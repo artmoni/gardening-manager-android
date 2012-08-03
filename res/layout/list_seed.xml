@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="70dp"
+    android:background="@drawable/bg_line_action"
+    android:orientation="horizontal"
+    android:padding="1dp" >
+
+    <org.gots.seed.view.SeedWidgetLong
+        android:id="@+id/idSeedWidgetLong"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/vegetdefault"  android:paddingRight="55dp" android:padding="5dp">
+    </org.gots.seed.view.SeedWidgetLong>
+
+    <org.gots.action.view.ActionWidget
+        android:id="@+id/IdSeedAction"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/action_selector"
+        android:src="@drawable/action_sow" android:layout_alignParentRight="true" android:layout_margin="5dp">
+    </org.gots.action.view.ActionWidget>
+
+</RelativeLayout>

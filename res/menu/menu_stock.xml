@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/new_seed_barcode"
+        android:icon="@drawable/bt_add_seed"
+        android:title="@string/seed.menu.add.barcode"
+        android:visible="true"/>
+
+</menu>

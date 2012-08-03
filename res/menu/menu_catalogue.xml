@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/new_seed"
+        android:icon="@drawable/bt_add_seed"
+        android:title="@string/seed.menu.add"/>
+    <item
+        android:id="@+id/refresh_seed"
+        android:icon="@drawable/synchronize"
+        android:title="@string/seed.menu.synchronize"/>
+
+</menu>

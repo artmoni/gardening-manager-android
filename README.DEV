@@ -1,0 +1,38 @@
+------------- SQLITE
+cd /data/data/org.gots/databases/
+sqlite3 gots.db
+
+.tables
+.header on
+.mode column
+
+------------- PROCESS IMAGE
+mogrify -resize 100x100 veget_*.jpg
+
+-################ JARSIGNER
+http://afleurentdidier.wordpress.com/2010/02/21/comment-publier-son-application-sur-landroid-market/
+
+keytool -genkeypair -alias artmonimobile -validity 10000
+
+Tapez le mot de passe du Keystore :  
+Mot de passe de Keystore trop court, il doit compter au moins 6 caractères
+Tapez le mot de passe du Keystore :  
+Ressaisissez le nouveau mot de passe : 
+Quels sont vos prénom et nom ?
+  [Unknown] :  Sébastien FLEURY
+Quel est le nom de votre unité organisationnelle ?
+  [Unknown] :  Artmoni mobile
+Quelle est le nom de votre organisation ?
+  [Unknown] :  Artmoni
+Quel est le nom de votre ville de résidence ?
+  [Unknown] :  Boissy l'Aillerie
+Quel est le nom de votre état ou province ?
+  [Unknown] :  France
+Quel est le code de pays à deux lettres pour cette unité ?
+  [Unknown] :  FR
+Est-ce CN=Sébastien FLEURY, OU=Artmoni mobile, O=Artmoni, L=Boissy l'Aillerie, ST=France, C=FR ?
+  [non] :  oui
+
+Spécifiez le mot de passe de la clé pour <artmonimobile>
+	(appuyez sur Entrée s'il s'agit du mot de passe du Keystore) : 
+-

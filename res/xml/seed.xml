@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss>
+	<channel>
+		
+		<title>android_news</title>
+		<description>android_news</description>
+		<link>http://www.androidster.com/android_news.php</link>
+		<lastBuildDate>Tue, 15 Feb 2011 23:43:43 +0100</lastBuildDate>
+
+		<generator>FeedCreator 1.7.2</generator>
+		<item>
+			<title>How To Backup protected and paid Android applications for root
+				users</title>
+			<link>http://www.androidster.com/android_news/how-to-backup-protected-and-paid-android-applications-for-root-users</link>
+			<description>Now, you can use AppManager to backup most apps, but
+				protected apps are not included in this because they are stored in a
+				different directory. With a rooted phone, you can access this
+				directory
+				and copy the apps to your SD card or to your computer.&amp;nbsp;
+				&lt;p&gt;First method, copy with your phone to SD card:&lt;/p&gt;
+
+				&lt;ol style=&quot;list-style-type:
+				decimal;&quot;&gt;&lt;li&gt;Install and open a Terminal Emulator on
+				your phone.&lt;/li&gt;&lt;li&gt;Enter &lt;b&gt;su&lt;/b&gt; to be
+				superuser (root).&lt;/li&gt;&lt;li&gt;Enter &lt;b&gt;cd
+				/data/app-private/&lt;/b&gt; to enter the protected application
+				directory.&lt;/li&gt;&lt;li&gt;Use &lt;b&gt;ls&lt;/b&gt; to view the
+				apps in the directory.&lt;/li&gt;&lt;li&gt;Enter &lt;b&gt;cp
+				&lt;i&gt;filename&lt;/i&gt;.apk /sdcard&lt;/b&gt; to copy a single
+				app to your SD card.&lt;br&gt;
+
+				(Or to backup all the protected apps: &lt;b&gt;cp *
+				/sdcard&lt;/b&gt;)&lt;/li&gt;&lt;li&gt;If you want to backup all
+				your apps, they can be found in
+				&lt;b&gt;/data/app/&lt;/b&gt;&lt;/li&gt;&lt;/ol&gt;&lt;p&gt;Second
+				method is to use &lt;a class=&quot;&quot;
+				href=&quot;http://developer.android.com/guide/developing/tools/adb.html&quot;&gt;Android
+				Debug Bridge&lt;/a&gt; with your PC:&lt;/p&gt;
+
+				&lt;ol&gt;&lt;li&gt;Install the &lt;a class=&quot;&quot;
+				href=&quot;http://developer.android.com/sdk/index.html&quot;&gt;Android
+				SDK&lt;/a&gt; on your PC&lt;/li&gt;&lt;li&gt;Connect your phone to
+				your computer via USB cable, and make sure
+				USB debugging is enabled on your phone (Settings &amp;gt; Applications
+				&amp;gt;
+				Development)&lt;/li&gt;&lt;li&gt;Enter &lt;b&gt;adb shell &lt;/b&gt;to fire up Debug Bridge and enter
+				shell mode&lt;/li&gt;&lt;li&gt;Enter &lt;b&gt;su &lt;/b&gt;to become
+				superuser&lt;/li&gt;&lt;li&gt;Enter &lt;b&gt;&lt;b&gt;cat
+				/data/app-private/&lt;i&gt;filename&lt;/i&gt;.apk &amp;gt;
+				/sdcard/&lt;i&gt;filename&lt;/i&gt;.apk &lt;/b&gt;&lt;/b&gt;to copy
+				the file to the SD
+				card.&lt;/li&gt;&lt;li&gt;&lt;b&gt;&lt;b&gt;&lt;b&gt;exit&lt;/b&gt;&lt;/b&gt;&lt;/b&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;&lt;b&gt;&lt;b&gt;&lt;b&gt;exit&lt;/b&gt;&lt;/b&gt;&lt;/b&gt;&lt;/b&gt;&lt;/li&gt;&lt;li&gt;And
+				finally &lt;b&gt;&lt;b&gt;&lt;b&gt;&lt;b&gt;&lt;b&gt;adb pull
+				/sdcard/&lt;i&gt;filename&lt;/i&gt;.apk
+				&lt;i&gt;filename&lt;/i&gt;.apk
+				&lt;/b&gt;&lt;/b&gt;&lt;/b&gt;&lt;/b&gt;&lt;/b&gt;pulls the .apk
+				file from your SD card to your
+				computer.&lt;/li&gt;&lt;/ol&gt;&lt;p&gt;Success? Problems? Moral
+				issues with copying software? Let us know in the comments.&lt;/p&gt;</description>
+
+			<pubDate>Tue, 24 Nov 2009 01:50:21 +0100</pubDate>
+		</item>
+	</channel>
+	<item>
+			<reference></reference>
+			
+			<title></title>
+			<family></family>
+			<specie></specie>
+			<variety></variety>			
+			<link></link>			
+			<description></description>
+
+			<sowingDateMin></sowingDateMin>			
+			<sowingDateMax></sowingDateMax>			
+			<durationMin></durationMin>			
+			<durationMax></durationMax>
+			
+			<action_name_1></action_name_1>			
+			<action_description_1></action_description_1>		
+			<action_duration_1></action_duration_1>
+		</item>
+		
+</rss>
+        

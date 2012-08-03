@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_seed"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/text_color_dark"
+    android:orientation="vertical"
+    android:scrollbars="vertical" android:paddingTop="5dp">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <!-- seed.description.environment -->
+
+        <TextView
+            style="@style/seed_description_title"
+            android:background="@drawable/titre_climat_et_sol"
+            android:text="@string/seed.description.environment" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/IdSeedDescriptionEnvironment"
+            style="@style/seed_description_content"
+            android:text="seedDescription" >
+        </TextView>
+        <!-- seed.description.culture -->
+
+        <TextView
+            style="@style/seed_description_title"
+            android:background="@drawable/titre_culture"
+            android:text="@string/seed.description.culture" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/IdSeedDescriptionCulture"
+            style="@style/seed_description_content"
+            android:text="Récolte" >
+        </TextView>
+
+        <!-- seed.description.harvest -->
+
+        <TextView
+            style="@style/seed_description_title"
+            android:background="@drawable/titre_recolte"
+            android:text="@string/seed.description.harvest" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/IdSeedDescriptionHarvest"
+            style="@style/seed_description_content"
+            android:text="seedDescription" >
+        </TextView>
+
+        <!-- seed.description.ennemi -->
+
+        <TextView
+            style="@style/seed_description_title"
+            android:background="@drawable/titre_ennemis"
+            android:text="@string/seed.description.ennemi" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/IdSeedDescriptionEnnemi"
+            style="@style/seed_description_content"
+            android:text="seedDescription" >
+        </TextView>
+
+        <!-- <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/LinearLayout01"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="bottom"
+            android:gravity="bottom" >
+
+            <Gallery
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/examplegallery"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2" />
+
+            <ImageView
+                android:id="@+id/idCamera"
+                android:layout_width="50px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/icone_camera" >
+            </ImageView>
+        </LinearLayout> -->
+    </LinearLayout>
+
+</ScrollView>

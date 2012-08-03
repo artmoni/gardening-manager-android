@@ -1,0 +1,100 @@
+/*******************************************************************************
+ * Copyright (c) 2012 sfleury.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Public License v3.0
+ * which accompanies this distribution, and is available at
+ * http://www.gnu.org/licenses/gpl.html
+ * 
+ * Contributors:
+ *     sfleury - initial API and implementation
+ ******************************************************************************/
+package org.gots.ui;
+
+import org.gots.DatabaseHelper;
+import org.gots.R;
+import org.gots.garden.GardenInterface;
+import org.gots.garden.GardenManager;
+import org.gots.garden.sql.GardenDBHelper;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.widget.TextView;
+
+public class SplashScreenActivity extends Activity {
+	private static final int STOPSPLASH = 0;
+	// private static final long SPLASHTIME = 3000;
+	private static final long SPLASHTIME = 3000;
+
+	private Handler splashHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case STOPSPLASH:
+				// remove SplashScreen from view
+				Intent intent = new Intent(SplashScreenActivity.this, DashboardActivity.class);
+				startActivity(intent);
+				finish();
+				break;
+			}
+			super.handleMessage(msg);
+		}
+	};
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.splash_screen);
+		Message msg = new Message();
+		msg.what = STOPSPLASH;
+
+		PackageInfo pInfo;
+		try {
+			pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+			String version = pInfo.versionName;
+			TextView name = (TextView)findViewById(R.id.TextView01);
+			name.setText("version "+version);
+		} catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+		GardenDBHelper helper = new GardenDBHelper(this);
+		SharedPreferences preferences = getSharedPreferences("org.gots.preference", 0);
+
+		GardenInterface garden = helper.getGarden(preferences.getInt("org.gots.preference.gardenid", 0));
+		if (garden == null) {
+			Intent intent = new Intent(this, ProfileActivity.class);
+			startActivityForResult(intent, 0);
+
+		} else{
+			splashHandler.sendMessageDelayed(msg, SPLASHTIME);
+			DatabaseHelper databaseHelper = new DatabaseHelper(this);
+			databaseHelper.setDatabase(preferences.getInt("org.gots.preference.gardenid",0));
+		
+		}
+	}
+
+	@Override
+	protected void onResume() {
+		// Message msg = new Message();
+		// msg.what = STOPSPLASH;
+		// splashHandler.sendMessageDelayed(msg, SPLASHTIME);
+		super.onResume();
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Message msg = new Message();
+		msg.what = STOPSPLASH;
+		splashHandler.sendMessageDelayed(msg, SPLASHTIME);
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+
+}

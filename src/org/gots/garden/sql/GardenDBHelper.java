@@ -1,0 +1,125 @@
+/*******************************************************************************
+ * Copyright (c) 2012 sfleury.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Public License v3.0
+ * which accompanies this distribution, and is available at
+ * http://www.gnu.org/licenses/gpl.html
+ * 
+ * Contributors:
+ *     sfleury - initial API and implementation
+ ******************************************************************************/
+package org.gots.garden.sql;
+
+import java.util.Date;
+
+import org.gots.bean.Garden;
+import org.gots.garden.GardenInterface;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
+public class GardenDBHelper {
+
+	// private List<BaseAllotmentInterface> allAllotment = new
+	// ArrayList<BaseAllotmentInterface>();
+
+	private GardenSQLite gardenSQLite;
+	private SQLiteDatabase bdd;
+	Context mContext;
+
+	public GardenDBHelper(Context mContext) {
+		gardenSQLite = new GardenSQLite(mContext);
+		this.mContext = mContext;
+	}
+
+	public void open() {
+		// on ouvre la BDD en écriture
+		bdd = gardenSQLite.getWritableDatabase();
+	}
+
+	public void close() {
+		// on ferme l'accès à la BDD
+		bdd.close();
+	}
+
+	public GardenInterface insertGarden(GardenInterface garden) {
+		long rowid;
+		open();
+		ContentValues values = new ContentValues();
+		values.put(GardenSQLite.GARDEN_ADMINAREA, garden.getAdminArea());
+		values.put(GardenSQLite.GARDEN_COUNTRYNAME, garden.getCountryName());
+		values.put(GardenSQLite.GARDEN_LOCALITY, garden.getLocality());
+
+		rowid = bdd.insert(GardenSQLite.GARDEN_TABLE_NAME, null, values);
+		garden.setId(rowid);
+		close();
+		return garden;
+	}
+
+	public GardenInterface getGarden(int gardenId) {
+		GardenInterface garden = null;
+		// SeedActionInterface searchedSeed = new GrowingSeed();
+		open();
+		Cursor cursor = bdd.query(GardenSQLite.GARDEN_TABLE_NAME, null, GardenSQLite.GARDEN_ID+"="+gardenId, null, null, null, null);
+
+		if (cursor.moveToFirst()) {
+			do {
+				garden = cursorToGarden(cursor);
+
+			} while (cursor.moveToNext());
+		}
+		cursor.close();
+		close();
+		return garden;
+	}
+
+	private GardenInterface cursorToGarden(Cursor cursor) {
+		GardenInterface garden = new Garden();
+		// ActionFactory factory = new ActionFactory();
+		// lot =
+		// factory.buildAction(mContext,cursor.getString(cursor.getColumnIndex(GardenDatabase.ACTION_NAME)));
+		// lot.setId(cursor.getInt(cursor.getColumnIndex(GardenDatabase.ACTION_ID)));
+		garden.setId(cursor.getInt(cursor.getColumnIndex(GardenSQLite.GARDEN_ID)));
+
+		garden.setAdminArea(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_ADMINAREA)));
+		garden.setCountryName(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_COUNTRYNAME)));
+		garden.setLocality(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_LOCALITY)));
+		garden.setDateLastSynchro(new Date(cursor.getInt(cursor.getColumnIndex(GardenSQLite.GARDEN_LAST_SYNCHRO))));
+
+		return garden;
+	}
+
+	public void updateGarden(GardenInterface garden) {
+		open();
+		ContentValues values = new ContentValues();
+		values.put(GardenSQLite.GARDEN_ADMINAREA, garden.getAdminArea());
+		values.put(GardenSQLite.GARDEN_COUNTRYNAME, garden.getCountryName());
+		values.put(GardenSQLite.GARDEN_LOCALITY, garden.getLocality());
+		values.put(GardenSQLite.GARDEN_LATITUDE, garden.getGpsLatitude());
+		values.put(GardenSQLite.GARDEN_LONGITUDE, garden.getGpsLongitude());
+		values.put(GardenSQLite.GARDEN_ALTITUDE, garden.getGpsAltitude());
+		bdd.update(GardenSQLite.GARDEN_TABLE_NAME, values, GardenSQLite.GARDEN_ID + "=" + garden.getId(), null);
+		close();
+	}
+
+	public String[] getGardens() {
+		GardenInterface garden = null;
+		// SeedActionInterface searchedSeed = new GrowingSeed();
+		open();
+		Cursor cursor = bdd.query(GardenSQLite.GARDEN_TABLE_NAME, null, null, null, null, null, null);
+		String[] gardens = new String[cursor.getCount()];
+		int i = 0;
+		if (cursor.moveToFirst()) {
+			do {
+				garden = cursorToGarden(cursor);
+				gardens[i++] = garden.getLocality();
+			} while (cursor.moveToNext());
+		}
+		cursor.close();
+		close();
+		return gardens;
+	}
+
+}
