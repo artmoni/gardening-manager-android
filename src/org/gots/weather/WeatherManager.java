@@ -100,12 +100,16 @@ public class WeatherManager {
 
 	private void updateCondition(WeatherConditionInterface condition, int day) {
 		WeatherDBHelper helper = new WeatherDBHelper(mContext);
-	
-		weatherday.add(Calendar.DAY_OF_YEAR, day);
-		condition.setDate(weatherday.getTime());
-		condition.setDayofYear(weatherday.get(Calendar.DAY_OF_YEAR));
 
-		WeatherConditionInterface wc = helper.getWeatherByDayofyear(weatherday.get(Calendar.DAY_OF_YEAR));
+		// weatherday.add(Calendar.DAY_OF_YEAR, day);
+		Calendar conditionDate = Calendar.getInstance();
+		conditionDate.setTime(weatherday.getTime());
+		conditionDate.add(Calendar.DAY_OF_YEAR, day);
+
+		condition.setDate(conditionDate.getTime());
+		condition.setDayofYear(conditionDate.get(Calendar.DAY_OF_YEAR));
+
+		WeatherConditionInterface wc = helper.getWeatherByDayofyear(conditionDate.get(Calendar.DAY_OF_YEAR));
 
 		if (wc == null)
 			helper.insertWeather(condition);
