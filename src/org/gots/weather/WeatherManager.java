@@ -69,26 +69,28 @@ public class WeatherManager {
 				if (ws == null)
 					return;
 
-				
-				updateCondition(ws.getWeatherCurrentCondition(),0);
-				updateCondition(ws.getWeatherForecastConditions().get(1),1);
-				updateCondition(ws.getWeatherForecastConditions().get(2),2);
-				updateCondition(ws.getWeatherForecastConditions().get(3),3);
+				updateCondition(ws.getWeatherCurrentCondition(), 0);
+				updateCondition(ws.getWeatherForecastConditions().get(1), 1);
+				updateCondition(ws.getWeatherForecastConditions().get(2), 2);
+				updateCondition(ws.getWeatherForecastConditions().get(3), 3);
 
-//				weatherday.set(Calendar.DAY_OF_WEEK, weatherday.get(Calendar.DAY_OF_WEEK) + 1);
-//				ws.getWeatherForecastConditions().get(1).setDate(weatherday.getTime());
-//				ws.getWeatherForecastConditions().get(1).setDayofYear(weatherday.get(Calendar.DAY_OF_YEAR));
-//				helper.insertWeather(ws.getWeatherForecastConditions().get(1));
-//
-//				weatherday.set(Calendar.DAY_OF_WEEK, weatherday.get(Calendar.DAY_OF_WEEK) + 1);
-//				ws.getWeatherForecastConditions().get(2).setDayofYear(weatherday.get(Calendar.DAY_OF_YEAR));
-//				ws.getWeatherForecastConditions().get(2).setDate(weatherday.getTime());
-//				helper.insertWeather(ws.getWeatherForecastConditions().get(2));
-//
-//				weatherday.set(Calendar.DAY_OF_WEEK, weatherday.get(Calendar.DAY_OF_WEEK) + 1);
-//				ws.getWeatherForecastConditions().get(3).setDayofYear(weatherday.get(Calendar.DAY_OF_YEAR));
-//				ws.getWeatherForecastConditions().get(3).setDate(weatherday.getTime());
-//				helper.insertWeather(ws.getWeatherForecastConditions().get(3));
+				// weatherday.set(Calendar.DAY_OF_WEEK,
+				// weatherday.get(Calendar.DAY_OF_WEEK) + 1);
+				// ws.getWeatherForecastConditions().get(1).setDate(weatherday.getTime());
+				// ws.getWeatherForecastConditions().get(1).setDayofYear(weatherday.get(Calendar.DAY_OF_YEAR));
+				// helper.insertWeather(ws.getWeatherForecastConditions().get(1));
+				//
+				// weatherday.set(Calendar.DAY_OF_WEEK,
+				// weatherday.get(Calendar.DAY_OF_WEEK) + 1);
+				// ws.getWeatherForecastConditions().get(2).setDayofYear(weatherday.get(Calendar.DAY_OF_YEAR));
+				// ws.getWeatherForecastConditions().get(2).setDate(weatherday.getTime());
+				// helper.insertWeather(ws.getWeatherForecastConditions().get(2));
+				//
+				// weatherday.set(Calendar.DAY_OF_WEEK,
+				// weatherday.get(Calendar.DAY_OF_WEEK) + 1);
+				// ws.getWeatherForecastConditions().get(3).setDayofYear(weatherday.get(Calendar.DAY_OF_YEAR));
+				// ws.getWeatherForecastConditions().get(3).setDate(weatherday.getTime());
+				// helper.insertWeather(ws.getWeatherForecastConditions().get(3));
 			} catch (Exception e) {
 				if (e.getMessage() != null)
 					Log.e("WeatherManager", e.getMessage());
@@ -98,16 +100,17 @@ public class WeatherManager {
 
 	private void updateCondition(WeatherConditionInterface condition, int day) {
 		WeatherDBHelper helper = new WeatherDBHelper(mContext);
-
+	
+		weatherday.add(Calendar.DAY_OF_YEAR, day);
 		condition.setDate(weatherday.getTime());
-		condition.setDayofYear(weatherday.get(Calendar.DAY_OF_YEAR)+day);
+		condition.setDayofYear(weatherday.get(Calendar.DAY_OF_YEAR));
 
 		WeatherConditionInterface wc = helper.getWeatherByDayofyear(weatherday.get(Calendar.DAY_OF_YEAR));
 
 		if (wc == null)
 			helper.insertWeather(condition);
 		else
-			helper.insertWeather(condition);
+			helper.updateWeather(condition);
 		return;
 
 	}
