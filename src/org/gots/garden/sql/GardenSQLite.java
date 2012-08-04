@@ -80,10 +80,8 @@ public class GardenSQLite extends SQLiteOpenHelper {
 		db.execSQL(CREATE_TABLE_GARDEN);
 		db.execSQL(CREATE_TABLE_ACTION);
 
-		db.execSQL(CREATE_TABLE_ACTION);
+		//db.execSQL(CREATE_TABLE_ACTION);
 		populateActions(db);
-		
-		Log.i(TAG, "onCreate");
 
 	}
 
