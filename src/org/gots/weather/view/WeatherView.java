@@ -11,6 +11,7 @@
 package org.gots.weather.view;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Locale;
 
 import org.gots.R;
@@ -97,16 +98,16 @@ public class WeatherView extends LinearLayout {
 
 		tempMax.setText("" + mWeather.getTempCelciusMax());
 
-		SimpleDateFormat sdf = new SimpleDateFormat("E", Locale.FRENCH);
+		SimpleDateFormat sdf = new SimpleDateFormat("E", Locale.getDefault());
 		if (mWeather.getDate() != null)
 			weatherDay.setText("" + sdf.format(mWeather.getDate()));
+		
 		invalidate();
 	}
 
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 		super.onLayout(changed, l, t, r, b);
-
 	}
 
 	public void setWeather(WeatherConditionInterface weather) {
