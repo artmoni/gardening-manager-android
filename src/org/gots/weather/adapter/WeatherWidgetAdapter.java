@@ -32,15 +32,13 @@ public class WeatherWidgetAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 
-		WeatherView weatherItem ;
+		WeatherView weatherItem = (WeatherView)convertView ;
 
-		if (convertView == null) {
+		if (convertView == null) 
 			weatherItem = new WeatherView(mContext);
-			weatherItem.setType(mType);
-		}else{
-			weatherItem= (WeatherView)convertView;
-		}
 		
+		weatherItem.setType(mType);
+
 		weatherItem.setWeather(getItem(position));
 
 		Log.i("WeatherWidgetAdapter", "position=" + position + "/" + getItem(position).getCondition());
