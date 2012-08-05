@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.gots.utils;
 
+import org.gots.R;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -79,22 +81,26 @@ public class GotsProgressBar extends View {
 		if (percent > 100f)
 			percent = 100f;
 		if (percent >= 99f)
-			paint.setColor(Color.RED);
+			paint.setColor(getContext().getResources().getColor(R.color.action_error_color));
+
 		else if (percent >= 90f)
-			paint.setColor(Color.rgb(255, 140, 0));
+			// paint.setColor(Color.rgb(255, 140, 0));
+			paint.setColor(getContext().getResources().getColor(R.color.action_warning_color));
+
 		else
-			paint.setARGB(255, 80, 150, 30);
+			// paint.setARGB(255, 80, 150, 30);
+			paint.setColor(getContext().getResources().getColor(R.color.action_ok_color));
 
 		// int height=new Float(f*getHeight()).intValue();
 
 		RectF rect2;
-		if (orientation == VERTICAL_STYLE){
+		if (orientation == VERTICAL_STYLE) {
 			int f = (getHeight() - 1) * percent.intValue() / 100;
-			rect2 = new RectF(1, getHeight() - 1, getWidth() - 1, getHeight() - f);}
-		else{
+			rect2 = new RectF(1, getHeight() - 1, getWidth() - 1, getHeight() - f);
+		} else {
 			int f = (getWidth() - 1) * percent.intValue() / 100;
 			rect2 = new RectF(1, 1, f, getHeight() - 1);
-		
+
 		}
 		canvas.drawRect(rect2, paint);
 		super.onDraw(canvas);
