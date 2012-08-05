@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import org.gots.DatabaseHelper;
 import org.gots.action.ActionFactory;
 import org.gots.action.BaseActionInterface;
+import org.gots.action.PermanentActionInterface;
 import org.gots.garden.sql.GardenSQLite;
 
 import android.content.ContentValues;
@@ -70,7 +71,8 @@ public class ActionDBHelper {
 			if (cursor.moveToFirst()) {
 				do {
 					BaseActionInterface action = cursorToAction(cursor);
-					allActions.add(action);
+					if (!PermanentActionInterface.class.isInstance(action))
+						allActions.add(action);
 				} while (cursor.moveToNext());
 				cursor.close();
 			}
@@ -133,8 +135,8 @@ public class ActionDBHelper {
 		// SeedActionInterface searchedSeed = new GrowingSeed();
 		open();
 		try {
-			Cursor cursor = bdd.query(GardenSQLite.ACTION_TABLE_NAME, null, GardenSQLite.ACTION_ID + "='" + id
-					+ "'", null, null, null, null);
+			Cursor cursor = bdd.query(GardenSQLite.ACTION_TABLE_NAME, null, GardenSQLite.ACTION_ID + "='" + id + "'",
+					null, null, null, null);
 
 			if (cursor.moveToFirst()) {
 				action = cursorToAction(cursor);
