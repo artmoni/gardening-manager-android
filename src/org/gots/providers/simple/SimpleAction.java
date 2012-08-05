@@ -108,4 +108,16 @@ public class SimpleAction implements BaseActionInterface {
 		// TODO Auto-generated method stub
 
 	}
+
+	@Override
+	public void setGrowingSeedId(int id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getGrowingSeedId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
