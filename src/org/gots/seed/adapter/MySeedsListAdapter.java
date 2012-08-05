@@ -12,12 +12,14 @@ package org.gots.seed.adapter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 
 import org.gots.R;
 import org.gots.action.BaseActionInterface;
 import org.gots.action.GardeningActionInterface;
 import org.gots.action.SeedActionInterface;
+import org.gots.action.adapter.comparator.ISeedSpecieComparator;
 import org.gots.action.bean.ReduceQuantityAction;
 import org.gots.action.bean.SowingAction;
 import org.gots.action.sql.ActionDBHelper;
@@ -51,13 +53,15 @@ public class MySeedsListAdapter extends BaseAdapter implements OnClickListener {
 
 	// final private static int nbActionToDisplay = 5;
 
-	public MySeedsListAdapter(Context mContext, BaseAllotmentInterface allotment,ArrayList<BaseSeedInterface> seeds) {
-		this.mContext = mContext;
+	public MySeedsListAdapter(Context context, BaseAllotmentInterface allotment,ArrayList<BaseSeedInterface> seeds) {
+		this.mContext = context;
 		// this.mySeeds.addAll(mySeeds);
 		this.allotment = allotment;
 		this.mySeeds=seeds;
-		inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		nbAds = mySeeds.size() / frequencyAds + 1;
+		Collections.sort(mySeeds, new ISeedSpecieComparator(context));
+
 	}
 
 	@Override

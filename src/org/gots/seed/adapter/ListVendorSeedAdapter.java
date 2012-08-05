@@ -11,20 +11,26 @@
 package org.gots.seed.adapter;
 
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.gots.R;
 import org.gots.action.BaseActionInterface;
 import org.gots.action.SeedActionInterface;
+import org.gots.action.adapter.comparator.ISeedSpecieComparator;
 import org.gots.action.bean.BuyingAction;
 import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.SeedUtil;
 import org.gots.seed.view.SeedWidgetLong;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +45,11 @@ public class ListVendorSeedAdapter extends ArrayAdapter<BaseSeedInterface> {
 	public ListVendorSeedAdapter(Context context, List<BaseSeedInterface> vendorSeeds) {
 		super(context, 0, vendorSeeds);
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		Collections.sort(vendorSeeds, new ISeedSpecieComparator(context));
 	}
+
+	
+
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -60,27 +70,32 @@ public class ListVendorSeedAdapter extends ArrayAdapter<BaseSeedInterface> {
 		buying.setState(ActionState.NORMAL);
 		actionWidget.setAction(buying);
 		actionWidget.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				SeedActionInterface action = (SeedActionInterface) buying;
 				action.execute((GrowingSeedInterface) currentSeed);
-//				Toast.makeText(getContext(),
-//						action.getName() + " " + currentSeed.getSpecie() + " " + currentSeed.getVariety(), 30).show();
-				notifyDataSetChanged();				
+				// Toast.makeText(getContext(),
+				// action.getName() + " " + currentSeed.getSpecie() + " " +
+				// currentSeed.getVariety(), 30).show();
+				notifyDataSetChanged();
 			}
 		});
-//		actionWidget.setOnActionItemClickListener(new ActionWidget.OnActionItemClickListener() {
-//
-//			@Override
-//			public void onItemClick(ActionWidget source, BaseActionInterface baseActionInterface) {
-//				SeedActionInterface action = (SeedActionInterface) baseActionInterface;
-//				action.execute((GrowingSeedInterface) currentSeed);
-//				Toast.makeText(getContext(),
-//						action.getName() + " " + currentSeed.getSpecie() + " " + currentSeed.getVariety(), 30).show();
-//				notifyDataSetChanged();
-//			}
-//		});
+		// actionWidget.setOnActionItemClickListener(new
+		// ActionWidget.OnActionItemClickListener() {
+		//
+		// @Override
+		// public void onItemClick(ActionWidget source, BaseActionInterface
+		// baseActionInterface) {
+		// SeedActionInterface action = (SeedActionInterface)
+		// baseActionInterface;
+		// action.execute((GrowingSeedInterface) currentSeed);
+		// Toast.makeText(getContext(),
+		// action.getName() + " " + currentSeed.getSpecie() + " " +
+		// currentSeed.getVariety(), 30).show();
+		// notifyDataSetChanged();
+		// }
+		// });
 
 		Calendar sowTime = Calendar.getInstance();
 		if (sowTime.get(Calendar.MONTH) > currentSeed.getDateSowingMin())
