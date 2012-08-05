@@ -14,27 +14,37 @@ import java.util.ArrayList;
 
 import org.gots.action.BaseActionInterface;
 
+import android.content.Context;
 
 public class SeedUtil {
-	 public BaseSeedInterface copy(BaseSeedInterface originalSeed) {
-		 BaseSeedInterface copy = new GrowingSeed();
-		 copy.setName(originalSeed.getName());
-		 copy.setDescriptionGrowth(originalSeed.getDescriptionGrowth());
-		 copy.setDurationMin(originalSeed.getDurationMin());
-		 copy.setDurationMax(originalSeed.getDurationMax());
-		 copy.setDateSowingMin(originalSeed.getDateSowingMin());
-		 copy.setDateSowingMax(originalSeed.getDateSowingMax());
-		 copy.setUrlDescription(originalSeed.getUrlDescription());
-		 copy.setCategory(originalSeed.getCategory());
-		 copy.setReference(originalSeed.getReference());
-		 copy.setActionToDo((ArrayList<BaseActionInterface>)originalSeed.getActionToDo().clone());
-//		 copy.getActionToDo().addAll((ArrayList<Action>)originalSeed.getActionToDo().clone());
-		 copy.setActionDone((ArrayList<BaseActionInterface>)originalSeed.getActionDone().clone());
-		 copy.setFamily(originalSeed.getFamily());
-		 copy.setSpecie(originalSeed.getSpecie());
-		 copy.setVariety(originalSeed.getVariety());		
-		 copy.setBareCode(originalSeed.getBareCode());
-		 return copy;
-		
-		 }
+	public BaseSeedInterface copy(BaseSeedInterface originalSeed) {
+		BaseSeedInterface copy = new GrowingSeed();
+		copy.setName(originalSeed.getName());
+		copy.setDescriptionGrowth(originalSeed.getDescriptionGrowth());
+		copy.setDurationMin(originalSeed.getDurationMin());
+		copy.setDurationMax(originalSeed.getDurationMax());
+		copy.setDateSowingMin(originalSeed.getDateSowingMin());
+		copy.setDateSowingMax(originalSeed.getDateSowingMax());
+		copy.setUrlDescription(originalSeed.getUrlDescription());
+		copy.setCategory(originalSeed.getCategory());
+		copy.setReference(originalSeed.getReference());
+		copy.setActionToDo((ArrayList<BaseActionInterface>) originalSeed.getActionToDo().clone());
+		// copy.getActionToDo().addAll((ArrayList<Action>)originalSeed.getActionToDo().clone());
+		copy.setActionDone((ArrayList<BaseActionInterface>) originalSeed.getActionDone().clone());
+		copy.setFamily(originalSeed.getFamily());
+		copy.setSpecie(originalSeed.getSpecie());
+		copy.setVariety(originalSeed.getVariety());
+		copy.setBareCode(originalSeed.getBareCode());
+		return copy;
+
+	}
+
+	public static String translateSpecie(Context context, GrowingSeedInterface growingSeedInterface) {
+		String translateSpecie = growingSeedInterface.getSpecie();
+		int specieRessourceString = context.getResources().getIdentifier(
+				"org.gots:string/specie." + translateSpecie.toLowerCase().replaceAll("\\s", ""), null, null);
+		if (specieRessourceString != 0)
+			translateSpecie = context.getResources().getString(specieRessourceString);
+		return translateSpecie;
+	}
 }
