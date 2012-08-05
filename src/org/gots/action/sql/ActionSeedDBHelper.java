@@ -56,6 +56,7 @@ public class ActionSeedDBHelper {
 		values.put(DatabaseHelper.ACTIONSEED_GROWINGSEED_ID, seed.getGrowingSeedId());
 		values.put(DatabaseHelper.ACTIONSEED_DURATION, action.getDuration());
 		values.put(DatabaseHelper.ACTIONSEED_ACTION_ID, action.getId());
+		// values.put(DatabaseHelper.ACTIONSEED_D, action.getId());
 
 		if (action.getDateActionDone() != null)
 			values.put(DatabaseHelper.ACTIONSEED_DATEACTIONDONE, action.getDateActionDone().getTime());
@@ -108,7 +109,7 @@ public class ActionSeedDBHelper {
 		seedAction = actionDBHelper.getActionById(cursor.getInt(cursor
 				.getColumnIndex(DatabaseHelper.ACTIONSEED_ACTION_ID)));
 		seedAction.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_ACTION_ID)));
-		// seedAction.setDescription(cursor.getString(cursor.getColumnIndex(GardenSQLite.ACTION_DESCRIPTION)));
+		seedAction.setGrowingSeedId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_GROWINGSEED_ID)));
 		seedAction.setDuration(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_DURATION)));
 		seedAction.setDateActionDone(new Date(cursor.getLong(cursor
 				.getColumnIndex(DatabaseHelper.ACTIONSEED_DATEACTIONDONE))));
@@ -221,7 +222,7 @@ public class ActionSeedDBHelper {
 
 		rowid = bdd.update(DatabaseHelper.ACTIONSEEDS_TABLE_NAME, values,
 				DatabaseHelper.ACTIONSEED_ID + "=" + action.getLogId(), null);
-		if (rowid ==  0)
+		if (rowid == 0)
 			rowid = insertAction(action, seed);
 		close();
 		return rowid;

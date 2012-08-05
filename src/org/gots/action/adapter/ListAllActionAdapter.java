@@ -26,7 +26,9 @@ import org.gots.action.SeedActionInterface;
 import org.gots.action.sql.ActionSeedDBHelper;
 import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
+import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.sql.GrowingSeedDBHelper;
 import org.gots.seed.view.SeedWidget;
 
 import android.content.Context;
@@ -42,7 +44,7 @@ public class ListAllActionAdapter extends BaseAdapter {
 
 	private Context mContext;
 	private ArrayList<BaseActionInterface> actions = new ArrayList<BaseActionInterface>();
-	private ArrayList<GrowingSeedInterface> seeds = new ArrayList<GrowingSeedInterface>();
+//	private ArrayList<GrowingSeedInterface> seeds = new ArrayList<GrowingSeedInterface>();
 	// private ArrayList<WeatherConditionInterface> weathers = new
 	// ArrayList<WeatherConditionInterface>();
 
@@ -67,7 +69,7 @@ public class ListAllActionAdapter extends BaseAdapter {
 
 			if (seedActions.size() > 0) {
 				for (Iterator<BaseActionInterface> iterator2 = seedActions.iterator(); iterator2.hasNext();) {
-					this.seeds.add(seed);
+//					this.seeds.add(seed);
 					// ********** GET ACTIONS for seed
 					BaseActionInterface baseActionInterface = iterator2.next();
 					this.actions.add(baseActionInterface);
@@ -76,6 +78,7 @@ public class ListAllActionAdapter extends BaseAdapter {
 			}
 		}
 		Collections.sort(actions, new IStatusUpdateComparator());
+		// Collections.sort(seeds, new IStatusUpdateComparator());
 
 	}
 
@@ -107,13 +110,16 @@ public class ListAllActionAdapter extends BaseAdapter {
 			// ll = new LinearLayout(mContext);
 			ll = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.list_action, parent, false);
 		}
-		if (seeds.get(position) != null && BaseActionInterface.class.isInstance(actions.get(position))) {
+		
+		GrowingSeedDBHelper helper = new GrowingSeedDBHelper(mContext);
+		final GrowingSeedInterface seed = helper.getSeedById(actions.get(position).getGrowingSeedId());
+		if (seed != null && BaseActionInterface.class.isInstance(actions.get(position))) {
 			ActionWidget actionTODO = (ActionWidget) ll.findViewById(R.id.idActionView);
 			actions.get(position).setState(ActionState.NORMAL);
 			actionTODO.setAction(actions.get(position));
 
 			SeedWidget seedView = (SeedWidget) ll.findViewById(R.id.idSeedView);
-			seedView.setSeed(seeds.get(position));
+			seedView.setSeed(seed);
 
 			// WeatherView weatherView = (WeatherView)
 			// ll.findViewById(R.id.idWeatherView);
@@ -128,15 +134,15 @@ public class ListAllActionAdapter extends BaseAdapter {
 				tv.setText(mContext.getResources().getString(R.string.seed_action_todo));
 
 				Calendar rightNow = Calendar.getInstance();
-				rightNow.setTime(seeds.get(position).getDateSowing());
+				rightNow.setTime(seed.getDateSowing());
 				rightNow.add(Calendar.DAY_OF_YEAR, actions.get(position).getDuration());
 				tv2.setText(dateFormat.format(rightNow.getTime()));
 				actionTODO.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						((SeedActionInterface) actions.get(position)).execute(seeds.get(position));
+						((SeedActionInterface) actions.get(position)).execute(seed);
 						actions.remove(position);
-						seeds.remove(position);
+//						seeds.remove(position);
 						notifyDataSetChanged();
 					}
 				});
@@ -145,7 +151,7 @@ public class ListAllActionAdapter extends BaseAdapter {
 				tv.setText(mContext.getResources().getString(R.string.seed_action_done));
 
 				Calendar rightNow = Calendar.getInstance();
-				rightNow.setTime(seeds.get(position).getDateSowing());
+				rightNow.setTime(seed.getDateSowing());
 				rightNow.add(Calendar.DAY_OF_YEAR, actions.get(position).getDuration());
 				tv2.setText(dateFormat.format(actions.get(position).getDateActionDone()));
 			}
@@ -157,9 +163,9 @@ public class ListAllActionAdapter extends BaseAdapter {
 		@Override
 		public int compare(BaseActionInterface obj1, BaseActionInterface obj2) {
 			int result = 0;
-			if (obj1.getDateActionTodo() != null && obj2.getDateActionTodo() != null) {
-				Log.i("Compare", obj1.getDateActionTodo().getTime() + " | " + obj2.getDateActionTodo().getTime());
-				result = obj1.getDateActionTodo().getTime() > obj2.getDateActionTodo().getTime() ? -1 : 0;
+			if (obj1.getDuration() >= 0 && obj2.getDuration() >= 0) {
+				Log.i("Compare", obj1.getDuration() + " | " + obj2.getDuration());
+				result = obj1.getDuration() < obj2.getDuration() ? -1 : 0;
 			}
 
 			return result;

@@ -25,6 +25,7 @@ public abstract class AbstractActionGarden implements GardeningActionInterface {
 	private int state;
 	private Date dateActionTodo;
 	private int logid;
+	private int growingSeedId;
 
 	public AbstractActionGarden() {
 		// TODO Auto-generated constructor stub
@@ -32,6 +33,16 @@ public abstract class AbstractActionGarden implements GardeningActionInterface {
 
 	public AbstractActionGarden(String name) {
 		this.name = name;
+	}
+
+	@Override
+	public int getGrowingSeedId() {
+		return growingSeedId;
+	}
+
+	@Override
+	public void setGrowingSeedId(int id) {
+		growingSeedId=id;
 	}
 
 	@Override

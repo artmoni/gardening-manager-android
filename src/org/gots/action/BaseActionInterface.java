@@ -46,4 +46,8 @@ public interface BaseActionInterface {
 
 	public abstract int getLogId();
 
+	public abstract void setGrowingSeedId(int id);
+
+	public abstract int getGrowingSeedId();
+
 }
