@@ -93,7 +93,7 @@ public class GotsProgressBar extends View {
 			rect2 = new RectF(1, getHeight() - 1, getWidth() - 1, getHeight() - f);}
 		else{
 			int f = (getWidth() - 1) * percent.intValue() / 100;
-			rect2 = new RectF(1, 1, getWidth() - f, getHeight() - 1);
+			rect2 = new RectF(1, 1, f, getHeight() - 1);
 		
 		}
 		canvas.drawRect(rect2, paint);
