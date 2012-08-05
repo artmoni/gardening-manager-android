@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 import org.gots.R;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.SeedUtil;
 import org.gots.seed.adapter.PlanningHarvestAdapter;
 import org.gots.seed.adapter.PlanningSowAdapter;
 
@@ -72,7 +73,7 @@ public class SeedWidgetLong extends LinearLayout implements OnClickListener {
 		seedWidget.setSeed(mSeed);
 
 		TextView seedSpecie = (TextView) findViewById(R.id.IdSeedSpecie);
-		seedSpecie.setText(translateSpecie(mSeed));
+		seedSpecie.setText(SeedUtil.translateSpecie(mContext,mSeed));
 
 		TextView seedVariety = (TextView) findViewById(R.id.IdSeedVariety);
 		seedVariety.setText(mSeed.getVariety());
@@ -97,16 +98,7 @@ public class SeedWidgetLong extends LinearLayout implements OnClickListener {
 		invalidate();
 	}
 
-	public String translateSpecie(GrowingSeedInterface growingSeedInterface) {
-		String translateSpecie = growingSeedInterface.getSpecie();
-		int specieRessourceString = getResources()
-				.getIdentifier(
-						"org.gots:string/specie." + translateSpecie.toLowerCase().replaceAll("\\s", ""),
-						null, null);
-		if (specieRessourceString != 0)
-			translateSpecie = getResources().getString(specieRessourceString);
-		return translateSpecie;
-	}
+	
 
 //	public static String unAccent(String s) {
 //		//
