@@ -9,5 +9,8 @@
         android:id="@+id/refresh_seed"
         android:icon="@drawable/synchronize"
         android:title="@string/seed.menu.synchronize"/>
-
+ <item
+        android:id="@+id/help"
+        android:icon="@drawable/help"
+        android:title="@string/menu.help"/>
 </menu>

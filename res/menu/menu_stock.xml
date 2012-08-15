@@ -6,5 +6,9 @@
         android:icon="@drawable/bt_add_seed"
         android:title="@string/seed.menu.add.barcode"
         android:visible="true"/>
+    <item
+        android:id="@+id/help"
+        android:icon="@drawable/help"
+        android:title="@string/menu.help"/>
 
 </menu>
