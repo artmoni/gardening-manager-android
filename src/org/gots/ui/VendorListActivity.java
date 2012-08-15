@@ -55,14 +55,21 @@ public class VendorListActivity extends ListActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
+		Intent i;
 		switch (item.getItemId()) {
 		case R.id.new_seed:
-			Intent i = new Intent(this, NewSeedActivity.class);
+			i = new Intent(this, NewSeedActivity.class);
 			startActivity(i);
 			return true;
 
 		case R.id.refresh_seed:
 			new RefreshTask().execute(new Object());
+			return true;
+		case R.id.help:
+			i = new Intent(this, WebHelpActivity.class);
+			i.putExtra("org.gots.help.page", getClass().getSimpleName());
+			startActivity(i);
+
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -77,6 +84,7 @@ public class VendorListActivity extends ListActivity {
 			garden.refreshData();
 			return null;
 		}
+
 		@Override
 		protected void onPostExecute(Long result) {
 			VendorSeedDBHelper myBank = new VendorSeedDBHelper(mContext);

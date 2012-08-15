@@ -77,7 +77,12 @@ public class MySeedsListActivity extends ListActivity {
 			IntentIntegrator integrator = new IntentIntegrator(this);
 			integrator.initiateScan();
 			return true;
+		case R.id.help:
+			Intent i = new Intent(this, WebHelpActivity.class);
+			i.putExtra("org.gots.help.page", getClass().getSimpleName());
+			startActivity(i);
 
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}

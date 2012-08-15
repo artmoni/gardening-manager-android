@@ -15,6 +15,7 @@ import org.gots.R;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GardenManager;
 import org.gots.garden.sql.GardenDBHelper;
+import org.gots.preferences.GotsPreferences;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -74,6 +75,7 @@ public class SplashScreenActivity extends Activity {
 			startActivityForResult(intent, 0);
 
 		} else{
+			
 			splashHandler.sendMessageDelayed(msg, SPLASHTIME);
 			DatabaseHelper databaseHelper = new DatabaseHelper(this);
 			databaseHelper.setDatabase(preferences.getInt("org.gots.preference.gardenid",0));

@@ -82,8 +82,8 @@ public class ActionActivity extends Activity implements OnClickListener {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// MenuInflater inflater = getMenuInflater();
-		// inflater.inflate(R.menu.menu_action, menu);
+		 MenuInflater inflater = getMenuInflater();
+		 inflater.inflate(R.menu.menu_action, menu);
 		return true;
 	}
 
@@ -91,12 +91,12 @@ public class ActionActivity extends Activity implements OnClickListener {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
 		switch (item.getItemId()) {
-		// case R.id.new_action:
-		//
-		// Intent i = new Intent(this, NewActionActivity.class);
-		// startActivity(i);
-		//
-		// return true;
+		case R.id.help:
+			Intent i = new Intent(this, WebHelpActivity.class);
+			i.putExtra("org.gots.help.page", getClass().getSimpleName());
+			startActivity(i);
+
+			return true;
 
 		default:
 			return super.onOptionsItemSelected(item);

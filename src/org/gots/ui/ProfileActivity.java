@@ -35,6 +35,9 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -263,6 +266,30 @@ public class ProfileActivity extends Activity implements LocationListener, OnCli
 
 		default:
 			break;
+		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu_profile, menu);
+
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle item selection
+		switch (item.getItemId()) {
+		case R.id.help:
+			Intent i = new Intent(this, WebHelpActivity.class);
+			i.putExtra("org.gots.help.page", getClass().getSimpleName());
+			startActivity(i);
+
+			return true;
+
+		default:
+			return super.onOptionsItemSelected(item);
 		}
 	}
 

@@ -13,6 +13,7 @@ package org.gots.ui;
 import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.analytics.GotsAnalytics;
+import org.gots.garden.GardenInterface;
 import org.gots.garden.GardenManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.weather.view.WeatherView;
@@ -20,6 +21,7 @@ import org.gots.weather.view.WeatherWidget;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -41,8 +43,6 @@ public class DashboardActivity extends Activity implements OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
-
-		
 
 		setContentView(R.layout.dashboard);
 
@@ -76,28 +76,48 @@ public class DashboardActivity extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
+		SharedPreferences preferences = getSharedPreferences("org.gots.preference", 0);
+		SharedPreferences.Editor prefedit = preferences.edit();
+
 		Intent i = null;
 		switch (v.getId()) {
 		case R.id.dashboard_button_hut:
-			// tracker.trackEvent("Clicks", // Category
-			// "Button", // Action
-			// "HutActivity", // Label
-			// 77); // Value
-			i = new Intent(v.getContext(), HutActivity.class);
+
+			if (!preferences.getBoolean("org.gots.preference.hutfirsttime", false)) {
+				i = new Intent(v.getContext(), WebHelpActivity.class);
+				i.putExtra("org.gots.help.page", HutActivity.class.getSimpleName());
+				prefedit.putBoolean("org.gots.preference.hutfirsttime", true);
+				prefedit.commit();
+			} else
+				i = new Intent(v.getContext(), HutActivity.class);
 			break;
 		case R.id.dashboard_button_allotment:
-			i = new Intent(v.getContext(), MyMainGarden.class);
+			if (!preferences.getBoolean("org.gots.preference.allotmentfirsttime", false)) {
+				i = new Intent(v.getContext(), WebHelpActivity.class);
+				i.putExtra("org.gots.help.page", MyMainGarden.class.getSimpleName());
+				prefedit.putBoolean("org.gots.preference.allotmentfirsttime", true);
+				prefedit.commit();
+			} else
+				i = new Intent(v.getContext(), MyMainGarden.class);
 			break;
 		case R.id.dashboard_button_action:
-
-
-			i = new Intent(v.getContext(), ActionActivity.class);
+			if (!preferences.getBoolean("org.gots.preference.actionsfirsttime", false)) {
+				i = new Intent(v.getContext(), WebHelpActivity.class);
+				i.putExtra("org.gots.help.page", ActionActivity.class.getSimpleName());
+				prefedit.putBoolean("org.gots.preference.actionsfirsttime", true);
+				prefedit.commit();
+			} else
+				i = new Intent(v.getContext(), ActionActivity.class);
 
 			break;
 		case R.id.dashboard_button_profile:
-
-
-			i = new Intent(v.getContext(), org.gots.ui.ProfileActivity.class);
+			if (!preferences.getBoolean("org.gots.preference.profilefirsttime", false)) {
+				i = new Intent(v.getContext(), WebHelpActivity.class);
+				i.putExtra("org.gots.help.page", ProfileActivity.class.getSimpleName());
+				prefedit.putBoolean("org.gots.preference.profilefirsttime", true);
+				prefedit.commit();
+			} else
+				i = new Intent(v.getContext(), org.gots.ui.ProfileActivity.class);
 			break;
 		default:
 			break;
@@ -111,7 +131,6 @@ public class DashboardActivity extends Activity implements OnClickListener {
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		
 
 		GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
 	}
