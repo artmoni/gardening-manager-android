@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.gots"
-    android:versionCode="4"
-    android:versionName="0.11" >
+    android:versionCode="5"
+    android:versionName="0.12" >
 
     <uses-sdk
         android:minSdkVersion="4"
@@ -10,7 +10,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-<!--      <uses-permission android:name="android.permission.CAMERA" /> -->
+    <!-- <uses-permission android:name="android.permission.CAMERA" /> -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <!--
@@ -32,7 +32,7 @@
         </activity>
         <activity android:name=".ui.MyMainGarden" />
         <activity android:name=".ui.MyMainGardenFirstTime" />
-        <activity android:name=".ui.DashboardActivity"  />
+        <activity android:name=".ui.DashboardActivity" />
         <activity android:name=".ui.AllotmentActivity" />
         <activity android:name=".ui.SeedActivity" />
         <activity android:name=".ui.CameraView" />
@@ -40,8 +40,8 @@
         <activity android:name=".ui.ProfileActivity" />
         <activity android:name=".ui.ListActionActivity" />
         <activity android:name=".ui.ActionActivity" />
-                <activity android:name=".ui.NewActionActivity" />
-        
+        <activity android:name=".ui.NewActionActivity" />
+        <activity android:name=".ui.WebHelpActivity" />
         <activity
             android:name=".ui.TabSeedActivity"
             android:theme="@style/CustomTheme" />
