@@ -29,7 +29,7 @@ public class GotsAdvertisement {
 
 		AdRequest adRequest = new AdRequest();
 		if (GotsPreferences.DEVELOPPEMENT)
-			adRequest.addTestDevice("02AB944DF533A2683E14DB7EBAF64B43");
+			adRequest.addTestDevice(AdRequest.TEST_EMULATOR);
 
 		AdView adView;
 		if (width > 500)
