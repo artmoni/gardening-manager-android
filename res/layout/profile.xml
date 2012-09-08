@@ -16,16 +16,28 @@
             android:layout_height="60dp"
             android:background="@drawable/bg_allotment_top" />
 
+        <HorizontalScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                android:id="@+id/scrollWeatherHistory"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+            </LinearLayout>
+        </HorizontalScrollView>
+
         <ScrollView
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_margin="16dp"
-            android:layout_marginTop="60dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_marginTop="0dp"
             android:background="@drawable/bg_line_action" >
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical" >
 
                 <LinearLayout
@@ -56,7 +68,7 @@
                     <TextView
                         android:id="@+id/textView1"
                         style="@style/description_content"
-                        android:layout_width="wrap_content"
+                        android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_description"
                         android:paddingLeft="30dp"
@@ -67,10 +79,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/img_description"
+                        android:gravity="center_vertical|center_horizontal"
                         android:text="1"
                         android:textColor="@color/text_color_dark"
                         android:textSize="30dp"
-                            android:textStyle="bold" android:gravity="center_vertical|center_horizontal" />
+                        android:textStyle="bold" />
                 </RelativeLayout>
 
                 <LinearLayout
@@ -82,6 +95,7 @@
 
                     <Button
                         android:id="@+id/buttonLocalize"
+                        style="@style/button"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/bt_localize_garden"
@@ -104,6 +118,7 @@
 
                     <Button
                         android:id="@+id/buttonValidatePosition"
+                        style="@style/button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/profile.location.validate" />
@@ -141,7 +156,6 @@
                             android:textColor="@color/text_color_dark"
                             android:textSize="30dp"
                             android:textStyle="bold" />
-
                     </RelativeLayout>
 
                     <LinearLayout
@@ -152,6 +166,7 @@
 
                         <Button
                             android:id="@+id/buttonAddGarden"
+                            style="@style/button"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/profile.menu.add"
@@ -166,6 +181,7 @@
         android:id="@+id/btReturn"
         android:layout_width="fill_parent"
         android:layout_height="70dp"
-        android:background="@drawable/bt_logo" />
+        android:background="@drawable/bt_logo" >
+    </LinearLayout>
 
 </RelativeLayout>
