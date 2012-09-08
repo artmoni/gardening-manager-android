@@ -29,6 +29,11 @@ public class WeatherCondition implements WeatherConditionInterface {
 		super();
 	}
 
+	public WeatherCondition(Date date) {
+		super();
+		setDate(date);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

@@ -98,7 +98,7 @@ public class WeatherView extends LinearLayout {
 
 		tempMax.setText("" + mWeather.getTempCelciusMax());
 
-		SimpleDateFormat sdf = new SimpleDateFormat("E", Locale.getDefault());
+		SimpleDateFormat sdf = new SimpleDateFormat("E dd/MM", Locale.getDefault());
 		if (mWeather.getDate() != null)
 			weatherDay.setText("" + sdf.format(mWeather.getDate()));
 		

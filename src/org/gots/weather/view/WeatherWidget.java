@@ -54,7 +54,7 @@ public class WeatherWidget extends GridView {
 	
 
 	public void update() {
-		wm.update(false);
+//		wm.update();
 		weatherWidgetAdapter.setConditions(wm.getConditionSet(nbDays ));
 		Log.i("update",weatherWidgetAdapter.getCount()+"<->"+getChildCount());
 

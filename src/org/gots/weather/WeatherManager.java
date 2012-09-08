@@ -15,10 +15,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import org.gots.garden.GardenInterface;
 import org.gots.garden.sql.GardenDBHelper;
 import org.gots.weather.exception.UnknownWeatherException;
+import org.gots.weather.provider.DatabaseWeatherTask;
+import org.gots.weather.provider.GoogleWeatherTask;
+import org.gots.weather.provider.WeatherTask;
 import org.gots.weather.sql.WeatherDBHelper;
 
 import android.content.Context;
@@ -31,66 +35,50 @@ public class WeatherManager {
 	private Integer temperatureLimitHot;
 	private Integer temperatureLimitCold;
 	private Integer runningLimit;
-	private Date today;
+	// private Date today;
 	private Context mContext;
 	private static SharedPreferences preferences;
 	private Calendar weatherday;
 
 	public WeatherManager(Context context) {
 		this.mContext = context;
-		update(false);
+		update();
 
 	}
 
-	public void update(boolean force) {
+	public void update() {
 		weatherday = new GregorianCalendar();
 
-		GardenDBHelper helper = new GardenDBHelper(mContext);
 		preferences = mContext.getSharedPreferences("org.gots.preference", 0);
 
+		GardenDBHelper helper = new GardenDBHelper(mContext);
 		GardenInterface garden = helper.getGarden(preferences.getInt("org.gots.preference.gardenid", 0));
-		getWeather(garden, force);
+		getWeather(garden);
 
 	}
 
-	private void getWeather(GardenInterface garden, boolean force) {
+	private void getWeather(GardenInterface garden) {
 		WeatherDBHelper helper = new WeatherDBHelper(mContext);
 		WeatherConditionInterface wc;
 
-		weatherday.setTime(Calendar.getInstance().getTime());
-		wc = helper.getWeatherByDayofyear(weatherday.get(Calendar.DAY_OF_YEAR));
+		wc = getCondition(0);
 
-		if (wc == null || force) {
-			today = Calendar.getInstance().getTime();
+		if (wc == null || true) {
+			// today = Calendar.getInstance().getTime();
 
 			try {
-				WeatherTask wt = new WeatherTask(garden.getAddress());
-				ws = wt.execute().get();
-				if (ws == null)
-					return;
+				for (int forecastDay = 0; forecastDay < 4; forecastDay++) {
+					Calendar cal = Calendar.getInstance();
+					cal.add(Calendar.DAY_OF_YEAR, forecastDay);
+					
+					WeatherTask wt = new GoogleWeatherTask(garden.getAddress(), cal.getTime());
+					WeatherConditionInterface conditionInterface = wt.execute().get();
 
-				updateCondition(ws.getWeatherCurrentCondition(), 0);
-				updateCondition(ws.getWeatherForecastConditions().get(1), 1);
-				updateCondition(ws.getWeatherForecastConditions().get(2), 2);
-				updateCondition(ws.getWeatherForecastConditions().get(3), 3);
+					if (conditionInterface != null)
+						updateCondition(conditionInterface, forecastDay);
 
-				// weatherday.set(Calendar.DAY_OF_WEEK,
-				// weatherday.get(Calendar.DAY_OF_WEEK) + 1);
-				// ws.getWeatherForecastConditions().get(1).setDate(weatherday.getTime());
-				// ws.getWeatherForecastConditions().get(1).setDayofYear(weatherday.get(Calendar.DAY_OF_YEAR));
-				// helper.insertWeather(ws.getWeatherForecastConditions().get(1));
-				//
-				// weatherday.set(Calendar.DAY_OF_WEEK,
-				// weatherday.get(Calendar.DAY_OF_WEEK) + 1);
-				// ws.getWeatherForecastConditions().get(2).setDayofYear(weatherday.get(Calendar.DAY_OF_YEAR));
-				// ws.getWeatherForecastConditions().get(2).setDate(weatherday.getTime());
-				// helper.insertWeather(ws.getWeatherForecastConditions().get(2));
-				//
-				// weatherday.set(Calendar.DAY_OF_WEEK,
-				// weatherday.get(Calendar.DAY_OF_WEEK) + 1);
-				// ws.getWeatherForecastConditions().get(3).setDayofYear(weatherday.get(Calendar.DAY_OF_YEAR));
-				// ws.getWeatherForecastConditions().get(3).setDate(weatherday.getTime());
-				// helper.insertWeather(ws.getWeatherForecastConditions().get(3));
+				}
+
 			} catch (Exception e) {
 				if (e.getMessage() != null)
 					Log.e("WeatherManager", e.getMessage());
@@ -143,31 +131,37 @@ public class WeatherManager {
 		this.runningLimit = runningLimit;
 	}
 
-	public WeatherConditionInterface getCondition(int i) throws UnknownWeatherException {
-		Calendar weatherday = new GregorianCalendar();
-		WeatherConditionInterface wc;
+	public WeatherConditionInterface getCondition(int i) {
+		WeatherConditionInterface conditionInterface;
 
-		weatherday.setTime(Calendar.getInstance().getTime());
-		weatherday.add(Calendar.DAY_OF_YEAR, i);
+		Calendar weatherCalendar = Calendar.getInstance();
+		weatherCalendar.add(Calendar.DAY_OF_YEAR, i);
 
-		WeatherDBHelper helper = new WeatherDBHelper(mContext);
-		wc = helper.getWeatherByDayofyear(weatherday.get(Calendar.DAY_OF_YEAR));
-		if (wc == null)
-			throw new UnknownWeatherException();
-		return wc;
+		Date weatherDate = weatherCalendar.getTime();
+
+		try {
+			WeatherTask wt = new DatabaseWeatherTask(mContext, weatherDate);
+			conditionInterface = wt.execute().get();
+		} catch (Exception e) {
+			conditionInterface = new WeatherCondition(weatherDate);
+		}
+
+		return conditionInterface;
 	}
 
 	public List<WeatherConditionInterface> getConditionSet(int nbDays) {
 		List<WeatherConditionInterface> conditions = new ArrayList<WeatherConditionInterface>();
 		for (int i = -nbDays; i <= nbDays; i++) {
+
 			try {
+
 				conditions.add(getCondition(i));
-			} catch (UnknownWeatherException e) {
+			} catch (Exception e) {
 				conditions.add(new WeatherCondition());
+
 				e.printStackTrace();
 			}
 		}
 		return conditions;
 	}
-
 }
