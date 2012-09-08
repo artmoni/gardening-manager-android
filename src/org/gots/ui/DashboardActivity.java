@@ -62,7 +62,7 @@ public class DashboardActivity extends Activity implements OnClickListener {
 
 		// ADMOB
 		LinearLayout layout = (LinearLayout) findViewById(R.id.bannerAd);
-		if (true) {
+		if (!GotsPreferences.DEVELOPPEMENT) {
 			adView = new GotsAdvertisement(this);
 			layout.addView(adView.getAdsLayout());
 
