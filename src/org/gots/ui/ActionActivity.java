@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import org.gots.R;
 import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.analytics.GotsAnalytics;
+import org.gots.help.HelpUriBuilder;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.sql.GrowingSeedDBHelper;
 
@@ -22,6 +23,7 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -92,9 +94,12 @@ public class ActionActivity extends Activity implements OnClickListener {
 		// Handle item selection
 		switch (item.getItemId()) {
 		case R.id.help:
-			Intent i = new Intent(this, WebHelpActivity.class);
-			i.putExtra("org.gots.help.page", getClass().getSimpleName());
-			startActivity(i);
+			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
+			startActivity(browserIntent);
+
+//			Intent i = new Intent(this, WebHelpActivity.class);
+//			i.putExtra("org.gots.help.page", getClass().getSimpleName());
+//			startActivity(i);
 
 			return true;
 

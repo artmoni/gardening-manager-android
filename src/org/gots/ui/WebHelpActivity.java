@@ -51,10 +51,7 @@ public class WebHelpActivity extends Activity {
 			}
 		});
 
-		// ADMOB
-		LinearLayout layout = (LinearLayout) findViewById(R.id.bannerAd);
-		GotsAdvertisement adView = new GotsAdvertisement(this);
-		layout.addView(adView.getAdsLayout());
+		
 
 		pd = ProgressDialog.show(this, "", getResources().getString(R.string.help_loading), true);
 

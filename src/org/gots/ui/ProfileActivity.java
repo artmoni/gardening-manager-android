@@ -22,6 +22,7 @@ import org.gots.analytics.GotsAnalytics;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GardenManager;
 import org.gots.garden.sql.GardenDBHelper;
+import org.gots.help.HelpUriBuilder;
 import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.WeatherManager;
@@ -44,6 +45,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -319,9 +321,8 @@ public class ProfileActivity extends Activity implements LocationListener, OnCli
 		// Handle item selection
 		switch (item.getItemId()) {
 		case R.id.help:
-			Intent i = new Intent(this, WebHelpActivity.class);
-			i.putExtra("org.gots.help.page", getClass().getSimpleName());
-			startActivity(i);
+			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
+			startActivity(browserIntent);
 
 			return true;
 

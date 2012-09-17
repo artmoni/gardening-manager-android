@@ -83,40 +83,20 @@ public class DashboardActivity extends Activity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.dashboard_button_hut:
 
-			if (!preferences.getBoolean("org.gots.preference.hutfirsttime", false)) {
-				i = new Intent(v.getContext(), WebHelpActivity.class);
-				i.putExtra("org.gots.help.page", HutActivity.class.getSimpleName());
-				prefedit.putBoolean("org.gots.preference.hutfirsttime", true);
-				prefedit.commit();
-			} else
+			
 				i = new Intent(v.getContext(), HutActivity.class);
 			break;
 		case R.id.dashboard_button_allotment:
-			if (!preferences.getBoolean("org.gots.preference.allotmentfirsttime", false)) {
-				i = new Intent(v.getContext(), WebHelpActivity.class);
-				i.putExtra("org.gots.help.page", MyMainGarden.class.getSimpleName());
-				prefedit.putBoolean("org.gots.preference.allotmentfirsttime", true);
-				prefedit.commit();
-			} else
+			
 				i = new Intent(v.getContext(), MyMainGarden.class);
 			break;
 		case R.id.dashboard_button_action:
-			if (!preferences.getBoolean("org.gots.preference.actionsfirsttime", false)) {
-				i = new Intent(v.getContext(), WebHelpActivity.class);
-				i.putExtra("org.gots.help.page", ActionActivity.class.getSimpleName());
-				prefedit.putBoolean("org.gots.preference.actionsfirsttime", true);
-				prefedit.commit();
-			} else
+			
 				i = new Intent(v.getContext(), ActionActivity.class);
 
 			break;
 		case R.id.dashboard_button_profile:
-			if (!preferences.getBoolean("org.gots.preference.profilefirsttime", false)) {
-				i = new Intent(v.getContext(), WebHelpActivity.class);
-				i.putExtra("org.gots.help.page", ProfileActivity.class.getSimpleName());
-				prefedit.putBoolean("org.gots.preference.profilefirsttime", true);
-				prefedit.commit();
-			} else
+			
 				i = new Intent(v.getContext(), org.gots.ui.ProfileActivity.class);
 			break;
 		default:

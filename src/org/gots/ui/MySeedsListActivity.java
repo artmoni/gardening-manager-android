@@ -15,12 +15,14 @@ import java.util.ArrayList;
 import org.gots.R;
 import org.gots.allotment.sql.AllotmentDBHelper;
 import org.gots.bean.BaseAllotmentInterface;
+import org.gots.help.HelpUriBuilder;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.adapter.MySeedsListAdapter;
 import org.gots.seed.sql.VendorSeedDBHelper;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -49,10 +51,10 @@ public class MySeedsListActivity extends ListActivity {
 		listAdapter = new MySeedsListAdapter(this, allotment, mySeeds);
 		setListAdapter(listAdapter);
 
-		if (mySeeds.size() == 0) {
-			Intent intent = new Intent().setClass(this, MySeedsListFirstTimeActivity.class);
-			startActivity(intent);
-		}
+//		if (mySeeds.size() == 0) {
+//			Intent intent = new Intent().setClass(this, MySeedsListFirstTimeActivity.class);
+//			startActivity(intent);
+//		}
 	}
 
 	@Override
@@ -78,9 +80,8 @@ public class MySeedsListActivity extends ListActivity {
 			integrator.initiateScan();
 			return true;
 		case R.id.help:
-			Intent i = new Intent(this, WebHelpActivity.class);
-			i.putExtra("org.gots.help.page", getClass().getSimpleName());
-			startActivity(i);
+			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
+			startActivity(browserIntent);
 
 			return true;
 		default:

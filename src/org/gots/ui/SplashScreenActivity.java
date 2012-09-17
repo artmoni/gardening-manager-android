@@ -15,6 +15,7 @@ import org.gots.R;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GardenManager;
 import org.gots.garden.sql.GardenDBHelper;
+import org.gots.help.HelpUriBuilder;
 import org.gots.preferences.GotsPreferences;
 
 import android.app.Activity;
@@ -22,9 +23,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class SplashScreenActivity extends Activity {
@@ -65,7 +69,26 @@ public class SplashScreenActivity extends Activity {
 			e.printStackTrace();
 		}
 
-		
+		LinearLayout artmoni = (LinearLayout)findViewById(R.id.webArtmoni);
+		artmoni.setOnClickListener(new LinearLayout.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.artmoni.eu"));
+				startActivity(browserIntent);
+				
+			}
+		});
+		LinearLayout sauterdanslesflaques = (LinearLayout)findViewById(R.id.webSauterDansLesFlaques);
+		sauterdanslesflaques.setOnClickListener(new LinearLayout.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.sauterdanslesflaques.com"));
+				startActivity(browserIntent);
+				
+			}
+		});
 		GardenDBHelper helper = new GardenDBHelper(this);
 		SharedPreferences preferences = getSharedPreferences("org.gots.preference", 0);
 

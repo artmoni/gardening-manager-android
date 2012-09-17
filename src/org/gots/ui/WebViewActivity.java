@@ -34,6 +34,7 @@ public class WebViewActivity extends Activity {
 		
 		pd = ProgressDialog.show(this, "", 
                 getResources().getString(R.string.gots_loading), true);
+		pd.setCanceledOnTouchOutside(true);
 
 	}
 

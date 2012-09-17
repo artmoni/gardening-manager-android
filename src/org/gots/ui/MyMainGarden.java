@@ -18,12 +18,16 @@ import org.gots.allotment.sql.AllotmentDBHelper;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
+import org.gots.help.HelpUriBuilder;
 import org.gots.weather.view.WeatherWidget;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -55,8 +59,25 @@ public class MyMainGarden extends Activity {
 		listAllotments.setDividerHeight(0);
 
 		if (listAllotments.getCount() == 0) {
-			Intent intent = new Intent(this, MyMainGardenFirstTime.class);
-			startActivity(intent);
+			final String classname =  getClass().getSimpleName();
+			new AlertDialog.Builder(this)
+            .setIcon(R.drawable.help)
+            .setTitle(R.string.menu_help_firstlaunch)
+            .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+
+                	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HelpUriBuilder.getUri( classname)));
+        			startActivity(browserIntent);                }
+            })
+            .setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+
+                    /* User clicked Cancel so do some stuff */
+                }
+            })
+            .show();
+//			Intent intent = new Intent(this, MyMainGardenFirstTime.class);
+//			startActivity(intent);
 		}
 
 		// listAllotments.setBackgroundDrawable(getResources().getDrawable(R.drawable.help_hut_2));
@@ -103,9 +124,8 @@ public class MyMainGarden extends Activity {
 				listAllotments.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_simple));
 			return true;
 		case R.id.help:
-			Intent i = new Intent(this, WebHelpActivity.class);
-			i.putExtra("org.gots.help.page", getClass().getSimpleName());
-			startActivity(i);
+			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
+			startActivity(browserIntent);
 
 			return true;
 		default:

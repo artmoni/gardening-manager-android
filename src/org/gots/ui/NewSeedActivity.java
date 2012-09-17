@@ -78,13 +78,12 @@ public class NewSeedActivity extends Activity implements OnClickListener {
 				showDropdown();
 			}
 
-			
 		});
-		
+
 		autoCompleteVariety = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewVariety);
 		initVarietyList();
 		autoCompleteVariety.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				initVarietyList();
@@ -92,13 +91,13 @@ public class NewSeedActivity extends Activity implements OnClickListener {
 			}
 		});
 
-		
-		
 		super.onCreate(savedInstanceState);
 	}
+
 	private void showDropdown() {
 		autoCompleteSpecie.showDropDown();
 	}
+
 	@Override
 	public void onClick(View v) {
 		currentView = v;
@@ -110,12 +109,12 @@ public class NewSeedActivity extends Activity implements OnClickListener {
 		case R.id.buttonStock:
 			long seedId = insertSeed();
 			addToStock(seedId);
-			finish();		
+			finish();
 
 			break;
 		case R.id.buttonCatalogue:
 			insertSeed();
-			finish();		
+			finish();
 
 			break;
 		default:
@@ -126,13 +125,14 @@ public class NewSeedActivity extends Activity implements OnClickListener {
 
 	private void addToStock(long seedId) {
 		VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
-		if (seedId>=0){
-			GrowingSeedInterface seed = (GrowingSeedInterface) helper.getSeedById((int)seedId);
+		if (seedId >= 0) {
+			GrowingSeedInterface seed = (GrowingSeedInterface) helper.getSeedById((int) seedId);
 			BuyingAction buy = new BuyingAction(this);
 			buy.execute(seed);
 		}
-		
+
 	}
+
 	private long insertSeed() {
 		// String family = (String) ((Spinner)
 		// findViewById(R.id.spinnerFamily)).getSelectedItem();
@@ -182,8 +182,8 @@ public class NewSeedActivity extends Activity implements OnClickListener {
 		seed.setBareCode(barcode);
 		seed.setReference(barcode);
 		VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
-		
-		return helper.insertSeed(seed); 
+
+		return helper.insertSeed(seed);
 	}
 
 	/**
@@ -251,7 +251,7 @@ public class NewSeedActivity extends Activity implements OnClickListener {
 				v.setImageResource(vegetableImageRessource);
 			}
 		});
-//		autoCompleteVariety.showDropDown();
+		// autoCompleteVariety.showDropDown();
 		autoCompleteVariety.invalidate();
 	}
 

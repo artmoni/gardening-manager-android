@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import org.gots.R;
 import org.gots.garden.GardenManager;
+import org.gots.help.HelpUriBuilder;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.adapter.ListVendorSeedAdapter;
 import org.gots.seed.sql.VendorSeedDBHelper;
@@ -21,6 +22,7 @@ import org.gots.seed.sql.VendorSeedDBHelper;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -66,10 +68,8 @@ public class VendorListActivity extends ListActivity {
 			new RefreshTask().execute(new Object());
 			return true;
 		case R.id.help:
-			i = new Intent(this, WebHelpActivity.class);
-			i.putExtra("org.gots.help.page", getClass().getSimpleName());
-			startActivity(i);
-
+			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
+			startActivity(browserIntent);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

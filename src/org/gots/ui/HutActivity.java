@@ -14,13 +14,17 @@ import java.util.ArrayList;
 
 import org.gots.R;
 import org.gots.analytics.GotsAnalytics;
+import org.gots.help.HelpUriBuilder;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.sql.VendorSeedDBHelper;
 
+import android.app.AlertDialog;
 import android.app.TabActivity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -85,9 +89,27 @@ public class HutActivity extends TabActivity implements OnTabChangeListener {
 		vendorspec.setContent(intent);
 		tabHost.addTab(vendorspec);
 
-		if (mySeeds.size() == 0)
+		if (mySeeds.size() == 0){
 			getTabHost().setCurrentTabByTag("vendorseeds");
+		
+			final String classname =  getClass().getSimpleName();
+			new AlertDialog.Builder(this)
+            .setIcon(R.drawable.help)
+            .setTitle(R.string.menu_help_firstlaunch)
+            .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
 
+                	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HelpUriBuilder.getUri( classname)));
+        			startActivity(browserIntent);                }
+            })
+            .setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+
+                    /* User clicked Cancel so do some stuff */
+                }
+            })
+            .show();
+		}
 		LinearLayout dashboardButton = (LinearLayout) findViewById(R.id.btReturn);
 		dashboardButton.setOnClickListener(new LinearLayout.OnClickListener() {
 
