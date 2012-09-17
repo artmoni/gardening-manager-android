@@ -7,6 +7,7 @@
     android:padding="10dp" >
 
     <LinearLayout
+        android:id="@+id/webArtmoni"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
@@ -29,21 +30,25 @@
             android:textSize="14dip" />
     </LinearLayout>
 
-<RelativeLayout
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent" android:layout_weight="1">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
 
-    <ImageView
+        <ImageView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:src="@drawable/logosplah" />
-    <TextView
+
+        <TextView
             android:id="@+id/TextView01"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
             android:text="version"
             android:textColor="#432D07"
-            android:textSize="25dip" android:layout_alignParentBottom="true" android:layout_alignParentRight="true"/>
+            android:textSize="25dip" />
     </RelativeLayout>
     <!--
     <LinearLayout
@@ -79,6 +84,7 @@
     -->
 
     <LinearLayout
+        android:id="@+id/webSauterDansLesFlaques"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
