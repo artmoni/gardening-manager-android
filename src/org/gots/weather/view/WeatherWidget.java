@@ -21,7 +21,6 @@ public class WeatherWidget extends GridView {
 
 	// today
 
-
 	private int mType = WeatherView.FULL;
 	private WeatherWidgetAdapter weatherWidgetAdapter;
 	private int nbDays = 2;
@@ -30,13 +29,12 @@ public class WeatherWidget extends GridView {
 	public WeatherWidget(Context context, int type) {
 		super(context);
 		mType = type;
-		
+
 		wm = new WeatherManager(context);
-		
-		
-		weatherWidgetAdapter = new WeatherWidgetAdapter(getContext(), type,wm.getConditionSet(nbDays ));
+
+		weatherWidgetAdapter = new WeatherWidgetAdapter(getContext(), type, wm.getConditionSet(nbDays));
 		setAdapter(weatherWidgetAdapter);
-		
+
 		setNumColumns(getAdapter().getCount());
 
 	}
@@ -51,18 +49,14 @@ public class WeatherWidget extends GridView {
 		super.onLayout(changed, left, top, right, bottom);
 	}
 
-	
-
 	public void update() {
-//		wm.update();
-		weatherWidgetAdapter.setConditions(wm.getConditionSet(nbDays ));
-		Log.i("update",weatherWidgetAdapter.getCount()+"<->"+getChildCount());
+		// wm.update();
+		weatherWidgetAdapter.setConditions(wm.getConditionSet(nbDays));
+		Log.i("update", weatherWidgetAdapter.getCount() + "<->" + getChildCount());
 
 		weatherWidgetAdapter.notifyDataSetChanged();
 		setAdapter(weatherWidgetAdapter);
 		invalidateViews();
 	}
-	
-	
 
 }
