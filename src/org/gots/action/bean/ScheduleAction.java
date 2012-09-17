@@ -20,11 +20,11 @@ import org.gots.seed.GrowingSeedInterface;
 
 import android.content.Context;
 
-public class PlanAction extends AbstractActionSeed implements SeedActionInterface {
+public class ScheduleAction extends AbstractActionSeed implements SeedActionInterface {
 	Context mContext;
 
-	public PlanAction(	Context mContext) {
-		setName("plan");
+	public ScheduleAction(	Context mContext) {
+		setName("schedule");
 		this.mContext=mContext;
 	}
 
