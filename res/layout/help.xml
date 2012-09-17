@@ -11,30 +11,18 @@
         android:layout_height="fill_parent"
         android:orientation="vertical" >
 
-        <LinearLayout
-            android:id="@+id/bannerAd"
-            android:layout_width="fill_parent"
-            android:layout_height="50dp" >
-        </LinearLayout>
-
         <WebView
             android:id="@+id/webViewHelp"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1" android:layout_margin="10dp" />
 
         <Button
             android:id="@+id/buttonClose"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:text="OK" />
+            android:text="@string/button.close" android:layout_marginLeft="10dp" android:layout_marginRight="10dp"/>
     </LinearLayout>
-
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="60dp"
-        android:background="@drawable/bt_logo" >
-    </ImageView>
 
 </RelativeLayout>
