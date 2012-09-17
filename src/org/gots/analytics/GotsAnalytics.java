@@ -13,7 +13,7 @@ public class GotsAnalytics {
 
 	protected int activityCount = 0;
 	protected Integer dispatchIntervalSecs;
-	protected static String apiKey = GotsPreferences.ANALYTICS_ID;
+	protected static String apiKey = GotsPreferences.ANALYTICS_API_KEY;
 	protected Context context;
 
 	/**
