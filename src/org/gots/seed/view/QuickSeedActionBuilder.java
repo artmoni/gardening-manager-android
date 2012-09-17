@@ -20,7 +20,7 @@ import org.gots.action.BaseActionInterface;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.bean.DeleteAction;
 import org.gots.action.bean.DetailAction;
-import org.gots.action.bean.PlanAction;
+import org.gots.action.bean.ScheduleAction;
 import org.gots.action.bean.WateringAction;
 import org.gots.action.sql.ActionDBHelper;
 import org.gots.action.sql.ActionSeedDBHelper;
@@ -86,7 +86,7 @@ public class QuickSeedActionBuilder {
 			// });
 		}
 
-		PlanAction planAction = new PlanAction(v.getContext());
+		ScheduleAction planAction = new ScheduleAction(v.getContext());
 		ActionWidget actionWidget = new ActionWidget(v.getContext(), planAction);
 		actionWidget.setOnClickListener(new View.OnClickListener() {
 
