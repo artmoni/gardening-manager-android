@@ -21,8 +21,9 @@ import org.gots.garden.GardenInterface;
 import org.gots.garden.sql.GardenDBHelper;
 import org.gots.weather.exception.UnknownWeatherException;
 import org.gots.weather.provider.DatabaseWeatherTask;
-import org.gots.weather.provider.GoogleWeatherTask;
 import org.gots.weather.provider.WeatherTask;
+import org.gots.weather.provider.google.GoogleWeatherTask;
+import org.gots.weather.provider.previmeteo.PrevimeteoWeatherTask;
 import org.gots.weather.sql.WeatherDBHelper;
 
 import android.content.Context;
@@ -71,7 +72,8 @@ public class WeatherManager {
 					Calendar cal = Calendar.getInstance();
 					cal.add(Calendar.DAY_OF_YEAR, forecastDay);
 					
-					WeatherTask wt = new GoogleWeatherTask(garden.getAddress(), cal.getTime());
+//					WeatherTask wt = new GoogleWeatherTask(garden.getAddress(), cal.getTime());
+					WeatherTask wt = new PrevimeteoWeatherTask(garden.getAddress(), cal.getTime());
 					WeatherConditionInterface conditionInterface = wt.execute().get();
 
 					if (conditionInterface != null)
