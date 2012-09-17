@@ -79,4 +79,8 @@
     <string name="stock.description2">You can also add a reference by scanning the barcode of the packet of seeds</string>
     <string name="help.loading">Please wait, web help is loading</string>
     <string name="menu.help">Help</string>
+    <string name="menu.help.firstlaunch">Do you want to have a look on the documentation?</string>
+    <string name="button.close">Close</string>
+     <string name="button.ok">OK</string>
+     <string name="button.cancel">Cancel</string>
 </resources>
