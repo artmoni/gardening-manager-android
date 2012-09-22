@@ -17,11 +17,12 @@
             android:background="@drawable/bg_allotment_top" />
 
         <HorizontalScrollView
+            android:id="@+id/scrollWeatherHistory"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" >
 
             <LinearLayout
-                android:id="@+id/scrollWeatherHistory"
+                android:id="@+id/layoutWeatherHistory"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" >
