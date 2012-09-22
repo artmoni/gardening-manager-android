@@ -11,7 +11,6 @@
 package org.gots.ui;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -24,17 +23,9 @@ import org.gots.garden.GardenManager;
 import org.gots.garden.sql.GardenDBHelper;
 import org.gots.help.HelpUriBuilder;
 import org.gots.weather.WeatherCondition;
-import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.WeatherManager;
-import org.gots.weather.WeatherSet;
-import org.gots.weather.adapter.WeatherWidgetAdapter;
-import org.gots.weather.exception.UnknownWeatherException;
 import org.gots.weather.view.WeatherView;
-import org.gots.weather.view.WeatherWidget;
 
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
-
-import android.R.layout;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -56,13 +47,13 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.GridView;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class ProfileActivity extends Activity implements LocationListener, OnClickListener {
 	private LocationManager mlocManager;
@@ -87,12 +78,21 @@ public class ProfileActivity extends Activity implements LocationListener, OnCli
 		buildProfile();
 		WeatherManager manager = new WeatherManager(this);
 
-		LinearLayout weatherHistory = (LinearLayout) findViewById(R.id.scrollWeatherHistory);
+		LinearLayout weatherHistory = (LinearLayout) findViewById(R.id.layoutWeatherHistory);
+		final HorizontalScrollView scrollView = (HorizontalScrollView) findViewById(R.id.scrollWeatherHistory);
+
+		//set scrollview to the right end where today weather is displayed
+		scrollView.post(new Runnable() {
+			@Override
+			public void run() {
+				scrollView.scrollTo(scrollView.getWidth(), scrollView.getHeight());
+			}
+		});
 
 		for (int i = -10; i <= 0; i++) {
 			WeatherView view = new WeatherView(this);
 			try {
-				view.setWeather(manager.getCondition(i)); 
+				view.setWeather(manager.getCondition(i));
 			} catch (Exception e) {
 				Calendar weatherday = new GregorianCalendar();
 
@@ -105,7 +105,7 @@ public class ProfileActivity extends Activity implements LocationListener, OnCli
 
 			}
 			weatherHistory.addView(view);
-			
+
 		}
 	}
 
@@ -321,7 +321,8 @@ public class ProfileActivity extends Activity implements LocationListener, OnCli
 		// Handle item selection
 		switch (item.getItemId()) {
 		case R.id.help:
-			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
+			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HelpUriBuilder.getUri(getClass()
+					.getSimpleName())));
 			startActivity(browserIntent);
 
 			return true;
