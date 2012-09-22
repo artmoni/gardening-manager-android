@@ -12,7 +12,6 @@ package org.gots.allotment.view;
 
 import net.londatiga.android.QuickAction;
 
-import org.gots.action.BaseActionInterface;
 import org.gots.action.GardeningActionInterface;
 import org.gots.action.bean.SowingAction;
 import org.gots.action.bean.WateringAction;

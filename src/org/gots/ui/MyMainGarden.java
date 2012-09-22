@@ -21,8 +21,6 @@ import org.gots.bean.BaseAllotmentInterface;
 import org.gots.help.HelpUriBuilder;
 import org.gots.weather.view.WeatherWidget;
 
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -34,6 +32,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class MyMainGarden extends Activity {
 

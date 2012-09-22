@@ -12,7 +12,6 @@ package org.gots.action.sql;
 
 import java.util.ArrayList;
 
-import org.gots.DatabaseHelper;
 import org.gots.action.ActionFactory;
 import org.gots.action.BaseActionInterface;
 import org.gots.action.PermanentActionInterface;

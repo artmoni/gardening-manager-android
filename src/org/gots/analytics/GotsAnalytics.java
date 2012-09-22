@@ -12,7 +12,7 @@ public class GotsAnalytics {
 	protected static GotsAnalytics INSTANCE;
 
 	protected int activityCount = 0;
-	protected Integer dispatchIntervalSecs;
+	protected Integer dispatchIntervalSecs=10;
 	protected static String apiKey = GotsPreferences.ANALYTICS_API_KEY;
 	protected Context context;
 
@@ -21,7 +21,6 @@ public class GotsAnalytics {
 	 * in order to avoid memory leaks.
 	 */
 	protected GotsAnalytics(Application context) {
-		this.apiKey = apiKey;
 		this.context = context;
 	}
 

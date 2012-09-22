@@ -34,8 +34,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 
 public class QuickSeedActionBuilder {
 

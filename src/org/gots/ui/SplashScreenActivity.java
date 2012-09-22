@@ -12,11 +12,11 @@ package org.gots.ui;
 
 import org.gots.DatabaseHelper;
 import org.gots.R;
+import org.gots.analytics.GotsAnalytics;
 import org.gots.garden.GardenInterface;
-import org.gots.garden.GardenManager;
 import org.gots.garden.sql.GardenDBHelper;
-import org.gots.help.HelpUriBuilder;
-import org.gots.preferences.GotsPreferences;
+
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -62,31 +62,31 @@ public class SplashScreenActivity extends Activity {
 		try {
 			pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
 			String version = pInfo.versionName;
-			TextView name = (TextView)findViewById(R.id.TextView01);
-			name.setText("version "+version);
+			TextView name = (TextView) findViewById(R.id.TextView01);
+			name.setText("version " + version);
 		} catch (NameNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		LinearLayout artmoni = (LinearLayout)findViewById(R.id.webArtmoni);
+		LinearLayout artmoni = (LinearLayout) findViewById(R.id.webArtmoni);
 		artmoni.setOnClickListener(new LinearLayout.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.artmoni.eu"));
 				startActivity(browserIntent);
-				
+
 			}
 		});
-		LinearLayout sauterdanslesflaques = (LinearLayout)findViewById(R.id.webSauterDansLesFlaques);
+		LinearLayout sauterdanslesflaques = (LinearLayout) findViewById(R.id.webSauterDansLesFlaques);
 		sauterdanslesflaques.setOnClickListener(new LinearLayout.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.sauterdanslesflaques.com"));
 				startActivity(browserIntent);
-				
+
 			}
 		});
 		GardenDBHelper helper = new GardenDBHelper(this);
@@ -97,13 +97,18 @@ public class SplashScreenActivity extends Activity {
 			Intent intent = new Intent(this, ProfileActivity.class);
 			startActivityForResult(intent, 0);
 
-		} else{
-			
+		} else {
+
 			splashHandler.sendMessageDelayed(msg, SPLASHTIME);
 			DatabaseHelper databaseHelper = new DatabaseHelper(this);
-			databaseHelper.setDatabase(preferences.getInt("org.gots.preference.gardenid",0));
-		
+			databaseHelper.setDatabase(preferences.getInt("org.gots.preference.gardenid", 0));
+
+			GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
+			GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+			tracker.trackEvent("Garden", "location", garden.getLocality(), 0);
+			tracker.dispatch();
 		}
+
 	}
 
 	@Override
@@ -122,4 +127,9 @@ public class SplashScreenActivity extends Activity {
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
+	@Override
+	protected void onDestroy() {
+		GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
+		super.onDestroy();
+	}
 }

@@ -13,15 +13,12 @@ package org.gots.ui;
 import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.analytics.GotsAnalytics;
-import org.gots.garden.GardenInterface;
-import org.gots.garden.GardenManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.weather.view.WeatherView;
 import org.gots.weather.view.WeatherWidget;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -76,8 +73,6 @@ public class DashboardActivity extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		SharedPreferences preferences = getSharedPreferences("org.gots.preference", 0);
-		SharedPreferences.Editor prefedit = preferences.edit();
 
 		Intent i = null;
 		switch (v.getId()) {

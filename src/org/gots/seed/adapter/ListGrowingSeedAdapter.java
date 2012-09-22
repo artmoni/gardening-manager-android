@@ -10,13 +10,11 @@
  ******************************************************************************/
 package org.gots.seed.adapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.gots.R;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.sql.GrowingSeedDBHelper;
 import org.gots.seed.view.QuickSeedActionBuilder;
 import org.gots.seed.view.SeedWidget;
 
@@ -25,7 +23,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class ListGrowingSeedAdapter extends BaseAdapter implements OnClickListener {

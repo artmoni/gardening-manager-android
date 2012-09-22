@@ -19,8 +19,6 @@ import org.gots.help.HelpUriBuilder;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.sql.GrowingSeedDBHelper;
 
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -32,6 +30,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class ActionActivity extends Activity implements OnClickListener {
 

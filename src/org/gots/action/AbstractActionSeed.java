@@ -14,7 +14,6 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 
-import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GrowingSeedInterface;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;

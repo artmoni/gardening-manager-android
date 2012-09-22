@@ -13,20 +13,17 @@ package org.gots.action.adapter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Locale;
 
 import org.gots.R;
-import org.gots.action.AbstractActionSeed;
 import org.gots.action.BaseActionInterface;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.sql.ActionSeedDBHelper;
 import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
-import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.sql.GrowingSeedDBHelper;
 import org.gots.seed.view.SeedWidget;
@@ -44,7 +41,8 @@ public class ListAllActionAdapter extends BaseAdapter {
 
 	private Context mContext;
 	private ArrayList<BaseActionInterface> actions = new ArrayList<BaseActionInterface>();
-//	private ArrayList<GrowingSeedInterface> seeds = new ArrayList<GrowingSeedInterface>();
+	// private ArrayList<GrowingSeedInterface> seeds = new
+	// ArrayList<GrowingSeedInterface>();
 	// private ArrayList<WeatherConditionInterface> weathers = new
 	// ArrayList<WeatherConditionInterface>();
 
@@ -69,10 +67,12 @@ public class ListAllActionAdapter extends BaseAdapter {
 
 			if (seedActions.size() > 0) {
 				for (Iterator<BaseActionInterface> iterator2 = seedActions.iterator(); iterator2.hasNext();) {
-//					this.seeds.add(seed);
+					// this.seeds.add(seed);
 					// ********** GET ACTIONS for seed
-					BaseActionInterface baseActionInterface = iterator2.next();
-					this.actions.add(baseActionInterface);
+//					if (SeedActionInterface.class.isInstance(iterator2)) {
+						BaseActionInterface baseActionInterface = iterator2.next();
+						this.actions.add(baseActionInterface);
+//					}
 
 				}
 			}
@@ -110,7 +110,7 @@ public class ListAllActionAdapter extends BaseAdapter {
 			// ll = new LinearLayout(mContext);
 			ll = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.list_action, parent, false);
 		}
-		
+
 		GrowingSeedDBHelper helper = new GrowingSeedDBHelper(mContext);
 		final GrowingSeedInterface seed = helper.getSeedById(actions.get(position).getGrowingSeedId());
 		if (seed != null && BaseActionInterface.class.isInstance(actions.get(position))) {
@@ -142,7 +142,7 @@ public class ListAllActionAdapter extends BaseAdapter {
 					public void onClick(View v) {
 						((SeedActionInterface) actions.get(position)).execute(seed);
 						actions.remove(position);
-//						seeds.remove(position);
+						// seeds.remove(position);
 						notifyDataSetChanged();
 					}
 				});

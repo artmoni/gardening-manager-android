@@ -11,7 +11,6 @@
 package org.gots.seed.view;
 
 import java.util.Calendar;
-import java.util.regex.Pattern;
 
 import org.gots.R;
 import org.gots.seed.BaseSeedInterface;
@@ -26,7 +25,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 public class SeedWidget extends RelativeLayout implements OnClickListener {

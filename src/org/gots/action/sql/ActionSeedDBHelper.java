@@ -16,10 +16,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import org.gots.DatabaseHelper;
-import org.gots.action.ActionFactory;
 import org.gots.action.BaseActionInterface;
 import org.gots.action.util.ActionState;
-import org.gots.garden.sql.GardenSQLite;
 import org.gots.seed.GrowingSeedInterface;
 
 import android.content.ContentValues;

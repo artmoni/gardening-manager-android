@@ -64,8 +64,8 @@ public class GardenManager {
 		List<BaseSeedInterface> seeds = connector.getAllSeeds();
 
 		VendorSeedDBHelper theSeedBank = new VendorSeedDBHelper(mContext);
-		for (Iterator iterator = seeds.iterator(); iterator.hasNext();) {
-			BaseSeedInterface baseSeedInterface = (BaseSeedInterface) iterator.next();
+		for (Iterator<BaseSeedInterface> iterator = seeds.iterator(); iterator.hasNext();) {
+			BaseSeedInterface baseSeedInterface =  iterator.next();
 			if (theSeedBank.getSeedByReference(baseSeedInterface.getReference()) == null)
 				theSeedBank.insertSeed(baseSeedInterface);
 

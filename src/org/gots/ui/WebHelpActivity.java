@@ -11,17 +11,14 @@
 package org.gots.ui;
 
 import org.gots.R;
-import org.gots.ads.GotsAdvertisement;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
-import android.widget.LinearLayout;
 
 public class WebHelpActivity extends Activity {
 	private ProgressDialog pd;

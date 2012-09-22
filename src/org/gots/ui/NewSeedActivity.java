@@ -87,7 +87,7 @@ public class NewSeedActivity extends Activity implements OnClickListener {
 			@Override
 			public void onClick(View v) {
 				initVarietyList();
-				autoCompleteVariety.showDropDown();
+					autoCompleteVariety.showDropDown();
 			}
 		});
 

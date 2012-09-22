@@ -10,8 +10,6 @@
  ******************************************************************************/
 package org.gots.seed.view;
 
-import java.util.regex.Pattern;
-
 import org.gots.R;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;

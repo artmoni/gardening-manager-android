@@ -3,9 +3,6 @@ package org.gots.action.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.crypto.Mac;
-
-import org.gots.R;
 import org.gots.action.BaseActionInterface;
 import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
@@ -13,7 +10,6 @@ import org.gots.action.view.ActionWidget;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 
 public class SimpleListActionAdapter extends BaseAdapter {
 

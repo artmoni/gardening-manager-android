@@ -37,7 +37,7 @@ public class ImageAdapter extends BaseAdapter {
 	List<File> imagelist=new ArrayList<File>();
 	// private List<Bitmap> bMap = new ArrayList<Bitmap>();
 
-	private ImageView image;
+//	private ImageView image;
 
 	public ImageAdapter(Context c, String directory) {
 		mContext = c;

@@ -15,14 +15,14 @@ import org.gots.analytics.GotsAnalytics;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.sql.VendorSeedDBHelper;
 
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Gallery;
 import android.widget.TextView;
+
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class SeedActivity extends Activity {
 	private int seedId;
