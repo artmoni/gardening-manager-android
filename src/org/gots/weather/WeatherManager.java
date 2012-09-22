@@ -15,14 +15,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import org.gots.garden.GardenInterface;
 import org.gots.garden.sql.GardenDBHelper;
-import org.gots.weather.exception.UnknownWeatherException;
 import org.gots.weather.provider.DatabaseWeatherTask;
 import org.gots.weather.provider.WeatherTask;
-import org.gots.weather.provider.google.GoogleWeatherTask;
 import org.gots.weather.provider.previmeteo.PrevimeteoWeatherTask;
 import org.gots.weather.sql.WeatherDBHelper;
 

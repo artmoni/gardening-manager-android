@@ -11,6 +11,7 @@
 package org.gots.weather.provider.previmeteo;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
@@ -28,6 +29,7 @@ import org.gots.preferences.GotsPreferences;
 import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.WeatherSet;
+import org.gots.weather.provider.WeatherCache;
 import org.gots.weather.provider.WeatherTask;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
@@ -52,8 +54,8 @@ public class PrevimeteoWeatherTask extends WeatherTask {
 			if (GotsPreferences.DEVELOPPEMENT)
 				weatherURL = "http://92.243.19.29/weather-previmeteo.xml";
 			else
-				weatherURL = "http://api.previmeteo.com/" + GotsPreferences.WEATHER_API_KEY + "/ig/api?weather=" + address.getLocality() + ","
-						+ address.getCountryName();
+				weatherURL = "http://api.previmeteo.com/" + GotsPreferences.WEATHER_API_KEY + "/ig/api?weather="
+						+ address.getLocality() + "," + address.getCountryName() + "&hl=fr";
 
 			if (today != Calendar.getInstance().getTime().getDay())
 				force = true;
@@ -75,20 +77,23 @@ public class PrevimeteoWeatherTask extends WeatherTask {
 
 			try {
 
-				// android.os.Debug.waitForDebugger();
-				/*************/
-
-				HttpClient httpclient = new DefaultHttpClient();
-				HttpGet httpget = new HttpGet(url.toURI());
-
-				// create a response handler
-				ResponseHandler<String> responseHandler = new BasicResponseHandler();
-
-				String responseBody = httpclient.execute(httpget, responseHandler);
-				// Log.d(DEBUG_TAG, "response from httpclient:n "+responseBody);
-
-				ByteArrayInputStream is = new ByteArrayInputStream(responseBody.getBytes());
-
+//				// android.os.Debug.waitForDebugger();
+//				/*************/
+//
+//				HttpClient httpclient = new DefaultHttpClient();
+//				HttpGet httpget = new HttpGet(url.toURI());
+//
+//				// create a response handler
+//				ResponseHandler<String> responseHandler = new BasicResponseHandler();
+//
+//				String responseBody = httpclient.execute(httpget, responseHandler);
+//				// Log.d(DEBUG_TAG, "response from httpclient:n "+responseBody);
+//
+//				ByteArrayInputStream is = new ByteArrayInputStream(responseBody.getBytes());
+				WeatherCache cache = new WeatherCache();
+				
+				InputStream is = cache.getWeatherXML(url); 
+				
 				/* Get a SAXParser from the SAXPArserFactory. */
 				SAXParserFactory spf = SAXParserFactory.newInstance();
 				SAXParser sp = spf.newSAXParser();
@@ -112,6 +117,8 @@ public class PrevimeteoWeatherTask extends WeatherTask {
 			}
 			force = false;
 		}
+		
+		
 		Calendar requestCalendar = Calendar.getInstance();
 		requestCalendar.setTime(requestedDay);
 		if (ws == null)

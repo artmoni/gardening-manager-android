@@ -1,14 +1,11 @@
 package org.gots.weather.provider;
 
-import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
-import org.gots.weather.WeatherSet;
-import org.gots.weather.exception.UnknownWeatherException;
 import org.gots.weather.sql.WeatherDBHelper;
 
 import android.content.Context;

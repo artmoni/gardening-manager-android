@@ -11,7 +11,6 @@
 package org.gots.weather.view;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Locale;
 
 import org.gots.R;
