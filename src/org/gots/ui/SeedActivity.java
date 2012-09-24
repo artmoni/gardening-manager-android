@@ -64,38 +64,7 @@ public class SeedActivity extends Activity {
 		seedDescription = (TextView) findViewById(R.id.IdSeedDescriptionHarvest);
 		seedDescription.setText(mSeed.getDescriptionHarvest());
 
-		// ********** WEBVIEW ******************
-		// WebView mWebView = (WebView) findViewById(R.id.webview);
-		// mWebView.setWebViewClient(new HelloWebViewClient());
-		// mWebView.getSettings().setJavaScriptEnabled(true);
-		//
-		// mWebView.loadUrl(mSeed.getUrlDescription());
-
-		// ********** GALLERY ******************
-		// gallery = (Gallery) findViewById(R.id.examplegallery);
-		// gallery.setAdapter(new ImageAdapter(this, mSeed.getReference()));
-		//
-		// gallery.setOnItemClickListener(new OnItemClickListener() {
-		// public void onItemClick(AdapterView<?> parent, View v, int position,
-		// long id) {
-		// // Toast.makeText(HelloGallery.this, "" + position,
-		// // Toast.LENGTH_SHORT).show();
-		// }
-		// });
-		//
-		// ImageView takePhoto = (ImageView) findViewById(R.id.idCamera);
-		// takePhoto.setOnClickListener(new View.OnClickListener() {
-		//
-		// @Override
-		// public void onClick(View v) {
-		// Intent i = new Intent(v.getContext(), CameraView.class);
-		// i.putExtra("org.gots.camera.filename", mSeed.getName());
-		// i.putExtra("org.gots.camera.savedirectory", mSeed.getReference());
-		// startActivityForResult(i, resultCameraActivity);
-		// }
-		// });
-
-		// END GALLERY
+		
 
 	}
 
