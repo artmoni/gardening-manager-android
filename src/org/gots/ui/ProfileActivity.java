@@ -125,6 +125,7 @@ public class ProfileActivity extends Activity implements LocationListener, OnCli
 
 			findViewById(R.id.layoutMultiGarden).setVisibility(View.VISIBLE);
 			findViewById(R.id.idGardenSelector).setVisibility(View.VISIBLE);
+			findViewById(R.id.scrollWeatherHistory).setVisibility(View.VISIBLE);
 
 			Spinner gardenSelector = (Spinner) findViewById(R.id.idGardenSelector);
 			initGardenList(gardenSelector);
