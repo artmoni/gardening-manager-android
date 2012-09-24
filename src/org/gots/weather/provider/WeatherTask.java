@@ -11,6 +11,11 @@ public abstract class WeatherTask extends AsyncTask<Object, Integer, WeatherCond
 	public WeatherTask() {
 		super();
 	}
+	@Override
+	protected void onPostExecute(WeatherConditionInterface result) {
+	
+		super.onPostExecute(result);
+	}
 
 	
 }

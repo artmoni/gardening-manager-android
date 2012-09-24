@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.gots.R;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.sql.GardenDBHelper;
 import org.gots.weather.provider.DatabaseWeatherTask;
@@ -26,6 +27,7 @@ import org.gots.weather.sql.WeatherDBHelper;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 public class WeatherManager {
 
@@ -52,37 +54,30 @@ public class WeatherManager {
 		GardenDBHelper helper = new GardenDBHelper(mContext);
 		GardenInterface garden = helper.getGarden(preferences.getInt("org.gots.preference.gardenid", 0));
 		getWeather(garden);
-
 	}
 
 	private void getWeather(GardenInterface garden) {
-		WeatherDBHelper helper = new WeatherDBHelper(mContext);
-		WeatherConditionInterface wc;
+		
+		try {
+			for (int forecastDay = 0; forecastDay < 4; forecastDay++) {
+				Calendar cal = Calendar.getInstance();
+				cal.add(Calendar.DAY_OF_YEAR, forecastDay);
+				
+				// GoogleWeatherTask(garden.getAddress(), cal.getTime());
+				WeatherTask wt = new PrevimeteoWeatherTask(mContext, garden.getAddress(), cal.getTime());
+				WeatherConditionInterface conditionInterface = wt.execute().get();
 
-		wc = getCondition(0);
+				if (conditionInterface != null)
+					updateCondition(conditionInterface, forecastDay);
 
-		if (wc == null || true) {
-			// today = Calendar.getInstance().getTime();
-
-			try {
-				for (int forecastDay = 0; forecastDay < 4; forecastDay++) {
-					Calendar cal = Calendar.getInstance();
-					cal.add(Calendar.DAY_OF_YEAR, forecastDay);
-					
-//					WeatherTask wt = new GoogleWeatherTask(garden.getAddress(), cal.getTime());
-					WeatherTask wt = new PrevimeteoWeatherTask(garden.getAddress(), cal.getTime());
-					WeatherConditionInterface conditionInterface = wt.execute().get();
-
-					if (conditionInterface != null)
-						updateCondition(conditionInterface, forecastDay);
-
-				}
-
-			} catch (Exception e) {
-				if (e.getMessage() != null)
-					Log.e("WeatherManager", e.getMessage());
 			}
+
+		} catch (Exception e) {
+			if (e.getMessage() != null)
+				Log.e("WeatherManager", e.getMessage());
+			Toast.makeText(mContext, "Try another nearest city", 50).show();
 		}
+
 	}
 
 	private void updateCondition(WeatherConditionInterface condition, int day) {
