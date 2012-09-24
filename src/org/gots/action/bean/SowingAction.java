@@ -24,6 +24,8 @@ import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.sql.GrowingSeedDBHelper;
 
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+
 import android.content.Context;
 
 public class SowingAction extends AbstractActionGarden implements PermanentActionInterface, GardeningActionInterface {
@@ -76,17 +78,20 @@ public class SowingAction extends AbstractActionGarden implements PermanentActio
 		seed = gsdh.insertSeed(seed, allotment.getName());
 		ActionSeedDBHelper asdh = new ActionSeedDBHelper(mContext);
 		asdh.insertAction(this, seed);
-//		setId(1);
+		// setId(1);
 		asdh.doAction(this, seed);
 
 		for (Iterator<BaseActionInterface> iterator = seed.getActionToDo().iterator(); iterator.hasNext();) {
 			ActionDBHelper actionHelper = new ActionDBHelper(mContext);
-			BaseActionInterface type1 =  iterator.next();
+			BaseActionInterface type1 = iterator.next();
 			if (type1 != null) {
 				BaseActionInterface type = actionHelper.getActionByName(type1.getName());
 				asdh.insertAction(type, seed);
 			}
 		}
+		GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+		tracker.trackEvent("Seed", getName(), seed.getSpecie(), 0);
+		// tracker.dispatch();
 		return 0;
 	}
 

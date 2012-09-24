@@ -105,7 +105,7 @@ public abstract class AbstractActionSeed implements SeedActionInterface, Compara
 
 		GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
 		tracker.trackEvent("Seed", getName(), seed.getSpecie(), 0);
-		tracker.dispatch();
+//		tracker.dispatch();
 		return 1;
 	}
 
