@@ -19,7 +19,7 @@
         <HorizontalScrollView
             android:id="@+id/scrollWeatherHistory"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content" android:visibility="gone" >
 
             <LinearLayout
                 android:id="@+id/layoutWeatherHistory"
@@ -115,7 +115,8 @@
                         android:id="@+id/editTextLocality"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"                         style="@style/button"
+/>
 
                     <Button
                         android:id="@+id/buttonValidatePosition"
