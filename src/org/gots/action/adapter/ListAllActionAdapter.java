@@ -128,7 +128,7 @@ public class ListAllActionAdapter extends BaseAdapter {
 			TextView tv = (TextView) ll.findViewById(R.id.IdSeedActionStatus);
 			TextView tv2 = (TextView) ll.findViewById(R.id.IdSeedActionDate);
 
-			SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
+			SimpleDateFormat dateFormat = new SimpleDateFormat(" dd/MM/yyyy", Locale.FRANCE);
 
 			if (current_status == STATUS_TODO) {
 				tv.setText(mContext.getResources().getString(R.string.seed_action_todo));
