@@ -6,8 +6,8 @@ import java.util.List;
 import org.gots.DatabaseHelper;
 import org.gots.bean.Garden;
 import org.gots.garden.sql.GardenDBHelper;
-import org.gots.providers.simple.SimpleConnector;
 import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.providers.simple.SimpleConnector;
 import org.gots.seed.sql.VendorSeedDBHelper;
 
 import android.content.Context;
