@@ -36,6 +36,7 @@ public class GotsAdvertisement {
 			adView = new AdView((Activity) mContext, AdSize.IAB_BANNER, editorId);
 		else
 			adView = new AdView((Activity) mContext, AdSize.BANNER, editorId);
+		
 		adView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 
 		adView.loadAd(adRequest);
