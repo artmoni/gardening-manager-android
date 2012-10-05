@@ -83,4 +83,5 @@
     <string name="button.close">Close</string>
      <string name="button.ok">OK</string>
      <string name="button.cancel">Cancel</string>
+     <string name="weather.citynotfound">We can\'t provide weather for your city, please try locating to the nearest bigger city</string>
 </resources>
