@@ -43,7 +43,6 @@ public class WeatherManager {
 	public WeatherManager(Context context) {
 		this.mContext = context;
 		update();
-
 	}
 
 	public void update() {
@@ -69,6 +68,10 @@ public class WeatherManager {
 
 				if (conditionInterface != null)
 					updateCondition(conditionInterface, forecastDay);
+				else{
+					Toast.makeText(mContext, mContext.getResources().getString(R.string.weather_citynotfound), 50).show();
+					break;
+				}
 
 			}
 

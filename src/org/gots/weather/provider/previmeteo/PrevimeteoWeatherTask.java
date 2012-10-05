@@ -58,7 +58,8 @@ public class PrevimeteoWeatherTask extends WeatherTask {
 			else
 				weatherURL = "http://api.previmeteo.com/" + GotsPreferences.WEATHER_API_KEY + "/ig/api?weather="
 						+ address.getLocality() + "," + address.getCountryName() + "&hl=fr";
-//				weatherURL = "http://www.gardening-manager.com/weather/weather-previmeteo.xml";
+			// weatherURL =
+			// "http://www.gardening-manager.com/weather/weather-previmeteo.xml";
 
 			queryString = weatherURL;
 
@@ -90,9 +91,10 @@ public class PrevimeteoWeatherTask extends WeatherTask {
 				xr.setContentHandler(error);
 				xr.parse(new InputSource(is));
 				iserror = error.isError();
-				
+
 				if (!iserror) {
-					//TODO we should not need to get the cache file again, a better way exists
+					// TODO we should not need to get the cache file again, a
+					// better way exists
 					is = cache.getCacheByURL(url);
 					/*
 					 * Create a new ContentHandler and apply it to the
@@ -109,8 +111,10 @@ public class PrevimeteoWeatherTask extends WeatherTask {
 					ws = gwh.getWeatherSet();
 				}
 			} catch (Exception e) {
-				Log.e("PrevimeteoWeatherTask", "PrevimeteoErrorHandler has return an error, maybe location should be modified:"+e.getMessage());
-
+				Log.e("PrevimeteoWeatherTask",
+						"PrevimeteoErrorHandler has return an error, maybe location should be modified:"
+								+ e.getMessage());
+				return null;
 			}
 		}
 
