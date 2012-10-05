@@ -164,6 +164,9 @@ public class ProfileActivity extends Activity implements LocationListener, OnCli
 			public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
 				gardenManager.selectGarden(position + 1);
 				buildProfile();
+				
+				GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+				tracker.trackEvent("Garden","Select", gardenManager.getcurrentGarden().getLocality(), 0);
 			}
 
 			@Override

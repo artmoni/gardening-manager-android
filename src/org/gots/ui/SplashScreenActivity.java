@@ -106,7 +106,7 @@ public class SplashScreenActivity extends Activity {
 			GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
 			GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
 			tracker.trackEvent("Garden", "location", garden.getLocality(), 0);
-			tracker.dispatch();
+//			tracker.dispatch();
 		}
 
 	}

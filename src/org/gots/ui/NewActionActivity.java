@@ -80,7 +80,7 @@ public class NewActionActivity extends Activity implements OnItemClickListener, 
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.buttonPlanAction:
-			planAction();
+			scheduleAction();
 			break;
 		case R.id.idListAction:
 			Log.i("listAction", "" + ((GridView) v).getCheckedItemPosition());
@@ -90,7 +90,7 @@ public class NewActionActivity extends Activity implements OnItemClickListener, 
 		}
 	}
 
-	private void planAction() {
+	private void scheduleAction() {
 
 		int duration = (Integer) spinner.getSelectedItem();
 

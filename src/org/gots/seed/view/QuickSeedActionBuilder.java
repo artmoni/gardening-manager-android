@@ -52,7 +52,7 @@ public class QuickSeedActionBuilder {
 		for (Iterator<BaseActionInterface> iterator = actions.iterator(); iterator.hasNext();) {
 			BaseActionInterface baseActionInterface = iterator.next();
 			if (!SeedActionInterface.class.isInstance(baseActionInterface))
-				break;
+				continue;
 			final SeedActionInterface currentAction = (SeedActionInterface) baseActionInterface;
 
 			ActionWidget actionWidget = new ActionWidget(v.getContext(), currentAction);
@@ -71,17 +71,7 @@ public class QuickSeedActionBuilder {
 					quickAction.dismiss();
 				}
 			});
-			// actionWidget.setOnActionItemClickListener(new
-			// ActionWidget.OnActionItemClickListener() {
-			// @Override
-			// public void onItemClick(ActionWidget source, BaseActionInterface
-			// action) {
-			// SeedActionInterface actionItem = (SeedActionInterface) action;
-			// actionItem.execute(seed);
-			// parentAdapter.notifyDataSetChanged();
-			// quickAction.dismiss();
-			// }
-			// });
+			
 		}
 
 		ScheduleAction planAction = new ScheduleAction(v.getContext());
@@ -96,18 +86,14 @@ public class QuickSeedActionBuilder {
 				quickAction.dismiss();
 			}
 		});
-		// actionWidget.setOnActionItemClickListener(new
-		// ActionWidget.OnActionItemClickListener() {
-		// @Override
-		// public void onItemClick(ActionWidget source, BaseActionInterface
-		// action) {
-		//
-		// }
-		// });
+		
 		quickAction.addActionItem(actionWidget);
 
 		ActionDBHelper helper = new ActionDBHelper(v.getContext());
-
+		
+		/*
+		 * ACTION WATERING
+		 */
 		final WateringAction wateringAction = (WateringAction) helper.getActionByName("water");
 		ActionWidget watering = new ActionWidget(v.getContext(), wateringAction);
 		watering.setOnClickListener(new View.OnClickListener() {
@@ -120,20 +106,12 @@ public class QuickSeedActionBuilder {
 				quickAction.dismiss();
 
 			}
-		});
-		// watering.setOnActionItemClickListener(new
-		// ActionWidget.OnActionItemClickListener() {
-		// @Override
-		// public void onItemClick(ActionWidget source, BaseActionInterface
-		// action) {
-		// SeedActionInterface actionItem = (SeedActionInterface) action;
-		// actionItem.execute(seed);
-		// parentAdapter.notifyDataSetChanged();
-		// quickAction.dismiss();
-		// }
-		// });
+		});			
 		quickAction.addPermanentActionItem(watering);
 
+		/*
+		 * ACTION DELETE
+		 */
 		final DeleteAction deleteAction = new DeleteAction(v.getContext());
 		ActionWidget delete = new ActionWidget(v.getContext(), deleteAction);
 		delete.setOnClickListener(new View.OnClickListener() {
@@ -158,20 +136,12 @@ public class QuickSeedActionBuilder {
 				builder.show();
 
 			}
-		});
-		// delete.setOnActionItemClickListener(new
-		// ActionWidget.OnActionItemClickListener() {
-		// @Override
-		// public void onItemClick(ActionWidget source, BaseActionInterface
-		// action) {
-		// SeedActionInterface actionItem = (SeedActionInterface) action;
-		// actionItem.execute(seed);
-		// parentAdapter.notifyDataSetChanged();
-		// quickAction.dismiss();
-		// }
-		// });
+		});		
 		quickAction.addPermanentActionItem(delete);
 
+		/*
+		 * ACTION DETAIL
+		 */
 		final DetailAction detail = new DetailAction(v.getContext());
 		ActionWidget detailWidget = new ActionWidget(v.getContext(), new DetailAction(v.getContext()));
 		quickAction.addPermanentActionItem(detailWidget);
@@ -194,29 +164,7 @@ public class QuickSeedActionBuilder {
 				quickAction.dismiss();
 			}
 		});
-		// Set listener for action item clicked
-		// detail.setOnActionItemClickListener(new
-		// ActionWidget.OnActionItemClickListener() {
-		// @Override
-		// public void onItemClick(ActionWidget source, BaseActionInterface
-		// action) {
-		// SeedActionInterface actionItem = (SeedActionInterface) action;
-		// if (DetailAction.class.isInstance(actionItem)) {
-		// // alert.show();
-		// final Intent i = new Intent(v.getContext(), TabSeedActivity.class);
-		// i.putExtra("org.gots.seed.id", ((GrowingSeedInterface)
-		// v.getTag()).getGrowingSeedId());
-		// i.putExtra("org.gots.seed.url", ((GrowingSeedInterface)
-		// v.getTag()).getUrlDescription());
-		//
-		// v.getContext().startActivity(i);
-		// } else {
-		// actionItem.execute(seed);
-		// }
-		// parentAdapter.notifyDataSetChanged();
-		// quickAction.dismiss();
-		// }
-		// });
+		
 
 	}
 
