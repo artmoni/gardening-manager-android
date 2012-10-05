@@ -70,16 +70,15 @@ public class SowingAction extends AbstractActionGarden implements PermanentActio
 
 	@Override
 	public int execute(BaseAllotmentInterface allotment, GrowingSeedInterface seed) {
-		// allotment.getSeeds().put(seed.getName(), seed);
 		super.execute(allotment, seed);
 
 		GrowingSeedDBHelper gsdh = new GrowingSeedDBHelper(mContext);
 		seed.setDateSowing(Calendar.getInstance().getTime());
 		seed = gsdh.insertSeed(seed, allotment.getName());
+		
 		ActionSeedDBHelper asdh = new ActionSeedDBHelper(mContext);
 		asdh.insertAction(this, seed);
-		// setId(1);
-		asdh.doAction(this, seed);
+		//asdh.doAction(this, seed);
 
 		for (Iterator<BaseActionInterface> iterator = seed.getActionToDo().iterator(); iterator.hasNext();) {
 			ActionDBHelper actionHelper = new ActionDBHelper(mContext);
