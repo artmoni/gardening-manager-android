@@ -81,7 +81,7 @@ public class WeatherView extends LinearLayout {
 		case IMAGE:
 			boxTemp.setVisibility(View.GONE);
 			weatherDay.setVisibility(View.GONE);
-			
+
 			break;
 
 		default:
@@ -100,7 +100,7 @@ public class WeatherView extends LinearLayout {
 		SimpleDateFormat sdf = new SimpleDateFormat("E dd/MM", Locale.getDefault());
 		if (mWeather.getDate() != null)
 			weatherDay.setText("" + sdf.format(mWeather.getDate()));
-		
+
 		invalidate();
 	}
 
@@ -124,7 +124,12 @@ public class WeatherView extends LinearLayout {
 			return R.drawable.weather_mostlysunny;
 		else if (weatherCondition.getIconURL().contains("cloud"))
 			return R.drawable.weather_cloud;
-
+		else if (weatherCondition.getIconURL().contains("snow"))
+			return R.drawable.weather_snow;
+		else if (weatherCondition.getIconURL().contains("sunny"))
+			return R.drawable.weather_mostlysunny;
+		else if (weatherCondition.getIconURL().contains("storm") || weatherCondition.getIconURL().contains("thunder"))
+			return R.drawable.weather_thunder;
 		return R.drawable.weather_sun;
 	}
 
