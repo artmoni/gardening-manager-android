@@ -50,6 +50,7 @@ public class SplashScreenActivity extends Activity {
 			super.handleMessage(msg);
 		}
 	};
+	private GardenInterface myGarden;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -92,8 +93,8 @@ public class SplashScreenActivity extends Activity {
 		GardenDBHelper helper = new GardenDBHelper(this);
 		SharedPreferences preferences = getSharedPreferences("org.gots.preference", 0);
 
-		GardenInterface garden = helper.getGarden(preferences.getInt("org.gots.preference.gardenid", 0));
-		if (garden == null) {
+		myGarden = helper.getGarden(preferences.getInt("org.gots.preference.gardenid", 0));
+		if (myGarden == null) {
 			Intent intent = new Intent(this, ProfileActivity.class);
 			startActivityForResult(intent, 0);
 
@@ -103,11 +104,7 @@ public class SplashScreenActivity extends Activity {
 			DatabaseHelper databaseHelper = new DatabaseHelper(this);
 			databaseHelper.setDatabase(preferences.getInt("org.gots.preference.gardenid", 0));
 
-			GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
-			GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-			tracker.trackEvent("Garden", "location", garden.getLocality(), 0);
-//			tracker.dispatch();
-		}
+			}
 
 	}
 
@@ -124,11 +121,19 @@ public class SplashScreenActivity extends Activity {
 		Message msg = new Message();
 		msg.what = STOPSPLASH;
 		splashHandler.sendMessageDelayed(msg, SPLASHTIME);
+		
+		GardenDBHelper helper = new GardenDBHelper(this);
+		SharedPreferences preferences = getSharedPreferences("org.gots.preference", 0);
+		myGarden = helper.getGarden(preferences.getInt("org.gots.preference.gardenid", 0));
+		
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	@Override
 	protected void onDestroy() {
+		GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
+		GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+		tracker.trackEvent("Garden", "location", myGarden.getLocality(), 0);
 		GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
 		super.onDestroy();
 	}
