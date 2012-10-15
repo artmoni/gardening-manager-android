@@ -1,6 +1,8 @@
 package org.gots.layout;
 
 import android.content.Context;
+import android.content.res.Configuration;
+import android.graphics.drawable.GradientDrawable.Orientation;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,7 +103,7 @@ public class DashboardLayout extends ViewGroup {
 		int cols = 1;
 		int rows = 1;
 
-		if (width < height) {
+		if (width < height || getContext().getResources().getConfiguration().orientation==Configuration.ORIENTATION_PORTRAIT) {
 
 			while (true) {
 				rows = (visibleCount - 1) / cols + 1;
