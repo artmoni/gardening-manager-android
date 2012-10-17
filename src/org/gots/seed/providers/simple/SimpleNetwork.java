@@ -19,7 +19,7 @@ import android.os.AsyncTask;
 public class SimpleNetwork extends AsyncTask<String, Integer, InputStream> {
 	String result;
 	private static final String GOTS_APIKEY = "PY0XHE11WE4VQNJ18DXUQFZ7OJR5YVBR";
-	private String URL = "http://gots.artmoni.eu/seeds/seed.xml";
+	private String URL = "http://services.gardening-manager.com/seeds/seed.xml";
 	private InputStream instream;
 
 	@Override

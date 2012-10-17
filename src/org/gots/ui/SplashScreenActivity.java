@@ -104,7 +104,7 @@ public class SplashScreenActivity extends Activity {
 			DatabaseHelper databaseHelper = new DatabaseHelper(this);
 			databaseHelper.setDatabase(preferences.getInt("org.gots.preference.gardenid", 0));
 
-			}
+		}
 
 	}
 
@@ -121,11 +121,11 @@ public class SplashScreenActivity extends Activity {
 		Message msg = new Message();
 		msg.what = STOPSPLASH;
 		splashHandler.sendMessageDelayed(msg, SPLASHTIME);
-		
+
 		GardenDBHelper helper = new GardenDBHelper(this);
 		SharedPreferences preferences = getSharedPreferences("org.gots.preference", 0);
 		myGarden = helper.getGarden(preferences.getInt("org.gots.preference.gardenid", 0));
-		
+
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
