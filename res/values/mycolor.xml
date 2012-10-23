@@ -11,5 +11,7 @@
     <color name="text_color_dark">#432D07</color>
     <color name="text_color_light">#E5DFC5</color>
     <color name="transparent">#00000000</color>
+    <color name="green_dark">#48651C</color>
+    <color name="green_light">#92C051</color>
 
 </resources>

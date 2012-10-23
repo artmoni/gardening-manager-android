@@ -23,17 +23,20 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class ActionActivity extends Activity implements OnClickListener {
+public class ActionActivity extends SherlockActivity implements OnClickListener {
 
 	private ListAllActionAdapter listActions;
 	ListView listAllotments;
@@ -43,6 +46,10 @@ public class ActionActivity extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		ActionBar bar = getSupportActionBar();
+		bar.setDisplayHomeAsUpEnabled(true);
+		bar.setDisplayShowTitleEnabled(false);
+		
 		GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
 		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
@@ -84,7 +91,7 @@ public class ActionActivity extends Activity implements OnClickListener {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		 MenuInflater inflater = getMenuInflater();
+		 MenuInflater inflater = getSupportMenuInflater();
 		 inflater.inflate(R.menu.menu_action, menu);
 		return true;
 	}
@@ -93,6 +100,9 @@ public class ActionActivity extends Activity implements OnClickListener {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
 		switch (item.getItemId()) {
+		case android.R.id.home:
+			finish();
+			return true;
 		case R.id.help:
 			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
 			startActivity(browserIntent);

@@ -12,30 +12,41 @@ package org.gots.ui;
 
 import org.gots.R;
 
+import com.actionbarsherlock.app.SherlockFragment;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-public class WebViewActivity extends Activity {
+public class WebViewActivity extends SherlockFragment {
 	private ProgressDialog pd;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		WebView mWebView = new WebView(this);
+
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		WebView mWebView = new WebView(getActivity());
 		mWebView.setWebViewClient(new HelloWebViewClient());
 		mWebView.getSettings().setJavaScriptEnabled(true);
 
-		mWebView.loadUrl(getIntent().getExtras().getString("org.gots.seed.url"));
-		addContentView(mWebView, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+		Bundle bundle = this.getArguments();
+		String url = bundle.getString("org.gots.seed.url");
 		
-		pd = ProgressDialog.show(this, "", 
-                getResources().getString(R.string.gots_loading), true);
-		pd.setCanceledOnTouchOutside(true);
+		mWebView.loadUrl(url);
 
+		pd = ProgressDialog.show(getActivity(), "", getResources().getString(R.string.gots_loading), true);
+		pd.setCanceledOnTouchOutside(true);
+		return mWebView;
 	}
 
 	private class HelloWebViewClient extends WebViewClient {
@@ -44,11 +55,12 @@ public class WebViewActivity extends Activity {
 			view.loadUrl(url);
 			return true;
 		}
+
 		@Override
 		public void onPageFinished(WebView view, String url) {
 			super.onPageFinished(view, url);
-	        pd.dismiss();
+			pd.dismiss();
 		}
-		
+
 	}
 }

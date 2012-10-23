@@ -12,19 +12,32 @@ package org.gots.ui;
 
 import org.gots.R;
 import org.gots.analytics.GotsAnalytics;
+import org.gots.help.HelpUriBuilder;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.sql.VendorSeedDBHelper;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Gallery;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class SeedActivity extends Activity {
+public class SeedActivity extends SherlockFragment {
 	private int seedId;
 
 	protected BaseSeedInterface mSeed;
@@ -36,52 +49,59 @@ public class SeedActivity extends Activity {
 	private Gallery gallery;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.seed);
 
-		GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
+		GotsAnalytics.getInstance(getActivity().getApplication()).incrementActivityCount();
 		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
-		if (getIntent().getExtras() == null || getIntent().getExtras().getInt("org.gots.seed.id") <= 0) {
-			Log.e("SeedActivity", "You must provide a org.gots.seed.id as an Extra Int");
-			finish();
-			return;
-		}
-		this.seedId = getIntent().getExtras().getInt("org.gots.seed.id");
-		VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
-		mSeed = helper.getSeedById(seedId);
+	}
 
-		TextView seedDescription = (TextView) findViewById(R.id.IdSeedDescriptionEnvironment);
-		seedDescription.setText(mSeed.getDescriptionGrowth());
-
-		seedDescription = (TextView) findViewById(R.id.IdSeedDescriptionCulture);
-		seedDescription.setText(mSeed.getDescriptionCultivation());
-
-		seedDescription = (TextView) findViewById(R.id.IdSeedDescriptionEnnemi);
-		seedDescription.setText(mSeed.getDescriptionDiseases());
-
-		seedDescription = (TextView) findViewById(R.id.IdSeedDescriptionHarvest);
-		seedDescription.setText(mSeed.getDescriptionHarvest());
-
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.seed, container, false);
 		
 
-	}
+		Bundle bundle = this.getArguments();
+		seedId = bundle.getInt("org.gots.seed.id");
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if ( seedId <= 0) {
+			Log.e("SeedActivity", "You must provide a org.gots.seed.id as an Extra Int");
+			return v;
+		}		
+		
+		VendorSeedDBHelper helper = new VendorSeedDBHelper(getActivity());
+		mSeed = helper.getSeedById(seedId);
 
-		if (requestCode == resultCameraActivity) {
-			gallery.refreshDrawableState();
-			gallery.invalidate();
-		}
-		super.onActivityResult(requestCode, resultCode, data);
+		TextView seedDescription = (TextView) v.findViewById(R.id.IdSeedDescriptionEnvironment);
+		seedDescription.setText(mSeed.getDescriptionGrowth());
+
+		seedDescription = (TextView) v.findViewById(R.id.IdSeedDescriptionCulture);
+		seedDescription.setText(mSeed.getDescriptionCultivation());
+
+		seedDescription = (TextView) v.findViewById(R.id.IdSeedDescriptionEnnemi);
+		seedDescription.setText(mSeed.getDescriptionDiseases());
+
+		seedDescription = (TextView) v.findViewById(R.id.IdSeedDescriptionHarvest);
+		seedDescription.setText(mSeed.getDescriptionHarvest());
+
+		return v;
 	}
-	
-	@Override
-	protected void onDestroy() {
-	GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
-		super.onDestroy();
-	}
+	// @Override
+	// protected void onActivityResult(int requestCode, int resultCode, Intent
+	// data) {
+	//
+	// if (requestCode == resultCameraActivity) {
+	// gallery.refreshDrawableState();
+	// gallery.invalidate();
+	// }
+	// super.onActivityResult(requestCode, resultCode, data);
+	// }
+	//
+	// @Override
+	// protected void onDestroy() {
+	// GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
+	// super.onDestroy();
+	// }
 
 }

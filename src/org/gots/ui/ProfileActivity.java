@@ -39,9 +39,7 @@ import android.location.LocationProvider;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -53,9 +51,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class ProfileActivity extends Activity implements LocationListener, OnClickListener {
+public class ProfileActivity extends SherlockActivity implements LocationListener, OnClickListener {
 	private LocationManager mlocManager;
 	private Location location;
 	private Address address;
@@ -68,12 +71,18 @@ public class ProfileActivity extends Activity implements LocationListener, OnCli
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
-		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
-
 		super.onCreate(savedInstanceState);
+		
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.profile);
+		
+		ActionBar bar = getSupportActionBar();
+		bar.setDisplayHomeAsUpEnabled(true);
+		bar.setDisplayShowTitleEnabled(false);
+
+		GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
+		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
+		
 
 		buildProfile();
 		WeatherManager manager = new WeatherManager(this);
@@ -81,7 +90,7 @@ public class ProfileActivity extends Activity implements LocationListener, OnCli
 		LinearLayout weatherHistory = (LinearLayout) findViewById(R.id.layoutWeatherHistory);
 		final HorizontalScrollView scrollView = (HorizontalScrollView) findViewById(R.id.scrollWeatherHistory);
 
-		//set scrollview to the right end where today weather is displayed
+		// set scrollview to the right end where today weather is displayed
 		scrollView.post(new Runnable() {
 			@Override
 			public void run() {
@@ -164,9 +173,9 @@ public class ProfileActivity extends Activity implements LocationListener, OnCli
 			public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
 				gardenManager.selectGarden(position + 1);
 				buildProfile();
-				
+
 				GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-				tracker.trackEvent("Garden","Select", gardenManager.getcurrentGarden().getLocality(), 0);
+				tracker.trackEvent("Garden", "Select", gardenManager.getcurrentGarden().getLocality(), 0);
 			}
 
 			@Override
@@ -282,6 +291,9 @@ public class ProfileActivity extends Activity implements LocationListener, OnCli
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+		case android.R.id.home:
+			finish();
+			break;
 		// case R.id.buttonSelectSource:
 		// selectSource();
 		// break;
@@ -314,7 +326,8 @@ public class ProfileActivity extends Activity implements LocationListener, OnCli
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
+		// MenuInflater inflater = getMenuInflater();
+		MenuInflater inflater = getSupportMenuInflater();
 		inflater.inflate(R.menu.menu_profile, menu);
 
 		return super.onCreateOptionsMenu(menu);

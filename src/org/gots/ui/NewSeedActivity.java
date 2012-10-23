@@ -11,9 +11,14 @@
 package org.gots.ui;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.gots.R;
 import org.gots.action.bean.BuyingAction;
+import org.gots.allotment.sql.AllotmentDBHelper;
+import org.gots.bean.Allotment;
+import org.gots.bean.BaseAllotmentInterface;
+import org.gots.help.HelpUriBuilder;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
@@ -24,6 +29,7 @@ import org.gots.seed.view.PlanningWidget;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -36,10 +42,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.ActionMode;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-public class NewSeedActivity extends Activity implements OnClickListener {
+public class NewSeedActivity extends SherlockActivity implements OnClickListener {
 	private View currentView;
 	private PlanningWidget planningSow;
 	private PlanningWidget planningHarvest;
@@ -50,6 +62,10 @@ public class NewSeedActivity extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.inputseed);
 
+		ActionBar bar = getSupportActionBar();
+		bar.setDisplayHomeAsUpEnabled(true);
+		bar.setDisplayShowTitleEnabled(false);
+		
 		// initFamilyList();
 		// initSpecieList();
 		// initVarietyList();
@@ -87,7 +103,7 @@ public class NewSeedActivity extends Activity implements OnClickListener {
 			@Override
 			public void onClick(View v) {
 				initVarietyList();
-					autoCompleteVariety.showDropDown();
+				autoCompleteVariety.showDropDown();
 			}
 		});
 
@@ -272,4 +288,29 @@ public class NewSeedActivity extends Activity implements OnClickListener {
 		// super.onActivityResult(requestCode, resultCode, data);
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getSupportMenuInflater();
+		inflater.inflate(R.menu.menu_newseed, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle item selection
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			finish();
+			return true;
+		
+		case R.id.help:
+			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HelpUriBuilder.getUri(getClass()
+					.getSimpleName())));
+			startActivity(browserIntent);
+
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
 }

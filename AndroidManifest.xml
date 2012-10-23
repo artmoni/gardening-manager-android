@@ -5,8 +5,8 @@
     android:versionName="0.12" >
 
     <uses-sdk
-        android:minSdkVersion="4"
-        android:targetSdkVersion="11" />
+        android:minSdkVersion="7"
+        android:targetSdkVersion="15" />
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -21,7 +21,7 @@
 
     <application
         android:icon="@drawable/launcher"
-        android:label="@string/app_name" >
+        android:label="@string/app_name" android:theme="@style/Theme.Sherlock">
         <activity
             android:name=".ui.SplashScreenActivity"
             android:label="@string/app_name" >
@@ -31,28 +31,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.MyMainGarden" />
-        <activity android:name=".ui.MyMainGardenFirstTime" />
-        <activity android:name=".ui.DashboardActivity" />
+        <activity android:name=".ui.MyMainGarden" android:theme="@style/Theme.Styled"/>
+       <activity android:name=".ui.DashboardActivity"  android:theme="@style/Theme.Styled"/>
         <activity android:name=".ui.AllotmentActivity" />
-        <activity android:name=".ui.SeedActivity" />
+        <activity android:name=".ui.SeedActivity" android:theme="@style/Theme.Styled"/>
         <activity android:name=".ui.CameraView" />
         <activity android:name=".ui.VendorListActivity" />
-        <activity android:name=".ui.ProfileActivity" />
-        <activity android:name=".ui.ListActionActivity" />
-        <activity android:name=".ui.ActionActivity" />
+        <activity android:name=".ui.ProfileActivity" android:theme="@style/Theme.Styled"/>
+        <activity android:name=".ui.ListActionActivity" android:theme="@style/Theme.Styled"/>
+        <activity android:name=".ui.ActionActivity" android:theme="@style/Theme.Styled"/>
         <activity android:name=".ui.NewActionActivity" />
         <activity android:name=".ui.WebHelpActivity" />
         <activity
             android:name=".ui.TabSeedActivity"
-            android:theme="@style/CustomTheme" />
+            android:theme="@style/Theme.Styled" />
         <activity android:name=".ui.WebViewActivity" />
         <activity
             android:name=".ui.HutActivity"
-            android:theme="@style/CustomTheme" />
+             android:theme="@style/Theme.Styled" />
         <activity android:name=".ui.MySeedsListActivity" />
         <activity android:name=".ui.MySeedsListFirstTimeActivity" />
-        <activity android:name=".ui.NewSeedActivity" />
+        <activity
+            android:name=".ui.NewSeedActivity"
+            android:theme="@style/Theme.Styled" />
+
         <activity
             android:name="com.google.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />

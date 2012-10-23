@@ -15,6 +15,7 @@ import org.gots.R;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.sql.GardenDBHelper;
+import org.gots.preferences.GotsPreferences;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
@@ -99,8 +100,11 @@ public class SplashScreenActivity extends Activity {
 			startActivityForResult(intent, 0);
 
 		} else {
+			if (GotsPreferences.DEVELOPPEMENT)
+				splashHandler.sendMessageDelayed(msg, 0);
+			else
+				splashHandler.sendMessageDelayed(msg, SPLASHTIME);
 
-			splashHandler.sendMessageDelayed(msg, SPLASHTIME);
 			DatabaseHelper databaseHelper = new DatabaseHelper(this);
 			databaseHelper.setDatabase(preferences.getInt("org.gots.preference.gardenid", 0));
 

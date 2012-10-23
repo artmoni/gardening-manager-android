@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="DashboardButton">
         <item name="android:layout_gravity">center_vertical</item>
@@ -49,7 +49,8 @@
         <item name="android:textColor">@color/text_color_dark</item>
         <item name="android:background">@drawable/fond_bl_arr</item>
     </style>
-<style name="description_content">
+
+    <style name="description_content">
         <item name="android:layout_marginLeft">10dp</item>
         <item name="android:layout_marginRight">10dp</item>
         <item name="android:layout_marginBottom">5dp</item>
@@ -62,7 +63,7 @@
         <item name="android:textColor">@color/text_color_dark</item>
     </style>
 
-<style name="button">
+    <style name="button">
         <item name="android:layout_marginLeft">0dp</item>
         <item name="android:layout_marginRight">0dp</item>
         <item name="android:layout_marginBottom">0dp</item>
@@ -75,7 +76,7 @@
         <item name="android:textColor">@color/text_color_dark</item>
     </style>
 
-<style name="description_increment">
+    <style name="description_increment">
         <item name="android:layout_marginLeft">10dp</item>
         <item name="android:layout_marginRight">10dp</item>
         <item name="android:layout_marginBottom">5dp</item>
@@ -175,13 +176,50 @@
 
     <style name="CustomTabWidget" parent="@android:style/Widget.TabWidget">
         <item name="android:textAppearance">@style/CustomTabWidgetText</item>
-        
     </style>
 
     <style name="CustomTabWidgetText" parent="@android:style/TextAppearance.Widget.TabWidget">
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/text_color_dark</item>
         <item name="android:background">@drawable/tab_green</item>
+    </style>
+
+    <style name="Theme.Styled" parent="Theme.Sherlock.Light.DarkActionBar">
+        <item name="actionBarStyle">@style/Widget.Styled.ActionBar</item>
+        <item name="android:actionBarStyle">@style/Widget.Styled.ActionBar</item>
+        <item name="actionBarTabTextStyle">@style/Widget.Styled.TabTextStyle</item>
+        <item name="android:actionBarTabTextStyle">@style/Widget.Styled.TabTextStyle</item>
+        <item name="actionBarTabStyle">@style/Widget.Styled.TabBar</item>
+        <item name="android:actionBarTabStyle">@style/Widget.Styled.TabBar</item>
+        <item name="android:divider">@drawable/tab_divider</item>
+        <item name="divider">@drawable/tab_divider</item>
+    </style>
+
+    <style name="Widget.Styled.ActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
+        <item name="background">@color/text_color_dark</item>
+        <item name="android:background">@color/text_color_dark</item>
+        <item name="titleTextStyle">@style/Widget.Styled.TitleTextStyle</item>
+        <item name="android:titleTextStyle">@style/Widget.Styled.TitleTextStyle</item>
+        <item name="backgroundSplit">@drawable/tab_divider</item>
+        <item name="android:backgroundSplit">@drawable/tab_divider</item>
+    </style>
+
+    <style name="Widget.Styled.TitleTextStyle" parent="TextAppearance.Sherlock.Widget.ActionBar.Title">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/green_light</item>
+    </style>
+
+    <style name="Widget.Styled.TabBar" parent="Widget.Sherlock.Light.ActionBar.TabView">
+        <item name="android:background">@drawable/selector_tab</item>
+        <item name="background">@drawable/selector_tab</item>
+        <item name="android:divider">@drawable/tab_divider</item>
+        <item name="divider">@drawable/tab_divider</item>
+    </style>
+
+    <style name="Widget.Styled.TabTextStyle" parent="Widget.Sherlock.Light.ActionBar.TabText">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text_color_light</item>
+        <item name="android:textSize">13dp</item>
     </style>
 
 </resources>

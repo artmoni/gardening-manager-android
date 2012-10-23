@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <item
-        android:id="@+id/new_seed"
+    <!--
+         <item android:id="@+id/new_action" android:icon="@drawable/bt_add_seed"
+		android:title="@string/action.menu.add" />
+    -->
+   
+<!--     <item
+        android:id="@+id/add_stock"
         android:icon="@drawable/bt_add_seed"
         android:showAsAction="ifRoom"
-        android:title="@string/seed.menu.add"/>
+        android:title="@string/seed.action.add.stock"/>
     <item
-        android:id="@+id/new_seed_barcode"
+        android:id="@+id/add_catalogue"
         android:icon="@drawable/bt_add_seed"
         android:showAsAction="ifRoom"
-        android:title="@string/seed.menu.add.barcode"/>
-    <item
-        android:id="@+id/refresh_seed"
-        android:icon="@drawable/synchronize"
-        android:showAsAction="ifRoom"
-        android:title="@string/seed.menu.synchronize"/>
-    <item
+        android:title="@string/seed.action.add.catalogue"/> -->
+     <item
         android:id="@+id/help"
         android:icon="@drawable/help"
         android:showAsAction="always"

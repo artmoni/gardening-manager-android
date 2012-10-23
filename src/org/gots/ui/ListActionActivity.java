@@ -12,21 +12,27 @@ package org.gots.ui;
 
 import java.util.ArrayList;
 
+import org.gots.R;
 import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.sql.GrowingSeedDBHelper;
+
+import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.app.SherlockListFragment;
 
 import android.app.ListActivity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class ListActionActivity extends ListActivity implements ListView.OnScrollListener {
+public class ListActionActivity extends SherlockListFragment implements ListView.OnScrollListener {
 
 	// private String[] mStrings;
 	ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
@@ -60,57 +66,34 @@ public class ListActionActivity extends ListActivity implements ListView.OnScrol
 	private char mPrevLetter = Character.MIN_VALUE;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		// *******************************************
-		// SeedDBHelper helper = new SeedDBHelper(this);
-
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
 		int seedid = 0;
-		GrowingSeedDBHelper helper = new GrowingSeedDBHelper(this);
+		GrowingSeedDBHelper helper = new GrowingSeedDBHelper(getActivity());
 
-		
-		if (getIntent().getExtras() != null)
-			seedid = getIntent().getExtras().getInt("org.gots.seed.id");
+		Bundle bundle = this.getArguments();
+		seedid = bundle.getInt("org.gots.seed.id");
 
 		if (seedid > 0) {
 			allSeeds.add(helper.getSeedById(seedid));
 		} else
 			allSeeds = helper.getGrowingSeeds();
 
-		// ActionSeedDBHelper helper = new ActionSeedDBHelper(this); 
+		// ActionSeedDBHelper helper = new ActionSeedDBHelper(this);
 		// ArrayList<BaseActionInterface> actions = helper.getActionsToDo();
 		// Arrays.sort(mStrings);
 
 		// *******************************************
-		mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+		mWindowManager = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
 
 		// Use an existing ListAdapter that will map an array
 		// of strings to TextViews
-		setListAdapter(new ListAllActionAdapter(this, allSeeds, ListAllActionAdapter.STATUS_DONE));
+		setListAdapter(new ListAllActionAdapter(getActivity(), allSeeds, ListAllActionAdapter.STATUS_DONE));
 
 		getListView().setOnScrollListener(this);
-
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		mReady = true;
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-		// mWindowRemover.removeWindow();
-		mReady = false;
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		// mWindowManager.removeView(mDialogText);
-		mReady = false;
-	}
+	
 
 	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 		// int lastItem = firstVisibleItem + visibleItemCount - 1;
@@ -131,10 +114,6 @@ public class ListActionActivity extends ListActivity implements ListView.OnScrol
 	}
 
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
-	}
-
-	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
 	}
 
 }

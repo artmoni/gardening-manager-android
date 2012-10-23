@@ -14,8 +14,8 @@
     <string name="seed.action.save">Save</string>
     <string name="seed.action.todo">To do before the</string>
     <string name="seed.action.done">Dated</string>
-    <string name="seed.action.sowing.done">You have sown</string>
-    <string name="seed.action.sowing.todo">You must sow</string>
+    <string name="seed.action.sowing.done">Select month period to sow</string>
+    <string name="seed.action.sowing.todo">Select month period to harvest</string>
     <string name="seed.action.sowing.button">Sow</string>
     <string name="seed.action.sowing.date">Planting date</string>
     <string name="seed.action.sowing.choosetitle">Choose a seed</string>

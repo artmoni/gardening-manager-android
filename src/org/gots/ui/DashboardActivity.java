@@ -25,9 +25,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 
+import com.actionbarsherlock.app.SherlockActivity;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class DashboardActivity extends Activity implements OnClickListener {
+public class DashboardActivity extends SherlockActivity implements OnClickListener {
 	// public static GardenInterface myGarden = new Garden();
 	// GoogleAnalyticsTracker tracker;
 	GotsAdvertisement adView;
@@ -39,6 +40,7 @@ public class DashboardActivity extends Activity implements OnClickListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		getSupportActionBar();
 		GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
 
 		setContentView(R.layout.dashboard);

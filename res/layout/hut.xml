@@ -10,8 +10,9 @@
         android:layout_width="fill_parent"
         android:layout_height="60dp"
         android:background="@drawable/bg_hut_top" >
-    </LinearLayout> 
+    </LinearLayout>
 
+    <!--
     <TabHost
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@android:id/tabhost"
@@ -37,10 +38,18 @@
                 android:padding="0dp" android:background="#432D07"/>
         </LinearLayout>
     </TabHost>
+    -->
+
+    <ListView
+        android:id="@+id/listSeed"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" android:paddingTop="60dp">
+    </ListView>
 
     <LinearLayout
+        android:id="@+id/btReturn"
         android:layout_width="fill_parent"
         android:layout_height="70dp"
-        android:background="@drawable/bt_logo" android:id="@+id/btReturn"/>
+        android:background="@drawable/bt_logo" />
 
 </RelativeLayout>

@@ -66,8 +66,8 @@ public class MySeedsListActivity extends ListActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.menu_stock, menu);
+//		MenuInflater inflater = getMenuInflater();
+//		inflater.inflate(R.menu.menu_stock, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
