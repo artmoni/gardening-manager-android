@@ -70,7 +70,8 @@ public class HutActivity extends SherlockActivity implements ActionBar.TabListen
 
 		ActionBar bar = getSupportActionBar();
 		bar.setDisplayHomeAsUpEnabled(true);
-		bar.setDisplayShowTitleEnabled(false);
+		bar.setDisplayShowTitleEnabled(true);
+		bar.setTitle(R.string.dashboard_hut_name);
 
 		GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
 		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());

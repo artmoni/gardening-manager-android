@@ -29,7 +29,7 @@
     <string name="seed.action.buy.todo">Consider buying your seeds</string>
     <string name="seed.action.buy.done">Seeds purchased</string>
     <string name="seed.description.tabmenu.detail">Detail</string>
-    <string name="seed.description.tabmenu.actions">Actions</string>
+    <string name="seed.description.tabmenu.actions">Historique</string>
     <string name="seed.description.tabmenu.wikipedia">Wikipedia</string>
     <string name="seed.description.environment">Climate and soil</string>
     <string name="seed.description.culture">Plantation</string>
@@ -60,7 +60,7 @@
     <string name="garden.cityname.inputtitle">Garden place</string>
     <string name="garden.cityname.inputmessage">Please enter your garden place</string>
     <string name="dashboard.hut.name">Shed</string>
-    <string name="dashboard.allotments.name">Plots</string>
+    <string name="dashboard.allotments.name">Garden</string>
     <string name="dashboard.actions.name">Actions</string>
     <string name="dashboard.profile.name">Profile</string>
     <string name="dateSliderTitle">dateSliderTitle string</string>

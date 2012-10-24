@@ -48,8 +48,7 @@ public class ActionActivity extends SherlockActivity implements OnClickListener 
 
 		ActionBar bar = getSupportActionBar();
 		bar.setDisplayHomeAsUpEnabled(true);
-		bar.setDisplayShowTitleEnabled(false);
-		
+		bar.setTitle(R.string.dashboard_actions_name);		
 		GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
 		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 

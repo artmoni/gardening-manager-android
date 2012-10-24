@@ -55,12 +55,12 @@
                         android:src="@drawable/dashboard_button_profile_selector" />
 
                     <Spinner
-                        android:id="@+id/idGardenSelector"
-                        style="@style/description_content"
-                        
+                        android:id="@+id/idGardenSelector"                        
                         android:layout_width="fill_parent"
                         android:layout_height="40dp"
-                        android:visibility="gone"  />
+                        android:visibility="visible"   >
+                        
+                        </Spinner>
                 </LinearLayout>
 
                 <RelativeLayout

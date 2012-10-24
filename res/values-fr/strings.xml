@@ -31,7 +31,7 @@
     <string name="seed.action.buy.todo">Pensez à acheter vos graines</string>
     <string name="seed.action.buy.done">Graines achetées</string>
     <string name="seed.description.tabmenu.detail">Détail</string>
-    <string name="seed.description.tabmenu.actions">Actions</string>
+    <string name="seed.description.tabmenu.actions">Historique</string>
     <string name="seed.description.tabmenu.wikipedia">Wikipedia</string>
     <string name="seed.description.environment">Climat et sol</string>
     <string name="seed.description.culture">Culture</string>
@@ -62,7 +62,7 @@
     <string name="garden.cityname.inputtitle">Ville du potager</string>
     <string name="garden.cityname.inputmessage">Veuillez saisir la ville dans laquelle se trouve votre potager</string>
     <string name="dashboard.hut.name">Cabanon</string>
-    <string name="dashboard.allotments.name">Parcelles</string>
+    <string name="dashboard.allotments.name">Potager</string>
     <string name="dashboard.actions.name">Actions</string>
     <string name="dashboard.profile.name">Profil</string>
     <string name="dateSliderTitle">dateSliderTitle strings</string>

@@ -48,6 +48,7 @@ import android.widget.ArrayAdapter;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -72,17 +73,16 @@ public class ProfileActivity extends SherlockActivity implements LocationListene
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.profile);
-		
+
 		ActionBar bar = getSupportActionBar();
 		bar.setDisplayHomeAsUpEnabled(true);
-		bar.setDisplayShowTitleEnabled(false);
+		bar.setTitle(R.string.dashboard_profile_name);
 
 		GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
 		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
-		
 
 		buildProfile();
 		WeatherManager manager = new WeatherManager(this);
@@ -128,10 +128,6 @@ public class ProfileActivity extends SherlockActivity implements LocationListene
 		gardenManager = new GardenManager(this);
 
 		if (gardenManager.getcurrentGarden() != null) {
-			// TextView gardenName = (TextView)
-			// findViewById(R.id.textGardenName);
-			// gardenName.setText(gardenManager.getcurrentGarden().getLocality());
-
 			findViewById(R.id.layoutMultiGarden).setVisibility(View.VISIBLE);
 			findViewById(R.id.idGardenSelector).setVisibility(View.VISIBLE);
 			findViewById(R.id.scrollWeatherHistory).setVisibility(View.VISIBLE);
@@ -164,8 +160,7 @@ public class ProfileActivity extends SherlockActivity implements LocationListene
 
 		gardenId = (int) gardenManager.getcurrentGarden().getId();
 
-		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_dropdown_item_1line, referenceList);
+		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_item_text, referenceList);
 		gardenSelector.setAdapter(adapter);
 		gardenSelector.setSelection(gardenId - 1);
 		gardenSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

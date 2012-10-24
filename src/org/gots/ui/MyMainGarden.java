@@ -50,7 +50,7 @@ public class MyMainGarden extends SherlockActivity {
 
 		ActionBar bar = getSupportActionBar();
 		bar.setDisplayHomeAsUpEnabled(true);
-		bar.setDisplayShowTitleEnabled(false);
+		bar.setTitle(R.string.dashboard_allotments_name);
 		
 		GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
 		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
