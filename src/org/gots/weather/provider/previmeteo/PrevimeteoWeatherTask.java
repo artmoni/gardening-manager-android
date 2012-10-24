@@ -10,11 +10,8 @@
  ******************************************************************************/
 package org.gots.weather.provider.previmeteo;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
-import java.sql.PreparedStatement;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -33,7 +30,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
 import android.content.Context;
-import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 

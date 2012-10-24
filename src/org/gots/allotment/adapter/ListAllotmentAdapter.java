@@ -24,12 +24,15 @@ import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
 import org.gots.seed.sql.GrowingSeedDBHelper;
+import org.gots.ui.HutActivity;
 import org.gots.ui.MySeedsListActivity;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -113,7 +116,8 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
 
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(mContext, MySeedsListActivity.class);
+				
+				Intent i = new Intent(mContext, HutActivity.class);
 				i.putExtra("org.gots.allotment.reference", myAllotments.get(position).getName());
 				mContext.startActivity(i);
 			}

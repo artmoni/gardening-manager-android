@@ -12,17 +12,15 @@ package org.gots.ui;
 
 import org.gots.R;
 
-import com.actionbarsherlock.app.SherlockFragment;
-
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import com.actionbarsherlock.app.SherlockFragment;
 
 public class WebViewActivity extends SherlockFragment {
 	private ProgressDialog pd;

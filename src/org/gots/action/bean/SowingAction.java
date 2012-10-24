@@ -24,9 +24,9 @@ import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.sql.GrowingSeedDBHelper;
 
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
-
 import android.content.Context;
+
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class SowingAction extends AbstractActionGarden implements PermanentActionInterface, GardeningActionInterface {
 	Context mContext;

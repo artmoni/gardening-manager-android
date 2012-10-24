@@ -26,7 +26,6 @@ import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherManager;
 import org.gots.weather.view.WeatherView;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.location.Address;
@@ -39,7 +38,6 @@ import android.location.LocationProvider;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -48,7 +46,6 @@ import android.widget.ArrayAdapter;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 

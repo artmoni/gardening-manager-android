@@ -11,13 +11,9 @@
 package org.gots.ui;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import org.gots.R;
 import org.gots.action.bean.BuyingAction;
-import org.gots.allotment.sql.AllotmentDBHelper;
-import org.gots.bean.Allotment;
-import org.gots.bean.BaseAllotmentInterface;
 import org.gots.help.HelpUriBuilder;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
@@ -27,7 +23,6 @@ import org.gots.seed.adapter.PlanningSowAdapter;
 import org.gots.seed.sql.VendorSeedDBHelper;
 import org.gots.seed.view.PlanningWidget;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -44,7 +39,6 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;

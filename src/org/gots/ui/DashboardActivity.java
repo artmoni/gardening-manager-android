@@ -17,7 +17,6 @@ import org.gots.preferences.GotsPreferences;
 import org.gots.weather.view.WeatherView;
 import org.gots.weather.view.WeatherWidget;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;

@@ -2,7 +2,6 @@ package org.gots.layout;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.graphics.drawable.GradientDrawable.Orientation;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;

@@ -12,25 +12,20 @@ package org.gots.ui;
 
 import java.util.ArrayList;
 
-import org.gots.R;
 import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.sql.GrowingSeedDBHelper;
 
-import com.actionbarsherlock.app.SherlockListActivity;
-import com.actionbarsherlock.app.SherlockListFragment;
-
-import android.app.ListActivity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.actionbarsherlock.app.SherlockListFragment;
 
 public class ListActionActivity extends SherlockListFragment implements ListView.OnScrollListener {
 
