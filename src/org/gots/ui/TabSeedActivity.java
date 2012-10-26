@@ -55,18 +55,14 @@ public class TabSeedActivity extends SherlockFragmentActivity implements ActionB
 
 		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-		// TabHost tabHost = getTabHost(); // The activity TabHost
-		// TabHost.TabSpec spec; // Resusable TabSpec for each tab
-		Intent intent; // Reusable Intent for each tab
-
 		// ********************** **********************
 		if (getIntent().getExtras() == null) {
 			Log.e("SeedActivity", "You must provide a org.gots.seed.id as an Extra Int");
 			finish();
 			return;
 		}
-		if (getIntent().getExtras().getInt("org.gots.seed.id") != 0) {TabHost mTabHost = (TabHost) findViewById(android.R.id.tabhost);
-//		mTabHost.setup();
+		if (getIntent().getExtras().getInt("org.gots.seed.id") != 0) {
+			TabHost mTabHost = (TabHost) findViewById(android.R.id.tabhost);
 
 			int seedId = getIntent().getExtras().getInt("org.gots.seed.id");
 			GrowingSeedDBHelper helper = new GrowingSeedDBHelper(this);
@@ -82,70 +78,31 @@ public class TabSeedActivity extends SherlockFragmentActivity implements ActionB
 		SeedWidgetLong seedWidget = (SeedWidgetLong) findViewById(R.id.IdSeedWidgetLong);
 		seedWidget.setSeed(mSeed);
 
-//		TabHost mTabHost = (TabHost) findViewById(android.R.id.tabhost);
-//		mTabHost.setup();
-
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		TabsAdapter mTabsAdapter = new TabsAdapter(this, mViewPager);
-		
-		mTabsAdapter.addTab(bar.newTab()
-			    .setTag("event_list")
-		        .setText(getString(R.string.seed_description_tabmenu_detail))
-		        , SeedActivity.class, null);
-	
 
 		// // ********************** Tab description **********************
-		// ActionBar.Tab tab = getSupportActionBar().newTab();
-		// tab.setText(getResources().getString(R.string.seed_description_tabmenu_detail).toUpperCase());
-		// tab.setTabListener(this);
-		// getSupportActionBar().addTab(tab);
-
-		// View detailtitle =
-		// LayoutInflater.from(this).inflate(R.layout.tabs_bg, null);
-		// TextView tv = (TextView) detailtitle.findViewById(R.id.tabsText);
-		// tv.setText(getResources().getString(R.string.seed_description_tabmenu_detail).toUpperCase());
-		// TabSpec descriptionspec =
-		// tabHost.newTabSpec("detail").setIndicator(detailtitle);
-		// intent = new Intent().setClass(this, SeedActivity.class);
-		// intent.putExtra("org.gots.seed.id", mSeed.getId());
-		// descriptionspec.setContent(intent);
-		// tabHost.getTabWidget().setDividerDrawable(R.drawable.tab_divider);
-		//
-		// tabHost.addTab(descriptionspec);
+		mTabsAdapter.addTab(
+				bar.newTab().setTag("event_list").setText(getString(R.string.seed_description_tabmenu_detail)),
+				SeedActivity.class, null);
 
 		// ********************** Tab actions **********************
 		if (mSeed.getGrowingSeedId() > 0) {
-			// tab = getSupportActionBar().newTab();
-			// tab.setText(getResources().getString(R.string.seed_description_tabmenu_actions).toUpperCase());
-			// tab.setTabListener(this);
-			// getSupportActionBar().addTab(tab);
-
-			// View actionstitle =
-			// LayoutInflater.from(this).inflate(R.layout.tabs_bg, null);
-			// tv = (TextView) actionstitle.findViewById(R.id.tabsText);
-			// tv.setText(getResources().getString(R.string.seed_description_tabmenu_actions).toUpperCase());
-			// TabSpec actionsspec =
-			// tabHost.newTabSpec("actions").setIndicator(actionstitle);
-			// intent = new Intent().setClass(this, ListActionActivity.class);
-			// intent.putExtra("org.gots.seed.id", mSeed.getGrowingSeedId());
-			// actionsspec.setContent(intent);
-			// tabHost.addTab(actionsspec);
-			mTabsAdapter.addTab(bar.newTab()
-				    .setTag("event_list")
-			        .setText(getString(R.string.seed_description_tabmenu_actions))
-			        , ListActionActivity.class, null);
+			mTabsAdapter.addTab(
+					bar.newTab().setTag("event_list").setText(getString(R.string.seed_description_tabmenu_actions)),
+					ListActionActivity.class, null);
 		}
 
 		// ********************** Tab Wikipedia**********************
 		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo netInfo = cm.getActiveNetworkInfo();
 		if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-			mTabsAdapter.addTab(bar.newTab()
-				    .setTag("event_list")
-			        .setText(getString(R.string.seed_description_tabmenu_wikipedia)), WebViewActivity.class, null);
-			
+			mTabsAdapter.addTab(
+					bar.newTab().setTag("event_list").setText(getString(R.string.seed_description_tabmenu_wikipedia)),
+					WebViewActivity.class, null);
+
 			urlDescription = "http://" + Locale.getDefault().getLanguage() + ".wikipedia.org/wiki/" + mSeed.getSpecie();
-			
+
 		}
 
 	}
@@ -251,7 +208,7 @@ public class TabSeedActivity extends SherlockFragmentActivity implements ActionB
 			Bundle bundle = new Bundle();
 			bundle.putInt("org.gots.seed.id", mSeed.getId());
 			bundle.putString("org.gots.seed.url", urlDescription);
-			Fragment fragment =Fragment.instantiate(mContext, info.clss.getName(), info.args);
+			Fragment fragment = Fragment.instantiate(mContext, info.clss.getName(), info.args);
 			fragment.setArguments(bundle);
 			return fragment;
 		}
@@ -282,5 +239,4 @@ public class TabSeedActivity extends SherlockFragmentActivity implements ActionB
 		}
 	}
 
-	
 }

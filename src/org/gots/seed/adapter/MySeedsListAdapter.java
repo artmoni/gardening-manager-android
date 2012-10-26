@@ -79,13 +79,9 @@ public class MySeedsListAdapter extends BaseAdapter implements OnClickListener {
 	@Override
 	public long getItemId(int position) {
 		return position;
-		// mySeeds.get(position).getId()
 	}
 
-	protected static class ViewHolder {
-		private SeedWidgetLong seedWidget;
-		private ActionWidget actionWidget;
-	}
+	
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {

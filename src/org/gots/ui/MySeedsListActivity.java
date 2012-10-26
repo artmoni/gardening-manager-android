@@ -27,27 +27,29 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.actionbarsherlock.app.SherlockListFragment;
 import com.google.zxing.integration.android.IntentIntegrator;
 
-public class MySeedsListActivity extends ListActivity {
+public class MySeedsListActivity extends SherlockListFragment {
 	private MySeedsListAdapter listAdapter;
+	private BaseAllotmentInterface allotment;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onActivityCreated (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		BaseAllotmentInterface allotment = null;
-		if (getIntent().getExtras() != null) {
-			String allotmentRef = getIntent().getExtras().getString("org.gots.allotment.reference");
+		
+		if (getActivity().getIntent().getExtras() != null) {
+			String allotmentRef = getActivity().getIntent().getExtras().getString("org.gots.allotment.reference");
 			if (allotmentRef != null) {
-				AllotmentDBHelper helper = new AllotmentDBHelper(this);
+				AllotmentDBHelper helper = new AllotmentDBHelper(getActivity());
 				allotment = helper.getAllotmentByName(allotmentRef);
 			}
 		}
-		VendorSeedDBHelper myBank = new VendorSeedDBHelper(this);
+		VendorSeedDBHelper myBank = new VendorSeedDBHelper(getActivity());
 		ArrayList<BaseSeedInterface> mySeeds = myBank.getMySeeds();
 
-		listAdapter = new MySeedsListAdapter(this, allotment, mySeeds);
+		listAdapter = new MySeedsListAdapter(getActivity(), allotment, mySeeds);
 		setListAdapter(listAdapter);
 
 //		if (mySeeds.size() == 0) {
@@ -56,36 +58,36 @@ public class MySeedsListActivity extends ListActivity {
 //		}
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		listAdapter.notifyDataSetChanged();
-
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-//		MenuInflater inflater = getMenuInflater();
-//		inflater.inflate(R.menu.menu_stock, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-
-		case R.id.new_seed_barcode:
-			IntentIntegrator integrator = new IntentIntegrator(this);
-			integrator.initiateScan();
-			return true;
-		case R.id.help:
-			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
-			startActivity(browserIntent);
-
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-
-	}
+//	@Override
+//	protected void onResume() {
+//		super.onResume();
+//		listAdapter.notifyDataSetChanged();
+//
+//	}
+//
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+////		MenuInflater inflater = getMenuInflater();
+////		inflater.inflate(R.menu.menu_stock, menu);
+//		return super.onCreateOptionsMenu(menu);
+//	}
+//
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//		switch (item.getItemId()) {
+//
+//		case R.id.new_seed_barcode:
+//			IntentIntegrator integrator = new IntentIntegrator(this);
+//			integrator.initiateScan();
+//			return true;
+//		case R.id.help:
+//			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
+//			startActivity(browserIntent);
+//
+//			return true;
+//		default:
+//			return super.onOptionsItemSelected(item);
+//		}
+//
+//	}
 }

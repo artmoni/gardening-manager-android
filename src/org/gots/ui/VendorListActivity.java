@@ -19,6 +19,9 @@ import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.adapter.ListVendorSeedAdapter;
 import org.gots.seed.sql.VendorSeedDBHelper;
 
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockListFragment;
+
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -29,52 +32,52 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-public class VendorListActivity extends ListActivity {
+public class VendorListActivity extends SherlockListFragment {
 
 	public Context mContext;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		VendorSeedDBHelper myBank = new VendorSeedDBHelper(this);
+		VendorSeedDBHelper myBank = new VendorSeedDBHelper(getActivity());
 		ArrayList<BaseSeedInterface> vendorSeeds;
 		vendorSeeds = myBank.getVendorSeeds();
 
-		setListAdapter(new ListVendorSeedAdapter(this, vendorSeeds));
-		mContext = this;
+		setListAdapter(new ListVendorSeedAdapter(getActivity(), vendorSeeds));
+		mContext = getActivity();
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-
-		inflater.inflate(R.menu.menu_catalogue, menu);
-
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle item selection
-		Intent i;
-		switch (item.getItemId()) {
-		case R.id.new_seed:
-			i = new Intent(this, NewSeedActivity.class);
-			startActivity(i);
-			return true;
-
-		case R.id.refresh_seed:
-			new RefreshTask().execute(new Object());
-			return true;
-		case R.id.help:
-			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
-			startActivity(browserIntent);
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//		MenuInflater inflater = getMenuInflater();
+//
+//		inflater.inflate(R.menu.menu_catalogue, menu);
+//
+//		return super.onCreateOptionsMenu(menu);
+//	}
+//
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//		// Handle item selection
+//		Intent i;
+//		switch (item.getItemId()) {
+//		case R.id.new_seed:
+//			i = new Intent(this, NewSeedActivity.class);
+//			startActivity(i);
+//			return true;
+//
+//		case R.id.refresh_seed:
+//			new RefreshTask().execute(new Object());
+//			return true;
+//		case R.id.help:
+//			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
+//			startActivity(browserIntent);
+//			return true;
+//		default:
+//			return super.onOptionsItemSelected(item);
+//		}
+//	}
 
 	private class RefreshTask extends AsyncTask<Object, Integer, Long> {
 		@Override
