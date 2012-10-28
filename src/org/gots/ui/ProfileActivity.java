@@ -164,10 +164,10 @@ public class ProfileActivity extends SherlockActivity implements LocationListene
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
 				gardenManager.selectGarden(position + 1);
-				buildProfile();
+//				buildProfile();
 
 				GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-				tracker.trackEvent("Garden", "Select", gardenManager.getcurrentGarden().getLocality(), 0);
+				tracker.trackEvent("Garden", "Select", gardenManager.getcurrentGarden().getLocality(), position+1);
 			}
 
 			@Override
