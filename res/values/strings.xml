@@ -40,7 +40,7 @@
     <string name="seed.description.variety">Variety</string>
     <string name="seed.menu.add">Add a seed</string>
     <string name="seed.menu.add.barcode">Add by barcode</string>
-    <string name="seed.menu.synchronize">Update</string>
+    <string name="seed.menu.update">Update</string>
     <string name="action.planning">Plan an action</string>
     <string name="action.delete.allotment">You are deleting a plot</string>
     <string name="action.delete.seed">You are deleting a plot</string>

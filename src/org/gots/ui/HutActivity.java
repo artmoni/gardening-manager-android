@@ -187,7 +187,7 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getSupportMenuInflater();
-		inflater.inflate(R.menu.menu_catalogue, menu);
+		inflater.inflate(R.menu.menu_hut, menu);
 		return true;
 	}
 
@@ -201,10 +201,7 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 			startActivity(i);
 			return true;
 
-		case R.id.refresh_seed:
-			new RefreshTask().execute(new Object());
-			return true;
-
+	
 		case android.R.id.home:
 			finish();
 			return true;
@@ -226,25 +223,7 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 		}
 	}
 
-	private class RefreshTask extends AsyncTask<Object, Integer, Long> {
-		@Override
-		protected Long doInBackground(Object... params) {
-
-			GardenManager garden = new GardenManager(mContext);
-			garden.refreshData();
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Long result) {
-			VendorSeedDBHelper myBank = new VendorSeedDBHelper(mContext);
-			ArrayList<BaseSeedInterface> vendorSeeds;
-			vendorSeeds = myBank.getVendorSeeds();
-
-			listView.setAdapter(new ListVendorSeedAdapter(mContext, vendorSeeds));
-			super.onPostExecute(result);
-		}
-	}
+	
 
 	static final class TabInfo {
 		private final Class<?> clss;

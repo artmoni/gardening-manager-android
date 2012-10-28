@@ -10,14 +10,21 @@
  ******************************************************************************/
 package org.gots.ui;
 
+import java.util.Random;
+
 import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
+import org.gots.allotment.sql.AllotmentDBHelper;
 import org.gots.analytics.GotsAnalytics;
+import org.gots.bean.Allotment;
+import org.gots.bean.BaseAllotmentInterface;
+import org.gots.help.HelpUriBuilder;
 import org.gots.preferences.GotsPreferences;
 import org.gots.weather.view.WeatherView;
 import org.gots.weather.view.WeatherWidget;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +32,9 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class DashboardActivity extends SherlockActivity implements OnClickListener {
@@ -126,5 +136,27 @@ public class DashboardActivity extends SherlockActivity implements OnClickListen
 	protected void onPause() {
 
 		super.onPause();
+	}
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle item selection
+		Intent i;
+		switch (item.getItemId()) {
+		
+		case R.id.help:
+			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HelpUriBuilder.getUri(getClass()
+					.getSimpleName())));
+			startActivity(browserIntent);
+
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getSupportMenuInflater();
+		inflater.inflate(R.menu.menu_dashboard, menu);
+		return true;
 	}
 }
