@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.gots</groupId>
+    <artifactId>gardening-manager</artifactId>
+    <packaging>apk</packaging>
+    <version>0.13-SNAPSHOT</version>
+    <name>Gardening Manager</name>
+       
+       <repositories>
+  <repository>
+      <id>jakewharton</id>
+      <url>http://r.jakewharton.com/maven/release/</url>
+    </repository> 
+    <repository>
+      <id>google-api-services</id>
+      <url>http://mavenrepo.google-api-java-client.googlecode.com/hg</url>
+    </repository>
+  
+      </repositories>
+      
+      <parent>
+		<groupId>com.actionbarsherlock</groupId>
+		<artifactId>parent-sample</artifactId>
+		<version>4.2.0</version>
+		<relativePath>/home/sfleury/Projets/Gardening Over The Sun/20 API externes/JakeWharton-ActionBarSherlock-e5c2d1c/pom.xml</relativePath>
+	</parent>
+       
+       
+    <dependencies>
+        <dependency>
+			<groupId>com.google.android</groupId>
+			<artifactId>android</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.actionbarsherlock</groupId>
+			<artifactId>actionbarsherlock</artifactId>
+			<version>4.2.0</version>
+			<type>apklib</type>
+		</dependency>
+    
+    <dependency>
+			<groupId>com.google.android</groupId>
+			<artifactId>support-v4</artifactId>
+		</dependency>         
+     
+	
+	
+		 <dependency>
+      <groupId>com.google.android.analytics</groupId>
+      <artifactId>analytics</artifactId>
+      <version>1.4.2</version>
+    </dependency> 
+    
+		     <dependency>
+      <groupId>com.google.android.admob</groupId>
+      <artifactId>admob</artifactId>
+      <version>4.3.1</version>
+    </dependency> 
+    
+      <dependency>
+    <groupId>org.simpleframework</groupId>
+    <artifactId>simple-xml</artifactId>
+    <version>2.6.4</version>
+    <exclusions>
+        <!-- StAX is not available on Android -->
+        <exclusion>
+            <artifactId>stax</artifactId>
+            <groupId>stax</groupId>
+        </exclusion>
+        <exclusion>
+            <artifactId>stax-api</artifactId>
+            <groupId>stax</groupId>
+        </exclusion>
+        <!-- Provided by Android -->
+        <exclusion>
+            <artifactId>xpp3</artifactId>
+            <groupId>xpp3</groupId>
+        </exclusion>
+    </exclusions>
+</dependency>
+
+    </dependencies>
+
+   
+
+
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+
+		<plugins>
+			<plugin>
+				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+				<artifactId>android-maven-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration> <sdk>
+                          <path>/home/sfleury/Projets/Android/android-sdk-linux/</path>
+                          <platform>15</platform>
+                      </sdk>
+					<nativeLibrariesDirectory>ignored</nativeLibrariesDirectory>
+					<emulator>
+                        <avd>16</avd>
+                    </emulator>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+
+			
+		</plugins>
+	</build>
+
+</project>
