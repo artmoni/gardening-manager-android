@@ -52,12 +52,16 @@
       <groupId>com.google.android.analytics</groupId>
       <artifactId>analytics</artifactId>
       <version>1.4.2</version>
+       <scope>system</scope>
+   <systemPath>${basedir}/libs/libGoogleAnalytics.jar</systemPath>
     </dependency> 
     
 		     <dependency>
       <groupId>com.google.android.admob</groupId>
       <artifactId>admob</artifactId>
       <version>4.3.1</version>
+      <scope>system</scope>
+   <systemPath>${basedir}/libs/GoogleAdMobAdsSdk-4.3.1.jar</systemPath>
     </dependency> 
     
       <dependency>
