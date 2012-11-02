@@ -12,7 +12,7 @@
       <id>jakewharton</id>
       <url>http://r.jakewharton.com/maven/release/</url>
     </repository> 
-    <repository>
+   <repository>
       <id>google-api-services</id>
       <url>http://mavenrepo.google-api-java-client.googlecode.com/hg</url>
     </repository>
@@ -85,7 +85,7 @@
     </dependencies>
 
    
-
+<properties><sdk.path>/home/sfleury/Projets/Android/android-sdk-linux</sdk.path></properties>
 
 	<build>
 		<sourceDirectory>src</sourceDirectory>
@@ -96,12 +96,12 @@
 				<artifactId>android-maven-plugin</artifactId>
 				<extensions>true</extensions>
 				<configuration> <sdk>
-                          <path>/home/sfleury/Projets/Android/android-sdk-linux/</path>
+                          <path>${sdk.path}</path>
                           <platform>15</platform>
                       </sdk>
 					<nativeLibrariesDirectory>ignored</nativeLibrariesDirectory>
 					<emulator>
-                        <avd>16</avd>
+                        <avd>avd21</avd>
                     </emulator>
 				</configuration>
 			</plugin>
