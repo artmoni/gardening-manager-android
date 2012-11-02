@@ -2,6 +2,7 @@ package org.gots.seed.providers.simple;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -19,11 +20,26 @@ import android.os.AsyncTask;
 public class SimpleNetwork extends AsyncTask<String, Integer, InputStream> {
 	String result;
 	private static final String GOTS_APIKEY = "PY0XHE11WE4VQNJ18DXUQFZ7OJR5YVBR";
-	private String URL = "http://services.gardening-manager.com/seeds/seed.xml";
+	private String HOST = "services.gardening-manager.com";
+	private String PATH = "/seeds/";
+	private String URL = "http://" + HOST + PATH;
 	private InputStream instream;
+
+	private String urlFormatter() {
+		String lang = Locale.getDefault().getLanguage();
+		String filename = "seed";
+		String fileextension = ".xml";
+		if ("fr".equals(lang))
+			filename += "-" + lang + fileextension;
+		else
+			filename += fileextension;
+		
+		return URL+filename ;
+	}
 
 	@Override
 	protected InputStream doInBackground(String... params) {
+
 		CredentialsProvider credProvider = new BasicCredentialsProvider();
 		credProvider.setCredentials(new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT),
 				new UsernamePasswordCredentials(GOTS_APIKEY, ""));
@@ -35,19 +51,14 @@ public class SimpleNetwork extends AsyncTask<String, Integer, InputStream> {
 		InputStream is = null;
 		try {
 
-			HttpGet httpGet = new HttpGet(URL );
+			HttpGet httpGet = new HttpGet(urlFormatter());
 
 			response = httpClient.execute(httpGet);
 
 			StatusLine statusLine = response.getStatusLine();
 			if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
-				// ByteArrayOutputStream out = new ByteArrayOutputStream();
 				is = response.getEntity().getContent();
-				// out.close();
-				// is = response.getEntity().getContent();
-				// String responseString = out.toString();
-				// Log.i("WebService2",responseString);
-				// ..more logic
+
 			} else {
 				// Closes the connection.
 				response.getEntity().getContent().close();
@@ -61,6 +72,6 @@ public class SimpleNetwork extends AsyncTask<String, Integer, InputStream> {
 			e.printStackTrace();
 		}
 		return is;
-//		return null;
+		// return null;
 	}
 }

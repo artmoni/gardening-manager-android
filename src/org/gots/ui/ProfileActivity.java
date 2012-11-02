@@ -55,7 +55,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
-
+ 
 public class ProfileActivity extends SherlockActivity implements LocationListener, OnClickListener {
 	private LocationManager mlocManager;
 	private Location location;
@@ -121,7 +121,7 @@ public class ProfileActivity extends SherlockActivity implements LocationListene
 
 		findViewById(R.id.buttonValidatePosition).setOnClickListener(this);
 
-		findViewById(R.id.buttonAddGarden).setOnClickListener(this);
+		// findViewById(R.id.buttonAddGarden).setOnClickListener(this);
 		gardenManager = new GardenManager(this);
 
 		if (gardenManager.getcurrentGarden() != null) {
@@ -132,7 +132,7 @@ public class ProfileActivity extends SherlockActivity implements LocationListene
 			Spinner gardenSelector = (Spinner) findViewById(R.id.idGardenSelector);
 			initGardenList(gardenSelector);
 		}
-		findViewById(R.id.buttonAddGarden).setVisibility(View.VISIBLE);
+		// findViewById(R.id.buttonAddGarden).setVisibility(View.VISIBLE);
 
 		mlocManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
@@ -164,10 +164,10 @@ public class ProfileActivity extends SherlockActivity implements LocationListene
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
 				gardenManager.selectGarden(position + 1);
-//				buildProfile();
+				// buildProfile();
 
 				GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-				tracker.trackEvent("Garden", "Select", gardenManager.getcurrentGarden().getLocality(), position+1);
+				tracker.trackEvent("Garden", "Select", gardenManager.getcurrentGarden().getLocality(), position + 1);
 			}
 
 			@Override
@@ -303,13 +303,6 @@ public class ProfileActivity extends SherlockActivity implements LocationListene
 			// locator.localizeGarden();
 			validatePosition();
 			break;
-		case R.id.buttonAddGarden:
-
-			gardenManager = new GardenManager(this);
-			gardenManager.addGarden();
-			buildProfile();
-
-			break;
 
 		default:
 			break;
@@ -335,7 +328,13 @@ public class ProfileActivity extends SherlockActivity implements LocationListene
 			startActivity(browserIntent);
 
 			return true;
+		case R.id.new_gaden:
 
+			gardenManager = new GardenManager(this);
+			gardenManager.addGarden();
+			buildProfile();
+
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
