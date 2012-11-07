@@ -11,6 +11,11 @@ mvn install:install-file -Dfile=../../../Gardening\ Over\ The\ Sun/20\ API\ exte
 mvn install:install-file -Dfile=../../../Gardening\ Over\ The\ Sun/20\ API\ externes/GoogleAdMobAdsSdkAndroid-4.3.1/GoogleAdMobAdsSdk-4.3.1.jar -Dversion=4.3.1 -DartifactId=admob -DgroupId=com.google.android.admob -Dpackaging=jar
 mvn install:install-file -Dfile=../../../Gardening\ Over\ The\ Sun/20\ API\ externes/JakeWharton-ActionBarSherlock-e5c2d1c/library/bin/actionbarsherlock.jar -Dversion=4.2.0 -DartifactId=actionbarsherlock -DgroupId=com.actionbarsherlock -Dpackaging=jar
 mvn install:install-file -Dfile=../../../Gardening\ Over\ The\ Sun/20\ API\ externes/simple-xml-2.6.4/jar/simple-xml-2.6.4.jar -Dversion=2.6.4 -DartifactId=org.simpleframework -DgroupId=simple-xml -Dpackaging=jar
+
+https://github.com/mosabua/maven-android-sdk-deployer
+-export ANDROID_HOME=/home/sfleury/Projets/Android/android-sdk-linux
+-mvn install -P 4.0.3
+
 ------------- SQLITE
 cd /data/data/org.gots/databases/
 sqlite3 gots.db

@@ -5,7 +5,7 @@
     android:versionName="0.13 beta" >
 
     <uses-sdk
-        android:minSdkVersion="7"
+        android:minSdkVersion="11"
         android:targetSdkVersion="15" />
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -13,7 +13,7 @@
     <!-- <uses-permission android:name="android.permission.CAMERA" /> -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    
+
     <!--
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -21,25 +21,42 @@
 
     <application
         android:icon="@drawable/launcher"
-        android:label="@string/app_name" android:theme="@style/Theme.Sherlock">
+        android:label="@string/app_name"
+        android:theme="@style/Theme.Sherlock" >
         <activity
             android:name=".ui.SplashScreenActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.MyMainGarden" android:theme="@style/Theme.Styled"/>
-       <activity android:name=".ui.DashboardActivity"  android:theme="@style/Theme.Styled"/>
+        <activity
+            android:name=".ui.MyMainGarden"
+            android:theme="@style/Theme.Styled" />
+        <activity
+            android:name=".ui.DashboardActivity"
+            android:theme="@style/Theme.Styled" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.AllotmentActivity" />
-        <activity android:name=".ui.SeedActivity" android:theme="@style/Theme.Styled"/>
+        <activity
+            android:name=".ui.SeedActivity"
+            android:theme="@style/Theme.Styled" />
         <activity android:name=".ui.CameraView" />
         <activity android:name=".ui.VendorListActivity" />
-        <activity android:name=".ui.ProfileActivity" android:theme="@style/Theme.Styled"/>
-        <activity android:name=".ui.ListActionActivity" android:theme="@style/Theme.Styled"/>
-        <activity android:name=".ui.ActionActivity" android:theme="@style/Theme.Styled"/>
+        <activity
+            android:name=".ui.ProfileActivity"
+            android:theme="@style/Theme.Styled" />
+        <activity
+            android:name=".ui.ListActionActivity"
+            android:theme="@style/Theme.Styled" />
+        <activity
+            android:name=".ui.ActionActivity"
+            android:theme="@style/Theme.Styled" />
         <activity android:name=".ui.NewActionActivity" />
         <activity android:name=".ui.WebHelpActivity" />
         <activity
@@ -48,19 +65,18 @@
         <activity android:name=".ui.WebViewActivity" />
         <activity
             android:name=".ui.HutActivity"
-             android:theme="@style/Theme.Styled" />
+            android:theme="@style/Theme.Styled" />
         <activity android:name=".ui.MySeedsListActivity" />
         <activity android:name=".ui.MySeedsListFirstTimeActivity" />
         <activity
             android:name=".ui.NewSeedActivity"
             android:theme="@style/Theme.Styled" />
-
         <activity
             android:name="com.google.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
         <!--
         <provider
-        android:authorities="org.gots.providers.seeds"
+        android:authorities="org.gots.providers.seeds
         android:name="org.gots.providers.SeedSQLite" />
         -->
     </application>
