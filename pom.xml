@@ -9,7 +9,7 @@
 	<version>0.13-SNAPSHOT</version>
 	<name>Gardening Manager</name>
 	<properties>
-		<android.version>4.0.1.2</android.version>
+		<android.version>4.0.3</android.version>
 		<android.platform>15</android.platform>
 		<sdk.path>/home/sfleury/Projets/Android/android-sdk-linux</sdk.path>
 	</properties>
@@ -25,20 +25,15 @@
 	</repositories>
 	<dependencies>
 		<dependency>
-			<groupId>com.google.android</groupId>
+			<groupId>android</groupId>
 			<artifactId>android</artifactId>
-			<version>${android.version}</version>
+			<version>4.0.3_r3</version>
 			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.google.android</groupId>
-			<artifactId>support-v4</artifactId>
-			<version>r6</version>
 		</dependency>
 		<dependency>
 			<groupId>com.actionbarsherlock</groupId>
 			<artifactId>library</artifactId>
-			<version>4.1.0</version>
+			<version>4.2.0</version>
 			<type>apklib</type>
 		</dependency>
 		<dependency>
@@ -46,12 +41,8 @@
 			<artifactId>robotium-solo</artifactId>
 			<version>3.5.1</version>
 		</dependency>
-		<dependency>
-			<groupId>com.google.android</groupId>
-			<artifactId>android-test</artifactId>
-			<scope>provided</scope>
-			<version>${android.version}</version>
-		</dependency>
+		<!-- <dependency> <groupId>com.google.android</groupId> <artifactId>android-test</artifactId> 
+			<scope>provided</scope> <version>${android.version}</version> </dependency> -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -112,7 +103,11 @@
 					<nativeLibrariesDirectory>ignored</nativeLibrariesDirectory>
 					<emulator>
 						<avd>avd21</avd>
+						<wait>20000</wait>
+						<options>-no-skin</options>
+						<executable>emulator-arm</executable>
 					</emulator>
+					<undeployBeforeDeploy>true</undeployBeforeDeploy>
 				</configuration>
 			</plugin>
 			<plugin>
