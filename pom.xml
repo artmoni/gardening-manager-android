@@ -38,13 +38,7 @@
 			<version>4.2.0</version>
 			<type>apklib</type>
 		</dependency>
-		<!-- <dependency> <groupId>com.jayway.android.robotium</groupId> <artifactId>robotium-solo</artifactId> 
-			<version>3.5.1</version> </dependency> -->
-		<!-- <dependency> <groupId>com.google.android</groupId> <artifactId>android-test</artifactId> 
-			<scope>provided</scope> <version>${android.version}</version> </dependency> -->
-		<!-- <dependency> <groupId>junit</groupId> <artifactId>junit</artifactId> 
-			<version>4.10</version> <exclusions> <exclusion> <groupId>org.hamcrest</groupId> 
-			<artifactId>hamcrest-core</artifactId> </exclusion> </exclusions> </dependency> -->
+		
 		<dependency>
 			<groupId>com.google.android.analytics</groupId>
 			<artifactId>analytics</artifactId>
@@ -79,6 +73,7 @@
 	</dependencies>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
+		
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
