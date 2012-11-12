@@ -91,7 +91,7 @@
 				<extensions>true</extensions>
 				<configuration>
 					<run>
-						<debug>true</debug>
+						<debug>false</debug>
 					</run>
 					<sdk>
 						<path>${sdk.path}</path>
