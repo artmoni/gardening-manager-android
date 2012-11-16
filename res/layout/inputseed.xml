@@ -89,7 +89,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/seed.action.sowing.todo" />
+            android:text="@string/seed.action.sowing.period" />
 
         <org.gots.seed.view.PlanningWidget
             android:id="@+id/IdSeedSowingPlanning"
@@ -104,7 +104,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/seed.action.picking.todo" />
+            android:text="@string/seed.action.picking.period" />
 
         <org.gots.seed.view.PlanningWidget
             android:id="@+id/IdSeedHarvestPlanning"

@@ -58,11 +58,7 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 
 		ActionBar bar = getSupportActionBar();
 		bar.setDisplayHomeAsUpEnabled(true);
-		bar.setDisplayShowTitleEnabled(false);
-		
-		// initFamilyList();
-		// initSpecieList();
-		// initVarietyList();
+		bar.setTitle(R.string.seed_register_title);
 
 		findViewById(R.id.imageBarCode).setOnClickListener(this);
 

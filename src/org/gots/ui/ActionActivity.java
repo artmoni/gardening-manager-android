@@ -68,14 +68,6 @@ public class ActionActivity extends SherlockActivity implements OnClickListener 
 		listAllotments.setDivider(null);
 		listAllotments.setDividerHeight(0);
 
-		LinearLayout dashboardButton = (LinearLayout) findViewById(R.id.btReturn);
-		dashboardButton.setOnClickListener(new LinearLayout.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				finish();
-			}
-		});
 	}
 
 	@Override

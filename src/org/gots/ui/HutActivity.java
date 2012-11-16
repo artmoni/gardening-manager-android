@@ -91,32 +91,13 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 		mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
 				MySeedsListActivity.class, null);
 
-		// tab.setText(getResources().getString(R.string.hut_menu_myseeds).toUpperCase());
-		// tab.setTabListener(this);
-		// getSupportActionBar().addTab(tab);
-
 		VendorSeedDBHelper myBank = new VendorSeedDBHelper(this);
 		ArrayList<BaseSeedInterface> mySeeds = myBank.getMySeeds();
-		// Intent intent;
-		//
-		// intent = new Intent().setClass(this, MySeedsListActivity.class);
-
-		// ********************** Tab commercial seed**********************
-		// tab = getSupportActionBar().newTab();
-		// tab.setText(getResources().getString(R.string.hut_menu_vendorseeds).toUpperCase());
-		// tab.setTabListener(this);
-		// getSupportActionBar().addTab(tab);
+		
 		mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds)),
 				VendorListActivity.class, null);
 
-		LinearLayout dashboardButton = (LinearLayout) findViewById(R.id.btReturn);
-		dashboardButton.setOnClickListener(new LinearLayout.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				finish();
-			}
-		});
+		
 	}
 
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -148,28 +129,7 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 	@Override
 	public void onTabSelected(Tab tab, FragmentTransaction ft) {
 		mViewPager.getAdapter().notifyDataSetChanged();
-//		if (tab.getPosition() == 0) {
-//			BaseAllotmentInterface allotment = null;
-//			if (getIntent().getExtras() != null) {
-//				String allotmentRef = getIntent().getExtras().getString("org.gots.allotment.reference");
-//				if (allotmentRef != null) {
-//					AllotmentDBHelper helper = new AllotmentDBHelper(this);
-//					allotment = helper.getAllotmentByName(allotmentRef);
-//				}
-//			}
-//			VendorSeedDBHelper myBank = new VendorSeedDBHelper(this);
-//			ArrayList<BaseSeedInterface> mySeeds = myBank.getMySeeds();
-//
-//			listView = (ListView) findViewById(R.id.listSeed);
-//			MySeedsListAdapter listAdapter = new MySeedsListAdapter(this, allotment, mySeeds);
-//			listView.setAdapter(listAdapter);
-//		} else if (tab.getPosition() == 1) {
-//			VendorSeedDBHelper myBank = new VendorSeedDBHelper(this);
-//			ArrayList<BaseSeedInterface> vendorSeeds;
-//			vendorSeeds = myBank.getVendorSeeds();
-//			listView = (ListView) findViewById(R.id.listSeed);
-//			listView.setAdapter(new ListVendorSeedAdapter(this, vendorSeeds));
-//		}
+
 	}
 
 	@Override
@@ -205,13 +165,7 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 		case android.R.id.home:
 			finish();
 			return true;
-		case R.id.new_allotment:
-			BaseAllotmentInterface newAllotment = new Allotment();
-			newAllotment.setName("" + new Random().nextInt());
-
-			AllotmentDBHelper helper = new AllotmentDBHelper(this);
-			helper.insertAllotment(newAllotment);
-			return true;
+		
 		case R.id.help:
 			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HelpUriBuilder.getUri(getClass()
 					.getSimpleName())));

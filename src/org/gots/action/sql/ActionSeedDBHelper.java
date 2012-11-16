@@ -37,12 +37,10 @@ public class ActionSeedDBHelper {
 	}
 
 	public void open() {
-		// on ouvre la BDD en écriture
 		bdd = actionSeedSQLite.getWritableDatabase();
 	}
 
 	public void close() {
-		// on ferme l'accès à la BDD
 		bdd.close();
 	}
 

@@ -85,14 +85,7 @@ public class MyMainGarden extends SherlockActivity {
 
 		// listAllotments.setBackgroundDrawable(getResources().getDrawable(R.drawable.help_hut_2));
 
-		View dashboardButton = (View) findViewById(R.id.btReturn);
-		dashboardButton.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				finish();
-			}
-		});
+		
 
 	}
 

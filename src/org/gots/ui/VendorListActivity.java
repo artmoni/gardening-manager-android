@@ -49,13 +49,16 @@ public class VendorListActivity extends SherlockListFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		mContext = getActivity();
 
 		VendorSeedDBHelper myBank = new VendorSeedDBHelper(getActivity());
 		ArrayList<BaseSeedInterface> vendorSeeds;
-		vendorSeeds = myBank.getVendorSeeds();
+		vendorSeeds = myBank.getVendorSeeds();		
 
 		setListAdapter(new ListVendorSeedAdapter(getActivity(), vendorSeeds));
-		mContext = getActivity();
+		
+		if (vendorSeeds.size()==0)
+			new RefreshTask().execute(new Object());
 	}
 
 	@Override
@@ -84,37 +87,7 @@ public class VendorListActivity extends SherlockListFragment {
 		}
 	}
 
-	// @Override
-	// public boolean onCreateOptionsMenu(Menu menu) {
-	// MenuInflater inflater = getMenuInflater();
-	//
-	// inflater.inflate(R.menu.menu_catalogue, menu);
-	//
-	// return super.onCreateOptionsMenu(menu);
-	// }
-	//
-	// @Override
-	// public boolean onOptionsItemSelected(MenuItem item) {
-	// // Handle item selection
-	// Intent i;
-	// switch (item.getItemId()) {
-	// case R.id.new_seed:
-	// i = new Intent(this, NewSeedActivity.class);
-	// startActivity(i);
-	// return true;
-	//
-	// case R.id.refresh_seed:
-	// new RefreshTask().execute(new Object());
-	// return true;
-	// case R.id.help:
-	// Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-	// Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
-	// startActivity(browserIntent);
-	// return true;
-	// default:
-	// return super.onOptionsItemSelected(item);
-	// }
-	// }
+	
 
 	private class RefreshTask extends AsyncTask<Object, Integer, Long> {
 		@Override

@@ -96,7 +96,7 @@ public class SplashScreenActivity extends Activity {
 
 		myGarden = helper.getGarden(preferences.getInt("org.gots.preference.gardenid", 0));
 		if (myGarden == null) {
-			Intent intent = new Intent(this, ProfileActivity.class);
+			Intent intent = new Intent(this, ProfileCreationActivity.class);
 			startActivityForResult(intent, 0);
 
 		} else {

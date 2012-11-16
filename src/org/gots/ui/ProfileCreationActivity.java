@@ -55,8 +55,8 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
- 
-public class ProfileActivity extends SherlockActivity implements LocationListener, OnClickListener {
+
+public class ProfileCreationActivity extends SherlockActivity implements LocationListener, OnClickListener {
 	private LocationManager mlocManager;
 	private Location location;
 	private Address address;
@@ -72,103 +72,36 @@ public class ProfileActivity extends SherlockActivity implements LocationListene
 		super.onCreate(savedInstanceState);
 
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		setContentView(R.layout.profile);
+		setContentView(R.layout.profilecreation);
 
 		ActionBar bar = getSupportActionBar();
-		bar.setDisplayHomeAsUpEnabled(true);
-		bar.setTitle(R.string.dashboard_profile_name);
+		bar.setDisplayHomeAsUpEnabled(false);
+
+		bar.setTitle(R.string.profile_menu_localize);
 
 		GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
 		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
 		buildProfile();
-		WeatherManager manager = new WeatherManager(this);
 
-		LinearLayout weatherHistory = (LinearLayout) findViewById(R.id.layoutWeatherHistory);
-		final HorizontalScrollView scrollView = (HorizontalScrollView) findViewById(R.id.scrollWeatherHistory);
-
-		// set scrollview to the right end where today weather is displayed
-		scrollView.post(new Runnable() {
-			@Override
-			public void run() {
-				scrollView.scrollTo(scrollView.getWidth(), scrollView.getHeight());
-			}
-		});
-
-		for (int i = -10; i <= 0; i++) {
-			WeatherView view = new WeatherView(this);
-			try {
-				view.setWeather(manager.getCondition(i));
-			} catch (Exception e) {
-				Calendar weatherday = new GregorianCalendar();
-
-				weatherday.setTime(Calendar.getInstance().getTime());
-				weatherday.add(Calendar.DAY_OF_YEAR, i);
-				WeatherCondition condition = new WeatherCondition();
-				condition.setDate(weatherday.getTime());
-
-				view.setWeather(condition);
-
-			}
-			weatherHistory.addView(view);
-
-		}
 	}
 
 	private void buildProfile() {
-
-		findViewById(R.id.buttonLocalize).setOnClickListener(this);
 
 		findViewById(R.id.buttonValidatePosition).setOnClickListener(this);
 
 		// findViewById(R.id.buttonAddGarden).setOnClickListener(this);
 		gardenManager = new GardenManager(this);
 
-		if (gardenManager.getcurrentGarden() != null) {
-			findViewById(R.id.layoutMultiGarden).setVisibility(View.VISIBLE);
-			findViewById(R.id.idGardenSelector).setVisibility(View.VISIBLE);
-			findViewById(R.id.scrollWeatherHistory).setVisibility(View.VISIBLE);
-
-			Spinner gardenSelector = (Spinner) findViewById(R.id.idGardenSelector);
-			initGardenList(gardenSelector);
-		}
-		// findViewById(R.id.buttonAddGarden).setVisibility(View.VISIBLE);
-
 		mlocManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-		
 
 	}
 
-	private void initGardenList(Spinner gardenSelector) {
-		GardenDBHelper helper = new GardenDBHelper(this);
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
 
-		String[] referenceList = helper.getGardens();
-
-		if (referenceList == null)
-			return;
-
-		gardenId = (int) gardenManager.getcurrentGarden().getId();
-
-		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_item_text, referenceList);
-		gardenSelector.setAdapter(adapter);
-		gardenSelector.setSelection(gardenId - 1);
-		gardenSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
-				gardenManager.selectGarden(position + 1);
-				// buildProfile();
-
-				GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-				tracker.trackEvent("Garden", "Select", gardenManager.getcurrentGarden().getLocality(), position + 1);
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
-
-			}
-		});
+		getPosition();
 	}
 
 	private void getPosition() {
@@ -193,9 +126,10 @@ public class ProfileActivity extends SherlockActivity implements LocationListene
 
 		// Le geocoder permet de récupérer ou chercher des adresses
 		// gràce à un mot clé ou une position
-		Geocoder geo = new Geocoder(ProfileActivity.this);
+		Geocoder geo = new Geocoder(ProfileCreationActivity.this);
 		try {
-			// Ici on récupère la premiere adresse trouvé gràce à la position
+			// Ici on récupère la premiere adresse trouvé gràce à la
+			// position
 			// que l'on a récupéré
 			List<Address> adresses = geo.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
 
@@ -276,24 +210,9 @@ public class ProfileActivity extends SherlockActivity implements LocationListene
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case android.R.id.home:
-			finish();
-			break;
-		// case R.id.buttonSelectSource:
-		// selectSource();
-		// break;
-		case R.id.buttonLocalize:
 
-			// GardenLocator locator = new GardenLocator(v.getContext());
-			// locator.localizeGarden();
-			displayInputAddress();
-			getPosition();
-			buildProfile();
-			break;
 		case R.id.buttonValidatePosition:
 
-			// GardenLocator locator = new GardenLocator(v.getContext());
-			// locator.localizeGarden();
 			validatePosition();
 			break;
 
@@ -304,12 +223,10 @@ public class ProfileActivity extends SherlockActivity implements LocationListene
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// MenuInflater inflater = getMenuInflater();
-		if (gardenManager.getcurrentGarden() != null) {
 
 		MenuInflater inflater = getSupportMenuInflater();
-		inflater.inflate(R.menu.menu_profile, menu);
-		}
+		inflater.inflate(R.menu.menu_profilecreation, menu);
+
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -323,20 +240,13 @@ public class ProfileActivity extends SherlockActivity implements LocationListene
 			startActivity(browserIntent);
 
 			return true;
-		case R.id.new_gaden:
-
-			Intent i = new Intent(this, ProfileCreationActivity.class);
-			startActivity(i);
-
+		case R.id.localize_gaden:
+			getPosition();
 			return true;
+
 		default:
 			return super.onOptionsItemSelected(item);
 		}
-	}
-
-	private void displayInputAddress() {
-
-		findViewById(R.id.layoutCityLocalisation).setVisibility(View.VISIBLE);
 	}
 
 	private void validatePosition() {
@@ -357,16 +267,12 @@ public class ProfileActivity extends SherlockActivity implements LocationListene
 
 		if ("".equals(locality))
 			locality = ((TextView) (findViewById(R.id.editTextLocality))).getHint().toString();
-		// Toast.makeText(this, "La ville ne doit pas être vide",
-		// Toast.LENGTH_SHORT).show();
 
 		garden.setLocality(locality);
 		garden.setCountryName(Locale.getDefault().getDisplayCountry());
 		GardenDBHelper helper = new GardenDBHelper(this);
 		helper.updateGarden(garden);
 
-		WeatherManager weatherManager = new WeatherManager(this);
-		weatherManager.update();
 		this.finish();
 
 	}

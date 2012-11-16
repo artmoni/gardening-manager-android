@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.gots"
     android:versionCode="6"
-    android:versionName="0.13 beta" >
+    android:versionName="0.14 Beta" >
 
     <uses-sdk
         android:minSdkVersion="7"
@@ -50,6 +50,9 @@
         <activity android:name=".ui.VendorListActivity" />
         <activity
             android:name=".ui.ProfileActivity"
+            android:theme="@style/Theme.Styled" />
+        <activity
+            android:name=".ui.ProfileCreationActivity"
             android:theme="@style/Theme.Styled" />
         <activity
             android:name=".ui.ListActionActivity"

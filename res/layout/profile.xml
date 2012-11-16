@@ -51,7 +51,7 @@
                             android:id="@+id/idGardenSelector"
                             android:layout_width="fill_parent"
                             android:layout_height="40dp"
-                            android:visibility="visible" >
+                            android:visibility="gone" >
                         </Spinner>
 
                         <Button
@@ -61,37 +61,31 @@
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/bt_localize_garden"
                             android:text="@string/profile.menu.localize" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutCityLocalisation"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:visibility="gone" >
+
+                            <EditText
+                                android:id="@+id/editTextLocality"
+                                style="@style/button"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1" />
+
+                            <Button
+                                android:id="@+id/buttonValidatePosition"
+                                style="@style/button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/profile.location.validate" />
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
-
-                <!--
-                <RelativeLayout
-                    android:id="@+id/linearLayout1"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp" >
-
-                    <TextView
-                        android:id="@+id/textView1"
-                        style="@style/description_content"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_description"
-                        android:paddingLeft="30dp"
-                        android:text="@string/profile.menu.localize.description" />
-
-                    <TextView
-                        android:id="@+id/imageView1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/img_description"
-                        android:gravity="center_vertical|center_horizontal"
-                        android:text="1"
-                        android:textColor="@color/text_color_dark"
-                        android:textSize="30dp"
-                        android:textStyle="bold" />
-                </RelativeLayout>
-                -->
 
                 <HorizontalScrollView
                     android:id="@+id/scrollWeatherHistory"
@@ -106,29 +100,6 @@
                         android:orientation="horizontal" >
                     </LinearLayout>
                 </HorizontalScrollView>
-
-                <LinearLayout
-                    android:id="@+id/layoutCityLocalisation"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:visibility="gone" >
-
-                    <EditText
-                        android:id="@+id/editTextLocality"
-                        style="@style/button"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
-
-                    <Button
-                        android:id="@+id/buttonValidatePosition"
-                        style="@style/button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/profile.location.validate" />
-                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/layoutMultiGarden"
