@@ -41,7 +41,15 @@
                     style="@style/description_content"
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
-                    android:inputType="textAutoCorrect" android:hint="City" android:gravity="center"/>
+                    android:gravity="center"
+                    android:hint="City" />
+
+                <CheckBox
+                    android:id="@+id/checkboxSamples"
+                    style="@style/description_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fill with sample data" />
 
                 <Button
                     android:id="@+id/buttonValidatePosition"

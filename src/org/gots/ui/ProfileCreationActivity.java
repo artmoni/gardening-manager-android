@@ -12,16 +12,33 @@ package org.gots.ui;
 
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import org.gots.R;
+import org.gots.action.BaseActionInterface;
+import org.gots.action.GardeningActionInterface;
+import org.gots.action.SeedActionInterface;
+import org.gots.action.bean.BeakeringAction;
+import org.gots.action.bean.SowingAction;
+import org.gots.action.sql.ActionDBHelper;
+import org.gots.action.sql.ActionSeedDBHelper;
+import org.gots.allotment.sql.AllotmentDBHelper;
 import org.gots.analytics.GotsAnalytics;
+import org.gots.bean.Allotment;
+import org.gots.bean.BaseAllotmentInterface;
+import org.gots.bean.Garden;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GardenManager;
+import org.gots.garden.SampleGarden;
 import org.gots.garden.sql.GardenDBHelper;
 import org.gots.help.HelpUriBuilder;
+import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.sql.VendorSeedDBHelper;
 import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherManager;
 import org.gots.weather.view.WeatherView;
@@ -43,6 +60,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -76,8 +94,10 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 
 		ActionBar bar = getSupportActionBar();
 		bar.setDisplayHomeAsUpEnabled(false);
-
 		bar.setTitle(R.string.profile_menu_localize);
+		// bar.setDisplayShowCustomEnabled(true);
+
+		// getSupportActionBar().setIcon(R.drawable.bt_update);
 
 		GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
 		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
@@ -137,6 +157,7 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 				address = adresses.get(0);
 				// Si le geocoder a trouver une adresse, alors on l'affiche
 				((TextView) findViewById(R.id.editTextLocality)).setHint(String.format("%s", address.getLocality()));
+				Log.i("address", address.getLocality());
 			} else {
 				// sinon on affiche un message d'erreur
 				((TextView) findViewById(R.id.editTextLocality)).setHint("L'adresse n'a pu être déterminée");
@@ -196,8 +217,6 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 
 	@Override
 	protected void onResume() {
-		// mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-		// 1000, 10f, this);
 		super.onResume();
 	}
 
@@ -213,7 +232,7 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 
 		case R.id.buttonValidatePosition:
 
-			validatePosition();
+			createNewProfile();
 			break;
 
 		default:
@@ -242,6 +261,7 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 			return true;
 		case R.id.localize_gaden:
 			getPosition();
+			buildProfile();
 			return true;
 
 		default:
@@ -249,14 +269,10 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 		}
 	}
 
-	private void validatePosition() {
+	private void createNewProfile() {
 
-		GardenInterface garden = gardenManager.getcurrentGarden();
+		GardenInterface garden = new Garden();
 
-		if (garden == null) {
-			gardenManager.addGarden();
-			garden = gardenManager.getcurrentGarden();
-		}
 		if (location != null) {
 			garden.setGpsLatitude(location.getLatitude());
 			garden.setGpsLongitude(location.getLongitude());
@@ -270,9 +286,43 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 
 		garden.setLocality(locality);
 		garden.setCountryName(Locale.getDefault().getDisplayCountry());
-		GardenDBHelper helper = new GardenDBHelper(this);
-		helper.updateGarden(garden);
 
+		gardenManager.addGarden(garden);
+
+		// SAMPLE GARDEN
+		CheckBox samples = (CheckBox) findViewById(R.id.checkboxSamples);
+		if (samples.isChecked()) {
+			// Allotment
+			BaseAllotmentInterface newAllotment = new Allotment();
+			newAllotment.setName("" + new Random().nextInt());
+
+			AllotmentDBHelper helper = new AllotmentDBHelper(this);
+			helper.insertAllotment(newAllotment);
+
+			// Seed
+			VendorSeedDBHelper seedHelper = new VendorSeedDBHelper(this);
+//			seedHelper.loadFromXML(this);
+			
+			GrowingSeedInterface seed = (GrowingSeedInterface) seedHelper.getSeedById(1);
+			if (seed != null) {
+				seed.setNbSachet(2);
+				
+				ActionDBHelper actionHelper = new ActionDBHelper(this);
+				BaseActionInterface bakering = actionHelper.getActionByName("beak");
+				GardeningActionInterface sowing = (GardeningActionInterface)actionHelper.getActionByName("sow");
+
+				sowing.execute(newAllotment, seed);
+
+				Calendar cal = new GregorianCalendar();
+				cal.setTime(Calendar.getInstance().getTime());
+				cal.add(Calendar.MONTH, -3);
+				seed.setDateSowing(cal.getTime());
+
+					
+				ActionSeedDBHelper actionsHelper = new ActionSeedDBHelper(this);
+				actionsHelper.insertAction(bakering, seed);
+			}
+		}
 		this.finish();
 
 	}
