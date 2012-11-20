@@ -55,7 +55,7 @@ public class VendorSeedDBHelper {
 	// IMPORT FROM OTHER SOURCE
 	public void loadFromXML(Context mContext) {
 		BaseFeedParser parser = new BaseFeedParser(mContext);
-		allSeeds = parser.parse(R.raw.seed);
+		allSeeds = parser.parse(R.raw.seedbak);
 		for (int i = 0; i < allSeeds.size(); i++) {
 			BaseSeedInterface seed = allSeeds.get(i);
 			insertSeed(seed);

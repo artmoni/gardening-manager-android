@@ -94,7 +94,7 @@ public class VendorListActivity extends SherlockListFragment {
 		protected Long doInBackground(Object... params) {
 
 			GardenManager garden = new GardenManager(mContext);
-			garden.refreshData();
+			garden.populateVendorSeed();
 			return null;
 		}
 

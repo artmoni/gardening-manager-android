@@ -88,14 +88,13 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 		TabsAdapter mTabsAdapter = new TabsAdapter(this, mViewPager);
 
 		// // ********************** Tab description **********************
-		mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
-				MySeedsListActivity.class, null);
-
-		VendorSeedDBHelper myBank = new VendorSeedDBHelper(this);
-		ArrayList<BaseSeedInterface> mySeeds = myBank.getMySeeds();
-		
 		mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds)),
 				VendorListActivity.class, null);
+		
+		mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
+				MySeedsListActivity.class, null);
+		
+		
 
 		
 	}

@@ -23,17 +23,14 @@ public class GardenManager {
 
 	}
 
-	public long addGarden() {
-
-		Garden garden = new Garden();
-		garden.setLocality("Non localisé");
+	public long addGarden(GardenInterface garden) {
 
 		GardenDBHelper helper = new GardenDBHelper(mContext);
 		GardenInterface newGarden = helper.insertGarden(garden);
 
 		changeDatabase((int) newGarden.getId());
 
-		refreshData();
+		populateVendorSeed();
 
 		return newGarden.getId();
 	}
@@ -59,7 +56,7 @@ public class GardenManager {
 		changeDatabase(position);
 	}
 
-	public void refreshData() {
+	public void populateVendorSeed() {
 		SimpleConnector connector = new SimpleConnector();
 		List<BaseSeedInterface> seeds = connector.getAllSeeds();
 
@@ -70,5 +67,10 @@ public class GardenManager {
 				theSeedBank.insertSeed(baseSeedInterface);
 
 		}
+	}
+
+	public void removeCurrentGarden() {
+		GardenDBHelper helper = new GardenDBHelper(mContext);
+		helper.deleteGarden(getcurrentGarden());
 	}
 }

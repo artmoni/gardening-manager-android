@@ -19,6 +19,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 public class GardenDBHelper {
 
@@ -120,6 +121,14 @@ public class GardenDBHelper {
 		cursor.close();
 		close();
 		return gardens;
+	}
+
+	public void deleteGarden(GardenInterface garden) {
+		open();
+		int rowid = bdd.delete(GardenSQLite.GARDEN_TABLE_NAME, GardenSQLite.GARDEN_ID+"="+garden.getId(), null);
+		if (rowid!=1){
+			Log.w("deleteGarden", "Garden id="+garden.getId()+" has not been found");
+		}
 	}
 
 }

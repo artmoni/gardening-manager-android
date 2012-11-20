@@ -90,7 +90,7 @@ public class SeedWidget extends RelativeLayout implements OnClickListener {
 			vegetableImageRessource = mContext.getResources().getIdentifier(
 					"org.gots:drawable/veget_" + mSeed.getReference().toLowerCase(), null, null);
 		
-		if (vegetableImageRessource == 0)
+		if (vegetableImageRessource == 0 &&mSeed.getSpecie()!=null)
 			vegetableImageRessource = mContext.getResources().getIdentifier(
 					"org.gots:drawable/specie_" + mSeed.getSpecie().toLowerCase().replaceAll("\\s", ""),
 					null, null);
