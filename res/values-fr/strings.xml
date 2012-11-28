@@ -59,6 +59,8 @@
     <string name="profile.menu.add.description">Je peux gérer plusieurs potagers</string>
     <string name="profile.location.selectsource">Choix source</string>
     <string name="profile.location.validate">Valider</string>
+        <string name="profile.sample.data">Débuter avec un potager de test</string>
+    
     <string name="hut.menu.myseeds">Mon stock</string>
     <string name="hut.menu.vendorseeds">Catalogue</string>
     <string name="garden.cityname.inputtitle">Ville du potager</string>

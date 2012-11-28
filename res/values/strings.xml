@@ -57,6 +57,8 @@
     <string name="profile.menu.add.description">I can manage multiple gardens</string>
     <string name="profile.location.selectsource">Source choice</string>
     <string name="profile.location.validate">Validate</string>
+    <string name="profile.sample.data">Begin with a sample garden</string>
+    
     <string name="hut.menu.myseeds">My stock</string>
     <string name="hut.menu.vendorseeds">Catalog</string>
     <string name="garden.cityname.inputtitle">Garden place</string>

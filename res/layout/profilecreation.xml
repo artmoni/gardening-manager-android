@@ -49,7 +49,7 @@
                     style="@style/description_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Fill with sample data" />
+                    android:text="@string/profile.sample.data" android:checked="true"/>
 
                 <Button
                     android:id="@+id/buttonValidatePosition"

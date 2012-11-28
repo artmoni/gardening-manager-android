@@ -112,6 +112,8 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 
 		// findViewById(R.id.buttonAddGarden).setOnClickListener(this);
 		gardenManager = new GardenManager(this);
+		if (gardenManager.getcurrentGarden()!= null)
+			((CheckBox)findViewById(R.id.checkboxSamples)).setChecked(false);
 
 		mlocManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
@@ -292,6 +294,10 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 		// SAMPLE GARDEN
 		CheckBox samples = (CheckBox) findViewById(R.id.checkboxSamples);
 		if (samples.isChecked()) {
+			GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+			tracker.trackEvent("Garden", "sample", garden.getLocality(), 0);
+
+			
 			// Allotment
 			BaseAllotmentInterface newAllotment = new Allotment();
 			newAllotment.setName("" + new Random().nextInt());
@@ -301,26 +307,31 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 
 			// Seed
 			VendorSeedDBHelper seedHelper = new VendorSeedDBHelper(this);
-//			seedHelper.loadFromXML(this);
-			
-			GrowingSeedInterface seed = (GrowingSeedInterface) seedHelper.getSeedById(1);
-			if (seed != null) {
-				seed.setNbSachet(2);
+			// seedHelper.loadFromXML(this);
+			int nbSeed = seedHelper.getArraySeeds().length;
+			Random random = new Random();
+			for (int i = 1; i <= 5 && i <nbSeed; i++) {
+				int alea = random.nextInt(); 
 				
-				ActionDBHelper actionHelper = new ActionDBHelper(this);
-				BaseActionInterface bakering = actionHelper.getActionByName("beak");
-				GardeningActionInterface sowing = (GardeningActionInterface)actionHelper.getActionByName("sow");
+				GrowingSeedInterface seed = (GrowingSeedInterface) seedHelper.getSeedById(alea%nbSeed+1);
+				if (seed != null) {
+					seed.setNbSachet(alea%3+1);
+					seedHelper.updateSeed(seed);
 
-				sowing.execute(newAllotment, seed);
+					ActionDBHelper actionHelper = new ActionDBHelper(this);
+					BaseActionInterface bakering = actionHelper.getActionByName("beak");
+					GardeningActionInterface sowing = (GardeningActionInterface) actionHelper.getActionByName("sow");
 
-				Calendar cal = new GregorianCalendar();
-				cal.setTime(Calendar.getInstance().getTime());
-				cal.add(Calendar.MONTH, -3);
-				seed.setDateSowing(cal.getTime());
+					sowing.execute(newAllotment, seed);
 
-					
-				ActionSeedDBHelper actionsHelper = new ActionSeedDBHelper(this);
-				actionsHelper.insertAction(bakering, seed);
+					Calendar cal = new GregorianCalendar();
+					cal.setTime(Calendar.getInstance().getTime());
+					cal.add(Calendar.MONTH, -3);
+					seed.setDateSowing(cal.getTime());
+
+					ActionSeedDBHelper actionsHelper = new ActionSeedDBHelper(this);
+					actionsHelper.insertAction(bakering, seed);
+				}
 			}
 		}
 		this.finish();

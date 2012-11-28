@@ -1,0 +1,218 @@
+<gots>
+	<seeds>
+		<seed>
+			<reference>990001</reference>
+			<family>apiaceae</family>
+			<specie>daucus carota</specie>
+			<description_growth>Sowing: on the spot. Lighten 3-4 cm
+Closure: 10 to 14 days in soil at 20 ° C
+Sol: furniture, fresh and light.
+Watering: Needs more water particularly high in the months after sowing, nitrogen for foliage development, and potassium during the development of the root.
+</description_growth>
+			<description_cultivation>Dans un sillon d'un centimètre, de préférence sablonneux et avec un apport de compost bien fais. Eclaircissez lorsque les tiges font 3 centimères tous les 3 centimètres puis tous les 8 centimètres lorsqu'elles ont 3-4 feuilles.
+			</description_cultivation>
+			<description_harvest>3 à 6 mois après semis. Selon si c'est en pleine terre ou sous-abri et selon la variété. En climat tempéré, les périodes de semis peuvent s'étaler de fin janvier à début juillet, pour des récoltes d'Avril à Décembre.
+			</description_harvest>
+			<description_diseases>maladies cryptogamiques :
+
+- le mildiou: Bremia, Peronospora, Phytophthora, Plasmopara, Pseudoperonospora, Sclerospora
+Provoquée par le champignon appelé Phytophthora infestans.
+Ces maladies se manifestent par des taches brunes et/ou une apparence de moisissures blanches et cotonneuse suivies d'un flétrissement général de la feuille, d'un rameau ou de toute la plante. Le tubercule atteint pourrit rapidement, même au cours de la conservation, dégageant une odeur désagréable et forte.
+
+- l'oïdium : Erysiphe heraclei ou Erysiphe umbelliferarum, Leveillula taurica.
+Champignon.Taches poudreuses blanc-grisâtre à la surface des feuilles, des tiges et parfois des fleurs ou des fruits. L'oïdium peut provoquer une déformation des feuilles, qui se gondolent et se boursouflent.
+Pour Leveillula taurica, Les symptômes sont différents en fonction de la face des folioles :
+- Sur la face supérieure, on note la présence de taches jaunâtres.
+- Sur la face inférieure, le feutrage blanc est constitué par les conidiophores et conidies du champignon.
+
+Les porte-graines peuvent également être attaqués.
+
+- L'alternariose : Alternaria radicina, Stemphylium radicinum
+Provoquée par le champignon Alternaria dauci. Les facteurs favorisants sont la chaleur et l'humidité (ex: condensation). Des petites taches brunâtres, auréolées de jaune, apparaissent sur le bord des feuilles. Puis dessèchement des folioles qui se nécrosent et tombent. Les pétioles peuvent aussi être attaqués.
+			</description_diseases>
+			<sowingDateMin>3</sowingDateMin>
+			<sowingDateMax>6</sowingDateMax>
+			<durationMin>84</durationMin>
+			<durationMax>192</durationMax>
+			<actions> <action 	name="lighten" 	duration="20" ></action>
+
+			</actions>
+		</seed>
+		#########################################
+		<seed>
+			<reference>990002</reference>
+			<family>Liliaceae</family>
+			<specie>allium cepa</specie>
+			<description_growth>L'oignon est une espèce herbacée, vivace par son bulbe unique, cultivée comme une annuelle ou bisannuelle (floraison la deuxième année). C'est une plante haute de 60 à 100 cm, dont les feuilles de couleur verte sont cylindriques, creuses (ce qui distingue cette espèce du poireau et de l'ail, autres espèces cultivées appartenant aussi au genre Allium). La tige florale dressée est également creuse. Elle présente un renflement vers sa base.
+ Le b ulbe est relativement gros, de forme sphérique, parfois plus ou moins aplati.
+ Les fleurs petites (de 4 à 5 mm de large), de couleur blanche ou verte, sont regroupées en une ombelle sphérique, en position terminale sur la tige. Les fleurs ont une symétrie trimère, à trois sépales, trois pétales et six étamines. L'ovaire unique est divisé en trois loges. Le fruit est une capsule s'ouvrant par trois valves, libérant chacune généralement deux graines.
+ Chez certaines variétés, il arrive que des bulbilles se développent à la place des fleurs.
+ Cette plante possède un bulbe qui lui permet de se reproduire.
+			</description_growth>
+			<description_cultivation>Espacez vos plants de 10 centimètres dans des rangs distants de 20 centimètres
+			</description_cultivation>
+			<description_harvest>Vous pouvez récoltez les oignons blanc à partir de juin, les jaunes en septembre lorsque les tiges jaunissent
+			</description_harvest>
+			<description_diseases></description_diseases>
+			<sowingDateMin>3</sowingDateMin>
+			<sowingDateMax>4</sowingDateMax>
+			<durationMin>120</durationMin>
+			<durationMax>150</durationMax>
+		</seed>
+		<seed>
+			<reference>990003</reference>
+			<family>Asteraceae</family>
+			<specie>Lactuca sativa</specie>
+			<variety>
+			</variety>
+			<link>
+			</link>
+			<description_growth>Les nombreuses variétés de laitues actuelles sont généralement classées selon la forme et la couleur du feuillage, leur mode de culture et de récolte (période de culture, sous abris ou en plein champ, 4ème gamme,...).
+ Plus de 1500 variétés sont inscrites au catalogue officiel européen des espèces et variétés et plus de 400 au catalogue français.
+ La création variétale est extrêmement active du fait des différents modes de culture et de commercialisation, mais aussi de la recherche de variétés résistantes à des maladies telles que le Bremia qui évolue rapidement.
+			</description_growth>
+			<description_cultivation>Semez en ligne dans des sillons d'un centimètre de profondeur en espacant les graines de 25 centimètres
+			</description_cultivation>
+			<description_harvest>Lorsque la salade a une taille correcte
+			</description_harvest>
+			<description_diseases>Attention aux limaces</description_diseases>
+			<sowingDateMin>3</sowingDateMin>
+			<sowingDateMax>9</sowingDateMax>
+			<durationMin>90</durationMin>
+			<durationMax>120</durationMax>
+			<actions> <action 	name="lighten" 	duration="20" ></action>
+
+			</actions>
+		</seed>
+		<seed>
+			<reference>990004</reference>
+			<family>Brassicaceae</family>
+			<specie>Raphanus sativus</specie>
+			<variety>
+			</variety>
+			<link>
+			</link>
+			<description_growth>Semez toutes les 2-3 semaines une rangée pour avoir des radis régulièrement
+			</description_growth>
+			<description_cultivation>Eclaircissez tous les 3 centimères lorsque les tiges font 1-2 centimètres
+			</description_cultivation>
+			<description_harvest>
+			</description_harvest>
+			<description_diseases>En arrosant régulièrement, vous éviterez les attaques des altises qui mangent les feuilles
+			</description_diseases>
+			<sowingDateMin>4</sowingDateMin>
+			<sowingDateMax>8</sowingDateMax>
+			<durationMin>20</durationMin>
+			<durationMax>42</durationMax>
+		</seed>
+		<seed>
+			<reference>990005</reference>
+			<family>Solanaceae</family>
+			<specie>Solanum lycopersicum</specie>
+			<variety>
+			</variety>
+			<link>
+			</link>
+			<description_growth>Espacez les pieds de 50 centimètres
+			</description_growth>
+			<description_cultivation>Supprimez régulièrement les pouces latérales de la tomate appelés gourmands
+			</description_cultivation>
+			<description_harvest>
+			</description_harvest>
+			<description_diseases>
+			</description_diseases>
+			<sowingDateMin>3</sowingDateMin>
+			<sowingDateMax>4</sowingDateMax>
+			<durationMin>120</durationMin>
+			<durationMax>210</durationMax>
+		</seed>
+		<seed>
+			<reference>990006</reference>
+			<family>Brassicaceae</family>
+			<specie>Brassica rapa</specie>
+			<variety>
+			</variety>
+			<link>
+			</link>
+			<description_growth>
+			</description_growth>
+			<description_cultivation>Semez dans des sillons d'un centimètre et distants de 25 centimètres
+			</description_cultivation>
+			<description_harvest>Récoltez au fur et à mesure de vos besoins
+			</description_harvest>
+			<description_diseases>Lorqu'il fait très sec, l'Altise menace, arrosez régulièrement pour vous en protéger
+			</description_diseases>
+			<sowingDateMin>6</sowingDateMin>
+			<sowingDateMax>7</sowingDateMax>
+			<durationMin>60</durationMin>
+			<durationMax>150</durationMax>
+			<actions> 
+			    <action name="lighten" 	duration="20" ></action>
+			</actions>
+		</seed>
+		<seed>
+			<reference>990007</reference>
+			<family>Cucurbitaceae</family>
+			<specie>Cucumis sativus</specie>
+			<variety>
+			</variety>
+			<link>
+			</link>
+			<description_growth>Semez en petit lot de 5-6 graines, dans des sillons d'un centimètre et distants de 60 centimètres
+			</description_growth>
+			<description_cultivation>Pailler sous les fruits pour qu'ils ne s'abiment pas.
+			</description_cultivation>
+			<description_harvest>Récoltez selon votre préférence
+			</description_harvest>
+			<description_diseases>Le blanc ou oïdium, caractérisé par des feuilles grisatres et rigide. La nuile qui forme sur les feuilles et les fruits de tâches brunâtres. Le chancre qui attaque les rameaux et la tige principale.
+			</description_diseases>
+			<sowingDateMin>4</sowingDateMin>
+			<sowingDateMax>6</sowingDateMax>
+			<durationMin>120</durationMin>
+			<durationMax>180</durationMax>
+		</seed>
+		<seed>
+			<reference>990008</reference>
+			<family>Fabaceae</family>
+			<specie>Phaseolus vulgaris</specie>
+			<variety>
+			</variety>
+			<link>
+			</link>
+			<description_growth>
+			</description_growth>
+			<description_cultivation>
+			</description_cultivation>
+			<description_harvest>
+			</description_harvest>
+			<description_diseases>
+			</description_diseases>
+			<sowingDateMin>4</sowingDateMin>
+			<sowingDateMax>6</sowingDateMax>
+			<durationMin>120</durationMin>
+			<durationMax>180</durationMax>
+		</seed>
+		<seed>
+			<reference>990009</reference>
+			<family>Solanaceae</family>
+			<specie>Solanum tuberosum</specie>
+			<variety></variety>
+			<link></link>
+			<description_growth>Semez dans des sillons de 15 centimètres et distants de 50 centimètres
+			</description_growth>
+			<description_cultivation></description_cultivation>
+			<description_harvest>Aidez vous d'une bêche avec précaution pour ne pas abimer les tubercules
+			</description_harvest>
+			<description_diseases></description_diseases>
+			<sowingDateMin>4</sowingDateMin>
+			<sowingDateMax>6</sowingDateMax>
+			<durationMin>120</durationMin>
+			<durationMax>180</durationMax>
+			<actions> <action 	name="beak" 	duration="30" ></action>
+
+			</actions>
+
+
+		</seed>
+	</seeds>
+</gots>

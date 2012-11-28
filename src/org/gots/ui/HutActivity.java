@@ -160,7 +160,10 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 			startActivity(i);
 			return true;
 
-	
+		case R.id.new_seed_barcode:
+			IntentIntegrator integrator = new IntentIntegrator(this);
+			integrator.initiateScan();
+			return true;
 		case android.R.id.home:
 			finish();
 			return true;
