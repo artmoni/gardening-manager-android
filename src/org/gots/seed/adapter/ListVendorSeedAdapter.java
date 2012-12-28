@@ -10,9 +10,11 @@
  ******************************************************************************/
 package org.gots.seed.adapter;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 
 import org.gots.R;
@@ -23,6 +25,7 @@ import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.sql.VendorSeedDBHelper;
 import org.gots.seed.view.SeedWidgetLong;
 
 import android.content.Context;
@@ -30,20 +33,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 
-public class ListVendorSeedAdapter extends ArrayAdapter<BaseSeedInterface> {
+public class ListVendorSeedAdapter extends BaseAdapter {
 
 	private BuyingAction buying;
 	private LayoutInflater inflater;
+	private Context mContext;
+	private List<BaseSeedInterface> vendorSeeds;
 
 	public ListVendorSeedAdapter(Context context, List<BaseSeedInterface> vendorSeeds) {
-		super(context, 0, vendorSeeds);
+		// super(context);
+		this.vendorSeeds = vendorSeeds;
+		mContext = context;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		Collections.sort(vendorSeeds, new ISeedSpecieComparator(context));
 	}
-
-	
-
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -60,7 +65,7 @@ public class ListVendorSeedAdapter extends ArrayAdapter<BaseSeedInterface> {
 
 		seedWidgetLong.setSeed(currentSeed);
 
-		buying = new BuyingAction(getContext());
+		buying = new BuyingAction(mContext);
 		buying.setState(ActionState.NORMAL);
 		actionWidget.setAction(buying);
 		actionWidget.setOnClickListener(new View.OnClickListener() {
@@ -105,7 +110,25 @@ public class ListVendorSeedAdapter extends ArrayAdapter<BaseSeedInterface> {
 
 	@Override
 	public void notifyDataSetChanged() {
+		VendorSeedDBHelper myBank = new VendorSeedDBHelper(mContext);
+		vendorSeeds = myBank.getVendorSeeds();
+
 		super.notifyDataSetChanged();
+	}
+
+	@Override
+	public int getCount() {
+		return vendorSeeds.size();
+	}
+
+	@Override
+	public BaseSeedInterface getItem(int position) {
+		return vendorSeeds.get(position);
+	}
+
+	@Override
+	public long getItemId(int position) {
+		return vendorSeeds.get(position).getId();
 	}
 
 }
