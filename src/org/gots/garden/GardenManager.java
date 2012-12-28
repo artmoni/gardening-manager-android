@@ -7,6 +7,7 @@ import org.gots.DatabaseHelper;
 import org.gots.bean.Garden;
 import org.gots.garden.sql.GardenDBHelper;
 import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.providers.GotsConnector;
 import org.gots.seed.providers.local.LocalConnector;
 import org.gots.seed.providers.simple.SimpleConnector;
 import org.gots.seed.sql.VendorSeedDBHelper;
@@ -31,7 +32,18 @@ public class GardenManager {
 
 		changeDatabase((int) newGarden.getId());
 
-		populateVendorSeed();
+		populateVendorSeed(false);
+
+		return newGarden.getId();
+	}
+
+	public long addGarden(GardenInterface garden, boolean localStore) {
+		GardenDBHelper helper = new GardenDBHelper(mContext);
+		GardenInterface newGarden = helper.insertGarden(garden);
+
+		changeDatabase((int) newGarden.getId());
+
+		populateVendorSeed(localStore);
 
 		return newGarden.getId();
 	}
@@ -57,16 +69,17 @@ public class GardenManager {
 		changeDatabase(position);
 	}
 
-	public void populateVendorSeed() {
-		
-		
-		SimpleConnector connector = new SimpleConnector();
-//		LocalConnector connector = new LocalConnector(mContext);
+	private void populateVendorSeed(boolean localStore) {
+		GotsConnector connector;
+		if (!localStore)
+			connector = new SimpleConnector();
+		else
+			connector = new LocalConnector(mContext);
 		List<BaseSeedInterface> seeds = connector.getAllSeeds();
 
 		VendorSeedDBHelper theSeedBank = new VendorSeedDBHelper(mContext);
 		for (Iterator<BaseSeedInterface> iterator = seeds.iterator(); iterator.hasNext();) {
-			BaseSeedInterface baseSeedInterface =  iterator.next();
+			BaseSeedInterface baseSeedInterface = iterator.next();
 			if (theSeedBank.getSeedByReference(baseSeedInterface.getReference()) == null)
 				theSeedBank.insertSeed(baseSeedInterface);
 
@@ -76,5 +89,10 @@ public class GardenManager {
 	public void removeCurrentGarden() {
 		GardenDBHelper helper = new GardenDBHelper(mContext);
 		helper.deleteGarden(getcurrentGarden());
+	}
+	
+	public void update(){
+		populateVendorSeed(false);
+		
 	}
 }
