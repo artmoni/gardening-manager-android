@@ -24,8 +24,10 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListAdapter;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -35,10 +37,9 @@ public class MySeedsListActivity extends SherlockListFragment {
 	private BaseAllotmentInterface allotment;
 
 	@Override
-	public void onActivityCreated (Bundle savedInstanceState) {
+	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		
 		if (getActivity().getIntent().getExtras() != null) {
 			String allotmentRef = getActivity().getIntent().getExtras().getString("org.gots.allotment.reference");
 			if (allotmentRef != null) {
@@ -52,42 +53,60 @@ public class MySeedsListActivity extends SherlockListFragment {
 		listAdapter = new MySeedsListAdapter(getActivity(), allotment, mySeeds);
 		setListAdapter(listAdapter);
 
-//		if (mySeeds.size() == 0) {
-//			Intent intent = new Intent().setClass(this, MySeedsListFirstTimeActivity.class);
-//			startActivity(intent);
-//		}
+		// if (mySeeds.size() == 0) {
+		// Intent intent = new Intent().setClass(this,
+		// MySeedsListFirstTimeActivity.class);
+		// startActivity(intent);
+		// }
 	}
 
-//	@Override
-//	protected void onResume() {
-//		super.onResume();
-//		listAdapter.notifyDataSetChanged();
-//
-//	}
-//
-//	@Override
-//	public boolean onCreateOptionsMenu(Menu menu) {
-////		MenuInflater inflater = getMenuInflater();
-////		inflater.inflate(R.menu.menu_stock, menu);
-//		return super.onCreateOptionsMenu(menu);
-//	}
-//
-//	@Override
-//	public boolean onOptionsItemSelected(MenuItem item) {
-//		switch (item.getItemId()) {
-//
-//		case R.id.new_seed_barcode:
-//			IntentIntegrator integrator = new IntentIntegrator(this);
-//			integrator.initiateScan();
-//			return true;
-//		case R.id.help:
-//			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
-//			startActivity(browserIntent);
-//
-//			return true;
-//		default:
-//			return super.onOptionsItemSelected(item);
-//		}
-//
-//	}
+	@Override
+	public ListAdapter getListAdapter() {
+		// TODO Auto-generated method stub
+		return super.getListAdapter();
+	}
+
+	public void update() {
+		listAdapter.notifyDataSetChanged();
+	}
+
+	@Override
+	public void onResume() {
+		Log.i("onresume", this.getClass().getName());
+		super.onResume();
+	}
+
+	// @Override
+	// protected void onResume() {
+	// super.onResume();
+	// listAdapter.notifyDataSetChanged();
+	//
+	// }
+	//
+	// @Override
+	// public boolean onCreateOptionsMenu(Menu menu) {
+	// // MenuInflater inflater = getMenuInflater();
+	// // inflater.inflate(R.menu.menu_stock, menu);
+	// return super.onCreateOptionsMenu(menu);
+	// }
+	//
+	// @Override
+	// public boolean onOptionsItemSelected(MenuItem item) {
+	// switch (item.getItemId()) {
+	//
+	// case R.id.new_seed_barcode:
+	// IntentIntegrator integrator = new IntentIntegrator(this);
+	// integrator.initiateScan();
+	// return true;
+	// case R.id.help:
+	// Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+	// Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
+	// startActivity(browserIntent);
+	//
+	// return true;
+	// default:
+	// return super.onOptionsItemSelected(item);
+	// }
+	//
+	// }
 }
