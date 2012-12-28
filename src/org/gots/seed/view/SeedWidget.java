@@ -79,31 +79,30 @@ public class SeedWidget extends RelativeLayout implements OnClickListener {
 			seedView.setImageResource(vegetableImageRessource);
 
 		setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.action_selector));
-		
+
 		invalidate();
 	}
 
 	private int getSeedDrawable() {
 		int vegetableImageRessource = 0;
-		
+
 		if (mSeed.getReference() != null)
 			vegetableImageRessource = mContext.getResources().getIdentifier(
 					"org.gots:drawable/veget_" + mSeed.getReference().toLowerCase(), null, null);
-		
-		if (vegetableImageRessource == 0 &&mSeed.getSpecie()!=null)
+
+		if (vegetableImageRessource == 0 && mSeed.getSpecie() != null)
 			vegetableImageRessource = mContext.getResources().getIdentifier(
-					"org.gots:drawable/specie_" + mSeed.getSpecie().toLowerCase().replaceAll("\\s", ""),
-					null, null);
+					"org.gots:drawable/specie_" + mSeed.getSpecie().toLowerCase().replaceAll("\\s", ""), null, null);
 		return vegetableImageRessource;
 	}
 
-
 	@Override
 	public void onClick(View v) {
-
-		Intent i = new Intent(mContext, TabSeedActivity.class);
-		i.putExtra("org.gots.seed.vendorid", ((BaseSeedInterface) v.getTag()).getId());
-		mContext.startActivity(i);
+		if (!TabSeedActivity.class.isInstance(mContext)) {
+			Intent i = new Intent(mContext, TabSeedActivity.class);
+			i.putExtra("org.gots.seed.vendorid", ((BaseSeedInterface) v.getTag()).getId());
+			mContext.startActivity(i);
+		}
 	}
 
 	public void setSeed(BaseSeedInterface seed) {
