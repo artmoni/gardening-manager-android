@@ -95,7 +95,7 @@
 					</run>
 					<sdk>
 						<path>${sdk.path}</path>
-						<platform>15</platform>
+						<platform>${android.platform}</platform>
 					</sdk>
 					<nativeLibrariesDirectory>ignored</nativeLibrariesDirectory>
 					<emulator>
