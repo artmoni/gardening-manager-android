@@ -26,6 +26,8 @@ import org.gots.seed.adapter.ListVendorSeedAdapter;
 import org.gots.seed.adapter.MySeedsListAdapter;
 import org.gots.seed.sql.VendorSeedDBHelper;
 
+import sun.awt.motif.MCustomCursor;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -37,6 +39,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -44,6 +48,8 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -60,6 +66,7 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 	private Context mContext;
 	private ListView listView;
 	private ViewPager mViewPager;
+	private int currentAllotment = -1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +74,9 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 
 		GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
 		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
+
+		if (getIntent().getExtras() != null)
+			currentAllotment = getIntent().getExtras().getInt("org.gots.allotment.reference");
 
 		// GardenManager gm =GardenManager.getInstance();
 		mContext = this;
@@ -90,13 +100,12 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 		// // ********************** Tab description **********************
 		mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds)),
 				VendorListActivity.class, null);
-		
+
 		mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
 				MySeedsListActivity.class, null);
-		
-		
-
-		
+		// an allotment is selected
+		if (currentAllotment >= 0)
+			bar.setSelectedNavigationItem(1);
 	}
 
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -127,8 +136,7 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 
 	@Override
 	public void onTabSelected(Tab tab, FragmentTransaction ft) {
-		mViewPager.getAdapter().notifyDataSetChanged();
-
+		// mViewPager.getAdapter().notifyDataSetChanged();
 	}
 
 	@Override
@@ -167,7 +175,7 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 		case android.R.id.home:
 			finish();
 			return true;
-		
+
 		case R.id.help:
 			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HelpUriBuilder.getUri(getClass()
 					.getSimpleName())));
@@ -178,8 +186,6 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 			return super.onOptionsItemSelected(item);
 		}
 	}
-
-	
 
 	static final class TabInfo {
 		private final Class<?> clss;
@@ -239,6 +245,7 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 
 			Fragment fragment = Fragment.instantiate(mContext, info.clss.getName(), info.args);
 			fragment.setArguments(bundle);
+			
 			return fragment;
 		}
 
@@ -247,6 +254,10 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 
 		public void onPageSelected(int position) {
 			mActionBar.setSelectedNavigationItem(position);
+			
+			BaseAdapter myAdapter = (BaseAdapter)((ListView) getCurrentFocus()).getAdapter();
+			if (myAdapter!= null)
+			myAdapter.notifyDataSetChanged();
 		}
 
 		public void onPageScrollStateChanged(int state) {
@@ -257,6 +268,9 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 			for (int i = 0; i < mTabs.size(); i++) {
 				if (mTabs.get(i) == tag) {
 					mViewPager.setCurrentItem(i);
+//					((SherlockListFragment) getItem(i)).getListView().invalidate();
+					//mViewPager.getChildAt(i).invalidate();
+					
 				}
 			}
 		}
@@ -266,5 +280,14 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 
 		public void onTabReselected(Tab tab, FragmentTransaction ft) {
 		}
+//		
+//		public Fragment getActiveFragment(ViewPager container, int position) {
+//		    String name = makeFragmentName(container.getId(), position);
+//		    return  getFragmentManager().findFragmentByTag(name);
+//		}
+//
+//		private static String makeFragmentName(int viewId, int index) {
+//		    return "android:switcher:" + viewId + ":" + index;
+//		}
 	}
 }
