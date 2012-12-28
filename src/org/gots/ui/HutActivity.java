@@ -245,7 +245,7 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 
 			Fragment fragment = Fragment.instantiate(mContext, info.clss.getName(), info.args);
 			fragment.setArguments(bundle);
-			
+
 			return fragment;
 		}
 
@@ -255,9 +255,11 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 		public void onPageSelected(int position) {
 			mActionBar.setSelectedNavigationItem(position);
 			
-			BaseAdapter myAdapter = (BaseAdapter)((ListView) getCurrentFocus()).getAdapter();
-			if (myAdapter!= null)
-			myAdapter.notifyDataSetChanged();
+			if (getCurrentFocus() != null) {
+				BaseAdapter myAdapter = (BaseAdapter) ((ListView) getCurrentFocus()).getAdapter();
+				if (myAdapter != null)
+					myAdapter.notifyDataSetChanged();
+			}
 		}
 
 		public void onPageScrollStateChanged(int state) {
@@ -268,9 +270,10 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 			for (int i = 0; i < mTabs.size(); i++) {
 				if (mTabs.get(i) == tag) {
 					mViewPager.setCurrentItem(i);
-//					((SherlockListFragment) getItem(i)).getListView().invalidate();
-					//mViewPager.getChildAt(i).invalidate();
-					
+					// ((SherlockListFragment)
+					// getItem(i)).getListView().invalidate();
+					// mViewPager.getChildAt(i).invalidate();
+
 				}
 			}
 		}
@@ -280,14 +283,6 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 
 		public void onTabReselected(Tab tab, FragmentTransaction ft) {
 		}
-//		
-//		public Fragment getActiveFragment(ViewPager container, int position) {
-//		    String name = makeFragmentName(container.getId(), position);
-//		    return  getFragmentManager().findFragmentByTag(name);
-//		}
-//
-//		private static String makeFragmentName(int viewId, int index) {
-//		    return "android:switcher:" + viewId + ":" + index;
-//		}
+	
 	}
 }

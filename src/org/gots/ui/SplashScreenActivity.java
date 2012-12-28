@@ -57,6 +57,10 @@ public class SplashScreenActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.splash_screen);
+
+		GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
+		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
+
 		Message msg = new Message();
 		msg.what = STOPSPLASH;
 
@@ -67,7 +71,6 @@ public class SplashScreenActivity extends Activity {
 			TextView name = (TextView) findViewById(R.id.TextView01);
 			name.setText("version " + version);
 		} catch (NameNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -135,9 +138,7 @@ public class SplashScreenActivity extends Activity {
 
 	@Override
 	protected void onDestroy() {
-		GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
-		GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-		tracker.trackEvent("Garden", "location", myGarden.getLocality(), 0);
+		
 		GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
 		super.onDestroy();
 	}
