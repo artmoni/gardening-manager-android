@@ -112,8 +112,8 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 
 		// findViewById(R.id.buttonAddGarden).setOnClickListener(this);
 		gardenManager = new GardenManager(this);
-		if (gardenManager.getcurrentGarden()!= null)
-			((CheckBox)findViewById(R.id.checkboxSamples)).setChecked(false);
+		if (gardenManager.getcurrentGarden() != null)
+			((CheckBox) findViewById(R.id.checkboxSamples)).setChecked(false);
 
 		mlocManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
@@ -289,7 +289,7 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 		garden.setLocality(locality);
 		garden.setCountryName(Locale.getDefault().getDisplayCountry());
 
-		gardenManager.addGarden(garden);
+		gardenManager.addGarden(garden, true);
 
 		// SAMPLE GARDEN
 		CheckBox samples = (CheckBox) findViewById(R.id.checkboxSamples);
@@ -297,7 +297,6 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 			GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
 			tracker.trackEvent("Garden", "sample", garden.getLocality(), 0);
 
-			
 			// Allotment
 			BaseAllotmentInterface newAllotment = new Allotment();
 			newAllotment.setName("" + new Random().nextInt());
@@ -310,12 +309,12 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 			// seedHelper.loadFromXML(this);
 			int nbSeed = seedHelper.getArraySeeds().length;
 			Random random = new Random();
-			for (int i = 1; i <= 5 && i <nbSeed; i++) {
-				int alea = random.nextInt(); 
-				
-				GrowingSeedInterface seed = (GrowingSeedInterface) seedHelper.getSeedById(alea%nbSeed+1);
+			for (int i = 1; i <= 5 && i < nbSeed; i++) {
+				int alea = random.nextInt(nbSeed);
+
+				GrowingSeedInterface seed = (GrowingSeedInterface) seedHelper.getSeedById(alea % nbSeed + 1);
 				if (seed != null) {
-					seed.setNbSachet(alea%3+1);
+					seed.setNbSachet(alea % 3 + 1);
 					seedHelper.updateSeed(seed);
 
 					ActionDBHelper actionHelper = new ActionDBHelper(this);

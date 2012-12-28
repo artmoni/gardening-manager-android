@@ -20,9 +20,12 @@ import org.gots.R;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.sql.GardenDBHelper;
 import org.gots.weather.provider.DatabaseWeatherTask;
+import org.gots.weather.provider.MoonCalculation;
 import org.gots.weather.provider.WeatherTask;
 import org.gots.weather.provider.previmeteo.PrevimeteoWeatherTask;
 import org.gots.weather.sql.WeatherDBHelper;
+
+import sun.awt.motif.MPopupMenuPeer;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -43,6 +46,9 @@ public class WeatherManager {
 	public WeatherManager(Context context) {
 		this.mContext = context;
 		update();
+
+		MoonCalculation moon = new MoonCalculation();
+		Log.d("Moon phase", moon.phaseName(moon.moonPhase(2012, 12, 27)));
 	}
 
 	public void update() {
@@ -56,20 +62,21 @@ public class WeatherManager {
 	}
 
 	private void getWeather(GardenInterface garden) {
-		
+
 		try {
 			for (int forecastDay = 0; forecastDay < 4; forecastDay++) {
 				Calendar cal = Calendar.getInstance();
 				cal.add(Calendar.DAY_OF_YEAR, forecastDay);
-				
+
 				// GoogleWeatherTask(garden.getAddress(), cal.getTime());
 				WeatherTask wt = new PrevimeteoWeatherTask(mContext, garden.getAddress(), cal.getTime());
 				WeatherConditionInterface conditionInterface = wt.execute().get();
 
 				if (conditionInterface != null)
 					updateCondition(conditionInterface, forecastDay);
-				else{
-					Toast.makeText(mContext, mContext.getResources().getString(R.string.weather_citynotfound), 50).show();
+				else {
+					Toast.makeText(mContext, mContext.getResources().getString(R.string.weather_citynotfound), 50)
+							.show();
 					break;
 				}
 

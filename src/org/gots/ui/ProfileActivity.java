@@ -121,6 +121,7 @@ public class ProfileActivity extends SherlockActivity implements  OnClickListene
 
 		Spinner gardenSelector = (Spinner) findViewById(R.id.idGardenSelector);
 		initGardenList(gardenSelector);
+		
 
 	}
 
