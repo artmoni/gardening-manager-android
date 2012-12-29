@@ -125,20 +125,24 @@ public class SplashScreenActivity extends Activity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Message msg = new Message();
-		msg.what = STOPSPLASH;
-		splashHandler.sendMessageDelayed(msg, SPLASHTIME);
 
 		GardenDBHelper helper = new GardenDBHelper(this);
 		SharedPreferences preferences = getSharedPreferences("org.gots.preference", 0);
 		myGarden = helper.getGarden(preferences.getInt("org.gots.preference.gardenid", 0));
+		if (myGarden != null) {
+			Message msg = new Message();
+			msg.what = STOPSPLASH;
+			splashHandler.sendMessageDelayed(msg, SPLASHTIME);
+
+		}else
+			finish();
 
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	@Override
 	protected void onDestroy() {
-		
+
 		GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
 		super.onDestroy();
 	}

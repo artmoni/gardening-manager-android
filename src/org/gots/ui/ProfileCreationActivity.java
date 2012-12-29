@@ -84,7 +84,9 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 	private ProgressDialog pd;
 	private int gardenId;
 	private GardenManager gardenManager;
+	GardenInterface garden = new Garden();
 
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -102,6 +104,8 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 		GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
 		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
+		garden.setLocality("");
+		
 		buildProfile();
 
 	}
@@ -273,7 +277,6 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 
 	private void createNewProfile() {
 
-		GardenInterface garden = new Garden();
 
 		if (location != null) {
 			garden.setGpsLatitude(location.getLatitude());
