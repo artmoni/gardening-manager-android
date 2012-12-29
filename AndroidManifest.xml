@@ -37,10 +37,7 @@
         <activity
             android:name=".ui.DashboardActivity"
             android:theme="@style/Theme.Styled" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+           
         </activity>
         <activity android:name=".ui.AllotmentActivity" />
         <activity
