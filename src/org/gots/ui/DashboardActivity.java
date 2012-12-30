@@ -10,14 +10,9 @@
  ******************************************************************************/
 package org.gots.ui;
 
-import java.util.Random;
-
 import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
-import org.gots.allotment.sql.AllotmentDBHelper;
 import org.gots.analytics.GotsAnalytics;
-import org.gots.bean.Allotment;
-import org.gots.bean.BaseAllotmentInterface;
 import org.gots.help.HelpUriBuilder;
 import org.gots.preferences.GotsPreferences;
 import org.gots.weather.view.WeatherView;

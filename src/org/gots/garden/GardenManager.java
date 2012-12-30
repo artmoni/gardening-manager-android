@@ -4,8 +4,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.gots.DatabaseHelper;
-import org.gots.analytics.GotsAnalytics;
-import org.gots.bean.Garden;
 import org.gots.garden.sql.GardenDBHelper;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.providers.GotsConnector;
@@ -13,11 +11,10 @@ import org.gots.seed.providers.local.LocalConnector;
 import org.gots.seed.providers.simple.SimpleConnector;
 import org.gots.seed.sql.VendorSeedDBHelper;
 
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
-
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class GardenManager {
 	private SharedPreferences preferences;

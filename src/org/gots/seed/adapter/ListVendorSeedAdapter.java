@@ -10,11 +10,9 @@
  ******************************************************************************/
 package org.gots.seed.adapter;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
-import java.util.Iterator;
 import java.util.List;
 
 import org.gots.R;
@@ -32,7 +30,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 
 public class ListVendorSeedAdapter extends BaseAdapter {

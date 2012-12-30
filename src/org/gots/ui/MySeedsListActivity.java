@@ -12,25 +12,17 @@ package org.gots.ui;
 
 import java.util.ArrayList;
 
-import org.gots.R;
 import org.gots.allotment.sql.AllotmentDBHelper;
 import org.gots.bean.BaseAllotmentInterface;
-import org.gots.help.HelpUriBuilder;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.adapter.MySeedsListAdapter;
 import org.gots.seed.sql.VendorSeedDBHelper;
 
-import android.app.ListActivity;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.ListAdapter;
 
 import com.actionbarsherlock.app.SherlockListFragment;
-import com.google.zxing.integration.android.IntentIntegrator;
 
 public class MySeedsListActivity extends SherlockListFragment {
 	private MySeedsListAdapter listAdapter;

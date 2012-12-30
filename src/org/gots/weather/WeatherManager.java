@@ -25,8 +25,6 @@ import org.gots.weather.provider.WeatherTask;
 import org.gots.weather.provider.previmeteo.PrevimeteoWeatherTask;
 import org.gots.weather.sql.WeatherDBHelper;
 
-import sun.awt.motif.MPopupMenuPeer;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
