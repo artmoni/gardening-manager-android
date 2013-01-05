@@ -34,6 +34,7 @@ import android.widget.ListView;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -238,12 +239,12 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 
 		public void onPageSelected(int position) {
 			mActionBar.setSelectedNavigationItem(position);
+
+			SherlockListFragment fragment = 
+			          (SherlockListFragment) getSupportFragmentManager().findFragmentByTag(
+			                       "android:switcher:"+R.id.pager+":"+position);
+			((BaseAdapter)fragment.getListAdapter()).notifyDataSetChanged();
 			
-			if (getCurrentFocus() != null) {
-				BaseAdapter myAdapter = (BaseAdapter) ((ListView) getCurrentFocus()).getAdapter();
-				if (myAdapter != null)
-					myAdapter.notifyDataSetChanged();
-			}
 		}
 
 		public void onPageScrollStateChanged(int state) {
@@ -267,6 +268,6 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 
 		public void onTabReselected(Tab tab, FragmentTransaction ft) {
 		}
-	
+
 	}
 }
