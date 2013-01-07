@@ -24,12 +24,12 @@ import android.widget.LinearLayout;
 public class ActionWidget extends LinearLayout {
 	private BaseActionInterface mAction;
 	private Context mContext;
-//	private OnActionItemClickListener mItemClickListener;
+	// private OnActionItemClickListener mItemClickListener;
 
 	private static final int[] STATE_OK = { R.attr.state_ok };
 	private static final int[] STATE_WARNING = { R.attr.state_warning };
 	private static final int[] STATE_CRITICAL = { R.attr.state_critical };
-	private static final int[] STATE_UNDEFINED = { R.attr.state_critical };
+	private static final int[] STATE_UNDEFINED = { R.attr.state_undefined };
 
 	public ActionWidget(Context context, BaseActionInterface action) {
 		super(context);
@@ -74,15 +74,6 @@ public class ActionWidget extends LinearLayout {
 	private void initView() {
 		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		inflater.inflate(R.layout.action_widget, this);
-		
-//		setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				if (mItemClickListener != null) {
-//					mItemClickListener.onItemClick(ActionWidget.this, mAction);
-//				}
-//			}
-//		});
 	}
 
 	@Override
@@ -93,30 +84,15 @@ public class ActionWidget extends LinearLayout {
 			return;
 
 		ImageView actionImage = (ImageView) findViewById(R.id.idSeedActionImage);
+
 		int actionImageRessource = mContext.getResources().getIdentifier(
 				"org.gots:drawable/action_" + mAction.getName(), null, null);
+
 		if (actionImageRessource != 0) {
 			Drawable drawable = mContext.getResources().getDrawable(actionImageRessource);
 			actionImage.setImageDrawable(drawable);
-//			setLayoutParams(new LinearLayout.LayoutParams(actionImage.getWidth(), actionImage.getHeight()));
 		}
-
-		setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.action_selector));
-
-
-		// if (isOk()) {
-		// actionImage.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_state_ok));
-		// } else if (isWarning()) {
-		// actionImage.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_state_warning));
-		// } else if (isCritical()) {
-		// actionImage.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_state_critical));
-		// } else
-		// actionImage.setBackgroundDrawable(mContext.getResources().getDrawable(R.color.transparent));
-		// //
-
-		
-
-		
+		setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.action_selector)); 	
 		invalidate();
 	}
 
@@ -135,22 +111,24 @@ public class ActionWidget extends LinearLayout {
 	// return pixel == Color.BLACK;
 	// }
 
-//	/**
-//	 * Listener for item click
-//	 * 
-//	 */
-//	public interface OnActionItemClickListener {
-//		public abstract void onItemClick(ActionWidget source, BaseActionInterface baseActionInterface);
-//	}
+	// /**
+	// * Listener for item click
+	// *
+	// */
+	// public interface OnActionItemClickListener {
+	// public abstract void onItemClick(ActionWidget source, BaseActionInterface
+	// baseActionInterface);
+	// }
 
-//	/**
-//	 * Set listener for action item clicked.
-//	 * 
-//	 * @param listener
-//	 *            Listener
-//	 */
-//	public void setOnActionItemClickListener(OnActionItemClickListener listener) {
-//		mItemClickListener = listener;
-//	}
+	// /**
+	// * Set listener for action item clicked.
+	// *
+	// * @param listener
+	// * Listener
+	// */
+	// public void setOnActionItemClickListener(OnActionItemClickListener
+	// listener) {
+	// mItemClickListener = listener;
+	// }
 
 }
