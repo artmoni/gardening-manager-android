@@ -60,6 +60,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class ProfileCreationActivity extends SherlockActivity implements LocationListener, OnClickListener {
+	public static final int OPTION_EDIT = 1;
 	private LocationManager mlocManager;
 	private Location location;
 	private Address address;
@@ -70,11 +71,13 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 	private int gardenId;
 	private GardenManager gardenManager;
 	GardenInterface garden = new Garden();
+	private int mode = 0;
 
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if (getIntent().getExtras() != null)
+			mode = getIntent().getExtras().getInt("option");
 
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.profilecreation);
@@ -90,7 +93,7 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
 		garden.setLocality("");
-		
+
 		buildProfile();
 
 	}
@@ -106,24 +109,24 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 
 		mlocManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
+		if (mode == OPTION_EDIT)
+			((TextView) findViewById(R.id.editTextLocality)).setText(gardenManager.getcurrentGarden().getLocality());
 	}
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-
-		getPosition();
+	
+		if (mode != OPTION_EDIT)
+			getPosition();
 	}
 
 	private void getPosition() {
-		// on démarre le cercle de chargement
 		setProgressBarIndeterminateVisibility(true);
 
 		Criteria criteria = new Criteria();
 		criteria.setAccuracy(Criteria.ACCURACY_FINE);
-
-		// LocationManager lm = (LocationManager)
-		// getSystemService(LOCATION_SERVICE);
+		
 		pd = ProgressDialog.show(this, "", getResources().getString(R.string.gots_loading), false);
 		pd.setCanceledOnTouchOutside(true);
 
@@ -146,8 +149,11 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 
 			if (adresses != null && adresses.size() == 1) {
 				address = adresses.get(0);
-				// Si le geocoder a trouver une adresse, alors on l'affiche
-				((TextView) findViewById(R.id.editTextLocality)).setHint(String.format("%s", address.getLocality()));
+				TextView location = (TextView) findViewById(R.id.editTextLocality);
+				if ("".equals(location.getText()))
+					location.setHint(String.format("%s", address.getLocality()));
+				else
+					location.setText(String.format("%s", address.getLocality()));
 				Log.i("address", address.getLocality());
 			} else {
 				// sinon on affiche un message d'erreur
@@ -222,13 +228,28 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 		switch (v.getId()) {
 
 		case R.id.buttonValidatePosition:
-
-			createNewProfile();
+			if (mode == OPTION_EDIT)
+				updateProfile();
+			else
+				createNewProfile();
+			this.finish();
 			break;
 
 		default:
 			break;
 		}
+	}
+
+	private void updateProfile() {
+
+		String locality = ((TextView) (findViewById(R.id.editTextLocality))).getText().toString();
+
+		if ("".equals(locality))
+			locality = ((TextView) (findViewById(R.id.editTextLocality))).getHint().toString();
+
+		garden = gardenManager.getcurrentGarden();
+		garden.setLocality(locality);
+		gardenManager.updateCurrentGarden(garden);
 	}
 
 	@Override
@@ -261,7 +282,6 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 	}
 
 	private void createNewProfile() {
-
 
 		if (location != null) {
 			garden.setGpsLatitude(location.getLatitude());
@@ -321,7 +341,6 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 				}
 			}
 		}
-		this.finish();
 
 	}
 

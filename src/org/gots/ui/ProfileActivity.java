@@ -50,7 +50,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class ProfileActivity extends SherlockActivity implements  OnClickListener {
+public class ProfileActivity extends SherlockActivity {
 	private LocationManager mlocManager;
 	private Location location;
 	private Address address;
@@ -76,19 +76,32 @@ public class ProfileActivity extends SherlockActivity implements  OnClickListene
 		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
 		buildProfile();
-		WeatherManager manager = new WeatherManager(this);
 
-		LinearLayout weatherHistory = (LinearLayout) findViewById(R.id.layoutWeatherHistory);
 		final HorizontalScrollView scrollView = (HorizontalScrollView) findViewById(R.id.scrollWeatherHistory);
 
-		// set scrollview to the right end where today weather is displayed
 		scrollView.post(new Runnable() {
 			@Override
 			public void run() {
 				scrollView.scrollTo(scrollView.getWidth(), scrollView.getHeight());
 			}
 		});
+	}
 
+	private void buildProfile() {
+
+		gardenManager = new GardenManager(this);
+
+		Spinner gardenSelector = (Spinner) findViewById(R.id.idGardenSelector);
+		initGardenList(gardenSelector);
+
+		WeatherManager manager = new WeatherManager(this);
+
+		LinearLayout weatherHistory = (LinearLayout) findViewById(R.id.layoutWeatherHistory);
+
+		// set scrollview to the right end where today weather is displayed
+		
+		if (weatherHistory.getChildCount() > 0)
+			weatherHistory.removeAllViews();
 		for (int i = -10; i <= 0; i++) {
 			WeatherView view = new WeatherView(this);
 			try {
@@ -109,16 +122,6 @@ public class ProfileActivity extends SherlockActivity implements  OnClickListene
 		}
 	}
 
-	private void buildProfile() {
-
-		gardenManager = new GardenManager(this);
-
-		Spinner gardenSelector = (Spinner) findViewById(R.id.idGardenSelector);
-		initGardenList(gardenSelector);
-		
-
-	}
-
 	private void initGardenList(Spinner gardenSelector) {
 		GardenDBHelper helper = new GardenDBHelper(this);
 
@@ -136,7 +139,7 @@ public class ProfileActivity extends SherlockActivity implements  OnClickListene
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
 				gardenManager.selectGarden(position + 1);
-				// buildProfile();
+				buildProfile();
 
 				GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
 				tracker.trackEvent("Garden", "Select", gardenManager.getcurrentGarden().getLocality(), position + 1);
@@ -164,7 +167,6 @@ public class ProfileActivity extends SherlockActivity implements  OnClickListene
 
 		String bestProvider = mlocManager.getBestProvider(criteria, true);
 
-
 	}
 
 	private void displayAddress() {
@@ -185,7 +187,7 @@ public class ProfileActivity extends SherlockActivity implements  OnClickListene
 				((TextView) findViewById(R.id.editTextLocality)).setText(String.format("%s", address.getLocality()));
 
 			} else {
-				
+
 				// sinon on affiche un message d'erreur
 				((TextView) findViewById(R.id.editTextLocality)).setHint("L'adresse n'a pu être déterminée");
 			}
@@ -197,8 +199,6 @@ public class ProfileActivity extends SherlockActivity implements  OnClickListene
 		setProgressBarIndeterminateVisibility(false);
 	}
 
-	
-
 	@Override
 	protected void onResume() {
 		buildProfile();
@@ -209,20 +209,6 @@ public class ProfileActivity extends SherlockActivity implements  OnClickListene
 	protected void onPause() {
 		// mlocManager.removeUpdates(this);
 		super.onPause();
-	}
-
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case android.R.id.home:
-			finish();
-			break;
-		
-		
-
-		default:
-			break;
-		}
 	}
 
 	@Override
@@ -257,9 +243,17 @@ public class ProfileActivity extends SherlockActivity implements  OnClickListene
 			startActivity(i);
 
 			return true;
-		case R.id.delete_garden:
+			// case R.id.delete_garden:
+			//
+			// // deleteGarden();
+			//
+			// return true;
+		case R.id.edit_garden:
 
-//			deleteGarden();
+			// deleteGarden();
+			Intent intent = new Intent(this, ProfileCreationActivity.class);
+			intent.putExtra("option", ProfileCreationActivity.OPTION_EDIT);
+			startActivity(intent);
 
 			return true;
 		default:
@@ -270,7 +264,6 @@ public class ProfileActivity extends SherlockActivity implements  OnClickListene
 	private void deleteGarden() {
 		gardenManager.removeCurrentGarden();
 	}
-
 
 	@Override
 	protected void onDestroy() {
