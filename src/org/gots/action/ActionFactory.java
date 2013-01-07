@@ -42,7 +42,7 @@ public class ActionFactory {
 			seedAction = new HoeAction(context);
 		else if ("harvest".equals(name))
 			seedAction = new HarvestAction(context);
-		else seedAction = new SowingAction(context);
+		else seedAction = null;
 		return seedAction;
 
 	}
