@@ -199,7 +199,7 @@ public class VendorSeedDBHelper {
 		// null, null);
 		String MY_QUERY = "SELECT " + DatabaseHelper.FAMILY_NAME + " FROM " + DatabaseHelper.FAMILY_TABLE_NAME
 				+ " a INNER JOIN " + DatabaseHelper.SPECIE_TABLE_NAME + " b ON a." + DatabaseHelper.FAMILY_ID + "=b."
-				+ DatabaseHelper.SPECIE_FAMILY_ID + " WHERE b." + DatabaseHelper.SPECIE_NAME + "='" + specie+"'";
+				+ DatabaseHelper.SPECIE_FAMILY_ID + " WHERE b." + DatabaseHelper.SPECIE_NAME + "='" + specie + "'";
 		Cursor managedCursor = bdd.rawQuery(MY_QUERY, null);
 		String family = "";
 		int j = 0;
@@ -214,9 +214,9 @@ public class VendorSeedDBHelper {
 
 	public String[] getArrayVarietyBySpecie(String specie) {
 		open();
-		
-		Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_SPECIE+"='"+specie+"'", null,
-				null, null, null);
+
+		Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_SPECIE + "='"
+				+ specie + "'", null, null, null, null);
 
 		String[] arrayVariety = new String[managedCursor.getCount()];
 		int j = 0;
@@ -337,8 +337,8 @@ public class VendorSeedDBHelper {
 	public BaseSeedInterface getSeedByReference(String reference) {
 		BaseSeedInterface searchedSeed = null;
 		open();
-		Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_REFERENCE + "='" + reference
-				+ "'", null, null, null, null);
+		Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_REFERENCE + "='"
+				+ reference + "'", null, null, null, null);
 		// Log.d("getSeedById", "ID=>"+id+" / QUERY=>"+bdd.ge)
 		if (managedCursor.moveToFirst()) {
 			do {
@@ -349,7 +349,7 @@ public class VendorSeedDBHelper {
 		close();
 		return searchedSeed;
 	}
-	
+
 	public BaseSeedInterface cursorToSeed(Cursor cursor) {
 		BaseSeedInterface bsi = new GrowingSeed();
 		bsi.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.SEED_ID)));
@@ -357,7 +357,8 @@ public class VendorSeedDBHelper {
 		bsi.setReference(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_REFERENCE)));
 		bsi.setBareCode(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_BARECODE)));
 		bsi.setDescriptionGrowth(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_DESCRIPTION_GROWTH)));
-		bsi.setDescriptionCultivation(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_DESCRIPTION_CULTIVATION)));
+		bsi.setDescriptionCultivation(cursor.getString(cursor
+				.getColumnIndex(DatabaseHelper.SEED_DESCRIPTION_CULTIVATION)));
 		bsi.setDescriptionDiseases(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_DESCRIPTION_DISEASES)));
 		bsi.setDescriptionHarvest(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_DESCRIPTION_HARVEST)));
 		bsi.setFamily(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_FAMILY)));
@@ -380,7 +381,8 @@ public class VendorSeedDBHelper {
 		ActionFactory factory = new ActionFactory();
 		BaseActionInterface baseAction = factory.buildAction(mContext,
 				cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_ACTION1)));
-		bsi.getActionToDo().add(baseAction);
+		if (baseAction != null)
+			bsi.getActionToDo().add(baseAction);
 
 		// bsi.setDateLastWatering(cursor.getString(cursor.getColumnIndex(SeedSQLite.DATE_LAST_WATERING)));
 
