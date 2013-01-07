@@ -240,11 +240,11 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 		public void onPageSelected(int position) {
 			mActionBar.setSelectedNavigationItem(position);
 
-			SherlockListFragment fragment = 
-			          (SherlockListFragment) getSupportFragmentManager().findFragmentByTag(
-			                       "android:switcher:"+R.id.pager+":"+position);
-			((BaseAdapter)fragment.getListAdapter()).notifyDataSetChanged();
-			
+			SherlockListFragment fragment = (SherlockListFragment) getSupportFragmentManager().findFragmentByTag(
+					"android:switcher:" + R.id.pager + ":" + position);
+			if (fragment != null && fragment.getListAdapter() != null)
+				((BaseAdapter) fragment.getListAdapter()).notifyDataSetChanged();
+
 		}
 
 		public void onPageScrollStateChanged(int state) {
@@ -255,9 +255,6 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 			for (int i = 0; i < mTabs.size(); i++) {
 				if (mTabs.get(i) == tag) {
 					mViewPager.setCurrentItem(i);
-					// ((SherlockListFragment)
-					// getItem(i)).getListView().invalidate();
-					// mViewPager.getChildAt(i).invalidate();
 
 				}
 			}
