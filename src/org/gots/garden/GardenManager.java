@@ -94,7 +94,10 @@ public class GardenManager {
 		GardenDBHelper helper = new GardenDBHelper(mContext);
 		helper.deleteGarden(getcurrentGarden());
 	}
-	
+	public void updateCurrentGarden(GardenInterface garden) {
+		GardenDBHelper helper = new GardenDBHelper(mContext);
+		helper.updateGarden(garden);
+	}
 	public void update(){
 		populateVendorSeed(false);
 		
