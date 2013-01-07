@@ -47,6 +47,7 @@
     <string name="action.planning">Planifier une action</string>
     <string name="action.delete.allotment">Vous allez supprimer une parcelle</string>
     <string name="action.delete.seed">Vous allez supprimer un légume</string>
+    <string name="menu.edit">Modifier</string>
     <string name="allotment.action.add.message">Nommez votre parcelle</string>
     <string name="allotment.description1">Je sélectionne le bouton menu pour ajouter une parcelle.</string>
     <string name="allotment.description2">Le menu parcelle, j\'effectue des actions sur une parcelle. Par exemple: je plante une graine.</string>
@@ -83,5 +84,6 @@
     <string name="specie.solanumtuberosum">Pomme de terre</string>
     <string name="stock.description1">Vous n\'avez pas de graine en stock, rendez vous dans le catalogue pour faire votre choix</string>
     <string name="stock.description2">Vous pouvez également ajouter une référence en scannant le code barre du sachet</string>
-
+    <string name="weather.citynotfound">La météo n\'est pas disponible pour votre ville, essayez d\'indiquer une agglomération proche</string>
+    
 </resources>

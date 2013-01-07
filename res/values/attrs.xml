@@ -4,11 +4,11 @@
     <declare-styleable name="GalleryTheme">
         <attr name="android:galleryItemBackground" />
     </declare-styleable>
-    
     <declare-styleable name="actionState">
-        <attr format="boolean" name="state_ok" />
-        <attr format="boolean" name="state_warning" />
-        <attr format="boolean" name="state_critical" />
+        <attr name="state_ok" format="boolean" />
+        <attr name="state_warning" format="boolean" />
+        <attr name="state_critical" format="boolean" />
+        <attr name="state_undefined" format="boolean" />
     </declare-styleable>
 
 </resources>
