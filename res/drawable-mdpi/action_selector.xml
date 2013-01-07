@@ -7,6 +7,7 @@
         <item android:drawable="@drawable/bg_state_warning"   app:state_ok="true" android:state_selected="true"/>
     
     <item android:drawable="@drawable/bg_state_warning" app:state_warning="true"/>
-    <item android:drawable="@drawable/bg_state_critical" app:state_critical="true"/>
-
+    <item android:drawable="@color/red" app:state_critical="true"/>
+    <item android:drawable="@drawable/bg_state_critical" app:state_undefined="true"/>
+    
 </selector>
