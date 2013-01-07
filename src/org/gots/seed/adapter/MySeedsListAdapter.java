@@ -45,7 +45,7 @@ public class MySeedsListAdapter extends BaseAdapter implements OnClickListener {
 	private ArrayList<BaseSeedInterface> mySeeds = new ArrayList<BaseSeedInterface>();
 	private BaseAllotmentInterface allotment;
 	private LayoutInflater inflater;
-	private int nbAds = 1;
+	private int nbAds = 0;
 	private int frequencyAds = 4;
 
 	// private SeedWidgetLong seedWidget;
@@ -53,11 +53,11 @@ public class MySeedsListAdapter extends BaseAdapter implements OnClickListener {
 
 	// final private static int nbActionToDisplay = 5;
 
-	public MySeedsListAdapter(Context context, BaseAllotmentInterface allotment,ArrayList<BaseSeedInterface> seeds) {
+	public MySeedsListAdapter(Context context, BaseAllotmentInterface allotment, ArrayList<BaseSeedInterface> seeds) {
 		this.mContext = context;
 		// this.mySeeds.addAll(mySeeds);
 		this.allotment = allotment;
-		this.mySeeds=seeds;
+		this.mySeeds = seeds;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		nbAds = mySeeds.size() / frequencyAds + 1;
 		Collections.sort(mySeeds, new ISeedSpecieComparator(context));
@@ -80,8 +80,6 @@ public class MySeedsListAdapter extends BaseAdapter implements OnClickListener {
 	public long getItemId(int position) {
 		return position;
 	}
-
-	
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -125,7 +123,7 @@ public class MySeedsListAdapter extends BaseAdapter implements OnClickListener {
 			actionWidget.setAction(action);
 			final BaseActionInterface baseActionInterface = action;
 			actionWidget.setOnClickListener(new View.OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
 
@@ -136,13 +134,10 @@ public class MySeedsListAdapter extends BaseAdapter implements OnClickListener {
 					} else {
 						SeedActionInterface action = (SeedActionInterface) baseActionInterface;
 						action.execute((GrowingSeedInterface) currentSeed);
-						// ((Activity) mContext).finish();
 					}
-					notifyDataSetChanged();					
+					notifyDataSetChanged();
 				}
 			});
-			
-			
 
 			try {
 
@@ -159,15 +154,9 @@ public class MySeedsListAdapter extends BaseAdapter implements OnClickListener {
 				// holder.seedSowingDate.setText("--");
 			}
 
-			// convertView.setOnClickListener(this);
-
-			// holder = (ViewHolder) convertView.getTag();
-
 			return vi;
 		}
 	}
-
-	
 
 	@Override
 	public void notifyDataSetChanged() {
