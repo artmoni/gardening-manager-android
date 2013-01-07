@@ -116,25 +116,28 @@ public class ActionSeedDBHelper {
 
 	public ArrayList<BaseActionInterface> getActionsDoneBySeed(GrowingSeedInterface seed) {
 		ArrayList<BaseActionInterface> allActions = new ArrayList<BaseActionInterface>();
-		// SeedActionInterface searchedSeed = new GrowingSeed();
-		open();
-		// Cursor cursor = bdd.query(DatabaseHelper.ACTIONSEEDS_TABLE_NAME,
-		// null, DatabaseHelper.ACTIONSEED_GROWINGSEED_ID+"="+seed.getId(),null,
-		// null, null, null);
-		//@formatter:off
+		if (seed != null) {
+			// SeedActionInterface searchedSeed = new GrowingSeed();
+			open();
+			// Cursor cursor = bdd.query(DatabaseHelper.ACTIONSEEDS_TABLE_NAME,
+			// null,
+			// DatabaseHelper.ACTIONSEED_GROWINGSEED_ID+"="+seed.getId(),null,
+			// null, null, null);
+			//@formatter:off
 		Cursor cursor = bdd.rawQuery("select * from " + DatabaseHelper.ACTIONSEEDS_TABLE_NAME + " actionseed"
 				+ " WHERE actionseed." + DatabaseHelper.ACTIONSEED_GROWINGSEED_ID+ "=" + seed.getGrowingSeedId() 
 				+ " AND actionseed." + DatabaseHelper.ACTIONSEED_DATEACTIONDONE+ " IS NOT NULL"
 				, null);
 		//@formatter:on
-		if (cursor.moveToFirst()) {
-			do {
-				BaseActionInterface action = cursorToAction(cursor);
-				allActions.add(action);
-			} while (cursor.moveToNext());
+			if (cursor.moveToFirst()) {
+				do {
+					BaseActionInterface action = cursorToAction(cursor);
+					allActions.add(action);
+				} while (cursor.moveToNext());
+			}
+			cursor.close();
+			close();
 		}
-		cursor.close();
-		close();
 		return allActions;
 	}
 
