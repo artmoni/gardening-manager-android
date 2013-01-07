@@ -8,7 +8,7 @@
         android:title="@string/seed.menu.add"/>
     <item
         android:id="@+id/new_seed_barcode"
-        android:icon="@drawable/bt_add_seed"
+        android:icon="@drawable/bt_add_barcode"
         android:showAsAction="ifRoom"
         android:title="@string/seed.menu.add.barcode"/>
     

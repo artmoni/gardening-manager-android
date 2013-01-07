@@ -7,7 +7,7 @@
     -->
     <item
         android:id="@+id/new_gaden"
-        android:icon="@drawable/bt_add_allotment"
+        android:icon="@drawable/bt_add_garden"
         android:showAsAction="ifRoom"
         android:title="@string/garden.menu.add.button"/>
     
@@ -16,11 +16,14 @@
         android:icon="@drawable/help"
         android:showAsAction="always"
         android:title="@string/menu.help"/>
-    <item
+    <!-- <item
         android:id="@+id/delete_garden"
-        android:icon="@drawable/action_delete"
-        android:showAsAction="never"
+        android:showAsAction="withText"
         android:title="@string/action.delete"
-        />
+        /> -->
+     <item
+        android:id="@+id/edit_garden"
+        android:showAsAction="withText"
+        android:title="@string/menu.edit"/>
 
 </menu>
