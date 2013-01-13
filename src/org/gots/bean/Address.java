@@ -15,6 +15,7 @@ public class Address  {
 	private String locality;
 	private String adminArea;
 	private String countryName;
+	private String postalCode;
 
 	public String getLocality() {
 		return locality;
@@ -43,5 +44,13 @@ public class Address  {
 public String toString() {
 	// TODO Auto-generated method stub
 	return getLocality()+" "+getAdminArea()+" "+getCountryName();
+}
+
+public String getPostalCode() {
+	return postalCode;
+}
+
+public void setPostalCode(String postalCode) {
+	this.postalCode = postalCode;
 }
 }
