@@ -1,0 +1,13 @@
+*** V0.12
+* Changement fournisseur météo (Google Weather a été fermé le 31/08/12), connexion au site français PreviMeteo.
+* Historique météo à 10 jours dans le profile
+* Utilisation sdcard pour stockage des données temporaires (cache)
+* Ajout d'une aide en ligne
+
+*** V0.14
+* Nouvelle expérience utilisateur
+* Historique météo accessible
+* Aide en ligne à chaque écran
+* Gestion multi-potagers 
+* Potager d'example disponible au premier lancement
+
