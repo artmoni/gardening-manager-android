@@ -37,6 +37,12 @@
         android:layout_weight="1" >
     </LinearLayout>
 
+    <org.gots.weather.view.WeatherView
+        android:id="@+id/idWeatherView"
+        android:layout_width="65dp"
+        android:layout_height="65dp" >
+    </org.gots.weather.view.WeatherView>
+    
     <org.gots.action.view.ActionWidget
         android:id="@+id/idActionView"
         android:layout_width="wrap_content"

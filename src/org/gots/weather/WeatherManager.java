@@ -57,7 +57,7 @@ public class WeatherManager {
 
 		GardenDBHelper helper = new GardenDBHelper(mContext);
 		GardenInterface garden = helper.getGarden(preferences.getInt("org.gots.preference.gardenid", 0));
-//		getWeatherFromWebService(garden);
+		// getWeatherFromWebService(garden);
 	}
 
 	public void getWeatherFromWebService(GardenInterface garden) {
@@ -151,6 +151,11 @@ public class WeatherManager {
 
 		Date weatherDate = weatherCalendar.getTime();
 
+		return getCondition(weatherDate);
+	}
+
+	public WeatherConditionInterface getCondition(Date weatherDate) {
+		WeatherConditionInterface conditionInterface;
 		try {
 			WeatherTask wt = new DatabaseWeatherTask(mContext, weatherDate);
 			conditionInterface = wt.execute().get();
@@ -158,7 +163,6 @@ public class WeatherManager {
 			conditionInterface = new WeatherCondition(weatherDate);
 
 		}
-
 		return conditionInterface;
 	}
 

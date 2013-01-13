@@ -27,6 +27,8 @@ import org.gots.action.view.ActionWidget;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.sql.GrowingSeedDBHelper;
 import org.gots.seed.view.SeedWidget;
+import org.gots.weather.WeatherManager;
+import org.gots.weather.view.WeatherView;
 
 import android.content.Context;
 import android.util.Log;
@@ -49,6 +51,7 @@ public class ListAllActionAdapter extends BaseAdapter {
 	private int current_status = STATUS_DONE;
 	public static final int STATUS_TODO = 0;
 	public static final int STATUS_DONE = 1;
+	private WeatherManager manager;
 
 	public ListAllActionAdapter(Context context, ArrayList<GrowingSeedInterface> allSeeds, int status) {
 		this.mContext = context;
@@ -66,20 +69,17 @@ public class ListAllActionAdapter extends BaseAdapter {
 			}
 
 			if (seedActions.size() > 0) {
-				for (Iterator<BaseActionInterface> iterator2 = seedActions.iterator(); iterator2.hasNext();) {
-					// this.seeds.add(seed);
-					// ********** GET ACTIONS for seed
-//					if (SeedActionInterface.class.isInstance(iterator2)) {
-						BaseActionInterface baseActionInterface = iterator2.next();
-						this.actions.add(baseActionInterface);
-//					}
+				for (Iterator<BaseActionInterface> action = seedActions.iterator(); action.hasNext();) {
+
+					BaseActionInterface baseActionInterface = action.next();
+					this.actions.add(baseActionInterface);
+					//
 
 				}
 			}
 		}
 		Collections.sort(actions, new IStatusUpdateComparator());
-		// Collections.sort(seeds, new IStatusUpdateComparator());
-
+		manager = new WeatherManager(mContext);
 	}
 
 	@Override
@@ -154,6 +154,10 @@ public class ListAllActionAdapter extends BaseAdapter {
 				rightNow.setTime(seed.getDateSowing());
 				rightNow.add(Calendar.DAY_OF_YEAR, actions.get(position).getDuration());
 				tv2.setText(dateFormat.format(actions.get(position).getDateActionDone()));
+				
+				WeatherView weatherView = (WeatherView)ll.findViewById(R.id.idWeatherView);
+				weatherView.setWeather(manager.getCondition(rightNow.getTime()));
+				
 			}
 		}
 		return ll;

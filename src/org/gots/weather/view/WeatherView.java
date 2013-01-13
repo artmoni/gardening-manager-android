@@ -45,7 +45,7 @@ public class WeatherView extends LinearLayout {
 	public WeatherView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		this.mContext = context;
-
+		
 		initView();
 
 	}
@@ -56,7 +56,11 @@ public class WeatherView extends LinearLayout {
 		setupView();
 
 	}
-
+@Override
+protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+	super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+	
+}
 	private void initView() {
 		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View view = inflater.inflate(R.layout.weather_widget, this);
@@ -69,7 +73,9 @@ public class WeatherView extends LinearLayout {
 		TextView weatherDay = (TextView) findViewById(R.id.idWeatherDay);
 		TextView tempMax = (TextView) findViewById(R.id.idWeatherMax);
 		TextView tempMin = (TextView) findViewById(R.id.idWeatherMin);
-
+		if (mWeather == null) {
+			return;
+		}
 		switch (mType) {
 		case TEXT:
 			weatherWidget.setVisibility(View.GONE);
@@ -86,12 +92,9 @@ public class WeatherView extends LinearLayout {
 
 		default:
 			if (mWeather.getIconURL() == null) {
-				boxTemp.setVisibility(View.GONE);				
+				boxTemp.setVisibility(View.INVISIBLE);
 			}
 			break;
-		}
-		if (mWeather == null) {
-			return;
 		}
 
 		weatherWidget.setImageResource(getWeatherResource(mWeather));
@@ -125,7 +128,7 @@ public class WeatherView extends LinearLayout {
 			return R.drawable.weather_rain;
 		else if (weatherCondition.getIconURL().contains("mostly_sunny"))
 			return R.drawable.weather_mostlysunny;
-		else if (weatherCondition.getIconURL().contains("cloud")|| weatherCondition.getIconURL().contains("mist"))
+		else if (weatherCondition.getIconURL().contains("cloud") || weatherCondition.getIconURL().contains("mist"))
 			return R.drawable.weather_cloud;
 		else if (weatherCondition.getIconURL().contains("snow"))
 			return R.drawable.weather_snow;

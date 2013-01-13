@@ -11,10 +11,10 @@
 package org.gots.action.util;
 
 public class ActionState {
-	public static final int UNDEFINED = 0;
 	public static final int NORMAL = 1;
 	public static final int WARNING = 10;
 	public static final int CRITICAL = 20;
-	
+	public static final int UNDEFINED = 90;
+
 
 }

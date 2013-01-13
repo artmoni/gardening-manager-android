@@ -53,13 +53,16 @@ public class ActionWidget extends LinearLayout {
 			mergeDrawableStates(drawableState, STATE_WARNING);
 		} else if (isCritical()) {
 			mergeDrawableStates(drawableState, STATE_CRITICAL);
-		} else
+		} else if (isUndefined())
 			mergeDrawableStates(drawableState, STATE_UNDEFINED);
 		return drawableState;
 	}
 
 	private boolean isOk() {
 		return mAction == null ? false : mAction.getState() == ActionState.NORMAL;
+	}
+	private boolean isUndefined() {
+		return mAction == null ? false : mAction.getState() == ActionState.UNDEFINED;
 	}
 
 	private boolean isWarning() {

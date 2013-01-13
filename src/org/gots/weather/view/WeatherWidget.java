@@ -31,17 +31,17 @@ public class WeatherWidget extends GridView {
 	public WeatherWidget(Context context, int type) {
 		super(context);
 		mType = type;
-		initWidget();
+		initView();
 	}
 
 	public WeatherWidget(Context context, AttributeSet attr) {
 		super(context, attr);
 		mType = WeatherView.FULL;
-		initWidget();
+		initView();
 
 	}
 
-	private void initWidget() {
+	private void initView() {
 		wm = new WeatherManager(getContext());
 		if (wm.isConnected()) {
 			weatherWidgetAdapter = new WeatherWidgetAdapter(getContext(), mType, wm.getConditionSet(nbDays));

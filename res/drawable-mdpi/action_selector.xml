@@ -2,12 +2,10 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res/org.gots">
 
     <item android:drawable="@drawable/bg_state_warning" android:state_pressed="true"/>
-    <item android:drawable="@color/transparent" android:state_focused="false" android:state_pressed="false" app:state_ok="false" app:state_warning="false"/>
-    <item android:drawable="@drawable/bg_state_ok"   app:state_ok="true" android:state_selected="false"/>
-        <item android:drawable="@drawable/bg_state_warning"   app:state_ok="true" android:state_selected="true"/>
-    
+    <item android:drawable="@drawable/bg_state_ok" app:state_ok="true"/>
     <item android:drawable="@drawable/bg_state_warning" app:state_warning="true"/>
     <item android:drawable="@color/red" app:state_critical="true"/>
-    <item android:drawable="@drawable/bg_state_critical" app:state_undefined="true"/>
-    
+    <item android:drawable="@drawable/bg_weather" app:state_undefined="true"/>
+    <item android:drawable="@color/transparent"/>
+
 </selector>

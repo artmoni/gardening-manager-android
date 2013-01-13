@@ -15,7 +15,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/weather_nonet" >
+        android:src="@drawable/weather_thunder" >
     </ImageView>
 
     <LinearLayout
