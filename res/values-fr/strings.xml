@@ -82,8 +82,6 @@
     <string name="specie.raphanussativus">Radis</string>
     <string name="specie.solanumtuberosum">Pomme de terre</string>
     <string name="specie.capsicumannuum">Poivron/Piment</string>
-    <string name="stock.description1">Vous n\'avez pas de graine en stock, rendez vous dans le catalogue pour faire votre choix</string>
-    <string name="stock.description2">Vous pouvez également ajouter une référence en scannant le code barre du sachet</string>
-    <string name="weather.citynotfound">La météo n\'est pas disponible pour votre ville, essayez d\'indiquer une agglomération proche</string>
+    <string name="weather.citynotfound">Pas de météo dans cette localité, saisissez une proche agglomération</string>
     
 </resources>

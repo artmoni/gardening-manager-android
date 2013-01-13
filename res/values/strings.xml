@@ -83,14 +83,12 @@
     <string name="specie.solanumtuberosum">Potato</string>
     <string name="specie.capsicumannuum">Pepper</string>
     
-    <string name="stock.description1">You don \'t have seed in stock, go to the catalog to make your choice</string>
-    <string name="stock.description2">You can also add a reference by scanning the barcode of the packet of seeds</string>
-    <string name="help.loading">Please wait, web help is loading</string>
+     <string name="help.loading">Please wait, web help is loading</string>
     <string name="menu.help">Help</string>
     <string name="menu.help.firstlaunch">Do you want to have a look on the documentation?</string>
     <string name="button.close">Close</string>
     <string name="button.ok">OK</string>
     <string name="button.cancel">Cancel</string>
-    <string name="weather.citynotfound">We can\'t provide weather for your city, please try locating to the nearest bigger city</string>
+    <string name="weather.citynotfound">No weather for this city, change for a bigger one</string>
 
 </resources>

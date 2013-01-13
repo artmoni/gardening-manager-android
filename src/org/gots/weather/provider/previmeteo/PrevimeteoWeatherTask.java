@@ -43,6 +43,7 @@ public class PrevimeteoWeatherTask extends WeatherTask {
 	private boolean iserror;
 
 	private static int i = 0;
+	private WeatherCache cache;
 
 	public PrevimeteoWeatherTask(Context context, Address address, Date requestedDay) {
 		this.requestedDay = requestedDay;
@@ -74,7 +75,7 @@ public class PrevimeteoWeatherTask extends WeatherTask {
 
 			try {
 				Log.d("WeatherConditionInterface", "" + (++i));
-				WeatherCache cache = new WeatherCache();
+				cache = new WeatherCache();
 
 				InputStream is = cache.getCacheByURL(url);
 
@@ -138,7 +139,7 @@ public class PrevimeteoWeatherTask extends WeatherTask {
 			// Toast.makeText(mContext,
 			// mContext.getResources().getString(R.string.weather_citynotfound),
 			// 30).show();
-			// cache.clean(url);
+			 cache.clean(url);
 		}
 		super.onPostExecute(result);
 	}

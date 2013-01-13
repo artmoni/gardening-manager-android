@@ -72,6 +72,7 @@ public class ProfileActivity extends SherlockActivity {
 	// private WeatherWidget weatherWidget;
 	private WeatherManager weatherManager;
 	private Spinner gardenSelector;
+	private TextView alert;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -89,9 +90,6 @@ public class ProfileActivity extends SherlockActivity {
 		gardenManager = new GardenManager(this);
 		weatherManager = new WeatherManager(this);
 
-		
-
-
 		final HorizontalScrollView scrollView = (HorizontalScrollView) findViewById(R.id.scrollWeatherHistory);
 
 		scrollView.post(new Runnable() {
@@ -100,6 +98,12 @@ public class ProfileActivity extends SherlockActivity {
 				scrollView.scrollTo(scrollView.getWidth(), scrollView.getHeight());
 			}
 		});
+
+		alert = (TextView) findViewById(R.id.idTextAlert);
+
+		if (weatherManager.isConnected()) {
+			alert.setVisibility(View.GONE);
+		}
 	}
 
 	private void buildWeatherList() {
@@ -128,6 +132,10 @@ public class ProfileActivity extends SherlockActivity {
 			weatherHistory.addView(view);
 
 		}
+		
+		if (!weatherManager.isConnected()) {
+			alert.setVisibility(View.VISIBLE);
+		}
 
 	}
 
@@ -145,7 +153,7 @@ public class ProfileActivity extends SherlockActivity {
 		gardenSelector.setAdapter(adapter);
 
 		gardenSelector.setSelection((int) gardenManager.getcurrentGarden().getId() - 1);
-		
+
 		gardenSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
 			@Override

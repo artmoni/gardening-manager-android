@@ -71,8 +71,13 @@ public class WeatherManager {
 				WeatherTask wt = new PrevimeteoWeatherTask(mContext, garden.getAddress(), cal.getTime());
 				WeatherConditionInterface conditionInterface = wt.execute().get();
 
-				if (conditionInterface != null)
+				if (conditionInterface != null){
 					updateCondition(conditionInterface, forecastDay);
+					if (conditionInterface.getIconURL() == null)
+						isConnected = false;
+
+				}
+				
 				else {
 					// Toast.makeText(mContext,
 					// mContext.getResources().getString(R.string.weather_citynotfound),
@@ -81,7 +86,6 @@ public class WeatherManager {
 					Log.d("getWeather",
 							garden.getLocality() + " : "
 									+ mContext.getResources().getString(R.string.weather_citynotfound));
-					isConnected = false;
 					break;
 				}
 

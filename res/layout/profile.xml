@@ -53,6 +53,14 @@
                             android:layout_height="40dp"
                             android:visibility="visible" >
                         </Spinner>
+
+                        <TextView
+                            android:id="@+id/idTextAlert"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/action_error_color" 
+                            android:text="@string/weather.citynotfound"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -60,10 +68,11 @@
                     android:id="@+id/scrollWeatherHistory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="visible"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"
+                    android:visibility="visible" >
 
-                    	<!-- <org.gots.weather.view.WeatherWidget
+                    <!--
+                    <org.gots.weather.view.WeatherWidget
                         android:id="@+id/layoutWeatherHistory"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -71,17 +80,15 @@
                         android:horizontalSpacing="2dp"
                         android:orientation="horizontal"
                         android:scrollbars="horizontal" >
-                    </org.gots.weather.view.WeatherWidget> -->
+                    </org.gots.weather.view.WeatherWidget>
+                    -->
 
-                   
                     <LinearLayout
                         android:id="@+id/layoutWeatherHistory"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                         >
+                        android:orientation="horizontal" >
                     </LinearLayout>
-                    
                 </HorizontalScrollView>
 
                 <LinearLayout
