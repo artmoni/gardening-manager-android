@@ -146,6 +146,9 @@ public class ListAllActionAdapter extends BaseAdapter {
 						notifyDataSetChanged();
 					}
 				});
+				
+				WeatherView weatherView = (WeatherView)ll.findViewById(R.id.idWeatherView);
+				weatherView.setVisibility(View.GONE);
 
 			} else {
 				tv.setText(mContext.getResources().getString(R.string.seed_action_done));
