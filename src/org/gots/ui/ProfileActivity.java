@@ -89,30 +89,8 @@ public class ProfileActivity extends SherlockActivity {
 		gardenManager = new GardenManager(this);
 		weatherManager = new WeatherManager(this);
 
-		gardenSelector = (Spinner) findViewById(R.id.idGardenSelector);
-		gardenSelector.setSelection((int) gardenManager.getcurrentGarden().getId() - 1);
-		gardenSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+		
 
-			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
-
-				gardenManager.setCurrentGarden(position + 1);
-				buildWeatherList();
-
-				GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-				tracker.trackEvent("Garden", "Select", gardenManager.getcurrentGarden().getLocality(), position + 1);
-
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-
-		buildGardenList();
-		buildWeatherList();
 
 		final HorizontalScrollView scrollView = (HorizontalScrollView) findViewById(R.id.scrollWeatherHistory);
 
@@ -161,9 +139,32 @@ public class ProfileActivity extends SherlockActivity {
 		if (referenceList == null)
 			return;
 
+		gardenSelector = (Spinner) findViewById(R.id.idGardenSelector);
+
 		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_item_text, referenceList);
 		gardenSelector.setAdapter(adapter);
 
+		gardenSelector.setSelection((int) gardenManager.getcurrentGarden().getId() - 1);
+		
+		gardenSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
+
+				gardenManager.setCurrentGarden(position + 1);
+				buildWeatherList();
+
+				GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+				tracker.trackEvent("Garden", "Select", gardenManager.getcurrentGarden().getLocality(), position + 1);
+
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+
+			}
+		});
 	}
 
 	@Override
