@@ -4,12 +4,14 @@
     android:layout_height="wrap_content"
     android:background="@drawable/bg_line_action"
     android:orientation="horizontal"
-    android:padding="5dp" >
+    android:padding="5dp" 
+    android:layout_margin="2dp">
 
     <org.gots.seed.view.SeedWidget
         android:id="@+id/idSeedView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content" 
+        >
     </org.gots.seed.view.SeedWidget>
 
     <TextView
