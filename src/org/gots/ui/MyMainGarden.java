@@ -48,7 +48,7 @@ public class MyMainGarden extends SherlockActivity {
 		ActionBar bar = getSupportActionBar();
 		bar.setDisplayHomeAsUpEnabled(true);
 		bar.setTitle(R.string.dashboard_allotments_name);
-		
+
 		GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
 		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
@@ -84,8 +84,6 @@ public class MyMainGarden extends SherlockActivity {
 
 		// listAllotments.setBackgroundDrawable(getResources().getDrawable(R.drawable.help_hut_2));
 
-		
-
 	}
 
 	@Override
@@ -116,10 +114,7 @@ public class MyMainGarden extends SherlockActivity {
 			helper.insertAllotment(newAllotment);
 			lsa.notifyDataSetChanged();
 
-			if (listAllotments.getCount() == 0)
-				listAllotments.setBackgroundDrawable(getResources().getDrawable(R.drawable.help_hut));
-			else
-				listAllotments.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_simple));
+			listAllotments.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_simple));
 			return true;
 		case R.id.help:
 			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HelpUriBuilder.getUri(getClass()
