@@ -85,6 +85,9 @@ public class WeatherView extends LinearLayout {
 			break;
 
 		default:
+			if (mWeather.getIconURL() == null) {
+				boxTemp.setVisibility(View.GONE);				
+			}
 			break;
 		}
 		if (mWeather == null) {
@@ -122,7 +125,7 @@ public class WeatherView extends LinearLayout {
 			return R.drawable.weather_rain;
 		else if (weatherCondition.getIconURL().contains("mostly_sunny"))
 			return R.drawable.weather_mostlysunny;
-		else if (weatherCondition.getIconURL().contains("cloud"))
+		else if (weatherCondition.getIconURL().contains("cloud")|| weatherCondition.getIconURL().contains("mist"))
 			return R.drawable.weather_cloud;
 		else if (weatherCondition.getIconURL().contains("snow"))
 			return R.drawable.weather_snow;

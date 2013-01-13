@@ -150,7 +150,8 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 			if (adresses != null && adresses.size() == 1) {
 				address = adresses.get(0);
 				TextView location = (TextView) findViewById(R.id.editTextLocality);
-				if ("".equals(location.getText()))
+				
+				if ("".equals(location.getText().toString()))
 					location.setHint(String.format("%s", address.getLocality()));
 				else
 					location.setText(String.format("%s", address.getLocality()));

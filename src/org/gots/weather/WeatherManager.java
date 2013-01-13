@@ -32,6 +32,8 @@ import android.widget.Toast;
 
 public class WeatherManager {
 
+	private static WeatherManager instance;
+
 	private WeatherSet ws;
 	private Integer temperatureLimitHot;
 	private Integer temperatureLimitCold;
@@ -41,25 +43,24 @@ public class WeatherManager {
 	private static SharedPreferences preferences;
 	private Calendar weatherday;
 
+	private boolean isConnected = true;
+
 	public WeatherManager(Context context) {
 		this.mContext = context;
-		update();
 
 		MoonCalculation moon = new MoonCalculation();
 		Log.d("Moon phase", moon.phaseName(moon.moonPhase(2012, 12, 27)));
-	}
 
-	public void update() {
 		weatherday = new GregorianCalendar();
 
 		preferences = mContext.getSharedPreferences("org.gots.preference", 0);
 
 		GardenDBHelper helper = new GardenDBHelper(mContext);
 		GardenInterface garden = helper.getGarden(preferences.getInt("org.gots.preference.gardenid", 0));
-		getWeather(garden);
+//		getWeatherFromWebService(garden);
 	}
 
-	private void getWeather(GardenInterface garden) {
+	public void getWeatherFromWebService(GardenInterface garden) {
 
 		try {
 			for (int forecastDay = 0; forecastDay < 4; forecastDay++) {
@@ -73,8 +74,14 @@ public class WeatherManager {
 				if (conditionInterface != null)
 					updateCondition(conditionInterface, forecastDay);
 				else {
-					Toast.makeText(mContext, mContext.getResources().getString(R.string.weather_citynotfound), 50)
-							.show();
+					// Toast.makeText(mContext,
+					// mContext.getResources().getString(R.string.weather_citynotfound),
+					// 50)
+					// .show();
+					Log.d("getWeather",
+							garden.getLocality() + " : "
+									+ mContext.getResources().getString(R.string.weather_citynotfound));
+					isConnected = false;
 					break;
 				}
 
@@ -133,6 +140,9 @@ public class WeatherManager {
 		this.runningLimit = runningLimit;
 	}
 
+	/*
+	 * GetCondition from today until passed argument (-i or +i)
+	 */
 	public WeatherConditionInterface getCondition(int i) {
 		WeatherConditionInterface conditionInterface;
 
@@ -146,6 +156,7 @@ public class WeatherManager {
 			conditionInterface = wt.execute().get();
 		} catch (Exception e) {
 			conditionInterface = new WeatherCondition(weatherDate);
+
 		}
 
 		return conditionInterface;
@@ -165,5 +176,9 @@ public class WeatherManager {
 			}
 		}
 		return conditions;
+	}
+
+	public boolean isConnected() {
+		return isConnected;
 	}
 }

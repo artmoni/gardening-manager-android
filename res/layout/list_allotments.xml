@@ -73,7 +73,7 @@
                 android:id="@+id/IdGrowingSeedList"
                 android:layout_width="fill_parent"
                 android:layout_height="0dip"
-                android:background="@color/text_color_dark"
+                android:background="@color/white"
                 android:horizontalSpacing="2dp"
                 android:numColumns="4"
                 android:verticalSpacing="2dp" 

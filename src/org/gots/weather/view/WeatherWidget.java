@@ -14,8 +14,10 @@ import org.gots.weather.WeatherManager;
 import org.gots.weather.adapter.WeatherWidgetAdapter;
 
 import android.content.Context;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.GridView;
+import android.widget.TextView;
 
 public class WeatherWidget extends GridView {
 
@@ -29,12 +31,26 @@ public class WeatherWidget extends GridView {
 	public WeatherWidget(Context context, int type) {
 		super(context);
 		mType = type;
+		initWidget();
+	}
 
-		wm = new WeatherManager(context);
+	public WeatherWidget(Context context, AttributeSet attr) {
+		super(context, attr);
+		mType = WeatherView.FULL;
+		initWidget();
 
-		weatherWidgetAdapter = new WeatherWidgetAdapter(getContext(), type, wm.getConditionSet(nbDays));
-		setAdapter(weatherWidgetAdapter);
+	}
 
+	private void initWidget() {
+		wm = new WeatherManager(getContext());
+		if (wm.isConnected()) {
+			weatherWidgetAdapter = new WeatherWidgetAdapter(getContext(), mType, wm.getConditionSet(nbDays));
+			setAdapter(weatherWidgetAdapter);
+		} else {
+			TextView error = new TextView(getContext());
+			error.setText("Error");
+			addView(error);
+		}
 		setNumColumns(getAdapter().getCount());
 
 	}

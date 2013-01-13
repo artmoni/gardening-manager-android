@@ -42,10 +42,7 @@ public class WeatherWidgetAdapter extends BaseAdapter {
 		weatherItem.setWeather(getItem(position));
 
 		Log.i("WeatherWidgetAdapter", "position=" + position + "/" + getItem(position).getCondition());
-//		 TextView txtv = new TextView(mContext);
-		
-//		 txtv.setText(position+" ");
-		
+
 		return weatherItem;
 	}
 

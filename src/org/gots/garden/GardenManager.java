@@ -10,6 +10,7 @@ import org.gots.seed.providers.GotsConnector;
 import org.gots.seed.providers.local.LocalConnector;
 import org.gots.seed.providers.simple.SimpleConnector;
 import org.gots.seed.sql.VendorSeedDBHelper;
+import org.gots.weather.WeatherManager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -60,6 +61,8 @@ public class GardenManager {
 		prefedit.putInt("org.gots.preference.gardenid", position);
 		prefedit.commit();
 
+		WeatherManager wm = new WeatherManager(mContext);
+		wm.getWeatherFromWebService(getcurrentGarden());
 	}
 
 	public GardenInterface getcurrentGarden() {
@@ -69,7 +72,7 @@ public class GardenManager {
 		return garden;
 	}
 
-	public void selectGarden(int position) {
+	public void setCurrentGarden(int position) {
 		changeDatabase(position);
 	}
 
@@ -101,5 +104,11 @@ public class GardenManager {
 	public void update(){
 		populateVendorSeed(false);
 		
+	}
+
+	public int getNbGarden() {
+		GardenDBHelper helper = new GardenDBHelper(mContext);
+		
+		return helper.getCountGarden();
 	}
 }

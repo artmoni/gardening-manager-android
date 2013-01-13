@@ -131,4 +131,16 @@ public class GardenDBHelper {
 		}
 	}
 
+	public int getCountGarden() {
+		int nbGarden;
+		// SeedActionInterface searchedSeed = new GrowingSeed();
+		open();
+		Cursor cursor = bdd.query(GardenSQLite.GARDEN_TABLE_NAME, null, null, null, null, null, null);
+		nbGarden = cursor.getCount();
+		
+		cursor.close();
+		close();
+		return nbGarden;		
+	}
+
 }

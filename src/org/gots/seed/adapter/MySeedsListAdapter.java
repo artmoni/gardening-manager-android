@@ -113,7 +113,7 @@ public class MySeedsListAdapter extends BaseAdapter implements OnClickListener {
 				else if (Calendar.getInstance().get(Calendar.MONTH) + 1 >= currentSeed.getDateSowingMin())
 					action.setState(ActionState.WARNING);
 				else
-					action.setState(ActionState.CRITICAL);
+					action.setState(ActionState.UNDEFINED);
 
 			} else {
 				action = new ReduceQuantityAction(mContext);

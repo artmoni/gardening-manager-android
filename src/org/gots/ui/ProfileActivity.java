@@ -11,6 +11,7 @@
 package org.gots.ui;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -21,8 +22,11 @@ import org.gots.garden.GardenManager;
 import org.gots.garden.sql.GardenDBHelper;
 import org.gots.help.HelpUriBuilder;
 import org.gots.weather.WeatherCondition;
+import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.WeatherManager;
+import org.gots.weather.adapter.WeatherWidgetAdapter;
 import org.gots.weather.view.WeatherView;
+import org.gots.weather.view.WeatherWidget;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -33,11 +37,15 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -60,12 +68,15 @@ public class ProfileActivity extends SherlockActivity {
 	private ProgressDialog pd;
 	private int gardenId;
 	private GardenManager gardenManager;
+	private LinearLayout weatherHistory;
+	// private WeatherWidget weatherWidget;
+	private WeatherManager weatherManager;
+	private Spinner gardenSelector;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.profile);
 
 		ActionBar bar = getSupportActionBar();
@@ -75,7 +86,33 @@ public class ProfileActivity extends SherlockActivity {
 		GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
 		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
-		buildProfile();
+		gardenManager = new GardenManager(this);
+		weatherManager = new WeatherManager(this);
+
+		gardenSelector = (Spinner) findViewById(R.id.idGardenSelector);
+		gardenSelector.setSelection((int) gardenManager.getcurrentGarden().getId() - 1);
+		gardenSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
+
+				gardenManager.setCurrentGarden(position + 1);
+				buildWeatherList();
+
+				GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+				tracker.trackEvent("Garden", "Select", gardenManager.getcurrentGarden().getLocality(), position + 1);
+
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
+		buildGardenList();
+		buildWeatherList();
 
 		final HorizontalScrollView scrollView = (HorizontalScrollView) findViewById(R.id.scrollWeatherHistory);
 
@@ -87,42 +124,36 @@ public class ProfileActivity extends SherlockActivity {
 		});
 	}
 
-	private void buildProfile() {
+	private void buildWeatherList() {
 
-		gardenManager = new GardenManager(this);
+		weatherHistory = (LinearLayout) findViewById(R.id.layoutWeatherHistory);
 
-		Spinner gardenSelector = (Spinner) findViewById(R.id.idGardenSelector);
-		initGardenList(gardenSelector);
-
-		WeatherManager manager = new WeatherManager(this);
-
-		LinearLayout weatherHistory = (LinearLayout) findViewById(R.id.layoutWeatherHistory);
-
-		// set scrollview to the right end where today weather is displayed
-		
 		if (weatherHistory.getChildCount() > 0)
 			weatherHistory.removeAllViews();
+
 		for (int i = -10; i <= 0; i++) {
-			WeatherView view = new WeatherView(this);
+			WeatherConditionInterface condition;
 			try {
-				view.setWeather(manager.getCondition(i));
+				condition = weatherManager.getCondition(i);
 			} catch (Exception e) {
 				Calendar weatherday = new GregorianCalendar();
-
 				weatherday.setTime(Calendar.getInstance().getTime());
 				weatherday.add(Calendar.DAY_OF_YEAR, i);
-				WeatherCondition condition = new WeatherCondition();
+
+				condition = new WeatherCondition();
 				condition.setDate(weatherday.getTime());
-
-				view.setWeather(condition);
-
 			}
+
+			WeatherView view = new WeatherView(this);
+			view.setWeather(condition);
+			view.setPadding(2, 0, 2, 0);
 			weatherHistory.addView(view);
 
 		}
+
 	}
 
-	private void initGardenList(Spinner gardenSelector) {
+	private void buildGardenList() {
 		GardenDBHelper helper = new GardenDBHelper(this);
 
 		String[] referenceList = helper.getGardens();
@@ -130,96 +161,42 @@ public class ProfileActivity extends SherlockActivity {
 		if (referenceList == null)
 			return;
 
-		gardenId = (int) gardenManager.getcurrentGarden().getId();
-
 		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_item_text, referenceList);
 		gardenSelector.setAdapter(adapter);
-		gardenSelector.setSelection(gardenId - 1);
-		gardenSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
-				gardenManager.selectGarden(position + 1);
-				buildProfile();
 
-				GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-				tracker.trackEvent("Garden", "Select", gardenManager.getcurrentGarden().getLocality(), position + 1);
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-	}
-
-	private void getPosition() {
-		// on démarre le cercle de chargement
-		setProgressBarIndeterminateVisibility(true);
-
-		Criteria criteria = new Criteria();
-		criteria.setAccuracy(Criteria.ACCURACY_FINE);
-
-		// LocationManager lm = (LocationManager)
-		// getSystemService(LOCATION_SERVICE);
-		pd = ProgressDialog.show(this, "", getResources().getString(R.string.gots_loading), false);
-		pd.setCanceledOnTouchOutside(true);
-
-		String bestProvider = mlocManager.getBestProvider(criteria, true);
-
-	}
-
-	private void displayAddress() {
-
-		// Le geocoder permet de récupérer ou chercher des adresses
-		// gràce à un mot clé ou une position
-		Geocoder geo = new Geocoder(ProfileActivity.this);
-		try {
-			// Ici on récupère la premiere adresse trouvé gràce à la
-			// position
-			// que l'on a récupéré
-			List<Address> adresses = geo.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-
-			if (adresses != null && adresses.size() == 1) {
-				address = adresses.get(0);
-				// Si le geocoder a trouver une adresse, alors on l'affiche
-				((TextView) findViewById(R.id.editTextLocality)).setHint(String.format("%s", address.getLocality()));
-				((TextView) findViewById(R.id.editTextLocality)).setText(String.format("%s", address.getLocality()));
-
-			} else {
-
-				// sinon on affiche un message d'erreur
-				((TextView) findViewById(R.id.editTextLocality)).setHint("L'adresse n'a pu être déterminée");
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			((TextView) findViewById(R.id.editTextLocality)).setHint("L'adresse n'a pu être déterminée");
-		}
-		// on stop le cercle de chargement
-		setProgressBarIndeterminateVisibility(false);
 	}
 
 	@Override
 	protected void onResume() {
-		buildProfile();
+		buildGardenList();
+		buildWeatherList();
 		super.onResume();
 	}
 
 	@Override
 	protected void onPause() {
-		// mlocManager.removeUpdates(this);
 		super.onPause();
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// MenuInflater inflater = getMenuInflater();
 		if (gardenManager.getcurrentGarden() != null) {
 
 			MenuInflater inflater = getSupportMenuInflater();
 			inflater.inflate(R.menu.menu_profile, menu);
+
 		}
 		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+
+		// if (gardenManager.getNbGarden() == 1) {
+		// MenuItem item = menu.findItem(R.id.delete_garden);
+		// item.setEnabled(false);
+		// }
+		return super.onPrepareOptionsMenu(menu);
 	}
 
 	@Override
@@ -245,8 +222,8 @@ public class ProfileActivity extends SherlockActivity {
 			return true;
 			// case R.id.delete_garden:
 			//
-			// // deleteGarden();
-			//
+			// deleteGarden();
+			// buildGardenList();
 			// return true;
 		case R.id.edit_garden:
 

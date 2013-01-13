@@ -16,6 +16,7 @@ import org.gots.analytics.GotsAnalytics;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.sql.GardenDBHelper;
 import org.gots.preferences.GotsPreferences;
+import org.gots.weather.WeatherManager;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -36,10 +37,15 @@ public class SplashScreenActivity extends Activity {
 	private static final int STOPSPLASH = 0;
 	// private static final long SPLASHTIME = 3000;
 	private static final long SPLASHTIME = 3000;
+	private GardenInterface myGarden;
 
 	private Handler splashHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
+			
+			WeatherManager wm = new WeatherManager(getApplicationContext());
+			wm.getWeatherFromWebService(myGarden);
+			
 			switch (msg.what) {
 			case STOPSPLASH:
 				// remove SplashScreen from view
@@ -51,7 +57,6 @@ public class SplashScreenActivity extends Activity {
 			super.handleMessage(msg);
 		}
 	};
-	private GardenInterface myGarden;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -68,7 +73,7 @@ public class SplashScreenActivity extends Activity {
 		try {
 			pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
 			String version = pInfo.versionName;
-			TextView name = (TextView) findViewById(R.id.TextView01);
+			TextView name = (TextView) findViewById(R.id.textVersion);
 			name.setText("version " + version);
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();

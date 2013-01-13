@@ -42,6 +42,8 @@ public class PrevimeteoWeatherTask extends WeatherTask {
 	private WeatherSet ws;
 	private boolean iserror;
 
+	private static int i = 0;
+
 	public PrevimeteoWeatherTask(Context context, Address address, Date requestedDay) {
 		this.requestedDay = requestedDay;
 		mContext = context;
@@ -71,7 +73,7 @@ public class PrevimeteoWeatherTask extends WeatherTask {
 		if (ws == null) {
 
 			try {
-
+				Log.d("WeatherConditionInterface", "" + (++i));
 				WeatherCache cache = new WeatherCache();
 
 				InputStream is = cache.getCacheByURL(url);
@@ -91,6 +93,7 @@ public class PrevimeteoWeatherTask extends WeatherTask {
 				if (!iserror) {
 					// TODO we should not need to get the cache file again, a
 					// better way exists
+
 					is = cache.getCacheByURL(url);
 					/*
 					 * Create a new ContentHandler and apply it to the
@@ -130,9 +133,11 @@ public class PrevimeteoWeatherTask extends WeatherTask {
 	@Override
 	protected void onPostExecute(WeatherConditionInterface result) {
 
-		Log.d("GoogleWeatherTask", "executing request " + queryString);
+		Log.d("PrevimeteoWeatherTask", "executing request " + queryString);
 		if (iserror) {
-			Toast.makeText(mContext, mContext.getResources().getString(R.string.weather_citynotfound), 30).show();
+			// Toast.makeText(mContext,
+			// mContext.getResources().getString(R.string.weather_citynotfound),
+			// 30).show();
 			// cache.clean(url);
 		}
 		super.onPostExecute(result);
