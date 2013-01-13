@@ -261,5 +261,66 @@ Ces maladies se manifestent par des taches brunes et/ou une apparence de moisiss
 
 
 		</seed>
+		<seed>
+			<reference>990010</reference>
+			<family>solanaceae</family>
+			<specie>capsicum annuum</specie>
+			<variety>piment de cayenne</variety>
+			<link></link>
+			<description_growth>Semis en février mars, sur couche chaude ou en serre, en pots.
+Garder un plant par pot.
+Semis en terre vers fin mai-juin. Espacer de 50 cm.
+Sol : fertile, humifère, profond et frais.
+Exposition : Ensoleillé et chaud.
+Climat : Tempéré à chaud.
+
+			</description_growth>
+			<description_cultivation>Binage et sarclage nécessaires. Arrosage régulier. Tuteurs si nécessaire.			    
+			</description_cultivation>
+			<description_harvest>De fin juillet à l'hiver.
+Récolte 5 à 6 mois après semis.
+Leur couleur doit être verte car le piment continue de se colorer après récolte.
+Pour une longue conservation, les cueillir bien mûrs et les faire sécher en botte au soleil.
+			</description_harvest>
+			<description_diseases>Traiter l'apparition de pucerons ou d'araignées rouges avec un insecticide végétal.</description_diseases>
+			<sowingDateMin>2</sowingDateMin>
+			<sowingDateMax>6</sowingDateMax>
+			<durationMin></durationMin>
+			<durationMax>150</durationMax>
+			
+
+
+		</seed>
+		<seed>
+			<reference>990011</reference>
+			<family>solanaceae</family>
+			<specie>capsicum annuum</specie>
+			<variety>poivron Rosso</variety>
+			<link></link>
+			<description_growth>Semis en mars, sur couche chaude ou en serre (28°C), en godets.
+Garder un plant par pot.
+Semis en terre vers fin mai-juin. Espacer de 50 cm. Déposer un peu de compost dans le trou qui recevra le plan.
+Sol : fertile, humifère, profond et frais (15°C)
+Exposition : Ensoleillé et chaud.
+Climat : Tempéré à chaud.
+
+			</description_growth>
+			<description_cultivation>Tailler le plan, pour faire grossir les fruits.
+Binage et sarclage nécessaires. Arrosage régulier. Tuteurs si nécessaire. Pailler les pieds.
+Un apport d'engrais aux premiers fruits est favorable.
+			</description_cultivation>
+			<description_harvest>De fin juin à l'hiver. Récolter un mois après le premier fruit vert.
+Récolte 5 à 6 mois après semis.
+Leur couleur doit être verte car le poivron continue de se colorer après récolte.
+			</description_harvest>
+			<description_diseases>Traiter l'apparition de pucerons ou d'araignées rouges avec un insecticide végétal</description_diseases>
+			<sowingDateMin>2</sowingDateMin>
+			<sowingDateMax>6</sowingDateMax>
+			<durationMin></durationMin>
+			<durationMax>150</durationMax>
+			
+
+
+		</seed>
 	</seeds>
 </gots>

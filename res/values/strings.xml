@@ -81,6 +81,8 @@
     <string name="specie.phaseolusvulgaris">Bean</string>
     <string name="specie.raphanussativus">Radish</string>
     <string name="specie.solanumtuberosum">Potato</string>
+    <string name="specie.capsicumannuum">Pepper</string>
+    
     <string name="stock.description1">You don \'t have seed in stock, go to the catalog to make your choice</string>
     <string name="stock.description2">You can also add a reference by scanning the barcode of the packet of seeds</string>
     <string name="help.loading">Please wait, web help is loading</string>
