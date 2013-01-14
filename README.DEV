@@ -25,6 +25,14 @@ git clone https://github.com/mosabua/maven-android-sdk-deployer
 
 git clone https://github.com/JakeWharton/ActionBarSherlock
 
+------------- DEPLOIEMENT
+verify package certificate
+--jarsigner -verbose -sigalg MD5withRSA -digestalg SHA1 -certs -verify target/gardening-manager-0.14.apk
+delete meta-inf from apk released package 
+sign with release certificat
+--jarsigner -sigalg MD5withRSA -digestalg SHA1 -keystore '/home/sfleury/Projets/Gardening Manager/00 release/keystore/keystore' -storepass '@rtM0n!' -keypass '@rtM0n!' /home/sfleury/Projets/Android/workspace/GardeningOverTheSun-br0.10/target/gardening-manager-0.14.apk artmonimobile
+--zipalign  4 target/gardening-manager-0.14.apk target/gardening-manager-0.14-signed.apk
+
 ------------- SQLITE
 cd /data/data/org.gots/databases/
 sqlite3 gots.db
