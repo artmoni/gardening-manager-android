@@ -226,7 +226,6 @@ Semis en terre vers fin mai-juin. Espacer de 50 cm.
 Sol : fertile, humifère, profond et frais.
 Exposition : Ensoleillé et chaud.
 Climat : Tempéré à chaud.
-
 			</description_growth>
 			<description_cultivation>Binage et sarclage nécessaires. Arrosage régulier. Tuteurs si nécessaire.			    
 			</description_cultivation>
@@ -238,11 +237,8 @@ Pour une longue conservation, les cueillir bien mûrs et les faire sécher en bo
 			<description_diseases>Traiter l'apparition de pucerons ou d'araignées rouges avec un insecticide végétal.</description_diseases>
 			<sowingDateMin>2</sowingDateMin>
 			<sowingDateMax>6</sowingDateMax>
-			<durationMin></durationMin>
+			<durationMin>150</durationMin>
 			<durationMax>150</durationMax>
-			
-
-
 		</seed>
 		<seed>
 			<reference>990011</reference>
@@ -256,7 +252,6 @@ Semis en terre vers fin mai-juin. Espacer de 50 cm. Déposer un peu de compost d
 Sol : fertile, humifère, profond et frais (15°C)
 Exposition : Ensoleillé et chaud.
 Climat : Tempéré à chaud.
-
 			</description_growth>
 			<description_cultivation>Tailler le plan, pour faire grossir les fruits.
 Binage et sarclage nécessaires. Arrosage régulier. Tuteurs si nécessaire. Pailler les pieds.
@@ -269,11 +264,30 @@ Leur couleur doit être verte car le poivron continue de se colorer après réco
 			<description_diseases>Traiter l'apparition de pucerons ou d'araignées rouges avec un insecticide végétal</description_diseases>
 			<sowingDateMin>2</sowingDateMin>
 			<sowingDateMax>6</sowingDateMax>
-			<durationMin></durationMin>
+			<durationMin>150</durationMin>
 			<durationMax>150</durationMax>
-			
-
-
+		</seed>
+		
+		<seed>
+			<reference>990012</reference>
+			<family>Cucurbitaceae</family>
+			<specie>courge</specie>
+			<variety>
+			</variety>
+			<link>
+			</link>
+			<description_growth>Semez en petit lot de 5-6 graines, dans des sillons d'un centimètre et distants de 60 centimètres
+			</description_growth>
+			<description_cultivation>Pailler sous les fruits pour qu'ils ne s'abiment pas.
+			</description_cultivation>
+			<description_harvest>Récoltez selon votre préférence
+			</description_harvest>
+			<description_diseases>Le blanc ou oïdium, caractérisé par des feuilles grisatres et rigide. La nuile qui forme sur les feuilles et les fruits de tâches brunâtres. Le chancre qui attaque les rameaux et la tige principale.
+			</description_diseases>
+			<sowingDateMin>4</sowingDateMin>
+			<sowingDateMax>6</sowingDateMax>
+			<durationMin>120</durationMin>
+			<durationMax>180</durationMax>
 		</seed>
 	</seeds>
 </gots>

@@ -15,6 +15,7 @@ import org.gots.action.bean.CuttingAction;
 import org.gots.action.bean.HarvestAction;
 import org.gots.action.bean.HoeAction;
 import org.gots.action.bean.LighteningAction;
+import org.gots.action.bean.PhotoAction;
 import org.gots.action.bean.SowingAction;
 import org.gots.action.bean.WateringAction;
 
@@ -42,6 +43,8 @@ public class ActionFactory {
 			seedAction = new HoeAction(context);
 		else if ("harvest".equals(name))
 			seedAction = new HarvestAction(context);
+		else if ("photo".equals(name))
+			seedAction = new PhotoAction(context);
 		else seedAction = null;
 		return seedAction;
 
