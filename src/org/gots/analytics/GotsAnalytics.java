@@ -13,7 +13,7 @@ public class GotsAnalytics {
 
 	protected int activityCount = 0;
 	protected Integer dispatchIntervalSecs=10;
-	protected static String apiKey = GotsPreferences.ANALYTICS_API_KEY;
+	//protected static String apiKey = GotsPreferences.ANALYTICS_API_KEY;
 	protected Context context;
 
 	/**
@@ -42,11 +42,11 @@ public class GotsAnalytics {
 	public void incrementActivityCount() {
 		if (activityCount == 0) {
 			if (dispatchIntervalSecs == null)
-				GoogleAnalyticsTracker.getInstance().startNewSession(apiKey, context);
+				GoogleAnalyticsTracker.getInstance().startNewSession(GotsPreferences.getInstance().getAnalyticsApiKey(), context);
 			else
-				GoogleAnalyticsTracker.getInstance().startNewSession(apiKey, dispatchIntervalSecs, context);
+				GoogleAnalyticsTracker.getInstance().startNewSession(GotsPreferences.getInstance().getAnalyticsApiKey(), dispatchIntervalSecs, context);
 			
-			if (GotsPreferences.DEVELOPPEMENT)
+			if (GotsPreferences.getInstance().isDEVELOPPEMENT())
 				GoogleAnalyticsTracker.getInstance().setDryRun(true);
 		}
 		++activityCount;

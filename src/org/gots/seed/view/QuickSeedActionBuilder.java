@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.gots.seed.view;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -20,6 +22,7 @@ import org.gots.action.BaseActionInterface;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.bean.DeleteAction;
 import org.gots.action.bean.DetailAction;
+import org.gots.action.bean.PhotoAction;
 import org.gots.action.bean.ScheduleAction;
 import org.gots.action.bean.WateringAction;
 import org.gots.action.sql.ActionDBHelper;
@@ -29,9 +32,12 @@ import org.gots.seed.GrowingSeedInterface;
 import org.gots.ui.NewActionActivity;
 import org.gots.ui.TabSeedActivity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.BaseAdapter;
 
@@ -39,7 +45,8 @@ public class QuickSeedActionBuilder {
 
 	final QuickAction quickAction;
 	private View parentView;
-
+	int actionCode;
+	
 	public QuickSeedActionBuilder(final SeedWidget v, final BaseAdapter parentAdapter) {
 		parentView = v;
 		final GrowingSeedInterface seed = (GrowingSeedInterface) v.getTag();
@@ -140,11 +147,40 @@ public class QuickSeedActionBuilder {
 		quickAction.addPermanentActionItem(delete);
 
 		/*
+		 * ACTION PHOTO
+		 */
+		final PhotoAction photoAction = new PhotoAction(v.getContext());
+		ActionWidget photoWidget = new ActionWidget(v.getContext(), photoAction);
+		photoWidget.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				SeedActionInterface actionItem = (SeedActionInterface) photoAction;
+				if (PhotoAction.class.isInstance(actionItem)) {
+					Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+					File f;
+					try {
+						f = photoAction.createImageFile();
+						takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+					    ((Activity) v.getContext()).startActivityForResult(takePictureIntent, actionCode);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				    
+				} 
+				parentAdapter.notifyDataSetChanged();
+				quickAction.dismiss();
+			}
+		});
+		quickAction.addPermanentActionItem(photoWidget);
+
+		/*
 		 * ACTION DETAIL
 		 */
 		final DetailAction detail = new DetailAction(v.getContext());
-		ActionWidget detailWidget = new ActionWidget(v.getContext(), new DetailAction(v.getContext()));
-		quickAction.addPermanentActionItem(detailWidget);
+		ActionWidget detailWidget = new ActionWidget(v.getContext(), detail);
 		detailWidget.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -164,11 +200,14 @@ public class QuickSeedActionBuilder {
 				quickAction.dismiss();
 			}
 		});
-		
+		quickAction.addPermanentActionItem(detailWidget);
+
 
 	}
 
 	public void show() {
 		quickAction.show(parentView);
 	}
+	
+	
 }

@@ -115,7 +115,7 @@ public class ListAllActionAdapter extends BaseAdapter {
 		final GrowingSeedInterface seed = helper.getSeedById(actions.get(position).getGrowingSeedId());
 		if (seed != null && BaseActionInterface.class.isInstance(actions.get(position))) {
 			ActionWidget actionTODO = (ActionWidget) ll.findViewById(R.id.idActionView);
-			actions.get(position).setState(ActionState.NORMAL);
+			//actions.get(position).setState(ActionState.NORMAL);
 			actionTODO.setAction(actions.get(position));
 
 			SeedWidget seedView = (SeedWidget) ll.findViewById(R.id.idSeedView);

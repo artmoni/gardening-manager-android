@@ -15,8 +15,6 @@ import com.google.ads.AdView;
 
 public class GotsAdvertisement {
 	Context mContext;
-	private String editorId = "a14f50fa231b26d";
-
 	public GotsAdvertisement(Context mContext) {
 		this.mContext = mContext;
 	}
@@ -28,14 +26,14 @@ public class GotsAdvertisement {
 		int height = display.getHeight();
 
 		AdRequest adRequest = new AdRequest();
-		if (GotsPreferences.DEVELOPPEMENT)
+		if (GotsPreferences.getInstance().isDEVELOPPEMENT())
 			adRequest.addTestDevice(AdRequest.TEST_EMULATOR);
 
 		AdView adView;
 		if (width > 500)
-			adView = new AdView((Activity) mContext, AdSize.IAB_BANNER, editorId);
+			adView = new AdView((Activity) mContext, AdSize.IAB_BANNER, GotsPreferences.getInstance().getAdmobApiKey());
 		else
-			adView = new AdView((Activity) mContext, AdSize.BANNER, editorId);
+			adView = new AdView((Activity) mContext, AdSize.BANNER, GotsPreferences.getInstance().getAdmobApiKey());
 		
 		adView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 

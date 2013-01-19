@@ -65,7 +65,7 @@ public class DashboardActivity extends SherlockActivity implements OnClickListen
 
 		// ADMOB
 		LinearLayout layout = (LinearLayout) findViewById(R.id.bannerAd);
-		if (!GotsPreferences.DEVELOPPEMENT) {
+		if (!GotsPreferences.getInstance().isDEVELOPPEMENT()) {
 			adView = new GotsAdvertisement(this);
 			layout.addView(adView.getAdsLayout());
 

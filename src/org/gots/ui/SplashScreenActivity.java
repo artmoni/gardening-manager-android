@@ -108,7 +108,7 @@ public class SplashScreenActivity extends Activity {
 			startActivityForResult(intent, 0);
 
 		} else {
-			if (GotsPreferences.DEVELOPPEMENT)
+			if (GotsPreferences.getInstance().isDEVELOPPEMENT())
 				splashHandler.sendMessageDelayed(msg, 0);
 			else
 				splashHandler.sendMessageDelayed(msg, SPLASHTIME);

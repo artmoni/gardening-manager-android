@@ -108,6 +108,12 @@ public class TabSeedActivity extends SherlockFragmentActivity implements ActionB
 	}
 
 	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+	}
+
+	@Override
 	public void onTabSelected(Tab tab, FragmentTransaction ft) {
 		// TODO Auto-generated method stub
 
