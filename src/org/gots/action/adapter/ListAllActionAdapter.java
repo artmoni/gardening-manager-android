@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.gots.action.adapter;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,6 +23,7 @@ import java.util.Locale;
 import org.gots.R;
 import org.gots.action.BaseActionInterface;
 import org.gots.action.SeedActionInterface;
+import org.gots.action.bean.PhotoAction;
 import org.gots.action.sql.ActionSeedDBHelper;
 import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
@@ -31,11 +34,15 @@ import org.gots.weather.WeatherManager;
 import org.gots.weather.view.WeatherView;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.provider.ContactsContract.CommonDataKinds.Photo;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -56,6 +63,7 @@ public class ListAllActionAdapter extends BaseAdapter {
 	public ListAllActionAdapter(Context context, ArrayList<GrowingSeedInterface> allSeeds, int status) {
 		this.mContext = context;
 		current_status = status;
+		
 		for (Iterator<GrowingSeedInterface> iterator = allSeeds.iterator(); iterator.hasNext();) {
 			GrowingSeedInterface seed = iterator.next();
 			ActionSeedDBHelper helper = new ActionSeedDBHelper(context);
@@ -68,15 +76,7 @@ public class ListAllActionAdapter extends BaseAdapter {
 				seedActions = helper.getActionsDoneBySeed(seed);
 			}
 
-			if (seedActions.size() > 0) {
-				for (Iterator<BaseActionInterface> action = seedActions.iterator(); action.hasNext();) {
-
-					BaseActionInterface baseActionInterface = action.next();
-					this.actions.add(baseActionInterface);
-					//
-
-				}
-			}
+			actions.addAll(seedActions);
 		}
 		Collections.sort(actions, new IStatusUpdateComparator());
 		manager = new WeatherManager(mContext);
@@ -106,41 +106,43 @@ public class ListAllActionAdapter extends BaseAdapter {
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		LinearLayout ll = (LinearLayout) convertView;
+		
+		
+		
 		if (convertView == null) {
 			// ll = new LinearLayout(mContext);
 			ll = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.list_action, parent, false);
 		}
 
 		GrowingSeedDBHelper helper = new GrowingSeedDBHelper(mContext);
-		final GrowingSeedInterface seed = helper.getSeedById(actions.get(position).getGrowingSeedId());
-		if (seed != null && BaseActionInterface.class.isInstance(actions.get(position))) {
-			ActionWidget actionTODO = (ActionWidget) ll.findViewById(R.id.idActionView);
-			//actions.get(position).setState(ActionState.NORMAL);
-			actionTODO.setAction(actions.get(position));
+		final BaseActionInterface currentAction = actions.get(position);
+		
+		final GrowingSeedInterface seed = helper.getSeedById(currentAction.getGrowingSeedId());
+		if (seed != null && BaseActionInterface.class.isInstance(currentAction)) {
+			ActionWidget actionWidget = (ActionWidget) ll.findViewById(R.id.idActionView);
+			
 
 			SeedWidget seedView = (SeedWidget) ll.findViewById(R.id.idSeedView);
 			seedView.setSeed(seed);
 
-			// WeatherView weatherView = (WeatherView)
-			// ll.findViewById(R.id.idWeatherView);
-			// weatherView.setWeather(weathers.get(position));
-
-			TextView tv = (TextView) ll.findViewById(R.id.IdSeedActionStatus);
-			TextView tv2 = (TextView) ll.findViewById(R.id.IdSeedActionDate);
+			TextView textviewActionStatus = (TextView) ll.findViewById(R.id.IdSeedActionStatus);
+			TextView textviewActionDate = (TextView) ll.findViewById(R.id.IdSeedActionDate);
 
 			SimpleDateFormat dateFormat = new SimpleDateFormat(" dd/MM/yyyy", Locale.FRANCE);
 
 			if (current_status == STATUS_TODO) {
-				tv.setText(mContext.getResources().getString(R.string.seed_action_todo));
+				textviewActionStatus.setText(mContext.getResources().getString(R.string.seed_action_todo));
 
 				Calendar rightNow = Calendar.getInstance();
 				rightNow.setTime(seed.getDateSowing());
-				rightNow.add(Calendar.DAY_OF_YEAR, actions.get(position).getDuration());
-				tv2.setText(dateFormat.format(rightNow.getTime()));
-				actionTODO.setOnClickListener(new View.OnClickListener() {
+				rightNow.add(Calendar.DAY_OF_YEAR, currentAction.getDuration());
+				textviewActionDate.setText(dateFormat.format(rightNow.getTime()));
+				
+
+				actionWidget.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						((SeedActionInterface) actions.get(position)).execute(seed);
+						((SeedActionInterface) currentAction).execute(seed);
 						actions.remove(position);
 						// seeds.remove(position);
 						notifyDataSetChanged();
@@ -151,21 +153,44 @@ public class ListAllActionAdapter extends BaseAdapter {
 				weatherView.setVisibility(View.GONE);
 
 			} else {
-				tv.setText(mContext.getResources().getString(R.string.seed_action_done));
+				textviewActionStatus.setText(mContext.getResources().getString(R.string.seed_action_done));
 
 				Calendar rightNow = Calendar.getInstance();
 				rightNow.setTime(seed.getDateSowing());
-				rightNow.add(Calendar.DAY_OF_YEAR, actions.get(position).getDuration());
-				tv2.setText(dateFormat.format(actions.get(position).getDateActionDone()));
+				rightNow.add(Calendar.DAY_OF_YEAR, currentAction.getDuration());
+				textviewActionDate.setText(dateFormat.format(currentAction.getDateActionDone()));
 				
 				WeatherView weatherView = (WeatherView)ll.findViewById(R.id.idWeatherView);
 				weatherView.setWeather(manager.getCondition(rightNow.getTime()));
 				
+				currentAction.setState(ActionState.NORMAL);
+				
+				if (PhotoAction.class.isInstance(currentAction)){
+					File imgFile = ((PhotoAction)currentAction).getImageFile(rightNow.getTime());
+					Log.d("imageFile",imgFile.getAbsolutePath());
+					if(imgFile.exists()){
+
+					    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+					    
+				        final int THUMBNAIL_SIZE = 64;
+				        myBitmap = Bitmap.createScaledBitmap(myBitmap, THUMBNAIL_SIZE, THUMBNAIL_SIZE, false);
+					    
+					    ImageView myImage = (ImageView) ll.findViewById(R.id.imageviewPhoto);
+					    myImage.setImageBitmap(myBitmap);
+					    myImage.setVisibility(View.VISIBLE);
+					    weatherView.setVisibility(View.GONE);
+					    
+					}
+				}
 			}
+			actionWidget.setAction(currentAction);
+
 		}
 		return ll;
 	}
 
+
+	
 	class IStatusUpdateComparator implements Comparator<BaseActionInterface> {
 		@Override
 		public int compare(BaseActionInterface obj1, BaseActionInterface obj2) {
