@@ -31,13 +31,13 @@ public class WeatherWidget extends GridView {
 	public WeatherWidget(Context context, int type) {
 		super(context);
 		mType = type;
-		initView();
+		
 	}
 
 	public WeatherWidget(Context context, AttributeSet attr) {
 		super(context, attr);
 		mType = WeatherView.FULL;
-		initView();
+		
 
 	}
 
@@ -55,10 +55,16 @@ public class WeatherWidget extends GridView {
 
 	}
 
-	// public void setNbPastDays(int nbPastDays) {
-	// this.nbPastDays = nbPastDays;
-	// // displayWeather();
-	// }
+	@Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+		Log.i("WeatherOnMeasure",widthMeasureSpec+"x"+heightMeasureSpec);
+		if (widthMeasureSpec < heightMeasureSpec)
+			nbDays = 2;
+		else
+			nbDays = 3;
+		initView();
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+	}
 
 	@Override
 	protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
@@ -66,12 +72,9 @@ public class WeatherWidget extends GridView {
 	}
 
 	public void update() {
-		// wm.update();
-		weatherWidgetAdapter.setConditions(wm.getConditionSet(nbDays));
-		Log.i("update", weatherWidgetAdapter.getCount() + "<->" + getChildCount());
 
+		weatherWidgetAdapter.setConditions(wm.getConditionSet(nbDays));
 		weatherWidgetAdapter.notifyDataSetChanged();
-		setAdapter(weatherWidgetAdapter);
 		invalidateViews();
 	}
 
