@@ -139,10 +139,12 @@ public class ListVendorSeedAdapter extends BaseAdapter {
 
 	@Override
 	public long getItemId(int position) {
-		if (position % frequencyAds != 0)
+		if (position % frequencyAds != 0){
+			position = position - (position / frequencyAds + 1);
 			return vendorSeeds.get(position).getId();
+		}
 		else
-			return position;
+			return vendorSeeds.get(position).getId();
 	}
 
 }
