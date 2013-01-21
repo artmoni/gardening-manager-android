@@ -11,11 +11,16 @@
 package org.gots.ui;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.gots.R;
 import org.gots.garden.GardenManager;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.adapter.ListVendorSeedAdapter;
+import org.gots.seed.providers.GotsConnector;
+import org.gots.seed.providers.local.LocalConnector;
+import org.gots.seed.providers.simple.SimpleConnector;
 import org.gots.seed.sql.VendorSeedDBHelper;
 
 import android.content.Context;
@@ -35,7 +40,9 @@ public class VendorListActivity extends SherlockListFragment {
 
 	public Context mContext;
 	private ListVendorSeedAdapter listVendorSeedAdapter;
-
+	GardenManager manager;
+	
+	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -45,13 +52,13 @@ public class VendorListActivity extends SherlockListFragment {
 		ArrayList<BaseSeedInterface> vendorSeeds;
 		vendorSeeds = myBank.getVendorSeeds();	
 		
-		
+		 manager = new GardenManager(mContext);
 
 		listVendorSeedAdapter = new ListVendorSeedAdapter(getActivity(), vendorSeeds);
 		setListAdapter(listVendorSeedAdapter);
 		
 		if (vendorSeeds.size()==0)
-			new RefreshTask().execute(new Object());
+			manager.update();
 	}
 
 	@Override
@@ -72,7 +79,7 @@ public class VendorListActivity extends SherlockListFragment {
 		switch (item.getItemId()) {
 
 		case R.id.refresh_seed:
-			new RefreshTask().execute(new Object());
+			manager.update();
 			return true;
 
 		default:
@@ -85,24 +92,6 @@ public void update (){
 }
 	
 
-	private class RefreshTask extends AsyncTask<Object, Integer, Long> {
-		@Override
-		protected Long doInBackground(Object... params) {
-
-			GardenManager garden = new GardenManager(mContext);
-			garden.update(); 
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Long result) {
-			VendorSeedDBHelper myBank = new VendorSeedDBHelper(mContext);
-			ArrayList<BaseSeedInterface> vendorSeeds;
-			vendorSeeds = myBank.getVendorSeeds();
-
-			setListAdapter(new ListVendorSeedAdapter(mContext, vendorSeeds));
-			super.onPostExecute(result);
-		}
-	}
+	
 
 }
