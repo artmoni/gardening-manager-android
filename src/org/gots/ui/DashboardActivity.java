@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 
 import com.actionbarsherlock.app.SherlockActivity;
@@ -84,21 +85,20 @@ public class DashboardActivity extends SherlockActivity implements OnClickListen
 		switch (v.getId()) {
 		case R.id.dashboard_button_hut:
 
-			
-				i = new Intent(v.getContext(), HutActivity.class);
+			i = new Intent(v.getContext(), HutActivity.class);
 			break;
 		case R.id.dashboard_button_allotment:
-			
-				i = new Intent(v.getContext(), MyMainGarden.class);
+
+			i = new Intent(v.getContext(), MyMainGarden.class);
 			break;
 		case R.id.dashboard_button_action:
-			
-				i = new Intent(v.getContext(), ActionActivity.class);
+
+			i = new Intent(v.getContext(), ActionActivity.class);
 
 			break;
 		case R.id.dashboard_button_profile:
-			
-				i = new Intent(v.getContext(), org.gots.ui.ProfileActivity.class);
+
+			i = new Intent(v.getContext(), org.gots.ui.ProfileActivity.class);
 			break;
 		default:
 			break;
@@ -118,12 +118,12 @@ public class DashboardActivity extends SherlockActivity implements OnClickListen
 
 	@Override
 	protected void onResume() {
-		Log.i("DASHBOARD", "OnResume()");
 		GoogleAnalyticsTracker.getInstance().dispatch();
-		weatherWidget2.update();
+		if (weatherWidget2.getAdapter() != null && weatherWidget.getAdapter() != null){
+		((BaseAdapter)weatherWidget2.getAdapter()).notifyDataSetChanged();
 
-		weatherWidget.update();
-
+		((BaseAdapter)weatherWidget.getAdapter()).notifyDataSetChanged();
+		}
 		super.onResume();
 	}
 
@@ -132,12 +132,13 @@ public class DashboardActivity extends SherlockActivity implements OnClickListen
 
 		super.onPause();
 	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
 		Intent i;
 		switch (item.getItemId()) {
-		
+
 		case R.id.help:
 			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HelpUriBuilder.getUri(getClass()
 					.getSimpleName())));
@@ -148,6 +149,7 @@ public class DashboardActivity extends SherlockActivity implements OnClickListen
 			return super.onOptionsItemSelected(item);
 		}
 	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getSupportMenuInflater();
