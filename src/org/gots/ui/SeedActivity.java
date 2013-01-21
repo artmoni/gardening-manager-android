@@ -49,31 +49,75 @@ public class SeedActivity extends SherlockFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.seed, container, false);
-		
 
 		Bundle bundle = this.getArguments();
 		seedId = bundle.getInt("org.gots.seed.id");
 
-		if ( seedId <= 0) {
+		if (seedId <= 0) {
 			Log.e("SeedActivity", "You must provide a org.gots.seed.id as an Extra Int");
 			return v;
-		}		
-		
+		}
+
 		VendorSeedDBHelper helper = new VendorSeedDBHelper(getActivity());
 		mSeed = helper.getSeedById(seedId);
 
-		TextView seedDescription = (TextView) v.findViewById(R.id.IdSeedDescriptionEnvironment);
-		seedDescription.setText(mSeed.getDescriptionGrowth());
+		final TextView seedDescriptionEnvironnement = (TextView) v.findViewById(R.id.IdSeedDescriptionEnvironment);
+		seedDescriptionEnvironnement.setText(mSeed.getDescriptionGrowth());
 
-		seedDescription = (TextView) v.findViewById(R.id.IdSeedDescriptionCulture);
-		seedDescription.setText(mSeed.getDescriptionCultivation());
+		TextView seedDescriptionTitle = (TextView) v.findViewById(R.id.IdSeedDescriptionEnvironmentTitle);
+		seedDescriptionTitle.setOnClickListener(new View.OnClickListener() {
 
-		seedDescription = (TextView) v.findViewById(R.id.IdSeedDescriptionEnnemi);
-		seedDescription.setText(mSeed.getDescriptionDiseases());
+			@Override
+			public void onClick(View v) {
+				if (seedDescriptionEnvironnement.getVisibility() == View.VISIBLE)
+					seedDescriptionEnvironnement.setVisibility(View.GONE);
+				else
+					seedDescriptionEnvironnement.setVisibility(View.VISIBLE);
+			}
+		});
 
-		seedDescription = (TextView) v.findViewById(R.id.IdSeedDescriptionHarvest);
-		seedDescription.setText(mSeed.getDescriptionHarvest());
+		final TextView seedDescriptionCulture = (TextView) v.findViewById(R.id.IdSeedDescriptionCulture);
+		seedDescriptionCulture.setText(mSeed.getDescriptionCultivation());
+		TextView seedDescriptionCultureTitle = (TextView) v.findViewById(R.id.IdSeedDescriptionCultureTitle);
+		seedDescriptionCultureTitle.setOnClickListener(new View.OnClickListener() {
 
+			@Override
+			public void onClick(View v) {
+				if (seedDescriptionCulture.getVisibility() == View.VISIBLE)
+					seedDescriptionCulture.setVisibility(View.GONE);
+				else
+					seedDescriptionCulture.setVisibility(View.VISIBLE);
+			}
+		});
+		
+		final TextView seedDescriptionEnnemi = (TextView) v.findViewById(R.id.IdSeedDescriptionEnnemi);
+		seedDescriptionEnnemi.setText(mSeed.getDescriptionDiseases());
+		TextView seedDescriptionEnnemiTitle = (TextView) v.findViewById(R.id.IdSeedDescriptionEnnemiTitle);
+		seedDescriptionEnnemiTitle.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (seedDescriptionEnnemi.getVisibility() == View.VISIBLE)
+					seedDescriptionEnnemi.setVisibility(View.GONE);
+				else
+					seedDescriptionEnnemi.setVisibility(View.VISIBLE);
+			}
+		});
+		
+		final TextView seedDescriptionCultureHarvest = (TextView) v.findViewById(R.id.IdSeedDescriptionHarvest);
+		seedDescriptionCultureHarvest.setText(mSeed.getDescriptionHarvest());
+		TextView seedDescriptionHarvest = (TextView) v.findViewById(R.id.IdSeedDescriptionHarvestTitle);
+		seedDescriptionHarvest.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (seedDescriptionCultureHarvest.getVisibility() == View.VISIBLE)
+					seedDescriptionCultureHarvest.setVisibility(View.GONE);
+				else
+					seedDescriptionCultureHarvest.setVisibility(View.VISIBLE);
+			}
+		});
+		
 		return v;
 	}
 	// @Override

@@ -5,7 +5,8 @@
     android:layout_height="fill_parent"
     android:background="@color/text_color_dark"
     android:orientation="vertical"
-    android:scrollbars="vertical" android:paddingTop="5dp">
+    android:paddingTop="5dp"
+    android:scrollbars="vertical" >
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -15,6 +16,7 @@
         <!-- seed.description.environment -->
 
         <TextView
+            android:id="@+id/IdSeedDescriptionEnvironmentTitle"
             style="@style/seed_description_title"
             android:background="@drawable/titre_climat_et_sol"
             android:text="@string/seed.description.environment" >
@@ -23,11 +25,13 @@
         <TextView
             android:id="@+id/IdSeedDescriptionEnvironment"
             style="@style/seed_description_content"
-            android:text="seedDescription" >
+            android:text="seedDescription"
+            android:visibility="gone" >
         </TextView>
         <!-- seed.description.culture -->
 
         <TextView
+            android:id="@+id/IdSeedDescriptionCultureTitle"
             style="@style/seed_description_title"
             android:background="@drawable/titre_culture"
             android:text="@string/seed.description.culture" >
@@ -36,12 +40,14 @@
         <TextView
             android:id="@+id/IdSeedDescriptionCulture"
             style="@style/seed_description_content"
-            android:text="Récolte" >
+            android:text="Récolte"
+            android:visibility="gone" >
         </TextView>
 
         <!-- seed.description.harvest -->
 
         <TextView
+            android:id="@+id/IdSeedDescriptionHarvestTitle"
             style="@style/seed_description_title"
             android:background="@drawable/titre_recolte"
             android:text="@string/seed.description.harvest" >
@@ -50,12 +56,14 @@
         <TextView
             android:id="@+id/IdSeedDescriptionHarvest"
             style="@style/seed_description_content"
-            android:text="seedDescription" >
+            android:text="seedDescription"
+            android:visibility="gone" >
         </TextView>
 
         <!-- seed.description.ennemi -->
 
         <TextView
+            android:id="@+id/IdSeedDescriptionEnnemiTitle"
             style="@style/seed_description_title"
             android:background="@drawable/titre_ennemis"
             android:text="@string/seed.description.ennemi" >
@@ -64,9 +72,9 @@
         <TextView
             android:id="@+id/IdSeedDescriptionEnnemi"
             style="@style/seed_description_content"
-            android:text="seedDescription" >
+            android:text="seedDescription"
+            android:visibility="gone" >
         </TextView>
-
     </LinearLayout>
 
 </ScrollView>
