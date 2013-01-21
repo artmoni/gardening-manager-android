@@ -39,6 +39,10 @@
         android:layout_weight="1" >
     </LinearLayout>
 
+    <ImageView         android:id="@+id/imageviewPhoto"
+        android:layout_width="65dp"
+        android:layout_height="65dp" android:visibility="gone"/>
+    
     <org.gots.weather.view.WeatherView
         android:id="@+id/idWeatherView"
         android:layout_width="65dp"
