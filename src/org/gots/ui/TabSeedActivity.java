@@ -213,6 +213,7 @@ public class TabSeedActivity extends SherlockFragmentActivity implements ActionB
 			TabInfo info = mTabs.get(position);
 			Bundle bundle = new Bundle();
 			bundle.putInt("org.gots.seed.id", mSeed.getId());
+			bundle.putInt("org.gots.growingseed.id", mSeed.getGrowingSeedId());
 			bundle.putString("org.gots.seed.url", urlDescription);
 			Fragment fragment = Fragment.instantiate(mContext, info.clss.getName(), info.args);
 			fragment.setArguments(bundle);
