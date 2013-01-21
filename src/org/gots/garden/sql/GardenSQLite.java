@@ -17,7 +17,7 @@ import android.util.Log;
 
 public class GardenSQLite extends SQLiteOpenHelper {
 	// ************************ DATABASE **************
-	private static final int DATABASE_VERSION = 11;
+	private static final int DATABASE_VERSION = 12;
 	private static String DATABASE_NAME = "garden";
 	public final static String AUTHORITY = "org.gots.providers.garden";
 
@@ -80,21 +80,22 @@ public class GardenSQLite extends SQLiteOpenHelper {
 		db.execSQL(CREATE_TABLE_GARDEN);
 		db.execSQL(CREATE_TABLE_ACTION);
 
-		//db.execSQL(CREATE_TABLE_ACTION);
+		// db.execSQL(CREATE_TABLE_ACTION);
 		populateActions(db);
 
 	}
-
-	
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion
 				+ ", which will destroy all old data");
-		if (oldVersion<=10) {
+		if (oldVersion <= 10) {
 			db.execSQL(CREATE_TABLE_ACTION);
 			populateActions(db);
 
+		}
+		if (oldVersion < 12) {
+			db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('photo')");
 		}
 	}
 
@@ -106,5 +107,7 @@ public class GardenSQLite extends SQLiteOpenHelper {
 		db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('cut')");
 		db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('lighten')");
 		db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('harvest')");
+		db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('photo')");
+
 	}
 }
