@@ -62,7 +62,7 @@ public class GotsProgressBar extends View {
 		Paint paint = new Paint();
 		paint.setStyle(Style.FILL);
 
-		paint.setColor(Color.BLACK);
+		paint.setColor(getContext().getResources().getColor(R.color.text_color_dark));
 		canvas.drawLine(0, 0, 0, getHeight() - 1, paint);
 		canvas.drawLine(getWidth() - 1, 0, getWidth() - 1, getHeight() - 1, paint);
 		canvas.drawLine(0, 0, getWidth() - 1, 0, paint);
@@ -80,16 +80,16 @@ public class GotsProgressBar extends View {
 
 		if (percent > 100f)
 			percent = 100f;
-		if (percent >= 99f)
-			paint.setColor(getContext().getResources().getColor(R.color.action_error_color));
+		if (percent >= 90f)
+			paint.setColor(getContext().getResources().getColor(R.color.action_ok_color));
 
-		else if (percent >= 90f)
+		else if (percent >= 80f)
 			// paint.setColor(Color.rgb(255, 140, 0));
 			paint.setColor(getContext().getResources().getColor(R.color.action_warning_color));
 
 		else
 			// paint.setARGB(255, 80, 150, 30);
-			paint.setColor(getContext().getResources().getColor(R.color.action_ok_color));
+			paint.setColor(getContext().getResources().getColor(R.color.action_error_color));
 
 		// int height=new Float(f*getHeight()).intValue();
 
