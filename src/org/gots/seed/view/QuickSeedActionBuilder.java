@@ -13,6 +13,7 @@ package org.gots.seed.view;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 
 import net.londatiga.android.QuickAction;
@@ -46,7 +47,7 @@ public class QuickSeedActionBuilder {
 	final QuickAction quickAction;
 	private View parentView;
 	int actionCode;
-	
+
 	public QuickSeedActionBuilder(final SeedWidget v, final BaseAdapter parentAdapter) {
 		parentView = v;
 		final GrowingSeedInterface seed = (GrowingSeedInterface) v.getTag();
@@ -78,7 +79,7 @@ public class QuickSeedActionBuilder {
 					quickAction.dismiss();
 				}
 			});
-			
+
 		}
 
 		ScheduleAction planAction = new ScheduleAction(v.getContext());
@@ -93,11 +94,11 @@ public class QuickSeedActionBuilder {
 				quickAction.dismiss();
 			}
 		});
-		
+
 		quickAction.addActionItem(actionWidget);
 
 		ActionDBHelper helper = new ActionDBHelper(v.getContext());
-		
+
 		/*
 		 * ACTION WATERING
 		 */
@@ -113,7 +114,7 @@ public class QuickSeedActionBuilder {
 				quickAction.dismiss();
 
 			}
-		});			
+		});
 		quickAction.addPermanentActionItem(watering);
 
 		/*
@@ -126,8 +127,8 @@ public class QuickSeedActionBuilder {
 			@Override
 			public void onClick(View v) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-				builder.setMessage(v.getContext().getResources().getString(R.string.action_delete_seed)).setCancelable(false)
-						.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				builder.setMessage(v.getContext().getResources().getString(R.string.action_delete_seed))
+						.setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
 								SeedActionInterface actionItem = (SeedActionInterface) deleteAction;
 								actionItem.execute(seed);
@@ -143,13 +144,13 @@ public class QuickSeedActionBuilder {
 				builder.show();
 
 			}
-		});		
+		});
 		quickAction.addPermanentActionItem(delete);
 
 		/*
 		 * ACTION PHOTO
 		 */
-		final PhotoAction photoAction = new PhotoAction(v.getContext());
+		final PhotoAction photoAction = (PhotoAction) helper.getActionByName("photo");
 		ActionWidget photoWidget = new ActionWidget(v.getContext(), photoAction);
 		photoWidget.setOnClickListener(new View.OnClickListener() {
 
@@ -159,17 +160,14 @@ public class QuickSeedActionBuilder {
 				if (PhotoAction.class.isInstance(actionItem)) {
 					Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 					File f;
-					try {
-						f = photoAction.createImageFile();
-						takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-					    ((Activity) v.getContext()).startActivityForResult(takePictureIntent, actionCode);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					Date now = new Date();
 					
-				    
-				} 
+					f = photoAction.getImageFile(now);
+					takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+					((Activity) v.getContext()).startActivityForResult(takePictureIntent, actionCode);
+					actionItem.execute(seed);
+
+				}
 				parentAdapter.notifyDataSetChanged();
 				quickAction.dismiss();
 			}
@@ -202,12 +200,10 @@ public class QuickSeedActionBuilder {
 		});
 		quickAction.addPermanentActionItem(detailWidget);
 
-
 	}
 
 	public void show() {
 		quickAction.show(parentView);
 	}
-	
-	
+
 }
