@@ -67,7 +67,7 @@ public class ListActionActivity extends SherlockListFragment implements ListView
 		GrowingSeedDBHelper helper = new GrowingSeedDBHelper(getActivity());
 
 		Bundle bundle = this.getArguments();
-		seedid = bundle.getInt("org.gots.seed.id");
+		seedid = bundle.getInt("org.gots.growingseed.id");
 
 		if (seedid > 0) {
 			allSeeds.add(helper.getSeedById(seedid));
