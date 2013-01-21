@@ -33,10 +33,15 @@ import android.os.Environment;
 public class PhotoAction extends AbstractActionSeed implements PermanentActionInterface, SeedActionInterface,
 		GardeningActionInterface {
 	Context mContext;
+	private File storageDir;
+	private static final String JPEG_FILE_PREFIX = "GOTS";
+	private static final String JPEG_FILE_SUFFIX = ".JPG";
 
 	public PhotoAction(Context context) {
 		setName("photo");
 		mContext = context;
+		storageDir = new File(Environment.getExternalStorageDirectory(), "Gardening-Manager");
+
 	}
 
 	@Override
@@ -100,17 +105,11 @@ public class PhotoAction extends AbstractActionSeed implements PermanentActionIn
 		return super.getId();
 	}
 
-	public File createImageFile() throws IOException {
-		// Create an image file name
-		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-		String JPEG_FILE_PREFIX = "GOTS";
-		String JPEG_FILE_SUFFIX = ".JPG";
-
-		File storageDir = new File(Environment.getExternalStorageDirectory(), "Gardening-Manager");
-
+	public File getImageFile(Date date) {
+		String timeStamp = new SimpleDateFormat("yyyyMMdd_HH").format(date);
 		String imageFileName = JPEG_FILE_PREFIX + timeStamp + "_";
-		File image = File.createTempFile(imageFileName, JPEG_FILE_SUFFIX, storageDir);
-		String mCurrentPhotoPath = image.getAbsolutePath();
-		return image;
+
+		File imageFile = new File(storageDir, imageFileName + JPEG_FILE_SUFFIX);
+		return imageFile;
 	}
 }
