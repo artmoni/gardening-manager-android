@@ -58,8 +58,6 @@ public class WeatherWidgetAdapter extends BaseAdapter {
 
 	public void setConditions(List<WeatherConditionInterface> conditions) {
 		this.mConditions = conditions;
-
-		 
 	}
 
 }

@@ -40,7 +40,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
-public class TabSeedActivity extends SherlockFragmentActivity implements ActionBar.TabListener {
+public class TabSeedActivity extends SherlockFragmentActivity {
 	ViewPager mViewPager;
 	GrowingSeedInterface mSeed = null;
 	private String urlDescription;
@@ -108,27 +108,14 @@ public class TabSeedActivity extends SherlockFragmentActivity implements ActionB
 	}
 
 	@Override
-	protected void onPause() {
-		// TODO Auto-generated method stub
-		super.onPause();
+	protected void onSaveInstanceState(Bundle outState) {
+		//first saving my state, so the bundle wont be empty.
+    	//http://code.google.com/p/android/issues/detail?id=19917
 	}
 
 	@Override
-	public void onTabSelected(Tab tab, FragmentTransaction ft) {
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onTabReselected(Tab tab, FragmentTransaction ft) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 
 import org.gots.R;
@@ -71,13 +72,13 @@ public class WeatherManager {
 				WeatherTask wt = new PrevimeteoWeatherTask(mContext, garden.getAddress(), cal.getTime());
 				WeatherConditionInterface conditionInterface = wt.execute().get();
 
-				if (conditionInterface != null){
+				if (conditionInterface != null) {
 					updateCondition(conditionInterface, forecastDay);
 					if (conditionInterface.getIconURL() == null)
 						isConnected = false;
 
 				}
-				
+
 				else {
 					// Toast.makeText(mContext,
 					// mContext.getResources().getString(R.string.weather_citynotfound),
