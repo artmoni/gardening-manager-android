@@ -71,4 +71,11 @@ public class ReduceQuantityAction extends AbstractActionSeed implements SeedActi
 		return super.getName();
 	}
 
+	public void setData(Object data) {
+	}
+
+	public Object getData() {
+		return null;
+	}
+
 }

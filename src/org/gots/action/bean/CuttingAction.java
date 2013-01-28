@@ -70,4 +70,11 @@ public class CuttingAction extends AbstractActionSeed implements SeedActionInter
 	public String getName() {
 		return super.getName();
 	}
+
+	public void setData(Object data) {
+	}
+
+	public Object getData() {
+		return null;
+	}
 }

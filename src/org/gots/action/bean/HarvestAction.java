@@ -72,6 +72,13 @@ public class HarvestAction extends AbstractActionSeed implements SeedActionInter
 		return super.getName();
 	}
 
+	public void setData(Object data) {
+	}
+
+	public Object getData() {
+		return null;
+	}
+
 	
 
 }

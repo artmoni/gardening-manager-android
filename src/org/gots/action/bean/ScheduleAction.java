@@ -68,4 +68,11 @@ public class ScheduleAction extends AbstractActionSeed implements SeedActionInte
 		return super.getName();
 	}
 
+	public void setData(Object data) {
+	}
+
+	public Object getData() {
+		return null;
+	}
+
 }

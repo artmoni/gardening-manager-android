@@ -34,7 +34,7 @@ public class PhotoAction extends AbstractActionSeed implements PermanentActionIn
 		GardeningActionInterface {
 	Context mContext;
 	private File storageDir;
-	private static final String JPEG_FILE_PREFIX = "GOTS";
+	private static final String JPEG_FILE_PREFIX = "GOTS_";
 	private static final String JPEG_FILE_SUFFIX = ".JPG";
 
 	public PhotoAction(Context context) {
@@ -106,10 +106,11 @@ public class PhotoAction extends AbstractActionSeed implements PermanentActionIn
 	}
 
 	public File getImageFile(Date date) {
-		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmm").format(date);
-		String imageFileName = JPEG_FILE_PREFIX + timeStamp + "_";
+		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(date);
+		String imageFileName = JPEG_FILE_PREFIX + timeStamp ;
 
 		File imageFile = new File(storageDir, imageFileName + JPEG_FILE_SUFFIX);
 		return imageFile;
 	}
+
 }

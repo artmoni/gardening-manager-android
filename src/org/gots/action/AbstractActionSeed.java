@@ -30,6 +30,7 @@ public abstract class AbstractActionSeed implements SeedActionInterface, Compara
 	private int logid;
 	// private GrowingSeedInterface growingSeed;
 	private int growingSeedId;
+	private Object data;
 
 	public AbstractActionSeed() {
 		// TODO Auto-generated constructor stub
@@ -145,5 +146,15 @@ public abstract class AbstractActionSeed implements SeedActionInterface, Compara
 	@Override
 	public int getLogId() {
 		return this.logid;
+	}
+
+	@Override
+	public Object getData() {
+		return data;
+	}
+
+	@Override
+	public void setData(Object data) {
+		this.data = data;
 	}
 }

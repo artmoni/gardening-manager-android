@@ -70,6 +70,13 @@ public class BeakeringAction extends AbstractActionSeed implements SeedActionInt
 		return super.getName();
 	}
 
+	public void setData(Object data) {
+	}
+
+	public Object getData() {
+		return null;
+	}
+
 	
 
 	

@@ -23,7 +23,7 @@ import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 	// ************************ DATABASE **************
-	private static final int DATABASE_VERSION = 12;
+	private static final int DATABASE_VERSION = 13;
 	private static String DATABASE_NAME = "gots0";
 	public final static String AUTHORITY = "org.gots.providers.seeds";
 
@@ -149,6 +149,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String ACTIONSEED_GROWINGSEED_ID = "growingseed_id";
 	public static final String ACTIONSEED_ACTION_ID = "action_id";
 	public static final String ACTIONSEED_DURATION = "action_seed_duration";
+	public static final String ACTIONSEED_DATA = "data";
 
 	// public static final String SEED_ID = "seed_id";
 
@@ -159,8 +160,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ACTIONSEED_GROWINGSEED_ID + " INTEGER," 
 			+ ACTIONSEED_ACTION_ID + " INTEGER," 
 			+ ACTIONSEED_DATEACTIONDONE	+ " INTEGER,"
-			+ ACTIONSEED_DURATION+ " INTEGER"
-			
+			+ ACTIONSEED_DURATION+ " INTEGER,"
+			+ ACTIONSEED_DATA+ " VARCHAR(255)"
+
 			// + DATE_LAST_WATERING + " DATETIME"
 			// + "  FOREIGN KEY(" + SEED_ID
 			// + ") REFERENCES " + SeedSQLite.SEEDS_TABLE_NAME + "(" +
@@ -312,7 +314,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			db.execSQL("DROP TABLE backup");
 
 
-		} else {
+		} 		if (oldVersion < 13) {
+			db.execSQL("ALTER TABLE " + ACTIONSEEDS_TABLE_NAME + " ADD COLUMN " + ACTIONSEED_DATA + " VARCHAR(255)");
+
+		}else {
 			db.execSQL("DROP TABLE IF EXISTS " + SEEDS_TABLE_NAME);
 			db.execSQL("DROP TABLE IF EXISTS " + GROWINGSEEDS_TABLE_NAME);
 			db.execSQL("DROP TABLE IF EXISTS " + ALLOTMENT_TABLE_NAME);

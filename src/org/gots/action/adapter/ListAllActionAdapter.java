@@ -83,7 +83,10 @@ public class ListAllActionAdapter extends BaseAdapter {
 
 			actions.addAll(seedActions);
 		}
-		Collections.sort(actions, new IStatusUpdateComparator());
+		if (current_status == STATUS_TODO)
+			Collections.sort(actions, new IActionAscendantComparator());
+		else
+			Collections.sort(actions, new IActionDescendantComparator());
 		manager = new WeatherManager(mContext);
 	}
 
@@ -112,15 +115,15 @@ public class ListAllActionAdapter extends BaseAdapter {
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		LinearLayout ll = (LinearLayout) convertView;
 
-		if (convertView == null) {
-			// ll = new LinearLayout(mContext);
-			ll = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.list_action, parent, false);
-		}
+		// if (convertView == null) {
+		// ll = new LinearLayout(mContext);
+		ll = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.list_action, parent, false);
+
+		final BaseActionInterface currentAction = getItem(position);
 
 		GrowingSeedDBHelper helper = new GrowingSeedDBHelper(mContext);
-		final BaseActionInterface currentAction = actions.get(position);
-
 		final GrowingSeedInterface seed = helper.getSeedById(currentAction.getGrowingSeedId());
+
 		if (seed != null && BaseActionInterface.class.isInstance(currentAction)) {
 			ActionWidget actionWidget = (ActionWidget) ll.findViewById(R.id.idActionView);
 
@@ -166,36 +169,34 @@ public class ListAllActionAdapter extends BaseAdapter {
 
 				currentAction.setState(ActionState.NORMAL);
 
-				if (PhotoAction.class.isInstance(currentAction)) {
-					final File imgFile = ((PhotoAction) currentAction).getImageFile(currentAction.getDateActionDone());
+				if (PhotoAction.class.isInstance(currentAction) && currentAction.getData() != null) {
+					final File imgFile = new File(currentAction.getData().toString());
 					Log.d("imageFile", imgFile.getAbsolutePath());
 					if (imgFile.exists()) {
 
-						// Bitmap myBitmap =
-						// BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+						try {
+							Bitmap imageBitmap = getThumbnail(imgFile);
+							ImageView seedImage = (ImageView) ll.findViewById(R.id.imageviewPhoto);
+							int padding = (THUMBNAIL_WIDTH - imageBitmap.getWidth()) / 2;
+							seedImage.setPadding(padding, 0, padding, 0);
+							seedImage.setImageBitmap(imageBitmap);
 
-						// final int THUMBNAIL_SIZE = 64;
-						// myBitmap = Bitmap.createScaledBitmap(myBitmap,
-						// THUMBNAIL_SIZE, THUMBNAIL_SIZE, false);
-						Bitmap imageBitmap = getThumbnail(imgFile);
-						ImageView myImage = (ImageView) ll.findViewById(R.id.imageviewPhoto);
-						int padding = (THUMBNAIL_WIDTH - imageBitmap.getWidth()) / 2;
-						myImage.setPadding(padding, 0, padding, 0);
-						myImage.setImageBitmap(imageBitmap);
+							seedImage.setVisibility(View.VISIBLE);
+							weatherView.setVisibility(View.GONE);
 
-						myImage.setVisibility(View.VISIBLE);
-						weatherView.setVisibility(View.GONE);
+							seedImage.setOnClickListener(new View.OnClickListener() {
 
-						myImage.setOnClickListener(new View.OnClickListener() {
-
-							@Override
-							public void onClick(View v) {
-								Intent intent = new Intent();
-								intent.setAction(Intent.ACTION_VIEW);
-								intent.setDataAndType(Uri.parse("file://" + imgFile.getAbsolutePath()), "image/*");
-								mContext.startActivity(intent);
-							}
-						});
+								@Override
+								public void onClick(View v) {
+									Intent intent = new Intent();
+									intent.setAction(Intent.ACTION_VIEW);
+									intent.setDataAndType(Uri.parse("file://" + imgFile.getAbsolutePath()), "image/*");
+									mContext.startActivity(intent);
+								}
+							});
+						} catch (Exception e) {
+							Log.e(getClass().getName(), e.getMessage());
+						}
 
 					}
 				}
@@ -203,29 +204,44 @@ public class ListAllActionAdapter extends BaseAdapter {
 			actionWidget.setAction(currentAction);
 
 		}
+		// }
 		return ll;
 	}
 
-	private Bitmap getThumbnail(File imgFile) {
+	private Bitmap getThumbnail(File imgFile) throws Exception {
+		Log.d("getThumbnail", imgFile.getAbsolutePath());
 
 		Bitmap imageBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+		if (imageBitmap == null)
+			throw new Exception("Image file cannot be decoded :" + imgFile.getAbsolutePath());
 		// imageBitmap = BitmapFactory.decodeByteArray(mImageData, 0,
 		// mImageData.length);
-		Float width = new Float(imageBitmap.getWidth());
-		Float height = new Float(imageBitmap.getHeight());
+		Float width = Float.valueOf(imageBitmap.getWidth());
+		Float height = Float.valueOf(imageBitmap.getHeight());
 		Float ratio = width / height;
 		imageBitmap = Bitmap.createScaledBitmap(imageBitmap, (int) (THUMBNAIL_HEIGHT * ratio), THUMBNAIL_HEIGHT, false);
 
 		return imageBitmap;
 	}
 
-	class IStatusUpdateComparator implements Comparator<BaseActionInterface> {
+	class IActionAscendantComparator implements Comparator<BaseActionInterface> {
 		@Override
 		public int compare(BaseActionInterface obj1, BaseActionInterface obj2) {
 			int result = 0;
 			if (obj1.getDuration() >= 0 && obj2.getDuration() >= 0) {
-				Log.i("Compare", obj1.getDuration() + " | " + obj2.getDuration());
 				result = obj1.getDuration() < obj2.getDuration() ? -1 : 0;
+			}
+
+			return result;
+		}
+	}
+
+	class IActionDescendantComparator implements Comparator<BaseActionInterface> {
+		@Override
+		public int compare(BaseActionInterface obj1, BaseActionInterface obj2) {
+			int result = 0;
+			if (obj1.getDuration() >= 0 && obj2.getDuration() >= 0) {
+				result = obj1.getDuration() > obj2.getDuration() ? -1 : 0;
 			}
 
 			return result;

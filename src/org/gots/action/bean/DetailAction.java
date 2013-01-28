@@ -87,4 +87,11 @@ public class DetailAction extends AbstractActionSeed implements PermanentActionI
 		return super.getId();
 	}
 
+	public void setData(Object data) {
+	}
+
+	public Object getData() {
+		return null;
+	}
+
 }

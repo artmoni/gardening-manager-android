@@ -72,6 +72,13 @@ public class HoeAction extends AbstractActionSeed implements SeedActionInterface
 		return super.getName();
 	}
 
+	public void setData(Object data) {
+	}
+
+	public Object getData() {
+		return null;
+	}
+
 	
 
 }

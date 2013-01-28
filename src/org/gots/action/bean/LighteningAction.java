@@ -71,4 +71,11 @@ public class LighteningAction extends AbstractActionSeed implements SeedActionIn
 		return super.getName();
 	}
 
+	public void setData(Object data) {
+	}
+
+	public Object getData() {
+		return null;
+	}
+
 }

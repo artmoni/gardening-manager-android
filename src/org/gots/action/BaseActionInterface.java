@@ -50,4 +50,7 @@ public interface BaseActionInterface {
 
 	public abstract int getGrowingSeedId();
 
+	public abstract void setData(Object data);
+
+	public abstract Object getData();
 }

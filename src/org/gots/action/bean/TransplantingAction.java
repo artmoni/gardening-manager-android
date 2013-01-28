@@ -70,4 +70,11 @@ public class TransplantingAction extends AbstractActionSeed implements SeedActio
 	public String getName() {
 		return super.getName();
 	}
+
+	public void setData(Object data) {
+	}
+
+	public Object getData() {
+		return null;
+	}
 }

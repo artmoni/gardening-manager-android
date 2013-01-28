@@ -88,6 +88,13 @@ public class BuyingAction extends AbstractActionGarden implements PermanentActio
 		return 0;
 	}
 
+	public void setData(Object data) {
+	}
+
+	public Object getData() {
+		return null;
+	}
+
 	
 
 }
