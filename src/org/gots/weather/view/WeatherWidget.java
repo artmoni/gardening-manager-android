@@ -13,9 +13,13 @@ package org.gots.weather.view;
 import org.gots.weather.WeatherManager;
 import org.gots.weather.adapter.WeatherWidgetAdapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Point;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Display;
+import android.view.WindowManager;
 import android.widget.GridView;
 import android.widget.TextView;
 
@@ -31,13 +35,12 @@ public class WeatherWidget extends GridView {
 	public WeatherWidget(Context context, int type) {
 		super(context);
 		mType = type;
-		
+
 	}
 
 	public WeatherWidget(Context context, AttributeSet attr) {
 		super(context, attr);
 		mType = WeatherView.FULL;
-		
 
 	}
 
@@ -57,13 +60,21 @@ public class WeatherWidget extends GridView {
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		Log.i("WeatherOnMeasure",widthMeasureSpec+"x"+heightMeasureSpec);
-		if (widthMeasureSpec < heightMeasureSpec)
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+		 Display display = ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+//		 Point size = new Point();
+//		 display.getSize(size);
+//		 int width = size.x;
+//		 int height = size.y;
+		 int width = display.getWidth();
+		 int height = display.getHeight();
+		 
+		if (width< height)
 			nbDays = 2;
 		else
 			nbDays = 3;
 		initView();
-		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 	}
 
 	@Override
