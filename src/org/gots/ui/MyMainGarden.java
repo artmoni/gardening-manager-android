@@ -132,7 +132,12 @@ public class MyMainGarden extends SherlockActivity {
 		lsa.notifyDataSetChanged();
 		super.onResume();
 	}
-
+	
+	
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	super.onActivityResult(requestCode, resultCode, data);
+}
 	@Override
 	protected void onDestroy() {
 		GotsAnalytics.getInstance(getApplication()).decrementActivityCount();

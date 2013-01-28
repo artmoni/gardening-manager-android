@@ -71,7 +71,8 @@ public class ActionSeedDBHelper {
 		if (cursor.moveToFirst()) {
 			do {
 				BaseActionInterface action = cursorToAction(cursor);
-				allActions.add(action);
+				if (action != null)
+					allActions.add(action);
 			} while (cursor.moveToNext());
 		}
 		cursor.close();
@@ -97,21 +98,23 @@ public class ActionSeedDBHelper {
 	// }
 
 	private BaseActionInterface cursorToAction(Cursor cursor) {
-		BaseActionInterface seedAction;
+		BaseActionInterface seedAction = null;
 		// ActionFactory factory = new ActionFactory();
 		// seedAction = factory.buildAction(mContext,
 		// cursor.getString(cursor.getColumnIndex(GardenSQLite.ACTION_NAME)));
 		ActionDBHelper actionDBHelper = new ActionDBHelper(mContext);
 		seedAction = actionDBHelper.getActionById(cursor.getInt(cursor
 				.getColumnIndex(DatabaseHelper.ACTIONSEED_ACTION_ID)));
-		seedAction.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_ACTION_ID)));
-		seedAction.setGrowingSeedId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_GROWINGSEED_ID)));
-		seedAction.setDuration(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_DURATION)));
-		seedAction.setDateActionDone(new Date(cursor.getLong(cursor
-				.getColumnIndex(DatabaseHelper.ACTIONSEED_DATEACTIONDONE))));
-		seedAction.setLogId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_ID)));
+		if (seedAction != null) {
+			seedAction.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_ACTION_ID)));
+			seedAction.setGrowingSeedId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_GROWINGSEED_ID)));
+			seedAction.setDuration(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_DURATION)));
+			seedAction.setDateActionDone(new Date(cursor.getLong(cursor
+					.getColumnIndex(DatabaseHelper.ACTIONSEED_DATEACTIONDONE))));
+			seedAction.setLogId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_ID)));
 
-		seedAction.setData(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_DATA)));
+			seedAction.setData(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_DATA)));
+		}
 		return seedAction;
 	}
 
@@ -133,7 +136,8 @@ public class ActionSeedDBHelper {
 			if (cursor.moveToFirst()) {
 				do {
 					BaseActionInterface action = cursorToAction(cursor);
-					allActions.add(action);
+					if (action != null)
+						allActions.add(action);
 				} while (cursor.moveToNext());
 			}
 			cursor.close();
@@ -156,8 +160,10 @@ public class ActionSeedDBHelper {
 		if (cursor.moveToFirst()) {
 			do {
 				BaseActionInterface action = cursorToAction(cursor);
-				populateState(action, seed);
-				allActions.add(action);
+				if (action != null) {
+					populateState(action, seed);
+					allActions.add(action);
+				}
 			} while (cursor.moveToNext());
 		}
 		cursor.close();
@@ -200,8 +206,8 @@ public class ActionSeedDBHelper {
 		if (cursor.moveToFirst()) {
 			do {
 				BaseActionInterface action = cursorToAction(cursor);
-
-				allActions.add(action);
+				if (action != null)
+					allActions.add(action);
 			} while (cursor.moveToNext());
 		}
 		cursor.close();

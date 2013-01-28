@@ -160,8 +160,9 @@ public class ListAllActionAdapter extends BaseAdapter {
 				textviewActionStatus.setText(mContext.getResources().getString(R.string.seed_action_done));
 
 				Calendar rightNow = Calendar.getInstance();
-				rightNow.setTime(seed.getDateSowing());
-				rightNow.add(Calendar.DAY_OF_YEAR, currentAction.getDuration());
+				rightNow.setTime(currentAction.getDateActionDone());
+				// rightNow.add(Calendar.DAY_OF_YEAR,
+				// currentAction.getDuration());
 				textviewActionDate.setText(dateFormat.format(currentAction.getDateActionDone()));
 
 				WeatherView weatherView = (WeatherView) ll.findViewById(R.id.idWeatherView);
@@ -210,17 +211,19 @@ public class ListAllActionAdapter extends BaseAdapter {
 
 	private Bitmap getThumbnail(File imgFile) throws Exception {
 		Log.d("getThumbnail", imgFile.getAbsolutePath());
-
-		Bitmap imageBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-		if (imageBitmap == null)
+		Bitmap imageBitmap =null;
+		try {
+			imageBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+			// imageBitmap = BitmapFactory.decodeByteArray(mImageData, 0,
+			// mImageData.length);
+			Float width = Float.valueOf(imageBitmap.getWidth());
+			Float height = Float.valueOf(imageBitmap.getHeight());
+			Float ratio = width / height;
+			imageBitmap = Bitmap.createScaledBitmap(imageBitmap, (int) (THUMBNAIL_HEIGHT * ratio), THUMBNAIL_HEIGHT,
+					false);
+		} catch (Exception e) {
 			throw new Exception("Image file cannot be decoded :" + imgFile.getAbsolutePath());
-		// imageBitmap = BitmapFactory.decodeByteArray(mImageData, 0,
-		// mImageData.length);
-		Float width = Float.valueOf(imageBitmap.getWidth());
-		Float height = Float.valueOf(imageBitmap.getHeight());
-		Float ratio = width / height;
-		imageBitmap = Bitmap.createScaledBitmap(imageBitmap, (int) (THUMBNAIL_HEIGHT * ratio), THUMBNAIL_HEIGHT, false);
-
+		}
 		return imageBitmap;
 	}
 
@@ -240,8 +243,8 @@ public class ListAllActionAdapter extends BaseAdapter {
 		@Override
 		public int compare(BaseActionInterface obj1, BaseActionInterface obj2) {
 			int result = 0;
-			if (obj1.getDuration() >= 0 && obj2.getDuration() >= 0) {
-				result = obj1.getDuration() > obj2.getDuration() ? -1 : 0;
+			if (obj1.getDateActionDone() != null && obj2.getDateActionDone() != null) {
+				result = obj1.getDateActionDone().getTime() > obj2.getDateActionDone().getTime() ? -1 : 0;
 			}
 
 			return result;
