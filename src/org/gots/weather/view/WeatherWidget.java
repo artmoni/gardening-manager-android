@@ -16,6 +16,7 @@ import org.gots.weather.adapter.WeatherWidgetAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
@@ -62,15 +63,12 @@ public class WeatherWidget extends GridView {
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-		 Display display = ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-//		 Point size = new Point();
-//		 display.getSize(size);
-//		 int width = size.x;
-//		 int height = size.y;
-		 int width = display.getWidth();
-		 int height = display.getHeight();
-		 
-		if (width< height)
+		Display display = ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+
+		int width = display.getWidth();
+		int height = display.getHeight();
+
+		if (width < height)
 			nbDays = 2;
 		else
 			nbDays = 3;
