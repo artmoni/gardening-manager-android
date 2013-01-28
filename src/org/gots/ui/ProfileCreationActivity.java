@@ -155,7 +155,6 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 					location.setHint(String.format("%s", address.getLocality()));
 				else
 					location.setText(String.format("%s", address.getLocality()));
-				Log.i("address", address.getLocality());
 			} else {
 				// sinon on affiche un message d'erreur
 				((TextView) findViewById(R.id.editTextLocality)).setHint("L'adresse n'a pu être déterminée");
