@@ -16,3 +16,9 @@
 * Online help for each screen
 * Supports multiple gardens
 * Vegetable garden available for example at the first launch
+
+*** V0.15
+* Feature: Take photo and archive them in your plant diary
+* Feature: Display one more forecast weather in landscape mode
+* Accessibility: Spanish translation
+* Bug: application not responding solved
