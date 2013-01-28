@@ -147,33 +147,34 @@ public class QuickSeedActionBuilder {
 		});
 		quickAction.addPermanentActionItem(delete);
 
-//		/*
-//		 * ACTION PHOTO
-//		 */
-//		final PhotoAction photoAction = (PhotoAction) helper.getActionByName("photo");
-//		ActionWidget photoWidget = new ActionWidget(v.getContext(), photoAction);
-//		photoWidget.setOnClickListener(new View.OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				SeedActionInterface actionItem = (SeedActionInterface) photoAction;
-//				if (PhotoAction.class.isInstance(actionItem)) {
-//					Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//					File f;
-//					Date now = new Date();
-//					
-//					f = photoAction.getImageFile(now);
-//					actionItem.setData(f.getAbsoluteFile());
-//					takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-//					((Activity) v.getContext()).startActivityForResult(takePictureIntent, actionCode);
-//					actionItem.execute(seed);
-//
-//				}
-//				parentAdapter.notifyDataSetChanged();
-//				quickAction.dismiss();
-//			}
-//		});
-//		quickAction.addPermanentActionItem(photoWidget);
+		/*
+		 * ACTION PHOTO
+		 */
+		final PhotoAction photoAction = (PhotoAction) helper.getActionByName("photo");
+		ActionWidget photoWidget = new ActionWidget(v.getContext(), photoAction);
+		photoWidget.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				SeedActionInterface actionItem = (SeedActionInterface) photoAction;
+				if (PhotoAction.class.isInstance(actionItem)) {
+					Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+					File f;
+					Date now = new Date();
+					
+					f = photoAction.getImageFile(now);
+					actionItem.setData(f.getAbsoluteFile());
+					takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+					((Activity) v.getContext()).startActivityForResult(takePictureIntent, actionCode);
+					//TODO The action must not be executed if activity for result has been canceled because no image has been taken but the database get the imagefile
+					actionItem.execute(seed);
+
+				}
+				parentAdapter.notifyDataSetChanged();
+				quickAction.dismiss();
+			}
+		});
+		quickAction.addPermanentActionItem(photoWidget);
 
 		/*
 		 * ACTION DETAIL
