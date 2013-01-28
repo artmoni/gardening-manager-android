@@ -208,6 +208,7 @@ public class ListAllActionAdapter extends BaseAdapter {
 				}
 			}
 			actionWidget.setAction(currentAction);
+			//ll.invalidate();
 
 		}
 		// }
