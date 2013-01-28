@@ -27,6 +27,7 @@ import org.gots.action.bean.PhotoAction;
 import org.gots.action.sql.ActionSeedDBHelper;
 import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
+import org.gots.ads.GotsAdvertisement;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.sql.GrowingSeedDBHelper;
 import org.gots.seed.view.SeedWidget;
@@ -113,7 +114,7 @@ public class ListAllActionAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
-		LinearLayout ll = (LinearLayout) convertView;
+		View ll = (LinearLayout) convertView;
 
 		// if (convertView == null) {
 		// ll = new LinearLayout(mContext);
@@ -197,8 +198,12 @@ public class ListAllActionAdapter extends BaseAdapter {
 							});
 						} catch (Exception e) {
 							Log.e(getClass().getName(), e.getMessage());
+							ll.setVisibility(View.GONE);
 						}
 
+					} else {
+						GotsAdvertisement ads = new GotsAdvertisement(mContext);
+						ll = ads.getAdsLayout();
 					}
 				}
 			}
@@ -211,7 +216,7 @@ public class ListAllActionAdapter extends BaseAdapter {
 
 	private Bitmap getThumbnail(File imgFile) throws Exception {
 		Log.d("getThumbnail", imgFile.getAbsolutePath());
-		Bitmap imageBitmap =null;
+		Bitmap imageBitmap = null;
 		try {
 			imageBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 			// imageBitmap = BitmapFactory.decodeByteArray(mImageData, 0,
