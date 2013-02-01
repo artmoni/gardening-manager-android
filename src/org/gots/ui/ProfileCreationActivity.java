@@ -116,7 +116,7 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-	
+
 		if (mode != OPTION_EDIT)
 			getPosition();
 	}
@@ -126,13 +126,15 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 
 		Criteria criteria = new Criteria();
 		criteria.setAccuracy(Criteria.ACCURACY_FINE);
-		
+
 		pd = ProgressDialog.show(this, "", getResources().getString(R.string.gots_loading), false);
 		pd.setCanceledOnTouchOutside(true);
 
 		String bestProvider = mlocManager.getBestProvider(criteria, true);
-
-		mlocManager.requestLocationUpdates(bestProvider, 60000, 0, this);
+		if (mlocManager != null)
+			mlocManager.requestLocationUpdates(bestProvider, 60000, 0, this);
+		else
+			setProgressBarIndeterminateVisibility(true);
 
 	}
 
@@ -150,18 +152,18 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 			if (adresses != null && adresses.size() == 1) {
 				address = adresses.get(0);
 				TextView location = (TextView) findViewById(R.id.editTextLocality);
-				
+
 				if ("".equals(location.getText().toString()))
 					location.setHint(String.format("%s", address.getLocality()));
 				else
 					location.setText(String.format("%s", address.getLocality()));
 			} else {
 				// sinon on affiche un message d'erreur
-				((TextView) findViewById(R.id.editTextLocality)).setHint("L'adresse n'a pu être déterminée");
+				((TextView) findViewById(R.id.editTextLocality)).setHint(getResources().getString(R.string.location_notfound));
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-			((TextView) findViewById(R.id.editTextLocality)).setHint("L'adresse n'a pu être déterminée");
+			((TextView) findViewById(R.id.editTextLocality)).setHint(getResources().getString(R.string.location_notfound));
 		}
 		// on stop le cercle de chargement
 		setProgressBarIndeterminateVisibility(false);
