@@ -89,7 +89,7 @@ public class NotificationService extends Service {
 		CharSequence title = getText(R.string.notification_action_title);
 		CharSequence content = SeedUtil.translateAction(this, action) + ":" + SeedUtil.translateSpecie(this, seed);
 		if (actions.size() > 1)
-			content = content + " + " + actions.size() + " more task";
+			content = content + " + " + (actions.size()-1) + " more task";
 		// Set the icon, scrolling text and timestamp
 		Notification notification = new Notification(SeedWidget.getSeedDrawable(this, seed), content,
 				System.currentTimeMillis());
