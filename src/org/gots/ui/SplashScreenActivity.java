@@ -10,15 +10,26 @@
  ******************************************************************************/
 package org.gots.ui;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
+
 import org.gots.DatabaseHelper;
 import org.gots.R;
+import org.gots.action.service.ActionTODOBroadcastReceiver;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.sql.GardenDBHelper;
 import org.gots.preferences.GotsPreferences;
+import org.gots.service.NotificationService;
 import org.gots.weather.WeatherManager;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -42,10 +53,10 @@ public class SplashScreenActivity extends Activity {
 	private Handler splashHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
-			
+
 			WeatherManager wm = new WeatherManager(getApplicationContext());
 			wm.getWeatherFromWebService(myGarden);
-			
+
 			switch (msg.what) {
 			case STOPSPLASH:
 				// remove SplashScreen from view
@@ -99,6 +110,12 @@ public class SplashScreenActivity extends Activity {
 
 			}
 		});
+
+		// Intent startServiceIntent = new Intent(this,
+		// NotificationService.class);
+		// this.startService(startServiceIntent);
+		setRecurringAlarm(this);
+
 		GardenDBHelper helper = new GardenDBHelper(this);
 		SharedPreferences preferences = getSharedPreferences("org.gots.preference", 0);
 
@@ -139,7 +156,7 @@ public class SplashScreenActivity extends Activity {
 			msg.what = STOPSPLASH;
 			splashHandler.sendMessageDelayed(msg, SPLASHTIME);
 
-		}else
+		} else
 			finish();
 
 		super.onActivityResult(requestCode, resultCode, data);
@@ -150,5 +167,29 @@ public class SplashScreenActivity extends Activity {
 
 		GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
 		super.onDestroy();
+	}
+
+	private void setRecurringAlarm(Context context) {
+		// we know mobiletuts updates at right around 1130 GMT.
+		// let's grab new stuff at around 11:45 GMT, inexactly
+		Calendar updateTime = Calendar.getInstance();
+		// updateTime.setTimeInMillis(System.currentTimeMillis());
+//		updateTime.add(Calendar.SECOND, 10);
+		// updateTime.setTimeZone(TimeZone.getTimeZone("GMT"));
+		// updateTime.set(Calendar.HOUR_OF_DAY, 12);
+		// updateTime.set(Calendar.MINUTE, 15);
+		Intent downloader = new Intent(context, ActionTODOBroadcastReceiver.class);
+		PendingIntent actionTODOIntent = PendingIntent.getBroadcast(context, 0, downloader,
+				PendingIntent.FLAG_UPDATE_CURRENT);
+		AlarmManager alarms = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+		if (GotsPreferences.getInstance().isDEVELOPPEMENT())
+			alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
+					AlarmManager.INTERVAL_FIFTEEN_MINUTES, actionTODOIntent);
+		else{
+			updateTime.set(Calendar.HOUR_OF_DAY, 20);
+			alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
+					AlarmManager.INTERVAL_DAY, actionTODOIntent);
+			}
 	}
 }

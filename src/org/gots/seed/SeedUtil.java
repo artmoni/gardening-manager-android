@@ -39,12 +39,21 @@ public class SeedUtil {
 
 	}
 
-	public static String translateSpecie(Context context, GrowingSeedInterface growingSeedInterface) {
+	public static String translateSpecie(Context context, BaseSeedInterface growingSeedInterface) {
 		String translateSpecie = growingSeedInterface.getSpecie();
 		int specieRessourceString = context.getResources().getIdentifier(
 				"org.gots:string/specie." + translateSpecie.toLowerCase().replaceAll("\\s", ""), null, null);
 		if (specieRessourceString != 0)
 			translateSpecie = context.getResources().getString(specieRessourceString);
 		return translateSpecie;
+	}
+	
+	public static String translateAction(Context context, BaseActionInterface action) {
+		String translateAction = action.getName();
+		int actionRessourceString = context.getResources().getIdentifier(
+				"org.gots:string/action." + translateAction.toLowerCase().replaceAll("\\s", ""), null, null);
+		if (actionRessourceString != 0)
+			translateAction = context.getResources().getString(actionRessourceString);
+		return translateAction;
 	}
 }

@@ -84,4 +84,5 @@
     <string name="specie.capsicumannuum">Poivron/Piment</string>
     <string name="weather.citynotfound">Pas de météo dans cette localité, saisissez une proche agglomération</string>
     
+    <string name="location.notfound">Vous n\'avez pas pu être localisé</string>
 </resources>

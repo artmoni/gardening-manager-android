@@ -8,8 +8,6 @@ public interface GotsServiceAPIKEY {
 
 	public abstract String getAnalyticsApiKey();
 
-	public abstract void setDEVELOPPEMENT(boolean DEVELOPPEMENT);
-
 	public abstract boolean isDEVELOPPEMENT();
 
 }

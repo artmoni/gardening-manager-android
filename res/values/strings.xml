@@ -91,4 +91,13 @@
     <string name="button.cancel">Cancel</string>
     <string name="weather.citynotfound">No weather for this city, change for a bigger one</string>
 
+    <string name="location.notfound">Location not found</string>
+    <string name="notification.action.title">Your garden needs you</string>
+    <string name="action.sow">Sow</string>
+    <string name="action.beak">Beak</string>
+    <string name="action.lighten">Lighten</string>
+        
+    
+
+
 </resources>

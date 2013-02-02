@@ -32,6 +32,8 @@ public abstract class AbstractActionSeed implements SeedActionInterface, Compara
 	private int growingSeedId;
 	private Object data;
 
+	
+	
 	public AbstractActionSeed() {
 		// TODO Auto-generated constructor stub
 	}
@@ -107,6 +109,8 @@ public abstract class AbstractActionSeed implements SeedActionInterface, Compara
 		GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
 		tracker.trackEvent("Seed", getName(), seed.getSpecie(), 0);
 //		tracker.dispatch();
+		
+		
 		return 1;
 	}
 

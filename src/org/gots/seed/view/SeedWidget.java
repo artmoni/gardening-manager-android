@@ -74,7 +74,7 @@ public class SeedWidget extends RelativeLayout implements OnClickListener {
 		}
 
 		ImageView seedView = (ImageView) findViewById(R.id.idSeedImage2);
-		int vegetableImageRessource = getSeedDrawable();
+		int vegetableImageRessource = getSeedDrawable(getContext(), mSeed);
 		if (vegetableImageRessource != 0 && seedView != null)
 			seedView.setImageResource(vegetableImageRessource);
 
@@ -83,16 +83,16 @@ public class SeedWidget extends RelativeLayout implements OnClickListener {
 		invalidate();
 	}
 
-	private int getSeedDrawable() {
+	public static int getSeedDrawable(Context context, BaseSeedInterface seed) {
 		int vegetableImageRessource = 0;
 
-		if (mSeed.getReference() != null)
-			vegetableImageRessource = mContext.getResources().getIdentifier(
-					"org.gots:drawable/veget_" + mSeed.getReference().toLowerCase(), null, null);
+		if (seed.getReference() != null)
+			vegetableImageRessource = context.getResources().getIdentifier(
+					"org.gots:drawable/veget_" + seed.getReference().toLowerCase(), null, null);
 
-		if (vegetableImageRessource == 0 && mSeed.getSpecie() != null)
-			vegetableImageRessource = mContext.getResources().getIdentifier(
-					"org.gots:drawable/specie_" + mSeed.getSpecie().toLowerCase().replaceAll("\\s", ""), null, null);
+		if (vegetableImageRessource == 0 && seed.getSpecie() != null)
+			vegetableImageRessource = context.getResources().getIdentifier(
+					"org.gots:drawable/specie_" + seed.getSpecie().toLowerCase().replaceAll("\\s", ""), null, null);
 		return vegetableImageRessource;
 	}
 

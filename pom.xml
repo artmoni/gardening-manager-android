@@ -6,7 +6,7 @@
 	<groupId>org.gots</groupId>
 	<artifactId>gardening-manager</artifactId>
 	<packaging>apk</packaging>
-	<version>0.15</version>
+	<version>0.16-SNAPSHOT</version>
 	<name>Gardening Manager</name>
 	<properties>
 		<android.version>4.0.3</android.version>
@@ -104,6 +104,11 @@
 					</emulator>
 					<deleteConflictingFiles>true</deleteConflictingFiles>
 					<undeployBeforeDeploy>false</undeployBeforeDeploy>
+					<systemPropertyVariables>
+						<key.analyticsapi>UA-916500-18</key.analyticsapi>
+						<key.weatherapi>6ba97b2306fd5b9d47992d8716dab16a</key.weatherapi>
+						<key.admobapi>a14f50fa231b26d</key.admobapi>
+					</systemPropertyVariables>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -144,7 +149,8 @@
 									<includes>
 										<include>target/*.apk</include>
 									</includes>
-									<keystore>/home/sfleury/Projets/Gardening Manager/00 release/keystore/keystore</keystore>
+									<keystore>/home/sfleury/Projets/Gardening Manager/00
+										release/keystore/keystore</keystore>
 									<storepass>@rtM0n!</storepass>
 									<keypass>@rtM0n!</keypass>
 									<alias>artmonimobile</alias>
