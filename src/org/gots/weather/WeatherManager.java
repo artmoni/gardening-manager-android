@@ -41,10 +41,7 @@ public class WeatherManager {
 	private Integer runningLimit;
 	// private Date today;
 	private Context mContext;
-	private static SharedPreferences preferences;
-	private Calendar weatherday;
 
-	private boolean isConnected = true;
 
 	public WeatherManager(Context context) {
 		this.mContext = context;
@@ -52,74 +49,11 @@ public class WeatherManager {
 		MoonCalculation moon = new MoonCalculation();
 		Log.d("Moon phase", moon.phaseName(moon.moonPhase(2012, 12, 27)));
 
-		weatherday = new GregorianCalendar();
 
-		preferences = mContext.getSharedPreferences("org.gots.preference", 0);
 
-		GardenDBHelper helper = new GardenDBHelper(mContext);
-		GardenInterface garden = helper.getGarden(preferences.getInt("org.gots.preference.gardenid", 0));
-		// getWeatherFromWebService(garden);
+		
 	}
 
-	public void getWeatherFromWebService(GardenInterface garden) {
-
-		try {
-			for (int forecastDay = 0; forecastDay < 4; forecastDay++) {
-				Calendar cal = Calendar.getInstance();
-				cal.add(Calendar.DAY_OF_YEAR, forecastDay);
-
-				// GoogleWeatherTask(garden.getAddress(), cal.getTime());
-				WeatherTask wt = new PrevimeteoWeatherTask(mContext, garden.getAddress(), cal.getTime());
-				WeatherConditionInterface conditionInterface = wt.execute().get();
-
-				if (conditionInterface != null) {
-					updateCondition(conditionInterface, forecastDay);
-					if (conditionInterface.getIconURL() == null)
-						isConnected = false;
-
-				}
-
-				else {
-					// Toast.makeText(mContext,
-					// mContext.getResources().getString(R.string.weather_citynotfound),
-					// 50)
-					// .show();
-					Log.d("getWeather",
-							garden.getLocality() + " : "
-									+ mContext.getResources().getString(R.string.weather_citynotfound));
-					break;
-				}
-
-			}
-
-		} catch (Exception e) {
-			if (e.getMessage() != null)
-				Log.e("WeatherManager", e.getMessage());
-			Toast.makeText(mContext, "Try another nearest city", 50).show();
-		}
-
-	}
-
-	private void updateCondition(WeatherConditionInterface condition, int day) {
-		WeatherDBHelper helper = new WeatherDBHelper(mContext);
-
-		// weatherday.add(Calendar.DAY_OF_YEAR, day);
-		Calendar conditionDate = Calendar.getInstance();
-		conditionDate.setTime(weatherday.getTime());
-		conditionDate.add(Calendar.DAY_OF_YEAR, day);
-
-		condition.setDate(conditionDate.getTime());
-		condition.setDayofYear(conditionDate.get(Calendar.DAY_OF_YEAR));
-
-		WeatherConditionInterface wc = helper.getWeatherByDayofyear(conditionDate.get(Calendar.DAY_OF_YEAR));
-
-		if (wc == null)
-			helper.insertWeather(condition);
-		else
-			helper.updateWeather(condition);
-		return;
-
-	}
 
 	public Integer getTemperatureLimitHot() {
 		return temperatureLimitHot;
@@ -187,7 +121,5 @@ public class WeatherManager {
 		return conditions;
 	}
 
-	public boolean isConnected() {
-		return isConnected;
-	}
+	
 }

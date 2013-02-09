@@ -1,4 +1,4 @@
-package org.gots.service;
+package org.gots.action.service;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -22,7 +22,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
-public class NotificationService extends Service {
+public class ActionNotificationService extends Service {
 	private static final int NOTIFICATION = 100;
 
 	NotificationManager mNM;
@@ -36,7 +36,7 @@ public class NotificationService extends Service {
 
 	@Override
 	public void onCreate() {
-		Log.d(NotificationService.class.getName(), "FirstService created");
+		Log.d(ActionNotificationService.class.getName(), "FirstService created");
 		mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
 		super.onCreate();
@@ -45,7 +45,7 @@ public class NotificationService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
-		Log.d(NotificationService.class.getName(), "FirstService started");
+		Log.d(ActionNotificationService.class.getName(), "FirstService started");
 		// Display a notification about us starting. We put an icon in the
 		// status bar.
 		actions.clear();
@@ -77,7 +77,7 @@ public class NotificationService extends Service {
 	@Override
 	public void onDestroy() {
 		mNM.cancel(NOTIFICATION);
-		Log.d(NotificationService.class.getName(), "FirstService destroyed");
+		Log.d(ActionNotificationService.class.getName(), "FirstService destroyed");
 
 		super.onDestroy();
 

@@ -34,6 +34,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class PrevimeteoWeatherTask extends WeatherTask {
+	private static final String TAG = "PrevimeteoWeatherTask";
 	protected URL url;
 	private Date requestedDay;
 	private Context mContext;
@@ -57,14 +58,12 @@ public class PrevimeteoWeatherTask extends WeatherTask {
 			else
 				weatherURL = "http://api.previmeteo.com/" + GotsPreferences.getInstance().getWeatherApiKey() + "/ig/api?weather="
 						+ address.getLocality() + "," + address.getCountryName() + "&hl=fr";
-			// weatherURL =
-			// "http://www.gardening-manager.com/weather/weather-previmeteo.xml";
-
+			
 			queryString = weatherURL;
 
 			url = new URL(queryString.replace(" ", "%20"));
 		} catch (Exception e) {
-			Log.e("WeatherTask", e.getMessage());
+			Log.e(TAG, e.getMessage());
 		}
 
 	}
@@ -111,9 +110,11 @@ public class PrevimeteoWeatherTask extends WeatherTask {
 					ws = gwh.getWeatherSet();
 				}
 			} catch (Exception e) {
-				Log.e("PrevimeteoWeatherTask",
-						"PrevimeteoErrorHandler has return an error, maybe location should be modified:"
+				Log.e(TAG,
+						"PrevimeteoErrorHandler has return an error "
 								+ e.getMessage());
+				iserror = true;
+
 				return null;
 			}
 		}
@@ -134,13 +135,16 @@ public class PrevimeteoWeatherTask extends WeatherTask {
 	@Override
 	protected void onPostExecute(WeatherConditionInterface result) {
 
-		Log.d("PrevimeteoWeatherTask", "executing request " + queryString);
 		if (iserror) {
 			// Toast.makeText(mContext,
 			// mContext.getResources().getString(R.string.weather_citynotfound),
 			// 30).show();
-			 cache.clean(url);
-		}
+			Log.w(TAG, "Error ");
+
+			// cache.clean(url);
+		}else
+			Log.d(TAG, "Weather updated from " + queryString);
+
 		super.onPostExecute(result);
 	}
 

@@ -60,7 +60,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:textColor="@color/action_error_color" 
-                            android:text="@string/weather.citynotfound"/>
+                            android:text="@string/weather.citynotfound" android:visibility="gone"/>
                     </LinearLayout>
                 </LinearLayout>
 

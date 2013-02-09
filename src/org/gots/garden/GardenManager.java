@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.gots.DatabaseHelper;
+import org.gots.action.service.ActionNotificationService;
 import org.gots.garden.sql.GardenDBHelper;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.adapter.ListVendorSeedAdapter;
@@ -13,8 +14,10 @@ import org.gots.seed.providers.local.LocalConnector;
 import org.gots.seed.providers.simple.SimpleConnector;
 import org.gots.seed.sql.VendorSeedDBHelper;
 import org.gots.weather.WeatherManager;
+import org.gots.weather.service.WeatherUpdateService;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.widget.Toast;
@@ -37,7 +40,7 @@ public class GardenManager {
 		GardenDBHelper helper = new GardenDBHelper(mContext);
 		GardenInterface newGarden = helper.insertGarden(garden);
 
-		changeDatabase((int) newGarden.getId());
+		setCurrentGarden((int) newGarden.getId());
 
 		new RefreshTask().execute(new Object());
 
@@ -48,7 +51,7 @@ public class GardenManager {
 		GardenDBHelper helper = new GardenDBHelper(mContext);
 		GardenInterface newGarden = helper.insertGarden(garden);
 
-		changeDatabase((int) newGarden.getId());
+		setCurrentGarden((int) newGarden.getId());
 
 		isLocalStore = localStore;
 		new RefreshTask().execute(new Object());
@@ -63,22 +66,25 @@ public class GardenManager {
 		DatabaseHelper helper = new DatabaseHelper(mContext);
 		helper.setDatabase(position);
 
-		SharedPreferences.Editor prefedit = preferences.edit();
-		prefedit.putInt("org.gots.preference.gardenid", position);
-		prefedit.commit();
-
-		WeatherManager wm = new WeatherManager(mContext);
-		wm.getWeatherFromWebService(getcurrentGarden());
+		// WeatherManager wm = new WeatherManager(mContext);
+		// wm.getWeatherFromWebService(getcurrentGarden());
+		
 	}
 
 	public GardenInterface getcurrentGarden() {
 		GardenDBHelper helper = new GardenDBHelper(mContext);
 		int gardenId = preferences.getInt("org.gots.preference.gardenid", 0);
 		GardenInterface garden = helper.getGarden(gardenId);
+		
+		changeDatabase(gardenId);
 		return garden;
 	}
 
 	public void setCurrentGarden(int position) {
+		SharedPreferences.Editor prefedit = preferences.edit();
+		prefedit.putInt("org.gots.preference.gardenid", position);
+		prefedit.commit();
+
 		changeDatabase(position);
 	}
 
@@ -128,13 +134,13 @@ public class GardenManager {
 
 		@Override
 		protected void onPostExecute(Long result) {
-//			VendorSeedDBHelper myBank = new VendorSeedDBHelper(mContext);
-//			ArrayList<BaseSeedInterface> vendorSeeds;
-//			vendorSeeds = myBank.getVendorSeeds();
+			// VendorSeedDBHelper myBank = new VendorSeedDBHelper(mContext);
+			// ArrayList<BaseSeedInterface> vendorSeeds;
+			// vendorSeeds = myBank.getVendorSeeds();
 
-			//setListAdapter(new ListVendorSeedAdapter(mContext, vendorSeeds));
+			// setListAdapter(new ListVendorSeedAdapter(mContext, vendorSeeds));
 			Toast.makeText(mContext, "Updated", 20).show();
-			
+
 			super.onPostExecute(result);
 		}
 	}

@@ -16,13 +16,15 @@ import java.util.TimeZone;
 
 import org.gots.DatabaseHelper;
 import org.gots.R;
+import org.gots.action.service.ActionNotificationService;
 import org.gots.action.service.ActionTODOBroadcastReceiver;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.garden.GardenInterface;
+import org.gots.garden.GardenManager;
 import org.gots.garden.sql.GardenDBHelper;
 import org.gots.preferences.GotsPreferences;
-import org.gots.service.NotificationService;
 import org.gots.weather.WeatherManager;
+import org.gots.weather.service.WeatherUpdateService;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -49,13 +51,16 @@ public class SplashScreenActivity extends Activity {
 	// private static final long SPLASHTIME = 3000;
 	private static final long SPLASHTIME = 3000;
 	private GardenInterface myGarden;
-
+	private Context mContext;
+	
 	private Handler splashHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 
-			WeatherManager wm = new WeatherManager(getApplicationContext());
-			wm.getWeatherFromWebService(myGarden);
+			// WeatherManager wm = new WeatherManager(getApplicationContext());
+			// wm.getWeatherFromWebService(myGarden);
+			Intent startServiceIntent = new Intent(mContext, WeatherUpdateService.class);
+			startService(startServiceIntent);
 
 			switch (msg.what) {
 			case STOPSPLASH:
@@ -73,6 +78,8 @@ public class SplashScreenActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.splash_screen);
+
+		mContext = this;
 
 		GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
 		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
@@ -116,10 +123,15 @@ public class SplashScreenActivity extends Activity {
 		// this.startService(startServiceIntent);
 		setRecurringAlarm(this);
 
-		GardenDBHelper helper = new GardenDBHelper(this);
-		SharedPreferences preferences = getSharedPreferences("org.gots.preference", 0);
+		GardenManager gardenManager = new GardenManager(this);
+		myGarden = gardenManager.getcurrentGarden();
+		// GardenDBHelper helper = new GardenDBHelper(this);
+		// SharedPreferences preferences =
+		// getSharedPreferences("org.gots.preference", 0);
 
-		myGarden = helper.getGarden(preferences.getInt("org.gots.preference.gardenid", 0));
+		// myGarden =
+		// helper.getGarden(preferences.getInt("org.gots.preference.gardenid",
+		// 0));
 		if (myGarden == null) {
 			Intent intent = new Intent(this, ProfileCreationActivity.class);
 			startActivityForResult(intent, 0);
@@ -130,8 +142,9 @@ public class SplashScreenActivity extends Activity {
 			else
 				splashHandler.sendMessageDelayed(msg, SPLASHTIME);
 
-			DatabaseHelper databaseHelper = new DatabaseHelper(this);
-			databaseHelper.setDatabase(preferences.getInt("org.gots.preference.gardenid", 0));
+			// DatabaseHelper databaseHelper = new DatabaseHelper(this);
+			// databaseHelper.setDatabase(preferences.getInt("org.gots.preference.gardenid",
+			// 0));
 
 		}
 
@@ -174,7 +187,7 @@ public class SplashScreenActivity extends Activity {
 		// let's grab new stuff at around 11:45 GMT, inexactly
 		Calendar updateTime = Calendar.getInstance();
 		// updateTime.setTimeInMillis(System.currentTimeMillis());
-//		updateTime.add(Calendar.SECOND, 10);
+		// updateTime.add(Calendar.SECOND, 10);
 		// updateTime.setTimeZone(TimeZone.getTimeZone("GMT"));
 		// updateTime.set(Calendar.HOUR_OF_DAY, 12);
 		// updateTime.set(Calendar.MINUTE, 15);
@@ -186,10 +199,10 @@ public class SplashScreenActivity extends Activity {
 		if (GotsPreferences.getInstance().isDEVELOPPEMENT())
 			alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
 					AlarmManager.INTERVAL_FIFTEEN_MINUTES, actionTODOIntent);
-		else{
+		else {
 			updateTime.set(Calendar.HOUR_OF_DAY, 20);
 			alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
 					AlarmManager.INTERVAL_DAY, actionTODOIntent);
-			}
+		}
 	}
 }

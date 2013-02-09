@@ -23,6 +23,7 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.gots.preferences.GotsPreferences;
 
 import android.os.Environment;
 import android.util.Log;
@@ -33,13 +34,14 @@ public class WeatherCache {
 	private final int MAX_DOWNLOAD_TRY = 3;
 	private static URL CURRENT_DOWNLOAD_URL;
 	private static int currentDownloadTry = 0;
+	private static String TAG = "WeatherCache";
 
 	public WeatherCache() {
 		if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-			Log.d("WeatherCache", "Sdcard was not mounted !!");
+			Log.w("WeatherCache", "Sdcard was not mounted !!");
 
 		} else {
-			rootDirectory = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Gardening-Manager/cache/";
+			rootDirectory = Environment.getExternalStorageDirectory().getAbsolutePath() + "/"+GotsPreferences.getGardeningManagerDirectory()+"/cache/";
 
 			File directory = new File(rootDirectory);
 			directory.mkdirs();
@@ -49,7 +51,6 @@ public class WeatherCache {
 	public InputStream getCacheByURL(URL url) {
 		InputStream weatherXmlStream = null;
 		String fileName = "";
-
 		try {
 			fileName = md5(url.toURI().toString());
 			weatherXmlStream = getLocalCache(fileName);
@@ -57,7 +58,7 @@ public class WeatherCache {
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
-			Log.e("getweatherCache", e.getMessage());
+			Log.w(TAG, e.getMessage());
 			try {
 				if (currentDownloadTry < MAX_DOWNLOAD_TRY || !url.equals(WeatherCache.CURRENT_DOWNLOAD_URL)) {
 					WeatherCache.CURRENT_DOWNLOAD_URL = url;
@@ -66,16 +67,17 @@ public class WeatherCache {
 					currentDownloadTry++;
 
 				} else {
-					Log.w("WeatherCache", MAX_DOWNLOAD_TRY + " Max download retry reached");
+					Log.w(TAG, MAX_DOWNLOAD_TRY + " Max download retry reached");
 				}
 			} catch (Exception downloadException) {
 				currentDownloadTry++;
-				Log.w("WeatherCache", "Current try = " + currentDownloadTry + " / " + downloadException.getMessage()
+				Log.w(TAG, "[" + currentDownloadTry + "/"+MAX_DOWNLOAD_TRY+"] " + downloadException.getMessage()
 						+ " / " + url.toString());
-				
-				//TODO a better way to store the error XML bad request data
-				setLocalCache(fileName, null);
 
+				// TODO a better way to store the error XML bad request data
+				fileName = md5("errorfile");
+				if (weatherXmlStream != null)
+					setLocalCache(fileName, weatherXmlStream);
 
 			}
 		}
@@ -96,7 +98,7 @@ public class WeatherCache {
 	private InputStream downloadWeatherXML(URL url) throws URISyntaxException, ClientProtocolException, IOException {
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpGet httpget = new HttpGet(url.toURI());
-		Log.i("downloadWeatherXML", url.toURI().toString());
+		Log.i(TAG, "Get URI "+url.toURI().toString());
 
 		// create a response handler
 		ResponseHandler<String> responseHandler = new BasicResponseHandler();
@@ -111,19 +113,17 @@ public class WeatherCache {
 
 	private InputStream getLocalCache(String filePath) throws FileNotFoundException, ObsoletCacheException {
 		File f = new File(rootDirectory + filePath);
-		// FileReader reader = new FileReader(f);
 
 		Calendar lastModDate = new GregorianCalendar();
 		lastModDate.setTime(new Date(f.lastModified()));
 		Calendar today = Calendar.getInstance();
-		
+
 		FileInputStream fileInputStream = new FileInputStream(f);
 
 		if (lastModDate.get(Calendar.DAY_OF_YEAR) < today.get(Calendar.DAY_OF_YEAR))
 			throw new ObsoletCacheException();
 
-
-		Log.i("WeatherCache", "Open cache " + filePath);
+		Log.i(TAG, "Open cache " + f.getAbsolutePath());
 		return fileInputStream;
 	}
 
@@ -140,20 +140,19 @@ public class WeatherCache {
 			os.close();
 			// weatherXmlStream.close();
 
-			Log.i("WeatherCache", "Save data to file " + f.getAbsolutePath());
+			Log.i(TAG, "Creating cache file " + f.getAbsolutePath());
 
 		} catch (Exception e) {
-			Log.e("WeatherCache", "setLocalCache " + e.getMessage());
+			Log.e(TAG, "Error creating cache file " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
 
 	private void cleanLocalCache(String fileName) {
 		File f = new File(rootDirectory + fileName);
-		// FileReader reader = new FileReader(f);
 		f.delete();
-		Log.d("WeatherCache", "Delete cache file "+f.getAbsolutePath());
-
+		
+		Log.d(TAG, "Deleting cache file " + f.getAbsolutePath());
 	}
 
 	private String md5(String s) {

@@ -92,7 +92,8 @@
         <receiver android:name=".action.service.ActionTODOBroadcastReceiver" >
         </receiver>
 
-        <service android:name=".service.NotificationService" />
+        <service android:name=".action.service.ActionNotificationService" />
+        <service android:name=".weather.service.WeatherUpdateService" />
     </application>
 
 </manifest>

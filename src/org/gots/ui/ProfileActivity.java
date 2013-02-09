@@ -25,11 +25,15 @@ import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.WeatherManager;
 import org.gots.weather.adapter.WeatherWidgetAdapter;
+import org.gots.weather.service.WeatherUpdateService;
 import org.gots.weather.view.WeatherView;
 import org.gots.weather.view.WeatherWidget;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
@@ -67,12 +71,13 @@ public class ProfileActivity extends SherlockActivity {
 	private String choix_source = "";
 	private ProgressDialog pd;
 	private int gardenId;
+	private String TAG = "ProfileActivity";
 	private GardenManager gardenManager;
 	private LinearLayout weatherHistory;
 	// private WeatherWidget weatherWidget;
 	private WeatherManager weatherManager;
 	private Spinner gardenSelector;
-	private TextView alert;
+	private Intent weatherIntent;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -98,12 +103,8 @@ public class ProfileActivity extends SherlockActivity {
 				scrollView.scrollTo(scrollView.getWidth(), scrollView.getHeight());
 			}
 		});
+		weatherIntent = new Intent(this, WeatherUpdateService.class);
 
-		alert = (TextView) findViewById(R.id.idTextAlert);
-
-		if (weatherManager.isConnected()) {
-			alert.setVisibility(View.GONE);
-		}
 	}
 
 	private void buildWeatherList() {
@@ -131,10 +132,6 @@ public class ProfileActivity extends SherlockActivity {
 			view.setPadding(2, 0, 2, 0);
 			weatherHistory.addView(view);
 
-		}
-		
-		if (!weatherManager.isConnected()) {
-			alert.setVisibility(View.VISIBLE);
 		}
 
 	}
@@ -175,16 +172,40 @@ public class ProfileActivity extends SherlockActivity {
 		});
 	}
 
+	private BroadcastReceiver weatherBroadcastReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			updateUI(intent);
+		}
+	};
+
+	private void updateUI(Intent intent) {
+		boolean isError = intent.getBooleanExtra("error", true);
+		Log.d(TAG, "=>" + isError);
+
+		TextView txtError = (TextView) findViewById(R.id.idTextAlert);
+		if (isError)
+			txtError.setVisibility(View.VISIBLE);
+		else
+			txtError.setVisibility(View.GONE);
+	}
+
 	@Override
 	protected void onResume() {
+		super.onResume();
+
 		buildGardenList();
 		buildWeatherList();
-		super.onResume();
+
+		startService(weatherIntent);
+		registerReceiver(weatherBroadcastReceiver, new IntentFilter(WeatherUpdateService.BROADCAST_ACTION));
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
+		unregisterReceiver(weatherBroadcastReceiver);
+		stopService(weatherIntent);
 	}
 
 	@Override
