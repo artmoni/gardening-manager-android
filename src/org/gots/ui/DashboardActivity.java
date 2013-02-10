@@ -15,17 +15,23 @@ import org.gots.ads.GotsAdvertisement;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.help.HelpUriBuilder;
 import org.gots.preferences.GotsPreferences;
+import org.gots.weather.service.WeatherUpdateService;
 import org.gots.weather.view.WeatherView;
 import org.gots.weather.view.WeatherWidget;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
@@ -41,6 +47,7 @@ public class DashboardActivity extends SherlockActivity implements OnClickListen
 	private WeatherWidget weatherWidget2;
 	private LinearLayout handle;
 	private LinearLayout weatherWidgetLayout;
+	private Intent weatherIntent;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -57,12 +64,8 @@ public class DashboardActivity extends SherlockActivity implements OnClickListen
 		findViewById(R.id.dashboard_button_profile).setOnClickListener(this);
 
 		handle = (LinearLayout) findViewById(R.id.handle);
-		weatherWidget2 = new WeatherWidget(this, WeatherView.IMAGE);
-		handle.addView(weatherWidget2);
 
 		weatherWidgetLayout = (LinearLayout) findViewById(R.id.WeatherWidget);
-		weatherWidget = new WeatherWidget(this, WeatherView.TEXT);
-		weatherWidgetLayout.addView(weatherWidget);
 
 		// ADMOB
 		LinearLayout layout = (LinearLayout) findViewById(R.id.bannerAd);
@@ -73,8 +76,41 @@ public class DashboardActivity extends SherlockActivity implements OnClickListen
 		} else
 			layout.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_dashboard_top));
 
+		weatherIntent = new Intent(this, WeatherUpdateService.class);
+
 		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 		GoogleAnalyticsTracker.getInstance().dispatch();
+
+	}
+
+	private BroadcastReceiver weatherBroadcastReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			updateUI(intent);
+		}
+	};
+	private ImageView weatherState;
+	private String TAG = "DashboardActivity";
+
+	private void updateUI(Intent intent) {
+		boolean isError = intent.getBooleanExtra("error", true);
+		Log.d(TAG, "=>" + isError);
+
+		handle.removeAllViews();
+		weatherWidgetLayout.removeAllViews();
+
+		if (isError) {
+			TextView txtError = new TextView(this);
+			txtError.setText(getResources().getText(R.string.weather_citynotfound));
+			txtError.setTextColor(getResources().getColor(R.color.text_color_light));
+			handle.addView(txtError);
+
+		} else {
+			weatherWidget2 = new WeatherWidget(this, WeatherView.IMAGE);
+			handle.addView(weatherWidget2);
+			weatherWidget = new WeatherWidget(this, WeatherView.TEXT);
+			weatherWidgetLayout.addView(weatherWidget);
+		}
 
 	}
 
@@ -118,19 +154,26 @@ public class DashboardActivity extends SherlockActivity implements OnClickListen
 
 	@Override
 	protected void onResume() {
-		GoogleAnalyticsTracker.getInstance().dispatch();
-		if (weatherWidget2.getAdapter() != null && weatherWidget.getAdapter() != null){
-		((BaseAdapter)weatherWidget2.getAdapter()).notifyDataSetChanged();
-
-		((BaseAdapter)weatherWidget.getAdapter()).notifyDataSetChanged();
-		}
 		super.onResume();
+
+		GoogleAnalyticsTracker.getInstance().dispatch();
+		// if (weatherWidget2.getAdapter() != null && weatherWidget.getAdapter()
+		// != null) {
+		// ((BaseAdapter) weatherWidget2.getAdapter()).notifyDataSetChanged();
+		//
+		// ((BaseAdapter) weatherWidget.getAdapter()).notifyDataSetChanged();
+		// }
+		startService(weatherIntent);
+		registerReceiver(weatherBroadcastReceiver, new IntentFilter(WeatherUpdateService.BROADCAST_ACTION));
+
 	}
 
 	@Override
 	protected void onPause() {
 
 		super.onPause();
+		unregisterReceiver(weatherBroadcastReceiver);
+		stopService(weatherIntent);
 	}
 
 	@Override
