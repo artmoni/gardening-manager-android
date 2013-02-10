@@ -51,16 +51,40 @@
                             android:id="@+id/idGardenSelector"
                             android:layout_width="fill_parent"
                             android:layout_height="40dp"
+                            style="@style/SpinnerTextViewItem"
                             android:visibility="visible" >
+                            
                         </Spinner>
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:orientation="horizontal" >
+
+                            <ImageView
+                                android:id="@+id/idWeatherConnected"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left"
+                                android:src="@drawable/weather_updating" />
+
+                            <!-- <ImageView
+                                android:id="@+id/idWeatherConnected"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left"
+                                android:src="@drawable/garden_shared" /> -->
+                        </LinearLayout>
 
                         <TextView
                             android:id="@+id/idTextAlert"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
-                            android:textColor="@color/action_error_color" 
-                            android:text="@string/weather.citynotfound" android:visibility="gone"/>
+                            android:text="@string/weather.citynotfound"
+                            android:textColor="@color/action_error_color"
+                            android:visibility="gone" />
                     </LinearLayout>
                 </LinearLayout>
 

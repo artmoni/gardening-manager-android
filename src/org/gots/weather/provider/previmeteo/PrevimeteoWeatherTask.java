@@ -54,11 +54,15 @@ public class PrevimeteoWeatherTask extends WeatherTask {
 			String weatherURL;
 
 			if (GotsPreferences.getInstance().isDEVELOPPEMENT())
-				weatherURL = "http://www.gardening-manager.com/weather/weather-error.xml";
+				// weatherURL =
+				// "http://www.gardening-manager.com/weather/weather-error.xml";
+				weatherURL = "http://api.previmeteo.com/" + GotsPreferences.getInstance().getWeatherApiKey()
+						+ "/ig/api?weather=" + address.getLocality() + ",France&hl=fr";
+
 			else
-				weatherURL = "http://api.previmeteo.com/" + GotsPreferences.getInstance().getWeatherApiKey() + "/ig/api?weather="
-						+ address.getLocality() + "," + address.getCountryName() + "&hl=fr";
-			
+				weatherURL = "http://api.previmeteo.com/" + GotsPreferences.getInstance().getWeatherApiKey()
+						+ "/ig/api?weather=" + address.getLocality() + "," + address.getCountryName() + "&hl=fr";
+
 			queryString = weatherURL;
 
 			url = new URL(queryString.replace(" ", "%20"));
@@ -110,9 +114,10 @@ public class PrevimeteoWeatherTask extends WeatherTask {
 					ws = gwh.getWeatherSet();
 				}
 			} catch (Exception e) {
-				Log.e(TAG,
-						"PrevimeteoErrorHandler has return an error "
-								+ e.getMessage());
+				Log.e(TAG, "PrevimeteoErrorHandler has return an error " + e.getMessage());
+				Log.e(TAG, "PrevimeteoErrorHandler has return an error " + e.getStackTrace().toString());
+
+				
 				iserror = true;
 
 				return null;
@@ -142,7 +147,7 @@ public class PrevimeteoWeatherTask extends WeatherTask {
 			Log.w(TAG, "Error ");
 
 			// cache.clean(url);
-		}else
+		} else
 			Log.d(TAG, "Weather updated from " + queryString);
 
 		super.onPostExecute(result);

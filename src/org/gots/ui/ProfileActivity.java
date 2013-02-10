@@ -51,6 +51,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -104,7 +105,17 @@ public class ProfileActivity extends SherlockActivity {
 			}
 		});
 		weatherIntent = new Intent(this, WeatherUpdateService.class);
-
+		weatherState = (ImageView) findViewById(R.id.idWeatherConnected);
+		weatherState.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				weatherState.setImageDrawable(getResources().getDrawable(R.drawable.weather_updating));
+				startService(weatherIntent);
+				registerReceiver(weatherBroadcastReceiver, new IntentFilter(WeatherUpdateService.BROADCAST_ACTION));
+				
+			}
+		});
 	}
 
 	private void buildWeatherList() {
@@ -157,10 +168,14 @@ public class ProfileActivity extends SherlockActivity {
 			public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
 
 				gardenManager.setCurrentGarden(position + 1);
-				buildWeatherList();
+				// buildWeatherList();
 
 				GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
 				tracker.trackEvent("Garden", "Select", gardenManager.getcurrentGarden().getLocality(), position + 1);
+
+				weatherState.setImageDrawable(getResources().getDrawable(R.drawable.weather_updating));
+				startService(weatherIntent);
+				registerReceiver(weatherBroadcastReceiver, new IntentFilter(WeatherUpdateService.BROADCAST_ACTION));
 
 			}
 
@@ -178,16 +193,22 @@ public class ProfileActivity extends SherlockActivity {
 			updateUI(intent);
 		}
 	};
+	private ImageView weatherState;
 
 	private void updateUI(Intent intent) {
 		boolean isError = intent.getBooleanExtra("error", true);
 		Log.d(TAG, "=>" + isError);
 
 		TextView txtError = (TextView) findViewById(R.id.idTextAlert);
-		if (isError)
+
+		if (isError) {
 			txtError.setVisibility(View.VISIBLE);
-		else
+			weatherState.setImageDrawable(getResources().getDrawable(R.drawable.weather_disconnected));
+		} else {
 			txtError.setVisibility(View.GONE);
+			weatherState.setImageDrawable(getResources().getDrawable(R.drawable.weather_connected));
+		}
+		buildWeatherList();
 	}
 
 	@Override
@@ -195,8 +216,8 @@ public class ProfileActivity extends SherlockActivity {
 		super.onResume();
 
 		buildGardenList();
-		buildWeatherList();
-
+		
+		weatherState.setImageDrawable(getResources().getDrawable(R.drawable.weather_updating));
 		startService(weatherIntent);
 		registerReceiver(weatherBroadcastReceiver, new IntentFilter(WeatherUpdateService.BROADCAST_ACTION));
 	}

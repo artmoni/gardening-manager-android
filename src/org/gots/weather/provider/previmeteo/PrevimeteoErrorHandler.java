@@ -26,12 +26,7 @@ public class PrevimeteoErrorHandler extends DefaultHandler {
 	// Fields
 	// ===========================================================
 
-	private WeatherSet myWeatherSet = null;
 	private boolean problem_cause = false;
-	private boolean in_current_conditions = false;
-	private boolean in_forecast_conditions = false;
-
-	private boolean usingSITemperature = true; // false means Fahrenheit
 	private String errorMessage;
 
 	// ===========================================================
@@ -55,7 +50,6 @@ public class PrevimeteoErrorHandler extends DefaultHandler {
 	// ===========================================================
 	@Override
 	public void startDocument() throws SAXException {
-		this.myWeatherSet = new WeatherSet();
 	}
 
 	@Override
