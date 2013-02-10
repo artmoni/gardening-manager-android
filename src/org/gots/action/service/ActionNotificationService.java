@@ -86,12 +86,20 @@ public class ActionNotificationService extends Service {
 	private final void createNotification(BaseActionInterface action, BaseSeedInterface seed) {
 		// In this sample, we'll use the same text for the ticker and the
 		// expanded notification
-		CharSequence title = getText(R.string.notification_action_title);
-		CharSequence content = SeedUtil.translateAction(this, action) + ":" + SeedUtil.translateSpecie(this, seed);
-		if (actions.size() > 1)
-			content = content + " + " + (actions.size()-1) + " more task";
+		String content="";
+		String title = getText(R.string.notification_action_title).toString();
+//		CharSequence content = SeedUtil.translateAction(this, action) + ":" + SeedUtil.translateSpecie(this, seed);
+
+		CharSequence specieName = SeedUtil.translateSpecie(this, seed);
+		title = title.replace("_SPECIE_", specieName);
+
+		if (actions.size() > 1){
+			 content = getText(R.string.notification_action_content).toString();
+			 content = content.replace("_NBACTIONS_", Integer.toString(actions.size()));
+		}
+		
 		// Set the icon, scrolling text and timestamp
-		Notification notification = new Notification(SeedWidget.getSeedDrawable(this, seed), content,
+		Notification notification = new Notification(SeedWidget.getSeedDrawable(this, seed), title,
 				System.currentTimeMillis());
 
 		// The PendingIntent to launch our activity if the user selects this

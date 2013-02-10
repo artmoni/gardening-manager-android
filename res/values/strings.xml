@@ -92,7 +92,9 @@
     <string name="weather.citynotfound">No weather for this city, change for a bigger one</string>
 
     <string name="location.notfound">Location not found</string>
-    <string name="notification.action.title">Your garden needs you</string>
+    <string name="notification.action.title">Your _SPECIE_ needs you</string>
+    <string name="notification.action.content">and _NBACTIONS_ more task</string>
+    
     <string name="action.sow">Sow</string>
     <string name="action.beak">Beak</string>
     <string name="action.lighten">Lighten</string>
