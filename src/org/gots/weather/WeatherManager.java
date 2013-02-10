@@ -13,23 +13,14 @@ package org.gots.weather;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
 
-import org.gots.R;
-import org.gots.garden.GardenInterface;
-import org.gots.garden.sql.GardenDBHelper;
 import org.gots.weather.provider.DatabaseWeatherTask;
 import org.gots.weather.provider.MoonCalculation;
 import org.gots.weather.provider.WeatherTask;
-import org.gots.weather.provider.previmeteo.PrevimeteoWeatherTask;
-import org.gots.weather.sql.WeatherDBHelper;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.Toast;
 
 public class WeatherManager {
 

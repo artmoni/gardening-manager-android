@@ -10,11 +10,8 @@
  ******************************************************************************/
 package org.gots.ui;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 import org.gots.R;
 import org.gots.analytics.GotsAnalytics;
@@ -24,10 +21,8 @@ import org.gots.help.HelpUriBuilder;
 import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.WeatherManager;
-import org.gots.weather.adapter.WeatherWidgetAdapter;
 import org.gots.weather.service.WeatherUpdateService;
 import org.gots.weather.view.WeatherView;
-import org.gots.weather.view.WeatherWidget;
 
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -35,21 +30,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Address;
-import android.location.Criteria;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.GridLayout;
-import android.widget.GridView;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;

@@ -1,6 +1,5 @@
 package org.gots.preferences;
 
-import android.util.Log;
 
 public class GotsPreferences implements GotsServiceAPIKEY {
 	private static final boolean DEVELOPPEMENT = false;
@@ -25,21 +24,18 @@ public class GotsPreferences implements GotsServiceAPIKEY {
 
 	@Override
 	public String getAnalyticsApiKey() {
-		Log.d("ANALYTICS_API_KEY", ANALYTICS_API_KEY);
 
 		return ANALYTICS_API_KEY;
 	}
 
 	@Override
 	public String getWeatherApiKey() {
-		Log.d("WEATHER_API_KEY", WEATHER_API_KEY);
 
 		return WEATHER_API_KEY;
 	}
 
 	@Override
 	public String getAdmobApiKey() {
-		Log.d("ADMOB_API_KEY", ADMOB_API_KEY);
 
 		return ADMOB_API_KEY;
 	}

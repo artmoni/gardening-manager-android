@@ -18,7 +18,6 @@ import java.util.Date;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.gots.R;
 import org.gots.bean.Address;
 import org.gots.preferences.GotsPreferences;
 import org.gots.weather.WeatherCondition;
@@ -31,7 +30,6 @@ import org.xml.sax.XMLReader;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 public class PrevimeteoWeatherTask extends WeatherTask {
 	private static final String TAG = "PrevimeteoWeatherTask";

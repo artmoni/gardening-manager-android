@@ -11,21 +11,15 @@
 package org.gots.ui;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 import org.gots.R;
 import org.gots.garden.GardenManager;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.adapter.ListVendorSeedAdapter;
-import org.gots.seed.providers.GotsConnector;
-import org.gots.seed.providers.local.LocalConnector;
-import org.gots.seed.providers.simple.SimpleConnector;
 import org.gots.seed.sql.VendorSeedDBHelper;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;

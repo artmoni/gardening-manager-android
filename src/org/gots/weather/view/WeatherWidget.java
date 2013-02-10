@@ -13,16 +13,11 @@ package org.gots.weather.view;
 import org.gots.weather.WeatherManager;
 import org.gots.weather.adapter.WeatherWidgetAdapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Point;
-import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 import android.widget.GridView;
-import android.widget.TextView;
 
 public class WeatherWidget extends GridView {
 

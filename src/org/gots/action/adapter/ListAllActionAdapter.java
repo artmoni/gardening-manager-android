@@ -11,7 +11,6 @@
 package org.gots.action.adapter;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,7 +38,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.provider.ContactsContract.CommonDataKinds.Photo;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;

@@ -11,12 +11,8 @@
 package org.gots.action.bean;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 
 import org.gots.action.AbstractActionSeed;
 import org.gots.action.GardeningActionInterface;
@@ -25,7 +21,6 @@ import org.gots.action.SeedActionInterface;
 import org.gots.action.sql.ActionSeedDBHelper;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.sql.GrowingSeedDBHelper;
 
 import android.content.Context;
 import android.os.Environment;

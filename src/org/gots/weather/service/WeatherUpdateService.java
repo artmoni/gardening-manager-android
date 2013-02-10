@@ -5,7 +5,6 @@ import java.util.Calendar;
 import org.gots.R;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GardenManager;
-import org.gots.garden.sql.GardenDBHelper;
 import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.provider.WeatherTask;
 import org.gots.weather.provider.previmeteo.PrevimeteoWeatherTask;
@@ -13,7 +12,6 @@ import org.gots.weather.sql.WeatherDBHelper;
 
 import android.app.Service;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;

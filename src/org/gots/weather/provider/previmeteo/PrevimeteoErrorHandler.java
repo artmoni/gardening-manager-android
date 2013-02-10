@@ -11,7 +11,6 @@
 package org.gots.weather.provider.previmeteo;
 
 
-import org.gots.weather.WeatherSet;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;

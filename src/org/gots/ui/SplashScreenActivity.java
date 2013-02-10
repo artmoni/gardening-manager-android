@@ -11,25 +11,18 @@
 package org.gots.ui;
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
 
-import org.gots.DatabaseHelper;
 import org.gots.R;
-import org.gots.action.service.ActionNotificationService;
 import org.gots.action.service.ActionTODOBroadcastReceiver;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GardenManager;
 import org.gots.garden.sql.GardenDBHelper;
 import org.gots.preferences.GotsPreferences;
-import org.gots.weather.WeatherManager;
 import org.gots.weather.service.WeatherUpdateService;
 
 import android.app.Activity;
 import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
