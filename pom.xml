@@ -6,11 +6,11 @@
 	<groupId>org.gots</groupId>
 	<artifactId>gardening-manager</artifactId>
 	<packaging>apk</packaging>
-	<version>0.16-SNAPSHOT</version>
+	<version>0.16</version>
 	<name>Gardening Manager</name>
 	<properties>
 		<android.version>4.0.3</android.version>
-		<android.platform>15</android.platform>
+		<android.platform>16</android.platform>
 		<sdk.path>/home/sfleury/Projets/Android/android-sdk-linux</sdk.path>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
