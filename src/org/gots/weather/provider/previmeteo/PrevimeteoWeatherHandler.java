@@ -125,8 +125,9 @@ public class PrevimeteoWeatherHandler extends DefaultHandler {
 				this.myWeatherSet.getWeatherCurrentCondition().setTempCelciusMin(
 						Integer.parseInt(dataAttribute));
 			} else if (localName.equals("humidity")) {
+				
 				this.myWeatherSet.getWeatherCurrentCondition().setHumidity(
-						new Integer(dataAttribute.substring(11,dataAttribute.indexOf('%')).trim()));
+						new Integer(dataAttribute.substring(10,dataAttribute.indexOf('%')).trim()));
 			} else if (localName.equals("wind_condition")) {
 				this.myWeatherSet.getWeatherCurrentCondition()
 						.setWindCondition(dataAttribute);
