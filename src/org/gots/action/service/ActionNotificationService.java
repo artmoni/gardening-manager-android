@@ -27,6 +27,8 @@ public class ActionNotificationService extends Service {
 	NotificationManager mNM;
 	private ArrayList<BaseActionInterface> actions = new ArrayList<BaseActionInterface>();
 
+	private String TAG = "ActionNotificationService";
+
 	@Override
 	public IBinder onBind(Intent arg0) {
 
@@ -35,16 +37,14 @@ public class ActionNotificationService extends Service {
 
 	@Override
 	public void onCreate() {
-		Log.d(ActionNotificationService.class.getName(), "FirstService created");
 		mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
 		super.onCreate();
 	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
-		Log.d(ActionNotificationService.class.getName(), "FirstService started");
+		Log.d(TAG, "Starting service : checking actions to do");
 		// Display a notification about us starting. We put an icon in the
 		// status bar.
 		actions.clear();
@@ -76,8 +76,7 @@ public class ActionNotificationService extends Service {
 	@Override
 	public void onDestroy() {
 		mNM.cancel(NOTIFICATION);
-		Log.d(ActionNotificationService.class.getName(), "FirstService destroyed");
-
+		Log.d(TAG, "Stopping service : " + actions.size() + " actions found");
 		super.onDestroy();
 
 	}
@@ -95,7 +94,7 @@ public class ActionNotificationService extends Service {
 
 		if (actions.size() > 1) {
 			content = getText(R.string.notification_action_content).toString();
-			content = content.replace("_NBACTIONS_", Integer.toString(actions.size()-1));
+			content = content.replace("_NBACTIONS_", Integer.toString(actions.size() - 1));
 		}
 
 		// Set the icon, scrolling text and timestamp
@@ -111,5 +110,6 @@ public class ActionNotificationService extends Service {
 		notification.flags |= Notification.FLAG_AUTO_CANCEL;
 		// Send the notification.
 		mNM.notify(NOTIFICATION, notification);
+
 	}
 }

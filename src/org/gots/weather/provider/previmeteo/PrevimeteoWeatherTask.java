@@ -52,11 +52,7 @@ public class PrevimeteoWeatherTask extends WeatherTask {
 			String weatherURL;
 
 			if (GotsPreferences.getInstance().isDEVELOPPEMENT())
-				// weatherURL =
-				// "http://www.gardening-manager.com/weather/weather-error.xml";
-				weatherURL = "http://api.previmeteo.com/" + GotsPreferences.getInstance().getWeatherApiKey()
-						+ "/ig/api?weather=" + address.getLocality() + ",France&hl=fr";
-
+				weatherURL = "http://www.gardening-manager.com/weather/weather-error.xml";
 			else
 				weatherURL = "http://api.previmeteo.com/" + GotsPreferences.getInstance().getWeatherApiKey()
 						+ "/ig/api?weather=" + address.getLocality() + "," + address.getCountryName() + "&hl=fr";
@@ -142,7 +138,7 @@ public class PrevimeteoWeatherTask extends WeatherTask {
 			// Toast.makeText(mContext,
 			// mContext.getResources().getString(R.string.weather_citynotfound),
 			// 30).show();
-			Log.w(TAG, "Error ");
+			Log.w(TAG, "Error updating weather");
 
 			// cache.clean(url);
 		} else
