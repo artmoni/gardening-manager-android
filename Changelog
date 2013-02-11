@@ -1,8 +1,22 @@
-*** V0.12
-* Changement fournisseur météo (Google Weather a été fermé le 31/08/12), connexion au site français PreviMeteo.
-* Historique météo à 10 jours dans le profile
-* Utilisation sdcard pour stockage des données temporaires (cache)
-* Ajout d'une aide en ligne
+*** V0.16
+* Update weather in background, alert if no weather available
+* notification to daily tasks
+* More bugs solved
+
+* Mise à jour météo en arrière plan, alerte en cas d'erreur
+* Alerte journalière par notification des actions à effectuer
+* Autres résolutions de bugs
+
+*** V0.15
+* Feature: Take photo and archive them in your plant diary
+* Feature: Display one more forecast weather in landscape mode
+* Accessibility: Spanish translation
+* Bug: application not responding solved
+
+* Fonctionnalité: Photographier et archiver l'évolution de vos légumes
+* Fonctionnalité: Plus de prévision météo en mode paysage
+* Accessibilité: Traduction Espagnole
+* Bug: "L'application ne répond pas" résolu
 
 *** V0.14
 * Nouvelle expérience utilisateur
@@ -17,13 +31,11 @@
 * Supports multiple gardens
 * Vegetable garden available for example at the first launch
 
-*** V0.15
-* Feature: Take photo and archive them in your plant diary
-* Feature: Display one more forecast weather in landscape mode
-* Accessibility: Spanish translation
-* Bug: application not responding solved
+*** V0.12
+* Changement fournisseur météo (Google Weather a été fermé le 31/08/12), connexion au site français PreviMeteo.
+* Historique météo à 10 jours dans le profile
+* Utilisation sdcard pour stockage des données temporaires (cache)
+* Ajout d'une aide en ligne
 
-* Fonctionnalité: Photographier et archiver l'évolution de vos légumes
-* Fonctionnalité: Plus de prévision météo en mode paysage
-* Accessibilité: Traduction Espagnole
-* Bug: "L'application ne répond pas" résolu
+
+
