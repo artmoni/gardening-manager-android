@@ -14,6 +14,9 @@
 		<sdk.path>/home/sfleury/Projets/Android/android-sdk-linux</sdk.path>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<keystore.path>/home/sfleury/Projets/30\ Gardening\ Manager/00\ release/keystore/keystore</keystore.path>
+		
+		
 	</properties>
 	<repositories>
 		<repository>
@@ -166,8 +169,7 @@
 									<includes>
 										<include>target/*.apk</include>
 									</includes>
-									<keystore>/home/sfleury/Projets/Gardening Manager/00
-										release/keystore/keystore</keystore>
+									<keystore>${keystore.path}</keystore>
 									<storepass>@rtM0n!</storepass>
 									<keypass>@rtM0n!</keypass>
 									<alias>artmonimobile</alias>
