@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_seed"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/background_simple"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:scrollbars="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/bg_line_action"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:id="@+id/layoutFamily"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@drawable/family_apiaceae" >
+
+                    <TextView
+                        android:id="@+id/IdSeedFamily"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:textColor="@color/text_color_dark"
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layoutSpecie"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" >
+
+                    <AutoCompleteTextView
+                        android:id="@+id/autoCompleteTextViewSpecie"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:hint="@string/seed.description.specie" />
+
+                    <ImageView
+                        android:id="@+id/imageViewSpecie"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/vegetdefault" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_weight="1" >
+
+                    <AutoCompleteTextView
+                        android:id="@+id/autoCompleteTextViewVariety"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:hint="@string/seed.description.variety" />
+
+                    <ImageView
+                        android:id="@+id/imageViewVariety"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/vegetdefault" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/seed.action.sowing.period" />
+
+        <org.gots.seed.view.PlanningWidget
+            android:id="@+id/IdSeedSowingPlanning"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:columnWidth="15dp"
+            android:numColumns="12" >
+        </org.gots.seed.view.PlanningWidget>
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/seed.action.picking.period" />
+
+        <org.gots.seed.view.PlanningWidget
+            android:id="@+id/IdSeedHarvestPlanning"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:columnWidth="15dp"
+            android:numColumns="12" >
+        </org.gots.seed.view.PlanningWidget>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal" >
+
+            <ImageView
+                android:id="@+id/imageBarCode"
+                android:layout_width="100dp"
+                android:layout_height="58dp"
+                android:src="@drawable/codebarre" />
+
+            <TextView
+                android:id="@+id/textViewBarCode"
+                android:layout_width="100dp"
+                android:layout_height="58dp"
+                android:gravity="center_horizontal|bottom"
+                android:text="0283878732" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutSpecie"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:gravity="center_horizontal">
+
+            <Button
+                android:id="@+id/buttonStock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/seed.action.add.stock" />
+
+            <Button
+                android:id="@+id/buttonCatalogue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/seed.action.add.catalogue" />
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

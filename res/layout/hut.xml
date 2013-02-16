@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/background_simple"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/bg_hut_top" >
+        </LinearLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+    </LinearLayout>
+    <!--
+    <ListView
+        android:id="@+id/listSeed"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" android:paddingTop="60dp">
+    </ListView>
+    -->
+
+    <LinearLayout
+        android:id="@+id/btReturn"
+        android:layout_width="fill_parent"
+        android:layout_height="70dp"
+        android:background="@drawable/bt_logo" />
+
+</RelativeLayout>

@@ -1,0 +1,732 @@
+<seeds>
+	<channel>
+		
+		<title>Liste des légumes</title><specie>cucurbitacae</specie><variety>du japon</variety>
+		<description>Tomates blanches du japon a recolte tardice</description>
+		<link>http://www.androidster.com/android_news.php</link>
+		<lastBuildDate>Tue, 15 Feb 2011 23:43:43 +0100</lastBuildDate>
+
+		<generator>FeedCreator 1.7.2</generator>		
+			
+			<item>
+			<reference>concombregynialhybridef1</reference>
+			
+			<title>Concombre Gynial Hybride F1 </title>
+			<family>Cucurbitaceae</family>
+			<specie>Concombre</specie>
+			<variety>Gynial Hybride F1</variety>
+			
+			<link>http://fr.wikipedia.org/wiki/Concombre</link>
+			
+			<description>Cette variété très productive donne de beaux concombres longs et sans amertume. Sa résistance aux maladies permet de limiter les traitements et ainsi de mieux respecter la nature.</description>
+	
+			<sowingDateMin>3</sowingDateMin>
+			
+			<sowingDateMax>6</sowingDateMax>
+			
+			<durationMin>150</durationMin>
+			
+			<durationMax>150</durationMax>
+			
+			<action_name_1></action_name_1>
+			
+			<action_description_1></action_description_1>
+			
+			<action_duration_1></action_duration_1>
+	</item>
+#########################################
+<item>
+		<reference>betteravedegypte</reference>
+		
+		<title>Betterave d'Egypte</title>
+		<family>Cucurbitaceae</family>
+		<specie>Betterave</specie>
+		<variety>d'Egypte</variety>
+		
+		<link>http://fr.wikipedia.org/wiki/Concombre</link>
+		
+		<description>La Betterave se consomme crue ou cuite et ses feuilles peuvent être utilisées de la même façon que les Epinards. Elle peut aussi s'accommoder en purée. Pour la congèlation, la cuire et la cut en dés ou en tranches. Malgré son goût sucré, la betterave apporte peu de calories. Racine aplatie à chair ferme et rouge vif.Variété hâtive.</description>
+
+		<sowingDateMin>4</sowingDateMin>
+		
+		<sowingDateMax>6</sowingDateMax>
+		
+		<durationMin>120</durationMin>
+		
+		<durationMax>180</durationMax>
+		
+		<action_name_1></action_name_1>
+		
+		<action_description_1></action_description_1>
+		
+		<action_duration_1></action_duration_1>
+</item>
+#########################################
+<item>
+		<reference>carottelonguedemeaux</reference>
+		
+		<title>Carotte Longue de Meaux</title>
+		<family>Apiaceae</family>
+		<specie>Carotte</specie>
+		<variety>Longue de Meaux</variety>
+		
+		<link>http://fr.wikipedia.org/wiki/Carotte</link>
+		
+		<description>Carotte à la racine longue, pour terres profondes. Racine très rouge, avec cœur, de bonne conservation.</description>
+
+		<sowingDateMin>4</sowingDateMin>
+		
+		<sowingDateMax>7</sowingDateMax>
+		
+		<durationMin>120</durationMin>
+		
+		<durationMax>150</durationMax>
+		
+		<action_name_1>lighten</action_name_1>
+		
+		<action_description_1></action_description_1>
+		
+		<action_duration_1>21</action_duration_1>
+</item>
+#########################################
+<item>
+		<reference>navetravedauvergnehatif</reference>
+		
+		<title>Navet Rave d'Auvergne hâtif</title>
+		<family>Brassicaceae</family>
+		<specie>Navet</specie>
+		<variety>Rave d'Auvergne hâtif</variety>
+		
+		<link>http://fr.wikipedia.org/wiki/Navet</link>
+		
+		<description>Cette variété au développement rapide produit de beaux navets en forme de toupie.Récoltés jeunes, ils sont d'une saveur fine et douce. </description>
+
+		<sowingDateMin>3</sowingDateMin>
+		
+		<sowingDateMax>9</sowingDateMax>
+		
+		<durationMin>120</durationMin>
+		
+		<durationMax>90</durationMax>
+		
+		<action_name_1>lighten</action_name_1>
+		
+		<action_description_1></action_description_1>
+		
+		<action_duration_1>15</action_duration_1>
+</item>
+#########################################
+<item>
+		<reference>radisrosedhiverdechine</reference>
+		
+		<title>Radis Rose d'Hiver de Chine</title>
+		<family>Brassicaceae</family>
+		<specie>Radis</specie>
+		<variety>Rose d'Hiver de Chine</variety>
+		
+		<link>http://fr.wikipedia.org/wiki/Radis</link>
+		
+		<description>Gros radis à la racine allongée rose vif dont la chair blanche est légèrement piquante. Idéale pour des récoltes d'automne et une conservation hivernale.</description>
+
+		<sowingDateMin>6</sowingDateMin>
+		
+		<sowingDateMax>8</sowingDateMax>
+		
+		<durationMin>120</durationMin>
+		
+		<durationMax>120</durationMax>
+		
+		<action_name_1>lighten</action_name_1>
+		
+		<action_description_1></action_description_1>
+		
+		<action_duration_1>15</action_duration_1>
+</item>
+#########################################
+<item>
+		<reference>celeriraveibis</reference>
+		
+		<title>Céleri rave Ibis</title>
+		<family>Apiaceae</family>
+		<specie>Céleri rave</specie>
+		<variety>Ibis</variety>
+		
+		<link>http://fr.wikipedia.org/wiki/C%C3%A9leri-rave</link>
+		
+		<description>Cette variété à croissance rapide vous donnera une pomme lisse, ronde et à la chair très blanche et savoureuse.</description>
+
+		<sowingDateMin>2</sowingDateMin>
+		
+		<sowingDateMax>5</sowingDateMax>
+		
+		<durationMin>270</durationMin>
+		
+		<durationMax>210</durationMax>
+		
+		<action_name_1></action_name_1>
+		
+		<action_description_1></action_description_1>
+		
+		<action_duration_1></action_duration_1>
+</item>
+#########################################
+<item>
+		<reference>poivronesterelhybridef1</reference>
+		
+		<title>Poivron Esterel Hybride F1</title>
+		<family>Solanaceae</family>
+		<specie>Poivron</specie>
+		<variety>Esterel Hybride F1</variety>
+		<barecode>3211500008145</barecode>
+		
+		<link>http://fr.wikipedia.org/wiki/Poivron</link>
+		
+		<description>Solanaceae</description>
+
+		<sowingDateMin>2</sowingDateMin>
+		
+		<sowingDateMax>4</sowingDateMax>
+		
+		<durationMin>180</durationMin>
+		
+		<durationMax>210</durationMax>
+		
+		<action_name_1></action_name_1>
+		
+		<action_description_1></action_description_1>
+		
+		<action_duration_1></action_duration_1>
+</item>
+#########################################
+<item>
+		<reference>tomatecerise</reference>
+		
+		<title>Tomate cerise</title>
+		<family>Solanaceae</family>
+		<specie>Tomate</specie>
+		<variety>Tomate</variety>
+		
+		<link>http://fr.wikipedia.org/wiki/Tomate_cerise</link>
+		
+		<description>Les Tomates cerise se consomment crues en salades, en hors-d’oeuvre ou à l’apéritif. Cette variété est aussi utilisée pour la décoration des plats et assiettes.Variété produisant de petits fruits ronds de la grosseur d'une cerise, fructifiant en grappes sur la plante.Belle couleur rouge écarlate au goût très fruité.</description>
+
+		<sowingDateMin>2</sowingDateMin>
+		
+		<sowingDateMax>5</sowingDateMax>
+		
+		<durationMin>150</durationMin>
+		
+		<durationMax>180</durationMax>
+		
+		<action_name_1>cut</action_name_1>
+		
+		<action_description_1></action_description_1>
+		
+		<action_duration_1>40</action_duration_1>
+</item>
+#########################################
+<item>
+		<reference>tomatecoeurdeboeufbio</reference>
+		
+		<title>Tomate coeur de boeuf bio</title>
+		<family>Solanaceae</family>
+		<specie>Tomate</specie>
+		<variety>coeur de boeuf bio</variety>
+		
+		<link>http://fr.wikipedia.org/wiki/Tomate</link>
+		
+		<description>Variété tardive produisant d'excellentes tomates bien lisses et charnues en forme de coeur.</description>
+
+		<sowingDateMin>2</sowingDateMin>
+		
+		<sowingDateMax>5</sowingDateMax>
+		
+		<durationMin>180</durationMin>
+		
+		<durationMax>180</durationMax>
+		
+		<action_name_1>cut</action_name_1>
+		
+		<action_description_1></action_description_1>
+		
+		<action_duration_1>35</action_duration_1>
+</item>
+#########################################
+<item>
+		<reference>tomatemarmandehative</reference>
+		
+		<title>Tomate marmande hâtive</title>
+		<family>Solanaceae</family>
+		<specie>Tomate</specie>
+		<variety>marmande hative</variety>
+		
+		<link>http://fr.wikipedia.org/wiki/Tomate</link>
+		
+		<description>Les Tomates se consomment le plus souvent coupées en rondelles sur des feuilles de salade ou sautées avec des herbes. Les plus petites sont destinées à la préparation de sauces alors que les plus grosses sont plus appropriées pour être farcies. La congélation est possible pour les Tomates destinées à être cuites. Laver et essuyer simplement. Variété précoce produisant de gros fruits côtelés légèrement aplatis. Culture de pleine terre. </description>
+
+		<sowingDateMin>2</sowingDateMin>
+		
+		<sowingDateMax>5</sowingDateMax>
+		
+		<durationMin>150</durationMin>
+		
+		<durationMax>180</durationMax>
+		
+		<action_name_1>cut</action_name_1>
+		
+		<action_description_1></action_description_1>
+		
+		<action_duration_1>35</action_duration_1>
+</item>
+
+
+
+
+
+
+
+
+
+
+
+<item>
+		<reference>choucabus</reference>
+		
+		<title>Chou Cabus</title>
+		<family>Brassicaceae</family>
+		<specie>Chou</specie>
+		<variety>Cabus</variety>
+		
+		<link>http://fr.wikipedia.org/wiki/Chou_cabus</link>
+		
+		<description>Variété donnant des belles pommes arrondies, de 2 à 3,5 kg, de couleur blanche. Recommandé pour les récoltes dhiver grâce à son excellente conservation en périodes froides.</description>
+
+		<sowingDateMin>4</sowingDateMin>
+		
+		<sowingDateMax>5</sowingDateMax>
+		
+		<durationMin>210</durationMin>
+		
+		<durationMax>210</durationMax>
+		
+		<action_name_1></action_name_1>
+		
+		<action_description_1></action_description_1>
+		
+		<action_duration_1></action_duration_1>
+</item>
+#########################################
+<item>
+		<reference>cornichonfindemeaux</reference>
+		
+		<title>Cornichon Fin de Meaux</title>
+		<family>Cucurbitaceae</family>
+		<specie>Cornichon</specie>
+		<variety>Fin de Meaux</variety>
+		
+		<link>http://fr.wikipedia.org/wiki/Cornichon</link>
+		
+		<description>Variété très productive à fruits cylindriques demi-longs. Fruits tendres, plus long et moins épineux que le "Vert petit de Paris".</description>
+
+		<sowingDateMin>3</sowingDateMin>
+		
+		<sowingDateMax>6</sowingDateMax>
+		
+		<durationMin>150</durationMin>
+		
+		<durationMax>150</durationMax>
+		
+		<action_name_1></action_name_1>
+		
+		<action_description_1></action_description_1>
+		
+		<action_duration_1></action_duration_1>
+</item>
+
+<item>
+		<reference>potironjaunegrosdeparis</reference>
+		
+		<title>Potiron Jaune Gros de Paris</title>
+		<family>Cucurbitaceae</family>
+		<specie>Potiron</specie>
+		<variety>Jaune Gros de Paris</variety>
+		
+		<link>http://fr.wikipedia.org/wiki/Potiron</link>
+		
+		<description>Variété produisant de très gros fruits à la chair jaune et sucrée qui est utilisée pour la préparation des potages.</description>
+
+		<sowingDateMin>3</sowingDateMin>
+		
+		<sowingDateMax>5</sowingDateMax>
+		
+		<durationMin>210</durationMin>
+		
+		<durationMax>240</durationMax>
+		
+		<action_name_1></action_name_1>
+		
+		<action_description_1></action_description_1>
+		
+		<action_duration_1></action_duration_1>
+</item>
+#########################################
+<item>
+		<reference>meloncharentais</reference>
+		
+		<title>Melon Charentais</title>
+		<family>Cucurbitaceae</family>
+		<specie>Melon</specie>
+		<variety>Charentais</variety>
+		
+		<link>http://fr.wikipedia.org/wiki/Melon_(plante)</link>
+		
+		<description>Cette variété traditionnelle donne des melons à peau lisse, à chair épaisse, colorée et très parfumée.</description>
+
+		<sowingDateMin>3</sowingDateMin>
+		
+		<sowingDateMax>6</sowingDateMax>
+		
+		<durationMin>150</durationMin>
+		
+		<durationMax>120</durationMax>
+		
+		<action_name_1></action_name_1>
+		
+		<action_description_1></action_description_1>
+		
+		<action_duration_1></action_duration_1>
+</item>
+#########################################
+<item>
+		<reference>fèvedagualduce</reference>
+		
+		<title>Fève d'Agualduce</title>
+		<family>Fabaceae</family>
+		<specie>Fève</specie>
+		<variety>d'Agualduce</variety>
+		
+		<link>http://fr.wikipedia.org/wiki/F%C3%A8ve</link>
+		
+		<description>Très longue et très large cosse contenant 8 à 9 gros grains blancs. Variété particulièrement précoce.</description>
+
+		<sowingDateMin>2</sowingDateMin>
+		
+		<sowingDateMax>3</sowingDateMax>
+		
+		<durationMin>120</durationMin>
+		
+		<durationMax>180</durationMax>
+		
+		<action_name_1></action_name_1>
+		
+		<action_description_1></action_description_1>
+		
+		<action_duration_1></action_duration_1>
+</item>
+#########################################
+<item>
+		<reference>oignonjaunepailledesvertus</reference>
+		
+		<title>Oignon jaune paille des Vertus</title>
+		<family>Liliaceae</family>
+		<specie>Oignon</specie>
+		<variety>jaune paille des Vertus</variety>
+		
+		<link>http://fr.wikipedia.org/wiki/Oignon</link>
+		
+		<description>Variété rustique et très productive donnant des gros bulbes jaunes, plats et épais qui se conservent très bien.</description>
+
+		<sowingDateMin>3</sowingDateMin>
+		
+		<sowingDateMax>4</sowingDateMax>
+		
+		<durationMin>180</durationMin>
+		
+		<durationMax>180</durationMax>
+		
+		<action_name_1></action_name_1>
+		
+		<action_description_1></action_description_1>
+		
+		<action_duration_1></action_duration_1>
+</item>
+#########################################
+<item>
+		<reference>oignonblancpremier</reference>
+		
+		<title>Oignon blanc Premier</title>
+		<family>Liliaceae</family>
+		<specie>Oignon</specie>
+		<variety>blanc Premier</variety>
+		
+		<link>http://fr.wikipedia.org/wiki/Oignon</link>
+		
+		<description>C'est un excellent petit oignon blanc à confire utilisé en salade ou en accompagnement de plats. Cette variété au développement rapide,idéale pour les récoltes d'été, donne de très bons résultats quelque soit la région de production</description>
+
+		<sowingDateMin>2</sowingDateMin>
+		
+		<sowingDateMax>9</sowingDateMax>
+		
+		<durationMin>90</durationMin>
+		
+		<durationMax>30</durationMax>
+		
+		<action_name_1></action_name_1>
+		
+		<action_description_1></action_description_1>
+		
+		<action_duration_1></action_duration_1>
+</item>
+
+
+
+
+﻿<item>
+		<reference>haricotfindebagnols</reference>
+		
+		<title>Haricot fin de bagnols</title>
+		<family>Fabaceae</family>
+		<specie>Phaseolus vulgaris,
+Phaseolus coccineus</specie>
+		<variety> fin de bagnols</variety>
+		
+		<link> http://fr.wikipedia.org/wiki/Haricot_vert</link>
+		
+		<description> Variété très hâtive à semer de très bonne heure. Elle donne à la première récolte de jolis filets longs, cylindriques, fins et droits.</description>
+
+		<sowingDateMin>4</sowingDateMin>
+		
+		<sowingDateMax>7</sowingDateMax>
+		
+		<durationMin>120</durationMin>
+		
+		<durationMax>90</durationMax>
+		
+		<action_name_1></action_name_1>
+		
+		<action_description_1></action_description_1>
+		
+		<action_duration_1></action_duration_1>
+</item>
+#########################################
+<item>
+		<reference>poireaujaunegrosdupoitou</reference>
+		
+		<title>Poireau Jaune Gros du Poitou</title>
+		<family> Liliaceae</family>
+		<specie>poireau</specie>
+		<variety>Jaune Gros du Poitou</variety>
+		
+		<link> http://fr.wikipedia.org/wiki/Poireau</link>
+		
+		<description> Cette variété très cultivée dans l'Ouest car sensible au froid donne de gros poireaux au pied court et au feuillage vert blond.</description>
+
+		<sowingDateMin>1</sowingDateMin>
+		
+		<sowingDateMax>3</sowingDateMax>
+		
+		<durationMin>180</durationMin>
+		
+		<durationMax>210</durationMax>
+		
+		<action_name_1></action_name_1>
+		
+		<action_description_1></action_description_1>
+		
+		<action_duration_1></action_duration_1>
+</item>
+#########################################
+<item>
+		<reference>chicoreefriseedemeaux</reference>
+		
+		<title>Chicorée frisée de Meaux</title>
+		<family>Asteraceae</family>
+		<specie>Chicorée</specie>
+		<variety>frisée de Meaux</variety>
+		
+		<link> http://fr.wikipedia.org/wiki/Chicor%C3%A9e_fris%C3%A9e</link>
+		
+		<description> Variété à pomme volumineuse, formant un coeur serré qui blanchit facilement.Variété rustique qui offre une bonne résistance à la montée à graines. Pour récolte d’Eté-début Automne.</description>
+
+		<sowingDateMin>5</sowingDateMin>
+		
+		<sowingDateMax>7</sowingDateMax>
+		
+		<durationMin>120</durationMin>
+		
+		<durationMax>120</durationMax>
+		
+		<action_name_1></action_name_1>
+		
+		<action_description_1></action_description_1>
+		
+		<action_duration_1></action_duration_1>
+</item>
+#########################################
+<item>
+		<reference>oseilledebelleville</reference>
+		
+		<title>Oseille de Belleville</title>
+		<family> Polygonaceae</family>
+		<specie>oseille</specie>
+		<variety>de Belleville</variety>
+		
+		<link> http://fr.wikipedia.org/wiki/Oseille</link>
+		
+		<description> Cuite comme les Epinards ou en accompagnement de viande et d’oeufs, l’Oseille est très appréciée. Les enfants l’aiment sur des toats accompagnés d’une béchamel et gratinés. Plante produisant des feuilles très larges, vert clair. Variété très productive et la plus largement utilisée.</description>
+
+		<sowingDateMin>3</sowingDateMin>
+		
+		<sowingDateMax>7</sowingDateMax>
+		
+		<durationMin>120</durationMin>
+		
+		<durationMax>150</durationMax>
+		
+		<action_name_1></action_name_1>
+		
+		<action_description_1></action_description_1>
+		
+		<action_duration_1></action_duration_1>
+</item>
+#########################################
+<item>
+		<reference>fenouilfinoracezefa</reference>
+		
+		<title>Fenouil fino race zefa</title>
+
+		<family>Cyperaceae</family>
+		<specie>fenouil</specie>
+		<variety>fino race zefa</variety>
+		
+		<link> http://fr.wikipedia.org/wiki/Fenouil</link>
+		
+		<description> Le Fenouil se consomme cru en salade ou cuit accompagné de jus de viande ou gratiné. Les graines, fortement anisées, peuvent parfumer gâteaux, poissons et autres plats. Pour la congélation, laver, couper en tranches et faire Blanchir pendant 1 à 2 minutes. Variété précoce et adaptée à la culture sous abri et de plein champ. Bulbe globuleux, volumineux et bien blanc.</description>
+
+		<sowingDateMin>2</sowingDateMin>
+		
+		<sowingDateMax>7</sowingDateMax>
+		
+		<durationMin>180</durationMin>
+		
+		<durationMax>150</durationMax>
+		
+		<action_name_1></action_name_1>
+		
+		<action_description_1></action_description_1>
+		
+		<action_duration_1></action_duration_1>
+</item>
+#########################################
+<item>
+		<reference>epinarddeviroflay</reference>
+		
+		<title>Epinard de Viroflay</title>
+		<family> Chenopodiaceae</family>
+		<specie>épinard</specie>
+		<variety>de Viroflay</variety>
+		
+		<link> http://fr.wikipedia.org/wiki/%C3%89pinard</link>
+		
+		<description> Les feuilles des Epinards se consomment cuites, nature, à la crème, en quiche... La congélation est possible après avoir blanchi les épinards 3-4 mn. Les égoutter et bien les presser pour retirer l’excédent d’eau. Plante vigoureuse et productive à très larges feuilles lisses et charnues.</description>
+
+		<sowingDateMin>8</sowingDateMin>
+		
+		<sowingDateMax>10</sowingDateMax>
+		
+		<durationMin>90</durationMin>
+		
+		<durationMax>210</durationMax>
+		
+		<action_name_1></action_name_1>
+		
+		<action_description_1></action_description_1>
+		
+		<action_duration_1></action_duration_1>
+</item>
+#########################################
+<item>
+		<reference>poisnormand</reference>
+		
+		<title>Pois Normand</title>
+		<family> Fabaceae</family>
+		<specie>pois</specie>
+		<variety>normand</variety>
+		
+		<link> http://fr.wikipedia.org/wiki/Pois</link>
+		
+		<description> Demi nain mangetout. Variété précoce donnant une abondante production de cosses blondes à saveur sucrée. Grains jaunes. Hauteur : 60-90 cm.</description>
+
+		<sowingDateMin>2</sowingDateMin>
+		
+		<sowingDateMax>4</sowingDateMax>
+		
+		<durationMin>120</durationMin>
+		
+		<durationMax>120</durationMax>
+		
+		<action_name_1></action_name_1>
+		
+		<action_description_1></action_description_1>
+		
+		<action_duration_1></action_duration_1>
+</item>
+#########################################
+<item>
+		<reference>celeriacouper</reference>
+		
+		<title>Céleri à couper</title>
+		<family>Apiaceae</family>
+		<specie>céleri</specie>
+		<variety>A couper</variety>
+		
+		<link> http://fr.wikipedia.org/wiki/C%C3%A9leri</link>
+		
+		<description> Les feuilles des Céleris à couper sont employées pour parfumer potages et sauces. Variété aux feuilles très parfumées, dressées, à côtes fines et tendres. Produit de nombreux rejets.</description>
+
+		<sowingDateMin>4</sowingDateMin>
+		
+		<sowingDateMax>6</sowingDateMax>
+		
+		<durationMin>120</durationMin>
+		
+		<durationMax>150</durationMax>
+		
+		<action_name_1></action_name_1>
+		
+		<action_description_1></action_description_1>
+		
+		<action_duration_1></action_duration_1>
+</item>
+#########################################
+<item>
+		<reference>laituebataviadepierrebenite</reference>
+		
+		<title>Laitue Batavia de Pierre Bénite</title>
+		<family> Astereacées</family>
+		<specie>laitue batavia</specie>
+		<variety>de Pierre bénite</variety>
+		
+		<link> http://fr.wikipedia.org/wiki/Laitue_batavia</link>
+		
+		<description> Variété résistant à la chaleur et produisant de belles salades volumineuses au feuillage blond frisé</description>
+
+		<sowingDateMin>2</sowingDateMin>
+		
+		<sowingDateMax>7</sowingDateMax>
+		
+		<durationMin>150</durationMin>
+		
+		<durationMax>120</durationMax>
+		
+		<action_name_1></action_name_1>
+		
+		<action_description_1></action_description_1>
+		
+		<action_duration_1></action_duration_1>
+</item>
+
+
+	</channel>
+</seeds>
+        

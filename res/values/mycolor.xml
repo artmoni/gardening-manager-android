@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="red">#ff0000</color>
+    <color name="green">#00ff00</color>
+    <color name="blue">#0000ff</color>
+    <color name="white">#ffffff</color>
+    <color name="action_ok_color">#92c051</color>
+    <color name="action_warning_color">#D7ae68</color>
+    <color name="action_error_color">#b65635</color>
+    <color name="text_color_dark">#432D07</color>
+    <color name="text_color_light">#E5DFC5</color>
+    <color name="transparent">#00000000</color>
+    <color name="green_dark">#48651C</color>
+    <color name="green_light">#92C051</color>
+
+</resources>

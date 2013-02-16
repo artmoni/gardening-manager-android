@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources> <!-- <string name="google.api.key">ABQIAAAASssRXsF27_M_fuf_bEbCAxQmfzzk-Yg4SASwaoK_s6A1IwWkRxSwq74WP3xqK-1eOaVljrrC3Nn7wg</string> -->
+    <string name="app_name">Gardening manager</string>
+    <string name="gots.credits.code">DEVELOPPEMENT \nArtmoni</string>
+    <string name="gots.credits.design">DESIGN \nSauter dans les flaques</string>
+    <string name="gots.description">The biologeekal growing</string>
+    <string name="gots.loading">Please wait, downloading</string>
+    <string name="day">Day</string>
+    <string name="week">week</string>
+    <string name="month">month</string>
+    <string name="seed.register.title">Register variety</string>
+    <string name="seed.action.date">action date :</string>
+    <string name="seed.action.add.stock">Add to stock</string>
+    <string name="seed.action.add.catalogue">Add to</string>
+    <string name="seed.action.save">Save</string>
+    <string name="seed.action.todo">To do before the</string>
+    <string name="seed.action.done">Dated</string>
+    <string name="seed.action.sowing.period">Sowing times</string>
+    <string name="seed.action.sowing.todo">Select month period to harvest</string>
+    <string name="seed.action.sowing.button">Sow</string>
+    <string name="seed.action.sowing.date">Planting date</string>
+    <string name="seed.action.sowing.choosetitle">Choose a seed</string>
+    <string name="seed.action.picking.period">Harvesting times</string>
+    <string name="seed.action.picking.todo">You must collect</string>
+    <string name="seed.action.picking.button">Harvest</string>
+    <string name="seed.action.picking.date">Harvest Date</string>
+    <string name="seed.action.watering.done">Watering done</string>
+    <string name="seed.action.watering.todo">You should water</string>
+    <string name="seed.action.watering.Button">Water</string>
+    <string name="seed.action.buy.todo">Consider buying your seeds</string>
+    <string name="seed.action.buy.done">Seeds purchased</string>
+    <string name="seed.description.tabmenu.detail">Detail</string>
+    <string name="seed.description.tabmenu.actions">Historique</string>
+    <string name="seed.description.tabmenu.wikipedia">Wikipedia</string>
+    <string name="seed.description.environment">Climate and soil</string>
+    <string name="seed.description.culture">Plantation</string>
+    <string name="seed.description.harvest">Harvest</string>
+    <string name="seed.description.ennemi">Enemies</string>
+    <string name="seed.description.family">Family</string>
+    <string name="seed.description.specie">Species</string>
+    <string name="seed.description.variety">Variety</string>
+    <string name="seed.menu.add">Add a seed</string>
+    <string name="seed.menu.add.barcode">Add by barcode</string>
+    <string name="seed.menu.update">Update</string>
+    <string name="action.planning">Plan an action</string>
+    <string name="action.delete.allotment">You are deleting a plot</string>
+    <string name="action.delete.seed">You are deleting a plot</string>
+    <string name="action.delete">Delete</string>
+        <string name="menu.edit">Modify</string>
+    
+    <string name="allotment.action.add.message">Name your plot</string>
+    <string name="allotment.description1">I select the menu button to add a plot.</string>
+    <string name="allotment.description2">The plot menu, I \'performs actions on a plot. For example: I plant a seed</string>
+    <string name="allotment.description3">I monitor development of my vegetables, I note my actions, I get informations.</string>
+    <string name="garden.menu.add.button">Add a plot</string>
+    <string name="profile.menu.localize">Locate my garden</string>
+    <string name="profile.menu.localize.description"> I geo-tag my garden to get the weather</string>
+    <string name="profile.menu.add">Add a garden</string>
+    <string name="profile.menu.add.description">I can manage multiple gardens</string>
+    <string name="profile.location.selectsource">Source choice</string>
+    <string name="profile.location.validate">Validate</string>
+    <string name="profile.sample.data">Begin with a sample garden</string>
+    
+    <string name="hut.menu.myseeds">My stock</string>
+    <string name="hut.menu.vendorseeds">Catalog</string>
+    <string name="garden.cityname.inputtitle">Garden place</string>
+    <string name="garden.cityname.inputmessage">Please enter your garden place</string>
+    <string name="dashboard.hut.name">Shed</string>
+    <string name="dashboard.allotments.name">Garden</string>
+    <string name="dashboard.actions.name">Actions</string>
+    <string name="dashboard.profile.name">Profile</string>
+    <string name="dateSliderTitle">dateSliderTitle string</string>
+    <string name="specie.daucuscarota">Carrot</string>
+    <string name="specie.brassicaoleracea">Broccoli</string>
+    <string name="specie.solanumlycopersicum">Tomato</string>
+    <string name="specie.alliumcepa">Onion</string>
+    <string name="specie.alliumporrum">leek</string>
+    <string name="specie.brassicarapa">Turnip</string>
+    <string name="specie.cucumissativus">Gherkin</string>
+    <string name="specie.lactucasativa">Lettuce</string>
+    <string name="specie.phaseolusvulgaris">Bean</string>
+    <string name="specie.raphanussativus">Radish</string>
+    <string name="specie.solanumtuberosum">Potato</string>
+    <string name="specie.capsicumannuum">Pepper</string>
+    
+     <string name="help.loading">Please wait, web help is loading</string>
+    <string name="menu.help">Help</string>
+    <string name="menu.help.firstlaunch">Do you want to have a look on the documentation?</string>
+    <string name="button.close">Close</string>
+    <string name="button.ok">OK</string>
+    <string name="button.cancel">Cancel</string>
+    <string name="weather.citynotfound">No weather for this city, change for a bigger one</string>
+
+    <string name="location.notfound">Location not found</string>
+    <string name="notification.action.title">Your _SPECIE_ needs you</string>
+    <string name="notification.action.content">and _NBACTIONS_ more task</string>
+    
+    <string name="action.sow">Sow</string>
+    <string name="action.beak">Beak</string>
+    <string name="action.lighten">Lighten</string>
+        
+    
+
+
+</resources>
