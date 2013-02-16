@@ -4,9 +4,9 @@ package org.gots.preferences;
 public class GotsPreferences implements GotsServiceAPIKEY {
 	private static final boolean DEVELOPPEMENT = false;
 	// private static final String ANALYTICS_API_KEY = "UA-916500-18";
-	private static final String ANALYTICS_API_KEY = System.getProperty("key.analyticsapi", "UA-916500-18");
-	private static final String WEATHER_API_KEY = System.getProperty("key.weatherapi", "6ba97b2306fd5b9d47992d8716dab16a");
-	private static final String ADMOB_API_KEY = System.getProperty("key.admobapi", "a14f50fa231b26d");
+	private static final String ANALYTICS_API_KEY = System.getProperty("key.analyticsapi", "UA-XXXXXX-XX");
+	private static final String WEATHER_API_KEY = System.getProperty("key.weatherapi", "XXXXXX");
+	private static final String ADMOB_API_KEY = System.getProperty("key.admobapi", "XXXXXX");
 	private static final String GARDENING_MANAGER_DIRECTORY="Gardening-Manager";
 
 	private static GotsPreferences preferences;
