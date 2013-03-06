@@ -28,6 +28,11 @@ public class GotsAdvertisement {
 		AdRequest adRequest = new AdRequest();
 		if (GotsPreferences.getInstance().isDEVELOPPEMENT())
 			adRequest.addTestDevice(AdRequest.TEST_EMULATOR);
+		adRequest.addKeyword("garden");
+		adRequest.addKeyword("potager");
+		adRequest.addKeyword("plant");
+		adRequest.addKeyword("vegetable");
+		
 
 		AdView adView;
 		if (width > 500)
