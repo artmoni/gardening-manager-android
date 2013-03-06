@@ -52,6 +52,7 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 	private ListView listView;
 	private ViewPager mViewPager;
 	private int currentAllotment = -1;
+	private TabsAdapter mTabsAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -80,8 +81,8 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 		// tabHost = getTabHost(); // The activity TabHost
 
 		mViewPager = (ViewPager) findViewById(R.id.pager);
-		TabsAdapter mTabsAdapter = new TabsAdapter(this, mViewPager);
-
+		mTabsAdapter = new TabsAdapter(this, mViewPager);
+		bar.removeAllTabs();
 		// // ********************** Tab description **********************
 		mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds)),
 				VendorListActivity.class, null);
@@ -102,9 +103,9 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 			if (scanSeed != null) {
 				scanSeed.setNbSachet(scanSeed.getNbSachet() + 1);
 				helper.updateSeed(scanSeed);
-				buildMyTabHost();
 			}
 		}
+		buildMyTabHost();
 
 	}
 

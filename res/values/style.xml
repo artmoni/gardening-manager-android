@@ -35,7 +35,6 @@
         <item name="android:layout_marginBottom">10dp</item>
         <item name="android:layout_marginLeft">10dp</item>
         <item name="android:layout_marginRight">10dp</item>
-        
     </style>
 
     <style name="seed_description_content">
@@ -63,7 +62,6 @@
         <item name="android:textSize">14dp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/text_color_dark</item>
-        
     </style>
 
     <style name="button">
@@ -196,6 +194,8 @@
         <item name="android:actionBarTabStyle">@style/Widget.Styled.TabBar</item>
         <item name="android:divider">@drawable/tab_divider</item>
         <item name="divider">@drawable/tab_divider</item>
+        <item name="android:dropDownItemStyle">@style/Widget.DropDownItemLight</item>
+        <item name="android:autoCompleteTextViewStyle">@style/Widget.AutoCompleteTextViewLight</item>
     </style>
 
     <style name="Widget.Styled.ActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
@@ -229,6 +229,14 @@
         <item name="android:textSize">20dp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/text_color_dark</item>
-           </style>
+    </style>
+
+    <style name="Widget.AutoCompleteTextViewLight" parent="@android:style/Widget.AutoCompleteTextView">
+        <item name="android:textColor">@color/text_color_dark</item>
+    </style>
+
+    <style name="Widget.DropDownItemLight" parent="@android:style/Widget.DropDownItem">
+        <item name="android:textColor">@color/text_color_dark</item>
+    </style>
 
 </resources>

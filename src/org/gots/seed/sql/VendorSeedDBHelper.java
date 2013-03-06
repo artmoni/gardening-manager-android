@@ -235,7 +235,7 @@ public class VendorSeedDBHelper {
 
 	public String[] getArrayVariety() {
 		open();
-		Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, null, null,
+		Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_VARIETY+"<>"+"''", null,
 				DatabaseHelper.SEED_VARIETY, null, null);
 
 		String[] arrayFamily = new String[managedCursor.getCount()];
@@ -245,7 +245,8 @@ public class VendorSeedDBHelper {
 			int nameColumn = managedCursor.getColumnIndex(DatabaseHelper.SEED_VARIETY);
 			do {
 				name = managedCursor.getString(nameColumn);
-				arrayFamily[j++] = name;
+				if (name != null)
+					arrayFamily[j++] = name;
 			} while (managedCursor.moveToNext());
 		}
 		managedCursor.close();

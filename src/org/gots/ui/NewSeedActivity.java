@@ -18,20 +18,34 @@ import org.gots.help.HelpUriBuilder;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.adapter.ListSpeciesAdapter;
 import org.gots.seed.adapter.PlanningHarvestAdapter;
 import org.gots.seed.adapter.PlanningSowAdapter;
 import org.gots.seed.sql.VendorSeedDBHelper;
 import org.gots.seed.view.PlanningWidget;
+import org.gots.seed.view.SeedWidgetLong;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.Gallery;
+import android.widget.GridView;
+import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -46,11 +60,15 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 public class NewSeedActivity extends SherlockActivity implements OnClickListener {
+	private static final String SELECTED_SPECIE = "selectedSpecie";
 	private View currentView;
 	private PlanningWidget planningSow;
 	private PlanningWidget planningHarvest;
 	private AutoCompleteTextView autoCompleteVariety;
-	private AutoCompleteTextView autoCompleteSpecie;
+	// private AutoCompleteTextView autoCompleteSpecie;
+	private Gallery gallerySpecies;
+	private SeedWidgetLong seedWidgetLong;
+	private BaseSeedInterface newSeed;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,26 +83,65 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 		findViewById(R.id.buttonStock).setOnClickListener(this);
 		findViewById(R.id.buttonCatalogue).setOnClickListener(this);
 
-		planningSow = (PlanningWidget) findViewById(R.id.IdSeedSowingPlanning);
+		newSeed = new GrowingSeed();
+
+		gallerySpecies = (Gallery) findViewById(R.id.layoutSpecieGallery);
+		if (savedInstanceState != null && savedInstanceState.getInt(SELECTED_SPECIE) != 0)
+			gallerySpecies.setSelection(savedInstanceState.getInt(SELECTED_SPECIE));
+		gallerySpecies.requestFocus();
+
+		initview();
+
+		super.onCreate(savedInstanceState);
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putInt(SELECTED_SPECIE, gallerySpecies.getSelectedItemPosition());
+	}
+
+	private void initview() {
+		planningSow = (PlanningWidget) findViewById(R.id.IdSeedEditSowingPlanning);
 		planningSow.setAdapter(new PlanningSowAdapter(null));
 		planningSow.setEditable(true);
 
-		planningHarvest = (PlanningWidget) findViewById(R.id.IdSeedHarvestPlanning);
-		planningHarvest.setAdapter(new PlanningHarvestAdapter(null));
-		planningHarvest.setEditable(true);
+		Button validateSowing = (Button) findViewById(R.id.buttonUpdateSeed);
 
-		autoCompleteSpecie = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewSpecie);
-		initSpecieList();
-
-		autoCompleteSpecie.setOnClickListener(new View.OnClickListener() {
+		validateSowing.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				initSpecieList();
-				showDropdown();
-			}
+				if (planningSow.getSelectedMonth().size() > 0) {
+					newSeed.setDateSowingMin(planningSow.getSelectedMonth().get(0));
+					newSeed.setDateSowingMax(planningSow.getSelectedMonth().get(
+							planningSow.getSelectedMonth().size() - 1));
 
+					ArrayList<Integer> harvestMonth = planningHarvest.getSelectedMonth();
+					if (harvestMonth.size() == 0) {
+						Toast.makeText(getApplicationContext(), "Please select month to harvest", 3000).show();
+						return;
+					}
+
+					int durationmin = harvestMonth.get(0) - newSeed.getDateSowingMin();
+					newSeed.setDurationMin(durationmin * 30);
+
+					int durationmax = harvestMonth.get(harvestMonth.size() - 1) - newSeed.getDateSowingMax();
+					newSeed.setDurationMax(durationmax * 30);
+
+					seedWidgetLong.setSeed(newSeed);
+					seedWidgetLong.invalidate();
+				}
+			}
 		});
+
+		planningHarvest = (PlanningWidget) findViewById(R.id.IdSeedEditHarvestPlanning);
+		planningHarvest.setAdapter(new PlanningHarvestAdapter(null));
+		planningHarvest.setEditable(true);
+
+		seedWidgetLong = (SeedWidgetLong) findViewById(R.id.idSeedWidgetLong);
+
+		initSpecieList();
 
 		autoCompleteVariety = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewVariety);
 		initVarietyList();
@@ -93,16 +150,24 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 			@Override
 			public void onClick(View v) {
 				initVarietyList();
-				autoCompleteVariety.showDropDown();
+				if (autoCompleteVariety != null)
+					autoCompleteVariety.showDropDown();
 			}
 		});
 
-		super.onCreate(savedInstanceState);
+		ImageButton clearVariety = (ImageButton) findViewById(R.id.buttonClearVariety);
+		clearVariety.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				autoCompleteVariety.setText("");
+			}
+		});
 	}
 
-	private void showDropdown() {
-		autoCompleteSpecie.showDropDown();
-	}
+	// private void showDropdown() {
+	// autoCompleteSpecie.showDropDown();
+	// }
 
 	@Override
 	public void onClick(View v) {
@@ -113,15 +178,17 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 			break;
 
 		case R.id.buttonStock:
-			long seedId = insertSeed();
-			addToStock(seedId);
-			finish();
-
+			if (validateSeed()) {
+				long seedId = insertSeed();
+				addToStock(seedId);
+				finish();
+			}
 			break;
 		case R.id.buttonCatalogue:
-			insertSeed();
-			finish();
-
+			if (validateSeed()) {
+				insertSeed();
+				finish();
+			}
 			break;
 		default:
 			break;
@@ -139,57 +206,27 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 
 	}
 
+	private boolean validateSeed() {
+		boolean isValidate = true;
+
+		if (newSeed.getVariety() == null || "".equals(newSeed.getVariety()))
+			isValidate = false;
+		if (newSeed.getFamily() == null || "".equals(newSeed.getFamily()))
+			isValidate = false;
+		if (newSeed.getDateSowingMin() == -1 || newSeed.getDateSowingMax() == -1)
+			isValidate = false;
+		if (!isValidate) {
+			Toast.makeText(this, "All fields should be defined", 3000).show();
+		}
+
+		return isValidate;
+	}
+
 	private long insertSeed() {
-		// String family = (String) ((Spinner)
-		// findViewById(R.id.spinnerFamily)).getSelectedItem();
-		String variety = (String) ((AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewVariety)).getText()
-				.toString();
-		String specie = (String) ((AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewSpecie)).getText()
-				.toString();
 
-		// int sowmin = (Integer) ((TextView)
-		// findViewById(R.id.buttonSowingMinDatePicker)).getTag();
-		// int sowmax = (Integer) ((TextView)
-		// findViewById(R.id.buttonSowingMaxDatePicker)).getTag();
-		// int harvestmin = (Integer) ((TextView)
-		// findViewById(R.id.buttonHarvestMinDatePicker)).getTag();
-		// int harvestmax = (Integer) ((TextView)
-		// findViewById(R.id.buttonHarvestMaxDatePicker)).getTag();
-		String barcode = (((TextView) findViewById(R.id.textViewBarCode)).getText()).toString();
-
-		// BaseSeedInterface seed = SeedFactory.createSeed(family);
-		BaseSeedInterface seed = new GrowingSeed();
-
-		ArrayList<Integer> sowMonth = planningSow.getSelectedMonth();
-		if (sowMonth.size() == 0) {
-			Toast.makeText(this, "Please select month to sow", 3000).show();
-			return -1;
-		}
-		seed.setDateSowingMin(sowMonth.get(0));
-		seed.setDateSowingMax(sowMonth.get(sowMonth.size() - 1));
-
-		ArrayList<Integer> harvestMonth = planningHarvest.getSelectedMonth();
-		if (harvestMonth.size() == 0) {
-			Toast.makeText(this, "Please select month to harvest", 3000).show();
-			return -1;
-		}
-
-		int durationmin = harvestMonth.get(0) - sowMonth.get(0);
-		seed.setDurationMin(durationmin * 30);
-
-		int durationmax = harvestMonth.get(harvestMonth.size() - 1) - sowMonth.get(sowMonth.size() - 1);
-		seed.setDurationMax(durationmax * 30);
-
-		TextView familyText = (TextView) findViewById(R.id.IdSeedFamily);
-
-		seed.setFamily(familyText.getText().toString());
-		seed.setSpecie(specie);
-		seed.setVariety(variety);
-		seed.setBareCode(barcode);
-		seed.setReference(barcode);
 		VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
 
-		return helper.insertSeed(seed);
+		return helper.insertSeed(newSeed);
 	}
 
 	/**
@@ -199,33 +236,24 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 		final VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
 		String[] specieList = helper.getArraySpecie();
 
-		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_dropdown_item_1line, specieList);
-		autoCompleteSpecie.setAdapter(adapter);
+		ListSpeciesAdapter listSpeciesAdapter = new ListSpeciesAdapter(this, specieList);
 
-		autoCompleteSpecie.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-			private String family;
+		gallerySpecies.setAdapter(listSpeciesAdapter);
+		gallerySpecies.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				String specie = adapter.getItem(arg2);
-				int vegetableImageRessource = getResources().getIdentifier(
-						"org.gots:drawable/specie_" + specie.trim().toLowerCase().replaceAll("\\s", ""), null, null);
-				ImageView v = (ImageView) findViewById(R.id.imageViewSpecie);
-				v.setImageResource(vegetableImageRessource);
-
-				family = helper.getFamilyBySpecie(specie);
-				LinearLayout vf = (LinearLayout) findViewById(R.id.layoutFamily);
-				int vegetableImageRessourcef = getResources().getIdentifier(
-						"org.gots:drawable/family_" + family.trim().toLowerCase().replaceAll("\\s", ""), null, null);
-				vf.setBackgroundResource(vegetableImageRessourcef);
-
-				TextView familyText = (TextView) findViewById(R.id.IdSeedFamily);
-				familyText.setText(family);
+				gallerySpecies.dispatchSetSelected(false);
+				arg1.setSelected(!arg1.isSelected());
+				newSeed.setSpecie((String) arg1.getTag());
+				String family = helper.getFamilyBySpecie(newSeed.getSpecie());
+				newSeed.setFamily(family);
+				seedWidgetLong.setSeed(newSeed);
+				seedWidgetLong.invalidate();
+				// arg1.setBackgroundColor(getResources().getColor(R.color.action_warning_color));
 			}
 		});
-		autoCompleteSpecie.invalidate();
+
 	}
 
 	/**
@@ -233,31 +261,48 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 	 */
 	private void initVarietyList() {
 		VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
-		AutoCompleteTextView textViewSpecie = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewSpecie);
-		String specie = textViewSpecie.getText().toString();
+
 		String[] referenceList = null;
-		if (specie != null)
-			referenceList = helper.getArrayVarietyBySpecie(specie);
+		if (newSeed.getSpecie() != null)
+			referenceList = helper.getArrayVarietyBySpecie(newSeed.getSpecie());
 		else
 			referenceList = helper.getArrayVariety();
 
 		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_dropdown_item_1line, referenceList);
 		autoCompleteVariety.setAdapter(adapter);
+		autoCompleteVariety.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				String variety = autoCompleteVariety.getText().toString();
+				newSeed.setVariety(variety);
+				seedWidgetLong.setSeed(newSeed);
+				seedWidgetLong.invalidate();
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
+		});
 
 		autoCompleteVariety.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				String variety = adapter.getItem(arg2).trim().toLowerCase().replaceAll("\\s", "");
-				int vegetableImageRessource = getResources().getIdentifier("org.gots:drawable/veget_" + variety, null,
-						null);
+				String variety = adapter.getItem(arg2);
+				newSeed.setVariety(variety);
+				seedWidgetLong.setSeed(newSeed);
+				seedWidgetLong.invalidate();
 
-				ImageView v = (ImageView) findViewById(R.id.imageViewVariety);
-				v.setImageResource(vegetableImageRessource);
 			}
 		});
-		// autoCompleteVariety.showDropDown();
 		autoCompleteVariety.invalidate();
 	}
 
@@ -273,7 +318,9 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 			Log.i("Scan result", scanResult.toString());
 			TextView textViewBarCode = (TextView) findViewById(R.id.textViewBarCode);
 			textViewBarCode.setText(scanResult.getContents());
-
+			newSeed.setBareCode(textViewBarCode.getText().toString());
+			seedWidgetLong.setSeed(newSeed);
+			seedWidgetLong.invalidate();
 		}
 		// super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -292,7 +339,7 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 		case android.R.id.home:
 			finish();
 			return true;
-		
+
 		case R.id.help:
 			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HelpUriBuilder.getUri(getClass()
 					.getSimpleName())));
@@ -302,5 +349,13 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+
+		super.onConfigurationChanged(newConfig);
+		seedWidgetLong.setSeed(newSeed);
+		seedWidgetLong.invalidate();
 	}
 }

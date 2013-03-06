@@ -72,7 +72,7 @@ public class ListVendorSeedAdapter extends BaseAdapter {
 			actionWidget = (ActionWidget) vi.findViewById(R.id.IdSeedAction);
 
 			seedWidgetLong.setSeed(currentSeed);
-
+ 
 			buying = new BuyingAction(mContext);
 			buying.setState(ActionState.NORMAL);
 			actionWidget.setAction(buying);
