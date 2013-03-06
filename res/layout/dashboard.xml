@@ -13,8 +13,11 @@
 
         <LinearLayout
             android:id="@+id/bannerAd"
-            android:layout_width="fill_parent"
-            android:layout_height="50dp" android:background="@color/text_color_dark" android:layout_gravity="center_horizontal">
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/text_color_dark"
+            android:gravity="center_horizontal" >
         </LinearLayout>
 
         <org.gots.layout.DashboardLayout
@@ -22,8 +25,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_marginBottom="20dp"
-            android:orientation="vertical" 
-            >
+            android:orientation="vertical" >
 
             <Button
                 android:id="@+id/dashboard_button_hut"
@@ -68,9 +70,8 @@
             android:layout_height="53dp"
             android:layout_centerHorizontal="true"
             android:background="@drawable/weather_background"
-            android:paddingBottom="0dp"
-            
-             />
+            android:paddingBottom="0dp" />
+
         <LinearLayout
             android:id="@+id/WeatherWidget"
             android:layout_width="fill_parent"
