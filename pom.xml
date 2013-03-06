@@ -6,17 +6,11 @@
 	<groupId>org.gots</groupId>
 	<artifactId>gardening-manager</artifactId>
 	<packaging>apk</packaging>
-	<version>0.16</version>
+	<version>0.17-SNAPSHOT</version>
 	<name>Gardening Manager</name>
 	<properties>
 		<android.version>4.0.3</android.version>
 		<android.platform>16</android.platform>
-		<sdk.path>/home/sfleury/Projets/Android/android-sdk-linux</sdk.path>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<keystore.path>/home/sfleury/Projets/30\ Gardening\ Manager/00\ release/keystore/keystore</keystore.path>
-		
-		
 	</properties>
 	<repositories>
 		<repository>
@@ -27,6 +21,8 @@
 			<id>google-api-services</id>
 			<url>http://mavenrepo.google-api-java-client.googlecode.com/hg</url>
 		</repository>
+		<!-- <repository> <id>gardening-manager-maven</id> <url>https://github.com/artmoni/gardening-manager-maven.git</url> 
+			</repository> -->
 	</repositories>
 	<dependencies>
 		<dependency>
@@ -47,10 +43,17 @@
 			<version>2</version>
 		</dependency>
 		<dependency>
+			<groupId>org.opensocial</groupId>
+			<artifactId>opensocial</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
 			<groupId>com.google.android.admob</groupId>
 			<artifactId>admob</artifactId>
 			<version>6.2.1-r8</version>
 		</dependency>
+		<!-- <dependency> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-javadoc-plugin</artifactId> 
+			<version>2.9</version> </dependency> -->
 		<dependency>
 			<groupId>org.simpleframework</groupId>
 			<artifactId>simple-xml</artifactId>
@@ -107,37 +110,56 @@
 					</emulator>
 					<deleteConflictingFiles>true</deleteConflictingFiles>
 					<undeployBeforeDeploy>false</undeployBeforeDeploy>
-					
+					<!-- <dex>
+						<jvmArguments>
+							<jvmArgument>-Dtest=truc</jvmArgument>
+						</jvmArguments>
+					</dex> -->
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9</version>
 				<configuration>
 					<skip>true</skip>
 				</configuration>
 			</plugin>
 			<!-- <plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.5</version>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+				<version>1.0-alpha-2</version>
+				<executions>
+					<execution>
+						<phase>initialize</phase>
+						<goals>
+							<goal>set-system-properties</goal>
+						</goals>
+					</execution>
+				</executions>
 				<configuration>
-					<systemPropertyVariables>
+					<properties>
 						<property>
 							<name>key.analyticsapi</name>
-							<value>UA-916500-18</value>
+							<value>${key.analyticsapi}</value>
 						</property>
 						<property>
 							<name>key.weatherapi</name>
-							<value>6ba97b2306fd5b9d47992d8716dab16a</value>
+							<value>${key.weatherapi}</value>
 						</property>
 						<property>
 							<name>key.admobapi</name>
-							<value>a14f50fa231b26d</value>
+							<value>${key.admobapi}</value>
 						</property>
-					</systemPropertyVariables>
+					</properties>
 				</configuration>
 			</plugin> -->
+			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-surefire-plugin</artifactId> 
+				<version>2.5</version> <configuration> <systemPropertyVariables> <property> 
+				<name>key.analyticsapi</name> <value>UA-916500-18</value> </property> <property> 
+				<name>key.weatherapi</name> <value>6ba97b2306fd5b9d47992d8716dab16a</value> 
+				</property> <property> <name>key.admobapi</name> <value>a14f50fa231b26d</value> 
+				</property> </systemPropertyVariables> </configuration> </plugin> -->
 		</plugins>
 	</build>
 	<profiles>
