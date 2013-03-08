@@ -85,11 +85,6 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 
 		newSeed = new GrowingSeed();
 
-		gallerySpecies = (Gallery) findViewById(R.id.layoutSpecieGallery);
-		if (savedInstanceState != null && savedInstanceState.getInt(SELECTED_SPECIE) != 0)
-			gallerySpecies.setSelection(savedInstanceState.getInt(SELECTED_SPECIE));
-		gallerySpecies.requestFocus();
-
 		initview();
 
 		super.onCreate(savedInstanceState);
@@ -98,7 +93,8 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putInt(SELECTED_SPECIE, gallerySpecies.getSelectedItemPosition());
+		if (gallerySpecies != null)
+			outState.putInt(SELECTED_SPECIE, gallerySpecies.getSelectedItemPosition());
 	}
 
 	private void initview() {
@@ -141,8 +137,6 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 
 		seedWidgetLong = (SeedWidgetLong) findViewById(R.id.idSeedWidgetLong);
 
-		initSpecieList();
-
 		autoCompleteVariety = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewVariety);
 		initVarietyList();
 		autoCompleteVariety.setOnClickListener(new View.OnClickListener() {
@@ -163,6 +157,19 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 				autoCompleteVariety.setText("");
 			}
 		});
+
+		gallerySpecies = (Gallery) findViewById(R.id.layoutSpecieGallery);
+		initSpecieList();
+		gallerySpecies.post(new Runnable() {
+			public void run() {
+				gallerySpecies.requestFocus();
+
+			}
+		});
+		// if (savedInstanceState != null &&
+		// savedInstanceState.getInt(SELECTED_SPECIE) != 0)
+		// gallerySpecies.setSelection(savedInstanceState.getInt(SELECTED_SPECIE));
+
 	}
 
 	// private void showDropdown() {

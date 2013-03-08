@@ -37,7 +37,7 @@ import org.gots.bean.SeedCategory;
 /**
  *
  */
-public interface BaseSeedInterface {
+public interface BaseSeedInterface  {
 	public abstract int getId();
 
 	public abstract void setId(int id);
