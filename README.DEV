@@ -28,11 +28,13 @@ http://subclipse.tigris.org/update_1.8.x
 --------------------------------------------------------
 Use android-m2e
 http://blog.xebia.fr/2010/03/23/maven-et-android-comment-utiliser-le-plugin/
+
 1/ INCLUDE EXTERNALS IN MAVEN REPOSITORY
 mvn install:install-file -Dfile=GoogleAnalytics/libGoogleAnalytics.jar -Dversion=1.4.2 -DartifactId=analytics -DgroupId=com.google.android.analytics -Dpackaging=jar
 mvn install:install-file -Dfile=GoogleAdMobAdsSdkAndroid-4.3.1/GoogleAdMobAdsSdk-4.3.1.jar -Dversion=4.3.1 -DartifactId=admob -DgroupId=com.google.android.admob -Dpackaging=jar
 mvn install:install-file -Dfile=JakeWharton-ActionBarSherlock-e5c2d1c/library/bin/actionbarsherlock.jar -Dversion=4.2.0 -DartifactId=actionbarsherlock -DgroupId=com.actionbarsherlock -Dpackaging=jar
 mvn install:install-file -Dfile=simple-xml-2.6.4/jar/simple-xml-2.6.4.jar -Dversion=2.6.4 -DartifactId=org.simpleframework -DgroupId=simple-xml -Dpackaging=jar
+mvn install:install-file -Dfile=opensocial-1.0.jar -Dversion=1.0 -DartifactId=opensocial -DgroupId=org.opensocial -Dpackaging=jar
 
 2/ INCLUDE ANDROID SDK IN MAVEN REPOSITORY
 With android SDK Manager, install those tools:
@@ -48,6 +50,9 @@ git clone https://github.com/mosabua/maven-android-sdk-deployer
 
 git clone https://github.com/JakeWharton/ActionBarSherlock
 link the library project with your project
+
+3/ COMPILATION lifecycle
+mvn install --settings settings.xml -P env-dev
 
 --------------------------------------------------------
 ------------- COMPILATION PROCESS 
