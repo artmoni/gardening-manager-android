@@ -138,7 +138,7 @@ public class SplashScreenActivity extends Activity {
 			startActivityForResult(intent, 0);
 
 		} else {
-			if (GotsPreferences.getInstance().isDevelopment())
+			if (GotsPreferences.getInstance(mContext).isDevelopment())
 				splashHandler.sendMessageDelayed(msg, 0);
 			else
 				splashHandler.sendMessageDelayed(msg, SPLASHTIME);
@@ -199,7 +199,7 @@ public class SplashScreenActivity extends Activity {
 				PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager alarms = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-		if (GotsPreferences.getInstance().isDevelopment())
+		if (GotsPreferences.getInstance(context).isDevelopment())
 			alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
 					AlarmManager.INTERVAL_FIFTEEN_MINUTES, actionTODOIntent);
 		else {
@@ -215,27 +215,13 @@ public class SplashScreenActivity extends Activity {
 		List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
 
 		for (ApplicationInfo applicationInfo : packages) {
-			Log.d("unlockPremium", "App:" + applicationInfo.name + " Package :" + applicationInfo.packageName);
 			try {
 
 				PackageInfo packageInfo = pm
 						.getPackageInfo(applicationInfo.packageName, PackageManager.GET_PERMISSIONS);
 				if ("org.gots.premium".equals(packageInfo.packageName)) {
-					Log.i("unlockPremium", "unlocked");
 					unlocked = true;
 				}
-
-				// //Get Permissions
-				// String[] requestedPermissions =
-				// packageInfo.requestedPermissions;
-				//
-				// if(requestedPermissions != null)
-				// {
-				// for (int i = 0; i < requestedPermissions.length; i++) {
-				// Log.d("unlockPremium",requestedPermissions[i]);
-				// }
-				// }
-
 			} catch (NameNotFoundException e) {
 				e.printStackTrace();
 			}

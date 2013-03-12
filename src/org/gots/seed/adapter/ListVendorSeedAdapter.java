@@ -48,11 +48,11 @@ public class ListVendorSeedAdapter extends BaseAdapter {
 		this.vendorSeeds = vendorSeeds;
 		mContext = context;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		
 		if (!GotsPreferences.isPremium())
 			nbAds = vendorSeeds.size() / frequencyAds + 1;
 
 		Collections.sort(vendorSeeds, new ISeedSpecieComparator(context));
-
 	}
 
 	@Override

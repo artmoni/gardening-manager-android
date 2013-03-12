@@ -18,20 +18,22 @@ public class BootBroadcastReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-//        Intent startServiceIntent = new Intent(context, ActionNotificationService.class);
-//        context.startService(startServiceIntent);
+		// Intent startServiceIntent = new Intent(context,
+		// ActionNotificationService.class);
+		// context.startService(startServiceIntent);
 		setRecurringAlarm(context);
 	}
+
 	private void setRecurringAlarm(Context context) {
 		Calendar updateTime = Calendar.getInstance();
-		
+
 		Intent actionsBroadcaster = new Intent(context, ActionTODOBroadcastReceiver.class);
 		PendingIntent actionTODOIntent = PendingIntent.getBroadcast(context, 0, actionsBroadcaster,
 				PendingIntent.FLAG_UPDATE_CURRENT);
-		
+
 		AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-		if (GotsPreferences.getInstance().isDevelopment())
+		if (GotsPreferences.isDevelopment())
 			alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
 					AlarmManager.INTERVAL_FIFTEEN_MINUTES, actionTODOIntent);
 		else {
@@ -39,13 +41,12 @@ public class BootBroadcastReceiver extends BroadcastReceiver {
 			alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
 					AlarmManager.INTERVAL_DAY * 7, actionTODOIntent);
 		}
-		
-		
+
 		Intent weatherBroadcastIntent = new Intent(context, WeatherBroadcastReceiver.class);
 		PendingIntent weatherUpdateService = PendingIntent.getBroadcast(context, 1, weatherBroadcastIntent,
 				PendingIntent.FLAG_UPDATE_CURRENT);
 
-		if (GotsPreferences.getInstance().isPremium())
+		if (GotsPreferences.isDevelopment())
 			alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
 					AlarmManager.INTERVAL_FIFTEEN_MINUTES, weatherUpdateService);
 		else {
