@@ -30,6 +30,7 @@ import org.gots.bean.Garden;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GardenManager;
 import org.gots.help.HelpUriBuilder;
+import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.providers.RetrieveNuxeoDocs;
 import org.gots.seed.sql.VendorSeedDBHelper;
@@ -52,6 +53,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,8 +78,10 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 	private GardenManager gardenManager;
 	GardenInterface garden = new Garden();
 	private int mode = 0;
+	private CheckBox shareBox;
+	private TextView loginText;
+	private TextView passwordText;
 
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -99,8 +104,25 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 		garden.setLocality("");
 
 		buildProfile();
-		
+ 
+		final LinearLayout loginBox = (LinearLayout) findViewById(R.id.idLoginBox);
 
+		loginText = (TextView) findViewById(R.id.edittextLogin);
+		loginText.setText(GotsPreferences.getNUXEO_LOGIN());
+		passwordText = (TextView) findViewById(R.id.edittextPassword);
+		passwordText.setText(GotsPreferences.getNUXEO_PASSWORD());
+
+		shareBox = (CheckBox) findViewById(R.id.checkboxShare);
+		shareBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (isChecked) {
+					loginBox.setVisibility(View.VISIBLE);
+				}
+
+			}
+		});
 	}
 
 	private void buildProfile() {
@@ -164,11 +186,13 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 					location.setText(String.format("%s", address.getLocality()));
 			} else {
 				// sinon on affiche un message d'erreur
-				((TextView) findViewById(R.id.editTextLocality)).setHint(getResources().getString(R.string.location_notfound));
+				((TextView) findViewById(R.id.editTextLocality)).setHint(getResources().getString(
+						R.string.location_notfound));
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-			((TextView) findViewById(R.id.editTextLocality)).setHint(getResources().getString(R.string.location_notfound));
+			((TextView) findViewById(R.id.editTextLocality)).setHint(getResources().getString(
+					R.string.location_notfound));
 		}
 		// on stop le cercle de chargement
 		setProgressBarIndeterminateVisibility(false);
@@ -287,13 +311,13 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
-	private void createNuxeoGarden(){
-		RetrieveNuxeoDocs docs = new RetrieveNuxeoDocs(this);
-		docs.execute(garden);
-	}
 
 	private void createNewProfile() {
+
+		if (shareBox.isChecked()) {
+			GotsPreferences.setNUXEO_LOGIN(loginText.getText().toString());
+			GotsPreferences.setNUXEO_PASSWORD(passwordText.getText().toString());
+		}
 
 		if (location != null) {
 			garden.setGpsLatitude(location.getLatitude());
@@ -311,8 +335,6 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 
 		gardenManager.addGarden(garden, true);
 
-		createNuxeoGarden();
-		
 		// SAMPLE GARDEN
 		CheckBox samples = (CheckBox) findViewById(R.id.checkboxSamples);
 		if (samples.isChecked()) {
@@ -364,5 +386,4 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 		super.onDestroy();
 	}
 
-	
 }

@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.gots.DatabaseHelper;
+import org.gots.garden.provider.NuxeoGardenProvider;
 import org.gots.garden.sql.GardenDBHelper;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.providers.GotsConnector;
@@ -30,6 +31,7 @@ public class GardenManager {
 	private SharedPreferences preferences;
 	private Context mContext;
 	private boolean isLocalStore = false;
+	
 
 	public GardenManager(Context mContext) {
 		this.mContext = mContext;
@@ -58,40 +60,12 @@ public class GardenManager {
 		isLocalStore = localStore;
 		new RefreshTask().execute(new Object());
 
-		new AsyncTask<GardenInterface, Integer, Integer>() {
-
-			@Override
-			protected Integer doInBackground(GardenInterface... params) {
-				HttpAutomationClient client = new HttpAutomationClient(
-						"http://192.168.100.90:8080/nuxeo/site/automation");
-				Session session = client.getSession("bob", "password");
-
-				DocumentService rs = new DocumentService(session);
-				try {
-					DocRef wsRef = new DocRef("/default-domain/UserWorkspaces/bob");
-
-					Log.i("Nuxeo addGarden", wsRef.toString());
-					Log.i("Nuxeo addGarden", params[0].getLocality());
-
-					PropertyMap map = new PropertyMap();
-					map.set("dc:title", params[0].getLocality());
-					map.set("garden:altitude", new Long(800));
-					map.set("garden:longitude", new Long(-5));
-					
-					rs.createDocument(wsRef, "Garden", params[0].getLocality(),map);
-
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				return null;
-			}
-
-		}.execute(newGarden);
-
 		GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
 		tracker.trackEvent("Garden", "location", newGarden.getLocality(), 0);
 
+		GardenProvider gardenProvider = new NuxeoGardenProvider();
+		gardenProvider.createGarden(garden);
+		
 		return newGarden.getId();
 	}
 
@@ -177,5 +151,10 @@ public class GardenManager {
 
 			super.onPostExecute(result);
 		}
+	}
+
+	public List<GardenInterface> getMyGardens() {
+		GardenProvider nuxeoProvider = new NuxeoGardenProvider();
+		return nuxeoProvider.getMyGardens();
 	}
 }
