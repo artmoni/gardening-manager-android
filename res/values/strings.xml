@@ -46,8 +46,7 @@
     <string name="action.delete.allotment">You are deleting a plot</string>
     <string name="action.delete.seed">You are deleting a plot</string>
     <string name="action.delete">Delete</string>
-        <string name="menu.edit">Modify</string>
-    
+    <string name="menu.edit">Modify</string>
     <string name="allotment.action.add.message">Name your plot</string>
     <string name="allotment.description1">I select the menu button to add a plot.</string>
     <string name="allotment.description2">The plot menu, I \'performs actions on a plot. For example: I plant a seed</string>
@@ -60,7 +59,6 @@
     <string name="profile.location.selectsource">Source choice</string>
     <string name="profile.location.validate">Validate</string>
     <string name="profile.sample.data">Begin with a sample garden</string>
-    
     <string name="hut.menu.myseeds">My stock</string>
     <string name="hut.menu.vendorseeds">Catalog</string>
     <string name="garden.cityname.inputtitle">Garden place</string>
@@ -82,24 +80,22 @@
     <string name="specie.raphanussativus">Radish</string>
     <string name="specie.solanumtuberosum">Potato</string>
     <string name="specie.capsicumannuum">Pepper</string>
-    
-     <string name="help.loading">Please wait, web help is loading</string>
+    <string name="help.loading">Please wait, web help is loading</string>
     <string name="menu.help">Help</string>
     <string name="menu.help.firstlaunch">Do you want to have a look on the documentation?</string>
     <string name="button.close">Close</string>
     <string name="button.ok">OK</string>
     <string name="button.cancel">Cancel</string>
     <string name="weather.citynotfound">No weather for this city, change for a bigger one</string>
-
     <string name="location.notfound">Location not found</string>
     <string name="notification.action.title">Your _SPECIE_ needs you</string>
     <string name="notification.action.content">and _NBACTIONS_ more task</string>
-    
     <string name="action.sow">Sow</string>
     <string name="action.beak">Beak</string>
     <string name="action.lighten">Lighten</string>
-        
+    <string name="profile.share.data">Share this garden with friends</string>
+    <string name="login">Login</string>
+        <string name="password">Password</string>
     
-
-
+    
 </resources>
