@@ -26,7 +26,7 @@ public class GotsAdvertisement {
 		int height = display.getHeight();
 
 		AdRequest adRequest = new AdRequest();
-		if (GotsPreferences.getInstance().isPremium())
+		if (GotsPreferences.getInstance(mContext).isPremium())
 			adRequest.addTestDevice(AdRequest.TEST_EMULATOR);
 		adRequest.addKeyword("garden");
 		adRequest.addKeyword("potager");
@@ -36,9 +36,9 @@ public class GotsAdvertisement {
 
 		AdView adView;
 		if (width > 500)
-			adView = new AdView((Activity) mContext, AdSize.IAB_BANNER, GotsPreferences.getInstance().getAdmobApiKey());
+			adView = new AdView((Activity) mContext, AdSize.IAB_BANNER, GotsPreferences.getAdmobApiKey());
 		else
-			adView = new AdView((Activity) mContext, AdSize.BANNER, GotsPreferences.getInstance().getAdmobApiKey());
+			adView = new AdView((Activity) mContext, AdSize.BANNER, GotsPreferences.getAdmobApiKey());
 		
 		adView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 

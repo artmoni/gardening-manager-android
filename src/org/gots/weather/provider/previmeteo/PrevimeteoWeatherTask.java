@@ -51,10 +51,10 @@ public class PrevimeteoWeatherTask extends WeatherTask {
 		try {
 			String weatherURL;
 
-			if (GotsPreferences.getInstance().isDevelopment())
+			if (GotsPreferences.isDevelopment())
 				weatherURL = "http://www.gardening-manager.com/weather/weather-error.xml";
 			else
-				weatherURL = "http://api.previmeteo.com/" + GotsPreferences.getInstance().getWeatherApiKey()
+				weatherURL = "http://api.previmeteo.com/" + GotsPreferences.getWeatherApiKey()
 						+ "/ig/api?weather=" + address.getLocality() + "," + address.getCountryName() + "&hl=fr";
 			// weatherURL = "http://services.gardening-manager.com/previmeteo/"
 			// + "/ig/api?weather="

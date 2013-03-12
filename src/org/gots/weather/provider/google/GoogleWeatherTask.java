@@ -49,7 +49,7 @@ public class GoogleWeatherTask extends WeatherTask {
 		try {
 			String weatherURL;
 
-			if (GotsPreferences.getInstance().isDevelopment())
+			if (GotsPreferences.isDevelopment())
 				weatherURL = "http://92.243.19.29/weather.xml";
 			else
 				weatherURL = "http://www.google.com/ig/api?weather=" + address.getLocality() + ","

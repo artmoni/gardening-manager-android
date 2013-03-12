@@ -42,11 +42,11 @@ public class GotsAnalytics {
 	public void incrementActivityCount() {
 		if (activityCount == 0) {
 			if (dispatchIntervalSecs == null)
-				GoogleAnalyticsTracker.getInstance().startNewSession(GotsPreferences.getInstance().getAnalyticsApiKey(), context);
+				GoogleAnalyticsTracker.getInstance().startNewSession(GotsPreferences.getInstance(context).getAnalyticsApiKey(), context);
 			else
-				GoogleAnalyticsTracker.getInstance().startNewSession(GotsPreferences.getInstance().getAnalyticsApiKey(), dispatchIntervalSecs, context);
+				GoogleAnalyticsTracker.getInstance().startNewSession(GotsPreferences.getInstance(context).getAnalyticsApiKey(), dispatchIntervalSecs, context);
 			
-			if (GotsPreferences.getInstance().isDevelopment())
+			if (GotsPreferences.getInstance(context).isDevelopment())
 				GoogleAnalyticsTracker.getInstance().setDryRun(true);
 		}
 		++activityCount;
