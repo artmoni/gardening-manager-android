@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_line_action"
+    android:orientation="horizontal"
+    android:padding="5dp" 
+    android:layout_margin="2dp">
+
+    <TextView
+        android:id="@+id/idButtonPremium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gardening Manager Premium"
+        android:textAppearance="?android:attr/textAppearanceLarge" style="@style/seed_family_description"/>
+
+</LinearLayout>

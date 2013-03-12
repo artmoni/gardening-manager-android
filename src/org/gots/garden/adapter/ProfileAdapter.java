@@ -57,7 +57,7 @@ public class ProfileAdapter extends BaseAdapter {
 		weatherManager = new WeatherManager(mContext);
 		gardenManager = new GardenManager(mContext);
 		myGardens = gardenManager.getMyGardens();
-		if (!GotsPreferences.isPremium())
+		if (!GotsPreferences.getInstance(mContext).isPremium())
 			nbAds = myGardens.size() / frequencyAds + 1;
 
 		// myGardens = weatherManager.get
@@ -70,7 +70,7 @@ public class ProfileAdapter extends BaseAdapter {
 
 	@Override
 	public GardenInterface getItem(int position) {
-		if (position % frequencyAds > 0 && !GotsPreferences.isPremium())
+		if (position % frequencyAds > 0 && !GotsPreferences.getInstance(mContext).isPremium())
 			position = position - (position / frequencyAds + 1);
 		return myGardens.get(position);
 	}
@@ -83,7 +83,7 @@ public class ProfileAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		if (position % frequencyAds == 0 && !GotsPreferences.isPremium()) {
+		if (position % frequencyAds == 0 && !GotsPreferences.getInstance(mContext).isPremium()) {
 			GotsAdvertisement ads = new GotsAdvertisement(mContext);
 			convertView = ads.getAdsLayout();
 			return convertView;

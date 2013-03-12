@@ -49,7 +49,7 @@ public class ListVendorSeedAdapter extends BaseAdapter {
 		mContext = context;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
-		if (!GotsPreferences.isPremium())
+		if (!GotsPreferences.getInstance(mContext).isPremium())
 			nbAds = vendorSeeds.size() / frequencyAds + 1;
 
 		Collections.sort(vendorSeeds, new ISeedSpecieComparator(context));
@@ -57,7 +57,7 @@ public class ListVendorSeedAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		if (position % frequencyAds == 0 && !GotsPreferences.isPremium()) {
+		if (position % frequencyAds == 0 && !GotsPreferences.getInstance(mContext).isPremium()) {
 			GotsAdvertisement ads = new GotsAdvertisement(mContext);
 			convertView = ads.getAdsLayout();
 			return convertView;
@@ -134,14 +134,14 @@ public class ListVendorSeedAdapter extends BaseAdapter {
 
 	@Override
 	public BaseSeedInterface getItem(int position) {
-		if (position % frequencyAds > 0 && !GotsPreferences.isPremium())
+		if (position % frequencyAds > 0 && !GotsPreferences.getInstance(mContext).isPremium())
 			position = position - (position / frequencyAds + 1);
 		return vendorSeeds.get(position);
 	}
 
 	@Override
 	public long getItemId(int position) {
-		if (position % frequencyAds != 0 && !GotsPreferences.isPremium()) {
+		if (position % frequencyAds != 0 && !GotsPreferences.getInstance(mContext).isPremium()) {
 			position = position - (position / frequencyAds + 1);
 			return vendorSeeds.get(position).getSeedId();
 		} else

@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 public class GotsPreferences  {
+	private static final String ORG_GOTS_GARDEN_PASSWORD = "org.gots.garden.password";
+	private static final String ORG_GOTS_GARDEN_LOGIN = "org.gots.garden.login";
+	
 	private static boolean PREMIUM = Boolean.valueOf(System.getProperty("boolean.isdevelopment", "false"));
 	// private static final String ANALYTICS_API_KEY = "UA-916500-18";
 	private static final String ANALYTICS_API_KEY = System.getProperty("key.analyticsapi", "UA-916500-18");
@@ -35,7 +38,7 @@ public class GotsPreferences  {
 		return preferences;
 	}
 
-	public static boolean isPremium() {
+	public boolean isPremium() {
 		return PREMIUM;
 	}
 
@@ -72,23 +75,23 @@ public class GotsPreferences  {
 	
 
 	public static String getNUXEO_LOGIN() {
-		return sharedPreferences.getString("org.gots.garden.password", "");
+		return sharedPreferences.getString(ORG_GOTS_GARDEN_LOGIN, "");
 	}
 
 	public static void setNUXEO_LOGIN(String NUXEO_LOGIN) {
 		SharedPreferences.Editor prefedit = sharedPreferences.edit();
-		prefedit.putString("org.gots.garden.login", NUXEO_LOGIN);
+		prefedit.putString(ORG_GOTS_GARDEN_LOGIN, NUXEO_LOGIN);
 		prefedit.commit();
 	}
 
 	public static String getNUXEO_PASSWORD() {
 
-		return sharedPreferences.getString("org.gots.garden.login", "");
+		return sharedPreferences.getString(ORG_GOTS_GARDEN_PASSWORD, "");
 	}
 
 	public static void setNUXEO_PASSWORD(String NUXEO_PASSWORD) {
 		SharedPreferences.Editor prefedit = sharedPreferences.edit();
-		prefedit.putString("org.gots.garden.password", NUXEO_PASSWORD);
+		prefedit.putString(ORG_GOTS_GARDEN_PASSWORD, NUXEO_PASSWORD);
 		prefedit.commit();
 	}
 
