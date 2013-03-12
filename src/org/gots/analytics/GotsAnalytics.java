@@ -46,7 +46,7 @@ public class GotsAnalytics {
 			else
 				GoogleAnalyticsTracker.getInstance().startNewSession(GotsPreferences.getInstance().getAnalyticsApiKey(), dispatchIntervalSecs, context);
 			
-			if (GotsPreferences.getInstance().isDEVELOPPEMENT())
+			if (GotsPreferences.getInstance().isDevelopment())
 				GoogleAnalyticsTracker.getInstance().setDryRun(true);
 		}
 		++activityCount;

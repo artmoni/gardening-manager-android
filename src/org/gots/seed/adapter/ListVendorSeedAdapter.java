@@ -22,6 +22,7 @@ import org.gots.action.bean.BuyingAction;
 import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
 import org.gots.ads.GotsAdvertisement;
+import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.sql.VendorSeedDBHelper;
@@ -47,7 +48,8 @@ public class ListVendorSeedAdapter extends BaseAdapter {
 		this.vendorSeeds = vendorSeeds;
 		mContext = context;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		nbAds = vendorSeeds.size() / frequencyAds + 1;
+		if (!GotsPreferences.isPremium())
+			nbAds = vendorSeeds.size() / frequencyAds + 1;
 
 		Collections.sort(vendorSeeds, new ISeedSpecieComparator(context));
 
@@ -55,7 +57,7 @@ public class ListVendorSeedAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		if (position % frequencyAds == 0) {
+		if (position % frequencyAds == 0 && !GotsPreferences.isPremium()) {
 			GotsAdvertisement ads = new GotsAdvertisement(mContext);
 			convertView = ads.getAdsLayout();
 			return convertView;
@@ -72,7 +74,7 @@ public class ListVendorSeedAdapter extends BaseAdapter {
 			actionWidget = (ActionWidget) vi.findViewById(R.id.IdSeedAction);
 
 			seedWidgetLong.setSeed(currentSeed);
- 
+
 			buying = new BuyingAction(mContext);
 			buying.setState(ActionState.NORMAL);
 			actionWidget.setAction(buying);
@@ -132,19 +134,18 @@ public class ListVendorSeedAdapter extends BaseAdapter {
 
 	@Override
 	public BaseSeedInterface getItem(int position) {
-		if (position % frequencyAds > 0)
+		if (position % frequencyAds > 0 && !GotsPreferences.isPremium())
 			position = position - (position / frequencyAds + 1);
 		return vendorSeeds.get(position);
 	}
 
 	@Override
 	public long getItemId(int position) {
-		if (position % frequencyAds != 0){
+		if (position % frequencyAds != 0 && !GotsPreferences.isPremium()) {
 			position = position - (position / frequencyAds + 1);
-			return vendorSeeds.get(position).getId();
-		}
-		else
-			return vendorSeeds.get(position).getId();
+			return vendorSeeds.get(position).getSeedId();
+		} else
+			return vendorSeeds.get(position).getSeedId();
 	}
 
 }

@@ -31,7 +31,7 @@ public class BootBroadcastReceiver extends BroadcastReceiver {
 		
 		AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-		if (GotsPreferences.getInstance().isDEVELOPPEMENT())
+		if (GotsPreferences.getInstance().isDevelopment())
 			alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
 					AlarmManager.INTERVAL_FIFTEEN_MINUTES, actionTODOIntent);
 		else {
@@ -45,7 +45,7 @@ public class BootBroadcastReceiver extends BroadcastReceiver {
 		PendingIntent weatherUpdateService = PendingIntent.getBroadcast(context, 1, weatherBroadcastIntent,
 				PendingIntent.FLAG_UPDATE_CURRENT);
 
-		if (GotsPreferences.getInstance().isDEVELOPPEMENT())
+		if (GotsPreferences.getInstance().isPremium())
 			alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
 					AlarmManager.INTERVAL_FIFTEEN_MINUTES, weatherUpdateService);
 		else {

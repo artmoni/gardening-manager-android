@@ -11,6 +11,8 @@
 package org.gots.ui;
 
 import java.util.Calendar;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import org.gots.R;
 import org.gots.action.service.ActionTODOBroadcastReceiver;
@@ -19,7 +21,11 @@ import org.gots.garden.GardenInterface;
 import org.gots.garden.GardenManager;
 import org.gots.garden.sql.GardenDBHelper;
 import org.gots.preferences.GotsPreferences;
+import org.gots.seed.providers.RetrieveNuxeoDocs;
 import org.gots.weather.service.WeatherUpdateService;
+import org.nuxeo.android.activities.BaseNuxeoActivity;
+import org.nuxeo.android.context.NuxeoContext;
+import org.nuxeo.android.context.NuxeoContextProvider;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -27,12 +33,15 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -45,7 +54,7 @@ public class SplashScreenActivity extends Activity {
 	private static final long SPLASHTIME = 3000;
 	private GardenInterface myGarden;
 	private Context mContext;
-	
+
 	private Handler splashHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -73,7 +82,6 @@ public class SplashScreenActivity extends Activity {
 		setContentView(R.layout.splash_screen);
 
 		mContext = this;
-
 		GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
 		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
@@ -130,7 +138,7 @@ public class SplashScreenActivity extends Activity {
 			startActivityForResult(intent, 0);
 
 		} else {
-			if (GotsPreferences.getInstance().isDEVELOPPEMENT())
+			if (GotsPreferences.getInstance().isDevelopment())
 				splashHandler.sendMessageDelayed(msg, 0);
 			else
 				splashHandler.sendMessageDelayed(msg, SPLASHTIME);
@@ -140,6 +148,8 @@ public class SplashScreenActivity extends Activity {
 			// 0));
 
 		}
+
+		GotsPreferences.setPREMIUM(unlockPremium());
 
 	}
 
@@ -189,7 +199,7 @@ public class SplashScreenActivity extends Activity {
 				PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager alarms = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-		if (GotsPreferences.getInstance().isDEVELOPPEMENT())
+		if (GotsPreferences.getInstance().isDevelopment())
 			alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
 					AlarmManager.INTERVAL_FIFTEEN_MINUTES, actionTODOIntent);
 		else {
@@ -198,4 +208,40 @@ public class SplashScreenActivity extends Activity {
 					AlarmManager.INTERVAL_DAY, actionTODOIntent);
 		}
 	}
+
+	private boolean unlockPremium() {
+		boolean unlocked = false;
+		PackageManager pm = getPackageManager();
+		List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+
+		for (ApplicationInfo applicationInfo : packages) {
+			Log.d("unlockPremium", "App:" + applicationInfo.name + " Package :" + applicationInfo.packageName);
+			try {
+
+				PackageInfo packageInfo = pm
+						.getPackageInfo(applicationInfo.packageName, PackageManager.GET_PERMISSIONS);
+				if ("org.gots.premium".equals(packageInfo.packageName)) {
+					Log.i("unlockPremium", "unlocked");
+					unlocked = true;
+				}
+
+				// //Get Permissions
+				// String[] requestedPermissions =
+				// packageInfo.requestedPermissions;
+				//
+				// if(requestedPermissions != null)
+				// {
+				// for (int i = 0; i < requestedPermissions.length; i++) {
+				// Log.d("unlockPremium",requestedPermissions[i]);
+				// }
+				// }
+
+			} catch (NameNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+		return unlocked;
+
+	}
+
 }

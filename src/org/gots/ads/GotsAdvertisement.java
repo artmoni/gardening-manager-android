@@ -26,7 +26,7 @@ public class GotsAdvertisement {
 		int height = display.getHeight();
 
 		AdRequest adRequest = new AdRequest();
-		if (GotsPreferences.getInstance().isDEVELOPPEMENT())
+		if (GotsPreferences.getInstance().isPremium())
 			adRequest.addTestDevice(AdRequest.TEST_EMULATOR);
 		adRequest.addKeyword("garden");
 		adRequest.addKeyword("potager");

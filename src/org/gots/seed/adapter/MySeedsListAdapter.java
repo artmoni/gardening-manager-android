@@ -27,6 +27,7 @@ import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.bean.BaseAllotmentInterface;
+import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.sql.VendorSeedDBHelper;
@@ -59,7 +60,8 @@ public class MySeedsListAdapter extends BaseAdapter implements OnClickListener {
 		this.allotment = allotment;
 		this.mySeeds = seeds;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		nbAds = mySeeds.size() / frequencyAds + 1;
+		if (!GotsPreferences.isPremium())
+			nbAds = mySeeds.size() / frequencyAds + 1;
 		Collections.sort(mySeeds, new ISeedSpecieComparator(context));
 
 	}
@@ -71,7 +73,7 @@ public class MySeedsListAdapter extends BaseAdapter implements OnClickListener {
 
 	@Override
 	public BaseSeedInterface getItem(int position) {
-		if (position % frequencyAds > 0)
+		if (position % frequencyAds > 0 && !GotsPreferences.isPremium())
 			position = position - (position / frequencyAds + 1);
 		return mySeeds.get(position);
 	}
@@ -83,7 +85,7 @@ public class MySeedsListAdapter extends BaseAdapter implements OnClickListener {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		if (position % frequencyAds == 0) {
+		if (position % frequencyAds == 0 && !GotsPreferences.isPremium()) {
 			GotsAdvertisement ads = new GotsAdvertisement(mContext);
 			convertView = ads.getAdsLayout();
 			return convertView;
