@@ -137,7 +137,7 @@ public abstract class BaseSeed implements Serializable, BaseSeedInterface {
 	@Override
 	public String toString() {
 		String seed = new String();
-		seed = "-" + getId() + "--------- " + getFamily()+" " + getSpecie()+" " + getVariety()+" ------------";
+		seed = "-" + getSeedId() + "--------- " + getFamily()+" " + getSpecie()+" " + getVariety()+" ------------";
 		seed += "\n-- Date Arrosage:" + getDateLastWatering();
 		seed += "\n-- Délais récolte: " + getDurationMin() + "/" + getDurationMax();
 		seed += "\n-- Nb Sachets:" + getNbSachet();
@@ -272,7 +272,7 @@ public abstract class BaseSeed implements Serializable, BaseSeedInterface {
 	}
 
 	@Override
-	public int getId() {
+	public int getSeedId() {
 		return this.id;
 	}
 

@@ -45,7 +45,7 @@ public class GrowingSeedDBHelper {
 		long rowid;
 		open();
 		ContentValues values = new ContentValues();
-		values.put(DatabaseHelper.GROWINGSEED_SEED_ID, seed.getId());
+		values.put(DatabaseHelper.GROWINGSEED_SEED_ID, seed.getSeedId());
 		values.put(DatabaseHelper.GROWINGSEED_ALLOTMENT_ID, allotmentReference);
 		try {
 			if (seed.getDateSowing() != null)

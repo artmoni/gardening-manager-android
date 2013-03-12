@@ -64,7 +64,7 @@ public class LocalSeedInterface implements BaseSeedInterface {
 	}
 
 	@Override
-	public int getId() {
+	public int getSeedId() {
 		// TODO Auto-generated method stub
 		return 0;
 	}

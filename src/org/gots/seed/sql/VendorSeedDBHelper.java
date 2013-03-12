@@ -94,7 +94,7 @@ public class VendorSeedDBHelper {
 		ContentValues values = getContentValuesFromSeed(seed);
 
 		try {
-			rowid = bdd.update(DatabaseHelper.SEEDS_TABLE_NAME, values, DatabaseHelper.SEED_ID + "=" + seed.getId(),
+			rowid = bdd.update(DatabaseHelper.SEEDS_TABLE_NAME, values, DatabaseHelper.SEED_ID + "=" + seed.getSeedId(),
 					null);
 		} finally {
 			close();

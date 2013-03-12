@@ -31,7 +31,10 @@ import org.gots.garden.GardenInterface;
 import org.gots.garden.GardenManager;
 import org.gots.help.HelpUriBuilder;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.providers.RetrieveNuxeoDocs;
 import org.gots.seed.sql.VendorSeedDBHelper;
+import org.nuxeo.android.context.NuxeoContext;
+import org.nuxeo.android.context.NuxeoContextProvider;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -73,6 +76,7 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 	GardenInterface garden = new Garden();
 	private int mode = 0;
 
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -95,6 +99,7 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 		garden.setLocality("");
 
 		buildProfile();
+		
 
 	}
 
@@ -282,6 +287,11 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 			return super.onOptionsItemSelected(item);
 		}
 	}
+	
+	private void createNuxeoGarden(){
+		RetrieveNuxeoDocs docs = new RetrieveNuxeoDocs(this);
+		docs.execute(garden);
+	}
 
 	private void createNewProfile() {
 
@@ -301,6 +311,8 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 
 		gardenManager.addGarden(garden, true);
 
+		createNuxeoGarden();
+		
 		// SAMPLE GARDEN
 		CheckBox samples = (CheckBox) findViewById(R.id.checkboxSamples);
 		if (samples.isChecked()) {
@@ -351,4 +363,6 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 		GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
 		super.onDestroy();
 	}
+
+	
 }

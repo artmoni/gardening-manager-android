@@ -1,72 +1,29 @@
-package org.gots.seed.providers.simple;
+package org.gots.seed.providers.nuxeo;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
 
 import org.gots.action.BaseActionInterface;
 import org.gots.bean.SeedCategory;
 import org.gots.seed.BaseSeedInterface;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
+import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
+import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
-@Root(name = "seed", strict = false)
-public class SimpleSeedInterface implements BaseSeedInterface {
+public class NuxeoSeed extends Document implements BaseSeedInterface {
 
-	// @Element(name="reference")
-	// String reference;
+	/** 
+	 * 
+	 */
+	private static final long serialVersionUID = -5085980323953815686L;
 
-	@Element(name = "family")
-	String family;
-
-	@Element(name = "specie")
-	String specie;
-
-	@Element(name = "variety", required = false)
-	String variety;
-
-	@Element(name = "description_growth", required = false)
-	String description_growth;
-
-	@Element(name = "description_cultivation", required = false)
-	String description_cultivation;
-
-	@Element(name = "description_harvest", required = false)
-	String description_harvest;
-
-	@Element(name = "description_diseases", required = false)
-	String description_diseases;
-
-	@Element(name = "sowingDateMin")
-	int sowingDateMin;
-
-	@Element(name = "sowingDateMax")
-	int sowingDateMax;
-
-	@Element(name = "durationMin")
-	int durationMin;
-
-	@Element(name = "durationMax")
-	int durationMax;
-
-	@Element(name = "reference",required=false)
-	String reference;
-
-	@ElementList(name = "actions", required = false)
-	List<SimpleAction> actions;
-
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		// TODO Auto-generated method stub
-		return super.clone();
+	public NuxeoSeed(String parentPath, String name, String type) {
+		super(parentPath, name, type);
 	}
 
 	@Override
-	public int getSeedId() {
+	public String getId() {
 		// TODO Auto-generated method stub
-		return 0;
+		return super.getId();
 	}
 
 	@Override
@@ -88,12 +45,6 @@ public class SimpleSeedInterface implements BaseSeedInterface {
 	}
 
 	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void setName(String name) {
 		// TODO Auto-generated method stub
 
@@ -101,28 +52,68 @@ public class SimpleSeedInterface implements BaseSeedInterface {
 
 	@Override
 	public String getDescriptionGrowth() {
-		return description_growth;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	public void setDescriptionGrowth(String description) {
+	public void setDescriptionGrowth(String description_growth) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public String getDescriptionCultivation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setDescriptionCultivation(String description_cultivation) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public String getDescriptionHarvest() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setDescriptionHarvest(String description_harvest) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public String getDescriptionDiseases() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setDescriptionDiseases(String description_diseases) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public String getReference() {
-		return reference;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public void setReference(String reference) {
-		this.reference = reference;
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public int getDateSowingMin() {
-		return sowingDateMin;
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	@Override
@@ -139,6 +130,7 @@ public class SimpleSeedInterface implements BaseSeedInterface {
 
 	@Override
 	public SeedCategory getCategory() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -150,7 +142,8 @@ public class SimpleSeedInterface implements BaseSeedInterface {
 
 	@Override
 	public int getDateSowingMax() {
-		return sowingDateMax;
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	@Override
@@ -167,7 +160,8 @@ public class SimpleSeedInterface implements BaseSeedInterface {
 
 	@Override
 	public int getDurationMin() {
-		return durationMin;
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	@Override
@@ -178,7 +172,8 @@ public class SimpleSeedInterface implements BaseSeedInterface {
 
 	@Override
 	public int getDurationMax() {
-		return durationMax;
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	@Override
@@ -201,7 +196,11 @@ public class SimpleSeedInterface implements BaseSeedInterface {
 
 	@Override
 	public String getFamily() {
-		return family;
+		
+		PropertyMap properties = getProperties();
+		PropertyMap languageMap = properties.getMap("dc:language");
+		String languageValue = languageMap.getString("data");
+		return null;
 	}
 
 	@Override
@@ -224,7 +223,8 @@ public class SimpleSeedInterface implements BaseSeedInterface {
 
 	@Override
 	public String getSpecie() {
-		return specie;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -235,23 +235,20 @@ public class SimpleSeedInterface implements BaseSeedInterface {
 
 	@Override
 	public String getVariety() {
-		return variety;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public void setVariety(String variety) {
 		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public ArrayList<BaseActionInterface> getActionToDo() {
-		ArrayList<BaseActionInterface> actionsToDo = new ArrayList<BaseActionInterface>();
-		if (actions != null)
-			for (Iterator iterator = actions.iterator(); iterator.hasNext();) {
-				BaseActionInterface baseActionInterface = (BaseActionInterface) iterator.next();
-				actionsToDo.add(baseActionInterface);
-			}
-		return actionsToDo;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -321,38 +318,9 @@ public class SimpleSeedInterface implements BaseSeedInterface {
 	}
 
 	@Override
-	public String getDescriptionCultivation() {
-
-		return description_cultivation;
-	}
-
-	@Override
-	public void setDescriptionCultivation(String description_cultivation) {
+	public int getSeedId() {
 		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public String getDescriptionHarvest() {
-
-		return description_harvest;
-	}
-
-	@Override
-	public void setDescriptionHarvest(String description_harvest) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public String getDescriptionDiseases() {
-		return description_diseases;
-	}
-
-	@Override
-	public void setDescriptionDiseases(String description_diseases) {
-		// TODO Auto-generated method stub
-
+		return 0;
 	}
 
 }

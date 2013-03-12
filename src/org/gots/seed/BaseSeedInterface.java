@@ -38,7 +38,7 @@ import org.gots.bean.SeedCategory;
  *
  */
 public interface BaseSeedInterface  {
-	public abstract int getId();
+	public abstract int getSeedId();
 
 	public abstract void setId(int id);
 
@@ -122,7 +122,7 @@ public interface BaseSeedInterface  {
 
 	public abstract void setActionDone(ArrayList<BaseActionInterface> actionDone);
 
-	public abstract Object clone() throws CloneNotSupportedException;
+	//public abstract Object clone() throws CloneNotSupportedException;
 
 	public abstract boolean onActionAlert();
 
