@@ -30,6 +30,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ProfileAdapter extends BaseAdapter {
 
@@ -50,6 +52,7 @@ public class ProfileAdapter extends BaseAdapter {
 	private Intent weatherIntent;
 	private WeatherManager weatherManager;
 	private GardenManager gardenManager;
+	private GardenInterface selectedGarden;
 
 	public ProfileAdapter(Context context) {
 		mContext = context;
@@ -57,9 +60,11 @@ public class ProfileAdapter extends BaseAdapter {
 		weatherManager = new WeatherManager(mContext);
 		gardenManager = new GardenManager(mContext);
 		myGardens = gardenManager.getMyGardens();
+		
 		if (!GotsPreferences.getInstance(mContext).isPremium())
 			nbAds = myGardens.size() / frequencyAds + 1;
 
+		selectedGarden = gardenManager.getcurrentGarden();
 		// myGardens = weatherManager.get
 	}
 
@@ -82,7 +87,7 @@ public class ProfileAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		if (position % frequencyAds == 0 && !GotsPreferences.getInstance(mContext).isPremium()) {
 			GotsAdvertisement ads = new GotsAdvertisement(mContext);
 			convertView = ads.getAdsLayout();
@@ -92,34 +97,43 @@ public class ProfileAdapter extends BaseAdapter {
 			final GardenInterface currentGarden = getItem(position);
 			vi = inflater.inflate(R.layout.list_garden, null);
 
-			// ImageView imageProfile = (ImageView)
-			// vi.findViewById(R.id.imageProfile);
-			// imageProfile.setOnClickListener(new View.OnClickListener() {
-			//
-			// @Override
-			// public void onClick(View v) {
-			// vi.setSelected(true);
-			// }
-			// });
+			if (selectedGarden != null && currentGarden != null && selectedGarden.getId() == currentGarden.getId()) {
+				vi.setSelected(true);
+			} else {
+				vi.setSelected(false);
+				vi.getBackground().setAlpha(200);
+			}
+			vi.setOnClickListener(new View.OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					
+					gardenManager.setCurrentGarden(position+1);
+					selectedGarden = getItem(position);
+					notifyDataSetChanged();
+				}
+			});
 			TextView gardenName = (TextView) vi.findViewById(R.id.idGardenName);
-			gardenName.setText(currentGarden.getName());
+			if (currentGarden.getName() != null)
+				gardenName.setText(currentGarden.getName());
+			else
+				gardenName.setText(currentGarden.getAddress().getLocality());
 
 			weatherIntent = new Intent(mContext, WeatherUpdateService.class);
 			weatherState = (ImageView) vi.findViewById(R.id.idWeatherConnected);
 			weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_weather));
-			// weatherState.setOnClickListener(new View.OnClickListener() {
-			//
-			// @Override
-			// public void onClick(View v) {
-			// weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_weather));
-			// weatherState.setImageDrawable(mContext.getResources().getDrawable(R.drawable.weather_updating));
-			// mContext.startService(weatherIntent);
-			// mContext.registerReceiver(weatherBroadcastReceiver, new
-			// IntentFilter(
-			// WeatherUpdateService.BROADCAST_ACTION));
-			//
-			// }
-			// });
+			weatherState.setOnClickListener(new View.OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_weather));
+					weatherState.setImageDrawable(mContext.getResources().getDrawable(R.drawable.weather_updating));
+					mContext.startService(weatherIntent);
+					mContext.registerReceiver(weatherBroadcastReceiver, new IntentFilter(
+							WeatherUpdateService.BROADCAST_ACTION));
+
+				}
+			});
 
 			// *************** WEATHER HISTORY
 			weatherHistory = (LinearLayout) vi.findViewById(R.id.layoutWeatherHistory);
@@ -171,25 +185,25 @@ public class ProfileAdapter extends BaseAdapter {
 	private ViewGroup weatherHistory;
 
 	private void updateUI(Intent intent) {
-		// boolean isError = intent.getBooleanExtra("error", true);
-		//
-		// TextView txtError = (TextView) findViewById(R.id.idTextAlert);
-		// if (isError) {
-		// txtError.setVisibility(View.VISIBLE);
-		// weatherState.setImageDrawable(mContext.getResources().getDrawable(R.drawable.weather_disconnected));
-		// weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_state_critical));
-		//
-		// } else {
-		// txtError.setVisibility(View.GONE);
-		// weatherState.setImageDrawable(mContext.getResources().getDrawable(R.drawable.weather_connected));
-		// weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_state_ok));
-		// }
-		// buildWeatherList();
+//		 boolean isError = intent.getBooleanExtra("error", true);
+//		
+//		 TextView txtError = (TextView) findViewById(R.id.idTextAlert);
+//		 if (isError) {
+//		 txtError.setVisibility(View.VISIBLE);
+//		 weatherState.setImageDrawable(mContext.getResources().getDrawable(R.drawable.weather_disconnected));
+//		 weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_state_critical));
+//		
+//		 } else {
+//		 txtError.setVisibility(View.GONE);
+//		 weatherState.setImageDrawable(mContext.getResources().getDrawable(R.drawable.weather_connected));
+//		 weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_state_ok));
+//		 }
+//		 buildWeatherList();
 	}
 
 	@Override
 	public void notifyDataSetChanged() {
-		myGardens = gardenManager.getMyGardens();
+		// myGardens = gardenManager.getMyGardens();
 		super.notifyDataSetChanged();
 	}
 }

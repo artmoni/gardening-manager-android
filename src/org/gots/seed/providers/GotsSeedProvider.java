@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.gots.seed.BaseSeedInterface;
 
-public interface GotsConnector {
+public interface GotsSeedProvider {
 
 	public List<BaseSeedInterface> getAllSeeds();
 	

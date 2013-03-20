@@ -4,13 +4,15 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.gots.DatabaseHelper;
-import org.gots.garden.provider.NuxeoGardenProvider;
+import org.gots.garden.provider.GardenProvider;
+import org.gots.garden.provider.local.LocalGardenProvider;
+import org.gots.garden.provider.nuxeo.NuxeoGardenProvider;
 import org.gots.garden.sql.GardenDBHelper;
 import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.providers.GotsConnector;
-import org.gots.seed.providers.local.LocalConnector;
-import org.gots.seed.providers.nuxeo.NuxeoConnector;
-import org.gots.seed.providers.simple.SimpleConnector;
+import org.gots.seed.providers.GotsSeedProvider;
+import org.gots.seed.providers.local.LocalSeedProvider;
+import org.gots.seed.providers.nuxeo.NuxeoSeedProvider;
+import org.gots.seed.providers.simple.SimpleSeedProvider;
 import org.gots.seed.sql.VendorSeedDBHelper;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.adapters.DocumentService;
@@ -31,40 +33,33 @@ public class GardenManager {
 	private SharedPreferences preferences;
 	private Context mContext;
 	private boolean isLocalStore = false;
+	private GardenProvider gardenProvider;
 	
 
 	public GardenManager(Context mContext) {
 		this.mContext = mContext;
 		preferences = mContext.getSharedPreferences("org.gots.preference", 0);
-
+//		gardenProvider = new NuxeoGardenProvider(mContext);
+		gardenProvider = new LocalGardenProvider(mContext);
+		
 	}
 
 	public long addGarden(GardenInterface garden) {
 
-		GardenDBHelper helper = new GardenDBHelper(mContext);
-		GardenInterface newGarden = helper.insertGarden(garden);
-
-		setCurrentGarden((int) newGarden.getId());
-
-		new RefreshTask().execute(new Object());
-
-		return newGarden.getId();
+		return addGarden(garden, false);
 	}
 
 	public long addGarden(GardenInterface garden, boolean localStore) {
-		GardenDBHelper helper = new GardenDBHelper(mContext);
-		GardenInterface newGarden = helper.insertGarden(garden);
+		
+		GardenInterface newGarden = gardenProvider.createGarden(garden);
 
 		setCurrentGarden((int) newGarden.getId());
 
 		isLocalStore = localStore;
-		new RefreshTask().execute(new Object());
+//		new RefreshTask().execute(new Object());
 
 		GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
 		tracker.trackEvent("Garden", "location", newGarden.getLocality(), 0);
-
-		GardenProvider gardenProvider = new NuxeoGardenProvider();
-		gardenProvider.createGarden(garden);
 		
 		return newGarden.getId();
 	}
@@ -106,55 +101,48 @@ public class GardenManager {
 	}
 
 	public void update() {
-		new RefreshTask().execute(new Object(), false);
+//		new RefreshTask().execute(new Object(), false);
 
 	}
 
-	public int getNbGarden() {
-		GardenDBHelper helper = new GardenDBHelper(mContext);
+	
 
-		return helper.getCountGarden();
-	}
-
-	private class RefreshTask extends AsyncTask<Object, Boolean, Long> {
-		@Override
-		protected Long doInBackground(Object... params) {
-
-			GardenManager garden = new GardenManager(mContext);
-			// garden.update();
-			GotsConnector connector;
-			if (!isLocalStore)
-				// connector = new SimpleConnector();
-				connector = new NuxeoConnector();
-			else
-				connector = new LocalConnector(mContext);
-			List<BaseSeedInterface> seeds = connector.getAllSeeds();
-
-			VendorSeedDBHelper theSeedBank = new VendorSeedDBHelper(mContext);
-			for (Iterator<BaseSeedInterface> iterator = seeds.iterator(); iterator.hasNext();) {
-				BaseSeedInterface baseSeedInterface = iterator.next();
-				if (theSeedBank.getSeedByReference(baseSeedInterface.getReference()) == null)
-					theSeedBank.insertSeed(baseSeedInterface);
-
-			}
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Long result) {
-			// VendorSeedDBHelper myBank = new VendorSeedDBHelper(mContext);
-			// ArrayList<BaseSeedInterface> vendorSeeds;
-			// vendorSeeds = myBank.getVendorSeeds();
-
-			// setListAdapter(new ListVendorSeedAdapter(mContext, vendorSeeds));
-			Toast.makeText(mContext, "Updated", 20).show();
-
-			super.onPostExecute(result);
-		}
-	}
+//	private class RefreshTask extends AsyncTask<Object, Boolean, Long> {
+//		@Override
+//		protected Long doInBackground(Object... params) {
+//
+//			GotsConnector connector;
+//			if (!isLocalStore)
+//				// connector = new SimpleConnector();
+//				connector = new NuxeoConnector(mContext);
+//			else
+//				connector = new LocalConnector(mContext);
+//			List<BaseSeedInterface> seeds = connector.getAllSeeds();
+//
+//			VendorSeedDBHelper theSeedBank = new VendorSeedDBHelper(mContext);
+//			for (Iterator<BaseSeedInterface> iterator = seeds.iterator(); iterator.hasNext();) {
+//				BaseSeedInterface baseSeedInterface = iterator.next();
+//				if (theSeedBank.getSeedByReference(baseSeedInterface.getReference()) == null)
+//					theSeedBank.insertSeed(baseSeedInterface);
+//
+//			}
+//			return null;
+//		}
+//
+//		@Override
+//		protected void onPostExecute(Long result) {
+//			// VendorSeedDBHelper myBank = new VendorSeedDBHelper(mContext);
+//			// ArrayList<BaseSeedInterface> vendorSeeds;
+//			// vendorSeeds = myBank.getVendorSeeds();
+//
+//			// setListAdapter(new ListVendorSeedAdapter(mContext, vendorSeeds));
+//			Toast.makeText(mContext, "Updated", 20).show();
+//
+//			super.onPostExecute(result);
+//		}
+//	}
 
 	public List<GardenInterface> getMyGardens() {
-		GardenProvider nuxeoProvider = new NuxeoGardenProvider();
-		return nuxeoProvider.getMyGardens();
+		return gardenProvider.getMyGardens();
 	}
 }

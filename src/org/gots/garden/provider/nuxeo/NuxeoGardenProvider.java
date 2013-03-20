@@ -1,15 +1,17 @@
-package org.gots.garden.provider;
+package org.gots.garden.provider.nuxeo;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.jar.Attributes.Name;
 
 import org.gots.action.GardeningActionInterface;
 import org.gots.bean.Garden;
 import org.gots.garden.GardenInterface;
-import org.gots.garden.GardenProvider;
+import org.gots.garden.provider.GardenProvider;
 import org.gots.preferences.GotsPreferences;
+import org.nuxeo.ecm.automation.client.jaxrs.Constants;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.adapters.DocumentService;
 import org.nuxeo.ecm.automation.client.jaxrs.impl.HttpAutomationClient;
@@ -18,17 +20,20 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
 public class NuxeoGardenProvider implements GardenProvider {
 
-	public NuxeoGardenProvider() {
+	private Context mContext;
 
+	public NuxeoGardenProvider(Context context) {
+		mContext = context;
 	}
 
 	@Override
-	public void createGarden(GardenInterface garden) {
+	public GardenInterface createGarden(GardenInterface garden) {
 
 		try {
 			new AsyncTask<GardenInterface, Integer, Document>() {
@@ -40,14 +45,16 @@ public class NuxeoGardenProvider implements GardenProvider {
 					GardenInterface currentGarden = params[0];
 					HttpAutomationClient client = new HttpAutomationClient(
 							GotsPreferences.getGardeningManagerServerURI());
-					Session session = client.getSession(GotsPreferences.getNUXEO_LOGIN(),
-							GotsPreferences.getNUXEO_PASSWORD());
+					Session session = client.getSession(GotsPreferences.getInstance(mContext).getNUXEO_LOGIN(),
+							GotsPreferences.getInstance(mContext).getNUXEO_PASSWORD());
 
 					try {
-						DocRef wsRef = new DocRef("/default-domain/UserWorkspaces/" + GotsPreferences.getNUXEO_LOGIN());
+						DocRef wsRef = new DocRef("/default-domain/UserWorkspaces/"
+								+ GotsPreferences.getInstance(mContext).getNUXEO_LOGIN());
 
 						newGarden = (Document) session.newRequest("Document.Create").setInput(wsRef)
 								.set("type", "Garden").set("name", currentGarden.getLocality())
+
 								.set("properties", "dc:title=" + currentGarden.getLocality()).execute();
 
 					} catch (Exception e) {
@@ -64,6 +71,7 @@ public class NuxeoGardenProvider implements GardenProvider {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return garden;
 	}
 
 	@Override
@@ -85,8 +93,8 @@ public class NuxeoGardenProvider implements GardenProvider {
 				protected List<GardenInterface> doInBackground(Object... params) {
 					HttpAutomationClient client = new HttpAutomationClient(
 							GotsPreferences.getGardeningManagerServerURI());
-					Session session = client.getSession(GotsPreferences.getNUXEO_LOGIN(),
-							GotsPreferences.getNUXEO_PASSWORD());
+					Session session = client.getSession(GotsPreferences.getInstance(mContext).getNUXEO_LOGIN(),
+							GotsPreferences.getInstance(mContext).getNUXEO_PASSWORD());
 
 					// DocumentService rs = new DocumentService(session);
 					try {
@@ -97,17 +105,14 @@ public class NuxeoGardenProvider implements GardenProvider {
 						// Documents gardensWorkspaces = (Documents)
 						// rs.getChildren(wsRef);
 						Documents gardensWorkspaces = (Documents) session.newRequest("Document.Query")
+								.setHeader(Constants.HEADER_NX_SCHEMAS, "*")
 								.set("query", "SELECT * FROM Garden ORDER BY dc:modified DESC").execute();
 						for (Iterator<Document> iterator = gardensWorkspaces.iterator(); iterator.hasNext();) {
-							Document gardenWorkspace = (Document) session.newRequest("Document.Fetch")
-									.set("value", iterator.next().getId()).execute();
+							Document gardenWorkspace = iterator.next();
 							// Document gardenWorkspace = iterator.next();
-							GardenInterface garden = new Garden();
-							garden.setName(gardenWorkspace.getTitle());
-							garden.setLocality(gardenWorkspace.getTitle());
-
-							// garden.setGpsAltitude(gardenWorkspace.getLong("garden:altitude"));
-							// garden.setGpsLongitude(gardenWorkspace.getLong("garden:longitude"));
+							
+							GardenInterface garden = NuxeoGardenConvertor.convert(gardenWorkspace);
+							
 							gardens.add(garden);
 						}
 

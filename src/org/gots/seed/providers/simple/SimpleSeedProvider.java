@@ -6,13 +6,13 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.providers.GotsConnector;
+import org.gots.seed.providers.GotsSeedProvider;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
 import android.util.Log;
 
-public class SimpleConnector implements GotsConnector {
+public class SimpleSeedProvider implements GotsSeedProvider {
 
 	@Override
 	public void getAllFamilies() {
@@ -46,12 +46,13 @@ public class SimpleConnector implements GotsConnector {
 
 			for (Iterator iterator = seeds.getSeeds().iterator(); iterator.hasNext();) {
 				BaseSeedInterface seed = (BaseSeedInterface) iterator.next();
-				Log.i("getFamily", "" + seed);
 				allSeeds.add(seed);
 			}
-			// allSeeds = seeds.getSeeds();
+			Log.i("SimpleSeedProvider", allSeeds.size()+" seeds have been parsed");
 		} catch (Exception e) {
 			e.printStackTrace();
+			Log.w("SimpleSeedProvider", "Error loading seeds from XML");
+
 		}
 		return allSeeds;
 	}

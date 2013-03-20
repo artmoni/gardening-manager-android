@@ -11,11 +11,14 @@
 package org.gots.ui;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.gots.R;
 import org.gots.garden.GardenManager;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.adapter.ListVendorSeedAdapter;
+import org.gots.seed.providers.GotsSeedProvider;
+import org.gots.seed.providers.nuxeo.NuxeoSeedProvider;
 import org.gots.seed.sql.VendorSeedDBHelper;
 
 import android.content.Context;
@@ -34,25 +37,25 @@ public class VendorListActivity extends SherlockListFragment {
 
 	public Context mContext;
 	private ListVendorSeedAdapter listVendorSeedAdapter;
-	GardenManager manager;
-	
-	
+	// GardenManager manager;
+	private List<BaseSeedInterface> vendorSeeds;
+	private GotsSeedProvider seedProvider;
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mContext = getActivity();
 
-		VendorSeedDBHelper myBank = new VendorSeedDBHelper(getActivity());
-		ArrayList<BaseSeedInterface> vendorSeeds;
-		vendorSeeds = myBank.getVendorSeeds();	
-		
-		 manager = new GardenManager(mContext);
+		seedProvider = new NuxeoSeedProvider(mContext);
+		vendorSeeds = seedProvider.getAllSeeds();
+
+		// manager = new GardenManager(mContext);
 
 		listVendorSeedAdapter = new ListVendorSeedAdapter(getActivity(), vendorSeeds);
 		setListAdapter(listVendorSeedAdapter);
-		
-		if (vendorSeeds.size()==0)
-			manager.update();
+
+		// if (vendorSeeds.size() == 0)
+		// manager.update();
 	}
 
 	@Override
@@ -73,7 +76,9 @@ public class VendorListActivity extends SherlockListFragment {
 		switch (item.getItemId()) {
 
 		case R.id.refresh_seed:
-			manager.update();
+			vendorSeeds = seedProvider.getAllSeeds();
+			listVendorSeedAdapter = new ListVendorSeedAdapter(getActivity(), vendorSeeds);
+			listVendorSeedAdapter.notifyDataSetChanged();
 			return true;
 
 		default:
@@ -81,11 +86,8 @@ public class VendorListActivity extends SherlockListFragment {
 		}
 	}
 
-public void update (){
-	listVendorSeedAdapter.notifyDataSetChanged();
-}
-	
-
-	
+	public void update() {
+		listVendorSeedAdapter.notifyDataSetChanged();
+	}
 
 }

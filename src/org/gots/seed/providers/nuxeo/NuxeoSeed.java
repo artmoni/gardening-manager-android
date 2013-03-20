@@ -112,8 +112,7 @@ public class NuxeoSeed extends Document implements BaseSeedInterface {
 
 	@Override
 	public int getDateSowingMin() {
-		// TODO Auto-generated method stub
-		return 0;
+		return Integer.valueOf(getString("vendorseed:durationmin"));
 	}
 
 	@Override
@@ -142,8 +141,7 @@ public class NuxeoSeed extends Document implements BaseSeedInterface {
 
 	@Override
 	public int getDateSowingMax() {
-		// TODO Auto-generated method stub
-		return 0;
+		return Integer.valueOf(getString("vendorseed:datesowingmax"));
 	}
 
 	@Override
@@ -160,8 +158,7 @@ public class NuxeoSeed extends Document implements BaseSeedInterface {
 
 	@Override
 	public int getDurationMin() {
-		// TODO Auto-generated method stub
-		return 0;
+		return Integer.valueOf(getString("vendorseed:durationmin"));
 	}
 
 	@Override
@@ -172,8 +169,7 @@ public class NuxeoSeed extends Document implements BaseSeedInterface {
 
 	@Override
 	public int getDurationMax() {
-		// TODO Auto-generated method stub
-		return 0;
+		return Integer.valueOf(getString("vendorseed:durationmax"));
 	}
 
 	@Override
@@ -196,11 +192,8 @@ public class NuxeoSeed extends Document implements BaseSeedInterface {
 
 	@Override
 	public String getFamily() {
-		
-		PropertyMap properties = getProperties();
-		PropertyMap languageMap = properties.getMap("dc:language");
-		String languageValue = languageMap.getString("data");
-		return null;
+		return getString("vendorseed:familly");
+
 	}
 
 	@Override
@@ -223,8 +216,8 @@ public class NuxeoSeed extends Document implements BaseSeedInterface {
 
 	@Override
 	public String getSpecie() {
-		// TODO Auto-generated method stub
-		return null;
+		return getString("vendorseed:specie");
+
 	}
 
 	@Override
@@ -235,8 +228,8 @@ public class NuxeoSeed extends Document implements BaseSeedInterface {
 
 	@Override
 	public String getVariety() {
-		// TODO Auto-generated method stub
-		return null;
+
+		return getString("vendorseed:variety");
 	}
 
 	@Override

@@ -8,9 +8,13 @@
 	<packaging>apk</packaging>
 	<version>0.17-SNAPSHOT</version>
 	<name>Gardening Manager</name>
+	
 	<properties>
 		<android.version>4.0.3</android.version>
 		<android.platform>16</android.platform>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	
 	</properties>
 	<repositories>
 		<repository>
@@ -26,6 +30,13 @@
 			<url>
 		https://maven-eu.nuxeo.org/nexus/content/repositories/public-releases/
       </url>
+		</repository>
+		<repository>
+			<id>sonatype-oss-public</id>
+			<url>https://oss.sonatype.org/content/groups/public/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
 		</repository>
 		<!-- <repository> <id>gardening-manager-maven</id> <url>https://github.com/artmoni/gardening-manager-maven.git</url> 
 			</repository> -->
@@ -46,12 +57,7 @@
 		<dependency>
 			<groupId>com.google.android.analytics</groupId>
 			<artifactId>analytics</artifactId>
-			<version>2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.opensocial</groupId>
-			<artifactId>opensocial</artifactId>
-			<version>1.0</version>
+			<version>1.4.2</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.android.admob</groupId>
@@ -93,22 +99,26 @@
 			<version>2.4</version> <classifier>jdk15</classifier> </dependency> -->
 		<!-- <dependency> <groupId>net.sf.ezmorph</groupId> <artifactId>ezmorph</artifactId> 
 			<version>1.0.6</version> </dependency> -->
-		<!-- <dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpcore</artifactId>
-			<version>4.2.3</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.2.3</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-			<version>1.4.6</version>
-		</dependency> -->
+		<!-- <dependency> <groupId>org.apache.httpcomponents</groupId> <artifactId>httpcore</artifactId> 
+			<version>4.2.3</version> </dependency> <dependency> <groupId>org.apache.httpcomponents</groupId> 
+			<artifactId>httpclient</artifactId> <version>4.2.3</version> </dependency> 
+			<dependency> <groupId>javax.mail</groupId> <artifactId>mail</artifactId> 
+			<version>1.4.6</version> </dependency> -->
 		<!-- ********* NUXEO INTEGRATION END********* -->
+		<!-- ********* SOCIALAUTH INTEGRATION BEGIN********* -->
+		<!-- <dependency> <groupId>org.brickred</groupId> <artifactId>socialauth</artifactId> 
+			<version>3.0</version> </dependency> -->
+		<!-- <dependency>
+			<groupId>org.openid4java</groupId>
+			<artifactId>openid4java</artifactId>
+			<version>0.9.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.opensocial</groupId>
+			<artifactId>opensocial</artifactId>
+			<version>1.0</version>
+		</dependency> -->
+		<!-- ********* SOCIALAUTH INTEGRATION END********* -->
 	</dependencies>
 	<build>
 		<sourceDirectory>src</sourceDirectory>

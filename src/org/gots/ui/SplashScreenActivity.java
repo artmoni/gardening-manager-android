@@ -62,13 +62,15 @@ public class SplashScreenActivity extends Activity {
 			// WeatherManager wm = new WeatherManager(getApplicationContext());
 			// wm.getWeatherFromWebService(myGarden);
 			Intent startServiceIntent = new Intent(mContext, WeatherUpdateService.class);
-			startService(startServiceIntent);
+			startService(startServiceIntent); 
 
 			switch (msg.what) {
 			case STOPSPLASH:
 				// remove SplashScreen from view
 				Intent intent = new Intent(SplashScreenActivity.this, DashboardActivity.class);
 				startActivity(intent);
+//				Intent intent = new Intent(SplashScreenActivity.this, AccountList.class);
+//				startActivity(intent);
 				finish();
 				break;
 			}
@@ -149,8 +151,9 @@ public class SplashScreenActivity extends Activity {
 
 		}
 
-		GotsPreferences.setPREMIUM(unlockPremium());
+		GotsPreferences.getInstance(this).setPREMIUM(unlockPremium());
 
+		
 	}
 
 	@Override

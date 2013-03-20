@@ -1,6 +1,8 @@
-package org.gots.garden;
+package org.gots.garden.provider;
 
 import java.util.List;
+
+import org.gots.garden.GardenInterface;
 
 public interface GardenProvider {
 
@@ -8,7 +10,7 @@ public interface GardenProvider {
 	
 	public List<GardenInterface> getMyGardens();
 
-	public void createGarden(GardenInterface garden);
+	public GardenInterface createGarden(GardenInterface garden);
 	
 	
 }

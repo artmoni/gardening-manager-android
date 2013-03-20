@@ -10,7 +10,9 @@
  ******************************************************************************/
 package org.gots.garden.sql;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.gots.bean.Garden;
 import org.gots.garden.GardenInterface;
@@ -105,17 +107,14 @@ public class GardenDBHelper {
 		close();
 	}
 
-	public String[] getGardens() {
-		GardenInterface garden = null;
-		// SeedActionInterface searchedSeed = new GrowingSeed();
+	public List<GardenInterface> getGardens() {
+		List<GardenInterface> gardens = new ArrayList<GardenInterface>();
 		open();
 		Cursor cursor = bdd.query(GardenSQLite.GARDEN_TABLE_NAME, null, null, null, null, null, null);
-		String[] gardens = new String[cursor.getCount()];
-		int i = 0;
 		if (cursor.moveToFirst()) {
 			do {
-				garden = cursorToGarden(cursor);
-				gardens[i++] = garden.getLocality();
+				GardenInterface garden = cursorToGarden(cursor);
+				gardens.add(garden);
 			} while (cursor.moveToNext());
 		}
 		cursor.close();

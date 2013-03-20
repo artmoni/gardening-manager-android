@@ -95,7 +95,7 @@
     <string name="action.lighten">Lighten</string>
     <string name="profile.share.data">Share this garden with friends</string>
     <string name="login">Login</string>
-        <string name="password">Password</string>
-    
-    
+    <string name="password">Password</string>
+    <string name="connect">Connect</string>
+
 </resources>

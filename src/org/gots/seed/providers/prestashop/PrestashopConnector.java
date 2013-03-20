@@ -4,13 +4,13 @@ import java.io.InputStream;
 import java.util.List;
 
 import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.providers.GotsConnector;
+import org.gots.seed.providers.GotsSeedProvider;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
 import android.util.Log;
 
-public class PrestashopConnector implements GotsConnector{
+public class PrestashopConnector implements GotsSeedProvider{
 
 	private PrestashopNetwork network = new PrestashopNetwork();
 	

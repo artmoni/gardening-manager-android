@@ -10,11 +10,19 @@
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    
+    <!-- STORE WEATHER CACHE AND VEGETABLE PHOTOS -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    
+    <!-- REMINDER DOING GARDENG TASK -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    
+    <!-- LOGIN WITH GARDENING MANAGER SERVER USING LOCAL ACCOUNTS -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -75,9 +83,12 @@
         <activity android:name=".ui.MySeedsListFirstTimeActivity" />
         <activity
             android:name=".ui.NewSeedActivity"
-            android:theme="@style/Theme.Styled" />
+            android:theme="@style/Theme.Styled" />       
         <activity
-            android:name=".ui.NuxeoActivity"
+            android:name=".ui.AccountList"
+            android:theme="@style/Theme.Styled" />
+           <activity
+            android:name=".ui.LoginActivity"
             android:theme="@style/Theme.Styled" />
         <activity
             android:name="com.google.ads.AdActivity"
