@@ -12,7 +12,6 @@ public class GotsPreferences {
 	private static final String ORG_GOTS_GARDEN_LOGIN = "org.gots.garden.login";
 	private static final String ORG_GOTS_GARDEN_SERVERCONNECTED = "org.gots.garden.connected";
 
-	
 	private static boolean ORG_GOTS_PREMIUM_LICENCE = Boolean.valueOf(System.getProperty("boolean.isdevelopment",
 			"false"));
 
@@ -23,10 +22,12 @@ public class GotsPreferences {
 	private static final String GARDENING_MANAGER_DIRECTORY = "Gardening-Manager";
 
 	private static final String GARDENING_MANAGER_NUXEO_AUTOMATION_TEST = "http://192.168.100.90:8080/nuxeo/site/automation";
-//	private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://my.gardening-manager.com/site/automation";
-	
-		private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://srv2.gardening-manager.com:8090/nuxeo/site/automation";
+	// private static final String GARDENING_MANAGER_NUXEO_AUTOMATION =
+	// "http://my.gardening-manager.com/site/automation";
 
+	private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://srv2.gardening-manager.com:8090/nuxeo/site/automation";
+
+	private static String OAuthtToken;
 	private static GotsPreferences preferences;
 	private static SharedPreferences sharedPreferences;
 
@@ -115,6 +116,15 @@ public class GotsPreferences {
 
 	public boolean isConnectedToServer() {
 		sharedPreferences = mContext.getSharedPreferences("org.gots.garden", 0);
-		return sharedPreferences.getBoolean(ORG_GOTS_GARDEN_SERVERCONNECTED, false);	}
+		return sharedPreferences.getBoolean(ORG_GOTS_GARDEN_SERVERCONNECTED, false);
+	}
+
+	public String getOAuthtToken() {
+		return OAuthtToken;
+	}
+
+	public void setOAuthtToken(String oAuthtToken) {
+		OAuthtToken = oAuthtToken;
+	}
 
 }

@@ -73,6 +73,31 @@
             android:layout_height="wrap_content"
             android:layout_margin="2dp" >
         </LinearLayout>
-    </LinearLayout>
+         <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
 
+        <ImageView
+            android:id="@+id/idSocialGoogle"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/social_google" />
+
+        <ImageView
+            android:id="@+id/idSocialFacebook"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/social_facebook" />
+
+        <ImageView
+            android:id="@+id/idPrevimeteo"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/logo_previmeteo" />
+    </LinearLayout>
+    </LinearLayout>
+   
 </LinearLayout>

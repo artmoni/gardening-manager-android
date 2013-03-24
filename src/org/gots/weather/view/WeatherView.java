@@ -11,14 +11,18 @@
 package org.gots.weather.view;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import org.gots.R;
 import org.gots.weather.WeatherConditionInterface;
+import org.gots.weather.provider.MoonCalculation;
 
 import android.content.Context;
 import android.text.Layout;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -45,7 +49,7 @@ public class WeatherView extends LinearLayout {
 	public WeatherView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		this.mContext = context;
-		
+
 		initView();
 
 	}
@@ -56,11 +60,13 @@ public class WeatherView extends LinearLayout {
 		setupView();
 
 	}
-@Override
-protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-	super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-	
-}
+
+	@Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+	}
+
 	private void initView() {
 		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View view = inflater.inflate(R.layout.weather_widget, this);
@@ -70,19 +76,23 @@ protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 	private void setupView() {
 		LinearLayout boxTemp = (LinearLayout) findViewById(R.id.idWeatherTemp);
 		ImageView weatherWidget = (ImageView) findViewById(R.id.idWeatherImage);
+		ImageView moonWidget = (ImageView) findViewById(R.id.idMoonImage);
 		TextView weatherDay = (TextView) findViewById(R.id.idWeatherDay);
 		TextView tempMax = (TextView) findViewById(R.id.idWeatherMax);
 		TextView tempMin = (TextView) findViewById(R.id.idWeatherMin);
+
 		if (mWeather == null) {
 			return;
 		}
 		switch (mType) {
 		case TEXT:
 			weatherWidget.setVisibility(View.GONE);
+			moonWidget.setVisibility(View.GONE);
 			if (mWeather.getIconURL() == null) {
 				boxTemp.setVisibility(View.GONE);
 				weatherDay.setVisibility(View.GONE);
 			}
+
 			break;
 		case IMAGE:
 			boxTemp.setVisibility(View.GONE);
@@ -93,11 +103,18 @@ protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		default:
 			if (mWeather.getIconURL() == null) {
 				boxTemp.setVisibility(View.INVISIBLE);
+
 			}
 			break;
 		}
-
 		weatherWidget.setImageResource(getWeatherResource(mWeather));
+
+		Calendar t = new GregorianCalendar();
+		t.setTime(mWeather.getDate());
+		MoonCalculation moon = new MoonCalculation();
+		moonWidget.setImageResource(getMoonResource(moon.phaseName(moon.moonPhase(t.get(Calendar.YEAR),
+				t.get(Calendar.MONTH), t.get(Calendar.DAY_OF_MONTH)))));
+		moonWidget.setBackgroundColor(getResources().getColor(R.color.black));
 
 		tempMin.setText("" + mWeather.getTempCelciusMin());
 
@@ -137,6 +154,25 @@ protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		else if (weatherCondition.getIconURL().contains("storm") || weatherCondition.getIconURL().contains("thunder"))
 			return R.drawable.weather_thunder;
 		return R.drawable.weather_sun;
+	}
+
+	public static int getMoonResource(String moon) {
+		if ("First quarter".equals(moon))
+			return R.drawable.moon_first_quarter;
+		else if ("New".equals(moon))
+			return R.drawable.moon_new_moon;
+		else if ("Waxing crescent".equals(moon))
+			return R.drawable.moon_waxing_crescent;
+		else if ("Waxing gibbous".equals(moon))
+			return R.drawable.moon_waxing_gibbous;
+		else if ("Waning gibbous".equals(moon))
+			return R.drawable.moon_waning_gibbous;
+		else if ("Third quarter".equals(moon))
+			return R.drawable.moon_third_quarter;
+		else if ("Waning crescent".equals(moon))
+			return R.drawable.moon_waning_crescent;
+
+		return R.drawable.weather_nonet;
 	}
 
 	public void setType(int mType) {

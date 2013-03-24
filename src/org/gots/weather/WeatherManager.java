@@ -13,6 +13,7 @@ package org.gots.weather;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.gots.weather.provider.DatabaseWeatherTask;
@@ -36,12 +37,6 @@ public class WeatherManager {
 
 	public WeatherManager(Context context) {
 		this.mContext = context;
-
-		MoonCalculation moon = new MoonCalculation();
-		Log.d("Moon phase", moon.phaseName(moon.moonPhase(2012, 12, 27)));
-
-
-
 		
 	}
 
@@ -93,6 +88,8 @@ public class WeatherManager {
 			conditionInterface = new WeatherCondition(weatherDate);
 
 		}
+		
+		
 		return conditionInterface;
 	}
 

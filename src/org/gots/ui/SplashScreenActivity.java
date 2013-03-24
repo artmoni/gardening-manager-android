@@ -43,6 +43,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -62,15 +63,14 @@ public class SplashScreenActivity extends Activity {
 			// WeatherManager wm = new WeatherManager(getApplicationContext());
 			// wm.getWeatherFromWebService(myGarden);
 			Intent startServiceIntent = new Intent(mContext, WeatherUpdateService.class);
-			startService(startServiceIntent); 
+			startService(startServiceIntent);
 
 			switch (msg.what) {
 			case STOPSPLASH:
 				// remove SplashScreen from view
 				Intent intent = new Intent(SplashScreenActivity.this, DashboardActivity.class);
 				startActivity(intent);
-//				Intent intent = new Intent(SplashScreenActivity.this, AccountList.class);
-//				startActivity(intent);
+				
 				finish();
 				break;
 			}
@@ -110,6 +110,7 @@ public class SplashScreenActivity extends Activity {
 
 			}
 		});
+		
 		LinearLayout sauterdanslesflaques = (LinearLayout) findViewById(R.id.webSauterDansLesFlaques);
 		sauterdanslesflaques.setOnClickListener(new LinearLayout.OnClickListener() {
 
@@ -121,6 +122,40 @@ public class SplashScreenActivity extends Activity {
 			}
 		});
 
+		ImageView socialGoogle = (ImageView) findViewById(R.id.idSocialGoogle);
+		socialGoogle.setOnClickListener(new LinearLayout.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri
+						.parse("https://plus.google.com/u/0/b/108868805153744305734/communities/105269291264998461912"));
+				startActivity(browserIntent);
+
+			}
+		});
+
+		ImageView socialFacebook = (ImageView) findViewById(R.id.idSocialFacebook);
+		socialFacebook.setOnClickListener(new LinearLayout.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri
+						.parse("http://www.facebook.com/pages/Gardening-Manager/120589404779871"));
+				startActivity(browserIntent);
+
+			}
+		});
+
+		ImageView previmeteo = (ImageView) findViewById(R.id.idPrevimeteo);
+		previmeteo.setOnClickListener(new LinearLayout.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.previmeteo.com/"));
+				startActivity(browserIntent);
+
+			}
+		});
 		// Intent startServiceIntent = new Intent(this,
 		// NotificationService.class);
 		// this.startService(startServiceIntent);
@@ -153,7 +188,6 @@ public class SplashScreenActivity extends Activity {
 
 		GotsPreferences.getInstance(this).setPREMIUM(unlockPremium());
 
-		
 	}
 
 	@Override
@@ -161,6 +195,10 @@ public class SplashScreenActivity extends Activity {
 		// Message msg = new Message();
 		// msg.what = STOPSPLASH;
 		// splashHandler.sendMessageDelayed(msg, SPLASHTIME);
+		
+		Intent intent = new Intent(SplashScreenActivity.this, DashboardActivity.class);
+		startActivity(intent);
+		
 		super.onResume();
 	}
 

@@ -10,13 +10,24 @@
         style="@style/WeatherText"
         android:text="Lun" />
 
-    <ImageView
-        android:id="@+id/idWeatherImage"
+    <RelativeLayout
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_gravity="center_horizontal"
-        android:src="@drawable/weather_thunder" >
-    </ImageView>
+        android:layout_gravity="center_horizontal" >
+
+        <ImageView
+            android:id="@+id/idWeatherImage"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/weather_thunder" >
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/idMoonImage"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:src="@drawable/moon_first_quarter"  />
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/idWeatherTemp"

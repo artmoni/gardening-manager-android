@@ -18,12 +18,15 @@ import org.gots.garden.GardenManager;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.adapter.ListVendorSeedAdapter;
 import org.gots.seed.providers.GotsSeedProvider;
+import org.gots.seed.providers.local.LocalSeedProvider;
 import org.gots.seed.providers.nuxeo.NuxeoSeedProvider;
 import org.gots.seed.sql.VendorSeedDBHelper;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,26 +39,19 @@ import com.actionbarsherlock.view.MenuItem;
 public class VendorListActivity extends SherlockListFragment {
 
 	public Context mContext;
-	private ListVendorSeedAdapter listVendorSeedAdapter;
 	// GardenManager manager;
-	private List<BaseSeedInterface> vendorSeeds;
 	private GotsSeedProvider seedProvider;
+	private ListVendorSeedAdapter listVendorSeedAdapter;
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mContext = getActivity();
 
-		seedProvider = new NuxeoSeedProvider(mContext);
-		vendorSeeds = seedProvider.getAllSeeds();
-
-		// manager = new GardenManager(mContext);
-
-		listVendorSeedAdapter = new ListVendorSeedAdapter(getActivity(), vendorSeeds);
-		setListAdapter(listVendorSeedAdapter);
-
-		// if (vendorSeeds.size() == 0)
-		// manager.update();
+//		seedProvider = new NuxeoSeedProvider(mContext);
+//		new SeedUpdater().execute(seedProvider);
+		seedProvider = new LocalSeedProvider(mContext);
+		new SeedUpdater().execute(seedProvider);
 	}
 
 	@Override
@@ -76,9 +72,11 @@ public class VendorListActivity extends SherlockListFragment {
 		switch (item.getItemId()) {
 
 		case R.id.refresh_seed:
-			vendorSeeds = seedProvider.getAllSeeds();
-			listVendorSeedAdapter = new ListVendorSeedAdapter(getActivity(), vendorSeeds);
-			listVendorSeedAdapter.notifyDataSetChanged();
+			new SeedUpdater().execute(seedProvider);
+
+//			vendorSeeds = seedProvider.getAllSeeds();
+//			listVendorSeedAdapter = new ListVendorSeedAdapter(getActivity(), vendorSeeds);
+//			listVendorSeedAdapter.notifyDataSetChanged();
 			return true;
 
 		default:
@@ -86,8 +84,23 @@ public class VendorListActivity extends SherlockListFragment {
 		}
 	}
 
-	public void update() {
-		listVendorSeedAdapter.notifyDataSetChanged();
-	}
+	
 
+	class SeedUpdater extends AsyncTask<GotsSeedProvider, Void, List<BaseSeedInterface>>{
+		private List<BaseSeedInterface> vendorSeeds;
+
+		@Override
+		protected List<BaseSeedInterface> doInBackground(GotsSeedProvider... params) {
+			vendorSeeds = params[0].getAllSeeds();
+			return vendorSeeds;
+		}
+		@Override
+		protected void onPostExecute(List<BaseSeedInterface> result) {
+			Log.i("SeedUpdater",result.size()+" seeds updated");
+			listVendorSeedAdapter = new ListVendorSeedAdapter(getActivity(), result);
+			setListAdapter(listVendorSeedAdapter);
+			super.onPostExecute(result);
+		}
+	}
+	
 }

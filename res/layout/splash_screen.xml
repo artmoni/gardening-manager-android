@@ -7,27 +7,60 @@
     android:padding="10dp" >
 
     <LinearLayout
-        android:id="@+id/webArtmoni"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/bg_line_action"
-        android:gravity="center_vertical" >
+        android:layout_height="wrap_content" >
 
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@drawable/logo_artmoni" />
-
-        <TextView
-            android:id="@+id/TextView02"
-            android:layout_width="fill_parent"
+        <LinearLayout
+            android:id="@+id/webArtmoni"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:autoLink="web"
-            android:gravity="center"
-            android:text="@string/gots.credits.code"
-            android:textColor="#432D07"
-            android:textSize="14dip" />
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_line_action"
+            android:gravity="center_vertical"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/logo_artmoni" />
+
+            <TextView
+                android:id="@+id/TextView02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:gravity="center"
+                android:text="@string/gots.credits.code"
+                android:textColor="#432D07"
+                android:textSize="14dip" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/webSauterDansLesFlaques"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_line_action"
+            android:gravity="center_vertical"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/logosdlf" />
+
+            <TextView
+                android:id="@+id/TextView02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:gravity="center"
+                android:text="@string/gots.credits.design"
+                android:textColor="#432D07"
+                android:textSize="14dip" />
+        </LinearLayout>
     </LinearLayout>
 
     <RelativeLayout
@@ -84,27 +117,29 @@
     -->
 
     <LinearLayout
-        android:id="@+id/webSauterDansLesFlaques"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/bg_line_action"
-        android:gravity="center_vertical" >
+        android:layout_height="wrap_content" >
 
         <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@drawable/logosdlf" />
+            android:id="@+id/idSocialGoogle"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/social_google" />
 
-        <TextView
-            android:id="@+id/TextView02"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:autoLink="web"
-            android:gravity="center"
-            android:text="@string/gots.credits.design"
-            android:textColor="#432D07"
-            android:textSize="14dip" />
+        <ImageView
+            android:id="@+id/idSocialFacebook"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/social_facebook" />
+
+        <ImageView
+            android:id="@+id/idPrevimeteo"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/logo_previmeteo" />
     </LinearLayout>
 
 </LinearLayout>

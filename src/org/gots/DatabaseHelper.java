@@ -225,6 +225,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	public void setDatabase(int databaseId) {
 		DATABASE_NAME = "gots" + databaseId;
+		Log.d("setDatabase",DATABASE_NAME);
 	}
 
 	@Override

@@ -11,6 +11,7 @@ import org.gots.bean.Garden;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.provider.GardenProvider;
 import org.gots.preferences.GotsPreferences;
+import org.gots.utils.OpenIDRequestInterceptor;
 import org.nuxeo.ecm.automation.client.jaxrs.Constants;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.adapters.DocumentService;
@@ -45,8 +46,13 @@ public class NuxeoGardenProvider implements GardenProvider {
 					GardenInterface currentGarden = params[0];
 					HttpAutomationClient client = new HttpAutomationClient(
 							GotsPreferences.getGardeningManagerServerURI());
-					Session session = client.getSession(GotsPreferences.getInstance(mContext).getNUXEO_LOGIN(),
-							GotsPreferences.getInstance(mContext).getNUXEO_PASSWORD());
+					
+					String myToken = GotsPreferences.getInstance(mContext).getOAuthtToken();
+					client.setRequestInterceptor(new OpenIDRequestInterceptor(myToken));
+					
+//					Session session = client.getSession(GotsPreferences.getInstance(mContext).getNUXEO_LOGIN(),
+//							GotsPreferences.getInstance(mContext).getNUXEO_PASSWORD());
+					Session session = client.getSession();
 
 					try {
 						DocRef wsRef = new DocRef("/default-domain/UserWorkspaces/"
@@ -84,6 +90,15 @@ public class NuxeoGardenProvider implements GardenProvider {
 	public List<GardenInterface> getMyGardens() {
 
 		List<GardenInterface> myGardens = new ArrayList<GardenInterface>();
+		HttpAutomationClient client = new HttpAutomationClient(
+				GotsPreferences.getGardeningManagerServerURI());
+		
+		String myToken = GotsPreferences.getInstance(mContext).getOAuthtToken();
+		client.setRequestInterceptor(new OpenIDRequestInterceptor(myToken));
+		
+//		Session session = client.getSession(GotsPreferences.getInstance(mContext).getNUXEO_LOGIN(),
+//				GotsPreferences.getInstance(mContext).getNUXEO_PASSWORD());
+		Session session = client.getSession();
 
 		try {
 			myGardens = new AsyncTask<Object, Integer, List<GardenInterface>>() {
@@ -93,8 +108,13 @@ public class NuxeoGardenProvider implements GardenProvider {
 				protected List<GardenInterface> doInBackground(Object... params) {
 					HttpAutomationClient client = new HttpAutomationClient(
 							GotsPreferences.getGardeningManagerServerURI());
-					Session session = client.getSession(GotsPreferences.getInstance(mContext).getNUXEO_LOGIN(),
-							GotsPreferences.getInstance(mContext).getNUXEO_PASSWORD());
+					
+					String myToken = GotsPreferences.getInstance(mContext).getOAuthtToken();
+					client.setRequestInterceptor(new OpenIDRequestInterceptor(myToken));
+					
+//					Session session = client.getSession(GotsPreferences.getInstance(mContext).getNUXEO_LOGIN(),
+//							GotsPreferences.getInstance(mContext).getNUXEO_PASSWORD());
+					Session session = client.getSession();
 
 					// DocumentService rs = new DocumentService(session);
 					try {

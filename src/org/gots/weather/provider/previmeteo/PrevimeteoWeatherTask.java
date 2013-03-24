@@ -55,7 +55,7 @@ public class PrevimeteoWeatherTask extends WeatherTask {
 				weatherURL = "http://www.gardening-manager.com/weather/weather-error.xml";
 			else
 				weatherURL = "http://api.previmeteo.com/" + GotsPreferences.getWeatherApiKey() + "/ig/api?weather="
-						+ address.getLocality() + "," + address.getCountryName() + "&hl=fr";
+						+ address.getLocality() + "," + context.getResources().getConfiguration().locale.getCountry() + "&hl=fr";
 			// weatherURL = "http://services.gardening-manager.com/previmeteo/"
 			// + "/ig/api?weather="
 			// + address.getLocality() + "," + address.getCountryName() +
@@ -113,7 +113,7 @@ public class PrevimeteoWeatherTask extends WeatherTask {
 				}
 			} catch (Exception e) {
 				Log.e(TAG, "PrevimeteoErrorHandler has return an error " + e.getMessage());
-				Log.e(TAG, "PrevimeteoErrorHandler has return an error " + e.getStackTrace().toString());
+				e.printStackTrace();
 
 				iserror = true;
 

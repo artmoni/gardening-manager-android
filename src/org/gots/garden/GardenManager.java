@@ -39,8 +39,8 @@ public class GardenManager {
 	public GardenManager(Context mContext) {
 		this.mContext = mContext;
 		preferences = mContext.getSharedPreferences("org.gots.preference", 0);
-//		gardenProvider = new NuxeoGardenProvider(mContext);
-		gardenProvider = new LocalGardenProvider(mContext);
+		gardenProvider = new NuxeoGardenProvider(mContext);
+//		gardenProvider = new LocalGardenProvider(mContext);
 		
 	}
 
@@ -53,7 +53,7 @@ public class GardenManager {
 		
 		GardenInterface newGarden = gardenProvider.createGarden(garden);
 
-		setCurrentGarden((int) newGarden.getId());
+		setCurrentGarden(newGarden);
 
 		isLocalStore = localStore;
 //		new RefreshTask().execute(new Object());
@@ -82,12 +82,13 @@ public class GardenManager {
 		return garden;
 	}
 
-	public void setCurrentGarden(int position) {
+	public void setCurrentGarden(GardenInterface garden) {
 		SharedPreferences.Editor prefedit = preferences.edit();
-		prefedit.putInt("org.gots.preference.gardenid", position);
+		prefedit.putInt("org.gots.preference.gardenid", (int)garden.getId());
 		prefedit.commit();
+		Log.d("setCurrentGarden",">"+(int)garden.getId());
 
-		changeDatabase(position);
+		changeDatabase((int)garden.getId());
 	}
 
 	public void removeCurrentGarden() {

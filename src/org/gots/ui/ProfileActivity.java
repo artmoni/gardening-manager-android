@@ -10,15 +10,22 @@
  ******************************************************************************/
 package org.gots.ui;
 
+import java.util.List;
+
 import org.gots.R;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.garden.GardenInterface;
+import org.gots.garden.GardenManager;
 import org.gots.garden.adapter.ProfileAdapter;
 import org.gots.help.HelpUriBuilder;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -35,6 +42,7 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 public class ProfileActivity extends SherlockActivity {
 
 	private ProfileAdapter profileAdapter;
+	private ListView profileList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,77 +57,43 @@ public class ProfileActivity extends SherlockActivity {
 		GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
 		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
-		final ListView profileList = (ListView) findViewById(R.id.IdGardenProfileList);
-		profileAdapter = new ProfileAdapter(this);
-		profileList.setAdapter(profileAdapter);
-		profileList.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				arg0.setSelected(false);
-				arg1.setSelected(true);
-				arg0.invalidate();
-
-				GardenInterface selectedGarden = (GardenInterface) profileList.getItemAtPosition(arg2);
-
-				Toast.makeText(arg1.getContext(), "selected num " + arg2 + " / garden " + selectedGarden.getName(),
-						Toast.LENGTH_LONG).show();
-			}
-		});
-
+		profileList = (ListView) findViewById(R.id.IdGardenProfileList);
 	}
 
-	// private void buildGardenList() {
-	// GardenDBHelper helper = new GardenDBHelper(this);
-	//
-	// String[] referenceList = helper.getGardens();
-	//
-	// if (referenceList == null)
-	// return;
-	//
-	// gardenSelector = (Spinner) findViewById(R.id.idGardenSelector);
-	//
-	// final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-	// R.layout.spinner_item_text, referenceList);
-	// gardenSelector.setAdapter(adapter);
-	//
-	// gardenSelector.setSelection((int)
-	// gardenManager.getcurrentGarden().getId() - 1);
-	//
-	// gardenSelector.setOnItemSelectedListener(new
-	// AdapterView.OnItemSelectedListener() {
-	//
-	// @Override
-	// public void onItemSelected(AdapterView<?> arg0, View arg1, int position,
-	// long arg3) {
-	//
-	// gardenManager.setCurrentGarden(position + 1);
-	// // buildWeatherList();
-	//
-	// GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-	// tracker.trackEvent("Garden", "Select",
-	// gardenManager.getcurrentGarden().getLocality(), position + 1);
-	//
-	// weatherState.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_weather));
-	// weatherState.setImageDrawable(getResources().getDrawable(R.drawable.weather_updating));
-	// startService(weatherIntent);
-	// registerReceiver(weatherBroadcastReceiver, new
-	// IntentFilter(WeatherUpdateService.BROADCAST_ACTION));
-	//
-	// }
-	//
-	// @Override
-	// public void onNothingSelected(AdapterView<?> arg0) {
-	// // TODO Auto-generated method stub
-	//
-	// }
-	// });
-	// }
+	class GardenClass extends AsyncTask<Context, Void, List<GardenInterface>> {
+		ProgressDialog dialog;
+
+		@Override
+		protected void onPreExecute() {
+			dialog = ProgressDialog.show(ProfileActivity.this, "", "Loading. Please wait...", true);
+			dialog.setCanceledOnTouchOutside(true);
+			dialog.show();
+			super.onPreExecute();
+		}
+
+		private List<GardenInterface> myGardens;
+		GardenManager gardenManager = new GardenManager(ProfileActivity.this);
+
+		@Override
+		protected List<GardenInterface> doInBackground(Context... params) {
+			myGardens = gardenManager.getMyGardens();
+			return myGardens;
+		}
+
+		@Override
+		protected void onPostExecute(List<GardenInterface> result) {
+			profileAdapter = new ProfileAdapter(ProfileActivity.this, myGardens);
+			profileList.setAdapter(profileAdapter);
+			dialog.dismiss();
+			super.onPostExecute(result);
+		}
+
+	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		profileAdapter.notifyDataSetChanged();
+		new GardenClass().execute(this);
 		// buildGardenList();
 		// weatherState.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_weather));
 		// weatherState.setImageDrawable(getResources().getDrawable(R.drawable.weather_updating));
