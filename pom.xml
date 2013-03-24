@@ -8,13 +8,11 @@
 	<packaging>apk</packaging>
 	<version>0.17-SNAPSHOT</version>
 	<name>Gardening Manager</name>
-	
 	<properties>
 		<android.version>4.0.3</android.version>
 		<android.platform>16</android.platform>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-	
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 	<repositories>
 		<repository>
@@ -108,16 +106,9 @@
 		<!-- ********* SOCIALAUTH INTEGRATION BEGIN********* -->
 		<!-- <dependency> <groupId>org.brickred</groupId> <artifactId>socialauth</artifactId> 
 			<version>3.0</version> </dependency> -->
-		<!-- <dependency>
-			<groupId>org.openid4java</groupId>
-			<artifactId>openid4java</artifactId>
-			<version>0.9.7</version>
-		</dependency>
-		<dependency>
-			<groupId>org.opensocial</groupId>
-			<artifactId>opensocial</artifactId>
-			<version>1.0</version>
-		</dependency> -->
+		<!-- <dependency> <groupId>org.openid4java</groupId> <artifactId>openid4java</artifactId> 
+			<version>0.9.7</version> </dependency> <dependency> <groupId>org.opensocial</groupId> 
+			<artifactId>opensocial</artifactId> <version>1.0</version> </dependency> -->
 		<!-- ********* SOCIALAUTH INTEGRATION END********* -->
 	</dependencies>
 	<build>

@@ -66,7 +66,7 @@ verify package certificate
 --jarsigner -verbose -sigalg MD5withRSA -digestalg SHA1 -certs -verify target/gardening-manager-0.14.apk
 delete meta-inf from apk released package 
 sign with release certificat
---jarsigner -sigalg MD5withRSA -digestalg SHA1 -keystore '/home/sfleury/Projets/Gardening Manager/00 release/keystore/keystore' -storepass '@rtM0n!' -keypass '@rtM0n!' /home/sfleury/Projets/Android/workspace/GardeningOverTheSun-br0.10/target/gardening-manager-0.14.apk artmonimobile
+--jarsigner -sigalg MD5withRSA -digestalg SHA1 -keystore '$KEYSTORE_DIR/keystore' -storepass 'STORE_PASS' -keypass 'KEY_PASS' $PROJECT_HOME/target/gardening-manager-0.14.apk artmonimobile
 --zipalign  4 target/gardening-manager-0.14.apk target/gardening-manager-0.14-signed.apk
 
 --------------------------------------------------------
