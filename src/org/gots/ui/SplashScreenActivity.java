@@ -163,13 +163,7 @@ public class SplashScreenActivity extends Activity {
 
 		GardenManager gardenManager = new GardenManager(this);
 		myGarden = gardenManager.getcurrentGarden();
-		// GardenDBHelper helper = new GardenDBHelper(this);
-		// SharedPreferences preferences =
-		// getSharedPreferences("org.gots.preference", 0);
-
-		// myGarden =
-		// helper.getGarden(preferences.getInt("org.gots.preference.gardenid",
-		// 0));
+		
 		if (myGarden == null) {
 			Intent intent = new Intent(this, ProfileCreationActivity.class);
 			startActivityForResult(intent, 0);
