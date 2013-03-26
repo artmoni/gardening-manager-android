@@ -36,8 +36,9 @@ public class AccountList extends ListActivity {
 
 		accountManager = AccountManager.get(getApplicationContext());
 
-		Account[] accounts = accountManager.getAccounts();
-		// Account[] accounts = accountManager.getAccountsByType("com.google");
+//		Account[] accounts = accountManager.getAccounts();
+		 Account[] accounts = accountManager.getAccountsByType("com.google");
+		 
 		for (int i = 0; i < accounts.length; i++) {
 			Log.i("account", ">" + accounts[i]);
 		}
@@ -60,6 +61,7 @@ public class AccountList extends ListActivity {
 		} else {
 			type = account.type;
 		}
+		
 		accountManager.getAuthToken(account, // Account retrieved using
 												// getAccountsByType()
 				type, // Auth scope
