@@ -11,6 +11,8 @@ public interface GardenProvider {
 	public List<GardenInterface> getMyGardens();
 
 	public GardenInterface createGarden(GardenInterface garden);
+
+	int removeGarden(GardenInterface garden);
 	
 	
 }

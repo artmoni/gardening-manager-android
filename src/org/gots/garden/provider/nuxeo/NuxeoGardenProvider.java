@@ -152,4 +152,11 @@ public class NuxeoGardenProvider implements GardenProvider {
 		}
 		return myGardens;
 	}
+
+	@Override
+	public int removeGarden(GardenInterface garden) {
+		// TODO Auto-generated method stub
+		return 0;
+		
+	}
 }
