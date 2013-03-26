@@ -80,10 +80,10 @@ public class DashboardActivity extends SherlockActivity implements OnClickListen
 		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 		GoogleAnalyticsTracker.getInstance().dispatch();
 
-		if (GotsPreferences.getInstance(this).getOAuthtToken() == null) {
-			Intent intent = new Intent(this, AccountList.class);
-			startActivityForResult(intent, 0);
-		}
+		// if (GotsPreferences.getInstance(this).getOAuthtToken() == null) {
+		// Intent intent = new Intent(this, AccountList.class);
+		// startActivityForResult(intent, 0);
+		// }
 	}
 
 	private BroadcastReceiver weatherBroadcastReceiver = new BroadcastReceiver() {
