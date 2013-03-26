@@ -27,8 +27,10 @@ import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.sql.VendorSeedDBHelper;
 import org.gots.seed.view.SeedWidgetLong;
+import org.gots.ui.NewSeedActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,11 +50,13 @@ public class ListVendorSeedAdapter extends BaseAdapter {
 		this.vendorSeeds = vendorSeeds;
 		mContext = context;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		
+
 		if (!GotsPreferences.getInstance(mContext).isPremium())
 			nbAds = vendorSeeds.size() / frequencyAds + 1;
 
 		Collections.sort(vendorSeeds, new ISeedSpecieComparator(context));
+		
+	
 	}
 
 	@Override
@@ -66,7 +70,7 @@ public class ListVendorSeedAdapter extends BaseAdapter {
 			final BaseSeedInterface currentSeed = getItem(position);
 			SeedWidgetLong seedWidgetLong;
 			ActionWidget actionWidget;
-
+ 
 			// if (vi == null)
 			vi = inflater.inflate(R.layout.list_seed, null);
 
@@ -114,6 +118,18 @@ public class ListVendorSeedAdapter extends BaseAdapter {
 			Calendar harvestTime = new GregorianCalendar();
 			harvestTime.setTime(sowTime.getTime());
 			harvestTime.add(Calendar.DAY_OF_MONTH, currentSeed.getDurationMin());
+
+			
+			seedWidgetLong.setOnLongClickListener(new View.OnLongClickListener() {
+
+				@Override
+				public boolean onLongClick(View v) {
+					Intent i = new Intent(mContext, NewSeedActivity.class);
+					i.putExtra("org.gots.seedid", currentSeed.getSeedId());
+					mContext.startActivity(i);
+					return false;
+				}
+			});
 
 			return vi;
 		}
