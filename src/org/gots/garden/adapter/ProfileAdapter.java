@@ -97,13 +97,16 @@ public class ProfileAdapter extends BaseAdapter {
 		} else {
 			View vi = convertView;
 
-			// if (convertView == null)
-			vi = inflater.inflate(R.layout.list_garden, null);
+			if (convertView == null || convertView.findViewById(R.id.idGardenName) == null)
+				vi = inflater.inflate(R.layout.list_garden, null);
 
 			TextView gardenName = (TextView) vi.findViewById(R.id.idGardenName);
 			weatherState = (ImageView) vi.findViewById(R.id.idWeatherConnected);
 			ImageView imageProfile = (ImageView) vi.findViewById(R.id.imageProfile);
 			weatherHistory = (LinearLayout) vi.findViewById(R.id.layoutWeatherHistory);
+			final HorizontalScrollView weatherHistoryContainer = (HorizontalScrollView) vi.findViewById(R.id.scrollWeatherHistory);
+
+			
 
 			final GardenInterface currentGarden = getItem(position);
 
@@ -111,14 +114,23 @@ public class ProfileAdapter extends BaseAdapter {
 				vi.setSelected(true);
 				imageProfile.setVisibility(View.VISIBLE);
 				weatherState.setVisibility(View.VISIBLE);
-				weatherHistory.setVisibility(View.VISIBLE);
+//				weatherHistory.setVisibility(View.VISIBLE);
+				weatherHistoryContainer.setVisibility(View.VISIBLE);
+				
+				weatherIntent = new Intent(mContext, WeatherUpdateService.class);
+				weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_weather));
+				mContext.startService(weatherIntent);
+				mContext.registerReceiver(weatherBroadcastReceiver, new IntentFilter(
+						WeatherUpdateService.BROADCAST_ACTION));
+				currentView = vi;
 
 			} else {
 				vi.setSelected(false);
 				// vi.getBackground().setAlpha(200);
 				imageProfile.setVisibility(View.GONE);
 				weatherState.setVisibility(View.GONE);
-				weatherHistory.setVisibility(View.GONE);
+//				weatherHistory.setVisibility(View.GONE);
+				weatherHistoryContainer.setVisibility(View.GONE);
 
 			}
 
@@ -127,31 +139,27 @@ public class ProfileAdapter extends BaseAdapter {
 			else
 				gardenName.setText(currentGarden.getAddress().getLocality());
 
-			weatherIntent = new Intent(mContext, WeatherUpdateService.class);
-			weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_weather));
-
-			weatherState.setOnClickListener(new View.OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_weather));
-					weatherState.setImageDrawable(mContext.getResources().getDrawable(R.drawable.weather_updating));
-					mContext.startService(weatherIntent);
-					mContext.registerReceiver(weatherBroadcastReceiver, new IntentFilter(
-							WeatherUpdateService.BROADCAST_ACTION));
-					// currentView = (ImageView) v;
-
-				}
-			});
+			// weatherState.setOnClickListener(new View.OnClickListener() {
+			//
+			// @Override
+			// public void onClick(View v) {
+			// weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_weather));
+			// weatherState.setImageDrawable(mContext.getResources().getDrawable(R.drawable.weather_updating));
+			// mContext.startService(weatherIntent);
+			// mContext.registerReceiver(weatherBroadcastReceiver, new
+			// IntentFilter(
+			// WeatherUpdateService.BROADCAST_ACTION));
+			// // currentView = conve;
+			//
+			// }
+			// });
 
 			// *************** WEATHER HISTORY
 			if (vi.isSelected()) {
-				final HorizontalScrollView scrollView = (HorizontalScrollView) vi
-						.findViewById(R.id.scrollWeatherHistory);
-				scrollView.post(new Runnable() {
+				weatherHistoryContainer.post(new Runnable() {
 					@Override
 					public void run() {
-						scrollView.scrollTo(scrollView.getWidth(), scrollView.getHeight());
+						weatherHistoryContainer.scrollTo(weatherHistoryContainer.getWidth(), weatherHistoryContainer.getHeight());
 					}
 				});
 				if (weatherHistory.getChildCount() > 0)
