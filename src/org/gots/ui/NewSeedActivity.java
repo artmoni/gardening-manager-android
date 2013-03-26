@@ -83,9 +83,12 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 		findViewById(R.id.buttonStock).setOnClickListener(this);
 		findViewById(R.id.buttonCatalogue).setOnClickListener(this);
 
-		newSeed = new GrowingSeed();
+		if (getIntent().getIntExtra("org.gots.seedid", -1) != -1) {
+			VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
+			newSeed = helper.getSeedById(getIntent().getIntExtra("org.gots.seedid", -1));
 
-		initview();
+		} else
+			newSeed = new GrowingSeed();
 
 		super.onCreate(savedInstanceState);
 	}
@@ -98,8 +101,12 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 	}
 
 	private void initview() {
+
+		/*
+		 * PLANNING
+		 */
 		planningSow = (PlanningWidget) findViewById(R.id.IdSeedEditSowingPlanning);
-		planningSow.setAdapter(new PlanningSowAdapter(null));
+		planningSow.setAdapter(new PlanningSowAdapter(newSeed));
 		planningSow.setEditable(true);
 
 		Button validateSowing = (Button) findViewById(R.id.buttonUpdateSeed);
@@ -132,13 +139,17 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 		});
 
 		planningHarvest = (PlanningWidget) findViewById(R.id.IdSeedEditHarvestPlanning);
-		planningHarvest.setAdapter(new PlanningHarvestAdapter(null));
+		planningHarvest.setAdapter(new PlanningHarvestAdapter(newSeed));
 		planningHarvest.setEditable(true);
 
 		seedWidgetLong = (SeedWidgetLong) findViewById(R.id.idSeedWidgetLong);
 
+		/*
+		 * VARIETIES
+		 */
 		autoCompleteVariety = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewVariety);
 		initVarietyList();
+		autoCompleteVariety.setText(newSeed.getVariety());
 		autoCompleteVariety.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -158,14 +169,12 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 			}
 		});
 
+		/*
+		 * SPECIES
+		 */
 		gallerySpecies = (Gallery) findViewById(R.id.layoutSpecieGallery);
 		initSpecieList();
-		gallerySpecies.post(new Runnable() {
-			public void run() {
-				gallerySpecies.requestFocus();
 
-			}
-		});
 		// if (savedInstanceState != null &&
 		// savedInstanceState.getInt(SELECTED_SPECIE) != 0)
 		// gallerySpecies.setSelection(savedInstanceState.getInt(SELECTED_SPECIE));
@@ -243,7 +252,7 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 		final VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
 		String[] specieList = helper.getArraySpecie();
 
-		ListSpeciesAdapter listSpeciesAdapter = new ListSpeciesAdapter(this, specieList);
+		ListSpeciesAdapter listSpeciesAdapter = new ListSpeciesAdapter(this, specieList, newSeed.getSpecie());
 
 		gallerySpecies.setAdapter(listSpeciesAdapter);
 		gallerySpecies.setOnItemClickListener(new OnItemClickListener() {
@@ -364,5 +373,19 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 		super.onConfigurationChanged(newConfig);
 		seedWidgetLong.setSeed(newSeed);
 		seedWidgetLong.invalidate();
+	}
+
+	@Override
+	protected void onResume() {
+		initview();
+
+		autoCompleteVariety.clearFocus();
+		gallerySpecies.post(new Runnable() {
+			public void run() {
+				gallerySpecies.requestFocus();
+
+			}
+		});
+		super.onResume();
 	}
 }

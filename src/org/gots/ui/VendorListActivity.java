@@ -51,7 +51,8 @@ public class VendorListActivity extends SherlockListFragment {
 //		seedProvider = new NuxeoSeedProvider(mContext);
 //		new SeedUpdater().execute(seedProvider);
 		seedProvider = new LocalSeedProvider(mContext);
-		new SeedUpdater().execute(seedProvider);
+//		new SeedUpdater().execute(seedProvider);
+		
 	}
 
 	@Override
@@ -84,7 +85,11 @@ public class VendorListActivity extends SherlockListFragment {
 		}
 	}
 
-	
+	@Override
+	public void onResume() {
+		new SeedUpdater().execute(seedProvider);
+		super.onResume();
+	}
 
 	class SeedUpdater extends AsyncTask<GotsSeedProvider, Void, List<BaseSeedInterface>>{
 		private List<BaseSeedInterface> vendorSeeds;
@@ -98,7 +103,9 @@ public class VendorListActivity extends SherlockListFragment {
 		protected void onPostExecute(List<BaseSeedInterface> result) {
 			Log.i("SeedUpdater",result.size()+" seeds updated");
 			listVendorSeedAdapter = new ListVendorSeedAdapter(getActivity(), result);
+			
 			setListAdapter(listVendorSeedAdapter);
+			
 			super.onPostExecute(result);
 		}
 	}
