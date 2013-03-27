@@ -39,7 +39,7 @@ public class WebViewActivity extends SherlockFragment {
 
 		Bundle bundle = this.getArguments();
 		String url = bundle.getString("org.gots.seed.url");
-		
+
 		mWebView.loadUrl(url);
 
 		pd = ProgressDialog.show(getActivity(), "", getResources().getString(R.string.gots_loading), true);
@@ -57,7 +57,8 @@ public class WebViewActivity extends SherlockFragment {
 		@Override
 		public void onPageFinished(WebView view, String url) {
 			super.onPageFinished(view, url);
-			pd.dismiss();
+			if (pd.isShowing())
+				pd.dismiss();
 		}
 
 	}
