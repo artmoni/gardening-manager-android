@@ -69,6 +69,8 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 	private Gallery gallerySpecies;
 	private SeedWidgetLong seedWidgetLong;
 	private BaseSeedInterface newSeed;
+	private TextView textViewBarCode;
+	private boolean isNewSeed = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -83,13 +85,16 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 		findViewById(R.id.buttonStock).setOnClickListener(this);
 		findViewById(R.id.buttonCatalogue).setOnClickListener(this);
 
+		textViewBarCode = (TextView) findViewById(R.id.textViewBarCode);
+
 		if (getIntent().getIntExtra("org.gots.seedid", -1) != -1) {
 			VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
 			newSeed = helper.getSeedById(getIntent().getIntExtra("org.gots.seedid", -1));
+			isNewSeed = false;
 
-		} else
+		} else {
 			newSeed = new GrowingSeed();
-
+		}
 		super.onCreate(savedInstanceState);
 	}
 
@@ -175,6 +180,11 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 		gallerySpecies = (Gallery) findViewById(R.id.layoutSpecieGallery);
 		initSpecieList();
 
+		/*
+		 * BARCODE
+		 */
+		textViewBarCode.setText(newSeed.getBareCode());
+
 		// if (savedInstanceState != null &&
 		// savedInstanceState.getInt(SELECTED_SPECIE) != 0)
 		// gallerySpecies.setSelection(savedInstanceState.getInt(SELECTED_SPECIE));
@@ -241,8 +251,11 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 	private long insertSeed() {
 
 		VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
+		if (isNewSeed)
 
-		return helper.insertSeed(newSeed);
+			return helper.insertSeed(newSeed);
+		else
+			return helper.updateSeed(newSeed);
 	}
 
 	/**
@@ -332,7 +345,6 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 		IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
 		if (scanResult != null && scanResult.getContents() != "") {
 			Log.i("Scan result", scanResult.toString());
-			TextView textViewBarCode = (TextView) findViewById(R.id.textViewBarCode);
 			textViewBarCode.setText(scanResult.getContents());
 			newSeed.setBareCode(textViewBarCode.getText().toString());
 			seedWidgetLong.setSeed(newSeed);
