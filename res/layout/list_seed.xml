@@ -17,8 +17,7 @@
         android:id="@+id/IdSeedAction"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="@drawable/action_selector"
-        android:src="@drawable/action_sow" android:layout_alignParentRight="true" android:layout_margin="5dp">
+        android:src="@drawable/action_sow" android:layout_alignParentRight="true" android:layout_margin="2dp">
     </org.gots.action.view.ActionWidget>
 
 </RelativeLayout>
