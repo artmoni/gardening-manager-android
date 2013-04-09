@@ -79,12 +79,12 @@
             android:layout_margin="5dp"
             android:src="@drawable/social_facebook" />
 
-        <ImageView
+        <!-- <ImageView
             android:id="@+id/idPrevimeteo"
             android:layout_width="80dp"
             android:layout_height="50dp"
             android:layout_margin="5dp"
-            android:src="@drawable/logo_previmeteo" />
+            android:src="@drawable/logo_previmeteo" /> -->
     </LinearLayout>
     </LinearLayout>
 <RelativeLayout
