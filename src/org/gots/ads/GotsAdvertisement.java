@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import com.google.ads.AdRequest;
 import com.google.ads.AdSize;
 import com.google.ads.AdView;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class GotsAdvertisement {
 	Context mContext;
@@ -62,6 +63,10 @@ public class GotsAdvertisement {
 			
 			@Override
 			public void onClick(View v) {
+				GoogleAnalyticsTracker.getInstance().trackPageView(GotsAdvertisement.class.getSimpleName()+"Premium");
+				GoogleAnalyticsTracker.getInstance().dispatch();
+
+				
 				Intent marketIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id="
 						+ appPackageName ));
 				marketIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
