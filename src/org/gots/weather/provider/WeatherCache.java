@@ -25,6 +25,8 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.gots.preferences.GotsPreferences;
 
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+
 import android.os.Environment;
 import android.util.Log;
 
@@ -65,6 +67,10 @@ public class WeatherCache {
 					weatherXmlStream = downloadWeatherXML(url);
 					setLocalCache(fileName, weatherXmlStream);
 					currentDownloadTry++;
+					
+					GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+					tracker.trackEvent("Weather", "Download", url.getPath(), currentDownloadTry);
+
 
 				} else {
 					Log.w(TAG, MAX_DOWNLOAD_TRY + " Max download retry reached");
