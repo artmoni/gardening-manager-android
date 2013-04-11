@@ -13,7 +13,7 @@
 
         <LinearLayout
             android:id="@+id/bannerAd"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="50dp"
             android:layout_gravity="center_horizontal"
             android:background="@color/text_color_dark"
@@ -86,9 +86,10 @@
     </org.gots.weather.view.WrappingSlidingDrawer>
 
     <ImageView
+        android:id="@+id/idImageLogo"
         android:layout_width="fill_parent"
         android:layout_height="60dp"
-        android:background="@drawable/bt_logo" >
+        android:background="@drawable/bt_logo_premium" >
     </ImageView>
 
 </RelativeLayout>
