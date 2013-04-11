@@ -82,6 +82,8 @@
     <string name="specie.capsicumannuum">Pepper</string>
     <string name="help.loading">Please wait, web help is loading</string>
     <string name="menu.help">Help</string>
+    <string name="menu.about">About</string>
+    
     <string name="menu.help.firstlaunch">Do you want to have a look on the documentation?</string>
     <string name="button.close">Close</string>
     <string name="button.ok">OK</string>
