@@ -44,7 +44,7 @@ public class WeatherWidget extends GridView {
 		wm = new WeatherManager(getContext());
 		weatherWidgetAdapter = new WeatherWidgetAdapter(getContext(), mType, wm.getConditionSet(nbDays));
 		setAdapter(weatherWidgetAdapter);
-
+		setFocusable(false);
 		setNumColumns(getAdapter().getCount());
 
 	}
