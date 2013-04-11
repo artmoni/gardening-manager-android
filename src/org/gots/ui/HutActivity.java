@@ -13,8 +13,10 @@ package org.gots.ui;
 import java.util.ArrayList;
 
 import org.gots.R;
+import org.gots.ads.GotsAdvertisement;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.help.HelpUriBuilder;
+import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.sql.VendorSeedDBHelper;
@@ -29,6 +31,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -68,6 +71,12 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 		mContext = this;
 		setContentView(R.layout.hut);
 		buildMyTabHost();
+		if (!GotsPreferences.getInstance(this).isPremium()) {
+			GotsAdvertisement ads = new GotsAdvertisement(this);
+
+			LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
+			layout.addView(ads.getAdsLayout());
+		}
 
 	}
 

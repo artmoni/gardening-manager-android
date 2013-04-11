@@ -13,11 +13,13 @@ package org.gots.ui;
 import java.util.List;
 
 import org.gots.R;
+import org.gots.ads.GotsAdvertisement;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GardenManager;
 import org.gots.garden.adapter.ProfileAdapter;
 import org.gots.help.HelpUriBuilder;
+import org.gots.preferences.GotsPreferences;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -29,6 +31,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -58,6 +61,13 @@ public class ProfileActivity extends SherlockActivity {
 		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
 		profileList = (ListView) findViewById(R.id.IdGardenProfileList);
+		
+		if (!GotsPreferences.getInstance(this).isPremium()){
+			GotsAdvertisement ads = new GotsAdvertisement(this);
+			
+		LinearLayout layout = (LinearLayout)findViewById(R.id.idAdsTop);
+		layout.addView( ads.getAdsLayout());
+		}
 	}
 
 	class GardenClass extends AsyncTask<Context, Void, List<GardenInterface>> {
