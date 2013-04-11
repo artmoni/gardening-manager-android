@@ -1,7 +1,13 @@
 package org.gots.preferences;
 
+import java.util.List;
+
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
 
 public class GotsPreferences {
@@ -46,7 +52,7 @@ public class GotsPreferences {
 	}
 
 	public boolean isPremium() {
-		return ORG_GOTS_PREMIUM_LICENCE;
+		return unlockPremium();
 	}
 
 	public static String getAnalyticsApiKey() {
@@ -70,9 +76,9 @@ public class GotsPreferences {
 		return ISDEVELOPMENT ? GARDENING_MANAGER_NUXEO_AUTOMATION_TEST : GARDENING_MANAGER_NUXEO_AUTOMATION;
 	}
 
-	public void setPREMIUM(boolean pREMIUM) {
-		ORG_GOTS_PREMIUM_LICENCE = pREMIUM;
-	}
+//	public void setPREMIUM(boolean pREMIUM) {
+//		ORG_GOTS_PREMIUM_LICENCE = pREMIUM;
+//	}
 
 	public static boolean isDevelopment() {
 		return ISDEVELOPMENT;
@@ -125,6 +131,27 @@ public class GotsPreferences {
 
 	public void setOAuthtToken(String oAuthtToken) {
 		OAuthtToken = oAuthtToken;
+	}
+	
+	private boolean unlockPremium() {
+		boolean unlocked = false;
+		PackageManager pm = mContext.getPackageManager();
+		List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+
+		for (ApplicationInfo applicationInfo : packages) {
+			try {
+
+				PackageInfo packageInfo = pm
+						.getPackageInfo(applicationInfo.packageName, PackageManager.GET_PERMISSIONS);
+				if ("org.gots.premium".equals(packageInfo.packageName)) {
+					unlocked = true;
+				}
+			} catch (NameNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+		return unlocked;
+
 	}
 
 }
