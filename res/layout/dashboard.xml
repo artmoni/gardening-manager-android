@@ -89,7 +89,7 @@
         android:id="@+id/idImageLogo"
         android:layout_width="fill_parent"
         android:layout_height="60dp"
-        android:background="@drawable/bt_logo_premium" >
+        android:background="@drawable/bt_logo" >
     </ImageView>
 
 </RelativeLayout>
