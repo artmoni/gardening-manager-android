@@ -41,8 +41,6 @@ public class WeatherWidgetAdapter extends BaseAdapter {
 
 		weatherItem.setWeather(getItem(position));
 
-		Log.i("WeatherWidgetAdapter", "position=" + position + "/" + getItem(position).getCondition());
-
 		return weatherItem;
 	}
 
