@@ -19,10 +19,12 @@ public class ListSpeciesAdapter extends BaseAdapter {
 	// ArrayList<BaseSeedInterface>();
 	private Context mContext;
 	private String[] mSpecieList;
+	private String mSelectedSpecies;
 
-	public ListSpeciesAdapter(Context context, String[] specieList) {
+	public ListSpeciesAdapter(Context context, String[] specieList, String selectedSpecies) {
 		mContext = context;
 		mSpecieList = specieList;
+		mSelectedSpecies = selectedSpecies;
 	}
 
 	@Override
@@ -55,6 +57,7 @@ public class ListSpeciesAdapter extends BaseAdapter {
 		v.setImageResource(vegetableImageRessource);
 		v.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.action_selector));
 		v.setTag(specie);
+		
 		return v;
 	}
 
