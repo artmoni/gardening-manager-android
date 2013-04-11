@@ -71,6 +71,7 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 		mContext = this;
 		setContentView(R.layout.hut);
 		buildMyTabHost();
+		
 		if (!GotsPreferences.getInstance(this).isPremium()) {
 			GotsAdvertisement ads = new GotsAdvertisement(this);
 
