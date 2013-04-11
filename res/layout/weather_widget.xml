@@ -10,24 +10,27 @@
         style="@style/WeatherText"
         android:text="Lun" />
 
-    <RelativeLayout
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_gravity="center_horizontal" >
-
-        <ImageView
-            android:id="@+id/idWeatherImage"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:src="@drawable/weather_thunder" >
-        </ImageView>
+    <LinearLayout
+        android:id="@+id/idWeatherImageContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/idMoonImage"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
-            android:src="@drawable/moon_first_quarter"  />
-    </RelativeLayout>
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/moon_third_quarter" android:padding="2dp">
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/idWeatherImage"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/weather_thunder" >
+        </ImageView>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/idWeatherTemp"
