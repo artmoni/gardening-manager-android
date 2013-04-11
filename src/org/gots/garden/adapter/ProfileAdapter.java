@@ -46,12 +46,11 @@ import android.widget.Toast;
 public class ProfileAdapter extends BaseAdapter {
 
 	private Context mContext;
-	private int nbAds = 0;
-	private int frequencyAds = 4;
+	
 	private List<GardenInterface> myGardens = new ArrayList<GardenInterface>();
 	private LayoutInflater inflater;
 	private ImageView weatherState;
-	private Intent weatherIntent;
+//	private Intent weatherIntent;
 	private WeatherManager weatherManager;
 	private GardenManager gardenManager;
 	private GardenInterface selectedGarden;
@@ -63,22 +62,20 @@ public class ProfileAdapter extends BaseAdapter {
 		weatherManager = new WeatherManager(mContext);
 		gardenManager = new GardenManager(mContext);
 
-		if (!GotsPreferences.getInstance(mContext).isPremium())
-			nbAds = myGardens.size() / frequencyAds + 1;
+
 		this.myGardens = myGardens;
 		selectedGarden = gardenManager.getcurrentGarden();
-		// myGardens = weatherManager.get
 	}
 
 	@Override
 	public int getCount() {
-		return myGardens.size() + nbAds;
+		return myGardens.size();
 	}
 
 	@Override
 	public GardenInterface getItem(int position) {
-		if (position % frequencyAds > 0 && !GotsPreferences.getInstance(mContext).isPremium())
-			position = position - (position / frequencyAds + 1);
+//		if (position % frequencyAds > 0 && !GotsPreferences.getInstance(mContext).isPremium())
+//			position = position - (position / frequencyAds + 1);
 		return myGardens.get(position);
 	}
 
@@ -90,11 +87,7 @@ public class ProfileAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
-		if (position % frequencyAds == 0 && !GotsPreferences.getInstance(mContext).isPremium()) {
-			GotsAdvertisement ads = new GotsAdvertisement(mContext);
-			convertView = ads.getAdsLayout();
-			return convertView;
-		} else {
+
 			View vi = convertView;
 
 			if (convertView == null || convertView.findViewById(R.id.idGardenName) == null)
@@ -109,6 +102,7 @@ public class ProfileAdapter extends BaseAdapter {
 			
 
 			final GardenInterface currentGarden = getItem(position);
+//			weatherIntent = new Intent(mContext, WeatherUpdateService.class);
 
 			if (selectedGarden != null && currentGarden != null && selectedGarden.getId() == currentGarden.getId()) {
 				vi.setSelected(true);
@@ -117,11 +111,10 @@ public class ProfileAdapter extends BaseAdapter {
 //				weatherHistory.setVisibility(View.VISIBLE);
 				weatherHistoryContainer.setVisibility(View.VISIBLE);
 				
-				weatherIntent = new Intent(mContext, WeatherUpdateService.class);
 				weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_weather));
-				mContext.startService(weatherIntent);
-				mContext.registerReceiver(weatherBroadcastReceiver, new IntentFilter(
-						WeatherUpdateService.BROADCAST_ACTION));
+//				mContext.startService(weatherIntent);
+//				mContext.registerReceiver(weatherBroadcastReceiver, new IntentFilter(
+//						WeatherUpdateService.BROADCAST_ACTION));
 				currentView = vi;
 
 			} else {
@@ -197,9 +190,9 @@ public class ProfileAdapter extends BaseAdapter {
 
 					weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_weather));
 					weatherState.setImageDrawable(mContext.getResources().getDrawable(R.drawable.weather_updating));
-					mContext.startService(weatherIntent);
-					mContext.registerReceiver(weatherBroadcastReceiver, new IntentFilter(
-							WeatherUpdateService.BROADCAST_ACTION));
+//					mContext.startService(weatherIntent);
+//					mContext.registerReceiver(weatherBroadcastReceiver, new IntentFilter(
+//							WeatherUpdateService.BROADCAST_ACTION));
 					currentView = v;
 
 					GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
@@ -208,8 +201,7 @@ public class ProfileAdapter extends BaseAdapter {
 			});
 
 			return vi;
-
-		}
+		
 	}
 
 	private BroadcastReceiver weatherBroadcastReceiver = new BroadcastReceiver() {
@@ -244,4 +236,5 @@ public class ProfileAdapter extends BaseAdapter {
 		// myGardens = gardenManager.getMyGardens();
 		super.notifyDataSetChanged();
 	}
+	
 }
