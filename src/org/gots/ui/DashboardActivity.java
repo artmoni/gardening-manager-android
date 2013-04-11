@@ -72,9 +72,11 @@ public class DashboardActivity extends SherlockActivity implements OnClickListen
 			adView = new GotsAdvertisement(this);
 			adView.getPremiumAds(layout);
 
-		} else
+		} else {
 			layout.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_dashboard_top));
-
+			ImageView logo = (ImageView) findViewById(R.id.idImageLogo);
+			logo.setBackgroundDrawable(getResources().getDrawable(R.drawable.bt_logo_premium));
+		}
 		weatherIntent = new Intent(this, WeatherUpdateService.class);
 
 		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
@@ -189,6 +191,11 @@ public class DashboardActivity extends SherlockActivity implements OnClickListen
 			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HelpUriBuilder.getUri(getClass()
 					.getSimpleName())));
 			startActivity(browserIntent);
+
+			return true;
+		case R.id.about:
+			Intent aboutIntent = new Intent(this, AboutActivity.class);
+			startActivity(aboutIntent);
 
 			return true;
 		default:
