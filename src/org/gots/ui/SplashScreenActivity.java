@@ -146,16 +146,16 @@ public class SplashScreenActivity extends Activity {
 			}
 		});
 
-		ImageView previmeteo = (ImageView) findViewById(R.id.idPrevimeteo);
-		previmeteo.setOnClickListener(new LinearLayout.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.previmeteo.com/"));
-				startActivity(browserIntent);
-
-			}
-		});
+//		ImageView previmeteo = (ImageView) findViewById(R.id.idPrevimeteo);
+//		previmeteo.setOnClickListener(new LinearLayout.OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.previmeteo.com/"));
+//				startActivity(browserIntent);
+//
+//			}
+//		});
 		// Intent startServiceIntent = new Intent(this,
 		// NotificationService.class);
 		// this.startService(startServiceIntent);
@@ -169,7 +169,7 @@ public class SplashScreenActivity extends Activity {
 			startActivityForResult(intent, 0);
 
 		} else {
-			if (GotsPreferences.getInstance(mContext).isDevelopment())
+			if (GotsPreferences.isDevelopment())
 				splashHandler.sendMessageDelayed(msg, 0);
 			else
 				splashHandler.sendMessageDelayed(msg, SPLASHTIME);
@@ -180,7 +180,7 @@ public class SplashScreenActivity extends Activity {
 
 		}
 
-		GotsPreferences.getInstance(this).setPREMIUM(unlockPremium());
+//		GotsPreferences.getInstance(this).setPREMIUM(unlockPremium());
 
 	}
 
@@ -234,7 +234,7 @@ public class SplashScreenActivity extends Activity {
 				PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager alarms = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-		if (GotsPreferences.getInstance(context).isDevelopment())
+		if (GotsPreferences.isDevelopment())
 			alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
 					AlarmManager.INTERVAL_FIFTEEN_MINUTES, actionTODOIntent);
 		else {
@@ -244,25 +244,6 @@ public class SplashScreenActivity extends Activity {
 		}
 	}
 
-	private boolean unlockPremium() {
-		boolean unlocked = false;
-		PackageManager pm = getPackageManager();
-		List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
-
-		for (ApplicationInfo applicationInfo : packages) {
-			try {
-
-				PackageInfo packageInfo = pm
-						.getPackageInfo(applicationInfo.packageName, PackageManager.GET_PERMISSIONS);
-				if ("org.gots.premium".equals(packageInfo.packageName)) {
-					unlocked = true;
-				}
-			} catch (NameNotFoundException e) {
-				e.printStackTrace();
-			}
-		}
-		return unlocked;
-
-	}
+	
 
 }
