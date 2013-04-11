@@ -46,8 +46,6 @@ public class MySeedsListAdapter extends BaseAdapter implements OnClickListener {
 	private ArrayList<BaseSeedInterface> mySeeds = new ArrayList<BaseSeedInterface>();
 	private BaseAllotmentInterface allotment;
 	private LayoutInflater inflater;
-	private int nbAds = 0;
-	private int frequencyAds = 4;
 
 	// private SeedWidgetLong seedWidget;
 	// private ActionWidget actionWidget;
@@ -60,21 +58,19 @@ public class MySeedsListAdapter extends BaseAdapter implements OnClickListener {
 		this.allotment = allotment;
 		this.mySeeds = seeds;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		if (!GotsPreferences.getInstance(mContext).isPremium())
-			nbAds = mySeeds.size() / frequencyAds + 1;
+
 		Collections.sort(mySeeds, new ISeedSpecieComparator(context));
 
 	}
 
 	@Override
 	public int getCount() {
-		return mySeeds.size() + nbAds;
+		return mySeeds.size();
 	}
 
 	@Override
 	public BaseSeedInterface getItem(int position) {
-		if (position % frequencyAds > 0 && !GotsPreferences.getInstance(mContext).isPremium())
-			position = position - (position / frequencyAds + 1);
+
 		return mySeeds.get(position);
 	}
 
@@ -85,79 +81,75 @@ public class MySeedsListAdapter extends BaseAdapter implements OnClickListener {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		if (position % frequencyAds == 0 && !GotsPreferences.getInstance(mContext).isPremium()) {
-			GotsAdvertisement ads = new GotsAdvertisement(mContext);
-			convertView = ads.getAdsLayout();
-			return convertView;
-		} else {
-			View vi = convertView;
-			final BaseSeedInterface currentSeed = getItem(position);
-			SeedWidgetLong seedWidgetLong;
-			ActionWidget actionWidget;
 
-			// if (vi == null)
+		View vi = convertView;
+		final BaseSeedInterface currentSeed = getItem(position);
+		SeedWidgetLong seedWidgetLong;
+		ActionWidget actionWidget;
+
+		if (vi == null)
 			vi = inflater.inflate(R.layout.list_seed, null);
 
-			seedWidgetLong = (SeedWidgetLong) vi.findViewById(R.id.idSeedWidgetLong);
-			actionWidget = (ActionWidget) vi.findViewById(R.id.IdSeedAction);
+		seedWidgetLong = (SeedWidgetLong) vi.findViewById(R.id.idSeedWidgetLong);
+		actionWidget = (ActionWidget) vi.findViewById(R.id.IdSeedAction);
 
-			seedWidgetLong.setSeed(currentSeed);
+		seedWidgetLong.setSeed(currentSeed);
 
-			BaseActionInterface action = null;
-			if (allotment != null) {
-				// action = new SowingAction(mContext);
-				ActionDBHelper helper = new ActionDBHelper(mContext);
-				action = (SowingAction) helper.getActionByName("sow");
+		BaseActionInterface action = null;
+		if (allotment != null) {
+			// action = new SowingAction(mContext);
+			ActionDBHelper helper = new ActionDBHelper(mContext);
+			action = (SowingAction) helper.getActionByName("sow");
 
-				if (Calendar.getInstance().get(Calendar.MONTH) >= currentSeed.getDateSowingMin()
-						&& Calendar.getInstance().get(Calendar.MONTH) <= currentSeed.getDateSowingMax())
-					action.setState(ActionState.NORMAL);
-				else if (Calendar.getInstance().get(Calendar.MONTH) + 1 >= currentSeed.getDateSowingMin())
-					action.setState(ActionState.WARNING);
-				else
-					action.setState(ActionState.UNDEFINED);
-
-			} else {
-				action = new ReduceQuantityAction(mContext);
+			if (Calendar.getInstance().get(Calendar.MONTH) >= currentSeed.getDateSowingMin()
+					&& Calendar.getInstance().get(Calendar.MONTH) <= currentSeed.getDateSowingMax())
 				action.setState(ActionState.NORMAL);
-			}
+			else if (Calendar.getInstance().get(Calendar.MONTH) + 1 >= currentSeed.getDateSowingMin())
+				action.setState(ActionState.WARNING);
+			else
+				action.setState(ActionState.UNDEFINED);
 
-			actionWidget.setAction(action);
-			final BaseActionInterface baseActionInterface = action;
-			actionWidget.setOnClickListener(new View.OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-
-					if (allotment != null) {
-						GardeningActionInterface action = (GardeningActionInterface) baseActionInterface;
-						action.execute(allotment, (GrowingSeedInterface) currentSeed);
-						((Activity) mContext).finish();
-					} else {
-						SeedActionInterface action = (SeedActionInterface) baseActionInterface;
-						action.execute((GrowingSeedInterface) currentSeed);
-					}
-					notifyDataSetChanged();
-				}
-			});
-
-			try {
-
-				Calendar sowTime = Calendar.getInstance();
-				if (sowTime.get(Calendar.MONTH) > currentSeed.getDateSowingMin())
-					sowTime.set(Calendar.YEAR, sowTime.get(Calendar.YEAR) + 1);
-				sowTime.set(Calendar.MONTH, currentSeed.getDateSowingMin());
-
-				Calendar harvestTime = new GregorianCalendar();
-				harvestTime.setTime(sowTime.getTime());
-				harvestTime.add(Calendar.DAY_OF_MONTH, currentSeed.getDurationMin());
-
-			} catch (Exception e) {
-				// holder.seedSowingDate.setText("--");
-			}
-
-			return vi;
+		} else {
+			action = new ReduceQuantityAction(mContext);
+			action.setState(ActionState.NORMAL);
 		}
+
+		actionWidget.setAction(action);
+		final BaseActionInterface baseActionInterface = action;
+		actionWidget.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				if (allotment != null) {
+					GardeningActionInterface action = (GardeningActionInterface) baseActionInterface;
+					action.execute(allotment, (GrowingSeedInterface) currentSeed);
+					((Activity) mContext).finish();
+				} else {
+					SeedActionInterface action = (SeedActionInterface) baseActionInterface;
+					action.execute((GrowingSeedInterface) currentSeed);
+				}
+				notifyDataSetChanged();
+			}
+		});
+
+		try {
+
+			Calendar sowTime = Calendar.getInstance();
+			if (sowTime.get(Calendar.MONTH) > currentSeed.getDateSowingMin())
+				sowTime.set(Calendar.YEAR, sowTime.get(Calendar.YEAR) + 1);
+			sowTime.set(Calendar.MONTH, currentSeed.getDateSowingMin());
+
+			Calendar harvestTime = new GregorianCalendar();
+			harvestTime.setTime(sowTime.getTime());
+			harvestTime.add(Calendar.DAY_OF_MONTH, currentSeed.getDurationMin());
+
+		} catch (Exception e) {
+			// holder.seedSowingDate.setText("--");
+		}
+
+		return vi;
+
 	}
 
 	@Override
