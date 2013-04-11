@@ -16,12 +16,15 @@ import java.util.List;
 import org.gots.R;
 import org.gots.garden.GardenManager;
 import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.GotsSeedManager;
 import org.gots.seed.adapter.ListVendorSeedAdapter;
 import org.gots.seed.providers.GotsSeedProvider;
 import org.gots.seed.providers.local.LocalSeedProvider;
 import org.gots.seed.providers.nuxeo.NuxeoSeedProvider;
+import org.gots.seed.providers.simple.SimpleSeedProvider;
 import org.gots.seed.sql.VendorSeedDBHelper;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -50,7 +53,11 @@ public class VendorListActivity extends SherlockListFragment {
 
 //		seedProvider = new NuxeoSeedProvider(mContext);
 //		new SeedUpdater().execute(seedProvider);
-		seedProvider = new LocalSeedProvider(mContext);
+//		seedProvider = new LocalSeedProvider(mContext);
+		seedProvider = new GotsSeedManager(mContext);
+		listVendorSeedAdapter = new ListVendorSeedAdapter(mContext, seedProvider.getAllSeeds());
+		
+		setListAdapter(listVendorSeedAdapter);
 //		new SeedUpdater().execute(seedProvider);
 		
 	}
@@ -73,8 +80,9 @@ public class VendorListActivity extends SherlockListFragment {
 		switch (item.getItemId()) {
 
 		case R.id.refresh_seed:
-			new SeedUpdater().execute(seedProvider);
-
+//			new SeedUpdater().execute(seedProvider);
+			listVendorSeedAdapter = new ListVendorSeedAdapter(mContext, seedProvider.getAllSeeds());
+			listVendorSeedAdapter.notifyDataSetChanged();
 //			vendorSeeds = seedProvider.getAllSeeds();
 //			listVendorSeedAdapter = new ListVendorSeedAdapter(getActivity(), vendorSeeds);
 //			listVendorSeedAdapter.notifyDataSetChanged();
@@ -87,27 +95,43 @@ public class VendorListActivity extends SherlockListFragment {
 
 	@Override
 	public void onResume() {
-		new SeedUpdater().execute(seedProvider);
+//		new SeedUpdater().execute(seedProvider);
+		listVendorSeedAdapter = new ListVendorSeedAdapter(mContext, seedProvider.getAllSeeds());
+		setListAdapter(listVendorSeedAdapter);
+		
 		super.onResume();
 	}
 
-	class SeedUpdater extends AsyncTask<GotsSeedProvider, Void, List<BaseSeedInterface>>{
-		private List<BaseSeedInterface> vendorSeeds;
-
-		@Override
-		protected List<BaseSeedInterface> doInBackground(GotsSeedProvider... params) {
-			vendorSeeds = params[0].getAllSeeds();
-			return vendorSeeds;
-		}
-		@Override
-		protected void onPostExecute(List<BaseSeedInterface> result) {
-			Log.i("SeedUpdater",result.size()+" seeds updated");
-			listVendorSeedAdapter = new ListVendorSeedAdapter(getActivity(), result);
-			
-			setListAdapter(listVendorSeedAdapter);
-			
-			super.onPostExecute(result);
-		}
-	}
+//	class SeedUpdater extends AsyncTask<GotsSeedProvider, Void, List<BaseSeedInterface>>{
+//		private List<BaseSeedInterface> vendorSeeds;
+//		private ProgressDialog dialog;
+//
+//		@Override
+//		protected void onPreExecute() {
+//			dialog = ProgressDialog.show(mContext, "", "Loading. Please wait...", true);
+//			dialog.setCanceledOnTouchOutside(true);
+//			dialog.show();
+//			super.onPreExecute();
+//		}
+//		@Override
+//		protected List<BaseSeedInterface> doInBackground(GotsSeedProvider... params) {
+//			vendorSeeds = params[0].getAllSeeds();
+//			return vendorSeeds;
+//		}
+//		@Override
+//		protected void onPostExecute(List<BaseSeedInterface> result) {
+//			Log.i("SeedUpdater",result.size()+" seeds updated");
+//			listVendorSeedAdapter = new ListVendorSeedAdapter(mContext, result);
+//			
+//			setListAdapter(listVendorSeedAdapter);
+//			dialog.dismiss();
+//			super.onPostExecute(result);
+//		}
+//		@Override
+//		protected void onCancelled() {
+// 
+//			super.onCancelled();
+//		}
+//	}
 	
 }
