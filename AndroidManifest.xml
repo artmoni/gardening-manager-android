@@ -86,6 +86,7 @@
         <activity android:name=".ui.MySeedsListFirstTimeActivity" />
         <activity
             android:name=".ui.NewSeedActivity"
+
             android:theme="@style/Theme.Styled" />
         <activity
             android:name=".ui.AccountList"
