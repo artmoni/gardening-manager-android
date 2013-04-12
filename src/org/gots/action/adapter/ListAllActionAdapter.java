@@ -116,7 +116,8 @@ public class ListAllActionAdapter extends BaseAdapter {
 
 		// if (convertView == null) {
 		// ll = new LinearLayout(mContext);
-		ll = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.list_action, parent, false);
+		if (convertView == null)
+			ll = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.list_action, parent, false);
 
 		final BaseActionInterface currentAction = getItem(position);
 
@@ -171,7 +172,6 @@ public class ListAllActionAdapter extends BaseAdapter {
 
 				if (PhotoAction.class.isInstance(currentAction) && currentAction.getData() != null) {
 					final File imgFile = new File(currentAction.getData().toString());
-					Log.d("imageFile", imgFile.getAbsolutePath());
 					if (imgFile.exists()) {
 
 						try {
@@ -206,7 +206,7 @@ public class ListAllActionAdapter extends BaseAdapter {
 				}
 			}
 			actionWidget.setAction(currentAction);
-			//ll.invalidate();
+			// ll.invalidate();
 
 		}
 		// }
