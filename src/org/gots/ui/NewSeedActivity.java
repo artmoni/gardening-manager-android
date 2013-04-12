@@ -347,8 +347,8 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 			Log.i("Scan result", scanResult.toString());
 			textViewBarCode.setText(scanResult.getContents());
 			newSeed.setBareCode(textViewBarCode.getText().toString());
-			seedWidgetLong.setSeed(newSeed);
-			seedWidgetLong.invalidate();
+//			seedWidgetLong.setSeed(newSeed);
+//			seedWidgetLong.invalidate();
 		}
 		// super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -383,8 +383,10 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 	public void onConfigurationChanged(Configuration newConfig) {
 
 		super.onConfigurationChanged(newConfig);
-		seedWidgetLong.setSeed(newSeed);
-		seedWidgetLong.invalidate();
+		setContentView(R.layout.inputseed);
+//
+//		seedWidgetLong.setSeed(newSeed);
+//		seedWidgetLong.invalidate();
 	}
 
 	@Override
