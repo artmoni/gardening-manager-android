@@ -60,8 +60,6 @@ public class SplashScreenActivity extends Activity {
 		@Override
 		public void handleMessage(Message msg) {
 
-			// WeatherManager wm = new WeatherManager(getApplicationContext());
-			// wm.getWeatherFromWebService(myGarden);
 			Intent startServiceIntent = new Intent(mContext, WeatherUpdateService.class);
 			startService(startServiceIntent);
 
@@ -174,13 +172,10 @@ public class SplashScreenActivity extends Activity {
 			else
 				splashHandler.sendMessageDelayed(msg, SPLASHTIME);
 
-			// DatabaseHelper databaseHelper = new DatabaseHelper(this);
-			// databaseHelper.setDatabase(preferences.getInt("org.gots.preference.gardenid",
-			// 0));
+			
 
 		}
 
-//		GotsPreferences.getInstance(this).setPREMIUM(unlockPremium());
 
 	}
 
@@ -190,8 +185,8 @@ public class SplashScreenActivity extends Activity {
 		// msg.what = STOPSPLASH;
 		// splashHandler.sendMessageDelayed(msg, SPLASHTIME);
 		
-		Intent intent = new Intent(SplashScreenActivity.this, DashboardActivity.class);
-		startActivity(intent);
+//		Intent intent = new Intent(SplashScreenActivity.this, DashboardActivity.class);
+//		startActivity(intent);
 		
 		super.onResume();
 	}
