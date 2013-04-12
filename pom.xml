@@ -62,6 +62,11 @@
 			<artifactId>admob</artifactId>
 			<version>6.2.1-r8</version>
 		</dependency>
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>android-integration</artifactId>
+			<version>2.1</version>
+		</dependency>
 		<!-- <dependency> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-javadoc-plugin</artifactId> 
 			<version>2.9</version> </dependency> -->
 		<dependency>
