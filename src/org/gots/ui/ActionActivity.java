@@ -45,7 +45,7 @@ public class ActionActivity extends SherlockActivity implements OnClickListener 
 
 		ActionBar bar = getSupportActionBar();
 		bar.setDisplayHomeAsUpEnabled(true);
-		bar.setTitle(R.string.dashboard_actions_name);		
+		bar.setTitle(R.string.dashboard_actions_name);
 		GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
 		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
@@ -79,8 +79,8 @@ public class ActionActivity extends SherlockActivity implements OnClickListener 
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		 MenuInflater inflater = getSupportMenuInflater();
-		 inflater.inflate(R.menu.menu_action, menu);
+		MenuInflater inflater = getSupportMenuInflater();
+		inflater.inflate(R.menu.menu_action, menu);
 		return true;
 	}
 
@@ -92,12 +92,13 @@ public class ActionActivity extends SherlockActivity implements OnClickListener 
 			finish();
 			return true;
 		case R.id.help:
-			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
+			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HelpUriBuilder.getUri(getClass()
+					.getSimpleName())));
 			startActivity(browserIntent);
 
-//			Intent i = new Intent(this, WebHelpActivity.class);
-//			i.putExtra("org.gots.help.page", getClass().getSimpleName());
-//			startActivity(i);
+			// Intent i = new Intent(this, WebHelpActivity.class);
+			// i.putExtra("org.gots.help.page", getClass().getSimpleName());
+			// startActivity(i);
 
 			return true;
 
