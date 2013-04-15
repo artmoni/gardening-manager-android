@@ -55,7 +55,7 @@ public class WeatherView extends LinearLayout {
 	public WeatherView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		this.mContext = context;
-
+		initView();
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class WeatherView extends LinearLayout {
 	private void initView() {
 		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View view = inflater.inflate(R.layout.weather_widget, this);
-		setupView();
+//		setupView();
 
 	}
 
@@ -129,28 +129,27 @@ public class WeatherView extends LinearLayout {
 			}
 			break;
 		}
-try{
-		Calendar t = new GregorianCalendar();
-		t.setTime(mWeather.getDate());
+		try {
+			Calendar t = new GregorianCalendar();
+			t.setTime(mWeather.getDate());
 
+			tempMin.setText("" + mWeather.getTempCelciusMin());
 
-		tempMin.setText("" + mWeather.getTempCelciusMin());
+			tempMax.setText("" + mWeather.getTempCelciusMax());
 
-		tempMax.setText("" + mWeather.getTempCelciusMax());
+			SimpleDateFormat sdf = new SimpleDateFormat("E dd/MM", Locale.getDefault());
+			if (mWeather.getDate() != null)
+				weatherDay.setText("" + sdf.format(mWeather.getDate()));
 
-		SimpleDateFormat sdf = new SimpleDateFormat("E dd/MM", Locale.getDefault());
-		if (mWeather.getDate() != null)
-			weatherDay.setText("" + sdf.format(mWeather.getDate()));
+			weatherWidget.setImageResource(getWeatherResource(mWeather));
 
-		weatherWidget.setImageResource(getWeatherResource(mWeather));
-		
-		MoonCalculation moon = new MoonCalculation();
-		moonWidget.setImageDrawable(getResources().getDrawable(
-				getMoonResource(moon.phaseName(moon.moonPhase(t.get(Calendar.YEAR), t.get(Calendar.MONTH),
-						t.get(Calendar.DAY_OF_MONTH))))));
-}catch(Exception e){
-	e.printStackTrace();
-}
+			MoonCalculation moon = new MoonCalculation();
+			moonWidget.setImageDrawable(getResources().getDrawable(
+					getMoonResource(moon.phaseName(moon.moonPhase(t.get(Calendar.YEAR), t.get(Calendar.MONTH),
+							t.get(Calendar.DAY_OF_MONTH))))));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		// final Handler mHandler = new Handler();
 		// final Runnable mUpdateUITimerTask = new Runnable() {
 		// public void run() {
@@ -201,11 +200,12 @@ try{
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 		super.onLayout(changed, l, t, r, b);
+		setupView();
 	}
 
 	public void setWeather(WeatherConditionInterface weather) {
 		this.mWeather = weather;
-		setupView();
+		invalidate();
 	}
 
 	public static int getWeatherResource(WeatherConditionInterface weatherCondition) {
