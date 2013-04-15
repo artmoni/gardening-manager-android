@@ -105,51 +105,52 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 
 		final LinearLayout loginBox = (LinearLayout) findViewById(R.id.idLoginBox);
 
-		
 		shareBox = (CheckBox) findViewById(R.id.checkboxShare);
 		shareBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if (isChecked&& ! GotsPreferences.getInstance(ProfileCreationActivity.this).isConnectedToServer()) {
+				if (isChecked && !GotsPreferences.getInstance(ProfileCreationActivity.this).isConnectedToServer()) {
 					Intent intent = new Intent(ProfileCreationActivity.this, LoginActivity.class);
 					startActivity(intent);
 				}
-//				if (isChecked) {
-//					loginBox.setVisibility(View.VISIBLE);
-//
-//					// Create an instance of SocialAuthConfgi object
-//					SocialAuthConfig config = SocialAuthConfig.getDefault();
-//
-//					// load configuration. By default load the configuration
-//					// from oauth_consumer.properties.
-//					// You can also pass input stream, properties object or
-//					// properties file name.
-//					try {
-//						config.load();
-//
-//						// Create an instance of SocialAuthManager and set
-//						// config
-//						SocialAuthManager manager = new SocialAuthManager();
-//						manager.setSocialAuthConfig(config);
-//
-//						// URL of YOUR application which will be called after
-//						// authentication
-//						String successUrl = "http://srv2.gardening-manager.com:8090/nuxeo/nxstartup.faces?provider=GoogleOpenIDConnect";
-//
-//						// get Provider URL to which you should redirect for
-//						// authentication.
-//						// id can have values "facebook", "twitter", "yahoo"
-//						// etc. or the OpenID URL
-//						String url = manager.getAuthenticationUrl("google", successUrl);
-//
-//						// Store in session
-//						// session.setAttribute("authManager", manager);
-//					} catch (Exception e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//				}
+				// if (isChecked) {
+				// loginBox.setVisibility(View.VISIBLE);
+				//
+				// // Create an instance of SocialAuthConfgi object
+				// SocialAuthConfig config = SocialAuthConfig.getDefault();
+				//
+				// // load configuration. By default load the configuration
+				// // from oauth_consumer.properties.
+				// // You can also pass input stream, properties object or
+				// // properties file name.
+				// try {
+				// config.load();
+				//
+				// // Create an instance of SocialAuthManager and set
+				// // config
+				// SocialAuthManager manager = new SocialAuthManager();
+				// manager.setSocialAuthConfig(config);
+				//
+				// // URL of YOUR application which will be called after
+				// // authentication
+				// String successUrl =
+				// "http://srv2.gardening-manager.com:8090/nuxeo/nxstartup.faces?provider=GoogleOpenIDConnect";
+				//
+				// // get Provider URL to which you should redirect for
+				// // authentication.
+				// // id can have values "facebook", "twitter", "yahoo"
+				// // etc. or the OpenID URL
+				// String url = manager.getAuthenticationUrl("google",
+				// successUrl);
+				//
+				// // Store in session
+				// // session.setAttribute("authManager", manager);
+				// } catch (Exception e) {
+				// // TODO Auto-generated catch block
+				// e.printStackTrace();
+				// }
+				// }
 
 			}
 		});
@@ -188,7 +189,8 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 		pd.setCanceledOnTouchOutside(true);
 
 		String bestProvider = mlocManager.getBestProvider(criteria, true);
-		if (mlocManager != null)
+		//bestprovider can be null because we ask only for enabled providers (getBestProvider(criteria, TRUE);)
+		if (bestProvider != null && mlocManager != null)
 			mlocManager.requestLocationUpdates(bestProvider, 60000, 0, this);
 		else
 			setProgressBarIndeterminateVisibility(true);
@@ -234,7 +236,9 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 		setProgressBarIndeterminateVisibility(false);
 		this.location = location;
 		displayAddress();
-		pd.dismiss();
+		if (pd != null && pd.isShowing()) {
+			pd.cancel();
+		}
 		mlocManager.removeUpdates(this);
 	}
 
@@ -343,8 +347,6 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 	}
 
 	private void createNewProfile() {
-
-		
 
 		if (location != null) {
 			garden.setGpsLatitude(location.getLatitude());
