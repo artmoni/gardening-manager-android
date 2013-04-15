@@ -15,6 +15,7 @@ import java.util.Locale;
 
 import org.gots.R;
 import org.gots.help.HelpUriBuilder;
+import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.sql.GrowingSeedDBHelper;
 import org.gots.seed.sql.VendorSeedDBHelper;
@@ -71,7 +72,8 @@ public class TabSeedActivity extends SherlockFragmentActivity {
 			int seedId = getIntent().getExtras().getInt("org.gots.seed.vendorid");
 			VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
 			mSeed = (GrowingSeedInterface) helper.getSeedById(seedId);
-		}
+		}else
+			mSeed = new GrowingSeed(); // DEFAULT SEED
 
 		bar.setTitle(mSeed.getSpecie());
 
