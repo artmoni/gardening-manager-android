@@ -25,7 +25,7 @@ import org.gots.ads.GotsAdvertisement;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.sql.VendorSeedDBHelper;
+import org.gots.seed.providers.local.sql.VendorSeedDBHelper;
 import org.gots.seed.view.SeedWidgetLong;
 import org.gots.ui.NewSeedActivity;
 

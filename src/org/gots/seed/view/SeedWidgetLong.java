@@ -124,7 +124,7 @@ public class SeedWidgetLong extends LinearLayout implements OnClickListener {
 	// }
 
 	public void setSeed(BaseSeedInterface seed) {
-		this.mSeed = (GrowingSeedInterface) seed;
+		this.mSeed =  (GrowingSeedInterface) seed;
 		setupView();
 		invalidate();
 		requestLayout();
