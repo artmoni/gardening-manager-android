@@ -87,7 +87,7 @@ public class WeatherView extends LinearLayout {
 	private void initView() {
 		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View view = inflater.inflate(R.layout.weather_widget, this);
-//		setupView();
+		setupView();
 
 	}
 
@@ -107,13 +107,13 @@ public class WeatherView extends LinearLayout {
 		switch (mType) {
 		case TEXT:
 			weatherWidget.setVisibility(View.GONE);
-			// moonWidget.setVisibility(View.GONE);
-			weatherImageContainer.setVisibility(View.GONE);
 
 			if (mWeather.getIconURL() == null) {
 				boxTemp.setVisibility(View.GONE);
 				weatherDay.setVisibility(View.GONE);
+				
 			}
+			weatherImageContainer.setVisibility(View.GONE);
 
 			break;
 		case IMAGE:
@@ -200,12 +200,13 @@ public class WeatherView extends LinearLayout {
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 		super.onLayout(changed, l, t, r, b);
-		setupView();
+		
 	}
 
 	public void setWeather(WeatherConditionInterface weather) {
 		this.mWeather = weather;
-		invalidate();
+//		invalidate();
+		setupView();
 	}
 
 	public static int getWeatherResource(WeatherConditionInterface weatherCondition) {
