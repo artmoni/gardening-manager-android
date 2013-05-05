@@ -23,7 +23,7 @@ import org.gots.allotment.view.QuickAllotmentActionBuilder;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
-import org.gots.seed.sql.GrowingSeedDBHelper;
+import org.gots.seed.providers.local.sql.GrowingSeedDBHelper;
 import org.gots.ui.HutActivity;
 
 import android.app.AlertDialog;
