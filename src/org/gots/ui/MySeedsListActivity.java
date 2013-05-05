@@ -16,7 +16,7 @@ import org.gots.allotment.sql.AllotmentDBHelper;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.adapter.MySeedsListAdapter;
-import org.gots.seed.sql.VendorSeedDBHelper;
+import org.gots.seed.providers.local.sql.VendorSeedDBHelper;
 
 import android.os.Bundle;
 import android.util.Log;

@@ -20,9 +20,9 @@ import org.gots.seed.GotsSeedManager;
 import org.gots.seed.adapter.ListVendorSeedAdapter;
 import org.gots.seed.providers.GotsSeedProvider;
 import org.gots.seed.providers.local.LocalSeedProvider;
+import org.gots.seed.providers.local.sql.VendorSeedDBHelper;
 import org.gots.seed.providers.nuxeo.NuxeoSeedProvider;
 import org.gots.seed.providers.simple.SimpleSeedProvider;
-import org.gots.seed.sql.VendorSeedDBHelper;
 
 import android.app.ProgressDialog;
 import android.content.Context;

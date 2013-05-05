@@ -22,6 +22,7 @@ import org.gots.garden.GardenManager;
 import org.gots.garden.sql.GardenDBHelper;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.providers.RetrieveNuxeoDocs;
+import org.gots.seed.service.SeedUpdateService;
 import org.gots.weather.service.WeatherUpdateService;
 import org.nuxeo.android.activities.BaseNuxeoActivity;
 import org.nuxeo.android.context.NuxeoContext;
@@ -62,6 +63,10 @@ public class SplashScreenActivity extends Activity {
 
 			Intent startServiceIntent = new Intent(mContext, WeatherUpdateService.class);
 			startService(startServiceIntent);
+			
+			Intent startServiceIntent2 = new Intent(mContext, SeedUpdateService.class);
+	        startService(startServiceIntent2);
+
 
 			switch (msg.what) {
 			case STOPSPLASH:
@@ -158,7 +163,8 @@ public class SplashScreenActivity extends Activity {
 		// NotificationService.class);
 		// this.startService(startServiceIntent);
 		setRecurringAlarm(this);
-
+		
+		
 		GardenManager gardenManager = new GardenManager(this);
 		myGarden = gardenManager.getcurrentGarden();
 		

@@ -10,7 +10,7 @@ import org.gots.action.sql.ActionDBHelper;
 import org.gots.action.sql.ActionSeedDBHelper;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.sql.GrowingSeedDBHelper;
+import org.gots.seed.providers.local.sql.GrowingSeedDBHelper;
 import org.gots.seed.view.SeedWidgetLong;
 
 import android.app.Activity;

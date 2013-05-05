@@ -17,7 +17,7 @@ import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.help.HelpUriBuilder;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.sql.GrowingSeedDBHelper;
+import org.gots.seed.providers.local.sql.GrowingSeedDBHelper;
 
 import android.content.Intent;
 import android.net.Uri;

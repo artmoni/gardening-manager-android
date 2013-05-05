@@ -33,7 +33,7 @@ import org.gots.help.HelpUriBuilder;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.providers.RetrieveNuxeoDocs;
-import org.gots.seed.sql.VendorSeedDBHelper;
+import org.gots.seed.providers.local.sql.VendorSeedDBHelper;
 import org.nuxeo.android.context.NuxeoContext;
 import org.nuxeo.android.context.NuxeoContextProvider;
 

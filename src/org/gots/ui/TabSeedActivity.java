@@ -17,8 +17,8 @@ import org.gots.R;
 import org.gots.help.HelpUriBuilder;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.sql.GrowingSeedDBHelper;
-import org.gots.seed.sql.VendorSeedDBHelper;
+import org.gots.seed.providers.local.sql.GrowingSeedDBHelper;
+import org.gots.seed.providers.local.sql.VendorSeedDBHelper;
 import org.gots.seed.view.SeedWidgetLong;
 
 import android.content.Context;
