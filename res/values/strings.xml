@@ -83,7 +83,6 @@
     <string name="help.loading">Please wait, web help is loading</string>
     <string name="menu.help">Help</string>
     <string name="menu.about">About</string>
-    
     <string name="menu.help.firstlaunch">Do you want to have a look on the documentation?</string>
     <string name="button.close">Close</string>
     <string name="button.ok">OK</string>
@@ -92,6 +91,8 @@
     <string name="location.notfound">Location not found</string>
     <string name="notification.action.title">Your _SPECIE_ needs you</string>
     <string name="notification.action.content">and _NBACTIONS_ more task</string>
+    <string name="notification.seed.title">New _SPECIE_ available</string>
+    <string name="notification.seed.content">and _NBSEEDS_ more vegetable</string>
     <string name="action.sow">Sow</string>
     <string name="action.beak">Beak</string>
     <string name="action.lighten">Lighten</string>
