@@ -9,7 +9,7 @@ import org.gots.action.sql.ActionSeedDBHelper;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.SeedUtil;
-import org.gots.seed.sql.GrowingSeedDBHelper;
+import org.gots.seed.providers.local.sql.GrowingSeedDBHelper;
 import org.gots.seed.view.SeedWidget;
 import org.gots.ui.ActionActivity;
 
