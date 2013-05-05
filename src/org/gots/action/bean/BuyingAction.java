@@ -16,7 +16,7 @@ import org.gots.action.AbstractActionGarden;
 import org.gots.action.PermanentActionInterface;
 import org.gots.action.SeedActionInterface;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.sql.VendorSeedDBHelper;
+import org.gots.seed.providers.local.sql.VendorSeedDBHelper;
 
 import android.content.Context;
 
