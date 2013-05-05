@@ -6,7 +6,6 @@ import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.view.WeatherView;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;

@@ -8,11 +8,10 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.util.Log;
 
 public class GotsPreferences {
 
-	private static final boolean ISDEVELOPMENT = false;
+	private static final boolean ISDEVELOPMENT = true;
 
 	private static final String ORG_GOTS_GARDEN_PASSWORD = "org.gots.garden.password";
 	private static final String ORG_GOTS_GARDEN_LOGIN = "org.gots.garden.login";

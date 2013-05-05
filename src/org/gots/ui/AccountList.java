@@ -1,11 +1,9 @@
 package org.gots.ui;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
-import org.apache.http.params.HttpParams;
 import org.gots.preferences.GotsPreferences;
 
 import android.accounts.Account;
@@ -13,12 +11,9 @@ import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.accounts.AuthenticatorDescription;
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;

@@ -1,14 +1,10 @@
 package org.gots.seed;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.gots.seed.providers.GotsSeedProvider;
 import org.gots.seed.providers.local.LocalSeedProvider;
-import org.gots.seed.providers.local.sql.VendorSeedDBHelper;
 import org.gots.seed.providers.nuxeo.NuxeoSeedProvider;
-import org.gots.seed.providers.simple.SimpleSeedProvider;
 
 import android.content.Context;
 

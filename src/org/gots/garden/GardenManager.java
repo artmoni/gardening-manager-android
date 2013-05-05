@@ -1,31 +1,15 @@
 package org.gots.garden;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.gots.DatabaseHelper;
 import org.gots.garden.provider.GardenProvider;
 import org.gots.garden.provider.local.LocalGardenProvider;
-import org.gots.garden.provider.nuxeo.NuxeoGardenProvider;
 import org.gots.garden.sql.GardenDBHelper;
-import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.providers.GotsSeedProvider;
-import org.gots.seed.providers.local.LocalSeedProvider;
-import org.gots.seed.providers.local.sql.VendorSeedDBHelper;
-import org.gots.seed.providers.nuxeo.NuxeoSeedProvider;
-import org.gots.seed.providers.simple.SimpleSeedProvider;
-import org.nuxeo.ecm.automation.client.jaxrs.Session;
-import org.nuxeo.ecm.automation.client.jaxrs.adapters.DocumentService;
-import org.nuxeo.ecm.automation.client.jaxrs.impl.HttpAutomationClient;
-import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
-import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
-import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 

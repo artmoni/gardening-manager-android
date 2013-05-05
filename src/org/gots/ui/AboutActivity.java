@@ -2,7 +2,6 @@ package org.gots.ui;
 
 import org.gots.R;
 import org.gots.analytics.GotsAnalytics;
-import org.gots.help.HelpUriBuilder;
 
 import android.content.Intent;
 import android.content.pm.PackageInfo;

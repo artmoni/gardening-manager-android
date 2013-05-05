@@ -13,15 +13,12 @@ package org.gots.weather;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.gots.weather.provider.DatabaseWeatherTask;
-import org.gots.weather.provider.MoonCalculation;
 import org.gots.weather.provider.WeatherTask;
 
 import android.content.Context;
-import android.util.Log;
 
 public class WeatherManager {
 

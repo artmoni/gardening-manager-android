@@ -25,10 +25,10 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.gots.preferences.GotsPreferences;
 
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
-
 import android.os.Environment;
 import android.util.Log;
+
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class WeatherCache {
 

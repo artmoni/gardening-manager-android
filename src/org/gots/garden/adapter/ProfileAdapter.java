@@ -16,23 +16,16 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.gots.R;
-import org.gots.ads.GotsAdvertisement;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GardenManager;
-import org.gots.preferences.GotsPreferences;
 import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.WeatherManager;
-import org.gots.weather.service.WeatherUpdateService;
 import org.gots.weather.view.WeatherView;
-
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +34,8 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class ProfileAdapter extends BaseAdapter {
 

@@ -1,12 +1,6 @@
 package org.gots.seed.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.gots.R;
-import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.GrowingSeed;
-import org.gots.seed.view.SeedWidget;
 
 import android.content.Context;
 import android.view.View;

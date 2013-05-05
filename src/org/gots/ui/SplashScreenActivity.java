@@ -11,8 +11,6 @@
 package org.gots.ui;
 
 import java.util.Calendar;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import org.gots.R;
 import org.gots.action.service.ActionTODOBroadcastReceiver;
@@ -21,12 +19,8 @@ import org.gots.garden.GardenInterface;
 import org.gots.garden.GardenManager;
 import org.gots.garden.sql.GardenDBHelper;
 import org.gots.preferences.GotsPreferences;
-import org.gots.seed.providers.RetrieveNuxeoDocs;
 import org.gots.seed.service.SeedUpdateService;
 import org.gots.weather.service.WeatherUpdateService;
-import org.nuxeo.android.activities.BaseNuxeoActivity;
-import org.nuxeo.android.context.NuxeoContext;
-import org.nuxeo.android.context.NuxeoContextProvider;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -34,15 +28,12 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;

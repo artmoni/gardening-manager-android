@@ -2,12 +2,10 @@ package org.gots.service;
 
 import java.util.Calendar;
 
-import org.gots.action.service.ActionNotificationService;
 import org.gots.action.service.ActionTODOBroadcastReceiver;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.service.SeedBroadcastReceiver;
 import org.gots.weather.service.WeatherBroadcastReceiver;
-import org.gots.weather.service.WeatherUpdateService;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

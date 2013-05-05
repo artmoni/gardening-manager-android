@@ -7,7 +7,6 @@ import org.gots.action.BaseActionInterface;
 import org.gots.bean.SeedCategory;
 import org.gots.seed.BaseSeedInterface;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
-import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
 public class NuxeoSeed extends Document implements BaseSeedInterface {
 

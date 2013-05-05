@@ -32,10 +32,7 @@ import org.gots.garden.GardenManager;
 import org.gots.help.HelpUriBuilder;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.providers.RetrieveNuxeoDocs;
 import org.gots.seed.providers.local.sql.VendorSeedDBHelper;
-import org.nuxeo.android.context.NuxeoContext;
-import org.nuxeo.android.context.NuxeoContextProvider;
 
 import android.app.ProgressDialog;
 import android.content.Intent;

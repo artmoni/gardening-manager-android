@@ -3,7 +3,6 @@ package org.gots.action.adapter.comparator;
 import java.util.Comparator;
 
 import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.SeedUtil;
 
 import android.content.Context;

@@ -20,16 +20,12 @@ import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.provider.MoonCalculation;
 
 import android.content.Context;
-import android.graphics.drawable.AnimationDrawable;
-import android.os.Handler;
 import android.text.Layout;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class WeatherView extends LinearLayout {

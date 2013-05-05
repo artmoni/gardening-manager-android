@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.gots.action.BaseActionInterface;
 import org.gots.bean.SeedCategory;
-import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;

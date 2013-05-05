@@ -2,20 +2,14 @@ package org.gots.seed.service;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import org.gots.R;
-import org.gots.action.BaseActionInterface;
-import org.gots.action.sql.ActionSeedDBHelper;
 import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.providers.GotsSeedProvider;
-import org.gots.seed.providers.local.sql.GrowingSeedDBHelper;
 import org.gots.seed.providers.local.sql.VendorSeedDBHelper;
 import org.gots.seed.providers.nuxeo.NuxeoSeedProvider;
 import org.gots.seed.view.SeedWidget;
-import org.gots.ui.ActionActivity;
 import org.gots.ui.HutActivity;
 
 import android.app.Notification;

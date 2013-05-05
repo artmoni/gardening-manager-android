@@ -10,26 +10,14 @@
  ******************************************************************************/
 package org.gots.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.gots.R;
-import org.gots.garden.GardenManager;
-import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.adapter.ListVendorSeedAdapter;
 import org.gots.seed.providers.GotsSeedProvider;
-import org.gots.seed.providers.local.LocalSeedProvider;
-import org.gots.seed.providers.local.sql.VendorSeedDBHelper;
-import org.gots.seed.providers.nuxeo.NuxeoSeedProvider;
-import org.gots.seed.providers.simple.SimpleSeedProvider;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
