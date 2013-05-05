@@ -5,6 +5,7 @@ import java.util.Calendar;
 import org.gots.action.service.ActionNotificationService;
 import org.gots.action.service.ActionTODOBroadcastReceiver;
 import org.gots.preferences.GotsPreferences;
+import org.gots.seed.service.SeedBroadcastReceiver;
 import org.gots.weather.service.WeatherBroadcastReceiver;
 import org.gots.weather.service.WeatherUpdateService;
 
@@ -53,6 +54,19 @@ public class BootBroadcastReceiver extends BroadcastReceiver {
 			updateTime.set(Calendar.HOUR_OF_DAY, 20);
 			alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
 					AlarmManager.INTERVAL_DAY, weatherUpdateService);
+		}
+		
+		Intent seedBroadcastIntent = new Intent(context, SeedBroadcastReceiver.class);
+		PendingIntent seedUpdateService = PendingIntent.getBroadcast(context, 1, seedBroadcastIntent,
+				PendingIntent.FLAG_UPDATE_CURRENT);
+
+		if (GotsPreferences.isDevelopment())
+			alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
+					60000, seedUpdateService);
+		else {
+			updateTime.set(Calendar.HOUR_OF_DAY, 20);
+			alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
+					AlarmManager.INTERVAL_DAY, seedUpdateService);
 		}
 	}
 }
