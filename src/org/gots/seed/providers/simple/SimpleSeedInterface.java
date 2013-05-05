@@ -8,12 +8,13 @@ import java.util.List;
 import org.gots.action.BaseActionInterface;
 import org.gots.bean.SeedCategory;
 import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.GrowingSeedInterface;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
 @Root(name = "seed", strict = false)
-public class SimpleSeedInterface implements BaseSeedInterface {
+public class SimpleSeedInterface implements GrowingSeedInterface {
 
 	// @Element(name="reference")
 	// String reference;
@@ -51,11 +52,21 @@ public class SimpleSeedInterface implements BaseSeedInterface {
 	@Element(name = "durationMax")
 	int durationMax;
 
-	@Element(name = "reference",required=false)
+	@Element(name = "reference", required = false)
 	String reference;
 
 	@ElementList(name = "actions", required = false)
 	List<SimpleAction> actions;
+
+	private int growinseed_id;
+
+	private Date date_sowing;
+
+	private String barecode;
+
+	private Integer nbSachet = 0;
+
+	private int seed_id;
 
 	@Override
 	public Object clone() throws CloneNotSupportedException {
@@ -66,13 +77,12 @@ public class SimpleSeedInterface implements BaseSeedInterface {
 	@Override
 	public int getSeedId() {
 		// TODO Auto-generated method stub
-		return 0;
+		return seed_id;
 	}
 
 	@Override
 	public void setId(int id) {
-		// TODO Auto-generated method stub
-
+		seed_id = id;
 	}
 
 	@Override
@@ -304,8 +314,7 @@ public class SimpleSeedInterface implements BaseSeedInterface {
 
 	@Override
 	public String getBareCode() {
-		// TODO Auto-generated method stub
-		return null;
+		return barecode;
 	}
 
 	@Override
@@ -316,8 +325,7 @@ public class SimpleSeedInterface implements BaseSeedInterface {
 
 	@Override
 	public Integer getNbSachet() {
-		// TODO Auto-generated method stub
-		return null;
+		return nbSachet;
 	}
 
 	@Override
@@ -353,6 +361,27 @@ public class SimpleSeedInterface implements BaseSeedInterface {
 	public void setDescriptionDiseases(String description_diseases) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void setGrowingSeedId(int id) {
+		this.growinseed_id = id;
+
+	}
+
+	@Override
+	public int getGrowingSeedId() {
+		return this.growinseed_id;
+	}
+
+	@Override
+	public Date getDateSowing() {
+		return date_sowing;
+	}
+
+	@Override
+	public void setDateSowing(Date dateSowing) {
+		date_sowing = dateSowing;
 	}
 
 }

@@ -1,15 +1,35 @@
 package org.gots.seed.providers.simple;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.providers.GotsSeedProvider;
+import org.gots.seed.providers.nuxeo.NuxeoSeedConverter;
+import org.nuxeo.ecm.automation.client.jaxrs.Constants;
+import org.nuxeo.ecm.automation.client.jaxrs.Session;
+import org.nuxeo.ecm.automation.client.jaxrs.impl.HttpAutomationClient;
+import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
+import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 public class SimpleSeedProvider implements GotsSeedProvider {
@@ -37,18 +57,64 @@ public class SimpleSeedProvider implements GotsSeedProvider {
 		List<BaseSeedInterface> allSeeds = new ArrayList<BaseSeedInterface>();
 
 		try {
+			allSeeds = new AsyncTask<Object, Integer, List<BaseSeedInterface>>() {
 
-			SimpleNetwork network = new SimpleNetwork();
-			InputStream is = network.execute("").get();
+				@Override
+				protected List<BaseSeedInterface> doInBackground(Object... params) {
+					List<BaseSeedInterface> vendorSeeds = new ArrayList<BaseSeedInterface>();
+
+					try {
+						
+//						SimpleNetwork network = new SimpleNetwork();
+//						InputStream is = network.execute("").get();
+						
+						CredentialsProvider credProvider = new BasicCredentialsProvider();
+						credProvider.setCredentials(new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT),
+								new UsernamePasswordCredentials("PY0XHE11WE4VQNJ18DXUQFZ7OJR5YVBR", ""));
+
+						DefaultHttpClient httpClient = new DefaultHttpClient();
+						httpClient.setCredentialsProvider(credProvider);
+
+						HttpResponse response;
+						InputStream is = null;
+						try {
+
+							HttpGet httpGet = new HttpGet(urlFormatter());
+
+							response = httpClient.execute(httpGet);
+
+							StatusLine statusLine = response.getStatusLine();
+							if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
+								is = response.getEntity().getContent();
+
+							} else {
+								// Closes the connection.
+								response.getEntity().getContent().close();
+								throw new IOException(statusLine.getReasonPhrase());
+							}
+						} catch (ClientProtocolException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						//********
+						Serializer serializer = new Persister();
+						SimpleSeeds seeds = serializer.read(SimpleSeeds.class, is);
+
+						for (Iterator iterator = seeds.getSeeds().iterator(); iterator.hasNext();) {
+							BaseSeedInterface seed = (BaseSeedInterface) iterator.next();
+							vendorSeeds.add(seed);
+						}
+						Log.i("SimpleSeedProvider", vendorSeeds.size()+" seeds have been parsed");
+					} catch (Exception e) {
+						Log.e("getAllSeeds", e.getMessage());
+					}
+					return vendorSeeds;
+				}
+			}.execute(new Object()).get();
 			
-			Serializer serializer = new Persister();
-			SimpleSeeds seeds = serializer.read(SimpleSeeds.class, is);
-
-			for (Iterator iterator = seeds.getSeeds().iterator(); iterator.hasNext();) {
-				BaseSeedInterface seed = (BaseSeedInterface) iterator.next();
-				allSeeds.add(seed);
-			}
-			Log.i("SimpleSeedProvider", allSeeds.size()+" seeds have been parsed");
 		} catch (Exception e) {
 			e.printStackTrace();
 			Log.w("SimpleSeedProvider", "Error loading seeds from XML");
@@ -56,5 +122,19 @@ public class SimpleSeedProvider implements GotsSeedProvider {
 		}
 		return allSeeds;
 	}
-
+	
+	private String HOST = "services.gardening-manager.com";
+	private String PATH = "/seeds/";
+	private String URL = "http://" + HOST + PATH;
+	private String urlFormatter() {
+		String lang = Locale.getDefault().getLanguage();
+		String filename = "seed";
+		String fileextension = ".xml";
+		if ("fr".equals(lang))
+			filename += "-" + lang + fileextension;
+		else
+			filename += fileextension;
+		
+		return URL+filename ;
+	}
 }
