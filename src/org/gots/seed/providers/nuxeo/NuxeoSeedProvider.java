@@ -49,7 +49,7 @@ public class NuxeoSeedProvider implements GotsSeedProvider {
 							BaseSeedInterface seed = NuxeoSeedConverter.convert(document);
 							vendorSeeds.add(seed);
 							Log.i("Seed Specie", " " + seed.getSpecie());
-							Log.i("Nuxeo Seed", "" + seed.toString());
+//							Log.i("Nuxeo Seed", "" + seed.toString());
 
 						}
 					} catch (Exception e) {
