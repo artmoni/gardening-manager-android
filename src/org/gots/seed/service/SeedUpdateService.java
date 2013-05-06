@@ -17,18 +17,30 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.View;
 
 public class SeedUpdateService extends Service {
-	private static final int NOTIFICATION = 100;
+	public static final String BROADCAST_ACTION = "org.gots.broadcastseed.displaylist";
+	public static final String ISNEWSEED = "org.gots.isnewseed";
+
+	private static final int NOTIFICATION = 101;
+
+	private static Intent intent = null;
+
+
+	private static boolean isNewSeed = false;
 
 	NotificationManager mNM;
 	private ArrayList<BaseSeedInterface> newSeeds = new ArrayList<BaseSeedInterface>();
 
-	private String TAG = "ActionNotificationService";
+	private String TAG = "SeedNotificationService";
 
 	private GotsSeedProvider mRemoteProvider;
+
+	private Handler handler = new Handler();
 
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -40,6 +52,8 @@ public class SeedUpdateService extends Service {
 	public void onCreate() {
 		mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		mRemoteProvider = new NuxeoSeedProvider(getApplicationContext());
+		intent = new Intent(BROADCAST_ACTION);
+
 		super.onCreate();
 	}
 
@@ -63,15 +77,35 @@ public class SeedUpdateService extends Service {
 		if (newSeeds.size() > 0) {
 
 			createNotification();
-
+			isNewSeed = true;
 		}
+		handler.removeCallbacks(sendUpdatesToUI);
+		handler.postDelayed(sendUpdatesToUI, 1000); // 1 second
+
 		return super.onStartCommand(intent, flags, startId);
+	}
+
+	private Runnable sendUpdatesToUI = new Runnable() {
+		public void run() {
+			displaySeedsAvailable();
+			// handler.postDelayed(this, 5000); // 5 seconds
+			stopSelf();
+		}
+	};
+
+	private void displaySeedsAvailable() {
+		Log.d(TAG, "entered displaySeedsAvailable");
+
+		intent.putExtra(ISNEWSEED, isNewSeed);
+		// intent.putExtra("counter", String.valueOf(++counter));
+		sendBroadcast(intent);
+		stopSelf();
 	}
 
 	@Override
 	public void onDestroy() {
 		mNM.cancel(NOTIFICATION);
-		Log.d(TAG, "Stopping service : " + newSeeds.size() + " actions found");
+		Log.d(TAG, "Stopping service : " + newSeeds.size() + " seeds found");
 		super.onDestroy();
 
 	}
