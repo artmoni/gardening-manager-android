@@ -11,6 +11,7 @@
 package org.gots.ui;
 
 import java.util.Calendar;
+import java.util.concurrent.ExecutionException;
 
 import org.gots.R;
 import org.gots.action.service.ActionTODOBroadcastReceiver;
@@ -31,6 +32,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -54,17 +56,16 @@ public class SplashScreenActivity extends Activity {
 
 			Intent startServiceIntent = new Intent(mContext, WeatherUpdateService.class);
 			startService(startServiceIntent);
-			
-			Intent startServiceIntent2 = new Intent(mContext, SeedUpdateService.class);
-	        startService(startServiceIntent2);
 
+			Intent startServiceIntent2 = new Intent(mContext, SeedUpdateService.class);
+			startService(startServiceIntent2);
 
 			switch (msg.what) {
 			case STOPSPLASH:
 				// remove SplashScreen from view
 				Intent intent = new Intent(SplashScreenActivity.this, DashboardActivity.class);
 				startActivity(intent);
-				
+
 				finish();
 				break;
 			}
@@ -104,7 +105,7 @@ public class SplashScreenActivity extends Activity {
 
 			}
 		});
-		
+
 		LinearLayout sauterdanslesflaques = (LinearLayout) findViewById(R.id.webSauterDansLesFlaques);
 		sauterdanslesflaques.setOnClickListener(new LinearLayout.OnClickListener() {
 
@@ -140,25 +141,25 @@ public class SplashScreenActivity extends Activity {
 			}
 		});
 
-//		ImageView previmeteo = (ImageView) findViewById(R.id.idPrevimeteo);
-//		previmeteo.setOnClickListener(new LinearLayout.OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.previmeteo.com/"));
-//				startActivity(browserIntent);
-//
-//			}
-//		});
+		// ImageView previmeteo = (ImageView) findViewById(R.id.idPrevimeteo);
+		// previmeteo.setOnClickListener(new LinearLayout.OnClickListener() {
+		//
+		// @Override
+		// public void onClick(View v) {
+		// Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+		// Uri.parse("http://www.previmeteo.com/"));
+		// startActivity(browserIntent);
+		//
+		// }
+		// });
 		// Intent startServiceIntent = new Intent(this,
 		// NotificationService.class);
 		// this.startService(startServiceIntent);
 		setRecurringAlarm(this);
-		
-		
+
 		GardenManager gardenManager = new GardenManager(this);
 		myGarden = gardenManager.getcurrentGarden();
-		
+
 		if (myGarden == null) {
 			Intent intent = new Intent(this, ProfileCreationActivity.class);
 			startActivityForResult(intent, 0);
@@ -169,10 +170,7 @@ public class SplashScreenActivity extends Activity {
 			else
 				splashHandler.sendMessageDelayed(msg, SPLASHTIME);
 
-			
-
 		}
-
 
 	}
 
@@ -181,10 +179,11 @@ public class SplashScreenActivity extends Activity {
 		// Message msg = new Message();
 		// msg.what = STOPSPLASH;
 		// splashHandler.sendMessageDelayed(msg, SPLASHTIME);
-		
-//		Intent intent = new Intent(SplashScreenActivity.this, DashboardActivity.class);
-//		startActivity(intent);
-		
+
+		// Intent intent = new Intent(SplashScreenActivity.this,
+		// DashboardActivity.class);
+		// startActivity(intent);
+
 		super.onResume();
 	}
 
@@ -235,7 +234,5 @@ public class SplashScreenActivity extends Activity {
 					AlarmManager.INTERVAL_DAY, actionTODOIntent);
 		}
 	}
-
-	
 
 }

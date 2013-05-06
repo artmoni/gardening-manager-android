@@ -48,6 +48,9 @@ public class DashboardActivity extends SherlockActivity implements OnClickListen
 	private LinearLayout weatherWidgetLayout;
 	private Intent weatherIntent;
 
+	private ImageView weatherState;
+	private String TAG = "DashboardActivity";
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -94,8 +97,7 @@ public class DashboardActivity extends SherlockActivity implements OnClickListen
 			updateUI(intent);
 		}
 	};
-	private ImageView weatherState;
-	private String TAG = "DashboardActivity";
+	
 
 	private void updateUI(Intent intent) {
 		boolean isError = intent.getBooleanExtra("error", true);
