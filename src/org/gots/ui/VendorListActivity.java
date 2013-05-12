@@ -76,12 +76,15 @@ public class VendorListActivity extends SherlockListFragment {
 
 		case R.id.refresh_seed:
 			// new SeedUpdater().execute(seedProvider);
-			listVendorSeedAdapter = new ListVendorSeedAdapter(mContext, seedProvider.getAllSeeds());
-			listVendorSeedAdapter.notifyDataSetChanged();
+//			listVendorSeedAdapter = new ListVendorSeedAdapter(mContext, seedProvider.getAllSeeds());
+//			listVendorSeedAdapter.notifyDataSetChanged();
 			// vendorSeeds = seedProvider.getAllSeeds();
 			// listVendorSeedAdapter = new ListVendorSeedAdapter(getActivity(),
 			// vendorSeeds);
 			// listVendorSeedAdapter.notifyDataSetChanged();
+			mContext.startService(seedIntent);
+			mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(SeedUpdateService.BROADCAST_ACTION));
+			
 			return true;
 
 		default:
