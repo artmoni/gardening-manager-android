@@ -45,7 +45,7 @@ public class WeatherUpdateService extends Service {
 
 		handler.removeCallbacks(sendUpdatesToUI);
 		handler.postDelayed(sendUpdatesToUI, 1000); // 1 second
-
+		
 		return super.onStartCommand(intent, flags, startId);
 	}
 
@@ -53,6 +53,7 @@ public class WeatherUpdateService extends Service {
 		public void run() {
 			displayWeatherAvailable();
 //			handler.postDelayed(this, 5000); // 5 seconds
+			stopSelf();
 		}
 	};
 
@@ -104,7 +105,6 @@ public class WeatherUpdateService extends Service {
 				Log.e(TAG, e.getMessage());
 			Toast.makeText(this, "Try another nearest city", 50).show();
 		}
-		stopSelf();
 
 	}
 
