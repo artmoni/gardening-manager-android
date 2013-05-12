@@ -166,6 +166,7 @@ public class ActionSeedDBHelper {
 				}
 			} while (cursor.moveToNext());
 		}
+
 		cursor.close();
 		close();
 		return allActions;
@@ -210,6 +211,8 @@ public class ActionSeedDBHelper {
 					allActions.add(action);
 			} while (cursor.moveToNext());
 		}
+
+		
 		cursor.close();
 		close();
 		return allActions;

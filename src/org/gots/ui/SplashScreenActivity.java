@@ -14,6 +14,7 @@ import java.util.Calendar;
 import java.util.concurrent.ExecutionException;
 
 import org.gots.R;
+import org.gots.action.service.ActionNotificationService;
 import org.gots.action.service.ActionTODOBroadcastReceiver;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.garden.GardenInterface;
@@ -60,6 +61,9 @@ public class SplashScreenActivity extends Activity {
 			Intent startServiceIntent2 = new Intent(mContext, SeedUpdateService.class);
 			startService(startServiceIntent2);
 
+			Intent startServiceIntent3 = new Intent(mContext, ActionNotificationService.class);
+			startService(startServiceIntent3);
+			
 			switch (msg.what) {
 			case STOPSPLASH:
 				// remove SplashScreen from view

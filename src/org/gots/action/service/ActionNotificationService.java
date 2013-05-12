@@ -1,15 +1,19 @@
 package org.gots.action.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 
 import org.gots.R;
 import org.gots.action.BaseActionInterface;
+import org.gots.action.bean.SowingAction;
 import org.gots.action.sql.ActionSeedDBHelper;
 import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.providers.local.sql.GrowingSeedDBHelper;
+import org.gots.seed.providers.local.sql.VendorSeedDBHelper;
 import org.gots.seed.view.SeedWidget;
 import org.gots.ui.ActionActivity;
 
@@ -70,6 +74,40 @@ public class ActionNotificationService extends Service {
 			createNotification(action, seed);
 
 		}
+
+		// ##########
+
+		VendorSeedDBHelper helperVendor = new VendorSeedDBHelper(this);
+		ArrayList<BaseSeedInterface> allMySeeds = helperVendor.getMySeeds();
+		ArrayList<BaseActionInterface> sowingActions = new ArrayList<BaseActionInterface>();
+		BaseSeedInterface sowingseed = new GrowingSeed();
+		for (Iterator<BaseSeedInterface> iterator = allMySeeds.iterator(); iterator.hasNext();) {
+			BaseSeedInterface seed = iterator.next();
+			// ActionSeedDBHelper actionseedHelper = new
+			// ActionSeedDBHelper(this);
+			// ArrayList<BaseActionInterface> seedActions;
+			//
+			// seedActions = actionseedHelper.getActionsToDoBySeed(seed);
+			Calendar cal = Calendar.getInstance();
+			if (cal.get(Calendar.MONTH) >= seed.getDateSowingMin()   &&  cal.get(Calendar.MONTH)<=seed.getDateSowingMax()) {
+				BaseActionInterface action = new SowingAction(this);
+				sowingActions.add(action);
+				sowingseed = seed;
+			}
+
+			// actions.addAll(seedActions);
+		}
+		// GrowingSeedDBHelper helper = new GrowingSeedDBHelper(this);
+
+		if (!sowingActions.isEmpty()) {
+			BaseActionInterface action = (BaseActionInterface) sowingActions.iterator().next();
+
+			// GrowingSeedInterface seed =
+			// helper.getSeedById(action.getGrowingSeedId());
+			createNotification(action, (GrowingSeedInterface) sowingseed);
+
+		}
+
 		return super.onStartCommand(intent, flags, startId);
 	}
 

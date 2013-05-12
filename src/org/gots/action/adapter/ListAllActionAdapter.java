@@ -67,10 +67,10 @@ public class ListAllActionAdapter extends BaseAdapter {
 	public ListAllActionAdapter(Context context, ArrayList<GrowingSeedInterface> allSeeds, int status) {
 		this.mContext = context;
 		current_status = status;
+		ActionSeedDBHelper helper = new ActionSeedDBHelper(context);
 
 		for (Iterator<GrowingSeedInterface> iterator = allSeeds.iterator(); iterator.hasNext();) {
 			GrowingSeedInterface seed = iterator.next();
-			ActionSeedDBHelper helper = new ActionSeedDBHelper(context);
 			ArrayList<BaseActionInterface> seedActions;
 
 			if (current_status == STATUS_TODO) {
