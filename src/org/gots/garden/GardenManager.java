@@ -5,6 +5,7 @@ import java.util.List;
 import org.gots.DatabaseHelper;
 import org.gots.garden.provider.GardenProvider;
 import org.gots.garden.provider.local.LocalGardenProvider;
+import org.gots.garden.provider.nuxeo.NuxeoGardenProvider;
 import org.gots.garden.sql.GardenDBHelper;
 
 import android.content.Context;
@@ -22,18 +23,16 @@ public class GardenManager {
 	public GardenManager(Context mContext) {
 		this.mContext = mContext;
 		preferences = mContext.getSharedPreferences("org.gots.preference", 0);
-		// gardenProvider = new NuxeoGardenProvider(mContext);
-		gardenProvider = new LocalGardenProvider(mContext);
+		// gardenProvider = new LocalGardenProvider(mContext);
+		gardenProvider = new NuxeoGardenProvider(mContext);
 
 	}
 
 	public long addGarden(GardenInterface garden) {
-
 		return addGarden(garden, false);
 	}
 
 	public long addGarden(GardenInterface garden, boolean localStore) {
-
 		GardenInterface newGarden = gardenProvider.createGarden(garden);
 
 		setCurrentGarden(newGarden);

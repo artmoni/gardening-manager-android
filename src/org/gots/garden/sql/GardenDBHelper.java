@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.gots.action.GardeningActionInterface;
 import org.gots.bean.Garden;
 import org.gots.garden.GardenInterface;
 
@@ -65,7 +66,8 @@ public class GardenDBHelper {
 		GardenInterface garden = null;
 		// SeedActionInterface searchedSeed = new GrowingSeed();
 		open();
-		Cursor cursor = bdd.query(GardenSQLite.GARDEN_TABLE_NAME, null, GardenSQLite.GARDEN_ID+"="+gardenId, null, null, null, null);
+		Cursor cursor = bdd.query(GardenSQLite.GARDEN_TABLE_NAME, null, GardenSQLite.GARDEN_ID + "=" + gardenId, null,
+				null, null, null);
 
 		if (cursor.moveToFirst()) {
 			do {
@@ -90,11 +92,11 @@ public class GardenDBHelper {
 		garden.setCountryName(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_COUNTRYNAME)));
 		garden.setLocality(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_LOCALITY)));
 		garden.setDateLastSynchro(new Date(cursor.getInt(cursor.getColumnIndex(GardenSQLite.GARDEN_LAST_SYNCHRO))));
-
+		garden.setUUID(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_UUID)));
 		return garden;
 	}
 
-	public void updateGarden(GardenInterface garden) {
+	public GardenInterface updateGarden(GardenInterface garden) {
 		open();
 		ContentValues values = new ContentValues();
 		values.put(GardenSQLite.GARDEN_ADMINAREA, garden.getAdminArea());
@@ -103,8 +105,11 @@ public class GardenDBHelper {
 		values.put(GardenSQLite.GARDEN_LATITUDE, garden.getGpsLatitude());
 		values.put(GardenSQLite.GARDEN_LONGITUDE, garden.getGpsLongitude());
 		values.put(GardenSQLite.GARDEN_ALTITUDE, garden.getGpsAltitude());
+		values.put(GardenSQLite.GARDEN_UUID, garden.getUUID());
+
 		bdd.update(GardenSQLite.GARDEN_TABLE_NAME, values, GardenSQLite.GARDEN_ID + "=" + garden.getId(), null);
 		close();
+		return garden;
 	}
 
 	public List<GardenInterface> getGardens() {
@@ -124,9 +129,9 @@ public class GardenDBHelper {
 
 	public void deleteGarden(GardenInterface garden) {
 		open();
-		int rowid = bdd.delete(GardenSQLite.GARDEN_TABLE_NAME, GardenSQLite.GARDEN_ID+"="+garden.getId(), null);
-		if (rowid!=1){
-			Log.w("deleteGarden", "Garden id="+garden.getId()+" has not been found");
+		int rowid = bdd.delete(GardenSQLite.GARDEN_TABLE_NAME, GardenSQLite.GARDEN_ID + "=" + garden.getId(), null);
+		if (rowid != 1) {
+			Log.w("deleteGarden", "Garden id=" + garden.getId() + " has not been found");
 		}
 	}
 
@@ -136,10 +141,10 @@ public class GardenDBHelper {
 		open();
 		Cursor cursor = bdd.query(GardenSQLite.GARDEN_TABLE_NAME, null, null, null, null, null, null);
 		nbGarden = cursor.getCount();
-		
+
 		cursor.close();
 		close();
-		return nbGarden;		
+		return nbGarden;
 	}
 
 }

@@ -11,28 +11,31 @@ import android.content.SharedPreferences;
 
 public class LocalGardenProvider implements GardenProvider {
 
-	private SharedPreferences preferences;
-	private Context mContext;
+	protected SharedPreferences preferences;
+	protected Context mContext;
+	protected GardenDBHelper helper;
 
 	public LocalGardenProvider(Context context) {
 		mContext = context;
 		preferences = mContext.getSharedPreferences("org.gots.preference", 0);
+		helper = new GardenDBHelper(mContext);
+
 	}
 
-	
-	
-	
-	
 	@Override
 	public GardenInterface createGarden(GardenInterface garden) {
-		GardenDBHelper helper = new GardenDBHelper(mContext);
 		GardenInterface newGarden = helper.insertGarden(garden);
 		return newGarden;
 	}
 
 	@Override
+	public GardenInterface updateGarden(GardenInterface garden) {
+		GardenInterface newGarden = helper.updateGarden(garden);
+		return newGarden;
+	}
+
+	@Override
 	public GardenInterface getCurrentGarden() {
-		GardenDBHelper helper = new GardenDBHelper(mContext);
 		int gardenId = preferences.getInt("org.gots.preference.gardenid", 0);
 		GardenInterface garden = helper.getGarden(gardenId);
 		return garden;
@@ -40,12 +43,11 @@ public class LocalGardenProvider implements GardenProvider {
 
 	@Override
 	public List<GardenInterface> getMyGardens() {
-		GardenDBHelper helper = new GardenDBHelper(mContext);
 		return helper.getGardens();
 	}
+
 	@Override
 	public int removeGarden(GardenInterface garden) {
-		GardenDBHelper helper = new GardenDBHelper(mContext);
 		helper.deleteGarden(garden);
 		return 0;
 	}

@@ -64,4 +64,8 @@ public interface GardenInterface {
 
 	public abstract void setGpsAltitude(double gpsAltitude);
 
+	public abstract void setUUID(String id);
+
+	public abstract String getUUID();
+
 }

@@ -28,9 +28,9 @@ public class NuxeoGardenConvertor {
 		} catch (NumberFormatException exception) {
 			Log.w("NuxeoGarden", garden.getName() + " has not a correct longitude");
 		}
+		
+		garden.setUUID(gardenWorkspace.getId());
 
-//		Log.i("Nuxeo getMyGardens",
-//				"Latitude [" + garden.getGpsAltitude() + "] / Longitude [" + garden.getGpsLongitude() + "]");
 		return garden;
 	}
 

@@ -141,4 +141,15 @@ public class SampleGarden implements GardenInterface {
 
 	}
 
+	@Override
+	public void setUUID(String id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getUUID() {
+		return null;
+	}
+
 }

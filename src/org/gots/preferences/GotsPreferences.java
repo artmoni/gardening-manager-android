@@ -8,6 +8,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.util.Log;
 
 public class GotsPreferences {
 
@@ -30,9 +31,10 @@ public class GotsPreferences {
 	// private static final String GARDENING_MANAGER_NUXEO_AUTOMATION =
 	// "http://my.gardening-manager.com/site/automation";
 
+//	private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://services.gardening-manager.com/nuxeo/site/automation";
 	private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://srv2.gardening-manager.com:8090/nuxeo/site/automation";
 
-	private static String OAuthtToken;
+	private static String token = "fc1c2bbc-af06-4973-b291-244f59253d51";
 	private static GotsPreferences preferences;
 	private static SharedPreferences sharedPreferences;
 
@@ -85,13 +87,11 @@ public class GotsPreferences {
 
 	public String getNUXEO_LOGIN() {
 		sharedPreferences = mContext.getSharedPreferences("org.gots.garden", 0);
-
 		return sharedPreferences.getString(ORG_GOTS_GARDEN_LOGIN, "");
 	}
 
 	public void setNUXEO_LOGIN(String NUXEO_LOGIN) {
 		sharedPreferences = mContext.getSharedPreferences("org.gots.garden", 0);
-
 		SharedPreferences.Editor prefedit = sharedPreferences.edit();
 		prefedit.putString(ORG_GOTS_GARDEN_LOGIN, NUXEO_LOGIN);
 		prefedit.commit();
@@ -99,13 +99,11 @@ public class GotsPreferences {
 
 	public String getNUXEO_PASSWORD() {
 		sharedPreferences = mContext.getSharedPreferences("org.gots.garden", 0);
-
 		return sharedPreferences.getString(ORG_GOTS_GARDEN_PASSWORD, "");
 	}
 
 	public void setNUXEO_PASSWORD(String NUXEO_PASSWORD) {
 		sharedPreferences = mContext.getSharedPreferences("org.gots.garden", 0);
-
 		SharedPreferences.Editor prefedit = sharedPreferences.edit();
 		prefedit.putString(ORG_GOTS_GARDEN_PASSWORD, NUXEO_PASSWORD);
 		prefedit.commit();
@@ -118,18 +116,18 @@ public class GotsPreferences {
 		prefedit.putBoolean(ORG_GOTS_GARDEN_SERVERCONNECTED, isConnected);
 		prefedit.commit();
 	}
+//
+//	public boolean isConnectedToServer() {
+//		sharedPreferences = mContext.getSharedPreferences("org.gots.garden", 0);
+//		return sharedPreferences.getBoolean(ORG_GOTS_GARDEN_SERVERCONNECTED, false);
+//	}
 
-	public boolean isConnectedToServer() {
-		sharedPreferences = mContext.getSharedPreferences("org.gots.garden", 0);
-		return sharedPreferences.getBoolean(ORG_GOTS_GARDEN_SERVERCONNECTED, false);
+	public String getToken() {
+		return token;
 	}
 
-	public String getOAuthtToken() {
-		return OAuthtToken;
-	}
-
-	public void setOAuthtToken(String oAuthtToken) {
-		OAuthtToken = oAuthtToken;
+	public void setToken(String token) {
+		token = token;
 	}
 	
 	private boolean unlockPremium() {

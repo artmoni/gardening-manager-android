@@ -17,7 +17,7 @@ import android.util.Log;
 
 public class GardenSQLite extends SQLiteOpenHelper {
 	// ************************ DATABASE **************
-	private static final int DATABASE_VERSION = 12;
+	private static final int DATABASE_VERSION = 13;
 	private static String DATABASE_NAME = "garden";
 	public final static String AUTHORITY = "org.gots.providers.garden";
 
@@ -27,6 +27,7 @@ public class GardenSQLite extends SQLiteOpenHelper {
 	public static final String GARDEN_TABLE_NAME = "garden";
 
 	public static final String GARDEN_ID = "_id";
+	public static final String GARDEN_UUID = "_uuid";
 	public static final String GARDEN_LATITUDE = "latitude";
 	public static final String GARDEN_LONGITUDE = "longitude";
 	public static final String GARDEN_ALTITUDE = "altitude";
@@ -39,6 +40,7 @@ public class GardenSQLite extends SQLiteOpenHelper {
 	//@formatter:off
 		public static final String CREATE_TABLE_GARDEN = "CREATE TABLE " + GARDEN_TABLE_NAME 
 				+ " (" + GARDEN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+				+ GARDEN_UUID + " STRING,"
 				+ GARDEN_LOCALITY + " STRING,"
 				+ GARDEN_ADMINAREA + " STRING,"
 				+ GARDEN_COUNTRYNAME + " STRING,"
@@ -96,6 +98,9 @@ public class GardenSQLite extends SQLiteOpenHelper {
 		}
 		if (oldVersion < 12) {
 			db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('photo')");
+		}
+		if (oldVersion < 13) {
+			db.execSQL("ALTER TABLE " + GARDEN_TABLE_NAME + " ADD COLUMN " + GARDEN_UUID + " VARCHAR(255);");
 		}
 	}
 

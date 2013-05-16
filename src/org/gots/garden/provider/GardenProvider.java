@@ -13,6 +13,8 @@ public interface GardenProvider {
 	public GardenInterface createGarden(GardenInterface garden);
 
 	int removeGarden(GardenInterface garden);
+
+	GardenInterface updateGarden(GardenInterface garden);
 	
 	
 }
