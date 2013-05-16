@@ -103,7 +103,7 @@ public class AccountList extends ListActivity {
 				}
 
 				openid_connect(bundle.getString(AccountManager.KEY_AUTHTOKEN));
-				GotsPreferences.getInstance(getApplicationContext()).setOAuthtToken(bundle.getString(AccountManager.KEY_AUTHTOKEN));
+				GotsPreferences.getInstance(getApplicationContext()).setToken(bundle.getString(AccountManager.KEY_AUTHTOKEN));
 				// accountManager.invalidateAuthToken(bundle.getString(AccountManager.KEY_ACCOUNT_TYPE),
 				// bundle.getString(AccountManager.KEY_AUTHTOKEN));
 
