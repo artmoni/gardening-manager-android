@@ -67,6 +67,8 @@ public class ProfileActivity extends SherlockActivity {
 
 	class GardenClass extends AsyncTask<Context, Void, List<GardenInterface>> {
 		ProgressDialog dialog;
+		private List<GardenInterface> myGardens;
+		GardenManager gardenManager = new GardenManager(ProfileActivity.this);
 
 		@Override
 		protected void onPreExecute() {
@@ -76,8 +78,6 @@ public class ProfileActivity extends SherlockActivity {
 			super.onPreExecute();
 		}
 
-		private List<GardenInterface> myGardens;
-		GardenManager gardenManager = new GardenManager(ProfileActivity.this);
 
 		@Override
 		protected List<GardenInterface> doInBackground(Context... params) {
