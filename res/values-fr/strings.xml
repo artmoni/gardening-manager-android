@@ -52,15 +52,13 @@
     <string name="allotment.description2">Le menu parcelle, j\'effectue des actions sur une parcelle. Par exemple: je plante une graine.</string>
     <string name="allotment.description3">Je suis l\'évolution de mes légumes, je note mes actions, j\'obtiens des informations.</string>
     <string name="garden.menu.add.button">Ajouter une parcelle</string>
-    
     <string name="profile.menu.localize">Localiser mon potager</string>
     <string name="profile.menu.localize.description">Je géolocalise mon potager pour obtenir la météo</string>
     <string name="profile.menu.add">Ajouter un potager</string>
     <string name="profile.menu.add.description">Je peux gérer plusieurs potagers</string>
     <string name="profile.location.selectsource">Choix source</string>
     <string name="profile.location.validate">Valider</string>
-        <string name="profile.sample.data">Débuter avec un potager de test</string>
-    
+    <string name="profile.sample.data">Débuter avec un potager de test</string>
     <string name="hut.menu.myseeds">Mon stock</string>
     <string name="hut.menu.vendorseeds">Catalogue</string>
     <string name="garden.cityname.inputtitle">Ville du potager</string>
@@ -83,6 +81,20 @@
     <string name="specie.solanumtuberosum">Pomme de terre</string>
     <string name="specie.capsicumannuum">Poivron/Piment</string>
     <string name="weather.citynotfound">Pas de météo dans cette localité, saisissez une proche agglomération</string>
-    
     <string name="location.notfound">Vous n\'avez pas pu être localisé</string>
+    <string name="help.loading">Chargement de la documentation</string>
+    <string name="menu.help">Aide</string>
+    <string name="menu.about">A propos</string>
+    <string name="menu.help.firstlaunch">Consulter la documentation?</string>
+    <string name="button.close">Fermer</string>
+    <string name="button.ok">OK</string>
+    <string name="button.cancel">Annuler</string>
+    <string name="weather.citynotfound">Météo non disponible pour cette ville</string>
+    <string name="location.notfound">Adresse non trouvée</string>
+    <string name="notification.action.title">Les _SPECIE_ ont besoin de vous</string>
+    <string name="notification.action.content">et _NBACTIONS_ autre(s) action(s)</string>
+    <string name="notification.seed.title">_SPECIE_ nouvellement disponible</string>
+    <string name="notification.seed.content">ainsi que _NBSEEDS_ autre légumes</string>
+    <string name="notification.seedsow.content">Prêt à être semé</string>
+
 </resources>
