@@ -107,7 +107,7 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if (isChecked && !GotsPreferences.getInstance(ProfileCreationActivity.this).isConnectedToServer()) {
+				if (isChecked) {
 					Intent intent = new Intent(ProfileCreationActivity.this, LoginActivity.class);
 					startActivity(intent);
 				}
