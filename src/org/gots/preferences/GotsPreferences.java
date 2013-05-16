@@ -12,11 +12,12 @@ import android.util.Log;
 
 public class GotsPreferences {
 
-	private static final boolean ISDEVELOPMENT = true;
+	private static final boolean ISDEVELOPMENT = false;
 
 	private static final String ORG_GOTS_GARDEN_PASSWORD = "org.gots.garden.password";
 	private static final String ORG_GOTS_GARDEN_LOGIN = "org.gots.garden.login";
 	private static final String ORG_GOTS_GARDEN_SERVERCONNECTED = "org.gots.garden.connected";
+	private static final String TAG = "GotsPreferences";
 
 	private static boolean ORG_GOTS_PREMIUM_LICENCE = Boolean.valueOf(System.getProperty("boolean.isdevelopment",
 			"false"));
@@ -27,14 +28,21 @@ public class GotsPreferences {
 	private static final String ADMOB_API_KEY = System.getProperty("key.admobapi", "a14f50fa231b26d");
 	private static final String GARDENING_MANAGER_DIRECTORY = "Gardening-Manager";
 
+
+
+	//Administrator
+//	private static String token = "fc1c2bbc-af06-4973-b291-244f59253d51";
+	//Bob
+	//NUXEO SERVER 
+	private static String token = "9f91de2a-51b8-40b2-a086-b09e94cb2cbb";
+	private static String device_id= "4f2d6daabce311e29085606720eac0ac";
 	private static final String GARDENING_MANAGER_NUXEO_AUTOMATION_TEST = "http://192.168.100.90:8080/nuxeo/site/automation";
 	// private static final String GARDENING_MANAGER_NUXEO_AUTOMATION =
 	// "http://my.gardening-manager.com/site/automation";
-
+	
 //	private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://services.gardening-manager.com/nuxeo/site/automation";
 	private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://srv2.gardening-manager.com:8090/nuxeo/site/automation";
-
-	private static String token = "fc1c2bbc-af06-4973-b291-244f59253d51";
+	
 	private static GotsPreferences preferences;
 	private static SharedPreferences sharedPreferences;
 
@@ -127,7 +135,8 @@ public class GotsPreferences {
 	}
 
 	public void setToken(String token) {
-		token = token;
+		GotsPreferences.token = token;
+		Log.d(TAG, "setToken="+token);
 	}
 	
 	private boolean unlockPremium() {
@@ -149,6 +158,14 @@ public class GotsPreferences {
 		}
 		return unlocked;
 
+	}
+
+	public String getDeviceId() {
+		return device_id;
+	}
+
+	public void setDeviceId(String device_id) {
+		GotsPreferences.device_id = device_id;
 	}
 
 }

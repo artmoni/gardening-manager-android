@@ -30,6 +30,10 @@ import android.util.Log;
 public class NuxeoGardenProvider extends LocalGardenProvider {
 
 	private String TAG = "NuxeoGardenProvider";
+	String myToken = GotsPreferences.getInstance(mContext).getToken();
+	String myLogin = GotsPreferences.getInstance(mContext).getNUXEO_LOGIN();
+	String myDeviceId = GotsPreferences.getInstance(mContext).getDeviceId();
+	private long TIMEOUT = 5;
 
 	public NuxeoGardenProvider(Context context) {
 		super(context);
@@ -53,9 +57,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 					HttpAutomationClient client = new HttpAutomationClient(
 							GotsPreferences.getGardeningManagerServerURI());
 
-					String myToken = GotsPreferences.getInstance(mContext).getToken();
-					String myLogin = GotsPreferences.getInstance(mContext).getNUXEO_LOGIN();
-					client.setRequestInterceptor(new TokenRequestInterceptor(myToken,myLogin));
+					client.setRequestInterceptor(new TokenRequestInterceptor(myToken, myLogin, myDeviceId));
 
 					Session session = client.getSession();
 
@@ -81,7 +83,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 			// TODO get(timeout)
 			Document remoteGarden;
 			try {
-				remoteGarden = task.get(10, TimeUnit.SECONDS);
+				remoteGarden = task.get(TIMEOUT, TimeUnit.SECONDS);
 			} catch (TimeoutException e) {
 				Log.e(TAG, e.getMessage(), e);
 				return garden;
@@ -124,9 +126,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 							GotsPreferences.getGardeningManagerServerURI());
 					List<GardenInterface> mGardens = new ArrayList<GardenInterface>(Arrays.asList(localGarden));
 					// mGardens.addAll(Arrays.asList(localGarden));
-					String myToken = GotsPreferences.getInstance(mContext).getToken();
-					String myLogin = GotsPreferences.getInstance(mContext).getNUXEO_LOGIN();				
-					client.setRequestInterceptor(new TokenRequestInterceptor(myToken,myLogin));
+					client.setRequestInterceptor(new TokenRequestInterceptor(myToken, myLogin, myDeviceId));
 					Log.d("NuxeoGardenProvider", "Token=" + myToken);
 
 					// Session session =
@@ -159,7 +159,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 							// helperGarden.insertGarden(garden);
 
 							mGardens.add(garden);
-							 
+
 						}
 
 					} catch (Exception e) {
@@ -170,11 +170,9 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 
 			}.execute(myGardens.toArray(new GardenInterface[myGardens.size()]));
 			// TODO wait for task.getStatus() == Status.FINISHED; in a thread
-			//
-			// TODO get(timeout)
 			List<GardenInterface> remoteGardens;
 			try {
-				remoteGardens = task.get(10, TimeUnit.SECONDS);
+				remoteGardens = task.get(TIMEOUT, TimeUnit.SECONDS);
 			} catch (TimeoutException e) {
 				Log.e(TAG, e.getMessage(), e);
 				return myGardens;

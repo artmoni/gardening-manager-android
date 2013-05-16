@@ -20,6 +20,7 @@ import android.util.Log;
 
 public class NuxeoSeedProvider implements GotsSeedProvider {
 	private Context mContext;
+	List<BaseSeedInterface> vendorSeeds = new ArrayList<BaseSeedInterface>();
 
 	public NuxeoSeedProvider(Context context) {
 		mContext = context;
@@ -27,34 +28,43 @@ public class NuxeoSeedProvider implements GotsSeedProvider {
 
 	@Override
 	public List<BaseSeedInterface> getAllSeeds() {
-		List<BaseSeedInterface> nuxeoSeeds = new ArrayList<BaseSeedInterface>(); ;
+		List<BaseSeedInterface> nuxeoSeeds = new ArrayList<BaseSeedInterface>();
+		;
 		try {
 			nuxeoSeeds = new AsyncTask<Object, Integer, List<BaseSeedInterface>>() {
 
+				private HttpAutomationClient client;
+
 				@Override
 				protected List<BaseSeedInterface> doInBackground(Object... params) {
-					List<BaseSeedInterface> vendorSeeds = new ArrayList<BaseSeedInterface>();
 
-					try {
-						HttpAutomationClient client = new HttpAutomationClient(
-								GotsPreferences.getGardeningManagerServerURI());
+					client = new HttpAutomationClient(GotsPreferences.getGardeningManagerServerURI());
+					client.asyncExec(new Runnable() {
 
-						Session session = client.getSession();
+						@Override
+						public void run() {
+							try {
 
-						Documents docs = (Documents) session.newRequest("Document.Query")
-								.setHeader(Constants.HEADER_NX_SCHEMAS, "*")
-								.set("query", "SELECT * FROM VendorSeed ORDER BY dc:modified DESC").execute();
-						for (Iterator<Document> iterator = docs.iterator(); iterator.hasNext();) {
-							Document document = (Document) iterator.next();
-							BaseSeedInterface seed = NuxeoSeedConverter.convert(document);
-							vendorSeeds.add(seed);
-							Log.i("Seed Specie", " " + seed.getSpecie());
-//							Log.i("Nuxeo Seed", "" + seed.toString());
+								Session session = client.getSession();
 
+								Documents docs = (Documents) session.newRequest("Document.Query")
+										.setHeader(Constants.HEADER_NX_SCHEMAS, "*")
+										.set("query", "SELECT * FROM VendorSeed ORDER BY dc:modified DESC").execute();
+								for (Iterator<Document> iterator = docs.iterator(); iterator.hasNext();) {
+									Document document = (Document) iterator.next();
+									BaseSeedInterface seed = NuxeoSeedConverter.convert(document);
+									vendorSeeds.add(seed);
+									Log.i("Seed Specie", " " + seed.getSpecie());
+									// Log.i("Nuxeo Seed", "" +
+									// seed.toString());
+
+								}
+							} catch (Exception e) {
+								Log.e("getAllSeeds", e.getMessage());
+							}
 						}
-					} catch (Exception e) {
-						Log.e("getAllSeeds", e.getMessage());
-					}
+					});
+
 					return vendorSeeds;
 				}
 			}.execute(new Object()).get();

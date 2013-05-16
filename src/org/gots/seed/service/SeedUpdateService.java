@@ -30,7 +30,6 @@ public class SeedUpdateService extends Service {
 
 	private static Intent intent = null;
 
-
 	private static boolean isNewSeed = false;
 
 	NotificationManager mNM;
@@ -89,7 +88,7 @@ public class SeedUpdateService extends Service {
 		public void run() {
 			displaySeedsAvailable();
 			// handler.postDelayed(this, 5000); // 5 seconds
-			stopSelf();
+//			stopSelf();
 		}
 	};
 
@@ -104,7 +103,7 @@ public class SeedUpdateService extends Service {
 
 	@Override
 	public void onDestroy() {
-		mNM.cancel(NOTIFICATION);
+//		mNM.cancel(NOTIFICATION);
 		Log.d(TAG, "Stopping service : " + newSeeds.size() + " seeds found");
 		super.onDestroy();
 
@@ -140,5 +139,7 @@ public class SeedUpdateService extends Service {
 		// Send the notification.
 		mNM.notify(NOTIFICATION, notification);
 
+	
 	}
+
 }

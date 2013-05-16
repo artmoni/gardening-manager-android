@@ -10,6 +10,8 @@ import org.gots.garden.sql.GardenDBHelper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
@@ -23,8 +25,12 @@ public class GardenManager {
 	public GardenManager(Context mContext) {
 		this.mContext = mContext;
 		preferences = mContext.getSharedPreferences("org.gots.preference", 0);
-		// gardenProvider = new LocalGardenProvider(mContext);
-		gardenProvider = new NuxeoGardenProvider(mContext);
+		ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo ni = cm.getActiveNetworkInfo();
+		if (ni != null && ni.isConnected()) {
+			gardenProvider = new NuxeoGardenProvider(mContext);
+		} else
+			gardenProvider = new LocalGardenProvider(mContext);
 
 	}
 

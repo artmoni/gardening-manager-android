@@ -28,6 +28,7 @@ public class Garden implements GardenInterface {
 	private Address address = new Address();
 	private Date dateLastSynchro;
 	private double gpsAltitude;
+	private String uuid;
 
 	@Override
 	public double getGpsLatitude() {
@@ -170,14 +171,22 @@ public class Garden implements GardenInterface {
 
 	@Override
 	public double getGpsAltitude() {
-		
+
 		return gpsAltitude;
 	}
 
 	@Override
 	public void setGpsAltitude(double gpsAltitude) {
 		this.gpsAltitude = gpsAltitude;
-		
+
 	}
 
+	@Override
+	public void setUUID(String id) {
+		uuid = id;
+	}
+@Override
+public String getUUID() {
+	return uuid;
+}
 }
