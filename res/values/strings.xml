@@ -93,6 +93,8 @@
     <string name="notification.action.content">and _NBACTIONS_ more task</string>
     <string name="notification.seed.title">New _SPECIE_ available</string>
     <string name="notification.seed.content">and _NBSEEDS_ more vegetable</string>
+        <string name="notification.seedsow.content">Ready to sow</string>
+    
     <string name="action.sow">Sow</string>
     <string name="action.beak">Beak</string>
     <string name="action.lighten">Lighten</string>
