@@ -84,7 +84,7 @@ public class SeedWidgetLong extends LinearLayout implements OnClickListener {
 
 		LinearLayout stock = (LinearLayout) findViewById(R.id.idSeedStock);
 		stock.removeAllViews();
-		for (int i = 0; i < mSeed.getNbSachet(); i++) {
+		for (int i = 0; i < mSeed.getNbSachet(); i++) {	
 			ImageView seedbag = new ImageView(mContext);
 			seedbag.setImageDrawable(mContext.getResources().getDrawable(R.drawable.seed_bag));
 			// seedbag.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_planning_sow));
