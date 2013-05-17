@@ -13,6 +13,7 @@ package org.gots.ui;
 import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.analytics.GotsAnalytics;
+import org.gots.garden.GardenManager;
 import org.gots.help.HelpUriBuilder;
 import org.gots.preferences.GotsPreferences;
 import org.gots.weather.service.WeatherUpdateService;
@@ -32,6 +33,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -50,11 +52,15 @@ public class DashboardActivity extends SherlockActivity implements OnClickListen
 
 	private ImageView weatherState;
 	private String TAG = "DashboardActivity";
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getSupportActionBar();
+		
+		GardenManager gardenManager = new GardenManager(this);
+		ActionBar bar = getSupportActionBar();
+		bar.setTitle(gardenManager.getcurrentGarden().getLocality());
+
 		GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
 
 		setContentView(R.layout.dashboard);
@@ -97,7 +103,6 @@ public class DashboardActivity extends SherlockActivity implements OnClickListen
 			updateUI(intent);
 		}
 	};
-	
 
 	private void updateUI(Intent intent) {
 		boolean isError = intent.getBooleanExtra("error", true);
@@ -198,6 +203,11 @@ public class DashboardActivity extends SherlockActivity implements OnClickListen
 		case R.id.about:
 			Intent aboutIntent = new Intent(this, AboutActivity.class);
 			startActivity(aboutIntent);
+
+			return true;
+		case R.id.login:
+			Intent loginIntent = new Intent(this, LoginActivity.class);
+			startActivity(loginIntent);
 
 			return true;
 		default:
