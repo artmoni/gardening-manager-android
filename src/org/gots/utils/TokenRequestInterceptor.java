@@ -24,7 +24,7 @@ public class TokenRequestInterceptor implements RequestInterceptor {
 	public void processHttpRequest(HttpRequest request) {
 		request.addHeader("X-User-Id", mLogin);
 		request.addHeader("X-Device-Id", mDeviceId);
-		request.addHeader("X-Application-Name", "Gardening Manager");
+		request.addHeader("X-Application-Name", "Nuxeo Drive");
 		request.addHeader("X-Authentication-Token", mToken);
 		Log.d("TokenRequestInterceptor","processHttpRequest");
 	}
@@ -33,7 +33,7 @@ public class TokenRequestInterceptor implements RequestInterceptor {
 	public void processRequest(Request request, Connector connector) {
 		request.put("X-User-Id", mLogin);
 		request.put("X-Device-Id", mDeviceId);
-		request.put("X-Application-Name", "Gardening Manager");
+		request.put("X-Application-Name", "Nuxeo Drive");
 		request.put("X-Authentication-Token", mToken);
 		Log.d("TokenRequestInterceptor","processRequest");
 

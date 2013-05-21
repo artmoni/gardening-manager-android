@@ -29,11 +29,11 @@ import android.util.Log;
 
 public class NuxeoGardenProvider extends LocalGardenProvider {
 
-	private String TAG = "NuxeoGardenProvider";
+	private static final String TAG = "NuxeoGardenProvider";
 	String myToken = GotsPreferences.getInstance(mContext).getToken();
 	String myLogin = GotsPreferences.getInstance(mContext).getNUXEO_LOGIN();
 	String myDeviceId = GotsPreferences.getInstance(mContext).getDeviceId();
-	private long TIMEOUT = 5;
+	private long TIMEOUT = 10;
 
 	public NuxeoGardenProvider(Context context) {
 		super(context);
@@ -81,13 +81,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 			//
 			// TODO send as intent
 			// TODO get(timeout)
-			Document remoteGarden;
-			try {
-				remoteGarden = task.get(TIMEOUT, TimeUnit.SECONDS);
-			} catch (TimeoutException e) {
-				Log.e(TAG, e.getMessage(), e);
-				return garden;
-			}
+			Document remoteGarden = task.get();
 			garden.setUUID(remoteGarden.getId());
 
 			super.updateGarden(garden);
@@ -121,19 +115,21 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 
 				@Override
 				protected List<GardenInterface> doInBackground(GardenInterface... localGarden) {
-					Log.d("NuxeoGardenProvider", "doInBackground");
+					Log.d(TAG, "doInBackground");
 					HttpAutomationClient client = new HttpAutomationClient(
 							GotsPreferences.getGardeningManagerServerURI());
+					Log.d(TAG, GotsPreferences.getGardeningManagerServerURI());
+
 					List<GardenInterface> mGardens = new ArrayList<GardenInterface>(Arrays.asList(localGarden));
 					// mGardens.addAll(Arrays.asList(localGarden));
 					client.setRequestInterceptor(new TokenRequestInterceptor(myToken, myLogin, myDeviceId));
-					Log.d("NuxeoGardenProvider", "Token=" + myToken);
+					Log.d(TAG, "Token=" + myToken);
 
 					// Session session =
 					// client.getSession(GotsPreferences.getInstance(mContext).getNUXEO_LOGIN(),
 					// GotsPreferences.getInstance(mContext).getNUXEO_PASSWORD());
 					Session session = client.getSession();
-					Log.d("NuxeoGardenProvider", "Session=" + session);
+					Log.d(TAG, "Session=" + session);
 
 					// DocumentService rs = new DocumentService(session);
 					try {
@@ -145,12 +141,12 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 						// rs.getChildren(wsRef);
 						Documents gardensWorkspaces = (Documents) session.newRequest("Document.Query")
 								.setHeader(Constants.HEADER_NX_SCHEMAS, "*")
-								.set("query", "SELECT * FROM Garden ORDER BY dc:modified DESC").execute();
+								.set("query", "SELECT * FROM Garden WHERE ecm:currentLifeCycleState <> 'deleted' ORDER BY dc:modified DESC").execute();
 						for (Iterator<Document> iterator = gardensWorkspaces.iterator(); iterator.hasNext();) {
 
 							Document gardenWorkspace = iterator.next();
 							// Document gardenWorkspace = iterator.next();
-							Log.d("NuxeoGardenProvider", "Document=" + gardenWorkspace.getId());
+							Log.d(TAG, "Document=" + gardenWorkspace.getId());
 
 							GardenInterface garden = NuxeoGardenConvertor.convert(gardenWorkspace);
 							//
@@ -171,12 +167,9 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 			}.execute(myGardens.toArray(new GardenInterface[myGardens.size()]));
 			// TODO wait for task.getStatus() == Status.FINISHED; in a thread
 			List<GardenInterface> remoteGardens;
-			try {
-				remoteGardens = task.get(TIMEOUT, TimeUnit.SECONDS);
-			} catch (TimeoutException e) {
-				Log.e(TAG, e.getMessage(), e);
-				return myGardens;
-			}
+					remoteGardens = task.get();
+				
+			
 
 			// TODO send as intent
 			List<GardenInterface> myLocalGardens = super.getMyGardens();

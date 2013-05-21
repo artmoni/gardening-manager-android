@@ -91,7 +91,7 @@ public class VendorSeedDBHelper {
 		ContentValues values = getContentValuesFromSeed(seed);
 
 		try {
-			rowid = bdd.update(DatabaseHelper.SEEDS_TABLE_NAME, values, DatabaseHelper.SEED_REFERENCE + "='" + seed.getReference()+"'",
+			rowid = bdd.update(DatabaseHelper.SEEDS_TABLE_NAME, values, DatabaseHelper.SEED_ID + "='" + seed.getSeedId()+"'",
 					null);
 		} finally {
 			close();
@@ -108,7 +108,7 @@ public class VendorSeedDBHelper {
 		values.put(DatabaseHelper.SEED_DESCRIPTION_DISEASES, seed.getDescriptionDiseases());
 		values.put(DatabaseHelper.SEED_DESCRIPTION_HARVEST, seed.getDescriptionHarvest());
 
-		values.put(DatabaseHelper.SEED_REFERENCE, seed.getReference());
+		values.put(DatabaseHelper.SEED_UUID, seed.getUUID());
 		values.put(DatabaseHelper.SEED_DURATIONMIN, seed.getDurationMin());
 		values.put(DatabaseHelper.SEED_DURATIONMAX, seed.getDurationMax());
 		values.put(DatabaseHelper.SEED_DATESOWINGMIN, seed.getDateSowingMin());
@@ -332,10 +332,10 @@ public class VendorSeedDBHelper {
 		return searchedSeed;
 	}
 
-	public BaseSeedInterface getSeedByReference(String reference) {
+	public BaseSeedInterface getSeedByUUID(String reference) {
 		BaseSeedInterface searchedSeed = null;
 		open();
-		Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_REFERENCE + "='"
+		Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_UUID + "='"
 				+ reference + "'", null, null, null, null);
 		// Log.d("getSeedById", "ID=>"+id+" / QUERY=>"+bdd.ge)
 		if (managedCursor.moveToFirst()) {
@@ -352,7 +352,7 @@ public class VendorSeedDBHelper {
 		BaseSeedInterface bsi = new GrowingSeed();
 		bsi.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.SEED_ID)));
 		bsi.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_NAME)));
-		bsi.setReference(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_REFERENCE)));
+		bsi.setUUID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_UUID)));
 		bsi.setBareCode(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_BARECODE)));
 		bsi.setDescriptionGrowth(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_DESCRIPTION_GROWTH)));
 		bsi.setDescriptionCultivation(cursor.getString(cursor

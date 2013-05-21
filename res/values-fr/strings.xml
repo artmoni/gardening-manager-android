@@ -96,5 +96,5 @@
     <string name="notification.seed.title">_SPECIE_ nouvellement disponible</string>
     <string name="notification.seed.content">ainsi que _NBSEEDS_ autre légumes</string>
     <string name="notification.seedsow.content">Prêt à être semé</string>
-
+  <string name="login">Connexion</string>
 </resources>

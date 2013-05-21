@@ -185,8 +185,9 @@ public class Garden implements GardenInterface {
 	public void setUUID(String id) {
 		uuid = id;
 	}
-@Override
-public String getUUID() {
-	return uuid;
-}
+
+	@Override
+	public String getUUID() {
+		return uuid;
+	}
 }

@@ -98,7 +98,12 @@ public class ProfileActivity extends SherlockActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		new GardenClass().execute(this);
+//		new GardenClass().execute(this);
+		GardenManager gardenManager = new GardenManager(this);
+
+		profileAdapter = new ProfileAdapter(this, gardenManager.getMyGardens());
+		profileList.setAdapter(profileAdapter);
+		
 		// buildGardenList();
 		// weatherState.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_weather));
 		// weatherState.setImageDrawable(getResources().getDrawable(R.drawable.weather_updating));

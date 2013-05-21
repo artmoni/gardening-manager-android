@@ -102,7 +102,7 @@ public class BaseFeedParser {
 		});
 		item.getChild(REFERENCE).setEndTextElementListener(new EndTextElementListener() {
 			public void end(String body) {
-				currentSeed.setReference(body);
+				currentSeed.setUUID(body);
 			}
 		});
 		item.getChild(DURATION_MIN).setEndTextElementListener(new EndTextElementListener() {

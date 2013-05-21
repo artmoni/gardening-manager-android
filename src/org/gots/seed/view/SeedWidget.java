@@ -86,9 +86,9 @@ public class SeedWidget extends RelativeLayout implements OnClickListener {
 	public static int getSeedDrawable(Context context, BaseSeedInterface seed) {
 		int vegetableImageRessource = 0;
 
-		if (seed.getReference() != null)
+		if (seed.getUUID() != null)
 			vegetableImageRessource = context.getResources().getIdentifier(
-					"org.gots:drawable/veget_" + seed.getReference().toLowerCase(), null, null);
+					"org.gots:drawable/veget_" + seed.getUUID().toLowerCase(), null, null);
 
 		if (vegetableImageRessource == 0 && seed.getSpecie() != null)
 			vegetableImageRessource = context.getResources().getIdentifier(

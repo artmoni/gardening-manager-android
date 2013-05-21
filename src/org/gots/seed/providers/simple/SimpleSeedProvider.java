@@ -46,7 +46,7 @@ public class SimpleSeedProvider implements GotsSeedProvider {
 	}
 
 	@Override
-	public List<BaseSeedInterface> getAllSeeds() {
+	public List<BaseSeedInterface> getVendorSeeds() {
 		List<BaseSeedInterface> allSeeds = new ArrayList<BaseSeedInterface>();
 
 		try {
@@ -129,5 +129,17 @@ public class SimpleSeedProvider implements GotsSeedProvider {
 			filename += fileextension;
 		
 		return URL+filename ;
+	}
+
+	@Override
+	public BaseSeedInterface createSeed(BaseSeedInterface seed) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public BaseSeedInterface updateSeed(BaseSeedInterface newSeed) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

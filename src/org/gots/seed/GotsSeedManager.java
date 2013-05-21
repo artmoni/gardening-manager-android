@@ -3,39 +3,48 @@ package org.gots.seed;
 import java.util.Iterator;
 import java.util.List;
 
+import org.gots.preferences.GotsPreferences;
 import org.gots.seed.providers.GotsSeedProvider;
 import org.gots.seed.providers.local.LocalSeedProvider;
 import org.gots.seed.providers.local.sql.VendorSeedDBHelper;
 import org.gots.seed.providers.nuxeo.NuxeoSeedProvider;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 public class GotsSeedManager implements GotsSeedProvider {
 
 	private Context mContext;
-	private GotsSeedProvider mLocalProvider;
-	private GotsSeedProvider mRemoteProvider;
+	private GotsSeedProvider mSeedProvider;
 
 	public GotsSeedManager(Context mContext) {
 		this.mContext = mContext;
-		mLocalProvider = new LocalSeedProvider(mContext);
-		mRemoteProvider = new NuxeoSeedProvider(mContext);
+		// mLocalProvider = new LocalSeedProvider(mContext);
+		ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo ni = cm.getActiveNetworkInfo();
+		if (GotsPreferences.getInstance(mContext).isConnectedToServer() && ni != null && ni.isConnected()) {
+			mSeedProvider = new NuxeoSeedProvider(mContext);
+		} else
+			mSeedProvider = new LocalSeedProvider(mContext);
 	}
 
 	@Override
-	public List<BaseSeedInterface> getAllSeeds() {
+	public List<BaseSeedInterface> getVendorSeeds() {
 
-//		VendorSeedDBHelper helper = new VendorSeedDBHelper(mContext);
-//		for (Iterator<BaseSeedInterface> iterator = mRemoteProvider.getAllSeeds().iterator(); iterator.hasNext();) {
-//			BaseSeedInterface baseSeedInterface = iterator.next();
-//			if (helper.getSeedByReference(baseSeedInterface.getReference()) != null) {
-//				helper.updateSeed(baseSeedInterface);
-//			} else {
-//				helper.insertSeed(baseSeedInterface);
-//			}
-//		}
+		// VendorSeedDBHelper helper = new VendorSeedDBHelper(mContext);
+		// for (Iterator<BaseSeedInterface> iterator =
+		// mRemoteProvider.getAllSeeds().iterator(); iterator.hasNext();) {
+		// BaseSeedInterface baseSeedInterface = iterator.next();
+		// if (helper.getSeedByReference(baseSeedInterface.getReference()) !=
+		// null) {
+		// helper.updateSeed(baseSeedInterface);
+		// } else {
+		// helper.insertSeed(baseSeedInterface);
+		// }
+		// }
 
-		List<BaseSeedInterface> listSeeds = mLocalProvider.getAllSeeds();
+		List<BaseSeedInterface> listSeeds = mSeedProvider.getVendorSeeds();
 
 		return listSeeds;
 	}
@@ -56,6 +65,16 @@ public class GotsSeedManager implements GotsSeedProvider {
 	public BaseSeedInterface getSeedById() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public BaseSeedInterface createSeed(BaseSeedInterface seed) {
+		return mSeedProvider.createSeed(seed);
+	}
+	
+	@Override
+	public BaseSeedInterface updateSeed(BaseSeedInterface newSeed) {
+return mSeedProvider.updateSeed(newSeed)	;
 	}
 
 }

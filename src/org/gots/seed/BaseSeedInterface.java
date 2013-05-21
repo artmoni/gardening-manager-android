@@ -66,9 +66,9 @@ public interface BaseSeedInterface  {
 
 	public abstract void setDescriptionDiseases(String description_diseases);
 
-	public abstract String getReference();
+	public abstract String getUUID();
 
-	public abstract void setReference(String reference);
+	public abstract void setUUID(String reference);
 
 	public abstract int getDateSowingMin();
 

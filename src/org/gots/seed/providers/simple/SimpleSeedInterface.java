@@ -120,12 +120,12 @@ public class SimpleSeedInterface implements GrowingSeedInterface {
 	}
 
 	@Override
-	public String getReference() {
+	public String getUUID() {
 		return reference;
 	}
 
 	@Override
-	public void setReference(String reference) {
+	public void setUUID(String reference) {
 		this.reference = reference;
 	}
 

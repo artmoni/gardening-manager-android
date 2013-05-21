@@ -95,12 +95,12 @@ public abstract class BaseSeed implements Serializable, BaseSeedInterface {
 	}
 
 	@Override
-	public String getReference() {
+	public String getUUID() {
 		return reference;
 	}
 
 	@Override
-	public void setReference(String reference) {
+	public void setUUID(String reference) {
 		this.reference = reference;
 	}
 
@@ -162,7 +162,7 @@ public abstract class BaseSeed implements Serializable, BaseSeedInterface {
 		newSeed.setGenus(genus);
 		newSeed.setOrder(order);
 		newSeed.setName(name);
-		newSeed.setReference(reference);
+		newSeed.setUUID(reference);
 		newSeed.setSpecie(species);
 		newSeed.setUrlDescription(urlDescription);
 		newSeed.setVariety(variety);

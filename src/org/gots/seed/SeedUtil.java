@@ -27,7 +27,7 @@ public class SeedUtil {
 		copy.setDateSowingMax(originalSeed.getDateSowingMax());
 		copy.setUrlDescription(originalSeed.getUrlDescription());
 		copy.setCategory(originalSeed.getCategory());
-		copy.setReference(originalSeed.getReference());
+		copy.setUUID(originalSeed.getUUID());
 		copy.setActionToDo((ArrayList<BaseActionInterface>) originalSeed.getActionToDo().clone());
 		// copy.getActionToDo().addAll((ArrayList<Action>)originalSeed.getActionToDo().clone());
 		copy.setActionDone((ArrayList<BaseActionInterface>) originalSeed.getActionDone().clone());

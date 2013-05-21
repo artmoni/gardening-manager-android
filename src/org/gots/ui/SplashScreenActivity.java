@@ -58,8 +58,8 @@ public class SplashScreenActivity extends Activity {
 			Intent startServiceIntent = new Intent(mContext, WeatherUpdateService.class);
 			startService(startServiceIntent);
 
-			Intent startServiceIntent2 = new Intent(mContext, SeedUpdateService.class);
-			startService(startServiceIntent2);
+//			Intent startServiceIntent2 = new Intent(mContext, SeedUpdateService.class);
+//			startService(startServiceIntent2);
 
 			Intent startServiceIntent3 = new Intent(mContext, ActionNotificationService.class);
 			startService(startServiceIntent3);

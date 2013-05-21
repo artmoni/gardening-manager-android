@@ -75,7 +75,6 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 	private GardenManager gardenManager;
 	GardenInterface garden = new Garden();
 	private int mode = 0;
-	private CheckBox shareBox;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -100,17 +99,7 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 
 		buildProfile();
 
-		final LinearLayout loginBox = (LinearLayout) findViewById(R.id.idLoginBox);
-
-		shareBox = (CheckBox) findViewById(R.id.checkboxShare);
-		shareBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if (isChecked) {
-					Intent intent = new Intent(ProfileCreationActivity.this, LoginActivity.class);
-					startActivity(intent);
-				}
+		
 				// if (isChecked) {
 				// loginBox.setVisibility(View.VISIBLE);
 				//
@@ -149,8 +138,9 @@ public class ProfileCreationActivity extends SherlockActivity implements Locatio
 				// }
 				// }
 
-			}
-		});
+			
+		
+
 	}
 
 	private void buildProfile() {

@@ -7,6 +7,7 @@ import org.gots.garden.provider.GardenProvider;
 import org.gots.garden.provider.local.LocalGardenProvider;
 import org.gots.garden.provider.nuxeo.NuxeoGardenProvider;
 import org.gots.garden.sql.GardenDBHelper;
+import org.gots.preferences.GotsPreferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -19,7 +20,6 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 public class GardenManager {
 	private SharedPreferences preferences;
 	private Context mContext;
-	private boolean isLocalStore = false;
 	private GardenProvider gardenProvider;
 
 	public GardenManager(Context mContext) {
@@ -27,23 +27,19 @@ public class GardenManager {
 		preferences = mContext.getSharedPreferences("org.gots.preference", 0);
 		ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo ni = cm.getActiveNetworkInfo();
-		if (ni != null && ni.isConnected()) {
+		
+		if (GotsPreferences.getInstance(mContext).isConnectedToServer()&& ni != null && ni.isConnected()) {
 			gardenProvider = new NuxeoGardenProvider(mContext);
 		} else
 			gardenProvider = new LocalGardenProvider(mContext);
 
 	}
 
+	
 	public long addGarden(GardenInterface garden) {
-		return addGarden(garden, false);
-	}
-
-	public long addGarden(GardenInterface garden, boolean localStore) {
 		GardenInterface newGarden = gardenProvider.createGarden(garden);
 
 		setCurrentGarden(newGarden);
-
-		isLocalStore = localStore;
 
 		GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
 		tracker.trackEvent("Garden", "location", newGarden.getLocality(), 0);

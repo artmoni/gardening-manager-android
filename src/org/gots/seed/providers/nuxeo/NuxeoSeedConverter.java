@@ -19,7 +19,7 @@ public class NuxeoSeedConverter {
 		seed.setDescriptionDiseases(document.getString("vendorseed:description_diseases"));
 		seed.setDescriptionGrowth(document.getString("vendorseed:description_growth"));
 		seed.setDescriptionHarvest(document.getString("vendorseed:description_harvest"));
-		seed.setReference(document.getId());
+		seed.setUUID(document.getId());
 		return seed;
 	}
 

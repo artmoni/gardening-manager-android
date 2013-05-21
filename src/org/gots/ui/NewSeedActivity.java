@@ -16,6 +16,7 @@ import org.gots.R;
 import org.gots.action.bean.BuyingAction;
 import org.gots.help.HelpUriBuilder;
 import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.GotsSeedManager;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.adapter.ListSpeciesAdapter;
@@ -198,7 +199,7 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 
 		case R.id.buttonStock:
 			if (validateSeed()) {
-				long seedId = insertSeed();
+				BaseSeedInterface seedId = insertSeed();
 				addToStock(seedId);
 				finish();
 			}
@@ -215,10 +216,10 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 
 	}
 
-	private void addToStock(long seedId) {
+	private void addToStock(BaseSeedInterface vendorseed) {
 		VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
-		if (seedId >= 0) {
-			GrowingSeedInterface seed = (GrowingSeedInterface) helper.getSeedById((int) seedId);
+		if (vendorseed.getSeedId() >= 0) {
+			GrowingSeedInterface seed = (GrowingSeedInterface) helper.getSeedById((int) vendorseed.getSeedId());
 			BuyingAction buy = new BuyingAction(this);
 			buy.execute(seed);
 		}
@@ -241,14 +242,16 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 		return isValidate;
 	}
 
-	private long insertSeed() {
+	private BaseSeedInterface insertSeed() {
+		GotsSeedManager manager = new GotsSeedManager(this);
 
-		VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
+		// VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
 		if (isNewSeed)
-
-			return helper.insertSeed(newSeed);
+			return manager.createSeed(newSeed);
 		else
-			return helper.updateSeed(newSeed);
+			return manager.updateSeed(newSeed);
+
+		// return helper.updateSeed(newSeed);
 	}
 
 	/**
@@ -340,8 +343,8 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 			Log.i("Scan result", scanResult.toString());
 			textViewBarCode.setText(scanResult.getContents());
 			newSeed.setBareCode(textViewBarCode.getText().toString());
-//			seedWidgetLong.setSeed(newSeed);
-//			seedWidgetLong.invalidate();
+			// seedWidgetLong.setSeed(newSeed);
+			// seedWidgetLong.invalidate();
 		}
 		// super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -377,9 +380,9 @@ public class NewSeedActivity extends SherlockActivity implements OnClickListener
 
 		super.onConfigurationChanged(newConfig);
 		setContentView(R.layout.inputseed);
-//
-//		seedWidgetLong.setSeed(newSeed);
-//		seedWidgetLong.invalidate();
+		//
+		// seedWidgetLong.setSeed(newSeed);
+		// seedWidgetLong.invalidate();
 	}
 
 	@Override

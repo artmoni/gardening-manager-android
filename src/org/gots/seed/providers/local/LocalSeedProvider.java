@@ -10,11 +10,13 @@ import android.content.Context;
 
 public class LocalSeedProvider implements GotsSeedProvider {
 
-	private Context mContext;
+	protected Context mContext;
+	VendorSeedDBHelper myBank;
 
 	public LocalSeedProvider(Context context) {
 		this.mContext = context;
 	}
+
 	@Override
 	public void getAllFamilies() {
 		// TODO Auto-generated method stub
@@ -34,9 +36,25 @@ public class LocalSeedProvider implements GotsSeedProvider {
 	}
 
 	@Override
-	public List<BaseSeedInterface> getAllSeeds() {
-		VendorSeedDBHelper myBank = new VendorSeedDBHelper(mContext);		
-		return myBank.getVendorSeeds();	
+	public List<BaseSeedInterface> getVendorSeeds() {
+		myBank = new VendorSeedDBHelper(mContext);
+
+		return myBank.getVendorSeeds();
+	}
+
+	@Override
+	public BaseSeedInterface createSeed(BaseSeedInterface seed) {
+		myBank = new VendorSeedDBHelper(mContext);
+
+		seed.setId(Long.valueOf(myBank.insertSeed(seed)).intValue());
+		return seed;
+	}
+
+	@Override
+	public BaseSeedInterface updateSeed(BaseSeedInterface newSeed) {
+		myBank = new VendorSeedDBHelper(mContext);
+		myBank.updateSeed(newSeed);
+		return newSeed;
 	}
 
 }

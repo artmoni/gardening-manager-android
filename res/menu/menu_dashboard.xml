@@ -12,8 +12,11 @@
         android:title="@string/menu.help"/>
     <item
         android:id="@+id/about"
-        android:icon="@drawable/help"
         android:showAsAction="never"
         android:title="@string/menu.about"/>
+    <item
+        android:id="@+id/login"
+        android:showAsAction="never"
+        android:title="@string/login"/>
 
 </menu>

@@ -70,7 +70,6 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 		// GardenManager gm =GardenManager.getInstance();
 		mContext = this;
 		setContentView(R.layout.hut);
-		buildMyTabHost();
 		
 		if (!GotsPreferences.getInstance(this).isPremium()) {
 			GotsAdvertisement ads = new GotsAdvertisement(this);
@@ -122,6 +121,8 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
 	@Override
 	protected void onResume() {
 		super.onResume();
+		buildMyTabHost();
+
 	}
 
 	@Override

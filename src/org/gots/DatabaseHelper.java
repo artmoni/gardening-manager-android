@@ -64,7 +64,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.gots.seeds";
 
 	public static final String SEED_ID = "_id";
-	public static final String SEED_REFERENCE = "reference";
+	public static final String SEED_UUID = "uuid";
 	public static final String SEED_BARECODE = "barcode";
 	public static final String SEED_NAME = "name";
 	public static final String SEED_DESCRIPTION_GROWTH = "description_growth";
@@ -92,7 +92,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String CREATE_TABLE_SEEDS = "CREATE TABLE " + SEEDS_TABLE_NAME 
 			+ " (" + SEED_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT," 
 			+ SEED_NAME + " VARCHAR(255)," 
-			+ SEED_REFERENCE + " VARCHAR(255),"
+			+ SEED_UUID + " VARCHAR(255),"
 			+ SEED_SPECIE + " VARCHAR(255)," 
 			+ SEED_DESCRIPTION_GROWTH + " VARCHAR(255),"
 			+ SEED_DESCRIPTION_DISEASES + " VARCHAR(255)," 

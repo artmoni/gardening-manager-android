@@ -63,13 +63,12 @@ public class SeedUpdateService extends Service {
 		Log.d(TAG, "Starting service : checking seeds from web services");
 
 		VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
+		for (BaseSeedInterface baseSeedInterface : mRemoteProvider.getVendorSeeds()) {
 
-		for (Iterator<BaseSeedInterface> iterator = mRemoteProvider.getAllSeeds().iterator(); iterator.hasNext();) {
-			BaseSeedInterface baseSeedInterface = iterator.next();
-			if (helper.getSeedByReference(baseSeedInterface.getReference()) != null) {
+			if (helper.getSeedByUUID(baseSeedInterface.getUUID()) != null) {
 				helper.updateSeed(baseSeedInterface);
 			} else {
-				newSeeds.add(baseSeedInterface);
+				newSeeds.add(baseSeedInterface); 
 				helper.insertSeed(baseSeedInterface);
 			}
 		}
@@ -88,7 +87,7 @@ public class SeedUpdateService extends Service {
 		public void run() {
 			displaySeedsAvailable();
 			// handler.postDelayed(this, 5000); // 5 seconds
-//			stopSelf();
+			// stopSelf();
 		}
 	};
 
@@ -103,7 +102,7 @@ public class SeedUpdateService extends Service {
 
 	@Override
 	public void onDestroy() {
-//		mNM.cancel(NOTIFICATION);
+		// mNM.cancel(NOTIFICATION);
 		Log.d(TAG, "Stopping service : " + newSeeds.size() + " seeds found");
 		super.onDestroy();
 
@@ -139,7 +138,6 @@ public class SeedUpdateService extends Service {
 		// Send the notification.
 		mNM.notify(NOTIFICATION, notification);
 
-	
 	}
 
 }

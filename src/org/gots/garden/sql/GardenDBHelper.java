@@ -52,6 +52,8 @@ public class GardenDBHelper {
 		long rowid;
 		open();
 		ContentValues values = new ContentValues();
+		values.put(GardenSQLite.GARDEN_UUID, garden.getUUID());
+
 		values.put(GardenSQLite.GARDEN_ADMINAREA, garden.getAdminArea());
 		values.put(GardenSQLite.GARDEN_COUNTRYNAME, garden.getCountryName());
 		values.put(GardenSQLite.GARDEN_LOCALITY, garden.getLocality());
@@ -110,7 +112,7 @@ public class GardenDBHelper {
 		bdd.update(GardenSQLite.GARDEN_TABLE_NAME, values, GardenSQLite.GARDEN_ID + "=" + garden.getId(), null);
 		close();
 		return garden;
-	}
+	} 
 
 	public List<GardenInterface> getGardens() {
 		List<GardenInterface> gardens = new ArrayList<GardenInterface>();

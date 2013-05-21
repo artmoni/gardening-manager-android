@@ -9,8 +9,7 @@ import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
 import android.util.Log;
-
-public class PrestashopConnector implements GotsSeedProvider{
+  class PrestashopConnector implements GotsSeedProvider{
 
 	private PrestashopNetwork network = new PrestashopNetwork();
 	
@@ -61,7 +60,19 @@ public class PrestashopConnector implements GotsSeedProvider{
 	}
 
 	@Override
-	public List<BaseSeedInterface> getAllSeeds() {
+	public List<BaseSeedInterface> getVendorSeeds() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public BaseSeedInterface createSeed(BaseSeedInterface seed) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public BaseSeedInterface updateSeed(BaseSeedInterface newSeed) {
 		// TODO Auto-generated method stub
 		return null;
 	}
