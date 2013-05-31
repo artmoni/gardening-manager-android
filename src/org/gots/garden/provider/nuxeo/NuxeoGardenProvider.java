@@ -34,6 +34,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 	String myLogin = GotsPreferences.getInstance(mContext).getNUXEO_LOGIN();
 	String myDeviceId = GotsPreferences.getInstance(mContext).getDeviceId();
 	private long TIMEOUT = 10;
+	protected String myApp= GotsPreferences.getInstance(mContext).getGardeningManagerAppname();
 
 	public NuxeoGardenProvider(Context context) {
 		super(context);
@@ -57,7 +58,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 					HttpAutomationClient client = new HttpAutomationClient(
 							GotsPreferences.getGardeningManagerServerURI());
 
-					client.setRequestInterceptor(new TokenRequestInterceptor(myToken, myLogin, myDeviceId));
+					client.setRequestInterceptor(new TokenRequestInterceptor(myApp,myToken, myLogin, myDeviceId));
 
 					Session session = client.getSession();
 
@@ -122,7 +123,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 
 					List<GardenInterface> mGardens = new ArrayList<GardenInterface>(Arrays.asList(localGarden));
 					// mGardens.addAll(Arrays.asList(localGarden));
-					client.setRequestInterceptor(new TokenRequestInterceptor(myToken, myLogin, myDeviceId));
+					client.setRequestInterceptor(new TokenRequestInterceptor(myApp= GotsPreferences.getInstance(mContext).getGardeningManagerAppname(),myToken, myLogin, myDeviceId));
 					Log.d(TAG, "Token=" + myToken);
 
 					// Session session =

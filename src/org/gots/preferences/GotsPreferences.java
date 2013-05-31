@@ -12,7 +12,7 @@ import android.util.Log;
 
 public class GotsPreferences {
 
-	private static final boolean ISDEVELOPMENT = true;
+	private static final boolean ISDEVELOPMENT = false;
 
 	private static final String ORG_GOTS_GARDEN_PASSWORD = "org.gots.garden.password";
 	private static final String ORG_GOTS_GARDEN_LOGIN = "org.gots.garden.login";
@@ -27,20 +27,24 @@ public class GotsPreferences {
 			"6ba97b2306fd5b9d47992d8716dab16a");
 	private static final String ADMOB_API_KEY = System.getProperty("key.admobapi", "a14f50fa231b26d");
 	private static final String GARDENING_MANAGER_DIRECTORY = "Gardening-Manager";
+	private static final String GARDENING_MANAGER_APPNAME = "Gardening Manager";
 
 	// Administrator
 	// private static String token = "fc1c2bbc-af06-4973-b291-244f59253d51";
 	// Bob
 	// NUXEO SERVER
-	private static String token = "9f91de2a-51b8-40b2-a086-b09e94cb2cbb";
-	private static String device_id = "bdc5bc40be4611e2bbca606720eac0ac";
+	private static String token = "";
+	private static String device_id = "";
 	private static final String GARDENING_MANAGER_NUXEO_AUTOMATION_TEST = "http://192.168.100.90:8080/nuxeo/site/automation";
+	private static final String GARDENING_MANAGER_NUXEO_AUTHENTICATION_TEST = "http://192.168.100.90:8080/nuxeo/authentication/token?";
+
 	// private static final String GARDENING_MANAGER_NUXEO_AUTOMATION =
 	// "http://my.gardening-manager.com/site/automation";
 
 	// private static final String GARDENING_MANAGER_NUXEO_AUTOMATION =
 	// "http://services.gardening-manager.com/nuxeo/site/automation";
 	private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://srv2.gardening-manager.com:8090/nuxeo/site/automation";
+	private static final String GARDENING_MANAGER_NUXEO_AUTHENTICATION = "http://srv2.gardening-manager.com:8090/nuxeo/authentication/token?";
 
 	private static GotsPreferences preferences;
 	private static SharedPreferences sharedPreferences;
@@ -125,11 +129,10 @@ public class GotsPreferences {
 	}
 
 	//
-	 public boolean isConnectedToServer() {
-	 sharedPreferences = mContext.getSharedPreferences("org.gots.garden", 0);
-	 return sharedPreferences.getBoolean(ORG_GOTS_GARDEN_SERVERCONNECTED,
-	 false);
-	 }
+	public boolean isConnectedToServer() {
+		sharedPreferences = mContext.getSharedPreferences("org.gots.garden", 0);
+		return sharedPreferences.getBoolean(ORG_GOTS_GARDEN_SERVERCONNECTED, false);
+	}
 
 	public String getToken() {
 		return token;
@@ -167,6 +170,14 @@ public class GotsPreferences {
 
 	public void setDeviceId(String device_id) {
 		GotsPreferences.device_id = device_id;
+	}
+
+	public String getGardeningManagerAppname() {
+		return GARDENING_MANAGER_APPNAME;
+	}
+
+	public String getGardeningManagerNuxeoAuthentication() {
+		return ISDEVELOPMENT ? GARDENING_MANAGER_NUXEO_AUTHENTICATION_TEST : GARDENING_MANAGER_NUXEO_AUTHENTICATION;
 	}
 
 }

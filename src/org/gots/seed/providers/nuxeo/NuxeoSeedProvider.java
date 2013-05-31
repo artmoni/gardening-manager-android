@@ -31,6 +31,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 	String myToken = GotsPreferences.getInstance(mContext).getToken();
 	String myLogin = GotsPreferences.getInstance(mContext).getNUXEO_LOGIN();
 	String myDeviceId = GotsPreferences.getInstance(mContext).getDeviceId();
+	protected String myApp= GotsPreferences.getInstance(mContext).getGardeningManagerAppname();
 
 	public NuxeoSeedProvider(Context context) {
 		super(context);
@@ -51,7 +52,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
 				client = new HttpAutomationClient(GotsPreferences.getGardeningManagerServerURI());
 				if (GotsPreferences.getInstance(mContext).isConnectedToServer())
-					client.setRequestInterceptor(new TokenRequestInterceptor(myToken, myLogin, myDeviceId));
+					client.setRequestInterceptor(new TokenRequestInterceptor(myApp, myToken, myLogin, myDeviceId));
 
 				try {
 
@@ -159,7 +160,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 					HttpAutomationClient client = new HttpAutomationClient(
 							GotsPreferences.getGardeningManagerServerURI());
 
-					client.setRequestInterceptor(new TokenRequestInterceptor(myToken, myLogin, myDeviceId));
+					client.setRequestInterceptor(new TokenRequestInterceptor(myApp= GotsPreferences.getInstance(mContext).getDeviceId(),myToken, myLogin, myDeviceId));
 
 					Session session = client.getSession();
 
