@@ -110,11 +110,43 @@ Spécifiez le mot de passe de la clé pour <artmonimobile>
 	(appuyez sur Entrée s'il s'agit du mot de passe du Keystore) : 
 -
 
-
+###############################
 #### NUXEO INTEGRATION
+###############################
 mvn install:install-file -Dfile=../nuxeo-android/nuxeo-automation-thin-client/target/nuxeo-automation-thin-client-2.0-SNAPSHOT.jar -Dversion=2.0-SNAPSHOT -DartifactId=nuxeo-automation-client -DgroupId=org.nuxeo.ecm.automation -Dpackaging=jar
 mvn install:install-file -Dfile=../nuxeo-android/nuxeo-android-connector/target/nuxeo-android-connector-2.0-SNAPSHOT.jar -Dversion=2.0-SNAPSHOT -DartifactId=nuxeo-android-connector -DgroupId=org.nuxeo.android -Dpackaging=jar
 
 # run nuxeo shell
 java -cp nuxeo-shell-5.6.jar org.nuxeo.shell.Main
 connect http://localhost:8080/nuxeo/site/automation -u Administrator
+
+
+### Authentication
+## 1) USER CREATION
+<- ServerSide: User creation by admin or openid
+<- org.nuxeo.ecm.platform.oauth2.openid.auth.OpenIDConnectAuthenticator => OAuth2 authentication, user creation
+<- ++ Generate password, send email with android specific URI (no manual copy of password)
+<- ++ Generate token and send email with android specific URI (step 2 useless)
+
+## 2) TOKEN REQUEST
+-> ClientSide connect with user/password to request token 
+-> org.gots.ui.LoginActivity.request_token(boolean)
+<- org.nuxeo.ecm.platform.ui.web.auth.plugins.BasicAuthenticator => user authenticated with password
+<- org.nuxeo.ecm.tokenauth.servlet.TokenAuthenticationServlet => send token for user
+-> token stored on device
+
+## 3) TOKEN USE
+-> client side, connect with token
+-> org.gots.utils.TokenRequestInterceptor => send request with token and deviceid
+<- org.nuxeo.ecm.platform.ui.web.auth.token.TokenAuthenticator => check token and log the request
+
+## 1bis) USER CREATION REQUEST
+-> ++ Client side send a request for a user creation for a given user (email)
+<- ++ Server creates user, generate token and send email with android specific URI (step 1 useless)
+org.gots.server.auth.RequestAuthenticationTokenByEmail
+-> ++ Client side, click email, open Gardening, token request for device
+<- org.gots.server.auth.TemporaryTokenAuthenticator userPrincipal (replace basic auth)
+<- org.nuxeo.ecm.tokenauth.servlet.TokenAuthenticationServlet => send token for user
+-> store token (and connect to validate user creation)
+<- ++ If created user is not validated within a given delay, the user is deleted
+
