@@ -36,15 +36,16 @@ public class GotsPreferences {
 	private static String token = "";
 	private static String device_id = "";
 	private static final String GARDENING_MANAGER_NUXEO_AUTOMATION_TEST = "http://192.168.100.90:8080/nuxeo/site/automation";
-	private static final String GARDENING_MANAGER_NUXEO_AUTHENTICATION_TEST = "http://192.168.100.90:8080/nuxeo/authentication/token?";
-
+//	private static final String GARDENING_MANAGER_NUXEO_AUTHENTICATION_TEST = "http://192.168.100.90:8080/nuxeo/authentication/token?";
+	private static final String GARDENING_MANAGER_NUXEO_AUTHENTICATION_TEST = "http://192.168.100.90:8080/nuxeo/authentication/temptoken?";
 	// private static final String GARDENING_MANAGER_NUXEO_AUTOMATION =
 	// "http://my.gardening-manager.com/site/automation";
 
 	// private static final String GARDENING_MANAGER_NUXEO_AUTOMATION =
 	// "http://services.gardening-manager.com/nuxeo/site/automation";
 	private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://srv2.gardening-manager.com:8090/nuxeo/site/automation";
-	private static final String GARDENING_MANAGER_NUXEO_AUTHENTICATION = "http://srv2.gardening-manager.com:8090/nuxeo/authentication/token?";
+//	private static final String GARDENING_MANAGER_NUXEO_AUTHENTICATION = "http://srv2.gardening-manager.com:8090/nuxeo/authentication/token?";
+	private static final String GARDENING_MANAGER_NUXEO_AUTHENTICATION = "http://srv2.gardening-manager.com:8090/nuxeo/authentication/temptoken?";
 
 	private static GotsPreferences preferences;
 	private static SharedPreferences sharedPreferences;
