@@ -10,10 +10,14 @@
  ******************************************************************************/
 package org.gots.ui;
 
+import java.util.List;
+
 import org.gots.R;
+import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.adapter.ListVendorSeedAdapter;
 import org.gots.seed.providers.GotsSeedProvider;
+import org.gots.seed.providers.local.LocalSeedProvider;
 import org.gots.seed.service.SeedBroadcastReceiver;
 import org.gots.seed.service.SeedUpdateService;
 import org.gots.weather.service.WeatherUpdateService;
@@ -45,7 +49,7 @@ public class VendorListActivity extends SherlockListFragment {
 		super.onCreate(savedInstanceState);
 		mContext = getActivity();
 
-		seedProvider = new GotsSeedManager(mContext);
+		seedProvider = new GotsSeedManager(mContext, new LocalSeedProvider(mContext));
 		seedIntent = new Intent(mContext, SeedUpdateService.class);
 
 	}
@@ -68,10 +72,8 @@ public class VendorListActivity extends SherlockListFragment {
 		switch (item.getItemId()) {
 
 		case R.id.refresh_seed:
-			
 			mContext.startService(seedIntent);
-			mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(SeedUpdateService.BROADCAST_ACTION));
-			
+
 			return true;
 
 		default:
@@ -88,9 +90,13 @@ public class VendorListActivity extends SherlockListFragment {
 
 	@Override
 	public void onResume() {
-		listVendorSeedAdapter = new ListVendorSeedAdapter(mContext, seedProvider.getVendorSeeds());
+
+		List<BaseSeedInterface> vendorSeeds = seedProvider.getVendorSeeds();
+		listVendorSeedAdapter = new ListVendorSeedAdapter(mContext, vendorSeeds);
+		if (vendorSeeds.size() < 1)
+			mContext.startService(seedIntent);
+
 		setListAdapter(listVendorSeedAdapter);
-		mContext.startService(seedIntent);
 		mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(SeedUpdateService.BROADCAST_ACTION));
 		super.onResume();
 	}
@@ -105,14 +111,13 @@ public class VendorListActivity extends SherlockListFragment {
 
 	protected void updateUI(Intent intent) {
 		boolean isnewseed = intent.getBooleanExtra(SeedUpdateService.ISNEWSEED, false);
-		if (isnewseed) {
-			seedProvider = new GotsSeedManager(mContext);
-			listVendorSeedAdapter = new ListVendorSeedAdapter(mContext, seedProvider.getVendorSeeds());
+		// if (isnewseed) {
+		seedProvider = new GotsSeedManager(mContext);
+		listVendorSeedAdapter = new ListVendorSeedAdapter(mContext, seedProvider.getVendorSeeds());
 
-			setListAdapter(listVendorSeedAdapter);
-//			listVendorSeedAdapter.notifyDataSetChanged();
-		}
+		setListAdapter(listVendorSeedAdapter);
+		// listVendorSeedAdapter.notifyDataSetChanged();
+		// }
 	}
-
 
 }
