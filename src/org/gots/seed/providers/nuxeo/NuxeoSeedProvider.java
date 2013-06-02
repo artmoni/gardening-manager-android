@@ -31,7 +31,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 	String myToken = GotsPreferences.getInstance(mContext).getToken();
 	String myLogin = GotsPreferences.getInstance(mContext).getNUXEO_LOGIN();
 	String myDeviceId = GotsPreferences.getInstance(mContext).getDeviceId();
-	protected String myApp= GotsPreferences.getInstance(mContext).getGardeningManagerAppname();
+	protected String myApp = GotsPreferences.getInstance(mContext).getGardeningManagerAppname();
 
 	public NuxeoSeedProvider(Context context) {
 		super(context);
@@ -112,7 +112,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 				vendorSeeds.add(super.createSeed(remoteSeed));
 			}
 		}
-		
+
 		for (BaseSeedInterface localSeed : myLocalSeeds) {
 			if (localSeed.getUUID() == null) {
 				createRemoteSeed(localSeed);
@@ -146,6 +146,9 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 		return createRemoteSeed(seed);
 	}
 
+	/*
+	 * Return new remote seed or null if error
+	 */
 	protected BaseSeedInterface createRemoteSeed(BaseSeedInterface seed) {
 		try {
 			AsyncTask<BaseSeedInterface, Integer, Document> task = new AsyncTask<BaseSeedInterface, Integer, Document>() {
@@ -160,11 +163,11 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 					HttpAutomationClient client = new HttpAutomationClient(
 							GotsPreferences.getGardeningManagerServerURI());
 
-					client.setRequestInterceptor(new TokenRequestInterceptor(myApp= GotsPreferences.getInstance(mContext).getDeviceId(),myToken, myLogin, myDeviceId));
-
-					Session session = client.getSession();
+					client.setRequestInterceptor(new TokenRequestInterceptor(myApp = GotsPreferences.getInstance(
+							mContext).getDeviceId(), myToken, myLogin, myDeviceId));
 
 					try {
+						Session session = client.getSession();
 						DocRef wsRef = new DocRef("/default-domain/UserWorkspaces/"
 								+ GotsPreferences.getInstance(mContext).getNUXEO_LOGIN());
 
@@ -187,6 +190,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
 					} catch (Exception e) {
 						Log.e(TAG, e.getMessage(), e);
+						return null;
 					}
 					return documentVendorSeed;
 
@@ -198,6 +202,8 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 			// TODO send as intent
 			// TODO get(timeout)
 			Document remoteVendorSeed = task.get();
+			if (remoteVendorSeed == null)
+				return null;
 			seed.setUUID(remoteVendorSeed.getId());
 
 			super.updateSeed(seed);

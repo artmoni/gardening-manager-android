@@ -29,6 +29,10 @@ public class GotsSeedManager implements GotsSeedProvider {
 			mSeedProvider = new LocalSeedProvider(mContext);
 	}
 
+	public GotsSeedManager(Context context, GotsSeedProvider gotsSeedProvider){
+		mSeedProvider = gotsSeedProvider;
+
+	}
 	@Override
 	public List<BaseSeedInterface> getVendorSeeds() {
 

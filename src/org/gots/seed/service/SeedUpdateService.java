@@ -62,21 +62,26 @@ public class SeedUpdateService extends Service {
 		// ArrayList<BaseSeedInterface>();
 		Log.d(TAG, "Starting service : checking seeds from web services");
 
-		VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
-		for (BaseSeedInterface baseSeedInterface : mRemoteProvider.getVendorSeeds()) {
-
-			if (helper.getSeedByUUID(baseSeedInterface.getUUID()) != null) {
-				helper.updateSeed(baseSeedInterface);
-			} else {
-				newSeeds.add(baseSeedInterface); 
-				helper.insertSeed(baseSeedInterface);
-			}
-		}
-		if (newSeeds.size() > 0) {
-
-			createNotification();
-			isNewSeed = true;
-		}
+//		VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
+		mRemoteProvider.getVendorSeeds();
+//		for (BaseSeedInterface baseSeedInterface : mRemoteProvider.getVendorSeeds()) {
+//
+//			if (helper.getSeedByUUID(baseSeedInterface.getUUID()) != null) {
+//				helper.updateSeed(baseSeedInterface);
+//				Log.d(TAG, "updateSeed :"+baseSeedInterface);
+//			} 
+//			else {
+//				newSeeds.add(baseSeedInterface); 
+//				helper.insertSeed(baseSeedInterface);
+//				Log.d(TAG, "insertSeed :"+baseSeedInterface);
+//
+//			}
+//		}
+//		if (newSeeds.size() > 0) {
+//
+//			createNotification();
+//			isNewSeed = true;
+//		}
 		handler.removeCallbacks(sendUpdatesToUI);
 		handler.postDelayed(sendUpdatesToUI, 1000); // 1 second
 
