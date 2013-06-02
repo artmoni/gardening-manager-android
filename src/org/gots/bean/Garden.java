@@ -190,4 +190,10 @@ public class Garden implements GardenInterface {
 	public String getUUID() {
 		return uuid;
 	}
+
+	@Override
+	public String toString() {
+		String gardenString = "#" + getId() + " --" + getLocality() + "--" + "\n" + "UUID[" + getUUID() + "]";
+		return gardenString;
+	}
 }
