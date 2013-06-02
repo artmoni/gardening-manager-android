@@ -26,6 +26,7 @@ import android.util.Log;
 
 public class GardenDBHelper {
 
+	private static final String TAG = "GardenDBHelper";
 	// private List<BaseAllotmentInterface> allAllotment = new
 	// ArrayList<BaseAllotmentInterface>();
 
@@ -109,10 +110,12 @@ public class GardenDBHelper {
 		values.put(GardenSQLite.GARDEN_ALTITUDE, garden.getGpsAltitude());
 		values.put(GardenSQLite.GARDEN_UUID, garden.getUUID());
 
-		bdd.update(GardenSQLite.GARDEN_TABLE_NAME, values, GardenSQLite.GARDEN_ID + "=" + garden.getId(), null);
+		int nbRows = bdd.update(GardenSQLite.GARDEN_TABLE_NAME, values, GardenSQLite.GARDEN_ID + "=" + garden.getId(),
+				null);
+		Log.d(TAG, "Updating " + nbRows + " garden named " + garden.getLocality());
 		close();
 		return garden;
-	} 
+	}
 
 	public List<GardenInterface> getGardens() {
 		List<GardenInterface> gardens = new ArrayList<GardenInterface>();
