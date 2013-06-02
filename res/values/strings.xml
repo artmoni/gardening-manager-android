@@ -93,15 +93,15 @@
     <string name="notification.action.content">and _NBACTIONS_ more task</string>
     <string name="notification.seed.title">New _SPECIE_ available</string>
     <string name="notification.seed.content">and _NBSEEDS_ more vegetable</string>
-        <string name="notification.seedsow.content">Ready to sow</string>
-    
+    <string name="notification.seedsow.content">Ready to sow</string>
     <string name="action.sow">Sow</string>
     <string name="action.beak">Beak</string>
     <string name="action.lighten">Lighten</string>
     <string name="profile.share.data">Share this garden with friends</string>
     <string name="login">Login</string>
     <string name="password">Password</string>
-   
-        <string name="login">Login</string>
-    
+    <string name="connect">Connection</string>
+    <string name="button.signin">Sign in with</string>
+    <string name="feature.unavalaible">This feature will be available in next release</string>
+
 </resources>

@@ -96,11 +96,14 @@
     <string name="notification.seed.title">_SPECIE_ nouvellement disponible</string>
     <string name="notification.seed.content">ainsi que _NBSEEDS_ autre légumes</string>
     <string name="notification.seedsow.content">Prêt à être semé</string>
-  <string name="login">Connexion</string>
   
   <string name="action.sow">Semer</string>
     <string name="action.beak">Bécher</string>
     <string name="action.lighten">Eclaircir</string>
     <string name="profile.share.data">Partager</string>
-    <string name="password">Password</string>
+  <string name="login">Utilisateur</string>
+    <string name="password">Mot de passe</string>
+    <string name="connect">Connexion</string>
+        <string name="feature.unavalaible">Fonction prochainement disponible</string>
+    
 </resources>
