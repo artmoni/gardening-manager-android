@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
+	<classpathentry kind="output" path="bin/classes"/>
+  <classpathentry kind="var" path="M2_REPO/com/google/android/admob/admob/6.2.1-r8/admob-6.2.1-r8.jar" sourcepath="M2_REPO/com/google/android/admob/admob/6.2.1-r8/admob-6.2.1-r8-sources.jar">
+    <attributes>
+      <attribute name="javadoc_location" value="jar:file:/Users/julien/.m2/repository/com/google/android/admob/admob/6.2.1-r8/admob-6.2.1-r8-javadoc.jar!/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/com/google/android/analytics/analytics/1.4.2/analytics-1.4.2.jar" sourcepath="M2_REPO/com/google/android/analytics/analytics/1.4.2/analytics-1.4.2-sources.jar">
+    <attributes>
+      <attribute name="javadoc_location" value="jar:file:/Users/julien/.m2/repository/com/google/android/analytics/analytics/1.4.2/analytics-1.4.2-javadoc.jar!/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/android/android/4.0.3_r3/android-4.0.3_r3.jar" sourcepath="M2_REPO/android/android/4.0.3_r3/android-4.0.3_r3-sources.jar">
+    <attributes>
+      <attribute name="javadoc_location" value="jar:file:/Users/julien/.m2/repository/android/android/4.0.3_r3/android-4.0.3_r3-javadoc.jar!/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/com/google/zxing/android-integration/2.1/android-integration-2.1.jar" sourcepath="M2_REPO/com/google/zxing/android-integration/2.1/android-integration-2.1-sources.jar">
+    <attributes>
+      <attribute name="javadoc_location" value="jar:file:/Users/julien/.m2/repository/com/google/zxing/android-integration/2.1/android-integration-2.1-javadoc.jar!/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/commons-codec/commons-codec/1.2/commons-codec-1.2.jar" sourcepath="M2_REPO/commons-codec/commons-codec/1.2/commons-codec-1.2-sources.jar">
+    <attributes>
+      <attribute name="javadoc_location" value="jar:file:/Users/julien/.m2/repository/commons-codec/commons-codec/1.2/commons-codec-1.2-javadoc.jar!/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/org/nuxeo/android/nuxeo-android-connector/2.0-SNAPSHOT/nuxeo-android-connector-2.0-SNAPSHOT.jar" sourcepath="M2_REPO/org/nuxeo/android/nuxeo-android-connector/2.0-SNAPSHOT/nuxeo-android-connector-2.0-SNAPSHOT-sources.jar">
+    <attributes>
+      <attribute name="javadoc_location" value="jar:file:/Users/julien/.m2/repository/org/nuxeo/android/nuxeo-android-connector/2.0-SNAPSHOT/nuxeo-android-connector-2.0-SNAPSHOT-javadoc.jar!/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/org/simpleframework/simple-xml/2.6.4/simple-xml-2.6.4.jar" sourcepath="M2_REPO/org/simpleframework/simple-xml/2.6.4/simple-xml-2.6.4-sources.jar">
+    <attributes>
+      <attribute name="javadoc_location" value="jar:file:/Users/julien/.m2/repository/org/simpleframework/simple-xml/2.6.4/simple-xml-2.6.4-javadoc.jar!/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/com/google/android/support-v4/r7/support-v4-r7.jar" sourcepath="M2_REPO/com/google/android/support-v4/r7/support-v4-r7-sources.jar">
+    <attributes>
+      <attribute name="javadoc_location" value="jar:file:/Users/julien/.m2/repository/com/google/android/support-v4/r7/support-v4-r7-javadoc.jar!/"/>
+    </attributes>
+  </classpathentry>
+</classpath>
