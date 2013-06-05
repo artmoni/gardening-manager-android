@@ -80,6 +80,9 @@
     <string name="specie.raphanussativus">Radish</string>
     <string name="specie.solanumtuberosum">Potato</string>
     <string name="specie.capsicumannuum">Pepper</string>
+        <string name="specie.solanummelongena">Eggplant</string>
+    
+    
     <string name="help.loading">Please wait, web help is loading</string>
     <string name="menu.help">Help</string>
     <string name="menu.about">About</string>

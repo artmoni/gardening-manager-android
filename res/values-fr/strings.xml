@@ -80,6 +80,7 @@
     <string name="specie.raphanussativus">Radis</string>
     <string name="specie.solanumtuberosum">Pomme de terre</string>
     <string name="specie.capsicumannuum">Poivron/Piment</string>
+    <string name="specie.solanummelongena">Aubergine</string>
     <string name="weather.citynotfound">Pas de météo dans cette localité, saisissez une proche agglomération</string>
     <string name="location.notfound">Vous n\'avez pas pu être localisé</string>
     <string name="help.loading">Chargement de la documentation</string>
@@ -96,14 +97,13 @@
     <string name="notification.seed.title">_SPECIE_ nouvellement disponible</string>
     <string name="notification.seed.content">ainsi que _NBSEEDS_ autre légumes</string>
     <string name="notification.seedsow.content">Prêt à être semé</string>
-  
-  <string name="action.sow">Semer</string>
+    <string name="action.sow">Semer</string>
     <string name="action.beak">Bécher</string>
     <string name="action.lighten">Eclaircir</string>
     <string name="profile.share.data">Partager</string>
-  <string name="login">Utilisateur</string>
+    <string name="login">Utilisateur</string>
     <string name="password">Mot de passe</string>
     <string name="connect">Connexion</string>
-        <string name="feature.unavalaible">Fonction prochainement disponible</string>
-    
+    <string name="feature.unavalaible">Fonction prochainement disponible</string>
+
 </resources>
