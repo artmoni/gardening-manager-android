@@ -110,7 +110,7 @@ public class GardenDBHelper {
 		values.put(GardenSQLite.GARDEN_ALTITUDE, garden.getGpsAltitude());
 		values.put(GardenSQLite.GARDEN_UUID, garden.getUUID());
 
-		int nbRows = bdd.update(GardenSQLite.GARDEN_TABLE_NAME, values, GardenSQLite.GARDEN_ID + "=" + garden.getId(),
+		int nbRows = bdd.update(GardenSQLite.GARDEN_TABLE_NAME, values, GardenSQLite.GARDEN_ID + "='" + garden.getId()+"'",
 				null);
 		Log.d(TAG, "Updating " + nbRows + " garden named " + garden.getLocality());
 		close();
