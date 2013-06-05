@@ -243,20 +243,23 @@ public class NewSeedActivity extends SherlockActivity implements
     }
 
     private boolean validateSeed() {
-        boolean isValidate = true;
-
-        if (newSeed.getVariety() == null || "".equals(newSeed.getVariety()))
-            isValidate = false;
-        if (newSeed.getFamily() == null || "".equals(newSeed.getFamily()))
-            isValidate = false;
-        if (newSeed.getDateSowingMin() == -1
-                || newSeed.getDateSowingMax() == -1)
-            isValidate = false;
-        if (!isValidate) {
-            Toast.makeText(this, "All fields should be defined", 3000).show();
+        if (newSeed.getFamily() == null || "".equals(newSeed.getFamily())) {
+            Toast.makeText(this,
+                    getResources().getString(R.string.fillfields_specie), 3000).show();
+            return false;
         }
-
-        return isValidate;
+        if (newSeed.getVariety() == null || "".equals(newSeed.getVariety())) {
+            Toast.makeText(this,
+                    getResources().getString(R.string.fillfields_variety), 3000).show();
+            return false;
+        }
+        if (newSeed.getDateSowingMin() == -1
+                || newSeed.getDateSowingMax() == -1) {
+            Toast.makeText(this,
+                    getResources().getString(R.string.fillfields_dates), 3000).show();
+            return false;
+        }
+        return true;
     }
 
     private BaseSeedInterface insertSeed() {
