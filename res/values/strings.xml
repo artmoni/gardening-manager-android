@@ -80,9 +80,7 @@
     <string name="specie.raphanussativus">Radish</string>
     <string name="specie.solanumtuberosum">Potato</string>
     <string name="specie.capsicumannuum">Pepper</string>
-        <string name="specie.solanummelongena">Eggplant</string>
-    
-    
+    <string name="specie.solanummelongena">Eggplant</string>
     <string name="help.loading">Please wait, web help is loading</string>
     <string name="menu.help">Help</string>
     <string name="menu.about">About</string>
@@ -106,5 +104,8 @@
     <string name="connect">Connection</string>
     <string name="button.signin">Sign in with</string>
     <string name="feature.unavalaible">This feature will be available in next release</string>
+    <string name="fillfields.specie">Please check the specie</string>
+    <string name="fillfields.variety">Please check the Variety</string>
+    <string name="fillfields.dates">Please check the growing dates</string>
 
 </resources>
