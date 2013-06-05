@@ -57,7 +57,8 @@ mvn install --settings settings.xml -P env-dev
 --------------------------------------------------------
 ------------- COMPILATION PROCESS 
 --------------------------------------------------------
-$ mvn clean install android:deploy android:run
+
+    $ mvn clean install android:deploy android:run [-Dandroid.sdk.path=/path/to/android-sdk/]
  
 --------------------------------------------------------
 ------------- RELEASE PROCESS 

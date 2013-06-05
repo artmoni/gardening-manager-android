@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
->
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.gots</groupId>
   <artifactId>gardening-manager</artifactId>
@@ -16,6 +15,10 @@
   </properties>
   <repositories>
     <repository>
+      <id>gardening-manager-maven</id>
+      <url>http://github.com/artmoni/gardening-manager-maven/raw/master</url>
+    </repository>
+    <repository>
       <id>jakewharton</id>
       <url>http://r.jakewharton.com/maven/release/</url>
     </repository>
@@ -25,9 +28,14 @@
     </repository>
     <repository>
       <id>public-releases</id>
-      <url>
-		https://maven-eu.nuxeo.org/nexus/content/repositories/public-releases/
-      </url>
+      <url>https://maven.nuxeo.org/nexus/content/repositories/public-releases/</url>
+    </repository>
+    <repository>
+      <id>public-snapshots</id>
+      <url>https://maven.nuxeo.org/nexus/content/repositories/public-snapshots/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
     </repository>
     <repository>
       <id>sonatype-oss-public</id>
@@ -36,8 +44,6 @@
         <enabled>true</enabled>
       </releases>
     </repository>
-    <!-- <repository> <id>gardening-manager-maven</id> <url>https://github.com/artmoni/gardening-manager-maven.git</url> 
-      </repository> -->
   </repositories>
   <dependencies>
     <dependency>
@@ -107,8 +113,11 @@
         </exclusion>
       </exclusions>
     </dependency>
-    <!-- <dependency> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-javadoc-plugin</artifactId> 
-      <version>2.9</version> </dependency> -->
+    <!-- <dependency> -->
+    <!-- <groupId>org.apache.maven.plugins</groupId> -->
+    <!-- <artifactId>maven-javadoc-plugin</artifactId> -->
+    <!-- <version>2.9</version> -->
+    <!-- </dependency> -->
     <dependency>
       <groupId>org.simpleframework</groupId>
       <artifactId>simple-xml</artifactId>
@@ -131,32 +140,59 @@
       </exclusions>
     </dependency>
     <!-- ********* NUXEO INTEGRATION BEGIN********* -->
-    <!-- <dependency> <groupId>org.nuxeo.ecm.automation</groupId> <artifactId>nuxeo-automation-client</artifactId> 
-      <version>2.0-SNAPSHOT</version> </dependency> -->
+    <!-- <dependency> -->
+    <!-- <groupId>org.nuxeo.ecm.automation</groupId> -->
+    <!-- <artifactId>nuxeo-automation-client</artifactId> -->
+    <!-- <version>2.0-SNAPSHOT</version> -->
+    <!-- </dependency> -->
     <dependency>
       <groupId>org.nuxeo.android</groupId>
       <artifactId>nuxeo-android-connector</artifactId>
       <version>2.0-SNAPSHOT</version>
     </dependency>
-    <!-- <dependency> <groupId>net.sf.json-lib</groupId> <artifactId>json-lib</artifactId> 
-      <version>2.4</version> <classifier>jdk15</classifier> </dependency> -->
-    <!-- <dependency> <groupId>net.sf.ezmorph</groupId> <artifactId>ezmorph</artifactId> 
-      <version>1.0.6</version> </dependency> -->
-    <!-- <dependency> <groupId>org.apache.httpcomponents</groupId> <artifactId>httpcore</artifactId> 
-      <version>4.2.3</version> </dependency> <dependency> <groupId>org.apache.httpcomponents</groupId> 
-      <artifactId>httpclient</artifactId> <version>4.2.3</version> </dependency> 
-      <dependency> <groupId>javax.mail</groupId> <artifactId>mail</artifactId> 
-      <version>1.4.6</version> </dependency> -->
+    <!-- <dependency> -->
+    <!-- <groupId>net.sf.json-lib</groupId> -->
+    <!-- <artifactId>json-lib</artifactId> -->
+    <!-- <version>2.4</version> -->
+    <!-- <classifier>jdk15</classifier> -->
+    <!-- </dependency> -->
+    <!-- <dependency> -->
+    <!-- <groupId>net.sf.ezmorph</groupId> -->
+    <!-- <artifactId>ezmorph</artifactId> -->
+    <!-- <version>1.0.6</version> -->
+    <!-- </dependency> -->
+    <!-- <dependency> -->
+    <!-- <groupId>org.apache.httpcomponents</groupId> -->
+    <!-- <artifactId>httpcore</artifactId> -->
+    <!-- <version>4.2.3</version> -->
+    <!-- </dependency> -->
+    <!-- <dependency> -->
+    <!-- <groupId>org.apache.httpcomponents</groupId> -->
+    <!-- <artifactId>httpclient</artifactId> -->
+    <!-- <version>4.2.3</version> -->
+    <!-- </dependency> -->
+    <!-- <dependency> -->
+    <!-- <groupId>javax.mail</groupId> -->
+    <!-- <artifactId>mail</artifactId> -->
+    <!-- <version>1.4.6</version> -->
+    <!-- </dependency> -->
     <!-- ********* NUXEO INTEGRATION END********* -->
     <!-- ********* SOCIALAUTH INTEGRATION BEGIN********* -->
-    <!-- <dependency>
-      <groupId>org.brickred</groupId>
-      <artifactId>socialauth</artifactId>
-      <version>3.0</version>
-    </dependency> -->
-    <!-- <dependency> <groupId>org.openid4java</groupId> <artifactId>openid4java</artifactId> 
-      <version>0.9.7</version> </dependency> <dependency> <groupId>org.opensocial</groupId> 
-      <artifactId>opensocial</artifactId> <version>1.0</version> </dependency> -->
+    <!-- <dependency> -->
+    <!-- <groupId>org.brickred</groupId> -->
+    <!-- <artifactId>socialauth</artifactId> -->
+    <!-- <version>3.0</version> -->
+    <!-- </dependency> -->
+    <!-- <dependency> -->
+    <!-- <groupId>org.openid4java</groupId> -->
+    <!-- <artifactId>openid4java</artifactId> -->
+    <!-- <version>0.9.7</version> -->
+    <!-- </dependency> -->
+    <!-- <dependency> -->
+    <!-- <groupId>org.opensocial</groupId> -->
+    <!-- <artifactId>opensocial</artifactId> -->
+    <!-- <version>1.0</version> -->
+    <!-- </dependency> -->
     <!-- ********* SOCIALAUTH INTEGRATION END********* -->
     <dependency>
       <groupId>commons-codec</groupId>
@@ -179,7 +215,7 @@
       <plugin>
         <groupId>com.jayway.maven.plugins.android.generation2</groupId>
         <artifactId>android-maven-plugin</artifactId>
-        <version>3.5.1</version>
+        <version>3.6.0</version>
         <extensions>true</extensions>
         <configuration>
           <run>
@@ -208,19 +244,56 @@
           <skip>true</skip>
         </configuration>
       </plugin>
-      <!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>properties-maven-plugin</artifactId> 
-        <version>1.0-alpha-2</version> <executions> <execution> <phase>initialize</phase> 
-        <goals> <goal>set-system-properties</goal> </goals> </execution> </executions> 
-        <configuration> <properties> <property> <name>key.analyticsapi</name> <value>${key.analyticsapi}</value> 
-        </property> <property> <name>key.weatherapi</name> <value>${key.weatherapi}</value> 
-        </property> <property> <name>key.admobapi</name> <value>${key.admobapi}</value> 
-        </property> </properties> </configuration> </plugin> -->
-      <!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-surefire-plugin</artifactId> 
-        <version>2.5</version> <configuration> <systemPropertyVariables> <property> 
-        <name>key.analyticsapi</name> <value>UA-916500-18</value> </property> <property> 
-        <name>key.weatherapi</name> <value>6ba97b2306fd5b9d47992d8716dab16a</value> 
-        </property> <property> <name>key.admobapi</name> <value>a14f50fa231b26d</value> 
-        </property> </systemPropertyVariables> </configuration> </plugin> -->
+      <!-- <plugin> -->
+      <!-- <groupId>org.codehaus.mojo</groupId> -->
+      <!-- <artifactId>properties-maven-plugin</artifactId> -->
+      <!-- <version>1.0-alpha-2</version> -->
+      <!-- <executions> -->
+      <!-- <execution> -->
+      <!-- <phase>initialize</phase> -->
+      <!-- <goals> -->
+      <!-- <goal>set-system-properties</goal> -->
+      <!-- </goals> -->
+      <!-- </execution> -->
+      <!-- </executions> -->
+      <!-- <configuration> -->
+      <!-- <properties> -->
+      <!-- <property> -->
+      <!-- <name>key.analyticsapi</name> -->
+      <!-- <value>${key.analyticsapi}</value> -->
+      <!-- </property> -->
+      <!-- <property> -->
+      <!-- <name>key.weatherapi</name> -->
+      <!-- <value>${key.weatherapi}</value> -->
+      <!-- </property> -->
+      <!-- <property> -->
+      <!-- <name>key.admobapi</name> -->
+      <!-- <value>${key.admobapi}</value> -->
+      <!-- </property> -->
+      <!-- </properties> -->
+      <!-- </configuration> -->
+      <!-- </plugin> -->
+      <!-- <plugin> -->
+      <!-- <groupId>org.apache.maven.plugins</groupId> -->
+      <!-- <artifactId>maven-surefire-plugin</artifactId> -->
+      <!-- <version>2.5</version> -->
+      <!-- <configuration> -->
+      <!-- <systemPropertyVariables> -->
+      <!-- <property> -->
+      <!-- <name>key.analyticsapi</name> -->
+      <!-- <value>UA-916500-18</value> -->
+      <!-- </property> -->
+      <!-- <property> -->
+      <!-- <name>key.weatherapi</name> -->
+      <!-- <value>6ba97b2306fd5b9d47992d8716dab16a</value> -->
+      <!-- </property> -->
+      <!-- <property> -->
+      <!-- <name>key.admobapi</name> -->
+      <!-- <value>a14f50fa231b26d</value> -->
+      <!-- </property> -->
+      <!-- </systemPropertyVariables> -->
+      <!-- </configuration> -->
+      <!-- </plugin> -->
     </plugins>
   </build>
   <profiles>
@@ -277,7 +350,7 @@
               <zipalign>
                 <verbose>true</verbose>
                 <inputApk>${project.build.directory}/${project.artifactId}.apk</inputApk>
-                <outputApk>${project.build.directory}/${project.artifactId}-signed-aligned.apk 
+                <outputApk>${project.build.directory}/${project.artifactId}-signed-aligned.apk
                 </outputApk>
               </zipalign>
             </configuration>
