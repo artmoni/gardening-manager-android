@@ -105,5 +105,8 @@
     <string name="password">Mot de passe</string>
     <string name="connect">Connexion</string>
     <string name="feature.unavalaible">Fonction prochainement disponible</string>
-
+    <string name="fillfields.specie">Veuillez saisir une éspèce</string>
+    <string name="fillfields.variety">Veuillez saisir une variété</string>
+    <string name="fillfields.dates">Veuillez saisir les dates de culture</string>
+    
 </resources>
