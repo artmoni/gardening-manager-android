@@ -199,6 +199,21 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
                 if (localGarden.getUUID() == null) {
                     // local only
                     createRemoteGarden(localGarden);
+                } else {
+                    boolean found = false;
+                    for (GardenInterface remoteGarden : remoteGardens) {
+                        if (remoteGarden.getUUID() != null
+                                && remoteGarden.getUUID().equals(
+                                        localGarden.getUUID())) {
+                            // local and remote
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        // local only with UUID -> delete local
+                        super.removeGarden(localGarden);
+                    }
                 }
             }
 
