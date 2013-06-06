@@ -104,8 +104,8 @@
     <string name="connect">Connection</string>
     <string name="button.signin">Sign in with</string>
     <string name="feature.unavalaible">This feature will be available in next release</string>
-    <string name="fillfields.specie">Please check the specie</string>
-    <string name="fillfields.variety">Please check the Variety</string>
-    <string name="fillfields.dates">Please check the growing dates</string>
+    <string name="fillfields.specie">Please choose the specie</string>
+    <string name="fillfields.variety">Please fill the variety</string>
+    <string name="fillfields.dates">Please give the dates</string>
 
 </resources>
