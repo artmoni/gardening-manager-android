@@ -282,22 +282,34 @@ public class NewSeedActivity extends SherlockActivity implements
         String[] specieList = helper.getArraySpecie();
 
         ListSpeciesAdapter listSpeciesAdapter = new ListSpeciesAdapter(this,
-                specieList, newSeed.getSpecie());
+                specieList, newSeed);
 
         gallerySpecies.setAdapter(listSpeciesAdapter);
         gallerySpecies.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-                    long arg3) {
+            public void onItemClick(AdapterView<?> parent, View view,
+                    int position, long id) {
                 gallerySpecies.dispatchSetSelected(false);
-                arg1.setSelected(!arg1.isSelected());
-                newSeed.setSpecie((String) arg1.getTag());
+                if (((String) view.getTag()).equals(newSeed.getSpecie())) {
+                    // clicked already selected item
+                    return;
+                }
+                // Selected specie changed -> remove background on others
+                for (int i = 0; i < parent.getChildCount(); i++) {
+                    View childView = parent.getChildAt(i);
+                    if (childView != view) {
+                        childView.setBackgroundColor(0);
+                    }
+                }
+                view.setSelected(true);
+                view.setBackgroundDrawable(getResources().getDrawable(
+                        R.drawable.bg_state_warning));
+                newSeed.setSpecie((String) view.getTag());
                 String family = helper.getFamilyBySpecie(newSeed.getSpecie());
                 newSeed.setFamily(family);
                 seedWidgetLong.setSeed(newSeed);
                 seedWidgetLong.invalidate();
-                // arg1.setBackgroundColor(getResources().getColor(R.color.action_warning_color));
             }
         });
 
