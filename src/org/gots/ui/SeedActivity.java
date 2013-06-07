@@ -27,114 +27,114 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class SeedActivity extends SherlockFragment {
-	private int seedId;
+    private int seedId;
 
-	protected BaseSeedInterface mSeed;
+    protected BaseSeedInterface mSeed;
 
-	private float downXValue;
+    private float downXValue;
 
-	protected int resultCameraActivity = 1;
+    protected int resultCameraActivity = 1;
 
-	private Gallery gallery;
+    private Gallery gallery;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		GotsAnalytics.getInstance(getActivity().getApplication()).incrementActivityCount();
-		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
+        GotsAnalytics.getInstance(getActivity().getApplication()).incrementActivityCount();
+        GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
-	}
+    }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.seed, container, false);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.seed, container, false);
 
-		Bundle bundle = this.getArguments();
-		seedId = bundle.getInt("org.gots.seed.id");
+        Bundle bundle = this.getArguments();
+        seedId = bundle.getInt("org.gots.seed.id");
 
-		if (seedId <= 0) {
-			Log.e("SeedActivity", "You must provide a org.gots.seed.id as an Extra Int");
-			return v;
-		}
+        if (seedId <= 0) {
+            Log.e("SeedActivity", "You must provide a org.gots.seed.id as an Extra Int");
+            return v;
+        }
 
-		VendorSeedDBHelper helper = new VendorSeedDBHelper(getActivity());
-		mSeed = helper.getSeedById(seedId);
+        VendorSeedDBHelper helper = new VendorSeedDBHelper(getActivity());
+        mSeed = helper.getSeedById(seedId);
 
-		final TextView seedDescriptionEnvironnement = (TextView) v.findViewById(R.id.IdSeedDescriptionEnvironment);
-		seedDescriptionEnvironnement.setText(mSeed.getDescriptionGrowth());
+        final TextView seedDescriptionEnvironnement = (TextView) v.findViewById(R.id.IdSeedDescriptionEnvironment);
+        seedDescriptionEnvironnement.setText(mSeed.getDescriptionGrowth());
 
-		TextView seedDescriptionTitle = (TextView) v.findViewById(R.id.IdSeedDescriptionEnvironmentTitle);
-		seedDescriptionTitle.setOnClickListener(new View.OnClickListener() {
+        TextView seedDescriptionTitle = (TextView) v.findViewById(R.id.IdSeedDescriptionEnvironmentTitle);
+        seedDescriptionTitle.setOnClickListener(new View.OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				if (seedDescriptionEnvironnement.getVisibility() == View.VISIBLE)
-					seedDescriptionEnvironnement.setVisibility(View.GONE);
-				else
-					seedDescriptionEnvironnement.setVisibility(View.VISIBLE);
-			}
-		});
+            @Override
+            public void onClick(View v) {
+                if (seedDescriptionEnvironnement.getVisibility() == View.VISIBLE)
+                    seedDescriptionEnvironnement.setVisibility(View.GONE);
+                else
+                    seedDescriptionEnvironnement.setVisibility(View.VISIBLE);
+            }
+        });
 
-		final TextView seedDescriptionCulture = (TextView) v.findViewById(R.id.IdSeedDescriptionCulture);
-		seedDescriptionCulture.setText(mSeed.getDescriptionCultivation());
-		TextView seedDescriptionCultureTitle = (TextView) v.findViewById(R.id.IdSeedDescriptionCultureTitle);
-		seedDescriptionCultureTitle.setOnClickListener(new View.OnClickListener() {
+        final TextView seedDescriptionCulture = (TextView) v.findViewById(R.id.IdSeedDescriptionCulture);
+        seedDescriptionCulture.setText(mSeed.getDescriptionCultivation());
+        TextView seedDescriptionCultureTitle = (TextView) v.findViewById(R.id.IdSeedDescriptionCultureTitle);
+        seedDescriptionCultureTitle.setOnClickListener(new View.OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				if (seedDescriptionCulture.getVisibility() == View.VISIBLE)
-					seedDescriptionCulture.setVisibility(View.GONE);
-				else
-					seedDescriptionCulture.setVisibility(View.VISIBLE);
-			}
-		});
-		
-		final TextView seedDescriptionEnnemi = (TextView) v.findViewById(R.id.IdSeedDescriptionEnnemi);
-		seedDescriptionEnnemi.setText(mSeed.getDescriptionDiseases());
-		TextView seedDescriptionEnnemiTitle = (TextView) v.findViewById(R.id.IdSeedDescriptionEnnemiTitle);
-		seedDescriptionEnnemiTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (seedDescriptionCulture.getVisibility() == View.VISIBLE)
+                    seedDescriptionCulture.setVisibility(View.GONE);
+                else
+                    seedDescriptionCulture.setVisibility(View.VISIBLE);
+            }
+        });
 
-			@Override
-			public void onClick(View v) {
-				if (seedDescriptionEnnemi.getVisibility() == View.VISIBLE)
-					seedDescriptionEnnemi.setVisibility(View.GONE);
-				else
-					seedDescriptionEnnemi.setVisibility(View.VISIBLE);
-			}
-		});
-		
-		final TextView seedDescriptionCultureHarvest = (TextView) v.findViewById(R.id.IdSeedDescriptionHarvest);
-		seedDescriptionCultureHarvest.setText(mSeed.getDescriptionHarvest());
-		TextView seedDescriptionHarvest = (TextView) v.findViewById(R.id.IdSeedDescriptionHarvestTitle);
-		seedDescriptionHarvest.setOnClickListener(new View.OnClickListener() {
+        final TextView seedDescriptionEnnemi = (TextView) v.findViewById(R.id.IdSeedDescriptionEnnemi);
+        seedDescriptionEnnemi.setText(mSeed.getDescriptionDiseases());
+        TextView seedDescriptionEnnemiTitle = (TextView) v.findViewById(R.id.IdSeedDescriptionEnnemiTitle);
+        seedDescriptionEnnemiTitle.setOnClickListener(new View.OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				if (seedDescriptionCultureHarvest.getVisibility() == View.VISIBLE)
-					seedDescriptionCultureHarvest.setVisibility(View.GONE);
-				else
-					seedDescriptionCultureHarvest.setVisibility(View.VISIBLE);
-			}
-		});
-		
-		return v;
-	}
-	// @Override
-	// protected void onActivityResult(int requestCode, int resultCode, Intent
-	// data) {
-	//
-	// if (requestCode == resultCameraActivity) {
-	// gallery.refreshDrawableState();
-	// gallery.invalidate();
-	// }
-	// super.onActivityResult(requestCode, resultCode, data);
-	// }
-	//
-	// @Override
-	// protected void onDestroy() {
-	// GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
-	// super.onDestroy();
-	// }
+            @Override
+            public void onClick(View v) {
+                if (seedDescriptionEnnemi.getVisibility() == View.VISIBLE)
+                    seedDescriptionEnnemi.setVisibility(View.GONE);
+                else
+                    seedDescriptionEnnemi.setVisibility(View.VISIBLE);
+            }
+        });
+
+        final TextView seedDescriptionCultureHarvest = (TextView) v.findViewById(R.id.IdSeedDescriptionHarvest);
+        seedDescriptionCultureHarvest.setText(mSeed.getDescriptionHarvest());
+        TextView seedDescriptionHarvest = (TextView) v.findViewById(R.id.IdSeedDescriptionHarvestTitle);
+        seedDescriptionHarvest.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (seedDescriptionCultureHarvest.getVisibility() == View.VISIBLE)
+                    seedDescriptionCultureHarvest.setVisibility(View.GONE);
+                else
+                    seedDescriptionCultureHarvest.setVisibility(View.VISIBLE);
+            }
+        });
+
+        return v;
+    }
+    // @Override
+    // protected void onActivityResult(int requestCode, int resultCode, Intent
+    // data) {
+    //
+    // if (requestCode == resultCameraActivity) {
+    // gallery.refreshDrawableState();
+    // gallery.invalidate();
+    // }
+    // super.onActivityResult(requestCode, resultCode, data);
+    // }
+    //
+    // @Override
+    // protected void onDestroy() {
+    // GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
+    // super.onDestroy();
+    // }
 
 }

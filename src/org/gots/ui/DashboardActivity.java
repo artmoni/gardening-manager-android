@@ -67,7 +67,7 @@ public class DashboardActivity extends SherlockActivity implements
         GardenManager gardenManager = new GardenManager(this);
         ActionBar bar = getSupportActionBar();
         if (gardenManager.getcurrentGarden() != null)
-            bar.setTitle(gardenManager.getcurrentGarden().getLocality());
+        bar.setTitle(gardenManager.getcurrentGarden().getLocality());
         else
             bar.setTitle(GotsPreferences.getInstance(this).getGardeningManagerAppname());
 
@@ -211,8 +211,7 @@ public class DashboardActivity extends SherlockActivity implements
         switch (item.getItemId()) {
 
         case R.id.help:
-            Intent browserIntent = new Intent(
-                    Intent.ACTION_VIEW,
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW,
                     Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
             startActivity(browserIntent);
 

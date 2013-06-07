@@ -1,13 +1,11 @@
 package org.gots.seed.service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.gots.R;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.providers.GotsSeedProvider;
-import org.gots.seed.providers.local.sql.VendorSeedDBHelper;
 import org.gots.seed.providers.nuxeo.NuxeoSeedProvider;
 import org.gots.seed.view.SeedWidget;
 import org.gots.ui.HutActivity;
@@ -20,129 +18,130 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.View;
 
 public class SeedUpdateService extends Service {
-	public static final String BROADCAST_ACTION = "org.gots.broadcastseed.displaylist";
-	public static final String ISNEWSEED = "org.gots.isnewseed";
+    public static final String BROADCAST_ACTION = "org.gots.broadcastseed.displaylist";
 
-	private static final int NOTIFICATION = 101;
+    public static final String ISNEWSEED = "org.gots.isnewseed";
 
-	private static Intent intent = null;
+    private static final int NOTIFICATION = 101;
 
-	private static boolean isNewSeed = false;
+    private static Intent intent = null;
 
-	NotificationManager mNM;
-	private ArrayList<BaseSeedInterface> newSeeds = new ArrayList<BaseSeedInterface>();
+    private static boolean isNewSeed = false;
 
-	private String TAG = "SeedNotificationService";
+    NotificationManager mNM;
 
-	private GotsSeedProvider mRemoteProvider;
+    private ArrayList<BaseSeedInterface> newSeeds = new ArrayList<BaseSeedInterface>();
 
-	private Handler handler = new Handler();
+    private String TAG = "SeedNotificationService";
 
-	@Override
-	public IBinder onBind(Intent arg0) {
+    private GotsSeedProvider mRemoteProvider;
 
-		return null;
-	}
+    private Handler handler = new Handler();
 
-	@Override
-	public void onCreate() {
-		mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		mRemoteProvider = new NuxeoSeedProvider(getApplicationContext());
-		intent = new Intent(BROADCAST_ACTION);
+    @Override
+    public IBinder onBind(Intent arg0) {
 
-		super.onCreate();
-	}
+        return null;
+    }
 
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
-		// List<BaseSeedInterface> newSeeds = new
-		// ArrayList<BaseSeedInterface>();
-		Log.d(TAG, "Starting service : checking seeds from web services");
+    @Override
+    public void onCreate() {
+        mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        mRemoteProvider = new NuxeoSeedProvider(getApplicationContext());
+        intent = new Intent(BROADCAST_ACTION);
 
-//		VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
-		mRemoteProvider.getVendorSeeds();
-//		for (BaseSeedInterface baseSeedInterface : mRemoteProvider.getVendorSeeds()) {
-//
-//			if (helper.getSeedByUUID(baseSeedInterface.getUUID()) != null) {
-//				helper.updateSeed(baseSeedInterface);
-//				Log.d(TAG, "updateSeed :"+baseSeedInterface);
-//			} 
-//			else {
-//				newSeeds.add(baseSeedInterface); 
-//				helper.insertSeed(baseSeedInterface);
-//				Log.d(TAG, "insertSeed :"+baseSeedInterface);
-//
-//			}
-//		}
-//		if (newSeeds.size() > 0) {
-//
-//			createNotification();
-//			isNewSeed = true;
-//		}
-		handler.removeCallbacks(sendUpdatesToUI);
-		handler.postDelayed(sendUpdatesToUI, 1000); // 1 second
+        super.onCreate();
+    }
 
-		return super.onStartCommand(intent, flags, startId);
-	}
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        // List<BaseSeedInterface> newSeeds = new
+        // ArrayList<BaseSeedInterface>();
+        Log.d(TAG, "Starting service : checking seeds from web services");
 
-	private Runnable sendUpdatesToUI = new Runnable() {
-		public void run() {
-			displaySeedsAvailable();
-			// handler.postDelayed(this, 5000); // 5 seconds
-			// stopSelf();
-		}
-	};
+        // VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
+        mRemoteProvider.getVendorSeeds();
+        // for (BaseSeedInterface baseSeedInterface : mRemoteProvider.getVendorSeeds()) {
+        //
+        // if (helper.getSeedByUUID(baseSeedInterface.getUUID()) != null) {
+        // helper.updateSeed(baseSeedInterface);
+        // Log.d(TAG, "updateSeed :"+baseSeedInterface);
+        // }
+        // else {
+        // newSeeds.add(baseSeedInterface);
+        // helper.insertSeed(baseSeedInterface);
+        // Log.d(TAG, "insertSeed :"+baseSeedInterface);
+        //
+        // }
+        // }
+        // if (newSeeds.size() > 0) {
+        //
+        // createNotification();
+        // isNewSeed = true;
+        // }
+        handler.removeCallbacks(sendUpdatesToUI);
+        handler.postDelayed(sendUpdatesToUI, 1000); // 1 second
 
-	private void displaySeedsAvailable() {
-		Log.d(TAG, "entered displaySeedsAvailable");
+        return super.onStartCommand(intent, flags, startId);
+    }
 
-		intent.putExtra(ISNEWSEED, isNewSeed);
-		// intent.putExtra("counter", String.valueOf(++counter));
-		sendBroadcast(intent);
-		stopSelf();
-	}
+    private Runnable sendUpdatesToUI = new Runnable() {
+        public void run() {
+            displaySeedsAvailable();
+            // handler.postDelayed(this, 5000); // 5 seconds
+            // stopSelf();
+        }
+    };
 
-	@Override
-	public void onDestroy() {
-		// mNM.cancel(NOTIFICATION);
-		Log.d(TAG, "Stopping service : " + newSeeds.size() + " seeds found");
-		super.onDestroy();
+    private void displaySeedsAvailable() {
+        Log.d(TAG, "entered displaySeedsAvailable");
 
-	}
+        intent.putExtra(ISNEWSEED, isNewSeed);
+        // intent.putExtra("counter", String.valueOf(++counter));
+        sendBroadcast(intent);
+        stopSelf();
+    }
 
-	private final void createNotification() {
-		// In this sample, we'll use the same text for the ticker and the
-		// expanded notification
-		String content = "";
-		String title = getText(R.string.notification_seed_title).toString();
-		// CharSequence content = SeedUtil.translateAction(this, action) + ":" +
-		// SeedUtil.translateSpecie(this, seed);
+    @Override
+    public void onDestroy() {
+        // mNM.cancel(NOTIFICATION);
+        Log.d(TAG, "Stopping service : " + newSeeds.size() + " seeds found");
+        super.onDestroy();
 
-		CharSequence specieName = SeedUtil.translateSpecie(this, newSeeds.get(0));
-		title = title.replace("_SPECIE_", specieName);
+    }
 
-		if (newSeeds.size() > 1) {
-			content = getText(R.string.notification_seed_content).toString();
-			content = content.replace("_NBSEEDS_", Integer.toString(newSeeds.size() - 1));
-		}
+    private final void createNotification() {
+        // In this sample, we'll use the same text for the ticker and the
+        // expanded notification
+        String content = "";
+        String title = getText(R.string.notification_seed_title).toString();
+        // CharSequence content = SeedUtil.translateAction(this, action) + ":" +
+        // SeedUtil.translateSpecie(this, seed);
 
-		// Set the icon, scrolling text and timestamp
-		Notification notification = new Notification(SeedWidget.getSeedDrawable(this, newSeeds.get(0)), title,
-				System.currentTimeMillis());
+        CharSequence specieName = SeedUtil.translateSpecie(this, newSeeds.get(0));
+        title = title.replace("_SPECIE_", specieName);
 
-		// The PendingIntent to launch our activity if the user selects this
-		// notification
-		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, HutActivity.class), 0);
+        if (newSeeds.size() > 1) {
+            content = getText(R.string.notification_seed_content).toString();
+            content = content.replace("_NBSEEDS_", Integer.toString(newSeeds.size() - 1));
+        }
 
-		// Set the info for the views that show in the notification panel.
-		notification.setLatestEventInfo(this, title, content, contentIntent);
-		notification.flags |= Notification.FLAG_AUTO_CANCEL;
-		// Send the notification.
-		mNM.notify(NOTIFICATION, notification);
+        // Set the icon, scrolling text and timestamp
+        Notification notification = new Notification(SeedWidget.getSeedDrawable(this, newSeeds.get(0)), title,
+                System.currentTimeMillis());
 
-	}
+        // The PendingIntent to launch our activity if the user selects this
+        // notification
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, HutActivity.class), 0);
+
+        // Set the info for the views that show in the notification panel.
+        notification.setLatestEventInfo(this, title, content, contentIntent);
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+        // Send the notification.
+        mNM.notify(NOTIFICATION, notification);
+
+    }
 
 }

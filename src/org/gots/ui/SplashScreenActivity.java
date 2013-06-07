@@ -45,198 +45,202 @@ import android.widget.TextView;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class SplashScreenActivity extends Activity {
-	private static final int STOPSPLASH = 0;
-	// private static final long SPLASHTIME = 3000;
-	private static final long SPLASHTIME = 3000;
-	private GardenInterface myGarden;
-	private Context mContext;
+    private static final int STOPSPLASH = 0;
 
-	private Handler splashHandler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
+    // private static final long SPLASHTIME = 3000;
+    private static final long SPLASHTIME = 3000;
 
-			Intent startServiceIntent = new Intent(mContext, WeatherUpdateService.class);
-			startService(startServiceIntent);
+    private GardenInterface myGarden;
 
-			Intent startServiceIntent2 = new Intent(mContext, SeedUpdateService.class);
-			startService(startServiceIntent2);
+    private Context mContext;
 
-			Intent startServiceIntent3 = new Intent(mContext, ActionNotificationService.class);
-			startService(startServiceIntent3);
-			
-			switch (msg.what) {
-			case STOPSPLASH:
-				// remove SplashScreen from view
-				Intent intent = new Intent(SplashScreenActivity.this, DashboardActivity.class);
-				startActivity(intent);
+    private Handler splashHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
 
-				finish();
-				break;
-			}
-			super.handleMessage(msg);
-		}
-	};
+            Intent startServiceIntent = new Intent(mContext, WeatherUpdateService.class);
+            startService(startServiceIntent);
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.splash_screen);
+            Intent startServiceIntent2 = new Intent(mContext, SeedUpdateService.class);
+            startService(startServiceIntent2);
 
-		mContext = this;
-		GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
-		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
+            Intent startServiceIntent3 = new Intent(mContext, ActionNotificationService.class);
+            startService(startServiceIntent3);
 
-		Message msg = new Message();
-		msg.what = STOPSPLASH;
+            switch (msg.what) {
+            case STOPSPLASH:
+                // remove SplashScreen from view
+                Intent intent = new Intent(SplashScreenActivity.this, DashboardActivity.class);
+                startActivity(intent);
 
-		PackageInfo pInfo;
-		try {
-			pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-			String version = pInfo.versionName;
-			TextView name = (TextView) findViewById(R.id.textVersion);
-			name.setText("version " + version);
-		} catch (NameNotFoundException e) {
-			e.printStackTrace();
-		}
+                finish();
+                break;
+            }
+            super.handleMessage(msg);
+        }
+    };
 
-		LinearLayout artmoni = (LinearLayout) findViewById(R.id.webArtmoni);
-		artmoni.setOnClickListener(new LinearLayout.OnClickListener() {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.splash_screen);
 
-			@Override
-			public void onClick(View v) {
-				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.artmoni.eu"));
-				startActivity(browserIntent);
+        mContext = this;
+        GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
+        GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
-			}
-		});
+        Message msg = new Message();
+        msg.what = STOPSPLASH;
 
-		LinearLayout sauterdanslesflaques = (LinearLayout) findViewById(R.id.webSauterDansLesFlaques);
-		sauterdanslesflaques.setOnClickListener(new LinearLayout.OnClickListener() {
+        PackageInfo pInfo;
+        try {
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            String version = pInfo.versionName;
+            TextView name = (TextView) findViewById(R.id.textVersion);
+            name.setText("version " + version);
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
-			@Override
-			public void onClick(View v) {
-				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.sauterdanslesflaques.com"));
-				startActivity(browserIntent);
+        LinearLayout artmoni = (LinearLayout) findViewById(R.id.webArtmoni);
+        artmoni.setOnClickListener(new LinearLayout.OnClickListener() {
 
-			}
-		});
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.artmoni.eu"));
+                startActivity(browserIntent);
 
-		ImageView socialGoogle = (ImageView) findViewById(R.id.idSocialGoogle);
-		socialGoogle.setOnClickListener(new LinearLayout.OnClickListener() {
+            }
+        });
 
-			@Override
-			public void onClick(View v) {
-				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri
-						.parse("https://plus.google.com/u/0/b/108868805153744305734/communities/105269291264998461912"));
-				startActivity(browserIntent);
+        LinearLayout sauterdanslesflaques = (LinearLayout) findViewById(R.id.webSauterDansLesFlaques);
+        sauterdanslesflaques.setOnClickListener(new LinearLayout.OnClickListener() {
 
-			}
-		});
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.sauterdanslesflaques.com"));
+                startActivity(browserIntent);
 
-		ImageView socialFacebook = (ImageView) findViewById(R.id.idSocialFacebook);
-		socialFacebook.setOnClickListener(new LinearLayout.OnClickListener() {
+            }
+        });
 
-			@Override
-			public void onClick(View v) {
-				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri
-						.parse("http://www.facebook.com/pages/Gardening-Manager/120589404779871"));
-				startActivity(browserIntent);
+        ImageView socialGoogle = (ImageView) findViewById(R.id.idSocialGoogle);
+        socialGoogle.setOnClickListener(new LinearLayout.OnClickListener() {
 
-			}
-		});
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://plus.google.com/u/0/b/108868805153744305734/communities/105269291264998461912"));
+                startActivity(browserIntent);
 
-		// ImageView previmeteo = (ImageView) findViewById(R.id.idPrevimeteo);
-		// previmeteo.setOnClickListener(new LinearLayout.OnClickListener() {
-		//
-		// @Override
-		// public void onClick(View v) {
-		// Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-		// Uri.parse("http://www.previmeteo.com/"));
-		// startActivity(browserIntent);
-		//
-		// }
-		// });
-		// Intent startServiceIntent = new Intent(this,
-		// NotificationService.class);
-		// this.startService(startServiceIntent);
-		setRecurringAlarm(this);
+            }
+        });
 
-		GardenManager gardenManager = new GardenManager(this);
-		myGarden = gardenManager.getcurrentGarden();
+        ImageView socialFacebook = (ImageView) findViewById(R.id.idSocialFacebook);
+        socialFacebook.setOnClickListener(new LinearLayout.OnClickListener() {
 
-		if (myGarden == null) {
-			Intent intent = new Intent(this, ProfileCreationActivity.class);
-			startActivityForResult(intent, 0);
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("http://www.facebook.com/pages/Gardening-Manager/120589404779871"));
+                startActivity(browserIntent);
 
-		} else {
-			if (GotsPreferences.isDevelopment())
-				splashHandler.sendMessageDelayed(msg, 0);
-			else
-				splashHandler.sendMessageDelayed(msg, SPLASHTIME);
+            }
+        });
 
-		}
+        // ImageView previmeteo = (ImageView) findViewById(R.id.idPrevimeteo);
+        // previmeteo.setOnClickListener(new LinearLayout.OnClickListener() {
+        //
+        // @Override
+        // public void onClick(View v) {
+        // Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+        // Uri.parse("http://www.previmeteo.com/"));
+        // startActivity(browserIntent);
+        //
+        // }
+        // });
+        // Intent startServiceIntent = new Intent(this,
+        // NotificationService.class);
+        // this.startService(startServiceIntent);
+        setRecurringAlarm(this);
 
-	}
+        GardenManager gardenManager = new GardenManager(this);
+        myGarden = gardenManager.getcurrentGarden();
 
-	@Override
-	protected void onResume() {
-		// Message msg = new Message();
-		// msg.what = STOPSPLASH;
-		// splashHandler.sendMessageDelayed(msg, SPLASHTIME);
+        if (myGarden == null) {
+            Intent intent = new Intent(this, ProfileCreationActivity.class);
+            startActivityForResult(intent, 0);
 
-		// Intent intent = new Intent(SplashScreenActivity.this,
-		// DashboardActivity.class);
-		// startActivity(intent);
+        } else {
+            if (GotsPreferences.isDevelopment())
+                splashHandler.sendMessageDelayed(msg, 0);
+            else
+                splashHandler.sendMessageDelayed(msg, SPLASHTIME);
 
-		super.onResume();
-	}
+        }
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    }
 
-		GardenDBHelper helper = new GardenDBHelper(this);
-		SharedPreferences preferences = getSharedPreferences("org.gots.preference", 0);
-		myGarden = helper.getGarden(preferences.getInt("org.gots.preference.gardenid", 0));
-		if (myGarden != null) {
-			Message msg = new Message();
-			msg.what = STOPSPLASH;
-			splashHandler.sendMessageDelayed(msg, SPLASHTIME);
+    @Override
+    protected void onResume() {
+        // Message msg = new Message();
+        // msg.what = STOPSPLASH;
+        // splashHandler.sendMessageDelayed(msg, SPLASHTIME);
 
-		} else
-			finish();
+        // Intent intent = new Intent(SplashScreenActivity.this,
+        // DashboardActivity.class);
+        // startActivity(intent);
 
-		super.onActivityResult(requestCode, resultCode, data);
-	}
+        super.onResume();
+    }
 
-	@Override
-	protected void onDestroy() {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-		GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
-		super.onDestroy();
-	}
+        GardenDBHelper helper = new GardenDBHelper(this);
+        SharedPreferences preferences = getSharedPreferences("org.gots.preference", 0);
+        myGarden = helper.getGarden(preferences.getInt("org.gots.preference.gardenid", 0));
+        if (myGarden != null) {
+            Message msg = new Message();
+            msg.what = STOPSPLASH;
+            splashHandler.sendMessageDelayed(msg, SPLASHTIME);
 
-	private void setRecurringAlarm(Context context) {
-		// we know mobiletuts updates at right around 1130 GMT.
-		// let's grab new stuff at around 11:45 GMT, inexactly
-		Calendar updateTime = Calendar.getInstance();
-		// updateTime.setTimeInMillis(System.currentTimeMillis());
-		// updateTime.add(Calendar.SECOND, 10);
-		// updateTime.setTimeZone(TimeZone.getTimeZone("GMT"));
-		// updateTime.set(Calendar.HOUR_OF_DAY, 12);
-		// updateTime.set(Calendar.MINUTE, 15);
-		Intent downloader = new Intent(context, ActionTODOBroadcastReceiver.class);
-		PendingIntent actionTODOIntent = PendingIntent.getBroadcast(context, 0, downloader,
-				PendingIntent.FLAG_UPDATE_CURRENT);
-		AlarmManager alarms = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        } else
+            finish();
 
-		if (GotsPreferences.isDevelopment())
-			alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
-					AlarmManager.INTERVAL_FIFTEEN_MINUTES, actionTODOIntent);
-		else {
-			updateTime.set(Calendar.HOUR_OF_DAY, 20);
-			alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
-					AlarmManager.INTERVAL_DAY, actionTODOIntent);
-		}
-	}
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
+        super.onDestroy();
+    }
+
+    private void setRecurringAlarm(Context context) {
+        // we know mobiletuts updates at right around 1130 GMT.
+        // let's grab new stuff at around 11:45 GMT, inexactly
+        Calendar updateTime = Calendar.getInstance();
+        // updateTime.setTimeInMillis(System.currentTimeMillis());
+        // updateTime.add(Calendar.SECOND, 10);
+        // updateTime.setTimeZone(TimeZone.getTimeZone("GMT"));
+        // updateTime.set(Calendar.HOUR_OF_DAY, 12);
+        // updateTime.set(Calendar.MINUTE, 15);
+        Intent downloader = new Intent(context, ActionTODOBroadcastReceiver.class);
+        PendingIntent actionTODOIntent = PendingIntent.getBroadcast(context, 0, downloader,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarms = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        if (GotsPreferences.isDevelopment())
+            alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
+                    AlarmManager.INTERVAL_FIFTEEN_MINUTES, actionTODOIntent);
+        else {
+            updateTime.set(Calendar.HOUR_OF_DAY, 20);
+            alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
+                    AlarmManager.INTERVAL_DAY, actionTODOIntent);
+        }
+    }
 
 }

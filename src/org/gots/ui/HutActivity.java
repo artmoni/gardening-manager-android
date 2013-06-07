@@ -47,236 +47,246 @@ import com.google.zxing.integration.android.IntentResult;
 
 public class HutActivity extends SherlockFragmentActivity implements ActionBar.TabListener {
 
-	// private ListVendorSeedAdapter lvsea;
-	ListView listSeeds;
-	ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
-	// TabHost tabHost;
-	private Context mContext;
-	private ListView listView;
-	private ViewPager mViewPager;
-	private int currentAllotment = -1;
-	private TabsAdapter mTabsAdapter;
+    // private ListVendorSeedAdapter lvsea;
+    ListView listSeeds;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
 
-		GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
-		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
+    // TabHost tabHost;
+    private Context mContext;
 
-		if (getIntent().getExtras() != null)
-			currentAllotment = getIntent().getExtras().getInt("org.gots.allotment.reference");
+    private ListView listView;
 
-		// GardenManager gm =GardenManager.getInstance();
-		mContext = this;
-		setContentView(R.layout.hut);
-		
-		if (!GotsPreferences.getInstance(this).isPremium()) {
-			GotsAdvertisement ads = new GotsAdvertisement(this);
+    private ViewPager mViewPager;
 
-			LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
-			layout.addView(ads.getAdsLayout());
-		}
+    private int currentAllotment = -1;
 
-	}
+    private TabsAdapter mTabsAdapter;
 
-	private void buildMyTabHost() {
-		ActionBar bar = getSupportActionBar();
-		bar.setDisplayHomeAsUpEnabled(true);
-		bar.setTitle(R.string.dashboard_hut_name);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
+        GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
-		// tabHost = getTabHost(); // The activity TabHost
+        if (getIntent().getExtras() != null)
+            currentAllotment = getIntent().getExtras().getInt("org.gots.allotment.reference");
 
-		mViewPager = (ViewPager) findViewById(R.id.pager);
-		mTabsAdapter = new TabsAdapter(this, mViewPager);
-		bar.removeAllTabs();
-		// // ********************** Tab description **********************
-		mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds)),
-				VendorListActivity.class, null);
+        // GardenManager gm =GardenManager.getInstance();
+        mContext = this;
+        setContentView(R.layout.hut);
 
-		mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
-				MySeedsListActivity.class, null);
-		// an allotment is selected
-		if (currentAllotment >= 0)
-			bar.setSelectedNavigationItem(1);
-	}
+        if (!GotsPreferences.getInstance(this).isPremium()) {
+            GotsAdvertisement ads = new GotsAdvertisement(this);
 
-	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-		IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-		if (scanResult != null && scanResult.getContents() != "") {
-			Log.i("Scan result", scanResult.toString());
-			VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
-			BaseSeedInterface scanSeed = helper.getSeedByBarCode(scanResult.getContents());
-			if (scanSeed != null) {
-				scanSeed.setNbSachet(scanSeed.getNbSachet() + 1);
-				helper.updateSeed(scanSeed);
-			}
-		}
-		buildMyTabHost();
+            LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
+            layout.addView(ads.getAdsLayout());
+        }
 
-	}
+    }
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		buildMyTabHost();
+    private void buildMyTabHost() {
+        ActionBar bar = getSupportActionBar();
+        bar.setDisplayHomeAsUpEnabled(true);
+        bar.setTitle(R.string.dashboard_hut_name);
 
-	}
+        bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-	@Override
-	protected void onDestroy() {
-		GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
-		super.onDestroy();
-	}
+        // tabHost = getTabHost(); // The activity TabHost
 
-	@Override
-	public void onTabSelected(Tab tab, FragmentTransaction ft) {
-		// mViewPager.getAdapter().notifyDataSetChanged();
-	}
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mTabsAdapter = new TabsAdapter(this, mViewPager);
+        bar.removeAllTabs();
+        // // ********************** Tab description **********************
+        mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds)),
+                VendorListActivity.class, null);
 
-	@Override
-	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-		// TODO Auto-generated method stub
+        mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
+                MySeedsListActivity.class, null);
+        // an allotment is selected
+        if (currentAllotment >= 0)
+            bar.setSelectedNavigationItem(1);
+    }
 
-	}
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        if (scanResult != null && scanResult.getContents() != "") {
+            Log.i("Scan result", scanResult.toString());
+            VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
+            BaseSeedInterface scanSeed = helper.getSeedByBarCode(scanResult.getContents());
+            if (scanSeed != null) {
+                scanSeed.setNbSachet(scanSeed.getNbSachet() + 1);
+                helper.updateSeed(scanSeed);
+            }
+        }
+        buildMyTabHost();
 
-	@Override
-	public void onTabReselected(Tab tab, FragmentTransaction ft) {
-		// TODO Auto-generated method stub
+    }
 
-	}
+    @Override
+    protected void onResume() {
+        super.onResume();
+        buildMyTabHost();
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getSupportMenuInflater();
-		inflater.inflate(R.menu.menu_hut, menu);
-		return true;
-	}
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle item selection
-		Intent i;
-		switch (item.getItemId()) {
-		case R.id.new_seed:
-			i = new Intent(this, NewSeedActivity.class);
-			startActivity(i);
-			return true;
+    @Override
+    protected void onDestroy() {
+        GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
+        super.onDestroy();
+    }
 
-		case R.id.new_seed_barcode:
-			IntentIntegrator integrator = new IntentIntegrator(this);
-			integrator.initiateScan();
-			return true;
-		case android.R.id.home:
-			finish();
-			return true;
+    @Override
+    public void onTabSelected(Tab tab, FragmentTransaction ft) {
+        // mViewPager.getAdapter().notifyDataSetChanged();
+    }
 
-		case R.id.help:
-			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HelpUriBuilder.getUri(getClass()
-					.getSimpleName())));
-			startActivity(browserIntent);
+    @Override
+    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+        // TODO Auto-generated method stub
 
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
+    }
 
-	static final class TabInfo {
-		private final Class<?> clss;
-		private final Bundle args;
+    @Override
+    public void onTabReselected(Tab tab, FragmentTransaction ft) {
+        // TODO Auto-generated method stub
 
-		TabInfo(Class<?> _class, Bundle _args) {
-			clss = _class;
-			args = _args;
-		}
-	}
+    }
 
-	/**
-	 * This is a helper class that implements the management of tabs and all
-	 * details of connecting a ViewPager with associated TabHost. It relies on a
-	 * trick. Normally a tab host has a simple API for supplying a View or
-	 * Intent that each tab will show. This is not sufficient for switching
-	 * between pages. So instead we make the content part of the tab host 0dp
-	 * high (it is not shown) and the TabsAdapter supplies its own dummy view to
-	 * show as the tab content. It listens to changes in tabs, and takes care of
-	 * switch to the correct paged in the ViewPager whenever the selected tab
-	 * changes.
-	 */
-	public class TabsAdapter extends FragmentPagerAdapter implements ActionBar.TabListener,
-			ViewPager.OnPageChangeListener {
-		private final Context mContext;
-		private final ActionBar mActionBar;
-		private final ViewPager mViewPager;
-		private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getSupportMenuInflater();
+        inflater.inflate(R.menu.menu_hut, menu);
+        return true;
+    }
 
-		public TabsAdapter(SherlockFragmentActivity activity, ViewPager pager) {
-			super(activity.getSupportFragmentManager());
-			mContext = activity;
-			mActionBar = activity.getSupportActionBar();
-			mViewPager = pager;
-			mViewPager.setAdapter(this);
-			mViewPager.setOnPageChangeListener(this);
-		}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        Intent i;
+        switch (item.getItemId()) {
+        case R.id.new_seed:
+            i = new Intent(this, NewSeedActivity.class);
+            startActivity(i);
+            return true;
 
-		public void addTab(ActionBar.Tab tab, Class<?> clss, Bundle args) {
-			TabInfo info = new TabInfo(clss, args);
-			tab.setTag(info);
-			tab.setTabListener(this);
-			mTabs.add(info);
-			mActionBar.addTab(tab);
-			notifyDataSetChanged();
-		}
+        case R.id.new_seed_barcode:
+            IntentIntegrator integrator = new IntentIntegrator(this);
+            integrator.initiateScan();
+            return true;
+        case android.R.id.home:
+            finish();
+            return true;
 
-		@Override
-		public int getCount() {
-			return mTabs.size();
-		}
+        case R.id.help:
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
+            startActivity(browserIntent);
 
-		@Override
-		public Fragment getItem(int position) {
-			TabInfo info = mTabs.get(position);
-			Bundle bundle = new Bundle();
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
 
-			Fragment fragment = Fragment.instantiate(mContext, info.clss.getName(), info.args);
-			fragment.setArguments(bundle);
+    static final class TabInfo {
+        private final Class<?> clss;
 
-			return fragment;
-		}
+        private final Bundle args;
 
-		public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-		}
+        TabInfo(Class<?> _class, Bundle _args) {
+            clss = _class;
+            args = _args;
+        }
+    }
 
-		public void onPageSelected(int position) {
-			mActionBar.setSelectedNavigationItem(position);
+    /**
+     * This is a helper class that implements the management of tabs and all
+     * details of connecting a ViewPager with associated TabHost. It relies on a
+     * trick. Normally a tab host has a simple API for supplying a View or
+     * Intent that each tab will show. This is not sufficient for switching
+     * between pages. So instead we make the content part of the tab host 0dp
+     * high (it is not shown) and the TabsAdapter supplies its own dummy view to
+     * show as the tab content. It listens to changes in tabs, and takes care of
+     * switch to the correct paged in the ViewPager whenever the selected tab
+     * changes.
+     */
+    public class TabsAdapter extends FragmentPagerAdapter implements ActionBar.TabListener,
+            ViewPager.OnPageChangeListener {
+        private final Context mContext;
 
-			SherlockListFragment fragment = (SherlockListFragment) getSupportFragmentManager().findFragmentByTag(
-					"android:switcher:" + R.id.pager + ":" + position);
-			if (fragment != null && fragment.getListAdapter() != null)
-				((BaseAdapter) fragment.getListAdapter()).notifyDataSetChanged();
+        private final ActionBar mActionBar;
 
-		}
+        private final ViewPager mViewPager;
 
-		public void onPageScrollStateChanged(int state) {
-		}
+        private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
 
-		public void onTabSelected(Tab tab, FragmentTransaction ft) {
-			Object tag = tab.getTag();
-			for (int i = 0; i < mTabs.size(); i++) {
-				if (mTabs.get(i) == tag) {
-					mViewPager.setCurrentItem(i);
+        public TabsAdapter(SherlockFragmentActivity activity, ViewPager pager) {
+            super(activity.getSupportFragmentManager());
+            mContext = activity;
+            mActionBar = activity.getSupportActionBar();
+            mViewPager = pager;
+            mViewPager.setAdapter(this);
+            mViewPager.setOnPageChangeListener(this);
+        }
 
-				}
-			}
-		}
+        public void addTab(ActionBar.Tab tab, Class<?> clss, Bundle args) {
+            TabInfo info = new TabInfo(clss, args);
+            tab.setTag(info);
+            tab.setTabListener(this);
+            mTabs.add(info);
+            mActionBar.addTab(tab);
+            notifyDataSetChanged();
+        }
 
-		public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-		}
+        @Override
+        public int getCount() {
+            return mTabs.size();
+        }
 
-		public void onTabReselected(Tab tab, FragmentTransaction ft) {
-		}
+        @Override
+        public Fragment getItem(int position) {
+            TabInfo info = mTabs.get(position);
+            Bundle bundle = new Bundle();
 
-	}
+            Fragment fragment = Fragment.instantiate(mContext, info.clss.getName(), info.args);
+            fragment.setArguments(bundle);
+
+            return fragment;
+        }
+
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        }
+
+        public void onPageSelected(int position) {
+            mActionBar.setSelectedNavigationItem(position);
+
+            SherlockListFragment fragment = (SherlockListFragment) getSupportFragmentManager().findFragmentByTag(
+                    "android:switcher:" + R.id.pager + ":" + position);
+            if (fragment != null && fragment.getListAdapter() != null)
+                ((BaseAdapter) fragment.getListAdapter()).notifyDataSetChanged();
+
+        }
+
+        public void onPageScrollStateChanged(int state) {
+        }
+
+        public void onTabSelected(Tab tab, FragmentTransaction ft) {
+            Object tag = tab.getTag();
+            for (int i = 0; i < mTabs.size(); i++) {
+                if (mTabs.get(i) == tag) {
+                    mViewPager.setCurrentItem(i);
+
+                }
+            }
+        }
+
+        public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+        }
+
+        public void onTabReselected(Tab tab, FragmentTransaction ft) {
+        }
+
+    }
 }

@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ *
  * Contributors:
  *     sfleury - initial API and implementation
  ******************************************************************************/
@@ -30,7 +30,6 @@ import org.gots.bean.Garden;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GardenManager;
 import org.gots.help.HelpUriBuilder;
-import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.providers.local.sql.VendorSeedDBHelper;
 
@@ -50,23 +49,17 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class ProfileCreationActivity extends SherlockActivity implements
-        LocationListener, OnClickListener {
+public class ProfileCreationActivity extends AbstractActivity implements LocationListener, OnClickListener {
     public static final int OPTION_EDIT = 1;
-
-    private static final String TAG = "ProfileCreationActivity";
 
     private LocationManager mlocManager;
 
@@ -135,7 +128,7 @@ public class ProfileCreationActivity extends SherlockActivity implements
                     public void onClick(View v) {
                         if ("".equals(((TextView) findViewById(R.id.editTextLocality)).getText()))
                             ((TextView) findViewById(R.id.editTextLocality)).setText(((TextView) findViewById(R.id.editTextLocality)).getHint());
-                    }
+    }
                 });
     };
 
@@ -165,9 +158,9 @@ public class ProfileCreationActivity extends SherlockActivity implements
             mlocManager.requestLocationUpdates(
                     LocationManager.NETWORK_PROVIDER, 60000, 0, this);
 
-            String bestProvider = mlocManager.getBestProvider(criteria, true);
-            if ("gps".equals(bestProvider))
-                mlocManager.requestLocationUpdates(bestProvider, 60000, 0, this);
+        String bestProvider = mlocManager.getBestProvider(criteria, true);
+        if ("gps".equals(bestProvider))
+            mlocManager.requestLocationUpdates(bestProvider, 60000, 0, this);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
@@ -313,8 +306,7 @@ public class ProfileCreationActivity extends SherlockActivity implements
         // Handle item selection
         switch (item.getItemId()) {
         case R.id.help:
-            Intent browserIntent = new Intent(
-                    Intent.ACTION_VIEW,
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW,
                     Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
             startActivity(browserIntent);
 

@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ *
  * Contributors:
  *     sfleury - initial API and implementation
  ******************************************************************************/
@@ -97,7 +97,7 @@ public class ProfileActivity extends SherlockActivity {
             profileAdapter = new ProfileAdapter(ProfileActivity.this, myGardens);
             profileList.setAdapter(profileAdapter);
             if (dialog.isShowing())
-                dialog.dismiss();
+            dialog.dismiss();
             super.onPostExecute(result);
         }
 
@@ -110,7 +110,7 @@ public class ProfileActivity extends SherlockActivity {
         try {
             GardenSync gardenSync = new GardenSync();
             gardenSync.execute(this);
-           
+
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
@@ -153,8 +153,7 @@ public class ProfileActivity extends SherlockActivity {
             return true;
 
         case R.id.help:
-            Intent browserIntent = new Intent(
-                    Intent.ACTION_VIEW,
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW,
                     Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
             startActivity(browserIntent);
             return true;

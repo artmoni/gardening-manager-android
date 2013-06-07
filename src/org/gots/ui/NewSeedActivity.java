@@ -53,8 +53,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-public class NewSeedActivity extends SherlockActivity implements
-        OnClickListener {
+public class NewSeedActivity extends SherlockActivity implements OnClickListener {
     private static final String SELECTED_SPECIE = "selectedSpecie";
 
     private View currentView;
@@ -93,8 +92,7 @@ public class NewSeedActivity extends SherlockActivity implements
 
         if (getIntent().getIntExtra("org.gots.seedid", -1) != -1) {
             VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
-            newSeed = helper.getSeedById(getIntent().getIntExtra(
-                    "org.gots.seedid", -1));
+            newSeed = helper.getSeedById(getIntent().getIntExtra("org.gots.seedid", -1));
             isNewSeed = false;
 
         } else {
@@ -107,8 +105,7 @@ public class NewSeedActivity extends SherlockActivity implements
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (gallerySpecies != null)
-            outState.putInt(SELECTED_SPECIE,
-                    gallerySpecies.getSelectedItemPosition());
+            outState.putInt(SELECTED_SPECIE, gallerySpecies.getSelectedItemPosition());
     }
 
     private void initview() {
@@ -127,24 +124,20 @@ public class NewSeedActivity extends SherlockActivity implements
             @Override
             public void onClick(View v) {
                 if (planningSow.getSelectedMonth().size() > 0) {
-                    newSeed.setDateSowingMin(planningSow.getSelectedMonth().get(
-                            0));
+                    newSeed.setDateSowingMin(planningSow.getSelectedMonth().get(0));
                     newSeed.setDateSowingMax(planningSow.getSelectedMonth().get(
                             planningSow.getSelectedMonth().size() - 1));
 
                     ArrayList<Integer> harvestMonth = planningHarvest.getSelectedMonth();
                     if (harvestMonth.size() == 0) {
-                        Toast.makeText(getApplicationContext(),
-                                "Please select month to harvest", 3000).show();
+                        Toast.makeText(getApplicationContext(), "Please select month to harvest", 3000).show();
                         return;
                     }
 
-                    int durationmin = harvestMonth.get(0)
-                            - newSeed.getDateSowingMin();
+                    int durationmin = harvestMonth.get(0) - newSeed.getDateSowingMin();
                     newSeed.setDurationMin(durationmin * 30);
 
-                    int durationmax = harvestMonth.get(harvestMonth.size() - 1)
-                            - newSeed.getDateSowingMax();
+                    int durationmax = harvestMonth.get(harvestMonth.size() - 1) - newSeed.getDateSowingMax();
                     newSeed.setDurationMax(durationmax * 30);
 
                     seedWidgetLong.setSeed(newSeed);
@@ -244,19 +237,15 @@ public class NewSeedActivity extends SherlockActivity implements
 
     private boolean validateSeed() {
         if (newSeed.getFamily() == null || "".equals(newSeed.getFamily())) {
-            Toast.makeText(this,
-                    getResources().getString(R.string.fillfields_specie), 3000).show();
+            Toast.makeText(this, getResources().getString(R.string.fillfields_specie), 3000).show();
             return false;
         }
         if (newSeed.getVariety() == null || "".equals(newSeed.getVariety())) {
-            Toast.makeText(this,
-                    getResources().getString(R.string.fillfields_variety), 3000).show();
+            Toast.makeText(this, getResources().getString(R.string.fillfields_variety), 3000).show();
             return false;
         }
-        if (newSeed.getDateSowingMin() == -1
-                || newSeed.getDateSowingMax() == -1) {
-            Toast.makeText(this,
-                    getResources().getString(R.string.fillfields_dates), 3000).show();
+        if (newSeed.getDateSowingMin() == -1 || newSeed.getDateSowingMax() == -1) {
+            Toast.makeText(this, getResources().getString(R.string.fillfields_dates), 3000).show();
             return false;
         }
         return true;
@@ -281,15 +270,13 @@ public class NewSeedActivity extends SherlockActivity implements
         final VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
         String[] specieList = helper.getArraySpecie();
 
-        ListSpeciesAdapter listSpeciesAdapter = new ListSpeciesAdapter(this,
-                specieList, newSeed);
+        ListSpeciesAdapter listSpeciesAdapter = new ListSpeciesAdapter(this, specieList, newSeed);
 
         gallerySpecies.setAdapter(listSpeciesAdapter);
         gallerySpecies.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                    int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 gallerySpecies.dispatchSetSelected(false);
                 if (((String) view.getTag()).equals(newSeed.getSpecie())) {
                     // clicked already selected item
@@ -303,8 +290,7 @@ public class NewSeedActivity extends SherlockActivity implements
                     }
                 }
                 view.setSelected(true);
-                view.setBackgroundDrawable(getResources().getDrawable(
-                        R.drawable.bg_state_warning));
+                view.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_warning));
                 newSeed.setSpecie((String) view.getTag());
                 String family = helper.getFamilyBySpecie(newSeed.getSpecie());
                 newSeed.setFamily(family);
@@ -333,8 +319,7 @@ public class NewSeedActivity extends SherlockActivity implements
         autoCompleteVariety.addTextChangedListener(new TextWatcher() {
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before,
-                    int count) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String variety = autoCompleteVariety.getText().toString();
                 newSeed.setVariety(variety);
                 seedWidgetLong.setSeed(newSeed);
@@ -342,8 +327,7 @@ public class NewSeedActivity extends SherlockActivity implements
             }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                    int after) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 // TODO Auto-generated method stub
 
             }
@@ -356,8 +340,7 @@ public class NewSeedActivity extends SherlockActivity implements
         autoCompleteVariety.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-                    long arg3) {
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 String variety = adapter.getItem(arg2);
                 newSeed.setVariety(variety);
                 seedWidgetLong.setSeed(newSeed);
@@ -375,8 +358,7 @@ public class NewSeedActivity extends SherlockActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult scanResult = IntentIntegrator.parseActivityResult(
-                requestCode, resultCode, data);
+        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (scanResult != null && scanResult.getContents() != "") {
             Log.i("Scan result", scanResult.toString());
             textViewBarCode.setText(scanResult.getContents());
@@ -403,8 +385,7 @@ public class NewSeedActivity extends SherlockActivity implements
             return true;
 
         case R.id.help:
-            Intent browserIntent = new Intent(
-                    Intent.ACTION_VIEW,
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW,
                     Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
             startActivity(browserIntent);
 

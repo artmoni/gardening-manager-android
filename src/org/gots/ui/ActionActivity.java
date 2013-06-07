@@ -35,98 +35,100 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class ActionActivity extends SherlockActivity implements OnClickListener {
 
-	private ListAllActionAdapter listActions;
-	ListView listAllotments;
-	ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
+    private ListAllActionAdapter listActions;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    ListView listAllotments;
 
-		ActionBar bar = getSupportActionBar();
-		bar.setDisplayHomeAsUpEnabled(true);
-		bar.setTitle(R.string.dashboard_actions_name);
-		GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
-		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
+    ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
 
-		setContentView(R.layout.actions);
-		int seedid = 0;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		GrowingSeedDBHelper helper = new GrowingSeedDBHelper(this);
+        ActionBar bar = getSupportActionBar();
+        bar.setDisplayHomeAsUpEnabled(true);
+        bar.setTitle(R.string.dashboard_actions_name);
+        GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
+        GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
-		if (getIntent().getExtras() != null)
-			seedid = getIntent().getExtras().getInt("org.gots.seed.id");
+        setContentView(R.layout.actions);
+        int seedid = 0;
 
-		if (seedid > 0) {
-			allSeeds.add(helper.getSeedById(seedid));
-		} else
-			allSeeds = helper.getGrowingSeeds();
-		listActions = new ListAllActionAdapter(this, allSeeds, ListAllActionAdapter.STATUS_TODO);
-		listAllotments = (ListView) findViewById(R.id.IdGardenActionsList);
-		listAllotments.setAdapter(listActions);
-		listAllotments.setDivider(null);
-		listAllotments.setDividerHeight(0);
+        GrowingSeedDBHelper helper = new GrowingSeedDBHelper(this);
 
-	}
+        if (getIntent().getExtras() != null)
+            seedid = getIntent().getExtras().getInt("org.gots.seed.id");
 
-	@Override
-	protected void onPause() {
-		// TODO Auto-generated method stub
-		super.onPause();
-		// GardenFactory gf = new GardenFactory(this);
-		// gf.saveGarden(DashboardActivity.myGarden);
-	}
+        if (seedid > 0) {
+            allSeeds.add(helper.getSeedById(seedid));
+        } else
+            allSeeds = helper.getGrowingSeeds();
+        listActions = new ListAllActionAdapter(this, allSeeds, ListAllActionAdapter.STATUS_TODO);
+        listAllotments = (ListView) findViewById(R.id.IdGardenActionsList);
+        listAllotments.setAdapter(listActions);
+        listAllotments.setDivider(null);
+        listAllotments.setDividerHeight(0);
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getSupportMenuInflater();
-		inflater.inflate(R.menu.menu_action, menu);
-		return true;
-	}
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle item selection
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			finish();
-			return true;
-		case R.id.help:
-			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HelpUriBuilder.getUri(getClass()
-					.getSimpleName())));
-			startActivity(browserIntent);
+    @Override
+    protected void onPause() {
+        // TODO Auto-generated method stub
+        super.onPause();
+        // GardenFactory gf = new GardenFactory(this);
+        // gf.saveGarden(DashboardActivity.myGarden);
+    }
 
-			// Intent i = new Intent(this, WebHelpActivity.class);
-			// i.putExtra("org.gots.help.page", getClass().getSimpleName());
-			// startActivity(i);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getSupportMenuInflater();
+        inflater.inflate(R.menu.menu_action, menu);
+        return true;
+    }
 
-			return true;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+        case android.R.id.home:
+            finish();
+            return true;
+        case R.id.help:
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
+            startActivity(browserIntent);
 
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
+            // Intent i = new Intent(this, WebHelpActivity.class);
+            // i.putExtra("org.gots.help.page", getClass().getSimpleName());
+            // startActivity(i);
 
-	@Override
-	protected void onResume() {
-		listActions.notifyDataSetChanged();
-		super.onResume();
-	}
+            return true;
 
-	@Override
-	public void onClick(View v) {
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
 
-	}
+    @Override
+    protected void onResume() {
+        listActions.notifyDataSetChanged();
+        super.onResume();
+    }
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		listActions.notifyDataSetChanged();
-		super.onActivityResult(requestCode, resultCode, data);
-	}
+    @Override
+    public void onClick(View v) {
 
-	@Override
-	protected void onDestroy() {
-		GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
-		super.onDestroy();
-	}
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        listActions.notifyDataSetChanged();
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onDestroy() {
+        GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
+        super.onDestroy();
+    }
 }

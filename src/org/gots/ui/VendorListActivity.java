@@ -38,86 +38,89 @@ import com.actionbarsherlock.view.MenuItem;
 
 public class VendorListActivity extends SherlockListFragment {
 
-	public Context mContext;
-	// GardenManager manager;
-	private GotsSeedProvider seedProvider;
-	private ListVendorSeedAdapter listVendorSeedAdapter;
-	private Intent seedIntent;
+    public Context mContext;
 
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		mContext = getActivity();
+    // GardenManager manager;
+    private GotsSeedProvider seedProvider;
 
-		seedProvider = new GotsSeedManager(mContext, new LocalSeedProvider(mContext));
-		seedIntent = new Intent(mContext, SeedUpdateService.class);
+    private ListVendorSeedAdapter listVendorSeedAdapter;
 
-	}
+    private Intent seedIntent;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		setHasOptionsMenu(true);
-		return super.onCreateView(inflater, container, savedInstanceState);
-	}
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mContext = getActivity();
 
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.menu_catalogue, menu);
-	}
+        seedProvider = new GotsSeedManager(mContext, new LocalSeedProvider(mContext));
+        seedIntent = new Intent(mContext, SeedUpdateService.class);
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle item selection
-		Intent i;
-		switch (item.getItemId()) {
+    }
 
-		case R.id.refresh_seed:
-			mContext.startService(seedIntent);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
 
-			return true;
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_catalogue, menu);
+    }
 
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        Intent i;
+        switch (item.getItemId()) {
 
-	private BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			updateUI(intent);
-		}
-	};
+        case R.id.refresh_seed:
+            mContext.startService(seedIntent);
 
-	@Override
-	public void onResume() {
+            return true;
 
-		List<BaseSeedInterface> vendorSeeds = seedProvider.getVendorSeeds();
-		listVendorSeedAdapter = new ListVendorSeedAdapter(mContext, vendorSeeds);
-		if (vendorSeeds.size() < 1)
-			mContext.startService(seedIntent);
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
 
-		setListAdapter(listVendorSeedAdapter);
-		mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(SeedUpdateService.BROADCAST_ACTION));
-		super.onResume();
-	}
+    private BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateUI(intent);
+        }
+    };
 
-	@Override
-	public void onPause() {
-		mContext.unregisterReceiver(seedBroadcastReceiver);
-		mContext.stopService(seedIntent);
+    @Override
+    public void onResume() {
 
-		super.onPause();
-	}
+        List<BaseSeedInterface> vendorSeeds = seedProvider.getVendorSeeds();
+        listVendorSeedAdapter = new ListVendorSeedAdapter(mContext, vendorSeeds);
+        if (vendorSeeds.size() < 1)
+            mContext.startService(seedIntent);
 
-	protected void updateUI(Intent intent) {
-		boolean isnewseed = intent.getBooleanExtra(SeedUpdateService.ISNEWSEED, false);
-		// if (isnewseed) {
-		seedProvider = new GotsSeedManager(mContext);
-		listVendorSeedAdapter = new ListVendorSeedAdapter(mContext, seedProvider.getVendorSeeds());
+        setListAdapter(listVendorSeedAdapter);
+        mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(SeedUpdateService.BROADCAST_ACTION));
+        super.onResume();
+    }
 
-		setListAdapter(listVendorSeedAdapter);
-		// listVendorSeedAdapter.notifyDataSetChanged();
-		// }
-	}
+    @Override
+    public void onPause() {
+        mContext.unregisterReceiver(seedBroadcastReceiver);
+        mContext.stopService(seedIntent);
+
+        super.onPause();
+    }
+
+    protected void updateUI(Intent intent) {
+        boolean isnewseed = intent.getBooleanExtra(SeedUpdateService.ISNEWSEED, false);
+        // if (isnewseed) {
+        seedProvider = new GotsSeedManager(mContext);
+        listVendorSeedAdapter = new ListVendorSeedAdapter(mContext, seedProvider.getVendorSeeds());
+
+        setListAdapter(listVendorSeedAdapter);
+        // listVendorSeedAdapter.notifyDataSetChanged();
+        // }
+    }
 
 }
