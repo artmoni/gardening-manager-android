@@ -26,9 +26,10 @@
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
- *   See also COPYING, LICENSE and WARRANTY file 
+ *   http://www.gnu.org/licenses/gpl-2.0.html                              *
+ *   See also COPYING, LICENSE and WARRANTY file                           *
  *   Contributors:                                                         *
- *                - Sebastien FLEURY                                       *
+ *                - ${user}                                                *
  *                                                                         *
  * *********************************************************************** */</template><template autoinsert="true" context="typecomment_context" deleted="false" description="Comment for created types" enabled="true" id="org.eclipse.jdt.ui.text.codetemplates.typecomment" name="typecomment">/**
  * @author ${user}
