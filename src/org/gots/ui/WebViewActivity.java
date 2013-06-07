@@ -23,43 +23,43 @@ import android.webkit.WebViewClient;
 import com.actionbarsherlock.app.SherlockFragment;
 
 public class WebViewActivity extends SherlockFragment {
-	private ProgressDialog pd;
+    private ProgressDialog pd;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-	}
+    }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		WebView mWebView = new WebView(getActivity());
-		mWebView.setWebViewClient(new HelloWebViewClient());
-		mWebView.getSettings().setJavaScriptEnabled(true);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        WebView mWebView = new WebView(getActivity());
+        mWebView.setWebViewClient(new HelloWebViewClient());
+        mWebView.getSettings().setJavaScriptEnabled(true);
 
-		Bundle bundle = this.getArguments();
-		String url = bundle.getString("org.gots.seed.url");
+        Bundle bundle = this.getArguments();
+        String url = bundle.getString("org.gots.seed.url");
 
-		mWebView.loadUrl(url);
+        mWebView.loadUrl(url);
 
-		pd = ProgressDialog.show(getActivity(), "", getResources().getString(R.string.gots_loading), true);
-		pd.setCanceledOnTouchOutside(true);
-		return mWebView;
-	}
+        pd = ProgressDialog.show(getActivity(), "", getResources().getString(R.string.gots_loading), true);
+        pd.setCanceledOnTouchOutside(true);
+        return mWebView;
+    }
 
-	private class HelloWebViewClient extends WebViewClient {
-		@Override
-		public boolean shouldOverrideUrlLoading(WebView view, String url) {
-			view.loadUrl(url);
-			return true;
-		}
+    private class HelloWebViewClient extends WebViewClient {
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            view.loadUrl(url);
+            return true;
+        }
 
-		@Override
-		public void onPageFinished(WebView view, String url) {
-			super.onPageFinished(view, url);
-			if (pd.isShowing())
-				pd.dismiss();
-		}
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+            if (pd.isShowing())
+                pd.dismiss();
+        }
 
-	}
+    }
 }

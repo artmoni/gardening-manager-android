@@ -42,197 +42,203 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 public class TabSeedActivity extends SherlockFragmentActivity {
-	ViewPager mViewPager;
-	GrowingSeedInterface mSeed = null;
-	private String urlDescription;
+    ViewPager mViewPager;
 
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.seed_tab);
+    GrowingSeedInterface mSeed = null;
 
-		ActionBar bar = getSupportActionBar();
-		bar.setDisplayHomeAsUpEnabled(true);
-		// bar.setDisplayShowTitleEnabled(false);
+    private String urlDescription;
 
-		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.seed_tab);
 
-		// ********************** **********************
-		if (getIntent().getExtras() == null) {
-			Log.e("SeedActivity", "You must provide a org.gots.seed.id as an Extra Int");
-			finish();
-			return;
-		}
-		if (getIntent().getExtras().getInt("org.gots.seed.id") != 0) {
-			TabHost mTabHost = (TabHost) findViewById(android.R.id.tabhost);
+        ActionBar bar = getSupportActionBar();
+        bar.setDisplayHomeAsUpEnabled(true);
+        // bar.setDisplayShowTitleEnabled(false);
 
-			int seedId = getIntent().getExtras().getInt("org.gots.seed.id");
-			GrowingSeedDBHelper helper = new GrowingSeedDBHelper(this);
-			mSeed = helper.getSeedById(seedId);
-		} else if (getIntent().getExtras().getInt("org.gots.seed.vendorid") != 0) {
-			int seedId = getIntent().getExtras().getInt("org.gots.seed.vendorid");
-			VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
-			mSeed = (GrowingSeedInterface) helper.getSeedById(seedId);
-		}else
-			mSeed = new GrowingSeed(); // DEFAULT SEED
+        getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-		bar.setTitle(mSeed.getSpecie());
+        // ********************** **********************
+        if (getIntent().getExtras() == null) {
+            Log.e("SeedActivity", "You must provide a org.gots.seed.id as an Extra Int");
+            finish();
+            return;
+        }
+        if (getIntent().getExtras().getInt("org.gots.seed.id") != 0) {
+            TabHost mTabHost = (TabHost) findViewById(android.R.id.tabhost);
 
-		SeedWidgetLong seedWidget = (SeedWidgetLong) findViewById(R.id.IdSeedWidgetLong);
-		seedWidget.setSeed(mSeed);
+            int seedId = getIntent().getExtras().getInt("org.gots.seed.id");
+            GrowingSeedDBHelper helper = new GrowingSeedDBHelper(this);
+            mSeed = helper.getSeedById(seedId);
+        } else if (getIntent().getExtras().getInt("org.gots.seed.vendorid") != 0) {
+            int seedId = getIntent().getExtras().getInt("org.gots.seed.vendorid");
+            VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
+            mSeed = (GrowingSeedInterface) helper.getSeedById(seedId);
+        } else
+            mSeed = new GrowingSeed(); // DEFAULT SEED
 
-		mViewPager = (ViewPager) findViewById(R.id.pager);
-		TabsAdapter mTabsAdapter = new TabsAdapter(this, mViewPager);
+        bar.setTitle(mSeed.getSpecie());
 
-		// // ********************** Tab description **********************
-		mTabsAdapter.addTab(
-				bar.newTab().setTag("event_list").setText(getString(R.string.seed_description_tabmenu_detail)),
-				SeedActivity.class, null);
+        SeedWidgetLong seedWidget = (SeedWidgetLong) findViewById(R.id.IdSeedWidgetLong);
+        seedWidget.setSeed(mSeed);
 
-		// ********************** Tab actions **********************
-		if (mSeed.getGrowingSeedId() > 0) {
-			mTabsAdapter.addTab(
-					bar.newTab().setTag("event_list").setText(getString(R.string.seed_description_tabmenu_actions)),
-					ListActionActivity.class, null);
-		}
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        TabsAdapter mTabsAdapter = new TabsAdapter(this, mViewPager);
 
-		// ********************** Tab Wikipedia**********************
-		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo netInfo = cm.getActiveNetworkInfo();
-		if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-			mTabsAdapter.addTab(
-					bar.newTab().setTag("event_list").setText(getString(R.string.seed_description_tabmenu_wikipedia)),
-					WebViewActivity.class, null);
+        // // ********************** Tab description **********************
+        mTabsAdapter.addTab(
+                bar.newTab().setTag("event_list").setText(getString(R.string.seed_description_tabmenu_detail)),
+                SeedActivity.class, null);
 
-			urlDescription = "http://" + Locale.getDefault().getLanguage() + ".wikipedia.org/wiki/" + mSeed.getSpecie();
+        // ********************** Tab actions **********************
+        if (mSeed.getGrowingSeedId() > 0) {
+            mTabsAdapter.addTab(
+                    bar.newTab().setTag("event_list").setText(getString(R.string.seed_description_tabmenu_actions)),
+                    ListActionActivity.class, null);
+        }
 
-		}
+        // ********************** Tab Wikipedia**********************
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            mTabsAdapter.addTab(
+                    bar.newTab().setTag("event_list").setText(getString(R.string.seed_description_tabmenu_wikipedia)),
+                    WebViewActivity.class, null);
 
-	}
+            urlDescription = "http://" + Locale.getDefault().getLanguage() + ".wikipedia.org/wiki/" + mSeed.getSpecie();
 
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		//first saving my state, so the bundle wont be empty.
-    	//http://code.google.com/p/android/issues/detail?id=19917
-	}
+        }
 
-	@Override
-	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-	}
+    }
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getSupportMenuInflater();
-		inflater.inflate(R.menu.menu_seeddescription, menu);
-		return true;
-	}
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        // first saving my state, so the bundle wont be empty.
+        // http://code.google.com/p/android/issues/detail?id=19917
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle item selection
-		Intent i;
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			finish();
-			return true;
-		case R.id.help:
-			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HelpUriBuilder.getUri(getClass()
-					.getSimpleName())));
-			startActivity(browserIntent);
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+    }
 
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getSupportMenuInflater();
+        inflater.inflate(R.menu.menu_seeddescription, menu);
+        return true;
+    }
 
-	static final class TabInfo {
-		private final Class<?> clss;
-		private final Bundle args;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        Intent i;
+        switch (item.getItemId()) {
+        case android.R.id.home:
+            finish();
+            return true;
+        case R.id.help:
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
+            startActivity(browserIntent);
 
-		TabInfo(Class<?> _class, Bundle _args) {
-			clss = _class;
-			args = _args;
-		}
-	}
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
 
-	/**
-	 * This is a helper class that implements the management of tabs and all
-	 * details of connecting a ViewPager with associated TabHost. It relies on a
-	 * trick. Normally a tab host has a simple API for supplying a View or
-	 * Intent that each tab will show. This is not sufficient for switching
-	 * between pages. So instead we make the content part of the tab host 0dp
-	 * high (it is not shown) and the TabsAdapter supplies its own dummy view to
-	 * show as the tab content. It listens to changes in tabs, and takes care of
-	 * switch to the correct paged in the ViewPager whenever the selected tab
-	 * changes.
-	 */
-	public class TabsAdapter extends FragmentPagerAdapter implements ActionBar.TabListener,
-			ViewPager.OnPageChangeListener {
-		private final Context mContext;
-		private final ActionBar mActionBar;
-		private final ViewPager mViewPager;
-		private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
+    static final class TabInfo {
+        private final Class<?> clss;
 
-		public TabsAdapter(SherlockFragmentActivity activity, ViewPager pager) {
-			super(activity.getSupportFragmentManager());
-			mContext = activity;
-			mActionBar = activity.getSupportActionBar();
-			mViewPager = pager;
-			mViewPager.setAdapter(this);
-			mViewPager.setOnPageChangeListener(this);
-		}
+        private final Bundle args;
 
-		public void addTab(ActionBar.Tab tab, Class<?> clss, Bundle args) {
-			TabInfo info = new TabInfo(clss, args);
-			tab.setTag(info);
-			tab.setTabListener(this);
-			mTabs.add(info);
-			mActionBar.addTab(tab);
-			notifyDataSetChanged();
-		}
+        TabInfo(Class<?> _class, Bundle _args) {
+            clss = _class;
+            args = _args;
+        }
+    }
 
-		@Override
-		public int getCount() {
-			return mTabs.size();
-		}
+    /**
+     * This is a helper class that implements the management of tabs and all
+     * details of connecting a ViewPager with associated TabHost. It relies on a
+     * trick. Normally a tab host has a simple API for supplying a View or
+     * Intent that each tab will show. This is not sufficient for switching
+     * between pages. So instead we make the content part of the tab host 0dp
+     * high (it is not shown) and the TabsAdapter supplies its own dummy view to
+     * show as the tab content. It listens to changes in tabs, and takes care of
+     * switch to the correct paged in the ViewPager whenever the selected tab
+     * changes.
+     */
+    public class TabsAdapter extends FragmentPagerAdapter implements ActionBar.TabListener,
+            ViewPager.OnPageChangeListener {
+        private final Context mContext;
 
-		@Override
-		public Fragment getItem(int position) {
-			TabInfo info = mTabs.get(position);
-			Bundle bundle = new Bundle();
-			bundle.putInt("org.gots.seed.id", mSeed.getSeedId());
-			bundle.putInt("org.gots.growingseed.id", mSeed.getGrowingSeedId());
-			bundle.putString("org.gots.seed.url", urlDescription);
-			Fragment fragment = Fragment.instantiate(mContext, info.clss.getName(), info.args);
-			fragment.setArguments(bundle);
-			return fragment;
-		}
+        private final ActionBar mActionBar;
 
-		public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-		}
+        private final ViewPager mViewPager;
 
-		public void onPageSelected(int position) {
-			mActionBar.setSelectedNavigationItem(position);
-		}
+        private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
 
-		public void onPageScrollStateChanged(int state) {
-		}
+        public TabsAdapter(SherlockFragmentActivity activity, ViewPager pager) {
+            super(activity.getSupportFragmentManager());
+            mContext = activity;
+            mActionBar = activity.getSupportActionBar();
+            mViewPager = pager;
+            mViewPager.setAdapter(this);
+            mViewPager.setOnPageChangeListener(this);
+        }
 
-		public void onTabSelected(Tab tab, FragmentTransaction ft) {
-			Object tag = tab.getTag();
-			for (int i = 0; i < mTabs.size(); i++) {
-				if (mTabs.get(i) == tag) {
-					mViewPager.setCurrentItem(i);
-				}
-			}
-		}
+        public void addTab(ActionBar.Tab tab, Class<?> clss, Bundle args) {
+            TabInfo info = new TabInfo(clss, args);
+            tab.setTag(info);
+            tab.setTabListener(this);
+            mTabs.add(info);
+            mActionBar.addTab(tab);
+            notifyDataSetChanged();
+        }
 
-		public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-		}
+        @Override
+        public int getCount() {
+            return mTabs.size();
+        }
 
-		public void onTabReselected(Tab tab, FragmentTransaction ft) {
-		}
-	}
+        @Override
+        public Fragment getItem(int position) {
+            TabInfo info = mTabs.get(position);
+            Bundle bundle = new Bundle();
+            bundle.putInt("org.gots.seed.id", mSeed.getSeedId());
+            bundle.putInt("org.gots.growingseed.id", mSeed.getGrowingSeedId());
+            bundle.putString("org.gots.seed.url", urlDescription);
+            Fragment fragment = Fragment.instantiate(mContext, info.clss.getName(), info.args);
+            fragment.setArguments(bundle);
+            return fragment;
+        }
+
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        }
+
+        public void onPageSelected(int position) {
+            mActionBar.setSelectedNavigationItem(position);
+        }
+
+        public void onPageScrollStateChanged(int state) {
+        }
+
+        public void onTabSelected(Tab tab, FragmentTransaction ft) {
+            Object tag = tab.getTag();
+            for (int i = 0; i < mTabs.size(); i++) {
+                if (mTabs.get(i) == tag) {
+                    mViewPager.setCurrentItem(i);
+                }
+            }
+        }
+
+        public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+        }
+
+        public void onTabReselected(Tab tab, FragmentTransaction ft) {
+        }
+    }
 
 }

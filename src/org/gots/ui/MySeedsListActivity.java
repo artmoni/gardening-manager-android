@@ -25,80 +25,81 @@ import android.widget.ListAdapter;
 import com.actionbarsherlock.app.SherlockListFragment;
 
 public class MySeedsListActivity extends SherlockListFragment {
-	private MySeedsListAdapter listAdapter;
-	private BaseAllotmentInterface allotment;
+    private MySeedsListAdapter listAdapter;
 
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    private BaseAllotmentInterface allotment;
 
-		if (getActivity().getIntent().getExtras() != null) {
-			String allotmentRef = getActivity().getIntent().getExtras().getString("org.gots.allotment.reference");
-			if (allotmentRef != null) {
-				AllotmentDBHelper helper = new AllotmentDBHelper(getActivity());
-				allotment = helper.getAllotmentByName(allotmentRef);
-			}
-		}
-		VendorSeedDBHelper myBank = new VendorSeedDBHelper(getActivity());
-		ArrayList<BaseSeedInterface> mySeeds = myBank.getMySeeds();
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		listAdapter = new MySeedsListAdapter(getActivity(), allotment, mySeeds);
-		setListAdapter(listAdapter);
+        if (getActivity().getIntent().getExtras() != null) {
+            String allotmentRef = getActivity().getIntent().getExtras().getString("org.gots.allotment.reference");
+            if (allotmentRef != null) {
+                AllotmentDBHelper helper = new AllotmentDBHelper(getActivity());
+                allotment = helper.getAllotmentByName(allotmentRef);
+            }
+        }
+        VendorSeedDBHelper myBank = new VendorSeedDBHelper(getActivity());
+        ArrayList<BaseSeedInterface> mySeeds = myBank.getMySeeds();
 
-		// if (mySeeds.size() == 0) {
-		// Intent intent = new Intent().setClass(this,
-		// MySeedsListFirstTimeActivity.class);
-		// startActivity(intent);
-		// }
-	}
+        listAdapter = new MySeedsListAdapter(getActivity(), allotment, mySeeds);
+        setListAdapter(listAdapter);
 
-	@Override
-	public ListAdapter getListAdapter() {
-		// TODO Auto-generated method stub
-		return super.getListAdapter();
-	}
+        // if (mySeeds.size() == 0) {
+        // Intent intent = new Intent().setClass(this,
+        // MySeedsListFirstTimeActivity.class);
+        // startActivity(intent);
+        // }
+    }
 
-	public void update() {
-		listAdapter.notifyDataSetChanged();
-	}
+    @Override
+    public ListAdapter getListAdapter() {
+        // TODO Auto-generated method stub
+        return super.getListAdapter();
+    }
 
-	@Override
-	public void onResume() {
-		Log.i("onresume", this.getClass().getName());
-		super.onResume();
-	}
+    public void update() {
+        listAdapter.notifyDataSetChanged();
+    }
 
-	// @Override
-	// protected void onResume() {
-	// super.onResume();
-	// listAdapter.notifyDataSetChanged();
-	//
-	// }
-	//
-	// @Override
-	// public boolean onCreateOptionsMenu(Menu menu) {
-	// // MenuInflater inflater = getMenuInflater();
-	// // inflater.inflate(R.menu.menu_stock, menu);
-	// return super.onCreateOptionsMenu(menu);
-	// }
-	//
-	// @Override
-	// public boolean onOptionsItemSelected(MenuItem item) {
-	// switch (item.getItemId()) {
-	//
-	// case R.id.new_seed_barcode:
-	// IntentIntegrator integrator = new IntentIntegrator(this);
-	// integrator.initiateScan();
-	// return true;
-	// case R.id.help:
-	// Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-	// Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
-	// startActivity(browserIntent);
-	//
-	// return true;
-	// default:
-	// return super.onOptionsItemSelected(item);
-	// }
-	//
-	// }
+    @Override
+    public void onResume() {
+        Log.i("onresume", this.getClass().getName());
+        super.onResume();
+    }
+
+    // @Override
+    // protected void onResume() {
+    // super.onResume();
+    // listAdapter.notifyDataSetChanged();
+    //
+    // }
+    //
+    // @Override
+    // public boolean onCreateOptionsMenu(Menu menu) {
+    // // MenuInflater inflater = getMenuInflater();
+    // // inflater.inflate(R.menu.menu_stock, menu);
+    // return super.onCreateOptionsMenu(menu);
+    // }
+    //
+    // @Override
+    // public boolean onOptionsItemSelected(MenuItem item) {
+    // switch (item.getItemId()) {
+    //
+    // case R.id.new_seed_barcode:
+    // IntentIntegrator integrator = new IntentIntegrator(this);
+    // integrator.initiateScan();
+    // return true;
+    // case R.id.help:
+    // Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+    // Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
+    // startActivity(browserIntent);
+    //
+    // return true;
+    // default:
+    // return super.onOptionsItemSelected(item);
+    // }
+    //
+    // }
 }

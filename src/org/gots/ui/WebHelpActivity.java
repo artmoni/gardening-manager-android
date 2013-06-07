@@ -21,52 +21,51 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 
 public class WebHelpActivity extends Activity {
-	private ProgressDialog pd;
-	private String baseHelpURL = "http://www.gardening-manager.com";
+    private ProgressDialog pd;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.help);
+    private String baseHelpURL = "http://www.gardening-manager.com";
 
-		String page = getIntent().getExtras().getString("org.gots.help.page");
-		
-		WebView mWebView = (WebView) findViewById(R.id.webViewHelp);
-		mWebView.setWebViewClient(new WebHelpClient());
-		mWebView.getSettings().setJavaScriptEnabled(true);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.help);
 
-		mWebView.loadUrl(baseHelpURL + "/" + page);
-		// addContentView(mWebView, new LayoutParams(LayoutParams.FILL_PARENT,
-		// LayoutParams.FILL_PARENT));
+        String page = getIntent().getExtras().getString("org.gots.help.page");
 
-		Button close = (Button) findViewById(R.id.buttonClose);
-		close.setOnClickListener(new View.OnClickListener() {
+        WebView mWebView = (WebView) findViewById(R.id.webViewHelp);
+        mWebView.setWebViewClient(new WebHelpClient());
+        mWebView.getSettings().setJavaScriptEnabled(true);
 
-			@Override
-			public void onClick(View v) {
-				finish();
-			}
-		});
+        mWebView.loadUrl(baseHelpURL + "/" + page);
+        // addContentView(mWebView, new LayoutParams(LayoutParams.FILL_PARENT,
+        // LayoutParams.FILL_PARENT));
 
-		
+        Button close = (Button) findViewById(R.id.buttonClose);
+        close.setOnClickListener(new View.OnClickListener() {
 
-		pd = ProgressDialog.show(this, "", getResources().getString(R.string.help_loading), true);
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
-	}
+        pd = ProgressDialog.show(this, "", getResources().getString(R.string.help_loading), true);
 
-	private class WebHelpClient extends WebViewClient {
+    }
 
-		@Override
-		public boolean shouldOverrideUrlLoading(WebView view, String url) {
-			view.loadUrl(url);
-			return true;
-		}
+    private class WebHelpClient extends WebViewClient {
 
-		@Override
-		public void onPageFinished(WebView view, String url) {
-			super.onPageFinished(view, url);
-			pd.dismiss();
-		}
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            view.loadUrl(url);
+            return true;
+        }
 
-	}
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+            pd.dismiss();
+        }
+
+    }
 }

@@ -29,86 +29,84 @@ import com.actionbarsherlock.app.SherlockListFragment;
 
 public class ListActionActivity extends SherlockListFragment implements ListView.OnScrollListener {
 
-	// private String[] mStrings;
-	ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
+    // private String[] mStrings;
+    ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
 
-	protected final class WindowRemover implements Runnable {
-		public void run() {
-			removeWindow();
-		}
+    protected final class WindowRemover implements Runnable {
+        public void run() {
+            removeWindow();
+        }
 
-		protected void removeWindow() {
-			if (mShowing) {
-				mShowing = false;
-				mDialogText.setVisibility(View.INVISIBLE);
-			}
-		}
+        protected void removeWindow() {
+            if (mShowing) {
+                mShowing = false;
+                mDialogText.setVisibility(View.INVISIBLE);
+            }
+        }
 
-	}
+    }
 
-	private WindowRemover mWindowRemover = new WindowRemover();
+    private WindowRemover mWindowRemover = new WindowRemover();
 
-	Handler mHandler = new Handler();
+    Handler mHandler = new Handler();
 
-	private WindowManager mWindowManager;
+    private WindowManager mWindowManager;
 
-	protected TextView mDialogText;
+    protected TextView mDialogText;
 
-	protected boolean mShowing;
+    protected boolean mShowing;
 
-	private boolean mReady;
+    private boolean mReady;
 
-	private char mPrevLetter = Character.MIN_VALUE;
+    private char mPrevLetter = Character.MIN_VALUE;
 
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		int seedid = 0;
-		GrowingSeedDBHelper helper = new GrowingSeedDBHelper(getActivity());
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        int seedid = 0;
+        GrowingSeedDBHelper helper = new GrowingSeedDBHelper(getActivity());
 
-		Bundle bundle = this.getArguments();
-		seedid = bundle.getInt("org.gots.growingseed.id");
+        Bundle bundle = this.getArguments();
+        seedid = bundle.getInt("org.gots.growingseed.id");
 
-		if (seedid > 0) {
-			allSeeds.add(helper.getSeedById(seedid));
-		} else
-			allSeeds = helper.getGrowingSeeds();
+        if (seedid > 0) {
+            allSeeds.add(helper.getSeedById(seedid));
+        } else
+            allSeeds = helper.getGrowingSeeds();
 
-		// ActionSeedDBHelper helper = new ActionSeedDBHelper(this);
-		// ArrayList<BaseActionInterface> actions = helper.getActionsToDo();
-		// Arrays.sort(mStrings);
+        // ActionSeedDBHelper helper = new ActionSeedDBHelper(this);
+        // ArrayList<BaseActionInterface> actions = helper.getActionsToDo();
+        // Arrays.sort(mStrings);
 
-		// *******************************************
-		mWindowManager = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
+        // *******************************************
+        mWindowManager = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
 
-		// Use an existing ListAdapter that will map an array
-		// of strings to TextViews
-		setListAdapter(new ListAllActionAdapter(getActivity(), allSeeds, ListAllActionAdapter.STATUS_DONE));
+        // Use an existing ListAdapter that will map an array
+        // of strings to TextViews
+        setListAdapter(new ListAllActionAdapter(getActivity(), allSeeds, ListAllActionAdapter.STATUS_DONE));
 
-		getListView().setOnScrollListener(this);
-	}
+        getListView().setOnScrollListener(this);
+    }
 
-	
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        // int lastItem = firstVisibleItem + visibleItemCount - 1;
+        // if (mReady) {
+        // char firstLetter = mStrings[firstVisibleItem].charAt(0);
+        //
+        // if (!mShowing && firstLetter != mPrevLetter) {
+        //
+        // mShowing = true;
+        // mDialogText.setVisibility(View.VISIBLE);
+        //
+        // }
+        // mDialogText.setText(((Character) firstLetter).toString());
+        // mHandler.removeCallbacks(mWindowRemover);
+        // mHandler.postDelayed(mWindowRemover, 3000);
+        // mPrevLetter = firstLetter;
+        // }
+    }
 
-	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-		// int lastItem = firstVisibleItem + visibleItemCount - 1;
-		// if (mReady) {
-		// char firstLetter = mStrings[firstVisibleItem].charAt(0);
-		//
-		// if (!mShowing && firstLetter != mPrevLetter) {
-		//
-		// mShowing = true;
-		// mDialogText.setVisibility(View.VISIBLE);
-		//
-		// }
-		// mDialogText.setText(((Character) firstLetter).toString());
-		// mHandler.removeCallbacks(mWindowRemover);
-		// mHandler.postDelayed(mWindowRemover, 3000);
-		// mPrevLetter = firstLetter;
-		// }
-	}
-
-	public void onScrollStateChanged(AbsListView view, int scrollState) {
-	}
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+    }
 
 }

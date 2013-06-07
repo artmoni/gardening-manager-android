@@ -32,127 +32,132 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class NewActionActivity extends Activity implements OnItemClickListener, OnClickListener {
 
-	Integer[] list = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
-	private GridView listActions;
-	private GrowingSeedInterface mySeed;
-	BaseActionInterface selectedAction;
-	private Spinner spinner;
-	private RadioGroup radioGroup;
+    Integer[] list = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		setContentView(R.layout.inputaction);
+    private GridView listActions;
 
-		GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
-		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
+    private GrowingSeedInterface mySeed;
 
-		ActionDBHelper helper = new ActionDBHelper(this);
-		List<BaseActionInterface> actions = helper.getActions();
+    BaseActionInterface selectedAction;
 
-		listActions = (GridView) findViewById(R.id.idListAction);
-		listActions.setAdapter(new SimpleListActionAdapter(actions));
-		
-		// listActions.setNumColumns(listActions.getCount());
+    private Spinner spinner;
 
-		listActions.setOnItemClickListener(this);
-		// listActions.invalidate();
+    private RadioGroup radioGroup;
 
-		spinner = (Spinner) findViewById(R.id.spinnerDuration);
-		spinner.setAdapter(new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, list));
-		if (getIntent().getExtras() != null) {
-			Integer seedId = getIntent().getExtras().getInt("org.gots.seed.id");
-			GrowingSeedDBHelper seedHelper = new GrowingSeedDBHelper(this);
-			mySeed = seedHelper.getSeedById(seedId);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        setContentView(R.layout.inputaction);
 
-			SeedWidgetLong seed = (SeedWidgetLong) findViewById(R.id.seedWidgetLong);
-			seed.setSeed(mySeed);
-		}
+        GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
+        GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
-		radioGroup = (RadioGroup) findViewById(R.id.radioGroupSelectDuration);
+        ActionDBHelper helper = new ActionDBHelper(this);
+        List<BaseActionInterface> actions = helper.getActions();
 
-		Button validate = (Button) findViewById(R.id.buttonPlanAction);
-		validate.setOnClickListener(this);
+        listActions = (GridView) findViewById(R.id.idListAction);
+        listActions.setAdapter(new SimpleListActionAdapter(actions));
 
-		super.onCreate(savedInstanceState);
-	}
+        // listActions.setNumColumns(listActions.getCount());
 
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.buttonPlanAction:
-			scheduleAction();
-			break;
-		case R.id.idListAction:
-			Log.i("listAction", "" + ((GridView) v).getCheckedItemPosition());
-			break;
-		default:
-			break;
-		}
-	}
+        listActions.setOnItemClickListener(this);
+        // listActions.invalidate();
 
-	private void scheduleAction() {
+        spinner = (Spinner) findViewById(R.id.spinnerDuration);
+        spinner.setAdapter(new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, list));
+        if (getIntent().getExtras() != null) {
+            Integer seedId = getIntent().getExtras().getInt("org.gots.seed.id");
+            GrowingSeedDBHelper seedHelper = new GrowingSeedDBHelper(this);
+            mySeed = seedHelper.getSeedById(seedId);
 
-		int duration = (Integer) spinner.getSelectedItem();
+            SeedWidgetLong seed = (SeedWidgetLong) findViewById(R.id.seedWidgetLong);
+            seed.setSeed(mySeed);
+        }
 
-		int radioButtonID = radioGroup.getCheckedRadioButtonId();
-		View radioButton = radioGroup.findViewById(radioButtonID);
-		int idx = radioGroup.indexOfChild(radioButton);
+        radioGroup = (RadioGroup) findViewById(R.id.radioGroupSelectDuration);
 
-		switch (radioButtonID) {
-		case R.id.radioWeek:
-			duration = duration * 7;
-			break;
-		case R.id.radioMonth:
-			duration = duration * 30;
-			break;
+        Button validate = (Button) findViewById(R.id.buttonPlanAction);
+        validate.setOnClickListener(this);
 
-		default:
-			break;
-		}
+        super.onCreate(savedInstanceState);
+    }
 
-		Calendar sowingdate = Calendar.getInstance();
-		sowingdate.setTime(mySeed.getDateSowing());
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+        case R.id.buttonPlanAction:
+            scheduleAction();
+            break;
+        case R.id.idListAction:
+            Log.i("listAction", "" + ((GridView) v).getCheckedItemPosition());
+            break;
+        default:
+            break;
+        }
+    }
 
-		Calendar today = Calendar.getInstance();
-		int durationorig = today.get(Calendar.DAY_OF_YEAR) - sowingdate.get(Calendar.DAY_OF_YEAR);
-		duration += durationorig;
+    private void scheduleAction() {
 
-		if (selectedAction == null) {
-			// AlertDialog alert = new AlertDialog(this);
-			AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-			builder.setMessage("Please select an action").setCancelable(false)
-					.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-						}
-					}).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-							dialog.cancel();
-							finish();
-						}
-					});
+        int duration = (Integer) spinner.getSelectedItem();
 
-		} else {
-			selectedAction.setDuration(duration);
+        int radioButtonID = radioGroup.getCheckedRadioButtonId();
+        View radioButton = radioGroup.findViewById(radioButtonID);
+        int idx = radioGroup.indexOfChild(radioButton);
 
-			ActionSeedDBHelper actionHelper = new ActionSeedDBHelper(this);
-			actionHelper.insertAction(selectedAction, mySeed);
+        switch (radioButtonID) {
+        case R.id.radioWeek:
+            duration = duration * 7;
+            break;
+        case R.id.radioMonth:
+            duration = duration * 30;
+            break;
 
-			GoogleAnalyticsTracker.getInstance().trackEvent(getClass().getSimpleName(), "NewAction",
-					selectedAction.getName(), 0);
-			finish();
-		}
-	}
+        default:
+            break;
+        }
 
-	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		selectedAction = (BaseActionInterface) listActions.getItemAtPosition(arg2);
-//		listActions.setSelection(arg2);
-		arg1.setSelected(!arg0.isSelected());
-	}
+        Calendar sowingdate = Calendar.getInstance();
+        sowingdate.setTime(mySeed.getDateSowing());
 
-	@Override
-	protected void onDestroy() {
-		GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
-		super.onDestroy();
-	}
+        Calendar today = Calendar.getInstance();
+        int durationorig = today.get(Calendar.DAY_OF_YEAR) - sowingdate.get(Calendar.DAY_OF_YEAR);
+        duration += durationorig;
+
+        if (selectedAction == null) {
+            // AlertDialog alert = new AlertDialog(this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+            builder.setMessage("Please select an action").setCancelable(false).setPositiveButton("OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.cancel();
+                    finish();
+                }
+            });
+
+        } else {
+            selectedAction.setDuration(duration);
+
+            ActionSeedDBHelper actionHelper = new ActionSeedDBHelper(this);
+            actionHelper.insertAction(selectedAction, mySeed);
+
+            GoogleAnalyticsTracker.getInstance().trackEvent(getClass().getSimpleName(), "NewAction",
+                    selectedAction.getName(), 0);
+            finish();
+        }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+        selectedAction = (BaseActionInterface) listActions.getItemAtPosition(arg2);
+        // listActions.setSelection(arg2);
+        arg1.setSelected(!arg0.isSelected());
+    }
+
+    @Override
+    protected void onDestroy() {
+        GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
+        super.onDestroy();
+    }
 }
