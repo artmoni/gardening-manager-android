@@ -40,185 +40,202 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class DashboardActivity extends SherlockActivity implements OnClickListener {
-	// public static GardenInterface myGarden = new Garden();
-	// GoogleAnalyticsTracker tracker;
-	GotsAdvertisement adView;
-	private WeatherWidget weatherWidget;
-	private WeatherWidget weatherWidget2;
-	private LinearLayout handle;
-	private LinearLayout weatherWidgetLayout;
-	private Intent weatherIntent;
+public class DashboardActivity extends SherlockActivity implements
+        OnClickListener {
+    // public static GardenInterface myGarden = new Garden();
+    // GoogleAnalyticsTracker tracker;
+    GotsAdvertisement adView;
 
-	private ImageView weatherState;
-	private String TAG = "DashboardActivity";
+    private WeatherWidget weatherWidget;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		GardenManager gardenManager = new GardenManager(this);
-		ActionBar bar = getSupportActionBar();
-		bar.setTitle(gardenManager.getcurrentGarden().getLocality());
+    private WeatherWidget weatherWidget2;
 
-		GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
+    private LinearLayout handle;
 
-		setContentView(R.layout.dashboard);
+    private LinearLayout weatherWidgetLayout;
 
-		// attach event handler to dash buttons
-		findViewById(R.id.dashboard_button_hut).setOnClickListener(this);
-		findViewById(R.id.dashboard_button_allotment).setOnClickListener(this);
-		findViewById(R.id.dashboard_button_action).setOnClickListener(this);
-		findViewById(R.id.dashboard_button_profile).setOnClickListener(this);
+    private Intent weatherIntent;
 
-		handle = (LinearLayout) findViewById(R.id.handle);
+    private ImageView weatherState;
 
-		weatherWidgetLayout = (LinearLayout) findViewById(R.id.WeatherWidget);
+    private String TAG = "DashboardActivity";
 
-		// ADMOB
-		LinearLayout layout = (LinearLayout) findViewById(R.id.bannerAd);
-		if (!GotsPreferences.getInstance(this).isPremium()) {
-			adView = new GotsAdvertisement(this);
-			adView.getPremiumAds(layout);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		} else {
-			layout.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_dashboard_top));
-			ImageView logo = (ImageView) findViewById(R.id.idImageLogo);
-			logo.setBackgroundDrawable(getResources().getDrawable(R.drawable.bt_logo_premium));
-		}
-		weatherIntent = new Intent(this, WeatherUpdateService.class);
+        GardenManager gardenManager = new GardenManager(this);
+        ActionBar bar = getSupportActionBar();
+        if (gardenManager.getcurrentGarden() != null)
+            bar.setTitle(gardenManager.getcurrentGarden().getLocality());
+        else
+            bar.setTitle(GotsPreferences.getInstance(this).getGardeningManagerAppname());
 
-		GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
-		GoogleAnalyticsTracker.getInstance().dispatch();
+        GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
 
-		// if (GotsPreferences.getInstance(this).getOAuthtToken() == null) {
-		// Intent intent = new Intent(this, AccountList.class);
-		// startActivityForResult(intent, 0);
-		// }
-	}
+        setContentView(R.layout.dashboard);
 
-	private BroadcastReceiver weatherBroadcastReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			updateUI(intent);
-		}
-	};
+        // attach event handler to dash buttons
+        findViewById(R.id.dashboard_button_hut).setOnClickListener(this);
+        findViewById(R.id.dashboard_button_allotment).setOnClickListener(this);
+        findViewById(R.id.dashboard_button_action).setOnClickListener(this);
+        findViewById(R.id.dashboard_button_profile).setOnClickListener(this);
 
-	private void updateUI(Intent intent) {
-		boolean isError = intent.getBooleanExtra("error", true);
-		Log.d(TAG, "=>" + isError);
+        handle = (LinearLayout) findViewById(R.id.handle);
 
-		handle.removeAllViews();
-		weatherWidgetLayout.removeAllViews();
+        weatherWidgetLayout = (LinearLayout) findViewById(R.id.WeatherWidget);
 
-		if (isError) {
-			TextView txtError = new TextView(this);
-			txtError.setText(getResources().getText(R.string.weather_citynotfound));
-			txtError.setTextColor(getResources().getColor(R.color.text_color_light));
-			handle.addView(txtError);
+        // ADMOB
+        LinearLayout layout = (LinearLayout) findViewById(R.id.bannerAd);
+        if (!GotsPreferences.getInstance(this).isPremium()) {
+            adView = new GotsAdvertisement(this);
+            adView.getPremiumAds(layout);
 
-		} else {
-			weatherWidget2 = new WeatherWidget(this, WeatherView.IMAGE);
-			handle.addView(weatherWidget2);
-			weatherWidget = new WeatherWidget(this, WeatherView.TEXT);
-			weatherWidgetLayout.addView(weatherWidget);
-		}
+        } else {
+            layout.setBackgroundDrawable(getResources().getDrawable(
+                    R.drawable.bg_dashboard_top));
+            ImageView logo = (ImageView) findViewById(R.id.idImageLogo);
+            logo.setBackgroundDrawable(getResources().getDrawable(
+                    R.drawable.bt_logo_premium));
+        }
+        weatherIntent = new Intent(this, WeatherUpdateService.class);
 
-	}
+        GoogleAnalyticsTracker.getInstance().trackPageView(
+                getClass().getSimpleName());
+        GoogleAnalyticsTracker.getInstance().dispatch();
 
-	@Override
-	public void onClick(View v) {
+        // if (GotsPreferences.getInstance(this).getOAuthtToken() == null) {
+        // Intent intent = new Intent(this, AccountList.class);
+        // startActivityForResult(intent, 0);
+        // }
+    }
 
-		Intent i = null;
-		switch (v.getId()) {
-		case R.id.dashboard_button_hut:
+    private BroadcastReceiver weatherBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateUI(intent);
+        }
+    };
 
-			i = new Intent(v.getContext(), HutActivity.class);
-			break;
-		case R.id.dashboard_button_allotment:
+    private void updateUI(Intent intent) {
+        boolean isError = intent.getBooleanExtra("error", true);
+        Log.d(TAG, "=>" + isError);
 
-			i = new Intent(v.getContext(), MyMainGarden.class);
-			break;
-		case R.id.dashboard_button_action:
+        handle.removeAllViews();
+        weatherWidgetLayout.removeAllViews();
 
-			i = new Intent(v.getContext(), ActionActivity.class);
+        if (isError) {
+            TextView txtError = new TextView(this);
+            txtError.setText(getResources().getText(
+                    R.string.weather_citynotfound));
+            txtError.setTextColor(getResources().getColor(
+                    R.color.text_color_light));
+            handle.addView(txtError);
 
-			break;
-		case R.id.dashboard_button_profile:
+        } else {
+            weatherWidget2 = new WeatherWidget(this, WeatherView.IMAGE);
+            handle.addView(weatherWidget2);
+            weatherWidget = new WeatherWidget(this, WeatherView.TEXT);
+            weatherWidgetLayout.addView(weatherWidget);
+        }
 
-			i = new Intent(v.getContext(), org.gots.ui.ProfileActivity.class);
-			break;
-		default:
-			break;
-		}
-		if (i != null) {
-			startActivity(i);
-		}
-	}
+    }
 
-	@Override
-	protected void onDestroy() {
-		// TODO Auto-generated method stub
-		super.onDestroy();
+    @Override
+    public void onClick(View v) {
 
-		GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
-	}
+        Intent i = null;
+        switch (v.getId()) {
+        case R.id.dashboard_button_hut:
 
-	@Override
-	protected void onResume() {
-		super.onResume();
+            i = new Intent(v.getContext(), HutActivity.class);
+            break;
+        case R.id.dashboard_button_allotment:
 
-		GoogleAnalyticsTracker.getInstance().dispatch();
-		// if (weatherWidget2.getAdapter() != null && weatherWidget.getAdapter()
-		// != null) {
-		// ((BaseAdapter) weatherWidget2.getAdapter()).notifyDataSetChanged();
-		//
-		// ((BaseAdapter) weatherWidget.getAdapter()).notifyDataSetChanged();
-		// }
-		startService(weatherIntent);
-		registerReceiver(weatherBroadcastReceiver, new IntentFilter(WeatherUpdateService.BROADCAST_ACTION));
+            i = new Intent(v.getContext(), MyMainGarden.class);
+            break;
+        case R.id.dashboard_button_action:
 
-	}
+            i = new Intent(v.getContext(), ActionActivity.class);
 
-	@Override
-	protected void onPause() {
+            break;
+        case R.id.dashboard_button_profile:
 
-		super.onPause();
-		unregisterReceiver(weatherBroadcastReceiver);
-		stopService(weatherIntent);
-	}
+            i = new Intent(v.getContext(), org.gots.ui.ProfileActivity.class);
+            break;
+        default:
+            break;
+        }
+        if (i != null) {
+            startActivity(i);
+        }
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle item selection
-		Intent i;
-		switch (item.getItemId()) {
+    @Override
+    protected void onDestroy() {
+        // TODO Auto-generated method stub
+        super.onDestroy();
 
-		case R.id.help:
-			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HelpUriBuilder.getUri(getClass()
-					.getSimpleName())));
-			startActivity(browserIntent);
+        GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
+    }
 
-			return true;
-		case R.id.about:
-			Intent aboutIntent = new Intent(this, AboutActivity.class);
-			startActivity(aboutIntent);
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-			return true;
-		case R.id.login:
-			Intent loginIntent = new Intent(this, LoginActivity.class);
-			startActivity(loginIntent);
+        GoogleAnalyticsTracker.getInstance().dispatch();
+        // if (weatherWidget2.getAdapter() != null && weatherWidget.getAdapter()
+        // != null) {
+        // ((BaseAdapter) weatherWidget2.getAdapter()).notifyDataSetChanged();
+        //
+        // ((BaseAdapter) weatherWidget.getAdapter()).notifyDataSetChanged();
+        // }
+        startService(weatherIntent);
+        registerReceiver(weatherBroadcastReceiver, new IntentFilter(
+                WeatherUpdateService.BROADCAST_ACTION));
 
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
+    }
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getSupportMenuInflater();
-		inflater.inflate(R.menu.menu_dashboard, menu);
-		return true;
-	}
+    @Override
+    protected void onPause() {
+
+        super.onPause();
+        unregisterReceiver(weatherBroadcastReceiver);
+        stopService(weatherIntent);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        Intent i;
+        switch (item.getItemId()) {
+
+        case R.id.help:
+            Intent browserIntent = new Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
+            startActivity(browserIntent);
+
+            return true;
+        case R.id.about:
+            Intent aboutIntent = new Intent(this, AboutActivity.class);
+            startActivity(aboutIntent);
+
+            return true;
+        case R.id.login:
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            startActivity(loginIntent);
+
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getSupportMenuInflater();
+        inflater.inflate(R.menu.menu_dashboard, menu);
+        return true;
+    }
 }

@@ -26,130 +26,140 @@ import android.util.Log;
 
 public class GardenDBHelper {
 
-	private static final String TAG = "GardenDBHelper";
-	// private List<BaseAllotmentInterface> allAllotment = new
-	// ArrayList<BaseAllotmentInterface>();
+    private static final String TAG = "GardenDBHelper";
 
-	private GardenSQLite gardenSQLite;
-	private SQLiteDatabase bdd;
-	Context mContext;
+    // private List<BaseAllotmentInterface> allAllotment = new
+    // ArrayList<BaseAllotmentInterface>();
 
-	public GardenDBHelper(Context mContext) {
-		gardenSQLite = new GardenSQLite(mContext);
-		this.mContext = mContext;
-	}
+    private GardenSQLite gardenSQLite;
 
-	public void open() {
-		// on ouvre la BDD en écriture
-		bdd = gardenSQLite.getWritableDatabase();
-	}
+    private SQLiteDatabase bdd;
 
-	public void close() {
-		// on ferme l'accès à la BDD
-		bdd.close();
-	}
+    Context mContext;
 
-	public GardenInterface insertGarden(GardenInterface garden) {
-		long rowid;
-		open();
-		ContentValues values = new ContentValues();
-		values.put(GardenSQLite.GARDEN_UUID, garden.getUUID());
+    public GardenDBHelper(Context mContext) {
+        gardenSQLite = new GardenSQLite(mContext);
+        this.mContext = mContext;
+    }
 
-		values.put(GardenSQLite.GARDEN_ADMINAREA, garden.getAdminArea());
-		values.put(GardenSQLite.GARDEN_COUNTRYNAME, garden.getCountryName());
-		values.put(GardenSQLite.GARDEN_LOCALITY, garden.getLocality());
+    public void open() {
+        // on ouvre la BDD en écriture
+        bdd = gardenSQLite.getWritableDatabase();
+    }
 
-		rowid = bdd.insert(GardenSQLite.GARDEN_TABLE_NAME, null, values);
-		garden.setId(rowid);
-		close();
-		return garden;
-	}
+    public void close() {
+        // on ferme l'accès à la BDD
+        bdd.close();
+    }
 
-	public GardenInterface getGarden(int gardenId) {
-		GardenInterface garden = null;
-		// SeedActionInterface searchedSeed = new GrowingSeed();
-		open();
-		Cursor cursor = bdd.query(GardenSQLite.GARDEN_TABLE_NAME, null, GardenSQLite.GARDEN_ID + "=" + gardenId, null,
-				null, null, null);
+    public GardenInterface insertGarden(GardenInterface garden) {
+        long rowid;
+        open();
+        ContentValues values = new ContentValues();
+        values.put(GardenSQLite.GARDEN_UUID, garden.getUUID());
 
-		if (cursor.moveToFirst()) {
-			do {
-				garden = cursorToGarden(cursor);
+        values.put(GardenSQLite.GARDEN_ADMINAREA, garden.getAdminArea());
+        values.put(GardenSQLite.GARDEN_COUNTRYNAME, garden.getCountryName());
+        values.put(GardenSQLite.GARDEN_LOCALITY, garden.getLocality());
 
-			} while (cursor.moveToNext());
-		}
-		cursor.close();
-		close();
-		return garden;
-	}
+        rowid = bdd.insert(GardenSQLite.GARDEN_TABLE_NAME, null, values);
+        garden.setId(rowid);
+        close();
+        return garden;
+    }
 
-	private GardenInterface cursorToGarden(Cursor cursor) {
-		GardenInterface garden = new Garden();
-		// ActionFactory factory = new ActionFactory();
-		// lot =
-		// factory.buildAction(mContext,cursor.getString(cursor.getColumnIndex(GardenDatabase.ACTION_NAME)));
-		// lot.setId(cursor.getInt(cursor.getColumnIndex(GardenDatabase.ACTION_ID)));
-		garden.setId(cursor.getInt(cursor.getColumnIndex(GardenSQLite.GARDEN_ID)));
+    public GardenInterface getGarden(int gardenId) {
+        GardenInterface garden = null;
+        // SeedActionInterface searchedSeed = new GrowingSeed();
+        open();
+        Cursor cursor = bdd.query(GardenSQLite.GARDEN_TABLE_NAME, null,
+                GardenSQLite.GARDEN_ID + "=" + gardenId, null, null, null, null);
 
-		garden.setAdminArea(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_ADMINAREA)));
-		garden.setCountryName(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_COUNTRYNAME)));
-		garden.setLocality(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_LOCALITY)));
-		garden.setDateLastSynchro(new Date(cursor.getInt(cursor.getColumnIndex(GardenSQLite.GARDEN_LAST_SYNCHRO))));
-		garden.setUUID(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_UUID)));
-		return garden;
-	}
+        if (cursor.moveToFirst()) {
+            do {
+                garden = cursorToGarden(cursor);
 
-	public GardenInterface updateGarden(GardenInterface garden) {
-		open();
-		ContentValues values = new ContentValues();
-		values.put(GardenSQLite.GARDEN_ADMINAREA, garden.getAdminArea());
-		values.put(GardenSQLite.GARDEN_COUNTRYNAME, garden.getCountryName());
-		values.put(GardenSQLite.GARDEN_LOCALITY, garden.getLocality());
-		values.put(GardenSQLite.GARDEN_LATITUDE, garden.getGpsLatitude());
-		values.put(GardenSQLite.GARDEN_LONGITUDE, garden.getGpsLongitude());
-		values.put(GardenSQLite.GARDEN_ALTITUDE, garden.getGpsAltitude());
-		values.put(GardenSQLite.GARDEN_UUID, garden.getUUID());
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        close();
+        return garden;
+    }
 
-		int nbRows = bdd.update(GardenSQLite.GARDEN_TABLE_NAME, values, GardenSQLite.GARDEN_ID + "='" + garden.getId()+"'",
-				null);
-		Log.d(TAG, "Updating " + nbRows + " garden named " + garden.getLocality());
-		close();
-		return garden;
-	}
+    private GardenInterface cursorToGarden(Cursor cursor) {
+        GardenInterface garden = new Garden();
+        // ActionFactory factory = new ActionFactory();
+        // lot =
+        // factory.buildAction(mContext,cursor.getString(cursor.getColumnIndex(GardenDatabase.ACTION_NAME)));
+        // lot.setId(cursor.getInt(cursor.getColumnIndex(GardenDatabase.ACTION_ID)));
+        garden.setId(cursor.getInt(cursor.getColumnIndex(GardenSQLite.GARDEN_ID)));
 
-	public List<GardenInterface> getGardens() {
-		List<GardenInterface> gardens = new ArrayList<GardenInterface>();
-		open();
-		Cursor cursor = bdd.query(GardenSQLite.GARDEN_TABLE_NAME, null, null, null, null, null, null);
-		if (cursor.moveToFirst()) {
-			do {
-				GardenInterface garden = cursorToGarden(cursor);
-				gardens.add(garden);
-			} while (cursor.moveToNext());
-		}
-		cursor.close();
-		close();
-		return gardens;
-	}
+        garden.setAdminArea(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_ADMINAREA)));
+        garden.setCountryName(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_COUNTRYNAME)));
+        garden.setLocality(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_LOCALITY)));
+        garden.setDateLastSynchro(new Date(
+                cursor.getInt(cursor.getColumnIndex(GardenSQLite.GARDEN_LAST_SYNCHRO))));
+        garden.setUUID(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_UUID)));
+        return garden;
+    }
 
-	public void deleteGarden(GardenInterface garden) {
-		open();
-		int rowid = bdd.delete(GardenSQLite.GARDEN_TABLE_NAME, GardenSQLite.GARDEN_ID + "=" + garden.getId(), null);
-		if (rowid != 1) {
-			Log.w("deleteGarden", "Garden id=" + garden.getId() + " has not been found");
-		}
-	}
+    public GardenInterface updateGarden(GardenInterface garden) {
+        open();
+        ContentValues values = new ContentValues();
+        values.put(GardenSQLite.GARDEN_ADMINAREA, garden.getAdminArea());
+        values.put(GardenSQLite.GARDEN_COUNTRYNAME, garden.getCountryName());
+        values.put(GardenSQLite.GARDEN_LOCALITY, garden.getLocality());
+        values.put(GardenSQLite.GARDEN_LATITUDE, garden.getGpsLatitude());
+        values.put(GardenSQLite.GARDEN_LONGITUDE, garden.getGpsLongitude());
+        values.put(GardenSQLite.GARDEN_ALTITUDE, garden.getGpsAltitude());
+        values.put(GardenSQLite.GARDEN_UUID, garden.getUUID());
 
-	public int getCountGarden() {
-		int nbGarden;
-		// SeedActionInterface searchedSeed = new GrowingSeed();
-		open();
-		Cursor cursor = bdd.query(GardenSQLite.GARDEN_TABLE_NAME, null, null, null, null, null, null);
-		nbGarden = cursor.getCount();
+        int nbRows = bdd.update(GardenSQLite.GARDEN_TABLE_NAME, values,
+                GardenSQLite.GARDEN_ID + "='" + garden.getId() + "'", null);
+        Log.d(TAG,
+                "Updating " + nbRows + " garden named " + garden.getLocality());
+        close();
+        return garden;
+    }
 
-		cursor.close();
-		close();
-		return nbGarden;
-	}
+    public List<GardenInterface> getGardens() {
+        List<GardenInterface> gardens = new ArrayList<GardenInterface>();
+        open();
+        Cursor cursor = bdd.query(GardenSQLite.GARDEN_TABLE_NAME, null, null,
+                null, null, null, null);
+        if (cursor.moveToFirst()) {
+            do {
+                GardenInterface garden = cursorToGarden(cursor);
+                gardens.add(garden);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        close();
+        return gardens;
+    }
+
+    public void deleteGarden(GardenInterface garden) {
+        open();
+        int rowid = bdd.delete(GardenSQLite.GARDEN_TABLE_NAME,
+                GardenSQLite.GARDEN_ID + "=" + garden.getId(), null);
+        if (rowid != 1) {
+            Log.w("deleteGarden", "Garden id=" + garden.getId()
+                    + " has not been found");
+        }
+        close();
+    }
+
+    public int getCountGarden() {
+        int nbGarden;
+        // SeedActionInterface searchedSeed = new GrowingSeed();
+        open();
+        Cursor cursor = bdd.query(GardenSQLite.GARDEN_TABLE_NAME, null, null,
+                null, null, null, null);
+        nbGarden = cursor.getCount();
+
+        cursor.close();
+        close();
+        return nbGarden;
+    }
 
 }

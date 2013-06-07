@@ -39,196 +39,217 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class ProfileAdapter extends BaseAdapter {
 
-	private Context mContext;
-	
-	private List<GardenInterface> myGardens = new ArrayList<GardenInterface>();
-	private LayoutInflater inflater;
-	private ImageView weatherState;
-//	private Intent weatherIntent;
-	private WeatherManager weatherManager;
-	private GardenManager gardenManager;
-	private GardenInterface selectedGarden;
-	private View currentView;
+    private Context mContext;
 
-	public ProfileAdapter(Context context, List<GardenInterface> myGardens) {
-		mContext = context;
-		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		weatherManager = new WeatherManager(mContext);
-		gardenManager = new GardenManager(mContext);
+    private List<GardenInterface> myGardens = new ArrayList<GardenInterface>();
 
+    private LayoutInflater inflater;
 
-		this.myGardens = myGardens;
-		selectedGarden = gardenManager.getcurrentGarden();
-	}
+    private ImageView weatherState;
 
-	@Override
-	public int getCount() {
-		return myGardens.size();
-	}
+    // private Intent weatherIntent;
+    private WeatherManager weatherManager;
 
-	@Override
-	public GardenInterface getItem(int position) {
-//		if (position % frequencyAds > 0 && !GotsPreferences.getInstance(mContext).isPremium())
-//			position = position - (position / frequencyAds + 1);
-		return myGardens.get(position);
-	}
+    private GardenManager gardenManager;
 
-	@Override
-	public long getItemId(int position) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    private GardenInterface selectedGarden;
 
-	@Override
-	public View getView(final int position, View convertView, ViewGroup parent) {
+    private View currentView;
 
-			View vi = convertView;
+    public ProfileAdapter(Context context, List<GardenInterface> myGardens) {
+        mContext = context;
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        weatherManager = new WeatherManager(mContext);
+        gardenManager = new GardenManager(mContext);
 
-			if (convertView == null || convertView.findViewById(R.id.idGardenName) == null)
-				vi = inflater.inflate(R.layout.list_garden, null);
+        this.myGardens = myGardens;
+        selectedGarden = gardenManager.getcurrentGarden();
+    }
 
-			TextView gardenName = (TextView) vi.findViewById(R.id.idGardenName);
-			weatherState = (ImageView) vi.findViewById(R.id.idWeatherConnected);
-			ImageView imageProfile = (ImageView) vi.findViewById(R.id.imageProfile);
-			weatherHistory = (LinearLayout) vi.findViewById(R.id.layoutWeatherHistory);
-			final HorizontalScrollView weatherHistoryContainer = (HorizontalScrollView) vi.findViewById(R.id.scrollWeatherHistory);
+    @Override
+    public int getCount() {
+        return myGardens.size();
+    }
 
-			
+    @Override
+    public GardenInterface getItem(int position) {
+        // if (position % frequencyAds > 0 &&
+        // !GotsPreferences.getInstance(mContext).isPremium())
+        // position = position - (position / frequencyAds + 1);
+        return myGardens.get(position);
+    }
 
-			final GardenInterface currentGarden = getItem(position);
-//			weatherIntent = new Intent(mContext, WeatherUpdateService.class);
+    @Override
+    public long getItemId(int position) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-			if (selectedGarden != null && currentGarden != null && selectedGarden.getId() == currentGarden.getId()) {
-				vi.setSelected(true);
-				imageProfile.setVisibility(View.VISIBLE);
-				weatherState.setVisibility(View.VISIBLE);
-//				weatherHistory.setVisibility(View.VISIBLE);
-				weatherHistoryContainer.setVisibility(View.VISIBLE);
-				
-				weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_weather));
-//				mContext.startService(weatherIntent);
-//				mContext.registerReceiver(weatherBroadcastReceiver, new IntentFilter(
-//						WeatherUpdateService.BROADCAST_ACTION));
-				currentView = vi;
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
-			} else {
-				vi.setSelected(false);
-				// vi.getBackground().setAlpha(200);
-				imageProfile.setVisibility(View.GONE);
-				weatherState.setVisibility(View.GONE);
-//				weatherHistory.setVisibility(View.GONE);
-				weatherHistoryContainer.setVisibility(View.GONE);
+        View vi = convertView;
 
-			}
+        if (convertView == null
+                || convertView.findViewById(R.id.idGardenName) == null)
+            vi = inflater.inflate(R.layout.list_garden, null);
 
-			if (currentGarden.getName() != null)
-				gardenName.setText(currentGarden.getName());
-			else
-				gardenName.setText(currentGarden.getAddress().getLocality());
+        TextView gardenName = (TextView) vi.findViewById(R.id.idGardenName);
+        weatherState = (ImageView) vi.findViewById(R.id.idWeatherConnected);
+        ImageView imageProfile = (ImageView) vi.findViewById(R.id.imageProfile);
+        weatherHistory = (LinearLayout) vi.findViewById(R.id.layoutWeatherHistory);
+        final HorizontalScrollView weatherHistoryContainer = (HorizontalScrollView) vi.findViewById(R.id.scrollWeatherHistory);
 
-			// weatherState.setOnClickListener(new View.OnClickListener() {
-			//
-			// @Override
-			// public void onClick(View v) {
-			// weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_weather));
-			// weatherState.setImageDrawable(mContext.getResources().getDrawable(R.drawable.weather_updating));
-			// mContext.startService(weatherIntent);
-			// mContext.registerReceiver(weatherBroadcastReceiver, new
-			// IntentFilter(
-			// WeatherUpdateService.BROADCAST_ACTION));
-			// // currentView = conve;
-			//
-			// }
-			// });
+        final GardenInterface currentGarden = getItem(position);
+        // weatherIntent = new Intent(mContext, WeatherUpdateService.class);
 
-			// *************** WEATHER HISTORY
-			if (vi.isSelected()) {
-				weatherHistoryContainer.post(new Runnable() {
-					@Override
-					public void run() {
-						weatherHistoryContainer.scrollTo(weatherHistoryContainer.getWidth(), weatherHistoryContainer.getHeight());
-					}
-				});
-				if (weatherHistory.getChildCount() > 0)
-					weatherHistory.removeAllViews();
+        if (selectedGarden != null && currentGarden != null
+                && selectedGarden.getId() == currentGarden.getId()) {
+            vi.setSelected(true);
+            imageProfile.setVisibility(View.VISIBLE);
+            weatherState.setVisibility(View.VISIBLE);
+            // weatherHistory.setVisibility(View.VISIBLE);
+            weatherHistoryContainer.setVisibility(View.VISIBLE);
 
-				for (int i = -10; i <= 0; i++) {
-					WeatherConditionInterface condition;
-					try {
-						condition = weatherManager.getCondition(i);
-					} catch (Exception e) {
-						Calendar weatherday = new GregorianCalendar();
-						weatherday.setTime(Calendar.getInstance().getTime());
-						weatherday.add(Calendar.DAY_OF_YEAR, i);
+            weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(
+                    R.drawable.bg_weather));
+            // mContext.startService(weatherIntent);
+            // mContext.registerReceiver(weatherBroadcastReceiver, new
+            // IntentFilter(
+            // WeatherUpdateService.BROADCAST_ACTION));
+            currentView = vi;
 
-						condition = new WeatherCondition();
-						condition.setDate(weatherday.getTime());
-					}
+        } else {
+            vi.setSelected(false);
+            // vi.getBackground().setAlpha(200);
+            imageProfile.setVisibility(View.GONE);
+            weatherState.setVisibility(View.GONE);
+            // weatherHistory.setVisibility(View.GONE);
+            weatherHistoryContainer.setVisibility(View.GONE);
 
-					WeatherView view = new WeatherView(mContext);
-					view.setWeather(condition);
-					view.setPadding(2, 0, 2, 0);
-					weatherHistory.addView(view);
+        }
 
-				}
-			}
+        if (currentGarden.getName() != null)
+            gardenName.setText(currentGarden.getName());
+        else
+            gardenName.setText(currentGarden.getAddress().getLocality());
 
-			vi.setOnClickListener(new View.OnClickListener() {
+        // weatherState.setOnClickListener(new View.OnClickListener() {
+        //
+        // @Override
+        // public void onClick(View v) {
+        // weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_weather));
+        // weatherState.setImageDrawable(mContext.getResources().getDrawable(R.drawable.weather_updating));
+        // mContext.startService(weatherIntent);
+        // mContext.registerReceiver(weatherBroadcastReceiver, new
+        // IntentFilter(
+        // WeatherUpdateService.BROADCAST_ACTION));
+        // // currentView = conve;
+        //
+        // }
+        // });
 
-				@Override
-				public void onClick(View v) {
+        // *************** WEATHER HISTORY
+        if (vi.isSelected()) {
+            weatherHistoryContainer.post(new Runnable() {
+                @Override
+                public void run() {
+                    weatherHistoryContainer.scrollTo(
+                            weatherHistoryContainer.getWidth(),
+                            weatherHistoryContainer.getHeight());
+                }
+            });
+            if (weatherHistory.getChildCount() > 0)
+                weatherHistory.removeAllViews();
 
-					gardenManager.setCurrentGarden(currentGarden);
-					selectedGarden = getItem(position);
-					notifyDataSetChanged();
+            for (int i = -10; i <= 0; i++) {
+                WeatherConditionInterface condition;
+                try {
+                    condition = weatherManager.getCondition(i);
+                } catch (Exception e) {
+                    Calendar weatherday = new GregorianCalendar();
+                    weatherday.setTime(Calendar.getInstance().getTime());
+                    weatherday.add(Calendar.DAY_OF_YEAR, i);
 
-					weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_weather));
-					weatherState.setImageDrawable(mContext.getResources().getDrawable(R.drawable.weather_updating));
-//					mContext.startService(weatherIntent);
-//					mContext.registerReceiver(weatherBroadcastReceiver, new IntentFilter(
-//							WeatherUpdateService.BROADCAST_ACTION));
-					currentView = v;
+                    condition = new WeatherCondition();
+                    condition.setDate(weatherday.getTime());
+                }
 
-					GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-					tracker.trackEvent("Garden", "Select", gardenManager.getcurrentGarden().getLocality(), position + 1);
-				}
-			});
+                WeatherView view = new WeatherView(mContext);
+                view.setWeather(condition);
+                view.setPadding(2, 0, 2, 0);
+                weatherHistory.addView(view);
 
-			return vi;
-		
-	}
+            }
+        }
 
-	private BroadcastReceiver weatherBroadcastReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			updateUI(intent);
+        vi.setOnClickListener(new View.OnClickListener() {
 
-		}
-	};
-	private ViewGroup weatherHistory;
+            @Override
+            public void onClick(View v) {
 
-	private void updateUI(Intent intent) {
-		boolean isError = intent.getBooleanExtra("error", true);
-		ImageView weatherConnected = (ImageView) currentView.findViewById(R.id.idWeatherConnected);
+                gardenManager.setCurrentGarden(currentGarden);
+                selectedGarden = getItem(position);
+                notifyDataSetChanged();
 
-		TextView txtError = (TextView) currentView.findViewById(R.id.idTextAlert);
-		if (isError) {
-			txtError.setVisibility(View.VISIBLE);
-			weatherConnected.setImageDrawable(mContext.getResources().getDrawable(R.drawable.weather_disconnected));
-			weatherConnected.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_state_critical));
+                weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(
+                        R.drawable.bg_weather));
+                weatherState.setImageDrawable(mContext.getResources().getDrawable(
+                        R.drawable.weather_updating));
+                // mContext.startService(weatherIntent);
+                // mContext.registerReceiver(weatherBroadcastReceiver, new
+                // IntentFilter(
+                // WeatherUpdateService.BROADCAST_ACTION));
+                currentView = v;
 
-		} else {
-			txtError.setVisibility(View.GONE);
-			weatherConnected.setImageDrawable(mContext.getResources().getDrawable(R.drawable.weather_connected));
-			weatherConnected.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_state_ok));
-		}
-		// buildWeatherList();
-	}
+                if (gardenManager.getcurrentGarden() != null) {
+                    GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+                    tracker.trackEvent("Garden", "Select",
+                            gardenManager.getcurrentGarden().getLocality(),
+                            position + 1);
+                }
+            }
+        });
 
-	@Override
-	public void notifyDataSetChanged() {
-		// myGardens = gardenManager.getMyGardens();
-		super.notifyDataSetChanged();
-	}
-	
+        return vi;
+
+    }
+
+    private BroadcastReceiver weatherBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateUI(intent);
+
+        }
+    };
+
+    private ViewGroup weatherHistory;
+
+    private void updateUI(Intent intent) {
+        boolean isError = intent.getBooleanExtra("error", true);
+        ImageView weatherConnected = (ImageView) currentView.findViewById(R.id.idWeatherConnected);
+
+        TextView txtError = (TextView) currentView.findViewById(R.id.idTextAlert);
+        if (isError) {
+            txtError.setVisibility(View.VISIBLE);
+            weatherConnected.setImageDrawable(mContext.getResources().getDrawable(
+                    R.drawable.weather_disconnected));
+            weatherConnected.setBackgroundDrawable(mContext.getResources().getDrawable(
+                    R.drawable.bg_state_critical));
+
+        } else {
+            txtError.setVisibility(View.GONE);
+            weatherConnected.setImageDrawable(mContext.getResources().getDrawable(
+                    R.drawable.weather_connected));
+            weatherConnected.setBackgroundDrawable(mContext.getResources().getDrawable(
+                    R.drawable.bg_state_ok));
+        }
+        // buildWeatherList();
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+    }
+
 }

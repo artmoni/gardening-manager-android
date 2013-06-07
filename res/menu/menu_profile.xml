@@ -16,11 +16,11 @@
         android:icon="@drawable/help"
         android:showAsAction="always"
         android:title="@string/menu.help"/>
-     <!-- <item
+     <item
         android:id="@+id/delete_garden"
         android:showAsAction="withText"
         android:title="@string/action.delete"
-        />  -->
+        /> 
      <item
         android:id="@+id/edit_garden"
         android:showAsAction="withText"

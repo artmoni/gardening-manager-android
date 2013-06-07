@@ -106,11 +106,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 
         List<GardenInterface> myGardens = super.getMyGardens();
 
-        // Session session =
-        // client.getSession(GotsPreferences.getInstance(mContext).getNUXEO_LOGIN(),
-        // GotsPreferences.getInstance(mContext).getNUXEO_PASSWORD());
-        // Session session = client.getSession();
-
+   
         // TODO Sync with remote
         try {
             AsyncTask<Void, Integer, List<GardenInterface>> task = new AsyncTask<Void, Integer, List<GardenInterface>>() {
