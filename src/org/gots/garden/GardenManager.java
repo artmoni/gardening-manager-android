@@ -6,7 +6,6 @@ import org.gots.DatabaseHelper;
 import org.gots.garden.provider.GardenProvider;
 import org.gots.garden.provider.local.LocalGardenProvider;
 import org.gots.garden.provider.nuxeo.NuxeoGardenProvider;
-import org.gots.garden.sql.GardenDBHelper;
 import org.gots.preferences.GotsPreferences;
 
 import android.content.Context;
@@ -81,8 +80,7 @@ public class GardenManager {
     }
 
     public void updateCurrentGarden(GardenInterface garden) {
-        GardenDBHelper helper = new GardenDBHelper(mContext);
-        helper.updateGarden(garden);
+        gardenProvider.updateGarden(garden);
     }
 
     public void update() {
