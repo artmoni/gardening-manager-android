@@ -181,6 +181,15 @@ public class ProfileActivity extends SherlockActivity {
                 intentCreation.putExtra("option",
                         ProfileCreationActivity.OPTION_EDIT);
                 startActivity(intentCreation);
+            }else{
+                gardenManager.removeGarden(gardenManager.getcurrentGarden());
+                try {
+                    GardenSync gardenSync = new GardenSync();
+                    gardenSync.execute(this);
+                   
+                } catch (Exception e) {
+                    Log.e(TAG, e.getMessage());
+                }
             }
             profileAdapter.notifyDataSetChanged();
             return true;
