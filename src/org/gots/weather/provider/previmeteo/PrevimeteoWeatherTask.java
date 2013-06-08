@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ *
  * Contributors:
  *     sfleury - initial API and implementation
  ******************************************************************************/
@@ -32,122 +32,129 @@ import android.content.Context;
 import android.util.Log;
 
 public class PrevimeteoWeatherTask extends WeatherTask {
-	private static final String TAG = "PrevimeteoWeatherTask";
-	protected URL url;
-	private Date requestedDay;
-	private Context mContext;
+    private static final String TAG = "PrevimeteoWeatherTask";
 
-	private static String queryString;
-	private WeatherSet ws;
-	private boolean iserror;
+    protected URL url;
 
-	private static int i = 0;
-	private WeatherCache cache;
+    private Date requestedDay;
 
-	public PrevimeteoWeatherTask(Context context, Address address, Date requestedDay) {
-		this.requestedDay = requestedDay;
-		mContext = context;
+    private Context mContext;
 
-		try {
-			String weatherURL;
+    private static String queryString;
 
-			if (GotsPreferences.isDevelopment())
-				weatherURL = "http://www.gardening-manager.com/weather/weather-error.xml";
-			else
-				weatherURL = "http://api.previmeteo.com/" + GotsPreferences.getWeatherApiKey() + "/ig/api?weather="
-						+ address.getLocality() + "," + context.getResources().getConfiguration().locale.getCountry() + "&hl=fr";
-			// weatherURL = "http://services.gardening-manager.com/previmeteo/"
-			// + "/ig/api?weather="
-			// + address.getLocality() + "," + address.getCountryName() +
-			// "&hl=fr";
+    private WeatherSet ws;
 
-			queryString = weatherURL;
+    private boolean iserror;
 
-			url = new URL(queryString.replace(" ", "%20"));
-		} catch (Exception e) {
-			Log.e(TAG, e.getMessage());
-		}
+    private static int i = 0;
 
-	}
+    private WeatherCache cache;
 
-	@Override
-	protected WeatherConditionInterface doInBackground(Object... arg0) {
-		if (ws == null) {
+    public PrevimeteoWeatherTask(Context context, Address address, Date requestedDay) {
+        this.requestedDay = requestedDay;
+        mContext = context;
 
-			try {
-				Log.d("WeatherConditionInterface", "" + (++i));
-				cache = new WeatherCache();
+        try {
+            String weatherURL;
 
-				InputStream is = cache.getCacheByURL(url);
+            if (GotsPreferences.isDevelopment())
+                weatherURL = "http://www.gardening-manager.com/weather/weather-error.xml";
+            else
+                weatherURL = "http://api.previmeteo.com/" + GotsPreferences.getWeatherApiKey() + "/ig/api?weather="
+                        + address.getLocality() + "," + context.getResources().getConfiguration().locale.getCountry()
+                        + "&hl=fr";
+            // weatherURL = "http://services.gardening-manager.com/previmeteo/"
+            // + "/ig/api?weather="
+            // + address.getLocality() + "," + address.getCountryName() +
+            // "&hl=fr";
 
-				/* Get a SAXParser from the SAXPArserFactory. */
-				SAXParserFactory spf = SAXParserFactory.newInstance();
-				SAXParser sp = spf.newSAXParser();
+            queryString = weatherURL;
 
-				/* Get the XMLReader of the SAXParser we created. */
-				XMLReader xr = sp.getXMLReader();
+            url = new URL(queryString.replace(" ", "%20"));
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
 
-				PrevimeteoErrorHandler error = new PrevimeteoErrorHandler();
-				xr.setContentHandler(error);
-				xr.parse(new InputSource(is));
-				iserror = error.isError();
+    }
 
-				if (!iserror) {
-					// TODO we should not need to get the cache file again, a
-					// better way exists
+    @Override
+    protected WeatherConditionInterface doInBackground(Object... arg0) {
+        if (ws == null) {
 
-					is = cache.getCacheByURL(url);
-					/*
-					 * Create a new ContentHandler and apply it to the
-					 * XML-Reader
-					 */
-					PrevimeteoWeatherHandler gwh = new PrevimeteoWeatherHandler();
-					xr.setContentHandler(gwh);
+            try {
+                Log.d("WeatherConditionInterface", "" + (++i));
+                cache = new WeatherCache();
 
-					// InputSource is = new InputSource(url.openStream());
-					/* Parse the xml-data our URL-call returned. */
-					xr.parse(new InputSource(is));
+                InputStream is = cache.getCacheByURL(url);
 
-					/* Our Handler now provides the parsed weather-data to us. */
-					ws = gwh.getWeatherSet();
-				}
-			} catch (Exception e) {
-				Log.e(TAG, "PrevimeteoErrorHandler has return an error " + e.getMessage());
-				e.printStackTrace();
+                /* Get a SAXParser from the SAXPArserFactory. */
+                SAXParserFactory spf = SAXParserFactory.newInstance();
+                SAXParser sp = spf.newSAXParser();
 
-				iserror = true;
+                /* Get the XMLReader of the SAXParser we created. */
+                XMLReader xr = sp.getXMLReader();
 
-				return null;
-			}
-		}
+                PrevimeteoErrorHandler error = new PrevimeteoErrorHandler();
+                xr.setContentHandler(error);
+                xr.parse(new InputSource(is));
+                iserror = error.isError();
 
-		Calendar requestCalendar = Calendar.getInstance();
-		requestCalendar.setTime(requestedDay);
-		if (ws == null)
-			return new WeatherCondition(requestedDay);
-		else if (requestCalendar.get(Calendar.DAY_OF_YEAR) == Calendar.getInstance().get(Calendar.DAY_OF_YEAR))
-			return ws.getWeatherCurrentCondition();
-		else if (requestCalendar.get(Calendar.DAY_OF_YEAR) > Calendar.getInstance().get(Calendar.DAY_OF_YEAR))
-			return ws.getWeatherForecastConditions().get(
-					requestCalendar.get(Calendar.DAY_OF_YEAR) - Calendar.getInstance().get(Calendar.DAY_OF_YEAR));
-		return new WeatherCondition(requestedDay);
+                if (!iserror) {
+                    // TODO we should not need to get the cache file again, a
+                    // better way exists
 
-	}
+                    is = cache.getCacheByURL(url);
+                    /*
+                     * Create a new ContentHandler and apply it to the
+                     * XML-Reader
+                     */
+                    PrevimeteoWeatherHandler gwh = new PrevimeteoWeatherHandler();
+                    xr.setContentHandler(gwh);
 
-	@Override
-	protected void onPostExecute(WeatherConditionInterface result) {
+                    // InputSource is = new InputSource(url.openStream());
+                    /* Parse the xml-data our URL-call returned. */
+                    xr.parse(new InputSource(is));
 
-		if (iserror) {
-			// Toast.makeText(mContext,
-			// mContext.getResources().getString(R.string.weather_citynotfound),
-			// 30).show();
-			Log.w(TAG, "Error updating weather");
+                    /* Our Handler now provides the parsed weather-data to us. */
+                    ws = gwh.getWeatherSet();
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "PrevimeteoErrorHandler has return an error " + e.getMessage());
+                e.printStackTrace();
 
-			// cache.clean(url);
-		} else
-			Log.d(TAG, "Weather updated from " + queryString);
+                iserror = true;
 
-		super.onPostExecute(result);
-	}
+                return null;
+            }
+        }
+
+        Calendar requestCalendar = Calendar.getInstance();
+        requestCalendar.setTime(requestedDay);
+        if (ws == null)
+            return new WeatherCondition(requestedDay);
+        else if (requestCalendar.get(Calendar.DAY_OF_YEAR) == Calendar.getInstance().get(Calendar.DAY_OF_YEAR))
+            return ws.getWeatherCurrentCondition();
+        else if (requestCalendar.get(Calendar.DAY_OF_YEAR) > Calendar.getInstance().get(Calendar.DAY_OF_YEAR))
+            return ws.getWeatherForecastConditions().get(
+                    requestCalendar.get(Calendar.DAY_OF_YEAR) - Calendar.getInstance().get(Calendar.DAY_OF_YEAR));
+        return new WeatherCondition(requestedDay);
+
+    }
+
+    @Override
+    protected void onPostExecute(WeatherConditionInterface result) {
+
+        if (iserror) {
+            // Toast.makeText(mContext,
+            // mContext.getResources().getString(R.string.weather_citynotfound),
+            // 30).show();
+            Log.w(TAG, "Error updating weather");
+
+            // cache.clean(url);
+        } else
+            Log.d(TAG, "Weather updated from " + queryString);
+
+        super.onPostExecute(result);
+    }
 
 }
