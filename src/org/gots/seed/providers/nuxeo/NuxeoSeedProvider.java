@@ -12,8 +12,6 @@ import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.providers.GotsSeedProvider;
 import org.gots.seed.providers.local.LocalSeedProvider;
-import org.gots.utils.TokenRequestInterceptor;
-import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.jaxrs.Constants;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.impl.HttpAutomationClient;
@@ -21,163 +19,157 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
+import org.nuxeo.ecm.automation.client.jaxrs.spi.auth.TokenRequestInterceptor;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
 public class NuxeoSeedProvider extends LocalSeedProvider {
-    protected static final String TAG = "NuxeoSeedProvider";
+	protected static final String TAG = "NuxeoSeedProvider";
 
-    private static final long TIMEOUT = 10;
+	private static final long TIMEOUT = 10;
 
-    String myToken = GotsPreferences.getInstance(mContext).getToken();
+	String myToken = GotsPreferences.getInstance(mContext).getToken();
+	String myLogin = GotsPreferences.getInstance(mContext).getNuxeoLogin();
+	String myDeviceId = GotsPreferences.getInstance(mContext).getDeviceId();
 
-    String myLogin = GotsPreferences.getInstance(mContext).getNUXEO_LOGIN();
+	protected String myApp = GotsPreferences.getInstance(mContext).getGardeningManagerAppname();
 
-    String myDeviceId = GotsPreferences.getInstance(mContext).getDeviceId();
+	public NuxeoSeedProvider(Context context) {
+		super(context);
+	}
 
-    protected String myApp = GotsPreferences.getInstance(mContext).getGardeningManagerAppname();
+	@Override
+	public List<BaseSeedInterface> getVendorSeeds() {
 
-    public NuxeoSeedProvider(Context context) {
-        super(context);
-    }
+		List<BaseSeedInterface> vendorSeeds = super.getVendorSeeds();
 
-    @Override
-    public List<BaseSeedInterface> getVendorSeeds() {
+		AsyncTask<Object, Integer, List<BaseSeedInterface>> task = new AsyncTask<Object, Integer, List<BaseSeedInterface>>() {
 
-        List<BaseSeedInterface> vendorSeeds = super.getVendorSeeds();
+			private HttpAutomationClient client;
 
-        AsyncTask<Object, Integer, List<BaseSeedInterface>> task = new AsyncTask<Object, Integer, List<BaseSeedInterface>>() {
+			@Override
+			protected List<BaseSeedInterface> doInBackground(Object... params) {
+				List<BaseSeedInterface> nuxeoSeeds = new ArrayList<BaseSeedInterface>();
 
-            private HttpAutomationClient client;
+				client = new HttpAutomationClient(GotsPreferences.getGardeningManagerServerURI());
+				if (GotsPreferences.getInstance(mContext).isConnectedToServer())
+					client.setRequestInterceptor(new TokenRequestInterceptor(myApp, myToken, myLogin, myDeviceId));
 
-            @Override
-            protected List<BaseSeedInterface> doInBackground(Object... params) {
-                List<BaseSeedInterface> nuxeoSeeds = new ArrayList<BaseSeedInterface>();
+				try {
 
-                client = new HttpAutomationClient(
-                        GotsPreferences.getGardeningManagerServerURI());
-                if (GotsPreferences.getInstance(mContext).isConnectedToServer())
-                    client.setRequestInterceptor(new TokenRequestInterceptor(
-                            myApp, myToken, myLogin, myDeviceId));
+					Session session = client.getSession();
 
-                try {
+					Documents docs = (Documents) session.newRequest("Document.Query") //
+							.setHeader(Constants.HEADER_NX_SCHEMAS, "*") //
+							.set("query","SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState <> 'deleted' ORDER BY dc:modified DESC") //
+							.execute();
+					for (Iterator<Document> iterator = docs.iterator(); iterator.hasNext();) {
+						Document document = (Document) iterator.next();
+						BaseSeedInterface seed = NuxeoSeedConverter.convert(document);
+						nuxeoSeeds.add(seed);
+						Log.i(TAG, "Nuxeo Seed Specie " + seed.getSpecie());
+					}
+				} catch (Exception e) {
+					Log.e(TAG, "getAllSeeds " + e.getMessage());
+				}
 
-                    Session session = client.getSession();
+				return nuxeoSeeds;
+			}
+		}.execute(new Object());
 
-                    Documents docs = (Documents) session.newRequest(
-                            "Document.Query").setHeader(
-                            Constants.HEADER_NX_SCHEMAS, "*").set(
-                            "query",
-                            "SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState <> 'deleted' ORDER BY dc:modified DESC").execute();
-                    for (Iterator<Document> iterator = docs.iterator(); iterator.hasNext();) {
-                        Document document = (Document) iterator.next();
-                        BaseSeedInterface seed = NuxeoSeedConverter.convert(document);
-                        nuxeoSeeds.add(seed);
-                        Log.i(TAG, "Nuxeo Seed Specie " + seed.getSpecie());
-                    }
-                } catch (Exception e) {
-                    Log.e(TAG, "getAllSeeds " + e.getMessage());
-                }
+		List<BaseSeedInterface> remoteSeeds = new ArrayList<BaseSeedInterface>();
 
-                return nuxeoSeeds;
-            }
-        }.execute(new Object());
+		try {
+			remoteSeeds = task.get(TIMEOUT, TimeUnit.SECONDS);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TimeoutException e) {
+			Log.e(TAG, GotsPreferences.getGardeningManagerServerURI() + "\n" + e.getMessage(), e);
+		}
 
-        List<BaseSeedInterface> remoteSeeds = new ArrayList<BaseSeedInterface>();
+		// TODO send as intent
+		List<BaseSeedInterface> myLocalSeeds = super.getVendorSeeds();
+		for (BaseSeedInterface remoteSeed : remoteSeeds) {
+			boolean found = false;
+			for (BaseSeedInterface localSeed : myLocalSeeds) {
+				if (remoteSeed.getUUID() != null && remoteSeed.getUUID().equals(localSeed.getUUID())) {
+					// local and remote
+					// 1: overwrite remote
+					// updateRemoteGarden(localSeed);
+					// 2: TODO sync with remote instead
+					// syncGardens(localGarden,remoteGarden);
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				// remote only
+				vendorSeeds.add(super.createSeed(remoteSeed));
+			}
+		}
 
-        try {
-            remoteSeeds = task.get(TIMEOUT, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (TimeoutException e) {
-            Log.e(TAG, GotsPreferences.getGardeningManagerServerURI() + "\n"
-                    + e.getMessage(), e);
-        }
+		for (BaseSeedInterface localSeed : myLocalSeeds) {
+			if (localSeed.getUUID() == null) {
+				createRemoteSeed(localSeed);
+			}
+		}
 
-        // TODO send as intent
-        List<BaseSeedInterface> myLocalSeeds = super.getVendorSeeds();
-        for (BaseSeedInterface remoteSeed : remoteSeeds) {
-            boolean found = false;
-            for (BaseSeedInterface localSeed : myLocalSeeds) {
-                if (remoteSeed.getUUID() != null
-                        && remoteSeed.getUUID().equals(localSeed.getUUID())) {
-                    // local and remote
-                    // 1: overwrite remote
-                    // updateRemoteGarden(localSeed);
-                    // 2: TODO sync with remote instead
-                    // syncGardens(localGarden,remoteGarden);
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                // remote only
-                vendorSeeds.add(super.createSeed(remoteSeed));
-            }
-        }
+		return vendorSeeds;
+	}
 
-        for (BaseSeedInterface localSeed : myLocalSeeds) {
-            if (localSeed.getUUID() == null) {
-                createRemoteSeed(localSeed);
-            }
-        }
+	@Override
+	public void getAllFamilies() {
+		// TODO Auto-generated method stub
 
-        return vendorSeeds;
-    }
+	}
 
-    @Override
-    public void getAllFamilies() {
-        // TODO Auto-generated method stub
+	@Override
+	public void getFamilyById(int id) {
+		// TODO Auto-generated method stub
 
-    }
+	}
 
-    @Override
-    public void getFamilyById(int id) {
-        // TODO Auto-generated method stub
+	@Override
+	public BaseSeedInterface getSeedById() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    }
+	@Override
+	public BaseSeedInterface createSeed(BaseSeedInterface seed) {
+		super.createSeed(seed);
+		return createRemoteSeed(seed);
+	}
 
-    @Override
-    public BaseSeedInterface getSeedById() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	/*
+	 * Return new remote seed or null if error
+	 */
+	protected BaseSeedInterface createRemoteSeed(BaseSeedInterface seed) {
+		try {
+			AsyncTask<BaseSeedInterface, Integer, Document> task = new AsyncTask<BaseSeedInterface, Integer, Document>() {
 
-    @Override
-    public BaseSeedInterface createSeed(BaseSeedInterface seed) {
-        super.createSeed(seed);
-        return createRemoteSeed(seed);
-    }
+				private Document documentVendorSeed;
 
-    /*
-     * Return new remote seed or null if error
-     */
-    protected BaseSeedInterface createRemoteSeed(BaseSeedInterface seed) {
-        try {
-            AsyncTask<BaseSeedInterface, Integer, Document> task = new AsyncTask<BaseSeedInterface, Integer, Document>() {
+				@Override
+				protected Document doInBackground(BaseSeedInterface... params) {
+					BaseSeedInterface currentSeed = params[0];
+					Log.d(TAG, "doInBackground createSeed " + currentSeed);
 
-                private Document documentVendorSeed;
-
-                @Override
-                protected Document doInBackground(BaseSeedInterface... params) {
-                    BaseSeedInterface currentSeed = params[0];
-                    Log.d(TAG, "doInBackground createSeed " + currentSeed);
-
-                    HttpAutomationClient client = new HttpAutomationClient(
-                            GotsPreferences.getGardeningManagerServerURI());
+					HttpAutomationClient client = new HttpAutomationClient(
+							GotsPreferences.getGardeningManagerServerURI());
 
                     client.setRequestInterceptor(new TokenRequestInterceptor(
                             myApp, myToken, myLogin, myDeviceId));
 
-                    PropertyMap props = new PropertyMap();
-                    props.set("dc:title", currentSeed.getVariety());
-                    props.set("dc:description", "test");
+						PropertyMap props = new PropertyMap();
+						props.set("dc:title", currentSeed.getVariety());
+						props.set("dc:description", "test");
                     props.set("vendorseed:datesowingmin",
                             String.valueOf(currentSeed.getDateSowingMin()));
                     props.set("vendorseed:datesowingmax",
@@ -186,10 +178,10 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                             String.valueOf(currentSeed.getDurationMin()));
                     props.set("vendorseed:durationmax",
                             String.valueOf(currentSeed.getDurationMax()));
-                    props.set("vendorseed:family", currentSeed.getFamily());
-                    props.set("vendorseed:specie", currentSeed.getSpecie());
-                    props.set("vendorseed:variety", currentSeed.getVariety());
-                    props.set("vendorseed:barcode", currentSeed.getBareCode());
+						props.set("vendorseed:family", currentSeed.getFamily());
+						props.set("vendorseed:specie", currentSeed.getSpecie());
+						props.set("vendorseed:variety", currentSeed.getVariety());
+						props.set("vendorseed:barcode", currentSeed.getBareCode());
 
                     // DocumentManager documentManager =
                     // session.getAdapter(DocumentManager.class);
@@ -204,9 +196,9 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     try {
                         catalog = (Document) session.newRequest(
                                 DocumentManager.FetchDocument).set("value",
-                                wsRef + "/Catalog").execute();
+                                wsRef+"/Catalog").execute();
 
-                    } catch (Exception e) {
+					} catch (Exception e) {
                         Log.e(TAG, "Fetching folder Catalog " + e.getMessage());
 
                         Document folder;
@@ -230,13 +222,13 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                         }
 
                     }
-
+                    
                     if (catalog == null)
-                        return null;
-
+						return null;
+                    
                     try {
                         // get the root
-
+                        
                         documentVendorSeed = (Document) session.newRequest(
                                 "Document.Create").setInput(catalog).setHeader(
                                 Constants.HEADER_NX_SCHEMAS, "*").set("type",
@@ -249,29 +241,29 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     } catch (Exception e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
-                    }
+					}
 
-                    return documentVendorSeed;
+					return documentVendorSeed;
 
-                }
+				}
 
-            }.execute(seed);
-            // TODO wait for task.getStatus() == Status.FINISHED; in a thread
-            //
-            // TODO send as intent
-            // TODO get(timeout)
-            Document remoteVendorSeed = task.get();
-            if (remoteVendorSeed == null)
-                return null;
-            seed.setUUID(remoteVendorSeed.getId());
+			}.execute(seed);
+			// TODO wait for task.getStatus() == Status.FINISHED; in a thread
+			//
+			// TODO send as intent
+			// TODO get(timeout)
+			Document remoteVendorSeed = task.get();
+			if (remoteVendorSeed == null)
+				return null;
+			seed.setUUID(remoteVendorSeed.getId());
 
-            super.updateSeed(seed);
+			super.updateSeed(seed);
 
-        } catch (InterruptedException e) {
-            Log.e(TAG, e.getMessage());
-        } catch (ExecutionException e) {
-            Log.e(TAG, e.getMessage(), e);
-        }
-        return seed;
-    }
+		} catch (InterruptedException e) {
+			Log.e(TAG, e.getMessage());
+		} catch (ExecutionException e) {
+			Log.e(TAG, e.getMessage(), e);
+		}
+		return seed;
+	}
 }

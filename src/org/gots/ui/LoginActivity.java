@@ -5,7 +5,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.LinkedList;
@@ -17,11 +16,11 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.gots.R;
 import org.gots.preferences.GotsPreferences;
-import org.gots.utils.TokenRequestInterceptor;
 import org.nuxeo.ecm.automation.client.jaxrs.Constants;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.impl.HttpAutomationClient;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
+import org.nuxeo.ecm.automation.client.jaxrs.spi.auth.TokenRequestInterceptor;
 
 import android.os.AsyncTask;
 import android.os.Build;
@@ -37,10 +36,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.MenuItem;
 
-public class LoginActivity extends SherlockActivity {
+public class LoginActivity extends AbstractActivity {
     private TextView loginText;
 
     private TextView passwordText;
@@ -65,9 +63,9 @@ public class LoginActivity extends SherlockActivity {
     protected void onResume() {
         super.onResume();
         loginText = (TextView) findViewById(R.id.edittextLogin);
-        loginText.setText(GotsPreferences.getInstance(this).getNUXEO_LOGIN());
+        loginText.setText(GotsPreferences.getInstance(this).getNuxeoLogin());
         passwordText = (TextView) findViewById(R.id.edittextPassword);
-        passwordText.setText(GotsPreferences.getInstance(this).getNUXEO_PASSWORD());
+        passwordText.setText(GotsPreferences.getInstance(this).getNuxeoPassword());
 
         LinearLayout buttonLayout = (LinearLayout) findViewById(R.id.idLayoutConnection);
         buttonLayout.setOnClickListener(new View.OnClickListener() {
@@ -107,8 +105,8 @@ public class LoginActivity extends SherlockActivity {
                 } else {
                     GotsPreferences.getInstance(LoginActivity.this).setToken(token);
 
-                    GotsPreferences.getInstance(LoginActivity.this).setNUXEO_LOGIN(loginText.getText().toString());
-                    GotsPreferences.getInstance(LoginActivity.this).setNUXEO_PASSWORD(passwordText.getText().toString());
+                    GotsPreferences.getInstance(LoginActivity.this).setNuxeoLogin(loginText.getText().toString());
+                    GotsPreferences.getInstance(LoginActivity.this).setNuxeoPassword(passwordText.getText().toString());
                     GotsPreferences.getInstance(LoginActivity.this).setConnectedToServer(true);
                 }
             }

@@ -3,6 +3,7 @@ package org.gots.weather.service;
 import java.util.Calendar;
 
 import org.gots.R;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GardenManager;
 import org.gots.weather.WeatherConditionInterface;
@@ -18,7 +19,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class WeatherUpdateService extends Service {
-	public static final String BROADCAST_ACTION = "org.gots.broadcastweather.displayevent";
 	private static final String TAG = "WeatherUpdateService";
 	private Intent intent;
 	private final Handler handler = new Handler();
@@ -33,7 +33,7 @@ public class WeatherUpdateService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		intent = new Intent(BROADCAST_ACTION);
+		intent = new Intent(BroadCastMessages.WEATHER_DISPLAY_EVENT);
 	}
 
 	@Override

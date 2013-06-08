@@ -13,6 +13,7 @@ package org.gots.ui;
 import java.util.List;
 
 import org.gots.R;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.adapter.ListVendorSeedAdapter;
@@ -100,7 +101,7 @@ public class VendorListActivity extends SherlockListFragment {
             mContext.startService(seedIntent);
 
         setListAdapter(listVendorSeedAdapter);
-        mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(SeedUpdateService.BROADCAST_ACTION));
+        mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.SEED_DISPLAYLIST));
         super.onResume();
     }
 

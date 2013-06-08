@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ *
  * Contributors:
  *     sfleury - initial API and implementation
  ******************************************************************************/
@@ -13,6 +13,7 @@ package org.gots.ui;
 import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.analytics.GotsAnalytics;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenManager;
 import org.gots.help.HelpUriBuilder;
 import org.gots.preferences.GotsPreferences;
@@ -34,14 +35,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class DashboardActivity extends SherlockActivity implements
-        OnClickListener {
+public class DashboardActivity extends AbstractActivity implements OnClickListener {
     // public static GardenInterface myGarden = new Garden();
     // GoogleAnalyticsTracker tracker;
     GotsAdvertisement adView;
@@ -191,8 +190,7 @@ public class DashboardActivity extends SherlockActivity implements
         // ((BaseAdapter) weatherWidget.getAdapter()).notifyDataSetChanged();
         // }
         startService(weatherIntent);
-        registerReceiver(weatherBroadcastReceiver, new IntentFilter(
-                WeatherUpdateService.BROADCAST_ACTION));
+        registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
 
     }
 

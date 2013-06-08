@@ -46,14 +46,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-public class NewSeedActivity extends SherlockActivity implements OnClickListener {
+public class NewSeedActivity extends AbstractActivity implements OnClickListener {
     private static final String SELECTED_SPECIE = "selectedSpecie";
 
     private View currentView;

@@ -13,7 +13,6 @@ import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.providers.local.sql.GrowingSeedDBHelper;
 import org.gots.seed.view.SeedWidgetLong;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -30,7 +29,7 @@ import android.widget.Spinner;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class NewActionActivity extends Activity implements OnItemClickListener, OnClickListener {
+public class NewActionActivity extends AbstractActivity implements OnItemClickListener, OnClickListener {
 
     Integer[] list = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
 
