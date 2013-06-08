@@ -204,7 +204,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     try {
                         catalog = (Document) session.newRequest(
                                 DocumentManager.FetchDocument).set("value",
-                                wsRef+"/Catalog").execute();
+                                wsRef + "/Catalog").execute();
 
                     } catch (Exception e) {
                         Log.e(TAG, "Fetching folder Catalog " + e.getMessage());
@@ -230,14 +230,13 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                         }
 
                     }
-                    
 
                     if (catalog == null)
                         return null;
-                    
+
                     try {
                         // get the root
-                        
+
                         documentVendorSeed = (Document) session.newRequest(
                                 "Document.Create").setInput(catalog).setHeader(
                                 Constants.HEADER_NX_SCHEMAS, "*").set("type",
