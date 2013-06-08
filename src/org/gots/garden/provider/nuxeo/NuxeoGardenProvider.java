@@ -9,12 +9,14 @@ import org.gots.garden.GardenInterface;
 import org.gots.garden.provider.local.LocalGardenProvider;
 import org.gots.preferences.GotsPreferences;
 import org.gots.utils.TokenRequestInterceptor;
+import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.jaxrs.Constants;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.impl.HttpAutomationClient;
 import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
+import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -106,7 +108,6 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 
         List<GardenInterface> myGardens = super.getMyGardens();
 
-   
         // TODO Sync with remote
         try {
             AsyncTask<Void, Integer, List<GardenInterface>> task = new AsyncTask<Void, Integer, List<GardenInterface>>() {
@@ -119,8 +120,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
                     Log.d(TAG, GotsPreferences.getGardeningManagerServerURI());
 
                     client.setRequestInterceptor(new TokenRequestInterceptor(
-                            myApp = GotsPreferences.getInstance(mContext).getGardeningManagerAppname(),
-                            myToken, myLogin, myDeviceId));
+                            myApp, myToken, myLogin, myDeviceId));
                     Log.d(TAG, "Token=" + myToken);
 
                     // Session session =
@@ -170,10 +170,9 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
             List<GardenInterface> remoteGardens = task.get();
 
             // TODO send as intent
-            List<GardenInterface> myLocalGardens = super.getMyGardens();
             for (GardenInterface remoteGarden : remoteGardens) {
                 boolean found = false;
-                for (GardenInterface localGarden : myLocalGardens) {
+                for (GardenInterface localGarden : myGardens) {
                     if (remoteGarden.getUUID() != null
                             && remoteGarden.getUUID().equals(
                                     localGarden.getUUID())) {
@@ -191,7 +190,9 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
                     myGardens.add(super.createGarden(remoteGarden));
                 }
             }
-            for (GardenInterface localGarden : myLocalGardens) {
+            int i = 0;
+            for (GardenInterface localGarden : myGardens) {
+
                 if (localGarden.getUUID() == null) {
                     // local only
                     createRemoteGarden(localGarden);
@@ -209,8 +210,11 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
                     if (!found) {
                         // local only with UUID -> delete local
                         super.removeGarden(localGarden);
+                        myGardens.remove(i);
                     }
                 }
+
+                i++;
             }
 
         } catch (InterruptedException e) {
@@ -223,9 +227,48 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 
     @Override
     public int removeGarden(GardenInterface garden) {
-        // TODO Auto-generated method stub
-        return 0;
+        AsyncTask<GardenInterface, Integer, List<GardenInterface>> task = new AsyncTask<GardenInterface, Integer, List<GardenInterface>>() {
 
+            @Override
+            protected List<GardenInterface> doInBackground(
+                    GardenInterface... gardens) {
+                Log.d(TAG, "doInBackground");
+                HttpAutomationClient client = new HttpAutomationClient(
+                        GotsPreferences.getGardeningManagerServerURI());
+                Log.d(TAG, GotsPreferences.getGardeningManagerServerURI());
+
+                client.setRequestInterceptor(new TokenRequestInterceptor(myApp,
+                        myToken, myLogin, myDeviceId));
+                Log.d(TAG, "Token=" + myToken);
+
+                // Session session =
+                // client.getSession(GotsPreferences.getInstance(mContext).getNUXEO_LOGIN(),
+                // GotsPreferences.getInstance(mContext).getNUXEO_PASSWORD());
+                Session session = client.getSession();
+                Log.d(TAG, "Session=" + session);
+
+                // DocumentService rs = new DocumentService(session);
+                List<GardenInterface> remoteGardens = new ArrayList<GardenInterface>();
+                try {
+
+                    // DocumentManager documentManager =
+                    // session.getAdapter(DocumentManager.class);
+                    // documentManager.remove(gardens[0].getUUID());
+                    Documents gardensWorkspaces = (Documents) session.newRequest(
+                            DocumentManager.DeleteDocument).setHeader(
+                            Constants.HEADER_NX_SCHEMAS, "*").setInput(
+                            new IdRef(gardens[0].getUUID())).execute();
+
+                } catch (Exception e) {
+                    Log.e(TAG, e.getMessage(), e);
+                }
+                return remoteGardens;
+            }
+
+        }.execute();
+        // TODO wait for task.getStatus() == Status.FINISHED; in a thread
+        // List<GardenInterface> remoteGardens = task.get();
+        return 0;
     }
 
     @Override
