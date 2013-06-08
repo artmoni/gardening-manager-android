@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ *
  * Contributors:
  *     sfleury - initial API and implementation
  ******************************************************************************/
@@ -27,13 +27,12 @@ import android.view.View.OnClickListener;
 import android.widget.ListView;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class ActionActivity extends SherlockActivity implements OnClickListener {
+public class ActionActivity extends AbstractActivity implements OnClickListener {
 
     private ListAllActionAdapter listActions;
 

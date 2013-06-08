@@ -3,21 +3,20 @@ package org.gots.garden;
 import java.util.List;
 
 import org.gots.DatabaseHelper;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.provider.GardenProvider;
 import org.gots.garden.provider.local.LocalGardenProvider;
 import org.gots.garden.provider.nuxeo.NuxeoGardenProvider;
 import org.gots.preferences.GotsPreferences;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.content.Intent;
 import android.util.Log;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class GardenManager {
-    private SharedPreferences preferences;
+public class GardenManager extends BroadcastReceiver {
 
     private Context mContext;
 
@@ -25,16 +24,22 @@ public class GardenManager {
 
     public GardenManager(Context mContext) {
         this.mContext = mContext;
-        preferences = mContext.getSharedPreferences("org.gots.preference", 0);
-        ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo ni = cm.getActiveNetworkInfo();
+        setGardenProvider();
+    }
 
-        if (GotsPreferences.getInstance(mContext).isConnectedToServer()
-                && ni != null && ni.isConnected()) {
+    public void setGardenProvider() {
+        if (GotsPreferences.getInstance(mContext).isConnectedToServer()) {
             gardenProvider = new NuxeoGardenProvider(mContext);
-        } else
+        } else {
             gardenProvider = new LocalGardenProvider(mContext);
+        }
+    }
 
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())) {
+            setGardenProvider();
+        }
     }
 
     public long addGarden(GardenInterface garden) {
@@ -65,13 +70,9 @@ public class GardenManager {
     }
 
     public void setCurrentGarden(GardenInterface garden) {
-        SharedPreferences.Editor prefedit = preferences.edit();
-        prefedit.putInt("org.gots.preference.gardenid", (int) garden.getId());
-        prefedit.commit();
-        Log.d("setCurrentGarden",
-                "[" + (int) garden.getId() + "] " + garden.getLocality()
-                        + " has been set as current workspace");
-
+        GotsPreferences.getInstance(mContext).set(GotsPreferences.ORG_GOTS_PREF_GARDENID, (int) garden.getId());
+        Log.d("setCurrentGarden", "[" + garden.getId() + "] " + garden.getLocality()
+                + " has been set as current workspace");
         changeDatabase((int) garden.getId());
     }
 
@@ -128,4 +129,5 @@ public class GardenManager {
     public List<GardenInterface> getMyGardens() {
         return gardenProvider.getMyGardens();
     }
+
 }

@@ -43,7 +43,7 @@ public class WeatherCache {
 			Log.w("WeatherCache", "Sdcard was not mounted !!");
 
 		} else {
-			rootDirectory = Environment.getExternalStorageDirectory().getAbsolutePath() + "/"+GotsPreferences.getGardeningManagerDirectory()+"/cache/";
+			rootDirectory = Environment.getExternalStorageDirectory().getAbsolutePath() + "/"+GotsPreferences.GARDENING_MANAGER_DIRECTORY+"/cache/";
 
 			File directory = new File(rootDirectory);
 			directory.mkdirs();
@@ -67,7 +67,7 @@ public class WeatherCache {
 					weatherXmlStream = downloadWeatherXML(url);
 					setLocalCache(fileName, weatherXmlStream);
 					currentDownloadTry++;
-					
+
 					GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
 					tracker.trackEvent("Weather", "Download", url.getPath(), currentDownloadTry);
 
@@ -157,7 +157,7 @@ public class WeatherCache {
 	private void cleanLocalCache(String fileName) {
 		File f = new File(rootDirectory + fileName);
 		f.delete();
-		
+
 		Log.d(TAG, "Deleting cache file " + f.getAbsolutePath());
 	}
 

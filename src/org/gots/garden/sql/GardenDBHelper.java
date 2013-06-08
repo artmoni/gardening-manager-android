@@ -137,7 +137,7 @@ public class GardenDBHelper {
         return gardens;
     }
 
-    public void deleteGarden(GardenInterface garden) {
+    public int deleteGarden(GardenInterface garden) {
         open();
         int rowid = bdd.delete(GardenSQLite.GARDEN_TABLE_NAME,
                 GardenSQLite.GARDEN_ID + "=" + garden.getId(), null);
@@ -146,16 +146,14 @@ public class GardenDBHelper {
                     + " has not been found");
         }
         close();
+        return rowid;
     }
 
     public int getCountGarden() {
-        int nbGarden;
         // SeedActionInterface searchedSeed = new GrowingSeed();
         open();
-        Cursor cursor = bdd.query(GardenSQLite.GARDEN_TABLE_NAME, null, null,
-                null, null, null, null);
-        nbGarden = cursor.getCount();
-
+        Cursor cursor = bdd.query(GardenSQLite.GARDEN_TABLE_NAME, null, null, null, null, null, null);
+        int nbGarden = cursor.getCount();
         cursor.close();
         close();
         return nbGarden;

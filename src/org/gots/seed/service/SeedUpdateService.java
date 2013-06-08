@@ -3,6 +3,7 @@ package org.gots.seed.service;
 import java.util.ArrayList;
 
 import org.gots.R;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.providers.GotsSeedProvider;
@@ -20,8 +21,6 @@ import android.os.IBinder;
 import android.util.Log;
 
 public class SeedUpdateService extends Service {
-    public static final String BROADCAST_ACTION = "org.gots.broadcastseed.displaylist";
-
     public static final String ISNEWSEED = "org.gots.isnewseed";
 
     private static final int NOTIFICATION = 101;
@@ -50,7 +49,7 @@ public class SeedUpdateService extends Service {
     public void onCreate() {
         mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mRemoteProvider = new NuxeoSeedProvider(getApplicationContext());
-        intent = new Intent(BROADCAST_ACTION);
+        intent = new Intent(BroadCastMessages.SEED_DISPLAYLIST);
 
         super.onCreate();
     }

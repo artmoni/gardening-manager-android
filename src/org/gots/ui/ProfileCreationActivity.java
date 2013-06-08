@@ -28,7 +28,6 @@ import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.bean.Garden;
 import org.gots.garden.GardenInterface;
-import org.gots.garden.GardenManager;
 import org.gots.help.HelpUriBuilder;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.providers.local.sql.VendorSeedDBHelper;
@@ -76,8 +75,6 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
 
     private int gardenId;
 
-    private GardenManager gardenManager;
-
     GardenInterface garden = new Garden();
 
     private int mode = 0;
@@ -113,7 +110,6 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
         findViewById(R.id.buttonValidatePosition).setOnClickListener(this);
 
         // findViewById(R.id.buttonAddGarden).setOnClickListener(this);
-        gardenManager = new GardenManager(this);
         if (gardenManager.getcurrentGarden() != null)
             ((CheckBox) findViewById(R.id.checkboxSamples)).setChecked(false);
 
