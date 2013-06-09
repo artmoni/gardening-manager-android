@@ -96,8 +96,7 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
         // getSupportActionBar().setIcon(R.drawable.bt_update);
 
         GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
-        GoogleAnalyticsTracker.getInstance().trackPageView(
-                getClass().getSimpleName());
+        GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
         garden.setLocality("");
 
@@ -117,15 +116,14 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
 
         if (mode == OPTION_EDIT)
             ((TextView) findViewById(R.id.editTextLocality)).setText(gardenManager.getcurrentGarden().getLocality());
-        findViewById(R.id.editTextLocality).setOnClickListener(
-                new View.OnClickListener() {
+        findViewById(R.id.editTextLocality).setOnClickListener(new View.OnClickListener() {
 
-                    @Override
-                    public void onClick(View v) {
-                        if ("".equals(((TextView) findViewById(R.id.editTextLocality)).getText()))
-                            ((TextView) findViewById(R.id.editTextLocality)).setText(((TextView) findViewById(R.id.editTextLocality)).getHint());
-    }
-                });
+            @Override
+            public void onClick(View v) {
+                if ("".equals(((TextView) findViewById(R.id.editTextLocality)).getText()))
+                    ((TextView) findViewById(R.id.editTextLocality)).setText(((TextView) findViewById(R.id.editTextLocality)).getHint());
+            }
+        });
     };
 
     @Override
@@ -142,8 +140,7 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
         Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_FINE);
 
-        pd = ProgressDialog.show(this, "",
-                getResources().getString(R.string.gots_loading), false);
+        pd = ProgressDialog.show(this, "", getResources().getString(R.string.gots_loading), false);
         pd.setCanceledOnTouchOutside(true);
 
         // bestprovider can be null because we ask only for enabled providers
@@ -151,14 +148,13 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
         if (mlocManager == null)
             return;
         try {
-            mlocManager.requestLocationUpdates(
-                    LocationManager.NETWORK_PROVIDER, 60000, 0, this);
+            mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 60000, 0, this);
 
-        String bestProvider = mlocManager.getBestProvider(criteria, true);
-        if ("gps".equals(bestProvider))
-            mlocManager.requestLocationUpdates(bestProvider, 60000, 0, this);
+            String bestProvider = mlocManager.getBestProvider(criteria, true);
+            if ("gps".equals(bestProvider))
+                mlocManager.requestLocationUpdates(bestProvider, 60000, 0, this);
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            Log.e(ProfileCreationActivity.class.getName(), e.getMessage());
         }
 
     }
@@ -172,8 +168,7 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
             // Ici on récupère la premiere adresse trouvé gràce à la
             // position
             // que l'on a récupéré
-            List<Address> adresses = geo.getFromLocation(
-                    location.getLatitude(), location.getLongitude(), 1);
+            List<Address> adresses = geo.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
 
             if (adresses != null && adresses.size() == 1) {
                 address = adresses.get(0);
@@ -215,8 +210,7 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
         Log.v(tag, "Disabled");
 
         /* bring up the GPS settings */
-        Intent intent = new Intent(
-                android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        Intent intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
         startActivity(intent);
     }
 
@@ -232,18 +226,15 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
         switch (status) {
         case LocationProvider.OUT_OF_SERVICE:
             Log.v(tag, "Status Changed: Out of Service");
-            Toast.makeText(this, "Status Changed: Out of Service",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Status Changed: Out of Service", Toast.LENGTH_SHORT).show();
             break;
         case LocationProvider.TEMPORARILY_UNAVAILABLE:
             Log.v(tag, "Status Changed: Temporarily Unavailable");
-            Toast.makeText(this, "Status Changed: Temporarily Unavailable",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Status Changed: Temporarily Unavailable", Toast.LENGTH_SHORT).show();
             break;
         case LocationProvider.AVAILABLE:
             Log.v(tag, "Status Changed: Available");
-            Toast.makeText(this, "Status Changed: Available",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Status Changed: Available", Toast.LENGTH_SHORT).show();
             break;
         }
     }
@@ -356,8 +347,7 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
             for (int i = 1; i <= 5 && i < nbSeed; i++) {
                 int alea = random.nextInt(nbSeed);
 
-                GrowingSeedInterface seed = (GrowingSeedInterface) seedHelper.getSeedById(alea
-                        % nbSeed + 1);
+                GrowingSeedInterface seed = (GrowingSeedInterface) seedHelper.getSeedById(alea % nbSeed + 1);
                 if (seed != null) {
                     seed.setNbSachet(alea % 3 + 1);
                     seedHelper.updateSeed(seed);
@@ -373,8 +363,7 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
                     cal.add(Calendar.MONTH, -3);
                     seed.setDateSowing(cal.getTime());
 
-                    ActionSeedDBHelper actionsHelper = new ActionSeedDBHelper(
-                            this);
+                    ActionSeedDBHelper actionsHelper = new ActionSeedDBHelper(this);
                     actionsHelper.insertAction(bakering, seed);
                 }
             }

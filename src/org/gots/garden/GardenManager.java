@@ -8,6 +8,7 @@ import org.gots.garden.provider.GardenProvider;
 import org.gots.garden.provider.local.LocalGardenProvider;
 import org.gots.garden.provider.nuxeo.NuxeoGardenProvider;
 import org.gots.preferences.GotsPreferences;
+import org.nuxeo.ecm.automation.client.jaxrs.impl.NotAvailableOffline;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -20,7 +21,7 @@ public class GardenManager extends BroadcastReceiver {
 
     private Context mContext;
 
-    private GardenProvider gardenProvider;
+    private GardenProvider gardenProvider = null;
 
     public GardenManager(Context mContext) {
         this.mContext = mContext;
@@ -29,8 +30,15 @@ public class GardenManager extends BroadcastReceiver {
 
     public void setGardenProvider() {
         if (GotsPreferences.getInstance(mContext).isConnectedToServer()) {
-            gardenProvider = new NuxeoGardenProvider(mContext);
-        } else {
+            try {
+                gardenProvider = new NuxeoGardenProvider(mContext);
+            } catch (NotAvailableOffline e) {
+                Log.w(getClass().getName(), "Failed to initialize NuxeoGardenProvider" + e.getMessage(), e);
+            } catch (Throwable e) {
+                Log.w(getClass().getName(), e.getMessage(), e);
+            }
+        }
+        if (gardenProvider == null) {
             gardenProvider = new LocalGardenProvider(mContext);
         }
     }

@@ -31,7 +31,7 @@ public class ActionNotificationService extends Service {
 	NotificationManager mNM;
 	private ArrayList<BaseActionInterface> actions = new ArrayList<BaseActionInterface>();
 
-	private String TAG = "ActionNotificationService";
+	private static final String TAG = "ActionNotificationService";
 
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -68,7 +68,7 @@ public class ActionNotificationService extends Service {
 		// GrowingSeedDBHelper helper = new GrowingSeedDBHelper(this);
 
 		if (!actions.isEmpty()) {
-			BaseActionInterface action = (BaseActionInterface) actions.iterator().next();
+			BaseActionInterface action = actions.iterator().next();
 
 			GrowingSeedInterface seed = helper.getSeedById(action.getGrowingSeedId());
 			createNotification(action, seed);
@@ -100,11 +100,11 @@ public class ActionNotificationService extends Service {
 		// GrowingSeedDBHelper helper = new GrowingSeedDBHelper(this);
 
 		if (!sowingActions.isEmpty()) {
-			BaseActionInterface action = (BaseActionInterface) sowingActions.iterator().next();
+			BaseActionInterface action = sowingActions.iterator().next();
 
 			// GrowingSeedInterface seed =
 			// helper.getSeedById(action.getGrowingSeedId());
-			createNotification(action, (GrowingSeedInterface) sowingseed);
+			createNotification(action, sowingseed);
 
 		}
 

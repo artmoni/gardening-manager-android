@@ -13,12 +13,15 @@ import org.nuxeo.android.context.NuxeoContext;
 import org.nuxeo.android.context.NuxeoContextFactory;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
+import org.nuxeo.ecm.automation.client.android.CachedSession;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
+import org.nuxeo.ecm.automation.client.jaxrs.impl.NotAvailableOffline;
 import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
+import org.nuxeo.ecm.automation.client.jaxrs.spi.DefaultSession;
 import org.nuxeo.ecm.automation.client.jaxrs.spi.auth.TokenRequestInterceptor;
 
 import android.content.Context;
@@ -49,7 +52,11 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 
     protected AndroidAutomationClient nuxeoClient;
 
-    public NuxeoGardenProvider(Context context) {
+    /**
+     * Android 11+: raises a {@link android.os.NetworkOnMainThreadException} if called from the main thread and tries to
+     * perform a network call (Nuxeo server)
+     */
+    public NuxeoGardenProvider(Context context) throws NotAvailableOffline {
         super(context);
         myToken = gotsPrefs.getToken();
         myLogin = gotsPrefs.getNuxeoLogin();
@@ -60,13 +67,20 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
         nxConfig.setLogin(myLogin);
         nxConfig.setPassword(gotsPrefs.getNuxeoPassword());
         nxConfig.setToken(myToken);
+        nxConfig.setCacheKey(NuxeoServerConfig.PREF_SERVER_TOKEN);
         Uri nxAutomationURI = Uri.parse(Uri.encode(GotsPreferences.getGardeningManagerServerURI()));
         Log.d(TAG, "setServerBaseUrl: " + nxAutomationURI.toString());
         nxConfig.setServerBaseUrl(nxAutomationURI);
         nuxeoClient = getNuxeoClient();
+        // Check connectivity with Nuxeo
+        getNuxeoSession();
     }
 
-    protected Session getNuxeoSession() {
+    /**
+     * @return {@link CachedSession} if available, else a {@link DefaultSession}
+     * @throws NotAvailableOffline If no data in cache and the required online session fails
+     */
+    protected Session getNuxeoSession() throws NotAvailableOffline {
         return nuxeoContext.getSession();
     }
 

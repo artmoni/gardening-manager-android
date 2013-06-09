@@ -119,11 +119,8 @@ public class PrevimeteoWeatherTask extends WeatherTask {
                     ws = gwh.getWeatherSet();
                 }
             } catch (Exception e) {
-                Log.e(TAG, "PrevimeteoErrorHandler has return an error " + e.getMessage());
-                e.printStackTrace();
-
+                Log.e(TAG, "PrevimeteoErrorHandler has return an error " + e.getMessage(), e);
                 iserror = true;
-
                 return null;
             }
         }
