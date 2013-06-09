@@ -31,6 +31,6 @@ import com.actionbarsherlock.app.SherlockActivity;
  */
 public class AbstractActivity extends SherlockActivity {
 
-    protected GardenManager gardenManager = new GardenManager(getApplicationContext());
+    protected GardenManager gardenManager = new GardenManager(this);
 
 }

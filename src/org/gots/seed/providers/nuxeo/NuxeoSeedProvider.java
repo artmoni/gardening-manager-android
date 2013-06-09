@@ -74,7 +74,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                         Log.i(TAG, "Nuxeo Seed Specie " + seed.getSpecie());
                     }
                 } catch (Exception e) {
-                    Log.e(TAG, "getAllSeeds " + e.getMessage());
+                    Log.e(TAG, "getAllSeeds " + e.getMessage(), e);
                 }
 
                 return nuxeoSeeds;
@@ -86,11 +86,9 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         try {
             remoteSeeds = task.get(TIMEOUT, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage(), e);
         } catch (ExecutionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage(), e);
         } catch (TimeoutException e) {
             Log.e(TAG, GotsPreferences.getGardeningManagerServerURI() + "\n" + e.getMessage(), e);
         }
@@ -187,7 +185,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     Session session;
                     session = client.getSession();
                     DocRef wsRef = new DocRef("/default-domain/UserWorkspaces/"
-                            + GotsPreferences.getInstance(mContext).getNUXEO_LOGIN());
+                            + GotsPreferences.getInstance(mContext).getNuxeoLogin());
                     Document catalog = null;
                     try {
                         catalog = (Document) session.newRequest(DocumentManager.FetchDocument).set("value",

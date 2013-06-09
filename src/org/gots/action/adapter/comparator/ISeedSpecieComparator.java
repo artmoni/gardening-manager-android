@@ -10,22 +10,24 @@ import android.util.Log;
 
 public class ISeedSpecieComparator implements Comparator<BaseSeedInterface> {
 
-	private Context mcontext;
+    private static final String TAG = "Compare";
 
-	public ISeedSpecieComparator(Context context) {
-		this.mcontext = context;
-	}
+    private Context mcontext;
 
-	@Override
-	public int compare(BaseSeedInterface obj1, BaseSeedInterface obj2) {
-		int result = 0;
-		if (obj1.getSpecie() != null && obj2.getSpecie() != null) {
-			Log.i("Compare",
-					SeedUtil.translateSpecie(mcontext, (BaseSeedInterface) obj1) + " | "
-							+ SeedUtil.translateSpecie(mcontext, (BaseSeedInterface) obj2));
-			result = SeedUtil.translateSpecie(mcontext, (BaseSeedInterface) obj1).compareTo(
-					SeedUtil.translateSpecie(mcontext, (BaseSeedInterface) obj2));
-		}
-		return result;
-	}
+    public ISeedSpecieComparator(Context context) {
+        this.mcontext = context;
+    }
+
+    @Override
+    public int compare(BaseSeedInterface obj1, BaseSeedInterface obj2) {
+        int result = 0;
+        if (obj1.getSpecie() != null && obj2.getSpecie() != null) {
+            Log.i(TAG,
+                    SeedUtil.translateSpecie(mcontext, obj1) + " | "
+                            + SeedUtil.translateSpecie(mcontext, obj2));
+            result = SeedUtil.translateSpecie(mcontext, obj1).compareTo(
+                    SeedUtil.translateSpecie(mcontext, obj2));
+        }
+        return result;
+    }
 }

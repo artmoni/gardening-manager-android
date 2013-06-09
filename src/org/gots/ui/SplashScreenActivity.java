@@ -17,7 +17,6 @@ import org.gots.action.service.ActionNotificationService;
 import org.gots.action.service.ActionTODOBroadcastReceiver;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.garden.GardenInterface;
-import org.gots.garden.GardenManager;
 import org.gots.garden.sql.GardenDBHelper;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.service.SeedUpdateService;
@@ -27,7 +26,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
@@ -39,9 +37,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.SherlockActivity;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class SplashScreenActivity extends AbstractActivity {
+public class SplashScreenActivity extends SherlockActivity {
     private static final int STOPSPLASH = 0;
 
     // private static final long SPLASHTIME = 3000;
@@ -51,31 +50,37 @@ public class SplashScreenActivity extends AbstractActivity {
 
     private Context mContext;
 
-    private Handler splashHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
+    private static Handler splashHandler;
 
-            Intent startServiceIntent = new Intent(mContext, WeatherUpdateService.class);
-            startService(startServiceIntent);
+    private Handler getSplashHandler() {
+        if (splashHandler == null) {
+            splashHandler = new Handler() {
+                @Override
+                public void handleMessage(Message msg) {
+                    Intent startServiceIntent = new Intent(mContext, WeatherUpdateService.class);
+                    startService(startServiceIntent);
 
-            Intent startServiceIntent2 = new Intent(mContext, SeedUpdateService.class);
-            startService(startServiceIntent2);
+                    Intent startServiceIntent2 = new Intent(mContext, SeedUpdateService.class);
+                    startService(startServiceIntent2);
 
-            Intent startServiceIntent3 = new Intent(mContext, ActionNotificationService.class);
-            startService(startServiceIntent3);
+                    Intent startServiceIntent3 = new Intent(mContext, ActionNotificationService.class);
+                    startService(startServiceIntent3);
 
-            switch (msg.what) {
-            case STOPSPLASH:
-                // remove SplashScreen from view
-                Intent intent = new Intent(SplashScreenActivity.this, DashboardActivity.class);
-                startActivity(intent);
+                    switch (msg.what) {
+                    case STOPSPLASH:
+                        // remove SplashScreen from view
+                        Intent intent = new Intent(SplashScreenActivity.this, DashboardActivity.class);
+                        startActivity(intent);
 
-                finish();
-                break;
-            }
-            super.handleMessage(msg);
+                        finish();
+                        break;
+                    }
+                    super.handleMessage(msg);
+                }
+            };
         }
-    };
+        return splashHandler;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -162,21 +167,24 @@ public class SplashScreenActivity extends AbstractActivity {
         // this.startService(startServiceIntent);
         setRecurringAlarm(this);
 
-        GardenManager gardenManager = new GardenManager(this);
-        myGarden = gardenManager.getcurrentGarden();
-
+        myGarden = getCurrentGarden();
         if (myGarden == null) {
             Intent intent = new Intent(this, ProfileCreationActivity.class);
             startActivityForResult(intent, 0);
 
         } else {
             if (GotsPreferences.isDevelopment())
-                splashHandler.sendMessageDelayed(msg, 0);
+                getSplashHandler().sendMessageDelayed(msg, 0);
             else
-                splashHandler.sendMessageDelayed(msg, SPLASHTIME);
+                getSplashHandler().sendMessageDelayed(msg, SPLASHTIME);
 
         }
 
+    }
+
+    protected GardenInterface getCurrentGarden() {
+        GardenDBHelper helper = new GardenDBHelper(this);
+        return helper.getGarden(GotsPreferences.getInstance(this).get(GotsPreferences.ORG_GOTS_PREF_GARDENID, 0));
     }
 
     @Override
@@ -194,15 +202,11 @@ public class SplashScreenActivity extends AbstractActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        GardenDBHelper helper = new GardenDBHelper(this);
-        SharedPreferences preferences = getSharedPreferences("org.gots.preference", 0);
-        myGarden = helper.getGarden(preferences.getInt("org.gots.preference.gardenid", 0));
+        myGarden = getCurrentGarden();
         if (myGarden != null) {
             Message msg = new Message();
             msg.what = STOPSPLASH;
-            splashHandler.sendMessageDelayed(msg, SPLASHTIME);
-
+            getSplashHandler().sendMessageDelayed(msg, SPLASHTIME);
         } else
             finish();
 
