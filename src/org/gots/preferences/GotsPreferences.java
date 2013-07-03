@@ -109,7 +109,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
      */
     private static final String GARDENING_MANAGER_NUXEO_AUTHENTICATION = "http://srv2.gardening-manager.com:8090/nuxeo/authentication/token?";
 
-    public static final String ORG_GOTS_PREF_GARDENID = "org.gots.preference.gardenid";
+//    public static final String ORG_GOTS_PREF_GARDENID = "org.gots.preference.gardenid";
 
     // private static final String GARDENING_MANAGER_NUXEO_AUTHENTICATION =
     // "http://srv2.gardening-manager.com:8090/nuxeo/authentication/temptoken?";
@@ -162,14 +162,14 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
         prefedit.putString(key, value);
         if (ORG_GOTS_GARDEN_PASSWORD.equals(key)) {
             // TODO set NuxeoServerConfig#PREF_SERVER_PASSWORD
-            value = "xxxxxxxx";
+//            value = "xxxxxxxx";
         }
         if (ORG_GOTS_GARDEN_LOGIN.equals(key)) {
             // TODO set NuxeoServerConfig#PREF_SERVER_LOGIN
         }
         if (ORG_GOTS_GARDEN_TOKEN.equals(key)) {
             // TODO set NuxeoServerConfig#PREF_SERVER_TOKEN
-            value = "xxxxxxxx";
+//            value = "xxxxxxxx";
         }
         prefedit.commit();
         Log.d(TAG, key + "=" + value);
