@@ -180,7 +180,7 @@ public class ProfileActivity extends AbstractActivity {
                         ProfileCreationActivity.OPTION_EDIT);
                 startActivity(intentCreation);
             }else{
-                gardenManager.removeGarden(gardenManager.getcurrentGarden());
+                gardenManager.removeGarden(gardenManager.getCurrentGarden());
                 try {
                     GardenSync gardenSync = new GardenSync();
                     gardenSync.execute(this);

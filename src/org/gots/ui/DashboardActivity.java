@@ -40,7 +40,8 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class DashboardActivity extends AbstractActivity implements OnClickListener {
+public class DashboardActivity extends AbstractActivity implements
+        OnClickListener {
     // public static GardenInterface myGarden = new Garden();
     // GoogleAnalyticsTracker tracker;
     GotsAdvertisement adView;
@@ -62,13 +63,6 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        GardenManager gardenManager = new GardenManager(this);
-        ActionBar bar = getSupportActionBar();
-        if (gardenManager.getcurrentGarden() != null)
-        bar.setTitle(gardenManager.getcurrentGarden().getLocality());
-        else
-            bar.setTitle(GotsPreferences.getInstance(this).getGardeningManagerAppname());
 
         GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
 
@@ -183,14 +177,18 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         super.onResume();
 
         GoogleAnalyticsTracker.getInstance().dispatch();
-        // if (weatherWidget2.getAdapter() != null && weatherWidget.getAdapter()
-        // != null) {
-        // ((BaseAdapter) weatherWidget2.getAdapter()).notifyDataSetChanged();
-        //
-        // ((BaseAdapter) weatherWidget.getAdapter()).notifyDataSetChanged();
-        // }
+
+        GardenManager gardenManager = new GardenManager(this);
+        ActionBar bar = getSupportActionBar();
+        if (gardenManager.getCurrentGarden() != null)
+            bar.setTitle(gardenManager.getCurrentGarden().getLocality());
+        else
+            bar.setTitle(GotsPreferences.getInstance(this).getGardeningManagerAppname());
+
+      
         startService(weatherIntent);
-        registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
+        registerReceiver(weatherBroadcastReceiver, new IntentFilter(
+                BroadCastMessages.WEATHER_DISPLAY_EVENT));
 
     }
 

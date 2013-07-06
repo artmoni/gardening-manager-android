@@ -63,7 +63,7 @@ public class ProfileAdapter extends BaseAdapter {
         gardenManager = new GardenManager(mContext);
 
         this.myGardens = myGardens;
-        selectedGarden = gardenManager.getcurrentGarden();
+        selectedGarden = gardenManager.getCurrentGarden();
     }
 
     @Override
@@ -202,10 +202,10 @@ public class ProfileAdapter extends BaseAdapter {
                 // WeatherUpdateService.BROADCAST_ACTION));
                 currentView = v;
 
-                if (gardenManager.getcurrentGarden() != null) {
+                if (gardenManager.getCurrentGarden() != null) {
                     GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
                     tracker.trackEvent("Garden", "Select",
-                            gardenManager.getcurrentGarden().getLocality(),
+                            gardenManager.getCurrentGarden().getLocality(),
                             position + 1);
                 }
             }

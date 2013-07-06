@@ -32,7 +32,7 @@
     </repository>
     <repository>
       <id>public-snapshots</id>
-      <url>https://maven.nuxeo.org/nexus/content/repositories/public-snapshots/</url>
+      <url>https://maven-us.nuxeo.org/nexus/content/repositories/public-snapshots/</url>
       <snapshots>
         <enabled>true</enabled>
       </snapshots>

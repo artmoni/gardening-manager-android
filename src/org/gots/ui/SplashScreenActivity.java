@@ -44,13 +44,15 @@ public class SplashScreenActivity extends SherlockActivity {
     private static final int STOPSPLASH = 0;
 
     // private static final long SPLASHTIME = 3000;
-    private static final long SPLASHTIME = 3000;
+    private static final long SPLASHTIME = 2000;
 
     private GardenInterface myGarden;
 
     private Context mContext;
 
     private static Handler splashHandler;
+
+    private GardenManager gardenManager;
 
     private Handler getSplashHandler() {
         if (splashHandler == null) {
@@ -166,10 +168,11 @@ public class SplashScreenActivity extends SherlockActivity {
         // NotificationService.class);
         // this.startService(startServiceIntent);
         setRecurringAlarm(this);
+        gardenManager = new GardenManager(this);
 
-        myGarden = getCurrentGarden();
+        myGarden = gardenManager.getCurrentGarden();
         if (myGarden == null) {
-            Intent intent = new Intent(this, ProfileCreationActivity.class);
+            Intent intent = new Intent(this, FirstLaunchActivity.class);
             startActivityForResult(intent, 0);
 
         } else {
@@ -182,11 +185,7 @@ public class SplashScreenActivity extends SherlockActivity {
 
     }
 
-    protected GardenInterface getCurrentGarden() {
-        GardenDBHelper helper = new GardenDBHelper(this);
-        return helper.getGarden(GotsPreferences.getInstance(this).get(GotsPreferences.ORG_GOTS_PREF_GARDENID, 0));
-    }
-
+   
     @Override
     protected void onResume() {
         // Message msg = new Message();
@@ -202,7 +201,7 @@ public class SplashScreenActivity extends SherlockActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        myGarden = getCurrentGarden();
+        myGarden = gardenManager.getCurrentGarden();
         if (myGarden != null) {
             Message msg = new Message();
             msg.what = STOPSPLASH;

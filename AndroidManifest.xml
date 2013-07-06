@@ -96,6 +96,9 @@
             android:name=".ui.LoginActivity"
             android:theme="@style/Theme.Styled" />
         <activity
+            android:name=".ui.FirstLaunchActivity"
+            android:theme="@style/Theme.Styled" />
+        <activity
             android:name="com.google.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
         <!--

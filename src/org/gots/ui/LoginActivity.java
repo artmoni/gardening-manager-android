@@ -15,6 +15,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.gots.R;
+import org.gots.garden.provider.nuxeo.NuxeoGardenProvider;
 import org.gots.preferences.GotsPreferences;
 import org.nuxeo.ecm.automation.client.jaxrs.Constants;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
@@ -72,7 +73,8 @@ public class LoginActivity extends AbstractActivity {
 
             @Override
             public void onClick(View v) {
-                Toast.makeText(LoginActivity.this, getResources().getString(R.string.feature_unavalaible),
+                Toast.makeText(LoginActivity.this,
+                        getResources().getString(R.string.feature_unavalaible),
                         Toast.LENGTH_SHORT).show();
 
                 // launchGoogle();
@@ -89,25 +91,44 @@ public class LoginActivity extends AbstractActivity {
 
             @Override
             public void onClick(View v) {
-                basicNuxeoConnect();
+                String login = loginText.getText().toString();
+                String password = passwordText.getText().toString();
 
-                finish();
+                if ("".equals(login) || "".equals(password))
+                    Toast.makeText(
+                            LoginActivity.this,
+                            getResources().getString(
+                                    R.string.login_missinginformation),
+                            Toast.LENGTH_SHORT).show();
+                else {
+                    basicNuxeoConnect(login, password);
+                    //TODO test if connexion is OK, then finish, else ask for login modification
+//                    new NuxeoGardenProvider(LoginActivity.this);
+                    finish();
+
+                }
 
             }
 
-            protected void basicNuxeoConnect() {
+            protected void basicNuxeoConnect(String login, String password) {
                 String device_id = getDeviceID();
-                GotsPreferences.getInstance(LoginActivity.this).setDeviceId(device_id);
+                GotsPreferences.getInstance(LoginActivity.this).setDeviceId(
+                        device_id);
 
                 String token = request_basicauth_token(false);
                 if (token == null) {
-                    Toast.makeText(LoginActivity.this, "error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Error logging",
+                            Toast.LENGTH_SHORT).show();
                 } else {
-                    GotsPreferences.getInstance(LoginActivity.this).setToken(token);
+                    GotsPreferences.getInstance(LoginActivity.this).setToken(
+                            token);
 
-                    GotsPreferences.getInstance(LoginActivity.this).setNuxeoLogin(loginText.getText().toString());
-                    GotsPreferences.getInstance(LoginActivity.this).setNuxeoPassword(passwordText.getText().toString());
-                    GotsPreferences.getInstance(LoginActivity.this).setConnectedToServer(true);
+                    GotsPreferences.getInstance(LoginActivity.this).setNuxeoLogin(
+                            login);
+                    GotsPreferences.getInstance(LoginActivity.this).setNuxeoPassword(
+                            password);
+                    GotsPreferences.getInstance(LoginActivity.this).setConnectedToServer(
+                            true);
                 }
             }
 
@@ -116,7 +137,8 @@ public class LoginActivity extends AbstractActivity {
     }
 
     protected String getDeviceID() {
-        String device_id = Secure.getString(getContentResolver(), Secure.ANDROID_ID);
+        String device_id = Secure.getString(getContentResolver(),
+                Secure.ANDROID_ID);
         return device_id;
     }
 
@@ -126,7 +148,8 @@ public class LoginActivity extends AbstractActivity {
 
         String tmp_token = request_temporaryauth_token(false);
         if (tmp_token == null) {
-            Toast.makeText(LoginActivity.this, "Authentication ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, "Authentication ",
+                    Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(LoginActivity.this, tmp_token, Toast.LENGTH_SHORT).show();
         }
@@ -143,44 +166,58 @@ public class LoginActivity extends AbstractActivity {
                     String email = "toto.tata@gmail.com";
                     HttpAutomationClient client = new HttpAutomationClient(
                             GotsPreferences.getGardeningManagerServerURI());
-                    client.setRequestInterceptor(new TokenRequestInterceptor("myApp", "myToken", "myLogin",
+                    client.setRequestInterceptor(new TokenRequestInterceptor(
+                            "myApp",
+                            "myToken",
+                            "myLogin",
                             GotsPreferences.getInstance(LoginActivity.this).getDeviceId()));
 
                     Session session = client.getSession();
 
-                    Documents docs = (Documents) session.newRequest("Document.Email").setHeader(
-                            Constants.HEADER_NX_SCHEMAS, "*").set("email", email).execute();
+                    Documents docs = (Documents) session.newRequest(
+                            "Document.Email").setHeader(
+                            Constants.HEADER_NX_SCHEMAS, "*").set("email",
+                            email).execute();
 
-                    // String uri = GotsPreferences.getInstance(getApplicationContext())
+                    // String uri =
+                    // GotsPreferences.getInstance(getApplicationContext())
                     // .getGardeningManagerNuxeoAuthentication();
                     //
-                    // List<NameValuePair> params = new LinkedList<NameValuePair>();
+                    // List<NameValuePair> params = new
+                    // LinkedList<NameValuePair>();
                     // params.add(new BasicNameValuePair("deviceId",
                     // GotsPreferences.getInstance(getApplicationContext())
                     // .getDeviceId()));
-                    // params.add(new BasicNameValuePair("applicationName", GotsPreferences.getInstance(
+                    // params.add(new BasicNameValuePair("applicationName",
+                    // GotsPreferences.getInstance(
                     // getApplicationContext()).getGardeningManagerAppname()));
-                    // params.add(new BasicNameValuePair("deviceDescription", Build.MODEL + "(" + Build.MANUFACTURER +
+                    // params.add(new BasicNameValuePair("deviceDescription",
+                    // Build.MODEL + "(" + Build.MANUFACTURER +
                     // ")"));
-                    // params.add(new BasicNameValuePair("permission", "ReadWrite"));
+                    // params.add(new BasicNameValuePair("permission",
+                    // "ReadWrite"));
                     // params.add(new BasicNameValuePair("revoke", "false"));
                     //
-                    // String paramString = URLEncodedUtils.format(params, "utf-8");
+                    // String paramString = URLEncodedUtils.format(params,
+                    // "utf-8");
                     // uri += paramString;
                     // URL url = new URL(uri);
                     //
                     // URLConnection urlConnection;
                     // urlConnection = url.openConnection();
                     //
-                    // urlConnection.addRequestProperty("X-User-Id", loginText.getText().toString());
-                    // urlConnection.addRequestProperty("X-Device-Id", GotsPreferences
+                    // urlConnection.addRequestProperty("X-User-Id",
+                    // loginText.getText().toString());
+                    // urlConnection.addRequestProperty("X-Device-Id",
+                    // GotsPreferences
                     // .getInstance(getApplicationContext()).getDeviceId());
                     // urlConnection.addRequestProperty("X-Application-Name",
                     // GotsPreferences.getInstance(getApplicationContext()).getGardeningManagerAppname());
                     // urlConnection.addRequestProperty(
                     // "Authorization",
                     // "Basic "
-                    // + Base64.encodeToString((loginText.getText().toString() + ":" + passwordText
+                    // + Base64.encodeToString((loginText.getText().toString() +
+                    // ":" + passwordText
                     // .getText().toString()).getBytes(), Base64.NO_WRAP));
 
                     // urlConnection.addRequestProperty(
@@ -190,12 +227,14 @@ public class LoginActivity extends AbstractActivity {
                     // ":" + passwordText.getText()
                     // .toString()).getBytes()));
 
-                    // InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+                    // InputStream in = new
+                    // BufferedInputStream(urlConnection.getInputStream());
                     // try {
                     // // readStream(in);
                     // StringBuilder builder = new StringBuilder();
                     // String line;
-                    // BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+                    // BufferedReader reader = new BufferedReader(new
+                    // InputStreamReader(in, "UTF-8"));
                     // while ((line = reader.readLine()) != null) {
                     // builder.append(line);
                     // }
@@ -237,14 +276,18 @@ public class LoginActivity extends AbstractActivity {
             @Override
             protected String doInBackground(Object... objects) {
                 try {
-                    String uri = GotsPreferences.getInstance(getApplicationContext()).getGardeningManagerNuxeoAuthentication();
+                    String uri = GotsPreferences.getInstance(
+                            getApplicationContext()).getGardeningManagerNuxeoAuthentication();
 
                     List<NameValuePair> params = new LinkedList<NameValuePair>();
-                    params.add(new BasicNameValuePair("deviceId",
+                    params.add(new BasicNameValuePair(
+                            "deviceId",
                             GotsPreferences.getInstance(getApplicationContext()).getDeviceId()));
-                    params.add(new BasicNameValuePair("applicationName", GotsPreferences.getInstance(
-                            getApplicationContext()).getGardeningManagerAppname()));
-                    params.add(new BasicNameValuePair("deviceDescription", Build.MODEL + "(" + Build.MANUFACTURER + ")"));
+                    params.add(new BasicNameValuePair(
+                            "applicationName",
+                            GotsPreferences.getInstance(getApplicationContext()).getGardeningManagerAppname()));
+                    params.add(new BasicNameValuePair("deviceDescription",
+                            Build.MODEL + "(" + Build.MANUFACTURER + ")"));
                     params.add(new BasicNameValuePair("permission", "ReadWrite"));
                     params.add(new BasicNameValuePair("revoke", "false"));
 
@@ -255,16 +298,20 @@ public class LoginActivity extends AbstractActivity {
                     URLConnection urlConnection;
                     urlConnection = url.openConnection();
 
-                    urlConnection.addRequestProperty("X-User-Id", loginText.getText().toString());
-                    urlConnection.addRequestProperty("X-Device-Id",
+                    urlConnection.addRequestProperty("X-User-Id",
+                            loginText.getText().toString());
+                    urlConnection.addRequestProperty(
+                            "X-Device-Id",
                             GotsPreferences.getInstance(getApplicationContext()).getDeviceId());
-                    urlConnection.addRequestProperty("X-Application-Name",
+                    urlConnection.addRequestProperty(
+                            "X-Application-Name",
                             GotsPreferences.getInstance(getApplicationContext()).getGardeningManagerAppname());
                     urlConnection.addRequestProperty(
                             "Authorization",
                             "Basic "
                                     + Base64.encodeToString(
-                                            (loginText.getText().toString() + ":" + passwordText.getText().toString()).getBytes(),
+                                            (loginText.getText().toString()
+                                                    + ":" + passwordText.getText().toString()).getBytes(),
                                             Base64.NO_WRAP));
 
                     // urlConnection.addRequestProperty(
@@ -274,12 +321,14 @@ public class LoginActivity extends AbstractActivity {
                     // ":" + passwordText.getText()
                     // .toString()).getBytes()));
 
-                    InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+                    InputStream in = new BufferedInputStream(
+                            urlConnection.getInputStream());
                     try {
                         // readStream(in);
                         StringBuilder builder = new StringBuilder();
                         String line;
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+                        BufferedReader reader = new BufferedReader(
+                                new InputStreamReader(in, "UTF-8"));
                         while ((line = reader.readLine()) != null) {
                             builder.append(line);
                         }

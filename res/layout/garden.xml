@@ -24,12 +24,19 @@
             android:background="@drawable/background_simple"
             android:cacheColorHint="#00000000" >
         </ListView>
+
+        <LinearLayout
+            android:id="@+id/idAdsTop"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+        </LinearLayout>
     </LinearLayout>
 
     <ImageView
+        android:id="@+id/btReturn"
         android:layout_width="fill_parent"
         android:layout_height="70dp"
-        android:background="@drawable/bt_logo" android:id="@+id/btReturn">
+        android:background="@drawable/bt_logo" >
     </ImageView>
 
 </RelativeLayout>

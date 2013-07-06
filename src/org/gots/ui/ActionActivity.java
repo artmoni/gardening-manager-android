@@ -14,8 +14,10 @@ import java.util.ArrayList;
 
 import org.gots.R;
 import org.gots.action.adapter.ListAllActionAdapter;
+import org.gots.ads.GotsAdvertisement;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.help.HelpUriBuilder;
+import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.providers.local.sql.GrowingSeedDBHelper;
 
@@ -24,6 +26,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -68,6 +71,12 @@ public class ActionActivity extends AbstractActivity implements OnClickListener 
         listAllotments.setDivider(null);
         listAllotments.setDividerHeight(0);
 
+        if (!GotsPreferences.getInstance(this).isPremium()) {
+            GotsAdvertisement ads = new GotsAdvertisement(this);
+
+            LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
+            layout.addView(ads.getAdsLayout());
+        }
     }
 
     @Override

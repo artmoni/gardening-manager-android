@@ -71,7 +71,7 @@ public class GardenManager extends BroadcastReceiver {
 
     }
 
-    public GardenInterface getcurrentGarden() {
+    public GardenInterface getCurrentGarden() {
         GardenInterface garden = gardenProvider.getCurrentGarden();
         if (garden != null)
             changeDatabase((int) garden.getId());
@@ -79,7 +79,7 @@ public class GardenManager extends BroadcastReceiver {
     }
 
     public void setCurrentGarden(GardenInterface garden) {
-        GotsPreferences.getInstance(mContext).set(GotsPreferences.ORG_GOTS_PREF_GARDENID, (int) garden.getId());
+        GotsPreferences.getInstance(mContext).set(GotsPreferences.ORG_GOTS_CURRENT_GARDENID, (int) garden.getId());
         Log.d("setCurrentGarden", "[" + garden.getId() + "] " + garden.getLocality()
                 + " has been set as current workspace");
         changeDatabase((int) garden.getId());

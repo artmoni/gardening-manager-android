@@ -67,18 +67,26 @@ public class GardenDBHelper {
         return garden;
     }
 
+    /*
+     * getGarden
+     * @param gardenId give you the specific garden, else -1 give you the first
+     * garden available
+     */
     public GardenInterface getGarden(int gardenId) {
         GardenInterface garden = null;
         // SeedActionInterface searchedSeed = new GrowingSeed();
         open();
-        Cursor cursor = bdd.query(GardenSQLite.GARDEN_TABLE_NAME, null,
-                GardenSQLite.GARDEN_ID + "=" + gardenId, null, null, null, null);
+        Cursor cursor;
+        if (gardenId == -1)
+            cursor = bdd.query(GardenSQLite.GARDEN_TABLE_NAME, null, null,
+                    null, null, null, null);
+        else
+            cursor = bdd.query(GardenSQLite.GARDEN_TABLE_NAME, null,
+                    GardenSQLite.GARDEN_ID + "=" + gardenId, null, null, null,
+                    null);
 
         if (cursor.moveToFirst()) {
-            do {
-                garden = cursorToGarden(cursor);
-
-            } while (cursor.moveToNext());
+            garden = cursorToGarden(cursor);
         }
         cursor.close();
         close();
@@ -112,11 +120,31 @@ public class GardenDBHelper {
         values.put(GardenSQLite.GARDEN_LONGITUDE, garden.getGpsLongitude());
         values.put(GardenSQLite.GARDEN_ALTITUDE, garden.getGpsAltitude());
         values.put(GardenSQLite.GARDEN_UUID, garden.getUUID());
+        int nbRows;
+        Cursor cursor;
+        if (garden.getUUID() != null) {
 
-        int nbRows = bdd.update(GardenSQLite.GARDEN_TABLE_NAME, values,
-                GardenSQLite.GARDEN_ID + "='" + garden.getId() + "'", null);
-        Log.d(TAG,
-                "Updating " + nbRows + " garden named " + garden.getLocality());
+            nbRows = bdd.update(GardenSQLite.GARDEN_TABLE_NAME, values,
+                    GardenSQLite.GARDEN_UUID + "='" + garden.getUUID() + "'",
+                    null);
+
+            cursor = bdd.query(GardenSQLite.GARDEN_TABLE_NAME, null,
+                    GardenSQLite.GARDEN_UUID + "='" + garden.getUUID()+"'", null,
+                    null, null, null);
+
+        } else {
+            nbRows = bdd.update(GardenSQLite.GARDEN_TABLE_NAME, values,
+                    GardenSQLite.GARDEN_ID + "='" + garden.getId() + "'", null);
+            cursor = bdd.query(GardenSQLite.GARDEN_TABLE_NAME, null,
+                    GardenSQLite.GARDEN_ID + "=" + garden.getId(), null, null,
+                    null, null);
+        }
+        Log.d(TAG, "Updating " + nbRows + " rows > " + garden);
+        if (cursor.moveToFirst()) {
+            int rowid = cursor.getInt(cursor.getColumnIndex(GardenSQLite.GARDEN_ID));
+            garden.setId(rowid);
+            cursor.close();
+        }
         close();
         return garden;
     }
@@ -152,7 +180,8 @@ public class GardenDBHelper {
     public int getCountGarden() {
         // SeedActionInterface searchedSeed = new GrowingSeed();
         open();
-        Cursor cursor = bdd.query(GardenSQLite.GARDEN_TABLE_NAME, null, null, null, null, null, null);
+        Cursor cursor = bdd.query(GardenSQLite.GARDEN_TABLE_NAME, null, null,
+                null, null, null, null);
         int nbGarden = cursor.getCount();
         cursor.close();
         close();

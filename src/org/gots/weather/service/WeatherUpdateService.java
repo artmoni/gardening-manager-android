@@ -5,6 +5,7 @@ import java.util.Calendar;
 import org.gots.R;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
+import org.gots.garden.GardenManager;
 import org.gots.garden.sql.GardenDBHelper;
 import org.gots.preferences.GotsPreferences;
 import org.gots.weather.WeatherConditionInterface;
@@ -39,15 +40,14 @@ public class WeatherUpdateService extends Service {
         intent = new Intent(BroadCastMessages.WEATHER_DISPLAY_EVENT);
     }
 
-    protected GardenInterface getCurrentGarden() {
-        GardenDBHelper helper = new GardenDBHelper(this);
-        return helper.getGarden(GotsPreferences.getInstance(this).get(GotsPreferences.ORG_GOTS_PREF_GARDENID, 0));
-    }
+   
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "getWeatherFromWebService");
         getWeatherFromWebService(getCurrentGarden());
+        
+        getWeatherFromWebService(gardenManager.getCurrentGarden());
 
         handler.removeCallbacks(sendUpdatesToUI);
         handler.postDelayed(sendUpdatesToUI, 1000); // 1 second

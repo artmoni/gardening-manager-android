@@ -6,19 +6,30 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        android:id="@+id/linearLayout1"
         android:layout_width="fill_parent"
-        android:layout_height="60dp"
-        android:background="@drawable/bg_action_top" >
-    </LinearLayout>
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
 
-    <ListView
-        android:id="@+id/IdGardenActionsList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:cacheColorHint="#00000000" >
-    </ListView>
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/bg_action_top" >
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/IdGardenActionsList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:cacheColorHint="#00000000" >
+        </ListView>
+
+        <LinearLayout
+            android:id="@+id/idAdsTop"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/btReturn"
