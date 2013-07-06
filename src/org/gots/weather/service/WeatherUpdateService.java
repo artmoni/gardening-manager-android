@@ -47,7 +47,7 @@ public class WeatherUpdateService extends Service {
         Log.d(TAG, "getWeatherFromWebService");
         GardenManager gardenManager = new GardenManager(this);
         
-        getWeatherFromWebService(gardenManager.getcurrentGarden());
+        getWeatherFromWebService(gardenManager.getCurrentGarden());
 
         handler.removeCallbacks(sendUpdatesToUI);
         handler.postDelayed(sendUpdatesToUI, 1000); // 1 second

@@ -180,8 +180,8 @@ public class DashboardActivity extends AbstractActivity implements
 
         GardenManager gardenManager = new GardenManager(this);
         ActionBar bar = getSupportActionBar();
-        if (gardenManager.getcurrentGarden() != null)
-            bar.setTitle(gardenManager.getcurrentGarden().getLocality());
+        if (gardenManager.getCurrentGarden() != null)
+            bar.setTitle(gardenManager.getCurrentGarden().getLocality());
         else
             bar.setTitle(GotsPreferences.getInstance(this).getGardeningManagerAppname());
 

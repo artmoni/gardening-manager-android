@@ -47,7 +47,7 @@ public class FirstLaunchActivity extends AbstractActivity {
         setContentView(R.layout.first_launch);
 
         ActionBar bar = getSupportActionBar();
-        bar.setDisplayHomeAsUpEnabled(true);
+        // bar.setDisplayHomeAsUpEnabled(true);
         bar.setTitle(R.string.app_name);
     }
 
@@ -63,7 +63,7 @@ public class FirstLaunchActivity extends AbstractActivity {
 
                 Intent intent = new Intent(FirstLaunchActivity.this,
                         ProfileCreationActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
                 finish();
 
             }
@@ -77,8 +77,7 @@ public class FirstLaunchActivity extends AbstractActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(FirstLaunchActivity.this,
                         LoginActivity.class);
-                startActivity(intent);
-                finish();
+                startActivityForResult(intent, 2);
 
             }
 
@@ -87,12 +86,18 @@ public class FirstLaunchActivity extends AbstractActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 2) {
+            Intent intent = new Intent(FirstLaunchActivity.this,
+                    DashboardActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-
-        case android.R.id.home:
-            finish();
-            return true;
 
         default:
             return super.onOptionsItemSelected(item);

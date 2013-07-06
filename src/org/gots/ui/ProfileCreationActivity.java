@@ -111,20 +111,22 @@ public class ProfileCreationActivity extends AbstractActivity implements
         findViewById(R.id.buttonValidatePosition).setOnClickListener(this);
 
         // findViewById(R.id.buttonAddGarden).setOnClickListener(this);
-        if (gardenManager.getcurrentGarden() != null)
+        if (gardenManager.getCurrentGarden() != null)
             ((CheckBox) findViewById(R.id.checkboxSamples)).setChecked(false);
 
         mlocManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-        if (mode == OPTION_EDIT)
-            ((TextView) findViewById(R.id.editTextLocality)).setText(gardenManager.getcurrentGarden().getLocality());
+        if (mode == OPTION_EDIT && gardenManager.getCurrentGarden() != null
+                && gardenManager.getCurrentGarden().getLocality() != null)
+            ((TextView) findViewById(R.id.editTextLocality)).setText(gardenManager.getCurrentGarden().getLocality());
 
         ((TextView) findViewById(R.id.editTextLocality)).setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 CharSequence hint = ((TextView) findViewById(R.id.editTextLocality)).getHint();
-                if (hint != null) {
+                if (hint != null
+                        && "".equals(((TextView) findViewById(R.id.editTextLocality)).getText())) {
                     ((TextView) findViewById(R.id.editTextLocality)).setText(hint);
                 }
             }
@@ -287,7 +289,7 @@ public class ProfileCreationActivity extends AbstractActivity implements
         if ("".equals(locality))
             locality = ((TextView) (findViewById(R.id.editTextLocality))).getHint().toString();
 
-        garden = gardenManager.getcurrentGarden();
+        garden = gardenManager.getCurrentGarden();
         garden.setLocality(locality);
         gardenManager.updateCurrentGarden(garden);
     }

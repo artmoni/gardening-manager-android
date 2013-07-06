@@ -124,7 +124,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     private GotsPreferences(Context context) {
         mContext = context;
-        // setSharedPreferences(context.getSharedPreferences("org.gots.garden", 0));
+//         setSharedPreferences(context.getSharedPreferences("org.gots.garden", 0));
         setSharedPreferences(PreferenceManager.getDefaultSharedPreferences(context));
     }
 

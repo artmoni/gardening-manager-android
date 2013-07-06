@@ -193,7 +193,7 @@ public class Garden implements GardenInterface {
 
 	@Override
 	public String toString() {
-		String gardenString = "#" + getId() + " --" + getLocality() + "--" + "\n" + "UUID[" + getUUID() + "]";
+		String gardenString = "#" + getId() + " --" + getLocality() + " -- " + "UUID[" + getUUID() + "]";
 		return gardenString;
 	}
 }

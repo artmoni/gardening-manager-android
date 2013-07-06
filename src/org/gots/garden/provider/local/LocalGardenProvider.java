@@ -41,7 +41,7 @@ public class LocalGardenProvider implements GardenProvider {
 
     @Override
     public GardenInterface getCurrentGarden() {
-        GardenInterface garden = helper.getGarden(gotsPrefs.get(GotsPreferences.ORG_GOTS_CURRENT_GARDENID, 0));
+        GardenInterface garden = helper.getGarden(gotsPrefs.get(GotsPreferences.ORG_GOTS_CURRENT_GARDENID, -1));
         return garden;
     }
 

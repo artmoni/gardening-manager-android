@@ -33,7 +33,7 @@ public class GardenManager extends BroadcastReceiver {
             try {
                 gardenProvider = new NuxeoGardenProvider(mContext);
             } catch (NotAvailableOffline e) {
-                Log.w(getClass().getName(), "Failed to initialize NuxeoGardenProvider" + e.getMessage(), e);
+                Log.w(getClass().getName(), "Failed to initialize NuxeoGardenProvider " + e.getMessage(), e);
             } catch (Throwable e) {
                 Log.w(getClass().getName(), e.getMessage(), e);
             }
@@ -70,7 +70,7 @@ public class GardenManager extends BroadcastReceiver {
 
     }
 
-    public GardenInterface getcurrentGarden() {
+    public GardenInterface getCurrentGarden() {
         GardenInterface garden = gardenProvider.getCurrentGarden();
         if (garden != null)
             changeDatabase((int) garden.getId());
