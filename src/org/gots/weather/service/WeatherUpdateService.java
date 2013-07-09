@@ -38,15 +38,15 @@ public class WeatherUpdateService extends Service {
     public void onCreate() {
         super.onCreate();
         intent = new Intent(BroadCastMessages.WEATHER_DISPLAY_EVENT);
-    }
 
-   
+    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "getWeatherFromWebService");
-        getWeatherFromWebService(getCurrentGarden());
-        
+        GardenManager gardenManager = new GardenManager(this);
+
+        // TODO change to async task and update UI in postExecute
         getWeatherFromWebService(gardenManager.getCurrentGarden());
 
         handler.removeCallbacks(sendUpdatesToUI);
@@ -86,7 +86,8 @@ public class WeatherUpdateService extends Service {
                 cal.add(Calendar.DAY_OF_YEAR, forecastDay);
 
                 // GoogleWeatherTask(garden.getAddress(), cal.getTime());
-                WeatherTask wt = new PrevimeteoWeatherTask(this, garden.getAddress(), cal.getTime());
+                WeatherTask wt = new PrevimeteoWeatherTask(this,
+                        garden.getAddress(), cal.getTime());
                 WeatherConditionInterface conditionInterface = wt.execute().get();
 
                 if (conditionInterface != null) {
@@ -99,7 +100,11 @@ public class WeatherUpdateService extends Service {
                     // mContext.getResources().getString(R.string.weather_citynotfound),
                     // 50)
                     // .show();
-                    Log.d(TAG, garden.getLocality() + " : " + getResources().getString(R.string.weather_citynotfound));
+                    Log.d(TAG,
+                            garden.getLocality()
+                                    + " : "
+                                    + getResources().getString(
+                                            R.string.weather_citynotfound));
                     isWeatherError = true;
                     break;
                 }

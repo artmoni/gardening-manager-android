@@ -38,7 +38,7 @@ public class GardenManager extends BroadcastReceiver {
             } catch (Throwable e) {
                 Log.w(getClass().getName(), e.getMessage(), e);
             }
-        }
+        } 
         if (gardenProvider == null) {
             gardenProvider = new LocalGardenProvider(mContext);
         }

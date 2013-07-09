@@ -96,7 +96,7 @@ public class ProfileActivity extends AbstractActivity {
             profileAdapter = new ProfileAdapter(ProfileActivity.this, myGardens);
             profileList.setAdapter(profileAdapter);
             if (dialog.isShowing())
-            dialog.dismiss();
+                dialog.dismiss();
             super.onPostExecute(result);
         }
 
@@ -152,7 +152,8 @@ public class ProfileActivity extends AbstractActivity {
             return true;
 
         case R.id.help:
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+            Intent browserIntent = new Intent(
+                    Intent.ACTION_VIEW,
                     Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
             startActivity(browserIntent);
             return true;
@@ -179,12 +180,12 @@ public class ProfileActivity extends AbstractActivity {
                 intentCreation.putExtra("option",
                         ProfileCreationActivity.OPTION_EDIT);
                 startActivity(intentCreation);
-            }else{
+            } else {
                 gardenManager.removeGarden(gardenManager.getCurrentGarden());
                 try {
                     GardenSync gardenSync = new GardenSync();
                     gardenSync.execute(this);
-                   
+
                 } catch (Exception e) {
                     Log.e(TAG, e.getMessage());
                 }
