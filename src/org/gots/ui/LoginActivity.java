@@ -165,7 +165,7 @@ public class LoginActivity extends AbstractActivity {
                 try {
                     String email = "toto.tata@gmail.com";
                     HttpAutomationClient client = new HttpAutomationClient(
-                            GotsPreferences.getGardeningManagerServerURI());
+                            GotsPreferences.getGardeningManagerServerURI()+"/site/automation");
                     client.setRequestInterceptor(new TokenRequestInterceptor(
                             "myApp",
                             "myToken",
