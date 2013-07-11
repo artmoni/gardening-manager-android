@@ -181,7 +181,14 @@ public class ProfileActivity extends AbstractActivity {
                         ProfileCreationActivity.OPTION_EDIT);
                 startActivity(intentCreation);
             } else {
-                gardenManager.removeGarden(gardenManager.getCurrentGarden());
+                new AsyncTask<GardenInterface, Integer, Void>() {
+                    @Override
+                    protected Void doInBackground(GardenInterface... params) {
+                        GardenManager gardenManager = new GardenManager(ProfileActivity.this);
+                        gardenManager.removeGarden(params[0]);
+                        return null;
+                    }
+                }.execute(gardenManager.getCurrentGarden());
                 try {
                     GardenSync gardenSync = new GardenSync();
                     gardenSync.execute(this);
