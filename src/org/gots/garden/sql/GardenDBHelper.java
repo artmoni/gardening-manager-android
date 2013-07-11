@@ -136,15 +136,15 @@ public class GardenDBHelper {
             nbRows = bdd.update(GardenSQLite.GARDEN_TABLE_NAME, values,
                     GardenSQLite.GARDEN_ID + "='" + garden.getId() + "'", null);
             cursor = bdd.query(GardenSQLite.GARDEN_TABLE_NAME, null,
-                    GardenSQLite.GARDEN_ID + "=" + garden.getId(), null, null,
+                    GardenSQLite.GARDEN_ID + "='" + garden.getId()+"'", null, null,
                     null, null);
         }
-        Log.d(TAG, "Updating " + nbRows + " rows > " + garden);
         if (cursor.moveToFirst()) {
             int rowid = cursor.getInt(cursor.getColumnIndex(GardenSQLite.GARDEN_ID));
             garden.setId(rowid);
             cursor.close();
         }
+        Log.d(TAG, "Updating " + nbRows + " rows > " + garden);
         close();
         return garden;
     }
