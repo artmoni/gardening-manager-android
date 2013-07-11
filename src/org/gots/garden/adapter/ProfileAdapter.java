@@ -18,6 +18,7 @@ import java.util.List;
 import org.gots.R;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GardenManager;
+import org.gots.preferences.GotsPreferences;
 import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.WeatherManager;
@@ -129,7 +130,9 @@ public class ProfileAdapter extends BaseAdapter {
 
         }
 
-        if (currentGarden.getName() != null)
+        if (GotsPreferences.DEBUG)
+            gardenName.setText(currentGarden.toString());
+        else if (currentGarden.getName() != null)
             gardenName.setText(currentGarden.getName());
         else
             gardenName.setText(currentGarden.getAddress().getLocality());
