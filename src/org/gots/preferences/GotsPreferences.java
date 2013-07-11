@@ -39,6 +39,7 @@ import android.util.Log;
 public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     public static final boolean ISDEVELOPMENT = false;
+    public static final boolean DEBUG = true;
 
     /**
      * @see NuxeoServerConfig#PREF_SERVER_PASSWORD
@@ -81,13 +82,13 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
      * @see NuxeoServerConfig#PREF_SERVER_URL
      * @see NuxeoServerConfig#getAutomationUrl()
      */
-    private static final String GARDENING_MANAGER_NUXEO_AUTOMATION_TEST = "http://192.168.100.90:8080/nuxeo/site/automation";
+    private static final String GARDENING_MANAGER_NUXEO_AUTOMATION_TEST = "http://192.168.100.90:8080/nuxeo/";
 
     /**
      * @see NuxeoServerConfig#PREF_SERVER_URL
      * @see NuxeoServerConfig#getAutomationUrl()
      */
-    private static final String GARDENING_MANAGER_NUXEO_AUTHENTICATION_TEST = "http://192.168.100.90:8080/nuxeo/authentication/temptoken?";
+    private static final String GARDENING_MANAGER_NUXEO_AUTHENTICATION_TEST = "http://192.168.100.90:8080/nuxeo/authentication/token?";
 
     // private static final String GARDENING_MANAGER_NUXEO_AUTHENTICATION_TEST =
     // "http://192.168.100.90:8080/nuxeo/authentication/token?";
@@ -96,7 +97,8 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
      * @see NuxeoServerConfig#PREF_SERVER_URL
      * @see NuxeoServerConfig#getAutomationUrl()
      */
-    private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://srv2.gardening-manager.com:8090/nuxeo/site/automation";
+//    private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://srv2.gardening-manager.com:8090/nuxeo/site/automation";
+    private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://srv2.gardening-manager.com:8090/nuxeo/";
 
     // private static final String GARDENING_MANAGER_NUXEO_AUTOMATION =
     // "http://my.gardening-manager.com/site/automation";
