@@ -54,7 +54,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             protected List<BaseSeedInterface> doInBackground(Object... params) {
                 List<BaseSeedInterface> nuxeoSeeds = new ArrayList<BaseSeedInterface>();
 
-                client = new HttpAutomationClient(GotsPreferences.getGardeningManagerServerURI());
+                client = new HttpAutomationClient(GotsPreferences.getGardeningManagerServerURI()+"site/automation");
                 if (GotsPreferences.getInstance(mContext).isConnectedToServer())
                     client.setRequestInterceptor(new TokenRequestInterceptor(myApp, myToken, myLogin, myDeviceId));
 
@@ -162,7 +162,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     Log.d(TAG, "doInBackground createSeed " + currentSeed);
 
                     HttpAutomationClient client = new HttpAutomationClient(
-                            GotsPreferences.getGardeningManagerServerURI());
+                            GotsPreferences.getGardeningManagerServerURI()+"site/automation");
 
                     client.setRequestInterceptor(new TokenRequestInterceptor(myApp, myToken, myLogin, myDeviceId));
 
