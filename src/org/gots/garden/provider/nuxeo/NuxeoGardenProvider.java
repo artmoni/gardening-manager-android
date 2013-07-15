@@ -3,22 +3,18 @@ package org.gots.garden.provider.nuxeo;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import org.gots.garden.GardenInterface;
 import org.gots.garden.provider.local.LocalGardenProvider;
 import org.gots.preferences.GotsPreferences;
-import org.gots.ui.ProfileActivity;
 import org.nuxeo.android.config.NuxeoServerConfig;
 import org.nuxeo.android.context.NuxeoContext;
 import org.nuxeo.android.context.NuxeoContextFactory;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
 import org.nuxeo.ecm.automation.client.android.CachedSession;
-import org.nuxeo.ecm.automation.client.jaxrs.Constants;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.impl.NotAvailableOffline;
-import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
@@ -26,11 +22,7 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 import org.nuxeo.ecm.automation.client.jaxrs.spi.DefaultSession;
 import org.nuxeo.ecm.automation.client.jaxrs.spi.auth.TokenRequestInterceptor;
 
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.util.Log;
 
 /**
@@ -71,32 +63,40 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
         nuxeoContext = NuxeoContextFactory.getNuxeoContext(context);
 
         nxConfig = nuxeoContext.getServerConfig();
-        nxConfig.setLogin(myLogin);
-        nxConfig.setPassword(gotsPrefs.getNuxeoPassword());
-        nxConfig.setToken(myToken);
-        nxConfig.setCacheKey(NuxeoServerConfig.PREF_SERVER_TOKEN);
-
-        Uri nxAutomationURI = Uri.parse(Uri.encode(GotsPreferences.getGardeningManagerServerURI()));
+       
+        Uri nxAutomationURI = Uri.parse(GotsPreferences.getGardeningManagerServerURI());
         nxConfig.setServerBaseUrl(nxAutomationURI);
-        Log.d(TAG,
-                "setServerBaseUrl: " + nxAutomationURI.toString() + " login="
-                        + nxConfig.getLogin() + " password="
-                        + nxConfig.getPassword());
+        nxConfig.setCacheKey(NuxeoServerConfig.PREF_SERVER_PASSWORD);
+        // nxConfig.setLogin(myLogin);
+        // nxConfig.setPassword(gotsPrefs.getNuxeoPassword());
+        // nxConfig.setToken(myToken);
+        // Uri nxAutomationURI = Uri.parse(Uri.encode(GotsPreferences.getGardeningManagerServerURI()));
+        // nxConfig.setServerBaseUrl(nxAutomationURI);
+        nxConfig.setServerBaseUrl(GotsPreferences.getGardeningManagerServerURI());
+        nxConfig.setCacheKey(NuxeoServerConfig.PREF_SERVER_TOKEN);
+        nuxeoContext.onConfigChanged();
+        nuxeoContext.onConfigChanged();
+
+     
+        // Log.d(TAG,
+        // "setServerBaseUrl: " + nxAutomationURI.toString() + " login="
+        // + nxConfig.getLogin() + " password="
+        // + nxConfig.getPassword());
         nuxeoClient = getNuxeoClient();
         getNuxeoSession();
         // Check connectivity with Nuxeo
-//        new AsyncTask<Void, Integer, Void>() {
-//            @Override
-//            protected Void doInBackground(Void... params) {
-//                try {
-//                    getNuxeoSession();
-//                } catch (NotAvailableOffline e) {
-//                    throw e;
-//                }
-//
-//                return null;
-//            }
-//        }.execute();
+        // new AsyncTask<Void, Integer, Void>() {
+        // @Override
+        // protected Void doInBackground(Void... params) {
+        // try {
+        // getNuxeoSession();
+        // } catch (NotAvailableOffline e) {
+        // throw e;
+        // }
+        //
+        // return null;
+        // }
+        // }.execute();
     }
 
     /**
@@ -111,8 +111,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
     protected AndroidAutomationClient getNuxeoClient() {
         if (nuxeoClient == null) {
             nuxeoClient = nuxeoContext.getNuxeoClient();
-            nuxeoClient.setRequestInterceptor(new TokenRequestInterceptor(
-                    myApp, myToken, myLogin, myDeviceId));
+            nuxeoClient.setRequestInterceptor(new TokenRequestInterceptor(myApp, myToken, myLogin, myDeviceId));
         }
         return nuxeoClient;
     }
@@ -126,8 +125,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
         return super.createGarden(garden);
     }
 
-    protected GardenInterface createRemoteGarden(
-            final GardenInterface localGarden) {
+    protected GardenInterface createRemoteGarden(final GardenInterface localGarden) {
         Log.i(TAG, "createRemoteGarden " + localGarden);
 
         GardenInterface currentGarden = localGarden;
@@ -142,8 +140,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
         Document createDocument;
         try {
             Document home = service.getUserHome();
-            createDocument = service.createDocument(home, "Garden",
-                    currentGarden.getLocality(), props);
+            createDocument = service.createDocument(home, "Garden", currentGarden.getLocality(), props);
             // return createDocument;
 
         } catch (Exception e) {
@@ -216,14 +213,13 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
      * Returns either the list of remote gardens or the full list of gardens
      * with synchronization between local and
      * remote
-     * 
+     *
      * @param myLocalGardens can be null if not syncWithLocalGardens
      * @param syncWithLocalGardens whether to sync or not local and remote
      *            gardens
      * @return
      */
-    protected List<GardenInterface> getMyRemoteGardens(
-            List<GardenInterface> myLocalGardens,
+    protected List<GardenInterface> getMyRemoteGardens(List<GardenInterface> myLocalGardens,
             final boolean syncWithLocalGardens) {
         List<GardenInterface> myGardens = new ArrayList<GardenInterface>();
 
@@ -239,8 +235,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
                 Document gardenWorkspace = iterator.next();
                 GardenInterface garden = NuxeoGardenConvertor.convert(gardenWorkspace);
                 remoteGardens.add(garden);
-                Log.d(TAG, "Document=" + gardenWorkspace.getId() + " / "
-                        + garden);
+                Log.d(TAG, "Document=" + gardenWorkspace.getId() + " / " + garden);
             }
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
@@ -255,8 +250,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
         for (GardenInterface remoteGarden : remoteGardens) {
             boolean found = false;
             for (GardenInterface localGarden : myLocalGardens) {
-                if (remoteGarden.getUUID() != null
-                        && remoteGarden.getUUID().equals(localGarden.getUUID())) {
+                if (remoteGarden.getUUID() != null && remoteGarden.getUUID().equals(localGarden.getUUID())) {
                     found = true;
                     break;
                 }
@@ -280,9 +274,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
             } else {
                 boolean found = false;
                 for (GardenInterface remoteGarden : remoteGardens) {
-                    if (remoteGarden.getUUID() != null
-                            && remoteGarden.getUUID().equals(
-                                    localGarden.getUUID())) {
+                    if (remoteGarden.getUUID() != null && remoteGarden.getUUID().equals(localGarden.getUUID())) {
                         found = true;
                         break;
                     }

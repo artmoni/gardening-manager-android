@@ -17,7 +17,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.gots.R;
 import org.gots.garden.provider.nuxeo.NuxeoGardenProvider;
 import org.gots.preferences.GotsPreferences;
-import org.nuxeo.android.config.NuxeoServerConfig;
 import org.nuxeo.ecm.automation.client.jaxrs.Constants;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.impl.HttpAutomationClient;
@@ -70,7 +69,7 @@ public class LoginActivity extends AbstractActivity {
         super.onResume();
         if (GotsPreferences.getInstance(this).isConnectedToServer()) {
             findViewById(R.id.layoutConnect).setVisibility(View.GONE);
-            View disconnectLayout = (View) findViewById(R.id.layoutDisconnect);
+            View disconnectLayout = findViewById(R.id.layoutDisconnect);
             disconnectLayout.setVisibility(View.VISIBLE);
 
             Button buttonDisconnect = (Button) findViewById(R.id.buttonDisconnect);
@@ -127,7 +126,7 @@ public class LoginActivity extends AbstractActivity {
                             Toast.LENGTH_SHORT).show();
                 else {
                     basicNuxeoConnect(login, password);
-                    // TODO test if connexion is OK, then finish, else ask for
+                    // TODO test if connection is OK, then finish, else ask for
                     // login modification
                     new AsyncTask<Void, Integer, NuxeoGardenProvider>() {
                         private ProgressDialog dialog;
@@ -147,6 +146,7 @@ public class LoginActivity extends AbstractActivity {
                                 new NuxeoGardenProvider(LoginActivity.this);
                             } catch (NotAvailableOffline nao) {
                                 Log.e(TAG, nao.getMessage());
+                                Log.d(TAG, nao.getMessage(), nao);
                                 GotsPreferences.getInstance(LoginActivity.this).setConnectedToServer(
                                         false);
                             }
@@ -163,7 +163,7 @@ public class LoginActivity extends AbstractActivity {
                             }else
                                 LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(
                                         View.VISIBLE);
-                                
+
 
                         };
 
@@ -413,6 +413,7 @@ public class LoginActivity extends AbstractActivity {
                 return token;
             }
         }.execute(new Object());
+        
         String tokenAcquired = null;
         try {
             tokenAcquired = task.get();
