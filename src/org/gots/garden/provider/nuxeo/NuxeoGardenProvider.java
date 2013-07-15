@@ -63,13 +63,6 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
         nuxeoContext = NuxeoContextFactory.getNuxeoContext(context);
 
         nxConfig = nuxeoContext.getServerConfig();
-<<<<<<< HEAD
-       
-//        Uri nxAutomationURI = Uri.parse(GotsPreferences.getGardeningManagerServerURI());
-//        nxConfig.setServerBaseUrl(nxAutomationURI);
-//        nxConfig.setCacheKey(NuxeoServerConfig.PREF_SERVER_PASSWORD);
-=======
->>>>>>> be295b69bca5c2ce04c6fe71a2c123d3756b2494
         // nxConfig.setLogin(myLogin);
         // nxConfig.setPassword(gotsPrefs.getNuxeoPassword());
         // nxConfig.setToken(myToken);
@@ -77,15 +70,8 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
         // nxConfig.setServerBaseUrl(nxAutomationURI);
         nxConfig.setServerBaseUrl(GotsPreferences.getGardeningManagerServerURI());
         nxConfig.setCacheKey(NuxeoServerConfig.PREF_SERVER_TOKEN);
-<<<<<<< HEAD
-//        nuxeoContext.onConfigChanged();
-
-
-     
-=======
         nuxeoContext.onConfigChanged();
-
->>>>>>> be295b69bca5c2ce04c6fe71a2c123d3756b2494
+        nuxeoContext.getNetworkStatus().reset();
         // Log.d(TAG,
         // "setServerBaseUrl: " + nxAutomationURI.toString() + " login="
         // + nxConfig.getLogin() + " password="
