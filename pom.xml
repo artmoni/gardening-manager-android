@@ -233,7 +233,7 @@
             <executable>emulator-arm</executable>
           </emulator>
           <deleteConflictingFiles>true</deleteConflictingFiles>
-          <undeployBeforeDeploy>false</undeployBeforeDeploy>
+          <undeployBeforeDeploy>true</undeployBeforeDeploy>
         </configuration>
       </plugin>
       <plugin>

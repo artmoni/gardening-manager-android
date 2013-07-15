@@ -74,7 +74,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
         // nxConfig.setServerBaseUrl(nxAutomationURI);
         nxConfig.setServerBaseUrl(GotsPreferences.getGardeningManagerServerURI());
         nxConfig.setCacheKey(NuxeoServerConfig.PREF_SERVER_TOKEN);
-        nuxeoContext.onConfigChanged();
+//        nuxeoContext.onConfigChanged();
 
 
      
