@@ -13,6 +13,7 @@ import org.nuxeo.ecm.automation.client.jaxrs.impl.NotAvailableOffline;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
@@ -29,16 +30,25 @@ public class GardenManager extends BroadcastReceiver {
     }
 
     public void setGardenProvider() {
-        if (GotsPreferences.getInstance(mContext).isConnectedToServer()) {
-            try {
-                gardenProvider = new NuxeoGardenProvider(mContext);
-            } catch (NotAvailableOffline e) {
-                Log.w(getClass().getName(), "Failed to initialize NuxeoGardenProvider\n" + e.getMessage());
-                Log.d(getClass().getName(), e.getMessage(), e);
-            } catch (Throwable e) {
-                Log.w(getClass().getName(), e.getMessage(), e);
+        new AsyncTask<Void, Integer, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                if (GotsPreferences.getInstance(mContext).isConnectedToServer()) {
+                    try {
+                        gardenProvider = new NuxeoGardenProvider(mContext);
+                    } catch (NotAvailableOffline e) {
+                        Log.w(getClass().getName(),
+                                "Failed to initialize NuxeoGardenProvider\n"
+                                        + e.getMessage());
+                        Log.d(getClass().getName(), e.getMessage(), e);
+                    } catch (Throwable e) {
+                        Log.w(getClass().getName(), e.getMessage(), e);
+                    }
+                }
+                return null;
             }
-        } 
+        }.execute();
+
         if (gardenProvider == null) {
             gardenProvider = new LocalGardenProvider(mContext);
         }
@@ -79,9 +89,11 @@ public class GardenManager extends BroadcastReceiver {
     }
 
     public void setCurrentGarden(GardenInterface garden) {
-        GotsPreferences.getInstance(mContext).set(GotsPreferences.ORG_GOTS_CURRENT_GARDENID, (int) garden.getId());
-        Log.d("setCurrentGarden", "[" + garden.getId() + "] " + garden.getLocality()
-                + " has been set as current workspace");
+        GotsPreferences.getInstance(mContext).set(
+                GotsPreferences.ORG_GOTS_CURRENT_GARDENID, (int) garden.getId());
+        Log.d("setCurrentGarden",
+                "[" + garden.getId() + "] " + garden.getLocality()
+                        + " has been set as current workspace");
         changeDatabase((int) garden.getId());
     }
 

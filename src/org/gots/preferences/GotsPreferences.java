@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.gots.broadcast.BroadCastMessages;
 import org.nuxeo.android.config.NuxeoServerConfig;
+import org.nuxeo.android.context.NuxeoContextFactory;
 
 import android.content.Context;
 import android.content.Intent;
@@ -124,8 +125,8 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     private GotsPreferences(Context context) {
         mContext = context;
-//         setSharedPreferences(context.getSharedPreferences("org.gots.garden", 0));
-        setSharedPreferences(PreferenceManager.getDefaultSharedPreferences(context));
+         setSharedPreferences(context.getSharedPreferences("org.gots.garden", Context.MODE_PRIVATE));
+//        setSharedPreferences(PreferenceManager.getDefaultSharedPreferences(context));
     }
 
     public static GotsPreferences getInstance(Context context) {
@@ -149,8 +150,9 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
         if (ORG_GOTS_GARDEN_SERVERCONNECTED.equals(key)) {
             mContext.sendBroadcast(new Intent(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
+            Log.d(TAG, key + " has changed");
         }
-        initFromPrefs(prefs);
+       // initFromPrefs(prefs);
     }
 
     protected void initFromPrefs(SharedPreferences prefs) {
@@ -160,16 +162,24 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     public void set(String key, String value) {
         SharedPreferences.Editor prefedit = sharedPreferences.edit();
         prefedit.putString(key, value);
+        
+        NuxeoServerConfig nxconfig  = NuxeoContextFactory.getNuxeoContext(mContext).getServerConfig();
+
         if (ORG_GOTS_GARDEN_PASSWORD.equals(key)) {
             // TODO set NuxeoServerConfig#PREF_SERVER_PASSWORD
 //            value = "xxxxxxxx";
+            nxconfig.setPassword(value);
         }
         if (ORG_GOTS_GARDEN_LOGIN.equals(key)) {
             // TODO set NuxeoServerConfig#PREF_SERVER_LOGIN
+            nxconfig.setLogin(value);
+
         }
         if (ORG_GOTS_GARDEN_TOKEN.equals(key)) {
             // TODO set NuxeoServerConfig#PREF_SERVER_TOKEN
 //            value = "xxxxxxxx";
+            nxconfig.setToken(value);
+
         }
         prefedit.commit();
         Log.d(TAG, key + "=" + value);

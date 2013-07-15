@@ -33,11 +33,14 @@ import org.gots.seed.view.SeedWidget;
 import org.gots.weather.WeatherManager;
 import org.gots.weather.view.WeatherView;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,210 +52,259 @@ import android.widget.TextView;
 
 public class ListAllActionAdapter extends BaseAdapter {
 
-	private Context mContext;
-	private ArrayList<BaseActionInterface> actions = new ArrayList<BaseActionInterface>();
-	// private ArrayList<GrowingSeedInterface> seeds = new
-	// ArrayList<GrowingSeedInterface>();
-	// private ArrayList<WeatherConditionInterface> weathers = new
-	// ArrayList<WeatherConditionInterface>();
+    private Context mContext;
 
-	private int current_status = STATUS_DONE;
-	public static final int STATUS_TODO = 0;
-	public static final int STATUS_DONE = 1;
-	private WeatherManager manager;
+    private ArrayList<BaseActionInterface> actions = new ArrayList<BaseActionInterface>();
 
-	public static final int THUMBNAIL_HEIGHT = 48;
-	public static final int THUMBNAIL_WIDTH = 66;
+    // private ArrayList<GrowingSeedInterface> seeds = new
+    // ArrayList<GrowingSeedInterface>();
+    // private ArrayList<WeatherConditionInterface> weathers = new
+    // ArrayList<WeatherConditionInterface>();
 
-	public ListAllActionAdapter(Context context, ArrayList<GrowingSeedInterface> allSeeds, int status) {
-		this.mContext = context;
-		current_status = status;
-		ActionSeedDBHelper helper = new ActionSeedDBHelper(context);
+    private int current_status = STATUS_DONE;
 
-		for (Iterator<GrowingSeedInterface> iterator = allSeeds.iterator(); iterator.hasNext();) {
-			GrowingSeedInterface seed = iterator.next();
-			ArrayList<BaseActionInterface> seedActions;
+    public static final int STATUS_TODO = 0;
 
-			if (current_status == STATUS_TODO) {
-				seedActions = helper.getActionsToDoBySeed(seed);
+    public static final int STATUS_DONE = 1;
 
-			} else {
-				seedActions = helper.getActionsDoneBySeed(seed);
-			}
+    private WeatherManager manager;
 
-			actions.addAll(seedActions);
-		}
-		if (current_status == STATUS_TODO)
-			Collections.sort(actions, new IActionAscendantComparator());
-		else
-			Collections.sort(actions, new IActionDescendantComparator());
-		manager = new WeatherManager(mContext);
-	}
+    public static final int THUMBNAIL_HEIGHT = 48;
 
-	@Override
-	public void notifyDataSetChanged() {
-		super.notifyDataSetChanged();
+    public static final int THUMBNAIL_WIDTH = 66;
 
-	}
+    private static final String TAG = "ListAllActionAdapter";
 
-	@Override
-	public int getCount() {
-		return actions.size();
-	}
+    public ListAllActionAdapter(Context context,
+            ArrayList<GrowingSeedInterface> allSeeds, int status) {
+        this.mContext = context;
+        current_status = status;
+        ActionSeedDBHelper helper = new ActionSeedDBHelper(context);
 
-	@Override
-	public BaseActionInterface getItem(int position) {
-		return actions.get(position);
-	}
+        for (Iterator<GrowingSeedInterface> iterator = allSeeds.iterator(); iterator.hasNext();) {
+            GrowingSeedInterface seed = iterator.next();
+            ArrayList<BaseActionInterface> seedActions;
 
-	@Override
-	public long getItemId(int position) {
-		return position;
-	}
+            if (current_status == STATUS_TODO) {
+                seedActions = helper.getActionsToDoBySeed(seed);
 
-	@Override
-	public View getView(final int position, View convertView, ViewGroup parent) {
-		View ll = (LinearLayout) convertView;
+            } else {
+                seedActions = helper.getActionsDoneBySeed(seed);
+            }
 
-		// if (convertView == null) {
-		// ll = new LinearLayout(mContext);
-		if (convertView == null)
-			ll = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.list_action, parent, false);
+            actions.addAll(seedActions);
+        }
+        if (current_status == STATUS_TODO)
+            Collections.sort(actions, new IActionAscendantComparator());
+        else
+            Collections.sort(actions, new IActionDescendantComparator());
+        manager = new WeatherManager(mContext);
+    }
 
-		final BaseActionInterface currentAction = getItem(position);
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
 
-		GrowingSeedDBHelper helper = new GrowingSeedDBHelper(mContext);
-		final GrowingSeedInterface seed = helper.getSeedById(currentAction.getGrowingSeedId());
+    }
 
-		if (seed != null && BaseActionInterface.class.isInstance(currentAction)) {
-			ActionWidget actionWidget = (ActionWidget) ll.findViewById(R.id.idActionView);
+    @Override
+    public int getCount() {
+        return actions.size();
+    }
 
-			SeedWidget seedView = (SeedWidget) ll.findViewById(R.id.idSeedView);
-			seedView.setSeed(seed);
+    @Override
+    public BaseActionInterface getItem(int position) {
+        return actions.get(position);
+    }
 
-			TextView textviewActionStatus = (TextView) ll.findViewById(R.id.IdSeedActionStatus);
-			TextView textviewActionDate = (TextView) ll.findViewById(R.id.IdSeedActionDate);
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
-			SimpleDateFormat dateFormat = new SimpleDateFormat(" dd/MM/yyyy", Locale.FRANCE);
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        View ll = (LinearLayout) convertView;
 
-			if (current_status == STATUS_TODO) {
-				textviewActionStatus.setText(mContext.getResources().getString(R.string.seed_action_todo));
+        // if (convertView == null) {
+        // ll = new LinearLayout(mContext);
+        if (convertView == null)
+            ll = (LinearLayout) LayoutInflater.from(mContext).inflate(
+                    R.layout.list_action, parent, false);
 
-				Calendar rightNow = Calendar.getInstance();
-				rightNow.setTime(seed.getDateSowing());
-				rightNow.add(Calendar.DAY_OF_YEAR, currentAction.getDuration());
-				textviewActionDate.setText(dateFormat.format(rightNow.getTime()));
+        final BaseActionInterface currentAction = getItem(position);
 
-				actionWidget.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						((SeedActionInterface) currentAction).execute(seed);
-						actions.remove(position);
-						// seeds.remove(position);
-						notifyDataSetChanged();
-					}
-				});
+        GrowingSeedDBHelper helper = new GrowingSeedDBHelper(mContext);
+        final GrowingSeedInterface seed = helper.getSeedById(currentAction.getGrowingSeedId());
 
-				WeatherView weatherView = (WeatherView) ll.findViewById(R.id.idWeatherView);
-				weatherView.setVisibility(View.GONE);
+        if (seed != null && BaseActionInterface.class.isInstance(currentAction)) {
+            ActionWidget actionWidget = (ActionWidget) ll.findViewById(R.id.idActionView);
 
-			} else {
-				textviewActionStatus.setText(mContext.getResources().getString(R.string.seed_action_done));
+            SeedWidget seedView = (SeedWidget) ll.findViewById(R.id.idSeedView);
+            seedView.setSeed(seed);
 
-				Calendar rightNow = Calendar.getInstance();
-				rightNow.setTime(currentAction.getDateActionDone());
-				// rightNow.add(Calendar.DAY_OF_YEAR,
-				// currentAction.getDuration());
-				textviewActionDate.setText(dateFormat.format(currentAction.getDateActionDone()));
+            TextView textviewActionStatus = (TextView) ll.findViewById(R.id.IdSeedActionStatus);
+            TextView textviewActionDate = (TextView) ll.findViewById(R.id.IdSeedActionDate);
 
-				WeatherView weatherView = (WeatherView) ll.findViewById(R.id.idWeatherView);
-				weatherView.setWeather(manager.getCondition(rightNow.getTime()));
+            SimpleDateFormat dateFormat = new SimpleDateFormat(" dd/MM/yyyy",
+                    Locale.FRANCE);
 
-				currentAction.setState(ActionState.NORMAL);
+            if (current_status == STATUS_TODO) {
+                textviewActionStatus.setText(mContext.getResources().getString(
+                        R.string.seed_action_todo));
 
-				if (PhotoAction.class.isInstance(currentAction) && currentAction.getData() != null) {
-					final File imgFile = new File(currentAction.getData().toString());
-					if (imgFile.exists()) {
+                Calendar rightNow = Calendar.getInstance();
+                rightNow.setTime(seed.getDateSowing());
+                rightNow.add(Calendar.DAY_OF_YEAR, currentAction.getDuration());
+                textviewActionDate.setText(dateFormat.format(rightNow.getTime()));
 
-						try {
-							Bitmap imageBitmap = getThumbnail(imgFile);
-							ImageView seedImage = (ImageView) ll.findViewById(R.id.imageviewPhoto);
-							int padding = (THUMBNAIL_WIDTH - imageBitmap.getWidth()) / 2;
-							seedImage.setPadding(padding, 0, padding, 0);
-							seedImage.setImageBitmap(imageBitmap);
+                actionWidget.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ((SeedActionInterface) currentAction).execute(seed);
+                        actions.remove(position);
+                        // seeds.remove(position);
+                        notifyDataSetChanged();
+                    }
+                });
 
-							seedImage.setVisibility(View.VISIBLE);
-							weatherView.setVisibility(View.GONE);
+                WeatherView weatherView = (WeatherView) ll.findViewById(R.id.idWeatherView);
+                weatherView.setVisibility(View.GONE);
 
-							seedImage.setOnClickListener(new View.OnClickListener() {
+            } else {
+                textviewActionStatus.setText(mContext.getResources().getString(
+                        R.string.seed_action_done));
 
-								@Override
-								public void onClick(View v) {
-									Intent intent = new Intent();
-									intent.setAction(Intent.ACTION_VIEW);
-									intent.setDataAndType(Uri.parse("file://" + imgFile.getAbsolutePath()), "image/*");
-									mContext.startActivity(intent);
-								}
-							});
-						} catch (Exception e) {
-							Log.e(getClass().getName(), e.getMessage());
-							ll.setVisibility(View.GONE);
-						}
+                Calendar rightNow = Calendar.getInstance();
+                rightNow.setTime(currentAction.getDateActionDone());
+                // rightNow.add(Calendar.DAY_OF_YEAR,
+                // currentAction.getDuration());
+                textviewActionDate.setText(dateFormat.format(currentAction.getDateActionDone()));
 
-					} else {
-						GotsAdvertisement ads = new GotsAdvertisement(mContext);
-						ll = ads.getAdsLayout();
-					}
-				}
-			}
-			actionWidget.setAction(currentAction);
-			// ll.invalidate();
+                WeatherView weatherView = (WeatherView) ll.findViewById(R.id.idWeatherView);
+                weatherView.setWeather(manager.getCondition(rightNow.getTime()));
 
-		}
-		// }
-		return ll;
-	}
+                currentAction.setState(ActionState.NORMAL);
 
-	private Bitmap getThumbnail(File imgFile) throws Exception {
-		Log.d("getThumbnail", imgFile.getAbsolutePath());
-		Bitmap imageBitmap = null;
-		try {
-			imageBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-			// imageBitmap = BitmapFactory.decodeByteArray(mImageData, 0,
-			// mImageData.length);
-			Float width = Float.valueOf(imageBitmap.getWidth());
-			Float height = Float.valueOf(imageBitmap.getHeight());
-			Float ratio = width / height;
-			imageBitmap = Bitmap.createScaledBitmap(imageBitmap, (int) (THUMBNAIL_HEIGHT * ratio), THUMBNAIL_HEIGHT,
-					false);
-		} catch (Exception e) {
-			throw new Exception("Image file cannot be decoded :" + imgFile.getAbsolutePath());
-		}
-		return imageBitmap;
-	}
+                if (PhotoAction.class.isInstance(currentAction)
+                        && currentAction.getData() != null) {
+                    final File imgFile = new File(
+                            currentAction.getData().toString());
 
-	class IActionAscendantComparator implements Comparator<BaseActionInterface> {
-		@Override
-		public int compare(BaseActionInterface obj1, BaseActionInterface obj2) {
-			int result = 0;
-			if (obj1.getDuration() >= 0 && obj2.getDuration() >= 0) {
-				result = obj1.getDuration() < obj2.getDuration() ? -1 : 0;
-			}
+                    try {
+                         Bitmap imageBitmap = getThumbnail(imgFile);
+//                        Bitmap imageBitmap = getThumbnail(
+//                                mContext.getContentResolver(),
+//                                imgFile.getAbsolutePath());
+                        ImageView seedImage = (ImageView) ll.findViewById(R.id.imageviewPhoto);
+                        int padding = (THUMBNAIL_WIDTH - imageBitmap.getWidth()) / 2;
+                        seedImage.setPadding(padding, 0, padding, 0);
+                        seedImage.setImageBitmap(imageBitmap);
 
-			return result;
-		}
-	}
+                        seedImage.setVisibility(View.VISIBLE);
+                        weatherView.setVisibility(View.GONE);
 
-	class IActionDescendantComparator implements Comparator<BaseActionInterface> {
-		@Override
-		public int compare(BaseActionInterface obj1, BaseActionInterface obj2) {
-			int result = 0;
-			if (obj1.getDateActionDone() != null && obj2.getDateActionDone() != null) {
-				result = obj1.getDateActionDone().getTime() > obj2.getDateActionDone().getTime() ? -1 : 0;
-			}
+                        seedImage.setOnClickListener(new View.OnClickListener() {
 
-			return result;
-		}
-	}
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent();
+                                intent.setAction(Intent.ACTION_VIEW);
+                                intent.setDataAndType(
+                                        Uri.parse("file://"
+                                                + imgFile.getAbsolutePath()),
+                                        "image/*");
+                                mContext.startActivity(intent);
+                            }
+                        });
+                    } catch (Exception e) {
+                        Log.e(getClass().getName(), "imgFile.getPath()="
+                                + imgFile.getPath() + " - " + e.getMessage());
+                        // ll.setVisibility(View.GONE);
+                    }
+
+                }
+            }
+            actionWidget.setAction(currentAction);
+            // ll.invalidate();
+
+        }
+        // }
+        return ll;
+    }
+
+    private Bitmap getThumbnail(File imgFile) throws Exception {
+        Log.d("getThumbnail", imgFile.getPath());
+        Bitmap imageBitmap = null;
+        try {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+            options.inSampleSize=2;
+            imageBitmap = BitmapFactory.decodeFile(imgFile.getPath(),options);
+            // imageBitmap = BitmapFactory.decodeByteArray(mImageData, 0,
+            // mImageData.length);
+            Float width = Float.valueOf(imageBitmap.getWidth());
+            Float height = Float.valueOf(imageBitmap.getHeight());
+            Float ratio = width / height;
+            imageBitmap = Bitmap.createScaledBitmap(imageBitmap,
+                    (int) (THUMBNAIL_HEIGHT * ratio), THUMBNAIL_HEIGHT, false);
+        } catch (Exception e) {
+            throw new Exception("Image file cannot be decoded :"
+                    + imgFile.getAbsolutePath());
+        }
+        return imageBitmap;
+    }
+
+    public static Bitmap getThumbnail(ContentResolver cr, String path)
+            throws Exception {
+        Uri selectedImageUri = Uri.fromFile(new File(path));
+        // Cursor ca = cr.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+        // new String[] { MediaStore.MediaColumns._ID },
+        // MediaStore.MediaColumns.DATA + "=?", new String[] { path },
+        // null);
+        Cursor ca = cr.query(selectedImageUri,
+                null, MediaStore.Images.Media.DATA + " like ? ",
+                new String[] { selectedImageUri.getPath() }, null);
+        
+        if (ca != null && ca.moveToFirst()) {
+            int id = ca.getInt(ca.getColumnIndex(MediaStore.MediaColumns._ID));
+            Log.d(TAG,
+                    ca.getString(ca.getColumnIndex(MediaStore.MediaColumns.DATA)));
+            ca.close();
+            return MediaStore.Images.Thumbnails.getThumbnail(cr, id,
+                    MediaStore.Images.Thumbnails.MICRO_KIND, null);
+        }
+
+        ca.close();
+        return null;
+
+    }
+
+    class IActionAscendantComparator implements Comparator<BaseActionInterface> {
+        @Override
+        public int compare(BaseActionInterface obj1, BaseActionInterface obj2) {
+            int result = 0;
+            if (obj1.getDuration() >= 0 && obj2.getDuration() >= 0) {
+                result = obj1.getDuration() < obj2.getDuration() ? -1 : 0;
+            }
+
+            return result;
+        }
+    }
+
+    class IActionDescendantComparator implements
+            Comparator<BaseActionInterface> {
+        @Override
+        public int compare(BaseActionInterface obj1, BaseActionInterface obj2) {
+            int result = 0;
+            if (obj1.getDateActionDone() != null
+                    && obj2.getDateActionDone() != null) {
+                result = obj1.getDateActionDone().getTime() > obj2.getDateActionDone().getTime() ? -1
+                        : 0;
+            }
+
+            return result;
+        }
+    }
 
 }

@@ -17,12 +17,15 @@ import org.apache.http.message.BasicNameValuePair;
 import org.gots.R;
 import org.gots.garden.provider.nuxeo.NuxeoGardenProvider;
 import org.gots.preferences.GotsPreferences;
+import org.nuxeo.android.config.NuxeoServerConfig;
 import org.nuxeo.ecm.automation.client.jaxrs.Constants;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.impl.HttpAutomationClient;
+import org.nuxeo.ecm.automation.client.jaxrs.impl.NotAvailableOffline;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import org.nuxeo.ecm.automation.client.jaxrs.spi.auth.TokenRequestInterceptor;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -40,6 +43,8 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.MenuItem;
 
 public class LoginActivity extends AbstractActivity {
+    protected static final String TAG = "LoginActivity";
+
     private TextView loginText;
 
     private TextView passwordText;
@@ -65,21 +70,24 @@ public class LoginActivity extends AbstractActivity {
         super.onResume();
         if (GotsPreferences.getInstance(this).isConnectedToServer()) {
             findViewById(R.id.layoutConnect).setVisibility(View.GONE);
-            LinearLayout disconnectLayout = (LinearLayout)findViewById(R.id.layoutDisconnect);
-            disconnectLayout.setVisibility(View.VISIBLE)
-            ;
-            disconnectLayout.setOnClickListener(new View.OnClickListener() {
-                
+            View disconnectLayout = (View) findViewById(R.id.layoutDisconnect);
+            disconnectLayout.setVisibility(View.VISIBLE);
+
+            Button buttonDisconnect = (Button) findViewById(R.id.buttonDisconnect);
+            buttonDisconnect.setOnClickListener(new View.OnClickListener() {
+
                 @Override
                 public void onClick(View v) {
-                    GotsPreferences.getInstance(LoginActivity.this).setConnectedToServer(false);
+                    GotsPreferences.getInstance(LoginActivity.this).setConnectedToServer(
+                            false);
                     findViewById(R.id.layoutConnect).setVisibility(View.VISIBLE);
                     findViewById(R.id.layoutDisconnect).setVisibility(View.GONE);
-
+                    onResume();
                 }
             });
             return;
         }
+
         loginText = (TextView) findViewById(R.id.edittextLogin);
         loginText.setText(GotsPreferences.getInstance(this).getNuxeoLogin());
         passwordText = (TextView) findViewById(R.id.edittextPassword);
@@ -121,8 +129,47 @@ public class LoginActivity extends AbstractActivity {
                     basicNuxeoConnect(login, password);
                     // TODO test if connexion is OK, then finish, else ask for
                     // login modification
-                    // new NuxeoGardenProvider(LoginActivity.this);
-                    finish();
+                    new AsyncTask<Void, Integer, NuxeoGardenProvider>() {
+                        private ProgressDialog dialog;
+
+                        protected void onPreExecute() {
+                            dialog = ProgressDialog.show(LoginActivity.this,
+                                    "", "Loading. Please wait...", true);
+                            dialog.setCanceledOnTouchOutside(true);
+                            dialog.show();
+                        };
+
+                        @Override
+                        protected NuxeoGardenProvider doInBackground(
+                                Void... params) {
+                            try {
+
+                                new NuxeoGardenProvider(LoginActivity.this);
+                            } catch (NotAvailableOffline nao) {
+                                Log.e(TAG, nao.getMessage());
+                                GotsPreferences.getInstance(LoginActivity.this).setConnectedToServer(
+                                        false);
+                            }
+                            return null;
+                        }
+
+                        protected void onPostExecute(NuxeoGardenProvider result) {
+                            if (dialog.isShowing())
+                                dialog.dismiss();
+                            if (result != null) {
+                                LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(                                        View.GONE);
+
+                                onResume();
+                            }else
+                                LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(
+                                        View.VISIBLE);
+                                
+
+                        };
+
+                    }.execute();
+
+                    // finish();
 
                 }
 

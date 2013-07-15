@@ -69,23 +69,34 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
         myDeviceId = gotsPrefs.getDeviceId();
         myApp = gotsPrefs.getGardeningManagerAppname();
         nuxeoContext = NuxeoContextFactory.getNuxeoContext(context);
+
         nxConfig = nuxeoContext.getServerConfig();
         nxConfig.setLogin(myLogin);
         nxConfig.setPassword(gotsPrefs.getNuxeoPassword());
         nxConfig.setToken(myToken);
         nxConfig.setCacheKey(NuxeoServerConfig.PREF_SERVER_TOKEN);
+
         Uri nxAutomationURI = Uri.parse(Uri.encode(GotsPreferences.getGardeningManagerServerURI()));
-        Log.d(TAG, "setServerBaseUrl: " + nxAutomationURI.toString());
         nxConfig.setServerBaseUrl(nxAutomationURI);
+        Log.d(TAG,
+                "setServerBaseUrl: " + nxAutomationURI.toString() + " login="
+                        + nxConfig.getLogin() + " password="
+                        + nxConfig.getPassword());
         nuxeoClient = getNuxeoClient();
+        getNuxeoSession();
         // Check connectivity with Nuxeo
-        new AsyncTask<Void, Integer, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                getNuxeoSession();
-                return null;
-            }
-        }.execute();
+//        new AsyncTask<Void, Integer, Void>() {
+//            @Override
+//            protected Void doInBackground(Void... params) {
+//                try {
+//                    getNuxeoSession();
+//                } catch (NotAvailableOffline e) {
+//                    throw e;
+//                }
+//
+//                return null;
+//            }
+//        }.execute();
     }
 
     /**
@@ -124,13 +135,13 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
         PropertyMap props = new PropertyMap();
         props.set("dc:title", currentGarden.getLocality());
         DocumentManager service = session.getAdapter(DocumentManager.class);
+
         // TODO use service.getUserHome()
         // DocRef wsRef = new DocRef("/default-domain/UserWorkspaces/" +
         // myLogin);
         Document createDocument;
         try {
             Document home = service.getUserHome();
-
             createDocument = service.createDocument(home, "Garden",
                     currentGarden.getLocality(), props);
             // return createDocument;
