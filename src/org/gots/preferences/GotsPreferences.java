@@ -34,7 +34,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class GotsPreferences implements OnSharedPreferenceChangeListener {
@@ -162,8 +161,10 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     public void set(String key, String value) {
         SharedPreferences.Editor prefedit = sharedPreferences.edit();
         prefedit.putString(key, value);
-        
+
+        // move to constructor
         NuxeoServerConfig nxconfig  = NuxeoContextFactory.getNuxeoContext(mContext).getServerConfig();
+        // nxconfig.setSharedPrefs()
 
         if (ORG_GOTS_GARDEN_PASSWORD.equals(key)) {
             // TODO set NuxeoServerConfig#PREF_SERVER_PASSWORD
