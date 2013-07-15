@@ -141,16 +141,17 @@ public class LoginActivity extends AbstractActivity {
                         @Override
                         protected NuxeoGardenProvider doInBackground(
                                 Void... params) {
+                            NuxeoGardenProvider garden = null;
                             try {
 
-                                new NuxeoGardenProvider(LoginActivity.this);
+                                garden = new NuxeoGardenProvider(LoginActivity.this);
                             } catch (NotAvailableOffline nao) {
                                 Log.e(TAG, nao.getMessage());
                                 Log.d(TAG, nao.getMessage(), nao);
                                 GotsPreferences.getInstance(LoginActivity.this).setConnectedToServer(
                                         false);
                             }
-                            return null;
+                            return garden;
                         }
 
                         protected void onPostExecute(NuxeoGardenProvider result) {
