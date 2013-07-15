@@ -39,7 +39,7 @@ import android.util.Log;
 public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     public static final boolean ISDEVELOPMENT = false;
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     /**
      * @see NuxeoServerConfig#PREF_SERVER_PASSWORD

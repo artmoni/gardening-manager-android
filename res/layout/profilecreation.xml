@@ -53,24 +53,26 @@
                     android:gravity="center_vertical"
                     android:text="@string/profile.sample.data" />
 
-                <!-- <CheckBox
+                <!--
+                     <CheckBox
                     android:id="@+id/checkboxShare"
                     style="@style/description_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="false"
                     android:gravity="center_vertical"
-                    android:text="@string/profile.share.data" /> -->
-
-                
+                    android:text="@string/profile.share.data" />
+                -->
 
                 <Button
                     android:id="@+id/buttonValidatePosition"
                     style="@style/button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/button_green_selector"
                     android:padding="10dp"
-                    android:text="@string/profile.location.validate" />
+                    android:text="@string/profile.location.validate"
+                    android:textColor="@color/white" />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

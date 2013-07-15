@@ -63,6 +63,23 @@ public class LoginActivity extends AbstractActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (GotsPreferences.getInstance(this).isConnectedToServer()) {
+            findViewById(R.id.layoutConnect).setVisibility(View.GONE);
+            LinearLayout disconnectLayout = (LinearLayout)findViewById(R.id.layoutDisconnect);
+            disconnectLayout.setVisibility(View.VISIBLE)
+            ;
+            disconnectLayout.setOnClickListener(new View.OnClickListener() {
+                
+                @Override
+                public void onClick(View v) {
+                    GotsPreferences.getInstance(LoginActivity.this).setConnectedToServer(false);
+                    findViewById(R.id.layoutConnect).setVisibility(View.VISIBLE);
+                    findViewById(R.id.layoutDisconnect).setVisibility(View.GONE);
+
+                }
+            });
+            return;
+        }
         loginText = (TextView) findViewById(R.id.edittextLogin);
         loginText.setText(GotsPreferences.getInstance(this).getNuxeoLogin());
         passwordText = (TextView) findViewById(R.id.edittextPassword);
@@ -102,8 +119,9 @@ public class LoginActivity extends AbstractActivity {
                             Toast.LENGTH_SHORT).show();
                 else {
                     basicNuxeoConnect(login, password);
-                    //TODO test if connexion is OK, then finish, else ask for login modification
-//                    new NuxeoGardenProvider(LoginActivity.this);
+                    // TODO test if connexion is OK, then finish, else ask for
+                    // login modification
+                    // new NuxeoGardenProvider(LoginActivity.this);
                     finish();
 
                 }
@@ -165,7 +183,8 @@ public class LoginActivity extends AbstractActivity {
                 try {
                     String email = "toto.tata@gmail.com";
                     HttpAutomationClient client = new HttpAutomationClient(
-                            GotsPreferences.getGardeningManagerServerURI()+"/site/automation");
+                            GotsPreferences.getGardeningManagerServerURI()
+                                    + "/site/automation");
                     client.setRequestInterceptor(new TokenRequestInterceptor(
                             "myApp",
                             "myToken",
