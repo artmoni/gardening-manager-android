@@ -77,8 +77,7 @@ public class LoginActivity extends AbstractActivity {
 
                 @Override
                 public void onClick(View v) {
-                    GotsPreferences.getInstance(LoginActivity.this).setConnectedToServer(
-                            false);
+                    GotsPreferences.getInstance(LoginActivity.this).setConnectedToServer(false);
                     findViewById(R.id.layoutConnect).setVisibility(View.VISIBLE);
                     findViewById(R.id.layoutDisconnect).setVisibility(View.GONE);
                     onResume();
@@ -97,8 +96,7 @@ public class LoginActivity extends AbstractActivity {
 
             @Override
             public void onClick(View v) {
-                Toast.makeText(LoginActivity.this,
-                        getResources().getString(R.string.feature_unavalaible),
+                Toast.makeText(LoginActivity.this, getResources().getString(R.string.feature_unavalaible),
                         Toast.LENGTH_SHORT).show();
 
                 // launchGoogle();
@@ -119,10 +117,7 @@ public class LoginActivity extends AbstractActivity {
                 String password = passwordText.getText().toString();
 
                 if ("".equals(login) || "".equals(password))
-                    Toast.makeText(
-                            LoginActivity.this,
-                            getResources().getString(
-                                    R.string.login_missinginformation),
+                    Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_missinginformation),
                             Toast.LENGTH_SHORT).show();
                 else {
                     basicNuxeoConnect(login, password);
@@ -132,39 +127,33 @@ public class LoginActivity extends AbstractActivity {
                         private ProgressDialog dialog;
 
                         protected void onPreExecute() {
-                            dialog = ProgressDialog.show(LoginActivity.this,
-                                    "", "Loading. Please wait...", true);
+                            dialog = ProgressDialog.show(LoginActivity.this, "", "Loading. Please wait...", true);
                             dialog.setCanceledOnTouchOutside(true);
                             dialog.show();
                         };
 
                         @Override
-                        protected NuxeoGardenProvider doInBackground(
-                                Void... params) {
-                            NuxeoGardenProvider garden = null;
+                        protected NuxeoGardenProvider doInBackground(Void... params) {
+                            NuxeoGardenProvider nuxeoGardenProvider = null;
                             try {
-
-                                garden = new NuxeoGardenProvider(LoginActivity.this);
+                                nuxeoGardenProvider = new NuxeoGardenProvider(LoginActivity.this);
                             } catch (NotAvailableOffline nao) {
                                 Log.e(TAG, nao.getMessage());
                                 Log.d(TAG, nao.getMessage(), nao);
-                                GotsPreferences.getInstance(LoginActivity.this).setConnectedToServer(
-                                        false);
+                                GotsPreferences.getInstance(LoginActivity.this).setConnectedToServer(false);
                             }
-                            return garden;
+                            return nuxeoGardenProvider;
                         }
 
                         protected void onPostExecute(NuxeoGardenProvider result) {
                             if (dialog.isShowing())
                                 dialog.dismiss();
                             if (result != null) {
-                                LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(                                        View.GONE);
+                                LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.GONE);
 
                                 onResume();
-                            }else
-                                LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(
-                                        View.VISIBLE);
-
+                            } else
+                                LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.VISIBLE);
 
                         };
 
@@ -178,23 +167,17 @@ public class LoginActivity extends AbstractActivity {
 
             protected void basicNuxeoConnect(String login, String password) {
                 String device_id = getDeviceID();
-                GotsPreferences.getInstance(LoginActivity.this).setDeviceId(
-                        device_id);
+                GotsPreferences.getInstance(LoginActivity.this).setDeviceId(device_id);
 
                 String token = request_basicauth_token(false);
                 if (token == null) {
-                    Toast.makeText(LoginActivity.this, "Error logging",
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Error logging", Toast.LENGTH_SHORT).show();
                 } else {
-                    GotsPreferences.getInstance(LoginActivity.this).setToken(
-                            token);
+                    GotsPreferences.getInstance(LoginActivity.this).setToken(token);
 
-                    GotsPreferences.getInstance(LoginActivity.this).setNuxeoLogin(
-                            login);
-                    GotsPreferences.getInstance(LoginActivity.this).setNuxeoPassword(
-                            password);
-                    GotsPreferences.getInstance(LoginActivity.this).setConnectedToServer(
-                            true);
+                    GotsPreferences.getInstance(LoginActivity.this).setNuxeoLogin(login);
+                    GotsPreferences.getInstance(LoginActivity.this).setNuxeoPassword(password);
+                    GotsPreferences.getInstance(LoginActivity.this).setConnectedToServer(true);
                 }
             }
 
@@ -203,8 +186,7 @@ public class LoginActivity extends AbstractActivity {
     }
 
     protected String getDeviceID() {
-        String device_id = Secure.getString(getContentResolver(),
-                Secure.ANDROID_ID);
+        String device_id = Secure.getString(getContentResolver(), Secure.ANDROID_ID);
         return device_id;
     }
 
@@ -214,8 +196,7 @@ public class LoginActivity extends AbstractActivity {
 
         String tmp_token = request_temporaryauth_token(false);
         if (tmp_token == null) {
-            Toast.makeText(LoginActivity.this, "Authentication ",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, "Authentication ", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(LoginActivity.this, tmp_token, Toast.LENGTH_SHORT).show();
         }
@@ -231,20 +212,14 @@ public class LoginActivity extends AbstractActivity {
                 try {
                     String email = "toto.tata@gmail.com";
                     HttpAutomationClient client = new HttpAutomationClient(
-                            GotsPreferences.getGardeningManagerServerURI()
-                                    + "/site/automation");
-                    client.setRequestInterceptor(new TokenRequestInterceptor(
-                            "myApp",
-                            "myToken",
-                            "myLogin",
+                            GotsPreferences.getGardeningManagerServerURI() + "/site/automation");
+                    client.setRequestInterceptor(new TokenRequestInterceptor("myApp", "myToken", "myLogin",
                             GotsPreferences.getInstance(LoginActivity.this).getDeviceId()));
 
                     Session session = client.getSession();
 
-                    Documents docs = (Documents) session.newRequest(
-                            "Document.Email").setHeader(
-                            Constants.HEADER_NX_SCHEMAS, "*").set("email",
-                            email).execute();
+                    Documents docs = (Documents) session.newRequest("Document.Email").setHeader(
+                            Constants.HEADER_NX_SCHEMAS, "*").set("email", email).execute();
 
                     // String uri =
                     // GotsPreferences.getInstance(getApplicationContext())
@@ -343,18 +318,14 @@ public class LoginActivity extends AbstractActivity {
             @Override
             protected String doInBackground(Object... objects) {
                 try {
-                    String uri = GotsPreferences.getInstance(
-                            getApplicationContext()).getGardeningManagerNuxeoAuthentication();
+                    String uri = GotsPreferences.getInstance(getApplicationContext()).getGardeningManagerNuxeoAuthentication();
 
                     List<NameValuePair> params = new LinkedList<NameValuePair>();
-                    params.add(new BasicNameValuePair(
-                            "deviceId",
+                    params.add(new BasicNameValuePair("deviceId",
                             GotsPreferences.getInstance(getApplicationContext()).getDeviceId()));
-                    params.add(new BasicNameValuePair(
-                            "applicationName",
-                            GotsPreferences.getInstance(getApplicationContext()).getGardeningManagerAppname()));
-                    params.add(new BasicNameValuePair("deviceDescription",
-                            Build.MODEL + "(" + Build.MANUFACTURER + ")"));
+                    params.add(new BasicNameValuePair("applicationName", GotsPreferences.getInstance(
+                            getApplicationContext()).getGardeningManagerAppname()));
+                    params.add(new BasicNameValuePair("deviceDescription", Build.MODEL + "(" + Build.MANUFACTURER + ")"));
                     params.add(new BasicNameValuePair("permission", "ReadWrite"));
                     params.add(new BasicNameValuePair("revoke", "false"));
 
@@ -365,20 +336,16 @@ public class LoginActivity extends AbstractActivity {
                     URLConnection urlConnection;
                     urlConnection = url.openConnection();
 
-                    urlConnection.addRequestProperty("X-User-Id",
-                            loginText.getText().toString());
-                    urlConnection.addRequestProperty(
-                            "X-Device-Id",
+                    urlConnection.addRequestProperty("X-User-Id", loginText.getText().toString());
+                    urlConnection.addRequestProperty("X-Device-Id",
                             GotsPreferences.getInstance(getApplicationContext()).getDeviceId());
-                    urlConnection.addRequestProperty(
-                            "X-Application-Name",
+                    urlConnection.addRequestProperty("X-Application-Name",
                             GotsPreferences.getInstance(getApplicationContext()).getGardeningManagerAppname());
                     urlConnection.addRequestProperty(
                             "Authorization",
                             "Basic "
                                     + Base64.encodeToString(
-                                            (loginText.getText().toString()
-                                                    + ":" + passwordText.getText().toString()).getBytes(),
+                                            (loginText.getText().toString() + ":" + passwordText.getText().toString()).getBytes(),
                                             Base64.NO_WRAP));
 
                     // urlConnection.addRequestProperty(
@@ -388,14 +355,12 @@ public class LoginActivity extends AbstractActivity {
                     // ":" + passwordText.getText()
                     // .toString()).getBytes()));
 
-                    InputStream in = new BufferedInputStream(
-                            urlConnection.getInputStream());
+                    InputStream in = new BufferedInputStream(urlConnection.getInputStream());
                     try {
                         // readStream(in);
                         StringBuilder builder = new StringBuilder();
                         String line;
-                        BufferedReader reader = new BufferedReader(
-                                new InputStreamReader(in, "UTF-8"));
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
                         while ((line = reader.readLine()) != null) {
                             builder.append(line);
                         }
