@@ -34,6 +34,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class GotsPreferences implements OnSharedPreferenceChangeListener {
@@ -62,22 +63,20 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     /**
      * TODO add to NuxeoServerConfig
-     * 
+     *
      * @see NuxeoServerConfig
      */
     public static final String ORG_GOTS_GARDEN_TOKEN = "org.gots.garden.token";
 
-    private static boolean ORG_GOTS_PREMIUM_LICENCE = Boolean.valueOf(System.getProperty(
-            "boolean.isdevelopment", "false"));
+    private static boolean ORG_GOTS_PREMIUM_LICENCE = Boolean.valueOf(System.getProperty("boolean.isdevelopment",
+            "false"));
 
-    private static final String ANALYTICS_API_KEY = System.getProperty(
-            "key.analyticsapi", "UA-916500-18");
+    private static final String ANALYTICS_API_KEY = System.getProperty("key.analyticsapi", "UA-916500-18");
 
-    private static final String WEATHER_API_KEY = System.getProperty(
-            "key.weatherapi", "6ba97b2306fd5b9d47992d8716dab16a");
+    private static final String WEATHER_API_KEY = System.getProperty("key.weatherapi",
+            "6ba97b2306fd5b9d47992d8716dab16a");
 
-    private static final String ADMOB_API_KEY = System.getProperty(
-            "key.admobapi", "a14f50fa231b26d");
+    private static final String ADMOB_API_KEY = System.getProperty("key.admobapi", "a14f50fa231b26d");
 
     public static final String GARDENING_MANAGER_DIRECTORY = "Gardening-Manager";
 
@@ -159,8 +158,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
         if (ORG_GOTS_GARDEN_SERVERCONNECTED.equals(key)) {
-            mContext.sendBroadcast(new Intent(
-                    BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
+            mContext.sendBroadcast(new Intent(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
             Log.d(TAG, key + " has changed");
         }
         // initFromPrefs(prefs);
@@ -173,17 +171,8 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     public void set(String key, String value) {
         SharedPreferences.Editor prefedit = sharedPreferences.edit();
         prefedit.putString(key, value);
-<<<<<<< HEAD
-        // nxconfig.setSharedPrefs()
-
-        nxconfig = NuxeoContextFactory.getNuxeoContext(
-                mContext).getServerConfig();
-        // nxconfig.setSharedPrefs()
-=======
-
-        // move to constructor
-        NuxeoServerConfig nxconfig  = NuxeoContextFactory.getNuxeoContext(mContext).getServerConfig();
->>>>>>> be295b69bca5c2ce04c6fe71a2c123d3756b2494
+        // TODO move to constructor
+        NuxeoServerConfig nxconfig = NuxeoContextFactory.getNuxeoContext(mContext).getServerConfig();
         // nxconfig.setSharedPrefs()
 
         if (ORG_GOTS_GARDEN_PASSWORD.equals(key)) {
@@ -256,14 +245,13 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
         return ADMOB_API_KEY;
     }
 
-   public void setGardeningManagerServerURI(String uri){
-       set(ORG_GOTS_GARDEN_NUXEO_URI,uri);
-   }
-    
+    public void setGardeningManagerServerURI(String uri) {
+        set(ORG_GOTS_GARDEN_NUXEO_URI, uri);
+    }
+
     public static String getGardeningManagerServerURI() {
         // TODO use NuxeoServerConfig.getAutomationUrl()
-        return ISDEVELOPMENT ? GARDENING_MANAGER_NUXEO_AUTOMATION_TEST
-                : GARDENING_MANAGER_NUXEO_AUTOMATION;
+        return ISDEVELOPMENT ? GARDENING_MANAGER_NUXEO_AUTOMATION_TEST : GARDENING_MANAGER_NUXEO_AUTOMATION;
     }
 
     // public void setPREMIUM(boolean pREMIUM) {
@@ -295,8 +283,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     }
 
     public boolean isConnectedToServer() {
-        return sharedPreferences.getBoolean(ORG_GOTS_GARDEN_SERVERCONNECTED,
-                false);
+        return sharedPreferences.getBoolean(ORG_GOTS_GARDEN_SERVERCONNECTED, false);
     }
 
     public String getToken() {
@@ -315,9 +302,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
         for (ApplicationInfo applicationInfo : packages) {
             try {
 
-                PackageInfo packageInfo = pm.getPackageInfo(
-                        applicationInfo.packageName,
-                        PackageManager.GET_PERMISSIONS);
+                PackageInfo packageInfo = pm.getPackageInfo(applicationInfo.packageName, PackageManager.GET_PERMISSIONS);
                 if ("org.gots.premium".equals(packageInfo.packageName)) {
                     unlocked = true;
                 }
@@ -343,8 +328,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     public String getGardeningManagerNuxeoAuthentication() {
         // TODO use NuxeoServerConfig.getAuthenticationUrl()
-        return ISDEVELOPMENT ? GARDENING_MANAGER_NUXEO_AUTHENTICATION_TEST
-                : GARDENING_MANAGER_NUXEO_AUTHENTICATION;
+        return ISDEVELOPMENT ? GARDENING_MANAGER_NUXEO_AUTHENTICATION_TEST : GARDENING_MANAGER_NUXEO_AUTHENTICATION;
     }
 
 }
