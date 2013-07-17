@@ -45,28 +45,30 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     public static final boolean DEBUG = false;
 
-    /**
-     * @see NuxeoServerConfig#PREF_SERVER_PASSWORD
-     */
-    public static final String ORG_GOTS_GARDEN_PASSWORD = "org.gots.garden.password";
+    // /**
+    // * @see NuxeoServerConfig#PREF_SERVER_PASSWORD
+    // */
+    // public static final String ORG_GOTS_GARDEN_PASSWORD = "org.gots.garden.password";
+    public static final String ORG_GOTS_GARDEN_PASSWORD = NuxeoServerConfig.PREF_SERVER_PASSWORD;
 
-    /**
-     * @see NuxeoServerConfig#PREF_SERVER_LOGIN
-     */
-    public static final String ORG_GOTS_GARDEN_NUXEO_URI = "org.gots.garden.nuxeo.uri";
+    // public static final String ORG_GOTS_GARDEN_NUXEO_URI = "org.gots.garden.nuxeo.uri";
+    public static final String ORG_GOTS_GARDEN_NUXEO_URI = NuxeoServerConfig.PREF_SERVER_URL;
 
-    public static final String ORG_GOTS_GARDEN_LOGIN = "org.gots.garden.login";
+    // /**
+    // * @see NuxeoServerConfig#PREF_SERVER_LOGIN
+    // */
+    // public static final String ORG_GOTS_GARDEN_LOGIN = "org.gots.garden.login";
+    public static final String ORG_GOTS_GARDEN_LOGIN = NuxeoServerConfig.PREF_SERVER_LOGIN;
 
     public static final String ORG_GOTS_GARDEN_SERVERCONNECTED = "org.gots.garden.connected";
 
     public static final String ORG_GOTS_GARDEN_DEVICEID = "org.gots.garden.deviceid";
 
-    /**
-     * TODO add to NuxeoServerConfig
-     *
-     * @see NuxeoServerConfig
-     */
-    public static final String ORG_GOTS_GARDEN_TOKEN = "org.gots.garden.token";
+    // /**
+    // * @see NuxeoServerConfig#PREF_SERVER_TOKEN
+    // */
+    // public static final String ORG_GOTS_GARDEN_TOKEN = "org.gots.garden.token";
+    public static final String ORG_GOTS_GARDEN_TOKEN = NuxeoServerConfig.PREF_SERVER_TOKEN;
 
     private static boolean ORG_GOTS_PREMIUM_LICENCE = Boolean.valueOf(System.getProperty("boolean.isdevelopment",
             "false"));
@@ -82,39 +84,11 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     public static final String GARDENING_MANAGER_APPNAME = "Gardening Manager";
 
-    /**
-     * @see NuxeoServerConfig#PREF_SERVER_URL
-     * @see NuxeoServerConfig#getAutomationUrl()
-     */
     private static final String GARDENING_MANAGER_NUXEO_AUTOMATION_TEST = "http://192.168.100.90:8080/nuxeo/";
 
-    /**
-     * @see NuxeoServerConfig#PREF_SERVER_URL
-     * @see NuxeoServerConfig#getAutomationUrl()
-     */
-    private static final String GARDENING_MANAGER_NUXEO_AUTHENTICATION_TEST = "http://192.168.100.90:8080/nuxeo/authentication/token?";
-
-    // private static final String GARDENING_MANAGER_NUXEO_AUTHENTICATION_TEST =
-    // "http://192.168.100.90:8080/nuxeo/authentication/token?";
-
-    /**
-     * @see NuxeoServerConfig#PREF_SERVER_URL
-     * @see NuxeoServerConfig#getAutomationUrl()
-     */
-    // private static final String GARDENING_MANAGER_NUXEO_AUTOMATION =
-    // "http://srv2.gardening-manager.com:8090/nuxeo/site/automation";
     private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://srv2.gardening-manager.com:8090/nuxeo/";
 
-    // private static final String GARDENING_MANAGER_NUXEO_AUTOMATION =
-    // "http://my.gardening-manager.com/site/automation";
-    // private static final String GARDENING_MANAGER_NUXEO_AUTOMATION =
-    // "http://services.gardening-manager.com/nuxeo/site/automation";
-
-    /**
-     * @see NuxeoServerConfig#PREF_SERVER_URL
-     * @see NuxeoServerConfig#getAutomationUrl()
-     */
-    private static final String GARDENING_MANAGER_NUXEO_AUTHENTICATION = "http://srv2.gardening-manager.com:8090/nuxeo/authentication/token?";
+    private static final String DEFAULT_LOCAL_URL = "http://10.0.2.2:8080/nuxeo/";
 
     // private static final String GARDENING_MANAGER_NUXEO_AUTHENTICATION =
     // "http://srv2.gardening-manager.com:8090/nuxeo/authentication/temptoken?";
@@ -134,7 +108,10 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
         // setSharedPreferences(context.getSharedPreferences("org.gots.garden",
         // Context.MODE_PRIVATE));
         setSharedPreferences(PreferenceManager.getDefaultSharedPreferences(context));
-        setGardeningManagerServerURI(getGardeningManagerServerURI());
+        setGardeningManagerServerURI(ISDEVELOPMENT ? GARDENING_MANAGER_NUXEO_AUTOMATION_TEST : GARDENING_MANAGER_NUXEO_AUTOMATION);
+        nxconfig = NuxeoContextFactory.getNuxeoContext(mContext).getServerConfig();
+        nxconfig.setCacheKey(NuxeoServerConfig.PREF_SERVER_TOKEN);
+        // nxconfig.setSharedPrefs(sharedPreferences);
 
     }
 
@@ -142,6 +119,15 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
         if (instance == null) {
             instance = new GotsPreferences(context);
         }
+        return instance;
+    }
+
+    /**
+     * Should never be called before {@link #getInstance(Context)}
+     *
+     * @return Can return null!
+     */
+    public static GotsPreferences getInstance() {
         return instance;
     }
 
@@ -171,22 +157,18 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     public void set(String key, String value) {
         SharedPreferences.Editor prefedit = sharedPreferences.edit();
         prefedit.putString(key, value);
-        // TODO move to constructor
-        NuxeoServerConfig nxconfig = NuxeoContextFactory.getNuxeoContext(mContext).getServerConfig();
-        // nxconfig.setSharedPrefs()
-
-        if (ORG_GOTS_GARDEN_PASSWORD.equals(key)) {
-            nxconfig.setPassword(value);
-        }
-        if (ORG_GOTS_GARDEN_LOGIN.equals(key)) {
-            nxconfig.setLogin(value);
-        }
-        if (ORG_GOTS_GARDEN_TOKEN.equals(key)) {
-            nxconfig.setToken(value);
-        }
-        if (ORG_GOTS_GARDEN_NUXEO_URI.equals(key)) {
-            nxconfig.setServerBaseUrl(value);
-        }
+        // if (ORG_GOTS_GARDEN_PASSWORD.equals(key)) {
+        // nxconfig.setPassword(value);
+        // }
+        // if (ORG_GOTS_GARDEN_LOGIN.equals(key)) {
+        // nxconfig.setLogin(value);
+        // }
+        // if (ORG_GOTS_GARDEN_TOKEN.equals(key)) {
+        // nxconfig.setToken(value);
+        // }
+        // if (ORG_GOTS_GARDEN_NUXEO_URI.equals(key)) {
+        // nxconfig.setServerBaseUrl(value);
+        // }
         prefedit.commit();
         Log.d(TAG, key + "=" + value);
     }
@@ -246,12 +228,16 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     }
 
     public void setGardeningManagerServerURI(String uri) {
+        if (!uri.endsWith("/")) {
+            uri = uri + "/";
+        }
         set(ORG_GOTS_GARDEN_NUXEO_URI, uri);
     }
 
-    public static String getGardeningManagerServerURI() {
-        // TODO use NuxeoServerConfig.getAutomationUrl()
-        return ISDEVELOPMENT ? GARDENING_MANAGER_NUXEO_AUTOMATION_TEST : GARDENING_MANAGER_NUXEO_AUTOMATION;
+    public String getGardeningManagerServerURI() {
+        String url = sharedPreferences.getString(ORG_GOTS_GARDEN_NUXEO_URI, "");
+        Log.d(TAG, "return " + url);
+        return url;
     }
 
     // public void setPREMIUM(boolean pREMIUM) {
@@ -327,8 +313,11 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     }
 
     public String getGardeningManagerNuxeoAuthentication() {
-        // TODO use NuxeoServerConfig.getAuthenticationUrl()
-        return ISDEVELOPMENT ? GARDENING_MANAGER_NUXEO_AUTHENTICATION_TEST : GARDENING_MANAGER_NUXEO_AUTHENTICATION;
+        return getGardeningManagerServerURI() + "authentication/token?";
+    }
+
+    public String getGardeningManagerNuxeoAutomation() {
+        return getGardeningManagerServerURI() + "site/automation";
     }
 
 }

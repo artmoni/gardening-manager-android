@@ -6,10 +6,10 @@ import java.util.List;
 
 import org.gots.garden.GardenInterface;
 import org.gots.garden.provider.local.LocalGardenProvider;
-import org.gots.preferences.GotsPreferences;
 import org.nuxeo.android.config.NuxeoServerConfig;
 import org.nuxeo.android.context.NuxeoContext;
 import org.nuxeo.android.context.NuxeoContextFactory;
+import org.nuxeo.android.documentprovider.LazyUpdatableDocumentsList;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
 import org.nuxeo.ecm.automation.client.android.CachedSession;
@@ -49,6 +49,8 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 
     protected AndroidAutomationClient nuxeoClient;
 
+    protected LazyUpdatableDocumentsList documentsList;
+
     /**
      * Android 11+: raises a {@link android.os.NetworkOnMainThreadException} if
      * called from the main thread and tries to
@@ -68,16 +70,14 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
         // nxConfig.setToken(myToken);
         // Uri nxAutomationURI = Uri.parse(Uri.encode(GotsPreferences.getGardeningManagerServerURI()));
         // nxConfig.setServerBaseUrl(nxAutomationURI);
-        nxConfig.setServerBaseUrl(GotsPreferences.getGardeningManagerServerURI());
-        nxConfig.setCacheKey(NuxeoServerConfig.PREF_SERVER_TOKEN);
-        nuxeoContext.onConfigChanged();
-        nuxeoContext.getNetworkStatus().reset();
-        // Log.d(TAG,
-        // "setServerBaseUrl: " + nxAutomationURI.toString() + " login="
-        // + nxConfig.getLogin() + " password="
-        // + nxConfig.getPassword());
+        nxConfig.setServerBaseUrl(gotsPrefs.getGardeningManagerServerURI());
+        // nxConfig.setCacheKey(NuxeoServerConfig.PREF_SERVER_TOKEN);
+        // nuxeoContext.onConfigChanged();
+        // nuxeoContext.getNetworkStatus().reset();
+        Log.d(TAG, "getSession with: " + nxConfig.getServerBaseUrl() + " login=" + nxConfig.getLogin() + " password="
+                + nxConfig.getPassword());
         nuxeoClient = getNuxeoClient();
-        getNuxeoSession();
+        // getNuxeoSession();
         // Check connectivity with Nuxeo
         // new AsyncTask<Void, Integer, Void>() {
         // @Override
@@ -91,6 +91,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
         // return null;
         // }
         // }.execute();
+
     }
 
     /**
@@ -126,15 +127,17 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
         Session session = getNuxeoClient().getSession();
         PropertyMap props = new PropertyMap();
         props.set("dc:title", currentGarden.getLocality());
-        DocumentManager service = session.getAdapter(DocumentManager.class);
+        DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
+        // DeferredUpdateManager deferredUpdateMgr = getNuxeoClient().getDeferredUpdatetManager();
 
         // TODO use service.getUserHome()
         // DocRef wsRef = new DocRef("/default-domain/UserWorkspaces/" +
         // myLogin);
         Document createDocument;
         try {
-            Document home = service.getUserHome();
-            createDocument = service.createDocument(home, "Garden", currentGarden.getLocality(), props);
+            Document home = documentMgr.getUserHome();
+            createDocument = documentMgr.createDocument(home, "Garden", currentGarden.getLocality(), props);
+            // TODO JC: documentsList.createDocument(newDocument, createOperation);
             // return createDocument;
 
         } catch (Exception e) {
@@ -200,7 +203,12 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 
     @Override
     public List<GardenInterface> getMyGardens() {
-        return getMyRemoteGardens(super.getMyGardens(), true);
+        List<GardenInterface> myLocalGardens = super.getMyGardens();
+        // if (documentsList != null) {
+        // documentsList.refreshAll();
+        // } else {
+        return getMyRemoteGardens(myLocalGardens, true);
+        // }
     }
 
     /**
@@ -216,15 +224,16 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
     protected List<GardenInterface> getMyRemoteGardens(List<GardenInterface> myLocalGardens,
             final boolean syncWithLocalGardens) {
         List<GardenInterface> myGardens = new ArrayList<GardenInterface>();
-
         List<GardenInterface> remoteGardens = new ArrayList<GardenInterface>();
+
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);
-        Documents gardensWorkspaces = null;
-
         try {
             // gardensWorkspaces = service.getChildren(wsRef);
-            gardensWorkspaces = service.query("SELECT * FROM Garden WHERE ecm:currentLifeCycleState <> 'deleted' ORDER BY dc:modified DESC");
+            Documents gardensWorkspaces = service.query("SELECT * FROM Garden WHERE ecm:currentLifeCycleState <> 'deleted' ORDER BY dc:modified DESC");
+            // TODO JC Documents gardensWorkspaces = service.query(nxql, queryParams, sortInfo, schemaList, page,
+            // pageSize, cacheFlags);
+            // documentsList = gardensWorkspaces.asUpdatableDocumentsList();
             for (Iterator<Document> iterator = gardensWorkspaces.iterator(); iterator.hasNext();) {
                 Document gardenWorkspace = iterator.next();
                 GardenInterface garden = NuxeoGardenConvertor.convert(gardenWorkspace);
@@ -237,7 +246,6 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
             // remoteGardens = getMyLocalGardens();
             // cancel(false);
             // return myLocalGardens;
-
         }
 
         // Synchronize remote garden with local gardens
@@ -258,8 +266,8 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
             }
         }
 
-        // Create remote garden when not exist remotly and remove local
-        // garden if no more reference online
+        // Create remote garden when not exist remotely and remove local
+        // garden if no more referenced online
         for (GardenInterface localGarden : myLocalGardens) {
             if (localGarden.getUUID() == null) { // local only without
                                                  // UUID => create
@@ -463,6 +471,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
         PropertyMap props = new PropertyMap();
         props.set("dc:title", garden.getLocality());
         DocumentManager service = session.getAdapter(DocumentManager.class);
+        // TODO JC: documentsList.updateDocument(updatedDocument, updateOperation);
         try {
             service.update(idRef, props);
         } catch (Exception e) {

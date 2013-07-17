@@ -7,7 +7,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.providers.local.LocalSeedProvider;
 import org.nuxeo.android.repository.DocumentManager;
@@ -25,20 +24,25 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 public class NuxeoSeedProvider extends LocalSeedProvider {
+
     protected static final String TAG = "NuxeoSeedProvider";
 
     private static final long TIMEOUT = 10;
 
-    String myToken = GotsPreferences.getInstance(mContext).getToken();
+    String myToken;
 
-    String myLogin = GotsPreferences.getInstance(mContext).getNuxeoLogin();
+    String myLogin;
 
-    String myDeviceId = GotsPreferences.getInstance(mContext).getDeviceId();
+    String myDeviceId;
 
-    protected String myApp = GotsPreferences.getInstance(mContext).getGardeningManagerAppname();
+    protected String myApp;
 
     public NuxeoSeedProvider(Context context) {
         super(context);
+        myToken = gotsPrefs.getToken();
+        myLogin = gotsPrefs.getNuxeoLogin();
+        myDeviceId = gotsPrefs.getDeviceId();
+        myApp = gotsPrefs.getGardeningManagerAppname();
     }
 
     @Override
@@ -54,8 +58,8 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             protected List<BaseSeedInterface> doInBackground(Object... params) {
                 List<BaseSeedInterface> nuxeoSeeds = new ArrayList<BaseSeedInterface>();
 
-                client = new HttpAutomationClient(GotsPreferences.getGardeningManagerServerURI()+"site/automation");
-                if (GotsPreferences.getInstance(mContext).isConnectedToServer())
+                client = new HttpAutomationClient(gotsPrefs.getGardeningManagerNuxeoAutomation());
+                if (gotsPrefs.isConnectedToServer())
                     client.setRequestInterceptor(new TokenRequestInterceptor(myApp, myToken, myLogin, myDeviceId));
 
                 try {
@@ -90,7 +94,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         } catch (ExecutionException e) {
             Log.e(TAG, e.getMessage(), e);
         } catch (TimeoutException e) {
-            Log.e(TAG, GotsPreferences.getGardeningManagerServerURI() + "\n" + e.getMessage(), e);
+            Log.e(TAG, gotsPrefs.getGardeningManagerServerURI() + "\n" + e.getMessage(), e);
         }
 
         // TODO send as intent
@@ -162,8 +166,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     Log.d(TAG, "doInBackground createSeed " + currentSeed);
 
                     HttpAutomationClient client = new HttpAutomationClient(
-                            GotsPreferences.getGardeningManagerServerURI()+"site/automation");
-
+                            gotsPrefs.getGardeningManagerNuxeoAutomation());
                     client.setRequestInterceptor(new TokenRequestInterceptor(myApp, myToken, myLogin, myDeviceId));
 
                     PropertyMap props = new PropertyMap();
@@ -184,8 +187,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     // documentManager.getDocument(wsRef);
                     Session session;
                     session = client.getSession();
-                    DocRef wsRef = new DocRef("/default-domain/UserWorkspaces/"
-                            + GotsPreferences.getInstance(mContext).getNuxeoLogin());
+                    DocRef wsRef = new DocRef("/default-domain/UserWorkspaces/" + gotsPrefs.getNuxeoLogin());
                     Document catalog = null;
                     try {
                         catalog = (Document) session.newRequest(DocumentManager.FetchDocument).set("value",

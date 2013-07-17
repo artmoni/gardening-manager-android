@@ -6,24 +6,19 @@ import org.gots.garden.GardenInterface;
 import org.gots.garden.provider.GardenProvider;
 import org.gots.garden.sql.GardenDBHelper;
 import org.gots.preferences.GotsPreferences;
+import org.gots.provider.AbstractProvider;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
-public class LocalGardenProvider implements GardenProvider {
+public class LocalGardenProvider extends AbstractProvider implements GardenProvider {
 
-    protected final GotsPreferences gotsPrefs;
-
-    protected final SharedPreferences sharedPrefs;
-
-    protected Context mContext;
+    // protected final SharedPreferences sharedPrefs;
 
     protected GardenDBHelper helper;
 
     public LocalGardenProvider(Context context) {
-        mContext = context;
-        gotsPrefs = GotsPreferences.getInstance(mContext);
-        sharedPrefs = gotsPrefs.getSharedPrefs();
+        super(context);
+        // sharedPrefs = gotsPrefs.getSharedPrefs();
         helper = new GardenDBHelper(mContext);
     }
 
