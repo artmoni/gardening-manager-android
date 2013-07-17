@@ -113,14 +113,14 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 
     @Override
     public GardenInterface createGarden(GardenInterface garden) {
-        return createRemoteGarden(createLocalGarden(garden));
+        return createNuxeoGarden(createLocalGarden(garden));
     }
 
     protected GardenInterface createLocalGarden(GardenInterface garden) {
         return super.createGarden(garden);
     }
 
-    protected GardenInterface createRemoteGarden(final GardenInterface localGarden) {
+    protected GardenInterface createNuxeoGarden(final GardenInterface localGarden) {
         Log.i(TAG, "createRemoteGarden " + localGarden);
 
         GardenInterface currentGarden = localGarden;
@@ -204,11 +204,11 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
     @Override
     public List<GardenInterface> getMyGardens() {
         List<GardenInterface> myLocalGardens = super.getMyGardens();
-        // if (documentsList != null) {
-        // documentsList.refreshAll();
-        // } else {
-        return getMyRemoteGardens(myLocalGardens, true);
-        // }
+//         if (documentsList != null) {
+//         documentsList.refreshAll();
+//         } else {
+        return getMyNuxeoGardens(myLocalGardens, true);
+//         }
     }
 
     /**
@@ -221,7 +221,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
      *            gardens
      * @return
      */
-    protected List<GardenInterface> getMyRemoteGardens(List<GardenInterface> myLocalGardens,
+    protected List<GardenInterface> getMyNuxeoGardens(List<GardenInterface> myLocalGardens,
             final boolean syncWithLocalGardens) {
         List<GardenInterface> myGardens = new ArrayList<GardenInterface>();
         List<GardenInterface> remoteGardens = new ArrayList<GardenInterface>();
@@ -272,7 +272,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
             if (localGarden.getUUID() == null) { // local only without
                                                  // UUID => create
                                                  // remote
-                myGardens.add(createRemoteGarden(localGarden));
+                myGardens.add(createNuxeoGarden(localGarden));
             } else {
                 boolean found = false;
                 for (GardenInterface remoteGarden : remoteGardens) {
@@ -400,7 +400,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 
     @Override
     public int removeGarden(GardenInterface garden) {
-        removeRemoteGarden(garden);
+        removeNuxeoGarden(garden);
         return removeLocalGarden(garden);
     }
 
@@ -410,7 +410,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
         return super.removeGarden(garden);
     }
 
-    protected void removeRemoteGarden(final GardenInterface garden) {
+    protected void removeNuxeoGarden(final GardenInterface garden) {
         Log.i(TAG, "removeRemoteGarden " + garden);
 
         Session session = getNuxeoClient().getSession();
@@ -458,10 +458,10 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 
     @Override
     public GardenInterface updateGarden(GardenInterface garden) {
-        return updateRemoteGarden(super.updateGarden(garden));
+        return updateNuxeoGarden(super.updateGarden(garden));
     }
 
-    protected GardenInterface updateRemoteGarden(final GardenInterface garden) {
+    protected GardenInterface updateNuxeoGarden(final GardenInterface garden) {
 
         Log.i(TAG, "updateRemoteGarden " + garden);
 

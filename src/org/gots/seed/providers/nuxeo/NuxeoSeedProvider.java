@@ -164,7 +164,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 @Override
                 protected Document doInBackground(BaseSeedInterface... params) {
                     BaseSeedInterface currentSeed = params[0];
-                    Log.d(TAG, "doInBackground createSeed " + currentSeed);
+                    Log.d(TAG, "doInBackground createRemoteSeed " + currentSeed);
 
                     HttpAutomationClient client = new HttpAutomationClient(
                             gotsPrefs.getGardeningManagerNuxeoAutomation());
