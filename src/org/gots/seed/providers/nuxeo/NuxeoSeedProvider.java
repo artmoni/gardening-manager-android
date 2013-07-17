@@ -7,6 +7,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.providers.local.LocalSeedProvider;
 import org.nuxeo.android.repository.DocumentManager;
@@ -187,7 +188,9 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     // documentManager.getDocument(wsRef);
                     Session session;
                     session = client.getSession();
-                    DocRef wsRef = new DocRef("/default-domain/UserWorkspaces/" + gotsPrefs.getNuxeoLogin());
+                    
+                    DocRef wsRef = new DocRef("/default-domain/UserWorkspaces/"
+                            + GotsPreferences.getInstance(mContext).getNuxeoLogin());
                     Document catalog = null;
                     try {
                         catalog = (Document) session.newRequest(DocumentManager.FetchDocument).set("value",
