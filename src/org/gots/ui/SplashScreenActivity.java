@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.gots.ui;
 
+import java.lang.ref.WeakReference;
 import java.util.Calendar;
 
 import org.gots.R;
@@ -20,6 +21,7 @@ import org.gots.preferences.GotsPreferences;
 import org.gots.seed.service.SeedUpdateService;
 import org.gots.weather.service.WeatherUpdateService;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -39,6 +41,37 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class SplashScreenActivity extends AbstractActivity {
+    private static final class SplashHandler extends Handler {
+
+        private WeakReference<Activity> that;
+
+        public SplashHandler(WeakReference<Activity> that) {
+            this.that = that;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            Intent startServiceIntent = new Intent(that.get(), WeatherUpdateService.class);
+            that.get().startService(startServiceIntent);
+
+            Intent startServiceIntent2 = new Intent(that.get(), SeedUpdateService.class);
+            that.get().startService(startServiceIntent2);
+
+            Intent startServiceIntent3 = new Intent(that.get(), ActionNotificationService.class);
+            that.get().startService(startServiceIntent3);
+
+            switch (msg.what) {
+            case STOPSPLASH:
+                // remove SplashScreen from view
+                Intent intent = new Intent(that.get(), DashboardActivity.class);
+                that.get().startActivity(intent);
+                that.get().finish();
+                break;
+            }
+            super.handleMessage(msg);
+        }
+    }
+
     private static final int STOPSPLASH = 0;
 
     // private static final long SPLASHTIME = 3000;
@@ -48,30 +81,8 @@ public class SplashScreenActivity extends AbstractActivity {
 
     private Handler getSplashHandler() {
         if (splashHandler == null) {
-            splashHandler = new Handler() {
-                @Override
-                public void handleMessage(Message msg) {
-                    Intent startServiceIntent = new Intent(mContext, WeatherUpdateService.class);
-                    startService(startServiceIntent);
-
-                    Intent startServiceIntent2 = new Intent(mContext, SeedUpdateService.class);
-                    startService(startServiceIntent2);
-
-                    Intent startServiceIntent3 = new Intent(mContext, ActionNotificationService.class);
-                    startService(startServiceIntent3);
-
-                    switch (msg.what) {
-                    case STOPSPLASH:
-                        // remove SplashScreen from view
-                        Intent intent = new Intent(SplashScreenActivity.this, DashboardActivity.class);
-                        startActivity(intent);
-
-                        finish();
-                        break;
-                    }
-                    super.handleMessage(msg);
-                }
-            };
+            WeakReference<Activity> that = new WeakReference<Activity>(this);
+            splashHandler = new SplashHandler(that);
         }
         return splashHandler;
     }
@@ -81,7 +92,6 @@ public class SplashScreenActivity extends AbstractActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
 
-        mContext = this;
         GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
         GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
