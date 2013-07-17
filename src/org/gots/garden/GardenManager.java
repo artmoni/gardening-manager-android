@@ -1,6 +1,7 @@
 package org.gots.garden;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import org.gots.DatabaseHelper;
 import org.gots.broadcast.BroadCastMessages;
@@ -37,9 +38,7 @@ public class GardenManager extends BroadcastReceiver {
                     try {
                         gardenProvider = new NuxeoGardenProvider(mContext);
                     } catch (NotAvailableOffline e) {
-                        Log.w(getClass().getName(),
-                                "Failed to initialize NuxeoGardenProvider\n"
-                                        + e.getMessage());
+                        Log.w(getClass().getName(), "Failed to initialize NuxeoGardenProvider\n" + e.getMessage());
                         Log.d(getClass().getName(), e.getMessage(), e);
                     } catch (Throwable e) {
                         Log.w(getClass().getName(), e.getMessage(), e);
@@ -62,14 +61,34 @@ public class GardenManager extends BroadcastReceiver {
     }
 
     public long addGarden(GardenInterface garden) {
-        GardenInterface newGarden = gardenProvider.createGarden(garden);
 
-        setCurrentGarden(newGarden);
+      final  long id;
 
-        GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-        tracker.trackEvent("Garden", "location", newGarden.getLocality(), 0);
+      AsyncTask<GardenInterface, Integer, GardenInterface> task=   new AsyncTask<GardenInterface, Integer, GardenInterface>() {
+            @Override
+            protected GardenInterface doInBackground(GardenInterface... params) {
+                GardenInterface newGarden = gardenProvider.createGarden(params[0]);
+                return newGarden;
+            }
 
-        return newGarden.getId();
+            protected void onPostExecute(GardenInterface result) {
+                setCurrentGarden(result);
+                GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+                tracker.trackEvent("Garden", "location", result.getLocality(), 0);
+            };
+        }.execute(garden);
+
+        try {
+            GardenInterface newgarden = task.get();
+            return newgarden.getId();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return -1;
     }
 
     private void changeDatabase(int position) {
@@ -89,20 +108,30 @@ public class GardenManager extends BroadcastReceiver {
     }
 
     public void setCurrentGarden(GardenInterface garden) {
-        GotsPreferences.getInstance(mContext).set(
-                GotsPreferences.ORG_GOTS_CURRENT_GARDENID, (int) garden.getId());
-        Log.d("setCurrentGarden",
-                "[" + garden.getId() + "] " + garden.getLocality()
-                        + " has been set as current workspace");
+        GotsPreferences.getInstance(mContext).set(GotsPreferences.ORG_GOTS_CURRENT_GARDENID, (int) garden.getId());
+        Log.d("setCurrentGarden", "[" + garden.getId() + "] " + garden.getLocality()
+                + " has been set as current workspace");
         changeDatabase((int) garden.getId());
     }
 
     public void removeGarden(GardenInterface garden) {
-        gardenProvider.removeGarden(garden);
+        new AsyncTask<GardenInterface, Integer, Void>(){
+            @Override
+            protected Void doInBackground(GardenInterface... params) {
+                gardenProvider.removeGarden(params[0]);
+                return null;
+            }
+        }.execute(garden);
     }
 
     public void updateCurrentGarden(GardenInterface garden) {
-        gardenProvider.updateGarden(garden);
+        new AsyncTask<GardenInterface, Integer, Void>(){
+            @Override
+            protected Void doInBackground(GardenInterface... params) {
+                gardenProvider.updateGarden(params[0]);
+                return null;
+            }
+        }.execute(garden);
     }
 
     public void update() {
