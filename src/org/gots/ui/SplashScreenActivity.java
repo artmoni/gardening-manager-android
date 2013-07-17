@@ -16,9 +16,6 @@ import org.gots.R;
 import org.gots.action.service.ActionNotificationService;
 import org.gots.action.service.ActionTODOBroadcastReceiver;
 import org.gots.analytics.GotsAnalytics;
-import org.gots.garden.GardenInterface;
-import org.gots.garden.GardenManager;
-import org.gots.garden.sql.GardenDBHelper;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.service.SeedUpdateService;
 import org.gots.weather.service.WeatherUpdateService;
@@ -47,12 +44,7 @@ public class SplashScreenActivity extends AbstractActivity {
     // private static final long SPLASHTIME = 3000;
     private static final long SPLASHTIME = 2000;
 
-    private GardenInterface myGarden;
-
-    private Context mContext;
-
     private static Handler splashHandler;
-
 
     private Handler getSplashHandler() {
         if (splashHandler == null) {
@@ -169,8 +161,8 @@ public class SplashScreenActivity extends AbstractActivity {
         // this.startService(startServiceIntent);
         setRecurringAlarm(this);
 
-        myGarden = gardenManager.getCurrentGarden();
-        if (myGarden == null) {
+        int currentGardenId = GotsPreferences.getInstance(this).getCurrentGardenId();
+        if (currentGardenId == -1) {
             Intent intent = new Intent(this, FirstLaunchActivity.class);
             startActivityForResult(intent, 0);
 
@@ -179,12 +171,10 @@ public class SplashScreenActivity extends AbstractActivity {
                 getSplashHandler().sendMessageDelayed(msg, 0);
             else
                 getSplashHandler().sendMessageDelayed(msg, SPLASHTIME);
-
         }
 
     }
 
-   
     @Override
     protected void onResume() {
         // Message msg = new Message();
@@ -200,8 +190,8 @@ public class SplashScreenActivity extends AbstractActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        myGarden = gardenManager.getCurrentGarden();
-        if (myGarden != null) {
+        int currentGardenId = GotsPreferences.getInstance(this).getCurrentGardenId();
+        if (currentGardenId > -1) {
             Message msg = new Message();
             msg.what = STOPSPLASH;
             getSplashHandler().sendMessageDelayed(msg, SPLASHTIME);
