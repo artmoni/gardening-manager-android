@@ -29,7 +29,7 @@ public class NuxeoGardenConvertor {
 			Log.w("NuxeoGarden", garden.getName() + " has not a correct longitude");
 		}
 		
-		garden.setUUID(gardenWorkspace.getId());
+		garden.setUUID(gardenWorkspace.getPath());
 
 		return garden;
 	}

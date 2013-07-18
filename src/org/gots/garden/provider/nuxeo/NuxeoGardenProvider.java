@@ -146,7 +146,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
             return localGarden;
         }
         if (createDocument != null) {
-            localGarden.setUUID(createDocument.getId());
+            localGarden.setUUID(createDocument.getPath());
             super.updateGarden(localGarden);
         }
         // new AsyncTask<GardenInterface, Integer, Document>() {
