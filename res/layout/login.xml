@@ -21,9 +21,10 @@
 
     <ScrollView
         android:id="@+id/layoutConnect"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_marginTop="60dp" >
+        android:layout_marginTop="60dp"
+        android:visibility="visible" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -96,7 +97,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="@string/login.connect.error"
-                    android:textColor="@color/action_error_color" android:visibility="gone"/>
+                    android:textColor="@color/action_error_color"
+                    android:visibility="gone" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -261,46 +263,54 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_marginTop="60dp"
-        android:background="@drawable/bg_line_action"
         android:gravity="center_vertical|center_horizontal"
-        android:orientation="vertical"
+        android:padding="10dp"
         android:visibility="gone" >
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:gravity="center" >
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_line_action"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="vertical" >
 
-            <ImageView
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:gravity="center" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/garden_shared" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/description_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/garden_shared" />
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/login.disconnect.description" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1" >
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/buttonDisconnect"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/button_green_selector"
+                android:text="@string/login.disconnect"
+                android:textColor="@color/white" />
         </LinearLayout>
-
-        <TextView
-            style="@style/description_content"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:gravity="center"
-            android:text="@string/login.disconnect.description" />
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1" >
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/buttonDisconnect"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/button_green_selector"
-            android:text="@string/login.disconnect"
-            android:textColor="@color/white" />
     </LinearLayout>
 
     <LinearLayout

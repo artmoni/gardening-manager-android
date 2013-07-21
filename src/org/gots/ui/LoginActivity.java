@@ -351,7 +351,7 @@ public class LoginActivity extends AbstractActivity {
                     // + Base64.encodeBase64((loginText.getText().toString() +
                     // ":" + passwordText.getText()
                     // .toString()).getBytes()));
-
+                    //TODO urlConnection.setConnectTimeout
                     InputStream in = new BufferedInputStream(urlConnection.getInputStream());
                     try {
                         // readStream(in);
