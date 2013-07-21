@@ -178,7 +178,6 @@ public class DashboardActivity extends AbstractActivity implements
 
         GoogleAnalyticsTracker.getInstance().dispatch();
 
-        GardenManager gardenManager = new GardenManager(this);
         ActionBar bar = getSupportActionBar();
         if (gardenManager.getCurrentGarden() != null)
             bar.setTitle(gardenManager.getCurrentGarden().getLocality());

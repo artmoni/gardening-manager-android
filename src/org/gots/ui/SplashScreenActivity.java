@@ -41,7 +41,7 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class SplashScreenActivity extends SherlockActivity {
+public class SplashScreenActivity extends AbstractActivity {
     private static final int STOPSPLASH = 0;
 
     // private static final long SPLASHTIME = 3000;
@@ -53,7 +53,6 @@ public class SplashScreenActivity extends SherlockActivity {
 
     private static Handler splashHandler;
 
-    private GardenManager gardenManager;
 
     private Handler getSplashHandler() {
         if (splashHandler == null) {
@@ -169,7 +168,6 @@ public class SplashScreenActivity extends SherlockActivity {
         // NotificationService.class);
         // this.startService(startServiceIntent);
         setRecurringAlarm(this);
-        gardenManager = new GardenManager(this);
 
         myGarden = gardenManager.getCurrentGarden();
         if (myGarden == null) {

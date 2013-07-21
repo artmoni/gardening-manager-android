@@ -74,8 +74,6 @@ public class ProfileActivity extends AbstractActivity {
 
         private List<GardenInterface> myGardens;
 
-        GardenManager gardenManager = new GardenManager(ProfileActivity.this);
-
         @Override
         protected void onPreExecute() {
             dialog = ProgressDialog.show(ProfileActivity.this, "",
@@ -93,7 +91,7 @@ public class ProfileActivity extends AbstractActivity {
 
         @Override
         protected void onPostExecute(List<GardenInterface> result) {
-            profileAdapter = new ProfileAdapter(ProfileActivity.this, myGardens);
+            profileAdapter = new ProfileAdapter(ProfileActivity.this,gardenManager, myGardens);
             profileList.setAdapter(profileAdapter);
             if (dialog.isShowing())
                 dialog.dismiss();
@@ -172,9 +170,8 @@ public class ProfileActivity extends AbstractActivity {
             // Intent intent = new Intent(this, ProfileCreationActivity.class);
             // intent.putExtra("option", ProfileCreationActivity.OPTION_EDIT);
             // startActivity(intent);
-            GardenManager gardenManager = new GardenManager(this);
 
-            if (gardenManager.getMyGardens().size() == 0) {
+            if (profileAdapter.getCount()==0) {
                 Intent intentCreation = new Intent(this,
                         ProfileCreationActivity.class);
                 intentCreation.putExtra("option",
@@ -184,7 +181,6 @@ public class ProfileActivity extends AbstractActivity {
                 new AsyncTask<GardenInterface, Integer, Void>() {
                     @Override
                     protected Void doInBackground(GardenInterface... params) {
-                        GardenManager gardenManager = new GardenManager(ProfileActivity.this);
                         gardenManager.removeGarden(params[0]);
                         return null;
                     }

@@ -29,7 +29,8 @@ public class GardenManager extends BroadcastReceiver {
         this.mContext = mContext;
         setGardenProvider();
     }
-
+  
+    
     public void setGardenProvider() {
         new AsyncTask<Void, Integer, Void>() {
             @Override

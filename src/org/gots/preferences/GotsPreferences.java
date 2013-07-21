@@ -105,8 +105,8 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     private GotsPreferences(Context context) {
         mContext = context;
-        // setSharedPreferences(context.getSharedPreferences("org.gots.garden",
-        // Context.MODE_PRIVATE));
+//         setSharedPreferences(context.getSharedPreferences("org.gots.garden",
+//         Context.MODE_PRIVATE));
         setSharedPreferences(PreferenceManager.getDefaultSharedPreferences(context));
         setGardeningManagerServerURI(ISDEVELOPMENT ? GARDENING_MANAGER_NUXEO_AUTOMATION_TEST : GARDENING_MANAGER_NUXEO_AUTOMATION);
         nxconfig = NuxeoContextFactory.getNuxeoContext(mContext).getServerConfig();

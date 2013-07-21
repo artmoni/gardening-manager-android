@@ -57,11 +57,11 @@ public class ProfileAdapter extends BaseAdapter {
 
     private View currentView;
 
-    public ProfileAdapter(Context context, List<GardenInterface> myGardens) {
+    public ProfileAdapter(Context context, GardenManager manager, List<GardenInterface> myGardens) {
         mContext = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         weatherManager = new WeatherManager(mContext);
-        gardenManager = new GardenManager(mContext);
+        gardenManager = manager;
 
         this.myGardens = myGardens;
         selectedGarden = gardenManager.getCurrentGarden();
