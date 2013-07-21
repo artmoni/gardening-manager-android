@@ -117,7 +117,7 @@ public class WeatherCache {
 		return is;
 	}
 
-	private InputStream getLocalCache(String filePath) throws FileNotFoundException, ObsoletCacheException {
+	private InputStream getLocalCache(String filePath) throws FileNotFoundException, ObsoleteCacheException {
 		File f = new File(rootDirectory + filePath);
 
 		Calendar lastModDate = new GregorianCalendar();
@@ -127,7 +127,7 @@ public class WeatherCache {
 		FileInputStream fileInputStream = new FileInputStream(f);
 
 		if (lastModDate.get(Calendar.DAY_OF_YEAR) < today.get(Calendar.DAY_OF_YEAR))
-			throw new ObsoletCacheException();
+			throw new ObsoleteCacheException();
 
 		Log.i(TAG, "Open cache " + f.getAbsolutePath());
 		return fileInputStream;

@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ *
  * Contributors:
  *     sfleury - initial API and implementation
  ******************************************************************************/
@@ -21,7 +21,6 @@ import org.gots.action.GardeningActionInterface;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.adapter.comparator.ISeedSpecieComparator;
 import org.gots.action.bean.ReduceQuantityAction;
-import org.gots.action.bean.SowingAction;
 import org.gots.action.sql.ActionDBHelper;
 import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
@@ -97,7 +96,7 @@ public class MySeedsListAdapter extends BaseAdapter implements OnClickListener {
 		if (allotment != null) {
 			// action = new SowingAction(mContext);
 			ActionDBHelper helper = new ActionDBHelper(mContext);
-			action = (SowingAction) helper.getActionByName("sow");
+			action = helper.getActionByName("sow");
 
 			if (Calendar.getInstance().get(Calendar.MONTH) >= currentSeed.getDateSowingMin()
 					&& Calendar.getInstance().get(Calendar.MONTH) <= currentSeed.getDateSowingMax())

@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ *
  * Contributors:
  *     sfleury - initial API and implementation
  ******************************************************************************/
@@ -199,7 +199,6 @@ public class VendorSeedDBHelper {
 				+ DatabaseHelper.SPECIE_FAMILY_ID + " WHERE b." + DatabaseHelper.SPECIE_NAME + "='" + specie + "'";
 		Cursor managedCursor = bdd.rawQuery(MY_QUERY, null);
 		String family = "";
-		int j = 0;
 		if (managedCursor.moveToFirst()) {
 			int nameColumn = managedCursor.getColumnIndex(DatabaseHelper.FAMILY_NAME);
 			family = managedCursor.getString(nameColumn);
@@ -252,7 +251,7 @@ public class VendorSeedDBHelper {
 	}
 
 	public ArrayList<BaseSeedInterface> getMySeeds() {
-		ArrayList<BaseSeedInterface> allSeeds = new ArrayList<BaseSeedInterface>();
+		ArrayList<BaseSeedInterface> mySeeds = new ArrayList<BaseSeedInterface>();
 		BaseSeedInterface searchedSeed = new GrowingSeed();
 		open();
 		Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_NBSACHET + ">0",
@@ -261,16 +260,16 @@ public class VendorSeedDBHelper {
 		if (managedCursor.moveToFirst()) {
 			do {
 				searchedSeed = cursorToSeed(managedCursor);
-				allSeeds.add(searchedSeed);
+				mySeeds.add(searchedSeed);
 			} while (managedCursor.moveToNext());
 		}
 		managedCursor.close();
 		close();
-		return allSeeds;
+		return mySeeds;
 	}
 
 	public ArrayList<BaseSeedInterface> getVendorSeeds() {
-		ArrayList<BaseSeedInterface> allSeeds = new ArrayList<BaseSeedInterface>();
+		ArrayList<BaseSeedInterface> vendorSeeds = new ArrayList<BaseSeedInterface>();
 		BaseSeedInterface searchedSeed = new GrowingSeed();
 		open();
 		Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, null, null, null, null, null);
@@ -278,12 +277,12 @@ public class VendorSeedDBHelper {
 		if (managedCursor.moveToFirst()) {
 			do {
 				searchedSeed = cursorToSeed(managedCursor);
-				allSeeds.add(searchedSeed);
+				vendorSeeds.add(searchedSeed);
 			} while (managedCursor.moveToNext());
 		}
 		managedCursor.close();
 		close();
-		return allSeeds;
+		return vendorSeeds;
 	}
 
 	public BaseSeedInterface getSeedByName(String name) {
@@ -391,23 +390,23 @@ public class VendorSeedDBHelper {
 		// String[] items = new String[allSeeds.size()];
 		ArrayList<String> searchedSeeds = new ArrayList<String>();
 		for (Iterator<BaseSeedInterface> iterator = allSeeds.iterator(); iterator.hasNext();) {
-			BaseSeedInterface seed = (BaseSeedInterface) iterator.next();
+			BaseSeedInterface seed = iterator.next();
 			if (string.toLowerCase().equals(seed.getFamily()))
 				searchedSeeds.add(seed.getName());
 		}
-		return (String[]) searchedSeeds.toArray(new String[searchedSeeds.size()]);
+		return searchedSeeds.toArray(new String[searchedSeeds.size()]);
 	}
 
 	public String[] getArraySeedAction() {
 		ArrayList<BaseActionInterface> actions = new ArrayList<BaseActionInterface>();
 		for (Iterator<BaseSeedInterface> iterator = getMySeeds().iterator(); iterator.hasNext();) {
-			BaseSeedInterface baseSeedInterface = (BaseSeedInterface) iterator.next();
+			BaseSeedInterface baseSeedInterface = iterator.next();
 			actions.addAll(baseSeedInterface.getActionToDo());
 		}
 		String[] actionsName = new String[actions.size()];
 		int i = 0;
 		for (Iterator<BaseActionInterface> iterator = actions.iterator(); iterator.hasNext();) {
-			BaseActionInterface seedActionInterface = (BaseActionInterface) iterator.next();
+			BaseActionInterface seedActionInterface = iterator.next();
 			actionsName[i++] = seedActionInterface.getName();
 		}
 		return actionsName;

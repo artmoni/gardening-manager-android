@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ *
  * Contributors:
  *     sfleury - initial API and implementation
  ******************************************************************************/
@@ -26,7 +26,7 @@ import org.gots.seed.providers.local.sql.GrowingSeedDBHelper;
 import android.content.Context;
 
 public class WateringAction extends AbstractActionSeed implements SeedActionInterface, GardeningActionInterface {
-	Context mContext; 
+	Context mContext;
 
 	public WateringAction(Context context) {
 		setName("water");
@@ -38,7 +38,7 @@ public class WateringAction extends AbstractActionSeed implements SeedActionInte
 		super.execute(seed);
 
 		seed.setDateLastWatering(Calendar.getInstance().getTime());
-		 
+
 		seed.getActionToDo().remove(this);
 		seed.getActionDone().add(this);
 
@@ -82,15 +82,15 @@ public class WateringAction extends AbstractActionSeed implements SeedActionInte
 
 	@Override
 	public int execute(BaseAllotmentInterface allotment, GrowingSeedInterface seed) {
-		
+
 		GrowingSeedDBHelper helper = new GrowingSeedDBHelper(mContext);
 		ArrayList<GrowingSeedInterface> listseeds = helper.getSeedsByAllotment(allotment.getName());
 		for (Iterator<GrowingSeedInterface> iterator = listseeds.iterator(); iterator.hasNext();) {
-			GrowingSeedInterface baseSeedInterface = (GrowingSeedInterface) iterator.next();
+			GrowingSeedInterface baseSeedInterface = iterator.next();
 			execute(baseSeedInterface);
 
 		}
-	
+
 		return 0;
 	}
 

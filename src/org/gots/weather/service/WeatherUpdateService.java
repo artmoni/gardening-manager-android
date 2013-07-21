@@ -6,8 +6,6 @@ import org.gots.R;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GardenManager;
-import org.gots.garden.sql.GardenDBHelper;
-import org.gots.preferences.GotsPreferences;
 import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.provider.WeatherTask;
 import org.gots.weather.provider.previmeteo.PrevimeteoWeatherTask;
@@ -86,8 +84,7 @@ public class WeatherUpdateService extends Service {
                 cal.add(Calendar.DAY_OF_YEAR, forecastDay);
 
                 // GoogleWeatherTask(garden.getAddress(), cal.getTime());
-                WeatherTask wt = new PrevimeteoWeatherTask(this,
-                        garden.getAddress(), cal.getTime());
+                WeatherTask wt = new PrevimeteoWeatherTask(this, garden.getAddress(), cal.getTime());
                 WeatherConditionInterface conditionInterface = wt.execute().get();
 
                 if (conditionInterface != null) {
@@ -100,11 +97,7 @@ public class WeatherUpdateService extends Service {
                     // mContext.getResources().getString(R.string.weather_citynotfound),
                     // 50)
                     // .show();
-                    Log.d(TAG,
-                            garden.getLocality()
-                                    + " : "
-                                    + getResources().getString(
-                                            R.string.weather_citynotfound));
+                    Log.d(TAG, garden.getLocality() + " : " + getResources().getString(R.string.weather_citynotfound));
                     isWeatherError = true;
                     break;
                 }
@@ -114,7 +107,7 @@ public class WeatherUpdateService extends Service {
         } catch (Exception e) {
             if (e.getMessage() != null)
                 Log.e(TAG, e.getMessage());
-            Toast.makeText(this, "Try another nearest city", 50).show();
+            Toast.makeText(this, "Try another nearest city", Toast.LENGTH_SHORT).show();
         }
 
     }

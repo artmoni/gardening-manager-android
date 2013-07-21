@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ *
  * Contributors:
  *     sfleury - initial API and implementation
  ******************************************************************************/
@@ -113,7 +113,7 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
 
 			@Override
 			public void onClick(View v) {
-				
+
 				Intent i = new Intent(mContext, HutActivity.class);
 				i.putExtra("org.gots.allotment.reference", myAllotments.get(position).getName());
 				mContext.startActivity(i);
@@ -133,7 +133,7 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
 				builder.setMessage(mContext.getResources().getString(R.string.action_delete_allotment)).setCancelable(false)
 						.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
-								GardeningActionInterface actionItem = (GardeningActionInterface) delete;
+								GardeningActionInterface actionItem = delete;
 								actionItem.execute(myAllotments.get(position), null);
 
 								notifyDataSetChanged();

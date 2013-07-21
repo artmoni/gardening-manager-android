@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ *
  * Contributors:
  *     sfleury - initial API and implementation
  ******************************************************************************/
@@ -38,14 +38,14 @@ public class QuickAllotmentActionBuilder {
 		ActionWidget sowingWidget = new ActionWidget(v.getContext(), sowing);
 		quickAction.addPermanentActionItem(sowingWidget);
 		sowingWidget.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				Intent i = new Intent(v.getContext(), MySeedsListActivity.class);
 				 i.putExtra("org.gots.allotment.reference", ((Allotment)
 				 v.getTag()).getName());
 				 v.getContext().startActivity(i);
-				 quickAction.dismiss();				
+				 quickAction.dismiss();
 			}
 		});
 		// sowingWidget.setOnActionItemClickListener(new
@@ -68,7 +68,7 @@ public class QuickAllotmentActionBuilder {
 
 			@Override
 			public void onClick(View v) {
-				GardeningActionInterface actionItem = (GardeningActionInterface) watering;
+				GardeningActionInterface actionItem = watering;
 
 				actionItem.execute((Allotment) v.getTag(), null);
 

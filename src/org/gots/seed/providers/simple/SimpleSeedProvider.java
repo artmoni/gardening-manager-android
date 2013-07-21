@@ -27,119 +27,122 @@ import android.util.Log;
 
 public class SimpleSeedProvider implements GotsSeedProvider {
 
-	@Override
-	public void getAllFamilies() {
-		// TODO Auto-generated method stub
+    @Override
+    public void getAllFamilies() {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	@Override
-	public void getFamilyById(int id) {
-		// TODO Auto-generated method stub
+    @Override
+    public void getFamilyById(int id) {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	@Override
-	public BaseSeedInterface getSeedById() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public BaseSeedInterface getSeedById() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public List<BaseSeedInterface> getVendorSeeds() {
-		List<BaseSeedInterface> allSeeds = new ArrayList<BaseSeedInterface>();
+    @Override
+    public List<BaseSeedInterface> getVendorSeeds() {
+        List<BaseSeedInterface> allSeeds = new ArrayList<BaseSeedInterface>();
 
-		try {
-			allSeeds = new AsyncTask<Object, Integer, List<BaseSeedInterface>>() {
+        try {
+            allSeeds = new AsyncTask<Object, Integer, List<BaseSeedInterface>>() {
 
-				@Override
-				protected List<BaseSeedInterface> doInBackground(Object... params) {
-					List<BaseSeedInterface> vendorSeeds = new ArrayList<BaseSeedInterface>();
+                @Override
+                protected List<BaseSeedInterface> doInBackground(Object... params) {
+                    List<BaseSeedInterface> vendorSeeds = new ArrayList<BaseSeedInterface>();
 
-					try {
-						
-//						SimpleNetwork network = new SimpleNetwork();
-//						InputStream is = network.execute("").get();
-						
-						CredentialsProvider credProvider = new BasicCredentialsProvider();
-						credProvider.setCredentials(new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT),
-								new UsernamePasswordCredentials("PY0XHE11WE4VQNJ18DXUQFZ7OJR5YVBR", ""));
+                    try {
 
-						DefaultHttpClient httpClient = new DefaultHttpClient();
-						httpClient.setCredentialsProvider(credProvider);
+                        // SimpleNetwork network = new SimpleNetwork();
+                        // InputStream is = network.execute("").get();
 
-						HttpResponse response;
-						InputStream is = null;
-						try {
+                        CredentialsProvider credProvider = new BasicCredentialsProvider();
+                        credProvider.setCredentials(new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT),
+                                new UsernamePasswordCredentials("PY0XHE11WE4VQNJ18DXUQFZ7OJR5YVBR", ""));
 
-							HttpGet httpGet = new HttpGet(urlFormatter());
+                        DefaultHttpClient httpClient = new DefaultHttpClient();
+                        httpClient.setCredentialsProvider(credProvider);
 
-							response = httpClient.execute(httpGet);
+                        HttpResponse response;
+                        InputStream is = null;
+                        try {
 
-							StatusLine statusLine = response.getStatusLine();
-							if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
-								is = response.getEntity().getContent();
+                            HttpGet httpGet = new HttpGet(urlFormatter());
 
-							} else {
-								// Closes the connection.
-								response.getEntity().getContent().close();
-								throw new IOException(statusLine.getReasonPhrase());
-							}
-						} catch (ClientProtocolException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						//********
-						Serializer serializer = new Persister();
-						SimpleSeeds seeds = serializer.read(SimpleSeeds.class, is);
+                            response = httpClient.execute(httpGet);
 
-						for (Iterator iterator = seeds.getSeeds().iterator(); iterator.hasNext();) {
-							BaseSeedInterface seed = (BaseSeedInterface) iterator.next();
-							vendorSeeds.add(seed);
-						}
-						Log.i("SimpleSeedProvider", vendorSeeds.size()+" seeds have been parsed");
-					} catch (Exception e) {
-						Log.e("getAllSeeds", e.getMessage());
-					}
-					return vendorSeeds;
-				}
-			}.execute(new Object()).get();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			Log.w("SimpleSeedProvider", "Error loading seeds from XML");
+                            StatusLine statusLine = response.getStatusLine();
+                            if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
+                                is = response.getEntity().getContent();
 
-		}
-		return allSeeds;
-	}
-	
-	private String HOST = "services.gardening-manager.com";
-	private String PATH = "/seeds/";
-	private String URL = "http://" + HOST + PATH;
-	private String urlFormatter() {
-		String lang = Locale.getDefault().getLanguage();
-		String filename = "seed";
-		String fileextension = ".xml";
-		if ("fr".equals(lang))
-			filename += "-" + lang + fileextension;
-		else
-			filename += fileextension;
-		
-		return URL+filename ;
-	}
+                            } else {
+                                // Closes the connection.
+                                response.getEntity().getContent().close();
+                                throw new IOException(statusLine.getReasonPhrase());
+                            }
+                        } catch (ClientProtocolException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                        // ********
+                        Serializer serializer = new Persister();
+                        SimpleSeeds seeds = serializer.read(SimpleSeeds.class, is);
 
-	@Override
-	public BaseSeedInterface createSeed(BaseSeedInterface seed) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+                        for (Iterator<SimpleSeedInterface> iterator = seeds.getSeeds().iterator(); iterator.hasNext();) {
+                            BaseSeedInterface seed = iterator.next();
+                            vendorSeeds.add(seed);
+                        }
+                        Log.i("SimpleSeedProvider", vendorSeeds.size() + " seeds have been parsed");
+                    } catch (Exception e) {
+                        Log.e("getAllSeeds", e.getMessage());
+                    }
+                    return vendorSeeds;
+                }
+            }.execute(new Object()).get();
 
-	@Override
-	public BaseSeedInterface updateSeed(BaseSeedInterface newSeed) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.w("SimpleSeedProvider", "Error loading seeds from XML");
+
+        }
+        return allSeeds;
+    }
+
+    private String HOST = "services.gardening-manager.com";
+
+    private String PATH = "/seeds/";
+
+    private String URL = "http://" + HOST + PATH;
+
+    private String urlFormatter() {
+        String lang = Locale.getDefault().getLanguage();
+        String filename = "seed";
+        String fileextension = ".xml";
+        if ("fr".equals(lang))
+            filename += "-" + lang + fileextension;
+        else
+            filename += fileextension;
+
+        return URL + filename;
+    }
+
+    @Override
+    public BaseSeedInterface createSeed(BaseSeedInterface seed) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BaseSeedInterface updateSeed(BaseSeedInterface newSeed) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

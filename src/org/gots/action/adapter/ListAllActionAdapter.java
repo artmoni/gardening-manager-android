@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ *
  * Contributors:
  *     sfleury - initial API and implementation
  ******************************************************************************/
@@ -26,7 +26,6 @@ import org.gots.action.bean.PhotoAction;
 import org.gots.action.sql.ActionSeedDBHelper;
 import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
-import org.gots.ads.GotsAdvertisement;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.providers.local.sql.GrowingSeedDBHelper;
 import org.gots.seed.view.SeedWidget;
@@ -47,7 +46,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class ListAllActionAdapter extends BaseAdapter {
@@ -75,8 +73,7 @@ public class ListAllActionAdapter extends BaseAdapter {
 
     private static final String TAG = "ListAllActionAdapter";
 
-    public ListAllActionAdapter(Context context,
-            ArrayList<GrowingSeedInterface> allSeeds, int status) {
+    public ListAllActionAdapter(Context context, ArrayList<GrowingSeedInterface> allSeeds, int status) {
         this.mContext = context;
         current_status = status;
         ActionSeedDBHelper helper = new ActionSeedDBHelper(context);
@@ -124,13 +121,12 @@ public class ListAllActionAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        View ll = (LinearLayout) convertView;
+        View ll = convertView;
 
         // if (convertView == null) {
         // ll = new LinearLayout(mContext);
         if (convertView == null)
-            ll = (LinearLayout) LayoutInflater.from(mContext).inflate(
-                    R.layout.list_action, parent, false);
+            ll = LayoutInflater.from(mContext).inflate(R.layout.list_action, parent, false);
 
         final BaseActionInterface currentAction = getItem(position);
 
@@ -146,12 +142,10 @@ public class ListAllActionAdapter extends BaseAdapter {
             TextView textviewActionStatus = (TextView) ll.findViewById(R.id.IdSeedActionStatus);
             TextView textviewActionDate = (TextView) ll.findViewById(R.id.IdSeedActionDate);
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat(" dd/MM/yyyy",
-                    Locale.FRANCE);
+            SimpleDateFormat dateFormat = new SimpleDateFormat(" dd/MM/yyyy", Locale.FRANCE);
 
             if (current_status == STATUS_TODO) {
-                textviewActionStatus.setText(mContext.getResources().getString(
-                        R.string.seed_action_todo));
+                textviewActionStatus.setText(mContext.getResources().getString(R.string.seed_action_todo));
 
                 Calendar rightNow = Calendar.getInstance();
                 rightNow.setTime(seed.getDateSowing());
@@ -172,8 +166,7 @@ public class ListAllActionAdapter extends BaseAdapter {
                 weatherView.setVisibility(View.GONE);
 
             } else {
-                textviewActionStatus.setText(mContext.getResources().getString(
-                        R.string.seed_action_done));
+                textviewActionStatus.setText(mContext.getResources().getString(R.string.seed_action_done));
 
                 Calendar rightNow = Calendar.getInstance();
                 rightNow.setTime(currentAction.getDateActionDone());
@@ -186,16 +179,14 @@ public class ListAllActionAdapter extends BaseAdapter {
 
                 currentAction.setState(ActionState.NORMAL);
 
-                if (PhotoAction.class.isInstance(currentAction)
-                        && currentAction.getData() != null) {
-                    final File imgFile = new File(
-                            currentAction.getData().toString());
+                if (PhotoAction.class.isInstance(currentAction) && currentAction.getData() != null) {
+                    final File imgFile = new File(currentAction.getData().toString());
 
                     try {
-                         Bitmap imageBitmap = getThumbnail(imgFile);
-//                        Bitmap imageBitmap = getThumbnail(
-//                                mContext.getContentResolver(),
-//                                imgFile.getAbsolutePath());
+                        Bitmap imageBitmap = getThumbnail(imgFile);
+                        // Bitmap imageBitmap = getThumbnail(
+                        // mContext.getContentResolver(),
+                        // imgFile.getAbsolutePath());
                         ImageView seedImage = (ImageView) ll.findViewById(R.id.imageviewPhoto);
                         int padding = (THUMBNAIL_WIDTH - imageBitmap.getWidth()) / 2;
                         seedImage.setPadding(padding, 0, padding, 0);
@@ -210,16 +201,12 @@ public class ListAllActionAdapter extends BaseAdapter {
                             public void onClick(View v) {
                                 Intent intent = new Intent();
                                 intent.setAction(Intent.ACTION_VIEW);
-                                intent.setDataAndType(
-                                        Uri.parse("file://"
-                                                + imgFile.getAbsolutePath()),
-                                        "image/*");
+                                intent.setDataAndType(Uri.parse("file://" + imgFile.getAbsolutePath()), "image/*");
                                 mContext.startActivity(intent);
                             }
                         });
                     } catch (Exception e) {
-                        Log.e(getClass().getName(), "imgFile.getPath()="
-                                + imgFile.getPath() + " - " + e.getMessage());
+                        Log.e(getClass().getName(), "imgFile.getPath()=" + imgFile.getPath() + " - " + e.getMessage());
                         // ll.setVisibility(View.GONE);
                     }
 
@@ -239,40 +226,35 @@ public class ListAllActionAdapter extends BaseAdapter {
         try {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            options.inSampleSize=2;
-            imageBitmap = BitmapFactory.decodeFile(imgFile.getPath(),options);
+            options.inSampleSize = 2;
+            imageBitmap = BitmapFactory.decodeFile(imgFile.getPath(), options);
             // imageBitmap = BitmapFactory.decodeByteArray(mImageData, 0,
             // mImageData.length);
             Float width = Float.valueOf(imageBitmap.getWidth());
             Float height = Float.valueOf(imageBitmap.getHeight());
             Float ratio = width / height;
-            imageBitmap = Bitmap.createScaledBitmap(imageBitmap,
-                    (int) (THUMBNAIL_HEIGHT * ratio), THUMBNAIL_HEIGHT, false);
+            imageBitmap = Bitmap.createScaledBitmap(imageBitmap, (int) (THUMBNAIL_HEIGHT * ratio), THUMBNAIL_HEIGHT,
+                    false);
         } catch (Exception e) {
-            throw new Exception("Image file cannot be decoded :"
-                    + imgFile.getAbsolutePath());
+            throw new Exception("Image file cannot be decoded :" + imgFile.getAbsolutePath());
         }
         return imageBitmap;
     }
 
-    public static Bitmap getThumbnail(ContentResolver cr, String path)
-            throws Exception {
+    public static Bitmap getThumbnail(ContentResolver cr, String path) throws Exception {
         Uri selectedImageUri = Uri.fromFile(new File(path));
         // Cursor ca = cr.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
         // new String[] { MediaStore.MediaColumns._ID },
         // MediaStore.MediaColumns.DATA + "=?", new String[] { path },
         // null);
-        Cursor ca = cr.query(selectedImageUri,
-                null, MediaStore.Images.Media.DATA + " like ? ",
+        Cursor ca = cr.query(selectedImageUri, null, MediaStore.Images.Media.DATA + " like ? ",
                 new String[] { selectedImageUri.getPath() }, null);
-        
+
         if (ca != null && ca.moveToFirst()) {
             int id = ca.getInt(ca.getColumnIndex(MediaStore.MediaColumns._ID));
-            Log.d(TAG,
-                    ca.getString(ca.getColumnIndex(MediaStore.MediaColumns.DATA)));
+            Log.d(TAG, ca.getString(ca.getColumnIndex(MediaStore.MediaColumns.DATA)));
             ca.close();
-            return MediaStore.Images.Thumbnails.getThumbnail(cr, id,
-                    MediaStore.Images.Thumbnails.MICRO_KIND, null);
+            return MediaStore.Images.Thumbnails.getThumbnail(cr, id, MediaStore.Images.Thumbnails.MICRO_KIND, null);
         }
 
         ca.close();
@@ -292,15 +274,12 @@ public class ListAllActionAdapter extends BaseAdapter {
         }
     }
 
-    class IActionDescendantComparator implements
-            Comparator<BaseActionInterface> {
+    class IActionDescendantComparator implements Comparator<BaseActionInterface> {
         @Override
         public int compare(BaseActionInterface obj1, BaseActionInterface obj2) {
             int result = 0;
-            if (obj1.getDateActionDone() != null
-                    && obj2.getDateActionDone() != null) {
-                result = obj1.getDateActionDone().getTime() > obj2.getDateActionDone().getTime() ? -1
-                        : 0;
+            if (obj1.getDateActionDone() != null && obj2.getDateActionDone() != null) {
+                result = obj1.getDateActionDone().getTime() > obj2.getDateActionDone().getTime() ? -1 : 0;
             }
 
             return result;
