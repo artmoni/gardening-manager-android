@@ -23,6 +23,8 @@ package org.gots.ui;
 
 import org.gots.garden.GardenManager;
 
+import android.os.Bundle;
+
 import com.actionbarsherlock.app.SherlockActivity;
 
 /**
@@ -31,6 +33,10 @@ import com.actionbarsherlock.app.SherlockActivity;
  */
 public class AbstractActivity extends SherlockActivity {
 
-    protected GardenManager gardenManager = new GardenManager(this);
-
+    protected GardenManager gardenManager;
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    gardenManager = new GardenManager(this);
+}
 }
