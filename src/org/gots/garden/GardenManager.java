@@ -9,17 +9,16 @@ import org.gots.garden.provider.GardenProvider;
 import org.gots.garden.provider.local.LocalGardenProvider;
 import org.gots.garden.provider.nuxeo.NuxeoGardenProvider;
 import org.gots.preferences.GotsPreferences;
-import org.nuxeo.ecm.automation.client.jaxrs.impl.NotAvailableOffline;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class GardenManager extends BroadcastReceiver {
+    private static final String TAG = "GardenManager";
 
     private Context mContext;
 
@@ -29,27 +28,17 @@ public class GardenManager extends BroadcastReceiver {
         this.mContext = mContext;
         setGardenProvider();
     }
-  
-    
-    public void setGardenProvider() {
-        new AsyncTask<Void, Integer, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                if (GotsPreferences.getInstance(mContext).isConnectedToServer()) {
-                    try {
-                        gardenProvider = new NuxeoGardenProvider(mContext);
-                    } catch (NotAvailableOffline e) {
-                        Log.w(getClass().getName(), "Failed to initialize NuxeoGardenProvider\n" + e.getMessage());
-                        Log.d(getClass().getName(), e.getMessage(), e);
-                    } catch (Throwable e) {
-                        Log.w(getClass().getName(), e.getMessage(), e);
-                    }
-                }
-                return null;
-            }
-        }.execute();
 
-        if (gardenProvider == null) {
+    private void setGardenProvider() {
+        // new AsyncTask<Void, Integer, Void>() {
+        // @Override
+        // protected Void doInBackground(Void... params) {
+        if (GotsPreferences.getInstance(mContext).isConnectedToServer()) {
+            gardenProvider = new NuxeoGardenProvider(mContext);
+        } else {
+            // return null;
+            // }
+            // }.execute();
             gardenProvider = new LocalGardenProvider(mContext);
         }
     }
@@ -74,7 +63,7 @@ public class GardenManager extends BroadcastReceiver {
 
             protected void onPostExecute(GardenInterface result) {
                 setCurrentGarden(result);
-                GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+        GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
                 tracker.trackEvent("Garden", "location", result.getLocality(), 0);
             };
         }.execute(garden);
@@ -88,7 +77,7 @@ public class GardenManager extends BroadcastReceiver {
         } catch (ExecutionException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }
+    }
         return -1;
     }
 
@@ -121,7 +110,7 @@ public class GardenManager extends BroadcastReceiver {
             protected Void doInBackground(GardenInterface... params) {
                 gardenProvider.removeGarden(params[0]);
                 return null;
-            }
+    }
         }.execute(garden);
     }
 
@@ -131,7 +120,7 @@ public class GardenManager extends BroadcastReceiver {
             protected Void doInBackground(GardenInterface... params) {
                 gardenProvider.updateGarden(params[0]);
                 return null;
-            }
+    }
         }.execute(garden);
     }
 

@@ -14,7 +14,6 @@ import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.garden.GardenManager;
 import org.gots.help.HelpUriBuilder;
 import org.gots.preferences.GotsPreferences;
 import org.gots.weather.service.WeatherUpdateService;
@@ -40,9 +39,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class DashboardActivity extends AbstractActivity implements
-        OnClickListener {
-    // public static GardenInterface myGarden = new Garden();
+public class DashboardActivity extends AbstractActivity implements OnClickListener {
     // GoogleAnalyticsTracker tracker;
     GotsAdvertisement adView;
 
@@ -56,7 +53,7 @@ public class DashboardActivity extends AbstractActivity implements
 
     private Intent weatherIntent;
 
-    private ImageView weatherState;
+    // private ImageView weatherState;
 
     private String TAG = "DashboardActivity";
 
@@ -85,16 +82,13 @@ public class DashboardActivity extends AbstractActivity implements
             adView.getPremiumAds(layout);
 
         } else {
-            layout.setBackgroundDrawable(getResources().getDrawable(
-                    R.drawable.bg_dashboard_top));
+            layout.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_dashboard_top));
             ImageView logo = (ImageView) findViewById(R.id.idImageLogo);
-            logo.setBackgroundDrawable(getResources().getDrawable(
-                    R.drawable.bt_logo_premium));
+            logo.setBackgroundDrawable(getResources().getDrawable(R.drawable.bt_logo_premium));
         }
         weatherIntent = new Intent(this, WeatherUpdateService.class);
 
-        GoogleAnalyticsTracker.getInstance().trackPageView(
-                getClass().getSimpleName());
+        GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
         GoogleAnalyticsTracker.getInstance().dispatch();
 
         // if (GotsPreferences.getInstance(this).getOAuthtToken() == null) {
@@ -119,10 +113,8 @@ public class DashboardActivity extends AbstractActivity implements
 
         if (isError) {
             TextView txtError = new TextView(this);
-            txtError.setText(getResources().getText(
-                    R.string.weather_citynotfound));
-            txtError.setTextColor(getResources().getColor(
-                    R.color.text_color_light));
+            txtError.setText(getResources().getText(R.string.weather_citynotfound));
+            txtError.setTextColor(getResources().getColor(R.color.text_color_light));
             handle.addView(txtError);
 
         } else {
@@ -166,9 +158,7 @@ public class DashboardActivity extends AbstractActivity implements
 
     @Override
     protected void onDestroy() {
-        // TODO Auto-generated method stub
         super.onDestroy();
-
         GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
     }
 
@@ -179,21 +169,19 @@ public class DashboardActivity extends AbstractActivity implements
         GoogleAnalyticsTracker.getInstance().dispatch();
 
         ActionBar bar = getSupportActionBar();
-        if (gardenManager.getCurrentGarden() != null)
+        if (gardenManager.getCurrentGarden() != null) {
             bar.setTitle(gardenManager.getCurrentGarden().getLocality());
-        else
+        } else {
             bar.setTitle(GotsPreferences.getInstance(this).getGardeningManagerAppname());
+        }
 
-      
         startService(weatherIntent);
-        registerReceiver(weatherBroadcastReceiver, new IntentFilter(
-                BroadCastMessages.WEATHER_DISPLAY_EVENT));
+        registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
 
     }
 
     @Override
     protected void onPause() {
-
         super.onPause();
         unregisterReceiver(weatherBroadcastReceiver);
         stopService(weatherIntent);

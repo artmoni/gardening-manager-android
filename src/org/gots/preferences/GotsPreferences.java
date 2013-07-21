@@ -43,7 +43,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     public static final boolean ISDEVELOPMENT = false;
 
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     // /**
     // * @see NuxeoServerConfig#PREF_SERVER_PASSWORD
@@ -105,9 +105,8 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     private GotsPreferences(Context context) {
         mContext = context;
-//         setSharedPreferences(context.getSharedPreferences("org.gots.garden",
-//         Context.MODE_PRIVATE));
-        setSharedPreferences(PreferenceManager.getDefaultSharedPreferences(context));
+//        setSharedPreferences(context.getSharedPreferences("org.gots.garden", Context.MODE_PRIVATE));
+         setSharedPreferences(PreferenceManager.getDefaultSharedPreferences(context));
         setGardeningManagerServerURI(ISDEVELOPMENT ? GARDENING_MANAGER_NUXEO_AUTOMATION_TEST : GARDENING_MANAGER_NUXEO_AUTOMATION);
         nxconfig = NuxeoContextFactory.getNuxeoContext(mContext).getServerConfig();
         nxconfig.setCacheKey(NuxeoServerConfig.PREF_SERVER_TOKEN);
@@ -318,6 +317,10 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     public String getGardeningManagerNuxeoAutomation() {
         return getGardeningManagerServerURI() + "site/automation";
+    }
+
+    public int getCurrentGardenId() {
+        return get(GotsPreferences.ORG_GOTS_CURRENT_GARDENID, -1);
     }
 
 }

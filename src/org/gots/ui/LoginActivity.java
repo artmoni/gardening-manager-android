@@ -15,14 +15,12 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.gots.R;
-import org.gots.garden.provider.nuxeo.NuxeoGardenProvider;
+import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
 import org.nuxeo.ecm.automation.client.jaxrs.Constants;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
-import org.nuxeo.ecm.automation.client.jaxrs.impl.HttpAutomationClient;
 import org.nuxeo.ecm.automation.client.jaxrs.impl.NotAvailableOffline;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
-import org.nuxeo.ecm.automation.client.jaxrs.spi.auth.TokenRequestInterceptor;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
@@ -47,12 +45,6 @@ public class LoginActivity extends AbstractActivity {
     private TextView loginText;
 
     private TextView passwordText;
-
-    // String myToken = GotsPreferences.getInstance(this).getToken();
-    // String myLogin = GotsPreferences.getInstance().getNUXEO_LOGIN();
-    // String myPassword =
-    // GotsPreferences.getInstance(this).getNUXEO_PASSWORD();
-    // String myDeviceId = GotsPreferences.getInstance(this).getDeviceId();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,75 +105,87 @@ public class LoginActivity extends AbstractActivity {
 
             @Override
             public void onClick(View v) {
-                String login = loginText.getText().toString();
-                String password = passwordText.getText().toString();
+                new AsyncTask<Void, Integer, Session>() {
+                    private ProgressDialog dialog;
 
-                if ("".equals(login) || "".equals(password))
-                    Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_missinginformation),
-                            Toast.LENGTH_SHORT).show();
-                else {
-                    basicNuxeoConnect(login, password);
-                    // TODO test if connection is OK, then finish, else ask for
-                    // login modification
-                    new AsyncTask<Void, Integer, NuxeoGardenProvider>() {
-                        private ProgressDialog dialog;
+                    private String login;
 
-                        protected void onPreExecute() {
-                            dialog = ProgressDialog.show(LoginActivity.this, "", "Loading. Please wait...", true);
-                            dialog.setCanceledOnTouchOutside(true);
-                            dialog.show();
-                        };
+                    private String password;
 
-                        @Override
-                        protected NuxeoGardenProvider doInBackground(Void... params) {
-                            NuxeoGardenProvider nuxeoGardenProvider = null;
-                            try {
-                                nuxeoGardenProvider = new NuxeoGardenProvider(LoginActivity.this);
-                            } catch (NotAvailableOffline nao) {
-                                Log.e(TAG, nao.getMessage());
-                                Log.d(TAG, nao.getMessage(), nao);
-                                GotsPreferences.getInstance(LoginActivity.this).setConnectedToServer(false);
-                            }
-                            return nuxeoGardenProvider;
+                    @Override
+                    protected void onPreExecute() {
+                        login = loginText.getText().toString();
+                        password = passwordText.getText().toString();
+
+                        if ("".equals(login) || "".equals(password)) {
+                            Toast.makeText(LoginActivity.this,
+                                    getResources().getString(R.string.login_missinginformation), Toast.LENGTH_SHORT).show();
+                            cancel(true);
                         }
+                        dialog = ProgressDialog.show(LoginActivity.this, "", "Loading. Please wait...", true);
+                        dialog.setCanceledOnTouchOutside(true);
+                        dialog.show();
+                    };
 
-                        protected void onPostExecute(NuxeoGardenProvider result) {
-                            if (dialog.isShowing())
-                                dialog.dismiss();
-                            if (result != null) {
-                                LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.GONE);
+                    @Override
+                    protected Session doInBackground(Void... params) {
+                        if (!basicNuxeoConnect(login, password)) {
+                            cancel(false);
+                        }
+                        try {
+                            return NuxeoManager.getInstance().getSession();
+                        } catch (NotAvailableOffline nao) {
+                            Log.e(TAG, nao.getMessage());
+                            Log.d(TAG, nao.getMessage(), nao);
+                            GotsPreferences.getInstance(LoginActivity.this).setConnectedToServer(false);
+                            cancel(false);
+                        }
+                        return null;
+                    }
 
-                                onResume();
-                            } else
-                                LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.VISIBLE);
+                    @Override
+                    protected void onPostExecute(Session result) {
+                        if (dialog.isShowing())
+                            dialog.dismiss();
+                        // if (result != null) {
+                        LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.GONE);
+                        onResume();
+                        // } else
+                        // LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.VISIBLE);
+                    };
 
-                        };
+                    @Override
+                    protected void onCancelled(Session result) {
+                        if (dialog.isShowing())
+                            dialog.dismiss();
+                        Toast.makeText(LoginActivity.this, "Error logging", Toast.LENGTH_SHORT).show();
+                        LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.VISIBLE);
+                    }
 
-                    }.execute();
+                }.execute();
 
-                    // finish();
+                // finish();
 
-                }
-
-            }
-
-            protected void basicNuxeoConnect(String login, String password) {
-                String device_id = getDeviceID();
-                GotsPreferences.getInstance(LoginActivity.this).setDeviceId(device_id);
-
-                String token = request_basicauth_token(false);
-                if (token == null) {
-                    Toast.makeText(LoginActivity.this, "Error logging", Toast.LENGTH_SHORT).show();
-                } else {
-                    GotsPreferences.getInstance().setToken(token);
-                    GotsPreferences.getInstance().setNuxeoLogin(login);
-                    GotsPreferences.getInstance().setNuxeoPassword(password);
-                    GotsPreferences.getInstance().setConnectedToServer(true);
-                }
             }
 
         });
 
+    }
+
+    protected boolean basicNuxeoConnect(String login, String password) {
+        String device_id = getDeviceID();
+        GotsPreferences.getInstance(this).setDeviceId(device_id);
+
+        String token = request_basicauth_token(false);
+        if (token == null) {
+            return false;
+        } else {
+            GotsPreferences.getInstance().setToken(token);
+            GotsPreferences.getInstance().setNuxeoLogin(login);
+            GotsPreferences.getInstance().setNuxeoPassword(password);
+            GotsPreferences.getInstance().setConnectedToServer(true);
+            return true;
+        }
     }
 
     protected String getDeviceID() {
@@ -189,18 +193,20 @@ public class LoginActivity extends AbstractActivity {
         return device_id;
     }
 
+    // TODO currently not used
     protected void tokenNuxeoConnect() {
         String device_id = getDeviceID();
-        GotsPreferences.getInstance(LoginActivity.this).setDeviceId(device_id);
+        GotsPreferences.getInstance(this).setDeviceId(device_id);
 
         String tmp_token = request_temporaryauth_token(false);
         if (tmp_token == null) {
-            Toast.makeText(LoginActivity.this, "Authentication ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Authentication ", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(LoginActivity.this, tmp_token, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, tmp_token, Toast.LENGTH_SHORT).show();
         }
     }
 
+    // TODO currently not used
     public String request_temporaryauth_token(boolean revoke) {
 
         AsyncTask<Object, Void, String> task = new AsyncTask<Object, Void, String>() {
@@ -210,13 +216,7 @@ public class LoginActivity extends AbstractActivity {
             protected String doInBackground(Object... objects) {
                 try {
                     String email = "toto.tata@gmail.com";
-                    HttpAutomationClient client = new HttpAutomationClient(GotsPreferences.getInstance(
-                            LoginActivity.this).getGardeningManagerNuxeoAutomation());
-                    client.setRequestInterceptor(new TokenRequestInterceptor("myApp", "myToken", "myLogin",
-                            GotsPreferences.getInstance().getDeviceId()));
-
-                    Session session = client.getSession();
-
+                    Session session = NuxeoManager.getInstance().getSession();
                     Documents docs = (Documents) session.newRequest("Document.Email").setHeader(
                             Constants.HEADER_NX_SCHEMAS, "*").set("email", email).execute();
 
@@ -311,81 +311,80 @@ public class LoginActivity extends AbstractActivity {
 
     public String request_basicauth_token(boolean revoke) {
 
-        AsyncTask<Object, Void, String> task = new AsyncTask<Object, Void, String>() {
-            String token = null;
+        // AsyncTask<Object, Void, String> task = new AsyncTask<Object, Void, String>() {
+        String token = null;
 
-            @Override
-            protected String doInBackground(Object... objects) {
-                try {
-                    String uri = GotsPreferences.getInstance(LoginActivity.this).getGardeningManagerNuxeoAuthentication();
-
-                    List<NameValuePair> params = new LinkedList<NameValuePair>();
-                    params.add(new BasicNameValuePair("deviceId", GotsPreferences.getInstance().getDeviceId()));
-                    params.add(new BasicNameValuePair("applicationName",
-                            GotsPreferences.getInstance().getGardeningManagerAppname()));
-                    params.add(new BasicNameValuePair("deviceDescription", Build.MODEL + "(" + Build.MANUFACTURER + ")"));
-                    params.add(new BasicNameValuePair("permission", "ReadWrite"));
-                    params.add(new BasicNameValuePair("revoke", "false"));
-
-                    String paramString = URLEncodedUtils.format(params, "utf-8");
-                    uri += paramString;
-                    URL url = new URL(uri);
-
-                    URLConnection urlConnection;
-                    urlConnection = url.openConnection();
-
-                    urlConnection.addRequestProperty("X-User-Id", loginText.getText().toString());
-                    urlConnection.addRequestProperty("X-Device-Id", GotsPreferences.getInstance().getDeviceId());
-                    urlConnection.addRequestProperty("X-Application-Name",
-                            GotsPreferences.getInstance().getGardeningManagerAppname());
-                    urlConnection.addRequestProperty(
-                            "Authorization",
-                            "Basic "
-                                    + Base64.encodeToString(
-                                            (loginText.getText().toString() + ":" + passwordText.getText().toString()).getBytes(),
-                                            Base64.NO_WRAP));
-
-                    // urlConnection.addRequestProperty(
-                    // "Authorization",
-                    // "Basic "
-                    // + Base64.encodeBase64((loginText.getText().toString() +
-                    // ":" + passwordText.getText()
-                    // .toString()).getBytes()));
-                    //TODO urlConnection.setConnectTimeout
-                    InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-                    try {
-                        // readStream(in);
-                        StringBuilder builder = new StringBuilder();
-                        String line;
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-                        while ((line = reader.readLine()) != null) {
-                            builder.append(line);
-                        }
-
-                        token = builder.toString();
-                        Log.d("LoginActivity", "Token acquired: " + token);
-
-                    } finally {
-                        in.close();
-                    }
-                } catch (IOException e) {
-                    Log.e("LoginActivity", e.getMessage(), e);
-                    return null;
-
-                }
-                return token;
-            }
-        }.execute(new Object());
-
-        String tokenAcquired = null;
+        // @Override
+        // protected String doInBackground(Object... objects) {
         try {
-            tokenAcquired = task.get();
-        } catch (InterruptedException e) {
-            Log.e("LoginActivity", e.getMessage(), e);
-        } catch (ExecutionException e) {
-            Log.e("LoginActivity", e.getMessage(), e);
+            String uri = GotsPreferences.getInstance(this).getGardeningManagerNuxeoAuthentication();
+
+            List<NameValuePair> params = new LinkedList<NameValuePair>();
+            params.add(new BasicNameValuePair("deviceId", GotsPreferences.getInstance().getDeviceId()));
+            params.add(new BasicNameValuePair("applicationName",
+                    GotsPreferences.getInstance().getGardeningManagerAppname()));
+            params.add(new BasicNameValuePair("deviceDescription", Build.MODEL + "(" + Build.MANUFACTURER + ")"));
+            params.add(new BasicNameValuePair("permission", "ReadWrite"));
+            params.add(new BasicNameValuePair("revoke", "false"));
+
+            String paramString = URLEncodedUtils.format(params, "utf-8");
+            uri += paramString;
+            URL url = new URL(uri);
+
+            URLConnection urlConnection;
+            urlConnection = url.openConnection();
+
+            urlConnection.addRequestProperty("X-User-Id", loginText.getText().toString());
+            urlConnection.addRequestProperty("X-Device-Id", GotsPreferences.getInstance().getDeviceId());
+            urlConnection.addRequestProperty("X-Application-Name",
+                    GotsPreferences.getInstance().getGardeningManagerAppname());
+            urlConnection.addRequestProperty(
+                    "Authorization",
+                    "Basic "
+                            + Base64.encodeToString(
+                                    (loginText.getText().toString() + ":" + passwordText.getText().toString()).getBytes(),
+                                    Base64.NO_WRAP));
+
+            // urlConnection.addRequestProperty(
+            // "Authorization",
+            // "Basic "
+            // + Base64.encodeBase64((loginText.getText().toString() +
+            // ":" + passwordText.getText()
+            // .toString()).getBytes()));
+                    //TODO urlConnection.setConnectTimeout
+            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+            try {
+                // readStream(in);
+                StringBuilder builder = new StringBuilder();
+                String line;
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+                while ((line = reader.readLine()) != null) {
+                    builder.append(line);
+                }
+
+                token = builder.toString();
+                Log.d("LoginActivity", "Token acquired: " + token);
+
+            } finally {
+                in.close();
+            }
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+            return null;
         }
-        return tokenAcquired;
+        return token;
+        // }
+        // }.execute(new Object());
+
+        // String tokenAcquired = null;
+        // try {
+        // tokenAcquired = task.get();
+        // } catch (InterruptedException e) {
+        // Log.e("LoginActivity", e.getMessage(), e);
+        // } catch (ExecutionException e) {
+        // Log.e("LoginActivity", e.getMessage(), e);
+        // }
+        // return tokenAcquired;
 
     }
 

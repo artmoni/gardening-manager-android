@@ -12,14 +12,11 @@ import android.content.Context;
 
 public class LocalGardenProvider extends AbstractProvider implements GardenProvider {
 
-    // protected final SharedPreferences sharedPrefs;
-
     protected GardenDBHelper helper;
 
     public LocalGardenProvider(Context context) {
         super(context);
-        // sharedPrefs = gotsPrefs.getSharedPrefs();
-        helper = new GardenDBHelper(mContext);
+        helper = new GardenDBHelper(context);
     }
 
     @Override

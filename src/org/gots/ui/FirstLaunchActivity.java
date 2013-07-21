@@ -1,43 +1,16 @@
 package org.gots.ui;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.message.BasicNameValuePair;
 import org.gots.R;
-import org.gots.preferences.GotsPreferences;
-import org.nuxeo.ecm.automation.client.jaxrs.Constants;
-import org.nuxeo.ecm.automation.client.jaxrs.Session;
-import org.nuxeo.ecm.automation.client.jaxrs.impl.HttpAutomationClient;
-import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
-import org.nuxeo.ecm.automation.client.jaxrs.spi.auth.TokenRequestInterceptor;
 
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings.Secure;
-import android.util.Base64;
-//import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.MenuItem;
+
+//import android.util.Base64;
 
 public class FirstLaunchActivity extends AbstractActivity {
 
@@ -61,8 +34,7 @@ public class FirstLaunchActivity extends AbstractActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(FirstLaunchActivity.this,
-                        ProfileCreationActivity.class);
+                Intent intent = new Intent(FirstLaunchActivity.this, ProfileCreationActivity.class);
                 startActivityForResult(intent, 1);
                 finish();
 
@@ -75,8 +47,7 @@ public class FirstLaunchActivity extends AbstractActivity {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FirstLaunchActivity.this,
-                        LoginActivity.class);
+                Intent intent = new Intent(FirstLaunchActivity.this, LoginActivity.class);
                 startActivityForResult(intent, 2);
 
             }
@@ -88,8 +59,7 @@ public class FirstLaunchActivity extends AbstractActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 2) {
-            Intent intent = new Intent(FirstLaunchActivity.this,
-                    DashboardActivity.class);
+            Intent intent = new Intent(FirstLaunchActivity.this, DashboardActivity.class);
             startActivity(intent);
             finish();
         }

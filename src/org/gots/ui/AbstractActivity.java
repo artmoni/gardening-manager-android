@@ -16,12 +16,13 @@
  *   http://www.gnu.org/licenses/gpl-2.0.html                              *
  *   See also COPYING, LICENSE and WARRANTY file                           *
  *   Contributors:                                                         *
- *                - jcarsique                                              *
+ *                - jcarsique                                                *
  *                                                                         *
  * *********************************************************************** */
 package org.gots.ui;
 
 import org.gots.garden.GardenManager;
+import org.gots.preferences.GotsPreferences;
 
 import android.os.Bundle;
 
@@ -32,11 +33,42 @@ import com.actionbarsherlock.app.SherlockActivity;
  *
  */
 public class AbstractActivity extends SherlockActivity {
+    private static final String TAG = "AbstractActivity";
+
+    protected GotsPreferences gotsPrefs;
 
     protected GardenManager gardenManager;
-@Override
-protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    gardenManager = new GardenManager(this);
-}
+
+    public AbstractActivity() {
+        // setGardenProvider();
+        gotsPrefs = GotsPreferences.getInstance(this);
+        gardenManager = new GardenManager(this);
+        // NuxeoManager.init(this);
+    }
+
+    // public void setGardenProvider() {
+    // new AsyncTask<Void, Integer, Void>() {
+    // @Override
+    // protected Void doInBackground(Void... params) {
+    // if (GotsPreferences.getInstance(mContext).isConnectedToServer()) {
+    // try {
+    // gardenProvider = new NuxeoGardenProvider(mContext);
+    // } catch (NotAvailableOffline e) {
+    // Log.w(getClass().getName(),
+    // "Failed to initialize NuxeoGardenProvider\n"
+    // + e.getMessage());
+    // Log.d(getClass().getName(), e.getMessage(), e);
+    // } catch (Throwable e) {
+    // Log.w(getClass().getName(), e.getMessage(), e);
+    // }
+    // }
+    // return null;
+    // }
+    // }.execute();
+    //
+    // if (gardenProvider == null) {
+    // gardenProvider = new LocalGardenProvider(mContext);
+    // }
+    // }
+
 }
