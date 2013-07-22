@@ -14,6 +14,7 @@ import org.gots.utils.NotConfiguredException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
@@ -83,9 +84,9 @@ public class GardenManager extends BroadcastReceiver {
 
     public long addGarden(GardenInterface garden) {
 
-      final  long id;
+        final long id;
 
-      AsyncTask<GardenInterface, Integer, GardenInterface> task=   new AsyncTask<GardenInterface, Integer, GardenInterface>() {
+        AsyncTask<GardenInterface, Integer, GardenInterface> task = new AsyncTask<GardenInterface, Integer, GardenInterface>() {
             @Override
             protected GardenInterface doInBackground(GardenInterface... params) {
                 GardenInterface newGarden = gardenProvider.createGarden(params[0]);
@@ -94,7 +95,7 @@ public class GardenManager extends BroadcastReceiver {
 
             protected void onPostExecute(GardenInterface result) {
                 setCurrentGarden(result);
-        GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+                GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
                 tracker.trackEvent("Garden", "location", result.getLocality(), 0);
             };
         }.execute(garden);
@@ -108,7 +109,7 @@ public class GardenManager extends BroadcastReceiver {
         } catch (ExecutionException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-    }
+        }
         return -1;
     }
 
@@ -136,22 +137,22 @@ public class GardenManager extends BroadcastReceiver {
     }
 
     public void removeGarden(GardenInterface garden) {
-        new AsyncTask<GardenInterface, Integer, Void>(){
+        new AsyncTask<GardenInterface, Integer, Void>() {
             @Override
             protected Void doInBackground(GardenInterface... params) {
                 gardenProvider.removeGarden(params[0]);
                 return null;
-    }
+            }
         }.execute(garden);
     }
 
     public void updateCurrentGarden(GardenInterface garden) {
-        new AsyncTask<GardenInterface, Integer, Void>(){
+        new AsyncTask<GardenInterface, Integer, Void>() {
             @Override
             protected Void doInBackground(GardenInterface... params) {
                 gardenProvider.updateGarden(params[0]);
                 return null;
-    }
+            }
         }.execute(garden);
     }
 

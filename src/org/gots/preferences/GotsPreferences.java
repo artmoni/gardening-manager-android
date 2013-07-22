@@ -43,7 +43,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     public static final boolean ISDEVELOPMENT = false;
 
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
 
     // /**
     // * @see NuxeoServerConfig#PREF_SERVER_PASSWORD

@@ -4,19 +4,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.swing.event.DocumentListener;
-
 import org.gots.garden.GardenInterface;
 import org.gots.garden.provider.local.LocalGardenProvider;
 import org.gots.nuxeo.NuxeoManager;
 import org.nuxeo.android.config.NuxeoServerConfig;
 import org.nuxeo.android.context.NuxeoContext;
-import org.nuxeo.android.context.NuxeoContextFactory;
 import org.nuxeo.android.documentprovider.DocumentsListChangeListener;
 import org.nuxeo.android.documentprovider.LazyUpdatableDocumentsList;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
-import org.nuxeo.ecm.automation.client.android.CachedSession;
 import org.nuxeo.ecm.automation.client.cache.CacheBehavior;
 import org.nuxeo.ecm.automation.client.jaxrs.Constants;
 import org.nuxeo.ecm.automation.client.jaxrs.OperationRequest;
@@ -24,7 +20,6 @@ import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
-import org.nuxeo.ecm.automation.client.jaxrs.model.PathRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertiesHelper;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
@@ -68,24 +63,24 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
     @Override
     public List<GardenInterface> getMyGardens() {
         // List<GardenInterface> myCachedGardens = super.getMyGardens();
-        List<GardenInterface> myCachedGardens ;
+        List<GardenInterface> myCachedGardens;
         if (documentsList != null) {
             myCachedGardens = new ArrayList<GardenInterface>();
             documentsList.refreshAll();
-            for (int i=0;i<=documentsList.getLoadedPageCount();i++){
-//            for (Iterator<Document> iterator = documentsList.getIterator(); iterator.hasNext();) {
+            for (int i = 0; i <= documentsList.getLoadedPageCount(); i++) {
+                // for (Iterator<Document> iterator = documentsList.getIterator(); iterator.hasNext();) {
                 Document documentGarden = documentsList.getDocument(i);
                 GardenInterface garden = NuxeoGardenConvertor.convert(documentGarden);
                 myCachedGardens.add(garden);
                 Log.d(TAG, "documentsList=" + documentGarden.getId() + " / " + garden);
-    }
-//            return myCachedGardens;
-        }else
+            }
+            // return myCachedGardens;
+        } else
             myCachedGardens = super.getMyGardens();
 
         return getMyNuxeoGardens(super.getMyGardens(), true);
 
-        }
+    }
 
     /**
      * Returns either the list of remote gardens or the full list of gardens
@@ -103,8 +98,8 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
         List<GardenInterface> remoteGardens = new ArrayList<GardenInterface>();
 
         try {
-        Session session = getNuxeoClient().getSession();
-        DocumentManager service = session.getAdapter(DocumentManager.class);
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
             // gardensWorkspaces = service.getChildren(wsRef);
             // Documents gardensWorkspaces =
             // service.query("SELECT * FROM Garden WHERE ecm:currentLifeCycleState <> 'deleted' ORDER BY dc:modified DESC");
@@ -204,7 +199,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
             // createDocument = documentMgr.createDocument(home, "Garden", currentGarden.getLocality(), props);
             createDocument = new Document(root.getPath(), currentGarden.getLocality(), "Garden");
 
-            OperationRequest createOperation = getNuxeoSession().newRequest("Document.Create").setHeader(
+            OperationRequest createOperation = NuxeoManager.getInstance().getSession().newRequest("Document.Create").setHeader(
                     Constants.HEADER_NX_SCHEMAS, "*").set("type", "Garden");
 
             PropertyMap dirty = createDocument.getDirtyProperties();
@@ -224,7 +219,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
                     documentsList.getCurrentDocument();
                     documentsList.getCurrentPosition();
                     doc.getTitle();
-                    Log.d(TAG, "notifyContentChanged on "+doc.getName()+" - "+doc.getId());
+                    Log.d(TAG, "notifyContentChanged on " + doc.getName() + " - " + doc.getId());
                 }
             });
             documentsList.createDocument(createDocument, createOperation);
@@ -275,7 +270,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
     public int removeGarden(GardenInterface garden) {
         removeNuxeoGarden(garden);
         return removeLocalGarden(garden);
-}
+    }
 
     protected int removeLocalGarden(GardenInterface garden) {
         Log.i(TAG, "removeLocalGarden " + garden);
