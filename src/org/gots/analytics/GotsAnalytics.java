@@ -44,15 +44,12 @@ public class GotsAnalytics {
     public void incrementActivityCount() {
         if (activityCount == 0) {
             if (dispatchIntervalSecs == null) {
-                GotsPreferences.getInstance(context);
                 GoogleAnalyticsTracker.getInstance().startNewSession(GotsPreferences.getAnalyticsApiKey(), context);
             } else {
-                GotsPreferences.getInstance(context);
                 GoogleAnalyticsTracker.getInstance().startNewSession(GotsPreferences.getAnalyticsApiKey(),
                         dispatchIntervalSecs, context);
             }
 
-            GotsPreferences.getInstance(context);
             if (GotsPreferences.isDevelopment())
                 GoogleAnalyticsTracker.getInstance().setDryRun(true);
         }

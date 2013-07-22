@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ *
  * Contributors:
  *     sfleury - initial API and implementation
  ******************************************************************************/
@@ -20,7 +20,6 @@ import org.gots.analytics.GotsAnalytics;
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.help.HelpUriBuilder;
-import org.gots.preferences.GotsPreferences;
 import org.gots.weather.view.WeatherWidget;
 
 import android.app.AlertDialog;
@@ -32,13 +31,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class MyMainGarden extends SherlockActivity {
+public class MyMainGarden extends AbstractActivity {
 
     private ListAllotmentAdapter lsa;
 
@@ -55,8 +53,7 @@ public class MyMainGarden extends SherlockActivity {
         bar.setTitle(R.string.dashboard_allotments_name);
 
         GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
-        GoogleAnalyticsTracker.getInstance().trackPageView(
-                getClass().getSimpleName());
+        GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
         // GardenManager gm =GardenManager.getInstance();
 
@@ -70,31 +67,26 @@ public class MyMainGarden extends SherlockActivity {
 
         if (listAllotments.getCount() == 0) {
             final String classname = getClass().getSimpleName();
-            new AlertDialog.Builder(this).setIcon(R.drawable.help).setTitle(
-                    R.string.menu_help_firstlaunch).setPositiveButton(
+            new AlertDialog.Builder(this).setIcon(R.drawable.help).setTitle(R.string.menu_help_firstlaunch).setPositiveButton(
                     R.string.button_ok, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog,
-                                int whichButton) {
+                        public void onClick(DialogInterface dialog, int whichButton) {
 
-                            Intent browserIntent = new Intent(
-                                    Intent.ACTION_VIEW,
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW,
                                     Uri.parse(HelpUriBuilder.getUri(classname)));
                             startActivity(browserIntent);
                         }
-                    }).setNegativeButton(R.string.button_cancel,
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog,
-                                int whichButton) {
+                    }).setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
 
-                            /* User clicked Cancel so do some stuff */
-                        }
-                    }).show();
+                    /* User clicked Cancel so do some stuff */
+                }
+            }).show();
             // Intent intent = new Intent(this, MyMainGardenFirstTime.class);
             // startActivity(intent);
         }
 
         // listAllotments.setBackgroundDrawable(getResources().getDrawable(R.drawable.help_hut_2));
-        if (!GotsPreferences.getInstance(this).isPremium()) {
+        if (!gotsPrefs.isPremium()) {
             GotsAdvertisement ads = new GotsAdvertisement(this);
 
             LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
@@ -130,12 +122,10 @@ public class MyMainGarden extends SherlockActivity {
             helper.insertAllotment(newAllotment);
             lsa.notifyDataSetChanged();
 
-            listAllotments.setBackgroundDrawable(getResources().getDrawable(
-                    R.drawable.background_simple));
+            listAllotments.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_simple));
             return true;
         case R.id.help:
-            Intent browserIntent = new Intent(
-                    Intent.ACTION_VIEW,
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW,
                     Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
             startActivity(browserIntent);
 

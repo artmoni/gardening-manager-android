@@ -15,7 +15,6 @@ import org.gots.ads.GotsAdvertisement;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.help.HelpUriBuilder;
-import org.gots.preferences.GotsPreferences;
 import org.gots.weather.service.WeatherUpdateService;
 import org.gots.weather.view.WeatherView;
 import org.gots.weather.view.WeatherWidget;
@@ -77,7 +76,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
         // ADMOB
         LinearLayout layout = (LinearLayout) findViewById(R.id.bannerAd);
-        if (!GotsPreferences.getInstance(this).isPremium()) {
+        if (!gotsPrefs.isPremium()) {
             adView = new GotsAdvertisement(this);
             adView.getPremiumAds(layout);
 
@@ -172,7 +171,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         if (gardenManager.getCurrentGarden() != null) {
             bar.setTitle(gardenManager.getCurrentGarden().getLocality());
         } else {
-            bar.setTitle(GotsPreferences.getInstance(this).getGardeningManagerAppname());
+            bar.setTitle(gotsPrefs.getGardeningManagerAppname());
         }
 
         startService(weatherIntent);

@@ -22,6 +22,7 @@
 package org.gots.nuxeo;
 
 import org.gots.preferences.GotsPreferences;
+import org.gots.utils.NotConfiguredException;
 import org.nuxeo.android.config.NuxeoServerConfig;
 import org.nuxeo.android.context.NuxeoContext;
 import org.nuxeo.android.context.NuxeoContextFactory;
@@ -42,29 +43,49 @@ public class NuxeoManager {
 
     private static NuxeoManager instance;
 
-    private static GotsPreferences gotsPrefs;
+    private static Exception firstCall;
 
-    private static NuxeoContext nuxeoContext;
+    private GotsPreferences gotsPrefs;
 
-    private static NuxeoServerConfig nxConfig;
+    private NuxeoContext nuxeoContext;
 
-    private static AndroidAutomationClient nuxeoClient;
+    private NuxeoServerConfig nxConfig;
+
+    private AndroidAutomationClient nuxeoClient;
+
+    private boolean initDone = false;
 
     private NuxeoManager() {
     }
 
-    public static NuxeoManager getInstance() {
+    /**
+     * After first call, {@link #initIfNew(Context)} must be called else a {@link NotConfiguredException} will be thrown
+     * on the second call attempt.
+     */
+    public static synchronized NuxeoManager getInstance() {
         if (instance == null) {
             instance = new NuxeoManager();
+            firstCall = new Exception();
+        } else if (!instance.initDone) {
+            throw new NotConfiguredException(firstCall);
         }
         return instance;
     }
 
-    public static void init(Context context) {
-        gotsPrefs = GotsPreferences.getInstance(context);
+    /**
+     * If it was already called once, the method returns without any change.
+     */
+    public synchronized void initIfNew(Context context) {
+        if (initDone) {
+            return;
+        }
+        gotsPrefs = GotsPreferences.getInstance();
+        gotsPrefs.initIfNew(context);
 
         nuxeoContext = NuxeoContextFactory.getNuxeoContext(context);
         nxConfig = nuxeoContext.getServerConfig();
+        nxConfig.setCacheKey(NuxeoServerConfig.PREF_SERVER_TOKEN);
+        // nxconfig.setSharedPrefs(sharedPreferences);
         // nxConfig.setLogin(myLogin);
         // nxConfig.setPassword(gotsPrefs.getNuxeoPassword());
         // nxConfig.setToken(myToken);
@@ -74,18 +95,20 @@ public class NuxeoManager {
         // nxConfig.setCacheKey(NuxeoServerConfig.PREF_SERVER_TOKEN);
         // nuxeoContext.onConfigChanged();
         // nuxeoContext.getNetworkStatus().reset();
+        initDone = true;
         Log.d(TAG, "getSession with: " + nxConfig.getServerBaseUrl() + " login=" + nxConfig.getLogin() + " password="
                 + nxConfig.getPassword());
     }
 
     public AndroidAutomationClient getNuxeoClient() {
-        if (nuxeoClient == null || nuxeoClient.getBaseUrl() == null) {
+        if (nuxeoClient == null || nuxeoClient.isShutdown()) {
             nuxeoClient = nuxeoContext.getNuxeoClient();
             String myToken = gotsPrefs.getToken();
             String myLogin = gotsPrefs.getNuxeoLogin();
             String myDeviceId = gotsPrefs.getDeviceId();
             String myApp = gotsPrefs.getGardeningManagerAppname();
             nuxeoClient.setRequestInterceptor(new TokenRequestInterceptor(myApp, myToken, myLogin, myDeviceId));
+            Log.d(TAG, "Got new nuxeoClient " + nuxeoClient);
         }
         return nuxeoClient;
     }

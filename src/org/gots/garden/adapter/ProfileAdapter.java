@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ *
  * Contributors:
  *     sfleury - initial API and implementation
  ******************************************************************************/
@@ -57,11 +57,11 @@ public class ProfileAdapter extends BaseAdapter {
 
     private View currentView;
 
-    public ProfileAdapter(Context context, GardenManager manager, List<GardenInterface> myGardens) {
+    public ProfileAdapter(Context context, List<GardenInterface> myGardens) {
         mContext = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         weatherManager = new WeatherManager(mContext);
-        gardenManager = manager;
+        gardenManager = GardenManager.getInstance();
 
         this.myGardens = myGardens;
         selectedGarden = gardenManager.getCurrentGarden();
@@ -91,8 +91,7 @@ public class ProfileAdapter extends BaseAdapter {
 
         View vi = convertView;
 
-        if (convertView == null
-                || convertView.findViewById(R.id.idGardenName) == null)
+        if (convertView == null || convertView.findViewById(R.id.idGardenName) == null)
             vi = inflater.inflate(R.layout.list_garden, null);
 
         TextView gardenName = (TextView) vi.findViewById(R.id.idGardenName);
@@ -104,16 +103,14 @@ public class ProfileAdapter extends BaseAdapter {
         final GardenInterface currentGarden = getItem(position);
         // weatherIntent = new Intent(mContext, WeatherUpdateService.class);
 
-        if (selectedGarden != null && currentGarden != null
-                && selectedGarden.getId() == currentGarden.getId()) {
+        if (selectedGarden != null && currentGarden != null && selectedGarden.getId() == currentGarden.getId()) {
             vi.setSelected(true);
             imageProfile.setVisibility(View.VISIBLE);
             weatherState.setVisibility(View.VISIBLE);
             // weatherHistory.setVisibility(View.VISIBLE);
             weatherHistoryContainer.setVisibility(View.VISIBLE);
 
-            weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(
-                    R.drawable.bg_weather));
+            weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_weather));
             // mContext.startService(weatherIntent);
             // mContext.registerReceiver(weatherBroadcastReceiver, new
             // IntentFilter(
@@ -157,8 +154,7 @@ public class ProfileAdapter extends BaseAdapter {
             weatherHistoryContainer.post(new Runnable() {
                 @Override
                 public void run() {
-                    weatherHistoryContainer.scrollTo(
-                            weatherHistoryContainer.getWidth(),
+                    weatherHistoryContainer.scrollTo(weatherHistoryContainer.getWidth(),
                             weatherHistoryContainer.getHeight());
                 }
             });
@@ -195,10 +191,8 @@ public class ProfileAdapter extends BaseAdapter {
                 selectedGarden = getItem(position);
                 notifyDataSetChanged();
 
-                weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(
-                        R.drawable.bg_weather));
-                weatherState.setImageDrawable(mContext.getResources().getDrawable(
-                        R.drawable.weather_updating));
+                weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_weather));
+                weatherState.setImageDrawable(mContext.getResources().getDrawable(R.drawable.weather_updating));
                 // mContext.startService(weatherIntent);
                 // mContext.registerReceiver(weatherBroadcastReceiver, new
                 // IntentFilter(
@@ -207,9 +201,7 @@ public class ProfileAdapter extends BaseAdapter {
 
                 if (gardenManager.getCurrentGarden() != null) {
                     GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-                    tracker.trackEvent("Garden", "Select",
-                            gardenManager.getCurrentGarden().getLocality(),
-                            position + 1);
+                    tracker.trackEvent("Garden", "Select", gardenManager.getCurrentGarden().getLocality(), position + 1);
                 }
             }
         });
@@ -235,17 +227,13 @@ public class ProfileAdapter extends BaseAdapter {
         TextView txtError = (TextView) currentView.findViewById(R.id.idTextAlert);
         if (isError) {
             txtError.setVisibility(View.VISIBLE);
-            weatherConnected.setImageDrawable(mContext.getResources().getDrawable(
-                    R.drawable.weather_disconnected));
-            weatherConnected.setBackgroundDrawable(mContext.getResources().getDrawable(
-                    R.drawable.bg_state_critical));
+            weatherConnected.setImageDrawable(mContext.getResources().getDrawable(R.drawable.weather_disconnected));
+            weatherConnected.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_state_critical));
 
         } else {
             txtError.setVisibility(View.GONE);
-            weatherConnected.setImageDrawable(mContext.getResources().getDrawable(
-                    R.drawable.weather_connected));
-            weatherConnected.setBackgroundDrawable(mContext.getResources().getDrawable(
-                    R.drawable.bg_state_ok));
+            weatherConnected.setImageDrawable(mContext.getResources().getDrawable(R.drawable.weather_connected));
+            weatherConnected.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_state_ok));
         }
         // buildWeatherList();
     }

@@ -19,19 +19,17 @@ public class LocalSeedProvider extends AbstractProvider implements GotsSeedProvi
 
     @Override
     public void getAllFamilies() {
-        // TODO Auto-generated method stub
-
+        // TODO
     }
 
     @Override
     public void getFamilyById(int id) {
-        // TODO Auto-generated method stub
-
+        // TODO
     }
 
     @Override
     public BaseSeedInterface getSeedById() {
-        // TODO Auto-generated method stub
+        // TODO
         return null;
     }
 

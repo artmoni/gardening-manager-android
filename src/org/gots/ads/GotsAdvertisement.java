@@ -34,7 +34,7 @@ public class GotsAdvertisement {
 		int height = display.getHeight();
 
 		AdRequest adRequest = new AdRequest();
-		if (GotsPreferences.getInstance(mContext).isPremium())
+		if (GotsPreferences.getInstance().isPremium())
 			adRequest.addTestDevice(AdRequest.TEST_EMULATOR);
 		adRequest.addKeyword("garden");
 		adRequest.addKeyword("potager");
@@ -60,17 +60,17 @@ public class GotsAdvertisement {
 		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View ads = inflater.inflate(R.layout.premium_ads, parent);
 		ads.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				GoogleAnalyticsTracker.getInstance().trackPageView(GotsAdvertisement.class.getSimpleName()+"Premium");
 				GoogleAnalyticsTracker.getInstance().dispatch();
 
-				
+
 				Intent marketIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id="
 						+ appPackageName ));
 				marketIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-				mContext.startActivity(marketIntent);				
+				mContext.startActivity(marketIntent);
 			}
 		});
 		return ads;

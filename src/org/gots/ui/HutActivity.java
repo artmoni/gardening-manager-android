@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ *
  * Contributors:
  *     sfleury - initial API and implementation
  ******************************************************************************/
@@ -77,7 +77,7 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
         mContext = this;
         setContentView(R.layout.hut);
 
-        if (!GotsPreferences.getInstance(this).isPremium()) {
+        if (!GotsPreferences.getInstance().isPremium()) {
             GotsAdvertisement ads = new GotsAdvertisement(this);
 
             LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);

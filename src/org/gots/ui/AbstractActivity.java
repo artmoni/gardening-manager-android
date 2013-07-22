@@ -22,6 +22,7 @@
 package org.gots.ui;
 
 import org.gots.garden.GardenManager;
+import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
 
 import android.os.Bundle;
@@ -39,36 +40,17 @@ public class AbstractActivity extends SherlockActivity {
 
     protected GardenManager gardenManager;
 
-    public AbstractActivity() {
-        // setGardenProvider();
-        gotsPrefs = GotsPreferences.getInstance(this);
-        gardenManager = new GardenManager(this);
-        // NuxeoManager.init(this);
-    }
+    protected NuxeoManager nuxeoManager;
 
-    // public void setGardenProvider() {
-    // new AsyncTask<Void, Integer, Void>() {
-    // @Override
-    // protected Void doInBackground(Void... params) {
-    // if (GotsPreferences.getInstance(mContext).isConnectedToServer()) {
-    // try {
-    // gardenProvider = new NuxeoGardenProvider(mContext);
-    // } catch (NotAvailableOffline e) {
-    // Log.w(getClass().getName(),
-    // "Failed to initialize NuxeoGardenProvider\n"
-    // + e.getMessage());
-    // Log.d(getClass().getName(), e.getMessage(), e);
-    // } catch (Throwable e) {
-    // Log.w(getClass().getName(), e.getMessage(), e);
-    // }
-    // }
-    // return null;
-    // }
-    // }.execute();
-    //
-    // if (gardenProvider == null) {
-    // gardenProvider = new LocalGardenProvider(mContext);
-    // }
-    // }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        gotsPrefs = GotsPreferences.getInstance();
+        gotsPrefs.initIfNew(this);
+        nuxeoManager = NuxeoManager.getInstance();
+        nuxeoManager.initIfNew(this);
+        gardenManager = GardenManager.getInstance();
+        gardenManager.initIfNew(this);
+    }
 
 }

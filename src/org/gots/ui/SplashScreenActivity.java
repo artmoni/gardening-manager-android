@@ -37,7 +37,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.SherlockActivity;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class SplashScreenActivity extends AbstractActivity {
@@ -171,7 +170,7 @@ public class SplashScreenActivity extends AbstractActivity {
         // this.startService(startServiceIntent);
         setRecurringAlarm(this);
 
-        int currentGardenId = GotsPreferences.getInstance(this).getCurrentGardenId();
+        int currentGardenId = gotsPrefs.getCurrentGardenId();
         if (currentGardenId == -1) {
             Intent intent = new Intent(this, FirstLaunchActivity.class);
             startActivityForResult(intent, 0);
@@ -200,7 +199,7 @@ public class SplashScreenActivity extends AbstractActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        int currentGardenId = GotsPreferences.getInstance(this).getCurrentGardenId();
+        int currentGardenId = gotsPrefs.getCurrentGardenId();
         if (currentGardenId > -1) {
             Message msg = new Message();
             msg.what = STOPSPLASH;

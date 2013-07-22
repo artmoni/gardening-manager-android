@@ -23,8 +23,8 @@ package org.gots.preferences;
 import java.util.List;
 
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.utils.NotConfiguredException;
 import org.nuxeo.android.config.NuxeoServerConfig;
-import org.nuxeo.android.context.NuxeoContextFactory;
 
 import android.content.Context;
 import android.content.Intent;
@@ -101,33 +101,39 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     private static GotsPreferences instance;
 
-    private NuxeoServerConfig nxconfig;
+    private static Exception firstCall;
 
-    private GotsPreferences(Context context) {
-        mContext = context;
-//        setSharedPreferences(context.getSharedPreferences("org.gots.garden", Context.MODE_PRIVATE));
-         setSharedPreferences(PreferenceManager.getDefaultSharedPreferences(context));
-        setGardeningManagerServerURI(ISDEVELOPMENT ? GARDENING_MANAGER_NUXEO_AUTOMATION_TEST : GARDENING_MANAGER_NUXEO_AUTOMATION);
-        nxconfig = NuxeoContextFactory.getNuxeoContext(mContext).getServerConfig();
-        nxconfig.setCacheKey(NuxeoServerConfig.PREF_SERVER_TOKEN);
-        // nxconfig.setSharedPrefs(sharedPreferences);
+    private boolean initDone = false;
 
+    private GotsPreferences() {
     }
 
-    public static GotsPreferences getInstance(Context context) {
+    /**
+     * After first call, {@link #initIfNew(Context)} must be called else a {@link NotConfiguredException} will be thrown
+     * on the second call attempt.
+     */
+    public static synchronized GotsPreferences getInstance() {
         if (instance == null) {
-            instance = new GotsPreferences(context);
+            instance = new GotsPreferences();
+            firstCall = new Exception();
+        } else if (!instance.initDone) {
+            throw new NotConfiguredException(firstCall);
         }
         return instance;
     }
 
     /**
-     * Should never be called before {@link #getInstance(Context)}
-     *
-     * @return Can return null!
+     * If it was already called once, the method returns without any change.
      */
-    public static GotsPreferences getInstance() {
-        return instance;
+    public synchronized void initIfNew(Context context) {
+        if (initDone) {
+            return;
+        }
+        mContext = context;
+        context.getSharedPreferences("org.gots.garden", Context.MODE_PRIVATE);
+        setSharedPreferences(PreferenceManager.getDefaultSharedPreferences(context));
+        setGardeningManagerServerURI(ISDEVELOPMENT ? GARDENING_MANAGER_NUXEO_AUTOMATION_TEST : GARDENING_MANAGER_NUXEO_AUTOMATION);
+        initDone = true;
     }
 
     public SharedPreferences getSharedPrefs() {

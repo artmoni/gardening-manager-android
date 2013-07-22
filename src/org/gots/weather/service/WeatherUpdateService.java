@@ -42,7 +42,7 @@ public class WeatherUpdateService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "getWeatherFromWebService");
-        GardenManager gardenManager = new GardenManager(this);
+        GardenManager gardenManager = GardenManager.getInstance();
 
         // TODO change to async task and update UI in postExecute
         getWeatherFromWebService(gardenManager.getCurrentGarden());

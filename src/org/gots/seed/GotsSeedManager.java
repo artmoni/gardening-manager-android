@@ -22,7 +22,7 @@ public class GotsSeedManager implements GotsSeedProvider {
         // mLocalProvider = new LocalSeedProvider(mContext);
         ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
-        if (GotsPreferences.getInstance(mContext).isConnectedToServer() && ni != null && ni.isConnected()) {
+        if (GotsPreferences.getInstance().isConnectedToServer() && ni != null && ni.isConnected()) {
             mSeedProvider = new NuxeoSeedProvider(mContext);
         } else
             mSeedProvider = new LocalSeedProvider(mContext);

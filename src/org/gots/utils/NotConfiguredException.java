@@ -19,30 +19,25 @@
  *                - jcarsique                                                *
  *                                                                         *
  * *********************************************************************** */
-package org.gots.provider;
-
-import org.gots.preferences.GotsPreferences;
-
-import android.content.Context;
+package org.gots.utils;
 
 /**
  * @author jcarsique
  *
  */
-public abstract class AbstractProvider {
+public class NotConfiguredException extends IllegalStateException {
 
-    protected final GotsPreferences gotsPrefs;
-
-    protected Context mContext;
+    @SuppressWarnings("unused")
+    private NotConfiguredException() {
+    }
 
     /**
-     * @param context
-     *
+     * @param firstCall
      */
-    public AbstractProvider(Context context) {
-        mContext = context;
-        gotsPrefs = GotsPreferences.getInstance();
-        gotsPrefs.initIfNew(context);
+    public NotConfiguredException(Exception firstCall) {
+        super("Instance called twice whereas it was not configured on first call. See root stack trace.", firstCall);
     }
+
+    private static final long serialVersionUID = 1L;
 
 }

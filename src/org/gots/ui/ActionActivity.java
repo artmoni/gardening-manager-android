@@ -17,7 +17,6 @@ import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.help.HelpUriBuilder;
-import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.providers.local.sql.GrowingSeedDBHelper;
 
@@ -71,7 +70,7 @@ public class ActionActivity extends AbstractActivity implements OnClickListener 
         listAllotments.setDivider(null);
         listAllotments.setDividerHeight(0);
 
-        if (!GotsPreferences.getInstance(this).isPremium()) {
+        if (!gotsPrefs.isPremium()) {
             GotsAdvertisement ads = new GotsAdvertisement(this);
 
             LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);

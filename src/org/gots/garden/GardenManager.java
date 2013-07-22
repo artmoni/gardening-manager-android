@@ -9,6 +9,7 @@ import org.gots.garden.provider.GardenProvider;
 import org.gots.garden.provider.local.LocalGardenProvider;
 import org.gots.garden.provider.nuxeo.NuxeoGardenProvider;
 import org.gots.preferences.GotsPreferences;
+import org.gots.utils.NotConfiguredException;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -20,20 +21,50 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 public class GardenManager extends BroadcastReceiver {
     private static final String TAG = "GardenManager";
 
+    private static GardenManager instance;
+
+    private static Exception firstCall;
+
     private Context mContext;
 
     private GardenProvider gardenProvider = null;
 
-    public GardenManager(Context mContext) {
-        this.mContext = mContext;
+    private boolean initDone = false;
+
+    private GardenManager() {
+    }
+
+    /**
+     * After first call, {@link #initIfNew(Context)} must be called else a {@link NotConfiguredException} will be thrown
+     * on the second call attempt.
+     */
+    public static synchronized GardenManager getInstance() {
+        if (instance == null) {
+            instance = new GardenManager();
+            firstCall = new Exception();
+        } else if (!instance.initDone) {
+            throw new NotConfiguredException(firstCall);
+        }
+        return instance;
+    }
+
+    /**
+     * If it was already called once, the method returns without any change.
+     */
+    public synchronized void initIfNew(Context context) {
+        if (initDone) {
+            return;
+        }
+        this.mContext = context;
         setGardenProvider();
+        initDone = true;
     }
 
     private void setGardenProvider() {
         // new AsyncTask<Void, Integer, Void>() {
         // @Override
         // protected Void doInBackground(Void... params) {
-        if (GotsPreferences.getInstance(mContext).isConnectedToServer()) {
+        if (GotsPreferences.getInstance().isConnectedToServer()) {
             gardenProvider = new NuxeoGardenProvider(mContext);
         } else {
             // return null;
@@ -98,7 +129,7 @@ public class GardenManager extends BroadcastReceiver {
     }
 
     public void setCurrentGarden(GardenInterface garden) {
-        GotsPreferences.getInstance(mContext).set(GotsPreferences.ORG_GOTS_CURRENT_GARDENID, (int) garden.getId());
+        GotsPreferences.getInstance().set(GotsPreferences.ORG_GOTS_CURRENT_GARDENID, (int) garden.getId());
         Log.d("setCurrentGarden", "[" + garden.getId() + "] " + garden.getLocality()
                 + " has been set as current workspace");
         changeDatabase((int) garden.getId());

@@ -16,10 +16,8 @@ import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.garden.GardenInterface;
-import org.gots.garden.GardenManager;
 import org.gots.garden.adapter.ProfileAdapter;
 import org.gots.help.HelpUriBuilder;
-import org.gots.preferences.GotsPreferences;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -56,12 +54,11 @@ public class ProfileActivity extends AbstractActivity {
         bar.setTitle(R.string.dashboard_profile_name);
 
         GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
-        GoogleAnalyticsTracker.getInstance().trackPageView(
-                getClass().getSimpleName());
+        GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
         profileList = (ListView) findViewById(R.id.IdGardenProfileList);
 
-        if (!GotsPreferences.getInstance(this).isPremium()) {
+        if (!gotsPrefs.isPremium()) {
             GotsAdvertisement ads = new GotsAdvertisement(this);
 
             LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
@@ -76,8 +73,7 @@ public class ProfileActivity extends AbstractActivity {
 
         @Override
         protected void onPreExecute() {
-            dialog = ProgressDialog.show(ProfileActivity.this, "",
-                    "Loading. Please wait...", true);
+            dialog = ProgressDialog.show(ProfileActivity.this, "", "Loading. Please wait...", true);
             dialog.setCanceledOnTouchOutside(true);
             dialog.show();
             super.onPreExecute();
@@ -91,7 +87,7 @@ public class ProfileActivity extends AbstractActivity {
 
         @Override
         protected void onPostExecute(List<GardenInterface> result) {
-            profileAdapter = new ProfileAdapter(ProfileActivity.this,gardenManager, myGardens);
+            profileAdapter = new ProfileAdapter(ProfileActivity.this, myGardens);
             profileList.setAdapter(profileAdapter);
             if (dialog.isShowing())
                 dialog.dismiss();
@@ -150,8 +146,7 @@ public class ProfileActivity extends AbstractActivity {
             return true;
 
         case R.id.help:
-            Intent browserIntent = new Intent(
-                    Intent.ACTION_VIEW,
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW,
                     Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
             startActivity(browserIntent);
             return true;
@@ -170,12 +165,10 @@ public class ProfileActivity extends AbstractActivity {
             // Intent intent = new Intent(this, ProfileCreationActivity.class);
             // intent.putExtra("option", ProfileCreationActivity.OPTION_EDIT);
             // startActivity(intent);
-
+            // if (gardenManager.getMyGardens().size() == 0) {
             if (profileAdapter.getCount()==0) {
-                Intent intentCreation = new Intent(this,
-                        ProfileCreationActivity.class);
-                intentCreation.putExtra("option",
-                        ProfileCreationActivity.OPTION_EDIT);
+                Intent intentCreation = new Intent(this, ProfileCreationActivity.class);
+                intentCreation.putExtra("option", ProfileCreationActivity.OPTION_EDIT);
                 startActivity(intentCreation);
             } else {
                 new AsyncTask<GardenInterface, Integer, Void>() {
