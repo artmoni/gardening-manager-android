@@ -30,7 +30,7 @@ import org.gots.bean.Garden;
 import org.gots.garden.GardenInterface;
 import org.gots.help.HelpUriBuilder;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.providers.local.sql.VendorSeedDBHelper;
+import org.gots.seed.provider.local.sql.VendorSeedDBHelper;
 
 import android.app.ProgressDialog;
 import android.content.Intent;

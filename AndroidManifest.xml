@@ -115,10 +115,15 @@
         </receiver>
         <receiver android:name=".seed.service.SeedBroadcastReceiver" >
         </receiver>
+        <receiver android:name=".garden.GardenManager" >
+            <intent-filter android:priority="100" >
+                <action android:name="org.gots.broadcast.BroadCastMessages.CONNECTION_SETTINGS_CHANGED" />
+            </intent-filter>
+        </receiver>
 
         <service android:name=".action.service.ActionNotificationService" />
-        <service android:name=".weather.service.WeatherUpdateService"/>
-        <service android:name=".seed.service.SeedUpdateService"/>
+        <service android:name=".weather.service.WeatherUpdateService" />
+        <service android:name=".seed.service.SeedUpdateService" />
     </application>
 
 </manifest>

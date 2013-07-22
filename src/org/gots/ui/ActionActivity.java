@@ -18,7 +18,7 @@ import org.gots.ads.GotsAdvertisement;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.help.HelpUriBuilder;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.providers.local.sql.GrowingSeedDBHelper;
+import org.gots.seed.provider.local.sql.GrowingSeedDBHelper;
 
 import android.content.Intent;
 import android.net.Uri;
