@@ -14,6 +14,7 @@ import org.gots.utils.NotConfiguredException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -43,6 +44,7 @@ public class GardenManager extends BroadcastReceiver {
         if (instance == null) {
             instance = new GardenManager();
             firstCall = new Exception();
+            
         } else if (!instance.initDone) {
             throw new NotConfiguredException(firstCall);
         }
@@ -57,6 +59,7 @@ public class GardenManager extends BroadcastReceiver {
             return;
         }
         this.mContext = context;
+        mContext.registerReceiver(this, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
         setGardenProvider();
         initDone = true;
     }
