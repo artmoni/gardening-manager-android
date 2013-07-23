@@ -21,6 +21,7 @@ import org.nuxeo.ecm.automation.client.jaxrs.impl.NotAvailableOffline;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import android.util.Base64;
 //import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -57,25 +59,24 @@ public class LoginActivity extends AbstractActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        
+        //hide keyboard
+        InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (this.getCurrentFocus()!=null) {            
+            inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(),
+                    InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+
         if (gotsPrefs.isConnectedToServer()) {
-            findViewById(R.id.layoutConnect).setVisibility(View.GONE);
-            View disconnectLayout = findViewById(R.id.layoutDisconnect);
-            disconnectLayout.setVisibility(View.VISIBLE);
-
-            Button buttonDisconnect = (Button) findViewById(R.id.buttonDisconnect);
-            buttonDisconnect.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    gotsPrefs.setConnectedToServer(false);
-                    findViewById(R.id.layoutConnect).setVisibility(View.VISIBLE);
-                    findViewById(R.id.layoutDisconnect).setVisibility(View.GONE);
-                    onResume();
-                }
-            });
+            buildLayoutConnected();
             return;
         }
 
+        buildLayoutDisconnected();
+
+    }
+
+    protected void buildLayoutDisconnected() {
         loginText = (TextView) findViewById(R.id.edittextLogin);
         loginText.setText(gotsPrefs.getNuxeoLogin());
         passwordText = (TextView) findViewById(R.id.edittextPassword);
@@ -127,37 +128,44 @@ public class LoginActivity extends AbstractActivity {
 
                     @Override
                     protected Session doInBackground(Void... params) {
-                        if (!basicNuxeoConnect(login, password)) {
-                            cancel(false);
-                        }
-                        try {
-                            return nuxeoManager.getSession();
-                        } catch (NotAvailableOffline nao) {
-                            Log.e(TAG, nao.getMessage());
-                            Log.d(TAG, nao.getMessage(), nao);
-                            gotsPrefs.setConnectedToServer(false);
-                            cancel(false);
-                        }
-                        return null;
+                        Session session = null;
+                        if (basicNuxeoConnect(login, password)) {
+
+                            try {
+                                session = nuxeoManager.getSession();
+
+                            } catch (Exception nao) {
+                                if (nao != null) {
+                                    Log.e(TAG, "" + nao.getMessage());
+                                    Log.d(TAG, "" + nao.getMessage(), nao);
+                                }
+                                cancel(true);
+                            }
+                        } else
+                            cancel(true);
+                        return session;
                     }
 
                     @Override
                     protected void onPostExecute(Session result) {
                         if (dialog.isShowing())
                             dialog.dismiss();
-                        // if (result != null) {
-                        LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.GONE);
+                        if (result == null) {
+                            Toast.makeText(LoginActivity.this, "Error logging", Toast.LENGTH_SHORT).show();
+                            LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.VISIBLE);
+                            gotsPrefs.setConnectedToServer(false);
+                        } else {
+                            LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.GONE);
+                            gotsPrefs.setConnectedToServer(true);
+                        }
                         onResume();
-                        // } else
-                        // LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.VISIBLE);
+
                     };
 
                     @Override
                     protected void onCancelled(Session result) {
                         if (dialog.isShowing())
                             dialog.dismiss();
-                        Toast.makeText(LoginActivity.this, "Error logging", Toast.LENGTH_SHORT).show();
-                        LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.VISIBLE);
                     }
 
                 }.execute();
@@ -167,7 +175,24 @@ public class LoginActivity extends AbstractActivity {
             }
 
         });
+    }
 
+    protected void buildLayoutConnected() {
+        findViewById(R.id.layoutConnect).setVisibility(View.GONE);
+        View disconnectLayout = findViewById(R.id.layoutDisconnect);
+        disconnectLayout.setVisibility(View.VISIBLE);
+
+        Button buttonDisconnect = (Button) findViewById(R.id.buttonDisconnect);
+        buttonDisconnect.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                gotsPrefs.setConnectedToServer(false);
+                findViewById(R.id.layoutConnect).setVisibility(View.VISIBLE);
+                findViewById(R.id.layoutDisconnect).setVisibility(View.GONE);
+                onResume();
+            }
+        });
     }
 
     protected boolean basicNuxeoConnect(String login, String password) {
@@ -181,7 +206,6 @@ public class LoginActivity extends AbstractActivity {
             gotsPrefs.setToken(token);
             gotsPrefs.setNuxeoLogin(login);
             gotsPrefs.setNuxeoPassword(password);
-            gotsPrefs.setConnectedToServer(true);
             return true;
         }
     }
@@ -315,7 +339,7 @@ public class LoginActivity extends AbstractActivity {
         // @Override
         // protected String doInBackground(Object... objects) {
         try {
-            String uri = gotsPrefs.getGardeningManagerNuxeoAuthentication();
+            String uri = gotsPrefs.getNuxeoAuthenticationURI();
 
             List<NameValuePair> params = new LinkedList<NameValuePair>();
             params.add(new BasicNameValuePair("deviceId", gotsPrefs.getDeviceId()));
@@ -347,7 +371,7 @@ public class LoginActivity extends AbstractActivity {
             // + Base64.encodeBase64((loginText.getText().toString() +
             // ":" + passwordText.getText()
             // .toString()).getBytes()));
-                    //TODO urlConnection.setConnectTimeout
+            // TODO urlConnection.setConnectTimeout
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             try {
                 // readStream(in);
@@ -366,7 +390,6 @@ public class LoginActivity extends AbstractActivity {
             }
         } catch (IOException e) {
             Log.e(TAG, e.getMessage(), e);
-            return null;
         }
         return token;
         // }
