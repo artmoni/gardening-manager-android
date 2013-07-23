@@ -1,4 +1,4 @@
-package org.gots.seed.providers.prestashop;
+package org.gots.seed.provider.prestashop;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;

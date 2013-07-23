@@ -1,4 +1,4 @@
-package org.gots.seed.providers.simple;
+package org.gots.seed.provider.simple;
 
 import java.util.ArrayList;
 import java.util.Date;

@@ -1,4 +1,4 @@
-package org.gots.seed.providers;
+package org.gots.seed.provider;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package org.gots.seed.providers.simple;
+package org.gots.seed.provider.simple;
 
 import java.io.IOException;
 import java.io.InputStream;

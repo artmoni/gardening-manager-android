@@ -8,7 +8,7 @@
  * Contributors:
  *     sfleury - initial API and implementation
  ******************************************************************************/
-package org.gots.seed.providers.local.sql;
+package org.gots.seed.provider.local.sql;
 
 import java.util.ArrayList;
 import java.util.Date;

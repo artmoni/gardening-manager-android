@@ -3,9 +3,9 @@ package org.gots.seed;
 import java.util.List;
 
 import org.gots.preferences.GotsPreferences;
-import org.gots.seed.providers.GotsSeedProvider;
-import org.gots.seed.providers.local.LocalSeedProvider;
-import org.gots.seed.providers.nuxeo.NuxeoSeedProvider;
+import org.gots.seed.provider.GotsSeedProvider;
+import org.gots.seed.provider.local.LocalSeedProvider;
+import org.gots.seed.provider.nuxeo.NuxeoSeedProvider;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

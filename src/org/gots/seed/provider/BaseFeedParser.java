@@ -8,7 +8,7 @@
  * Contributors:
  *     sfleury - initial API and implementation
  ******************************************************************************/
-package org.gots.seed.providers;
+package org.gots.seed.provider;
 
 import java.io.InputStream;
 import java.util.ArrayList;

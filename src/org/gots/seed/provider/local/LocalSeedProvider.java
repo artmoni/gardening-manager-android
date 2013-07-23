@@ -1,11 +1,11 @@
-package org.gots.seed.providers.local;
+package org.gots.seed.provider.local;
 
 import java.util.List;
 
 import org.gots.provider.AbstractProvider;
 import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.providers.GotsSeedProvider;
-import org.gots.seed.providers.local.sql.VendorSeedDBHelper;
+import org.gots.seed.provider.GotsSeedProvider;
+import org.gots.seed.provider.local.sql.VendorSeedDBHelper;
 
 import android.content.Context;
 

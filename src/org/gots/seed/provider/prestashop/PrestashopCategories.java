@@ -1,4 +1,4 @@
-package org.gots.seed.providers.prestashop;
+package org.gots.seed.provider.prestashop;
 
 import java.util.List;
 

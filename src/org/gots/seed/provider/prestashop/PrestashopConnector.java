@@ -1,10 +1,10 @@
-package org.gots.seed.providers.prestashop;
+package org.gots.seed.provider.prestashop;
 
 import java.io.InputStream;
 import java.util.List;
 
 import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.providers.GotsSeedProvider;
+import org.gots.seed.provider.GotsSeedProvider;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 

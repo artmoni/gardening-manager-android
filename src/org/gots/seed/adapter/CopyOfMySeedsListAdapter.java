@@ -16,7 +16,7 @@ import org.gots.R;
 import org.gots.action.view.ActionWidget;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.providers.local.sql.VendorSeedDBHelper;
+import org.gots.seed.provider.local.sql.VendorSeedDBHelper;
 import org.gots.seed.view.SeedWidgetLong;
 
 import android.content.Context;

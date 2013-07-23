@@ -1,4 +1,4 @@
-package org.gots.seed.providers.simple;
+package org.gots.seed.provider.simple;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +18,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.providers.GotsSeedProvider;
+import org.gots.seed.provider.GotsSeedProvider;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 

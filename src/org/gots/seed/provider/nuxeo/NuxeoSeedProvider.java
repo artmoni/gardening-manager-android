@@ -1,4 +1,4 @@
-package org.gots.seed.providers.nuxeo;
+package org.gots.seed.provider.nuxeo;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -9,7 +9,7 @@ import java.util.concurrent.TimeoutException;
 
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.providers.local.LocalSeedProvider;
+import org.gots.seed.provider.local.LocalSeedProvider;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.jaxrs.Constants;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
@@ -59,7 +59,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             protected List<BaseSeedInterface> doInBackground(Object... params) {
                 List<BaseSeedInterface> nuxeoSeeds = new ArrayList<BaseSeedInterface>();
 
-                client = new HttpAutomationClient(gotsPrefs.getGardeningManagerNuxeoAutomation());
+                client = new HttpAutomationClient(gotsPrefs.getNuxeoAutomationURI());
                 if (gotsPrefs.isConnectedToServer())
                     client.setRequestInterceptor(new TokenRequestInterceptor(myApp, myToken, myLogin, myDeviceId));
 
@@ -167,7 +167,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     Log.d(TAG, "doInBackground createRemoteSeed " + currentSeed);
 
                     HttpAutomationClient client = new HttpAutomationClient(
-                            gotsPrefs.getGardeningManagerNuxeoAutomation());
+                            gotsPrefs.getNuxeoAutomationURI());
                     client.setRequestInterceptor(new TokenRequestInterceptor(myApp, myToken, myLogin, myDeviceId));
 
                     PropertyMap props = new PropertyMap();
@@ -190,11 +190,11 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     session = client.getSession();
 
                     DocRef wsRef = new DocRef("/default-domain/UserWorkspaces/"
-                            + GotsPreferences.getInstance().getNuxeoLogin());
+                            + GotsPreferences.getInstance().getNuxeoLogin() + "/Catalog");
                     Document catalog = null;
                     try {
                         catalog = (Document) session.newRequest(DocumentManager.FetchDocument).set("value",
-                                wsRef + "/Catalog").execute();
+                                wsRef).execute();
 
                     } catch (Exception e) {
                         Log.e(TAG, "Fetching folder Catalog " + e.getMessage());

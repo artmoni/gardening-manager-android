@@ -1,4 +1,4 @@
-package org.gots.seed.providers.nuxeo;
+package org.gots.seed.provider.nuxeo;
 
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
