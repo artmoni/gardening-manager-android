@@ -21,7 +21,7 @@ import org.gots.action.SeedActionInterface;
 import org.gots.allotment.sql.AllotmentDBHelper;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.providers.local.sql.GrowingSeedDBHelper;
+import org.gots.seed.provider.local.sql.GrowingSeedDBHelper;
 
 import android.content.Context;
 

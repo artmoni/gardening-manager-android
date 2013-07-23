@@ -12,8 +12,8 @@ import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.SeedUtil;
-import org.gots.seed.providers.local.sql.GrowingSeedDBHelper;
-import org.gots.seed.providers.local.sql.VendorSeedDBHelper;
+import org.gots.seed.provider.local.sql.GrowingSeedDBHelper;
+import org.gots.seed.provider.local.sql.VendorSeedDBHelper;
 import org.gots.seed.view.SeedWidget;
 import org.gots.ui.ActionActivity;
 

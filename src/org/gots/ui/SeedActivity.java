@@ -13,7 +13,7 @@ package org.gots.ui;
 import org.gots.R;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.providers.local.sql.VendorSeedDBHelper;
+import org.gots.seed.provider.local.sql.VendorSeedDBHelper;
 
 import android.os.Bundle;
 import android.util.Log;

@@ -22,7 +22,7 @@ import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.adapter.ListSpeciesAdapter;
 import org.gots.seed.adapter.PlanningHarvestAdapter;
 import org.gots.seed.adapter.PlanningSowAdapter;
-import org.gots.seed.providers.local.sql.VendorSeedDBHelper;
+import org.gots.seed.provider.local.sql.VendorSeedDBHelper;
 import org.gots.seed.view.PlanningWidget;
 import org.gots.seed.view.SeedWidgetLong;
 

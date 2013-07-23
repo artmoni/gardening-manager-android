@@ -15,7 +15,7 @@ import java.util.Date;
 import org.gots.action.AbstractActionSeed;
 import org.gots.action.SeedActionInterface;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.providers.local.sql.VendorSeedDBHelper;
+import org.gots.seed.provider.local.sql.VendorSeedDBHelper;
 
 import android.content.Context;
 

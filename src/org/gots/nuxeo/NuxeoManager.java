@@ -79,6 +79,8 @@ public class NuxeoManager {
         if (initDone) {
             return;
         }
+        
+        
         gotsPrefs = GotsPreferences.getInstance();
         gotsPrefs.initIfNew(context);
 
