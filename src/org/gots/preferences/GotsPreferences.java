@@ -317,11 +317,11 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
         return GARDENING_MANAGER_APPNAME;
     }
 
-    public String getGardeningManagerNuxeoAuthentication() {
+    public String getNuxeoAuthenticationURI() {
         return getGardeningManagerServerURI() + "authentication/token?";
     }
 
-    public String getGardeningManagerNuxeoAutomation() {
+    public String getNuxeoAutomationURI() {
         return getGardeningManagerServerURI() + "site/automation";
     }
 
