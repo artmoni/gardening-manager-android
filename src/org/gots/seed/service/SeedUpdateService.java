@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.gots.R;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.GotsSeedManager;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.nuxeo.NuxeoSeedProvider;
@@ -35,7 +36,7 @@ public class SeedUpdateService extends Service {
 
     private String TAG = "SeedNotificationService";
 
-    private GotsSeedProvider mRemoteProvider;
+//    private GotsSeedProvider mRemoteProvider;
 
     private Handler handler = new Handler();
 
@@ -48,7 +49,7 @@ public class SeedUpdateService extends Service {
     @Override
     public void onCreate() {
         mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        mRemoteProvider = new NuxeoSeedProvider(getApplicationContext());
+        manager = new GotsSeedManager(this);
         intent = new Intent(BroadCastMessages.SEED_DISPLAYLIST);
 
         super.onCreate();
@@ -61,7 +62,8 @@ public class SeedUpdateService extends Service {
         Log.d(TAG, "Starting service : checking seeds from web services");
 
         // VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
-        mRemoteProvider.getVendorSeeds();
+//        mRemoteProvider.getVendorSeeds();
+        manager.getVendorSeeds();
         // for (BaseSeedInterface baseSeedInterface : mRemoteProvider.getVendorSeeds()) {
         //
         // if (helper.getSeedByUUID(baseSeedInterface.getUUID()) != null) {
@@ -93,6 +95,8 @@ public class SeedUpdateService extends Service {
             // stopSelf();
         }
     };
+
+    private GotsSeedManager manager;
 
     private void displaySeedsAvailable() {
         Log.d(TAG, "entered displaySeedsAvailable");

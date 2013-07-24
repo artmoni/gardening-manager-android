@@ -3,24 +3,48 @@ package org.gots.seed.provider.nuxeo;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
+import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
+
+import android.util.Log;
 
 public class NuxeoSeedConverter {
 
-	public static BaseSeedInterface convert(Document document) {
-		BaseSeedInterface seed = new GrowingSeed();
-		seed.setVariety(document.getTitle());
-		seed.setFamily(document.getString("vendorseed:family"));
-		seed.setSpecie(document.getString("vendorseed:specie"));
-		seed.setDurationMin(Integer.valueOf(document.getString("vendorseed:durationmin")));
-		seed.setDurationMax(Integer.valueOf(document.getString("vendorseed:durationmax")));
-		seed.setDateSowingMin(Integer.valueOf(document.getString("vendorseed:datesowingmin")));
-		seed.setDateSowingMax(Integer.valueOf(document.getString("vendorseed:datesowingmax")));
-		seed.setDescriptionCultivation(document.getString("vendorseed:description_cultivation"));
-		seed.setDescriptionDiseases(document.getString("vendorseed:description_diseases"));
-		seed.setDescriptionGrowth(document.getString("vendorseed:description_growth"));
-		seed.setDescriptionHarvest(document.getString("vendorseed:description_harvest"));
-		seed.setUUID(document.getId());
-		return seed;
-	}
+    private static final String TAG = "NuxeoSeedConverter";
 
+    public static BaseSeedInterface convert(Document document) {
+        try {
+            BaseSeedInterface seed = new GrowingSeed();
+            seed.setVariety(document.getTitle());
+            seed.setFamily(document.getString("vendorseed:family"));
+            seed.setSpecie(document.getString("vendorseed:specie"));
+            seed.setDurationMin(Integer.valueOf(document.getString("vendorseed:durationmin")));
+            seed.setDurationMax(Integer.valueOf(document.getString("vendorseed:durationmax")));
+            seed.setDateSowingMin(Integer.valueOf(document.getString("vendorseed:datesowingmin")));
+            seed.setDateSowingMax(Integer.valueOf(document.getString("vendorseed:datesowingmax")));
+            seed.setDescriptionCultivation(document.getString("vendorseed:description_cultivation"));
+            seed.setDescriptionDiseases(document.getString("vendorseed:description_diseases"));
+            seed.setDescriptionGrowth(document.getString("vendorseed:description_growth"));
+            seed.setDescriptionHarvest(document.getString("vendorseed:description_harvest"));
+            seed.setUUID(document.getId());
+            return seed;
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(),e);
+            return null;
+        }
+    }
+
+    public static Document convert(String parentPath, BaseSeedInterface seed) {
+        Document doc = new Document(parentPath, seed.getName(), "VendorSeed");
+        doc.set("dc:title", seed.getVariety());
+        doc.set("dc:description", "test");
+        doc.set("vendorseed:datesowingmin", String.valueOf(seed.getDateSowingMin()));
+        doc.set("vendorseed:datesowingmax", String.valueOf(seed.getDateSowingMax()));
+        doc.set("vendorseed:durationmin", String.valueOf(seed.getDurationMin()));
+        doc.set("vendorseed:durationmax", String.valueOf(seed.getDurationMax()));
+        doc.set("vendorseed:family", seed.getFamily());
+        doc.set("vendorseed:specie", seed.getSpecie());
+        doc.set("vendorseed:variety", seed.getVariety());
+        doc.set("vendorseed:barcode", seed.getBareCode());
+        return doc;
+    }
 }

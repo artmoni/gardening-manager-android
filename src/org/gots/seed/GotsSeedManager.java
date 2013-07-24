@@ -1,6 +1,7 @@
 package org.gots.seed;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.provider.GotsSeedProvider;
@@ -10,8 +11,12 @@ import org.gots.seed.provider.nuxeo.NuxeoSeedProvider;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
+import android.util.Log;
 
 public class GotsSeedManager implements GotsSeedProvider {
+
+    private static final String TAG = "GotsSeedManager";
 
     private Context mContext;
 
@@ -47,10 +52,23 @@ public class GotsSeedManager implements GotsSeedProvider {
         // helper.insertSeed(baseSeedInterface);
         // }
         // }
-
         List<BaseSeedInterface> listSeeds = mSeedProvider.getVendorSeeds();
+        AsyncTask<BaseSeedInterface, Integer, List<BaseSeedInterface>> task = new AsyncTask<BaseSeedInterface, Integer, List<BaseSeedInterface>>() {
+            @Override
+            protected List<BaseSeedInterface> doInBackground(BaseSeedInterface... params) {
 
-        return listSeeds;
+                return mSeedProvider.getVendorSeeds();
+            }
+        }.execute();
+
+        try {
+            return task.get();
+        } catch (InterruptedException e) {
+            Log.e(TAG, e.getMessage(), e);
+        } catch (ExecutionException e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+        return null;
     }
 
     @Override
@@ -73,7 +91,23 @@ public class GotsSeedManager implements GotsSeedProvider {
 
     @Override
     public BaseSeedInterface createSeed(BaseSeedInterface seed) {
-        return mSeedProvider.createSeed(seed);
+        AsyncTask<BaseSeedInterface, Integer, BaseSeedInterface> task = new AsyncTask<BaseSeedInterface, Integer, BaseSeedInterface>() {
+            @Override
+            protected BaseSeedInterface doInBackground(BaseSeedInterface... params) {
+
+                return mSeedProvider.createSeed(params[0]);
+            }
+        }.execute(seed);
+        try {
+            return task.get();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            Log.e(TAG, e.getMessage(), e);
+        } catch (ExecutionException e) {
+            // TODO Auto-generated catch block
+            Log.e(TAG, e.getMessage(), e);
+        }
+        return null;
     }
 
     @Override

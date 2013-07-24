@@ -29,6 +29,7 @@ import org.gots.ui.NewSeedActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,121 +37,136 @@ import android.widget.BaseAdapter;
 
 public class ListVendorSeedAdapter extends BaseAdapter {
 
-	private BuyingAction buying;
-	private LayoutInflater inflater;
-	private Context mContext;
-	private List<BaseSeedInterface> vendorSeeds;
-	// private int nbAds = 0;
-	// private int frequencyAds = 4;
-	private View adsView;
+    private BuyingAction buying;
 
-	public ListVendorSeedAdapter(Context context, List<BaseSeedInterface> vendorSeeds) {
-		// super(context);
-		this.vendorSeeds = vendorSeeds;
-		mContext = context;
-		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    private LayoutInflater inflater;
 
-		Collections.sort(vendorSeeds, new ISeedSpecieComparator(context));
+    private Context mContext;
 
-		GotsAdvertisement ads = new GotsAdvertisement(mContext);
-		adsView = ads.getAdsLayout();
+    private List<BaseSeedInterface> vendorSeeds;
 
-	}
+    // private int nbAds = 0;
+    // private int frequencyAds = 4;
+    private View adsView;
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+    public ListVendorSeedAdapter(Context context, List<BaseSeedInterface> vendorSeeds) {
+        // super(context);
+        this.vendorSeeds = vendorSeeds;
+        mContext = context;
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		View vi = convertView;
-		final BaseSeedInterface currentSeed = getItem(position);
-		SeedWidgetLong seedWidgetLong;
-		ActionWidget actionWidget;
+        Collections.sort(vendorSeeds, new ISeedSpecieComparator(context));
 
-		if (vi == null)
-			vi = inflater.inflate(R.layout.list_seed, null);
+        GotsAdvertisement ads = new GotsAdvertisement(mContext);
+        adsView = ads.getAdsLayout();
 
-		seedWidgetLong = (SeedWidgetLong) vi.findViewById(R.id.idSeedWidgetLong);
-		actionWidget = (ActionWidget) vi.findViewById(R.id.IdSeedAction);
+    }
 
-		seedWidgetLong.setSeed(currentSeed);
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
 
-		buying = new BuyingAction(mContext);
-		buying.setState(ActionState.NORMAL);
-		actionWidget.setAction(buying);
-		actionWidget.setOnClickListener(new View.OnClickListener() {
+        View vi = convertView;
+        final BaseSeedInterface currentSeed = getItem(position);
+        SeedWidgetLong seedWidgetLong;
+        ActionWidget actionWidget;
 
-			@Override
-			public void onClick(View v) {
-                SeedActionInterface action = buying;
-				action.execute((GrowingSeedInterface) currentSeed);
-				// Toast.makeText(getContext(),
-				// action.getName() + " " + currentSeed.getSpecie() + " " +
-				// currentSeed.getVariety(), 30).show();
-				notifyDataSetChanged();
-			}
-		});
-		// actionWidget.setOnActionItemClickListener(new
-		// ActionWidget.OnActionItemClickListener() {
-		//
-		// @Override
-		// public void onItemClick(ActionWidget source, BaseActionInterface
-		// baseActionInterface) {
-		// SeedActionInterface action = (SeedActionInterface)
-		// baseActionInterface;
-		// action.execute((GrowingSeedInterface) currentSeed);
-		// Toast.makeText(getContext(),
-		// action.getName() + " " + currentSeed.getSpecie() + " " +
-		// currentSeed.getVariety(), 30).show();
-		// notifyDataSetChanged();
-		// }
-		// });
+        if (vi == null)
+            vi = inflater.inflate(R.layout.list_seed, null);
 
-		Calendar sowTime = Calendar.getInstance();
-		if (sowTime.get(Calendar.MONTH) > currentSeed.getDateSowingMin())
-			sowTime.set(Calendar.YEAR, sowTime.get(Calendar.YEAR) + 1);
-		sowTime.set(Calendar.MONTH, currentSeed.getDateSowingMin());
+        seedWidgetLong = (SeedWidgetLong) vi.findViewById(R.id.idSeedWidgetLong);
+        actionWidget = (ActionWidget) vi.findViewById(R.id.IdSeedAction);
 
-		Calendar harvestTime = new GregorianCalendar();
-		harvestTime.setTime(sowTime.getTime());
-		harvestTime.add(Calendar.DAY_OF_MONTH, currentSeed.getDurationMin());
+        seedWidgetLong.setSeed(currentSeed);
 
-		seedWidgetLong.setOnLongClickListener(new View.OnLongClickListener() {
+        buying = new BuyingAction(mContext);
+        buying.setState(ActionState.NORMAL);
+        actionWidget.setAction(buying);
+        actionWidget.setOnClickListener(new View.OnClickListener() {
 
-			@Override
-			public boolean onLongClick(View v) {
-				Intent i = new Intent(mContext, NewSeedActivity.class);
-				i.putExtra("org.gots.seedid", currentSeed.getSeedId());
-				mContext.startActivity(i);
-				return false;
-			}
-		});
+            @Override
+            public void onClick(View v) {
+                new AsyncTask<Void, Integer, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        SeedActionInterface action = buying;
+                        action.execute((GrowingSeedInterface) currentSeed);
+                        return null;
+                    }
+                    @Override
+                    protected void onPostExecute(Void result) {
+                        notifyDataSetChanged();
+                        super.onPostExecute(result);
+                    }
+                }.execute();
 
-		return vi;
+                // Toast.makeText(getContext(),
+                // action.getName() + " " + currentSeed.getSpecie() + " " +
+                // currentSeed.getVariety(), 30).show();
+            }
+        });
+        // actionWidget.setOnActionItemClickListener(new
+        // ActionWidget.OnActionItemClickListener() {
+        //
+        // @Override
+        // public void onItemClick(ActionWidget source, BaseActionInterface
+        // baseActionInterface) {
+        // SeedActionInterface action = (SeedActionInterface)
+        // baseActionInterface;
+        // action.execute((GrowingSeedInterface) currentSeed);
+        // Toast.makeText(getContext(),
+        // action.getName() + " " + currentSeed.getSpecie() + " " +
+        // currentSeed.getVariety(), 30).show();
+        // notifyDataSetChanged();
+        // }
+        // });
 
-	}
+        Calendar sowTime = Calendar.getInstance();
+        if (sowTime.get(Calendar.MONTH) > currentSeed.getDateSowingMin())
+            sowTime.set(Calendar.YEAR, sowTime.get(Calendar.YEAR) + 1);
+        sowTime.set(Calendar.MONTH, currentSeed.getDateSowingMin());
 
-	@Override
-	public void notifyDataSetChanged() {
-		// VendorSeedDBHelper myBank = new VendorSeedDBHelper(mContext);
-		// vendorSeeds = myBank.getVendorSeeds();
+        Calendar harvestTime = new GregorianCalendar();
+        harvestTime.setTime(sowTime.getTime());
+        harvestTime.add(Calendar.DAY_OF_MONTH, currentSeed.getDurationMin());
 
-		super.notifyDataSetChanged();
-	}
+        seedWidgetLong.setOnLongClickListener(new View.OnLongClickListener() {
 
-	@Override
-	public int getCount() {
-		return vendorSeeds.size();
-	}
+            @Override
+            public boolean onLongClick(View v) {
+                Intent i = new Intent(mContext, NewSeedActivity.class);
+                i.putExtra("org.gots.seedid", currentSeed.getSeedId());
+                mContext.startActivity(i);
+                return false;
+            }
+        });
 
-	@Override
-	public BaseSeedInterface getItem(int position) {
+        return vi;
 
-		return vendorSeeds.get(position);
-	}
+    }
 
-	@Override
-	public long getItemId(int position) {
+    @Override
+    public void notifyDataSetChanged() {
+        // VendorSeedDBHelper myBank = new VendorSeedDBHelper(mContext);
+        // vendorSeeds = myBank.getVendorSeeds();
 
-		return vendorSeeds.get(position).getSeedId();
-	}
+        super.notifyDataSetChanged();
+    }
+
+    @Override
+    public int getCount() {
+        return vendorSeeds.size();
+    }
+
+    @Override
+    public BaseSeedInterface getItem(int position) {
+
+        return vendorSeeds.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+
+        return vendorSeeds.get(position).getSeedId();
+    }
 
 }
