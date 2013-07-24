@@ -79,24 +79,14 @@ public class NuxeoManager {
         if (initDone) {
             return;
         }
-        
-        
+
         gotsPrefs = GotsPreferences.getInstance();
         gotsPrefs.initIfNew(context);
 
-        nuxeoContext = NuxeoContextFactory.getNuxeoContext(context);
-        nxConfig = nuxeoContext.getServerConfig();
+        nxConfig = new NuxeoServerConfig(context);
         nxConfig.setSharedPrefs(gotsPrefs.getSharedPrefs());
         nxConfig.setCacheKey(NuxeoServerConfig.PREF_SERVER_TOKEN);
-        // nxConfig.setLogin(myLogin);
-        // nxConfig.setPassword(gotsPrefs.getNuxeoPassword());
-        // nxConfig.setToken(myToken);
-        // Uri nxAutomationURI = Uri.parse(Uri.encode(GotsPreferences.getGardeningManagerServerURI()));
-        // nxConfig.setServerBaseUrl(nxAutomationURI);
-        // nxConfig.setServerBaseUrl(gotsPrefs.getGardeningManagerServerURI());
-        // nxConfig.setCacheKey(NuxeoServerConfig.PREF_SERVER_TOKEN);
-        // nuxeoContext.onConfigChanged();
-        // nuxeoContext.getNetworkStatus().reset();
+        nuxeoContext = NuxeoContextFactory.getNuxeoContext(context, nxConfig);
         initDone = true;
         Log.d(TAG, "getSession with: " + nxConfig.getServerBaseUrl() + " login=" + nxConfig.getLogin() + " password="
                 + nxConfig.getPassword());
