@@ -53,4 +53,9 @@ public class AbstractActivity extends SherlockActivity {
         gardenManager.initIfNew(this);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        nuxeoManager.shutdown();
+    }
 }

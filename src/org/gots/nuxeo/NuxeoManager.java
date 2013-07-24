@@ -123,4 +123,8 @@ public class NuxeoManager {
     public Session getSession() throws NotAvailableOffline {
         return getNuxeoClient().getSession();
     }
+
+    public void shutdown() {
+        nuxeoContext.shutdown();
+    }
 }
