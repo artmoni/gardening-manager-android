@@ -21,6 +21,8 @@
  * *********************************************************************** */
 package org.gots.ui;
 
+import java.util.ArrayList;
+
 import org.gots.garden.GardenManager;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
@@ -42,25 +44,32 @@ public class AbstractActivity extends SherlockActivity {
 
     protected NuxeoManager nuxeoManager;
 
+    private static ArrayList<AbstractActivity> activities = new ArrayList<AbstractActivity>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // TODO All this should be part of the application/service/...
         gotsPrefs = GotsPreferences.getInstance();
         gotsPrefs.initIfNew(this);
         nuxeoManager = NuxeoManager.getInstance();
         nuxeoManager.initIfNew(this);
         gardenManager = GardenManager.getInstance();
         gardenManager.initIfNew(this);
+        activities.add(this);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        nuxeoManager.shutdown();
-        try {
-            this.unregisterReceiver(gardenManager);
-        } catch (IllegalArgumentException e) {
-            // Ignore
+        activities.remove(this);
+        if (activities.size() == 0) {
+            nuxeoManager.shutdown();
+            try {
+                this.unregisterReceiver(gardenManager);
+            } catch (IllegalArgumentException e) {
+                // Ignore
+            }
         }
     }
 }
