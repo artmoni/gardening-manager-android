@@ -143,7 +143,7 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
                     seedWidgetLong.invalidate();
                 }
             }
-        });
+        }); 
 
         planningHarvest = (PlanningWidget) findViewById(R.id.IdSeedEditHarvestPlanning);
         planningHarvest.setAdapter(new PlanningHarvestAdapter(newSeed));

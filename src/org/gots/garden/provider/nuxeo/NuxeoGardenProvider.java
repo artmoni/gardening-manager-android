@@ -70,6 +70,9 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
             for (int i = 0; i <= documentsList.getLoadedPageCount(); i++) {
                 // for (Iterator<Document> iterator = documentsList.getIterator(); iterator.hasNext();) {
                 Document documentGarden = documentsList.getDocument(i);
+                if (documentGarden==null) {
+                    break;
+                }
                 GardenInterface garden = NuxeoGardenConvertor.convert(documentGarden);
                 myCachedGardens.add(garden);
                 Log.d(TAG, "documentsList=" + documentGarden.getId() + " / " + garden);

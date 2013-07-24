@@ -17,6 +17,7 @@ import org.gots.action.PermanentActionInterface;
 import org.gots.action.SeedActionInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.local.sql.VendorSeedDBHelper;
+import org.gots.seed.provider.nuxeo.NuxeoSeedProvider;
 
 import android.content.Context;
 
@@ -85,6 +86,8 @@ public class BuyingAction extends AbstractActionGarden implements PermanentActio
 		seed.setNbSachet(seed.getNbSachet()+1);
 		VendorSeedDBHelper helper = new VendorSeedDBHelper(mContext);
 		helper.updateSeed(seed);
+		NuxeoSeedProvider provider = new NuxeoSeedProvider(mContext);
+		provider.addToStock(seed, null);
 		return 0;
 	}
 
