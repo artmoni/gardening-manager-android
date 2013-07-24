@@ -34,7 +34,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class GotsPreferences implements OnSharedPreferenceChangeListener {
@@ -130,8 +129,8 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
             return;
         }
         mContext = context;
-        context.getSharedPreferences("org.gots.garden", Context.MODE_PRIVATE);
-        setSharedPreferences(PreferenceManager.getDefaultSharedPreferences(context));
+        setSharedPreferences(context.getSharedPreferences("org.gots.garden", Context.MODE_PRIVATE));
+        // setSharedPreferences(PreferenceManager.getDefaultSharedPreferences(context));
         setGardeningManagerServerURI(ISDEVELOPMENT ? GARDENING_MANAGER_NUXEO_AUTOMATION_TEST : GARDENING_MANAGER_NUXEO_AUTOMATION);
         initDone = true;
     }
@@ -150,7 +149,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
         if (ORG_GOTS_GARDEN_SERVERCONNECTED.equals(key)) {
             mContext.sendBroadcast(new Intent(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
-            Log.d(TAG, key + " has changed");
+            Log.d(TAG, key + " has changed: " + isConnectedToServer());
         }
         // initFromPrefs(prefs);
     }
@@ -236,6 +235,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
         if (!uri.endsWith("/")) {
             uri = uri + "/";
         }
+        Log.d(TAG, "setGardeningManagerServerURI " + uri);
         set(ORG_GOTS_GARDEN_NUXEO_URI, uri);
     }
 

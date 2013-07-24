@@ -86,14 +86,14 @@ public class NuxeoManager {
 
         nuxeoContext = NuxeoContextFactory.getNuxeoContext(context);
         nxConfig = nuxeoContext.getServerConfig();
+        nxConfig.setSharedPrefs(gotsPrefs.getSharedPrefs());
         nxConfig.setCacheKey(NuxeoServerConfig.PREF_SERVER_TOKEN);
-        // nxconfig.setSharedPrefs(sharedPreferences);
         // nxConfig.setLogin(myLogin);
         // nxConfig.setPassword(gotsPrefs.getNuxeoPassword());
         // nxConfig.setToken(myToken);
         // Uri nxAutomationURI = Uri.parse(Uri.encode(GotsPreferences.getGardeningManagerServerURI()));
         // nxConfig.setServerBaseUrl(nxAutomationURI);
-        nxConfig.setServerBaseUrl(gotsPrefs.getGardeningManagerServerURI());
+        // nxConfig.setServerBaseUrl(gotsPrefs.getGardeningManagerServerURI());
         // nxConfig.setCacheKey(NuxeoServerConfig.PREF_SERVER_TOKEN);
         // nuxeoContext.onConfigChanged();
         // nuxeoContext.getNetworkStatus().reset();
