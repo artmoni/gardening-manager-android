@@ -23,10 +23,10 @@
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:layout_gravity="center_vertical|center_horizontal"
-        android:layout_marginBottom="50dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="110dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="70dp"
         android:background="@drawable/bg_line_action"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
@@ -99,7 +99,6 @@
         tools:ignore="Orientation" >
     </LinearLayout>
 
-    <LinearLayout>
-    </LinearLayout>
+   
 
 </RelativeLayout>
