@@ -34,6 +34,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class GotsPreferences implements OnSharedPreferenceChangeListener {
@@ -69,15 +70,11 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     // public static final String ORG_GOTS_GARDEN_TOKEN = "org.gots.garden.token";
     public static final String ORG_GOTS_GARDEN_TOKEN = NuxeoServerConfig.PREF_SERVER_TOKEN;
 
-    private static boolean ORG_GOTS_PREMIUM_LICENCE = Boolean.valueOf(System.getProperty("boolean.isdevelopment",
-            "false"));
+    private static final String ANALYTICS_API_KEY = "UA-916500-18";
 
-    private static final String ANALYTICS_API_KEY = System.getProperty("key.analyticsapi", "UA-916500-18");
+    private static final String WEATHER_API_KEY = "6ba97b2306fd5b9d47992d8716dab16a";
 
-    private static final String WEATHER_API_KEY = System.getProperty("key.weatherapi",
-            "6ba97b2306fd5b9d47992d8716dab16a");
-
-    private static final String ADMOB_API_KEY = System.getProperty("key.admobapi", "a14f50fa231b26d");
+    private static final String ADMOB_API_KEY = "a14f50fa231b26d";
 
     public static final String GARDENING_MANAGER_DIRECTORY = "Gardening-Manager";
 
@@ -98,7 +95,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     protected Context mContext;
 
-    private static GotsPreferences instance;
+    private static GotsPreferences instance=null;
 
     private static Exception firstCall;
 
@@ -129,8 +126,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
             return;
         }
         mContext = context;
-        setSharedPreferences(context.getSharedPreferences("org.gots.garden", Context.MODE_PRIVATE));
-        // setSharedPreferences(PreferenceManager.getDefaultSharedPreferences(context));
+         setSharedPreferences(PreferenceManager.getDefaultSharedPreferences(context));
         setGardeningManagerServerURI(ISDEVELOPMENT ? GARDENING_MANAGER_NUXEO_AUTOMATION_TEST : GARDENING_MANAGER_NUXEO_AUTOMATION);
         initDone = true;
     }
@@ -161,18 +157,6 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     public void set(String key, String value) {
         SharedPreferences.Editor prefedit = sharedPreferences.edit();
         prefedit.putString(key, value);
-        // if (ORG_GOTS_GARDEN_PASSWORD.equals(key)) {
-        // nxconfig.setPassword(value);
-        // }
-        // if (ORG_GOTS_GARDEN_LOGIN.equals(key)) {
-        // nxconfig.setLogin(value);
-        // }
-        // if (ORG_GOTS_GARDEN_TOKEN.equals(key)) {
-        // nxconfig.setToken(value);
-        // }
-        // if (ORG_GOTS_GARDEN_NUXEO_URI.equals(key)) {
-        // nxconfig.setServerBaseUrl(value);
-        // }
         prefedit.commit();
         Log.d(TAG, key + "=" + value);
     }
