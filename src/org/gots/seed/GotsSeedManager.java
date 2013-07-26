@@ -3,6 +3,7 @@ package org.gots.seed;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import org.gots.garden.GardenInterface;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
@@ -33,42 +34,10 @@ public class GotsSeedManager implements GotsSeedProvider {
             mSeedProvider = new LocalSeedProvider(mContext);
     }
 
-    public GotsSeedManager(Context context, GotsSeedProvider gotsSeedProvider) {
-        mSeedProvider = gotsSeedProvider;
-
-    }
-
     @Override
     public List<BaseSeedInterface> getVendorSeeds() {
 
-        // VendorSeedDBHelper helper = new VendorSeedDBHelper(mContext);
-        // for (Iterator<BaseSeedInterface> iterator =
-        // mRemoteProvider.getAllSeeds().iterator(); iterator.hasNext();) {
-        // BaseSeedInterface baseSeedInterface = iterator.next();
-        // if (helper.getSeedByReference(baseSeedInterface.getReference()) !=
-        // null) {
-        // helper.updateSeed(baseSeedInterface);
-        // } else {
-        // helper.insertSeed(baseSeedInterface);
-        // }
-        // }
-        List<BaseSeedInterface> listSeeds = mSeedProvider.getVendorSeeds();
-        AsyncTask<BaseSeedInterface, Integer, List<BaseSeedInterface>> task = new AsyncTask<BaseSeedInterface, Integer, List<BaseSeedInterface>>() {
-            @Override
-            protected List<BaseSeedInterface> doInBackground(BaseSeedInterface... params) {
-
-                return mSeedProvider.getVendorSeeds();
-            }
-        }.execute();
-
-        try {
-            return task.get();
-        } catch (InterruptedException e) {
-            Log.e(TAG, e.getMessage(), e);
-        } catch (ExecutionException e) {
-            Log.e(TAG, e.getMessage(), e);
-        }
-        return null;
+        return mSeedProvider.getVendorSeeds();
     }
 
     @Override
@@ -115,4 +84,14 @@ public class GotsSeedManager implements GotsSeedProvider {
         return mSeedProvider.updateSeed(newSeed);
     }
 
+    @Override
+    public void addToStock(BaseSeedInterface vendorSeed, GardenInterface garden) {
+        mSeedProvider.addToStock(vendorSeed, garden);
+    }
+
+    @Override
+    public void removeToStock(BaseSeedInterface vendorSeed) {
+        mSeedProvider.removeToStock(vendorSeed);
+
+    }
 }

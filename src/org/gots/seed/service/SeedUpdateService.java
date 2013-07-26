@@ -1,12 +1,14 @@
 package org.gots.seed.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.gots.R;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.SeedUtil;
+import org.gots.seed.adapter.ListVendorSeedAdapter;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.nuxeo.NuxeoSeedProvider;
 import org.gots.seed.view.SeedWidget;
@@ -15,8 +17,11 @@ import org.gots.ui.HutActivity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
@@ -36,7 +41,7 @@ public class SeedUpdateService extends Service {
 
     private String TAG = "SeedNotificationService";
 
-//    private GotsSeedProvider mRemoteProvider;
+    // private GotsSeedProvider mRemoteProvider;
 
     private Handler handler = new Handler();
 
@@ -62,8 +67,36 @@ public class SeedUpdateService extends Service {
         Log.d(TAG, "Starting service : checking seeds from web services");
 
         // VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
-//        mRemoteProvider.getVendorSeeds();
-        manager.getVendorSeeds();
+        // mRemoteProvider.getVendorSeeds();
+        new AsyncTask<Void, Integer, List<BaseSeedInterface>>() {
+//            private ProgressDialog dialog;
+
+            protected void onPreExecute() {
+//                dialog = ProgressDialog.show(SeedUpdateService.this, "",
+//                        getResources().getString(R.string.gots_loading), true);
+//                dialog.setCanceledOnTouchOutside(true);
+                // dialog.show();
+                super.onPreExecute();
+            };
+
+            @Override
+            protected List<BaseSeedInterface> doInBackground(Void... params) {
+                return manager.getVendorSeeds();
+
+            }
+
+            protected void onPostExecute(List<BaseSeedInterface> vendorSeeds) {
+                handler.removeCallbacks(sendUpdatesToUI);
+                handler.postDelayed(sendUpdatesToUI, 0); // 1 second
+//                mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.SEED_DISPLAYLIST));
+
+//                if (dialog.isShowing())
+//                    dialog.dismiss();
+
+                super.onPostExecute(vendorSeeds);
+            };
+        }.execute();
+
         // for (BaseSeedInterface baseSeedInterface : mRemoteProvider.getVendorSeeds()) {
         //
         // if (helper.getSeedByUUID(baseSeedInterface.getUUID()) != null) {
@@ -82,8 +115,7 @@ public class SeedUpdateService extends Service {
         // createNotification();
         // isNewSeed = true;
         // }
-        handler.removeCallbacks(sendUpdatesToUI);
-        handler.postDelayed(sendUpdatesToUI, 1000); // 1 second
+       
 
         return super.onStartCommand(intent, flags, startId);
     }

@@ -3,6 +3,7 @@ package org.gots.seed.provider.prestashop;
 import java.io.InputStream;
 import java.util.List;
 
+import org.gots.garden.GardenInterface;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.simpleframework.xml.Serializer;
@@ -76,6 +77,20 @@ import android.util.Log;
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+    @Override
+    public void addToStock(BaseSeedInterface vendorSeed, GardenInterface garden) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void removeToStock(BaseSeedInterface vendorSeed) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    
 
 	 
 }

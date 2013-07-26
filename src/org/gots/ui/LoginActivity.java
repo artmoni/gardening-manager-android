@@ -46,12 +46,14 @@ public class LoginActivity extends AbstractActivity {
 
     private TextView passwordText;
 
+    private ActionBar bar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
-        ActionBar bar = getSupportActionBar();
+        bar = getSupportActionBar();
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setTitle(R.string.app_name);
     }
@@ -59,10 +61,10 @@ public class LoginActivity extends AbstractActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        
-        //hide keyboard
+
+        // hide keyboard
         InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (this.getCurrentFocus()!=null) {            
+        if (this.getCurrentFocus() != null) {
             inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(),
                     InputMethodManager.HIDE_NOT_ALWAYS);
         }
@@ -77,6 +79,8 @@ public class LoginActivity extends AbstractActivity {
     }
 
     protected void buildLayoutDisconnected() {
+        
+        
         loginText = (TextView) findViewById(R.id.edittextLogin);
         loginText.setText(gotsPrefs.getNuxeoLogin());
         passwordText = (TextView) findViewById(R.id.edittextPassword);
@@ -98,6 +102,10 @@ public class LoginActivity extends AbstractActivity {
             }
 
         });
+        if (gotsPrefs.getNuxeoLogin() != null) {
+
+            loginText.setText(gotsPrefs.getNuxeoLogin());
+        }
 
         Button connect = (Button) findViewById(R.id.buttonConnect);
         connect.setOnClickListener(new View.OnClickListener() {
@@ -203,8 +211,8 @@ public class LoginActivity extends AbstractActivity {
         if (token == null) {
             return false;
         } else {
-            gotsPrefs.setToken(token);
             gotsPrefs.setNuxeoLogin(login);
+            gotsPrefs.setToken(token);
             gotsPrefs.setNuxeoPassword(password);
             return true;
         }

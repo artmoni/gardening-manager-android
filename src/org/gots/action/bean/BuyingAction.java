@@ -15,6 +15,8 @@ import java.util.Date;
 import org.gots.action.AbstractActionGarden;
 import org.gots.action.PermanentActionInterface;
 import org.gots.action.SeedActionInterface;
+import org.gots.garden.GardenManager;
+import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.local.sql.VendorSeedDBHelper;
 import org.gots.seed.provider.nuxeo.NuxeoSeedProvider;
@@ -87,7 +89,7 @@ public class BuyingAction extends AbstractActionGarden implements PermanentActio
 		VendorSeedDBHelper helper = new VendorSeedDBHelper(mContext);
 		helper.updateSeed(seed);
 		NuxeoSeedProvider provider = new NuxeoSeedProvider(mContext);
-		provider.addToStock(seed, null);
+		provider.addToStock(seed, GardenManager.getInstance().getCurrentGarden());
 		return 0;
 	}
 

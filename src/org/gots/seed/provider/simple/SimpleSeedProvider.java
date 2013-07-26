@@ -17,6 +17,7 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.gots.garden.GardenInterface;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.simpleframework.xml.Serializer;
@@ -144,5 +145,17 @@ public class SimpleSeedProvider implements GotsSeedProvider {
     public BaseSeedInterface updateSeed(BaseSeedInterface newSeed) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public void addToStock(BaseSeedInterface vendorSeed, GardenInterface garden) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void removeToStock(BaseSeedInterface vendorSeed) {
+        // TODO Auto-generated method stub
+
     }
 }

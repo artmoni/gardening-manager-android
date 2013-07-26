@@ -17,7 +17,7 @@ public class NuxeoSeedConverter {
             seed.setVariety(document.getTitle());
             seed.setFamily(document.getString("vendorseed:family"));
             seed.setSpecie(document.getString("vendorseed:specie"));
-            seed.setDurationMin(Integer.valueOf(document.getString("vendorseed:durationmin")));
+            seed.setDurationMin(Integer.valueOf(document.getString("vendorseed:durationmin") != null ? document.getString("vendorseed:durationmin") : "-1"));
             seed.setDurationMax(Integer.valueOf(document.getString("vendorseed:durationmax")));
             seed.setDateSowingMin(Integer.valueOf(document.getString("vendorseed:datesowingmin")));
             seed.setDateSowingMax(Integer.valueOf(document.getString("vendorseed:datesowingmax")));
@@ -28,7 +28,7 @@ public class NuxeoSeedConverter {
             seed.setUUID(document.getId());
             return seed;
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage(),e);
+            Log.e(TAG, e.getMessage(), e);
             return null;
         }
     }

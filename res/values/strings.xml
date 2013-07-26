@@ -4,7 +4,7 @@
     <string name="gots.credits.code">DEVELOPPEMENT \nArtmoni</string>
     <string name="gots.credits.design">DESIGN \nSauter dans les flaques</string>
     <string name="gots.description">The biologeekal growing</string>
-    <string name="gots.loading">Please wait, downloading</string>
+    <string name="gots.loading">Loading, please wait.</string>
     <string name="day">Day</string>
     <string name="week">week</string>
     <string name="month">month</string>

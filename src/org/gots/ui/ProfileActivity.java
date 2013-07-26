@@ -73,9 +73,9 @@ public class ProfileActivity extends AbstractActivity {
 
         @Override
         protected void onPreExecute() {
-            dialog = ProgressDialog.show(ProfileActivity.this, "", "Loading. Please wait...", true);
+            dialog = ProgressDialog.show(ProfileActivity.this, "", getResources().getString(R.string.gots_loading), true);
             dialog.setCanceledOnTouchOutside(true);
-            dialog.show();
+//            dialog.show();
             super.onPreExecute();
         }
 
