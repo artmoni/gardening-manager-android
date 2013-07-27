@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.gots.R;
 import org.gots.action.BaseActionInterface;
@@ -40,7 +41,7 @@ import android.widget.BaseAdapter;
 
 public class MySeedsListAdapter extends BaseAdapter implements OnClickListener {
 	private Context mContext;
-	private ArrayList<BaseSeedInterface> mySeeds = new ArrayList<BaseSeedInterface>();
+	private List<BaseSeedInterface> mySeeds = new ArrayList<BaseSeedInterface>();
 	private BaseAllotmentInterface allotment;
 	private LayoutInflater inflater;
 
@@ -49,7 +50,7 @@ public class MySeedsListAdapter extends BaseAdapter implements OnClickListener {
 
 	// final private static int nbActionToDisplay = 5;
 
-	public MySeedsListAdapter(Context context, BaseAllotmentInterface allotment, ArrayList<BaseSeedInterface> seeds) {
+	public MySeedsListAdapter(Context context, BaseAllotmentInterface allotment, List<BaseSeedInterface> seeds) {
 		this.mContext = context;
 		// this.mySeeds.addAll(mySeeds);
 		this.allotment = allotment;

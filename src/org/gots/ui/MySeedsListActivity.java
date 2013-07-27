@@ -11,13 +11,22 @@
 package org.gots.ui;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import org.gots.R;
 import org.gots.allotment.sql.AllotmentDBHelper;
 import org.gots.bean.BaseAllotmentInterface;
+import org.gots.broadcast.BroadCastMessages;
+import org.gots.garden.GardenManager;
 import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.GotsSeedManager;
+import org.gots.seed.adapter.ListVendorSeedAdapter;
 import org.gots.seed.adapter.MySeedsListAdapter;
 import org.gots.seed.provider.local.sql.VendorSeedDBHelper;
 
+import android.app.ProgressDialog;
+import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListAdapter;
@@ -40,22 +49,10 @@ public class MySeedsListActivity extends SherlockListFragment {
                 allotment = helper.getAllotmentByName(allotmentRef);
             }
         }
-        VendorSeedDBHelper myBank = new VendorSeedDBHelper(getActivity());
-        ArrayList<BaseSeedInterface> mySeeds = myBank.getMySeeds();
-
-        listAdapter = new MySeedsListAdapter(getActivity(), allotment, mySeeds);
-        setListAdapter(listAdapter);
-
-        // if (mySeeds.size() == 0) {
-        // Intent intent = new Intent().setClass(this,
-        // MySeedsListFirstTimeActivity.class);
-        // startActivity(intent);
-        // }
     }
 
     @Override
     public ListAdapter getListAdapter() {
-        // TODO Auto-generated method stub
         return super.getListAdapter();
     }
 
@@ -65,7 +62,33 @@ public class MySeedsListActivity extends SherlockListFragment {
 
     @Override
     public void onResume() {
-        Log.i("onresume", this.getClass().getName());
+        new AsyncTask<Void, Integer, List<BaseSeedInterface>>() {
+            private ProgressDialog dialog;
+
+            protected void onPreExecute() {
+                dialog = ProgressDialog.show(getActivity(), "", getResources().getString(R.string.gots_loading), true);
+                dialog.setCanceledOnTouchOutside(true);
+                // dialog.show();
+                super.onPreExecute();
+            };
+
+            @Override
+            protected List<BaseSeedInterface> doInBackground(Void... params) {
+                GotsSeedManager manager = new GotsSeedManager(getActivity());
+                List<BaseSeedInterface> mySeeds = manager.getMyStock(GardenManager.getInstance().getCurrentGarden());
+
+                return mySeeds;
+            }
+
+            protected void onPostExecute(List<BaseSeedInterface> vendorSeeds) {
+                listAdapter = new MySeedsListAdapter(getActivity(), allotment, vendorSeeds);
+                setListAdapter(listAdapter);
+                if (dialog.isShowing())
+                    dialog.dismiss();
+
+                super.onPostExecute(vendorSeeds);
+            };
+        }.execute();
         super.onResume();
     }
 

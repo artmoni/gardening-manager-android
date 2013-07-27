@@ -69,13 +69,9 @@ public class SeedUpdateService extends Service {
         // VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
         // mRemoteProvider.getVendorSeeds();
         new AsyncTask<Void, Integer, List<BaseSeedInterface>>() {
-//            private ProgressDialog dialog;
 
             protected void onPreExecute() {
-//                dialog = ProgressDialog.show(SeedUpdateService.this, "",
-//                        getResources().getString(R.string.gots_loading), true);
-//                dialog.setCanceledOnTouchOutside(true);
-                // dialog.show();
+
                 super.onPreExecute();
             };
 
@@ -88,33 +84,10 @@ public class SeedUpdateService extends Service {
             protected void onPostExecute(List<BaseSeedInterface> vendorSeeds) {
                 handler.removeCallbacks(sendUpdatesToUI);
                 handler.postDelayed(sendUpdatesToUI, 0); // 1 second
-//                mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.SEED_DISPLAYLIST));
-
-//                if (dialog.isShowing())
-//                    dialog.dismiss();
-
                 super.onPostExecute(vendorSeeds);
             };
         }.execute();
 
-        // for (BaseSeedInterface baseSeedInterface : mRemoteProvider.getVendorSeeds()) {
-        //
-        // if (helper.getSeedByUUID(baseSeedInterface.getUUID()) != null) {
-        // helper.updateSeed(baseSeedInterface);
-        // Log.d(TAG, "updateSeed :"+baseSeedInterface);
-        // }
-        // else {
-        // newSeeds.add(baseSeedInterface);
-        // helper.insertSeed(baseSeedInterface);
-        // Log.d(TAG, "insertSeed :"+baseSeedInterface);
-        //
-        // }
-        // }
-        // if (newSeeds.size() > 0) {
-        //
-        // createNotification();
-        // isNewSeed = true;
-        // }
        
 
         return super.onStartCommand(intent, flags, startId);
@@ -131,7 +104,7 @@ public class SeedUpdateService extends Service {
     private GotsSeedManager manager;
 
     private void displaySeedsAvailable() {
-        Log.d(TAG, "entered displaySeedsAvailable");
+        Log.d(TAG, "displaySeedsAvailable send broadcast");
 
         intent.putExtra(ISNEWSEED, isNewSeed);
         // intent.putExtra("counter", String.valueOf(++counter));

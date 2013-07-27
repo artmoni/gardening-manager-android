@@ -94,4 +94,9 @@ public class GotsSeedManager implements GotsSeedProvider {
         mSeedProvider.removeToStock(vendorSeed);
 
     }
+
+    @Override
+    public List<BaseSeedInterface> getMyStock(GardenInterface garden) {
+        return mSeedProvider.getMyStock(garden);
+    }
 }

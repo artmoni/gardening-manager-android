@@ -23,6 +23,7 @@ public interface GotsSeedProvider {
 
     public void removeToStock(BaseSeedInterface vendorSeed);
     
+    public List<BaseSeedInterface> getMyStock(GardenInterface garden);
     
 
 }

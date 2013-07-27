@@ -28,7 +28,7 @@ public class NuxeoSeedConverter {
             seed.setUUID(document.getId());
             return seed;
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage(), e);
+            Log.e(TAG, "Your document schema is not correct", e);
             return null;
         }
     }

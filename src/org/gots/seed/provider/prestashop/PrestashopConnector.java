@@ -90,7 +90,11 @@ import android.util.Log;
         
     }
 
-    
+    @Override
+    public List<BaseSeedInterface> getMyStock(GardenInterface garden) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 	 
 }
