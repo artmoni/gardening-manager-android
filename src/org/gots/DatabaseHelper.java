@@ -317,6 +317,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 		} 		if (oldVersion < 13) {
 			db.execSQL("ALTER TABLE " + ACTIONSEEDS_TABLE_NAME + " ADD COLUMN " + ACTIONSEED_DATA + " VARCHAR(255)");
+	         db.execSQL("ALTER TABLE " + SEEDS_TABLE_NAME + " ADD COLUMN " + SEED_UUID
+	                    + " VARCHAR(255);");
+
+			
 
 		}else {
 			db.execSQL("DROP TABLE IF EXISTS " + SEEDS_TABLE_NAME);
