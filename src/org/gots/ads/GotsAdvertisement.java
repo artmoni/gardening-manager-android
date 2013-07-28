@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,59 +21,64 @@ import com.google.ads.AdView;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class GotsAdvertisement {
-	Context mContext;
-	protected String appPackageName = "org.gots.premium";
+    Context mContext;
 
-	public GotsAdvertisement(Context mContext) {
-		this.mContext = mContext;
-	}
+    protected String appPackageName = "org.gots.premium";
 
-	public View getAdsLayout() {
-		View convertView;
-		Display display = ((Activity) mContext).getWindowManager().getDefaultDisplay();
-		int width = display.getWidth();
-		int height = display.getHeight();
+    public GotsAdvertisement(Context mContext) {
+        this.mContext = mContext;
+    }
 
-		AdRequest adRequest = new AdRequest();
-		if (GotsPreferences.getInstance().isPremium())
-			adRequest.addTestDevice(AdRequest.TEST_EMULATOR);
-		adRequest.addKeyword("garden");
-		adRequest.addKeyword("potager");
-		adRequest.addKeyword("plant");
-		adRequest.addKeyword("vegetable");
+    public View getAdsLayout() {
+        View convertView;
+        Display display = ((Activity) mContext).getWindowManager().getDefaultDisplay();
+        // int width = display.getWidth();
+        // int height = display.getHeight();
 
-		AdView adView;
-		if (width > 500)
-			adView = new AdView((Activity) mContext, AdSize.IAB_BANNER, GotsPreferences.getAdmobApiKey());
-		else
-			adView = new AdView((Activity) mContext, AdSize.BANNER, GotsPreferences.getAdmobApiKey());
+        final float density = mContext.getResources().getDisplayMetrics().density;
+        int width = ((Activity) mContext).getWindowManager().getDefaultDisplay().getWidth();
+        width = Math.round(((float) width) / density);
 
-		adView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+        AdRequest adRequest = new AdRequest();
+        if (GotsPreferences.getInstance().isPremium())
+            adRequest.addTestDevice(AdRequest.TEST_EMULATOR);
+        adRequest.addKeyword("garden");
+        adRequest.addKeyword("potager");
+        adRequest.addKeyword("plant");
+        adRequest.addKeyword("vegetable");
 
-		adView.loadAd(adRequest);
+        AdView adView;
+        if (width >= 936)
+            adView = new AdView((Activity) mContext, AdSize.IAB_BANNER, GotsPreferences.getAdmobApiKey());
+        else if (width >= 640)
+            adView = new AdView((Activity) mContext, AdSize.BANNER, GotsPreferences.getAdmobApiKey());
+        else
+            adView = new AdView((Activity) mContext, AdSize.SMART_BANNER, GotsPreferences.getAdmobApiKey());
 
-		convertView = new LinearLayout(mContext);
-		((LinearLayout) convertView).addView(adView);
-		return convertView;
-	}
+        adView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        adView.setGravity(Gravity.CENTER);
+        adView.loadAd(adRequest);
 
-	public View getPremiumAds(ViewGroup parent) {
-		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View ads = inflater.inflate(R.layout.premium_ads, parent);
-		ads.setOnClickListener(new View.OnClickListener() {
+        convertView = new LinearLayout(mContext);
+        ((LinearLayout) convertView).addView(adView);
+        return convertView;
+    }
 
-			@Override
-			public void onClick(View v) {
-				GoogleAnalyticsTracker.getInstance().trackPageView(GotsAdvertisement.class.getSimpleName()+"Premium");
-				GoogleAnalyticsTracker.getInstance().dispatch();
+    public View getPremiumAds(ViewGroup parent) {
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View ads = inflater.inflate(R.layout.premium_ads, parent);
+        ads.setOnClickListener(new View.OnClickListener() {
 
+            @Override
+            public void onClick(View v) {
+                GoogleAnalyticsTracker.getInstance().trackPageView(GotsAdvertisement.class.getSimpleName() + "Premium");
+                GoogleAnalyticsTracker.getInstance().dispatch();
 
-				Intent marketIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id="
-						+ appPackageName ));
-				marketIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-				mContext.startActivity(marketIntent);
-			}
-		});
-		return ads;
-	}
+                Intent marketIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName));
+                marketIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                mContext.startActivity(marketIntent);
+            }
+        });
+        return ads;
+    }
 }
