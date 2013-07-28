@@ -12,7 +12,7 @@ public class NuxeoGardenConvertor {
         GardenInterface garden = new Garden();
         garden.setName(gardenWorkspace.getTitle());
         garden.setLocality(gardenWorkspace.getTitle());
-        garden.setUUID(gardenWorkspace.getPath());
+        garden.setUUID(gardenWorkspace.getId());
 
         try {
             Long altitude = gardenWorkspace.getLong("garden:altitude");

@@ -23,6 +23,7 @@ import org.nuxeo.ecm.automation.client.jaxrs.impl.HttpAutomationClient;
 import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
+import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PathRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 import org.nuxeo.ecm.automation.client.jaxrs.spi.auth.TokenRequestInterceptor;
@@ -60,7 +61,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
         List<BaseSeedInterface> localVendorSeeds;
 
-        if (documentsList != null) {
+        if (documentsList != null && documentsList.getCurrentSize() > 0) {
             localVendorSeeds = new ArrayList<BaseSeedInterface>();
             documentsList.refreshAll();
             for (int i = 0; i <= documentsList.getLoadedPageCount(); i++) {
@@ -122,10 +123,10 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         }
 
         // TODO send as intent
-        List<BaseSeedInterface> myLocalSeeds = super.getVendorSeeds();
+//        List<BaseSeedInterface> myLocalSeeds = super.getVendorSeeds();
         for (BaseSeedInterface remoteSeed : remoteVendorSeeds) {
             boolean found = false;
-            for (BaseSeedInterface localSeed : myLocalSeeds) {
+            for (BaseSeedInterface localSeed : localVendorSeeds) {
                 if (remoteSeed.getUUID() != null && remoteSeed.getUUID().equals(localSeed.getUUID())) {
                     // local and remote
                     // 1: overwrite remote
@@ -142,7 +143,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             }
         }
 
-        for (BaseSeedInterface localSeed : myLocalSeeds) {
+        for (BaseSeedInterface localSeed : localVendorSeeds) {
             if (localSeed.getUUID() == null) {
                 createNuxeoVendorSeed(localSeed);
             }
@@ -196,6 +197,9 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 // Constants.HEADER_NX_SCHEMAS, "*").set("type", "Hut").set("name", "Catalog").set("properties",
                 // "dc:title=" + "Catalog").execute();
                 folder = service.createDocument(root, "Hut", "Catalog");
+                PropertyMap map = folder.getProperties();
+                map.set("dc:title", "Catalog");
+                service.update(folder, map);
                 catalog = folder;
 
                 Log.d(TAG, "create folder Catalog UUID " + folder.getId());
@@ -234,7 +238,8 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         try {
             wsRef = service.getUserHome();
             // TODO Change this when garden UUID manage uuid and not path
-            Document stockFolder = service.getDocument(new PathRef(garden.getUUID() + "/My Stock"));
+            Document gardenFolder = service.getDocument(new IdRef(garden.getUUID()));
+            Document stockFolder = service.getDocument(new PathRef(gardenFolder.getPath() + "/My Stock"));
 
             Document stockitem;
             int quantity = 0;
@@ -270,7 +275,9 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         DocumentManager service = session.getAdapter(DocumentManager.class);
         List<BaseSeedInterface> mySeeds = new ArrayList<BaseSeedInterface>();
         try {
-            Document stockFolder = service.getDocument(new PathRef(garden.getUUID() + "/My Stock"));
+            Document gardenFolder = service.getDocument(new IdRef(garden.getUUID()));
+            Document stockFolder = service.getDocument(new PathRef(gardenFolder.getPath() + "/My Stock"));
+            //TODO GetChildren also returns deleted documents, take care about that
             Documents stockItems = service.getChildren(stockFolder);
             for (Iterator<Document> iterator = stockItems.iterator(); iterator.hasNext();) {
                 Document stockItem = iterator.next();

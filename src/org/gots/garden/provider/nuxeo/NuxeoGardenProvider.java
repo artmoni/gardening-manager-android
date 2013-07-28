@@ -52,6 +52,8 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 
     protected LazyUpdatableDocumentsList documentsList;
 
+    private GardenInterface currentGarden;
+
     public NuxeoGardenProvider(Context context) {
         super(context);
     }
@@ -70,7 +72,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
             for (int i = 0; i <= documentsList.getLoadedPageCount(); i++) {
                 // for (Iterator<Document> iterator = documentsList.getIterator(); iterator.hasNext();) {
                 Document documentGarden = documentsList.getDocument(i);
-                if (documentGarden==null) {
+                if (documentGarden == null) {
                     break;
                 }
                 GardenInterface garden = NuxeoGardenConvertor.convert(documentGarden);
@@ -89,7 +91,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
      * Returns either the list of remote gardens or the full list of gardens
      * with synchronization between local and
      * remote
-     *
+     * 
      * @param myLocalGardens can be null if not syncWithLocalGardens
      * @param syncWithLocalGardens whether to sync or not local and remote
      *            gardens
@@ -191,22 +193,21 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
     protected GardenInterface createNuxeoGarden(GardenInterface localGarden) {
         Log.i(TAG, "createRemoteGarden " + localGarden);
 
-        GardenInterface currentGarden = localGarden;
         Session session = getNuxeoClient().getSession();
         DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
         // DeferredUpdateManager deferredUpdateMgr = getNuxeoClient().getDeferredUpdatetManager();
-
+        currentGarden = localGarden;
         Document createDocument;
         try {
             Document root = documentMgr.getUserHome();
             // createDocument = documentMgr.createDocument(home, "Garden", currentGarden.getLocality(), props);
-            createDocument = new Document(root.getPath(), currentGarden.getLocality(), "Garden");
+            createDocument = new Document(root.getPath(), localGarden.getLocality(), "Garden");
 
             OperationRequest createOperation = NuxeoManager.getInstance().getSession().newRequest("Document.Create").setHeader(
                     Constants.HEADER_NX_SCHEMAS, "*").set("type", "Garden");
 
             PropertyMap dirty = createDocument.getDirtyProperties();
-            dirty.set("dc:title", currentGarden.getLocality());
+            dirty.set("dc:title", localGarden.getLocality());
 
             String dirtyString = PropertiesHelper.toStringProperties(dirty);
 
@@ -218,20 +219,20 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 
                 @Override
                 public void notifyContentChanged(int page) {
-                    Document doc = documentsList.getDocument(page);
-                    documentsList.getCurrentDocument();
-                    documentsList.getCurrentPosition();
-                    doc.getTitle();
-                    Log.d(TAG, "notifyContentChanged on " + doc.getName() + " - " + doc.getId());
+                    Document doc = null;
+                    if (documentsList != null) {
+                        doc = documentsList.getCurrentDocument();
+                    }
+                    // cached-only document have a temporary id begginning with "NEW"
+                    if (doc != null && !doc.getId().startsWith("NEW")) {
+                        currentGarden.setUUID(doc.getId());
+                        NuxeoGardenProvider.super.updateGarden(currentGarden);
+                        Log.d(TAG, "notifyContentChanged on " + doc.getName() + " - " + doc.getId());
+                    }
+//                    documentsList.unregisterListener(this);
                 }
             });
             documentsList.createDocument(createDocument, createOperation);
-
-            documentsList.getCurrentDocument();
-            if (createDocument != null) {
-                localGarden.setUUID(createDocument.getPath());
-                super.updateGarden(localGarden);
-            }
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
             // cancel(false);
