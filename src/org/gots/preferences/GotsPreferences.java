@@ -60,6 +60,8 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     // public static final String ORG_GOTS_GARDEN_LOGIN = "org.gots.garden.login";
     public static final String ORG_GOTS_GARDEN_LOGIN = NuxeoServerConfig.PREF_SERVER_LOGIN;
 
+    public static final String ORG_GOTS_GARDEN_SUCCESSFUL_LOGIN = "nuxeo.successful.login";
+
     public static final String ORG_GOTS_GARDEN_SERVERCONNECTED = "org.gots.garden.connected";
 
     public static final String ORG_GOTS_GARDEN_DEVICEID = "org.gots.garden.deviceid";
@@ -311,6 +313,14 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     public int getCurrentGardenId() {
         return get(GotsPreferences.ORG_GOTS_CURRENT_GARDENID, -1);
+    }
+
+    public String getLastSuccessfulNuxeoLogin() {
+        return get(ORG_GOTS_GARDEN_SUCCESSFUL_LOGIN, "");
+    }
+
+    public void setLastSuccessfulNuxeoLogin(String login) {
+        set(ORG_GOTS_GARDEN_SUCCESSFUL_LOGIN, login);
     }
 
 }

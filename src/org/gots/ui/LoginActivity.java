@@ -17,7 +17,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.gots.R;
 import org.nuxeo.ecm.automation.client.jaxrs.Constants;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
-import org.nuxeo.ecm.automation.client.jaxrs.impl.NotAvailableOffline;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 
 import android.app.ProgressDialog;
@@ -82,9 +81,10 @@ public class LoginActivity extends AbstractActivity {
         
         
         loginText = (TextView) findViewById(R.id.edittextLogin);
-        loginText.setText(gotsPrefs.getNuxeoLogin());
+        loginText.setText(gotsPrefs.getLastSuccessfulNuxeoLogin());
         passwordText = (TextView) findViewById(R.id.edittextPassword);
         passwordText.setText(gotsPrefs.getNuxeoPassword());
+        gotsPrefs.setNuxeoLogin(null);
 
         LinearLayout buttonLayout = (LinearLayout) findViewById(R.id.idLayoutConnection);
         buttonLayout.setOnClickListener(new View.OnClickListener() {
@@ -162,9 +162,11 @@ public class LoginActivity extends AbstractActivity {
                             Toast.makeText(LoginActivity.this, "Error logging", Toast.LENGTH_SHORT).show();
                             LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.VISIBLE);
                             gotsPrefs.setConnectedToServer(false);
+                            gotsPrefs.setNuxeoLogin(null);
                         } else {
                             LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.GONE);
                             gotsPrefs.setConnectedToServer(true);
+                            gotsPrefs.setLastSuccessfulNuxeoLogin(login);
                         }
                         onResume();
 
