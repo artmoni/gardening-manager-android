@@ -98,10 +98,10 @@ public class LoginActivity extends AbstractActivity {
 
     protected void buildLayoutDisconnected() {
 
-        Spinner spinner = (Spinner) findViewById(R.id.edittextLogin);
+        loginSpinner = (Spinner) findViewById(R.id.spinnerLogin);
         ArrayAdapter<String> account_name_adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, getAccounts("com.google"));
-        spinner.setAdapter(account_name_adapter);
+        loginSpinner.setAdapter(account_name_adapter);
         // loginText = (TextView) findViewById(R.id.edittextLogin);
         // loginText.setText(gotsPrefs.getLastSuccessfulNuxeoLogin());
         passwordText = (TextView) findViewById(R.id.edittextPassword);
@@ -139,7 +139,7 @@ public class LoginActivity extends AbstractActivity {
 
                     @Override
                     protected void onPreExecute() {
-                        login = loginSpinner.getSelectedItem().toString();
+                        login = String.valueOf(loginSpinner.getSelectedItem());
                         password = passwordText.getText().toString();
 
                         if ("".equals(login) || "".equals(password)) {

@@ -25,5 +25,6 @@ public interface GotsSeedProvider {
     
     public List<BaseSeedInterface> getMyStock(GardenInterface garden);
     
+    public void remove(BaseSeedInterface vendorSeed);
 
 }

@@ -76,14 +76,15 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             }
             // return myCachedGardens;
         } else {
-            localVendorSeeds = super.getVendorSeeds();
-            getNuxeoVendorSeeds(localVendorSeeds);
+            localVendorSeeds =  getNuxeoVendorSeeds(super.getVendorSeeds());
+           
         }
         return localVendorSeeds;
     }
 
-    protected void getNuxeoVendorSeeds(List<BaseSeedInterface> localVendorSeeds) {
+    protected List<BaseSeedInterface> getNuxeoVendorSeeds(List<BaseSeedInterface> localVendorSeeds) {
         List<BaseSeedInterface> remoteVendorSeeds = new ArrayList<BaseSeedInterface>();
+        List<BaseSeedInterface> myVendorSeeds = new ArrayList<BaseSeedInterface>();
 
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);
@@ -123,7 +124,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         }
 
         // TODO send as intent
-//        List<BaseSeedInterface> myLocalSeeds = super.getVendorSeeds();
+        // List<BaseSeedInterface> myLocalSeeds = super.getVendorSeeds();
         for (BaseSeedInterface remoteSeed : remoteVendorSeeds) {
             boolean found = false;
             for (BaseSeedInterface localSeed : localVendorSeeds) {
@@ -137,17 +138,30 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     break;
                 }
             }
-            if (!found) {
-                // remote only
-                localVendorSeeds.add(super.createSeed(remoteSeed));
-            }
+            if (found)
+                myVendorSeeds.add(super.updateSeed(remoteSeed));
+            else
+                myVendorSeeds.add(super.createSeed(remoteSeed));
+
         }
 
         for (BaseSeedInterface localSeed : localVendorSeeds) {
             if (localSeed.getUUID() == null) {
                 createNuxeoVendorSeed(localSeed);
+            } else {
+                boolean found = false;
+                for (BaseSeedInterface remoteSeed : remoteVendorSeeds) {
+                    if (remoteSeed.getUUID() != null && remoteSeed.getUUID().equals(localSeed.getUUID())) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) { // local only with UUID -> delete local
+                    super.remove(localSeed);
+                }
             }
         }
+        return myVendorSeeds;
     }
 
     @Override
@@ -277,7 +291,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         try {
             Document gardenFolder = service.getDocument(new IdRef(garden.getUUID()));
             Document stockFolder = service.getDocument(new PathRef(gardenFolder.getPath() + "/My Stock"));
-            //TODO GetChildren also returns deleted documents, take care about that
+            // TODO GetChildren also returns deleted documents, take care about that
             Documents stockItems = service.getChildren(stockFolder);
             for (Iterator<Document> iterator = stockItems.iterator(); iterator.hasNext();) {
                 Document stockItem = iterator.next();
@@ -298,5 +312,10 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
         // service.getRelations(doc, predicate);
         return mySeeds;
+    }
+    @Override
+    public void remove(BaseSeedInterface vendorSeed) {
+        // TODO Auto-generated method stub
+        super.remove(vendorSeed);
     }
 }

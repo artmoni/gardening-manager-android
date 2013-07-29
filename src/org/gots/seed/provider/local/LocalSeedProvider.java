@@ -71,4 +71,10 @@ public class LocalSeedProvider extends AbstractProvider implements GotsSeedProvi
     public List<BaseSeedInterface> getMyStock(GardenInterface garden) {
         return myBank.getMySeeds();
     }
+
+    @Override 
+    public void remove(BaseSeedInterface vendorSeed) {
+        myBank.remove(vendorSeed);
+        
+    }
 }

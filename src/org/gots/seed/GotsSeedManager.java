@@ -3,35 +3,73 @@ package org.gots.seed;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
+import org.gots.garden.GardenManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.seed.provider.nuxeo.NuxeoSeedProvider;
+import org.gots.utils.NotConfiguredException;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class GotsSeedManager implements GotsSeedProvider {
+public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvider {
 
     private static final String TAG = "GotsSeedManager";
+
+    private static GotsSeedManager instance;
 
     private Context mContext;
 
     private GotsSeedProvider mSeedProvider;
 
-    public GotsSeedManager(Context mContext) {
-        this.mContext = mContext;
+    private boolean initDone = false;
+
+    private static Exception firstCall;
+
+    private GotsSeedManager() {
         // mLocalProvider = new LocalSeedProvider(mContext);
+    }
+
+    protected void setSeedProvider() {
         ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
         if (GotsPreferences.getInstance().isConnectedToServer() && ni != null && ni.isConnected()) {
             mSeedProvider = new NuxeoSeedProvider(mContext);
         } else
             mSeedProvider = new LocalSeedProvider(mContext);
+    }
+
+    public static synchronized GotsSeedManager getInstance() {
+        if (instance == null) {
+            instance = new GotsSeedManager();
+            firstCall = new Exception();
+
+        } else if (!instance.initDone) {
+            throw new NotConfiguredException(firstCall);
+        }
+        return instance;
+    }
+
+    /**
+     * If it was already called once, the method returns without any change.
+     */
+    public synchronized void initIfNew(Context context) {
+        if (initDone) {
+            return;
+        }
+        this.mContext = context;
+        mContext.registerReceiver(this, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
+        setSeedProvider();
+        initDone = true;
     }
 
     @Override
@@ -98,5 +136,17 @@ public class GotsSeedManager implements GotsSeedProvider {
     @Override
     public List<BaseSeedInterface> getMyStock(GardenInterface garden) {
         return mSeedProvider.getMyStock(garden);
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())) {
+            setSeedProvider();
+        }
+    }
+
+    @Override
+    public void remove(BaseSeedInterface vendorSeed) {
+        mSeedProvider.remove(vendorSeed);
     }
 }

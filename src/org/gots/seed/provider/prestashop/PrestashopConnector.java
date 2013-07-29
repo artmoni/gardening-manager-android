@@ -10,84 +10,84 @@ import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
 import android.util.Log;
-  class PrestashopConnector implements GotsSeedProvider{
 
-	private PrestashopNetwork network = new PrestashopNetwork();
-	
-	public PrestashopConnector() {
-	
-		
-	}
-	
-	@Override
-	public void getAllFamilies() {
-		InputStream result = network.callWebService2("categories");
-		Serializer serializer = new Persister();
-//		File source = new File("example.xml");
+class PrestashopConnector implements GotsSeedProvider {
 
-		try {
-			PrestashopCategories categories = serializer.read(PrestashopCategories.class, result);
-			for (int i = 0; i < categories.getRefCategories().size(); i++) {
-				Log.i("getAllFamilies", ""+categories.getRefCategories().get(i).getCategoryId());
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
+    private PrestashopNetwork network = new PrestashopNetwork();
 
-	@Override
-	public void getFamilyById(int id) {
-		InputStream result = network.callWebService2("categories/"+id);
-		Serializer serializer = new Persister();
-//		File source = new File("example.xml");
+    public PrestashopConnector() {
 
-		try {
-			PrestashopCategory category = serializer.read(PrestashopCategory.class, result);
-//			for (int i = 0; i < category.getRefCategories().size(); i++) {
-//				Log.i("getAllFamilies", ""+category.getRefCategories().get(i).getCategoryId());
-//			}
-			Log.i("getFamilyById", ""+category.getName());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+    }
 
-	@Override
-	public BaseSeedInterface getSeedById() {
-		return null;
-	}
+    @Override
+    public void getAllFamilies() {
+        InputStream result = network.callWebService2("categories");
+        Serializer serializer = new Persister();
+        // File source = new File("example.xml");
 
-	@Override
-	public List<BaseSeedInterface> getVendorSeeds() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+        try {
+            PrestashopCategories categories = serializer.read(PrestashopCategories.class, result);
+            for (int i = 0; i < categories.getRefCategories().size(); i++) {
+                Log.i("getAllFamilies", "" + categories.getRefCategories().get(i).getCategoryId());
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-	@Override
-	public BaseSeedInterface createSeed(BaseSeedInterface seed) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    }
 
-	@Override
-	public BaseSeedInterface updateSeed(BaseSeedInterface newSeed) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public void getFamilyById(int id) {
+        InputStream result = network.callWebService2("categories/" + id);
+        Serializer serializer = new Persister();
+        // File source = new File("example.xml");
+
+        try {
+            PrestashopCategory category = serializer.read(PrestashopCategory.class, result);
+            // for (int i = 0; i < category.getRefCategories().size(); i++) {
+            // Log.i("getAllFamilies", ""+category.getRefCategories().get(i).getCategoryId());
+            // }
+            Log.i("getFamilyById", "" + category.getName());
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public BaseSeedInterface getSeedById() {
+        return null;
+    }
+
+    @Override
+    public List<BaseSeedInterface> getVendorSeeds() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BaseSeedInterface createSeed(BaseSeedInterface seed) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BaseSeedInterface updateSeed(BaseSeedInterface newSeed) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
     @Override
     public void addToStock(BaseSeedInterface vendorSeed, GardenInterface garden) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void removeToStock(BaseSeedInterface vendorSeed) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
@@ -96,5 +96,10 @@ import android.util.Log;
         return null;
     }
 
-	 
+    @Override
+    public void remove(BaseSeedInterface vendorSeed) {
+        // TODO Auto-generated method stub
+
+    }
+
 }

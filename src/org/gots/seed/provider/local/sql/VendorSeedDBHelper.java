@@ -416,4 +416,17 @@ public class VendorSeedDBHelper {
         return actionsName;
     }
 
+    public Object remove(BaseSeedInterface vendorSeed) {
+        long rowid;
+        open();
+
+        try {
+            rowid = bdd.delete(DatabaseHelper.SEEDS_TABLE_NAME, 
+                    DatabaseHelper.SEED_ID + "='" + vendorSeed.getSeedId() + "'", null);
+        } finally {
+            close();
+        }
+
+        return rowid;    }
+
 }

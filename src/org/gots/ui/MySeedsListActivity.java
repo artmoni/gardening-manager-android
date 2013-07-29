@@ -38,6 +38,8 @@ public class MySeedsListActivity extends SherlockListFragment {
 
     private BaseAllotmentInterface allotment;
 
+    private GotsSeedManager seedManager;
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +51,8 @@ public class MySeedsListActivity extends SherlockListFragment {
                 allotment = helper.getAllotmentByName(allotmentRef);
             }
         }
+        seedManager = GotsSeedManager.getInstance();
+        seedManager.initIfNew(getActivity());
     }
 
     @Override
@@ -66,16 +70,16 @@ public class MySeedsListActivity extends SherlockListFragment {
             private ProgressDialog dialog;
 
             protected void onPreExecute() {
-                dialog = ProgressDialog.show(getActivity(), "", getResources().getString(R.string.gots_loading), true);
-                dialog.setCanceledOnTouchOutside(true);
+//                dialog = ProgressDialog.show(getActivity(), "", getResources().getString(R.string.gots_loading), true);
+//                dialog.setCanceledOnTouchOutside(true);
                 // dialog.show();
                 super.onPreExecute();
             };
 
             @Override
             protected List<BaseSeedInterface> doInBackground(Void... params) {
-                GotsSeedManager manager = new GotsSeedManager(getActivity());
-                List<BaseSeedInterface> mySeeds = manager.getMyStock(GardenManager.getInstance().getCurrentGarden());
+              
+                List<BaseSeedInterface> mySeeds = seedManager.getMyStock(GardenManager.getInstance().getCurrentGarden());
 
                 return mySeeds;
             }
@@ -83,8 +87,8 @@ public class MySeedsListActivity extends SherlockListFragment {
             protected void onPostExecute(List<BaseSeedInterface> vendorSeeds) {
                 listAdapter = new MySeedsListAdapter(getActivity(), allotment, vendorSeeds);
                 setListAdapter(listAdapter);
-                if (dialog.isShowing())
-                    dialog.dismiss();
+//                if (dialog.isShowing())
+//                    dialog.dismiss();
 
                 super.onPostExecute(vendorSeeds);
             };

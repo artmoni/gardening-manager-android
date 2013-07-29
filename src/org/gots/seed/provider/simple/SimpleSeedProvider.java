@@ -162,4 +162,10 @@ public class SimpleSeedProvider implements GotsSeedProvider {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public void remove(BaseSeedInterface vendorSeed) {
+        // TODO Auto-generated method stub
+        
+    }
 }

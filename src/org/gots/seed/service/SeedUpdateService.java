@@ -54,7 +54,8 @@ public class SeedUpdateService extends Service {
     @Override
     public void onCreate() {
         mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        manager = new GotsSeedManager(this);
+        manager = GotsSeedManager.getInstance();
+        manager.initIfNew(this);
         intent = new Intent(BroadCastMessages.SEED_DISPLAYLIST);
 
         super.onCreate();

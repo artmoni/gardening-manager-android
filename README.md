@@ -118,9 +118,8 @@ mvn install:install-file -Dfile=../nuxeo-android/nuxeo-automation-thin-client/ta
 mvn install:install-file -Dfile=../nuxeo-android/nuxeo-android-connector/target/nuxeo-android-connector-2.0-SNAPSHOT.jar -Dversion=2.0-SNAPSHOT -DartifactId=nuxeo-android-connector -DgroupId=org.nuxeo.android -Dpackaging=jar
 
 # run nuxeo shell
-java -cp nuxeo-shell-5.6.jar org.nuxeo.shell.Main
+java -cp /var/lib/nuxeo/server/lib/log4j-1.2.17.jar:/var/lib/nuxeo/server/client/nuxeo-shell-5.7.1.jar org.nuxeo.shell.Main
 connect http://localhost:8080/nuxeo/site/automation -u Administrator
-
 
 ### Authentication
 ## 1) USER CREATION

@@ -44,7 +44,7 @@ public class VendorListActivity extends SherlockListFragment {
     public Context mContext;
 
     // GardenManager manager;
-    private GotsSeedProvider seedProvider;
+    private GotsSeedManager seedProvider;
 
     private ListVendorSeedAdapter listVendorSeedAdapter;
 
@@ -55,7 +55,8 @@ public class VendorListActivity extends SherlockListFragment {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
 
-        seedProvider = new GotsSeedManager(mContext);
+        seedProvider = GotsSeedManager.getInstance();
+        seedProvider.initIfNew(mContext);
         seedIntent = new Intent(mContext, SeedUpdateService.class);
         mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.SEED_DISPLAYLIST));
 
@@ -101,11 +102,11 @@ public class VendorListActivity extends SherlockListFragment {
             private ProgressDialog dialog;
 
             protected void onPreExecute() {
-//                dialog = ProgressDialog.show(mContext, "", getResources().getString(R.string.gots_loading), true);
-//                dialog.setCanceledOnTouchOutside(true);
+                // dialog = ProgressDialog.show(mContext, "", getResources().getString(R.string.gots_loading), true);
+                // dialog.setCanceledOnTouchOutside(true);
                 // dialog.show();
-//                if (vendorSeeds.size() < 1)
-//                    mContext.startService(seedIntent);
+                // if (vendorSeeds.size() < 1)
+                // mContext.startService(seedIntent);
                 super.onPreExecute();
             };
 
@@ -115,11 +116,11 @@ public class VendorListActivity extends SherlockListFragment {
             }
 
             protected void onPostExecute(List<BaseSeedInterface> vendorSeeds) {
-                listVendorSeedAdapter = new ListVendorSeedAdapter(mContext, vendorSeeds);               
+                listVendorSeedAdapter = new ListVendorSeedAdapter(mContext, vendorSeeds);
                 setListAdapter(listVendorSeedAdapter);
 
-//                if (dialog.isShowing())
-//                    dialog.dismiss();
+                // if (dialog.isShowing())
+                // dialog.dismiss();
 
                 super.onPostExecute(vendorSeeds);
             };
@@ -132,13 +133,13 @@ public class VendorListActivity extends SherlockListFragment {
     public void onPause() {
 
         mContext.unregisterReceiver(seedBroadcastReceiver);
-//        mContext.stopService(seedIntent);
+        // mContext.stopService(seedIntent);
 
         super.onPause();
     }
 
     protected void updateUI(Intent intent) {
-        boolean isnewseed = intent.getBooleanExtra(SeedUpdateService.ISNEWSEED, false);
+        // boolean isnewseed = intent.getBooleanExtra(SeedUpdateService.ISNEWSEED, false);
         // if (isnewseed) {
         // seedProvider = new GotsSeedManager(mContext);
         // listVendorSeedAdapter = new ListVendorSeedAdapter(mContext, seedProvider.getVendorSeeds());

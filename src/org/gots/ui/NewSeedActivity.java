@@ -251,13 +251,12 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
     }
 
     private BaseSeedInterface insertSeed() {
-        GotsSeedManager manager = new GotsSeedManager(this);
-
+       
         // VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
         if (isNewSeed)
-            return manager.createSeed(newSeed);
+            return seedManager.createSeed(newSeed);
         else
-            return manager.updateSeed(newSeed);
+            return seedManager.updateSeed(newSeed);
 
         // return helper.updateSeed(newSeed);
     }

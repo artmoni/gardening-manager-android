@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import org.gots.garden.GardenManager;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
+import org.gots.seed.GotsSeedManager;
 
 import android.os.Bundle;
 
@@ -33,7 +34,7 @@ import com.actionbarsherlock.app.SherlockActivity;
 
 /**
  * @author jcarsique
- *
+ * 
  */
 public class AbstractActivity extends SherlockActivity {
     private static final String TAG = "AbstractActivity";
@@ -43,6 +44,8 @@ public class AbstractActivity extends SherlockActivity {
     protected GardenManager gardenManager;
 
     protected NuxeoManager nuxeoManager;
+
+    protected GotsSeedManager seedManager;
 
     private static ArrayList<AbstractActivity> activities = new ArrayList<AbstractActivity>();
 
@@ -56,6 +59,8 @@ public class AbstractActivity extends SherlockActivity {
         nuxeoManager.initIfNew(this);
         gardenManager = GardenManager.getInstance();
         gardenManager.initIfNew(this);
+        seedManager = GotsSeedManager.getInstance();
+        seedManager.initIfNew(this);
         activities.add(this);
     }
 
