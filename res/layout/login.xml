@@ -122,15 +122,13 @@
                             android:padding="10dp"
                             android:text="@string/login.login" />
 
-                        <EditText
+                        <Spinner
                             android:id="@+id/edittextLogin"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:ems="10"
-                            android:inputType="text" >
+                            android:ems="10" />
 
-                            <requestFocus />
-                        </EditText>
+                       
                     </TableRow>
 
                     <TableRow

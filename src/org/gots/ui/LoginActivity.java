@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -19,8 +21,11 @@ import org.nuxeo.ecm.automation.client.jaxrs.Constants;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,8 +35,10 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +48,7 @@ import com.actionbarsherlock.view.MenuItem;
 public class LoginActivity extends AbstractActivity {
     protected static final String TAG = "LoginActivity";
 
-    private TextView loginText;
+    private Spinner loginSpinner;
 
     private TextView passwordText;
 
@@ -77,11 +84,26 @@ public class LoginActivity extends AbstractActivity {
 
     }
 
+    public List<String> getAccounts(String account_type) {
+        AccountManager manager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
+        Account[] accounts = manager.getAccounts();
+        List<String> accountString = new ArrayList<String>();
+        for (int i = 0; i < accounts.length; i++) {
+            if (accounts[i].type.equals(account_type))
+                accountString.add(accounts[i].name);
+        }
+
+        return accountString;
+    }
+
     protected void buildLayoutDisconnected() {
-        
-        
-        loginText = (TextView) findViewById(R.id.edittextLogin);
-        loginText.setText(gotsPrefs.getLastSuccessfulNuxeoLogin());
+
+        Spinner spinner = (Spinner) findViewById(R.id.edittextLogin);
+        ArrayAdapter<String> account_name_adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, getAccounts("com.google"));
+        spinner.setAdapter(account_name_adapter);
+        // loginText = (TextView) findViewById(R.id.edittextLogin);
+        // loginText.setText(gotsPrefs.getLastSuccessfulNuxeoLogin());
         passwordText = (TextView) findViewById(R.id.edittextPassword);
         passwordText.setText(gotsPrefs.getNuxeoPassword());
         gotsPrefs.setNuxeoLogin(null);
@@ -102,10 +124,6 @@ public class LoginActivity extends AbstractActivity {
             }
 
         });
-        if (gotsPrefs.getNuxeoLogin() != null) {
-
-            loginText.setText(gotsPrefs.getNuxeoLogin());
-        }
 
         Button connect = (Button) findViewById(R.id.buttonConnect);
         connect.setOnClickListener(new View.OnClickListener() {
@@ -121,7 +139,7 @@ public class LoginActivity extends AbstractActivity {
 
                     @Override
                     protected void onPreExecute() {
-                        login = loginText.getText().toString();
+                        login = loginSpinner.getSelectedItem().toString();
                         password = passwordText.getText().toString();
 
                         if ("".equals(login) || "".equals(password)) {
@@ -198,6 +216,8 @@ public class LoginActivity extends AbstractActivity {
             @Override
             public void onClick(View v) {
                 gotsPrefs.setConnectedToServer(false);
+                gotsPrefs.setNuxeoLogin(null);
+                gotsPrefs.setNuxeoPassword("");
                 findViewById(R.id.layoutConnect).setVisibility(View.VISIBLE);
                 findViewById(R.id.layoutDisconnect).setVisibility(View.GONE);
                 onResume();
@@ -365,14 +385,14 @@ public class LoginActivity extends AbstractActivity {
             URLConnection urlConnection;
             urlConnection = url.openConnection();
 
-            urlConnection.addRequestProperty("X-User-Id", loginText.getText().toString());
+            urlConnection.addRequestProperty("X-User-Id", loginSpinner.getSelectedItem().toString());
             urlConnection.addRequestProperty("X-Device-Id", gotsPrefs.getDeviceId());
             urlConnection.addRequestProperty("X-Application-Name", gotsPrefs.getGardeningManagerAppname());
             urlConnection.addRequestProperty(
                     "Authorization",
                     "Basic "
                             + Base64.encodeToString(
-                                    (loginText.getText().toString() + ":" + passwordText.getText().toString()).getBytes(),
+                                    (loginSpinner.getSelectedItem().toString() + ":" + passwordText.getText().toString()).getBytes(),
                                     Base64.NO_WRAP));
 
             // urlConnection.addRequestProperty(
