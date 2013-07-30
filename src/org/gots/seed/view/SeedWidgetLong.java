@@ -11,6 +11,7 @@
 package org.gots.seed.view;
 
 import org.gots.R;
+import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.SeedUtil;
@@ -75,6 +76,9 @@ public class SeedWidgetLong extends LinearLayout implements OnClickListener {
 
 		TextView seedVariety = (TextView) findViewById(R.id.IdSeedVariety);
 		seedVariety.setText(mSeed.getVariety());
+		if (GotsPreferences.DEBUG)
+		      seedVariety.setText(mSeed.getVariety()+"\n" +mSeed.getUUID());
+
 
 		PlanningWidget planning = (PlanningWidget) findViewById(R.id.IdSeedSowingPlanning);
 		planning.setAdapter(new PlanningSowAdapter(mSeed));
