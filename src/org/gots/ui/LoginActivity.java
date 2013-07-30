@@ -159,7 +159,9 @@ public class LoginActivity extends AbstractActivity {
 
                             try {
                                 session = nuxeoManager.getSession();
-
+                                if ("Guest".equals(session.getLogin().getUsername())) {
+                                    return null;
+                                }
                             } catch (Exception nao) {
                                 if (nao != null) {
                                     Log.e(TAG, "" + nao.getMessage());

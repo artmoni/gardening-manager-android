@@ -208,6 +208,10 @@ public class ProfileCreationActivity extends AbstractActivity implements
     public void onLocationChanged(Location location) {
 
         setProgressBarIndeterminateVisibility(false);
+        if (!pd.isShowing()) {
+            return;
+        }
+        
         this.location = location;
         displayAddress();
         if (pd != null && pd.isShowing()) {

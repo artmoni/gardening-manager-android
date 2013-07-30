@@ -75,7 +75,7 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     @Override
     public List<BaseSeedInterface> getVendorSeeds() {
 
-        return mSeedProvider.getVendorSeeds();
+        return new NuxeoSeedProvider(mContext).getVendorSeeds();
     }
 
     @Override
