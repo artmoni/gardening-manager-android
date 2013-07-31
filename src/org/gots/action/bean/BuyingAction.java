@@ -24,82 +24,80 @@ import org.gots.seed.provider.nuxeo.NuxeoSeedProvider;
 import android.content.Context;
 
 public class BuyingAction extends AbstractActionGarden implements PermanentActionInterface, SeedActionInterface {
-	Context mContext;
+    Context mContext;
 
-	public BuyingAction(Context context) {
-		setName("buy");
-		mContext = context;
-	}
+    public BuyingAction(Context context) {
+        setName("buy");
+        mContext = context;
+    }
 
-	public void setDateActionDone(Date dateActionDone) {
-		super.setDateActionDone(dateActionDone);
-	}
+    public void setDateActionDone(Date dateActionDone) {
+        super.setDateActionDone(dateActionDone);
+    }
 
-	public Date getDateActionDone() {
-		return super.getDateActionDone();
-	}
+    public Date getDateActionDone() {
+        return super.getDateActionDone();
+    }
 
-	public void setDuration(int duration) {
-		super.setDuration(duration);
-	}
+    public void setDuration(int duration) {
+        super.setDuration(duration);
+    }
 
-	public int getDuration() {
-		return super.getDuration();
-	}
+    public int getDuration() {
+        return super.getDuration();
+    }
 
-	public void setDescription(String description) {
-		super.setDescription(description);
-	}
+    public void setDescription(String description) {
+        super.setDescription(description);
+    }
 
-	public String getDescription() {
-		return super.getDescription();
-	}
+    public String getDescription() {
+        return super.getDescription();
+    }
 
-	public void setName(String name) {
-		super.setName(name);
-	}
+    public void setName(String name) {
+        super.setName(name);
+    }
 
-	public String getName() {
-		return super.getName();
-	}
+    public String getName() {
+        return super.getName();
+    }
 
-	
+    @Override
+    public void setId(int id) {
+        super.setId(id);
+    }
 
-	@Override
-	public void setId(int id) {
-		super.setId(id);
-	}
+    @Override
+    public int getId() {
 
-	@Override
-	public int getId() {
+        return super.getId();
+    }
 
-		return super.getId();
-	}
+    @Override
+    public int getState() {
+        return super.getState();
+    }
 
-	@Override
-	public int getState() {
-		return super.getState();
-	}
+    @Override
+    public int execute(GrowingSeedInterface seed) {
+        // super.execute(seed);
 
-	@Override
-	public int execute(GrowingSeedInterface seed) {
-//		super.execute(seed);
+        seed.setNbSachet(seed.getNbSachet() + 1);
+        VendorSeedDBHelper helper = new VendorSeedDBHelper(mContext);
+        helper.updateSeed(seed);
+        if (GotsPreferences.getInstance().isConnectedToServer()) {
+            NuxeoSeedProvider provider = new NuxeoSeedProvider(mContext);
+            provider.addToStock(seed, GardenManager.getInstance().getCurrentGarden());
+        }
+        return 0;
+    }
 
-		seed.setNbSachet(seed.getNbSachet()+1);
-		VendorSeedDBHelper helper = new VendorSeedDBHelper(mContext);
-		helper.updateSeed(seed);
-		NuxeoSeedProvider provider = new NuxeoSeedProvider(mContext);
-		provider.addToStock(seed, GardenManager.getInstance().getCurrentGarden());
-		return 0;
-	}
+    public void setData(Object data) {
+    }
 
-	public void setData(Object data) {
-	}
-
-	public Object getData() {
-		return null;
-	}
-
-	
+    public Object getData() {
+        return null;
+    }
 
 }
