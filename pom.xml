@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.gots</groupId>
   <artifactId>gardening-manager</artifactId>
@@ -62,6 +63,11 @@
       <groupId>com.google.android.analytics</groupId>
       <artifactId>analytics</artifactId>
       <version>1.4.2</version>
+    </dependency>
+    <dependency>
+      <groupId>com.newrelic.agent.android</groupId>
+      <artifactId>android-agent</artifactId>
+      <version>2.426.0</version>
     </dependency>
     <dependency>
       <groupId>com.google.android.admob</groupId>
@@ -233,7 +239,7 @@
             <executable>emulator-arm</executable>
           </emulator>
           <deleteConflictingFiles>true</deleteConflictingFiles>
-          <undeployBeforeDeploy>false</undeployBeforeDeploy>
+          <undeployBeforeDeploy>true</undeployBeforeDeploy>
         </configuration>
       </plugin>
       <plugin>
@@ -350,7 +356,7 @@
               <zipalign>
                 <verbose>true</verbose>
                 <inputApk>${project.build.directory}/${project.artifactId}.apk</inputApk>
-                <outputApk>${project.build.directory}/${project.artifactId}-signed-aligned.apk
+                <outputApk>${project.build.directory}/${project.artifactId}-signed-aligned.apk 
                 </outputApk>
               </zipalign>
             </configuration>
@@ -360,6 +366,18 @@
                 <phase>package</phase>
                 <goals>
                   <goal>zipalign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>com.newrelic.agent.android</groupId>
+            <artifactId>agent-maven-plugin</artifactId>
+            <version>2.426.0</version>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>instrument</goal>
                 </goals>
               </execution>
             </executions>
