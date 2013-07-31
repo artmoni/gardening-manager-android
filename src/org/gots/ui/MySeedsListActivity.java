@@ -84,13 +84,13 @@ public class MySeedsListActivity extends SherlockListFragment {
                 return mySeeds;
             }
 
-            protected void onPostExecute(List<BaseSeedInterface> vendorSeeds) {
-                listAdapter = new MySeedsListAdapter(getActivity(), allotment, vendorSeeds);
+            protected void onPostExecute(List<BaseSeedInterface> mySeeds) {
+                listAdapter = new MySeedsListAdapter(getActivity(), allotment, mySeeds);
                 setListAdapter(listAdapter);
 //                if (dialog.isShowing())
 //                    dialog.dismiss();
 
-                super.onPostExecute(vendorSeeds);
+                super.onPostExecute(mySeeds);
             };
         }.execute();
         super.onResume();
