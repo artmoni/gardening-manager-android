@@ -44,7 +44,7 @@ public class GardenManager extends BroadcastReceiver {
         if (instance == null) {
             instance = new GardenManager();
             firstCall = new Exception();
-            
+
         } else if (!instance.initDone) {
             throw new NotConfiguredException(firstCall);
         }
@@ -62,6 +62,13 @@ public class GardenManager extends BroadcastReceiver {
         mContext.registerReceiver(this, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
         setGardenProvider();
         initDone = true;
+    }
+
+    public void finalize() {
+        mContext.unregisterReceiver(this);
+        initDone = false;
+        mContext = null;
+        instance=null;
     }
 
     private void setGardenProvider() {
