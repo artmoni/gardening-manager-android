@@ -70,6 +70,8 @@ public class AbstractActivity extends SherlockActivity {
         activities.remove(this);
         if (activities.size() == 0) {
             nuxeoManager.shutdown();
+            gardenManager.finalize();
+            seedManager.finalize();
             try {
                 this.unregisterReceiver(gardenManager);
             } catch (IllegalArgumentException e) {
