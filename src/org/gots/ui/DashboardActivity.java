@@ -28,6 +28,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -37,6 +39,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+import com.newrelic.agent.android.NewRelic;
 
 public class DashboardActivity extends AbstractActivity implements OnClickListener {
     // GoogleAnalyticsTracker tracker;
@@ -62,6 +65,8 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
         GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
 
+        NewRelic.withApplicationToken( "AA89617084bf906d3a0425f6cf6a382ce574b3acd8" ).start(this.getApplication());
+        
         setContentView(R.layout.dashboard);
 
         // attach event handler to dash buttons
@@ -177,6 +182,11 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         startService(weatherIntent);
         registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
 
+        if (gotsPrefs.getCurrentGardenId()==-1){
+            Animation myFadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.tween);
+            findViewById(R.id.dashboard_button_profile).startAnimation(myFadeInAnimation);}
+        else
+            findViewById(R.id.dashboard_button_profile).clearAnimation();
     }
 
     @Override
