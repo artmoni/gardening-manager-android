@@ -36,7 +36,6 @@ public class FirstLaunchActivity extends AbstractActivity {
 
                 Intent intent = new Intent(FirstLaunchActivity.this, ProfileCreationActivity.class);
                 startActivityForResult(intent, 1);
-                finish();
 
             }
 
@@ -58,11 +57,12 @@ public class FirstLaunchActivity extends AbstractActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 2) {
-            Intent intent = new Intent(FirstLaunchActivity.this, DashboardActivity.class);
-            startActivity(intent);
+        // if (requestCode == 2) {
+        // Intent intent = new Intent(FirstLaunchActivity.this, DashboardActivity.class);
+        // startActivity(intent);
+        // }
+        if (gotsPrefs.isConnectedToServer())
             finish();
-        }
     }
 
     @Override

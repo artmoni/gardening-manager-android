@@ -65,6 +65,7 @@ public class SplashScreenActivity extends AbstractActivity {
                 Intent intent = new Intent(that.get(), DashboardActivity.class);
                 that.get().startActivity(intent);
                 that.get().finish();
+
                 break;
             }
             super.handleMessage(msg);
@@ -200,7 +201,7 @@ public class SplashScreenActivity extends AbstractActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         int currentGardenId = gotsPrefs.getCurrentGardenId();
-        if (currentGardenId > -1) {
+        if (currentGardenId > -1 || gotsPrefs.isConnectedToServer()) {
             Message msg = new Message();
             msg.what = STOPSPLASH;
             getSplashHandler().sendMessageDelayed(msg, SPLASHTIME);
@@ -212,7 +213,6 @@ public class SplashScreenActivity extends AbstractActivity {
 
     @Override
     protected void onDestroy() {
-
         GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
         super.onDestroy();
     }
