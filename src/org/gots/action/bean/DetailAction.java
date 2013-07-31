@@ -22,11 +22,10 @@ import org.gots.seed.GrowingSeedInterface;
 import android.content.Context;
 
 public class DetailAction extends AbstractActionSeed implements PermanentActionInterface, SeedActionInterface, GardeningActionInterface {
-	Context mContext; 
 
 	public DetailAction(Context context) {
+	    super(context);
 		setName("detail");
-		mContext = context;
 	}
 
 	@Override

@@ -27,18 +27,17 @@ import android.content.Context;
 
 public class DeleteAction extends AbstractActionSeed implements PermanentActionInterface, SeedActionInterface,
 		GardeningActionInterface {
-	Context mContext;
 
 	public DeleteAction(Context context) {
+	    super(context);
 		setName("delete");
-		mContext = context;
 	}
 
 	@Override
 	public int execute(GrowingSeedInterface seed) {
 		super.execute(seed);
 
-		GrowingSeedDBHelper helper = new GrowingSeedDBHelper(mContext);
+		GrowingSeedDBHelper helper = new GrowingSeedDBHelper(getContext());
 		helper.deleteGrowingSeed(seed);
 		return 1;
 
@@ -78,14 +77,14 @@ public class DeleteAction extends AbstractActionSeed implements PermanentActionI
 	@Override
 	public int execute(BaseAllotmentInterface allotment, GrowingSeedInterface seed) {
 
-		GrowingSeedDBHelper helper = new GrowingSeedDBHelper(mContext);
+		GrowingSeedDBHelper helper = new GrowingSeedDBHelper(getContext());
 		ArrayList<GrowingSeedInterface> listseeds = helper.getSeedsByAllotment(allotment.getName());
 		for (Iterator<GrowingSeedInterface> iterator = listseeds.iterator(); iterator.hasNext();) {
 			GrowingSeedInterface baseSeedInterface = iterator.next();
 			execute(baseSeedInterface);
 		}
 
-		AllotmentDBHelper helperlot = new AllotmentDBHelper(mContext);
+		AllotmentDBHelper helperlot = new AllotmentDBHelper(getContext());
 		helperlot.deleteAllotment(allotment);
 		return 0;
 	}

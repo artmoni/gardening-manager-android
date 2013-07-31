@@ -21,11 +21,10 @@ import org.gots.seed.GrowingSeedInterface;
 import android.content.Context;
 
 public class LighteningAction extends AbstractActionSeed implements SeedActionInterface {
-	Context mContext;
 
 	public LighteningAction(	Context mContext) {
+	    super(mContext);
 		setName("lighten");
-		this.mContext=mContext;
 	}
 
 	@Override 
@@ -34,7 +33,7 @@ public class LighteningAction extends AbstractActionSeed implements SeedActionIn
 		setDateActionDone(Calendar.getInstance().getTime());
 		seed.getActionToDo().remove(this);
 		seed.getActionDone().add(this);
-		ActionSeedDBHelper asdh = new ActionSeedDBHelper(mContext);
+		ActionSeedDBHelper asdh = new ActionSeedDBHelper(getContext());
 		asdh.doAction(this, seed);
 		return 0;
 	}

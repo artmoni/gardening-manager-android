@@ -22,11 +22,10 @@ import android.content.Context;
 
 public class HarvestAction extends AbstractActionSeed implements SeedActionInterface {
 
-	Context mContext;
 
 	public HarvestAction(Context mContext) {
+	    super(mContext);
 		setName("harvest");
-		this.mContext = mContext;
 	}
 
 	@Override
@@ -35,7 +34,7 @@ public class HarvestAction extends AbstractActionSeed implements SeedActionInter
 		setDateActionDone(Calendar.getInstance().getTime());
 		seed.getActionToDo().remove(this);
 		seed.getActionDone().add(this);
-		ActionSeedDBHelper asdh = new ActionSeedDBHelper(mContext);
+		ActionSeedDBHelper asdh = new ActionSeedDBHelper(getContext());
 		asdh.doAction(this, seed);
 		return 0;
 	}

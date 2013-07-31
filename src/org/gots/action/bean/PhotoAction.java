@@ -26,86 +26,87 @@ import android.content.Context;
 import android.os.Environment;
 
 public class PhotoAction extends AbstractActionSeed implements PermanentActionInterface, SeedActionInterface,
-		GardeningActionInterface {
-	Context mContext;
-	private File storageDir;
-	private static final String JPEG_FILE_PREFIX = "GOTS_";
-	private static final String JPEG_FILE_SUFFIX = ".JPG";
+        GardeningActionInterface {
+    private File storageDir;
 
-	public PhotoAction(Context context) {
-		setName("photo");
-		mContext = context;
-		storageDir = new File(Environment.getExternalStorageDirectory(), "Gardening-Manager");
+    private static final String JPEG_FILE_PREFIX = "GOTS_";
 
-	}
+    private static final String JPEG_FILE_SUFFIX = ".JPG";
 
-	@Override
-	public int execute(GrowingSeedInterface seed) {
-		super.execute(seed);
+    public PhotoAction(Context context) {
+        super(context);
+        setName("photo");
+        storageDir = new File(Environment.getExternalStorageDirectory(), "Gardening-Manager");
 
-		seed.getActionToDo().remove(this);
-		seed.getActionDone().add(this);
+    }
 
-		ActionSeedDBHelper asdh = new ActionSeedDBHelper(mContext);
-		asdh.doAction(this, seed);
+    @Override
+    public int execute(GrowingSeedInterface seed) {
+        super.execute(seed);
 
-		return 0;
-	}
+        seed.getActionToDo().remove(this);
+        seed.getActionDone().add(this);
 
-	public void setDateActionDone(Date dateActionDone) {
-		super.setDateActionDone(dateActionDone);
-	}
+        ActionSeedDBHelper asdh = new ActionSeedDBHelper(getContext());
+        asdh.doAction(this, seed);
 
-	public Date getDateActionDone() {
-		return super.getDateActionDone();
-	}
+        return 0;
+    }
 
-	public void setDuration(int duration) {
-		super.setDuration(duration);
-	}
+    public void setDateActionDone(Date dateActionDone) {
+        super.setDateActionDone(dateActionDone);
+    }
 
-	public int getDuration() {
-		return super.getDuration();
-	}
+    public Date getDateActionDone() {
+        return super.getDateActionDone();
+    }
 
-	public void setDescription(String description) {
-		super.setDescription(description);
-	}
+    public void setDuration(int duration) {
+        super.setDuration(duration);
+    }
 
-	public String getDescription() {
-		return super.getDescription();
-	}
+    public int getDuration() {
+        return super.getDuration();
+    }
 
-	public void setName(String name) {
-		super.setName(name);
-	}
+    public void setDescription(String description) {
+        super.setDescription(description);
+    }
 
-	public String getName() {
-		return super.getName();
-	}
+    public String getDescription() {
+        return super.getDescription();
+    }
 
-	@Override
-	public int execute(BaseAllotmentInterface allotment, GrowingSeedInterface seed) {
+    public void setName(String name) {
+        super.setName(name);
+    }
 
-		return 0;
-	}
+    public String getName() {
+        return super.getName();
+    }
 
-	@Override
-	public void setId(int id) {
-		super.setId(id);
-	}
+    @Override
+    public int execute(BaseAllotmentInterface allotment, GrowingSeedInterface seed) {
 
-	@Override
-	public int getId() {
-		return super.getId();
-	}
+        return 0;
+    }
 
-	public File getImageFile(Date date) {
-		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(date);
-		String imageFileName = JPEG_FILE_PREFIX + timeStamp ;
+    @Override
+    public void setId(int id) {
+        super.setId(id);
+    }
 
-		File imageFile = new File(storageDir, imageFileName + JPEG_FILE_SUFFIX);
-		return imageFile;
-	}
+    @Override
+    public int getId() {
+        return super.getId();
+    }
+
+    public File getImageFile(Date date) {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(date);
+        String imageFileName = JPEG_FILE_PREFIX + timeStamp;
+
+        File imageFile = new File(storageDir, imageFileName + JPEG_FILE_SUFFIX);
+        return imageFile;
+    }
 
 }

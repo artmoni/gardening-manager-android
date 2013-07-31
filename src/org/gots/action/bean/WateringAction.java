@@ -26,89 +26,88 @@ import org.gots.seed.provider.local.sql.GrowingSeedDBHelper;
 import android.content.Context;
 
 public class WateringAction extends AbstractActionSeed implements SeedActionInterface, GardeningActionInterface {
-	Context mContext;
 
-	public WateringAction(Context context) {
-		setName("water");
-		mContext = context;
-	}
+    public WateringAction(Context context) {
+        super(context);
+        setName("water");
+    }
 
-	@Override
-	public int execute(GrowingSeedInterface seed) {
-		super.execute(seed);
+    @Override
+    public int execute(GrowingSeedInterface seed) {
+        super.execute(seed);
 
-		seed.setDateLastWatering(Calendar.getInstance().getTime());
+        seed.setDateLastWatering(Calendar.getInstance().getTime());
 
-		seed.getActionToDo().remove(this);
-		seed.getActionDone().add(this);
+        seed.getActionToDo().remove(this);
+        seed.getActionDone().add(this);
 
-		ActionSeedDBHelper asdh = new ActionSeedDBHelper(mContext);
-		asdh.doAction(this, seed);
+        ActionSeedDBHelper asdh = new ActionSeedDBHelper(getContext());
+        asdh.doAction(this, seed);
 
-		return 0;
-	}
+        return 0;
+    }
 
-	public void setDateActionDone(Date dateActionDone) {
-		super.setDateActionDone(dateActionDone);
-	}
+    public void setDateActionDone(Date dateActionDone) {
+        super.setDateActionDone(dateActionDone);
+    }
 
-	public Date getDateActionDone() {
-		return super.getDateActionDone();
-	}
+    public Date getDateActionDone() {
+        return super.getDateActionDone();
+    }
 
-	public void setDuration(int duration) {
-		super.setDuration(duration);
-	}
+    public void setDuration(int duration) {
+        super.setDuration(duration);
+    }
 
-	public int getDuration() {
-		return super.getDuration();
-	}
+    public int getDuration() {
+        return super.getDuration();
+    }
 
-	public void setDescription(String description) {
-		super.setDescription(description);
-	}
+    public void setDescription(String description) {
+        super.setDescription(description);
+    }
 
-	public String getDescription() {
-		return super.getDescription();
-	}
+    public String getDescription() {
+        return super.getDescription();
+    }
 
-	public void setName(String name) {
-		super.setName(name);
-	}
+    public void setName(String name) {
+        super.setName(name);
+    }
 
-	public String getName() {
-		return super.getName();
-	}
+    public String getName() {
+        return super.getName();
+    }
 
-	@Override
-	public int execute(BaseAllotmentInterface allotment, GrowingSeedInterface seed) {
+    @Override
+    public int execute(BaseAllotmentInterface allotment, GrowingSeedInterface seed) {
 
-		GrowingSeedDBHelper helper = new GrowingSeedDBHelper(mContext);
-		ArrayList<GrowingSeedInterface> listseeds = helper.getSeedsByAllotment(allotment.getName());
-		for (Iterator<GrowingSeedInterface> iterator = listseeds.iterator(); iterator.hasNext();) {
-			GrowingSeedInterface baseSeedInterface = iterator.next();
-			execute(baseSeedInterface);
+        GrowingSeedDBHelper helper = new GrowingSeedDBHelper(getContext());
+        ArrayList<GrowingSeedInterface> listseeds = helper.getSeedsByAllotment(allotment.getName());
+        for (Iterator<GrowingSeedInterface> iterator = listseeds.iterator(); iterator.hasNext();) {
+            GrowingSeedInterface baseSeedInterface = iterator.next();
+            execute(baseSeedInterface);
 
-		}
+        }
 
-		return 0;
-	}
+        return 0;
+    }
 
-	@Override
-	public void setId(int id) {
-		super.setId(id);
-	}
+    @Override
+    public void setId(int id) {
+        super.setId(id);
+    }
 
-	@Override
-	public int getId() {
-		return super.getId();
-	}
+    @Override
+    public int getId() {
+        return super.getId();
+    }
 
-	public void setData(Object data) {
-	}
+    public void setData(Object data) {
+    }
 
-	public Object getData() {
-		return null;
-	}
+    public Object getData() {
+        return null;
+    }
 
 }

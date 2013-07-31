@@ -20,62 +20,62 @@ import org.gots.seed.provider.local.sql.VendorSeedDBHelper;
 import android.content.Context;
 
 public class ReduceQuantityAction extends AbstractActionSeed implements SeedActionInterface {
-	Context mContext;
 
-	public ReduceQuantityAction(	Context mContext) {
-		setName("reducequantity");
-		this.mContext=mContext;
-	}
+    public ReduceQuantityAction(Context mContext) {
+        super(mContext);
 
-	@Override
-	public int execute(GrowingSeedInterface seed) {
-		
-		if (seed.getNbSachet()<=0)
-			return 0;
-		super.execute(seed);
-		seed.setNbSachet(seed.getNbSachet()-1);
-		VendorSeedDBHelper helper = new VendorSeedDBHelper(mContext);
-		helper.updateSeed(seed);
-		return 0;
-	}
+        setName("reducequantity");
+    }
 
-	public void setDateActionDone(Date dateActionDone) {
-		super.setDateActionDone(dateActionDone);
-	}
+    @Override
+    public int execute(GrowingSeedInterface seed) {
 
-	public Date getDateActionDone() {
-		return super.getDateActionDone();
-	}
+        if (seed.getNbSachet() <= 0)
+            return 0;
+        super.execute(seed);
+        seed.setNbSachet(seed.getNbSachet() - 1);
+        VendorSeedDBHelper helper = new VendorSeedDBHelper(getContext());
+        helper.updateSeed(seed);
+        return 0;
+    }
 
-	public void setDuration(int duration) {
-		super.setDuration(duration);
-	}
+    public void setDateActionDone(Date dateActionDone) {
+        super.setDateActionDone(dateActionDone);
+    }
 
-	public int getDuration() {
-		return super.getDuration();
-	}
+    public Date getDateActionDone() {
+        return super.getDateActionDone();
+    }
 
-	public void setDescription(String description) {
-		super.setDescription(description);
-	}
+    public void setDuration(int duration) {
+        super.setDuration(duration);
+    }
 
-	public String getDescription() {
-		return super.getDescription();
-	}
+    public int getDuration() {
+        return super.getDuration();
+    }
 
-	public void setName(String name) {
-		super.setName(name);
-	}
+    public void setDescription(String description) {
+        super.setDescription(description);
+    }
 
-	public String getName() {
-		return super.getName();
-	}
+    public String getDescription() {
+        return super.getDescription();
+    }
 
-	public void setData(Object data) {
-	}
+    public void setName(String name) {
+        super.setName(name);
+    }
 
-	public Object getData() {
-		return null;
-	}
+    public String getName() {
+        return super.getName();
+    }
+
+    public void setData(Object data) {
+    }
+
+    public Object getData() {
+        return null;
+    }
 
 }
