@@ -28,111 +28,111 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class SeedWidgetLong extends LinearLayout implements OnClickListener {
-	Context mContext;
-	private GrowingSeedInterface mSeed;
+    Context mContext;
 
-	public SeedWidgetLong(Context context) {
-		super(context);
-		this.mContext = context;
-		initView();
+    private GrowingSeedInterface mSeed;
 
-	}
+    public SeedWidgetLong(Context context) {
+        super(context);
+        this.mContext = context;
+        initView();
 
-	public SeedWidgetLong(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		this.mContext = context;
-		initView();
-	}
+    }
 
-	private void initView() {
-		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		inflater.inflate(R.layout.seed_widget_long, this);
-		setOnClickListener(this);
-	}
+    public SeedWidgetLong(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        this.mContext = context;
+        initView();
+    }
 
-	@Override
-	protected void onFinishInflate() {
-		super.onFinishInflate();
-		setupView();
-	}
+    private void initView() {
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater.inflate(R.layout.seed_widget_long, this);
+        setOnClickListener(this);
+    }
 
-	private void setupView() {
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        setupView();
+    }
 
-		if (mSeed == null)
-			return;
+    private void setupView() {
 
-		if (mSeed.getFamily() != null) {
-			int familyImageRessource = getResources().getIdentifier(
-					"org.gots:drawable/family_" + mSeed.getFamily().toLowerCase(), null, null);
-			if (familyImageRessource != 0)
-				setBackgroundResource(familyImageRessource);
-		}
+        if (mSeed == null)
+            return;
 
-		SeedWidget seedWidget = (SeedWidget) findViewById(R.id.idSeedWidget2);
-		seedWidget.setSeed(mSeed);
+        if (mSeed.getFamily() != null) {
+            int familyImageRessource = getResources().getIdentifier(
+                    "org.gots:drawable/family_" + mSeed.getFamily().toLowerCase(), null, null);
+            if (familyImageRessource != 0)
+                setBackgroundResource(familyImageRessource);
+        }
 
-		TextView seedSpecie = (TextView) findViewById(R.id.IdSeedSpecie);
-		seedSpecie.setText(SeedUtil.translateSpecie(mContext,mSeed));
+        SeedWidget seedWidget = (SeedWidget) findViewById(R.id.idSeedWidget2);
+        seedWidget.setSeed(mSeed);
 
-		TextView seedVariety = (TextView) findViewById(R.id.IdSeedVariety);
-		seedVariety.setText(mSeed.getVariety());
-		if (GotsPreferences.DEBUG)
-		      seedVariety.setText(mSeed.getVariety()+"\n" +mSeed.getUUID());
+        TextView seedSpecie = (TextView) findViewById(R.id.IdSeedSpecie);
+        seedSpecie.setText(SeedUtil.translateSpecie(mContext, mSeed));
+        if (GotsPreferences.DEBUG)
+            seedSpecie.setText("("+mSeed.getSeedId()+")"+SeedUtil.translateSpecie(mContext, mSeed));
 
+        TextView seedVariety = (TextView) findViewById(R.id.IdSeedVariety);
+        seedVariety.setText(mSeed.getVariety());
+        if (GotsPreferences.DEBUG &&  mSeed.getUUID()!=null)
+            seedVariety.setText(mSeed.getVariety() + "\n" + mSeed.getUUID().substring(0, 10));
 
-		PlanningWidget planning = (PlanningWidget) findViewById(R.id.IdSeedSowingPlanning);
-		planning.setAdapter(new PlanningSowAdapter(mSeed));
-		//
-		PlanningWidget planningHarvest = (PlanningWidget) findViewById(R.id.IdSeedHarvestPlanning);
-		planningHarvest.setAdapter(new PlanningHarvestAdapter(mSeed));
+        PlanningWidget planning = (PlanningWidget) findViewById(R.id.IdSeedSowingPlanning);
+        planning.setAdapter(new PlanningSowAdapter(mSeed));
+        //
+        PlanningWidget planningHarvest = (PlanningWidget) findViewById(R.id.IdSeedHarvestPlanning);
+        planningHarvest.setAdapter(new PlanningHarvestAdapter(mSeed));
 
-		LinearLayout stock = (LinearLayout) findViewById(R.id.idSeedStock);
-		stock.removeAllViews();
-		for (int i = 0; i < mSeed.getNbSachet(); i++) {	
-			ImageView seedbag = new ImageView(mContext);
-			seedbag.setImageDrawable(mContext.getResources().getDrawable(R.drawable.seed_bag));
-			// seedbag.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_planning_sow));
+        LinearLayout stock = (LinearLayout) findViewById(R.id.idSeedStock);
+        stock.removeAllViews();
+        for (int i = 0; i < mSeed.getNbSachet(); i++) {
+            ImageView seedbag = new ImageView(mContext);
+            seedbag.setImageDrawable(mContext.getResources().getDrawable(R.drawable.seed_bag));
+            // seedbag.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_planning_sow));
 
-			LayoutParams params = new LinearLayout.LayoutParams(30, 30);
-			seedbag.setLayoutParams(params);
-			stock.addView(seedbag, i);
-		}
-		invalidate();
-	}
+            LayoutParams params = new LinearLayout.LayoutParams(30, 30);
+            seedbag.setLayoutParams(params);
+            stock.addView(seedbag, i);
+        }
+        invalidate();
+    }
 
-	
+    // public static String unAccent(String s) {
+    // //
+    // // JDK1.5
+    // // use sun.text.Normalizer.normalize(s, Normalizer.DECOMP, 0);
+    // //
+    // String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
+    // Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+    // return pattern.matcher(temp).replaceAll("");
+    // }
 
-//	public static String unAccent(String s) {
-//		//
-//		// JDK1.5
-//		// use sun.text.Normalizer.normalize(s, Normalizer.DECOMP, 0);
-//		//
-//		String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
-//		Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-//		return pattern.matcher(temp).replaceAll("");
-//	}
+    @Override
+    public void onClick(View v) {
 
-	@Override
-	public void onClick(View v) {
+    }
 
-	}
+    //
+    // @Override
+    // public void onClick(View v) {
+    //
+    // setTag(mSeed);
+    // QuickSeedActionBuilder actionBuilder = new
+    // QuickSeedActionBuilder((SeedWidget)v);
+    // actionBuilder.show();
+    // }
 
-	//
-	// @Override
-	// public void onClick(View v) {
-	//
-	// setTag(mSeed);
-	// QuickSeedActionBuilder actionBuilder = new
-	// QuickSeedActionBuilder((SeedWidget)v);
-	// actionBuilder.show();
-	// }
-
-	public void setSeed(BaseSeedInterface seed) {
-		this.mSeed =  (GrowingSeedInterface) seed;
-		setupView();
-		invalidate();
-		requestLayout();
-		refreshDrawableState();
-	}
+    public void setSeed(BaseSeedInterface seed) {
+        this.mSeed = (GrowingSeedInterface) seed;
+        setupView();
+        invalidate();
+        requestLayout();
+        refreshDrawableState();
+    }
 
 }
