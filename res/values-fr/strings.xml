@@ -105,11 +105,11 @@
     <string name="login.password">Mot de passe</string>
     <string name="login.signin">Connexion</string>
     <string name="login.signout">Se déconnecter</string>
-        <string name="login.signup">Enregistrez vous</string>
-    
+    <string name="login.signup">Enregistrez vous</string>
     <string name="feature.unavalaible">Fonction prochainement disponible</string>
     <string name="fillfields.specie">Veuillez choisir une espèce</string>
     <string name="fillfields.variety">Veuillez saisir une variété</string>
     <string name="fillfields.dates">Veuillez indiquer les dates</string>
-    
+    <string name="login.disconnect.description">Vous êtes en mode synchronisé.\n\n Il est désormais possible de vous connecter depuis plusieurs appareils.</string>
+
 </resources>
