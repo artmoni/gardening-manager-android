@@ -37,15 +37,12 @@ public class LocalSeedProvider extends AbstractProvider implements GotsSeedProvi
 
     @Override
     public List<BaseSeedInterface> getVendorSeeds() {
-
         return myBank.getVendorSeeds();
     }
 
     @Override
     public BaseSeedInterface createSeed(BaseSeedInterface seed) {
-
-        seed.setId(Long.valueOf(myBank.insertSeed(seed)).intValue());
-        return seed;
+        return myBank.insertSeed(seed);
     }
 
     @Override

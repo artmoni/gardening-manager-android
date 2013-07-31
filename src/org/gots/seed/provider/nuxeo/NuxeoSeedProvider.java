@@ -59,25 +59,24 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
     @Override
     public List<BaseSeedInterface> getVendorSeeds() {
 
-        List<BaseSeedInterface> localVendorSeeds;
+        List<BaseSeedInterface> localVendorSeeds = super.getVendorSeeds();
 
-        if (documentsList != null && documentsList.getCurrentSize() > 0) {
-            localVendorSeeds = new ArrayList<BaseSeedInterface>();
-            documentsList.refreshAll();
-            for (int i = 0; i <= documentsList.getLoadedPageCount(); i++) {
-                // for (Iterator<Document> iterator = documentsList.getIterator(); iterator.hasNext();) {
-                Document documentSeed = documentsList.getDocument(i);
-                if (documentSeed == null) {
-                    break;
-                }
-                BaseSeedInterface seed = NuxeoSeedConverter.convert(documentSeed);
-                localVendorSeeds.add(seed);
-                Log.d(TAG, "documentsList=" + documentSeed.getId() + " / " + seed);
-            }
-            // return myCachedGardens;
-        } else {
-            localVendorSeeds =  getNuxeoVendorSeeds(super.getVendorSeeds());
-           
+        // if (documentsList != null && documentsList.getCurrentSize() > 0) {
+        if (localVendorSeeds.size() == 0) {
+            // localVendorSeeds = new ArrayList<BaseSeedInterface>();
+            // documentsList.refreshAll();
+            // for (int i = 0; i <= documentsList.getLoadedPageCount(); i++) {
+            // // for (Iterator<Document> iterator = documentsList.getIterator(); iterator.hasNext();) {
+            // Document documentSeed = documentsList.getDocument(i);
+            // if (documentSeed == null) {
+            // break;
+            // }
+            // BaseSeedInterface seed = NuxeoSeedConverter.convert(documentSeed);
+            // localVendorSeeds.add(super.updateSeed(seed));
+            // Log.d(TAG, "documentsList=" + documentSeed.getId() + " / " + seed);
+            // }
+
+            localVendorSeeds = getNuxeoVendorSeeds(localVendorSeeds);
         }
         return localVendorSeeds;
     }
@@ -86,14 +85,13 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         List<BaseSeedInterface> remoteVendorSeeds = new ArrayList<BaseSeedInterface>();
         List<BaseSeedInterface> myVendorSeeds = new ArrayList<BaseSeedInterface>();
 
-        Session session = getNuxeoClient().getSession();
-        DocumentManager service = session.getAdapter(DocumentManager.class);
-
         // client = new HttpAutomationClient(gotsPrefs.getNuxeoAutomationURI());
         // if (gotsPrefs.isConnectedToServer())
         // client.setRequestInterceptor(new TokenRequestInterceptor(myApp, myToken, myLogin, myDeviceId));
 
         try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
 
             // Session session = client.getSession();
 
@@ -123,6 +121,13 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             Log.e(TAG, "getAllSeeds " + e.getMessage(), e);
         }
 
+        myVendorSeeds = synchronize(localVendorSeeds, remoteVendorSeeds);
+        return myVendorSeeds;
+    }
+
+    protected List<BaseSeedInterface> synchronize(List<BaseSeedInterface> localVendorSeeds,
+            List<BaseSeedInterface> remoteVendorSeeds) {
+        List<BaseSeedInterface> myVendorSeeds = new ArrayList<BaseSeedInterface>();
         // TODO send as intent
         // List<BaseSeedInterface> myLocalSeeds = super.getVendorSeeds();
         for (BaseSeedInterface remoteSeed : remoteVendorSeeds) {
@@ -294,15 +299,15 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             // TODO GetChildren also returns deleted documents, take care about that
             Documents stockItems = service.getChildren(stockFolder);
             for (Iterator<Document> iterator = stockItems.iterator(); iterator.hasNext();) {
-                Document stockItem = iterator.next();
+                Document stockItem = service.getDocument(iterator.next(), "*");
                 Documents relations = service.getRelations(stockItem, "http://purl.org/dc/terms/isFormatOf", true);
                 if (relations.size() >= 1) {
                     Document originalSeed = service.getDocument(relations.get(0), "*");
                     BaseSeedInterface seed = NuxeoSeedConverter.convert(originalSeed);
-                    seed.setNbSachet(relations.size());
+                    seed.setNbSachet(Integer.valueOf(stockItem.getString("stockitem:quantity")));
+                    super.updateSeed(seed);
                     mySeeds.add(seed);
                 }
-                Log.i(TAG, "relations=" + relations.size());
 
             }
         } catch (Exception e) {
@@ -313,6 +318,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         // service.getRelations(doc, predicate);
         return mySeeds;
     }
+
     @Override
     public void remove(BaseSeedInterface vendorSeed) {
         // TODO Auto-generated method stub

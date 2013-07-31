@@ -71,36 +71,53 @@ public class VendorSeedDBHelper {
     // }
     // }
 
-    public long insertSeed(BaseSeedInterface seed) {
+    public BaseSeedInterface insertSeed(BaseSeedInterface seed) {
         // Création d'un ContentValues (fonctionne comme une HashMap)
         long rowid;
         open();
         ContentValues values = getContentValuesFromSeed(seed);
-        if (values == null)
-            return -1;
+
         try {
             rowid = bdd.insert(DatabaseHelper.SEEDS_TABLE_NAME, null, values);
+            seed.setId(Long.valueOf(rowid).intValue());
         } finally {
             close();
         }
 
-        return rowid;
+        return seed;
     }
 
-    public long updateSeed(BaseSeedInterface seed) {
+    public BaseSeedInterface updateSeed(BaseSeedInterface seed) {
         // Création d'un ContentValues (fonctionne comme une HashMap)
-        long rowid;
         open();
         ContentValues values = getContentValuesFromSeed(seed);
-
+        Cursor cursor;
         try {
-            rowid = bdd.update(DatabaseHelper.SEEDS_TABLE_NAME, values,
-                    DatabaseHelper.SEED_ID + "='" + seed.getSeedId() + "'", null);
+
+            if (seed.getUUID() != null) {
+                int nbRows = bdd.update(DatabaseHelper.SEEDS_TABLE_NAME, values,
+                        DatabaseHelper.SEED_UUID + "='" + seed.getUUID() + "'", null);
+                
+                cursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null,
+                        DatabaseHelper.SEED_UUID + "='" + seed.getUUID() + "'", null, null, null, null);
+                
+                if (cursor.moveToFirst()) {
+                    int rowid = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.SEED_ID));
+                    seed.setId(rowid);
+                    cursor.close();
+                }
+            } else {
+                int rowid = bdd.update(DatabaseHelper.SEEDS_TABLE_NAME, values,
+                        DatabaseHelper.SEED_ID + "='" + seed.getSeedId() + "'", null);
+                cursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null,
+                        DatabaseHelper.SEED_ID + "='" + seed.getSeedId() + "'", null, null, null, null);
+
+            }
         } finally {
             close();
         }
 
-        return rowid;
+        return seed;
     }
 
     private ContentValues getContentValuesFromSeed(BaseSeedInterface seed) {
@@ -421,12 +438,13 @@ public class VendorSeedDBHelper {
         open();
 
         try {
-            rowid = bdd.delete(DatabaseHelper.SEEDS_TABLE_NAME, 
-                    DatabaseHelper.SEED_ID + "='" + vendorSeed.getSeedId() + "'", null);
+            rowid = bdd.delete(DatabaseHelper.SEEDS_TABLE_NAME, DatabaseHelper.SEED_ID + "='" + vendorSeed.getSeedId()
+                    + "'", null);
         } finally {
             close();
         }
 
-        return rowid;    }
+        return rowid;
+    }
 
 }
