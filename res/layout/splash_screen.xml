@@ -5,8 +5,29 @@
     android:background="@drawable/background_simple"
     android:orientation="vertical"
     android:padding="10dp" >
+<LinearLayout
+            android:id="@+id/webSauterDansLesFlaques"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/bg_line_action"
+            android:gravity="center_vertical" >
 
-    <LinearLayout
+            <ImageView
+                style="@style/logo"
+                android:src="@drawable/ic_opensource" />
+
+            <TextView
+                android:id="@+id/TextView02"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:gravity="center"
+                android:text="@string/gots.opensource"
+                android:textColor="#432D07"
+                android:textSize="14dip" />
+        </LinearLayout>
+    <!-- <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
 
@@ -20,8 +41,7 @@
             android:orientation="vertical" >
 
             <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                style="@style/logo"
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/logo_artmoni" />
 
@@ -46,8 +66,8 @@
             android:orientation="vertical" >
 
             <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:id="@+id/webSauterDansLesFlaques"
+                style="@style/logo"
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/logosdlf" />
 
@@ -61,7 +81,7 @@
                 android:textColor="#432D07"
                 android:textSize="14dip" />
         </LinearLayout>
-    </LinearLayout>
+    </LinearLayout> -->
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -118,28 +138,40 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" android:gravity="center_horizontal">
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"             android:background="@drawable/bg_line_action"
+         >
+
+        <ImageView
+            android:id="@+id/webArtmoni"
+            style="@style/logo"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/logo_artmoni" />
+
+        <ImageView
+            android:id="@+id/webSauterDansLesFlaques"
+            style="@style/logo"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/logosdlf" />
 
         <ImageView
             android:id="@+id/idSocialGoogle"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="5dp"
+            style="@style/logo"
             android:src="@drawable/social_google" />
 
         <ImageView
             android:id="@+id/idSocialFacebook"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="5dp"
+            style="@style/logo"
             android:src="@drawable/social_facebook" />
 
-       <!--  <ImageView
+        <!--
+             <ImageView
             android:id="@+id/idPrevimeteo"
             android:layout_width="80dp"
             android:layout_height="50dp"
             android:layout_margin="5dp"
-            android:src="@drawable/logo_previmeteo" /> -->
+            android:src="@drawable/logo_previmeteo" />
+        -->
     </LinearLayout>
 
 </LinearLayout>
