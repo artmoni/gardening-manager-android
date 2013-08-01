@@ -6,6 +6,8 @@
     <string name="gots.credits.code">DEVELOPPEMENT \nArtmoni</string>
     <string name="gots.credits.design">DESIGN \nSauter dans les flaques</string>
     <string name="gots.description">La culture bioloGeek </string>
+        <string name="gots.opensource">Projet Open Source,\n la participation est ouverte à tous</string>
+    
     <string name="gots.loading">Veuillez patienter, chargement en cours</string>
     <string name="day">Jour</string>
     <string name="week">semaine</string>

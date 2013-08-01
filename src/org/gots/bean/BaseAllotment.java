@@ -17,87 +17,106 @@ import org.gots.seed.GrowingSeedInterface;
 
 public class BaseAllotment implements Serializable, BaseAllotmentInterface {
 
-	private static final long serialVersionUID = 1L;
-	private int id;
-	private String name;
+    private static final long serialVersionUID = 1L;
 
-	private String description;
+    private int id;
 
-	private HashMap<String, GrowingSeedInterface> seeds = new HashMap<String, GrowingSeedInterface>();
+    private String name;
 
-	public BaseAllotment() {
-		super();
-	}
+    private String description;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.gots.bean.AllotmentInterface#getSeeds()
-	 */
-	@Override
-	public HashMap<String, GrowingSeedInterface> getSeeds() {
-		return seeds;
-	}
+    private HashMap<String, GrowingSeedInterface> seeds = new HashMap<String, GrowingSeedInterface>();
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.gots.bean.AllotmentInterface#setSeeds(java.util.HashMap)
-	 */
-	@Override
-	public void setSeeds(HashMap<String, GrowingSeedInterface> seeds) {
-		this.seeds = seeds;
-	}
+    private String uuid;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.gots.bean.AllotmentInterface#getName()
-	 */
-	@Override
-	public String getName() {
-		return name;
-	}
+    public BaseAllotment() {
+        super();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.gots.bean.AllotmentInterface#setName(java.lang.String)
-	 */
-	@Override
-	public void setName(String name) {
-		this.name = name;
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.gots.bean.AllotmentInterface#getSeeds()
+     */
+    @Override
+    public HashMap<String, GrowingSeedInterface> getSeeds() {
+        return seeds;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.gots.bean.AllotmentInterface#getDescription()
-	 */
-	@Override
-	public String getDescription() {
-		return description;
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.gots.bean.AllotmentInterface#setSeeds(java.util.HashMap)
+     */
+    @Override
+    public void setSeeds(HashMap<String, GrowingSeedInterface> seeds) {
+        this.seeds = seeds;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.gots.bean.AllotmentInterface#setDescription(java.lang.String)
-	 */
-	@Override
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.gots.bean.AllotmentInterface#getName()
+     */
+    @Override
+    public String getName() {
+        return name;
+    }
 
-	@Override
-	public int getId() {
-		return id;
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.gots.bean.AllotmentInterface#setName(java.lang.String)
+     */
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	@Override
-	public void setId(int id) {
-		this.id = id;
+    /*
+     * (non-Javadoc)
+     * @see org.gots.bean.AllotmentInterface#getDescription()
+     */
+    @Override
+    public String getDescription() {
+        return description;
+    }
 
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.gots.bean.AllotmentInterface#setDescription(java.lang.String)
+     */
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(int id) {
+        this.id = id;
+
+    }
+
+    @Override
+    public String toString() {
+        String desc = new String();
+        desc.concat("(" + getId() + ")");
+        desc.concat("[" + getUUID() + "]");
+        desc.concat("[" + getName() + "]");
+        return desc;
+    }
+
+    @Override
+    public String getUUID() {
+        return uuid;
+    }
+
+    @Override
+    public void setUUID(String id) {
+        uuid = id;
+    }
+
+   
 
 }

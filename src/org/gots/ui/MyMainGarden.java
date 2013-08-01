@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.gots.ui;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.gots.R;
@@ -26,6 +28,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -58,32 +61,11 @@ public class MyMainGarden extends AbstractActivity {
         // GardenManager gm =GardenManager.getInstance();
 
         setContentView(R.layout.garden);
-
-        lsa = new ListAllotmentAdapter(this);
         listAllotments = (ListView) findViewById(R.id.IdGardenAllotmentsList);
+        lsa = new ListAllotmentAdapter(getApplicationContext(), new ArrayList<BaseAllotmentInterface>());
         listAllotments.setAdapter(lsa);
         listAllotments.setDivider(null);
         listAllotments.setDividerHeight(0);
-
-        if (listAllotments.getCount() == 0) {
-            final String classname = getClass().getSimpleName();
-            new AlertDialog.Builder(this).setIcon(R.drawable.help).setTitle(R.string.menu_help_firstlaunch).setPositiveButton(
-                    R.string.button_ok, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-
-                            Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                                    Uri.parse(HelpUriBuilder.getUri(classname)));
-                            startActivity(browserIntent);
-                        }
-                    }).setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-
-                    /* User clicked Cancel so do some stuff */
-                }
-            }).show();
-            // Intent intent = new Intent(this, MyMainGardenFirstTime.class);
-            // startActivity(intent);
-        }
 
         // listAllotments.setBackgroundDrawable(getResources().getDrawable(R.drawable.help_hut_2));
         if (!gotsPrefs.isPremium()) {
@@ -115,12 +97,23 @@ public class MyMainGarden extends AbstractActivity {
             finish();
             return true;
         case R.id.new_allotment:
-            BaseAllotmentInterface newAllotment = new Allotment();
-            newAllotment.setName("" + new Random().nextInt());
 
-            AllotmentDBHelper helper = new AllotmentDBHelper(this);
-            helper.insertAllotment(newAllotment);
-            lsa.notifyDataSetChanged();
+            // AllotmentDBHelper helper = new AllotmentDBHelper(this);
+            // helper.insertAllotment(newAllotment);
+            new AsyncTask<Void, Integer, BaseAllotmentInterface>() {
+                @Override
+                protected BaseAllotmentInterface doInBackground(Void... params) {
+                    BaseAllotmentInterface newAllotment = new Allotment();
+                    newAllotment.setName("" + new Random().nextInt());
+                    return allotmentManager.createAllotment(newAllotment);
+                }
+
+                @Override
+                protected void onPostExecute(BaseAllotmentInterface result) {
+                    onResume();
+                    super.onPostExecute(result);
+                }
+            }.execute();
 
             listAllotments.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_simple));
             return true;
@@ -137,7 +130,38 @@ public class MyMainGarden extends AbstractActivity {
 
     @Override
     protected void onResume() {
-        lsa.notifyDataSetChanged();
+        new AsyncTask<Void, Integer, List<BaseAllotmentInterface>>() {
+            @Override
+            protected List<BaseAllotmentInterface> doInBackground(Void... params) {
+                return allotmentManager.getMyAllotments();
+            }
+
+            @Override
+            protected void onPostExecute(List<BaseAllotmentInterface> result) {
+                lsa.setAllotments(result);
+                // if (listAllotments.getCount() == 0) {
+                // final String classname = getClass().getSimpleName();
+                // new AlertDialog.Builder(getApplicationContext()).setIcon(R.drawable.help).setTitle(
+                // R.string.menu_help_firstlaunch).setPositiveButton(R.string.button_ok,
+                // new DialogInterface.OnClickListener() {
+                // public void onClick(DialogInterface dialog, int whichButton) {
+                //
+                // Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                // Uri.parse(HelpUriBuilder.getUri(classname)));
+                // startActivity(browserIntent);
+                // }
+                // }).setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
+                // public void onClick(DialogInterface dialog, int whichButton) {
+                //
+                // /* User clicked Cancel so do some stuff */
+                // }
+                // }).show();
+                // // Intent intent = new Intent(this, MyMainGardenFirstTime.class);
+                // // startActivity(intent);
+                // }
+                super.onPostExecute(result);
+            }
+        }.execute();
         super.onResume();
     }
 

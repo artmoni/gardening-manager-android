@@ -108,7 +108,7 @@ public class SplashScreenActivity extends AbstractActivity {
             e.printStackTrace();
         }
 
-        LinearLayout artmoni = (LinearLayout) findViewById(R.id.webArtmoni);
+        View artmoni = (View) findViewById(R.id.webArtmoni);
         artmoni.setOnClickListener(new LinearLayout.OnClickListener() {
 
             @Override
@@ -119,7 +119,7 @@ public class SplashScreenActivity extends AbstractActivity {
             }
         });
 
-        LinearLayout sauterdanslesflaques = (LinearLayout) findViewById(R.id.webSauterDansLesFlaques);
+        View sauterdanslesflaques = (View) findViewById(R.id.webSauterDansLesFlaques);
         sauterdanslesflaques.setOnClickListener(new LinearLayout.OnClickListener() {
 
             @Override

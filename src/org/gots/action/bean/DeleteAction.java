@@ -84,8 +84,9 @@ public class DeleteAction extends AbstractActionSeed implements PermanentActionI
 			execute(baseSeedInterface);
 		}
 
-		AllotmentDBHelper helperlot = new AllotmentDBHelper(getContext());
-		helperlot.deleteAllotment(allotment);
+//		AllotmentDBHelper helperlot = new AllotmentDBHelper(getContext());
+//		helperlot.deleteAllotment(allotment);
+		allotmentProvider.removeAllotment(allotment);
 		return 0;
 	}
 

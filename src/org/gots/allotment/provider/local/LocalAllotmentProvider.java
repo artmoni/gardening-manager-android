@@ -40,6 +40,7 @@ public class LocalAllotmentProvider extends AbstractProvider implements Allotmen
         // lot.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTION_ID)));
         lot.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ALLOTMENT_ID)));
         lot.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ALLOTMENT_NAME)));
+        lot.setUUID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ALLOTMENT_UUID)));
         return lot;
     }
 
@@ -77,6 +78,8 @@ public class LocalAllotmentProvider extends AbstractProvider implements Allotmen
         // values.put(ActionSeedSQLite.ACTION_NAME, action.getName());
         // values.put(DatabaseHelper.ALLOTMENT_ID, allotment.getId());
         values.put(DatabaseHelper.ALLOTMENT_NAME, allotment.getName());
+        values.put(DatabaseHelper.ALLOTMENT_UUID, allotment.getUUID());
+
         // values.put(DatabaseHelper.ACTIONSEED_DATEACTIONDONE, Calendar.getInstance().getTimeInMillis());
 
         rowid = bdd.insert(DatabaseHelper.ALLOTMENT_TABLE_NAME, null, values);

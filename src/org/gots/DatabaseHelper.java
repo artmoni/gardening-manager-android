@@ -22,20 +22,23 @@ import android.net.Uri;
 import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-	// ************************ DATABASE **************
-	private static final int DATABASE_VERSION = 13;
-	private static String DATABASE_NAME = "gots0";
-	public final static String AUTHORITY = "org.gots.providers.seeds";
+    // ************************ DATABASE **************
+    private static final int DATABASE_VERSION = 14;
 
-	private static final String TAG = "DatabaseHelper";
+    private static String DATABASE_NAME = "gots0";
 
-	// ************************ FAMILY TABLE **************
-	public static final String FAMILY_TABLE_NAME = "family";
+    public final static String AUTHORITY = "org.gots.providers.seeds";
 
-	public static final String FAMILY_ID = "family_id";
-	public static final String FAMILY_NAME = "family_name";
+    private static final String TAG = "DatabaseHelper";
 
-	//@formatter:off
+    // ************************ FAMILY TABLE **************
+    public static final String FAMILY_TABLE_NAME = "family";
+
+    public static final String FAMILY_ID = "family_id";
+
+    public static final String FAMILY_NAME = "family_name";
+
+    //@formatter:off
 		private static final String CREATE_TABLE_FAMILY = "CREATE TABLE " + FAMILY_TABLE_NAME 
 				+ " ("+ FAMILY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," 
 				+ FAMILY_NAME + " VARCHAR(255)" 
@@ -43,51 +46,75 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				+ ");";
 	//@formatter:on
 
-	// ************************ SPECIE TABLE **************
+    // ************************ SPECIE TABLE **************
 
-	public static final String SPECIE_TABLE_NAME = "specie";
+    public static final String SPECIE_TABLE_NAME = "specie";
 
-	public static final String SPECIE_ID = "specie_id";
-	public static final String SPECIE_FAMILY_ID = "specie_family_id";
-	public static final String SPECIE_NAME = "specie_name";
+    public static final String SPECIE_ID = "specie_id";
 
-	//@formatter:off
+    public static final String SPECIE_FAMILY_ID = "specie_family_id";
+
+    public static final String SPECIE_NAME = "specie_name";
+
+    //@formatter:off
 			private static final String CREATE_TABLE_SPECIE = "CREATE TABLE " + SPECIE_TABLE_NAME 
 					+ " ("+ SPECIE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," 
 					+ SPECIE_FAMILY_ID + " INTEGER," 
 					+ SPECIE_NAME + " VARCHAR(255)" 					
 					+ ");";
 		//@formatter:on
-	// ************************ SEEDS TABLE **************
-	public static final String SEEDS_TABLE_NAME = "seeds";
-	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/seeds");
-	public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.gots.seeds";
+    // ************************ SEEDS TABLE **************
+    public static final String SEEDS_TABLE_NAME = "seeds";
 
-	public static final String SEED_ID = "_id";
-	public static final String SEED_UUID = "uuid";
-	public static final String SEED_BARECODE = "barcode";
-	public static final String SEED_NAME = "name";
-	public static final String SEED_DESCRIPTION_GROWTH = "description_growth";
-	public static final String SEED_DESCRIPTION_CULTIVATION = "description_cultivation";
-	public static final String SEED_DESCRIPTION_DISEASES = "description_diseases";
-	public static final String SEED_DESCRIPTION_HARVEST = "description_harvest";
+    public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/seeds");
 
-	public static final String SEED_ORDER = "botanicorder";
-	public static final String SEED_FAMILY = "botanicfamily";
-	public static final String SEED_GENUS = "botanicgenus";
-	public static final String SEED_SPECIE = "botanicspecie";
-	public static final String SEED_VARIETY = "variety";
-	public static final ArrayList<AbstractActionSeed> actionToDo = new ArrayList<AbstractActionSeed>();
-	public static final ArrayList<AbstractActionSeed> actionDone = new ArrayList<AbstractActionSeed>();
-	public static final String SEED_DATESOWINGMIN = "datesowingmin";
-	public static final String SEED_DATESOWINGMAX = "datesowingmax";
-	public static final String SEED_DURATIONMIN = "durationmin";
-	public static final String SEED_DURATIONMAX = "durationmax";
-	public static final String SEED_URLDESCRIPTION = "urldescription";
-	public static final String SEED_ACTION1 = "action1";
-	public static final String SEED_NBSACHET = "nbsachet";
+    public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.gots.seeds";
 
-	//@formatter:off
+    public static final String SEED_ID = "_id";
+
+    public static final String SEED_UUID = "uuid";
+
+    public static final String SEED_BARECODE = "barcode";
+
+    public static final String SEED_NAME = "name";
+
+    public static final String SEED_DESCRIPTION_GROWTH = "description_growth";
+
+    public static final String SEED_DESCRIPTION_CULTIVATION = "description_cultivation";
+
+    public static final String SEED_DESCRIPTION_DISEASES = "description_diseases";
+
+    public static final String SEED_DESCRIPTION_HARVEST = "description_harvest";
+
+    public static final String SEED_ORDER = "botanicorder";
+
+    public static final String SEED_FAMILY = "botanicfamily";
+
+    public static final String SEED_GENUS = "botanicgenus";
+
+    public static final String SEED_SPECIE = "botanicspecie";
+
+    public static final String SEED_VARIETY = "variety";
+
+    public static final ArrayList<AbstractActionSeed> actionToDo = new ArrayList<AbstractActionSeed>();
+
+    public static final ArrayList<AbstractActionSeed> actionDone = new ArrayList<AbstractActionSeed>();
+
+    public static final String SEED_DATESOWINGMIN = "datesowingmin";
+
+    public static final String SEED_DATESOWINGMAX = "datesowingmax";
+
+    public static final String SEED_DURATIONMIN = "durationmin";
+
+    public static final String SEED_DURATIONMAX = "durationmax";
+
+    public static final String SEED_URLDESCRIPTION = "urldescription";
+
+    public static final String SEED_ACTION1 = "action1";
+
+    public static final String SEED_NBSACHET = "nbsachet";
+
+    //@formatter:off
 
 	public static final String CREATE_TABLE_SEEDS = "CREATE TABLE " + SEEDS_TABLE_NAME 
 			+ " (" + SEED_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT," 
@@ -113,20 +140,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ ");";
 	//@formatter:on
 
-	// ************************ GROWINGSEEDS TABLE **************
-	public static final String GROWINGSEEDS_TABLE_NAME = "growseeds";
-	// public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
-	// + "/growseeds");
-	// public static final String CONTENT_TYPE =
-	// "vnd.android.cursor.dir/vnd.gots.growseeds";
+    // ************************ GROWINGSEEDS TABLE **************
+    public static final String GROWINGSEEDS_TABLE_NAME = "growseeds";
 
-	public static final String GROWINGSEED_ID = "_id";
-	public static final String GROWINGSEED_SEED_ID = "seed_id";
-	public static final String GROWINGSEED_ALLOTMENT_ID = "allotment_id";
-	public static final String GROWINGSEED_DATESOWING = "datesowing";
-	public static final String GROWINGSEED_DATELASTWATERING = "datelastwatering";
+    // public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
+    // + "/growseeds");
+    // public static final String CONTENT_TYPE =
+    // "vnd.android.cursor.dir/vnd.gots.growseeds";
 
-	//@formatter:off
+    public static final String GROWINGSEED_ID = "_id";
+
+    public static final String GROWINGSEED_SEED_ID = "seed_id";
+
+    public static final String GROWINGSEED_ALLOTMENT_ID = "allotment_id";
+
+    public static final String GROWINGSEED_DATESOWING = "datesowing";
+
+    public static final String GROWINGSEED_DATELASTWATERING = "datelastwatering";
+
+    //@formatter:off
 	public static final String CREATE_TABLE_GROWINDSEEDS = "CREATE TABLE " + GROWINGSEEDS_TABLE_NAME 
 			+ " ("+ GROWINGSEED_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," 
 			+ GROWINGSEED_SEED_ID + " INTEGER NOT NULL,"
@@ -139,21 +171,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ ");";
 	//@formatter:on
 
-	// ************************ ACTIONSEED TABLE **************
-	public static final String ACTIONSEEDS_TABLE_NAME = "actionseed";
-	// public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
-	// + "/actionseed");
-	// public static final String CONTENT_TYPE =
-	// "vnd.android.cursor.dir/vnd.gots.actionseed";
-	public static final String ACTIONSEED_ID = "_id";
-	public static final String ACTIONSEED_GROWINGSEED_ID = "growingseed_id";
-	public static final String ACTIONSEED_ACTION_ID = "action_id";
-	public static final String ACTIONSEED_DURATION = "action_seed_duration";
-	public static final String ACTIONSEED_DATA = "data";
+    // ************************ ACTIONSEED TABLE **************
+    public static final String ACTIONSEEDS_TABLE_NAME = "actionseed";
 
-	// public static final String SEED_ID = "seed_id";
+    // public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
+    // + "/actionseed");
+    // public static final String CONTENT_TYPE =
+    // "vnd.android.cursor.dir/vnd.gots.actionseed";
+    public static final String ACTIONSEED_ID = "_id";
 
-	//@formatter:off
+    public static final String ACTIONSEED_GROWINGSEED_ID = "growingseed_id";
+
+    public static final String ACTIONSEED_ACTION_ID = "action_id";
+
+    public static final String ACTIONSEED_DURATION = "action_seed_duration";
+
+    public static final String ACTIONSEED_DATA = "data";
+
+    // public static final String SEED_ID = "seed_id";
+
+    //@formatter:off
 	public static final String ACTIONSEED_DATEACTIONDONE = "dateactiondone";
 	private static final String CREATE_TABLE_ACTIONSEED = "CREATE TABLE " + ACTIONSEEDS_TABLE_NAME 
 			+ " ("+ACTIONSEED_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," 
@@ -170,22 +207,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ ");";
 	//@formatter:on
 
-	// ************************ WEATHER TABLE **************
-	public static final String WEATHER_TABLE_NAME = "weather";
+    // ************************ WEATHER TABLE **************
+    public static final String WEATHER_TABLE_NAME = "weather";
 
-	public static final String WEATHER_ID = "_id";
-	public static final String WEATHER_DAYOFYEAR = "dayofyear";
-	public static final String WEATHER_YEAR = "year";
-	public static final String WEATHER_TEMPCELCIUSMIN = "tempcelciusmin";
-	public static final String WEATHER_TEMPCELCIUSMAX = "tempcelciusmax";
-	public static final String WEATHER_TEMPFAHRENHEIT = "tempfahrenheit";
-	public static final String WEATHER_CONDITION = "condition";
-	public static final String WEATHER_WINDCONDITION = "windcondition";
-	public static final String WEATHER_HUMIDITY = "humidity";
-	public static final String WEATHER_ICONURL = "iconurl";
-	public static final String WEATHER_DATE = "date";
+    public static final String WEATHER_ID = "_id";
 
-	//@formatter:off
+    public static final String WEATHER_DAYOFYEAR = "dayofyear";
+
+    public static final String WEATHER_YEAR = "year";
+
+    public static final String WEATHER_TEMPCELCIUSMIN = "tempcelciusmin";
+
+    public static final String WEATHER_TEMPCELCIUSMAX = "tempcelciusmax";
+
+    public static final String WEATHER_TEMPFAHRENHEIT = "tempfahrenheit";
+
+    public static final String WEATHER_CONDITION = "condition";
+
+    public static final String WEATHER_WINDCONDITION = "windcondition";
+
+    public static final String WEATHER_HUMIDITY = "humidity";
+
+    public static final String WEATHER_ICONURL = "iconurl";
+
+    public static final String WEATHER_DATE = "date";
+
+    //@formatter:off
 		public static final String CREATE_TABLE_WEATHER = "CREATE TABLE " + WEATHER_TABLE_NAME 
 				+ " (" + WEATHER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
 				+ GardenSQLite.ACTION_NAME + " STRING,"
@@ -202,135 +249,135 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				+ ");";
 	//@formatter:on
 
-	// ************************ ALLOTMENT TABLE **************
-	public static final String ALLOTMENT_TABLE_NAME = "allotment";
-	// public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
-	// + "/action");
-	// public static final String CONTENT_TYPE =
-	// "vnd.android.cursor.dir/vnd.gots.action";
+    // ************************ ALLOTMENT TABLE **************
+    public static final String ALLOTMENT_TABLE_NAME = "allotment";
 
-	// public static final String GROWINGSEED_ID = "growingseed_id";
-	public static final String ALLOTMENT_ID = "_id";
-	public static final String ALLOTMENT_NAME = "name";
-	//@formatter:off
+    // public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
+    // + "/action");
+    // public static final String CONTENT_TYPE =
+    // "vnd.android.cursor.dir/vnd.gots.action";
+
+    // public static final String GROWINGSEED_ID = "growingseed_id";
+    public static final String ALLOTMENT_ID = "_id";
+
+    public static final String ALLOTMENT_NAME = "name";
+
+    public static final String ALLOTMENT_UUID = "uuid";
+
+    //@formatter:off
 		public static final String CREATE_TABLE_ALLOTMENT = "CREATE TABLE " + ALLOTMENT_TABLE_NAME 
 				+ " (" + ALLOTMENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-				+ ALLOTMENT_NAME + " STRING"
+				+ ALLOTMENT_NAME + " STRING,"
+				+ ALLOTMENT_UUID + " STRING"
 					+ ");";
 		//@formatter:on
 
-	public DatabaseHelper(Context context) {
-		super(context, DATABASE_NAME, null, DATABASE_VERSION);
-	}
+    public DatabaseHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
 
-	public void setDatabase(int databaseId) {
-		DATABASE_NAME = "gots" + databaseId;
-		Log.d("setDatabase",DATABASE_NAME);
-	}
+    public void setDatabase(int databaseId) {
+        DATABASE_NAME = "gots" + databaseId;
+        Log.d("setDatabase", DATABASE_NAME);
+    }
 
-	@Override
-	public void onCreate(SQLiteDatabase db) {
-		db.execSQL(CREATE_TABLE_ALLOTMENT);
-		db.execSQL(CREATE_TABLE_SEEDS);
-		db.execSQL(CREATE_TABLE_GROWINDSEEDS);
-		db.execSQL(CREATE_TABLE_ACTIONSEED);
-		db.execSQL(CREATE_TABLE_WEATHER);
-		db.execSQL(CREATE_TABLE_FAMILY);
-		db.execSQL(CREATE_TABLE_SPECIE);
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(CREATE_TABLE_ALLOTMENT);
+        db.execSQL(CREATE_TABLE_SEEDS);
+        db.execSQL(CREATE_TABLE_GROWINDSEEDS);
+        db.execSQL(CREATE_TABLE_ACTIONSEED);
+        db.execSQL(CREATE_TABLE_WEATHER);
+        db.execSQL(CREATE_TABLE_FAMILY);
+        db.execSQL(CREATE_TABLE_SPECIE);
 
-		db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('apiaceae')");
-		db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('asteracae')");
-		db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('brassicaceae')");
-		db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('Cucurbitaceae')");
-		db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('Fabaceae')");
-		db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('Lamiaceae')");
-		db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('Liliaceae')");
-		db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('Solanaceae')");
-		db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('aliaceae')");
+        db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('apiaceae')");
+        db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('asteracae')");
+        db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('brassicaceae')");
+        db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('Cucurbitaceae')");
+        db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('Fabaceae')");
+        db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('Lamiaceae')");
+        db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('Liliaceae')");
+        db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('Solanaceae')");
+        db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('aliaceae')");
 
-		db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
-				+ ") VALUES ('Brassica oleracea',3)");
-		db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
-				+ ") VALUES ('Daucus carota',1)");
-		db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
-				+ ") VALUES ('Solanum lycopersicum',8)");
-		db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
-				+ ") VALUES ('Cucumis sativus',4)");
-		db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
-				+ ") VALUES ('Lactuca sativa',2)");
-		db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
-				+ ") VALUES ('Brassica rapa',3)");
-		db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
-				+ ") VALUES ('Allium cepa',7)");
-		db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
-				+ ") VALUES ('Solanum tuberosum',8)");
-		db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
-				+ ") VALUES ('Raphanus sativus',3)");
-		db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
-				+ ") VALUES ('Allium porrum',9)");
-		db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
-				+ ") VALUES ('Phaseolus vulgaris',5)");
+        db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                + ") VALUES ('Brassica oleracea',3)");
+        db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                + ") VALUES ('Daucus carota',1)");
+        db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                + ") VALUES ('Solanum lycopersicum',8)");
+        db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                + ") VALUES ('Cucumis sativus',4)");
+        db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                + ") VALUES ('Lactuca sativa',2)");
+        db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                + ") VALUES ('Brassica rapa',3)");
+        db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                + ") VALUES ('Allium cepa',7)");
+        db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                + ") VALUES ('Solanum tuberosum',8)");
+        db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                + ") VALUES ('Raphanus sativus',3)");
+        db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                + ") VALUES ('Allium porrum',9)");
+        db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                + ") VALUES ('Phaseolus vulgaris',5)");
 
-		Log.i(TAG, "onCreate");
+        Log.i(TAG, "onCreate");
 
-	}
+    }
 
-	@Override
-	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion
-				+ ", which will destroy all old data");
-		if (oldVersion == 8 && newVersion == 9) {
-			db.execSQL("ALTER TABLE " + WEATHER_TABLE_NAME + " ADD COLUMN " + WEATHER_YEAR + " INTEGER;");
-		} else if (oldVersion == 9 && newVersion == 10) {
-			db.execSQL("ALTER TABLE " + SEEDS_TABLE_NAME + " ADD COLUMN " + SEED_DESCRIPTION_CULTIVATION
-					+ " VARCHAR(255);");
-			db.execSQL("ALTER TABLE " + SEEDS_TABLE_NAME + " ADD COLUMN " + SEED_DESCRIPTION_DISEASES
-					+ " VARCHAR(255);");
-			db.execSQL("ALTER TABLE " + SEEDS_TABLE_NAME + " ADD COLUMN " + SEED_DESCRIPTION_HARVEST + " VARCHAR(255);");
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion
+                + ", which will destroy all old data");
+        if (oldVersion == 8 && newVersion == 9) {
+            db.execSQL("ALTER TABLE " + WEATHER_TABLE_NAME + " ADD COLUMN " + WEATHER_YEAR + " INTEGER;");
+        } else if (oldVersion == 9 && newVersion == 10) {
+            db.execSQL("ALTER TABLE " + SEEDS_TABLE_NAME + " ADD COLUMN " + SEED_DESCRIPTION_CULTIVATION
+                    + " VARCHAR(255);");
+            db.execSQL("ALTER TABLE " + SEEDS_TABLE_NAME + " ADD COLUMN " + SEED_DESCRIPTION_DISEASES
+                    + " VARCHAR(255);");
+            db.execSQL("ALTER TABLE " + SEEDS_TABLE_NAME + " ADD COLUMN " + SEED_DESCRIPTION_HARVEST + " VARCHAR(255);");
 
-		} else if (oldVersion == 10 && newVersion == 11) {
-			db.execSQL("DROP TABLE IF EXISTS action");
+        } else if (oldVersion == 10 && newVersion == 11) {
+            db.execSQL("DROP TABLE IF EXISTS action");
 
-		}
-		
-		if (oldVersion < 12) {
-			db.execSQL("CREATE TEMPORARY TABLE backup" 
-			+ " ("+ACTIONSEED_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," 
-			+ACTIONSEED_GROWINGSEED_ID + " INTEGER," 
-			+ ACTIONSEED_ACTION_ID + " INTEGER," 
-			+ ACTIONSEED_DATEACTIONDONE	+ " INTEGER,"
-			+ ACTIONSEED_DURATION+ " INTEGER"
-			+ ");");
-			db.execSQL("INSERT INTO backup (growingseed_id, action_id,  dateactiondone, action_seed_duration) SELECT growingseed_id, action_id,  dateactiondone, action_seed_duration FROM "+ACTIONSEEDS_TABLE_NAME);
-			
-			db.execSQL("DROP TABLE "+ACTIONSEEDS_TABLE_NAME);
-			db.execSQL("CREATE TABLE "+ ACTIONSEEDS_TABLE_NAME
-					+ " ("+ACTIONSEED_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," 
-					+ACTIONSEED_GROWINGSEED_ID + " INTEGER," 
-					+ ACTIONSEED_ACTION_ID + " INTEGER," 
-					+ ACTIONSEED_DATEACTIONDONE	+ " INTEGER,"
-					+ ACTIONSEED_DURATION+ " INTEGER"
-					+ ");");
-			db.execSQL("INSERT INTO "+ACTIONSEEDS_TABLE_NAME+" SELECT _id, growingseed_id, action_id,  dateactiondone, action_seed_duration FROM backup");
-			db.execSQL("DROP TABLE backup");
+        }
 
+        if (oldVersion < 12) {
+            db.execSQL("CREATE TEMPORARY TABLE backup" + " (" + ACTIONSEED_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + ACTIONSEED_GROWINGSEED_ID + " INTEGER," + ACTIONSEED_ACTION_ID + " INTEGER,"
+                    + ACTIONSEED_DATEACTIONDONE + " INTEGER," + ACTIONSEED_DURATION + " INTEGER" + ");");
+            db.execSQL("INSERT INTO backup (growingseed_id, action_id,  dateactiondone, action_seed_duration) SELECT growingseed_id, action_id,  dateactiondone, action_seed_duration FROM "
+                    + ACTIONSEEDS_TABLE_NAME);
 
-		} 		if (oldVersion < 13) {
-			db.execSQL("ALTER TABLE " + ACTIONSEEDS_TABLE_NAME + " ADD COLUMN " + ACTIONSEED_DATA + " VARCHAR(255)");
-	         db.execSQL("ALTER TABLE " + SEEDS_TABLE_NAME + " ADD COLUMN " + SEED_UUID
-	                    + " VARCHAR(255);");
+            db.execSQL("DROP TABLE " + ACTIONSEEDS_TABLE_NAME);
+            db.execSQL("CREATE TABLE " + ACTIONSEEDS_TABLE_NAME + " (" + ACTIONSEED_ID
+                    + " INTEGER PRIMARY KEY AUTOINCREMENT," + ACTIONSEED_GROWINGSEED_ID + " INTEGER,"
+                    + ACTIONSEED_ACTION_ID + " INTEGER," + ACTIONSEED_DATEACTIONDONE + " INTEGER,"
+                    + ACTIONSEED_DURATION + " INTEGER" + ");");
+            db.execSQL("INSERT INTO " + ACTIONSEEDS_TABLE_NAME
+                    + " SELECT _id, growingseed_id, action_id,  dateactiondone, action_seed_duration FROM backup");
+            db.execSQL("DROP TABLE backup");
 
-			
+        }
+        if (oldVersion < 14) {
+            db.execSQL("ALTER TABLE " + ACTIONSEEDS_TABLE_NAME + " ADD COLUMN " + ACTIONSEED_DATA + " VARCHAR(255)");
+            db.execSQL("ALTER TABLE " + SEEDS_TABLE_NAME + " ADD COLUMN " + SEED_UUID + " VARCHAR(255);");
+            db.execSQL("ALTER TABLE " + ALLOTMENT_TABLE_NAME + " ADD COLUMN " + ALLOTMENT_UUID + " VARCHAR(255);");
+            
 
-		}else {
-			db.execSQL("DROP TABLE IF EXISTS " + SEEDS_TABLE_NAME);
-			db.execSQL("DROP TABLE IF EXISTS " + GROWINGSEEDS_TABLE_NAME);
-			db.execSQL("DROP TABLE IF EXISTS " + ALLOTMENT_TABLE_NAME);
-			db.execSQL("DROP TABLE IF EXISTS " + ACTIONSEEDS_TABLE_NAME);
-			db.execSQL("DROP TABLE IF EXISTS " + WEATHER_TABLE_NAME);
-			db.execSQL("DROP TABLE IF EXISTS " + FAMILY_TABLE_NAME);
-			onCreate(db);
+        } else {
+            db.execSQL("DROP TABLE IF EXISTS " + SEEDS_TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + GROWINGSEEDS_TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + ALLOTMENT_TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + ACTIONSEEDS_TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + WEATHER_TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + FAMILY_TABLE_NAME);
+            onCreate(db);
 
-		}
-	}
+        }
+    }
 }

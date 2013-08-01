@@ -23,6 +23,7 @@ package org.gots.ui;
 
 import java.util.ArrayList;
 
+import org.gots.allotment.AllotmentManager;
 import org.gots.garden.GardenManager;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
@@ -47,6 +48,8 @@ public class AbstractActivity extends SherlockActivity {
 
     protected GotsSeedManager seedManager;
 
+    protected AllotmentManager allotmentManager;
+
     private static ArrayList<AbstractActivity> activities = new ArrayList<AbstractActivity>();
 
     @Override
@@ -61,6 +64,8 @@ public class AbstractActivity extends SherlockActivity {
         gardenManager.initIfNew(this);
         seedManager = GotsSeedManager.getInstance();
         seedManager.initIfNew(this);
+        allotmentManager = AllotmentManager.getInstance();
+        allotmentManager.initIfNew(this);
         activities.add(this);
     }
 
@@ -72,6 +77,7 @@ public class AbstractActivity extends SherlockActivity {
             nuxeoManager.shutdown();
             gardenManager.finalize();
             seedManager.finalize();
+            allotmentManager.finalize();
             try {
                 this.unregisterReceiver(gardenManager);
             } catch (IllegalArgumentException e) {

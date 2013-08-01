@@ -31,6 +31,10 @@ public interface BaseAllotmentInterface {
 	public abstract int getId();
 
 	public abstract void setId(int id);
+
+    public abstract void setUUID(String id);
+
+    public abstract String getUUID();
 	
 		
 

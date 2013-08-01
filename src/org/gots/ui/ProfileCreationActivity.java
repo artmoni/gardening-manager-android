@@ -22,6 +22,7 @@ import org.gots.action.BaseActionInterface;
 import org.gots.action.GardeningActionInterface;
 import org.gots.action.sql.ActionDBHelper;
 import org.gots.action.sql.ActionSeedDBHelper;
+import org.gots.allotment.provider.local.LocalAllotmentProvider;
 import org.gots.allotment.sql.AllotmentDBHelper;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.bean.Allotment;
@@ -364,8 +365,8 @@ public class ProfileCreationActivity extends AbstractActivity implements
             BaseAllotmentInterface newAllotment = new Allotment();
             newAllotment.setName("" + new Random().nextInt());
 
-            AllotmentDBHelper helper = new AllotmentDBHelper(this);
-            helper.insertAllotment(newAllotment);
+            LocalAllotmentProvider helper = new LocalAllotmentProvider(this);
+            helper.createAllotment(newAllotment);
 
             // Seed
             VendorSeedDBHelper seedHelper = new VendorSeedDBHelper(this);

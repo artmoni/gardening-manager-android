@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.gots.R;
+import org.gots.allotment.AllotmentManager;
 import org.gots.allotment.sql.AllotmentDBHelper;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
@@ -45,11 +46,14 @@ public class MySeedsListActivity extends SherlockListFragment {
         super.onCreate(savedInstanceState);
 
         if (getActivity().getIntent().getExtras() != null) {
-            String allotmentRef = getActivity().getIntent().getExtras().getString("org.gots.allotment.reference");
-            if (allotmentRef != null) {
-                AllotmentDBHelper helper = new AllotmentDBHelper(getActivity());
-                allotment = helper.getAllotmentByName(allotmentRef);
-            }
+            // String allotmentRef = getActivity().getIntent().getExtras().getString("org.gots.allotment.reference");
+            // if (allotmentRef != null) {
+            // AllotmentDBHelper helper = new AllotmentDBHelper(getActivity());
+            // allotment = helper.getAllotmentByName(allotmentRef);
+            AllotmentManager allotmentManager = AllotmentManager.getInstance();
+            allotmentManager.initIfNew(getActivity());
+            allotment = allotmentManager.getCurrentAllotment();
+            // }
         }
         seedManager = GotsSeedManager.getInstance();
         seedManager.initIfNew(getActivity());
@@ -70,15 +74,16 @@ public class MySeedsListActivity extends SherlockListFragment {
             private ProgressDialog dialog;
 
             protected void onPreExecute() {
-//                dialog = ProgressDialog.show(getActivity(), "", getResources().getString(R.string.gots_loading), true);
-//                dialog.setCanceledOnTouchOutside(true);
+                // dialog = ProgressDialog.show(getActivity(), "", getResources().getString(R.string.gots_loading),
+                // true);
+                // dialog.setCanceledOnTouchOutside(true);
                 // dialog.show();
                 super.onPreExecute();
             };
 
             @Override
             protected List<BaseSeedInterface> doInBackground(Void... params) {
-              
+
                 List<BaseSeedInterface> mySeeds = seedManager.getMyStock(GardenManager.getInstance().getCurrentGarden());
 
                 return mySeeds;
@@ -87,8 +92,8 @@ public class MySeedsListActivity extends SherlockListFragment {
             protected void onPostExecute(List<BaseSeedInterface> mySeeds) {
                 listAdapter = new MySeedsListAdapter(getActivity(), allotment, mySeeds);
                 setListAdapter(listAdapter);
-//                if (dialog.isShowing())
-//                    dialog.dismiss();
+                // if (dialog.isShowing())
+                // dialog.dismiss();
 
                 super.onPostExecute(mySeeds);
             };

@@ -61,7 +61,7 @@ public class FirstLaunchActivity extends AbstractActivity {
         // Intent intent = new Intent(FirstLaunchActivity.this, DashboardActivity.class);
         // startActivity(intent);
         // }
-        if (gotsPrefs.isConnectedToServer())
+        if (gotsPrefs.isConnectedToServer() || gotsPrefs.getCurrentGardenId() > -1)
             finish();
     }
 

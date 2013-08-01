@@ -40,125 +40,127 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 
 public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener {
-	Context mContext;
+    Context mContext;
 
-	private ListGrowingSeedAdapter lgsa;
-	private GridView listSeeds;
+    private ListGrowingSeedAdapter lgsa;
 
-	private ArrayList<BaseAllotmentInterface> myAllotments;
+    private GridView listSeeds;
 
-	@Override
-	public void notifyDataSetChanged() {
-		AllotmentDBHelper helper = new AllotmentDBHelper(mContext);
-		myAllotments = helper.getAllotments();
+    private List<BaseAllotmentInterface> myAllotments;
 
-		super.notifyDataSetChanged();
-	}
+    @Override
+    public void notifyDataSetChanged() {
 
-	public ListAllotmentAdapter(Context mContext) {
-		this.mContext = mContext;
+        super.notifyDataSetChanged();
+    }
 
-		AllotmentDBHelper helper = new AllotmentDBHelper(mContext);
-		myAllotments = helper.getAllotments();
-	}
+    public ListAllotmentAdapter(Context mContext, List<BaseAllotmentInterface> allotments) {
+        this.mContext = mContext;
+        myAllotments = allotments;
+    }
 
-	@Override
-	public int getCount() {
-		return myAllotments.size();
-	}
+    public void setAllotments(List<BaseAllotmentInterface> allotments) {
+        myAllotments = allotments;
+        notifyDataSetChanged();
+    };
 
-	@Override
-	public Object getItem(int position) {
-		return myAllotments.get(position);
-	}
+    @Override
+    public int getCount() {
+        return myAllotments.size();
+    }
 
-	@Override
-	public long getItemId(int position) {
-		return position;
-	}
+    @Override
+    public Object getItem(int position) {
+        return myAllotments.get(position);
+    }
 
-	@Override
-	public View getView(final int position, View convertView, ViewGroup parent) {
-		LinearLayout ll = (LinearLayout) convertView;
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
-		if (convertView == null) {
-			// ll = new LinearLayout(mContext);
-			ll = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.list_allotments, parent, false);
-		}
-		GrowingSeedDBHelper helper = new GrowingSeedDBHelper(mContext);
-		List<GrowingSeedInterface> mySeeds = helper.getSeedsByAllotment(myAllotments.get(position).getName());
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        LinearLayout ll = (LinearLayout) convertView;
 
-		lgsa = new ListGrowingSeedAdapter(mContext, mySeeds, this);
-		listSeeds = (GridView) ll.findViewById(R.id.IdGrowingSeedList);
-		listSeeds.setAdapter(lgsa);
+        if (convertView == null) {
+            // ll = new LinearLayout(mContext);
+            ll = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.list_allotments, parent, false);
+        }
+        GrowingSeedDBHelper helper = new GrowingSeedDBHelper(mContext);
+        List<GrowingSeedInterface> mySeeds = helper.getSeedsByAllotment(myAllotments.get(position).getName());
 
-		int nbcolumn = 4;
-		int layoutsize = 100;
-		if (listSeeds.getCount() == 0)
-			listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, layoutsize));
-		else if (listSeeds.getCount() % nbcolumn == 0)
-			listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-					(listSeeds.getCount() / 4) * layoutsize));
-		else
+        lgsa = new ListGrowingSeedAdapter(mContext, mySeeds, this);
+        listSeeds = (GridView) ll.findViewById(R.id.IdGrowingSeedList);
+        listSeeds.setAdapter(lgsa);
 
-			listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-					(listSeeds.getCount() / 4 + 1) * layoutsize));
+        int nbcolumn = 4;
+        int layoutsize = 100;
+        if (listSeeds.getCount() == 0)
+            listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, layoutsize));
+        else if (listSeeds.getCount() % nbcolumn == 0)
+            listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+                    (listSeeds.getCount() / 4) * layoutsize));
+        else
 
-		LinearLayout menu = (LinearLayout) ll.findViewById(R.id.idMenuAllotment);
-		menu.removeAllViews();
+            listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+                    (listSeeds.getCount() / 4 + 1) * layoutsize));
 
-		SowingAction sow = new SowingAction(mContext);
-		ActionWidget widget = new ActionWidget(mContext, sow);
-		widget.setOnClickListener(new View.OnClickListener() {
+        LinearLayout menu = (LinearLayout) ll.findViewById(R.id.idMenuAllotment);
+        menu.removeAllViews();
 
-			@Override
-			public void onClick(View v) {
+        SowingAction sow = new SowingAction(mContext);
+        ActionWidget widget = new ActionWidget(mContext, sow);
+        widget.setOnClickListener(new View.OnClickListener() {
 
-				Intent i = new Intent(mContext, HutActivity.class);
-				i.putExtra("org.gots.allotment.reference", myAllotments.get(position).getName());
-				mContext.startActivity(i);
-			}
-		});
+            @Override
+            public void onClick(View v) {
 
-		widget.setPadding(4, 4, 4, 8);
-		menu.addView(widget);
+                Intent i = new Intent(mContext, HutActivity.class);
+                i.putExtra("org.gots.allotment.reference", myAllotments.get(position).getName());
+                mContext.startActivity(i);
+            }
+        });
 
-		final DeleteAction delete = new DeleteAction(mContext);
-		widget = new ActionWidget(mContext, delete);
-		widget.setOnClickListener(new View.OnClickListener() {
+        widget.setPadding(4, 4, 4, 8);
+        menu.addView(widget);
 
-			@Override
-			public void onClick(View v) {
-				AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-				builder.setMessage(mContext.getResources().getString(R.string.action_delete_allotment)).setCancelable(false)
-						.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								GardeningActionInterface actionItem = delete;
-								actionItem.execute(myAllotments.get(position), null);
+        final DeleteAction delete = new DeleteAction(mContext);
+        widget = new ActionWidget(mContext, delete);
+        widget.setOnClickListener(new View.OnClickListener() {
 
-								notifyDataSetChanged();
-							}
-						}).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								dialog.cancel();
-							}
-						});
-				builder.show();
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                builder.setMessage(mContext.getResources().getString(R.string.action_delete_allotment)).setCancelable(
+                        false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        GardeningActionInterface actionItem = delete;
+                        actionItem.execute(myAllotments.get(position), null);
 
-			}
-		});
+                        notifyDataSetChanged();
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+                builder.show();
 
-		widget.setPadding(4, 4, 4, 8);
+            }
+        });
 
-		menu.addView(widget);
+        widget.setPadding(4, 4, 4, 8);
 
-		return ll;
-	}
+        menu.addView(widget);
 
-	@Override
-	public void onClick(View v) {
-		QuickAllotmentActionBuilder actionsBuilder = new QuickAllotmentActionBuilder(v);
-		actionsBuilder.show();
+        return ll;
+    }
 
-	}
+    @Override
+    public void onClick(View v) {
+        QuickAllotmentActionBuilder actionsBuilder = new QuickAllotmentActionBuilder(v);
+        actionsBuilder.show();
+
+    }
 }
