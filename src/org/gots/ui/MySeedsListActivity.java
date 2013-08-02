@@ -46,7 +46,7 @@ public class MySeedsListActivity extends SherlockListFragment {
         super.onCreate(savedInstanceState);
 
         if (getActivity().getIntent().getExtras() != null) {
-            // String allotmentRef = getActivity().getIntent().getExtras().getString("org.gots.allotment.reference");
+             String allotmentRef = getActivity().getIntent().getExtras().getString("org.gots.allotment.reference");
             // if (allotmentRef != null) {
             // AllotmentDBHelper helper = new AllotmentDBHelper(getActivity());
             // allotment = helper.getAllotmentByName(allotmentRef);

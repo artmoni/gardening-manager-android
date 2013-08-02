@@ -93,6 +93,8 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     public static final String ORG_GOTS_CURRENT_GARDENID = "org.gots.preference.gardenid";
 
+    public static final String ORG_GOTS_CURRENT_ALLOTMENT = "org.gots.preference.allotmentid";
+
     protected SharedPreferences sharedPreferences;
 
     protected Context mContext;
