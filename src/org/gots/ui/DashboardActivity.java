@@ -163,6 +163,8 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        unregisterReceiver(weatherBroadcastReceiver);
+        stopService(weatherIntent);
         GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
     }
 
@@ -192,8 +194,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(weatherBroadcastReceiver);
-        stopService(weatherIntent);
+
     }
 
     @Override

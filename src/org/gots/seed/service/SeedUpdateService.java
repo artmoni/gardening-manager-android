@@ -86,6 +86,7 @@ public class SeedUpdateService extends Service {
                 handler.removeCallbacks(sendUpdatesToUI);
                 handler.postDelayed(sendUpdatesToUI, 0); // 1 second
                 super.onPostExecute(vendorSeeds);
+                stopSelf();
             };
         }.execute();
 

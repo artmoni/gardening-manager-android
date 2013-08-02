@@ -152,8 +152,7 @@ public class MySeedsListAdapter extends BaseAdapter implements OnClickListener {
 
 	@Override
 	public void notifyDataSetChanged() {
-		VendorSeedDBHelper myBank = new VendorSeedDBHelper(mContext);
-		mySeeds = myBank.getMySeeds();
+		
 		super.notifyDataSetChanged();
 	}
 

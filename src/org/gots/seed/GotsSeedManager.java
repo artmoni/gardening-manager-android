@@ -67,13 +67,13 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
             return;
         }
         this.mContext = context;
-        mContext.registerReceiver(this, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
+//        mContext.registerReceiver(this, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
         setSeedProvider();
         initDone = true;
     }
 
     public void finalize() {
-        mContext.unregisterReceiver(this);
+//        mContext.unregisterReceiver(this);
         initDone = false;
         mContext = null;
         instance = null;
