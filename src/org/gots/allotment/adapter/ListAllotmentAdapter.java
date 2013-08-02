@@ -18,9 +18,12 @@ import org.gots.action.GardeningActionInterface;
 import org.gots.action.bean.DeleteAction;
 import org.gots.action.bean.SowingAction;
 import org.gots.action.view.ActionWidget;
+import org.gots.allotment.AllotmentManager;
+import org.gots.allotment.provider.AllotmentProvider;
 import org.gots.allotment.sql.AllotmentDBHelper;
 import org.gots.allotment.view.QuickAllotmentActionBuilder;
 import org.gots.bean.BaseAllotmentInterface;
+import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
 import org.gots.seed.provider.local.sql.GrowingSeedDBHelper;
@@ -30,6 +33,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -70,7 +74,7 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
     }
 
     @Override
-    public Object getItem(int position) {
+    public BaseAllotmentInterface getItem(int position) {
         return myAllotments.get(position);
     }
 
@@ -80,7 +84,7 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
         LinearLayout ll = (LinearLayout) convertView;
 
         if (convertView == null) {
@@ -111,13 +115,17 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
 
         SowingAction sow = new SowingAction(mContext);
         ActionWidget widget = new ActionWidget(mContext, sow);
+        widget.setTag(Integer.valueOf(position));
         widget.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
+                AllotmentManager.getInstance().setCurrentAllotment(getItem(Integer.valueOf(v.getTag().toString())));
 
                 Intent i = new Intent(mContext, HutActivity.class);
-                i.putExtra("org.gots.allotment.reference", myAllotments.get(position).getName());
+                i.putExtra("org.gots.allotment.reference",
+                        myAllotments.get(Integer.valueOf(v.getTag().toString())).getId());
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 mContext.startActivity(i);
             }
         });
@@ -127,25 +135,45 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
 
         final DeleteAction delete = new DeleteAction(mContext);
         widget = new ActionWidget(mContext, delete);
+        widget.setTag(Integer.valueOf(position));
         widget.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                builder.setMessage(mContext.getResources().getString(R.string.action_delete_allotment)).setCancelable(
-                        false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        GardeningActionInterface actionItem = delete;
-                        actionItem.execute(myAllotments.get(position), null);
+                new AsyncTask<BaseAllotmentInterface, Integer, Void>() {
+                    @Override
+                    protected void onPreExecute() {
 
+                        super.onPreExecute();
+                    }
+
+                    @Override
+                    protected Void doInBackground(BaseAllotmentInterface... params) {
+                        GardeningActionInterface actionItem = delete;
+                        actionItem.execute(params[0], null);
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void result) {
                         notifyDataSetChanged();
+                        super.onPostExecute(result);
                     }
-                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-                builder.show();
+                }.execute(getItem(Integer.valueOf(v.getTag().toString())));
+
+                // AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                // builder.setMessage(v.getContext().getResources().getString(R.string.action_delete_allotment)).setCancelable(
+                // false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                // public void onClick(DialogInterface dialog, int id) {
+                // dialog.dismiss();
+                // }
+                // }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                // public void onClick(DialogInterface dialog, int id) {
+                // dialog.cancel();
+                // }
+                // });
+                //
+                // builder.show();
 
             }
         });

@@ -63,13 +63,13 @@ public class AllotmentManager extends BroadcastReceiver implements AllotmentProv
             return;
         }
         this.mContext = context;
-        mContext.registerReceiver(this, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
+        // mContext.registerReceiver(this, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
         setAllotmentProvider();
         initDone = true;
     }
 
     public void finalize() {
-        mContext.unregisterReceiver(this);
+        // mContext.unregisterReceiver(this);
         initDone = false;
         mContext = null;
         instance = null;
@@ -124,4 +124,8 @@ public class AllotmentManager extends BroadcastReceiver implements AllotmentProv
         return allotmentProvider.updateAllotment(allotment);
     }
 
+    @Override
+    public void setCurrentAllotment(BaseAllotmentInterface allotmentInterface) {
+        allotmentProvider.setCurrentAllotment(allotmentInterface);
+    }
 }

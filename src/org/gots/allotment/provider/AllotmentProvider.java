@@ -17,6 +17,8 @@ public interface AllotmentProvider {
 	int removeAllotment(BaseAllotmentInterface allotment);
 
 	BaseAllotmentInterface updateAllotment(BaseAllotmentInterface allotment);
+
+    void setCurrentAllotment(BaseAllotmentInterface allotmentInterface);
 	
 	
 }

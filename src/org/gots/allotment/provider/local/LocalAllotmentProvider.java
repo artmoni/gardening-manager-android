@@ -7,6 +7,9 @@ import org.gots.DatabaseHelper;
 import org.gots.allotment.provider.AllotmentProvider;
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
+import org.gots.garden.GardenInterface;
+import org.gots.garden.sql.GardenSQLite;
+import org.gots.preferences.GotsPreferences;
 import org.gots.provider.AbstractProvider;
 
 import android.content.ContentValues;
@@ -46,8 +49,29 @@ public class LocalAllotmentProvider extends AbstractProvider implements Allotmen
 
     @Override
     public BaseAllotmentInterface getCurrentAllotment() {
-        // TODO Auto-generated method stub
-        return null;
+        int currentAllotmentId = gotsPrefs.get(GotsPreferences.ORG_GOTS_CURRENT_ALLOTMENT, -1);
+        return getAllotment(currentAllotmentId);
+    }
+
+    @Override
+    public void setCurrentAllotment(BaseAllotmentInterface allotmentInterface) {
+        gotsPrefs.set(GotsPreferences.ORG_GOTS_CURRENT_ALLOTMENT, allotmentInterface.getId());
+    }
+
+    public BaseAllotmentInterface getAllotment(int id) {
+        BaseAllotmentInterface allotment = null;
+        open();
+        Cursor cursor;
+
+        cursor = bdd.query(DatabaseHelper.ALLOTMENT_TABLE_NAME, null, DatabaseHelper.ALLOTMENT_ID + "=" + id, null,
+                null, null, null);
+
+        if (cursor.moveToFirst()) {
+            allotment = cursorToAllotment(cursor);
+        }
+        cursor.close();
+        close();
+        return allotment;
     }
 
     @Override

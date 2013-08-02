@@ -7,7 +7,9 @@ import java.util.List;
 import org.gots.allotment.provider.AllotmentProvider;
 import org.gots.allotment.provider.local.LocalAllotmentProvider;
 import org.gots.bean.BaseAllotmentInterface;
+import org.gots.garden.GardenInterface;
 import org.gots.garden.GardenManager;
+import org.gots.garden.provider.nuxeo.NuxeoGardenConvertor;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.provider.nuxeo.NuxeoSeedConverter;
@@ -29,8 +31,6 @@ import android.util.Log;
 public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
     protected static final String TAG = "NuxeoSeedProvider";
 
-    private static final long TIMEOUT = 10;
-
     String myToken;
 
     String myLogin;
@@ -39,7 +39,7 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
 
     protected String myApp;
 
-    protected LazyUpdatableDocumentsList documentsList;
+    protected LazyUpdatableDocumentsList documentsList = null;
 
     public NuxeoAllotmentProvider(Context context) {
         super(context);
@@ -51,14 +51,34 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
 
     @Override
     public BaseAllotmentInterface getCurrentAllotment() {
-        // TODO Auto-generated method stub
-        return null;
+        return super.getCurrentAllotment();
     }
 
     @Override
     public List<BaseAllotmentInterface> getMyAllotments() {
+        List<BaseAllotmentInterface> remoteAllotments = super.getMyAllotments();
+        // if (documentsList != null && documentsList.getLoadedPageCount() > 0) {
+        // remoteAllotments = new ArrayList<BaseAllotmentInterface>();
+        // documentsList.refreshAll();
+        // for (int i = 0; i < documentsList.getLoadedPageCount(); i++) {
+        // Document documentAllotment = documentsList.getDocument(i);
+        // if (documentAllotment == null) {
+        // break;
+        // }
+        // BaseAllotmentInterface allotment = NuxeoAllotmentConverter.convert(documentAllotment);
+        // remoteAllotments.add(super.updateAllotment(allotment));
+        // Log.d(TAG, "documentsList=" + documentAllotment.getId() + " / " + allotment);
+        // }
+        // } else
+        // if (remoteAllotments.size() == 0)
+        remoteAllotments = getNuxeoAllotments();
+        // myVendorSeeds = synchronize(localVendorSeeds, remoteVendorSeeds);
+        return remoteAllotments;
+    }
+
+    protected List<BaseAllotmentInterface> getNuxeoAllotments() {
         List<BaseAllotmentInterface> remoteAllotments = new ArrayList<BaseAllotmentInterface>();
-//        List<BaseAllotmentInterface> myAllotments = new ArrayList<BaseAllotmentInterface>();
+        // List<BaseAllotmentInterface> myAllotments = new ArrayList<BaseAllotmentInterface>();
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager service = session.getAdapter(DocumentManager.class);
@@ -76,8 +96,8 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
             Document allotmentsFolder = service.getDocument(new PathRef(gardenFolder.getPath() + "/My Allotment"));
 
             Documents docs = service.query(
-                    "SELECT * FROM Allotment WHERE ecm:currentLifeCycleState != \"deleted\" AND ecm:parentId='"
-                            + allotmentsFolder.getId()+"'", null, new String[] { "dc:modified true" }, "*", 0, 50,
+                    "SELECT * FROM Allotment WHERE ecm:currentLifeCycleState != \"deleted\" AND ecm:parentId=\""
+                            + allotmentsFolder.getId() + "\"", null, new String[] { "dc:modified true" }, "*", 0, 50,
                     cacheParam);
             documentsList = docs.asUpdatableDocumentsList();
 
@@ -90,8 +110,6 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
         } catch (Exception e) {
             Log.e(TAG, "getMyAllotments " + e.getMessage(), e);
         }
-
-        // myVendorSeeds = synchronize(localVendorSeeds, remoteVendorSeeds);
         return remoteAllotments;
     }
 
@@ -134,7 +152,7 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
         try {
             service.remove(allotment.getUUID());
 
-            Log.d(TAG, "removing document "+allotment.getUUID());
+            Log.d(TAG, "removing document " + allotment.getUUID());
 
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
@@ -145,7 +163,11 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
     @Override
     public BaseAllotmentInterface updateAllotment(BaseAllotmentInterface allotment) {
         // TODO Auto-generated method stub
-        return null;
+        return super.updateAllotment(allotment);
     }
 
+    @Override
+    public void setCurrentAllotment(BaseAllotmentInterface allotmentInterface) {
+        super.setCurrentAllotment(allotmentInterface);
+    }
 }
