@@ -110,7 +110,7 @@
     <string name="garden.create">Create a new garden</string>
     <string name="login.connect">Connect me</string>
     <string name="login.connect.error">Connection failed, have you already create an account ? \n please verify your informations and try again. </string>
-    <string name="login.disconnect">Disconnect</string>
+    <string name="login.disconnect">Sign out</string>
     <string name="login.disconnect.description">Your application is synchronized with Gardening Manager Server.\n\n You can now use the application on multi-devices and be connected with your friends.</string>
     <string name="login.sso.description">Use your Google account to synchronize Gardening Manager on multi device</string>
     <string name="login.simple.description">Use your login/password to synchronize Gardening Manager on multi device</string>

@@ -29,6 +29,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -50,14 +51,6 @@ public class SplashScreenActivity extends AbstractActivity {
 
         @Override
         public void handleMessage(Message msg) {
-            Intent startServiceIntent = new Intent(that.get(), WeatherUpdateService.class);
-            that.get().startService(startServiceIntent);
-
-            Intent startServiceIntent2 = new Intent(that.get(), SeedUpdateService.class);
-            that.get().startService(startServiceIntent2);
-
-            Intent startServiceIntent3 = new Intent(that.get(), ActionNotificationService.class);
-            that.get().startService(startServiceIntent3);
 
             switch (msg.what) {
             case STOPSPLASH:
@@ -179,8 +172,55 @@ public class SplashScreenActivity extends AbstractActivity {
         } else {
             if (GotsPreferences.isDevelopment())
                 getSplashHandler().sendMessageDelayed(msg, 0);
-            else
+            else {
+                new AsyncTask<Void, Integer, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        Intent startServiceIntent = new Intent(getApplicationContext(), WeatherUpdateService.class);
+                        getApplicationContext().startService(startServiceIntent);
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void result) {
+                        ((ImageView)findViewById(R.id.imageProgressWeather)).setAlpha(1);
+                        super.onPostExecute(result);
+                    }
+                }.execute();
+                new AsyncTask<Void, Integer, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+
+                        Intent startServiceIntent2 = new Intent(getApplicationContext(), SeedUpdateService.class);
+                        getApplicationContext().startService(startServiceIntent2);
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void result) {
+                        ((ImageView)findViewById(R.id.imageProgressSeed)).setAlpha(1);
+                        super.onPostExecute(result);
+                    }
+                }.execute();
+                new AsyncTask<Void, Integer, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        Intent startServiceIntent3 = new Intent(getApplicationContext(), ActionNotificationService.class);
+                        getApplicationContext().startService(startServiceIntent3);
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void result) {
+                        ((ImageView)findViewById(R.id.imageProgressAction)).setAlpha(1);
+                        super.onPostExecute(result);
+                    }
+                }.execute();
+
+
+               
                 getSplashHandler().sendMessageDelayed(msg, SPLASHTIME);
+            }
         }
 
     }

@@ -113,5 +113,6 @@
     <string name="fillfields.variety">Veuillez saisir une variété</string>
     <string name="fillfields.dates">Veuillez indiquer les dates</string>
     <string name="login.disconnect.description">Vous êtes en mode synchronisé.\n\n Il est désormais possible de vous connecter depuis plusieurs appareils.</string>
-
+    <string name="login.disconnect">Déconnexion</string>
+    
 </resources>
