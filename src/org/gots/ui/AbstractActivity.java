@@ -24,11 +24,13 @@ package org.gots.ui;
 import java.util.ArrayList;
 
 import org.gots.allotment.AllotmentManager;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenManager;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsSeedManager;
 
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import com.actionbarsherlock.app.SherlockActivity;
@@ -67,12 +69,19 @@ public class AbstractActivity extends SherlockActivity {
         allotmentManager = AllotmentManager.getInstance();
         allotmentManager.initIfNew(this);
         activities.add(this);
+        registerReceiver(gardenManager, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
+        registerReceiver(allotmentManager, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
+        registerReceiver(seedManager, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         activities.remove(this);
+        unregisterReceiver(gardenManager);
+        unregisterReceiver(allotmentManager);
+        unregisterReceiver(seedManager);
         if (activities.size() == 0) {
             nuxeoManager.shutdown();
             gardenManager.finalize();

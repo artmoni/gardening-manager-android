@@ -69,21 +69,23 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
         if (documentsList != null) {
             myCachedGardens = new ArrayList<GardenInterface>();
             documentsList.refreshAll();
-            for (int i = 0; i <= documentsList.getLoadedPageCount(); i++) {
+            for (Iterator<Document> iterator = documentsList.getIterator(); iterator.hasNext();) {
+//                GardenInterface gardenInterface = (GardenInterface) iterator.next();
                 // for (Iterator<Document> iterator = documentsList.getIterator(); iterator.hasNext();) {
-                Document documentGarden = documentsList.getDocument(i);
+                Document documentGarden = iterator.next();
                 if (documentGarden == null) {
                     break;
                 }
                 GardenInterface garden = NuxeoGardenConvertor.convert(documentGarden);
-                myCachedGardens.add(garden);
+                myCachedGardens.add(super.updateGarden(garden));
                 Log.d(TAG, "documentsList=" + documentGarden.getId() + " / " + garden);
             }
+           
             // return myCachedGardens;
         } else
-            myCachedGardens = super.getMyGardens();
+            myCachedGardens = getMyNuxeoGardens(super.getMyGardens(), true);
 
-        return getMyNuxeoGardens(super.getMyGardens(), true);
+        return myCachedGardens;
 
     }
 

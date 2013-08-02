@@ -59,13 +59,11 @@ public class GardenManager extends BroadcastReceiver {
             return;
         }
         this.mContext = context;
-        mContext.registerReceiver(this, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
         setGardenProvider();
         initDone = true;
     }
 
     public void finalize() {
-        mContext.unregisterReceiver(this);
         initDone = false;
         mContext = null;
         instance=null;
