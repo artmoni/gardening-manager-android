@@ -112,7 +112,7 @@ public class VendorListActivity extends SherlockListFragment {
 
             @Override
             protected List<BaseSeedInterface> doInBackground(Void... params) {
-                return seedProvider.getVendorSeeds();
+                return seedProvider.getVendorSeeds(false);
             }
 
             protected void onPostExecute(List<BaseSeedInterface> vendorSeeds) {
@@ -132,7 +132,7 @@ public class VendorListActivity extends SherlockListFragment {
     @Override
     public void onPause() {
 
-        mContext.unregisterReceiver(seedBroadcastReceiver);
+//        mContext.unregisterReceiver(seedBroadcastReceiver);
         // mContext.stopService(seedIntent);
 
         super.onPause();
@@ -150,4 +150,9 @@ public class VendorListActivity extends SherlockListFragment {
         onResume();
     }
 
+    @Override
+    public void onDestroy() {
+        mContext.unregisterReceiver(seedBroadcastReceiver);
+        super.onDestroy();
+    }
 }

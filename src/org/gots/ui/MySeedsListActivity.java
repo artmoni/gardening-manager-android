@@ -26,6 +26,9 @@ import org.gots.seed.adapter.MySeedsListAdapter;
 import org.gots.seed.provider.local.sql.VendorSeedDBHelper;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -46,7 +49,7 @@ public class MySeedsListActivity extends SherlockListFragment {
         super.onCreate(savedInstanceState);
 
         if (getActivity().getIntent().getExtras() != null) {
-             String allotmentRef = getActivity().getIntent().getExtras().getString("org.gots.allotment.reference");
+            String allotmentRef = getActivity().getIntent().getExtras().getString("org.gots.allotment.reference");
             // if (allotmentRef != null) {
             // AllotmentDBHelper helper = new AllotmentDBHelper(getActivity());
             // allotment = helper.getAllotmentByName(allotmentRef);
@@ -57,7 +60,16 @@ public class MySeedsListActivity extends SherlockListFragment {
         }
         seedManager = GotsSeedManager.getInstance();
         seedManager.initIfNew(getActivity());
+        getActivity().registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.SEED_DISPLAYLIST));
+
     }
+
+    private BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            onResume();
+        }
+    };
 
     @Override
     public ListAdapter getListAdapter() {
@@ -101,6 +113,11 @@ public class MySeedsListActivity extends SherlockListFragment {
         super.onResume();
     }
 
+    @Override
+    public void onDestroy() {
+        getActivity().unregisterReceiver(seedBroadcastReceiver);
+        super.onDestroy();
+    }
     // @Override
     // protected void onResume() {
     // super.onResume();

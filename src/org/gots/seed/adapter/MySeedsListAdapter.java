@@ -26,6 +26,7 @@ import org.gots.action.sql.ActionDBHelper;
 import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
 import org.gots.bean.BaseAllotmentInterface;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.local.sql.VendorSeedDBHelper;
@@ -33,6 +34,9 @@ import org.gots.seed.view.SeedWidgetLong;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -82,6 +86,7 @@ public class MySeedsListAdapter extends BaseAdapter implements OnClickListener {
 
 		View vi = convertView;
 		final BaseSeedInterface currentSeed = getItem(position);
+		
 		SeedWidgetLong seedWidgetLong;
 		ActionWidget actionWidget;
 
@@ -118,16 +123,27 @@ public class MySeedsListAdapter extends BaseAdapter implements OnClickListener {
 
 			@Override
 			public void onClick(View v) {
-
-				if (allotment != null) {
-					GardeningActionInterface action = (GardeningActionInterface) baseActionInterface;
-					action.execute(allotment, (GrowingSeedInterface) currentSeed);
-					((Activity) mContext).finish();
-				} else {
-					SeedActionInterface action = (SeedActionInterface) baseActionInterface;
-					action.execute((GrowingSeedInterface) currentSeed);
-				}
-				notifyDataSetChanged();
+			    new AsyncTask<Void, Integer, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        if (allotment != null) {
+                            GardeningActionInterface action = (GardeningActionInterface) baseActionInterface;
+                            action.execute(allotment, (GrowingSeedInterface) currentSeed);
+                            ((Activity) mContext).finish();
+                        } else {
+                            SeedActionInterface action = (SeedActionInterface) baseActionInterface;
+                            action.execute((GrowingSeedInterface) currentSeed);
+                        }
+                        return null;
+                    }
+                    @Override
+                    protected void onPostExecute(Void result) {
+//                        notifyDataSetChanged();
+                        mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
+                        super.onPostExecute(result);
+                    }
+                }.execute();
+				
 			}
 		});
 

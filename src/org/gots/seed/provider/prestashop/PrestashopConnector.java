@@ -61,7 +61,7 @@ class PrestashopConnector implements GotsSeedProvider {
     }
 
     @Override
-    public List<BaseSeedInterface> getVendorSeeds() {
+    public List<BaseSeedInterface> getVendorSeeds(boolean force) {
         // TODO Auto-generated method stub
         return null;
     }

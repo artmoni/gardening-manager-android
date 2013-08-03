@@ -47,7 +47,7 @@ public class SimpleSeedProvider implements GotsSeedProvider {
     }
 
     @Override
-    public List<BaseSeedInterface> getVendorSeeds() {
+    public List<BaseSeedInterface> getVendorSeeds(boolean force) {
         List<BaseSeedInterface> allSeeds = new ArrayList<BaseSeedInterface>();
 
         try {

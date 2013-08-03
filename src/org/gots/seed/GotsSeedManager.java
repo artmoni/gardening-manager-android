@@ -80,9 +80,9 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     }
 
     @Override
-    public List<BaseSeedInterface> getVendorSeeds() {
+    public List<BaseSeedInterface> getVendorSeeds(boolean force) {
 
-        return new NuxeoSeedProvider(mContext).getVendorSeeds();
+        return new NuxeoSeedProvider(mContext).getVendorSeeds(force);
     }
 
     @Override

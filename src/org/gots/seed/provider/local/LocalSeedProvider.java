@@ -36,7 +36,7 @@ public class LocalSeedProvider extends AbstractProvider implements GotsSeedProvi
     }
 
     @Override
-    public List<BaseSeedInterface> getVendorSeeds() {
+    public List<BaseSeedInterface> getVendorSeeds(boolean force) {
         return myBank.getVendorSeeds();
     }
 

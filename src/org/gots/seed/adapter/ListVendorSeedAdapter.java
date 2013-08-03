@@ -22,6 +22,7 @@ import org.gots.action.bean.BuyingAction;
 import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
 import org.gots.ads.GotsAdvertisement;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.view.SeedWidgetLong;
@@ -59,7 +60,6 @@ public class ListVendorSeedAdapter extends BaseAdapter {
 
         GotsAdvertisement ads = new GotsAdvertisement(mContext);
         adsView = ads.getAdsLayout();
-
     }
 
     @Override
@@ -94,7 +94,9 @@ public class ListVendorSeedAdapter extends BaseAdapter {
                     }
                     @Override
                     protected void onPostExecute(Void result) {
-                        notifyDataSetChanged();
+//                        notifyDataSetChanged();
+                        mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
+
                         super.onPostExecute(result);
                     }
                 }.execute();

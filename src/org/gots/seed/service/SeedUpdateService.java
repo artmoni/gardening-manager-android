@@ -78,7 +78,7 @@ public class SeedUpdateService extends Service {
 
             @Override
             protected List<BaseSeedInterface> doInBackground(Void... params) {
-                return manager.getVendorSeeds();
+                return manager.getVendorSeeds(true);
 
             }
 

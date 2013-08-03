@@ -57,12 +57,12 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
     }
 
     @Override
-    public List<BaseSeedInterface> getVendorSeeds() {
+    public List<BaseSeedInterface> getVendorSeeds(boolean force) {
 
-        List<BaseSeedInterface> localVendorSeeds = super.getVendorSeeds();
+        List<BaseSeedInterface> localVendorSeeds = super.getVendorSeeds(force);
 
         // if (documentsList != null && documentsList.getCurrentSize() > 0) {
-        if (localVendorSeeds.size() == 0) {
+        if (localVendorSeeds.size() == 0 || force) {
             // localVendorSeeds = new ArrayList<BaseSeedInterface>();
             // documentsList.refreshAll();
             // for (int i = 0; i <= documentsList.getLoadedPageCount(); i++) {
@@ -76,12 +76,12 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             // Log.d(TAG, "documentsList=" + documentSeed.getId() + " / " + seed);
             // }
 
-            localVendorSeeds = getNuxeoVendorSeeds(localVendorSeeds);
+            localVendorSeeds = getNuxeoVendorSeeds(localVendorSeeds, force);
         }
         return localVendorSeeds;
     }
 
-    protected List<BaseSeedInterface> getNuxeoVendorSeeds(List<BaseSeedInterface> localVendorSeeds) {
+    protected List<BaseSeedInterface> getNuxeoVendorSeeds(List<BaseSeedInterface> localVendorSeeds, boolean force) {
         List<BaseSeedInterface> remoteVendorSeeds = new ArrayList<BaseSeedInterface>();
         List<BaseSeedInterface> myVendorSeeds = new ArrayList<BaseSeedInterface>();
 
@@ -101,7 +101,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             // "SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState <> 'deleted' ORDER BY dc:modified DESC") //
             // .execute();
             byte cacheParam = CacheBehavior.STORE;
-            boolean refresh = true;
+            boolean refresh = force;
             if (refresh) {
                 cacheParam = (byte) (cacheParam | CacheBehavior.FORCE_REFRESH);
                 refresh = false;

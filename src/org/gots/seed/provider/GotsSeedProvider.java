@@ -7,7 +7,7 @@ import org.gots.seed.BaseSeedInterface;
 
 public interface GotsSeedProvider {
 
-    public List<BaseSeedInterface> getVendorSeeds();
+    public List<BaseSeedInterface> getVendorSeeds(boolean force);
 
     public void getAllFamilies();
 
