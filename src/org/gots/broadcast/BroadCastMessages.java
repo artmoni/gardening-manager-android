@@ -33,6 +33,8 @@ public final class BroadCastMessages {
 
     public final static String CONNECTION_SETTINGS_CHANGED = "org.gots.settings.connection";
 
+    public static final String GARDEN_SETTINGS_CHANGED = "org.gots.settings.garden";
+
     private BroadCastMessages() {
         throw new AssertionError();
     }

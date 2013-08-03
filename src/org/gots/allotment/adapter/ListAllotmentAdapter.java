@@ -151,6 +151,7 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
                     protected Void doInBackground(BaseAllotmentInterface... params) {
                         GardeningActionInterface actionItem = delete;
                         actionItem.execute(params[0], null);
+                        myAllotments.remove(params[0]);
                         return null;
                     }
 

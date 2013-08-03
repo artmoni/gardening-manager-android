@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import org.gots.action.AbstractActionSeed;
 import org.gots.garden.sql.GardenSQLite;
+import org.gots.preferences.GotsPreferences;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -25,7 +26,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // ************************ DATABASE **************
     private static final int DATABASE_VERSION = 14;
 
-    private static String DATABASE_NAME = "gots0";
+    private static String DATABASE_NAME = "gots";
 
     public final static String AUTHORITY = "org.gots.providers.seeds";
 
@@ -273,13 +274,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		//@formatter:on
 
     public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, DATABASE_NAME.concat(String.valueOf(GotsPreferences.getInstance().get(
+                GotsPreferences.ORG_GOTS_CURRENT_GARDENID, 0))), null, DATABASE_VERSION);
     }
 
-    public void setDatabase(int databaseId) {
-        DATABASE_NAME = "gots" + databaseId;
-        Log.d("setDatabase", DATABASE_NAME);
-    }
+    // public void setDatabase(int databaseId) {
+    // DATABASE_NAME = "gots" + databaseId;
+    // Log.d(TAG, "Database has changed to "+DATABASE_NAME);
+    // }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -367,7 +369,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE " + ACTIONSEEDS_TABLE_NAME + " ADD COLUMN " + ACTIONSEED_DATA + " VARCHAR(255)");
             db.execSQL("ALTER TABLE " + SEEDS_TABLE_NAME + " ADD COLUMN " + SEED_UUID + " VARCHAR(255);");
             db.execSQL("ALTER TABLE " + ALLOTMENT_TABLE_NAME + " ADD COLUMN " + ALLOTMENT_UUID + " VARCHAR(255);");
-            
 
         } else {
             db.execSQL("DROP TABLE IF EXISTS " + SEEDS_TABLE_NAME);

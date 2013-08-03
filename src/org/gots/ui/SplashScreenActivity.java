@@ -34,6 +34,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -71,6 +73,12 @@ public class SplashScreenActivity extends AbstractActivity {
     private static final long SPLASHTIME = 2000;
 
     private static Handler splashHandler;
+
+    private View progressSeed;
+
+    private View progressWeather;
+
+    private View progressAction;
 
     private Handler getSplashHandler() {
         if (splashHandler == null) {
@@ -163,6 +171,9 @@ public class SplashScreenActivity extends AbstractActivity {
         // NotificationService.class);
         // this.startService(startServiceIntent);
         setRecurringAlarm(this);
+        progressWeather = findViewById(R.id.imageProgressWeather);
+        progressSeed = findViewById(R.id.imageProgressSeed);
+        progressAction = findViewById(R.id.imageProgressAction);
 
         int currentGardenId = gotsPrefs.getCurrentGardenId();
         if (currentGardenId == -1) {
@@ -174,6 +185,13 @@ public class SplashScreenActivity extends AbstractActivity {
                 getSplashHandler().sendMessageDelayed(msg, 0);
             else {
                 new AsyncTask<Void, Integer, Void>() {
+                    protected void onPreExecute() {
+                        Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(),
+                                R.anim.tween);
+                        progressWeather.startAnimation(myFadeInAnimation);
+
+                    };
+
                     @Override
                     protected Void doInBackground(Void... params) {
                         Intent startServiceIntent = new Intent(getApplicationContext(), WeatherUpdateService.class);
@@ -183,11 +201,20 @@ public class SplashScreenActivity extends AbstractActivity {
 
                     @Override
                     protected void onPostExecute(Void result) {
-                        ((ImageView)findViewById(R.id.imageProgressWeather)).setAlpha(1);
                         super.onPostExecute(result);
+                        ((ImageView) findViewById(R.id.imageProgressWeather)).setAlpha(1);
+                        progressWeather.clearAnimation();
+
                     }
                 }.execute();
                 new AsyncTask<Void, Integer, Void>() {
+                    protected void onPreExecute() {
+                        Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(),
+                                R.anim.tween);
+                        progressSeed.startAnimation(myFadeInAnimation);
+
+                    };
+
                     @Override
                     protected Void doInBackground(Void... params) {
 
@@ -198,27 +225,37 @@ public class SplashScreenActivity extends AbstractActivity {
 
                     @Override
                     protected void onPostExecute(Void result) {
-                        ((ImageView)findViewById(R.id.imageProgressSeed)).setAlpha(1);
+                        ((ImageView) findViewById(R.id.imageProgressSeed)).setAlpha(1);
+                        progressSeed.clearAnimation();
+
                         super.onPostExecute(result);
                     }
                 }.execute();
                 new AsyncTask<Void, Integer, Void>() {
+                    protected void onPreExecute() {
+                        Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(),
+                                R.anim.tween);
+                        progressAction.startAnimation(myFadeInAnimation);
+
+                    };
+
                     @Override
                     protected Void doInBackground(Void... params) {
-                        Intent startServiceIntent3 = new Intent(getApplicationContext(), ActionNotificationService.class);
+                        Intent startServiceIntent3 = new Intent(getApplicationContext(),
+                                ActionNotificationService.class);
                         getApplicationContext().startService(startServiceIntent3);
                         return null;
                     }
 
                     @Override
                     protected void onPostExecute(Void result) {
-                        ((ImageView)findViewById(R.id.imageProgressAction)).setAlpha(1);
+                        ((ImageView) findViewById(R.id.imageProgressAction)).setAlpha(1);
+                        progressAction.clearAnimation();
+
                         super.onPostExecute(result);
                     }
                 }.execute();
 
-
-               
                 getSplashHandler().sendMessageDelayed(msg, SPLASHTIME);
             }
         }

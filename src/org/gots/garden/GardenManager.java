@@ -85,7 +85,7 @@ public class GardenManager extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())) {
+        if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())||BroadCastMessages.GARDEN_SETTINGS_CHANGED.equals(intent.getAction())) {
             setGardenProvider();
         }
     }
@@ -121,27 +121,27 @@ public class GardenManager extends BroadcastReceiver {
         return -1;
     }
 
-    private void changeDatabase(int position) {
-        DatabaseHelper helper = new DatabaseHelper(mContext);
-        helper.setDatabase(position);
-
-        // WeatherManager wm = new WeatherManager(mContext);
-        // wm.getWeatherFromWebService(getcurrentGarden());
-
-    }
+//    private void changeDatabase(int position) {
+//        DatabaseHelper helper = new DatabaseHelper(mContext);
+//        helper.setDatabase(position);
+//
+//        // WeatherManager wm = new WeatherManager(mContext);
+//        // wm.getWeatherFromWebService(getcurrentGarden());
+//
+//    }
 
     public GardenInterface getCurrentGarden() {
         GardenInterface garden = gardenProvider.getCurrentGarden();
-        if (garden != null)
-            changeDatabase((int) garden.getId());
+//        if (garden != null)
+//            changeDatabase((int) garden.getId());
         return garden;
     }
 
     public void setCurrentGarden(GardenInterface garden) {
-        GotsPreferences.getInstance().set(GotsPreferences.ORG_GOTS_CURRENT_GARDENID, (int) garden.getId());
-        Log.d("setCurrentGarden", "[" + garden.getId() + "] " + garden.getLocality()
+        GotsPreferences.getInstance().set(GotsPreferences.ORG_GOTS_CURRENT_GARDENID, (int)garden.getId());
+        Log.d(TAG, "setCurrentGarden [" + garden.getId() + "] " + garden.getLocality()
                 + " has been set as current workspace");
-        changeDatabase((int) garden.getId());
+//        changeDatabase((int) garden.getId());
     }
 
     public void removeGarden(GardenInterface garden) {

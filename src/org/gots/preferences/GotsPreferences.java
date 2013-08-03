@@ -150,6 +150,9 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
         if (ORG_GOTS_GARDEN_SERVERCONNECTED.equals(key)) {
             mContext.sendBroadcast(new Intent(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
             Log.d(TAG, key + " has changed: " + isConnectedToServer());
+        }else if (ORG_GOTS_CURRENT_GARDENID.equals(key))   {
+            mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_SETTINGS_CHANGED));
+            Log.d(TAG, key + " has changed: " + getCurrentGardenId());
         }
         // initFromPrefs(prefs);
     }

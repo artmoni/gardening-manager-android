@@ -147,7 +147,7 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())) {
+        if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())||BroadCastMessages.GARDEN_SETTINGS_CHANGED.equals(intent.getAction())) {
             setSeedProvider();
         }
     }

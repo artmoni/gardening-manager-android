@@ -87,7 +87,8 @@ public class AllotmentManager extends BroadcastReceiver implements AllotmentProv
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())) {
+        if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())
+                || BroadCastMessages.GARDEN_SETTINGS_CHANGED.equals(intent.getAction())) {
             setAllotmentProvider();
         }
     }

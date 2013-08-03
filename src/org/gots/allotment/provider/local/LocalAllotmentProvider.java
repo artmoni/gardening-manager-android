@@ -36,7 +36,7 @@ public class LocalAllotmentProvider extends AbstractProvider implements Allotmen
         bdd.close();
     }
 
-    private BaseAllotmentInterface cursorToAllotment(Cursor cursor) {
+    protected BaseAllotmentInterface convertToAllotment(Cursor cursor) {
         BaseAllotmentInterface lot = new Allotment();
         // ActionFactory factory = new ActionFactory();
         // lot = factory.buildAction(mContext,cursor.getString(cursor.getColumnIndex(DatabaseHelper.ACTION_NAME)));
@@ -45,6 +45,16 @@ public class LocalAllotmentProvider extends AbstractProvider implements Allotmen
         lot.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ALLOTMENT_NAME)));
         lot.setUUID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ALLOTMENT_UUID)));
         return lot;
+    }
+
+    protected ContentValues convertToContentValues(BaseAllotmentInterface allotment) {
+        ContentValues values = new ContentValues();
+        // values.
+        // values.put(ActionSeedSQLite.ACTION_NAME, action.getName());
+        // values.put(DatabaseHelper.ALLOTMENT_ID, allotment.getId());
+        values.put(DatabaseHelper.ALLOTMENT_NAME, allotment.getName());
+        values.put(DatabaseHelper.ALLOTMENT_UUID, allotment.getUUID());
+        return values;
     }
 
     @Override
@@ -67,7 +77,7 @@ public class LocalAllotmentProvider extends AbstractProvider implements Allotmen
                 null, null, null);
 
         if (cursor.moveToFirst()) {
-            allotment = cursorToAllotment(cursor);
+            allotment = convertToAllotment(cursor);
         }
         cursor.close();
         close();
@@ -83,7 +93,7 @@ public class LocalAllotmentProvider extends AbstractProvider implements Allotmen
 
         if (cursor.moveToFirst()) {
             do {
-                BaseAllotmentInterface allotment = cursorToAllotment(cursor);
+                BaseAllotmentInterface allotment = convertToAllotment(cursor);
                 allAllotment.add(allotment);
             } while (cursor.moveToNext());
         }
@@ -97,12 +107,7 @@ public class LocalAllotmentProvider extends AbstractProvider implements Allotmen
 
         long rowid;
         open();
-        ContentValues values = new ContentValues();
-        // values.
-        // values.put(ActionSeedSQLite.ACTION_NAME, action.getName());
-        // values.put(DatabaseHelper.ALLOTMENT_ID, allotment.getId());
-        values.put(DatabaseHelper.ALLOTMENT_NAME, allotment.getName());
-        values.put(DatabaseHelper.ALLOTMENT_UUID, allotment.getUUID());
+        ContentValues values = convertToContentValues(allotment);
 
         // values.put(DatabaseHelper.ACTIONSEED_DATEACTIONDONE, Calendar.getInstance().getTimeInMillis());
 
@@ -116,15 +121,20 @@ public class LocalAllotmentProvider extends AbstractProvider implements Allotmen
     public int removeAllotment(BaseAllotmentInterface allotment) {
         open();
         int nbRow = bdd.delete(DatabaseHelper.ALLOTMENT_TABLE_NAME,
-                DatabaseHelper.ALLOTMENT_ID + "=" + allotment.getId(), null);
+                DatabaseHelper.ALLOTMENT_ID + "=" + allotment.getId()+"", null);
         close();
         return nbRow;
     }
 
     @Override
     public BaseAllotmentInterface updateAllotment(BaseAllotmentInterface allotment) {
-        // TODO Auto-generated method stub
-        return null;
+        open();
+        ContentValues values;
+        values = convertToContentValues(allotment);
+        int nbRow = bdd.update(DatabaseHelper.ALLOTMENT_TABLE_NAME, values, DatabaseHelper.ALLOTMENT_ID + "="
+                + allotment.getId()+"", null);
+        close();
+        return allotment;
     }
 
 }
