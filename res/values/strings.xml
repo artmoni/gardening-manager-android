@@ -6,6 +6,7 @@
     <string name="gots.opensource">This is a collaborative Project,\n you are invited to participate.</string>
     <string name="gots.description">The biologeekal growing</string>
     <string name="gots.loading">Loading, please wait.</string>
+    <string name="gots.beta.description">This is a beta feature.</string>
     <string name="day">Day</string>
     <string name="week">week</string>
     <string name="month">month</string>

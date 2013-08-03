@@ -115,9 +115,36 @@
         android:layout_height="match_parent"
         android:layout_weight="1" >
 
+        <LinearLayout
+            android:id="@+id/webSauterDansLesFlaques"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center_horizontal" >
+
+            <ImageView
+                android:id="@+id/imageProgressWeather"
+                style="@style/logo"
+                android:background="@drawable/bg_state_critical"
+                android:src="@drawable/weather_mostlysunny" />
+
+            <ImageView
+                android:id="@+id/imageProgressSeed"
+                style="@style/logo"
+                android:background="@drawable/bg_state_critical"
+                android:src="@drawable/specie_chillis" />
+
+            <ImageView
+                android:id="@+id/imageProgressAction"
+                style="@style/logo"
+                android:background="@drawable/bg_state_critical"
+                android:src="@drawable/action_cut" />
+        </LinearLayout>
+
         <ImageView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:layout_marginTop="50dp"
             android:src="@drawable/logosplah" />
 
         <TextView
