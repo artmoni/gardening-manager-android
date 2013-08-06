@@ -51,7 +51,7 @@ public class GardenDBHelper {
         bdd.close();
     }
 
-    public GardenInterface insertGarden(GardenInterface garden) {
+    public synchronized GardenInterface insertGarden(GardenInterface garden) {
         long rowid;
         open();
         ContentValues values = new ContentValues();
@@ -72,7 +72,7 @@ public class GardenDBHelper {
      * @param gardenId give you the specific garden, else -1 give you the first
      * garden available
      */
-    public GardenInterface getGarden(int gardenId) {
+    public synchronized GardenInterface getGarden(int gardenId) {
         GardenInterface garden = null;
         // SeedActionInterface searchedSeed = new GrowingSeed();
         open();
@@ -107,7 +107,7 @@ public class GardenDBHelper {
         return garden;
     }
 
-    public GardenInterface updateGarden(GardenInterface garden) {
+    public synchronized GardenInterface  updateGarden(GardenInterface garden) {
         open();
         ContentValues values = new ContentValues();
         values.put(GardenSQLite.GARDEN_ADMINAREA, garden.getAdminArea());
@@ -158,7 +158,7 @@ public class GardenDBHelper {
         return gardens;
     }
 
-    public int deleteGarden(GardenInterface garden) {
+    public synchronized int deleteGarden(GardenInterface garden) {
         open();
         int rowid = bdd.delete(GardenSQLite.GARDEN_TABLE_NAME, GardenSQLite.GARDEN_ID + "=" + garden.getId(), null);
         if (rowid != 1) {
@@ -168,7 +168,7 @@ public class GardenDBHelper {
         return rowid;
     }
 
-    public int getCountGarden() {
+    public synchronized int getCountGarden() {
         // SeedActionInterface searchedSeed = new GrowingSeed();
         open();
         Cursor cursor = bdd.query(GardenSQLite.GARDEN_TABLE_NAME, null, null, null, null, null, null);

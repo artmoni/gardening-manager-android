@@ -206,8 +206,8 @@ public class GardenManager extends BroadcastReceiver {
     // }
     // }
 
-    public List<GardenInterface> getMyGardens() {
-        return gardenProvider.getMyGardens();
+    public List<GardenInterface> getMyGardens(boolean force) {
+        return gardenProvider.getMyGardens(force);
     }
 
 }

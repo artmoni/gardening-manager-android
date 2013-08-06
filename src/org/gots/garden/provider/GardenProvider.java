@@ -8,7 +8,7 @@ public interface GardenProvider {
 
 	public GardenInterface getCurrentGarden();
 	
-	public List<GardenInterface> getMyGardens();
+	public List<GardenInterface> getMyGardens(boolean force);
 
 	public GardenInterface createGarden(GardenInterface garden);
 

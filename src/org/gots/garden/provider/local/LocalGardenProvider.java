@@ -38,7 +38,7 @@ public class LocalGardenProvider extends AbstractProvider implements GardenProvi
     }
 
     @Override
-    public List<GardenInterface> getMyGardens() {
+    public List<GardenInterface> getMyGardens(boolean force) {
         return helper.getGardens();
     }
 

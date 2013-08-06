@@ -14,9 +14,14 @@ import org.nuxeo.android.documentprovider.LazyUpdatableDocumentsList;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
 import org.nuxeo.ecm.automation.client.cache.CacheBehavior;
+import org.nuxeo.ecm.automation.client.cache.DeferredUpdateManager;
+import org.nuxeo.ecm.automation.client.cache.OperationType;
+import org.nuxeo.ecm.automation.client.cache.TransientStateManager;
+import org.nuxeo.ecm.automation.client.jaxrs.AsyncCallback;
 import org.nuxeo.ecm.automation.client.jaxrs.Constants;
 import org.nuxeo.ecm.automation.client.jaxrs.OperationRequest;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
+import org.nuxeo.ecm.automation.client.jaxrs.impl.NotAvailableOffline;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
@@ -54,6 +59,8 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 
     private GardenInterface currentGarden;
 
+    private boolean force_force = false;
+
     public NuxeoGardenProvider(Context context) {
         super(context);
     }
@@ -63,27 +70,29 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
     }
 
     @Override
-    public List<GardenInterface> getMyGardens() {
+    public List<GardenInterface> getMyGardens(boolean force) {
         // List<GardenInterface> myCachedGardens = super.getMyGardens();
         List<GardenInterface> myCachedGardens;
-        if (documentsList != null) {
-            myCachedGardens = new ArrayList<GardenInterface>();
-            documentsList.refreshAll();
-            for (Iterator<Document> iterator = documentsList.getIterator(); iterator.hasNext();) {
-//                GardenInterface gardenInterface = (GardenInterface) iterator.next();
-                // for (Iterator<Document> iterator = documentsList.getIterator(); iterator.hasNext();) {
-                Document documentGarden = iterator.next();
-                if (documentGarden == null) {
-                    break;
-                }
-                GardenInterface garden = NuxeoGardenConvertor.convert(documentGarden);
-                myCachedGardens.add(super.updateGarden(garden));
-                Log.d(TAG, "documentsList=" + documentGarden.getId() + " / " + garden);
-            }
-           
-            // return myCachedGardens;
-        } else
-            myCachedGardens = getMyNuxeoGardens(super.getMyGardens(), true);
+        // if (documentsList != null) {
+        // myCachedGardens = new ArrayList<GardenInterface>();
+        // documentsList.refreshAll();
+        // for (Iterator<Document> iterator = documentsList.getIterator(); iterator.hasNext();) {
+        // // GardenInterface gardenInterface = (GardenInterface) iterator.next();
+        // // for (Iterator<Document> iterator = documentsList.getIterator(); iterator.hasNext();) {
+        // Document documentGarden = iterator.next();
+        // if (documentGarden == null) {
+        // break;
+        // }
+        // GardenInterface garden = NuxeoGardenConvertor.convert(documentGarden);
+        // myCachedGardens.add(super.updateGarden(garden));
+        // Log.d(TAG, "documentsList=" + documentGarden.getId() + " / " + garden);
+        // }
+        //
+        // // return myCachedGardens;
+        // } else
+        // if(force)
+
+        myCachedGardens = getMyNuxeoGardens(super.getMyGardens(force), force);
 
         return myCachedGardens;
 
@@ -99,8 +108,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
      *            gardens
      * @return
      */
-    protected List<GardenInterface> getMyNuxeoGardens(List<GardenInterface> myLocalGardens,
-            final boolean syncWithLocalGardens) {
+    protected List<GardenInterface> getMyNuxeoGardens(List<GardenInterface> myLocalGardens, final boolean force) {
         List<GardenInterface> myGardens = new ArrayList<GardenInterface>();
         List<GardenInterface> remoteGardens = new ArrayList<GardenInterface>();
 
@@ -111,14 +119,14 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
             // Documents gardensWorkspaces =
             // service.query("SELECT * FROM Garden WHERE ecm:currentLifeCycleState <> 'deleted' ORDER BY dc:modified DESC");
             byte cacheParam = CacheBehavior.STORE;
-            boolean refresh = true;
+            boolean refresh = force || force_force;
             if (refresh) {
                 cacheParam = (byte) (cacheParam | CacheBehavior.FORCE_REFRESH);
                 refresh = false;
             }
             Documents gardensWorkspaces = service.query(
                     "SELECT * FROM Garden WHERE ecm:currentLifeCycleState != \"deleted\"", null,
-                    new String[] { "dc:modified true" }, "*", 0, 50, cacheParam);
+                    new String[] { "dc:modified desc" }, "*", 0, 50, cacheParam);
 
             documentsList = gardensWorkspaces.asUpdatableDocumentsList();
 
@@ -197,44 +205,65 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 
         Session session = getNuxeoClient().getSession();
         DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
-        // DeferredUpdateManager deferredUpdateMgr = getNuxeoClient().getDeferredUpdatetManager();
+        DeferredUpdateManager deferredUpdateMgr = getNuxeoClient().getDeferredUpdatetManager();
         currentGarden = localGarden;
         Document createDocument;
         try {
             Document root = documentMgr.getUserHome();
-            // createDocument = documentMgr.createDocument(home, "Garden", currentGarden.getLocality(), props);
-            createDocument = new Document(root.getPath(), localGarden.getLocality(), "Garden");
+
+            PropertyMap properties = new PropertyMap();
+            properties.set("dc:title", localGarden.getLocality());
 
             OperationRequest createOperation = NuxeoManager.getInstance().getSession().newRequest("Document.Create").setHeader(
-                    Constants.HEADER_NX_SCHEMAS, "*").set("type", "Garden");
+                    Constants.HEADER_NX_SCHEMAS, "*").setInput(root).set("type", "Garden").set("properties", properties);
 
-            PropertyMap dirty = createDocument.getDirtyProperties();
-            dirty.set("dc:title", localGarden.getLocality());
-
-            String dirtyString = PropertiesHelper.toStringProperties(dirty);
-
-            createOperation.setInput(root).set("properties", dirtyString);
-            if (createDocument.getName() != null) {
-                createOperation.set("name", createDocument.getName());
-            }
-            documentsList.registerListener(new DocumentsListChangeListener() {
+            AsyncCallback<Object> callback = new AsyncCallback<Object>() {
+                @Override
+                public void onSuccess(String executionId, Object data) {
+                    Document doc = (Document) data;
+                    currentGarden.setUUID(doc.getId());
+                    NuxeoGardenProvider.super.updateGarden(currentGarden);
+                    Log.d(TAG, "onSuccess " + data);
+                    // getNuxeoClient().getTransientStateManager().flushTransientState(
+                    // doc.getId());
+                    force_force = true;
+                }
 
                 @Override
-                public void notifyContentChanged(int page) {
-                    Document doc = null;
-                    if (documentsList != null) {
-                        doc = documentsList.getCurrentDocument();
-                    }
-                    // cached-only document have a temporary id begginning with "NEW"
-                    if (doc != null && !doc.getId().startsWith("NEW")) {
-                        currentGarden.setUUID(doc.getId());
-                        NuxeoGardenProvider.super.updateGarden(currentGarden);
-                        Log.d(TAG, "notifyContentChanged on " + doc.getName() + " - " + doc.getId());
-                    }
-//                    documentsList.unregisterListener(this);
+                public void onError(String executionId, Throwable e) {
+                    Log.d(TAG, "onError " + e.getMessage());
+
                 }
-            });
-            documentsList.createDocument(createDocument, createOperation);
+            };
+            deferredUpdateMgr.execDeferredUpdate(createOperation, callback, OperationType.CREATE, true);
+            // deferredUpdateMgr.executePendingRequests(session);
+            //
+            //
+            //
+            // String dirtyString = PropertiesHelper.toStringProperties(dirty);
+            //
+            // createOperation.setInput(root).set("properties", dirtyString);
+            // if (createDocument.getName() != null) {
+            // createOperation.set("name", createDocument.getName());
+            // }
+            // documentsList.registerListener(new DocumentsListChangeListener() {
+            //
+            // @Override
+            // public void notifyContentChanged(int page) {
+            // Document doc = null;
+            // if (documentsList != null) {
+            // doc = documentsList.getCurrentDocument();
+            // }
+            // // cached-only document have a temporary id begginning with "NEW"
+            // if (doc != null && !doc.getId().startsWith("NEW")) {
+            // currentGarden.setUUID(doc.getId());
+            // NuxeoGardenProvider.super.updateGarden(currentGarden);
+            // Log.d(TAG, "notifyContentChanged on " + doc.getName() + " - " + doc.getId());
+            // }
+            // // documentsList.unregisterListener(this);
+            // }
+            // });
+            // documentsList.createDocument(createDocument, createOperation);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
             // cancel(false);
@@ -254,21 +283,54 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 
         // TODO get document by id
         Session session = getNuxeoClient().getSession();
-        PropertyMap props = new PropertyMap();
-        props.set("dc:title", garden.getLocality());
+
         DocumentManager service = session.getAdapter(DocumentManager.class);
-
+        DeferredUpdateManager deferredUpdateMgr = getNuxeoClient().getDeferredUpdatetManager();
+        currentGarden=garden;
+        OperationRequest updateOperation;
         try {
-            Document updatedDocument = NuxeoGardenConvertor.convert(service.getUserHome().getPath(), garden);
-            // TODO JC: documentsList.updateDocument(updatedDocument, updateOperation);
-            documentsList.updateDocument(updatedDocument);
-            // service.update(idRef, props);
-        } catch (Exception e) {
-            Log.e(TAG, e.getMessage(), e);
-            // cancel(false);
-            return garden;
-        }
+            PropertyMap props = new PropertyMap();
+            props.set("dc:title", garden.getLocality());
+            Document doc = service.getDocument(garden.getUUID());
+            updateOperation = NuxeoManager.getInstance().getSession().newRequest("Document.Update").setHeader(
+                    Constants.HEADER_NX_SCHEMAS, "*").setInput(doc).set("properties", props);
 
+            AsyncCallback<Object> callback = new AsyncCallback<Object>() {
+                @Override
+                public void onSuccess(String executionId, Object data) {
+                    Document doc = (Document) data;
+                    currentGarden.setUUID(doc.getId());
+                    NuxeoGardenProvider.super.updateGarden(currentGarden);
+                    Log.d(TAG, "onSuccess " + currentGarden);
+                    // getNuxeoClient().getTransientStateManager().flushTransientState(
+                    // doc.getId());
+                    force_force = true;
+                }
+
+                @Override
+                public void onError(String executionId, Throwable e) {
+                    Log.d(TAG, "onError " + e.getMessage());
+
+                }
+            };
+            deferredUpdateMgr.execDeferredUpdate(updateOperation, callback, OperationType.UPDATE, true);
+            // try {
+            // Document updatedDocument = NuxeoGardenConvertor.convert(service.getUserHome().getPath(), garden);
+            // // TODO JC: documentsList.updateDocument(updatedDocument, updateOperation);
+            // documentsList.updateDocument(updatedDocument);
+            // // service.update(idRef, props);
+            // } catch (Exception e) {
+            // Log.e(TAG, e.getMessage(), e);
+            // // cancel(false);
+            // return garden;
+            // }
+        } catch (NotAvailableOffline e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        } catch (Exception e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
         return garden;
     }
 
