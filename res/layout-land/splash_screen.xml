@@ -139,6 +139,12 @@
                 style="@style/logo"
                 android:background="@drawable/bg_state_critical"
                 android:src="@drawable/action_cut" />
+
+            <ImageView
+                android:id="@+id/imageProgressGarden"
+                style="@style/logo"
+                android:background="@drawable/bg_state_critical"
+                android:src="@drawable/garden_shared" />
         </LinearLayout>
 
         <ImageView

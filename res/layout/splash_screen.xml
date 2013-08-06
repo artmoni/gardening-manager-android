@@ -50,6 +50,10 @@
             android:id="@+id/imageProgressAction"
             style="@style/logo"
             android:src="@drawable/action_cut" android:background="@drawable/bg_state_critical"/>
+         <ImageView
+            android:id="@+id/imageProgressGarden"
+            style="@style/logo"
+            android:src="@drawable/garden_shared" android:background="@drawable/bg_state_critical"/>
     </LinearLayout>
     <!--
     <LinearLayout

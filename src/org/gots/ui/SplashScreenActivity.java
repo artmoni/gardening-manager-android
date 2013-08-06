@@ -12,11 +12,15 @@ package org.gots.ui;
 
 import java.lang.ref.WeakReference;
 import java.util.Calendar;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import org.gots.R;
 import org.gots.action.service.ActionNotificationService;
 import org.gots.action.service.ActionTODOBroadcastReceiver;
 import org.gots.analytics.GotsAnalytics;
+import org.gots.garden.GardenInterface;
+import org.gots.garden.adapter.ProfileAdapter;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.service.SeedUpdateService;
 import org.gots.weather.service.WeatherUpdateService;
@@ -24,6 +28,7 @@ import org.gots.weather.service.WeatherUpdateService;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -70,7 +75,7 @@ public class SplashScreenActivity extends AbstractActivity {
     private static final int STOPSPLASH = 0;
 
     // private static final long SPLASHTIME = 3000;
-    private static final long SPLASHTIME = 2000;
+    private static final long SPLASHTIME = 5000;
 
     private static Handler splashHandler;
 
@@ -79,6 +84,10 @@ public class SplashScreenActivity extends AbstractActivity {
     private View progressWeather;
 
     private View progressAction;
+
+    private View progressGarden;
+
+    private int asyncCounter;
 
     private Handler getSplashHandler() {
         if (splashHandler == null) {
@@ -95,9 +104,6 @@ public class SplashScreenActivity extends AbstractActivity {
 
         GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
         GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
-
-        Message msg = new Message();
-        msg.what = STOPSPLASH;
 
         PackageInfo pInfo;
         try {
@@ -156,6 +162,7 @@ public class SplashScreenActivity extends AbstractActivity {
             }
         });
 
+        // *********** ACTIVATION DEPENDS ON PREVIMETEO BUSINESS RELATIONS *******
         // ImageView previmeteo = (ImageView) findViewById(R.id.idPrevimeteo);
         // previmeteo.setOnClickListener(new LinearLayout.OnClickListener() {
         //
@@ -174,104 +181,146 @@ public class SplashScreenActivity extends AbstractActivity {
         progressWeather = findViewById(R.id.imageProgressWeather);
         progressSeed = findViewById(R.id.imageProgressSeed);
         progressAction = findViewById(R.id.imageProgressAction);
+        progressGarden = findViewById(R.id.imageProgressGarden);
 
+    }
+
+    protected void addProgress() {
+        asyncCounter++;
+
+    };
+
+    protected void removeProgress() {
+        asyncCounter--;
+        if (asyncCounter == 0) {
+            Message msg = new Message();
+            msg.what = STOPSPLASH;
+            getSplashHandler().sendMessageDelayed(msg, SPLASHTIME);
+        }
+    };
+
+    protected void launchProgress() {
+        asyncCounter = 0;
+        new AsyncTask<Void, Integer, Void>() {
+            Intent startServiceIntent = new Intent(getApplicationContext(), WeatherUpdateService.class);
+
+            protected void onPreExecute() {
+                Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
+                progressWeather.startAnimation(myFadeInAnimation);
+                addProgress();
+            };
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                getApplicationContext().startService(startServiceIntent);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                super.onPostExecute(result);
+                progressWeather.clearAnimation();
+                progressWeather.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
+                getApplicationContext().stopService(startServiceIntent);
+                removeProgress();
+            }
+        }.execute();
+
+        new AsyncTask<Void, Integer, Void>() {
+            Intent startServiceIntent2 = new Intent(getApplicationContext(), SeedUpdateService.class);
+
+            protected void onPreExecute() {
+                Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
+                progressSeed.startAnimation(myFadeInAnimation);
+                addProgress();
+            };
+
+            @Override
+            protected Void doInBackground(Void... params) {
+
+                getApplicationContext().startService(startServiceIntent2);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                progressSeed.clearAnimation();
+                progressSeed.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
+                getApplicationContext().stopService(startServiceIntent2);
+                removeProgress();
+                super.onPostExecute(result);
+
+            }
+        }.execute();
+        new AsyncTask<Void, Integer, Void>() {
+            Intent startServiceIntent3 = new Intent(getApplicationContext(), ActionNotificationService.class);
+
+            protected void onPreExecute() {
+                Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
+                progressAction.startAnimation(myFadeInAnimation);
+                addProgress();
+            };
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                getApplicationContext().startService(startServiceIntent3);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                progressAction.clearAnimation();
+                progressAction.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
+                getApplicationContext().stopService(startServiceIntent3);
+                removeProgress();
+                super.onPostExecute(result);
+            }
+        }.execute();
+
+        new AsyncTask<Context, Void, List<GardenInterface>>() {
+            ProgressDialog dialog;
+
+            private List<GardenInterface> myGardens;
+
+            @Override
+            protected void onPreExecute() {
+                Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
+                progressGarden.startAnimation(myFadeInAnimation);
+                super.onPreExecute();
+            }
+
+            @Override
+            protected List<GardenInterface> doInBackground(Context... params) {
+                myGardens = gardenManager.getMyGardens(true);
+                return myGardens;
+            }
+
+            @Override
+            protected void onPostExecute(List<GardenInterface> result) {
+                progressGarden.clearAnimation();
+                progressGarden.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
+
+                super.onPostExecute(result);
+            }
+
+        }.execute();
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+    
+        super.onPostCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onResume() {
         int currentGardenId = gotsPrefs.getCurrentGardenId();
         if (currentGardenId == -1) {
             Intent intent = new Intent(this, FirstLaunchActivity.class);
             startActivityForResult(intent, 0);
 
-        } else {
-            if (GotsPreferences.isDevelopment())
-                getSplashHandler().sendMessageDelayed(msg, 0);
-            else {
-                new AsyncTask<Void, Integer, Void>() {
-                    protected void onPreExecute() {
-                        Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(),
-                                R.anim.tween);
-                        progressWeather.startAnimation(myFadeInAnimation);
-
-                    };
-
-                    @Override
-                    protected Void doInBackground(Void... params) {
-                        Intent startServiceIntent = new Intent(getApplicationContext(), WeatherUpdateService.class);
-                        getApplicationContext().startService(startServiceIntent);
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Void result) {
-                        super.onPostExecute(result);
-                        ((ImageView) findViewById(R.id.imageProgressWeather)).setAlpha(1);
-                        progressWeather.clearAnimation();
-
-                    }
-                }.execute();
-                new AsyncTask<Void, Integer, Void>() {
-                    protected void onPreExecute() {
-                        Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(),
-                                R.anim.tween);
-                        progressSeed.startAnimation(myFadeInAnimation);
-
-                    };
-
-                    @Override
-                    protected Void doInBackground(Void... params) {
-
-                        Intent startServiceIntent2 = new Intent(getApplicationContext(), SeedUpdateService.class);
-                        getApplicationContext().startService(startServiceIntent2);
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Void result) {
-                        ((ImageView) findViewById(R.id.imageProgressSeed)).setAlpha(1);
-                        progressSeed.clearAnimation();
-
-                        super.onPostExecute(result);
-                    }
-                }.execute();
-                new AsyncTask<Void, Integer, Void>() {
-                    protected void onPreExecute() {
-                        Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(),
-                                R.anim.tween);
-                        progressAction.startAnimation(myFadeInAnimation);
-
-                    };
-
-                    @Override
-                    protected Void doInBackground(Void... params) {
-                        Intent startServiceIntent3 = new Intent(getApplicationContext(),
-                                ActionNotificationService.class);
-                        getApplicationContext().startService(startServiceIntent3);
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Void result) {
-                        ((ImageView) findViewById(R.id.imageProgressAction)).setAlpha(1);
-                        progressAction.clearAnimation();
-
-                        super.onPostExecute(result);
-                    }
-                }.execute();
-
-                getSplashHandler().sendMessageDelayed(msg, SPLASHTIME);
-            }
-        }
-
-    }
-
-    @Override
-    protected void onResume() {
-        // Message msg = new Message();
-        // msg.what = STOPSPLASH;
-        // splashHandler.sendMessageDelayed(msg, SPLASHTIME);
-
-        // Intent intent = new Intent(SplashScreenActivity.this,
-        // DashboardActivity.class);
-        // startActivity(intent);
-
+        } else
+            launchProgress();
         super.onResume();
     }
 
