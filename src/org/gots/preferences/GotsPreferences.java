@@ -84,7 +84,8 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     private static final String GARDENING_MANAGER_NUXEO_AUTOMATION_TEST = "http://192.168.100.90:8080/nuxeo/";
 
-    private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://srv2.gardening-manager.com:8090/nuxeo/";
+    private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://services.gardening-manager.com/nuxeo/";
+//    private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://srv2.gardening-manager.com:8090/nuxeo/";
 
     private static final String DEFAULT_LOCAL_URL = "http://10.0.2.2:8080/nuxeo/";
 
