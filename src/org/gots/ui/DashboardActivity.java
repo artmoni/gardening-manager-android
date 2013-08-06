@@ -14,6 +14,7 @@ import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.garden.GardenInterface;
 import org.gots.help.HelpUriBuilder;
 import org.gots.weather.service.WeatherUpdateService;
 import org.gots.weather.view.WeatherView;
@@ -175,8 +176,10 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         GoogleAnalyticsTracker.getInstance().dispatch();
 
         ActionBar bar = getSupportActionBar();
-        if (gardenManager.getCurrentGarden() != null) {
-            bar.setTitle(gardenManager.getCurrentGarden().getLocality());
+        
+        GardenInterface currentGarden = gardenManager.getCurrentGarden();
+        if (currentGarden != null) {
+            bar.setTitle(currentGarden.getLocality());
         } else {
             bar.setTitle(gotsPrefs.getGardeningManagerAppname());
         }

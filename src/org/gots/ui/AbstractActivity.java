@@ -90,11 +90,7 @@ public class AbstractActivity extends SherlockActivity {
             gardenManager.finalize();
             seedManager.finalize();
             allotmentManager.finalize();
-            try {
-                this.unregisterReceiver(gardenManager);
-            } catch (IllegalArgumentException e) {
-                // Ignore
-            }
+            
         }
     }
 }
