@@ -81,7 +81,7 @@ public class ProfileActivity extends AbstractActivity {
 
         @Override
         protected List<GardenInterface> doInBackground(Context... params) {
-            myGardens = gardenManager.getMyGardens();
+            myGardens = gardenManager.getMyGardens(false);
             return myGardens;
         }
 
