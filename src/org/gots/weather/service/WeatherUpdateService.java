@@ -57,7 +57,6 @@ public class WeatherUpdateService extends Service {
         public void run() {
             displayWeatherAvailable();
             // handler.postDelayed(this, 5000); // 5 seconds
-            stopSelf();
         }
     };
 
