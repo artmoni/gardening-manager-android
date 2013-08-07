@@ -92,9 +92,10 @@ public class ListVendorSeedAdapter extends BaseAdapter {
                         action.execute((GrowingSeedInterface) currentSeed);
                         return null;
                     }
+
                     @Override
                     protected void onPostExecute(Void result) {
-//                        notifyDataSetChanged();
+                        // notifyDataSetChanged();
                         mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
 
                         super.onPostExecute(result);
@@ -169,6 +170,10 @@ public class ListVendorSeedAdapter extends BaseAdapter {
     public long getItemId(int position) {
 
         return vendorSeeds.get(position).getSeedId();
+    }
+
+    public void setSeeds(List<BaseSeedInterface> vendorSeeds) {
+        this.vendorSeeds = vendorSeeds;
     }
 
 }

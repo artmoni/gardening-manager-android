@@ -44,86 +44,89 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 public class MySeedsListAdapter extends BaseAdapter implements OnClickListener {
-	private Context mContext;
-	private List<BaseSeedInterface> mySeeds = new ArrayList<BaseSeedInterface>();
-	private BaseAllotmentInterface allotment;
-	private LayoutInflater inflater;
+    private Context mContext;
 
-	// private SeedWidgetLong seedWidget;
-	// private ActionWidget actionWidget;
+    private List<BaseSeedInterface> mySeeds = new ArrayList<BaseSeedInterface>();
 
-	// final private static int nbActionToDisplay = 5;
+    private BaseAllotmentInterface allotment;
 
-	public MySeedsListAdapter(Context context, BaseAllotmentInterface allotment, List<BaseSeedInterface> seeds) {
-		this.mContext = context;
-		// this.mySeeds.addAll(mySeeds);
-		this.allotment = allotment;
-		this.mySeeds = seeds;
-		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    private LayoutInflater inflater;
 
-		Collections.sort(mySeeds, new ISeedSpecieComparator(context));
+    // private SeedWidgetLong seedWidget;
+    // private ActionWidget actionWidget;
 
-	}
+    // final private static int nbActionToDisplay = 5;
 
-	@Override
-	public int getCount() {
-		return mySeeds.size();
-	}
+    public MySeedsListAdapter(Context context, BaseAllotmentInterface allotment, List<BaseSeedInterface> seeds) {
+        this.mContext = context;
+        // this.mySeeds.addAll(mySeeds);
+        this.allotment = allotment;
+        this.mySeeds = seeds;
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-	@Override
-	public BaseSeedInterface getItem(int position) {
+        Collections.sort(mySeeds, new ISeedSpecieComparator(context));
 
-		return mySeeds.get(position);
-	}
+    }
 
-	@Override
-	public long getItemId(int position) {
-		return position;
-	}
+    @Override
+    public int getCount() {
+        return mySeeds.size();
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+    @Override
+    public BaseSeedInterface getItem(int position) {
 
-		View vi = convertView;
-		final BaseSeedInterface currentSeed = getItem(position);
-		
-		SeedWidgetLong seedWidgetLong;
-		ActionWidget actionWidget;
+        return mySeeds.get(position);
+    }
 
-		if (vi == null)
-			vi = inflater.inflate(R.layout.list_seed, null);
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
-		seedWidgetLong = (SeedWidgetLong) vi.findViewById(R.id.idSeedWidgetLong);
-		actionWidget = (ActionWidget) vi.findViewById(R.id.IdSeedAction);
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
 
-		seedWidgetLong.setSeed(currentSeed);
+        View vi = convertView;
+        final BaseSeedInterface currentSeed = getItem(position);
 
-		BaseActionInterface action = null;
-		if (allotment != null) {
-			// action = new SowingAction(mContext);
-			ActionDBHelper helper = new ActionDBHelper(mContext);
-			action = helper.getActionByName("sow");
+        SeedWidgetLong seedWidgetLong;
+        ActionWidget actionWidget;
 
-			if (Calendar.getInstance().get(Calendar.MONTH) >= currentSeed.getDateSowingMin()
-					&& Calendar.getInstance().get(Calendar.MONTH) <= currentSeed.getDateSowingMax())
-				action.setState(ActionState.NORMAL);
-			else if (Calendar.getInstance().get(Calendar.MONTH) + 1 >= currentSeed.getDateSowingMin())
-				action.setState(ActionState.WARNING);
-			else
-				action.setState(ActionState.UNDEFINED);
+        if (vi == null)
+            vi = inflater.inflate(R.layout.list_seed, null);
 
-		} else {
-			action = new ReduceQuantityAction(mContext);
-			action.setState(ActionState.NORMAL);
-		}
+        seedWidgetLong = (SeedWidgetLong) vi.findViewById(R.id.idSeedWidgetLong);
+        actionWidget = (ActionWidget) vi.findViewById(R.id.IdSeedAction);
 
-		actionWidget.setAction(action);
-		final BaseActionInterface baseActionInterface = action;
-		actionWidget.setOnClickListener(new View.OnClickListener() {
+        seedWidgetLong.setSeed(currentSeed);
 
-			@Override
-			public void onClick(View v) {
-			    new AsyncTask<Void, Integer, Void>() {
+        BaseActionInterface action = null;
+        if (allotment != null) {
+            // action = new SowingAction(mContext);
+            ActionDBHelper helper = new ActionDBHelper(mContext);
+            action = helper.getActionByName("sow");
+
+            if (Calendar.getInstance().get(Calendar.MONTH) >= currentSeed.getDateSowingMin()
+                    && Calendar.getInstance().get(Calendar.MONTH) <= currentSeed.getDateSowingMax())
+                action.setState(ActionState.NORMAL);
+            else if (Calendar.getInstance().get(Calendar.MONTH) + 1 >= currentSeed.getDateSowingMin())
+                action.setState(ActionState.WARNING);
+            else
+                action.setState(ActionState.UNDEFINED);
+
+        } else {
+            action = new ReduceQuantityAction(mContext);
+            action.setState(ActionState.NORMAL);
+        }
+
+        actionWidget.setAction(action);
+        final BaseActionInterface baseActionInterface = action;
+        actionWidget.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                new AsyncTask<Void, Integer, Void>() {
                     @Override
                     protected Void doInBackground(Void... params) {
                         if (allotment != null) {
@@ -136,44 +139,49 @@ public class MySeedsListAdapter extends BaseAdapter implements OnClickListener {
                         }
                         return null;
                     }
+
                     @Override
                     protected void onPostExecute(Void result) {
-//                        notifyDataSetChanged();
+                        // notifyDataSetChanged();
                         mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
                         super.onPostExecute(result);
                     }
                 }.execute();
-				
-			}
-		});
 
-		try {
+            }
+        });
 
-			Calendar sowTime = Calendar.getInstance();
-			if (sowTime.get(Calendar.MONTH) > currentSeed.getDateSowingMin())
-				sowTime.set(Calendar.YEAR, sowTime.get(Calendar.YEAR) + 1);
-			sowTime.set(Calendar.MONTH, currentSeed.getDateSowingMin());
+        try {
 
-			Calendar harvestTime = new GregorianCalendar();
-			harvestTime.setTime(sowTime.getTime());
-			harvestTime.add(Calendar.DAY_OF_MONTH, currentSeed.getDurationMin());
+            Calendar sowTime = Calendar.getInstance();
+            if (sowTime.get(Calendar.MONTH) > currentSeed.getDateSowingMin())
+                sowTime.set(Calendar.YEAR, sowTime.get(Calendar.YEAR) + 1);
+            sowTime.set(Calendar.MONTH, currentSeed.getDateSowingMin());
 
-		} catch (Exception e) {
-			// holder.seedSowingDate.setText("--");
-		}
+            Calendar harvestTime = new GregorianCalendar();
+            harvestTime.setTime(sowTime.getTime());
+            harvestTime.add(Calendar.DAY_OF_MONTH, currentSeed.getDurationMin());
 
-		return vi;
+        } catch (Exception e) {
+            // holder.seedSowingDate.setText("--");
+        }
 
-	}
+        return vi;
 
-	@Override
-	public void notifyDataSetChanged() {
-		
-		super.notifyDataSetChanged();
-	}
+    }
 
-	@Override
-	public void onClick(View v) {
+    @Override
+    public void notifyDataSetChanged() {
 
-	}
+        super.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    public void setSeeds(List<BaseSeedInterface> seeds) {
+        mySeeds = seeds;
+    }
 }

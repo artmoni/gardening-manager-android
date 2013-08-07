@@ -37,7 +37,7 @@ public class SeedUpdateService extends Service {
 
     NotificationManager mNM;
 
-    private ArrayList<BaseSeedInterface> newSeeds = new ArrayList<BaseSeedInterface>();
+    private List<BaseSeedInterface> newSeeds = new ArrayList<BaseSeedInterface>();
 
     private String TAG = "SeedNotificationService";
 
