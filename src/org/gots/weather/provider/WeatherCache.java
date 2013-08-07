@@ -58,7 +58,7 @@ public class WeatherCache {
 			weatherXmlStream = getLocalCache(fileName);
 
 		} catch (URISyntaxException e) {
-			e.printStackTrace();
+            Log.w(TAG, e.getMessage());
 		} catch (Exception e) {
 			Log.w(TAG, e.getMessage());
 			try {

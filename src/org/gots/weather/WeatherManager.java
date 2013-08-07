@@ -15,96 +15,100 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.gots.weather.provider.DatabaseWeatherTask;
-import org.gots.weather.provider.WeatherTask;
+import org.gots.weather.provider.previmeteo.PrevimeteoWeatherProvider;
+import org.gots.weather.provider.previmeteo.WeatherProvider;
 
 import android.content.Context;
 
 public class WeatherManager {
 
-	private static WeatherManager instance;
+    private static WeatherManager instance;
 
-	private WeatherSet ws;
-	private Integer temperatureLimitHot;
-	private Integer temperatureLimitCold;
-	private Integer runningLimit;
-	// private Date today;
-	private Context mContext;
+    private WeatherSet ws;
 
+    private Integer temperatureLimitHot;
 
-	public WeatherManager(Context context) {
-		this.mContext = context;
-		
-	}
+    private Integer temperatureLimitCold;
 
+    private Integer runningLimit;
 
-	public Integer getTemperatureLimitHot() {
-		return temperatureLimitHot;
-	}
+    // private Date today;
+    private Context mContext;
 
-	public void setTemperatureLimitHot(Integer temperatureLimitHot) {
-		this.temperatureLimitHot = temperatureLimitHot;
-	}
+    WeatherProvider provider;
 
-	public Integer getTemperatureLimitCold() {
-		return temperatureLimitCold;
-	}
+    public WeatherManager(Context context) {
+        this.mContext = context;
+        provider = new PrevimeteoWeatherProvider(mContext);
 
-	public void setTemperatureLimitCold(Integer temperatureLimitCold) {
-		this.temperatureLimitCold = temperatureLimitCold;
-	}
+    }
 
-	public Integer getRunningLimit() {
-		return runningLimit;
-	}
+    public Integer getTemperatureLimitHot() {
+        return temperatureLimitHot;
+    }
 
-	public void setRunningLimit(Integer runningLimit) {
-		this.runningLimit = runningLimit;
-	}
+    public void setTemperatureLimitHot(Integer temperatureLimitHot) {
+        this.temperatureLimitHot = temperatureLimitHot;
+    }
 
-	/*
-	 * GetCondition from today until passed argument (-i or +i)
-	 */
-	public WeatherConditionInterface getCondition(int i) {
-		WeatherConditionInterface conditionInterface;
+    public Integer getTemperatureLimitCold() {
+        return temperatureLimitCold;
+    }
 
-		Calendar weatherCalendar = Calendar.getInstance();
-		weatherCalendar.add(Calendar.DAY_OF_YEAR, i);
+    public void setTemperatureLimitCold(Integer temperatureLimitCold) {
+        this.temperatureLimitCold = temperatureLimitCold;
+    }
 
-		Date weatherDate = weatherCalendar.getTime();
+    public Integer getRunningLimit() {
+        return runningLimit;
+    }
 
-		return getCondition(weatherDate);
-	}
+    public void setRunningLimit(Integer runningLimit) {
+        this.runningLimit = runningLimit;
+    }
 
-	public WeatherConditionInterface getCondition(Date weatherDate) {
-		WeatherConditionInterface conditionInterface;
-		try {
-			WeatherTask wt = new DatabaseWeatherTask(mContext, weatherDate);
-			conditionInterface = wt.execute().get();
-		} catch (Exception e) {
-			conditionInterface = new WeatherCondition(weatherDate);
+    /*
+     * GetCondition from today until passed argument (-i or +i)
+     */
+    public WeatherConditionInterface getCondition(int i) {
+        WeatherConditionInterface conditionInterface;
 
-		}
-		
-		
-		return conditionInterface;
-	}
+        Calendar weatherCalendar = Calendar.getInstance();
+        weatherCalendar.add(Calendar.DAY_OF_YEAR, i);
 
-	public List<WeatherConditionInterface> getConditionSet(int nbDays) {
-		List<WeatherConditionInterface> conditions = new ArrayList<WeatherConditionInterface>();
-		for (int i = -nbDays; i <= nbDays; i++) {
+        Date weatherDate = weatherCalendar.getTime();
 
-			try {
+        return getCondition(weatherDate);
+    }
 
-				conditions.add(getCondition(i));
-			} catch (Exception e) {
-				conditions.add(new WeatherCondition());
+    public WeatherConditionInterface getCondition(Date weatherDate) {
+        WeatherConditionInterface conditionInterface;
+        try {
+            // WeatherTask wt = new DatabaseWeatherTask(mContext, weatherDate);
+            // conditionInterface = wt.execute().get();
+            conditionInterface = provider.getCondition(weatherDate);
+        } catch (Exception e) {
+            conditionInterface = new WeatherCondition(weatherDate);
 
-				e.printStackTrace();
-			}
-		}
-		return conditions;
-	}
+        }
 
-	
+        return conditionInterface;
+    }
+
+    public List<WeatherConditionInterface> getConditionSet(int nbDays) {
+        List<WeatherConditionInterface> conditions = new ArrayList<WeatherConditionInterface>();
+        for (int i = -nbDays; i <= nbDays; i++) {
+
+            try {
+
+                conditions.add(getCondition(i));
+            } catch (Exception e) {
+                conditions.add(new WeatherCondition());
+
+                e.printStackTrace();
+            }
+        }
+        return conditions;
+    }
+
 }

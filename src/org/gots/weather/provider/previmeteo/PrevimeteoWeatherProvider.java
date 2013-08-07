@@ -19,24 +19,27 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.gots.bean.Address;
+import org.gots.garden.GardenManager;
 import org.gots.preferences.GotsPreferences;
+import org.gots.provider.AbstractProvider;
 import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.WeatherSet;
 import org.gots.weather.provider.WeatherCache;
-import org.gots.weather.provider.WeatherTask;
+import org.gots.weather.sql.WeatherDBHelper;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
 import android.content.Context;
+import android.text.format.DateFormat;
 import android.util.Log;
 
-public class PrevimeteoWeatherTask extends WeatherTask {
+public class PrevimeteoWeatherProvider extends AbstractProvider implements WeatherProvider {
     private static final String TAG = "PrevimeteoWeatherTask";
 
     protected URL url;
 
-    private Date requestedDay;
+    // private Date requestedDay;
 
     private Context mContext;
 
@@ -46,15 +49,14 @@ public class PrevimeteoWeatherTask extends WeatherTask {
 
     private boolean iserror;
 
-    private static int i = 0;
 
     private WeatherCache cache;
 
-    public PrevimeteoWeatherTask(Context context, Address address, Date requestedDay) {
-        this.requestedDay = requestedDay;
+    public PrevimeteoWeatherProvider(Context context) {
+        super(context);
         mContext = context;
-
         try {
+            Address address = GardenManager.getInstance().getCurrentGarden().getAddress();
             String weatherURL;
 
             if (GotsPreferences.isDevelopment())
@@ -63,26 +65,29 @@ public class PrevimeteoWeatherTask extends WeatherTask {
                 weatherURL = "http://api.previmeteo.com/" + GotsPreferences.getWeatherApiKey() + "/ig/api?weather="
                         + address.getLocality() + "," + context.getResources().getConfiguration().locale.getCountry()
                         + "&hl=fr";
-            // weatherURL = "http://services.gardening-manager.com/previmeteo/"
-            // + "/ig/api?weather="
-            // + address.getLocality() + "," + address.getCountryName() +
-            // "&hl=fr";
 
             queryString = weatherURL;
 
             url = new URL(queryString.replace(" ", "%20"));
+            Log.i(TAG, "Weather request on " + url.toString());
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
 
     }
 
+    // @Override
+    // protected WeatherConditionInterface doInBackground(Object... arg0) {
+    /*
+     * (non-Javadoc)
+     * @see org.gots.weather.provider.previmeteo.WeatherProvider#getCondition(java.util.Date)
+     */
     @Override
-    protected WeatherConditionInterface doInBackground(Object... arg0) {
+    public WeatherConditionInterface getCondition(Date requestedDay) {
         if (ws == null) {
 
             try {
-                Log.d("WeatherConditionInterface", "" + (++i));
+                Log.d(TAG, "getCondition "+DateFormat.format("MM/dd/yy h:mmaa", requestedDay));
                 cache = new WeatherCache();
 
                 InputStream is = cache.getCacheByURL(url);
@@ -127,31 +132,56 @@ public class PrevimeteoWeatherTask extends WeatherTask {
 
         Calendar requestCalendar = Calendar.getInstance();
         requestCalendar.setTime(requestedDay);
+        WeatherConditionInterface conditionInterface = new WeatherCondition(requestedDay) ;
         if (ws == null)
-            return new WeatherCondition(requestedDay);
+            conditionInterface= new WeatherCondition(requestedDay);
         else if (requestCalendar.get(Calendar.DAY_OF_YEAR) == Calendar.getInstance().get(Calendar.DAY_OF_YEAR))
-            return ws.getWeatherCurrentCondition();
+            conditionInterface= ws.getWeatherCurrentCondition();
         else if (requestCalendar.get(Calendar.DAY_OF_YEAR) > Calendar.getInstance().get(Calendar.DAY_OF_YEAR))
-            return ws.getWeatherForecastConditions().get(
+            conditionInterface= ws.getWeatherForecastConditions().get(
                     requestCalendar.get(Calendar.DAY_OF_YEAR) - Calendar.getInstance().get(Calendar.DAY_OF_YEAR));
-        return new WeatherCondition(requestedDay);
+        return updateCondition(conditionInterface,requestedDay);
 
     }
 
+    // @Override
+    // protected void onPostExecute(WeatherConditionInterface conditionInterface) {
+    // updateCondition(conditionInterface, requestedDay);
+    //
+    // if (iserror) {
+    // // Toast.makeText(mContext,
+    // // mContext.getResources().getString(R.string.weather_citynotfound),
+    // // 30).show();
+    // Log.w(TAG, "Error updating weather");
+    //
+    // // cache.clean(url);
+    // } else
+    // Log.d(TAG, "Weather updated from " + queryString);
+    //
+    // super.onPostExecute(conditionInterface);
+    // }
+    /*
+     * (non-Javadoc)
+     * @see
+     * org.gots.weather.provider.previmeteo.WeatherProvider#updateCondition(org.gots.weather.WeatherConditionInterface,
+     * java.util.Date)
+     */
     @Override
-    protected void onPostExecute(WeatherConditionInterface result) {
+    public WeatherConditionInterface updateCondition(WeatherConditionInterface condition, Date day) {
+        WeatherDBHelper helper = new WeatherDBHelper(mContext);
+        WeatherConditionInterface conditionInterface = null;
+        Calendar conditionDate = Calendar.getInstance();
+        // conditionDate.add(Calendar.DAY_OF_YEAR, day);
 
-        if (iserror) {
-            // Toast.makeText(mContext,
-            // mContext.getResources().getString(R.string.weather_citynotfound),
-            // 30).show();
-            Log.w(TAG, "Error updating weather");
+        condition.setDate(day);
+        condition.setDayofYear(conditionDate.get(Calendar.DAY_OF_YEAR));
 
-            // cache.clean(url);
-        } else
-            Log.d(TAG, "Weather updated from " + queryString);
-
-        super.onPostExecute(result);
+        WeatherConditionInterface wc = helper.getWeatherByDayofyear(conditionDate.get(Calendar.DAY_OF_YEAR));
+ 
+        if (wc == null)
+            conditionInterface=helper.insertWeather(condition);
+        else
+            conditionInterface= helper.updateWeather(condition);
+        return conditionInterface;
     }
-
 }

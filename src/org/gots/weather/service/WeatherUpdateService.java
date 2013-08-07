@@ -7,12 +7,13 @@ import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GardenManager;
 import org.gots.weather.WeatherConditionInterface;
-import org.gots.weather.provider.WeatherTask;
-import org.gots.weather.provider.previmeteo.PrevimeteoWeatherTask;
+import org.gots.weather.provider.previmeteo.PrevimeteoWeatherProvider;
+import org.gots.weather.provider.previmeteo.WeatherProvider;
 import org.gots.weather.sql.WeatherDBHelper;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
@@ -42,13 +43,11 @@ public class WeatherUpdateService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "getWeatherFromWebService");
-        GardenManager gardenManager = GardenManager.getInstance();
 
         // TODO change to async task and update UI in postExecute
-        getWeatherFromWebService(gardenManager.getCurrentGarden());
+        getWeatherFromWebService();
 
-        handler.removeCallbacks(sendUpdatesToUI);
-        handler.postDelayed(sendUpdatesToUI, 1000); // 1 second
+        
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -75,31 +74,51 @@ public class WeatherUpdateService extends Service {
         super.onDestroy();
     }
 
-    public void getWeatherFromWebService(GardenInterface garden) {
+    public void getWeatherFromWebService() {
 
         try {
             for (int forecastDay = 0; forecastDay < 4; forecastDay++) {
-                Calendar cal = Calendar.getInstance();
-                cal.add(Calendar.DAY_OF_YEAR, forecastDay);
 
                 // GoogleWeatherTask(garden.getAddress(), cal.getTime());
-                WeatherTask wt = new PrevimeteoWeatherTask(this, garden.getAddress(), cal.getTime());
-                WeatherConditionInterface conditionInterface = wt.execute().get();
+                // WeatherTask wt = new PrevimeteoWeatherProvider(this, garden.getAddress(), cal.getTime());
+                // wt.execute();
 
-                if (conditionInterface != null) {
-                    updateCondition(conditionInterface, forecastDay);
+                new AsyncTask<Integer, Integer, Void>() {
 
-                }
+                    protected void onPreExecute() {
+                    };
 
-                else {
-                    // Toast.makeText(mContext,
-                    // mContext.getResources().getString(R.string.weather_citynotfound),
-                    // 50)
-                    // .show();
-                    Log.d(TAG, garden.getLocality() + " : " + getResources().getString(R.string.weather_citynotfound));
-                    isWeatherError = true;
-                    break;
-                }
+                    @Override
+                    protected Void doInBackground(Integer... params) {
+                        Calendar cal = Calendar.getInstance();
+                        cal.add(Calendar.DAY_OF_YEAR, params[0]);
+                        WeatherProvider previmeteoWeatherProvider = new PrevimeteoWeatherProvider(getApplicationContext());
+                        previmeteoWeatherProvider.getCondition(cal.getTime());
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void result) {
+                        handler.removeCallbacks(sendUpdatesToUI);
+                        handler.postDelayed(sendUpdatesToUI, 0); // 1 second=1000
+                        super.onPostExecute(result);
+
+                    }
+                }.execute(forecastDay);
+                // if (conditionInterface != null) {
+                // updateCondition(conditionInterface, forecastDay);
+                //
+                // }
+                //
+                // else {
+                // // Toast.makeText(mContext,
+                // // mContext.getResources().getString(R.string.weather_citynotfound),
+                // // 50)
+                // // .show();
+                // Log.d(TAG, garden.getLocality() + " : " + getResources().getString(R.string.weather_citynotfound));
+                // isWeatherError = true;
+                // break;
+                // }
 
             }
 

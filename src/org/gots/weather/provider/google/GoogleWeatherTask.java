@@ -28,13 +28,13 @@ import org.gots.preferences.GotsPreferences;
 import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.WeatherSet;
-import org.gots.weather.provider.WeatherTask;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
-public class GoogleWeatherTask extends WeatherTask {
+public class GoogleWeatherTask extends AsyncTask<Object, Integer, WeatherConditionInterface> {
 	protected URL url;
 	private Date requestedDay;
 	private boolean force = false;

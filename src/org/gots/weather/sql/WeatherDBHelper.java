@@ -42,7 +42,7 @@ public class WeatherDBHelper {
 		bdd.close();
 	}
 
-	public WeatherConditionInterface insertWeather(WeatherConditionInterface weatherCondition) {
+	public synchronized WeatherConditionInterface insertWeather(WeatherConditionInterface weatherCondition) {
 		long rowid;
 		open();
 		ContentValues values = getWeatherContentValues(weatherCondition);
@@ -58,7 +58,7 @@ public class WeatherDBHelper {
 		return weatherCondition;
 	}
 
-	public long updateWeather(WeatherConditionInterface weatherCondition) {
+	public synchronized WeatherConditionInterface updateWeather(WeatherConditionInterface weatherCondition) {
 		long rowid;
 		open();
 		ContentValues values = getWeatherContentValues(weatherCondition);
@@ -71,7 +71,7 @@ public class WeatherDBHelper {
 			close();
 		}
 
-		return rowid;
+		return weatherCondition;
 	}
 
 	private ContentValues getWeatherContentValues(WeatherConditionInterface weatherCondition) {
@@ -103,7 +103,7 @@ public class WeatherDBHelper {
 		return condition;
 	}
 
-	public WeatherConditionInterface getWeatherByDayofyear(int dayofyear) {
+	public synchronized WeatherConditionInterface getWeatherByDayofyear(int dayofyear) {
 		WeatherConditionInterface weatherCondition = null;
 
 		open();
