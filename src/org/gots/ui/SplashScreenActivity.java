@@ -19,6 +19,7 @@ import org.gots.R;
 import org.gots.action.service.ActionNotificationService;
 import org.gots.action.service.ActionTODOBroadcastReceiver;
 import org.gots.analytics.GotsAnalytics;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.adapter.ProfileAdapter;
 import org.gots.preferences.GotsPreferences;
@@ -29,8 +30,10 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
@@ -63,8 +66,8 @@ public class SplashScreenActivity extends AbstractActivity {
             case STOPSPLASH:
                 // remove SplashScreen from view
                 Intent intent = new Intent(that.get(), DashboardActivity.class);
-                that.get().startActivity(intent);
-                that.get().finish();
+                that.get().startActivityForResult(intent, 3);
+                // that.get().finish();
 
                 break;
             }
@@ -75,7 +78,7 @@ public class SplashScreenActivity extends AbstractActivity {
     private static final int STOPSPLASH = 0;
 
     // private static final long SPLASHTIME = 3000;
-    private static final long SPLASHTIME = 5000;
+    private static final long SPLASHTIME = 1000;
 
     private static Handler splashHandler;
 
@@ -183,7 +186,25 @@ public class SplashScreenActivity extends AbstractActivity {
         progressAction = findViewById(R.id.imageProgressAction);
         progressGarden = findViewById(R.id.imageProgressGarden);
 
+        registerReceiver(receiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
+
     }
+
+    BroadcastReceiver receiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(BroadCastMessages.WEATHER_DISPLAY_EVENT)) {
+                progressWeather.clearAnimation();
+                progressWeather.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
+                removeProgress();
+
+            }
+
+        }
+    };
+
+    private Intent weatherServiceIntent;
 
     protected void addProgress() {
         asyncCounter++;
@@ -201,33 +222,31 @@ public class SplashScreenActivity extends AbstractActivity {
 
     protected void launchProgress() {
         asyncCounter = 0;
-        new AsyncTask<Void, Integer, Void>() {
-            Intent startServiceIntent = new Intent(getApplicationContext(), WeatherUpdateService.class);
+        weatherServiceIntent = new Intent(getApplicationContext(), WeatherUpdateService.class);
+        Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
+        progressWeather.startAnimation(myFadeInAnimation);
+        getApplicationContext().startService(weatherServiceIntent);
+        addProgress();
 
-            protected void onPreExecute() {
-                Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
-                progressWeather.startAnimation(myFadeInAnimation);
-                addProgress();
-            };
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                getApplicationContext().startService(startServiceIntent);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void result) {
-                super.onPostExecute(result);
-                progressWeather.clearAnimation();
-                progressWeather.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
-                getApplicationContext().stopService(startServiceIntent);
-                removeProgress();
-            }
-        }.execute();
+        // new AsyncTask<Void, Integer, Void>() {
+        //
+        // protected void onPreExecute() {
+        // };
+        //
+        // @Override
+        // protected Void doInBackground(Void... params) {
+        // return null;
+        // }
+        //
+        // @Override
+        // protected void onPostExecute(Void result) {
+        // super.onPostExecute(result);
+        //
+        // }
+        // }.execute();
 
         new AsyncTask<Void, Integer, Void>() {
-            Intent startServiceIntent2 = new Intent(getApplicationContext(), SeedUpdateService.class);
+            // Intent startServiceIntent2 = new Intent(getApplicationContext(), SeedUpdateService.class);
 
             protected void onPreExecute() {
                 Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
@@ -238,7 +257,8 @@ public class SplashScreenActivity extends AbstractActivity {
             @Override
             protected Void doInBackground(Void... params) {
 
-                getApplicationContext().startService(startServiceIntent2);
+                // getApplicationContext().startService(startServiceIntent2);
+                seedManager.getVendorSeeds(true);
                 return null;
             }
 
@@ -246,7 +266,7 @@ public class SplashScreenActivity extends AbstractActivity {
             protected void onPostExecute(Void result) {
                 progressSeed.clearAnimation();
                 progressSeed.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
-                getApplicationContext().stopService(startServiceIntent2);
+                // getApplicationContext().stopService(startServiceIntent2);
                 removeProgress();
                 super.onPostExecute(result);
 
@@ -308,7 +328,7 @@ public class SplashScreenActivity extends AbstractActivity {
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
-    
+
         super.onPostCreate(savedInstanceState);
     }
 
@@ -327,6 +347,10 @@ public class SplashScreenActivity extends AbstractActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         int currentGardenId = gotsPrefs.getCurrentGardenId();
+        if (requestCode == 3) {
+            finish();
+            return;
+        }
         if (currentGardenId > -1 || gotsPrefs.isConnectedToServer()) {
             Message msg = new Message();
             msg.what = STOPSPLASH;
@@ -340,6 +364,9 @@ public class SplashScreenActivity extends AbstractActivity {
     @Override
     protected void onDestroy() {
         GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
+        unregisterReceiver(receiver);
+        getApplicationContext().stopService(weatherServiceIntent);
+
         super.onDestroy();
     }
 
