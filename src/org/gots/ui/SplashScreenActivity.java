@@ -13,27 +13,21 @@ package org.gots.ui;
 import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import org.gots.R;
 import org.gots.action.service.ActionNotificationService;
 import org.gots.action.service.ActionTODOBroadcastReceiver;
 import org.gots.analytics.GotsAnalytics;
-import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
-import org.gots.garden.adapter.ProfileAdapter;
 import org.gots.preferences.GotsPreferences;
-import org.gots.seed.service.SeedUpdateService;
-import org.gots.weather.service.WeatherUpdateService;
+import org.gots.weather.WeatherManager;
 
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
@@ -186,23 +180,23 @@ public class SplashScreenActivity extends AbstractActivity {
         progressAction = findViewById(R.id.imageProgressAction);
         progressGarden = findViewById(R.id.imageProgressGarden);
 
-        registerReceiver(receiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
+//        registerReceiver(receiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
 
     }
 
-    BroadcastReceiver receiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(BroadCastMessages.WEATHER_DISPLAY_EVENT)) {
-                progressWeather.clearAnimation();
-                progressWeather.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
-                removeProgress();
-
-            }
-
-        }
-    };
+//    BroadcastReceiver receiver = new BroadcastReceiver() {
+//
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            if (intent.getAction().equals(BroadCastMessages.WEATHER_DISPLAY_EVENT)) {
+//                progressWeather.clearAnimation();
+//                progressWeather.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
+//                removeProgress();
+//
+//            }
+//
+//        }
+//    };
 
     private Intent weatherServiceIntent;
 
@@ -222,28 +216,34 @@ public class SplashScreenActivity extends AbstractActivity {
 
     protected void launchProgress() {
         asyncCounter = 0;
-        weatherServiceIntent = new Intent(getApplicationContext(), WeatherUpdateService.class);
-        Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
-        progressWeather.startAnimation(myFadeInAnimation);
-        getApplicationContext().startService(weatherServiceIntent);
-        addProgress();
+//        weatherServiceIntent = new Intent(getApplicationContext(), WeatherUpdateService.class);
 
-        // new AsyncTask<Void, Integer, Void>() {
-        //
-        // protected void onPreExecute() {
-        // };
-        //
-        // @Override
-        // protected Void doInBackground(Void... params) {
-        // return null;
-        // }
-        //
-        // @Override
-        // protected void onPostExecute(Void result) {
-        // super.onPostExecute(result);
-        //
-        // }
-        // }.execute();
+        // getApplicationContext().startService(weatherServiceIntent);
+
+        new AsyncTask<Void, Integer, Void>() {
+
+            protected void onPreExecute() {
+                addProgress();
+                Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
+                progressWeather.startAnimation(myFadeInAnimation);
+            };
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                WeatherManager manager = new WeatherManager(getApplicationContext());
+                manager.getConditionSet(2);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                progressWeather.clearAnimation();
+                progressWeather.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
+                removeProgress();
+                super.onPostExecute(result);
+
+            }
+        }.execute();
 
         new AsyncTask<Void, Integer, Void>() {
             // Intent startServiceIntent2 = new Intent(getApplicationContext(), SeedUpdateService.class);
@@ -364,8 +364,8 @@ public class SplashScreenActivity extends AbstractActivity {
     @Override
     protected void onDestroy() {
         GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
-        unregisterReceiver(receiver);
-        getApplicationContext().stopService(weatherServiceIntent);
+//        unregisterReceiver(receiver);
+//        getApplicationContext().stopService(weatherServiceIntent);
 
         super.onDestroy();
     }
