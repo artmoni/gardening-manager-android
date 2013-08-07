@@ -143,7 +143,7 @@ public class GardenDBHelper {
         return garden;
     }
 
-    public List<GardenInterface> getGardens() {
+    public synchronized List<GardenInterface> getGardens() {
         List<GardenInterface> gardens = new ArrayList<GardenInterface>();
         open();
         Cursor cursor = bdd.query(GardenSQLite.GARDEN_TABLE_NAME, null, null, null, null, null, null);
