@@ -17,6 +17,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.gots.R;
+import org.gots.analytics.GotsAnalytics;
 import org.nuxeo.ecm.automation.client.jaxrs.Constants;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
@@ -44,6 +45,7 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.MenuItem;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class LoginActivity extends AbstractActivity {
     protected static final String TAG = "LoginActivity";
@@ -58,6 +60,8 @@ public class LoginActivity extends AbstractActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+        GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
+        GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
         bar = getSupportActionBar();
         bar.setDisplayHomeAsUpEnabled(true);
@@ -82,6 +86,13 @@ public class LoginActivity extends AbstractActivity {
 
         buildLayoutDisconnected();
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        GoogleAnalyticsTracker.getInstance().dispatch();
+        GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
+        super.onDestroy();
     }
 
     public List<String> getAccounts(String account_type) {
@@ -416,11 +427,13 @@ public class LoginActivity extends AbstractActivity {
 
                 token = builder.toString();
                 Log.d("LoginActivity", "Token acquired: " + token);
+                GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Login", "Success", 0);
 
             } finally {
                 in.close();
             }
         } catch (IOException e) {
+            GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Login", "Failure", 0);
             Log.e(TAG, e.getMessage(), e);
         }
         return token;
