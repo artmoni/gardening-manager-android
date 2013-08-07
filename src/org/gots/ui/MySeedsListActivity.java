@@ -61,7 +61,8 @@ public class MySeedsListActivity extends SherlockListFragment {
         seedManager = GotsSeedManager.getInstance();
         seedManager.initIfNew(getActivity());
         getActivity().registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.SEED_DISPLAYLIST));
-
+        listAdapter = new MySeedsListAdapter(getActivity(), allotment, new ArrayList<BaseSeedInterface>());
+        setListAdapter(listAdapter);
     }
 
     private BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
@@ -102,8 +103,8 @@ public class MySeedsListActivity extends SherlockListFragment {
             }
 
             protected void onPostExecute(List<BaseSeedInterface> mySeeds) {
-                listAdapter = new MySeedsListAdapter(getActivity(), allotment, mySeeds);
-                setListAdapter(listAdapter);
+                listAdapter.setSeeds(mySeeds);
+                listAdapter.notifyDataSetChanged();
                 // if (dialog.isShowing())
                 // dialog.dismiss();
 
