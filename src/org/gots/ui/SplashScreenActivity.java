@@ -102,15 +102,35 @@ public class SplashScreenActivity extends AbstractActivity {
         GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
         GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
-        PackageInfo pInfo;
-        try {
-            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            String version = pInfo.versionName;
-            TextView name = (TextView) findViewById(R.id.textVersion);
-            name.setText("version " + version);
-        } catch (NameNotFoundException e) {
-            e.printStackTrace();
-        }
+        new AsyncTask<Void, Integer, String>() {
+            private TextView name;
+
+            @Override
+            protected void onPreExecute() {
+                name = (TextView) findViewById(R.id.textVersion);
+                super.onPreExecute();
+            }
+
+            @Override
+            protected String doInBackground(Void... params) {
+                PackageInfo pInfo;
+                String version = "";
+                try {
+                    pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                    version = pInfo.versionName;
+
+                } catch (NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+                setRecurringAlarm(getApplicationContext());
+
+                return version;
+            }
+
+            protected void onPostExecute(String version) {
+                name.setText("version " + version);
+            };
+        }.execute();
 
         View artmoni = (View) findViewById(R.id.webArtmoni);
         artmoni.setOnClickListener(new LinearLayout.OnClickListener() {
@@ -174,29 +194,28 @@ public class SplashScreenActivity extends AbstractActivity {
         // Intent startServiceIntent = new Intent(this,
         // NotificationService.class);
         // this.startService(startServiceIntent);
-        setRecurringAlarm(this);
         progressWeather = findViewById(R.id.imageProgressWeather);
         progressSeed = findViewById(R.id.imageProgressSeed);
         progressAction = findViewById(R.id.imageProgressAction);
         progressGarden = findViewById(R.id.imageProgressGarden);
 
-//        registerReceiver(receiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
+        // registerReceiver(receiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
 
     }
 
-//    BroadcastReceiver receiver = new BroadcastReceiver() {
-//
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            if (intent.getAction().equals(BroadCastMessages.WEATHER_DISPLAY_EVENT)) {
-//                progressWeather.clearAnimation();
-//                progressWeather.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
-//                removeProgress();
-//
-//            }
-//
-//        }
-//    };
+    // BroadcastReceiver receiver = new BroadcastReceiver() {
+    //
+    // @Override
+    // public void onReceive(Context context, Intent intent) {
+    // if (intent.getAction().equals(BroadCastMessages.WEATHER_DISPLAY_EVENT)) {
+    // progressWeather.clearAnimation();
+    // progressWeather.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
+    // removeProgress();
+    //
+    // }
+    //
+    // }
+    // };
 
     private Intent weatherServiceIntent;
 
@@ -216,7 +235,7 @@ public class SplashScreenActivity extends AbstractActivity {
 
     protected void launchProgress() {
         asyncCounter = 0;
-//        weatherServiceIntent = new Intent(getApplicationContext(), WeatherUpdateService.class);
+        // weatherServiceIntent = new Intent(getApplicationContext(), WeatherUpdateService.class);
 
         // getApplicationContext().startService(weatherServiceIntent);
 
@@ -364,8 +383,8 @@ public class SplashScreenActivity extends AbstractActivity {
     @Override
     protected void onDestroy() {
         GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
-//        unregisterReceiver(receiver);
-//        getApplicationContext().stopService(weatherServiceIntent);
+        // unregisterReceiver(receiver);
+        // getApplicationContext().stopService(weatherServiceIntent);
 
         super.onDestroy();
     }
