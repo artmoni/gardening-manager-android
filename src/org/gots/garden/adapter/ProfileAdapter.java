@@ -182,31 +182,31 @@ public class ProfileAdapter extends BaseAdapter {
                 weatherHistory.addView(view);
 
             }
-        }
+        } else
+            vi.setOnClickListener(new View.OnClickListener() {
 
-        vi.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-            @Override
-            public void onClick(View v) {
+                    gardenManager.setCurrentGarden(currentGarden);
+                    selectedGarden = getItem(position);
+                    notifyDataSetChanged();
 
-                gardenManager.setCurrentGarden(currentGarden);
-                selectedGarden = getItem(position);
-                notifyDataSetChanged();
+                    weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_weather));
+                    weatherState.setImageDrawable(mContext.getResources().getDrawable(R.drawable.weather_updating));
+                    // mContext.startService(weatherIntent);
+                    // mContext.registerReceiver(weatherBroadcastReceiver, new
+                    // IntentFilter(
+                    // WeatherUpdateService.BROADCAST_ACTION));
+                    currentView = v;
 
-                weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_weather));
-                weatherState.setImageDrawable(mContext.getResources().getDrawable(R.drawable.weather_updating));
-                // mContext.startService(weatherIntent);
-                // mContext.registerReceiver(weatherBroadcastReceiver, new
-                // IntentFilter(
-                // WeatherUpdateService.BROADCAST_ACTION));
-                currentView = v;
-
-                if (gardenManager.getCurrentGarden() != null) {
-                    GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-                    tracker.trackEvent("Garden", "Select", gardenManager.getCurrentGarden().getLocality(), position + 1);
+                    if (gardenManager.getCurrentGarden() != null) {
+                        GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+                        tracker.trackEvent("Garden", "Select", gardenManager.getCurrentGarden().getLocality(),
+                                position + 1);
+                    }
                 }
-            }
-        });
+            });
 
         return vi;
 
