@@ -132,8 +132,6 @@ public class GardenManager extends BroadcastReceiver {
 
     public GardenInterface getCurrentGarden() {
         GardenInterface garden = gardenProvider.getCurrentGarden();
-//        if (garden != null)
-//            changeDatabase((int) garden.getId());
         return garden;
     }
 
