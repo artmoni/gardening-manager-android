@@ -32,12 +32,12 @@ public class WeatherDBHelper {
 		this.mContext = mContext;
 	}
 
-	public void open() {
+	public synchronized void open() {
 		// on ouvre la BDD en écriture
 		bdd = databaseSQLite.getWritableDatabase();
 	}
 
-	public void close() {
+	public synchronized void close() {
 		// on ferme l'accès à la BDD
 		bdd.close();
 	}
