@@ -130,9 +130,11 @@ public class ProfileAdapter extends BaseAdapter {
         if (GotsPreferences.DEBUG)
             gardenName.setText(currentGarden.toString());
         else if (currentGarden.getName() != null)
-            gardenName.setText(currentGarden.getName());
+            gardenName.setText(currentGarden.getName().substring(0, 1).toUpperCase()
+                    + currentGarden.getName().substring(1));
         else
-            gardenName.setText(currentGarden.getAddress().getLocality());
+            gardenName.setText(currentGarden.getAddress().getLocality().substring(0, 1).toUpperCase()
+                    + currentGarden.getAddress().getLocality().substring(1));
 
         // weatherState.setOnClickListener(new View.OnClickListener() {
         //
