@@ -43,7 +43,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     public static final boolean ISDEVELOPMENT = false;
 
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     // /**
     // * @see NuxeoServerConfig#PREF_SERVER_PASSWORD
@@ -318,6 +318,14 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     }
 
     public int getCurrentGardenId() {
+        SharedPreferences preferences = mContext.getSharedPreferences("org.gots.preference", 0);
+        int oldGardenId=preferences.getInt("org.gots.preference.gardenid", -1);
+        if (oldGardenId> -1) {
+            GotsPreferences.getInstance().set(GotsPreferences.ORG_GOTS_CURRENT_GARDENID, oldGardenId);
+            SharedPreferences.Editor prefedit = preferences.edit();
+            prefedit.putInt("org.gots.preference.gardenid", -1);
+            prefedit.commit();
+        }
         return get(GotsPreferences.ORG_GOTS_CURRENT_GARDENID, -1);
     }
 
