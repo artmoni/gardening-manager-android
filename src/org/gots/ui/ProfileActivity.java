@@ -69,7 +69,6 @@ public class ProfileActivity extends AbstractActivity {
     class GardenSync extends AsyncTask<Context, Void, List<GardenInterface>> {
         ProgressDialog dialog;
 
-        private List<GardenInterface> myGardens;
 
         @Override
         protected void onPreExecute() {
@@ -81,17 +80,17 @@ public class ProfileActivity extends AbstractActivity {
 
         @Override
         protected List<GardenInterface> doInBackground(Context... params) {
-            myGardens = gardenManager.getMyGardens(false);
-            return myGardens;
+            return gardenManager.getMyGardens(false);
         }
 
         @Override
-        protected void onPostExecute(List<GardenInterface> result) {
+        protected void onPostExecute(List<GardenInterface> myGardens) {
             profileAdapter = new ProfileAdapter(ProfileActivity.this, myGardens);
             profileList.setAdapter(profileAdapter);
+            profileAdapter.notifyDataSetChanged();
             if (dialog.isShowing())
                 dialog.dismiss();
-            super.onPostExecute(result);
+            super.onPostExecute(myGardens);
         }
 
     }
