@@ -49,7 +49,6 @@ public class PrevimeteoWeatherProvider extends AbstractProvider implements Weath
 
     private boolean iserror;
 
-
     private WeatherCache cache;
 
     public PrevimeteoWeatherProvider(Context context) {
@@ -71,7 +70,7 @@ public class PrevimeteoWeatherProvider extends AbstractProvider implements Weath
             url = new URL(queryString.replace(" ", "%20"));
             Log.i(TAG, "Weather request on " + url.toString());
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            Log.e(TAG, "" + e.getMessage());
         }
 
     }
@@ -87,7 +86,7 @@ public class PrevimeteoWeatherProvider extends AbstractProvider implements Weath
         if (ws == null) {
 
             try {
-                Log.d(TAG, "getCondition "+DateFormat.format("MM/dd/yy h:mmaa", requestedDay));
+                Log.d(TAG, "getCondition " + DateFormat.format("MM/dd/yy h:mmaa", requestedDay));
                 cache = new WeatherCache();
 
                 InputStream is = cache.getCacheByURL(url);
@@ -132,15 +131,15 @@ public class PrevimeteoWeatherProvider extends AbstractProvider implements Weath
 
         Calendar requestCalendar = Calendar.getInstance();
         requestCalendar.setTime(requestedDay);
-        WeatherConditionInterface conditionInterface = new WeatherCondition(requestedDay) ;
+        WeatherConditionInterface conditionInterface = new WeatherCondition(requestedDay);
         if (ws == null)
-            conditionInterface= new WeatherCondition(requestedDay);
+            conditionInterface = new WeatherCondition(requestedDay);
         else if (requestCalendar.get(Calendar.DAY_OF_YEAR) == Calendar.getInstance().get(Calendar.DAY_OF_YEAR))
-            conditionInterface= ws.getWeatherCurrentCondition();
+            conditionInterface = ws.getWeatherCurrentCondition();
         else if (requestCalendar.get(Calendar.DAY_OF_YEAR) > Calendar.getInstance().get(Calendar.DAY_OF_YEAR))
-            conditionInterface= ws.getWeatherForecastConditions().get(
+            conditionInterface = ws.getWeatherForecastConditions().get(
                     requestCalendar.get(Calendar.DAY_OF_YEAR) - Calendar.getInstance().get(Calendar.DAY_OF_YEAR));
-        return updateCondition(conditionInterface,requestedDay);
+        return updateCondition(conditionInterface, requestedDay);
 
     }
 
@@ -177,11 +176,11 @@ public class PrevimeteoWeatherProvider extends AbstractProvider implements Weath
         condition.setDayofYear(conditionDate.get(Calendar.DAY_OF_YEAR));
 
         WeatherConditionInterface wc = helper.getWeatherByDayofyear(conditionDate.get(Calendar.DAY_OF_YEAR));
- 
+
         if (wc == null)
-            conditionInterface=helper.insertWeather(condition);
+            conditionInterface = helper.insertWeather(condition);
         else
-            conditionInterface= helper.updateWeather(condition);
+            conditionInterface = helper.updateWeather(condition);
         return conditionInterface;
     }
 }
