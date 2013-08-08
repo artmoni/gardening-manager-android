@@ -364,9 +364,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     + " SELECT _id, growingseed_id, action_id,  dateactiondone, action_seed_duration FROM backup");
             db.execSQL("DROP TABLE backup");
 
-        }
-        if (oldVersion < 14) {
+        } if (oldVersion < 13) {
             db.execSQL("ALTER TABLE " + ACTIONSEEDS_TABLE_NAME + " ADD COLUMN " + ACTIONSEED_DATA + " VARCHAR(255)");
+        } if (oldVersion < 14) {
             db.execSQL("ALTER TABLE " + SEEDS_TABLE_NAME + " ADD COLUMN " + SEED_UUID + " VARCHAR(255);");
             db.execSQL("ALTER TABLE " + ALLOTMENT_TABLE_NAME + " ADD COLUMN " + ALLOTMENT_UUID + " VARCHAR(255);");
 
