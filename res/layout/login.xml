@@ -7,6 +7,7 @@
     android:orientation="vertical" >
 
     <LinearLayout
+        android:id="@+id/linearLayoutTop"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical" >
@@ -23,6 +24,7 @@
         android:id="@+id/layoutConnect"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_alignParentBottom="@+id/linearLayoutTop"
         android:layout_marginTop="60dp"
         android:visibility="visible" >
 
@@ -30,6 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_marginTop="90dp"
             android:gravity="center_horizontal"
             android:orientation="vertical"
             android:padding="10dp"
@@ -40,7 +43,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|center_horizontal"
-                android:layout_marginTop="60dp"
                 android:background="@drawable/bg_line_action"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
@@ -88,7 +90,7 @@
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
                 android:padding="10dp"
-                android:visibility="visible" >
+                android:visibility="gone" >
 
                 <TextView
                     android:id="@+id/textConnectError"
@@ -102,7 +104,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center" android:gravity="center">
+                    android:layout_gravity="center"
+                    android:gravity="center" >
 
                     <ImageView
                         android:layout_width="50dp"
@@ -111,13 +114,12 @@
 
                     <TextView
                         style="@style/seed_description_content"
-                        android:textColor="@color/action_error_color"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
                         android:layout_gravity="center_vertical"
-                        android:text="@string/gots.beta.description" />
-
+                        android:gravity="center_vertical"
+                        android:text="@string/gots.beta.description"
+                        android:textColor="@color/action_error_color" />
                 </LinearLayout>
 
                 <TextView
@@ -200,7 +202,7 @@
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
                 android:padding="10dp"
-                android:visibility="visible" >
+                android:visibility="gone" >
 
                 <TextView
                     android:layout_width="wrap_content"
