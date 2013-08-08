@@ -155,6 +155,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
         for (BaseSeedInterface localSeed : localVendorSeeds) {
             if (localSeed.getUUID() == null) {
+                myVendorSeeds.add(localSeed);
                 createNuxeoVendorSeed(localSeed);
             } else {
                 boolean found = false;
