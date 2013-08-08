@@ -97,7 +97,7 @@ public class ListGrowingSeedAdapter extends BaseAdapter implements OnClickListen
 
 	@Override
 	public void onClick(View v) {
-		QuickSeedActionBuilder actionBuilder = new QuickSeedActionBuilder((SeedWidget) v, parentAdapter);
+		QuickSeedActionBuilder actionBuilder = new QuickSeedActionBuilder(mContext,(SeedWidget) v, parentAdapter);
 		actionBuilder.show();
 		// notifyDataSetChanged();
 	}

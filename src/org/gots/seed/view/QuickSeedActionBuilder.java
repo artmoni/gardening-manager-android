@@ -32,8 +32,8 @@ import org.gots.seed.GrowingSeedInterface;
 import org.gots.ui.NewActionActivity;
 import org.gots.ui.TabSeedActivity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -47,16 +47,18 @@ public class QuickSeedActionBuilder {
 
     private View parentView;
 
-    int actionCode;
 
-    public QuickSeedActionBuilder(final SeedWidget v, final BaseAdapter parentAdapter) {
+    private Context mContext;
+
+    public QuickSeedActionBuilder(Context context, final SeedWidget v, final BaseAdapter parentAdapter) {
         parentView = v;
+        mContext = context;
         final GrowingSeedInterface seed = (GrowingSeedInterface) v.getTag();
 
-        ActionSeedDBHelper helperActions = new ActionSeedDBHelper(v.getContext());
+        ActionSeedDBHelper helperActions = new ActionSeedDBHelper(mContext);
         ArrayList<BaseActionInterface> actions = helperActions.getActionsToDoBySeed(seed);
 
-        quickAction = new QuickAction(v.getContext(), QuickAction.HORIZONTAL);
+        quickAction = new QuickAction(mContext, QuickAction.HORIZONTAL);
 
         for (Iterator<BaseActionInterface> iterator = actions.iterator(); iterator.hasNext();) {
             BaseActionInterface baseActionInterface = iterator.next();
@@ -64,7 +66,7 @@ public class QuickSeedActionBuilder {
                 continue;
             final SeedActionInterface currentAction = (SeedActionInterface) baseActionInterface;
 
-            ActionWidget actionWidget = new ActionWidget(v.getContext(), currentAction);
+            ActionWidget actionWidget = new ActionWidget(mContext, currentAction);
 
             if (currentAction == null)
                 continue;
@@ -83,28 +85,30 @@ public class QuickSeedActionBuilder {
 
         }
 
-        ScheduleAction planAction = new ScheduleAction(v.getContext());
-        ActionWidget actionWidget = new ActionWidget(v.getContext(), planAction);
+        ScheduleAction planAction = new ScheduleAction(mContext);
+        ActionWidget actionWidget = new ActionWidget(mContext, planAction);
         actionWidget.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(v.getContext(), NewActionActivity.class);
+                Intent i = new Intent(mContext, NewActionActivity.class);
                 i.putExtra("org.gots.seed.id", seed.getGrowingSeedId());
-                v.getContext().startActivity(i);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                mContext.startActivity(i);
                 quickAction.dismiss();
             }
         });
 
         quickAction.addActionItem(actionWidget);
 
-        ActionDBHelper helper = new ActionDBHelper(v.getContext());
+        ActionDBHelper helper = new ActionDBHelper(mContext);
 
         /*
          * ACTION WATERING
          */
         final WateringAction wateringAction = (WateringAction) helper.getActionByName("water");
-        ActionWidget watering = new ActionWidget(v.getContext(), wateringAction);
+        ActionWidget watering = new ActionWidget(mContext, wateringAction);
         watering.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -121,23 +125,23 @@ public class QuickSeedActionBuilder {
         /*
          * ACTION DELETE
          */
-        final DeleteAction deleteAction = new DeleteAction(v.getContext());
-        ActionWidget delete = new ActionWidget(v.getContext(), deleteAction);
+        final DeleteAction deleteAction = new DeleteAction(mContext);
+        ActionWidget delete = new ActionWidget(mContext, deleteAction);
         delete.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                builder.setMessage(v.getContext().getResources().getString(R.string.action_delete_seed)).setCancelable(
-                        false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        SeedActionInterface actionItem = deleteAction;
-                        actionItem.execute(seed);
-                        parentAdapter.notifyDataSetChanged();
-                        quickAction.dismiss();
-                        dialog.dismiss();
-                    }
-                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setMessage(mContext.getResources().getString(R.string.action_delete_seed)).setCancelable(false).setPositiveButton(
+                        "OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                SeedActionInterface actionItem = deleteAction;
+                                actionItem.execute(seed);
+                                parentAdapter.notifyDataSetChanged();
+                                quickAction.dismiss();
+                                dialog.dismiss();
+                            }
+                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
@@ -152,21 +156,23 @@ public class QuickSeedActionBuilder {
          * ACTION PHOTO
          */
         final PhotoAction photoAction = (PhotoAction) helper.getActionByName("photo");
-        ActionWidget photoWidget = new ActionWidget(v.getContext(), photoAction);
+        ActionWidget photoWidget = new ActionWidget(mContext, photoAction);
         photoWidget.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 SeedActionInterface actionItem = photoAction;
                 if (PhotoAction.class.isInstance(actionItem)) {
-                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     File f;
                     Date now = new Date();
 
                     f = photoAction.getImageFile(now);
                     actionItem.setData(f.getAbsoluteFile());
+
+                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-                    ((Activity) v.getContext()).startActivityForResult(takePictureIntent, actionCode);
+                    takePictureIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivity(takePictureIntent);
                     // TODO The action must not be executed if activity for result has been canceled because no image
                     // has been taken but the database get the imagefile
                     actionItem.execute(seed);
@@ -181,8 +187,8 @@ public class QuickSeedActionBuilder {
         /*
          * ACTION DETAIL
          */
-        final DetailAction detail = new DetailAction(v.getContext());
-        ActionWidget detailWidget = new ActionWidget(v.getContext(), detail);
+        final DetailAction detail = new DetailAction(mContext);
+        ActionWidget detailWidget = new ActionWidget(mContext, detail);
         detailWidget.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -190,11 +196,11 @@ public class QuickSeedActionBuilder {
                 SeedActionInterface actionItem = detail;
                 if (DetailAction.class.isInstance(actionItem)) {
                     // alert.show();
-                    final Intent i = new Intent(v.getContext(), TabSeedActivity.class);
+                    final Intent i = new Intent(mContext, TabSeedActivity.class);
                     i.putExtra("org.gots.seed.id", ((GrowingSeedInterface) parentView.getTag()).getGrowingSeedId());
                     i.putExtra("org.gots.seed.url", ((GrowingSeedInterface) parentView.getTag()).getUrlDescription());
-
-                    v.getContext().startActivity(i);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivity(i);
                 } else {
                     actionItem.execute(seed);
                 }
