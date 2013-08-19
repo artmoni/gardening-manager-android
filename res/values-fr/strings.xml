@@ -6,8 +6,7 @@
     <string name="gots.credits.code">DEVELOPPEMENT \nArtmoni</string>
     <string name="gots.credits.design">DESIGN \nSauter dans les flaques</string>
     <string name="gots.description">La culture bioloGeek </string>
-        <string name="gots.opensource">Projet Open Source,\n la participation est ouverte à tous</string>
-    
+    <string name="gots.opensource">Projet Open Source,\n la participation est ouverte à tous</string>
     <string name="gots.loading">Veuillez patienter, chargement en cours</string>
     <string name="day">Jour</string>
     <string name="week">semaine</string>
@@ -83,6 +82,7 @@
     <string name="specie.solanumtuberosum">Pomme de terre</string>
     <string name="specie.capsicumannuum">Poivron/Piment</string>
     <string name="specie.solanummelongena">Aubergine</string>
+    <string name="specie.ocimumbasilicum">Basilic</string>
     <string name="weather.citynotfound">Pas de météo dans cette localité, saisissez une proche agglomération</string>
     <string name="location.notfound">Vous n\'avez pas pu être localisé</string>
     <string name="help.loading">Chargement de la documentation</string>
@@ -114,5 +114,5 @@
     <string name="fillfields.dates">Veuillez indiquer les dates</string>
     <string name="login.disconnect.description">Vous êtes en mode synchronisé.\n\n Il est désormais possible de vous connecter depuis plusieurs appareils.</string>
     <string name="login.disconnect">Déconnexion</string>
-    
+
 </resources>
