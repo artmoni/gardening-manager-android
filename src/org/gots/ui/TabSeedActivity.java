@@ -72,7 +72,7 @@ public class TabSeedActivity extends SherlockFragmentActivity {
             mSeed = helper.getSeedById(seedId);
         } else if (getIntent().getExtras().getInt("org.gots.seed.vendorid") != 0) {
             int seedId = getIntent().getExtras().getInt("org.gots.seed.vendorid");
-            VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
+            VendorSeedDBHelper helper = VendorSeedDBHelper.getInstance(this);
             mSeed = (GrowingSeedInterface) helper.getSeedById(seedId);
         } else
             mSeed = new GrowingSeed(); // DEFAULT SEED
@@ -85,17 +85,17 @@ public class TabSeedActivity extends SherlockFragmentActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         TabsAdapter mTabsAdapter = new TabsAdapter(this, mViewPager);
 
-        // // ********************** Tab description **********************
-        mTabsAdapter.addTab(
-                bar.newTab().setTag("event_list").setText(getString(R.string.seed_description_tabmenu_detail)),
-                SeedActivity.class, null);
-
         // ********************** Tab actions **********************
         if (mSeed.getGrowingSeedId() > 0) {
             mTabsAdapter.addTab(
                     bar.newTab().setTag("event_list").setText(getString(R.string.seed_description_tabmenu_actions)),
                     ListActionActivity.class, null);
         }
+        // // ********************** Tab description **********************
+        mTabsAdapter.addTab(
+                bar.newTab().setTag("event_list").setText(getString(R.string.seed_description_tabmenu_detail)),
+                SeedActivity.class, null);
+
 
         // ********************** Tab Wikipedia**********************
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

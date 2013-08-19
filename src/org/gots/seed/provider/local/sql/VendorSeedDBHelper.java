@@ -28,28 +28,39 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class VendorSeedDBHelper {
 
+    private static VendorSeedDBHelper helper = null;
+
     private List<BaseSeedInterface> allSeeds = new ArrayList<BaseSeedInterface>();
 
-    private DatabaseHelper seedSQLite;
+    private DatabaseHelper databaseHelper;
 
     private SQLiteDatabase bdd;
 
     Context mContext;
 
-    public VendorSeedDBHelper(Context mContext) {
-        seedSQLite = new DatabaseHelper(mContext);
+    private VendorSeedDBHelper(Context mContext) {
+        databaseHelper = DatabaseHelper.getInstance(mContext);
         this.mContext = mContext;
     }
 
-    public synchronized void open() {
-        // on ouvre la BDD en écriture
-        bdd = seedSQLite.getWritableDatabase();
+    public static synchronized VendorSeedDBHelper getInstance(Context mContext) {
+        if (helper == null) {
+            helper = new VendorSeedDBHelper(mContext);
+        }
+
+        return helper;
     }
 
-    public synchronized void close() {
-        // on ferme l'accès à la BDD
-        bdd.close();
-    }
+    //
+    // public synchronized void open() {
+    // // on ouvre la BDD en écriture
+    // bdd = databaseHelper.getWritableDatabase();
+    // }
+
+    // public synchronized void close() {
+    // // on ferme l'accès à la BDD
+    // bdd.close();
+    // }
 
     // // IMPORT FROM OTHER SOURCE
     // public void loadFromXML(Context mContext) {
@@ -74,22 +85,29 @@ public class VendorSeedDBHelper {
     public synchronized BaseSeedInterface insertSeed(BaseSeedInterface seed) {
         // Création d'un ContentValues (fonctionne comme une HashMap)
         long rowid;
-        open();
+        bdd = databaseHelper.getWritableDatabase();
         ContentValues values = getContentValuesFromSeed(seed);
 
         try {
             rowid = bdd.insert(DatabaseHelper.SEEDS_TABLE_NAME, null, values);
             seed.setId(Long.valueOf(rowid).intValue());
         } finally {
-            close();
+            // close();
         }
 
         return seed;
     }
 
+    @Override
+    protected void finalize() throws Throwable {
+        if (bdd != null)
+            bdd.close();
+        super.finalize();
+    }
+
     public synchronized BaseSeedInterface updateSeed(BaseSeedInterface seed) {
         // Création d'un ContentValues (fonctionne comme une HashMap)
-        open();
+        bdd = databaseHelper.getWritableDatabase();
         ContentValues values = getContentValuesFromSeed(seed);
         Cursor cursor;
         try {
@@ -114,7 +132,7 @@ public class VendorSeedDBHelper {
 
             }
         } finally {
-            close();
+            // close();
         }
 
         return seed;
@@ -151,7 +169,7 @@ public class VendorSeedDBHelper {
     }
 
     public synchronized String[] getArraySeeds() {
-        open();
+        bdd = databaseHelper.getWritableDatabase();
         Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, null, null, null, null, null);
 
         String[] arraySeeds = new String[managedCursor.getCount()];
@@ -165,12 +183,12 @@ public class VendorSeedDBHelper {
             } while (managedCursor.moveToNext());
         }
         managedCursor.close();
-        close();
+        // close();
         return arraySeeds;
     }
 
     public synchronized ArrayList<String> getArrayFamily() {
-        open();
+        bdd = databaseHelper.getReadableDatabase();
         Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, null, null, DatabaseHelper.SEED_FAMILY,
                 null, null);
 
@@ -187,13 +205,13 @@ public class VendorSeedDBHelper {
             } while (managedCursor.moveToNext());
         }
         managedCursor.close();
-        close();
+        // close();
         Collections.sort(arrayFamily);
         return arrayFamily;
     }
 
     public synchronized String[] getArraySpecie() {
-        open();
+        bdd = databaseHelper.getReadableDatabase();
         Cursor managedCursor = bdd.query(DatabaseHelper.SPECIE_TABLE_NAME, null, null, null, null, null, null);
 
         String[] arraySpecie = new String[managedCursor.getCount()];
@@ -207,12 +225,12 @@ public class VendorSeedDBHelper {
             } while (managedCursor.moveToNext());
         }
         managedCursor.close();
-        close();
+        // close();
         return arraySpecie;
     }
 
     public synchronized String getFamilyBySpecie(String specie) {
-        open();
+        bdd = databaseHelper.getReadableDatabase();
         // Cursor managedCursor = bdd.query(DatabaseHelper.FAMILY_ID, null,
         // DatabaseHelper.SEED_ID + "=" + seed.getId(), null, null,
         // null, null);
@@ -226,12 +244,12 @@ public class VendorSeedDBHelper {
             family = managedCursor.getString(nameColumn);
         }
         managedCursor.close();
-        close();
+        // close();
         return family;
     }
 
     public synchronized String[] getArrayVarietyBySpecie(String specie) {
-        open();
+        bdd = databaseHelper.getReadableDatabase();
 
         Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_SPECIE + "='"
                 + specie + "'", null, null, null, null);
@@ -247,12 +265,12 @@ public class VendorSeedDBHelper {
             } while (managedCursor.moveToNext());
         }
         managedCursor.close();
-        close();
+        // close();
         return arrayVariety;
     }
 
     public synchronized String[] getArrayVariety() {
-        open();
+        bdd = databaseHelper.getReadableDatabase();
         Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_VARIETY + "<>"
                 + "''", null, DatabaseHelper.SEED_VARIETY, null, null);
 
@@ -268,14 +286,14 @@ public class VendorSeedDBHelper {
             } while (managedCursor.moveToNext());
         }
         managedCursor.close();
-        close();
+        // close();
         return arrayFamily;
     }
 
     public synchronized ArrayList<BaseSeedInterface> getMySeeds() {
         ArrayList<BaseSeedInterface> mySeeds = new ArrayList<BaseSeedInterface>();
         BaseSeedInterface searchedSeed = new GrowingSeed();
-        open();
+        bdd = databaseHelper.getReadableDatabase();
         Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_NBSACHET + ">0",
                 null, null, null, null);
 
@@ -286,14 +304,14 @@ public class VendorSeedDBHelper {
             } while (managedCursor.moveToNext());
         }
         managedCursor.close();
-        close();
+        // close();
         return mySeeds;
     }
 
     public synchronized ArrayList<BaseSeedInterface> getVendorSeeds() {
         ArrayList<BaseSeedInterface> vendorSeeds = new ArrayList<BaseSeedInterface>();
         BaseSeedInterface searchedSeed = new GrowingSeed();
-        open();
+        bdd = databaseHelper.getReadableDatabase();
         Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, null, null, null, null, null);
 
         if (managedCursor.moveToFirst()) {
@@ -303,13 +321,13 @@ public class VendorSeedDBHelper {
             } while (managedCursor.moveToNext());
         }
         managedCursor.close();
-        close();
+        // close();
         return vendorSeeds;
     }
 
     public synchronized BaseSeedInterface getSeedByName(String name) {
         BaseSeedInterface searchedSeed = new GrowingSeed();
-        open();
+        bdd = databaseHelper.getReadableDatabase();
         Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_NAME + " like \""
                 + name + "\"", null, null, null, null);
 
@@ -319,13 +337,13 @@ public class VendorSeedDBHelper {
             } while (managedCursor.moveToNext());
         }
         managedCursor.close();
-        close();
+        // close();
         return searchedSeed;
     }
 
     public synchronized BaseSeedInterface getSeedByBarCode(String barecode) {
         BaseSeedInterface searchedSeed = new GrowingSeed();
-        open();
+        bdd = databaseHelper.getReadableDatabase();
         Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_BARECODE + "=\""
                 + barecode + "\"", null, null, null, null);
 
@@ -333,13 +351,13 @@ public class VendorSeedDBHelper {
             searchedSeed = cursorToSeed(managedCursor);
         }
         managedCursor.close();
-        close();
+        // close();
         return searchedSeed;
     }
 
     public synchronized BaseSeedInterface getSeedById(int id) {
         BaseSeedInterface searchedSeed = null;
-        open();
+        bdd = databaseHelper.getReadableDatabase();
         Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_ID + "='" + id
                 + "'", null, null, null, null);
         // Log.d("getSeedById", "ID=>"+id+" / QUERY=>"+bdd.ge)
@@ -349,13 +367,13 @@ public class VendorSeedDBHelper {
             } while (managedCursor.moveToNext());
         }
         managedCursor.close();
-        close();
+        // close();
         return searchedSeed;
     }
 
     public synchronized BaseSeedInterface getSeedByUUID(String reference) {
         BaseSeedInterface searchedSeed = null;
-        open();
+        bdd = databaseHelper.getReadableDatabase();
         Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_UUID + "='"
                 + reference + "'", null, null, null, null);
         // Log.d("getSeedById", "ID=>"+id+" / QUERY=>"+bdd.ge)
@@ -365,7 +383,7 @@ public class VendorSeedDBHelper {
             } while (managedCursor.moveToNext());
         }
         managedCursor.close();
-        close();
+        // close();
         return searchedSeed;
     }
 
@@ -435,13 +453,13 @@ public class VendorSeedDBHelper {
 
     public synchronized Object remove(BaseSeedInterface vendorSeed) {
         long rowid;
-        open();
+        bdd = databaseHelper.getWritableDatabase();
 
         try {
             rowid = bdd.delete(DatabaseHelper.SEEDS_TABLE_NAME, DatabaseHelper.SEED_ID + "='" + vendorSeed.getSeedId()
                     + "'", null);
         } finally {
-            close();
+            // close();
         }
 
         return rowid;

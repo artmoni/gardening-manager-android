@@ -25,7 +25,7 @@ public class LocalAllotmentProvider extends AbstractProvider implements Allotmen
 
     public LocalAllotmentProvider(Context mContext) {
         super(mContext);
-        actionSeedSQLite = new DatabaseHelper(mContext);
+        actionSeedSQLite = DatabaseHelper.getInstance(mContext);
     }
 
     public void open() {

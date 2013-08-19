@@ -65,6 +65,7 @@ public class SeedWidgetLong extends LinearLayout implements OnClickListener {
         if (mSeed.getFamily() != null) {
             int familyImageRessource = getResources().getIdentifier(
                     "org.gots:drawable/family_" + mSeed.getFamily().toLowerCase(), null, null);
+           
             if (familyImageRessource != 0)
                 setBackgroundResource(familyImageRessource);
         }

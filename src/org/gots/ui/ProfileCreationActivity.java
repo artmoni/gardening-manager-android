@@ -23,7 +23,6 @@ import org.gots.action.GardeningActionInterface;
 import org.gots.action.sql.ActionDBHelper;
 import org.gots.action.sql.ActionSeedDBHelper;
 import org.gots.allotment.provider.local.LocalAllotmentProvider;
-import org.gots.allotment.sql.AllotmentDBHelper;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
@@ -369,7 +368,7 @@ public class ProfileCreationActivity extends AbstractActivity implements
             helper.createAllotment(newAllotment);
 
             // Seed
-            VendorSeedDBHelper seedHelper = new VendorSeedDBHelper(this);
+            VendorSeedDBHelper seedHelper = VendorSeedDBHelper.getInstance(this);
             // seedHelper.loadFromXML(this);
             int nbSeed = seedHelper.getArraySeeds().length;
             Random random = new Random();

@@ -28,30 +28,29 @@ public class WeatherDBHelper {
 	Context mContext;
 
 	public WeatherDBHelper(Context mContext) {
-		databaseSQLite = new DatabaseHelper(mContext);
+		databaseSQLite = DatabaseHelper.getInstance(mContext);
 		this.mContext = mContext;
 	}
 
-	public synchronized void open() {
-		// on ouvre la BDD en écriture
-		bdd = databaseSQLite.getWritableDatabase();
-	}
+//	@Override
+//    protected void finalize() throws Throwable {
+//        if (bdd != null)
+//            bdd.close();
+//        super.finalize();
+//    }
 
-	public synchronized void close() {
-		// on ferme l'accès à la BDD
-		bdd.close();
-	}
+	
 
 	public synchronized WeatherConditionInterface insertWeather(WeatherConditionInterface weatherCondition) {
 		long rowid;
-		open();
+		bdd=databaseSQLite.getWritableDatabase();
 		ContentValues values = getWeatherContentValues(weatherCondition);
 
 		try {
 
 			rowid = bdd.insert(DatabaseHelper.WEATHER_TABLE_NAME, null, values);
 		} finally {
-			close();
+//			close();
 		}
 
 		weatherCondition.setId((int) rowid);
@@ -60,7 +59,7 @@ public class WeatherDBHelper {
 
 	public synchronized WeatherConditionInterface updateWeather(WeatherConditionInterface weatherCondition) {
 		long rowid;
-		open();
+		bdd=databaseSQLite.getWritableDatabase();
 		ContentValues values = getWeatherContentValues(weatherCondition);
 
 		try {
@@ -68,7 +67,7 @@ public class WeatherDBHelper {
 			rowid = bdd.update(DatabaseHelper.WEATHER_TABLE_NAME, values, DatabaseHelper.WEATHER_DAYOFYEAR + "="
 					+ weatherCondition.getDayofYear(),null);
 		} finally {
-			close();
+//			close();
 		}
 
 		return weatherCondition;
@@ -106,7 +105,7 @@ public class WeatherDBHelper {
 	public synchronized WeatherConditionInterface getWeatherByDayofyear(int dayofyear) {
 		WeatherConditionInterface weatherCondition = null;
 
-		open();
+		bdd=databaseSQLite.getReadableDatabase();
 		try {
 			Cursor cursor = bdd.query(DatabaseHelper.WEATHER_TABLE_NAME, null, DatabaseHelper.WEATHER_DAYOFYEAR + "="
 					+ dayofyear, null, null, null, null);
@@ -116,7 +115,7 @@ public class WeatherDBHelper {
 			}
 			cursor.close();
 		} finally {
-			close();
+//			close();
 		}
 		return weatherCondition;
 	}
