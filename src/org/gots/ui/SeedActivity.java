@@ -58,7 +58,7 @@ public class SeedActivity extends SherlockFragment {
             return v;
         }
 
-        VendorSeedDBHelper helper = new VendorSeedDBHelper(getActivity());
+        VendorSeedDBHelper helper = VendorSeedDBHelper.getInstance(getActivity());
         mSeed = helper.getSeedById(seedId);
 
         final TextView seedDescriptionEnvironnement = (TextView) v.findViewById(R.id.IdSeedDescriptionEnvironment);

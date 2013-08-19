@@ -113,7 +113,7 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanResult != null && scanResult.getContents() != "") {
             Log.i("Scan result", scanResult.toString());
-            VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
+            VendorSeedDBHelper helper = VendorSeedDBHelper.getInstance(this);
             BaseSeedInterface scanSeed = helper.getSeedByBarCode(scanResult.getContents());
             if (scanSeed != null) {
                 scanSeed.setNbSachet(scanSeed.getNbSachet() + 1);

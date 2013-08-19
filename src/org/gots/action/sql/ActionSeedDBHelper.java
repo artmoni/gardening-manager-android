@@ -32,7 +32,7 @@ public class ActionSeedDBHelper {
 	Context mContext;
 
 	public ActionSeedDBHelper(Context mContext) {
-		actionSeedSQLite = new DatabaseHelper(mContext);
+		actionSeedSQLite = DatabaseHelper.getInstance(mContext);
 		this.mContext = mContext;
 	}
 

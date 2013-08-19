@@ -77,7 +77,7 @@ public class ActionNotificationService extends Service {
 
 		// ##########
 
-		VendorSeedDBHelper helperVendor = new VendorSeedDBHelper(this);
+		VendorSeedDBHelper helperVendor = VendorSeedDBHelper.getInstance(this);
 		ArrayList<BaseSeedInterface> allMySeeds = helperVendor.getMySeeds();
 		ArrayList<BaseActionInterface> sowingActions = new ArrayList<BaseActionInterface>();
 		BaseSeedInterface sowingseed = new GrowingSeed();

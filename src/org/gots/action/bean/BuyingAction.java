@@ -84,7 +84,7 @@ public class BuyingAction extends AbstractActionGarden implements PermanentActio
         // super.execute(seed);
 
         seed.setNbSachet(seed.getNbSachet() + 1);
-        VendorSeedDBHelper helper = new VendorSeedDBHelper(mContext);
+        VendorSeedDBHelper helper = VendorSeedDBHelper.getInstance(mContext);
         helper.updateSeed(seed);
         if (GotsPreferences.getInstance().isConnectedToServer()) {
             NuxeoSeedProvider provider = new NuxeoSeedProvider(mContext);

@@ -271,9 +271,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				+ ALLOTMENT_NAME + " STRING,"
 				+ ALLOTMENT_UUID + " STRING"
 					+ ");";
+
+    private static DatabaseHelper helper = null;
 		//@formatter:on
 
-    public DatabaseHelper(Context context) {
+		 public static synchronized DatabaseHelper getInstance(Context context)
+		    {
+		        if(helper == null)
+		        {
+		            helper = new DatabaseHelper(context);
+		        }
+
+		        return helper;
+		    }		
+    private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME.concat(String.valueOf(GotsPreferences.getInstance().get(
                 GotsPreferences.ORG_GOTS_CURRENT_GARDENID, 0))), null, DATABASE_VERSION);
     }
@@ -294,7 +305,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_SPECIE);
 
         db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('apiaceae')");
-        db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('asteracae')");
+        db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('asteraceae')");
         db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('brassicaceae')");
         db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('Cucurbitaceae')");
         db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('Fabaceae')");
@@ -366,8 +377,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         } if (oldVersion < 13) {
             db.execSQL("ALTER TABLE " + ACTIONSEEDS_TABLE_NAME + " ADD COLUMN " + ACTIONSEED_DATA + " VARCHAR(255)");
-        } if (oldVersion < 14) {
             db.execSQL("ALTER TABLE " + SEEDS_TABLE_NAME + " ADD COLUMN " + SEED_UUID + " VARCHAR(255);");
+        } if (oldVersion < 14) {
             db.execSQL("ALTER TABLE " + ALLOTMENT_TABLE_NAME + " ADD COLUMN " + ALLOTMENT_UUID + " VARCHAR(255);");
 
         } else {
@@ -381,4 +392,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         }
     }
+   
 }

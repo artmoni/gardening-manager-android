@@ -20,7 +20,6 @@ import org.gots.action.bean.SowingAction;
 import org.gots.action.view.ActionWidget;
 import org.gots.allotment.AllotmentManager;
 import org.gots.allotment.provider.AllotmentProvider;
-import org.gots.allotment.sql.AllotmentDBHelper;
 import org.gots.allotment.view.QuickAllotmentActionBuilder;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.preferences.GotsPreferences;

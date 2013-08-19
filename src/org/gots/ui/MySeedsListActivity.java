@@ -15,7 +15,6 @@ import java.util.List;
 
 import org.gots.R;
 import org.gots.allotment.AllotmentManager;
-import org.gots.allotment.sql.AllotmentDBHelper;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenManager;

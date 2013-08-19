@@ -18,7 +18,6 @@ import org.gots.action.AbstractActionSeed;
 import org.gots.action.GardeningActionInterface;
 import org.gots.action.PermanentActionInterface;
 import org.gots.action.SeedActionInterface;
-import org.gots.allotment.sql.AllotmentDBHelper;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.local.sql.GrowingSeedDBHelper;
