@@ -103,6 +103,7 @@
     <string name="action.beak">Bécher</string>
     <string name="action.lighten">Eclaircir</string>
     <string name="profile.share.data">Partager</string>
+    <string name="login.account">Compte</string>
     <string name="login.login">Utilisateur</string>
     <string name="login.password">Mot de passe</string>
     <string name="login.signin">Connexion</string>
@@ -114,5 +115,6 @@
     <string name="fillfields.dates">Veuillez indiquer les dates</string>
     <string name="login.disconnect.description">Vous êtes en mode synchronisé.\n\n Il est désormais possible de vous connecter depuis plusieurs appareils.</string>
     <string name="login.disconnect">Déconnexion</string>
+    <string name="garden.create">Créer mon potager</string>
 
 </resources>

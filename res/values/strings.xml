@@ -102,6 +102,8 @@
     <string name="action.beak">Beak</string>
     <string name="action.lighten">Lighten</string>
     <string name="profile.share.data">Share this garden with friends</string>
+            <string name="login.account">Account</string>
+    
     <string name="login.login">Login</string>
     <string name="login.password">Password</string>
     <string name="login.signin">Sign in</string>

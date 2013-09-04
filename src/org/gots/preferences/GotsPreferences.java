@@ -82,6 +82,8 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     public static final String GARDENING_MANAGER_APPNAME = "Gardening Manager";
 
+    private static final String GARDENING_MANAGER_DOCUMENTATION_URL = "http://doc.gardening-manager.com";
+
     private static final String GARDENING_MANAGER_NUXEO_AUTOMATION_TEST = "http://192.168.100.90:8080/nuxeo/";
 
     private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://services.gardening-manager.com/nuxeo/";
@@ -336,5 +338,11 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     public void setLastSuccessfulNuxeoLogin(String login) {
         set(ORG_GOTS_GARDEN_SUCCESSFUL_LOGIN, login);
     }
+
+    public String getDocumentationURI() {
+        return GARDENING_MANAGER_DOCUMENTATION_URL;
+    }
+
+    
 
 }

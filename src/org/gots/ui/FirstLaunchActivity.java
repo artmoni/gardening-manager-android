@@ -42,7 +42,7 @@ public class FirstLaunchActivity extends AbstractActivity {
         });
 
         Button connect = (Button) findViewById(R.id.buttonConnect);
-        connect.setVisibility(View.GONE);
+//        connect.setVisibility(View.GONE);
         connect.setOnClickListener(new View.OnClickListener() {
 
             @Override
