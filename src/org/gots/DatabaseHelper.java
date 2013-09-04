@@ -280,6 +280,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		        if(helper == null)
 		        {
 		            helper = new DatabaseHelper(context);
+		            GotsPreferences.getInstance().initIfNew(context);
 		        }
 
 		        return helper;
