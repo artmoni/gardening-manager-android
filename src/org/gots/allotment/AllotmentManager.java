@@ -1,28 +1,18 @@
 package org.gots.allotment;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
-import org.gots.DatabaseHelper;
 import org.gots.allotment.provider.AllotmentProvider;
 import org.gots.allotment.provider.local.LocalAllotmentProvider;
 import org.gots.allotment.provider.nuxeo.NuxeoAllotmentProvider;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.garden.provider.GardenProvider;
-import org.gots.garden.provider.local.LocalGardenProvider;
-import org.gots.garden.provider.nuxeo.NuxeoGardenProvider;
 import org.gots.preferences.GotsPreferences;
 import org.gots.utils.NotConfiguredException;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.AsyncTask;
-import android.util.Log;
-
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class AllotmentManager extends BroadcastReceiver implements AllotmentProvider {
     private static final String TAG = "GardenManager";

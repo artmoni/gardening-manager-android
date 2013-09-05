@@ -18,11 +18,7 @@ import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.adapter.ListVendorSeedAdapter;
-import org.gots.seed.provider.GotsSeedProvider;
-import org.gots.seed.provider.local.LocalSeedProvider;
-import org.gots.seed.service.SeedBroadcastReceiver;
 import org.gots.seed.service.SeedUpdateService;
-import org.gots.weather.service.WeatherUpdateService;
 
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;

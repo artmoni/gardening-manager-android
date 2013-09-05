@@ -13,25 +13,20 @@ package org.gots.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.gots.R;
 import org.gots.allotment.AllotmentManager;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenManager;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsSeedManager;
-import org.gots.seed.adapter.ListVendorSeedAdapter;
 import org.gots.seed.adapter.MySeedsListAdapter;
-import org.gots.seed.provider.local.sql.VendorSeedDBHelper;
 
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ListAdapter;
 
 import com.actionbarsherlock.app.SherlockListFragment;
@@ -48,10 +43,6 @@ public class MySeedsListActivity extends SherlockListFragment {
         super.onCreate(savedInstanceState);
 
         if (getActivity().getIntent().getExtras() != null) {
-            String allotmentRef = getActivity().getIntent().getExtras().getString("org.gots.allotment.reference");
-            // if (allotmentRef != null) {
-            // AllotmentDBHelper helper = new AllotmentDBHelper(getActivity());
-            // allotment = helper.getAllotmentByName(allotmentRef);
             AllotmentManager allotmentManager = AllotmentManager.getInstance();
             allotmentManager.initIfNew(getActivity());
             allotment = allotmentManager.getCurrentAllotment();
@@ -83,7 +74,6 @@ public class MySeedsListActivity extends SherlockListFragment {
     @Override
     public void onResume() {
         new AsyncTask<Void, Integer, List<BaseSeedInterface>>() {
-            private ProgressDialog dialog;
 
             protected void onPreExecute() {
                 // dialog = ProgressDialog.show(getActivity(), "", getResources().getString(R.string.gots_loading),

@@ -23,8 +23,6 @@ import org.gots.bean.BaseAllotmentInterface;
 import org.gots.help.HelpUriBuilder;
 import org.gots.weather.view.WeatherWidget;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;

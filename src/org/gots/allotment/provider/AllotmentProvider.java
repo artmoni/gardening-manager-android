@@ -2,9 +2,7 @@ package org.gots.allotment.provider;
 
 import java.util.List;
 
-import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
-import org.gots.garden.GardenInterface;
 
 public interface AllotmentProvider {
 

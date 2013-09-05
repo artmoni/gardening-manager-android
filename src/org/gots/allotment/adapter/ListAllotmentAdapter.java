@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.gots.allotment.adapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.gots.R;
@@ -19,18 +18,14 @@ import org.gots.action.bean.DeleteAction;
 import org.gots.action.bean.SowingAction;
 import org.gots.action.view.ActionWidget;
 import org.gots.allotment.AllotmentManager;
-import org.gots.allotment.provider.AllotmentProvider;
 import org.gots.allotment.view.QuickAllotmentActionBuilder;
 import org.gots.bean.BaseAllotmentInterface;
-import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
 import org.gots.seed.provider.local.sql.GrowingSeedDBHelper;
 import org.gots.ui.HutActivity;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;

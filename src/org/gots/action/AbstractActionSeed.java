@@ -15,7 +15,6 @@ import java.util.Comparator;
 import java.util.Date;
 
 import org.gots.allotment.AllotmentManager;
-import org.gots.allotment.provider.AllotmentProvider;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GrowingSeedInterface;
 

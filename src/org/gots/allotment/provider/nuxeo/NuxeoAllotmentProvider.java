@@ -4,15 +4,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.gots.allotment.provider.AllotmentProvider;
 import org.gots.allotment.provider.local.LocalAllotmentProvider;
 import org.gots.bean.BaseAllotmentInterface;
-import org.gots.garden.GardenInterface;
 import org.gots.garden.GardenManager;
-import org.gots.garden.provider.nuxeo.NuxeoGardenConvertor;
 import org.gots.nuxeo.NuxeoManager;
-import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.provider.nuxeo.NuxeoSeedConverter;
 import org.nuxeo.android.documentprovider.LazyUpdatableDocumentsList;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
@@ -23,7 +18,6 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PathRef;
-import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
 import android.content.Context;
 import android.util.Log;

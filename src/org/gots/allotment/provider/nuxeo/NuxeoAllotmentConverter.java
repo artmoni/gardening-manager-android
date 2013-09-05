@@ -2,10 +2,7 @@ package org.gots.allotment.provider.nuxeo;
 
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
-import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.GrowingSeed;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
-import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
 import android.util.Log;
 

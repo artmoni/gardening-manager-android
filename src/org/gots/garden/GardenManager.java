@@ -3,7 +3,6 @@ package org.gots.garden;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import org.gots.DatabaseHelper;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.provider.GardenProvider;
 import org.gots.garden.provider.local.LocalGardenProvider;
@@ -14,7 +13,6 @@ import org.gots.utils.NotConfiguredException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.util.Log;
 

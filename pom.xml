@@ -8,7 +8,7 @@
   <packaging>apk</packaging>
   <version>0.20-SNAPSHOT</version>
   <name>Gardening Manager</name>
-  <properties>
+  <properties>      
     <android.version>4.0.3</android.version>
     <android.platform>16</android.platform>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

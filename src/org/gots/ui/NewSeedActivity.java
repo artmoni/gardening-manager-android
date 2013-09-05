@@ -16,7 +16,6 @@ import org.gots.R;
 import org.gots.action.bean.BuyingAction;
 import org.gots.help.HelpUriBuilder;
 import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.GotsSeedManager;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.adapter.ListSpeciesAdapter;

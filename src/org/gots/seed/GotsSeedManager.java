@@ -5,7 +5,6 @@ import java.util.concurrent.ExecutionException;
 
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
-import org.gots.garden.GardenManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
@@ -15,7 +14,6 @@ import org.gots.utils.NotConfiguredException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;

@@ -6,7 +6,6 @@ import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.SeedUtil;
 
 import android.content.Context;
-import android.util.Log;
 
 public class ISeedSpecieComparator implements Comparator<BaseSeedInterface> {
 

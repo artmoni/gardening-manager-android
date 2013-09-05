@@ -42,6 +42,7 @@ public class ActionNotificationService extends Service {
 	@Override
 	public void onCreate() {
 		mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		
 		super.onCreate();
 	}
 

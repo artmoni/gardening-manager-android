@@ -2,15 +2,16 @@ package org.gots.help;
 
 import java.util.Locale;
 
+import org.gots.preferences.GotsPreferences;
+
 import android.util.Log;
 
 public class HelpUriBuilder {
-	private static String baseHelpURL = "http://www.gardening-manager.com";
 
 	public static String getUri(String page) {
 		String lang = Locale.getDefault().getLanguage();
 		Log.i("Langue",lang);
 		
-		return baseHelpURL + "/"+lang+"/" + page;
+		return GotsPreferences.getInstance().getDocumentationURI() + "/"+lang+"/" + page;
 	}
 }

@@ -7,8 +7,6 @@ import org.gots.DatabaseHelper;
 import org.gots.allotment.provider.AllotmentProvider;
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
-import org.gots.garden.GardenInterface;
-import org.gots.garden.sql.GardenSQLite;
 import org.gots.preferences.GotsPreferences;
 import org.gots.provider.AbstractProvider;
 
