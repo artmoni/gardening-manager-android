@@ -239,6 +239,9 @@ public class SplashScreenActivity extends AbstractActivity {
 
         // getApplicationContext().startService(weatherServiceIntent);
 
+        /*
+         * Synchronize Weather
+         */
         new AsyncTask<Void, Integer, Void>() {
 
             protected void onPreExecute() {
@@ -264,6 +267,9 @@ public class SplashScreenActivity extends AbstractActivity {
             }
         }.execute();
 
+        /*
+         * Synchronize Seeds
+         */
         new AsyncTask<Void, Integer, Void>() {
             // Intent startServiceIntent2 = new Intent(getApplicationContext(), SeedUpdateService.class);
 
@@ -291,6 +297,10 @@ public class SplashScreenActivity extends AbstractActivity {
 
             }
         }.execute();
+
+        /*
+         * Synchronize Actions
+         */
         new AsyncTask<Void, Integer, Void>() {
             Intent startServiceIntent3 = new Intent(getApplicationContext(), ActionNotificationService.class);
 
@@ -316,33 +326,40 @@ public class SplashScreenActivity extends AbstractActivity {
             }
         }.execute();
 
-        new AsyncTask<Context, Void, List<GardenInterface>>() {
-            ProgressDialog dialog;
+        /*
+         * Synchronize Server
+         */
+        if (gotsPrefs.isConnectedToServer()) {
+            new AsyncTask<Context, Void, List<GardenInterface>>() {
+                ProgressDialog dialog;
 
-            private List<GardenInterface> myGardens;
+                private List<GardenInterface> myGardens;
 
-            @Override
-            protected void onPreExecute() {
-                Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
-                progressGarden.startAnimation(myFadeInAnimation);
-                super.onPreExecute();
-            }
+                @Override
+                protected void onPreExecute() {
+                    Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
+                    progressGarden.startAnimation(myFadeInAnimation);
+                    super.onPreExecute();
+                }
 
-            @Override
-            protected List<GardenInterface> doInBackground(Context... params) {
-                myGardens = gardenManager.getMyGardens(true);
-                return myGardens;
-            }
+                @Override
+                protected List<GardenInterface> doInBackground(Context... params) {
+                    myGardens = gardenManager.getMyGardens(true);
+                    return myGardens;
+                }
 
-            @Override
-            protected void onPostExecute(List<GardenInterface> result) {
-                progressGarden.clearAnimation();
-                progressGarden.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
+                @Override
+                protected void onPostExecute(List<GardenInterface> result) {
+                    progressGarden.clearAnimation();
+                    progressGarden.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
 
-                super.onPostExecute(result);
-            }
+                    super.onPostExecute(result);
+                }
 
-        }.execute();
+            }.execute();
+        }else{
+            progressGarden.setVisibility(View.GONE);
+        }
     }
 
     @Override
