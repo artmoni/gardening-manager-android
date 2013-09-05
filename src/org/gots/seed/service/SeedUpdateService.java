@@ -78,6 +78,8 @@ public class SeedUpdateService extends Service {
             }
 
             protected void onPostExecute(List<BaseSeedInterface> vendorSeeds) {
+                if (manager.countNewSeed())
+                    createNotification();
                 handler.removeCallbacks(sendUpdatesToUI);
                 handler.postDelayed(sendUpdatesToUI, 0); // 1 second
                 super.onPostExecute(vendorSeeds);

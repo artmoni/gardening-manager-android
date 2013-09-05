@@ -168,4 +168,8 @@ public class SimpleSeedProvider implements GotsSeedProvider {
         // TODO Auto-generated method stub
         
     }
+
+    public int countNewSeed() {
+        return 0;
+    }
 }

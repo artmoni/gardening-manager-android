@@ -13,6 +13,7 @@ import android.content.Context;
 public class LocalSeedProvider extends AbstractProvider implements GotsSeedProvider {
 
     VendorSeedDBHelper myBank;
+    protected int nbNewSeeds = 0;
 
     public LocalSeedProvider(Context context) {
         super(context);
@@ -73,5 +74,10 @@ public class LocalSeedProvider extends AbstractProvider implements GotsSeedProvi
     public void remove(BaseSeedInterface vendorSeed) {
         myBank.remove(vendorSeed);
         
+    }
+
+    @Override
+    public int countNewSeed() {
+        return nbNewSeeds;
     }
 }
