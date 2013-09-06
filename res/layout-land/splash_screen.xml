@@ -132,7 +132,7 @@
                 android:id="@+id/imageProgressSeed"
                 style="@style/logo"
                 android:background="@drawable/bg_state_critical"
-                android:src="@drawable/specie_chillis" />
+                android:src="@drawable/specie_alliumporrum" />
 
             <ImageView
                 android:id="@+id/imageProgressAction"

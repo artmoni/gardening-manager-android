@@ -44,7 +44,7 @@
         <ImageView
             android:id="@+id/imageProgressSeed"
             style="@style/logo"
-            android:src="@drawable/specie_chillis" android:background="@drawable/bg_state_critical"/>
+            android:src="@drawable/specie_alliumporrum" android:background="@drawable/bg_state_critical"/>
 
         <ImageView
             android:id="@+id/imageProgressAction"
