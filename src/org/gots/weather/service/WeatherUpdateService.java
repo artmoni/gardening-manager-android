@@ -44,8 +44,6 @@ public class WeatherUpdateService extends Service {
         // TODO change to async task and update UI in postExecute
         getWeatherFromWebService();
 
-        
-
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -80,25 +78,29 @@ public class WeatherUpdateService extends Service {
                 // WeatherTask wt = new PrevimeteoWeatherProvider(this, garden.getAddress(), cal.getTime());
                 // wt.execute();
 
-                new AsyncTask<Integer, Integer, Void>() {
+                new AsyncTask<Integer, Integer, WeatherConditionInterface>() {
 
                     protected void onPreExecute() {
                     };
 
                     @Override
-                    protected Void doInBackground(Integer... params) {
+                    protected WeatherConditionInterface doInBackground(Integer... params) {
                         Calendar cal = Calendar.getInstance();
                         cal.add(Calendar.DAY_OF_YEAR, params[0]);
-                        WeatherProvider previmeteoWeatherProvider = new PrevimeteoWeatherProvider(getApplicationContext());
-                        previmeteoWeatherProvider.getCondition(cal.getTime());
-                        return null;
+                        WeatherProvider previmeteoWeatherProvider = new PrevimeteoWeatherProvider(
+                                getApplicationContext());
+
+                        return previmeteoWeatherProvider.getCondition(cal.getTime());
+                        
                     }
 
                     @Override
-                    protected void onPostExecute(Void result) {
+                    protected void onPostExecute(WeatherConditionInterface weatherCondition) {
+                        if (weatherCondition == null)
+                            isWeatherError = true;
                         handler.removeCallbacks(sendUpdatesToUI);
                         handler.postDelayed(sendUpdatesToUI, 0); // 1 second=1000
-                        super.onPostExecute(result);
+                        super.onPostExecute(weatherCondition);
 
                     }
                 }.execute(forecastDay);

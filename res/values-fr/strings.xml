@@ -83,7 +83,7 @@
     <string name="specie.capsicumannuum">Poivron/Piment</string>
     <string name="specie.solanummelongena">Aubergine</string>
     <string name="specie.ocimumbasilicum">Basilic</string>
-    <string name="weather.citynotfound">Pas de météo dans cette localité, saisissez une proche agglomération</string>
+    <string name="weather.citynotfound">Pas de prévisions météorologiques, choisissez une ville proche</string>
     <string name="location.notfound">Vous n\'avez pas pu être localisé</string>
     <string name="help.loading">Chargement de la documentation</string>
     <string name="menu.help">Aide</string>
