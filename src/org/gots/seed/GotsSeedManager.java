@@ -31,6 +31,8 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     private boolean initDone = false;
 
+    private List<BaseSeedInterface> newSeeds;
+
     private static Exception firstCall;
 
     private GotsSeedManager() {
@@ -65,13 +67,13 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
             return;
         }
         this.mContext = context;
-//        mContext.registerReceiver(this, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
+        // mContext.registerReceiver(this, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
         setSeedProvider();
         initDone = true;
     }
 
     public void finalize() {
-//        mContext.unregisterReceiver(this);
+        // mContext.unregisterReceiver(this);
         initDone = false;
         mContext = null;
         instance = null;
@@ -79,8 +81,10 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     @Override
     public List<BaseSeedInterface> getVendorSeeds(boolean force) {
-
-        return new NuxeoSeedProvider(mContext).getVendorSeeds(force);
+        NuxeoSeedProvider provider = new NuxeoSeedProvider(mContext);
+        List<BaseSeedInterface> vendorSeeds= provider.getVendorSeeds(force);
+        newSeeds=provider.getNewSeeds();
+        return vendorSeeds;
     }
 
     @Override
@@ -106,7 +110,7 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
         AsyncTask<BaseSeedInterface, Integer, BaseSeedInterface> task = new AsyncTask<BaseSeedInterface, Integer, BaseSeedInterface>() {
             @Override
             protected BaseSeedInterface doInBackground(BaseSeedInterface... params) {
-
+                
                 return mSeedProvider.createSeed(params[0]);
             }
         }.execute(seed);
@@ -145,13 +149,21 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())||BroadCastMessages.GARDEN_SETTINGS_CHANGED.equals(intent.getAction())) {
+        if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())
+                || BroadCastMessages.GARDEN_SETTINGS_CHANGED.equals(intent.getAction())) {
             setSeedProvider();
-        }
+        } 
     }
 
     @Override
     public void remove(BaseSeedInterface vendorSeed) {
         mSeedProvider.remove(vendorSeed);
     }
+
+    @Override
+    public List<BaseSeedInterface> getNewSeeds() {
+        return newSeeds;
+    }
+
+  
 }

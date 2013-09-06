@@ -104,8 +104,12 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             for (Iterator<Document> iterator = docs.iterator(); iterator.hasNext();) {
                 Document document = iterator.next();
                 BaseSeedInterface seed = NuxeoSeedConverter.convert(document);
-                remoteVendorSeeds.add(seed);
-                Log.i(TAG, "Nuxeo Seed: " + seed);
+                if (seed != null) {
+                    remoteVendorSeeds.add(seed);
+                    Log.i(TAG, "Nuxeo Seed: " + seed);
+                } else {
+                    Log.w(TAG, "Nuxeo Seed conversion problem " + document.getTitle() + "- " + document.getId());
+                }
             }
             getNuxeoClient().shutdown();
         } catch (Exception e) {
@@ -118,7 +122,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
     protected List<BaseSeedInterface> synchronize(List<BaseSeedInterface> localVendorSeeds,
             List<BaseSeedInterface> remoteVendorSeeds) {
-        nbNewSeeds=0;
+        newSeeds.clear();
         List<BaseSeedInterface> myVendorSeeds = new ArrayList<BaseSeedInterface>();
         // TODO send as intent
         // List<BaseSeedInterface> myLocalSeeds = super.getVendorSeeds();
@@ -141,9 +145,10 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 // myVendorSeeds.add(super.updateSeed(remoteSeed));
                 // myVendorSeeds.add();
                 ;
-            else{
-                myVendorSeeds.add(super.createSeed(remoteSeed));
-                nbNewSeeds++;
+            else {
+                BaseSeedInterface seed  = super.createSeed(remoteSeed);
+                myVendorSeeds.add(seed);
+                newSeeds.add(seed);
             }
         }
 
@@ -323,5 +328,4 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         super.remove(vendorSeed);
     }
 
-  
 }

@@ -27,6 +27,6 @@ public interface GotsSeedProvider {
     
     public void remove(BaseSeedInterface vendorSeed);
 
-    public abstract int countNewSeed();
+    public abstract List<BaseSeedInterface> getNewSeeds();
 
 }

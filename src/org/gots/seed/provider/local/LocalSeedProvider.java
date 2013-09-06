@@ -1,5 +1,6 @@
 package org.gots.seed.provider.local;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.gots.garden.GardenInterface;
@@ -13,7 +14,7 @@ import android.content.Context;
 public class LocalSeedProvider extends AbstractProvider implements GotsSeedProvider {
 
     VendorSeedDBHelper myBank;
-    protected int nbNewSeeds = 0;
+    protected List<BaseSeedInterface> newSeeds = new ArrayList<BaseSeedInterface>();
 
     public LocalSeedProvider(Context context) {
         super(context);
@@ -77,7 +78,7 @@ public class LocalSeedProvider extends AbstractProvider implements GotsSeedProvi
     }
 
     @Override
-    public int countNewSeed() {
-        return nbNewSeeds;
+    public List<BaseSeedInterface> getNewSeeds() {
+        return newSeeds;
     }
 }

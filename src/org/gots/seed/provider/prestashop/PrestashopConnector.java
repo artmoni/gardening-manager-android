@@ -102,8 +102,8 @@ class PrestashopConnector implements GotsSeedProvider {
 
     }
 
-    public int countNewSeed() {
-        return 0;
+    public List<BaseSeedInterface> getNewSeeds() {
+        return null;
     }
 
 }
