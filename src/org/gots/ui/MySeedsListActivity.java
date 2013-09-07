@@ -13,13 +13,13 @@ package org.gots.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.gots.allotment.AllotmentManager;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenManager;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.adapter.MySeedsListAdapter;
+import org.gots.ui.fragment.AbstractListFragment;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -29,33 +29,26 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.ListAdapter;
 
-import com.actionbarsherlock.app.SherlockListFragment;
 
-public class MySeedsListActivity extends SherlockListFragment {
-    private MySeedsListAdapter listAdapter;
+public class MySeedsListActivity extends AbstractListFragment {
+    public MySeedsListAdapter listAdapter;
 
-    private BaseAllotmentInterface allotment;
+    public BaseAllotmentInterface allotment;
 
-    private GotsSeedManager seedManager;
-
+    
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (getActivity().getIntent().getExtras() != null) {
-            AllotmentManager allotmentManager = AllotmentManager.getInstance();
-            allotmentManager.initIfNew(getActivity());
             allotment = allotmentManager.getCurrentAllotment();
-            // }
         }
-        seedManager = GotsSeedManager.getInstance();
-        seedManager.initIfNew(getActivity());
+      
         getActivity().registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.SEED_DISPLAYLIST));
         listAdapter = new MySeedsListAdapter(getActivity(), allotment, new ArrayList<BaseSeedInterface>());
         setListAdapter(listAdapter);
     }
-
-    private BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
+    public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             onResume();
@@ -86,7 +79,7 @@ public class MySeedsListActivity extends SherlockListFragment {
             @Override
             protected List<BaseSeedInterface> doInBackground(Void... params) {
 
-                List<BaseSeedInterface> mySeeds = seedManager.getMyStock(GardenManager.getInstance().getCurrentGarden());
+                List<BaseSeedInterface> mySeeds = seedProvider.getMyStock(GardenManager.getInstance().getCurrentGarden());
 
                 return mySeeds;
             }

@@ -14,12 +14,11 @@ import java.util.ArrayList;
 
 import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
-import org.gots.analytics.GotsAnalytics;
 import org.gots.help.HelpUriBuilder;
-import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.local.sql.VendorSeedDBHelper;
+import org.gots.ui.fragment.AbstractFragmentActivity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -45,7 +44,7 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-public class HutActivity extends SherlockFragmentActivity implements ActionBar.TabListener {
+public class HutActivity extends AbstractFragmentActivity implements ActionBar.TabListener {
 
     // private ListVendorSeedAdapter lvsea;
     ListView listSeeds;
@@ -67,9 +66,6 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
-        GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
-
         if (getIntent().getExtras() != null)
             currentAllotment = getIntent().getExtras().getInt("org.gots.allotment.reference");
 
@@ -77,7 +73,7 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
         mContext = this;
         setContentView(R.layout.hut);
 
-        if (!GotsPreferences.getInstance().isPremium()) {
+        if (!gotsPref.isPremium()) {
             GotsAdvertisement ads = new GotsAdvertisement(this);
 
             LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
@@ -129,12 +125,6 @@ public class HutActivity extends SherlockFragmentActivity implements ActionBar.T
         super.onResume();
         buildMyTabHost();
 
-    }
-
-    @Override
-    protected void onDestroy() {
-        GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
-        super.onDestroy();
     }
 
     @Override

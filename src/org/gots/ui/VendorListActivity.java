@@ -16,9 +16,9 @@ import java.util.List;
 import org.gots.R;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.GotsSeedManager;
 import org.gots.seed.adapter.ListVendorSeedAdapter;
 import org.gots.seed.service.SeedUpdateService;
+import org.gots.ui.fragment.AbstractListFragment;
 
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -36,33 +36,19 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
-public class VendorListActivity extends SherlockListFragment {
+public class VendorListActivity extends AbstractListFragment {
 
     public Context mContext;
 
-    // GardenManager manager;
-    private GotsSeedManager seedProvider;
-
-    private ListVendorSeedAdapter listVendorSeedAdapter;
-
-    private Intent seedIntent;
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mContext = getActivity();
-
-        seedProvider = GotsSeedManager.getInstance();
-        seedProvider.initIfNew(mContext);
-        seedIntent = new Intent(mContext, SeedUpdateService.class);
-        mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.SEED_DISPLAYLIST));
-        listVendorSeedAdapter = new ListVendorSeedAdapter(mContext, new ArrayList<BaseSeedInterface>());
-        setListAdapter(listVendorSeedAdapter);
-    }
+    public ListVendorSeedAdapter listVendorSeedAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
+        mContext=getActivity();
+        mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.SEED_DISPLAYLIST));
+        listVendorSeedAdapter = new ListVendorSeedAdapter(mContext, new ArrayList<BaseSeedInterface>());
+        setListAdapter(listVendorSeedAdapter);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -78,6 +64,7 @@ public class VendorListActivity extends SherlockListFragment {
         switch (item.getItemId()) {
 
         case R.id.refresh_seed:
+            Intent seedIntent = new Intent(mContext, SeedUpdateService.class);
             mContext.startService(seedIntent);
 
             return true;
@@ -87,7 +74,7 @@ public class VendorListActivity extends SherlockListFragment {
         }
     }
 
-    private BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
+    public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             updateUI(intent);
