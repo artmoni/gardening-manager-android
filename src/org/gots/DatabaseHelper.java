@@ -24,7 +24,7 @@ import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     // ************************ DATABASE **************
-    private static final int DATABASE_VERSION = 14;
+    private static final int DATABASE_VERSION = 15;
 
     private static String DATABASE_NAME = "gots";
 
@@ -314,6 +314,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('Liliaceae')");
         db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('Solanaceae')");
         db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('aliaceae')");
+        db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('chenopodiaceae')");
+
+        
 
         db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
                 + ") VALUES ('Brassica oleracea',3)");
@@ -337,7 +340,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + ") VALUES ('Allium porrum',9)");
         db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
                 + ") VALUES ('Phaseolus vulgaris',5)");
+        db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                + ") VALUES ('Cynara scolymus',2)");
+        db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                + ") VALUES ('Solanum melongena',8)");
+        db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                + ") VALUES ('Ocimum basilicum',6)");
+        db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                + ") VALUES ('Asparagus officinalis',7)");
+        db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                + ") VALUES ('Cucurbita maxima',4)");
+        db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                + ") VALUES ('Spinacia oleracea',10)");
 
+        
+        
         Log.i(TAG, "onCreate");
 
     }
@@ -361,6 +378,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         if (oldVersion < 12) {
+            
             db.execSQL("CREATE TEMPORARY TABLE backup" + " (" + ACTIONSEED_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                     + ACTIONSEED_GROWINGSEED_ID + " INTEGER," + ACTIONSEED_ACTION_ID + " INTEGER,"
                     + ACTIONSEED_DATEACTIONDONE + " INTEGER," + ACTIONSEED_DURATION + " INTEGER" + ");");
@@ -381,7 +399,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE " + SEEDS_TABLE_NAME + " ADD COLUMN " + SEED_UUID + " VARCHAR(255);");
         } if (oldVersion < 14) {
             db.execSQL("ALTER TABLE " + ALLOTMENT_TABLE_NAME + " ADD COLUMN " + ALLOTMENT_UUID + " VARCHAR(255);");
+        } if (oldVersion < 15) {
+            db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('chenopodiaceae')");
 
+            db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                    + ") VALUES ('Cynara scolymus',2)");
+            db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                    + ") VALUES ('Solanum melongena',8)");
+            db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                    + ") VALUES ('Ocimum basilicum',6)");
+            db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                    + ") VALUES ('Asparagus officinalis',7)");
+            db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                    + ") VALUES ('Cucurbita maxima',4)");
+            db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                    + ") VALUES ('Spinacia oleracea',10)");
         } else {
             db.execSQL("DROP TABLE IF EXISTS " + SEEDS_TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + GROWINGSEEDS_TABLE_NAME);
