@@ -161,10 +161,7 @@ public class ProfileActivity extends AbstractActivity {
 
             return true;
         case R.id.delete_garden:
-            // Intent intent = new Intent(this, ProfileCreationActivity.class);
-            // intent.putExtra("option", ProfileCreationActivity.OPTION_EDIT);
-            // startActivity(intent);
-            // if (gardenManager.getMyGardens().size() == 0) {
+           
             if (profileAdapter.getCount()==0) {
                 Intent intentCreation = new Intent(this, ProfileCreationActivity.class);
                 intentCreation.putExtra("option", ProfileCreationActivity.OPTION_EDIT);
