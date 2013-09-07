@@ -70,7 +70,7 @@
     <string name="dashboard.profile.name">Profil</string>
     <string name="dateSliderTitle">dateSliderTitle strings</string>
     <string name="specie.daucuscarota">Carotte</string>
-    <string name="specie.brassicaoleracea">Brocoli</string>
+    <string name="specie.brassicaoleracea">Chou</string>
     <string name="specie.solanumlycopersicum">Tomate</string>
     <string name="specie.alliumcepa">Oignon</string>
     <string name="specie.alliumporrum">Poirreau</string>
@@ -96,7 +96,7 @@
     <string name="location.notfound">Adresse non trouvée</string>
     <string name="notification.action.title">Les _SPECIE_ ont besoin de vous</string>
     <string name="notification.action.content">et _NBACTIONS_ autre(s) action(s)</string>
-    <string name="notification.seed.title">_SPECIE_ nouvellement disponible</string>
+    <string name="notification.seed.title">Nouvelle espèce au catalogue: _SPECIE_</string>
     <string name="notification.seed.content">ainsi que _NBSEEDS_ autre légumes</string>
     <string name="notification.seedsow.content">Prêt à être semé</string>
     <string name="action.sow">Semer</string>

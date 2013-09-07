@@ -71,7 +71,7 @@
     <string name="dashboard.profile.name">Profile</string>
     <string name="dateSliderTitle">dateSliderTitle string</string>
     <string name="specie.daucuscarota">Carrot</string>
-    <string name="specie.brassicaoleracea">Broccoli</string>
+    <string name="specie.brassicaoleracea">Cabbage</string>
     <string name="specie.solanumlycopersicum">Tomato</string>
     <string name="specie.alliumcepa">Onion</string>
     <string name="specie.alliumporrum">leek</string>
@@ -94,9 +94,9 @@
     <string name="weather.citynotfound">No weather forecast, choose a closer city</string>
     <string name="location.notfound">Location not found</string>
     <string name="notification.action.title">Your _SPECIE_ needs you</string>
-    <string name="notification.action.content">and _NBACTIONS_ more task</string>
-    <string name="notification.seed.title">New _SPECIE_ available</string>
-    <string name="notification.seed.content">and _NBSEEDS_ more vegetable</string>
+    <string name="notification.action.content">and _NBACTIONS_ more tasks</string>
+    <string name="notification.seed.title">New species to catalog:_SPECIE_</string>
+    <string name="notification.seed.content">and _NBSEEDS_ more</string>
     <string name="notification.seedsow.content">Ready to sow</string>
     <string name="action.sow">Sow</string>
     <string name="action.beak">Beak</string>
