@@ -20,6 +20,8 @@ import org.gots.action.service.ActionTODOBroadcastReceiver;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.garden.GardenInterface;
 import org.gots.preferences.GotsPreferences;
+import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.service.SeedNotification;
 import org.gots.weather.WeatherManager;
 
 import android.app.Activity;
@@ -289,6 +291,11 @@ public class SplashScreenActivity extends AbstractActivity {
 
             @Override
             protected void onPostExecute(Void result) {
+                List<BaseSeedInterface> newSeeds = seedManager.getNewSeeds();
+                if (newSeeds.size() > 0) {
+                    SeedNotification notification = new SeedNotification(getApplicationContext());
+                    notification.createNotification(newSeeds);
+                }
                 progressSeed.clearAnimation();
                 progressSeed.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
                 // getApplicationContext().stopService(startServiceIntent2);
@@ -357,7 +364,7 @@ public class SplashScreenActivity extends AbstractActivity {
                 }
 
             }.execute();
-        }else{
+        } else {
             progressGarden.setVisibility(View.GONE);
         }
     }
