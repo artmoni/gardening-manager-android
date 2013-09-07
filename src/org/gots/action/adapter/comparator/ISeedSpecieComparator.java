@@ -9,7 +9,7 @@ import android.content.Context;
 
 public class ISeedSpecieComparator implements Comparator<BaseSeedInterface> {
 
-    private static final String TAG = "Compare";
+    private static final String TAG = "ISeedSpecieComparator";
 
     private Context mcontext;
 
