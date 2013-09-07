@@ -24,17 +24,15 @@ import android.util.Log;
 public class SeedUpdateService extends Service {
     public static final String ISNEWSEED = "org.gots.isnewseed";
 
-    private static final int NOTIFICATION = 101;
 
     private static Intent intent = null;
 
     private static boolean isNewSeed = false;
 
-    NotificationManager mNM;
 
     private List<BaseSeedInterface> newSeeds = new ArrayList<BaseSeedInterface>();
 
-    private String TAG = "SeedNotificationService";
+    private String TAG = "SeedUpdateService";
 
     // private GotsSeedProvider mRemoteProvider;
 
@@ -48,7 +46,7 @@ public class SeedUpdateService extends Service {
 
     @Override
     public void onCreate() {
-        mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+       
         manager = GotsSeedManager.getInstance();
         manager.initIfNew(this);
         intent = new Intent(BroadCastMessages.SEED_DISPLAYLIST);
@@ -78,16 +76,17 @@ public class SeedUpdateService extends Service {
             }
 
             protected void onPostExecute(List<BaseSeedInterface> vendorSeeds) {
-                if (manager.countNewSeed())
-                    createNotification();
+                newSeeds = manager.getNewSeeds();
+                if (newSeeds != null && newSeeds.size() > 0) {
+                    SeedNotification notification = new SeedNotification(getApplicationContext());
+                    notification.createNotification (newSeeds);
+                }
                 handler.removeCallbacks(sendUpdatesToUI);
                 handler.postDelayed(sendUpdatesToUI, 0); // 1 second
                 super.onPostExecute(vendorSeeds);
                 stopSelf();
             };
         }.execute();
-
-       
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -116,38 +115,6 @@ public class SeedUpdateService extends Service {
         // mNM.cancel(NOTIFICATION);
         Log.d(TAG, "Stopping service : " + newSeeds.size() + " seeds found");
         super.onDestroy();
-
-    }
-
-    private final void createNotification() {
-        // In this sample, we'll use the same text for the ticker and the
-        // expanded notification
-        String content = "";
-        String title = getText(R.string.notification_seed_title).toString();
-        // CharSequence content = SeedUtil.translateAction(this, action) + ":" +
-        // SeedUtil.translateSpecie(this, seed);
-
-        CharSequence specieName = SeedUtil.translateSpecie(this, newSeeds.get(0));
-        title = title.replace("_SPECIE_", specieName);
-
-        if (newSeeds.size() > 1) {
-            content = getText(R.string.notification_seed_content).toString();
-            content = content.replace("_NBSEEDS_", Integer.toString(newSeeds.size() - 1));
-        }
-
-        // Set the icon, scrolling text and timestamp
-        Notification notification = new Notification(SeedWidget.getSeedDrawable(this, newSeeds.get(0)), title,
-                System.currentTimeMillis());
-
-        // The PendingIntent to launch our activity if the user selects this
-        // notification
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, HutActivity.class), 0);
-
-        // Set the info for the views that show in the notification panel.
-        notification.setLatestEventInfo(this, title, content, contentIntent);
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;
-        // Send the notification.
-        mNM.notify(NOTIFICATION, notification);
 
     }
 

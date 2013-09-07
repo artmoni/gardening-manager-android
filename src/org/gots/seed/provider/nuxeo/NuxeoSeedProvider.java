@@ -37,7 +37,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
     protected String myApp;
 
-    protected LazyUpdatableDocumentsList documentsList;
+    // protected LazyUpdatableDocumentsList documentsList;
 
     public NuxeoSeedProvider(Context context) {
         super(context);
@@ -98,7 +98,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             }
             Documents docs = service.query("SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState != \"deleted\"",
                     null, new String[] { "dc:modified DESC" }, "*", 0, 50, cacheParam);
-            documentsList = docs.asUpdatableDocumentsList();
+            // documentsList = docs.asUpdatableDocumentsList();
             // Documents docs =
             // service.query("SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState <> 'deleted' ORDER BY dc:modified DESC");
             for (Iterator<Document> iterator = docs.iterator(); iterator.hasNext();) {
@@ -115,7 +115,6 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         } catch (Exception e) {
             Log.e(TAG, "getAllSeeds " + e.getMessage(), e);
         }
-        // if (gotsPrefs.isConnectedToServer())
         myVendorSeeds = synchronize(localVendorSeeds, remoteVendorSeeds);
         return myVendorSeeds;
     }
@@ -146,7 +145,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 // myVendorSeeds.add();
                 ;
             else {
-                BaseSeedInterface seed  = super.createSeed(remoteSeed);
+                BaseSeedInterface seed = super.createSeed(remoteSeed);
                 myVendorSeeds.add(seed);
                 newSeeds.add(seed);
             }
@@ -200,7 +199,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
      * Return new remote seed or null if error
      */
     protected BaseSeedInterface createNuxeoVendorSeed(BaseSeedInterface currentSeed) {
-
+        // TODO debug Session has username Administrator with null password when disconnected
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);
 
@@ -248,7 +247,9 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
     }
 
     protected AndroidAutomationClient getNuxeoClient() {
-        return NuxeoManager.getInstance().getNuxeoClient();
+        NuxeoManager nuxeoManager = NuxeoManager.getInstance();
+        nuxeoManager.initIfNew(mContext);
+        return nuxeoManager.getNuxeoClient();
     }
 
     @Override
@@ -306,6 +307,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 Documents relations = service.getRelations(stockItem, "http://purl.org/dc/terms/isFormatOf", true);
                 if (relations.size() >= 1) {
                     Document originalSeed = service.getDocument(relations.get(0), "*");
+                    // TODO get seed from super.getByUUID
                     BaseSeedInterface seed = NuxeoSeedConverter.convert(originalSeed);
                     seed.setNbSachet(Integer.valueOf(stockItem.getString("stockitem:quantity")));
                     super.updateSeed(seed);

@@ -25,6 +25,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 public class VendorSeedDBHelper {
 
@@ -37,6 +38,8 @@ public class VendorSeedDBHelper {
     private SQLiteDatabase bdd;
 
     Context mContext;
+
+    private String VendorSeedDBHelper;
 
     private VendorSeedDBHelper(Context mContext) {
         databaseHelper = DatabaseHelper.getInstance(mContext);
@@ -310,17 +313,21 @@ public class VendorSeedDBHelper {
 
     public synchronized ArrayList<BaseSeedInterface> getVendorSeeds() {
         ArrayList<BaseSeedInterface> vendorSeeds = new ArrayList<BaseSeedInterface>();
-        BaseSeedInterface searchedSeed = new GrowingSeed();
-        bdd = databaseHelper.getReadableDatabase();
-        Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, null, null, null, null, null);
+        try {
+            BaseSeedInterface searchedSeed = new GrowingSeed();
+            bdd = databaseHelper.getReadableDatabase();
+            Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, null, null, null, null, null);
 
-        if (managedCursor.moveToFirst()) {
-            do {
-                searchedSeed = cursorToSeed(managedCursor);
-                vendorSeeds.add(searchedSeed);
-            } while (managedCursor.moveToNext());
+            if (managedCursor.moveToFirst()) {
+                do {
+                    searchedSeed = cursorToSeed(managedCursor);
+                    vendorSeeds.add(searchedSeed);
+                } while (managedCursor.moveToNext());
+            }
+            managedCursor.close();
+        } catch (Exception e) {
+            Log.e(VendorSeedDBHelper, e.getMessage(), e);
         }
-        managedCursor.close();
         // close();
         return vendorSeeds;
     }
