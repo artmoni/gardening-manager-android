@@ -36,7 +36,7 @@ import android.util.Log;
 
 /**
  * @author jcarsique
- *
+ * 
  */
 public class NuxeoManager {
     private static final String TAG = "NuxeoManager";
@@ -115,6 +115,10 @@ public class NuxeoManager {
     }
 
     public void shutdown() {
-        nuxeoContext.shutdown();
+        try{
+            nuxeoContext.shutdown();
+        }catch(Exception e){
+            Log.e(TAG,"nuxeoContext.shutdown() "+e.getMessage(),e);
+        }
     }
 }

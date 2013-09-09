@@ -3,6 +3,7 @@ package org.gots.garden;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import org.gots.DatabaseHelper;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.provider.GardenProvider;
 import org.gots.garden.provider.local.LocalGardenProvider;
@@ -137,6 +138,7 @@ public class GardenManager extends BroadcastReceiver {
         GotsPreferences.getInstance().set(GotsPreferences.ORG_GOTS_CURRENT_GARDENID, (int)garden.getId());
         Log.d(TAG, "setCurrentGarden [" + garden.getId() + "] " + garden.getLocality()
                 + " has been set as current workspace");
+        DatabaseHelper.getInstance(mContext).changeDatabase();
 //        changeDatabase((int) garden.getId());
     }
 

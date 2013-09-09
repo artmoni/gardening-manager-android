@@ -34,7 +34,7 @@ public class ReduceQuantityAction extends AbstractActionSeed implements SeedActi
             return 0;
         super.execute(seed);
         seed.setNbSachet(seed.getNbSachet() - 1);
-        VendorSeedDBHelper helper = VendorSeedDBHelper.getInstance(getContext());
+        VendorSeedDBHelper helper = new VendorSeedDBHelper(getContext());
         helper.updateSeed(seed);
         return 0;
     }

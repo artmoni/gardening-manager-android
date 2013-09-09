@@ -273,27 +273,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 					+ ");";
 
     private static DatabaseHelper helper = null;
+
+    private static boolean newInstance=false;
 		//@formatter:on
 
-		 public static synchronized DatabaseHelper getInstance(Context context)
-		    {
-		        if(helper == null)
-		        {
-		            helper = new DatabaseHelper(context);
-		            GotsPreferences.getInstance().initIfNew(context);
-		        }
+    public static synchronized DatabaseHelper getInstance(Context context) {
+        if (helper == null || newInstance) {
+            GotsPreferences.getInstance().initIfNew(context);
+            helper = new DatabaseHelper(context);
+            
+        }
 
-		        return helper;
-		    }		
+        return helper;
+    }
+
     private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME.concat(String.valueOf(GotsPreferences.getInstance().get(
                 GotsPreferences.ORG_GOTS_CURRENT_GARDENID, 0))), null, DATABASE_VERSION);
     }
 
-    // public void setDatabase(int databaseId) {
-    // DATABASE_NAME = "gots" + databaseId;
-    // Log.d(TAG, "Database has changed to "+DATABASE_NAME);
-    // }
+    /*
+     * Change database after changing GotsPreferences.ORG_GOTS_CURRENT_GARDENID
+     */
+    public void changeDatabase() {
+        close();
+        newInstance = true;
+    }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -315,8 +320,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('Solanaceae')");
         db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('aliaceae')");
         db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('chenopodiaceae')");
-
-        
 
         db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
                 + ") VALUES ('Brassica oleracea',3)");
@@ -353,8 +356,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
                 + ") VALUES ('Spinacia oleracea',10)");
 
-        
-        
         Log.i(TAG, "onCreate");
 
     }
@@ -378,7 +379,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         if (oldVersion < 12) {
-            
+
             db.execSQL("CREATE TEMPORARY TABLE backup" + " (" + ACTIONSEED_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                     + ACTIONSEED_GROWINGSEED_ID + " INTEGER," + ACTIONSEED_ACTION_ID + " INTEGER,"
                     + ACTIONSEED_DATEACTIONDONE + " INTEGER," + ACTIONSEED_DURATION + " INTEGER" + ");");
@@ -394,12 +395,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     + " SELECT _id, growingseed_id, action_id,  dateactiondone, action_seed_duration FROM backup");
             db.execSQL("DROP TABLE backup");
 
-        } if (oldVersion < 13) {
+        }
+        if (oldVersion < 13) {
             db.execSQL("ALTER TABLE " + ACTIONSEEDS_TABLE_NAME + " ADD COLUMN " + ACTIONSEED_DATA + " VARCHAR(255)");
             db.execSQL("ALTER TABLE " + SEEDS_TABLE_NAME + " ADD COLUMN " + SEED_UUID + " VARCHAR(255);");
-        } if (oldVersion < 14) {
+        }
+        if (oldVersion < 14) {
             db.execSQL("ALTER TABLE " + ALLOTMENT_TABLE_NAME + " ADD COLUMN " + ALLOTMENT_UUID + " VARCHAR(255);");
-        } if (oldVersion < 15) {
+        }
+        if (oldVersion < 15) {
             db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('chenopodiaceae')");
 
             db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
@@ -425,5 +429,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         }
     }
-   
+
 }

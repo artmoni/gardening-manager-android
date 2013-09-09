@@ -41,7 +41,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     private static final String TAG = "GotsPreferences";
 
-    public static final boolean ISDEVELOPMENT = false;
+    public static final boolean ISDEVELOPMENT = true;
 
     public static final boolean DEBUG = false;
 
@@ -84,12 +84,12 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     private static final String GARDENING_MANAGER_DOCUMENTATION_URL = "http://doc.gardening-manager.com";
 
-    private static final String GARDENING_MANAGER_NUXEO_AUTOMATION_TEST = "http://192.168.100.90:8080/nuxeo/";
+    private static final String GARDENING_MANAGER_NUXEO_AUTOMATION_TEST = "http://services.gardening-manager.com/nuxeo/";
 
     private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://services.gardening-manager.com/nuxeo/";
 //    private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://srv2.gardening-manager.com:8090/nuxeo/";
 
-    private static final String DEFAULT_LOCAL_URL = "http://10.0.2.2:8080/nuxeo/";
+//    private static final String DEFAULT_LOCAL_URL = "http://10.0.2.2:8080/nuxeo/";
 
     // private static final String GARDENING_MANAGER_NUXEO_AUTHENTICATION =
     // "http://srv2.gardening-manager.com:8090/nuxeo/authentication/temptoken?";
@@ -135,7 +135,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
         mContext = context;
          setSharedPreferences(PreferenceManager.getDefaultSharedPreferences(context));
         setGardeningManagerServerURI(ISDEVELOPMENT ? GARDENING_MANAGER_NUXEO_AUTOMATION_TEST : GARDENING_MANAGER_NUXEO_AUTOMATION);
-        initDone = true;
+         initDone = true;
     }
 
     public SharedPreferences getSharedPrefs() {

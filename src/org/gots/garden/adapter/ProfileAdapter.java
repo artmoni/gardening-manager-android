@@ -189,6 +189,7 @@ public class ProfileAdapter extends BaseAdapter {
                 public void onClick(View v) {
 
                     gardenManager.setCurrentGarden(currentGarden);
+                    
                     selectedGarden = getItem(position);
                     notifyDataSetChanged();
 
