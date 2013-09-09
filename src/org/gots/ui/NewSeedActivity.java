@@ -89,7 +89,7 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
         textViewBarCode = (TextView) findViewById(R.id.textViewBarCode);
 
         if (getIntent().getIntExtra("org.gots.seedid", -1) != -1) {
-            VendorSeedDBHelper helper = VendorSeedDBHelper.getInstance(this);
+            VendorSeedDBHelper helper = new VendorSeedDBHelper(getApplicationContext());
             newSeed = helper.getSeedById(getIntent().getIntExtra("org.gots.seedid", -1));
             isNewSeed = false;
 
@@ -142,7 +142,7 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
                     seedWidgetLong.invalidate();
                 }
             }
-        }); 
+        });
 
         planningHarvest = (PlanningWidget) findViewById(R.id.IdSeedEditHarvestPlanning);
         planningHarvest.setAdapter(new PlanningHarvestAdapter(newSeed));
@@ -224,7 +224,7 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
     }
 
     private void addToStock(BaseSeedInterface vendorseed) {
-        VendorSeedDBHelper helper = VendorSeedDBHelper.getInstance(this);
+        VendorSeedDBHelper helper = new VendorSeedDBHelper(getApplicationContext());
         if (vendorseed.getSeedId() >= 0) {
             GrowingSeedInterface seed = (GrowingSeedInterface) helper.getSeedById(vendorseed.getSeedId());
             BuyingAction buy = new BuyingAction(this);
@@ -250,7 +250,7 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
     }
 
     private BaseSeedInterface insertSeed() {
-       
+
         // VendorSeedDBHelper helper = new VendorSeedDBHelper(this);
         if (isNewSeed)
             return seedManager.createSeed(newSeed);
@@ -264,7 +264,8 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
 	 *
 	 */
     private void initSpecieList() {
-        final VendorSeedDBHelper helper = VendorSeedDBHelper.getInstance(this);;
+        final VendorSeedDBHelper helper = new VendorSeedDBHelper(getApplicationContext());
+
         String[] specieList = helper.getArraySpecie();
 
         ListSpeciesAdapter listSpeciesAdapter = new ListSpeciesAdapter(this, specieList, newSeed);
@@ -302,7 +303,7 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
 	 *
 	 */
     private void initVarietyList() {
-        VendorSeedDBHelper helper = VendorSeedDBHelper.getInstance(this);
+        VendorSeedDBHelper helper = new VendorSeedDBHelper(getApplicationContext());
 
         String[] referenceList = null;
         if (newSeed.getSpecie() != null)

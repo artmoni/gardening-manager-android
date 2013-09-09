@@ -68,6 +68,7 @@ public class MySeedsListActivity extends AbstractListFragment {
     public void onResume() {
         new AsyncTask<Void, Integer, List<BaseSeedInterface>>() {
 
+            
             protected void onPreExecute() {
                 // dialog = ProgressDialog.show(getActivity(), "", getResources().getString(R.string.gots_loading),
                 // true);
@@ -79,7 +80,7 @@ public class MySeedsListActivity extends AbstractListFragment {
             @Override
             protected List<BaseSeedInterface> doInBackground(Void... params) {
 
-                List<BaseSeedInterface> mySeeds = seedProvider.getMyStock(GardenManager.getInstance().getCurrentGarden());
+                List<BaseSeedInterface> mySeeds = seedProvider.getMyStock(gardenManager.getCurrentGarden());
 
                 return mySeeds;
             }

@@ -87,7 +87,7 @@ public class GrowingSeedDBHelper {
 
     private GrowingSeedInterface cursorToSeed(Cursor cursor) {
         GrowingSeedInterface bsi = null;
-        VendorSeedDBHelper sb = VendorSeedDBHelper.getInstance(mContext);
+        VendorSeedDBHelper sb = new VendorSeedDBHelper(mContext);
         bsi = (GrowingSeedInterface) sb.getSeedById(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_SEED_ID)));
         if (bsi == null) {
             bsi = new GrowingSeed();

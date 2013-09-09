@@ -41,18 +41,18 @@ public class VendorSeedDBHelper {
 
     private String VendorSeedDBHelper;
 
-    private VendorSeedDBHelper(Context mContext) {
+    public VendorSeedDBHelper(Context mContext) {
         databaseHelper = DatabaseHelper.getInstance(mContext);
         this.mContext = mContext;
     }
 
-    public static synchronized VendorSeedDBHelper getInstance(Context mContext) {
-        if (helper == null) {
-            helper = new VendorSeedDBHelper(mContext);
-        }
-
-        return helper;
-    }
+//    public static synchronized VendorSeedDBHelper getInstance(Context mContext) {
+//        if (helper == null) {
+//            helper = new VendorSeedDBHelper(mContext);
+//        }
+//
+//        return helper;
+//    }
 
     //
     // public synchronized void open() {

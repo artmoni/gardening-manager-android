@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.gots.allotment.AllotmentManager;
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.garden.GardenManager;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.adapter.ListVendorSeedAdapter;
@@ -20,6 +21,7 @@ import com.actionbarsherlock.app.SherlockListFragment;
 public class AbstractListFragment extends SherlockListFragment {
     protected GotsSeedManager seedProvider;
     protected AllotmentManager allotmentManager;
+    protected GardenManager gardenManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -27,6 +29,9 @@ public class AbstractListFragment extends SherlockListFragment {
         seedProvider.initIfNew(getActivity());
         allotmentManager = AllotmentManager.getInstance();
         allotmentManager.initIfNew(getActivity());
+        gardenManager=GardenManager.getInstance();
+        gardenManager.initIfNew(getActivity());
+
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 

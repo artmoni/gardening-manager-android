@@ -111,7 +111,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     Log.w(TAG, "Nuxeo Seed conversion problem " + document.getTitle() + "- " + document.getId());
                 }
             }
-            getNuxeoClient().shutdown();
+//            getNuxeoClient().shutdown();
         } catch (Exception e) {
             Log.e(TAG, "getAllSeeds " + e.getMessage(), e);
         }

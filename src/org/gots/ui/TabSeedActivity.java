@@ -72,7 +72,8 @@ public class TabSeedActivity extends SherlockFragmentActivity {
             mSeed = helper.getSeedById(seedId);
         } else if (getIntent().getExtras().getInt("org.gots.seed.vendorid") != 0) {
             int seedId = getIntent().getExtras().getInt("org.gots.seed.vendorid");
-            VendorSeedDBHelper helper = VendorSeedDBHelper.getInstance(this);
+            VendorSeedDBHelper helper = new VendorSeedDBHelper(getApplicationContext());
+
             mSeed = (GrowingSeedInterface) helper.getSeedById(seedId);
         } else
             mSeed = new GrowingSeed(); // DEFAULT SEED

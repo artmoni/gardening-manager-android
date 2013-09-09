@@ -18,7 +18,7 @@ public class LocalSeedProvider extends AbstractProvider implements GotsSeedProvi
 
     public LocalSeedProvider(Context context) {
         super(context);
-        myBank = VendorSeedDBHelper.getInstance(context);
+        myBank = new VendorSeedDBHelper(context);
     }
 
     @Override

@@ -22,6 +22,7 @@ import org.gots.garden.GardenInterface;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.service.SeedNotification;
+import org.gots.seed.service.SeedUpdateService;
 import org.gots.weather.WeatherManager;
 
 import android.app.Activity;
@@ -417,23 +418,32 @@ public class SplashScreenActivity extends AbstractActivity {
         // we know mobiletuts updates at right around 1130 GMT.
         // let's grab new stuff at around 11:45 GMT, inexactly
         Calendar updateTime = Calendar.getInstance();
-        // updateTime.setTimeInMillis(System.currentTimeMillis());
-        // updateTime.add(Calendar.SECOND, 10);
-        // updateTime.setTimeZone(TimeZone.getTimeZone("GMT"));
-        // updateTime.set(Calendar.HOUR_OF_DAY, 12);
-        // updateTime.set(Calendar.MINUTE, 15);
-        Intent downloader = new Intent(context, ActionTODOBroadcastReceiver.class);
-        PendingIntent actionTODOIntent = PendingIntent.getBroadcast(context, 0, downloader,
+       
+        Intent actionBroadcastReceiver = new Intent(context, ActionTODOBroadcastReceiver.class);
+        PendingIntent actionTODOIntent = PendingIntent.getBroadcast(context, 0, actionBroadcastReceiver,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarms = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
         if (GotsPreferences.isDevelopment())
             alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
-                    AlarmManager.INTERVAL_FIFTEEN_MINUTES, actionTODOIntent);
+                    120000, actionTODOIntent);
         else {
             updateTime.set(Calendar.HOUR_OF_DAY, 20);
             alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
                     AlarmManager.INTERVAL_DAY, actionTODOIntent);
+        }
+        
+        Intent seedBroadcastReceiver = new Intent(context, SeedUpdateService.class);
+        PendingIntent seedIntent = PendingIntent.getBroadcast(context, 0, seedBroadcastReceiver,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        if (GotsPreferences.isDevelopment())
+            alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
+                    120000, seedIntent);
+        else {
+            updateTime.set(Calendar.HOUR_OF_DAY, 12);
+            alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
+                    AlarmManager.INTERVAL_DAY, seedIntent);
         }
     }
 

@@ -40,7 +40,7 @@ public class CopyOfMySeedsListAdapter extends BaseAdapter implements OnClickList
 		this.mContext = mContext;
 		// this.mySeeds.addAll(mySeeds);
 		this.allotment = allotment;
-		VendorSeedDBHelper myBank = VendorSeedDBHelper.getInstance(mContext);
+		VendorSeedDBHelper myBank = new VendorSeedDBHelper(mContext);
 		mySeeds = myBank.getMySeeds();
 	}
 
@@ -101,7 +101,7 @@ public class CopyOfMySeedsListAdapter extends BaseAdapter implements OnClickList
 
 	@Override
 	public void notifyDataSetChanged() {
-		VendorSeedDBHelper myBank = VendorSeedDBHelper.getInstance(mContext);
+		VendorSeedDBHelper myBank = new VendorSeedDBHelper(mContext);
 		mySeeds = myBank.getMySeeds();
 		 super.notifyDataSetChanged();
 	}

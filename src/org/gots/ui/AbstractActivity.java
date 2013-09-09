@@ -24,6 +24,7 @@ package org.gots.ui;
 import java.util.ArrayList;
 
 import org.gots.allotment.AllotmentManager;
+import org.gots.analytics.GotsAnalytics;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenManager;
 import org.gots.nuxeo.NuxeoManager;
@@ -34,6 +35,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 /**
  * @author jcarsique
@@ -84,7 +86,7 @@ public class AbstractActivity extends SherlockActivity {
         activities.remove(this);
         unregisterReceiver(gardenManager);
         unregisterReceiver(allotmentManager);
-        unregisterReceiver(seedManager);
+        unregisterReceiver(seedManager);        
         if (activities.size() == 0) {
             nuxeoManager.shutdown();
             gardenManager.finalize();
@@ -92,5 +94,7 @@ public class AbstractActivity extends SherlockActivity {
             allotmentManager.finalize();
             
         }
+        GoogleAnalyticsTracker.getInstance().dispatch();
+        GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
     }
 }

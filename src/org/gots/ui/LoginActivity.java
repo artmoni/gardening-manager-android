@@ -86,12 +86,7 @@ public class LoginActivity extends AbstractActivity {
 
     }
 
-    @Override
-    protected void onDestroy() {
-        GoogleAnalyticsTracker.getInstance().dispatch();
-        GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
-        super.onDestroy();
-    }
+   
 
     public List<String> getAccounts(String account_type) {
         AccountManager manager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
@@ -115,7 +110,7 @@ public class LoginActivity extends AbstractActivity {
         // loginText.setText(gotsPrefs.getLastSuccessfulNuxeoLogin());
         passwordText = (TextView) findViewById(R.id.edittextPassword);
         passwordText.setText(gotsPrefs.getNuxeoPassword());
-        gotsPrefs.setNuxeoLogin(null);
+        // gotsPrefs.setNuxeoLogin(null);
 
         LinearLayout buttonLayout = (LinearLayout) findViewById(R.id.idLayoutConnection);
         buttonLayout.setOnClickListener(new View.OnClickListener() {
@@ -124,6 +119,8 @@ public class LoginActivity extends AbstractActivity {
             public void onClick(View v) {
                 Toast.makeText(LoginActivity.this, getResources().getString(R.string.feature_unavalaible),
                         Toast.LENGTH_SHORT).show();
+                GoogleAnalyticsTracker.getInstance().trackEvent("Login", "GoogleAuthentication", "Request this new feature", 0);
+
 
                 // launchGoogle();
                 // tokenNuxeoConnect();
@@ -192,6 +189,8 @@ public class LoginActivity extends AbstractActivity {
                             LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.VISIBLE);
                             gotsPrefs.setConnectedToServer(false);
                             gotsPrefs.setNuxeoLogin(null);
+                            gotsPrefs.setLastSuccessfulNuxeoLogin(null);
+
                         } else {
                             LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.GONE);
                             gotsPrefs.setConnectedToServer(true);
