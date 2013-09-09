@@ -25,6 +25,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -58,7 +59,7 @@ public class LoginActivity extends AbstractActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-        
+
         bar = getSupportActionBar();
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setTitle(R.string.app_name);
@@ -83,8 +84,6 @@ public class LoginActivity extends AbstractActivity {
         buildLayoutDisconnected();
 
     }
-
-   
 
     public List<String> getAccounts(String account_type) {
         AccountManager manager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
@@ -117,14 +116,41 @@ public class LoginActivity extends AbstractActivity {
             public void onClick(View v) {
                 Toast.makeText(LoginActivity.this, getResources().getString(R.string.feature_unavalaible),
                         Toast.LENGTH_SHORT).show();
-                GoogleAnalyticsTracker.getInstance().trackEvent("Login", "GoogleAuthentication", "Request this new feature", 0);
-
+                GoogleAnalyticsTracker.getInstance().trackEvent("Login", "GoogleAuthentication",
+                        "Request this new feature", 0);
 
                 // launchGoogle();
                 // tokenNuxeoConnect();
 
                 // finish();
 
+            }
+
+        });
+
+        Button buttoncreate = (Button) findViewById(R.id.buttonCreate);
+        buttoncreate.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                GoogleAnalyticsTracker.getInstance().trackEvent("Login", "SimpleAuthentication",
+                        "Request account", 0);
+
+                // send mail
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("message/rfc822");
+                i.putExtra(Intent.EXTRA_EMAIL, new String[] { "account@gardening-manager.com" });
+                i.putExtra(Intent.EXTRA_SUBJECT, "Gardening Manager / Account / Ask for new account");
+                i.putExtra(Intent.EXTRA_TEXT,
+                        "Hello,\n\nI want to participate to the Gardening Manager beta version.\n\nMy Google account is: "
+                                + loginSpinner.getSelectedItem().toString()
+                                + "\n\nI know I will receive my password quickly.\n\n");
+                try {
+                    startActivity(Intent.createChooser(i, "Send mail..."));
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(LoginActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                }
+                
             }
 
         });

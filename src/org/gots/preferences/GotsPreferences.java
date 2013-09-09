@@ -41,7 +41,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     private static final String TAG = "GotsPreferences";
 
-    public static final boolean ISDEVELOPMENT = true;
+    public static final boolean ISDEVELOPMENT = false;
 
     public static final boolean DEBUG = false;
 

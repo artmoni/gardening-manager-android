@@ -136,12 +136,14 @@
                         android:layout_height="wrap_content"
                         android:gravity="center" >
 
-                        <!-- <TextView
+                        <!--
+                             <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="right"
                             android:padding="10dp"
-                            android:text="@string/login.login" /> -->
+                            android:text="@string/login.login" />
+                        -->
 
                         <Spinner
                             android:id="@+id/spinnerLogin"
@@ -156,18 +158,21 @@
                         android:layout_height="wrap_content"
                         android:gravity="center" >
 
-                       <!--  <TextView
+                        <!--
+                             <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="10dp"
-                            android:text="@string/login.password" /> -->
+                            android:text="@string/login.password" />
+                        -->
 
                         <EditText
                             android:id="@+id/edittextPassword"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ems="10"
-                            android:inputType="textPassword" android:hint="@string/login.password" />
+                            android:hint="@string/login.password"
+                            android:inputType="textPassword" />
                     </TableRow>
                 </TableLayout>
 
@@ -188,81 +193,6 @@
                     android:background="@drawable/button_green_selector"
                     android:text="@string/login.signin"
                     android:textColor="@color/white" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/idLoginBoxCreation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|center_horizontal"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/bg_line_action"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:padding="10dp"
-                android:visibility="gone" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/login.creation.description" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/login.login" />
-
-                    <EditText
-                        android:id="@+id/edittextLoginCreation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:inputType="text" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/login.email" />
-
-                    <EditText
-                        android:id="@+id/edittextEmailCreation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:inputType="textEmailAddress" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/login.password" />
-
-                    <EditText
-                        android:id="@+id/edittextPasswordCreation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:inputType="textPassword" />
-                </LinearLayout>
 
                 <Button
                     android:id="@+id/buttonCreate"
@@ -272,6 +202,8 @@
                     android:text="@string/login.signup"
                     android:textColor="@color/white" />
             </LinearLayout>
+
+            
         </LinearLayout>
     </ScrollView>
 
