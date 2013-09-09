@@ -12,7 +12,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@drawable/bg_line_action"
-        android:orientation="vertical" >
+        android:orientation="vertical" android:padding="10dp">
 
         <TextView
             android:id="@+id/textView1"
@@ -20,9 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="@string/action.planning"
-            android:textColor="@color/text_color_dark"
-            android:textSize="16dp"
-            android:textStyle="bold" />
+            style="@style/description_content"/>
 
         <org.gots.seed.view.SeedWidgetLong
             android:id="@+id/seedWidgetLong"
@@ -32,7 +30,7 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal" android:baselineAligned="false">
 
             <GridView
                 android:id="@+id/idListAction"
@@ -54,7 +52,7 @@
                     android:id="@+id/spinnerDuration"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    android:layout_weight="1" style="@style/description_content" />
 
                 <RadioGroup
                     android:id="@+id/radioGroupSelectDuration"
@@ -68,21 +66,21 @@
                         android:layout_height="wrap_content"
                         android:checked="true"
                         android:text="@string/day"
-                        android:textColor="@color/text_color_dark" />
+                        style="@style/description_content" />
 
                     <RadioButton
                         android:id="@+id/radioWeek"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/week"
-                        android:textColor="@color/text_color_dark" />
+                        style="@style/description_content"/>
 
                     <RadioButton
                         android:id="@+id/radioMonth"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/month"
-                        android:textColor="@color/text_color_dark" />
+                        style="@style/description_content" />
                 </RadioGroup>
             </LinearLayout>
         </LinearLayout>
