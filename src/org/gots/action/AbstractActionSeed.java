@@ -17,8 +17,10 @@ import java.util.Date;
 import org.gots.allotment.AllotmentManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.SeedUtil;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
@@ -130,6 +132,9 @@ public abstract class AbstractActionSeed implements SeedActionInterface, Compara
         GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
         tracker.trackEvent("Seed", getName(), seed.getSpecie(), 0);
         // tracker.dispatch();
+        Toast.makeText(mContext,
+                SeedUtil.translateAction(mContext, this) + " - " + SeedUtil.translateSpecie(mContext, seed),
+                Toast.LENGTH_LONG).show();
 
         return 1;
     }
