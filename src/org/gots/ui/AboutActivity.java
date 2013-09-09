@@ -31,8 +31,6 @@ public class AboutActivity extends AbstractActivity {
         bar.setDisplayHomeAsUpEnabled(true);
 
         mContext = this;
-        GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
-        GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
         PackageInfo pInfo;
         try {
@@ -126,9 +124,4 @@ public class AboutActivity extends AbstractActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    @Override
-    protected void onDestroy() {
-        GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
-        super.onDestroy();
-    }
 }

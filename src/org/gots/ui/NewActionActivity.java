@@ -47,8 +47,6 @@ public class NewActionActivity extends AbstractActivity implements OnItemClickLi
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.inputaction);
 
-        GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
-        GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
         ActionDBHelper helper = new ActionDBHelper(this);
         List<BaseActionInterface> actions = helper.getActions();
@@ -152,11 +150,5 @@ public class NewActionActivity extends AbstractActivity implements OnItemClickLi
         selectedAction = (BaseActionInterface) listActions.getItemAtPosition(arg2);
         // listActions.setSelection(arg2);
         arg1.setSelected(!arg0.isSelected());
-    }
-
-    @Override
-    protected void onDestroy() {
-        GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
-        super.onDestroy();
     }
 }

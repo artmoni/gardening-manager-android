@@ -49,8 +49,6 @@ public class ActionActivity extends AbstractActivity implements OnClickListener 
         ActionBar bar = getSupportActionBar();
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setTitle(R.string.dashboard_actions_name);
-        GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
-        GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
         setContentView(R.layout.actions);
         int seedid = 0;
@@ -131,11 +129,5 @@ public class ActionActivity extends AbstractActivity implements OnClickListener 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         listActions.notifyDataSetChanged();
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    protected void onDestroy() {
-        GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
-        super.onDestroy();
     }
 }

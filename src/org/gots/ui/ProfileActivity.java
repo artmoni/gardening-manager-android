@@ -53,9 +53,6 @@ public class ProfileActivity extends AbstractActivity {
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setTitle(R.string.dashboard_profile_name);
 
-        GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
-        GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
-
         profileList = (ListView) findViewById(R.id.IdGardenProfileList);
 
         if (!gotsPrefs.isPremium()) {
@@ -189,9 +186,4 @@ public class ProfileActivity extends AbstractActivity {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
-        super.onDestroy();
-    }
 }

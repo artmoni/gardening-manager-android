@@ -41,9 +41,6 @@ public class SeedActivity extends SherlockFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        GotsAnalytics.getInstance(getActivity().getApplication()).incrementActivityCount();
-        GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
-
     }
 
     @Override

@@ -52,9 +52,6 @@ public class MyMainGarden extends AbstractActivity {
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setTitle(R.string.dashboard_allotments_name);
 
-        GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
-        GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
-
         // GardenManager gm =GardenManager.getInstance();
 
         setContentView(R.layout.garden);
@@ -167,9 +164,4 @@ public class MyMainGarden extends AbstractActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    @Override
-    protected void onDestroy() {
-        GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
-        super.onDestroy();
-    }
 }

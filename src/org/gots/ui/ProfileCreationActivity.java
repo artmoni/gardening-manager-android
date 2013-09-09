@@ -96,9 +96,6 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
 
         // getSupportActionBar().setIcon(R.drawable.bt_update);
 
-        GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
-        GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
-
         garden.setLocality("");
 
         buildProfile();
@@ -387,12 +384,6 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
             }
         }
 
-    }
-
-    @Override
-    protected void onDestroy() {
-        GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
-        super.onDestroy();
     }
 
 }

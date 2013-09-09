@@ -77,7 +77,11 @@ public class AbstractActivity extends SherlockActivity {
         registerReceiver(allotmentManager, new IntentFilter(BroadCastMessages.GARDEN_SETTINGS_CHANGED));
         registerReceiver(seedManager, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
         registerReceiver(seedManager, new IntentFilter(BroadCastMessages.GARDEN_SETTINGS_CHANGED));
-
+        GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
+        GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
+        if (gotsPrefs.isPremium()) {
+            GoogleAnalyticsTracker.getInstance().setDryRun(true);
+        }
     }
 
     @Override
@@ -86,13 +90,13 @@ public class AbstractActivity extends SherlockActivity {
         activities.remove(this);
         unregisterReceiver(gardenManager);
         unregisterReceiver(allotmentManager);
-        unregisterReceiver(seedManager);        
+        unregisterReceiver(seedManager);
         if (activities.size() == 0) {
             nuxeoManager.shutdown();
             gardenManager.finalize();
             seedManager.finalize();
             allotmentManager.finalize();
-            
+
         }
         GoogleAnalyticsTracker.getInstance().dispatch();
         GotsAnalytics.getInstance(getApplication()).decrementActivityCount();

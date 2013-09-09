@@ -102,9 +102,6 @@ public class SplashScreenActivity extends AbstractActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
 
-        GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
-        GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
-
         new AsyncTask<Void, Integer, String>() {
             private TextView name;
 
@@ -403,15 +400,6 @@ public class SplashScreenActivity extends AbstractActivity {
             finish();
 
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    protected void onDestroy() {
-        GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
-        // unregisterReceiver(receiver);
-        // getApplicationContext().stopService(weatherServiceIntent);
-
-        super.onDestroy();
     }
 
     private void setRecurringAlarm(Context context) {

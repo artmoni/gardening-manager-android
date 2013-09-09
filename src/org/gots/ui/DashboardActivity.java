@@ -64,7 +64,6 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
 
         NewRelic.withApplicationToken( "AA89617084bf906d3a0425f6cf6a382ce574b3acd8" ).start(this.getApplication());
         
@@ -93,8 +92,6 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         }
         weatherIntent = new Intent(this, WeatherUpdateService.class);
 
-        GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
-        GoogleAnalyticsTracker.getInstance().dispatch();
 
         // if (GotsPreferences.getInstance(this).getOAuthtToken() == null) {
         // Intent intent = new Intent(this, AccountList.class);
@@ -166,7 +163,6 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         super.onDestroy();
         unregisterReceiver(weatherBroadcastReceiver);
         stopService(weatherIntent);
-        GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
     }
 
     @Override
