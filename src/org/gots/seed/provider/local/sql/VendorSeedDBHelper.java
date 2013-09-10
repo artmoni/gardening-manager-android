@@ -103,8 +103,6 @@ public class VendorSeedDBHelper {
 
     @Override
     protected void finalize() throws Throwable {
-        if (bdd != null)
-            bdd.close();
         super.finalize();
     }
 
@@ -365,6 +363,7 @@ public class VendorSeedDBHelper {
     public synchronized BaseSeedInterface getSeedById(int id) {
         BaseSeedInterface searchedSeed = null;
         bdd = databaseHelper.getReadableDatabase();
+        
         Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_ID + "='" + id
                 + "'", null, null, null, null);
         // Log.d("getSeedById", "ID=>"+id+" / QUERY=>"+bdd.ge)

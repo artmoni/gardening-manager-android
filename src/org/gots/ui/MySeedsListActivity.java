@@ -27,15 +27,16 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListAdapter;
 
-
 public class MySeedsListActivity extends AbstractListFragment {
+    protected static final String TAG = "MySeedsListActivity";
+
     public MySeedsListAdapter listAdapter;
 
     public BaseAllotmentInterface allotment;
 
-    
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,11 +44,12 @@ public class MySeedsListActivity extends AbstractListFragment {
         if (getActivity().getIntent().getExtras() != null) {
             allotment = allotmentManager.getCurrentAllotment();
         }
-      
+
         getActivity().registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.SEED_DISPLAYLIST));
         listAdapter = new MySeedsListAdapter(getActivity(), allotment, new ArrayList<BaseSeedInterface>());
         setListAdapter(listAdapter);
     }
+
     public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -68,7 +70,6 @@ public class MySeedsListActivity extends AbstractListFragment {
     public void onResume() {
         new AsyncTask<Void, Integer, List<BaseSeedInterface>>() {
 
-            
             protected void onPreExecute() {
                 // dialog = ProgressDialog.show(getActivity(), "", getResources().getString(R.string.gots_loading),
                 // true);
@@ -80,7 +81,9 @@ public class MySeedsListActivity extends AbstractListFragment {
             @Override
             protected List<BaseSeedInterface> doInBackground(Void... params) {
 
-                List<BaseSeedInterface> mySeeds = seedProvider.getMyStock(gardenManager.getCurrentGarden());
+                List<BaseSeedInterface> mySeeds = new ArrayList<BaseSeedInterface>();
+
+                mySeeds = seedProvider.getMyStock(gardenManager.getCurrentGarden());
 
                 return mySeeds;
             }

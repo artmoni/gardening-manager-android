@@ -40,9 +40,7 @@ public class ActionSeedDBHelper {
 		bdd = actionSeedSQLite.getWritableDatabase();
 	}
 
-	public void close() {
-		bdd.close();
-	}
+	
 
 	public long insertAction(BaseActionInterface action, GrowingSeedInterface seed) {
 		long rowid;
@@ -58,7 +56,6 @@ public class ActionSeedDBHelper {
 			values.put(DatabaseHelper.ACTIONSEED_DATEACTIONDONE, action.getDateActionDone().getTime());
 
 		rowid = bdd.insert(DatabaseHelper.ACTIONSEEDS_TABLE_NAME, null, values);
-		close();
 		return rowid;
 	}
 
@@ -76,7 +73,6 @@ public class ActionSeedDBHelper {
 			} while (cursor.moveToNext());
 		}
 		cursor.close();
-		close();
 		return allActions;
 	}
 
@@ -141,7 +137,6 @@ public class ActionSeedDBHelper {
 				} while (cursor.moveToNext());
 			}
 			cursor.close();
-			close();
 		}
 		return allActions;
 	}
@@ -168,7 +163,6 @@ public class ActionSeedDBHelper {
 		}
 
 		cursor.close();
-		close();
 		return allActions;
 	}
 
@@ -214,7 +208,6 @@ public class ActionSeedDBHelper {
 
 		
 		cursor.close();
-		close();
 		return allActions;
 	}
 
@@ -235,7 +228,6 @@ public class ActionSeedDBHelper {
 				DatabaseHelper.ACTIONSEED_ID + "=" + action.getLogId(), null);
 		if (rowid == 0)
 			rowid = bdd.insert(DatabaseHelper.ACTIONSEEDS_TABLE_NAME, null, values);
-		close();
 		return rowid;
 	}
 
