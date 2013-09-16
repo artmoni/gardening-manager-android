@@ -15,13 +15,18 @@ import java.util.List;
 import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.analytics.GotsAnalytics;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.adapter.ProfileAdapter;
 import org.gots.help.HelpUriBuilder;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -55,6 +60,8 @@ public class ProfileActivity extends AbstractActivity {
 
         profileList = (ListView) findViewById(R.id.IdGardenProfileList);
 
+        this.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_EVENT));
+
         if (!gotsPrefs.isPremium()) {
             GotsAdvertisement ads = new GotsAdvertisement(this);
 
@@ -63,28 +70,46 @@ public class ProfileActivity extends AbstractActivity {
         }
     }
 
+    public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            force_refresh = true;
+            onResume();
+        }
+    };
+
+    private boolean force_refresh = false;
+
     class GardenSync extends AsyncTask<Context, Void, List<GardenInterface>> {
         ProgressDialog dialog;
 
-
         @Override
         protected void onPreExecute() {
-            dialog = ProgressDialog.show(ProfileActivity.this, "", getResources().getString(R.string.gots_loading), true);
+            dialog = ProgressDialog.show(ProfileActivity.this, "", getResources().getString(R.string.gots_loading),
+                    true);
             dialog.setCanceledOnTouchOutside(true);
-//            dialog.show();
+            // dialog.show();
             super.onPreExecute();
         }
 
         @Override
         protected List<GardenInterface> doInBackground(Context... params) {
-            return gardenManager.getMyGardens(false);
+            return gardenManager.getMyGardens(force_refresh);
         }
 
         @Override
         protected void onPostExecute(List<GardenInterface> myGardens) {
-            profileAdapter = new ProfileAdapter(ProfileActivity.this, myGardens);
-            profileList.setAdapter(profileAdapter);
-            profileAdapter.notifyDataSetChanged();
+            force_refresh = false;
+
+            if (myGardens.size() == 0) {
+                Intent intentCreation = new Intent(getApplicationContext(), ProfileCreationActivity.class);
+                intentCreation.putExtra("option", ProfileCreationActivity.OPTION_EDIT);
+                startActivity(intentCreation);
+            } else {
+                profileAdapter = new ProfileAdapter(ProfileActivity.this, myGardens);
+                profileList.setAdapter(profileAdapter);
+                profileAdapter.notifyDataSetChanged();
+            }
             if (dialog.isShowing())
                 dialog.dismiss();
             super.onPostExecute(myGardens);
@@ -113,9 +138,16 @@ public class ProfileActivity extends AbstractActivity {
 
     @Override
     protected void onPause() {
+
         super.onPause();
         // unregisterReceiver(weatherBroadcastReceiver);
         // stopService(weatherIntent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(seedBroadcastReceiver);
+        super.onDestroy();
     }
 
     @Override
@@ -158,28 +190,34 @@ public class ProfileActivity extends AbstractActivity {
 
             return true;
         case R.id.delete_garden:
-           
-            if (profileAdapter.getCount()==0) {
-                Intent intentCreation = new Intent(this, ProfileCreationActivity.class);
-                intentCreation.putExtra("option", ProfileCreationActivity.OPTION_EDIT);
-                startActivity(intentCreation);
-            } else {
-                new AsyncTask<GardenInterface, Integer, Void>() {
-                    @Override
-                    protected Void doInBackground(GardenInterface... params) {
-                        gardenManager.removeGarden(params[0]);
-                        return null;
-                    }
-                }.execute(gardenManager.getCurrentGarden());
-                try {
-                    GardenSync gardenSync = new GardenSync();
-                    gardenSync.execute(this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-                } catch (Exception e) {
-                    Log.e(TAG, e.getMessage());
+            builder.setTitle("Delete");
+            builder.setMessage("Are you sure?");
+
+            builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                public void onClick(DialogInterface dialog, int which) {
+                    gardenManager.removeGarden(gardenManager.getCurrentGarden());
+
+                    dialog.dismiss();
                 }
-            }
-            profileAdapter.notifyDataSetChanged();
+
+            });
+
+            builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // Do nothing
+                    dialog.dismiss();
+                }
+            });
+
+            AlertDialog alert = builder.create();
+            alert.show();
+
+            // profileAdapter.notifyDataSetChanged();
             return true;
         default:
             return super.onOptionsItemSelected(item);
