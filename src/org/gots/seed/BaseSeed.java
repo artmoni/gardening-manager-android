@@ -141,11 +141,13 @@ public abstract class BaseSeed implements Serializable, BaseSeedInterface {
     @Override
     public String toString() {
         String seed = new String();
-        seed = "-" + getSeedId() + "--------- " + getFamily() + " " + getSpecie() + " " + getVariety()
+        seed = "#" + getSeedId() + "--------- " + getFamily() + " " + getSpecie() + " " + getVariety()
                 + " ------------";
-        seed += "\n-- Date Arrosage:" + getDateLastWatering();
-        seed += "\n-- Délais récolte: " + getDurationMin() + "/" + getDurationMax();
-        seed += "\n-- Nb Sachets:" + getNbSachet();
+        seed += "\n-- UUID:\t" + getUUID();
+
+        seed += "\n-- Date Arrosage:\t" + getDateLastWatering();
+        seed += "\n-- Délais récolte:\t" + getDurationMin() + "/" + getDurationMax();
+        seed += "\n-- Nb Sachets:\t" + getNbSachet();
         seed += "\n";
         return seed;
     }

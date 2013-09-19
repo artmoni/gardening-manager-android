@@ -14,6 +14,7 @@ import android.content.Context;
 public class LocalSeedProvider extends AbstractProvider implements GotsSeedProvider {
 
     VendorSeedDBHelper myBank;
+
     protected List<BaseSeedInterface> newSeeds = new ArrayList<BaseSeedInterface>();
 
     public LocalSeedProvider(Context context) {
@@ -49,8 +50,8 @@ public class LocalSeedProvider extends AbstractProvider implements GotsSeedProvi
 
     @Override
     public BaseSeedInterface updateSeed(BaseSeedInterface newSeed) {
-        myBank.updateSeed(newSeed);
-        return newSeed;
+
+        return myBank.updateSeed(newSeed);
     }
 
     @Override
@@ -60,7 +61,7 @@ public class LocalSeedProvider extends AbstractProvider implements GotsSeedProvi
     }
 
     @Override
-    public void removeToStock(BaseSeedInterface vendorSeed) {
+    public void removeToStock(BaseSeedInterface vendorSeed, GardenInterface garden) {
         vendorSeed.setNbSachet(vendorSeed.getNbSachet() - 1);
         myBank.updateSeed(vendorSeed);
 
@@ -71,10 +72,10 @@ public class LocalSeedProvider extends AbstractProvider implements GotsSeedProvi
         return myBank.getMySeeds();
     }
 
-    @Override 
+    @Override
     public void remove(BaseSeedInterface vendorSeed) {
         myBank.remove(vendorSeed);
-        
+
     }
 
     @Override

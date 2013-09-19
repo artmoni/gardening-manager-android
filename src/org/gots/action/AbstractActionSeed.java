@@ -15,11 +15,14 @@ import java.util.Comparator;
 import java.util.Date;
 
 import org.gots.allotment.AllotmentManager;
+import org.gots.garden.GardenManager;
 import org.gots.preferences.GotsPreferences;
+import org.gots.seed.GotsSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.SeedUtil;
 
 import android.content.Context;
+import android.os.Looper;
 import android.widget.Toast;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
@@ -53,12 +56,22 @@ public abstract class AbstractActionSeed implements SeedActionInterface, Compara
 
     private Context mContext;
 
+    protected GotsSeedManager seedManager;
+
+    protected GardenManager gardenManager;
+
     public AbstractActionSeed(Context context) {
         mContext = context;
         gotsPrefs = GotsPreferences.getInstance();
         gotsPrefs.initIfNew(context);
         allotmentProvider = AllotmentManager.getInstance();
         allotmentProvider.initIfNew(context);
+        seedManager = GotsSeedManager.getInstance();
+        seedManager.initIfNew(mContext);
+        
+        //Gardenmanager might not be declared here
+        gardenManager = GardenManager.getInstance();
+        gardenManager.initIfNew(mContext);
     }
 
     public AbstractActionSeed(String name) {
@@ -132,9 +145,8 @@ public abstract class AbstractActionSeed implements SeedActionInterface, Compara
         GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
         tracker.trackEvent("Seed", getName(), seed.getSpecie(), 0);
         // tracker.dispatch();
-        Toast.makeText(mContext,
-                SeedUtil.translateAction(mContext, this) + " - " + SeedUtil.translateSpecie(mContext, seed),
-                Toast.LENGTH_LONG).show();
+        
+        
 
         return 1;
     }

@@ -21,13 +21,14 @@
  * *********************************************************************** */
 package org.gots.provider;
 
+import org.gots.garden.GardenManager;
 import org.gots.preferences.GotsPreferences;
 
 import android.content.Context;
 
 /**
  * @author jcarsique
- *
+ * 
  */
 public abstract class AbstractProvider {
 
@@ -35,14 +36,14 @@ public abstract class AbstractProvider {
 
     protected Context mContext;
 
+
     /**
      * @param context
-     *
+     * 
      */
     public AbstractProvider(Context context) {
         mContext = context;
         gotsPrefs = GotsPreferences.getInstance();
         gotsPrefs.initIfNew(context);
     }
-
 }

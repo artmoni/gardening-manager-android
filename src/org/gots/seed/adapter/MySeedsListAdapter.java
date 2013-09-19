@@ -29,17 +29,20 @@ import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.SeedUtil;
 import org.gots.seed.view.SeedWidgetLong;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Toast;
 
 public class MySeedsListAdapter extends BaseAdapter implements OnClickListener {
     private Context mContext;
@@ -141,6 +144,9 @@ public class MySeedsListAdapter extends BaseAdapter implements OnClickListener {
                     @Override
                     protected void onPostExecute(Void result) {
                         // notifyDataSetChanged();
+                        Toast.makeText(mContext,
+                                SeedUtil.translateAction(mContext, baseActionInterface) + " - " + SeedUtil.translateSpecie(mContext, currentSeed),
+                                Toast.LENGTH_LONG).show();
                         mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
                         super.onPostExecute(result);
                     }

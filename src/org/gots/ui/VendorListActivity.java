@@ -30,6 +30,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.Menu;
@@ -89,6 +90,7 @@ public class VendorListActivity extends AbstractListFragment {
         new AsyncTask<Void, Integer, List<BaseSeedInterface>>() {
 
             protected void onPreExecute() {
+                
                 dialog.setCanceledOnTouchOutside(true);
                 dialog.show();
                 // if (vendorSeeds.size() < 1)

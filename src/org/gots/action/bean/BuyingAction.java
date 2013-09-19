@@ -25,11 +25,11 @@ import org.gots.seed.provider.nuxeo.NuxeoSeedProvider;
 import android.content.Context;
 
 public class BuyingAction extends AbstractActionGarden implements PermanentActionInterface, SeedActionInterface {
-    Context mContext;
 
     public BuyingAction(Context context) {
+        super(context);
         setName("buy");
-        mContext = context;
+
     }
 
     public void setDateActionDone(Date dateActionDone) {
@@ -83,14 +83,15 @@ public class BuyingAction extends AbstractActionGarden implements PermanentActio
     @Override
     public int execute(GrowingSeedInterface seed) {
         // super.execute(seed);
-
-        seed.setNbSachet(seed.getNbSachet() + 1);
-        VendorSeedDBHelper helper = new VendorSeedDBHelper(mContext);
-        helper.updateSeed(seed);
-        if (GotsPreferences.getInstance().isConnectedToServer()) {
-            GotsSeedProvider provider = new NuxeoSeedProvider(mContext);
-            provider.addToStock(seed, GardenManager.getInstance().getCurrentGarden());
-        }
+        seedManager.addToStock(seed, gardenManager.getCurrentGarden());
+        // if (GotsPreferences.getInstance().isConnectedToServer()) {
+        // GotsSeedProvider provider = new NuxeoSeedProvider(mContext);
+        // provider.addToStock(seed, GardenManager.getInstance().getCurrentGarden());
+        // } else {
+        // seed.setNbSachet(seed.getNbSachet() + 1);
+        // VendorSeedDBHelper helper = new VendorSeedDBHelper(mContext);
+        // helper.updateSeed(seed);
+        // }
         return 0;
     }
 

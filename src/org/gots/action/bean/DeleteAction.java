@@ -36,8 +36,9 @@ public class DeleteAction extends AbstractActionSeed implements PermanentActionI
 	public int execute(GrowingSeedInterface seed) {
 		super.execute(seed);
 
-		GrowingSeedDBHelper helper = new GrowingSeedDBHelper(getContext());
-		helper.deleteGrowingSeed(seed);
+//		GrowingSeedDBHelper helper = new GrowingSeedDBHelper(getContext());
+//		helper.deleteGrowingSeed(seed);
+		seedManager.remove(seed);
 		return 1;
 
 	}

@@ -23,13 +23,15 @@ package org.gots.broadcast;
 
 /**
  * @author jcarsique
- *
+ * 
  */
 public final class BroadCastMessages {
 
-    public final static String SEED_DISPLAYLIST = "org.gots.broadcastseed.displaylist";
+    public final static String SEED_DISPLAYLIST = "org.gots.seed.broadcastevent";
 
-    public final static String WEATHER_DISPLAY_EVENT = "org.gots.broadcastweather.displayevent";
+    public final static String GARDEN_EVENT = "org.gots.garden.broadcastevent";
+
+    public final static String WEATHER_DISPLAY_EVENT = "org.gots.weather.broadcastevent";
 
     public final static String CONNECTION_SETTINGS_CHANGED = "org.gots.settings.connection";
 

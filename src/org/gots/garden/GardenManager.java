@@ -52,20 +52,22 @@ public class GardenManager extends BroadcastReceiver {
 
     /**
      * If it was already called once, the method returns without any change.
+     * @return TODO
      */
-    public synchronized void initIfNew(Context context) {
+    public synchronized GardenManager initIfNew(Context context) {
         if (initDone) {
-            return;
+            return this;
         }
         this.mContext = context;
         setGardenProvider();
         initDone = true;
+        return instance;
     }
 
     public void finalize() {
         initDone = false;
         mContext = null;
-        instance=null;
+        instance = null;
     }
 
     private void setGardenProvider() {
@@ -84,7 +86,8 @@ public class GardenManager extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())||BroadCastMessages.GARDEN_SETTINGS_CHANGED.equals(intent.getAction())) {
+        if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())
+                || BroadCastMessages.GARDEN_SETTINGS_CHANGED.equals(intent.getAction())) {
             setGardenProvider();
         }
     }
@@ -104,6 +107,7 @@ public class GardenManager extends BroadcastReceiver {
                 setCurrentGarden(result);
                 GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
                 tracker.trackEvent("Garden", "location", result.getLocality(), 0);
+                mContext.sendBroadcast( new Intent(BroadCastMessages.GARDEN_EVENT));
             };
         }.execute(garden);
 
@@ -120,14 +124,14 @@ public class GardenManager extends BroadcastReceiver {
         return -1;
     }
 
-//    private void changeDatabase(int position) {
-//        DatabaseHelper helper = new DatabaseHelper(mContext);
-//        helper.setDatabase(position);
-//
-//        // WeatherManager wm = new WeatherManager(mContext);
-//        // wm.getWeatherFromWebService(getcurrentGarden());
-//
-//    }
+    // private void changeDatabase(int position) {
+    // DatabaseHelper helper = new DatabaseHelper(mContext);
+    // helper.setDatabase(position);
+    //
+    // // WeatherManager wm = new WeatherManager(mContext);
+    // // wm.getWeatherFromWebService(getcurrentGarden());
+    //
+    // }
 
     public GardenInterface getCurrentGarden() {
         GardenInterface garden = gardenProvider.getCurrentGarden();
@@ -135,11 +139,11 @@ public class GardenManager extends BroadcastReceiver {
     }
 
     public void setCurrentGarden(GardenInterface garden) {
-        GotsPreferences.getInstance().set(GotsPreferences.ORG_GOTS_CURRENT_GARDENID, (int)garden.getId());
+        GotsPreferences.getInstance().set(GotsPreferences.ORG_GOTS_CURRENT_GARDENID, (int) garden.getId());
         Log.d(TAG, "setCurrentGarden [" + garden.getId() + "] " + garden.getLocality()
                 + " has been set as current workspace");
         DatabaseHelper.getInstance(mContext).changeDatabase();
-//        changeDatabase((int) garden.getId());
+        // changeDatabase((int) garden.getId());
     }
 
     public void removeGarden(GardenInterface garden) {
@@ -149,6 +153,10 @@ public class GardenManager extends BroadcastReceiver {
                 gardenProvider.removeGarden(params[0]);
                 return null;
             }
+
+            protected void onPostExecute(Void result) {
+                mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
+            };
         }.execute(garden);
     }
 
@@ -159,6 +167,10 @@ public class GardenManager extends BroadcastReceiver {
                 gardenProvider.updateGarden(params[0]);
                 return null;
             }
+
+            protected void onPostExecute(Void result) {
+                mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
+            };
         }.execute(garden);
     }
 

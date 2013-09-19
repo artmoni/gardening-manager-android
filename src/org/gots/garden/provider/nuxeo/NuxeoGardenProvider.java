@@ -178,7 +178,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
                     }
                 }
                 if (!found) { // local only with UUID -> delete local
-                    removeLocalGarden(localGarden);
+                    super.removeGarden(localGarden);
                 }
             }
         }
@@ -283,7 +283,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 
         DocumentManager service = session.getAdapter(DocumentManager.class);
         DeferredUpdateManager deferredUpdateMgr = getNuxeoClient().getDeferredUpdatetManager();
-        currentGarden=garden;
+        currentGarden = garden;
         OperationRequest updateOperation;
         try {
             PropertyMap props = new PropertyMap();
@@ -333,13 +333,8 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 
     @Override
     public int removeGarden(GardenInterface garden) {
+        Log.i(TAG, "removeGarden " + garden);
         removeNuxeoGarden(garden);
-        return removeLocalGarden(garden);
-    }
-
-    protected int removeLocalGarden(GardenInterface garden) {
-        Log.i(TAG, "removeLocalGarden " + garden);
-
         return super.removeGarden(garden);
     }
 

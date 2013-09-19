@@ -154,7 +154,7 @@ public class SimpleSeedProvider implements GotsSeedProvider {
     }
 
     @Override
-    public void removeToStock(BaseSeedInterface vendorSeed) {
+    public void removeToStock(BaseSeedInterface vendorSeed, GardenInterface garden) {
         // TODO Auto-generated method stub
 
     }@Override
