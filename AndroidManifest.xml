@@ -95,7 +95,17 @@
             android:theme="@style/Theme.Styled" />
         <activity
             android:name=".ui.LoginActivity"
-            android:theme="@style/Theme.Styled" />
+            android:theme="@style/Theme.Styled" >
+            <intent-filter>
+                <data
+                    android:host="my.gardening-manager.com"
+                    android:path="/login"
+                    android:scheme="http" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.FirstLaunchActivity"
             android:theme="@style/Theme.Styled" />

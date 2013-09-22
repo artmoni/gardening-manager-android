@@ -17,6 +17,8 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.gots.R;
 import org.gots.analytics.GotsAnalytics;
+import org.gots.broadcast.BroadCastMessages;
+import org.gots.help.HelpUriBuilder;
 import org.nuxeo.ecm.automation.client.jaxrs.Constants;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
@@ -24,8 +26,11 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -43,6 +48,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
@@ -59,10 +66,35 @@ public class LoginActivity extends AbstractActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+        this.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
 
         bar = getSupportActionBar();
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setTitle(R.string.app_name);
+    }
+
+    public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())) {
+                refreshConnectionState();
+            }
+        }
+
+    };
+
+    private Menu mMenu;
+
+    protected void refreshConnectionState() {
+        if (mMenu == null)
+            return;
+        MenuItem connectionItem = (MenuItem) mMenu.findItem(R.id.connection);
+        if (gotsPrefs.isConnectedToServer()) {
+            connectionItem.setIcon(getResources().getDrawable(R.drawable.garden_connected));
+        } else {
+            connectionItem.setIcon(getResources().getDrawable(R.drawable.garden_disconnected));
+
+        }
     }
 
     @Override
@@ -83,6 +115,12 @@ public class LoginActivity extends AbstractActivity {
 
         buildLayoutDisconnected();
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(seedBroadcastReceiver);
+        super.onDestroy();
     }
 
     public List<String> getAccounts(String account_type) {
@@ -133,8 +171,7 @@ public class LoginActivity extends AbstractActivity {
 
             @Override
             public void onClick(View v) {
-                GoogleAnalyticsTracker.getInstance().trackEvent("Login", "SimpleAuthentication",
-                        "Request account", 0);
+                GoogleAnalyticsTracker.getInstance().trackEvent("Login", "SimpleAuthentication", "Request account", 0);
 
                 // send mail
                 Intent i = new Intent(Intent.ACTION_SEND);
@@ -150,7 +187,7 @@ public class LoginActivity extends AbstractActivity {
                 } catch (android.content.ActivityNotFoundException ex) {
                     Toast.makeText(LoginActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
                 }
-                
+
             }
 
         });
@@ -160,79 +197,7 @@ public class LoginActivity extends AbstractActivity {
 
             @Override
             public void onClick(View v) {
-                new AsyncTask<Void, Integer, Session>() {
-                    private ProgressDialog dialog;
-
-                    private String login;
-
-                    private String password;
-
-                    @Override
-                    protected void onPreExecute() {
-                        login = String.valueOf(loginSpinner.getSelectedItem());
-                        password = passwordText.getText().toString();
-
-                        if ("".equals(login) || "".equals(password)) {
-                            Toast.makeText(LoginActivity.this,
-                                    getResources().getString(R.string.login_missinginformation), Toast.LENGTH_SHORT).show();
-                            cancel(true);
-                        }
-                        dialog = ProgressDialog.show(LoginActivity.this, "", "Loading. Please wait...", true);
-                        dialog.setCanceledOnTouchOutside(true);
-                        dialog.show();
-                    };
-
-                    @Override
-                    protected Session doInBackground(Void... params) {
-                        Session session = null;
-                        if (basicNuxeoConnect(login, password)) {
-
-                            try {
-                                session = nuxeoManager.getSession();
-                                if ("Guest".equals(session.getLogin().getUsername())) {
-                                    return null;
-                                }
-                            } catch (Exception nao) {
-                                if (nao != null) {
-                                    Log.e(TAG, "" + nao.getMessage());
-                                    Log.d(TAG, "" + nao.getMessage(), nao);
-                                }
-                                cancel(true);
-                            }
-                        } else
-                            cancel(true);
-                        return session;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Session result) {
-                        if (dialog.isShowing())
-                            dialog.dismiss();
-                        if (result == null) {
-                            Toast.makeText(LoginActivity.this, "Error logging", Toast.LENGTH_SHORT).show();
-                            LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.VISIBLE);
-                            gotsPrefs.setConnectedToServer(false);
-                            gotsPrefs.setNuxeoLogin(null);
-                            gotsPrefs.setLastSuccessfulNuxeoLogin(null);
-
-                        } else {
-                            LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.GONE);
-                            gotsPrefs.setConnectedToServer(true);
-                            gotsPrefs.setLastSuccessfulNuxeoLogin(login);
-                        }
-                        onResume();
-
-                    };
-
-                    @Override
-                    protected void onCancelled(Session result) {
-                        if (dialog.isShowing())
-                            dialog.dismiss();
-                    }
-
-                }.execute();
-
-                // finish();
+                connect();
 
             }
 
@@ -249,14 +214,98 @@ public class LoginActivity extends AbstractActivity {
 
             @Override
             public void onClick(View v) {
-                gotsPrefs.setConnectedToServer(false);
-                gotsPrefs.setNuxeoLogin(null);
-                gotsPrefs.setNuxeoPassword("");
-                findViewById(R.id.layoutConnect).setVisibility(View.VISIBLE);
-                findViewById(R.id.layoutDisconnect).setVisibility(View.GONE);
-                onResume();
+                disconnect();
             }
+
         });
+    }
+
+    protected void connect() {
+        new AsyncTask<Void, Integer, Session>() {
+            private ProgressDialog dialog;
+
+            private String login;
+
+            private String password;
+
+            @Override
+            protected void onPreExecute() {
+                login = String.valueOf(loginSpinner.getSelectedItem());
+                password = passwordText.getText().toString();
+
+                if ("".equals(login) || "".equals(password)) {
+                    Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_missinginformation),
+                            Toast.LENGTH_SHORT).show();
+                    cancel(true);
+                } else {
+                    dialog = ProgressDialog.show(LoginActivity.this, "", "Loading. Please wait...", true);
+                    dialog.setCanceledOnTouchOutside(true);
+                    dialog.show();
+                }
+            };
+
+            @Override
+            protected Session doInBackground(Void... params) {
+                Session session = null;
+                if (basicNuxeoConnect(login, password)) {
+
+                    try {
+                        session = nuxeoManager.getSession();
+                        if ("Guest".equals(session.getLogin().getUsername())) {
+                            return null;
+                        }
+                    } catch (Exception nao) {
+                        if (nao != null) {
+                            Log.e(TAG, "" + nao.getMessage());
+                            Log.d(TAG, "" + nao.getMessage(), nao);
+                        }
+                        cancel(true);
+                    }
+                } else
+                    cancel(true);
+                return session;
+            }
+
+            @Override
+            protected void onPostExecute(Session result) {
+                if (dialog.isShowing())
+                    dialog.dismiss();
+                if (result == null) {
+                    Toast.makeText(LoginActivity.this, "Error logging", Toast.LENGTH_SHORT).show();
+                    LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.VISIBLE);
+                    gotsPrefs.setConnectedToServer(false);
+                    gotsPrefs.setNuxeoLogin(null);
+                    gotsPrefs.setLastSuccessfulNuxeoLogin(null);
+
+                } else {
+                    LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.GONE);
+                    gotsPrefs.setConnectedToServer(true);
+                    gotsPrefs.setLastSuccessfulNuxeoLogin(login);
+                }
+                onResume();
+
+            };
+
+            @Override
+            protected void onCancelled(Session result) {
+                if (dialog.isShowing())
+                    dialog.dismiss();
+            }
+
+        }.execute();
+        onResume();
+
+        // finish();
+    }
+
+    protected void disconnect() {
+        request_basicauth_token(true);
+        gotsPrefs.setConnectedToServer(false);
+        gotsPrefs.setNuxeoLogin(null);
+        gotsPrefs.setNuxeoPassword("");
+        findViewById(R.id.layoutConnect).setVisibility(View.VISIBLE);
+        findViewById(R.id.layoutDisconnect).setVisibility(View.GONE);
+        onResume();
     }
 
     protected boolean basicNuxeoConnect(String login, String password) {
@@ -268,8 +317,8 @@ public class LoginActivity extends AbstractActivity {
             return false;
         } else {
             gotsPrefs.setNuxeoLogin(login);
-            gotsPrefs.setToken(token);
             gotsPrefs.setNuxeoPassword(password);
+            gotsPrefs.setToken(token);
             return true;
         }
     }
@@ -410,7 +459,7 @@ public class LoginActivity extends AbstractActivity {
             params.add(new BasicNameValuePair("applicationName", gotsPrefs.getGardeningManagerAppname()));
             params.add(new BasicNameValuePair("deviceDescription", Build.MODEL + "(" + Build.MANUFACTURER + ")"));
             params.add(new BasicNameValuePair("permission", "ReadWrite"));
-            params.add(new BasicNameValuePair("revoke", "false"));
+            params.add(new BasicNameValuePair("revoke", String.valueOf(revoke)));
 
             String paramString = URLEncodedUtils.format(params, "utf-8");
             uri += paramString;
@@ -419,15 +468,21 @@ public class LoginActivity extends AbstractActivity {
             URLConnection urlConnection;
             urlConnection = url.openConnection();
 
-            urlConnection.addRequestProperty("X-User-Id", loginSpinner.getSelectedItem().toString());
+            String login = null;
+            String password = null;
+            if (loginSpinner != null && passwordText != null) {
+                // urlConnection.addRequestProperty("X-User-Id", gotsPrefs.getNuxeoLogin());
+                login = loginSpinner.getSelectedItem().toString();
+                password = passwordText.getText().toString();
+            } else {
+                login = gotsPrefs.getNuxeoLogin();
+                password = gotsPrefs.getNuxeoPassword();
+            }
+            urlConnection.addRequestProperty("X-User-Id", login);
             urlConnection.addRequestProperty("X-Device-Id", gotsPrefs.getDeviceId());
             urlConnection.addRequestProperty("X-Application-Name", gotsPrefs.getGardeningManagerAppname());
-            urlConnection.addRequestProperty(
-                    "Authorization",
-                    "Basic "
-                            + Base64.encodeToString(
-                                    (loginSpinner.getSelectedItem().toString() + ":" + passwordText.getText().toString()).getBytes(),
-                                    Base64.NO_WRAP));
+            urlConnection.addRequestProperty("Authorization",
+                    "Basic " + Base64.encodeToString((login + ":" + password).getBytes(), Base64.NO_WRAP));
 
             // urlConnection.addRequestProperty(
             // "Authorization",
@@ -458,18 +513,6 @@ public class LoginActivity extends AbstractActivity {
             Log.e(TAG, e.getMessage(), e);
         }
         return token;
-        // }
-        // }.execute(new Object());
-
-        // String tokenAcquired = null;
-        // try {
-        // tokenAcquired = task.get();
-        // } catch (InterruptedException e) {
-        // Log.e("LoginActivity", e.getMessage(), e);
-        // } catch (ExecutionException e) {
-        // Log.e("LoginActivity", e.getMessage(), e);
-        // }
-        // return tokenAcquired;
 
     }
 
@@ -480,14 +523,19 @@ public class LoginActivity extends AbstractActivity {
         case android.R.id.home:
             finish();
             return true;
+        case R.id.help:
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
+            startActivity(browserIntent);
 
-            // case R.id.help:
-            // Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-            // Uri.parse(HelpUriBuilder.getUri(getClass()
-            // .getSimpleName())));
-            // startActivity(browserIntent);
-            //
-            // return true;
+            return true;
+        case R.id.connection:
+            if (gotsPrefs.isConnectedToServer())
+                disconnect();
+            else
+                connect();
+            return true;
+
         default:
             return super.onOptionsItemSelected(item);
         }
@@ -532,4 +580,17 @@ public class LoginActivity extends AbstractActivity {
         // }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getSupportMenuInflater();
+        inflater.inflate(R.menu.menu_login, menu);
+        mMenu = menu;
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        refreshConnectionState();
+        return super.onPrepareOptionsMenu(menu);
+    }
 }

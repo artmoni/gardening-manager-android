@@ -144,7 +144,7 @@
                 android:id="@+id/imageProgressGarden"
                 style="@style/logo"
                 android:background="@drawable/bg_state_critical"
-                android:src="@drawable/garden_shared" />
+                android:src="@drawable/garden_connected" />
         </LinearLayout>
 
         <ImageView

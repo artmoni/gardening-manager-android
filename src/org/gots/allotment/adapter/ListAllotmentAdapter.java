@@ -74,7 +74,7 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
 
     @Override
     public long getItemId(int position) {
-        return position;
+        return myAllotments.get(position).getId();
     }
 
     @Override
@@ -109,7 +109,7 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
 
         SowingAction sow = new SowingAction(mContext);
         ActionWidget widget = new ActionWidget(mContext, sow);
-        widget.setTag(Integer.valueOf(position));
+        widget.setTag(position);
         widget.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -118,7 +118,7 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
 
                 Intent i = new Intent(mContext, HutActivity.class);
                 i.putExtra("org.gots.allotment.reference",
-                        myAllotments.get(Integer.valueOf(v.getTag().toString())).getId());
+                        getItem(Integer.valueOf(v.getTag().toString())).getId());
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 mContext.startActivity(i);
             }

@@ -98,6 +98,7 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
             for (Iterator<Document> iterator = docs.iterator(); iterator.hasNext();) {
                 Document document = iterator.next();
                 BaseAllotmentInterface allotment = NuxeoAllotmentConverter.convert(document);
+                allotment = super.updateAllotment(allotment);
                 remoteAllotments.add(allotment);
                 Log.i(TAG, "Nuxeo Allotment " + allotment);
             }
