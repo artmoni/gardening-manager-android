@@ -119,7 +119,7 @@ public class LocalAllotmentProvider extends AbstractProvider implements Allotmen
     public int removeAllotment(BaseAllotmentInterface allotment) {
         open();
         int nbRow = bdd.delete(DatabaseHelper.ALLOTMENT_TABLE_NAME,
-                DatabaseHelper.ALLOTMENT_ID + "=" + allotment.getId()+"", null);
+                DatabaseHelper.ALLOTMENT_ID + "=" + allotment.getId() + "", null);
         close();
         return nbRow;
     }
@@ -127,11 +127,34 @@ public class LocalAllotmentProvider extends AbstractProvider implements Allotmen
     @Override
     public BaseAllotmentInterface updateAllotment(BaseAllotmentInterface allotment) {
         open();
-        ContentValues values;
-        values = convertToContentValues(allotment);
-        int nbRow = bdd.update(DatabaseHelper.ALLOTMENT_TABLE_NAME, values, DatabaseHelper.ALLOTMENT_ID + "="
-                + allotment.getId()+"", null);
+        ContentValues values = convertToContentValues(allotment);
+        Cursor cursor;
+        try {
+
+            if (allotment.getUUID() != null) {
+                int nbRow = bdd.update(DatabaseHelper.ALLOTMENT_TABLE_NAME, values, DatabaseHelper.ALLOTMENT_UUID
+                        + "=\"" + allotment.getUUID() + "\"", null);
+
+                cursor = bdd.query(DatabaseHelper.ALLOTMENT_TABLE_NAME, null, DatabaseHelper.ALLOTMENT_UUID + "='"
+                        + allotment.getUUID() + "'", null, null, null, null);
+
+            } else {
+                int nbRow = bdd.update(DatabaseHelper.ALLOTMENT_TABLE_NAME, values, DatabaseHelper.ALLOTMENT_ID + "=\""
+                        + allotment.getId() + "\"", null);
+                cursor = bdd.query(DatabaseHelper.ALLOTMENT_TABLE_NAME, null, DatabaseHelper.ALLOTMENT_ID + "='"
+                        + allotment.getId() + "'", null, null, null, null);
+
+            }
+            if (cursor.moveToFirst()) {
+                int rowid = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ALLOTMENT_ID));
+                allotment.setId(rowid);
+            }
+            cursor.close();
+        } finally {
+            // close();
+        }
         close();
+
         return allotment;
     }
 

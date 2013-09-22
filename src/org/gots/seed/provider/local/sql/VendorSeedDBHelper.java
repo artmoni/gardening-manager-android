@@ -46,13 +46,13 @@ public class VendorSeedDBHelper {
         this.mContext = mContext;
     }
 
-//    public static synchronized VendorSeedDBHelper getInstance(Context mContext) {
-//        if (helper == null) {
-//            helper = new VendorSeedDBHelper(mContext);
-//        }
-//
-//        return helper;
-//    }
+    // public static synchronized VendorSeedDBHelper getInstance(Context mContext) {
+    // if (helper == null) {
+    // helper = new VendorSeedDBHelper(mContext);
+    // }
+    //
+    // return helper;
+    // }
 
     //
     // public synchronized void open() {
@@ -111,30 +111,26 @@ public class VendorSeedDBHelper {
         bdd = databaseHelper.getWritableDatabase();
         ContentValues values = getContentValuesFromSeed(seed);
         Cursor cursor;
-        try {
 
-            if (seed.getUUID() != null) {
-                int nbRows = bdd.update(DatabaseHelper.SEEDS_TABLE_NAME, values,
-                        DatabaseHelper.SEED_UUID + "='" + seed.getUUID() + "'", null);
+        if (seed.getUUID() != null) {
+            int nbRows = bdd.update(DatabaseHelper.SEEDS_TABLE_NAME, values,
+                    DatabaseHelper.SEED_UUID + "='" + seed.getUUID() + "'", null);
 
-                cursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null,
-                        DatabaseHelper.SEED_UUID + "='" + seed.getUUID() + "'", null, null, null, null);
+            cursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_UUID + "='" + seed.getUUID()
+                    + "'", null, null, null, null);
 
-                if (cursor.moveToFirst()) {
-                    int rowid = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.SEED_ID));
-                    seed.setId(rowid);
-                    cursor.close();
-                }
-            } else {
-                int rowid = bdd.update(DatabaseHelper.SEEDS_TABLE_NAME, values,
-                        DatabaseHelper.SEED_ID + "='" + seed.getSeedId() + "'", null);
-                cursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null,
-                        DatabaseHelper.SEED_ID + "='" + seed.getSeedId() + "'", null, null, null, null);
+        } else {
+            int rowid = bdd.update(DatabaseHelper.SEEDS_TABLE_NAME, values,
+                    DatabaseHelper.SEED_ID + "='" + seed.getSeedId() + "'", null);
+            cursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_ID + "='" + seed.getSeedId()
+                    + "'", null, null, null, null);
 
-            }
-        } finally {
-            // close();
         }
+        if (cursor.moveToFirst()) {
+            int rowid = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.SEED_ID));
+            seed.setId(rowid);
+        }
+        cursor.close();
 
         return seed;
     }
@@ -363,7 +359,7 @@ public class VendorSeedDBHelper {
     public synchronized BaseSeedInterface getSeedById(int id) {
         BaseSeedInterface searchedSeed = null;
         bdd = databaseHelper.getReadableDatabase();
-        
+
         Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_ID + "='" + id
                 + "'", null, null, null, null);
         // Log.d("getSeedById", "ID=>"+id+" / QUERY=>"+bdd.ge)

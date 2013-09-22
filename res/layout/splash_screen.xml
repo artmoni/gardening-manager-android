@@ -53,7 +53,7 @@
          <ImageView
             android:id="@+id/imageProgressGarden"
             style="@style/logo"
-            android:src="@drawable/garden_shared" android:background="@drawable/bg_state_critical"/>
+            android:src="@drawable/garden_connected" android:background="@drawable/bg_state_critical"/>
     </LinearLayout>
     <!--
     <LinearLayout

@@ -115,6 +115,7 @@
     <string name="fillfields.dates">Veuillez indiquer les dates</string>
     <string name="login.disconnect.description">Vous êtes en mode synchronisé.\n\n Il est désormais possible de vous connecter depuis plusieurs appareils.</string>
     <string name="login.disconnect">Déconnexion</string>
+    <string name="login.simple.description">Connectez vous au réseau Gardening Manager et prenez plaisir à suivre le jardin potager de vos amis.</string>
     <string name="garden.create">Créer mon potager</string>
-
+    
 </resources>
