@@ -100,21 +100,26 @@ public class ProfileActivity extends AbstractActivity {
         @Override
         protected void onPostExecute(List<GardenInterface> myGardens) {
             force_refresh = false;
-
+            try {
+                dialog.dismiss();
+                dialog = null;
+            } catch (Exception e) {
+                // nothing
+            }
             if (myGardens.size() == 0) {
                 Intent intentCreation = new Intent(getApplicationContext(), ProfileCreationActivity.class);
-                intentCreation.putExtra("option", ProfileCreationActivity.OPTION_EDIT);
+//                intentCreation.putExtra("option", ProfileCreationActivity.OPTION_EDIT);
                 startActivity(intentCreation);
             } else {
                 profileAdapter = new ProfileAdapter(ProfileActivity.this, myGardens);
                 profileList.setAdapter(profileAdapter);
                 profileAdapter.notifyDataSetChanged();
-            }
-            if (dialog.isShowing())
-                dialog.dismiss();
+            }          
+
             super.onPostExecute(myGardens);
         }
 
+       
     }
 
     @Override

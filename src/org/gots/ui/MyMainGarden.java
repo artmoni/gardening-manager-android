@@ -23,6 +23,7 @@ import org.gots.bean.BaseAllotmentInterface;
 import org.gots.help.HelpUriBuilder;
 import org.gots.weather.view.WeatherWidget;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -122,9 +123,18 @@ public class MyMainGarden extends AbstractActivity {
         }
     }
 
+    private ProgressDialog dialog;
+
     @Override
     protected void onResume() {
         new AsyncTask<Void, Integer, List<BaseAllotmentInterface>>() {
+
+            protected void onPreExecute() {
+                dialog = ProgressDialog.show(MyMainGarden.this, "", getResources().getString(R.string.gots_loading),
+                        true);
+                dialog.setCanceledOnTouchOutside(true);
+            };
+
             @Override
             protected List<BaseAllotmentInterface> doInBackground(Void... params) {
                 return allotmentManager.getMyAllotments();
@@ -133,6 +143,12 @@ public class MyMainGarden extends AbstractActivity {
             @Override
             protected void onPostExecute(List<BaseAllotmentInterface> result) {
                 lsa.setAllotments(result);
+                try {
+                    dialog.dismiss();
+                    dialog = null;
+                } catch (Exception e) {
+                    // nothing
+                }
                 // if (listAllotments.getCount() == 0) {
                 // final String classname = getClass().getSimpleName();
                 // new AlertDialog.Builder(getApplicationContext()).setIcon(R.drawable.help).setTitle(

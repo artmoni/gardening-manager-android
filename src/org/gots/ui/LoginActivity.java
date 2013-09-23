@@ -288,7 +288,7 @@ public class LoginActivity extends AbstractActivity {
 
             @Override
             protected void onCancelled(Session result) {
-                if (dialog.isShowing())
+                if (dialog != null && dialog.isShowing())
                     dialog.dismiss();
             }
 

@@ -86,13 +86,12 @@ public class VendorListActivity extends AbstractListFragment {
 
     @Override
     public void onResume() {
-        dialog = ProgressDialog.show(mContext, "", getResources().getString(R.string.gots_loading), true);
         new AsyncTask<Void, Integer, List<BaseSeedInterface>>() {
 
             protected void onPreExecute() {
-                
+                dialog = ProgressDialog.show(mContext, "", getResources().getString(R.string.gots_loading), true);
                 dialog.setCanceledOnTouchOutside(true);
-                dialog.show();
+//                dialog.show();
                 // if (vendorSeeds.size() < 1)
                 // mContext.startService(seedIntent);
                 super.onPreExecute();
@@ -106,8 +105,13 @@ public class VendorListActivity extends AbstractListFragment {
             protected void onPostExecute(List<BaseSeedInterface> vendorSeeds) {
                 listVendorSeedAdapter.setSeeds(vendorSeeds);
                 listVendorSeedAdapter.notifyDataSetChanged();
-                if (dialog.isShowing() && isAdded())
+                
+                try {
                     dialog.dismiss();
+                    dialog = null;
+                } catch (Exception e) {
+                    // nothing
+                }
 
                 super.onPostExecute(vendorSeeds);
             };

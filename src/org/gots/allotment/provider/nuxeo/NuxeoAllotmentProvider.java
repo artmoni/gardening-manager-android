@@ -50,27 +50,6 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
 
     @Override
     public List<BaseAllotmentInterface> getMyAllotments() {
-        List<BaseAllotmentInterface> remoteAllotments = super.getMyAllotments();
-        // if (documentsList != null && documentsList.getLoadedPageCount() > 0) {
-        // remoteAllotments = new ArrayList<BaseAllotmentInterface>();
-        // documentsList.refreshAll();
-        // for (int i = 0; i < documentsList.getLoadedPageCount(); i++) {
-        // Document documentAllotment = documentsList.getDocument(i);
-        // if (documentAllotment == null) {
-        // break;
-        // }
-        // BaseAllotmentInterface allotment = NuxeoAllotmentConverter.convert(documentAllotment);
-        // remoteAllotments.add(super.updateAllotment(allotment));
-        // Log.d(TAG, "documentsList=" + documentAllotment.getId() + " / " + allotment);
-        // }
-        // } else
-        // if (remoteAllotments.size() == 0)
-        remoteAllotments = getNuxeoAllotments();
-        // myVendorSeeds = synchronize(localVendorSeeds, remoteVendorSeeds);
-        return remoteAllotments;
-    }
-
-    protected List<BaseAllotmentInterface> getNuxeoAllotments() {
         List<BaseAllotmentInterface> remoteAllotments = new ArrayList<BaseAllotmentInterface>();
         // List<BaseAllotmentInterface> myAllotments = new ArrayList<BaseAllotmentInterface>();
         try {
@@ -98,9 +77,26 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
             for (Iterator<Document> iterator = docs.iterator(); iterator.hasNext();) {
                 Document document = iterator.next();
                 BaseAllotmentInterface allotment = NuxeoAllotmentConverter.convert(document);
-                allotment = super.updateAllotment(allotment);
                 remoteAllotments.add(allotment);
+
                 Log.i(TAG, "Nuxeo Allotment " + allotment);
+            }
+
+            List<BaseAllotmentInterface> localAllotments = super.getMyAllotments();
+            boolean found;
+            for (BaseAllotmentInterface remoteAllotment : remoteAllotments) {
+                found = false;
+                for (BaseAllotmentInterface localAllotment : localAllotments) {
+
+                    if (remoteAllotment.getUUID().equals(localAllotment.getUUID())) {
+                        found = true;
+                    }
+                    if (found)
+                        remoteAllotment = super.updateAllotment(remoteAllotment);
+                    else
+                        remoteAllotment = super.createAllotment(remoteAllotment);
+                }
+
             }
         } catch (Exception e) {
             Log.e(TAG, "getMyAllotments " + e.getMessage(), e);
