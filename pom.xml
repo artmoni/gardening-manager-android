@@ -8,7 +8,7 @@
   <packaging>apk</packaging>
   <version>0.21-SNAPSHOT</version>
   <name>Gardening Manager</name>
-  <properties>      
+  <properties>
     <android.version>4.0.3</android.version>
     <android.platform>16</android.platform>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -210,111 +210,30 @@
     <sourceDirectory>src</sourceDirectory>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.3.2</version>
-        <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
-        </configuration>
-      </plugin>
-      <plugin>
         <groupId>com.jayway.maven.plugins.android.generation2</groupId>
         <artifactId>android-maven-plugin</artifactId>
-        <version>3.6.0</version>
+        <version>3.6.1</version>
         <extensions>true</extensions>
         <configuration>
-          <run>
-            <debug>false</debug>
-          </run>
           <sdk>
             <path>${sdk.path}</path>
             <platform>${android.platform}</platform>
           </sdk>
           <nativeLibrariesDirectory>ignored</nativeLibrariesDirectory>
-          <emulator>
-            <avd>avd21</avd>
-            <wait>20000</wait>
-            <options>-no-skin</options>
-            <executable>emulator-arm</executable>
-          </emulator>
           <deleteConflictingFiles>true</deleteConflictingFiles>
           <undeployBeforeDeploy>false</undeployBeforeDeploy>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.9</version>
-        <configuration>
-          <skip>true</skip>
-        </configuration>
-      </plugin>
-     <!--  <plugin>
-        <groupId>com.newrelic.agent.android</groupId>
-        <artifactId>agent-maven-plugin</artifactId>
-        <version>2.426.0</version>
-        <executions>
-          <execution> 
-            <goals>
-              <goal>instrument</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin> -->
-      <!-- <plugin> -->
-      <!-- <groupId>org.codehaus.mojo</groupId> -->
-      <!-- <artifactId>properties-maven-plugin</artifactId> -->
-      <!-- <version>1.0-alpha-2</version> -->
-      <!-- <executions> -->
-      <!-- <execution> -->
-      <!-- <phase>initialize</phase> -->
-      <!-- <goals> -->
-      <!-- <goal>set-system-properties</goal> -->
-      <!-- </goals> -->
-      <!-- </execution> -->
-      <!-- </executions> -->
-      <!-- <configuration> -->
-      <!-- <properties> -->
-      <!-- <property> -->
-      <!-- <name>key.analyticsapi</name> -->
-      <!-- <value>${key.analyticsapi}</value> -->
-      <!-- </property> -->
-      <!-- <property> -->
-      <!-- <name>key.weatherapi</name> -->
-      <!-- <value>${key.weatherapi}</value> -->
-      <!-- </property> -->
-      <!-- <property> -->
-      <!-- <name>key.admobapi</name> -->
-      <!-- <value>${key.admobapi}</value> -->
-      <!-- </property> -->
-      <!-- </properties> -->
-      <!-- </configuration> -->
-      <!-- </plugin> -->
-      <!-- <plugin> -->
-      <!-- <groupId>org.apache.maven.plugins</groupId> -->
-      <!-- <artifactId>maven-surefire-plugin</artifactId> -->
-      <!-- <version>2.5</version> -->
-      <!-- <configuration> -->
-      <!-- <systemPropertyVariables> -->
-      <!-- <property> -->
-      <!-- <name>key.analyticsapi</name> -->
-      <!-- <value>UA-916500-18</value> -->
-      <!-- </property> -->
-      <!-- <property> -->
-      <!-- <name>key.weatherapi</name> -->
-      <!-- <value>6ba97b2306fd5b9d47992d8716dab16a</value> -->
-      <!-- </property> -->
-      <!-- <property> -->
-      <!-- <name>key.admobapi</name> -->
-      <!-- <value>a14f50fa231b26d</value> -->
-      <!-- </property> -->
-      <!-- </systemPropertyVariables> -->
-      <!-- </configuration> -->
-      <!-- </plugin> -->
     </plugins>
   </build>
   <profiles>
+    <!-- <profile> <id>emma</id> <build> <plugins> <plugin> <groupId>com.jayway.maven.plugins.android.generation2</groupId> 
+      <artifactId>android-maven-plugin</artifactId> <configuration> emma start 
+      <emma> <enable>true</enable> <classFolders>${project.basedir}/target/classes/</classFolders> 
+      <outputMetaFile>${project.basedir}/target/emma/coverage.em</outputMetaFile> 
+      </emma> emma stop <dex> <noLocals>true</noLocals> must be set for emma </dex> 
+      </configuration> <extensions>true</extensions> </plugin> </plugins> </build> 
+      </profile> -->
     <profile>
       <id>sign</id>
       <activation>
@@ -357,31 +276,14 @@
               </execution>
             </executions>
           </plugin>
-          <plugin>
-            <groupId>com.jayway.maven.plugins.android.generation2</groupId>
-            <artifactId>maven-android-plugin</artifactId>
-            <inherited>true</inherited>
-            <configuration>
-              <sign>
-                <debug>false</debug>
-              </sign>
-              <zipalign>
-                <verbose>true</verbose>
-                <inputApk>${project.build.directory}/${project.artifactId}.apk</inputApk>
-                <outputApk>${project.build.directory}/${project.artifactId}-signed-aligned.apk 
-                </outputApk>
-              </zipalign>
-            </configuration>
-            <executions>
-              <execution>
-                <id>alignApk</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>zipalign</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
+          <!-- <plugin> <groupId>com.jayway.maven.plugins.android.generation2</groupId> 
+            <artifactId>maven-android-plugin</artifactId> <inherited>true</inherited> 
+            <configuration> <sign> <debug>false</debug> </sign> <zipalign> <verbose>true</verbose> 
+            <inputApk>${project.build.directory}/${project.artifactId}.apk</inputApk> 
+            <outputApk>${project.build.directory}/${project.artifactId}-signed-aligned.apk 
+            </outputApk> </zipalign> </configuration> <executions> <execution> <id>alignApk</id> 
+            <phase>package</phase> <goals> <goal>zipalign</goal> </goals> </execution> 
+            </executions> </plugin> -->
         </plugins>
       </build>
     </profile>
