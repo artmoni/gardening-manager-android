@@ -31,11 +31,7 @@ public class SeedActivity extends SherlockFragment {
 
     protected BaseSeedInterface mSeed;
 
-    private float downXValue;
-
     protected int resultCameraActivity = 1;
-
-    private Gallery gallery;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -71,6 +71,9 @@ public class AbstractActivity extends SherlockActivity {
         allotmentManager = AllotmentManager.getInstance();
         allotmentManager.initIfNew(this);
         activities.add(this);
+    }
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
         registerReceiver(gardenManager, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
         registerReceiver(gardenManager, new IntentFilter(BroadCastMessages.GARDEN_SETTINGS_CHANGED));
         registerReceiver(allotmentManager, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
@@ -82,6 +85,7 @@ public class AbstractActivity extends SherlockActivity {
         if (gotsPrefs.isPremium()) {
             GoogleAnalyticsTracker.getInstance().setDryRun(true);
         }
+        super.onPostCreate(savedInstanceState);
     }
 
     @Override

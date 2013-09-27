@@ -3,7 +3,6 @@ package org.gots.garden;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import org.gots.DatabaseHelper;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.provider.GardenProvider;
 import org.gots.garden.provider.local.LocalGardenProvider;
@@ -52,6 +51,7 @@ public class GardenManager extends BroadcastReceiver {
 
     /**
      * If it was already called once, the method returns without any change.
+     * 
      * @return TODO
      */
     public synchronized GardenManager initIfNew(Context context) {
@@ -92,11 +92,9 @@ public class GardenManager extends BroadcastReceiver {
         }
     }
 
-    public long addGarden(GardenInterface garden) {
+    public void addGarden(GardenInterface garden) {
 
-        final long id;
-
-        AsyncTask<GardenInterface, Integer, GardenInterface> task = new AsyncTask<GardenInterface, Integer, GardenInterface>() {
+        new AsyncTask<GardenInterface, Integer, GardenInterface>() {
             @Override
             protected GardenInterface doInBackground(GardenInterface... params) {
                 GardenInterface newGarden = gardenProvider.createGarden(params[0]);
@@ -104,34 +102,16 @@ public class GardenManager extends BroadcastReceiver {
             }
 
             protected void onPostExecute(GardenInterface result) {
-                setCurrentGarden(result);
+                gardenProvider.setCurrentGarden(result);
+                mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
                 GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
                 tracker.trackEvent("Garden", "location", result.getLocality(), 0);
-                mContext.sendBroadcast( new Intent(BroadCastMessages.GARDEN_EVENT));
+
             };
         }.execute(garden);
 
-        try {
-            GardenInterface newgarden = task.get();
-            return newgarden.getId();
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return -1;
     }
 
-    // private void changeDatabase(int position) {
-    // DatabaseHelper helper = new DatabaseHelper(mContext);
-    // helper.setDatabase(position);
-    //
-    // // WeatherManager wm = new WeatherManager(mContext);
-    // // wm.getWeatherFromWebService(getcurrentGarden());
-    //
-    // }
 
     public GardenInterface getCurrentGarden() {
         GardenInterface garden = gardenProvider.getCurrentGarden();
@@ -139,11 +119,11 @@ public class GardenManager extends BroadcastReceiver {
     }
 
     public void setCurrentGarden(GardenInterface garden) {
-        GotsPreferences.getInstance().set(GotsPreferences.ORG_GOTS_CURRENT_GARDENID, (int) garden.getId());
+        gardenProvider.setCurrentGarden(garden);
+        mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
+
         Log.d(TAG, "setCurrentGarden [" + garden.getId() + "] " + garden.getLocality()
                 + " has been set as current workspace");
-        DatabaseHelper.getInstance(mContext).changeDatabase();
-        // changeDatabase((int) garden.getId());
     }
 
     public void removeGarden(GardenInterface garden) {
@@ -218,6 +198,10 @@ public class GardenManager extends BroadcastReceiver {
 
     public List<GardenInterface> getMyGardens(boolean force) {
         return gardenProvider.getMyGardens(force);
+    }
+
+    public GardenInterface getGardenById(Integer id) {
+        return new LocalGardenProvider(mContext).getGardenById(id);
     }
 
 }

@@ -14,7 +14,6 @@ import java.util.List;
 
 import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
-import org.gots.analytics.GotsAnalytics;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.adapter.ProfileAdapter;
@@ -38,7 +37,6 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class ProfileActivity extends AbstractActivity {
 
@@ -60,7 +58,7 @@ public class ProfileActivity extends AbstractActivity {
 
         profileList = (ListView) findViewById(R.id.IdGardenProfileList);
 
-        this.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_EVENT));
+        this.registerReceiver(gardenBroadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_EVENT));
 
         if (!gotsPrefs.isPremium()) {
             GotsAdvertisement ads = new GotsAdvertisement(this);
@@ -68,17 +66,20 @@ public class ProfileActivity extends AbstractActivity {
             LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
             layout.addView(ads.getAdsLayout());
         }
+
     }
 
-    public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
+    public BroadcastReceiver gardenBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            force_refresh = true;
-            onResume();
+            if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
+                // force_refresh = true;
+                onResume();
+            }
         }
     };
 
-    private boolean force_refresh = false;
+    private boolean force_refresh = true;
 
     class GardenSync extends AsyncTask<Context, Void, List<GardenInterface>> {
         ProgressDialog dialog;
@@ -106,20 +107,16 @@ public class ProfileActivity extends AbstractActivity {
             } catch (Exception e) {
                 // nothing
             }
-            if (myGardens.size() == 0) {
+            profileAdapter = new ProfileAdapter(ProfileActivity.this, myGardens);
+            profileList.setAdapter(profileAdapter);
+            profileAdapter.notifyDataSetChanged();
+            if (profileAdapter != null && profileAdapter.getCount() == 0) {
                 Intent intentCreation = new Intent(getApplicationContext(), ProfileCreationActivity.class);
-//                intentCreation.putExtra("option", ProfileCreationActivity.OPTION_EDIT);
                 startActivity(intentCreation);
-            } else {
-                profileAdapter = new ProfileAdapter(ProfileActivity.this, myGardens);
-                profileList.setAdapter(profileAdapter);
-                profileAdapter.notifyDataSetChanged();
-            }          
-
+            }
             super.onPostExecute(myGardens);
         }
 
-       
     }
 
     @Override
@@ -142,6 +139,12 @@ public class ProfileActivity extends AbstractActivity {
     }
 
     @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        
+    }
+
+    @Override
     protected void onPause() {
 
         super.onPause();
@@ -151,7 +154,7 @@ public class ProfileActivity extends AbstractActivity {
 
     @Override
     protected void onDestroy() {
-        unregisterReceiver(seedBroadcastReceiver);
+        unregisterReceiver(gardenBroadcastReceiver);
         super.onDestroy();
     }
 

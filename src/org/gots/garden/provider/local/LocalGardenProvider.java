@@ -2,6 +2,7 @@ package org.gots.garden.provider.local;
 
 import java.util.List;
 
+import org.gots.DatabaseHelper;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.provider.GardenProvider;
 import org.gots.garden.sql.GardenDBHelper;
@@ -21,6 +22,7 @@ public class LocalGardenProvider extends AbstractProvider implements GardenProvi
 
     @Override
     public GardenInterface createGarden(GardenInterface garden) {
+        
         GardenInterface newGarden = helper.insertGarden(garden);
         return newGarden;
     }
@@ -43,8 +45,18 @@ public class LocalGardenProvider extends AbstractProvider implements GardenProvi
     }
 
     @Override
-    public int removeGarden(GardenInterface garden) {
-        return helper.deleteGarden(garden);
+    public void removeGarden(GardenInterface garden) {
+        helper.deleteGarden(garden);
+    }
+
+    public GardenInterface getGardenById(Integer id) {
+        return helper.getGarden(id);
+    }
+
+    @Override
+    public void setCurrentGarden(GardenInterface garden) {
+        GotsPreferences.getInstance().set(GotsPreferences.ORG_GOTS_CURRENT_GARDENID, (int) garden.getId());
+        DatabaseHelper.getInstance(mContext).changeDatabase();        
     }
 
 }

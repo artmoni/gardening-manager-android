@@ -40,7 +40,6 @@ import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -53,8 +52,6 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
 
     // TabHost tabHost;
     private Context mContext;
-
-    private ListView listView;
 
     private ViewPager mViewPager;
 
@@ -242,7 +239,6 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
 
             Fragment fragment = Fragment.instantiate(mContext, info.clss.getName(), info.args);
             fragment.setArguments(bundle);
-
             return fragment;
         }
 

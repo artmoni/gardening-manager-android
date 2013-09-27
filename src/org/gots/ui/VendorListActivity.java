@@ -46,7 +46,7 @@ public class VendorListActivity extends AbstractListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        mContext=getActivity();
+        mContext = getActivity();
         mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.SEED_DISPLAYLIST));
         listVendorSeedAdapter = new ListVendorSeedAdapter(mContext, new ArrayList<BaseSeedInterface>());
         setListAdapter(listVendorSeedAdapter);
@@ -61,13 +61,11 @@ public class VendorListActivity extends AbstractListFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
-        Intent i;
         switch (item.getItemId()) {
 
         case R.id.refresh_seed:
             Intent seedIntent = new Intent(mContext, SeedUpdateService.class);
             mContext.startService(seedIntent);
-
             return true;
 
         default:
@@ -78,20 +76,36 @@ public class VendorListActivity extends AbstractListFragment {
     public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            updateUI(intent);
+            // updateUI(intent);
+            
+           
+            updateVendorSeeds();
+
         }
     };
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        updateVendorSeeds();
+    }
+
     private ProgressDialog dialog;
 
-    @Override
-    public void onResume() {
+    protected void updateVendorSeeds() {
         new AsyncTask<Void, Integer, List<BaseSeedInterface>>() {
 
             protected void onPreExecute() {
-                dialog = ProgressDialog.show(mContext, "", getResources().getString(R.string.gots_loading), true);
+                try {
+                    dialog.dismiss();
+                    dialog = null;
+                } catch (Exception e) {
+                    // nothing
+                }
+                dialog = ProgressDialog.show(mContext, "", mContext.getResources().getString(R.string.gots_loading),
+                        true);
                 dialog.setCanceledOnTouchOutside(true);
-//                dialog.show();
+                // dialog.show();
                 // if (vendorSeeds.size() < 1)
                 // mContext.startService(seedIntent);
                 super.onPreExecute();
@@ -103,44 +117,42 @@ public class VendorListActivity extends AbstractListFragment {
             }
 
             protected void onPostExecute(List<BaseSeedInterface> vendorSeeds) {
-                listVendorSeedAdapter.setSeeds(vendorSeeds);
-                listVendorSeedAdapter.notifyDataSetChanged();
-                
                 try {
                     dialog.dismiss();
                     dialog = null;
                 } catch (Exception e) {
                     // nothing
                 }
+                listVendorSeedAdapter.setSeeds(vendorSeeds);
+                listVendorSeedAdapter.notifyDataSetChanged();
 
                 super.onPostExecute(vendorSeeds);
             };
         }.execute();
-
-        super.onResume();
     }
 
     @Override
     public void onPause() {
-        if (dialog != null && dialog.isShowing())
+        try {
             dialog.dismiss();
-        // mContext.unregisterReceiver(seedBroadcastReceiver);
-        // mContext.stopService(seedIntent);
-
+            dialog = null;
+        } catch (Exception e) {
+            // nothing
+        }
         super.onPause();
     }
 
-    protected void updateUI(Intent intent) {
-        // boolean isnewseed = intent.getBooleanExtra(SeedUpdateService.ISNEWSEED, false);
-        // if (isnewseed) {
-        // seedProvider = new GotsSeedManager(mContext);
-        // listVendorSeedAdapter = new ListVendorSeedAdapter(mContext, seedProvider.getVendorSeeds());
-        //
-        // setListAdapter(listVendorSeedAdapter);
-        // listVendorSeedAdapter.notifyDataSetChanged();
-        // }
-        onResume();
-    }
+    // protected void updateUI(Intent intent) {
+    // // boolean isnewseed = intent.getBooleanExtra(SeedUpdateService.ISNEWSEED, false);
+    // // if (isnewseed) {
+    // // seedProvider = new GotsSeedManager(mContext);
+    // // listVendorSeedAdapter = new ListVendorSeedAdapter(mContext, seedProvider.getVendorSeeds());
+    // //
+    // // setListAdapter(listVendorSeedAdapter);
+    // // listVendorSeedAdapter.notifyDataSetChanged();
+    // // }
+    // onResume();
+    // }
 
     @Override
     public void onDestroy() {

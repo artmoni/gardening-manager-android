@@ -18,6 +18,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.gots.R;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.garden.GardenInterface;
 import org.gots.help.HelpUriBuilder;
 import org.nuxeo.ecm.automation.client.jaxrs.Constants;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
@@ -39,6 +40,8 @@ import android.util.Base64;
 //import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -238,12 +241,13 @@ public class LoginActivity extends AbstractActivity {
                             Toast.LENGTH_SHORT).show();
                     cancel(true);
                 } else {
-                    dialog = ProgressDialog.show(LoginActivity.this, "", "Loading. Please wait...", true);
+                    dialog = ProgressDialog.show(LoginActivity.this, "", getResources().getString(R.string.gots_loading), true);
                     dialog.setCanceledOnTouchOutside(true);
-                    dialog.show();
+//                    dialog.show();
                 }
             };
 
+            
             @Override
             protected Session doInBackground(Void... params) {
                 Session session = null;
@@ -251,9 +255,11 @@ public class LoginActivity extends AbstractActivity {
 
                     try {
                         session = nuxeoManager.getSession();
+
                         if ("Guest".equals(session.getLogin().getUsername())) {
                             return null;
                         }
+                        gardenManager.getMyGardens(true);
                     } catch (Exception nao) {
                         if (nao != null) {
                             Log.e(TAG, "" + nao.getMessage());

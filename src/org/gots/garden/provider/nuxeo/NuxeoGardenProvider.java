@@ -106,7 +106,6 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
      * @return
      */
     protected List<GardenInterface> getMyNuxeoGardens(List<GardenInterface> myLocalGardens, final boolean force) {
-        List<GardenInterface> myGardens = new ArrayList<GardenInterface>();
         List<GardenInterface> remoteGardens = new ArrayList<GardenInterface>();
 
         try {
@@ -144,6 +143,14 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
             // return myLocalGardens;
         }
 
+
+        return synchronize(myLocalGardens, remoteGardens);
+       
+    }
+
+    protected List<GardenInterface> synchronize(List<GardenInterface> myLocalGardens,
+            List<GardenInterface> remoteGardens) {
+        List<GardenInterface> myGardens = new ArrayList<GardenInterface>();
         // Synchronize remote garden with local gardens
         for (GardenInterface remoteGarden : remoteGardens) {
             boolean found = false;
@@ -158,7 +165,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
                 // syncGardens(localGarden,remoteGarden);
                 myGardens.add(super.updateGarden(remoteGarden));
             } else { // remote only => create local
-                myGardens.add(createLocalGarden(remoteGarden));
+                myGardens.add(super.createGarden(remoteGarden));
             }
         }
 
@@ -182,20 +189,16 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
                 }
             }
         }
-
         return myGardens;
     }
 
     @Override
     public GardenInterface createGarden(GardenInterface garden) {
-        return createNuxeoGarden(createLocalGarden(garden));
+        
+        return createNuxeoGarden(super.createGarden(garden));
     }
 
-    protected GardenInterface createLocalGarden(GardenInterface garden) {
-        Log.i(TAG, "createLocalGarden " + garden);
-
-        return super.createGarden(garden);
-    }
+   
 
     protected GardenInterface createNuxeoGarden(GardenInterface localGarden) {
         Log.i(TAG, "createRemoteGarden " + localGarden);
@@ -204,7 +207,6 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
         DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
         DeferredUpdateManager deferredUpdateMgr = getNuxeoClient().getDeferredUpdatetManager();
         currentGarden = localGarden;
-        Document createDocument;
         try {
             Document root = documentMgr.getUserHome();
 
@@ -219,10 +221,13 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
                 public void onSuccess(String executionId, Object data) {
                     Document doc = (Document) data;
                     currentGarden.setUUID(doc.getId());
+//                    currentGarden = NuxeoGardenProvider.super.createGarden(currentGarden);
                     NuxeoGardenProvider.super.updateGarden(currentGarden);
+                    //
+                    // Intent gardenIntent = new Intent(BroadCastMessages.GARDEN_EVENT);
+                    // mContext.sendBroadcast(gardenIntent);
+
                     Log.d(TAG, "onSuccess " + data);
-                    // getNuxeoClient().getTransientStateManager().flushTransientState(
-                    // doc.getId());
                     force_force = true;
                 }
 
@@ -332,14 +337,13 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
     }
 
     @Override
-    public int removeGarden(GardenInterface garden) {
-        Log.i(TAG, "removeGarden " + garden);
+    public void removeGarden(GardenInterface garden) {
+        super.removeGarden(garden);
         removeNuxeoGarden(garden);
-        return super.removeGarden(garden);
     }
 
     protected void removeNuxeoGarden(final GardenInterface garden) {
-        Log.i(TAG, "removeRemoteGarden " + garden);
+        Log.i(TAG, "removeNuxeoGarden " + garden);
 
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);

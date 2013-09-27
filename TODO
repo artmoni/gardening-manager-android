@@ -24,3 +24,7 @@ icones collées dans l'action bar
 la creation de potager n'ajoute pas de potager
 meteo marche rarement
 fond des parcelles en blanc
+
+
+###### QUESTIONS
+mettre un timeout sur les connexions, notamment au démarrage

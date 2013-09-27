@@ -138,6 +138,7 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
 
     @Override
     public int removeAllotment(BaseAllotmentInterface allotment) {
+        super.removeAllotment(allotment);
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);
         try {

@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.gots"
     android:versionCode="18"
-    android:versionName="0.20" >
+    android:versionName="0.21-SNAPSHOT" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -63,7 +63,9 @@
         <activity android:name=".ui.VendorListActivity" />
         <activity
             android:name=".ui.ProfileActivity"
-            android:theme="@style/Theme.Styled" />
+            android:theme="@style/Theme.Styled" >
+           
+        </activity>
         <activity
             android:name=".ui.ProfileCreationActivity"
             android:theme="@style/Theme.Styled" />
@@ -101,7 +103,9 @@
                     android:host="my.gardening-manager.com"
                     android:path="/login"
                     android:scheme="http" />
+
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>

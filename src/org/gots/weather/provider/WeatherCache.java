@@ -108,7 +108,6 @@ public class WeatherCache {
 
 		// create a response handler
 		ResponseHandler<String> responseHandler = new BasicResponseHandler();
-
 		String responseBody = httpclient.execute(httpget, responseHandler);
 		// Log.d(DEBUG_TAG, "response from httpclient:n "+responseBody);
 

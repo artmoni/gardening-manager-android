@@ -125,21 +125,23 @@ public class MyMainGarden extends AbstractActivity {
 
     private ProgressDialog dialog;
 
+   
     @Override
     protected void onResume() {
+        super.onResume();
         new AsyncTask<Void, Integer, List<BaseAllotmentInterface>>() {
-
+            
             protected void onPreExecute() {
                 dialog = ProgressDialog.show(MyMainGarden.this, "", getResources().getString(R.string.gots_loading),
                         true);
                 dialog.setCanceledOnTouchOutside(true);
             };
-
+            
             @Override
             protected List<BaseAllotmentInterface> doInBackground(Void... params) {
                 return allotmentManager.getMyAllotments();
             }
-
+            
             @Override
             protected void onPostExecute(List<BaseAllotmentInterface> result) {
                 lsa.setAllotments(result);
@@ -172,7 +174,6 @@ public class MyMainGarden extends AbstractActivity {
                 super.onPostExecute(result);
             }
         }.execute();
-        super.onResume();
     }
 
     @Override

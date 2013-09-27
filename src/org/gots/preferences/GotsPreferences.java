@@ -87,9 +87,10 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     private static final String GARDENING_MANAGER_NUXEO_AUTOMATION_TEST = "http://services.gardening-manager.com/nuxeo/";
 
     private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://services.gardening-manager.com/nuxeo/";
-//    private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://srv2.gardening-manager.com:8090/nuxeo/";
 
-//    private static final String DEFAULT_LOCAL_URL = "http://10.0.2.2:8080/nuxeo/";
+    // private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://srv2.gardening-manager.com:8090/nuxeo/";
+
+    // private static final String DEFAULT_LOCAL_URL = "http://10.0.2.2:8080/nuxeo/";
 
     // private static final String GARDENING_MANAGER_NUXEO_AUTHENTICATION =
     // "http://srv2.gardening-manager.com:8090/nuxeo/authentication/temptoken?";
@@ -102,7 +103,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     protected Context mContext;
 
-    private static GotsPreferences instance=null;
+    private static GotsPreferences instance = null;
 
     private static Exception firstCall;
 
@@ -133,9 +134,9 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
             return;
         }
         mContext = context;
-         setSharedPreferences(PreferenceManager.getDefaultSharedPreferences(context));
+        setSharedPreferences(PreferenceManager.getDefaultSharedPreferences(context));
         setGardeningManagerServerURI(ISDEVELOPMENT ? GARDENING_MANAGER_NUXEO_AUTOMATION_TEST : GARDENING_MANAGER_NUXEO_AUTOMATION);
-         initDone = true;
+        initDone = true;
     }
 
     public SharedPreferences getSharedPrefs() {
@@ -153,7 +154,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
         if (ORG_GOTS_GARDEN_SERVERCONNECTED.equals(key)) {
             mContext.sendBroadcast(new Intent(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
             Log.d(TAG, key + " has changed: " + isConnectedToServer());
-        }else if (ORG_GOTS_CURRENT_GARDENID.equals(key))   {
+        } else if (ORG_GOTS_CURRENT_GARDENID.equals(key)) {
             mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_SETTINGS_CHANGED));
             Log.d(TAG, key + " has changed: " + getCurrentGardenId());
         }
@@ -321,8 +322,8 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     public int getCurrentGardenId() {
         SharedPreferences preferences = mContext.getSharedPreferences("org.gots.preference", 0);
-        int oldGardenId=preferences.getInt("org.gots.preference.gardenid", -1);
-        if (oldGardenId> -1) {
+        int oldGardenId = preferences.getInt("org.gots.preference.gardenid", -1);
+        if (oldGardenId > -1) {
             GotsPreferences.getInstance().set(GotsPreferences.ORG_GOTS_CURRENT_GARDENID, oldGardenId);
             SharedPreferences.Editor prefedit = preferences.edit();
             prefedit.putInt("org.gots.preference.gardenid", -1);
@@ -342,7 +343,5 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     public String getDocumentationURI() {
         return GARDENING_MANAGER_DOCUMENTATION_URL;
     }
-
-    
 
 }

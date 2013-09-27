@@ -115,10 +115,11 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 }
             }
             // getNuxeoClient().shutdown();
+            myVendorSeeds = synchronize(localVendorSeeds, remoteVendorSeeds);
         } catch (Exception e) {
             Log.e(TAG, "getAllSeeds " + e.getMessage(), e);
+            myVendorSeeds=super.getVendorSeeds(force);
         }
-        myVendorSeeds = synchronize(localVendorSeeds, remoteVendorSeeds);
         return myVendorSeeds;
     }
 
@@ -168,7 +169,8 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     }
                 }
                 if (!found) { // local only with UUID -> delete local
-                    super.remove(localSeed);
+                    //TODO take a decision if local seed should be remove if the remote description is removed.
+//                    super.remove(localSeed);
                 }
             }
         }
