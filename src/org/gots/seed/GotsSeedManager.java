@@ -62,14 +62,15 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     /**
      * If it was already called once, the method returns without any change.
      */
-    public synchronized void initIfNew(Context context) {
+    public synchronized GotsSeedManager initIfNew(Context context) {
         if (initDone) {
-            return;
+            return this;
         }
         this.mContext = context;
         // mContext.registerReceiver(this, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
         setSeedProvider();
         initDone = true;
+        return this;
     }
 
     public void finalize() {
@@ -100,9 +101,8 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     }
 
     @Override
-    public BaseSeedInterface getSeedById() {
-        // TODO Auto-generated method stub
-        return null;
+    public BaseSeedInterface getSeedById(int seedId) {
+        return mSeedProvider.getSeedById(seedId);
     }
 
     @Override

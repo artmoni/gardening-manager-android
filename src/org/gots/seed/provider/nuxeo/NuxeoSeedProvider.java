@@ -210,9 +210,8 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
     }
 
     @Override
-    public BaseSeedInterface getSeedById() {
-        // TODO Auto-generated method stub
-        return null;
+    public BaseSeedInterface getSeedById(int id) {
+        return super.getSeedById(id);
     }
 
     @Override

@@ -33,9 +33,8 @@ public class LocalSeedProvider extends AbstractProvider implements GotsSeedProvi
     }
 
     @Override
-    public BaseSeedInterface getSeedById() {
-        // TODO
-        return null;
+    public BaseSeedInterface getSeedById(int seedId) {
+        return myBank.getSeedById(seedId);
     }
 
     @Override

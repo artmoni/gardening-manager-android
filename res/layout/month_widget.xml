@@ -6,14 +6,14 @@
 
     <TextView
         android:id="@+id/idSowingPeriod"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginLeft="1dp"
         android:background="@drawable/selector_planning"
         android:gravity="center_vertical|center_horizontal"
         android:text="J"
         android:textColor="@color/text_color_dark"
-        android:textSize="8dp"
+        android:textSize="8sp"
         android:textStyle="bold" />
 
 

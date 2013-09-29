@@ -41,7 +41,7 @@ public class SimpleSeedProvider implements GotsSeedProvider {
     }
 
     @Override
-    public BaseSeedInterface getSeedById() {
+    public BaseSeedInterface getSeedById(int id) {
         // TODO Auto-generated method stub
         return null;
     }

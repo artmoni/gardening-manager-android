@@ -100,6 +100,7 @@
     <string name="notification.seed.content">ainsi que _NBSEEDS_ autre légumes</string>
     <string name="notification.seedsow.content">Prêt à être semé</string>
     <string name="action.sow">Semer</string>
+    <string name="action.harvest">Récolter</string>
     <string name="action.beak">Bécher</string>
     <string name="action.lighten">Eclaircir</string>
     <string name="profile.share.data">Partager</string>
@@ -117,5 +118,5 @@
     <string name="login.disconnect">Déconnexion</string>
     <string name="login.simple.description">Connectez vous au réseau Gardening Manager et prenez plaisir à suivre le jardin potager de vos amis.</string>
     <string name="garden.create">Créer mon potager</string>
-    
+
 </resources>

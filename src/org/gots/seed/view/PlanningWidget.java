@@ -12,100 +12,115 @@ package org.gots.seed.view;
 
 import java.util.ArrayList;
 
+import org.gots.R;
+import org.gots.seed.adapter.PlanningSowAdapter;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.widget.GridLayout;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 
 public class PlanningWidget extends GridView {
 
-	private Context mContext;
-	private String monthText = "J";
-	private Boolean isSowingPeriod = false;
-	private Boolean isHarvestPeriod = false;
-	private boolean isEditable;
+    private Context mContext;
 
-	// private PlanningSowAdapter planningSowAdapter;
 
-	// private LinearLayout child;
+    private Boolean isSowingPeriod = false;
 
-	public PlanningWidget(Context context) {
+    private Boolean isHarvestPeriod = false;
 
-		super(context);
-		this.mContext = context;
-		initView();
-	}
+    private boolean isEditable;
 
-	public PlanningWidget(Context context, AttributeSet attr) {
+    // private PlanningSowAdapter planningSowAdapter;
 
-		super(context, attr);
-		this.mContext = context;
-		initView();
-	}
+    // private LinearLayout child;
 
-	private void initView() {
-		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    public PlanningWidget(Context context) {
 
-		// planningSowAdapter = new PlanningSowAdapter(null);
-		// setAdapter(planningSowAdapter);
+        super(context);
+        this.mContext = context;
+        initView();
+    }
 
-	}
+    public PlanningWidget(Context context, AttributeSet attr) {
 
-	public void setMonthText(String month) {
-		monthText = month;
-	}
+        super(context, attr);
+        this.mContext = context;
+        PlanningSowAdapter planningSowAdapter = new PlanningSowAdapter(null);
+        setAdapter(planningSowAdapter);
+        initView();
+    }
 
-	public void setSowingPeriode(boolean isSowingPeriod) {
-		this.isSowingPeriod = isSowingPeriod;
-	}
+    private void initView() {
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        // inflater.inflate(R.layout.planning_widget, this, false);
 
-	public void setHarvestPeriode(boolean isHarvestPeriod) {
-		this.isHarvestPeriod = isHarvestPeriod;
-	}
+    }
 
-	@Override
-	protected void onLayout(boolean changed, int l, int t, int r, int b) {
-		super.onLayout(changed, l, t, r, b);
-		if (isEditable)
-			for (int i = 0; i < getAdapter().getCount(); i++) {
-				if (MonthWidget.class.isInstance(getChildAt(i))) {
-					MonthWidget monthWidget = (MonthWidget) getChildAt(i);
-					monthWidget.setEditable(isEditable);
-				}
-			}
-		// TextView sowingIndicator = (TextView)
-		// findViewById(R.id.idSowingPeriod);
-		// // TextView harvestIndicator = (TextView)
-		// // findViewById(R.id.idHarvestPeriod);
-		//
-		// sowingIndicator.setText(monthText);
-		// // harvestIndicator.setText(monthText);
-		//
-		// if (isSowingPeriod) {
-		// sowingIndicator.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_planning_sow));
-		// }
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+//        if (getAdapter() != null)
+//            setNumColumns(getAdapter().getCount());
 
-		// if (isHarvestPeriod) {
-		// harvestIndicator.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_planning_harvest));
-		// }
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
 
-	}
 
-	public ArrayList<Integer> getSelectedMonth() {
-		ArrayList<Integer> selectedMonth = new ArrayList<Integer>();
-		for (int i = 0; i < getChildCount(); i++) {
-			if (getChildAt(i).isSelected()) {
-				selectedMonth.add(i);
-			}
-		}
-		return selectedMonth;
-	}
+    public void setSowingPeriode(boolean isSowingPeriod) {
+        this.isSowingPeriod = isSowingPeriod;
+    }
 
-	public void setEditable(boolean editable) {
-		this.isEditable = editable;
-		invalidate();
+    public void setHarvestPeriode(boolean isHarvestPeriod) {
+        this.isHarvestPeriod = isHarvestPeriod;
+    }
 
-	}
-	
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        super.onLayout(changed, l, t, r, b);
+        if (isEditable)
+            for (int i = 0; i < getChildCount(); i++) {
+                if (MonthWidget.class.isInstance(getChildAt(i))) {
+                    MonthWidget monthWidget = (MonthWidget) getChildAt(i);
+                    monthWidget.setEditable(isEditable);
+                }
+            }
+        
+        // MonthWidget monthWidget = new MonthWidget(getContext());
+        // monthWidget.setMonthText("T");
+        // TextView sowingIndicator = (TextView)
+        // findViewById(R.id.idSowingPeriod);
+        // // TextView harvestIndicator = (TextView)
+        // // findViewById(R.id.idHarvestPeriod);
+        //
+        // sowingIndicator.setText(monthText);
+        // // harvestIndicator.setText(monthText);
+        //
+        // if (isSowingPeriod) {
+        // sowingIndicator.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_planning_sow));
+        // }
+
+        // if (isHarvestPeriod) {
+        // harvestIndicator.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_planning_harvest));
+        // }
+
+    }
+
+    public ArrayList<Integer> getSelectedMonth() {
+        ArrayList<Integer> selectedMonth = new ArrayList<Integer>();
+        for (int i = 0; i < getChildCount(); i++) {
+            if (getChildAt(i).isSelected()) {
+                selectedMonth.add(i);
+            }
+        }
+        return selectedMonth;
+    }
+
+    public void setEditable(boolean editable) {
+        this.isEditable = editable;
+        invalidate();
+
+    }
 
 }

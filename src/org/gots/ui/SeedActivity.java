@@ -13,6 +13,7 @@ package org.gots.ui;
 import org.gots.R;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.GotsSeedManager;
 import org.gots.seed.provider.local.sql.VendorSeedDBHelper;
 
 import android.os.Bundle;
@@ -33,10 +34,12 @@ public class SeedActivity extends SherlockFragment {
 
     protected int resultCameraActivity = 1;
 
+    private GotsSeedManager seedManager;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        seedManager = GotsSeedManager.getInstance().initIfNew(getActivity());
     }
 
     @Override
@@ -51,9 +54,7 @@ public class SeedActivity extends SherlockFragment {
             return v;
         }
 
-        VendorSeedDBHelper helper = new VendorSeedDBHelper(getActivity());
-
-        mSeed = helper.getSeedById(seedId);
+        mSeed = seedManager.getSeedById(seedId);
 
         final TextView seedDescriptionEnvironnement = (TextView) v.findViewById(R.id.IdSeedDescriptionEnvironment);
         seedDescriptionEnvironnement.setText(mSeed.getDescriptionGrowth());

@@ -56,7 +56,7 @@ class PrestashopConnector implements GotsSeedProvider {
     }
 
     @Override
-    public BaseSeedInterface getSeedById() {
+    public BaseSeedInterface getSeedById(int id) {
         return null;
     }
 

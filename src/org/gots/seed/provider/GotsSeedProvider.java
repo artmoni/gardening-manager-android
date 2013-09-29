@@ -13,7 +13,7 @@ public interface GotsSeedProvider {
 
     public void getFamilyById(int id);
 
-    public BaseSeedInterface getSeedById();
+    public BaseSeedInterface getSeedById(int seedId);
 
     public BaseSeedInterface createSeed(BaseSeedInterface seed);
 
