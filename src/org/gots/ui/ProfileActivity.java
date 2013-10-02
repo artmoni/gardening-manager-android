@@ -141,7 +141,7 @@ public class ProfileActivity extends AbstractActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        
+
     }
 
     @Override
@@ -182,8 +182,8 @@ public class ProfileActivity extends AbstractActivity {
             return true;
 
         case R.id.help:
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                    Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
+            Intent browserIntent = new Intent(this, WebHelpActivity.class);
+            browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
             startActivity(browserIntent);
             return true;
 

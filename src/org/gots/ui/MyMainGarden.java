@@ -113,8 +113,8 @@ public class MyMainGarden extends AbstractActivity {
             listAllotments.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_simple));
             return true;
         case R.id.help:
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                    Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
+            Intent browserIntent = new Intent(this, WebHelpActivity.class);
+            browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
             startActivity(browserIntent);
 
             return true;

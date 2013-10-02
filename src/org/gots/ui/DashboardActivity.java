@@ -64,9 +64,8 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // NewRelic.withApplicationToken( "AA89617084bf906d3a0425f6cf6a382ce574b3acd8" ).start(this.getApplication());
 
-//        NewRelic.withApplicationToken( "AA89617084bf906d3a0425f6cf6a382ce574b3acd8" ).start(this.getApplication());
-        
         setContentView(R.layout.dashboard);
 
         // attach event handler to dash buttons
@@ -91,7 +90,6 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
             logo.setBackgroundDrawable(getResources().getDrawable(R.drawable.bt_logo_premium));
         }
         weatherIntent = new Intent(this, WeatherUpdateService.class);
-
 
         // if (GotsPreferences.getInstance(this).getOAuthtToken() == null) {
         // Intent intent = new Intent(this, AccountList.class);
@@ -172,7 +170,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         GoogleAnalyticsTracker.getInstance().dispatch();
 
         ActionBar bar = getSupportActionBar();
-        
+
         GardenInterface currentGarden = gardenManager.getCurrentGarden();
         if (currentGarden != null) {
             bar.setTitle(currentGarden.getLocality());
@@ -183,10 +181,10 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         startService(weatherIntent);
         registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
 
-        if (gotsPrefs.getCurrentGardenId()==-1){
+        if (gotsPrefs.getCurrentGardenId() == -1) {
             Animation myFadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.tween);
-            findViewById(R.id.dashboard_button_profile).startAnimation(myFadeInAnimation);}
-        else
+            findViewById(R.id.dashboard_button_profile).startAnimation(myFadeInAnimation);
+        } else
             findViewById(R.id.dashboard_button_profile).clearAnimation();
     }
 
@@ -203,8 +201,10 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         switch (item.getItemId()) {
 
         case R.id.help:
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                    Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
+            // Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+            // Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
+            Intent browserIntent = new Intent(this, WebHelpActivity.class);
+            browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
             startActivity(browserIntent);
 
             return true;

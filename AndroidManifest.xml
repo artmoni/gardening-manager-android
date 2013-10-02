@@ -64,7 +64,6 @@
         <activity
             android:name=".ui.ProfileActivity"
             android:theme="@style/Theme.Styled" >
-           
         </activity>
         <activity
             android:name=".ui.ProfileCreationActivity"
@@ -79,7 +78,9 @@
         <activity
             android:name=".ui.AboutActivity"
             android:theme="@style/Theme.Styled" />
-        <activity android:name=".ui.WebHelpActivity" />
+        <activity
+            android:name=".ui.WebHelpActivity"
+            android:theme="@style/Theme.Styled" />
         <activity
             android:name=".ui.TabSeedActivity"
             android:theme="@style/Theme.Styled" />

@@ -11,8 +11,15 @@
 package org.gots.ui;
 
 import org.gots.R;
+import org.gots.help.HelpUriBuilder;
+
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.view.MenuItem;
+import com.google.zxing.integration.android.IntentIntegrator;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
@@ -24,20 +31,24 @@ public class WebHelpActivity extends AbstractActivity {
 
     private String baseHelpURL = "http://www.gardening-manager.com";
 
+    public static final String URL = "org.gots.doc.classsimplename";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.help);
 
-        String page = getIntent().getExtras().getString("org.gots.help.page");
+        ActionBar bar = getSupportActionBar();
+        bar.setDisplayHomeAsUpEnabled(true);
+        bar.setTitle("Documentation");
 
+        String helpClass = getIntent().getExtras().getString(URL);
         WebView mWebView = (WebView) findViewById(R.id.webViewHelp);
         mWebView.setWebViewClient(new WebHelpClient());
+
         mWebView.getSettings().setJavaScriptEnabled(true);
 
-        mWebView.loadUrl(baseHelpURL + "/" + page);
-        // addContentView(mWebView, new LayoutParams(LayoutParams.FILL_PARENT,
-        // LayoutParams.FILL_PARENT));
+        mWebView.loadUrl(Uri.parse(HelpUriBuilder.getUri(helpClass)).toString());
 
         Button close = (Button) findViewById(R.id.buttonClose);
         close.setOnClickListener(new View.OnClickListener() {
@@ -50,6 +61,20 @@ public class WebHelpActivity extends AbstractActivity {
 
         pd = ProgressDialog.show(this, "", getResources().getString(R.string.help_loading), true);
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent i;
+        switch (item.getItemId()) {
+
+        case android.R.id.home:
+            finish();
+            return true;
+
+        default:
+            return super.onOptionsItemSelected(item);
+        }
     }
 
     private class WebHelpClient extends WebViewClient {
