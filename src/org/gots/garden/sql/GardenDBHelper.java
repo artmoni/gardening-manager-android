@@ -42,12 +42,10 @@ public class GardenDBHelper {
     }
 
     public void open() {
-        // on ouvre la BDD en écriture
         bdd = gardenSQLite.getWritableDatabase();
     }
 
     public void close() {
-        // on ferme l'accès à la BDD
         bdd.close();
     }
 
@@ -107,7 +105,7 @@ public class GardenDBHelper {
         return garden;
     }
 
-    public synchronized GardenInterface  updateGarden(GardenInterface garden) {
+    public synchronized GardenInterface updateGarden(GardenInterface garden) {
         open();
         ContentValues values = new ContentValues();
         values.put(GardenSQLite.GARDEN_ADMINAREA, garden.getAdminArea());

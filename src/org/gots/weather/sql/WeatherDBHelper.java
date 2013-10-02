@@ -23,101 +23,101 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class WeatherDBHelper {
 
-	private DatabaseHelper databaseSQLite;
-	private SQLiteDatabase bdd;
-	Context mContext;
+    private DatabaseHelper databaseSQLite;
 
-	public WeatherDBHelper(Context mContext) {
-		databaseSQLite = DatabaseHelper.getInstance(mContext);
-		this.mContext = mContext;
-	}
+    private SQLiteDatabase bdd;
 
-//	@Override
-//    protected void finalize() throws Throwable {
-//        if (bdd != null)
-//            bdd.close();
-//        super.finalize();
-//    }
+    Context mContext;
 
-	
+    public WeatherDBHelper(Context mContext) {
+        databaseSQLite = DatabaseHelper.getInstance(mContext);
+        this.mContext = mContext;
+    }
 
-	public synchronized WeatherConditionInterface insertWeather(WeatherConditionInterface weatherCondition) {
-		long rowid;
-		bdd=databaseSQLite.getWritableDatabase();
-		ContentValues values = getWeatherContentValues(weatherCondition);
+    // @Override
+    // protected void finalize() throws Throwable {
+    // if (bdd != null)
+    // bdd.close();
+    // super.finalize();
+    // }
 
-		try {
+    public synchronized WeatherConditionInterface insertWeather(WeatherConditionInterface weatherCondition) {
+        long rowid;
+        bdd = databaseSQLite.getWritableDatabase();
+        ContentValues values = getWeatherContentValues(weatherCondition);
 
-			rowid = bdd.insert(DatabaseHelper.WEATHER_TABLE_NAME, null, values);
-		} finally {
-//			close();
-		}
+        try {
 
-		weatherCondition.setId((int) rowid);
-		return weatherCondition;
-	}
+            rowid = bdd.insert(DatabaseHelper.WEATHER_TABLE_NAME, null, values);
+        } finally {
+            bdd.close();
+        }
 
-	public synchronized WeatherConditionInterface updateWeather(WeatherConditionInterface weatherCondition) {
-		long rowid;
-		bdd=databaseSQLite.getWritableDatabase();
-		ContentValues values = getWeatherContentValues(weatherCondition);
+        weatherCondition.setId((int) rowid);
+        return weatherCondition;
+    }
 
-		try {
+    public synchronized WeatherConditionInterface updateWeather(WeatherConditionInterface weatherCondition) {
+        long rowid;
+        bdd = databaseSQLite.getWritableDatabase();
+        ContentValues values = getWeatherContentValues(weatherCondition);
 
-			rowid = bdd.update(DatabaseHelper.WEATHER_TABLE_NAME, values, DatabaseHelper.WEATHER_DAYOFYEAR + "="
-					+ weatherCondition.getDayofYear(),null);
-		} finally {
-//			close();
-		}
+        try {
 
-		return weatherCondition;
-	}
+            rowid = bdd.update(DatabaseHelper.WEATHER_TABLE_NAME, values, DatabaseHelper.WEATHER_DAYOFYEAR + "="
+                    + weatherCondition.getDayofYear(), null);
+        } finally {
+            bdd.close();
+        }
 
-	private ContentValues getWeatherContentValues(WeatherConditionInterface weatherCondition) {
-		ContentValues values = new ContentValues();
-		values.put(DatabaseHelper.WEATHER_CONDITION, weatherCondition.getCondition());
-		values.put(DatabaseHelper.WEATHER_WINDCONDITION, weatherCondition.getWindCondition());
-		values.put(DatabaseHelper.WEATHER_DATE, weatherCondition.getDate().getTime());
-		values.put(DatabaseHelper.WEATHER_YEAR, weatherCondition.getDate().getYear());
-		values.put(DatabaseHelper.WEATHER_DAYOFYEAR, weatherCondition.getDayofYear());
-		values.put(DatabaseHelper.WEATHER_HUMIDITY, weatherCondition.getHumidity());
-		values.put(DatabaseHelper.WEATHER_ICONURL, weatherCondition.getIconURL());
-		values.put(DatabaseHelper.WEATHER_TEMPCELCIUSMIN, weatherCondition.getTempCelciusMin());
-		values.put(DatabaseHelper.WEATHER_TEMPCELCIUSMAX, weatherCondition.getTempCelciusMax());
-		values.put(DatabaseHelper.WEATHER_TEMPFAHRENHEIT, weatherCondition.getTempFahrenheit());
-		return values;
-	}
+        return weatherCondition;
+    }
 
-	private WeatherConditionInterface cursorToWeather(Cursor cursor) {
-		WeatherConditionInterface condition = new WeatherCondition();
-		condition.setCondition(cursor.getString(cursor.getColumnIndex(DatabaseHelper.WEATHER_CONDITION)));
-		condition.setWindCondition(cursor.getString(cursor.getColumnIndex(DatabaseHelper.WEATHER_WINDCONDITION)));
-		condition.setDayofYear(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.WEATHER_DAYOFYEAR)));
-		condition.setIconURL((cursor.getString(cursor.getColumnIndex(DatabaseHelper.WEATHER_ICONURL))));
-		condition.setHumidity((cursor.getInt(cursor.getColumnIndex(DatabaseHelper.WEATHER_HUMIDITY))));
-		condition.setTempCelciusMin((cursor.getInt(cursor.getColumnIndex(DatabaseHelper.WEATHER_TEMPCELCIUSMIN))));
-		condition.setTempCelciusMax((cursor.getInt(cursor.getColumnIndex(DatabaseHelper.WEATHER_TEMPCELCIUSMAX))));
-		condition.setTempFahrenheit((cursor.getInt(cursor.getColumnIndex(DatabaseHelper.WEATHER_TEMPFAHRENHEIT))));
-		condition.setDate(new Date(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.WEATHER_DATE))));
-		return condition;
-	}
+    private ContentValues getWeatherContentValues(WeatherConditionInterface weatherCondition) {
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.WEATHER_CONDITION, weatherCondition.getCondition());
+        values.put(DatabaseHelper.WEATHER_WINDCONDITION, weatherCondition.getWindCondition());
+        values.put(DatabaseHelper.WEATHER_DATE, weatherCondition.getDate().getTime());
+        values.put(DatabaseHelper.WEATHER_YEAR, weatherCondition.getDate().getYear());
+        values.put(DatabaseHelper.WEATHER_DAYOFYEAR, weatherCondition.getDayofYear());
+        values.put(DatabaseHelper.WEATHER_HUMIDITY, weatherCondition.getHumidity());
+        values.put(DatabaseHelper.WEATHER_ICONURL, weatherCondition.getIconURL());
+        values.put(DatabaseHelper.WEATHER_TEMPCELCIUSMIN, weatherCondition.getTempCelciusMin());
+        values.put(DatabaseHelper.WEATHER_TEMPCELCIUSMAX, weatherCondition.getTempCelciusMax());
+        values.put(DatabaseHelper.WEATHER_TEMPFAHRENHEIT, weatherCondition.getTempFahrenheit());
+        return values;
+    }
 
-	public synchronized WeatherConditionInterface getWeatherByDayofyear(int dayofyear) {
-		WeatherConditionInterface weatherCondition = null;
+    private WeatherConditionInterface cursorToWeather(Cursor cursor) {
+        WeatherConditionInterface condition = new WeatherCondition();
+        condition.setCondition(cursor.getString(cursor.getColumnIndex(DatabaseHelper.WEATHER_CONDITION)));
+        condition.setWindCondition(cursor.getString(cursor.getColumnIndex(DatabaseHelper.WEATHER_WINDCONDITION)));
+        condition.setDayofYear(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.WEATHER_DAYOFYEAR)));
+        condition.setIconURL((cursor.getString(cursor.getColumnIndex(DatabaseHelper.WEATHER_ICONURL))));
+        condition.setHumidity((cursor.getInt(cursor.getColumnIndex(DatabaseHelper.WEATHER_HUMIDITY))));
+        condition.setTempCelciusMin((cursor.getInt(cursor.getColumnIndex(DatabaseHelper.WEATHER_TEMPCELCIUSMIN))));
+        condition.setTempCelciusMax((cursor.getInt(cursor.getColumnIndex(DatabaseHelper.WEATHER_TEMPCELCIUSMAX))));
+        condition.setTempFahrenheit((cursor.getInt(cursor.getColumnIndex(DatabaseHelper.WEATHER_TEMPFAHRENHEIT))));
+        condition.setDate(new Date(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.WEATHER_DATE))));
+        return condition;
+    }
 
-		bdd=databaseSQLite.getReadableDatabase();
-		try {
-			Cursor cursor = bdd.query(DatabaseHelper.WEATHER_TABLE_NAME, null, DatabaseHelper.WEATHER_DAYOFYEAR + "="
-					+ dayofyear, null, null, null, null);
+    public synchronized WeatherConditionInterface getWeatherByDayofyear(int dayofyear) {
+        WeatherConditionInterface weatherCondition = null;
 
-			if (cursor.moveToFirst()) {
-				weatherCondition = cursorToWeather(cursor);
-			}
-			cursor.close();
-		} finally {
-//			close();
-		}
-		return weatherCondition;
-	}
+        bdd = databaseSQLite.getReadableDatabase();
+        try {
+            Cursor cursor = bdd.query(DatabaseHelper.WEATHER_TABLE_NAME, null, DatabaseHelper.WEATHER_DAYOFYEAR + "="
+                    + dayofyear, null, null, null, null);
+
+            if (cursor.moveToFirst()) {
+                weatherCondition = cursorToWeather(cursor);
+            }
+            cursor.close();
+        } finally {
+            bdd.close();
+        }
+        return weatherCondition;
+    }
 
 }

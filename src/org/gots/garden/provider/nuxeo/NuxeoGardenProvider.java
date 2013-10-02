@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.provider.local.LocalGardenProvider;
 import org.gots.nuxeo.NuxeoManager;
@@ -26,6 +27,7 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 /**
@@ -143,9 +145,8 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
             // return myLocalGardens;
         }
 
-
         return synchronize(myLocalGardens, remoteGardens);
-       
+
     }
 
     protected List<GardenInterface> synchronize(List<GardenInterface> myLocalGardens,
@@ -194,11 +195,9 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 
     @Override
     public GardenInterface createGarden(GardenInterface garden) {
-        
-        return createNuxeoGarden(super.createGarden(garden));
-    }
 
-   
+        return createNuxeoGarden(garden);
+    }
 
     protected GardenInterface createNuxeoGarden(GardenInterface localGarden) {
         Log.i(TAG, "createRemoteGarden " + localGarden);
@@ -221,11 +220,9 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
                 public void onSuccess(String executionId, Object data) {
                     Document doc = (Document) data;
                     currentGarden.setUUID(doc.getId());
-//                    currentGarden = NuxeoGardenProvider.super.createGarden(currentGarden);
-                    NuxeoGardenProvider.super.updateGarden(currentGarden);
-                    //
-                    // Intent gardenIntent = new Intent(BroadCastMessages.GARDEN_EVENT);
-                    // mContext.sendBroadcast(gardenIntent);
+                    currentGarden = NuxeoGardenProvider.super.createGarden(currentGarden);
+
+                    mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
 
                     Log.d(TAG, "onSuccess " + data);
                     force_force = true;
@@ -238,37 +235,8 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
                 }
             };
             deferredUpdateMgr.execDeferredUpdate(createOperation, callback, OperationType.CREATE, true);
-            // deferredUpdateMgr.executePendingRequests(session);
-            //
-            //
-            //
-            // String dirtyString = PropertiesHelper.toStringProperties(dirty);
-            //
-            // createOperation.setInput(root).set("properties", dirtyString);
-            // if (createDocument.getName() != null) {
-            // createOperation.set("name", createDocument.getName());
-            // }
-            // documentsList.registerListener(new DocumentsListChangeListener() {
-            //
-            // @Override
-            // public void notifyContentChanged(int page) {
-            // Document doc = null;
-            // if (documentsList != null) {
-            // doc = documentsList.getCurrentDocument();
-            // }
-            // // cached-only document have a temporary id begginning with "NEW"
-            // if (doc != null && !doc.getId().startsWith("NEW")) {
-            // currentGarden.setUUID(doc.getId());
-            // NuxeoGardenProvider.super.updateGarden(currentGarden);
-            // Log.d(TAG, "notifyContentChanged on " + doc.getName() + " - " + doc.getId());
-            // }
-            // // documentsList.unregisterListener(this);
-            // }
-            // });
-            // documentsList.createDocument(createDocument, createOperation);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
-            // cancel(false);
         }
 
         return localGarden;

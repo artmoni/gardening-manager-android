@@ -241,25 +241,25 @@ public class LoginActivity extends AbstractActivity {
                             Toast.LENGTH_SHORT).show();
                     cancel(true);
                 } else {
-                    dialog = ProgressDialog.show(LoginActivity.this, "", getResources().getString(R.string.gots_loading), true);
+                    dialog = ProgressDialog.show(LoginActivity.this, "",
+                            getResources().getString(R.string.gots_loading), true);
                     dialog.setCanceledOnTouchOutside(true);
-//                    dialog.show();
+                    // dialog.show();
                 }
             };
 
-            
             @Override
             protected Session doInBackground(Void... params) {
                 Session session = null;
                 if (basicNuxeoConnect(login, password)) {
 
                     try {
+                        nuxeoManager.shutdown();
                         session = nuxeoManager.getSession();
 
                         if ("Guest".equals(session.getLogin().getUsername())) {
                             return null;
                         }
-                        gardenManager.getMyGardens(true);
                     } catch (Exception nao) {
                         if (nao != null) {
                             Log.e(TAG, "" + nao.getMessage());
@@ -274,7 +274,7 @@ public class LoginActivity extends AbstractActivity {
 
             @Override
             protected void onPostExecute(Session result) {
-                if (dialog.isShowing())
+                if (dialog != null && dialog.isShowing())
                     dialog.dismiss();
                 if (result == null) {
                     Toast.makeText(LoginActivity.this, "Error logging", Toast.LENGTH_SHORT).show();
@@ -287,9 +287,10 @@ public class LoginActivity extends AbstractActivity {
                     LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.GONE);
                     gotsPrefs.setConnectedToServer(true);
                     gotsPrefs.setLastSuccessfulNuxeoLogin(login);
+                    gardenManager.getMyGardens(true);
                 }
-                onResume();
 
+                onResume();
             };
 
             @Override
@@ -305,10 +306,10 @@ public class LoginActivity extends AbstractActivity {
     }
 
     protected void disconnect() {
-        request_basicauth_token(true);
-        gotsPrefs.setConnectedToServer(false);
+        request_basicauth_token(gotsPrefs.getNuxeoLogin(), gotsPrefs.getNuxeoPassword(), true);
         gotsPrefs.setNuxeoLogin(null);
         gotsPrefs.setNuxeoPassword("");
+        gotsPrefs.setConnectedToServer(false);
         findViewById(R.id.layoutConnect).setVisibility(View.VISIBLE);
         findViewById(R.id.layoutDisconnect).setVisibility(View.GONE);
         onResume();
@@ -318,7 +319,7 @@ public class LoginActivity extends AbstractActivity {
         String device_id = getDeviceID();
         gotsPrefs.setDeviceId(device_id);
 
-        String token = request_basicauth_token(false);
+        String token = request_basicauth_token(login, password, false);
         if (token == null) {
             return false;
         } else {
@@ -450,7 +451,7 @@ public class LoginActivity extends AbstractActivity {
 
     }
 
-    public String request_basicauth_token(boolean revoke) {
+    public String request_basicauth_token(String login, String password, boolean revoke) {
 
         // AsyncTask<Object, Void, String> task = new AsyncTask<Object, Void, String>() {
         String token = null;
@@ -474,28 +475,12 @@ public class LoginActivity extends AbstractActivity {
             URLConnection urlConnection;
             urlConnection = url.openConnection();
 
-            String login = null;
-            String password = null;
-            if (loginSpinner != null && passwordText != null) {
-                // urlConnection.addRequestProperty("X-User-Id", gotsPrefs.getNuxeoLogin());
-                login = loginSpinner.getSelectedItem().toString();
-                password = passwordText.getText().toString();
-            } else {
-                login = gotsPrefs.getNuxeoLogin();
-                password = gotsPrefs.getNuxeoPassword();
-            }
             urlConnection.addRequestProperty("X-User-Id", login);
             urlConnection.addRequestProperty("X-Device-Id", gotsPrefs.getDeviceId());
             urlConnection.addRequestProperty("X-Application-Name", gotsPrefs.getGardeningManagerAppname());
             urlConnection.addRequestProperty("Authorization",
                     "Basic " + Base64.encodeToString((login + ":" + password).getBytes(), Base64.NO_WRAP));
 
-            // urlConnection.addRequestProperty(
-            // "Authorization",
-            // "Basic "
-            // + Base64.encodeBase64((loginText.getText().toString() +
-            // ":" + passwordText.getText()
-            // .toString()).getBytes()));
             // TODO urlConnection.setConnectTimeout
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             try {

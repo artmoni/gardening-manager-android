@@ -35,12 +35,12 @@ public class GrowingSeedDBHelper {
         this.mContext = mContext;
     }
 
-//    @Override
-//    protected void finalize() throws Throwable {
-//        if (bdd != null)
-//            bdd.close();
-//        super.finalize();
-//    }
+    // @Override
+    // protected void finalize() throws Throwable {
+    // if (bdd != null)
+    // bdd.close();
+    // super.finalize();
+    // }
 
     public GrowingSeedInterface insertSeed(GrowingSeedInterface seed, String allotmentReference) {
         long rowid;
@@ -108,7 +108,7 @@ public class GrowingSeedDBHelper {
 
         try {
             Cursor cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null,
-                    DatabaseHelper.GROWINGSEED_ALLOTMENT_ID + "=" + allotmentReference, null, null, null, null);
+                    DatabaseHelper.GROWINGSEED_ALLOTMENT_ID + "='" + allotmentReference + "'", null, null, null, null);
 
             if (cursor.moveToFirst()) {
                 do {
@@ -128,8 +128,8 @@ public class GrowingSeedDBHelper {
         bdd = growingSeedSQLite.getWritableDatabase();
 
         try {
-            Cursor cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, DatabaseHelper.GROWINGSEED_ID + "="
-                    + growingSeedId, null, null, null, null);
+            Cursor cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, DatabaseHelper.GROWINGSEED_ID
+                    + "='" + growingSeedId + "'", null, null, null, null);
 
             if (cursor.moveToFirst()) {
 
@@ -147,7 +147,7 @@ public class GrowingSeedDBHelper {
         bdd = growingSeedSQLite.getWritableDatabase();
 
         bdd.delete(DatabaseHelper.GROWINGSEEDS_TABLE_NAME,
-                DatabaseHelper.GROWINGSEED_ID + "=" + seed.getGrowingSeedId(), null);
+                DatabaseHelper.GROWINGSEED_ID + "='" + seed.getGrowingSeedId() + "'", null);
         // close();
     }
 

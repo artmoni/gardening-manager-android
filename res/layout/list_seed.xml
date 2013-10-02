@@ -20,7 +20,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentRight="true"
-        android:padding="5dp"
+        android:layout_margin="5dp"
         android:src="@drawable/action_sow" >
     </org.gots.action.view.ActionWidget>
 
