@@ -16,6 +16,27 @@
             android:background="@drawable/bg_hut_top" >
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/linearlayoutSearchBox"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone" >
+
+            <EditText
+                android:id="@+id/edittextSearchFilter"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Search filter" />
+
+            <ImageButton
+                android:id="@+id/clearSearchFilter"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_menu_close_clear_cancel" />
+        </LinearLayout>
+
         <android.support.v4.view.ViewPager
             android:id="@+id/pager"
             android:layout_width="match_parent"

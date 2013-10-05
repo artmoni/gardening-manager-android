@@ -8,11 +8,13 @@
  * Contributors:
  *     sfleury - initial API and implementation
  ******************************************************************************/
-package org.gots.weather.sql;
+package org.gots.weather.provider.local;
 
 import java.util.Date;
 
 import org.gots.DatabaseHelper;
+import org.gots.preferences.GotsPreferences;
+import org.gots.utils.GotsDBHelper;
 import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
 
@@ -21,36 +23,22 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-public class WeatherDBHelper {
-
-    private DatabaseHelper databaseSQLite;
-
-    private SQLiteDatabase bdd;
-
-    Context mContext;
+public class WeatherDBHelper extends GotsDBHelper {
 
     public WeatherDBHelper(Context mContext) {
-        databaseSQLite = DatabaseHelper.getInstance(mContext);
-        this.mContext = mContext;
+        super(mContext);
     }
-
-    // @Override
-    // protected void finalize() throws Throwable {
-    // if (bdd != null)
-    // bdd.close();
-    // super.finalize();
-    // }
 
     public synchronized WeatherConditionInterface insertWeather(WeatherConditionInterface weatherCondition) {
         long rowid;
-        bdd = databaseSQLite.getWritableDatabase();
+//        open();
         ContentValues values = getWeatherContentValues(weatherCondition);
 
         try {
 
             rowid = bdd.insert(DatabaseHelper.WEATHER_TABLE_NAME, null, values);
         } finally {
-            bdd.close();
+            // bdd.close();
         }
 
         weatherCondition.setId((int) rowid);
@@ -59,7 +47,7 @@ public class WeatherDBHelper {
 
     public synchronized WeatherConditionInterface updateWeather(WeatherConditionInterface weatherCondition) {
         long rowid;
-        bdd = databaseSQLite.getWritableDatabase();
+//        open();
         ContentValues values = getWeatherContentValues(weatherCondition);
 
         try {
@@ -67,7 +55,7 @@ public class WeatherDBHelper {
             rowid = bdd.update(DatabaseHelper.WEATHER_TABLE_NAME, values, DatabaseHelper.WEATHER_DAYOFYEAR + "="
                     + weatherCondition.getDayofYear(), null);
         } finally {
-            bdd.close();
+            // bdd.close();
         }
 
         return weatherCondition;
@@ -105,7 +93,7 @@ public class WeatherDBHelper {
     public synchronized WeatherConditionInterface getWeatherByDayofyear(int dayofyear) {
         WeatherConditionInterface weatherCondition = null;
 
-        bdd = databaseSQLite.getReadableDatabase();
+//        open();
         try {
             Cursor cursor = bdd.query(DatabaseHelper.WEATHER_TABLE_NAME, null, DatabaseHelper.WEATHER_DAYOFYEAR + "="
                     + dayofyear, null, null, null, null);
@@ -115,7 +103,7 @@ public class WeatherDBHelper {
             }
             cursor.close();
         } finally {
-            bdd.close();
+//            close();
         }
         return weatherCondition;
     }

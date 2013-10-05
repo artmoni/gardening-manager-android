@@ -4,9 +4,9 @@ import java.util.Calendar;
 
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.weather.WeatherConditionInterface;
+import org.gots.weather.provider.local.WeatherDBHelper;
 import org.gots.weather.provider.previmeteo.PrevimeteoWeatherProvider;
 import org.gots.weather.provider.previmeteo.WeatherProvider;
-import org.gots.weather.sql.WeatherDBHelper;
 
 import android.app.Service;
 import android.content.Intent;

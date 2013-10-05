@@ -10,10 +10,13 @@
  ******************************************************************************/
 package org.gots.seed.adapter;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
+
+import javax.xml.ws.Holder;
 
 import org.gots.R;
 import org.gots.action.SeedActionInterface;
@@ -25,6 +28,7 @@ import org.gots.ads.GotsAdvertisement;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.SeedUtil;
 import org.gots.seed.view.SeedWidgetLong;
 import org.gots.ui.NewSeedActivity;
 
@@ -35,8 +39,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 
-public class ListVendorSeedAdapter extends BaseAdapter {
+public class ListVendorSeedAdapter extends BaseAdapter implements Filterable {
 
     private BuyingAction buying;
 
@@ -46,13 +52,19 @@ public class ListVendorSeedAdapter extends BaseAdapter {
 
     private List<BaseSeedInterface> vendorSeeds;
 
+    private List<BaseSeedInterface> vendorSeedsFilter;
+
     // private int nbAds = 0;
     // private int frequencyAds = 4;
     private View adsView;
 
+    private HolderFilter holderFilter;
+
     public ListVendorSeedAdapter(Context context, List<BaseSeedInterface> vendorSeeds) {
         // super(context);
         this.vendorSeeds = vendorSeeds;
+        vendorSeedsFilter = new ArrayList<BaseSeedInterface>();
+        vendorSeedsFilter.addAll(vendorSeeds);
         mContext = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -60,6 +72,18 @@ public class ListVendorSeedAdapter extends BaseAdapter {
 
         GotsAdvertisement ads = new GotsAdvertisement(mContext);
         adsView = ads.getAdsLayout();
+
+    }
+
+    public class Holder {
+        public SeedWidgetLong seedWidgetLong;
+
+        public ActionWidget actionWidget;
+
+        // public Holder( SeedWidgetLong seedWidgetLong, ActionWidget actionWidget) {
+        // this.seedWidgetLong=seedWidgetLong;
+        // this.actionWidget=actionWidget;
+        // }
     }
 
     @Override
@@ -67,21 +91,23 @@ public class ListVendorSeedAdapter extends BaseAdapter {
 
         View vi = convertView;
         final BaseSeedInterface currentSeed = getItem(position);
-        SeedWidgetLong seedWidgetLong;
-        ActionWidget actionWidget;
+        Holder holder;
 
-        if (vi == null)
+        if (vi == null) {
             vi = inflater.inflate(R.layout.list_seed, null);
+            holder = new Holder();
+            holder.actionWidget = (ActionWidget) vi.findViewById(R.id.IdSeedAction);
+            holder.seedWidgetLong = (SeedWidgetLong) vi.findViewById(R.id.idSeedWidgetLong);
+            vi.setTag(holder);
+        } else
+            holder = (Holder) vi.getTag();
 
-        seedWidgetLong = (SeedWidgetLong) vi.findViewById(R.id.idSeedWidgetLong);
-        actionWidget = (ActionWidget) vi.findViewById(R.id.IdSeedAction);
-
-        seedWidgetLong.setSeed(currentSeed);
+        holder.seedWidgetLong.setSeed(currentSeed);
 
         buying = new BuyingAction(mContext);
         buying.setState(ActionState.NORMAL);
-        actionWidget.setAction(buying);
-        actionWidget.setOnClickListener(new View.OnClickListener() {
+        holder.actionWidget.setAction(buying);
+        holder.actionWidget.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -132,7 +158,7 @@ public class ListVendorSeedAdapter extends BaseAdapter {
         harvestTime.setTime(sowTime.getTime());
         harvestTime.add(Calendar.DAY_OF_MONTH, currentSeed.getDurationMin());
 
-        seedWidgetLong.setOnLongClickListener(new View.OnLongClickListener() {
+        holder.seedWidgetLong.setOnLongClickListener(new View.OnLongClickListener() {
 
             @Override
             public boolean onLongClick(View v) {
@@ -157,23 +183,70 @@ public class ListVendorSeedAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return vendorSeeds.size();
+        return vendorSeedsFilter.size();
     }
 
     @Override
     public BaseSeedInterface getItem(int position) {
 
-        return vendorSeeds.get(position);
+        return vendorSeedsFilter.get(position);
     }
 
     @Override
     public long getItemId(int position) {
 
-        return vendorSeeds.get(position).getSeedId();
+        return vendorSeedsFilter.get(position).getSeedId();
     }
 
     public void setSeeds(List<BaseSeedInterface> vendorSeeds) {
         this.vendorSeeds = vendorSeeds;
+        vendorSeedsFilter = new ArrayList<BaseSeedInterface>();
+        vendorSeedsFilter.addAll(vendorSeeds);
     }
 
+    @Override
+    public Filter getFilter() {
+        if (holderFilter == null) {
+            holderFilter = new HolderFilter();
+        }
+        return holderFilter;
+    }
+
+    private class HolderFilter extends Filter {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults results = new FilterResults();
+            if (constraint == null || constraint.length() == 0) {
+                results.values = vendorSeeds;
+                results.count = vendorSeeds.size();
+            } else {
+                List<BaseSeedInterface> nHolderList = new ArrayList<BaseSeedInterface>();
+                for (BaseSeedInterface seed : vendorSeeds) {
+                    if (SeedUtil.translateSpecie(mContext, seed).toUpperCase().startsWith(
+                            constraint.toString().toUpperCase()))
+                        nHolderList.add(seed);
+                }
+                results.values = nHolderList;
+                results.count = nHolderList.size();
+            }
+            return results;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            if (results.count == 0)
+                notifyDataSetInvalidated();
+            else {
+                vendorSeedsFilter = (ArrayList<BaseSeedInterface>) results.values;
+                notifyDataSetChanged();
+            }
+        }
+    }
+
+    @Override
+    public void notifyDataSetInvalidated() {
+        vendorSeedsFilter = vendorSeeds;
+        super.notifyDataSetInvalidated();
+    }
 }

@@ -14,25 +14,20 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.gots.DatabaseHelper;
+import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.utils.GotsDBHelper;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-public class GrowingSeedDBHelper {
-
-    private DatabaseHelper growingSeedSQLite;
-
-    private SQLiteDatabase bdd;
-
-    Context mContext;
+public class GrowingSeedDBHelper extends GotsDBHelper{
 
     public GrowingSeedDBHelper(Context mContext) {
-        growingSeedSQLite = DatabaseHelper.getInstance(mContext);
-        this.mContext = mContext;
+        super(mContext);
     }
 
     // @Override
@@ -44,7 +39,7 @@ public class GrowingSeedDBHelper {
 
     public GrowingSeedInterface insertSeed(GrowingSeedInterface seed, String allotmentReference) {
         long rowid;
-        bdd = growingSeedSQLite.getWritableDatabase();
+//        open();
 
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.GROWINGSEED_SEED_ID, seed.getSeedId());
@@ -67,7 +62,7 @@ public class GrowingSeedDBHelper {
     public ArrayList<GrowingSeedInterface> getGrowingSeeds() {
         ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
         GrowingSeedInterface searchedSeed = new GrowingSeed();
-        bdd = growingSeedSQLite.getWritableDatabase();
+//        open();
 
         try {
             Cursor cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, null, null, null, null, null);
@@ -104,7 +99,7 @@ public class GrowingSeedDBHelper {
     public ArrayList<GrowingSeedInterface> getSeedsByAllotment(String allotmentReference) {
         ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
         GrowingSeedInterface searchedSeed = new GrowingSeed();
-        bdd = growingSeedSQLite.getWritableDatabase();
+//        open();
 
         try {
             Cursor cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null,
@@ -125,7 +120,7 @@ public class GrowingSeedDBHelper {
 
     public GrowingSeedInterface getSeedById(int growingSeedId) {
         GrowingSeedInterface searchedSeed = null;
-        bdd = growingSeedSQLite.getWritableDatabase();
+//        open();
 
         try {
             Cursor cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, DatabaseHelper.GROWINGSEED_ID
@@ -144,7 +139,7 @@ public class GrowingSeedDBHelper {
     }
 
     public void deleteGrowingSeed(GrowingSeedInterface seed) {
-        bdd = growingSeedSQLite.getWritableDatabase();
+//        open();
 
         bdd.delete(DatabaseHelper.GROWINGSEEDS_TABLE_NAME,
                 DatabaseHelper.GROWINGSEED_ID + "='" + seed.getGrowingSeedId() + "'", null);

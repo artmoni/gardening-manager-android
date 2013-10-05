@@ -272,33 +272,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				+ ALLOTMENT_UUID + " STRING"
 					+ ");";
 
-    private static DatabaseHelper helper = null;
+//    private static DatabaseHelper helper = null;
 
-    private static boolean newInstance=false;
+//    private static boolean newInstance=false;
 		//@formatter:on
 
-    public static synchronized DatabaseHelper getInstance(Context context) {
-        if (helper == null || newInstance) {
-            GotsPreferences.getInstance().initIfNew(context);
-            helper = new DatabaseHelper(context);
-            
-        }
+//    public static synchronized DatabaseHelper getInstance(Context context) {
+//        if (helper == null || newInstance) {
+//            GotsPreferences.getInstance().initIfNew(context);
+//            helper = new DatabaseHelper(context);
+//            
+//        }
+//
+//        return helper;
+//    }
 
-        return helper;
-    }
-
-    private DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME.concat(String.valueOf(GotsPreferences.getInstance().get(
-                GotsPreferences.ORG_GOTS_CURRENT_GARDENID, 0))), null, DATABASE_VERSION);
+    public DatabaseHelper(Context context, int currentGardenId) {
+        super(context, DATABASE_NAME.concat(String.valueOf(currentGardenId)), null, DATABASE_VERSION);
+        
     }
 
     /*
      * Change database after changing GotsPreferences.ORG_GOTS_CURRENT_GARDENID
      */
-    public void changeDatabase() {
-        close();
-        newInstance = true;
-    }
+//    public void changeDatabase() {
+//        close();
+//        newInstance = true;
+//    }
 
     @Override
     public void onCreate(SQLiteDatabase db) {

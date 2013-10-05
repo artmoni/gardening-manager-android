@@ -1,5 +1,6 @@
 package org.gots.seed;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -33,10 +34,17 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     private List<BaseSeedInterface> newSeeds;
 
+    private List<BaseSeedInterface> allSeeds;
+
     private static Exception firstCall;
+
+    private List<BaseSeedInterface> myStock;
+
+    private boolean stockChanged;
 
     private GotsSeedManager() {
         // mLocalProvider = new LocalSeedProvider(mContext);
+        allSeeds = new ArrayList<BaseSeedInterface>();
     }
 
     protected void setSeedProvider() {
@@ -82,10 +90,12 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     @Override
     public List<BaseSeedInterface> getVendorSeeds(boolean force) {
-        NuxeoSeedProvider provider = new NuxeoSeedProvider(mContext);
-        List<BaseSeedInterface> vendorSeeds = provider.getVendorSeeds(force);
-        newSeeds = provider.getNewSeeds();
-        return vendorSeeds;
+        if (force) {
+            NuxeoSeedProvider provider = new NuxeoSeedProvider(mContext);
+            allSeeds = provider.getVendorSeeds(force);
+            newSeeds = provider.getNewSeeds();
+        }
+        return allSeeds;
     }
 
     @Override
@@ -129,7 +139,7 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     @Override
     public BaseSeedInterface updateSeed(BaseSeedInterface newSeed) {
         return mSeedProvider.updateSeed(newSeed);
-        
+
     }
 
     @Override
@@ -142,7 +152,9 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
             }
 
             protected void onPostExecute(Void result) {
-                mContext.sendBroadcast( new Intent(BroadCastMessages.SEED_DISPLAYLIST));
+                mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
+                stockChanged = true;
+
             };
         }.execute(garden);
 
@@ -158,17 +170,17 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
             }
 
             protected void onPostExecute(Void result) {
-                mContext.sendBroadcast( new Intent(BroadCastMessages.SEED_DISPLAYLIST));
+                mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
+                stockChanged = true;
             };
         }.execute(garden);
-
 
     }
 
     @Override
     public List<BaseSeedInterface> getMyStock(GardenInterface garden) {
-        
-        List<BaseSeedInterface> myStock = mSeedProvider.getMyStock(garden);
+        if (stockChanged || myStock == null)
+            myStock = mSeedProvider.getMyStock(garden);
         return myStock;
     }
 

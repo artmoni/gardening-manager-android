@@ -18,8 +18,10 @@ import java.util.List;
 import org.gots.DatabaseHelper;
 import org.gots.action.ActionFactory;
 import org.gots.action.BaseActionInterface;
+import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
+import org.gots.utils.GotsDBHelper;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -27,68 +29,24 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-public class VendorSeedDBHelper {
+public class VendorSeedDBHelper extends GotsDBHelper {
 
     private static VendorSeedDBHelper helper = null;
 
     private List<BaseSeedInterface> allSeeds = new ArrayList<BaseSeedInterface>();
-
-    private DatabaseHelper databaseHelper;
-
-    private SQLiteDatabase bdd;
 
     Context mContext;
 
     private String VendorSeedDBHelper;
 
     public VendorSeedDBHelper(Context mContext) {
-        databaseHelper = DatabaseHelper.getInstance(mContext);
-        this.mContext = mContext;
+        super(mContext);
     }
-
-    // public static synchronized VendorSeedDBHelper getInstance(Context mContext) {
-    // if (helper == null) {
-    // helper = new VendorSeedDBHelper(mContext);
-    // }
-    //
-    // return helper;
-    // }
-
-    //
-    // public synchronized void open() {
-    // // on ouvre la BDD en écriture
-    // bdd = databaseHelper.getWritableDatabase();
-    // }
-
-    // public synchronized void close() {
-    // // on ferme l'accès à la BDD
-    // bdd.close();
-    // }
-
-    // // IMPORT FROM OTHER SOURCE
-    // public void loadFromXML(Context mContext) {
-    // BaseFeedParser parser = new BaseFeedParser(mContext);
-    // allSeeds = parser.parse(R.raw.seedbak);
-    // for (int i = 0; i < allSeeds.size(); i++) {
-    // BaseSeedInterface seed = allSeeds.get(i);
-    // insertSeed(seed);
-    //
-    // ActionDBHelper actionHelper = new ActionDBHelper(mContext);
-    // for (Iterator<BaseActionInterface> iterator = seed.getActionToDo().iterator(); iterator.hasNext();) {
-    // BaseActionInterface action = iterator.next();
-    // if (action != null && !actionHelper.isExist(action))
-    // // if (action != null)
-    // actionHelper.insertAction(action);
-    //
-    // }
-    //
-    // }
-    // }
 
     public synchronized BaseSeedInterface insertSeed(BaseSeedInterface seed) {
         // Création d'un ContentValues (fonctionne comme une HashMap)
         long rowid;
-        bdd = databaseHelper.getWritableDatabase();
+//        open();
         ContentValues values = getContentValuesFromSeed(seed);
 
         try {
@@ -101,14 +59,9 @@ public class VendorSeedDBHelper {
         return seed;
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-    }
-
     public synchronized BaseSeedInterface updateSeed(BaseSeedInterface seed) {
         // Création d'un ContentValues (fonctionne comme une HashMap)
-        bdd = databaseHelper.getWritableDatabase();
+//        open();
         ContentValues values = getContentValuesFromSeed(seed);
         Cursor cursor;
 
@@ -166,7 +119,7 @@ public class VendorSeedDBHelper {
     }
 
     public synchronized String[] getArraySeeds() {
-        bdd = databaseHelper.getWritableDatabase();
+//        open();
         Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, null, null, null, null, null);
 
         String[] arraySeeds = new String[managedCursor.getCount()];
@@ -185,7 +138,7 @@ public class VendorSeedDBHelper {
     }
 
     public synchronized ArrayList<String> getArrayFamily() {
-        bdd = databaseHelper.getReadableDatabase();
+//        open();
         Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, null, null, DatabaseHelper.SEED_FAMILY,
                 null, null);
 
@@ -208,7 +161,7 @@ public class VendorSeedDBHelper {
     }
 
     public synchronized String[] getArraySpecie() {
-        bdd = databaseHelper.getReadableDatabase();
+//        open();
         Cursor managedCursor = bdd.query(DatabaseHelper.SPECIE_TABLE_NAME, null, null, null, null, null, null);
 
         String[] arraySpecie = new String[managedCursor.getCount()];
@@ -227,7 +180,7 @@ public class VendorSeedDBHelper {
     }
 
     public synchronized String getFamilyBySpecie(String specie) {
-        bdd = databaseHelper.getReadableDatabase();
+//        open();
         // Cursor managedCursor = bdd.query(DatabaseHelper.FAMILY_ID, null,
         // DatabaseHelper.SEED_ID + "=" + seed.getId(), null, null,
         // null, null);
@@ -246,7 +199,7 @@ public class VendorSeedDBHelper {
     }
 
     public synchronized String[] getArrayVarietyBySpecie(String specie) {
-        bdd = databaseHelper.getReadableDatabase();
+//        open();
 
         Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_SPECIE + "='"
                 + specie + "'", null, null, null, null);
@@ -267,7 +220,7 @@ public class VendorSeedDBHelper {
     }
 
     public synchronized String[] getArrayVariety() {
-        bdd = databaseHelper.getReadableDatabase();
+//        open();
         Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_VARIETY + "<>"
                 + "''", null, DatabaseHelper.SEED_VARIETY, null, null);
 
@@ -287,10 +240,11 @@ public class VendorSeedDBHelper {
         return arrayFamily;
     }
 
+
     public synchronized ArrayList<BaseSeedInterface> getMySeeds() {
         ArrayList<BaseSeedInterface> mySeeds = new ArrayList<BaseSeedInterface>();
         BaseSeedInterface searchedSeed = new GrowingSeed();
-        bdd = databaseHelper.getReadableDatabase();
+//        open();
         Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_NBSACHET + ">0",
                 null, null, null, null);
 
@@ -309,7 +263,7 @@ public class VendorSeedDBHelper {
         ArrayList<BaseSeedInterface> vendorSeeds = new ArrayList<BaseSeedInterface>();
         try {
             BaseSeedInterface searchedSeed = new GrowingSeed();
-            bdd = databaseHelper.getReadableDatabase();
+//            open();
             Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, null, null, null, null, null);
 
             if (managedCursor.moveToFirst()) {
@@ -328,7 +282,7 @@ public class VendorSeedDBHelper {
 
     public synchronized BaseSeedInterface getSeedByName(String name) {
         BaseSeedInterface searchedSeed = new GrowingSeed();
-        bdd = databaseHelper.getReadableDatabase();
+//        open();
         Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_NAME + " like \""
                 + name + "\"", null, null, null, null);
 
@@ -344,7 +298,7 @@ public class VendorSeedDBHelper {
 
     public synchronized BaseSeedInterface getSeedByBarCode(String barecode) {
         BaseSeedInterface searchedSeed = new GrowingSeed();
-        bdd = databaseHelper.getReadableDatabase();
+//        open();
         Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_BARECODE + "=\""
                 + barecode + "\"", null, null, null, null);
 
@@ -358,7 +312,7 @@ public class VendorSeedDBHelper {
 
     public synchronized BaseSeedInterface getSeedById(int id) {
         BaseSeedInterface searchedSeed = null;
-        bdd = databaseHelper.getReadableDatabase();
+//        open();
 
         Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_ID + "='" + id
                 + "'", null, null, null, null);
@@ -375,7 +329,7 @@ public class VendorSeedDBHelper {
 
     public synchronized BaseSeedInterface getSeedByUUID(String reference) {
         BaseSeedInterface searchedSeed = null;
-        bdd = databaseHelper.getReadableDatabase();
+//        open();
         Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_UUID + "='"
                 + reference + "'", null, null, null, null);
         // Log.d("getSeedById", "ID=>"+id+" / QUERY=>"+bdd.ge)
@@ -455,8 +409,7 @@ public class VendorSeedDBHelper {
 
     public synchronized Object remove(BaseSeedInterface vendorSeed) {
         long rowid;
-        bdd = databaseHelper.getWritableDatabase();
-
+//        open();
         try {
             rowid = bdd.delete(DatabaseHelper.SEEDS_TABLE_NAME, DatabaseHelper.SEED_ID + "='" + vendorSeed.getSeedId()
                     + "'", null);

@@ -117,6 +117,7 @@ public class AllotmentManager extends BroadcastReceiver implements AllotmentProv
 
     @Override
     public void setCurrentAllotment(BaseAllotmentInterface allotmentInterface) {
+
         allotmentProvider.setCurrentAllotment(allotmentInterface);
     }
 }

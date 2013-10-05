@@ -26,7 +26,7 @@ import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.WeatherSet;
 import org.gots.weather.provider.WeatherCache;
-import org.gots.weather.sql.WeatherDBHelper;
+import org.gots.weather.provider.local.WeatherDBHelper;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
@@ -34,14 +34,10 @@ import android.content.Context;
 import android.text.format.DateFormat;
 import android.util.Log;
 
-public class PrevimeteoWeatherProvider extends AbstractProvider implements WeatherProvider {
+public class PrevimeteoWeatherProvider extends WeatherDBHelper implements WeatherProvider {
     private static final String TAG = "PrevimeteoWeatherTask";
 
     protected URL url;
-
-    // private Date requestedDay;
-
-    private Context mContext;
 
     private static String queryString;
 
@@ -51,9 +47,10 @@ public class PrevimeteoWeatherProvider extends AbstractProvider implements Weath
 
     private WeatherCache cache;
 
+
     public PrevimeteoWeatherProvider(Context context) {
         super(context);
-        mContext = context;
+
         try {
             Address address = GardenManager.getInstance().getCurrentGarden().getAddress();
             String weatherURL;
@@ -74,6 +71,7 @@ public class PrevimeteoWeatherProvider extends AbstractProvider implements Weath
         }
 
     }
+
 
     // @Override
     // protected WeatherConditionInterface doInBackground(Object... arg0) {
@@ -167,7 +165,6 @@ public class PrevimeteoWeatherProvider extends AbstractProvider implements Weath
      */
     @Override
     public WeatherConditionInterface updateCondition(WeatherConditionInterface condition, Date day) {
-        WeatherDBHelper helper = new WeatherDBHelper(mContext);
         WeatherConditionInterface conditionInterface = null;
         Calendar conditionDate = Calendar.getInstance();
         // conditionDate.add(Calendar.DAY_OF_YEAR, day);
@@ -175,12 +172,12 @@ public class PrevimeteoWeatherProvider extends AbstractProvider implements Weath
         condition.setDate(day);
         condition.setDayofYear(conditionDate.get(Calendar.DAY_OF_YEAR));
 
-        WeatherConditionInterface wc = helper.getWeatherByDayofyear(conditionDate.get(Calendar.DAY_OF_YEAR));
+        WeatherConditionInterface wc = super.getWeatherByDayofyear(conditionDate.get(Calendar.DAY_OF_YEAR));
 
         if (wc == null)
-            conditionInterface = helper.insertWeather(condition);
+            conditionInterface = super.insertWeather(condition);
         else
-            conditionInterface = helper.updateWeather(condition);
+            conditionInterface = super.updateWeather(condition);
         return conditionInterface;
     }
 }

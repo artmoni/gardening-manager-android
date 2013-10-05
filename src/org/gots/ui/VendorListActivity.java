@@ -25,12 +25,18 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.DataSetObserver;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.Menu;
@@ -62,7 +68,9 @@ public class VendorListActivity extends AbstractListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-
+        case R.id.idSeedFilter:
+            displaySearchBox();
+            return true;
         case R.id.refresh_seed:
             Intent seedIntent = new Intent(mContext, SeedUpdateService.class);
             mContext.startService(seedIntent);
@@ -73,14 +81,49 @@ public class VendorListActivity extends AbstractListFragment {
         }
     }
 
+    private void displaySearchBox() {
+
+        getActivity().findViewById(R.id.linearlayoutSearchBox).setVisibility(View.VISIBLE);
+        EditText filter = (EditText) getActivity().findViewById(R.id.edittextSearchFilter);
+        filter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable arg0) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                listVendorSeedAdapter.getFilter().filter(s.toString());
+            }
+        });
+        ImageButton clear = (ImageButton) getActivity().findViewById(R.id.clearSearchFilter);
+        clear.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                closeSearchBox();
+            }
+
+        });
+    }
+
+    private void closeSearchBox() {
+        EditText filter = (EditText) getActivity().findViewById(R.id.edittextSearchFilter);
+        filter.setText("");
+        getActivity().findViewById(R.id.linearlayoutSearchBox).setVisibility(View.GONE);
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(filter.getWindowToken(), 0);
+    }
+
     public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            // updateUI(intent);
-            
-           
             updateVendorSeeds();
-
         }
     };
 

@@ -9,30 +9,22 @@ import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.preferences.GotsPreferences;
 import org.gots.provider.AbstractProvider;
+import org.gots.utils.GotsDBHelper;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-public class LocalAllotmentProvider extends AbstractProvider implements AllotmentProvider {
+public class LocalAllotmentProvider extends GotsDBHelper implements AllotmentProvider {
 
-    private DatabaseHelper actionSeedSQLite;
 
-    private SQLiteDatabase bdd;
 
     public LocalAllotmentProvider(Context mContext) {
         super(mContext);
-        actionSeedSQLite = DatabaseHelper.getInstance(mContext);
+
     }
 
-    public void open() {
-        bdd = actionSeedSQLite.getWritableDatabase();
-    }
-
-    public void close() {
-        bdd.close();
-    }
 
     protected BaseAllotmentInterface convertToAllotment(Cursor cursor) {
         BaseAllotmentInterface lot = new Allotment();
@@ -63,12 +55,12 @@ public class LocalAllotmentProvider extends AbstractProvider implements Allotmen
 
     @Override
     public void setCurrentAllotment(BaseAllotmentInterface allotmentInterface) {
-        gotsPrefs.set(GotsPreferences.ORG_GOTS_CURRENT_ALLOTMENT, allotmentInterface.getId());
+        gotsPrefs.initIfNew(mContext).set(GotsPreferences.ORG_GOTS_CURRENT_ALLOTMENT, allotmentInterface.getId());
     }
 
     public BaseAllotmentInterface getAllotment(int id) {
         BaseAllotmentInterface allotment = null;
-        open();
+//        open();
         Cursor cursor;
 
         cursor = bdd.query(DatabaseHelper.ALLOTMENT_TABLE_NAME, null, DatabaseHelper.ALLOTMENT_ID + "=" + id, null,
@@ -78,7 +70,7 @@ public class LocalAllotmentProvider extends AbstractProvider implements Allotmen
             allotment = convertToAllotment(cursor);
         }
         cursor.close();
-        close();
+//        close();
         return allotment;
     }
 
@@ -86,7 +78,7 @@ public class LocalAllotmentProvider extends AbstractProvider implements Allotmen
     public List<BaseAllotmentInterface> getMyAllotments() {
 
         ArrayList<BaseAllotmentInterface> allAllotment = new ArrayList<BaseAllotmentInterface>();
-        open();
+//        open();
         Cursor cursor = bdd.query(DatabaseHelper.ALLOTMENT_TABLE_NAME, null, null, null, null, null, null);
 
         if (cursor.moveToFirst()) {
@@ -96,7 +88,7 @@ public class LocalAllotmentProvider extends AbstractProvider implements Allotmen
             } while (cursor.moveToNext());
         }
         cursor.close();
-        close();
+//        close();
         return allAllotment;
     }
 
@@ -104,29 +96,29 @@ public class LocalAllotmentProvider extends AbstractProvider implements Allotmen
     public BaseAllotmentInterface createAllotment(BaseAllotmentInterface allotment) {
 
         long rowid;
-        open();
+//        open();
         ContentValues values = convertToContentValues(allotment);
 
         // values.put(DatabaseHelper.ACTIONSEED_DATEACTIONDONE, Calendar.getInstance().getTimeInMillis());
 
         rowid = bdd.insert(DatabaseHelper.ALLOTMENT_TABLE_NAME, null, values);
         allotment.setId(Long.valueOf(rowid).intValue());
-        close();
+//        close();
         return allotment;
     }
 
     @Override
     public int removeAllotment(BaseAllotmentInterface allotment) {
-        open();
+//        open();
         int nbRow = bdd.delete(DatabaseHelper.ALLOTMENT_TABLE_NAME,
                 DatabaseHelper.ALLOTMENT_ID + "=" + allotment.getId() + "", null);
-        close();
+//        close();
         return nbRow;
     }
 
     @Override
     public BaseAllotmentInterface updateAllotment(BaseAllotmentInterface allotment) {
-        open();
+//        open();
         ContentValues values = convertToContentValues(allotment);
         Cursor cursor;
         try {
@@ -153,7 +145,7 @@ public class LocalAllotmentProvider extends AbstractProvider implements Allotmen
         } finally {
             // close();
         }
-        close();
+//        close();
 
         return allotment;
     }

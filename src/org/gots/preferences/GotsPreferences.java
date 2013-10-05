@@ -129,14 +129,14 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     /**
      * If it was already called once, the method returns without any change.
      */
-    public synchronized void initIfNew(Context context) {
-        if (initDone) {
-            return;
+    public synchronized GotsPreferences initIfNew(Context context) {
+        if (!initDone) {
+            mContext = context;
+            setSharedPreferences(PreferenceManager.getDefaultSharedPreferences(context));
+            setGardeningManagerServerURI(ISDEVELOPMENT ? GARDENING_MANAGER_NUXEO_AUTOMATION_TEST : GARDENING_MANAGER_NUXEO_AUTOMATION);
+            initDone = true;
         }
-        mContext = context;
-        setSharedPreferences(PreferenceManager.getDefaultSharedPreferences(context));
-        setGardeningManagerServerURI(ISDEVELOPMENT ? GARDENING_MANAGER_NUXEO_AUTOMATION_TEST : GARDENING_MANAGER_NUXEO_AUTOMATION);
-        initDone = true;
+        return this;
     }
 
     public SharedPreferences getSharedPrefs() {

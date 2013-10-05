@@ -20,6 +20,7 @@ import org.gots.analytics.GotsAnalytics;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.help.HelpUriBuilder;
+import org.gots.preferences.GotsPreferences;
 import org.nuxeo.ecm.automation.client.jaxrs.Constants;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
@@ -45,6 +46,7 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -140,6 +142,10 @@ public class LoginActivity extends AbstractActivity {
 
     protected void buildLayoutDisconnected() {
 
+        if (GotsPreferences.isDevelopment()) {
+            findViewById(R.id.tableDebug).setVisibility(View.VISIBLE);
+
+        }
         loginSpinner = (Spinner) findViewById(R.id.spinnerLogin);
         ArrayAdapter<String> account_name_adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, getAccounts("com.google"));
@@ -233,7 +239,12 @@ public class LoginActivity extends AbstractActivity {
 
             @Override
             protected void onPreExecute() {
+
                 login = String.valueOf(loginSpinner.getSelectedItem());
+                if (GotsPreferences.isDevelopment()) {
+                    EditText logindebug = (EditText) findViewById(R.id.edittextLoginDebug);
+                    login = logindebug.getText().toString();
+                }
                 password = passwordText.getText().toString();
 
                 if ("".equals(login) || "".equals(password)) {
