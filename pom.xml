@@ -64,11 +64,11 @@
       <artifactId>analytics</artifactId>
       <version>1.4.2</version>
     </dependency>
-    <dependency>
+   <!--  <dependency>
       <groupId>com.newrelic.agent.android</groupId>
       <artifactId>android-agent</artifactId>
       <version>2.426.0</version>
-    </dependency>
+    </dependency> -->
     <dependency>
       <groupId>com.google.android.admob</groupId>
       <artifactId>admob</artifactId>

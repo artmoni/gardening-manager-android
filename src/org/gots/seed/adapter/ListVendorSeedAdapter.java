@@ -32,6 +32,8 @@ import org.gots.seed.SeedUtil;
 import org.gots.seed.view.SeedWidgetLong;
 import org.gots.ui.NewSeedActivity;
 
+import com.google.ads.ac;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -41,6 +43,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.LinearLayout;
 
 public class ListVendorSeedAdapter extends BaseAdapter implements Filterable {
 
@@ -80,6 +83,7 @@ public class ListVendorSeedAdapter extends BaseAdapter implements Filterable {
 
         public ActionWidget actionWidget;
 
+        public LinearLayout actionBox;
         // public Holder( SeedWidgetLong seedWidgetLong, ActionWidget actionWidget) {
         // this.seedWidgetLong=seedWidgetLong;
         // this.actionWidget=actionWidget;
@@ -98,12 +102,27 @@ public class ListVendorSeedAdapter extends BaseAdapter implements Filterable {
             holder = new Holder();
             holder.actionWidget = (ActionWidget) vi.findViewById(R.id.IdSeedAction);
             holder.seedWidgetLong = (SeedWidgetLong) vi.findViewById(R.id.idSeedWidgetLong);
+            holder.actionBox = (LinearLayout) convertView.findViewById(R.id.IdSeedAction);
             vi.setTag(holder);
         } else
             holder = (Holder) vi.getTag();
 
         holder.seedWidgetLong.setSeed(currentSeed);
+        holder.seedWidgetLong.setTag(holder.actionBox);
+        holder.seedWidgetLong.setOnClickListener(new View.OnClickListener() {
 
+            @Override
+            public void onClick(View v) {
+                View actionsView = (View) v.getTag();
+                if (actionsView == null)
+                    return;
+                if (actionsView.getVisibility() == View.VISIBLE)
+                    actionsView.setVisibility(View.GONE);
+                else
+                    actionsView.setVisibility(View.VISIBLE);
+
+            }
+        });
         buying = new BuyingAction(mContext);
         buying.setState(ActionState.NORMAL);
         holder.actionWidget.setAction(buying);

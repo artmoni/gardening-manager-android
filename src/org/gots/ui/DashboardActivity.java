@@ -40,7 +40,6 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
-import com.newrelic.agent.android.NewRelic;
 
 public class DashboardActivity extends AbstractActivity implements OnClickListener {
     // GoogleAnalyticsTracker tracker;
