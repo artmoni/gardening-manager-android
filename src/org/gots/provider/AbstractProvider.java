@@ -21,7 +21,6 @@
  * *********************************************************************** */
 package org.gots.provider;
 
-import org.gots.garden.GardenManager;
 import org.gots.preferences.GotsPreferences;
 
 import android.content.Context;

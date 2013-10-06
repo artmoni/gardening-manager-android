@@ -2,7 +2,6 @@ package org.gots.garden.provider.local;
 
 import java.util.List;
 
-import org.gots.DatabaseHelper;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.provider.GardenProvider;
 import org.gots.garden.sql.GardenDBHelper;

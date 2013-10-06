@@ -8,7 +8,6 @@ import org.gots.action.BaseActionInterface;
 import org.gots.action.adapter.SimpleListActionAdapter;
 import org.gots.action.sql.ActionDBHelper;
 import org.gots.action.sql.ActionSeedDBHelper;
-import org.gots.analytics.GotsAnalytics;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.local.sql.GrowingSeedDBHelper;
 import org.gots.seed.view.SeedWidgetLong;

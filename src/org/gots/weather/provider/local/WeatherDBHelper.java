@@ -13,7 +13,6 @@ package org.gots.weather.provider.local;
 import java.util.Date;
 
 import org.gots.DatabaseHelper;
-import org.gots.preferences.GotsPreferences;
 import org.gots.utils.GotsDBHelper;
 import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
@@ -21,7 +20,6 @@ import org.gots.weather.WeatherConditionInterface;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 public class WeatherDBHelper extends GotsDBHelper {
 

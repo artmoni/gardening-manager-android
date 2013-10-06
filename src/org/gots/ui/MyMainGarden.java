@@ -17,15 +17,12 @@ import java.util.Random;
 import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.allotment.adapter.ListAllotmentAdapter;
-import org.gots.analytics.GotsAnalytics;
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
-import org.gots.help.HelpUriBuilder;
 import org.gots.weather.view.WeatherWidget;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.LinearLayout;
@@ -35,7 +32,6 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class MyMainGarden extends AbstractActivity {
 

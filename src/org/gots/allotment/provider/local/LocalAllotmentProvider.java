@@ -8,13 +8,11 @@ import org.gots.allotment.provider.AllotmentProvider;
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.preferences.GotsPreferences;
-import org.gots.provider.AbstractProvider;
 import org.gots.utils.GotsDBHelper;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 public class LocalAllotmentProvider extends GotsDBHelper implements AllotmentProvider {
 

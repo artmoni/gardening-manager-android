@@ -23,7 +23,6 @@ import org.gots.action.GardeningActionInterface;
 import org.gots.action.sql.ActionDBHelper;
 import org.gots.action.sql.ActionSeedDBHelper;
 import org.gots.allotment.provider.local.LocalAllotmentProvider;
-import org.gots.analytics.GotsAnalytics;
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.bean.Garden;

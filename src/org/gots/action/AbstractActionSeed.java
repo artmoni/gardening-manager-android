@@ -19,11 +19,8 @@ import org.gots.garden.GardenManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.SeedUtil;
 
 import android.content.Context;
-import android.os.Looper;
-import android.widget.Toast;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 

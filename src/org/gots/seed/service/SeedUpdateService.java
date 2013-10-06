@@ -3,17 +3,10 @@ package org.gots.seed.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.gots.R;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsSeedManager;
-import org.gots.seed.SeedUtil;
-import org.gots.seed.view.SeedWidget;
-import org.gots.ui.HutActivity;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.AsyncTask;

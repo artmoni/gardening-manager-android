@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import org.gots.R;
 import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.ads.GotsAdvertisement;
-import org.gots.analytics.GotsAnalytics;
 import org.gots.help.HelpUriBuilder;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.local.sql.GrowingSeedDBHelper;
@@ -32,7 +31,6 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class ActionActivity extends AbstractActivity implements OnClickListener {
 

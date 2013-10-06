@@ -14,7 +14,6 @@ import java.util.ArrayList;
 
 import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
-import org.gots.help.HelpUriBuilder;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.local.sql.VendorSeedDBHelper;
@@ -22,7 +21,6 @@ import org.gots.ui.fragment.AbstractFragmentActivity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;

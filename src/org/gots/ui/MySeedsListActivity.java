@@ -15,9 +15,7 @@ import java.util.List;
 
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.garden.GardenManager;
 import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.GotsSeedManager;
 import org.gots.seed.adapter.MySeedsListAdapter;
 import org.gots.ui.fragment.AbstractListFragment;
 
@@ -27,7 +25,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ListAdapter;
 
 public class MySeedsListActivity extends AbstractListFragment {

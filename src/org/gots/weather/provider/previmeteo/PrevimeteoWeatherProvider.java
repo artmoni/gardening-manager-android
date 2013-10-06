@@ -21,7 +21,6 @@ import javax.xml.parsers.SAXParserFactory;
 import org.gots.bean.Address;
 import org.gots.garden.GardenManager;
 import org.gots.preferences.GotsPreferences;
-import org.gots.provider.AbstractProvider;
 import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.WeatherSet;

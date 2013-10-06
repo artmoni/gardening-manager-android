@@ -12,10 +12,8 @@ package org.gots.ui;
 
 import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
-import org.gots.analytics.GotsAnalytics;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
-import org.gots.help.HelpUriBuilder;
 import org.gots.weather.service.WeatherUpdateService;
 import org.gots.weather.view.WeatherView;
 import org.gots.weather.view.WeatherWidget;
@@ -24,7 +22,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;

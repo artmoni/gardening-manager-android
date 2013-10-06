@@ -1,7 +1,6 @@
 package org.gots.ui;
 
 import org.gots.R;
-import org.gots.analytics.GotsAnalytics;
 
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -17,7 +16,6 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class AboutActivity extends AbstractActivity {
     private AboutActivity mContext;

@@ -16,8 +16,6 @@ import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import javax.xml.ws.Holder;
-
 import org.gots.R;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.adapter.comparator.ISeedSpecieComparator;
@@ -31,8 +29,6 @@ import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.view.SeedWidgetLong;
 import org.gots.ui.NewSeedActivity;
-
-import com.google.ads.ac;
 
 import android.content.Context;
 import android.content.Intent;

@@ -17,7 +17,6 @@ import org.gots.ads.GotsAdvertisement;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.adapter.ProfileAdapter;
-import org.gots.help.HelpUriBuilder;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -26,7 +25,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;

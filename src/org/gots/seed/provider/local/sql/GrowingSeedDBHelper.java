@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.gots.DatabaseHelper;
-import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.utils.GotsDBHelper;
@@ -22,7 +21,6 @@ import org.gots.utils.GotsDBHelper;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 public class GrowingSeedDBHelper extends GotsDBHelper{
 

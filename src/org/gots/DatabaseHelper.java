@@ -14,7 +14,6 @@ import java.util.ArrayList;
 
 import org.gots.action.AbstractActionSeed;
 import org.gots.garden.sql.GardenSQLite;
-import org.gots.preferences.GotsPreferences;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

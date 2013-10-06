@@ -11,21 +11,17 @@
 package org.gots.ui;
 
 import org.gots.R;
-import org.gots.analytics.GotsAnalytics;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsSeedManager;
-import org.gots.seed.provider.local.sql.VendorSeedDBHelper;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Gallery;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class SeedActivity extends SherlockFragment {
     private int seedId;

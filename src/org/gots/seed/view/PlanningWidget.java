@@ -12,15 +12,12 @@ package org.gots.seed.view;
 
 import java.util.ArrayList;
 
-import org.gots.R;
 import org.gots.seed.adapter.PlanningSowAdapter;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.widget.GridLayout;
 import android.widget.GridView;
-import android.widget.LinearLayout;
 
 public class PlanningWidget extends GridView {
 

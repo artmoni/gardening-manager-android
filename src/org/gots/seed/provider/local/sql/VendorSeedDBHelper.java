@@ -18,7 +18,6 @@ import java.util.List;
 import org.gots.DatabaseHelper;
 import org.gots.action.ActionFactory;
 import org.gots.action.BaseActionInterface;
-import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
 import org.gots.utils.GotsDBHelper;
@@ -26,7 +25,6 @@ import org.gots.utils.GotsDBHelper;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 public class VendorSeedDBHelper extends GotsDBHelper {

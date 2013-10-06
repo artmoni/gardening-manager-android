@@ -13,10 +13,6 @@ package org.gots.ui;
 import org.gots.R;
 import org.gots.help.HelpUriBuilder;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.view.MenuItem;
-import com.google.zxing.integration.android.IntentIntegrator;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -25,6 +21,9 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.view.MenuItem;
 
 public class WebHelpActivity extends AbstractActivity {
     private ProgressDialog pd;

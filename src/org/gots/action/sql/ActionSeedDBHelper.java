@@ -18,11 +18,8 @@ import java.util.GregorianCalendar;
 import org.gots.DatabaseHelper;
 import org.gots.action.BaseActionInterface;
 import org.gots.action.util.ActionState;
-import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.utils.GotsDBHelper;
-
-import com.google.ads.m;
 
 import android.content.ContentValues;
 import android.content.Context;
