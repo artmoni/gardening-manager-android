@@ -75,7 +75,7 @@
                 android:layout_height="0dip"
                 android:background="@color/white"
                 android:horizontalSpacing="2dp"
-                android:numColumns="auto_fit"
+                android:numColumns="4"
                 android:verticalSpacing="2dp" 
                 android:layout_weight="1">
             </GridView>

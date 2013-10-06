@@ -12,85 +12,85 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@drawable/bg_line_action"
-        android:orientation="vertical" android:padding="10dp">
+        android:orientation="vertical"
+        android:padding="10dp" >
 
         <TextView
             android:id="@+id/textView1"
+            style="@style/description_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="@string/action.planning"
-            style="@style/description_content"/>
+            android:text="@string/action.planning" />
 
         <org.gots.seed.view.SeedWidgetLong
             android:id="@+id/seedWidgetLong"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
 
+        <GridView
+            android:id="@+id/idListAction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:horizontalSpacing="1dp"
+            android:numColumns="auto_fit"
+            android:verticalSpacing="1dp" >
+        </GridView>
+
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" android:baselineAligned="false">
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
 
-            <GridView
-                android:id="@+id/idListAction"
+            <Spinner
+                android:id="@+id/spinnerDuration"
+                style="@style/description_content"
                 android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:horizontalSpacing="1dp"
-                android:numColumns="2"
-                android:verticalSpacing="1dp" >
-            </GridView>
-
-            <LinearLayout
-                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical" >
+                android:background="@drawable/button_red_selector" />
 
-                <Spinner
-                    android:id="@+id/spinnerDuration"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" style="@style/description_content" />
+            <RadioGroup
+                android:id="@+id/radioGroupSelectDuration"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
 
-                <RadioGroup
-                    android:id="@+id/radioGroupSelectDuration"
+                <RadioButton
+                    android:id="@+id/radioDay"
+                    style="@style/description_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" >
+                    android:checked="true"
+                    android:text="@string/day" />
 
-                    <RadioButton
-                        android:id="@+id/radioDay"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="@string/day"
-                        style="@style/description_content" />
+                <RadioButton
+                    android:id="@+id/radioWeek"
+                    style="@style/description_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/week" />
 
-                    <RadioButton
-                        android:id="@+id/radioWeek"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/week"
-                        style="@style/description_content"/>
-
-                    <RadioButton
-                        android:id="@+id/radioMonth"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/month"
-                        style="@style/description_content" />
-                </RadioGroup>
-            </LinearLayout>
+                <RadioButton
+                    android:id="@+id/radioMonth"
+                    style="@style/description_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/month" />
+            </RadioGroup>
         </LinearLayout>
 
         <Button
             android:id="@+id/buttonPlanAction"
+            style="@style/button"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="@string/profile.location.validate" />
+            android:background="@drawable/button_green_selector"
+            android:text="@string/profile.location.validate"
+            android:textColor="@color/white" />
     </LinearLayout>
 
 </LinearLayout>
