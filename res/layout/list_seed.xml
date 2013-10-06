@@ -5,19 +5,36 @@
     android:orientation="vertical"
     android:padding="1dp" >
 
-    <org.gots.seed.view.SeedWidgetLong
-        android:id="@+id/idSeedWidgetLong"
+    <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:paddingRight="55dp"
-        android:src="@drawable/vegetdefault" >
-    </org.gots.seed.view.SeedWidgetLong>
+        android:layout_height="wrap_content" >
+
+        <org.gots.seed.view.SeedWidgetLong
+            android:id="@+id/idSeedWidgetLong"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:paddingRight="55dp"
+            android:src="@drawable/vegetdefault" >
+        </org.gots.seed.view.SeedWidgetLong>
+
+        <ImageView
+            android:id="@+id/idSeedImageSelected"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignRight="@+id/idSeedWidgetLong"
+            android:layout_alignBottom="@+id/idSeedWidgetLong"
+            android:src="@drawable/arrow_selector" />
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/IdActionsLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:background="@drawable/bg_line_action"
         android:orientation="horizontal"
         android:visibility="gone" >

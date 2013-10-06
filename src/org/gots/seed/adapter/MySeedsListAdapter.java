@@ -43,63 +43,25 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
 
-public class MySeedsListAdapter extends BaseAdapter implements OnClickListener {
-    private Context mContext;
-
-    private List<BaseSeedInterface> mySeeds = new ArrayList<BaseSeedInterface>();
+public class MySeedsListAdapter extends SeedListAdapter {
 
     private BaseAllotmentInterface allotment;
 
-    private LayoutInflater inflater;
-
-    // private SeedWidgetLong seedWidget;
-    // private ActionWidget actionWidget;
-
-    // final private static int nbActionToDisplay = 5;
 
     public MySeedsListAdapter(Context context, BaseAllotmentInterface allotment, List<BaseSeedInterface> seeds) {
-        this.mContext = context;
-        // this.mySeeds.addAll(mySeeds);
+        super(context, seeds);
         this.allotment = allotment;
-        this.mySeeds = seeds;
-        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        Collections.sort(mySeeds, new ISeedSpecieComparator(context));
-
-    }
-
-    @Override
-    public int getCount() {
-        return mySeeds.size();
-    }
-
-    @Override
-    public BaseSeedInterface getItem(int position) {
-
-        return mySeeds.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        View vi = convertView;
+        View vi = super.getView(position, convertView, parent);
+        Holder holder = (Holder)vi.getTag();
         final BaseSeedInterface currentSeed = getItem(position);
 
-        SeedWidgetLong seedWidgetLong;
-        ActionWidget actionWidget;
 
-        if (vi == null)
-            vi = inflater.inflate(R.layout.list_seed, null);
-
-        seedWidgetLong = (SeedWidgetLong) vi.findViewById(R.id.idSeedWidgetLong);
-        actionWidget = (ActionWidget) vi.findViewById(R.id.IdSeedAction);
-
-        seedWidgetLong.setSeed(currentSeed);
+        holder.seedWidgetLong.setSeed(currentSeed);
 
         BaseActionInterface action = null;
         if (allotment != null) {
@@ -120,9 +82,9 @@ public class MySeedsListAdapter extends BaseAdapter implements OnClickListener {
             action.setState(ActionState.NORMAL);
         }
 
-        actionWidget.setAction(action);
+        holder.actionWidget.setAction(action);
         final BaseActionInterface baseActionInterface = action;
-        actionWidget.setOnClickListener(new View.OnClickListener() {
+        holder.actionWidget.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -143,9 +105,10 @@ public class MySeedsListAdapter extends BaseAdapter implements OnClickListener {
                     @Override
                     protected void onPostExecute(Void result) {
                         // notifyDataSetChanged();
-                        Toast.makeText(mContext,
-                                SeedUtil.translateAction(mContext, baseActionInterface) + " - " + SeedUtil.translateSpecie(mContext, currentSeed),
-                                Toast.LENGTH_LONG).show();
+                        Toast.makeText(
+                                mContext,
+                                SeedUtil.translateAction(mContext, baseActionInterface) + " - "
+                                        + SeedUtil.translateSpecie(mContext, currentSeed), Toast.LENGTH_LONG).show();
                         mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
                         super.onPostExecute(result);
                     }
@@ -173,18 +136,4 @@ public class MySeedsListAdapter extends BaseAdapter implements OnClickListener {
 
     }
 
-    @Override
-    public void notifyDataSetChanged() {
-
-        super.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onClick(View v) {
-
-    }
-
-    public void setSeeds(List<BaseSeedInterface> seeds) {
-        mySeeds = seeds;
-    }
 }

@@ -16,7 +16,8 @@ import java.util.List;
 import org.gots.R;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.adapter.ListVendorSeedAdapter;
+import org.gots.seed.adapter.SeedListAdapter;
+import org.gots.seed.adapter.VendorSeedListAdapter;
 import org.gots.seed.service.SeedUpdateService;
 import org.gots.ui.fragment.AbstractListFragment;
 
@@ -44,14 +45,14 @@ public class VendorListActivity extends AbstractListFragment {
 
     public Context mContext;
 
-    public ListVendorSeedAdapter listVendorSeedAdapter;
+    public SeedListAdapter listVendorSeedAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         mContext = getActivity();
         mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.SEED_DISPLAYLIST));
-        listVendorSeedAdapter = new ListVendorSeedAdapter(mContext, new ArrayList<BaseSeedInterface>());
+        listVendorSeedAdapter = new VendorSeedListAdapter(mContext, new ArrayList<BaseSeedInterface>());
         setListAdapter(listVendorSeedAdapter);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
