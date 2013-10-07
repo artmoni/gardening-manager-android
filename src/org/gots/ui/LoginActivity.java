@@ -18,9 +18,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.gots.R;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.preferences.GotsPreferences;
-import org.gots.utils.AsyncLoadTasks;
-import org.gots.utils.ClientCredentials;
-import org.gots.utils.GoogleKeyInitializer;
+import org.gots.service.GoogleAuthManager;
 import org.nuxeo.ecm.automation.client.jaxrs.Constants;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
@@ -620,128 +618,24 @@ public class LoginActivity extends AbstractActivity {
     }
 
     void launchGoogle() {
+        String url = "https://accounts.google.com";
+        String command = "/o/oauth2/device/code";
+        String clientId = "473239775303.apps.googleusercontent.com";
+        String scope = "https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile";
+        GoogleAuthManager googleAuthManager = new GoogleAuthManager(this);
+        googleAuthManager.connectGoogle(url, command, clientId, scope);
         // Google Accounts
-        ClientCredentials.errorIfNotSpecified();
-        service = com.google.api.services.tasks.Tasks.builder(transport,
-                jsonFactory).setApplicationName("Google-TasksAndroidSample/1.0").setHttpRequestInitializer(
-                credential).setJsonHttpRequestInitializer(
-                new GoogleKeyInitializer(ClientCredentials.KEY)).build();
-        settings = getPreferences(MODE_PRIVATE);
-        accountName = settings.getString(PREF_ACCOUNT_NAME, null);
-        credential.setAccessToken(settings.getString(PREF_AUTH_TOKEN, null));
-        accountManager = new GoogleAccountManager(this);
-        gotAccount();
+        // ClientCredentials.errorIfNotSpecified();
+        // service = com.google.api.services.tasks.Tasks.builder(transport,
+        // jsonFactory).setApplicationName("Google-TasksAndroidSample/1.0").setHttpRequestInitializer(
+        // credential).setJsonHttpRequestInitializer(
+        // new GoogleKeyInitializer(ClientCredentials.KEY)).build();
+        // settings = getPreferences(MODE_PRIVATE);
+        // accountName = settings.getString(PREF_ACCOUNT_NAME, null);
+        // credential.setAccessToken(settings.getString(PREF_AUTH_TOKEN, null));
+        // accountManager = new GoogleAccountManager(this);
+        // gotAccount();
 
-    }
-
-    void gotAccount() {
-        Account account = accountManager.getAccountByName(accountName);
-        if (account == null) {
-            chooseAccount();
-            return;
-        }
-        if (credential.getAccessToken() != null) {
-            onAuthToken();
-            return;
-        }
-        accountManager.getAccountManager().getAuthToken(account,
-                AUTH_TOKEN_TYPE, true, new AccountManagerCallback<Bundle>() {
-
-                    public void run(AccountManagerFuture<Bundle> future) {
-                        try {
-                            Bundle bundle = future.getResult();
-                            if (bundle.containsKey(AccountManager.KEY_INTENT)) {
-                                Intent intent = bundle.getParcelable(AccountManager.KEY_INTENT);
-                                intent.setFlags(intent.getFlags()
-                                        & ~Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivityForResult(intent,
-                                        REQUEST_AUTHENTICATE);
-                            } else if (bundle.containsKey(AccountManager.KEY_AUTHTOKEN)) {
-                                setAuthToken(bundle.getString(AccountManager.KEY_AUTHTOKEN));
-                                onAuthToken();
-                            }
-                        } catch (Exception e) {
-                            Log.e(TAG, e.getMessage(), e);
-                        }
-                    }
-                }, null);
-    }
-
-    private void chooseAccount() {
-        accountManager.getAccountManager().getAuthTokenByFeatures(
-                GoogleAccountManager.ACCOUNT_TYPE, AUTH_TOKEN_TYPE, null,
-                LoginActivity.this, null, null,
-                new AccountManagerCallback<Bundle>() {
-
-                    public void run(AccountManagerFuture<Bundle> future) {
-                        Bundle bundle;
-                        try {
-                            bundle = future.getResult();
-                            setAccountName(bundle.getString(AccountManager.KEY_ACCOUNT_NAME));
-                            setAuthToken(bundle.getString(AccountManager.KEY_AUTHTOKEN));
-                            onAuthToken();
-                        } catch (OperationCanceledException e) {
-                            // user canceled
-                        } catch (AuthenticatorException e) {
-                            Log.e(TAG, e.getMessage(), e);
-                        } catch (IOException e) {
-                            Log.e(TAG, e.getMessage(), e);
-                        }
-                    }
-                }, null);
-    }
-
-    void setAccountName(String accountName) {
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString(PREF_ACCOUNT_NAME, accountName);
-        editor.commit();
-        this.accountName = accountName;
-    }
-
-    void setAuthToken(String authToken) {
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString(PREF_AUTH_TOKEN, authToken);
-        editor.commit();
-        credential.setAccessToken(authToken);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-        case REQUEST_AUTHENTICATE:
-            if (resultCode == RESULT_OK) {
-                gotAccount();
-            } else {
-                chooseAccount();
-            }
-            break;
-        }
-    }
-
-    void onAuthToken() {
-        new AsyncLoadTasks(this).execute();
-    }
-
-    public void onRequestCompleted() {
-        received401 = false;
-    }
-
-    public void handleGoogleException(IOException e) {
-        if (e instanceof GoogleJsonResponseException) {
-            GoogleJsonResponseException exception = (GoogleJsonResponseException) e;
-            if (exception.getStatusCode() == 401 && !received401) {
-                received401 = true;
-                accountManager.invalidateAuthToken(credential.getAccessToken());
-                credential.setAccessToken(null);
-                SharedPreferences.Editor editor2 = settings.edit();
-                editor2.remove(PREF_AUTH_TOKEN);
-                editor2.commit();
-                gotAccount();
-                return;
-            }
-        }
-        Log.e(TAG, e.getMessage(), e);
     }
 
     @Override

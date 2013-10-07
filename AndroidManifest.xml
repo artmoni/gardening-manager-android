@@ -140,6 +140,7 @@
         <service android:name=".action.service.ActionNotificationService" />
         <service android:name=".weather.service.WeatherUpdateService" />
         <service android:name=".seed.service.SeedUpdateService" />
+      <service android:name=".service.QueryService"/>
     </application>
 
 </manifest>
