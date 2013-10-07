@@ -34,7 +34,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.util.Base64;
-//import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -51,6 +50,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+//import android.util.Base64;
 
 public class LoginActivity extends AbstractActivity {
     protected static final String TAG = "LoginActivity";
@@ -87,7 +87,7 @@ public class LoginActivity extends AbstractActivity {
     protected void refreshConnectionState() {
         if (mMenu == null)
             return;
-        MenuItem connectionItem = (MenuItem) mMenu.findItem(R.id.connection);
+        MenuItem connectionItem = mMenu.findItem(R.id.connection);
         if (gotsPrefs.isConnectedToServer()) {
             connectionItem.setIcon(getResources().getDrawable(R.drawable.garden_connected));
         } else {
@@ -311,7 +311,7 @@ public class LoginActivity extends AbstractActivity {
     }
 
     protected void disconnect() {
-        request_basicauth_token(gotsPrefs.getNuxeoLogin(), gotsPrefs.getNuxeoPassword(), true);
+        // request_basicauth_token(gotsPrefs.getNuxeoLogin(), gotsPrefs.getNuxeoPassword(), true);
         gotsPrefs.setNuxeoLogin(null);
         gotsPrefs.setNuxeoPassword("");
         gotsPrefs.setConnectedToServer(false);
