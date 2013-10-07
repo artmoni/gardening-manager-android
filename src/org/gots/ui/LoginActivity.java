@@ -18,23 +18,30 @@ import org.apache.http.message.BasicNameValuePair;
 import org.gots.R;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.preferences.GotsPreferences;
+import org.gots.utils.AsyncLoadTasks;
+import org.gots.utils.ClientCredentials;
+import org.gots.utils.GoogleKeyInitializer;
 import org.nuxeo.ecm.automation.client.jaxrs.Constants;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.accounts.AuthenticatorException;
+import android.accounts.OperationCanceledException;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.util.Base64;
-//import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -51,8 +58,37 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
+import com.google.api.client.googleapis.extensions.android.accounts.GoogleAccountManager;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.tasks.Tasks;
+
+//import android.util.Base64;
 
 public class LoginActivity extends AbstractActivity {
+
+    // This must be the exact string, and is a special for alias OAuth 2 scope
+    // "https://www.googleapis.com/auth/tasks"
+    private static final String AUTH_TOKEN_TYPE = "Manage your tasks";
+
+    private static final int REQUEST_AUTHENTICATE = 0;
+
+    final HttpTransport transport = AndroidHttp.newCompatibleTransport();
+
+    static final String PREF_AUTH_TOKEN = "authToken";
+
+    GoogleAccountManager accountManager;
+
+    SharedPreferences settings;
+
+    String accountName;
+
+    private boolean received401;
+
     protected static final String TAG = "LoginActivity";
 
     private Spinner loginSpinner;
@@ -61,11 +97,20 @@ public class LoginActivity extends AbstractActivity {
 
     private ActionBar bar;
 
+    GoogleCredential credential;
+
+    public Tasks service;
+
+    private static final String PREF_ACCOUNT_NAME = "accountName";
+
+    final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-        this.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
+        this.registerReceiver(seedBroadcastReceiver, new IntentFilter(
+                BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
 
         bar = getSupportActionBar();
         bar.setDisplayHomeAsUpEnabled(true);
@@ -89,9 +134,11 @@ public class LoginActivity extends AbstractActivity {
             return;
         MenuItem connectionItem = (MenuItem) mMenu.findItem(R.id.connection);
         if (gotsPrefs.isConnectedToServer()) {
-            connectionItem.setIcon(getResources().getDrawable(R.drawable.garden_connected));
+            connectionItem.setIcon(getResources().getDrawable(
+                    R.drawable.garden_connected));
         } else {
-            connectionItem.setIcon(getResources().getDrawable(R.drawable.garden_disconnected));
+            connectionItem.setIcon(getResources().getDrawable(
+                    R.drawable.garden_disconnected));
 
         }
     }
@@ -103,7 +150,8 @@ public class LoginActivity extends AbstractActivity {
         // hide keyboard
         InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         if (this.getCurrentFocus() != null) {
-            inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(),
+            inputManager.hideSoftInputFromWindow(
+                    this.getCurrentFocus().getWindowToken(),
                     InputMethodManager.HIDE_NOT_ALWAYS);
         }
 
@@ -141,8 +189,9 @@ public class LoginActivity extends AbstractActivity {
 
         }
         loginSpinner = (Spinner) findViewById(R.id.spinnerLogin);
-        ArrayAdapter<String> account_name_adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, getAccounts("com.google"));
+        ArrayAdapter<String> account_name_adapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item,
+                getAccounts("com.google"));
         loginSpinner.setAdapter(account_name_adapter);
         // loginText = (TextView) findViewById(R.id.edittextLogin);
         // loginText.setText(gotsPrefs.getLastSuccessfulNuxeoLogin());
@@ -155,12 +204,13 @@ public class LoginActivity extends AbstractActivity {
 
             @Override
             public void onClick(View v) {
-                Toast.makeText(LoginActivity.this, getResources().getString(R.string.feature_unavalaible),
+                Toast.makeText(LoginActivity.this,
+                        getResources().getString(R.string.feature_unavalaible),
                         Toast.LENGTH_SHORT).show();
-                GoogleAnalyticsTracker.getInstance().trackEvent("Login", "GoogleAuthentication",
-                        "Request this new feature", 0);
+                GoogleAnalyticsTracker.getInstance().trackEvent("Login",
+                        "GoogleAuthentication", "Request this new feature", 0);
 
-                // launchGoogle();
+                launchGoogle();
                 // tokenNuxeoConnect();
 
                 // finish();
@@ -174,21 +224,27 @@ public class LoginActivity extends AbstractActivity {
 
             @Override
             public void onClick(View v) {
-                GoogleAnalyticsTracker.getInstance().trackEvent("Login", "SimpleAuthentication", "Request account", 0);
+                GoogleAnalyticsTracker.getInstance().trackEvent("Login",
+                        "SimpleAuthentication", "Request account", 0);
 
                 // send mail
                 Intent i = new Intent(Intent.ACTION_SEND);
                 i.setType("message/rfc822");
-                i.putExtra(Intent.EXTRA_EMAIL, new String[] { "account@gardening-manager.com" });
-                i.putExtra(Intent.EXTRA_SUBJECT, "Gardening Manager / Account / Ask for new account");
-                i.putExtra(Intent.EXTRA_TEXT,
+                i.putExtra(Intent.EXTRA_EMAIL,
+                        new String[] { "account@gardening-manager.com" });
+                i.putExtra(Intent.EXTRA_SUBJECT,
+                        "Gardening Manager / Account / Ask for new account");
+                i.putExtra(
+                        Intent.EXTRA_TEXT,
                         "Hello,\n\nI want to participate to the Gardening Manager beta version.\n\nMy Google account is: "
                                 + loginSpinner.getSelectedItem().toString()
                                 + "\n\nI know I will receive my password quickly.\n\n");
                 try {
                     startActivity(Intent.createChooser(i, "Send mail..."));
                 } catch (android.content.ActivityNotFoundException ex) {
-                    Toast.makeText(LoginActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this,
+                            "There are no email clients installed.",
+                            Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -242,12 +298,16 @@ public class LoginActivity extends AbstractActivity {
                 password = passwordText.getText().toString();
 
                 if ("".equals(login) || "".equals(password)) {
-                    Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_missinginformation),
+                    Toast.makeText(
+                            LoginActivity.this,
+                            getResources().getString(
+                                    R.string.login_missinginformation),
                             Toast.LENGTH_SHORT).show();
                     cancel(true);
                 } else {
                     dialog = ProgressDialog.show(LoginActivity.this, "",
-                            getResources().getString(R.string.gots_loading), true);
+                            getResources().getString(R.string.gots_loading),
+                            true);
                     dialog.setCanceledOnTouchOutside(true);
                     // dialog.show();
                 }
@@ -282,14 +342,17 @@ public class LoginActivity extends AbstractActivity {
                 if (dialog != null && dialog.isShowing())
                     dialog.dismiss();
                 if (result == null) {
-                    Toast.makeText(LoginActivity.this, "Error logging", Toast.LENGTH_SHORT).show();
-                    LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.VISIBLE);
+                    Toast.makeText(LoginActivity.this, "Error logging",
+                            Toast.LENGTH_SHORT).show();
+                    LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(
+                            View.VISIBLE);
                     gotsPrefs.setConnectedToServer(false);
                     gotsPrefs.setNuxeoLogin(null);
                     gotsPrefs.setLastSuccessfulNuxeoLogin(null);
 
                 } else {
-                    LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.GONE);
+                    LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(
+                            View.GONE);
                     gotsPrefs.setConnectedToServer(true);
                     gotsPrefs.setLastSuccessfulNuxeoLogin(login);
                     gardenManager.getMyGardens(true);
@@ -311,7 +374,8 @@ public class LoginActivity extends AbstractActivity {
     }
 
     protected void disconnect() {
-        request_basicauth_token(gotsPrefs.getNuxeoLogin(), gotsPrefs.getNuxeoPassword(), true);
+        request_basicauth_token(gotsPrefs.getNuxeoLogin(),
+                gotsPrefs.getNuxeoPassword(), true);
         gotsPrefs.setNuxeoLogin(null);
         gotsPrefs.setNuxeoPassword("");
         gotsPrefs.setConnectedToServer(false);
@@ -336,7 +400,8 @@ public class LoginActivity extends AbstractActivity {
     }
 
     protected String getDeviceID() {
-        String device_id = Secure.getString(getContentResolver(), Secure.ANDROID_ID);
+        String device_id = Secure.getString(getContentResolver(),
+                Secure.ANDROID_ID);
         return device_id;
     }
 
@@ -364,8 +429,10 @@ public class LoginActivity extends AbstractActivity {
                 try {
                     String email = "toto.tata@gmail.com";
                     Session session = nuxeoManager.getSession();
-                    Documents docs = (Documents) session.newRequest("Document.Email").setHeader(
-                            Constants.HEADER_NX_SCHEMAS, "*").set("email", email).execute();
+                    Documents docs = (Documents) session.newRequest(
+                            "Document.Email").setHeader(
+                            Constants.HEADER_NX_SCHEMAS, "*").set("email",
+                            email).execute();
 
                     // String uri =
                     // GotsPreferences.getInstance(getApplicationContext())
@@ -456,9 +523,11 @@ public class LoginActivity extends AbstractActivity {
 
     }
 
-    public String request_basicauth_token(String login, String password, boolean revoke) {
+    public String request_basicauth_token(String login, String password,
+            boolean revoke) {
 
-        // AsyncTask<Object, Void, String> task = new AsyncTask<Object, Void, String>() {
+        // AsyncTask<Object, Void, String> task = new AsyncTask<Object, Void,
+        // String>() {
         String token = null;
 
         // @Override
@@ -467,9 +536,12 @@ public class LoginActivity extends AbstractActivity {
             String uri = gotsPrefs.getNuxeoAuthenticationURI();
 
             List<NameValuePair> params = new LinkedList<NameValuePair>();
-            params.add(new BasicNameValuePair("deviceId", gotsPrefs.getDeviceId()));
-            params.add(new BasicNameValuePair("applicationName", gotsPrefs.getGardeningManagerAppname()));
-            params.add(new BasicNameValuePair("deviceDescription", Build.MODEL + "(" + Build.MANUFACTURER + ")"));
+            params.add(new BasicNameValuePair("deviceId",
+                    gotsPrefs.getDeviceId()));
+            params.add(new BasicNameValuePair("applicationName",
+                    gotsPrefs.getGardeningManagerAppname()));
+            params.add(new BasicNameValuePair("deviceDescription", Build.MODEL
+                    + "(" + Build.MANUFACTURER + ")"));
             params.add(new BasicNameValuePair("permission", "ReadWrite"));
             params.add(new BasicNameValuePair("revoke", String.valueOf(revoke)));
 
@@ -481,31 +553,41 @@ public class LoginActivity extends AbstractActivity {
             urlConnection = url.openConnection();
 
             urlConnection.addRequestProperty("X-User-Id", login);
-            urlConnection.addRequestProperty("X-Device-Id", gotsPrefs.getDeviceId());
-            urlConnection.addRequestProperty("X-Application-Name", gotsPrefs.getGardeningManagerAppname());
-            urlConnection.addRequestProperty("Authorization",
-                    "Basic " + Base64.encodeToString((login + ":" + password).getBytes(), Base64.NO_WRAP));
+            urlConnection.addRequestProperty("X-Device-Id",
+                    gotsPrefs.getDeviceId());
+            urlConnection.addRequestProperty("X-Application-Name",
+                    gotsPrefs.getGardeningManagerAppname());
+            urlConnection.addRequestProperty(
+                    "Authorization",
+                    "Basic "
+                            + Base64.encodeToString(
+                                    (login + ":" + password).getBytes(),
+                                    Base64.NO_WRAP));
 
             // TODO urlConnection.setConnectTimeout
-            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+            InputStream in = new BufferedInputStream(
+                    urlConnection.getInputStream());
             try {
                 // readStream(in);
                 StringBuilder builder = new StringBuilder();
                 String line;
-                BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(in, "UTF-8"));
                 while ((line = reader.readLine()) != null) {
                     builder.append(line);
                 }
 
                 token = builder.toString();
                 Log.d("LoginActivity", "Token acquired: " + token);
-                GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Login", "Success", 0);
+                GoogleAnalyticsTracker.getInstance().trackEvent(
+                        "Authentication", "Login", "Success", 0);
 
             } finally {
                 in.close();
             }
         } catch (IOException e) {
-            GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Login", "Failure", 0);
+            GoogleAnalyticsTracker.getInstance().trackEvent("Authentication",
+                    "Login", "Failure", 0);
             Log.e(TAG, e.getMessage(), e);
         }
         return token;
@@ -521,7 +603,8 @@ public class LoginActivity extends AbstractActivity {
             return true;
         case R.id.help:
             Intent browserIntent = new Intent(this, WebHelpActivity.class);
-            browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
+            browserIntent.putExtra(WebHelpActivity.URL,
+                    getClass().getSimpleName());
             startActivity(browserIntent);
             return true;
         case R.id.connection:
@@ -537,42 +620,128 @@ public class LoginActivity extends AbstractActivity {
     }
 
     void launchGoogle() {
-        // // if (isChecked) {
-        // // loginBox.setVisibility(View.VISIBLE);
-        // //
-        // // // Create an instance of SocialAuthConfgi object
-        // SocialAuthConfig config = SocialAuthConfig.getDefault();
-        // //
-        // // // load configuration. By default load the configuration
-        // // // from oauth_consumer.properties.
-        // // // You can also pass input stream, properties object or
-        // // // properties file name.
-        // try {
-        // config.load();
-        //
-        // // Create an instance of SocialAuthManager and set
-        // // config
-        // SocialAuthManager manager = new SocialAuthManager();
-        // manager.setSocialAuthConfig(config);
-        //
-        // // URL of YOUR application which will be called after
-        // // authentication
-        // String successUrl =
-        // "http://srv2.gardening-manager.com:8090/nuxeo/nxstartup.faces?provider=GoogleOpenIDConnect";
-        //
-        // // get Provider URL to which you should redirect for
-        // // authentication.
-        // // id can have values "facebook", "twitter", "yahoo"
-        // // etc. or the OpenID URL
-        // String url = manager.getAuthenticationUrl("google",
-        // successUrl);
-        //
-        // // Store in session
-        // // session.setAttribute("authManager", manager);
-        // } catch (Exception e) {
-        // // TODO Auto-generated catch block
-        // e.printStackTrace();
-        // }
+        // Google Accounts
+        ClientCredentials.errorIfNotSpecified();
+        service = com.google.api.services.tasks.Tasks.builder(transport,
+                jsonFactory).setApplicationName("Google-TasksAndroidSample/1.0").setHttpRequestInitializer(
+                credential).setJsonHttpRequestInitializer(
+                new GoogleKeyInitializer(ClientCredentials.KEY)).build();
+        settings = getPreferences(MODE_PRIVATE);
+        accountName = settings.getString(PREF_ACCOUNT_NAME, null);
+        credential.setAccessToken(settings.getString(PREF_AUTH_TOKEN, null));
+        accountManager = new GoogleAccountManager(this);
+        gotAccount();
+
+    }
+
+    void gotAccount() {
+        Account account = accountManager.getAccountByName(accountName);
+        if (account == null) {
+            chooseAccount();
+            return;
+        }
+        if (credential.getAccessToken() != null) {
+            onAuthToken();
+            return;
+        }
+        accountManager.getAccountManager().getAuthToken(account,
+                AUTH_TOKEN_TYPE, true, new AccountManagerCallback<Bundle>() {
+
+                    public void run(AccountManagerFuture<Bundle> future) {
+                        try {
+                            Bundle bundle = future.getResult();
+                            if (bundle.containsKey(AccountManager.KEY_INTENT)) {
+                                Intent intent = bundle.getParcelable(AccountManager.KEY_INTENT);
+                                intent.setFlags(intent.getFlags()
+                                        & ~Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivityForResult(intent,
+                                        REQUEST_AUTHENTICATE);
+                            } else if (bundle.containsKey(AccountManager.KEY_AUTHTOKEN)) {
+                                setAuthToken(bundle.getString(AccountManager.KEY_AUTHTOKEN));
+                                onAuthToken();
+                            }
+                        } catch (Exception e) {
+                            Log.e(TAG, e.getMessage(), e);
+                        }
+                    }
+                }, null);
+    }
+
+    private void chooseAccount() {
+        accountManager.getAccountManager().getAuthTokenByFeatures(
+                GoogleAccountManager.ACCOUNT_TYPE, AUTH_TOKEN_TYPE, null,
+                LoginActivity.this, null, null,
+                new AccountManagerCallback<Bundle>() {
+
+                    public void run(AccountManagerFuture<Bundle> future) {
+                        Bundle bundle;
+                        try {
+                            bundle = future.getResult();
+                            setAccountName(bundle.getString(AccountManager.KEY_ACCOUNT_NAME));
+                            setAuthToken(bundle.getString(AccountManager.KEY_AUTHTOKEN));
+                            onAuthToken();
+                        } catch (OperationCanceledException e) {
+                            // user canceled
+                        } catch (AuthenticatorException e) {
+                            Log.e(TAG, e.getMessage(), e);
+                        } catch (IOException e) {
+                            Log.e(TAG, e.getMessage(), e);
+                        }
+                    }
+                }, null);
+    }
+
+    void setAccountName(String accountName) {
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(PREF_ACCOUNT_NAME, accountName);
+        editor.commit();
+        this.accountName = accountName;
+    }
+
+    void setAuthToken(String authToken) {
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(PREF_AUTH_TOKEN, authToken);
+        editor.commit();
+        credential.setAccessToken(authToken);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+        case REQUEST_AUTHENTICATE:
+            if (resultCode == RESULT_OK) {
+                gotAccount();
+            } else {
+                chooseAccount();
+            }
+            break;
+        }
+    }
+
+    void onAuthToken() {
+        new AsyncLoadTasks(this).execute();
+    }
+
+    public void onRequestCompleted() {
+        received401 = false;
+    }
+
+    public void handleGoogleException(IOException e) {
+        if (e instanceof GoogleJsonResponseException) {
+            GoogleJsonResponseException exception = (GoogleJsonResponseException) e;
+            if (exception.getStatusCode() == 401 && !received401) {
+                received401 = true;
+                accountManager.invalidateAuthToken(credential.getAccessToken());
+                credential.setAccessToken(null);
+                SharedPreferences.Editor editor2 = settings.edit();
+                editor2.remove(PREF_AUTH_TOKEN);
+                editor2.commit();
+                gotAccount();
+                return;
+            }
+        }
+        Log.e(TAG, e.getMessage(), e);
     }
 
     @Override

@@ -22,3 +22,5 @@ settings.xml
 
 .settings/
 target/
+
+.idea

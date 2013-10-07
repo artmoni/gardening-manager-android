@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
->
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+        >
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.gots</groupId>
   <artifactId>gardening-manager</artifactId>
@@ -10,7 +10,7 @@
   <name>Gardening Manager</name>
   <properties>
     <android.version>4.0.3</android.version>
-    <android.platform>16</android.platform>
+    <android.platform>18</android.platform>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
@@ -50,7 +50,7 @@
     <dependency>
       <groupId>android</groupId>
       <artifactId>android</artifactId>
-      <version>4.0.3_r3</version>
+      <version>4.3_r2</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -64,11 +64,11 @@
       <artifactId>analytics</artifactId>
       <version>1.4.2</version>
     </dependency>
-   <!--  <dependency>
-      <groupId>com.newrelic.agent.android</groupId>
-      <artifactId>android-agent</artifactId>
-      <version>2.426.0</version>
-    </dependency> -->
+    <!--  <dependency>
+       <groupId>com.newrelic.agent.android</groupId>
+       <artifactId>android-agent</artifactId>
+       <version>2.426.0</version>
+     </dependency> -->
     <dependency>
       <groupId>com.google.android.admob</groupId>
       <artifactId>admob</artifactId>
@@ -184,26 +184,46 @@
     <!-- </dependency> -->
     <!-- ********* NUXEO INTEGRATION END********* -->
     <!-- ********* SOCIALAUTH INTEGRATION BEGIN********* -->
-    <!-- <dependency> -->
-    <!-- <groupId>org.brickred</groupId> -->
-    <!-- <artifactId>socialauth</artifactId> -->
-    <!-- <version>3.0</version> -->
-    <!-- </dependency> -->
-    <!-- <dependency> -->
-    <!-- <groupId>org.openid4java</groupId> -->
-    <!-- <artifactId>openid4java</artifactId> -->
-    <!-- <version>0.9.7</version> -->
-    <!-- </dependency> -->
-    <!-- <dependency> -->
-    <!-- <groupId>org.opensocial</groupId> -->
-    <!-- <artifactId>opensocial</artifactId> -->
-    <!-- <version>1.0</version> -->
-    <!-- </dependency> -->
+    <dependency>
+      <groupId>com.google.api-client</groupId>
+      <artifactId>google-api-client-android</artifactId>
+      <version>1.17.0-rc</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.api-client</groupId>
+      <artifactId>google-api-client-gson</artifactId>
+      <version>1.17.0-rc</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.apis</groupId>
+      <artifactId>google-api-services-tasks</artifactId>
+      <version>v1-rev4-1.6.0-beta</version>
+    </dependency>
+    <dependency>
+    <groupId>com.google.api-client</groupId>
+    <artifactId>google-api-client</artifactId>
+    <version>1.13.2-beta</version>
+  </dependency>
+    <!--<dependency>-->
+    <!--<groupId>org.openid4java</groupId>-->
+    <!--<artifactId>openid4java</artifactId>-->
+    <!--<version>0.9.7</version>-->
+    <!--</dependency>-->
+    <!--<dependency>-->
+    <!--<groupId>org.opensocial</groupId>-->
+    <!--<artifactId>opensocial</artifactId>-->
+    <!--<version>1.0</version>-->
+    <!--</dependency> -->
     <!-- ********* SOCIALAUTH INTEGRATION END********* -->
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
       <version>1.2</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.http-client</groupId>
+      <artifactId>google-http-client</artifactId>
+      <version>1.12.0-beta</version>
     </dependency>
   </dependencies>
   <build>
