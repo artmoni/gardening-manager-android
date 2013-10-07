@@ -36,7 +36,7 @@ import android.util.Log;
 
 /**
  * @author jcarsique
- * 
+ *
  */
 public class NuxeoManager {
     private static final String TAG = "NuxeoManager";
@@ -59,7 +59,8 @@ public class NuxeoManager {
     }
 
     /**
-     * After first call, {@link #initIfNew(Context)} must be called else a {@link NotConfiguredException} will be thrown
+     * After first call, {@link #initIfNew(Context)} must be called else a
+     * {@link NotConfiguredException} will be thrown
      * on the second call attempt.
      */
     public static synchronized NuxeoManager getInstance() {
@@ -88,8 +89,13 @@ public class NuxeoManager {
         nxConfig.setCacheKey(NuxeoServerConfig.PREF_SERVER_TOKEN);
         nuxeoContext = NuxeoContextFactory.getNuxeoContext(context, nxConfig);
         initDone = true;
-        Log.d(TAG, "getSession with: " + nxConfig.getServerBaseUrl() + " login=" + nxConfig.getLogin() + " password="
-                + nxConfig.getPassword());
+        Log.d(TAG, "getSession with: "
+                + nxConfig.getServerBaseUrl()
+                + " login="
+                + nxConfig.getLogin()
+                + " password="
+                + (GotsPreferences.ISDEVELOPMENT ? nxConfig.getPassword()
+                        : "******"));
     }
 
     public AndroidAutomationClient getNuxeoClient() {
@@ -99,7 +105,8 @@ public class NuxeoManager {
             String myLogin = gotsPrefs.getNuxeoLogin();
             String myDeviceId = gotsPrefs.getDeviceId();
             String myApp = gotsPrefs.getGardeningManagerAppname();
-            nuxeoClient.setRequestInterceptor(new TokenRequestInterceptor(myApp, myToken, myLogin, myDeviceId));
+            nuxeoClient.setRequestInterceptor(new TokenRequestInterceptor(
+                    myApp, myToken, myLogin, myDeviceId));
             Log.d(TAG, "Got new nuxeoClient " + nuxeoClient);
         }
         return nuxeoClient;
@@ -115,10 +122,10 @@ public class NuxeoManager {
     }
 
     public void shutdown() {
-        try{
+        try {
             nuxeoContext.shutdown();
-        }catch(Exception e){
-            Log.e(TAG,"nuxeoContext.shutdown() "+e.getMessage(),e);
+        } catch (Exception e) {
+            Log.e(TAG, "nuxeoContext.shutdown() " + e.getMessage(), e);
         }
     }
 }
