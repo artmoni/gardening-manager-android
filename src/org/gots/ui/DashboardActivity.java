@@ -17,7 +17,14 @@ import org.gots.garden.GardenInterface;
 import org.gots.weather.service.WeatherUpdateService;
 import org.gots.weather.view.WeatherView;
 import org.gots.weather.view.WeatherWidget;
+import org.nuxeo.android.automation.NetworkSettingsActivity;
+import org.nuxeo.android.automation.fragments.NetworkSettingsFragment;
+import org.nuxeo.android.automation.fragments.SettingsActivity;
+import org.nuxeo.android.context.NuxeoContext;
+import org.nuxeo.android.context.NuxeoContextProvider;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -212,7 +219,15 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         case R.id.login:
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
+            return true;
 
+        case R.id.settings:
+//            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+//            startActivity(settingsIntent);
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.setCustomAnimations(android.R.animator.fade_in,
+                    android.R.animator.fade_out);
+            ft.replace(R.id.idContent,new PreferenceActivity()).addToBackStack("back").commit();
             return true;
         default:
             return super.onOptionsItemSelected(item);
@@ -225,4 +240,6 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         inflater.inflate(R.menu.menu_dashboard, menu);
         return true;
     }
+
+    
 }

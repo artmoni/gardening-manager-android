@@ -117,6 +117,9 @@
         <activity
             android:name="com.google.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
+        <activity
+            android:name=".ui.PreferenceActivity"
+            android:theme="@style/Theme.Styled" />
         <!--
         <provider
         android:authorities="org.gots.providers.seeds

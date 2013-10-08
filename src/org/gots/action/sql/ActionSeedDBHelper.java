@@ -167,11 +167,11 @@ public class ActionSeedDBHelper extends GotsDBHelper{
             long i = (now.getTimeInMillis() - cal.getTimeInMillis()) / 86400000;
 
             if (i == 0)
-                state = ActionState.NORMAL;
+                state = ActionState.CRITICAL;
             else if (i >= -7 && i <= 7)
                 state = ActionState.WARNING;
             else
-                state = ActionState.CRITICAL;
+                state = ActionState.NORMAL;
         }
         action.setState(state);
     }

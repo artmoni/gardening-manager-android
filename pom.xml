@@ -69,11 +69,7 @@
       <artifactId>analytics</artifactId>
       <version>1.4.2</version>
     </dependency>
-    <!-- <dependency> -->
-    <!-- <groupId>com.newrelic.agent.android</groupId> -->
-    <!-- <artifactId>android-agent</artifactId> -->
-    <!-- <version>2.426.0</version> -->
-    <!-- </dependency> -->
+
     <dependency>
       <groupId>com.google.android.admob</groupId>
       <artifactId>admob</artifactId>
@@ -210,6 +206,18 @@
     <!-- <artifactId>opensocial</artifactId> -->
     <!-- <version>1.0</version> -->
     <!-- </dependency> -->
+    <dependency>
+      <groupId>com.google.android.gms</groupId>
+      <artifactId>google-play-services</artifactId>
+      <version>12</version>
+      <type>apklib</type>
+    </dependency>
+    <dependency>
+      <groupId>com.google.android.gms</groupId>
+      <artifactId>google-play-services</artifactId>
+      <version>12</version>
+      <type>jar</type>
+    </dependency>
     <!-- ********* SOCIALAUTH INTEGRATION END********* -->
     <dependency>
       <groupId>commons-codec</groupId>

@@ -8,8 +8,11 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.http.NameValuePair;
@@ -24,9 +27,11 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
@@ -50,7 +55,10 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
-//import android.util.Base64;
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.UserRecoverableAuthException;
+import com.google.android.gms.common.Scopes;
 
 public class LoginActivity extends AbstractActivity {
     protected static final String TAG = "LoginActivity";
@@ -120,6 +128,7 @@ public class LoginActivity extends AbstractActivity {
     protected void onDestroy() {
         unregisterReceiver(seedBroadcastReceiver);
         super.onDestroy();
+
     }
 
     public List<String> getAccounts(String account_type) {
@@ -155,12 +164,12 @@ public class LoginActivity extends AbstractActivity {
 
             @Override
             public void onClick(View v) {
-                Toast.makeText(LoginActivity.this, getResources().getString(R.string.feature_unavalaible),
-                        Toast.LENGTH_SHORT).show();
-                GoogleAnalyticsTracker.getInstance().trackEvent("Login", "GoogleAuthentication",
-                        "Request this new feature", 0);
+                // Toast.makeText(LoginActivity.this, getResources().getString(R.string.feature_unavalaible),
+                // Toast.LENGTH_SHORT).show();
+                // GoogleAnalyticsTracker.getInstance().trackEvent("Login", "GoogleAuthentication",
+                // "Request this new feature", 0);
 
-                // launchGoogle();
+                launchGoogle();
                 // tokenNuxeoConnect();
 
                 // finish();
@@ -311,7 +320,6 @@ public class LoginActivity extends AbstractActivity {
     }
 
     protected void disconnect() {
-        // request_basicauth_token(gotsPrefs.getNuxeoLogin(), gotsPrefs.getNuxeoPassword(), true);
         gotsPrefs.setNuxeoLogin(null);
         gotsPrefs.setNuxeoPassword("");
         gotsPrefs.setConnectedToServer(false);
@@ -537,6 +545,65 @@ public class LoginActivity extends AbstractActivity {
     }
 
     void launchGoogle() {
+        AccountManager manager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
+        Account[] accounts = manager.getAccounts();
+        final List<Account> usableAccounts = new ArrayList<Account>();
+        List<String> items = new ArrayList<String>();
+        for (Account account : accounts) {
+            if ("com.google".equals(account.type)) {
+                usableAccounts.add(account);
+                items.add(String.format("%s (%s)", account.name, account.type));
+            }
+        }
+        new AlertDialog.Builder(this).setTitle("Action").setItems(items.toArray(new String[items.size()]),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int item) {
+
+                        new AsyncTask<String, Integer, String>() {
+                            @Override
+                            protected String doInBackground(String... params) {
+                                String token = null;
+                                try {
+                                    final String G_PLUS_SCOPE = "oauth2:https://www.googleapis.com/auth/plus.me";
+                                    final String USERINFO_SCOPE = "https://www.googleapis.com/auth/userinfo.profile";
+
+                                    final String SCOPES = G_PLUS_SCOPE + " " + USERINFO_SCOPE;
+                                    token = GoogleAuthUtil.getToken(LoginActivity.this, params[0], SCOPES);
+                                    // if (server indicates token is invalid) {
+                                    // // invalidate the token that we found is bad so that GoogleAuthUtil won't
+                                    // // return it next time (it may have cached it)
+                                    // GoogleAuthUtil.invalidateToken(Context, String)(context, token);
+                                    // // consider retrying getAndUseTokenBlocking() once more
+                                    // return;
+                                    // }
+
+                                } catch (UserRecoverableAuthException e) {
+                                    startActivityForResult(e.getIntent(), 0);
+                                } catch (IOException e) {
+                                    Log.e(TAG, e.getMessage(), e);
+                                } catch (GoogleAuthException e) {
+                                    Log.e(TAG, e.getMessage(), e);
+                                }
+                                return token;
+                            }
+
+                            @Override
+                            protected void onPostExecute(String result) {
+                                if (result != null)
+                                    Toast.makeText(LoginActivity.this, result, Toast.LENGTH_SHORT).show();
+                                else
+                                    Toast.makeText(LoginActivity.this, "Error requesting GoogleAuthUtil.getToken",
+                                            Toast.LENGTH_SHORT).show();
+                                ;
+
+                                super.onPostExecute(result);
+                            }
+                        }.execute(usableAccounts.get(item).name);
+                    }
+
+                }).show();
+
         // // if (isChecked) {
         // // loginBox.setVisibility(View.VISIBLE);
         // //
@@ -564,8 +631,7 @@ public class LoginActivity extends AbstractActivity {
         // // authentication.
         // // id can have values "facebook", "twitter", "yahoo"
         // // etc. or the OpenID URL
-        // String url = manager.getAuthenticationUrl("google",
-        // successUrl);
+        // String url = manager.getAuthenticationUrl("google", successUrl);
         //
         // // Store in session
         // // session.setAttribute("authManager", manager);

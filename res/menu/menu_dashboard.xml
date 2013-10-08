@@ -18,5 +18,15 @@
         android:id="@+id/login"
         android:showAsAction="never"
         android:title="@string/login.account"/>
+    <item
+        android:id="@+id/connection"
+        android:icon="@drawable/garden_connected"
+        android:showAsAction="always"
+        android:title="@string/login.disconnect"/>
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/ic_compose"
+        android:showAsAction="always"
+        android:title="settings"/>
 
 </menu>
