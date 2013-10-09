@@ -17,6 +17,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -32,6 +33,8 @@ public class WebHelpActivity extends AbstractActivity {
 
     public static final String URL = "org.gots.doc.classsimplename";
 
+    private WebView mWebView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +45,7 @@ public class WebHelpActivity extends AbstractActivity {
         bar.setTitle("Documentation");
 
         String helpClass = getIntent().getExtras().getString(URL);
-        WebView mWebView = (WebView) findViewById(R.id.webViewHelp);
+        mWebView = (WebView) findViewById(R.id.webViewHelp);
         mWebView.setWebViewClient(new WebHelpClient());
 
         mWebView.getSettings().setJavaScriptEnabled(true);
@@ -90,5 +93,14 @@ public class WebHelpActivity extends AbstractActivity {
             pd.dismiss();
         }
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK) && mWebView.canGoBack()) {
+            mWebView.goBack();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
