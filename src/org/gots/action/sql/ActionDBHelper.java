@@ -16,136 +16,120 @@ import org.gots.action.ActionFactory;
 import org.gots.action.BaseActionInterface;
 import org.gots.action.PermanentActionInterface;
 import org.gots.garden.sql.GardenSQLite;
+import org.gots.utils.GotsDBHelper;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-public class ActionDBHelper {
+public class ActionDBHelper extends GotsDBHelper {
 
-	private GardenSQLite actionSQLite;
-	private SQLiteDatabase bdd;
-	Context mContext;
+    public ActionDBHelper(Context mContext) {
+        super(mContext);
+    }
 
-	public ActionDBHelper(Context mContext) {
-		actionSQLite = new GardenSQLite(mContext);
+    public long insertAction(BaseActionInterface action) {
+        long rowid;
+        // open();
+        ContentValues values = new ContentValues();
+        values.put(GardenSQLite.ACTION_NAME, action.getName());
+        values.put(GardenSQLite.ACTION_DESCRIPTION, action.getDescription());
+        values.put(GardenSQLite.ACTION_DURATION, action.getDuration());
+        try {
+            rowid = bdd.insert(GardenSQLite.ACTION_TABLE_NAME, null, values);
+        } finally {
+            // close();
+        }
+        return rowid;
+    }
 
-		this.mContext = mContext;
-	}
+    public ArrayList<BaseActionInterface> getActions() {
+        ArrayList<BaseActionInterface> allActions = new ArrayList<BaseActionInterface>();
+        // SeedActionInterface searchedSeed = new GrowingSeed();
+        // open();
+        try {
+            Cursor cursor = bdd.query(GardenSQLite.ACTION_TABLE_NAME, null, null, null, null, null, null);
 
-	public void open() {
-		// on ouvre la BDD en écriture
-		bdd = actionSQLite.getWritableDatabase();
-	}
+            if (cursor.moveToFirst()) {
+                do {
+                    BaseActionInterface action = cursorToAction(cursor);
+                    if (!PermanentActionInterface.class.isInstance(action))
+                        allActions.add(action);
+                } while (cursor.moveToNext());
+                cursor.close();
+            }
+        } finally {
+            // close();
+        }
+        return allActions;
+    }
 
-	public void close() {
-		// on ferme l'accès à la BDD
+    public boolean isExist(BaseActionInterface action) {
+        // open();
+        boolean exists = false;
+        try {
+            Cursor cursor = bdd.query(GardenSQLite.ACTION_TABLE_NAME, null,
+                    GardenSQLite.ACTION_NAME + "='" + action.getName() + "'", null, null, null, null);
 
-		bdd.close();
-	}
+            if (cursor.getCount() > 0)
+                exists = true;
+            else
+                exists = false;
 
-	public long insertAction(BaseActionInterface action) {
-		long rowid;
-		open();
-		ContentValues values = new ContentValues();
-		values.put(GardenSQLite.ACTION_NAME, action.getName());
-		values.put(GardenSQLite.ACTION_DESCRIPTION, action.getDescription());
-		values.put(GardenSQLite.ACTION_DURATION, action.getDuration());
-		try {
-			rowid = bdd.insert(GardenSQLite.ACTION_TABLE_NAME, null, values);
-		} finally {
-			close();
-		}
-		return rowid;
-	}
+            cursor.close();
+        } finally {
+            // close();
+        }
+        return exists;
+    }
 
-	public ArrayList<BaseActionInterface> getActions() {
-		ArrayList<BaseActionInterface> allActions = new ArrayList<BaseActionInterface>();
-		// SeedActionInterface searchedSeed = new GrowingSeed();
-		open();
-		try {
-			Cursor cursor = bdd.query(GardenSQLite.ACTION_TABLE_NAME, null, null, null, null, null, null);
+    private BaseActionInterface cursorToAction(Cursor cursor) {
+        BaseActionInterface bsi;
+        ActionFactory factory = new ActionFactory();
+        bsi = factory.buildAction(mContext, cursor.getString(cursor.getColumnIndex(GardenSQLite.ACTION_NAME)));
+        bsi.setDescription(cursor.getString(cursor.getColumnIndex(GardenSQLite.ACTION_DESCRIPTION)));
+        bsi.setDuration(cursor.getInt(cursor.getColumnIndex(GardenSQLite.ACTION_DURATION)));
+        bsi.setId(cursor.getInt(cursor.getColumnIndex(GardenSQLite.ACTION_ID)));
+        return bsi;
+    }
 
-			if (cursor.moveToFirst()) {
-				do {
-					BaseActionInterface action = cursorToAction(cursor);
-					if (!PermanentActionInterface.class.isInstance(action))
-						allActions.add(action);
-				} while (cursor.moveToNext());
-				cursor.close();
-			}
-		} finally {
-			close();
-		}
-		return allActions;
-	}
+    public BaseActionInterface getActionByName(String name) {
+        BaseActionInterface action = null;
+        // SeedActionInterface searchedSeed = new GrowingSeed();
+        // open();
+        try {
+            Cursor cursor = bdd.query(GardenSQLite.ACTION_TABLE_NAME, null, GardenSQLite.ACTION_NAME + "='" + name
+                    + "'", null, null, null, null);
 
-	public boolean isExist(BaseActionInterface action) {
-		open();
-		boolean exists = false;
-		try {
-			Cursor cursor = bdd.query(GardenSQLite.ACTION_TABLE_NAME, null,
-					GardenSQLite.ACTION_NAME + "='" + action.getName() + "'", null, null, null, null);
+            if (cursor.moveToFirst()) {
+                action = cursorToAction(cursor);
+                cursor.close();
+            }
+        } finally {
+            // close();
+        }
+        return action;
 
-			if (cursor.getCount() > 0)
-				exists = true;
-			else
-				exists = false;
+    }
 
-			cursor.close();
-		} finally {
-			close();
-		}
-		return exists;
-	}
+    public BaseActionInterface getActionById(int id) {
+        BaseActionInterface action = null;
+        // SeedActionInterface searchedSeed = new GrowingSeed();
+        // open();
+        try {
+            Cursor cursor = bdd.query(GardenSQLite.ACTION_TABLE_NAME, null, GardenSQLite.ACTION_ID + "='" + id + "'",
+                    null, null, null, null);
 
-	private BaseActionInterface cursorToAction(Cursor cursor) {
-		BaseActionInterface bsi;
-		ActionFactory factory = new ActionFactory();
-		bsi = factory.buildAction(mContext, cursor.getString(cursor.getColumnIndex(GardenSQLite.ACTION_NAME)));
-		bsi.setDescription(cursor.getString(cursor.getColumnIndex(GardenSQLite.ACTION_DESCRIPTION)));
-		bsi.setDuration(cursor.getInt(cursor.getColumnIndex(GardenSQLite.ACTION_DURATION)));
-		bsi.setId(cursor.getInt(cursor.getColumnIndex(GardenSQLite.ACTION_ID)));
-		return bsi;
-	}
+            if (cursor.moveToFirst()) {
+                action = cursorToAction(cursor);
+                cursor.close();
+            }
+        } finally {
+            // close();
+        }
+        return action;
 
-	public BaseActionInterface getActionByName(String name) {
-		BaseActionInterface action = null;
-		// SeedActionInterface searchedSeed = new GrowingSeed();
-		open();
-		try {
-			Cursor cursor = bdd.query(GardenSQLite.ACTION_TABLE_NAME, null, GardenSQLite.ACTION_NAME + "='" + name
-					+ "'", null, null, null, null);
-
-			if (cursor.moveToFirst()) {
-				action = cursorToAction(cursor);
-				cursor.close();
-			}
-		} finally {
-			close();
-		}
-		return action;
-
-	}
-
-	public BaseActionInterface getActionById(int id) {
-		BaseActionInterface action = null;
-		// SeedActionInterface searchedSeed = new GrowingSeed();
-		open();
-		try {
-			Cursor cursor = bdd.query(GardenSQLite.ACTION_TABLE_NAME, null, GardenSQLite.ACTION_ID + "='" + id + "'",
-					null, null, null, null);
-
-			if (cursor.moveToFirst()) {
-				action = cursorToAction(cursor);
-				cursor.close();
-			}
-		} finally {
-			close();
-		}
-		return action;
-
-	}
+    }
 
 }

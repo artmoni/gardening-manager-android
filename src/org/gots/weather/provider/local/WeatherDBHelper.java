@@ -43,6 +43,7 @@ public class WeatherDBHelper extends GotsDBHelper {
         return weatherCondition;
     }
 
+    
     public synchronized WeatherConditionInterface updateWeather(WeatherConditionInterface weatherCondition) {
         long rowid;
 //        open();

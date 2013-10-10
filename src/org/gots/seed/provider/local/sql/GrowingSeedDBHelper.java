@@ -22,7 +22,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-public class GrowingSeedDBHelper extends GotsDBHelper{
+public class GrowingSeedDBHelper extends GotsDBHelper {
 
     public GrowingSeedDBHelper(Context mContext) {
         super(mContext);
@@ -37,7 +37,7 @@ public class GrowingSeedDBHelper extends GotsDBHelper{
 
     public GrowingSeedInterface insertSeed(GrowingSeedInterface seed, String allotmentReference) {
         long rowid;
-//        open();
+        // open();
 
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.GROWINGSEED_SEED_ID, seed.getSeedId());
@@ -60,7 +60,7 @@ public class GrowingSeedDBHelper extends GotsDBHelper{
     public ArrayList<GrowingSeedInterface> getGrowingSeeds() {
         ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
         GrowingSeedInterface searchedSeed = new GrowingSeed();
-//        open();
+        // open();
 
         try {
             Cursor cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, null, null, null, null, null);
@@ -97,7 +97,7 @@ public class GrowingSeedDBHelper extends GotsDBHelper{
     public ArrayList<GrowingSeedInterface> getSeedsByAllotment(String allotmentReference) {
         ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
         GrowingSeedInterface searchedSeed = new GrowingSeed();
-//        open();
+        // open();
 
         try {
             Cursor cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null,
@@ -118,7 +118,7 @@ public class GrowingSeedDBHelper extends GotsDBHelper{
 
     public GrowingSeedInterface getSeedById(int growingSeedId) {
         GrowingSeedInterface searchedSeed = null;
-//        open();
+        // open();
 
         try {
             Cursor cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, DatabaseHelper.GROWINGSEED_ID
@@ -137,7 +137,7 @@ public class GrowingSeedDBHelper extends GotsDBHelper{
     }
 
     public void deleteGrowingSeed(GrowingSeedInterface seed) {
-//        open();
+        // open();
 
         bdd.delete(DatabaseHelper.GROWINGSEEDS_TABLE_NAME,
                 DatabaseHelper.GROWINGSEED_ID + "='" + seed.getGrowingSeedId() + "'", null);
