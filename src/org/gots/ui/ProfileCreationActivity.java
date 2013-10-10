@@ -68,12 +68,7 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
 
     private String tag = "ProfileActivity";
 
-    // EditText locality;
-    private String choix_source = "";
-
     private ProgressDialog pd;
-
-    private int gardenId;
 
     GardenInterface garden = new Garden();
 

@@ -226,19 +226,13 @@
 
                     <Button
                         android:id="@+id/buttonConnect"
-                        android:layout_width="200dp"
-                        android:layout_height="50dp"
-                        android:background="@drawable/button_green_selector"
-                        android:text="@string/login.signin"
-                        android:textColor="@color/white" />
+                        style="@style/buttonGreen"
+                        android:text="@string/login.signin" />
 
                     <Button
                         android:id="@+id/buttonCreate"
-                        android:layout_width="200dp"
-                        android:layout_height="50dp"
-                        android:background="@drawable/button_red_selector"
-                        android:text="@string/login.signup"
-                        android:textColor="@color/white" />
+                        style="@style/buttonRed"
+                        android:text="@string/login.signup" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

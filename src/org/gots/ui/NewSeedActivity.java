@@ -54,7 +54,6 @@ import com.google.zxing.integration.android.IntentResult;
 public class NewSeedActivity extends AbstractActivity implements OnClickListener {
     private static final String SELECTED_SPECIE = "selectedSpecie";
 
-    private View currentView;
 
     private PlanningWidget planningSow;
 
@@ -198,7 +197,6 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
 
     @Override
     public void onClick(View v) {
-        currentView = v;
         switch (v.getId()) {
         case R.id.imageBarCode:
             scanBarCode();

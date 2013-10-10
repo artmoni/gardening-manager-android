@@ -13,7 +13,7 @@
     <string name="seed.register.title">Register variety</string>
     <string name="seed.action.date">action date :</string>
     <string name="seed.action.add.stock">Add to stock</string>
-    <string name="seed.action.add.catalogue">Add to catalogue</string>
+    <string name="seed.action.add.catalogue">Add to catalog</string>
     <string name="seed.action.save">Save</string>
     <string name="seed.action.todo">To do before the</string>
     <string name="seed.action.done">Dated</string>
