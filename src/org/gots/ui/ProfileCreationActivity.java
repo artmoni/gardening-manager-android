@@ -301,10 +301,9 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
         // Handle item selection
         switch (item.getItemId()) {
         case R.id.help:
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                    Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
+            Intent browserIntent = new Intent(this, WebHelpActivity.class);
+            browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
             startActivity(browserIntent);
-
             return true;
         case R.id.localize_gaden:
             getPosition();
