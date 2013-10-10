@@ -1,24 +1,13 @@
 package org.gots.ui;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.message.BasicNameValuePair;
 import org.gots.R;
+import org.gots.authentication.GoogleAuthentication;
+import org.gots.authentication.NuxeoAuthentication;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.preferences.GotsPreferences;
 import org.nuxeo.ecm.automation.client.jaxrs.Constants;
@@ -35,10 +24,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -56,9 +43,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
-import com.google.android.gms.common.Scopes;
 
 public class LoginActivity extends AbstractActivity {
     protected static final String TAG = "LoginActivity";
@@ -69,6 +54,10 @@ public class LoginActivity extends AbstractActivity {
 
     private ActionBar bar;
 
+    private Menu mMenu;
+
+    private NuxeoAuthentication nuxeoAuthentication;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +67,8 @@ public class LoginActivity extends AbstractActivity {
         bar = getSupportActionBar();
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setTitle(R.string.app_name);
+        nuxeoAuthentication = new NuxeoAuthentication(this);
+
     }
 
     public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
@@ -89,8 +80,6 @@ public class LoginActivity extends AbstractActivity {
         }
 
     };
-
-    private Menu mMenu;
 
     protected void refreshConnectionState() {
         if (mMenu == null)
@@ -153,13 +142,10 @@ public class LoginActivity extends AbstractActivity {
         ArrayAdapter<String> account_name_adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, getAccounts("com.google"));
         loginSpinner.setAdapter(account_name_adapter);
-        // loginText = (TextView) findViewById(R.id.edittextLogin);
-        // loginText.setText(gotsPrefs.getLastSuccessfulNuxeoLogin());
         passwordText = (TextView) findViewById(R.id.edittextPassword);
         passwordText.setText(gotsPrefs.getNuxeoPassword());
-        // gotsPrefs.setNuxeoLogin(null);
 
-        LinearLayout buttonLayout = (LinearLayout) findViewById(R.id.idLayoutConnection);
+        LinearLayout buttonLayout = (LinearLayout) findViewById(R.id.idLayoutOAuth2);
         buttonLayout.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -183,23 +169,8 @@ public class LoginActivity extends AbstractActivity {
 
             @Override
             public void onClick(View v) {
-                GoogleAnalyticsTracker.getInstance().trackEvent("Login", "SimpleAuthentication", "Request account", 0);
-
-                // send mail
-                Intent i = new Intent(Intent.ACTION_SEND);
-                i.setType("message/rfc822");
-                i.putExtra(Intent.EXTRA_EMAIL, new String[] { "account@gardening-manager.com" });
-                i.putExtra(Intent.EXTRA_SUBJECT, "Gardening Manager / Account / Ask for new account");
-                i.putExtra(Intent.EXTRA_TEXT,
-                        "Hello,\n\nI want to participate to the Gardening Manager beta version.\n\nMy Google account is: "
-                                + loginSpinner.getSelectedItem().toString()
-                                + "\n\nI know I will receive my password quickly.\n\n");
-                try {
-                    startActivity(Intent.createChooser(i, "Send mail..."));
-                } catch (android.content.ActivityNotFoundException ex) {
-                    Toast.makeText(LoginActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-                }
-
+                GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Login", "Request account", 0);
+                sendEmail();
             }
 
         });
@@ -214,6 +185,23 @@ public class LoginActivity extends AbstractActivity {
             }
 
         });
+    }
+
+    protected void sendEmail() {
+        // send mail
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("message/rfc822");
+        i.putExtra(Intent.EXTRA_EMAIL, new String[] { "account@gardening-manager.com" });
+        i.putExtra(Intent.EXTRA_SUBJECT, "Gardening Manager / Account / Ask for new account");
+        i.putExtra(Intent.EXTRA_TEXT,
+                "Hello,\n\nI want to participate to the Gardening Manager beta version.\n\nMy Google account is: "
+                        + loginSpinner.getSelectedItem().toString()
+                        + "\n\nI know I will receive my password quickly.\n\n");
+        try {
+            startActivity(Intent.createChooser(i, "Send mail..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(LoginActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     protected void buildLayoutConnected() {
@@ -265,24 +253,21 @@ public class LoginActivity extends AbstractActivity {
             @Override
             protected Session doInBackground(Void... params) {
                 Session session = null;
-                if (basicNuxeoConnect(login, password)) {
+                try {
+                    if (nuxeoAuthentication.basicNuxeoConnect(login, password)) {
 
-                    try {
                         nuxeoManager.shutdown();
                         session = nuxeoManager.getSession();
 
                         if ("Guest".equals(session.getLogin().getUsername())) {
                             return null;
                         }
-                    } catch (Exception nao) {
-                        if (nao != null) {
-                            Log.e(TAG, "" + nao.getMessage());
-                            Log.d(TAG, "" + nao.getMessage(), nao);
-                        }
+                    } else
                         cancel(true);
-                    }
-                } else
+                } catch (IOException e) {
+                    Log.e(TAG, e.getMessage(), e);
                     cancel(true);
+                }
                 return session;
             }
 
@@ -296,12 +281,14 @@ public class LoginActivity extends AbstractActivity {
                     gotsPrefs.setConnectedToServer(false);
                     gotsPrefs.setNuxeoLogin(null);
                     gotsPrefs.setLastSuccessfulNuxeoLogin(null);
+                    GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Login", "Failure", 0);
 
                 } else {
                     LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.GONE);
                     gotsPrefs.setConnectedToServer(true);
                     gotsPrefs.setLastSuccessfulNuxeoLogin(login);
                     gardenManager.getMyGardens(true);
+                    GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Login", "Success", 0);
                 }
 
                 onResume();
@@ -315,8 +302,6 @@ public class LoginActivity extends AbstractActivity {
 
         }.execute();
         onResume();
-
-        // finish();
     }
 
     protected void disconnect() {
@@ -326,198 +311,6 @@ public class LoginActivity extends AbstractActivity {
         findViewById(R.id.layoutConnect).setVisibility(View.VISIBLE);
         findViewById(R.id.layoutDisconnect).setVisibility(View.GONE);
         onResume();
-    }
-
-    protected boolean basicNuxeoConnect(String login, String password) {
-        String device_id = getDeviceID();
-        gotsPrefs.setDeviceId(device_id);
-
-        String token = request_basicauth_token(login, password, false);
-        if (token == null) {
-            return false;
-        } else {
-            gotsPrefs.setNuxeoLogin(login);
-            gotsPrefs.setNuxeoPassword(password);
-            gotsPrefs.setToken(token);
-            return true;
-        }
-    }
-
-    protected String getDeviceID() {
-        String device_id = Secure.getString(getContentResolver(), Secure.ANDROID_ID);
-        return device_id;
-    }
-
-    // TODO currently not used
-    protected void tokenNuxeoConnect() {
-        String device_id = getDeviceID();
-        gotsPrefs.setDeviceId(device_id);
-
-        String tmp_token = request_temporaryauth_token(false);
-        if (tmp_token == null) {
-            Toast.makeText(this, "Authentication ", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, tmp_token, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    // TODO currently not used
-    public String request_temporaryauth_token(boolean revoke) {
-
-        AsyncTask<Object, Void, String> task = new AsyncTask<Object, Void, String>() {
-            String token = null;
-
-            @Override
-            protected String doInBackground(Object... objects) {
-                try {
-                    String email = "toto.tata@gmail.com";
-                    Session session = nuxeoManager.getSession();
-                    Documents docs = (Documents) session.newRequest("Document.Email").setHeader(
-                            Constants.HEADER_NX_SCHEMAS, "*").set("email", email).execute();
-
-                    // String uri =
-                    // GotsPreferences.getInstance(getApplicationContext())
-                    // .getGardeningManagerNuxeoAuthentication();
-                    //
-                    // List<NameValuePair> params = new
-                    // LinkedList<NameValuePair>();
-                    // params.add(new BasicNameValuePair("deviceId",
-                    // GotsPreferences.getInstance(getApplicationContext())
-                    // .getDeviceId()));
-                    // params.add(new BasicNameValuePair("applicationName",
-                    // GotsPreferences.getInstance(
-                    // getApplicationContext()).getGardeningManagerAppname()));
-                    // params.add(new BasicNameValuePair("deviceDescription",
-                    // Build.MODEL + "(" + Build.MANUFACTURER +
-                    // ")"));
-                    // params.add(new BasicNameValuePair("permission",
-                    // "ReadWrite"));
-                    // params.add(new BasicNameValuePair("revoke", "false"));
-                    //
-                    // String paramString = URLEncodedUtils.format(params,
-                    // "utf-8");
-                    // uri += paramString;
-                    // URL url = new URL(uri);
-                    //
-                    // URLConnection urlConnection;
-                    // urlConnection = url.openConnection();
-                    //
-                    // urlConnection.addRequestProperty("X-User-Id",
-                    // loginText.getText().toString());
-                    // urlConnection.addRequestProperty("X-Device-Id",
-                    // GotsPreferences
-                    // .getInstance(getApplicationContext()).getDeviceId());
-                    // urlConnection.addRequestProperty("X-Application-Name",
-                    // GotsPreferences.getInstance(getApplicationContext()).getGardeningManagerAppname());
-                    // urlConnection.addRequestProperty(
-                    // "Authorization",
-                    // "Basic "
-                    // + Base64.encodeToString((loginText.getText().toString() +
-                    // ":" + passwordText
-                    // .getText().toString()).getBytes(), Base64.NO_WRAP));
-
-                    // urlConnection.addRequestProperty(
-                    // "Authorization",
-                    // "Basic "
-                    // + Base64.encodeBase64((loginText.getText().toString() +
-                    // ":" + passwordText.getText()
-                    // .toString()).getBytes()));
-
-                    // InputStream in = new
-                    // BufferedInputStream(urlConnection.getInputStream());
-                    // try {
-                    // // readStream(in);
-                    // StringBuilder builder = new StringBuilder();
-                    // String line;
-                    // BufferedReader reader = new BufferedReader(new
-                    // InputStreamReader(in, "UTF-8"));
-                    // while ((line = reader.readLine()) != null) {
-                    // builder.append(line);
-                    // }
-                    //
-                    // token = builder.toString();
-                    // Log.d("LoginActivity", "Token acquired: " + token);
-                    //
-                    // } finally {
-                    // in.close();
-                    // }
-                } catch (IOException e) {
-                    Log.e("LoginActivity", e.getMessage(), e);
-                    return null;
-
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                return token;
-            }
-        }.execute(new Object());
-        String tokenAcquired = null;
-        try {
-            tokenAcquired = task.get();
-        } catch (InterruptedException e) {
-            Log.e("LoginActivity", e.getMessage(), e);
-        } catch (ExecutionException e) {
-            Log.e("LoginActivity", e.getMessage(), e);
-        }
-        return tokenAcquired;
-
-    }
-
-    public String request_basicauth_token(String login, String password, boolean revoke) {
-
-        // AsyncTask<Object, Void, String> task = new AsyncTask<Object, Void, String>() {
-        String token = null;
-
-        // @Override
-        // protected String doInBackground(Object... objects) {
-        try {
-            String uri = gotsPrefs.getNuxeoAuthenticationURI();
-
-            List<NameValuePair> params = new LinkedList<NameValuePair>();
-            params.add(new BasicNameValuePair("deviceId", gotsPrefs.getDeviceId()));
-            params.add(new BasicNameValuePair("applicationName", gotsPrefs.getGardeningManagerAppname()));
-            params.add(new BasicNameValuePair("deviceDescription", Build.MODEL + "(" + Build.MANUFACTURER + ")"));
-            params.add(new BasicNameValuePair("permission", "ReadWrite"));
-            params.add(new BasicNameValuePair("revoke", String.valueOf(revoke)));
-
-            String paramString = URLEncodedUtils.format(params, "utf-8");
-            uri += paramString;
-            URL url = new URL(uri);
-
-            URLConnection urlConnection;
-            urlConnection = url.openConnection();
-
-            urlConnection.addRequestProperty("X-User-Id", login);
-            urlConnection.addRequestProperty("X-Device-Id", gotsPrefs.getDeviceId());
-            urlConnection.addRequestProperty("X-Application-Name", gotsPrefs.getGardeningManagerAppname());
-            urlConnection.addRequestProperty("Authorization",
-                    "Basic " + Base64.encodeToString((login + ":" + password).getBytes(), Base64.NO_WRAP));
-
-            // TODO urlConnection.setConnectTimeout
-            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            try {
-                // readStream(in);
-                StringBuilder builder = new StringBuilder();
-                String line;
-                BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-                while ((line = reader.readLine()) != null) {
-                    builder.append(line);
-                }
-
-                token = builder.toString();
-                Log.d("LoginActivity", "Token acquired: " + token);
-                GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Login", "Success", 0);
-
-            } finally {
-                in.close();
-            }
-        } catch (IOException e) {
-            GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Login", "Failure", 0);
-            Log.e(TAG, e.getMessage(), e);
-        }
-        return token;
-
     }
 
     @Override
@@ -555,6 +348,7 @@ public class LoginActivity extends AbstractActivity {
                 items.add(String.format("%s (%s)", account.name, account.type));
             }
         }
+
         new AlertDialog.Builder(this).setTitle("Action").setItems(items.toArray(new String[items.size()]),
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -563,21 +357,11 @@ public class LoginActivity extends AbstractActivity {
                         new AsyncTask<String, Integer, String>() {
                             @Override
                             protected String doInBackground(String... params) {
+
+                                GoogleAuthentication authentication = new GoogleAuthentication(getApplicationContext());
                                 String token = null;
                                 try {
-                                    final String G_PLUS_SCOPE = "oauth2:https://www.googleapis.com/auth/plus.me";
-                                    final String USERINFO_SCOPE = "https://www.googleapis.com/auth/userinfo.profile";
-
-                                    final String SCOPES = G_PLUS_SCOPE + " " + USERINFO_SCOPE;
-                                    token = GoogleAuthUtil.getToken(LoginActivity.this, params[0], SCOPES);
-                                    // if (server indicates token is invalid) {
-                                    // // invalidate the token that we found is bad so that GoogleAuthUtil won't
-                                    // // return it next time (it may have cached it)
-                                    // GoogleAuthUtil.invalidateToken(Context, String)(context, token);
-                                    // // consider retrying getAndUseTokenBlocking() once more
-                                    // return;
-                                    // }
-
+                                    token = authentication.getToken(params[0]);
                                 } catch (UserRecoverableAuthException e) {
                                     startActivityForResult(e.getIntent(), 0);
                                 } catch (IOException e) {
@@ -604,42 +388,60 @@ public class LoginActivity extends AbstractActivity {
 
                 }).show();
 
-        // // if (isChecked) {
-        // // loginBox.setVisibility(View.VISIBLE);
-        // //
-        // // // Create an instance of SocialAuthConfgi object
-        // SocialAuthConfig config = SocialAuthConfig.getDefault();
-        // //
-        // // // load configuration. By default load the configuration
-        // // // from oauth_consumer.properties.
-        // // // You can also pass input stream, properties object or
-        // // // properties file name.
-        // try {
-        // config.load();
-        //
-        // // Create an instance of SocialAuthManager and set
-        // // config
-        // SocialAuthManager manager = new SocialAuthManager();
-        // manager.setSocialAuthConfig(config);
-        //
-        // // URL of YOUR application which will be called after
-        // // authentication
-        // String successUrl =
-        // "http://srv2.gardening-manager.com:8090/nuxeo/nxstartup.faces?provider=GoogleOpenIDConnect";
-        //
-        // // get Provider URL to which you should redirect for
-        // // authentication.
-        // // id can have values "facebook", "twitter", "yahoo"
-        // // etc. or the OpenID URL
-        // String url = manager.getAuthenticationUrl("google", successUrl);
-        //
-        // // Store in session
-        // // session.setAttribute("authManager", manager);
-        // } catch (Exception e) {
-        // // TODO Auto-generated catch block
-        // e.printStackTrace();
-        // }
     }
+
+    // protected void getRefreshAccessToken(String token) {
+    // new AsyncTask<String, Void, String>() {
+    // @Override
+    // protected String doInBackground(String... params) {
+    // try {
+    // HttpClient httpclient = new DefaultHttpClient();
+    // HttpPost httppost = new HttpPost("https://accounts.google.com/o/oauth2/token");
+    // httppost.setHeader("Content-type", "application/x-www-form-urlencoded");
+    // // Add your data
+    // List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+    // nameValuePairs.add(new BasicNameValuePair("code", params[0]));
+    // nameValuePairs.add(new BasicNameValuePair("client_id", CLIENT_ID));
+    // nameValuePairs.add(new BasicNameValuePair("client_secret", CLIENT_SECRET));
+    // nameValuePairs.add(new BasicNameValuePair("grant_type", "authorization_code"));
+    //
+    // UrlEncodedFormEntity entity = new UrlEncodedFormEntity(nameValuePairs);
+    // httppost.setEntity(entity);
+    // HttpResponse response = httpclient.execute(httppost);
+    // StatusLine serverCode = response.getStatusLine();
+    // int code = serverCode.getStatusCode();
+    // if (code == 200) {
+    // InputStream is = response.getEntity().getContent();
+    // JSONArray jsonArray = new JSONArray(convertStreamToString(is));
+    // String refreshToken = (String) jsonArray.opt(4);
+    // String accessToken = (String) jsonArray.opt(0);
+    // return accessToken;
+    // // bad token, invalidate and get a new one
+    // } else if (code == 401) {
+    // GoogleAuthUtil.invalidateToken(LoginActivity.this, params[0]);
+    // Log.e(TAG, "Server auth error: " + response.getStatusLine());
+    // return null;
+    // // unknown error, do something else
+    // } else {
+    // InputStream is = response.getEntity().getContent();
+    // String error = convertStreamToString(is);
+    // Log.e("Server returned the following error code: " + serverCode, "");
+    // return null;
+    // }
+    // } catch (MalformedURLException e) {
+    // } catch (IOException e) {
+    // } catch (JSONException e) {
+    // } finally {
+    // }
+    // return null;
+    // }
+    //
+    // @Override
+    // protected void onPostExecute(String accessToken) {
+    // Log.d("AccessToken", " " + accessToken);
+    // }
+    // }.execute(token);
+    // }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
