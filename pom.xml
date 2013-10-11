@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.gots</groupId>
   <artifactId>gardening-manager</artifactId>
@@ -69,7 +70,6 @@
       <artifactId>analytics</artifactId>
       <version>1.4.2</version>
     </dependency>
-
     <dependency>
       <groupId>com.google.android.admob</groupId>
       <artifactId>admob</artifactId>
@@ -217,6 +217,34 @@
       <artifactId>google-play-services</artifactId>
       <version>12</version>
       <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>com.google.api-client</groupId>
+      <artifactId>google-api-client</artifactId>
+      <version>1.17.0-rc</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>xpp3</artifactId>
+          <groupId>xpp3</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>httpclient</artifactId>
+          <groupId>org.apache.httpcomponents</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>junit</artifactId>
+          <groupId>junit</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>android</artifactId>
+          <groupId>com.google.android</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.google.api-client</groupId>
+      <artifactId>google-api-client-android</artifactId>
+      <version>1.17.0-rc</version>
     </dependency>
     <!-- ********* SOCIALAUTH INTEGRATION END********* -->
     <dependency>

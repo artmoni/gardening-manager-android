@@ -290,7 +290,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME.concat(String.valueOf(currentGardenId)), null, DATABASE_VERSION);
         
     }
-
     /*
      * Change database after changing GotsPreferences.ORG_GOTS_CURRENT_GARDENID
      */
@@ -428,5 +427,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         }
     }
+    
+    
 
 }

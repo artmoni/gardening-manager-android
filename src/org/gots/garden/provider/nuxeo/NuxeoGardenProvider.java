@@ -196,7 +196,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
     @Override
     public GardenInterface createGarden(GardenInterface garden) {
 
-        return createNuxeoGarden(garden);
+        return createNuxeoGarden(super.createGarden(garden));
     }
 
     protected GardenInterface createNuxeoGarden(GardenInterface localGarden) {
@@ -220,9 +220,9 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
                 public void onSuccess(String executionId, Object data) {
                     Document doc = (Document) data;
                     currentGarden.setUUID(doc.getId());
-                    currentGarden = NuxeoGardenProvider.super.createGarden(currentGarden);
+                    currentGarden = NuxeoGardenProvider.super.updateGarden(currentGarden);
 
-                    mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
+//                    mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
 
                     Log.d(TAG, "onSuccess " + data);
                     force_force = true;

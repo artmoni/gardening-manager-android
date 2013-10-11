@@ -16,6 +16,7 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -44,6 +45,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 
 public class LoginActivity extends AbstractActivity {
     protected static final String TAG = "LoginActivity";
@@ -58,6 +60,10 @@ public class LoginActivity extends AbstractActivity {
 
     private NuxeoAuthentication nuxeoAuthentication;
 
+    protected int AUTHTOKEN_CODE_RESULT = 1;
+
+    Account selectedAccount = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +75,7 @@ public class LoginActivity extends AbstractActivity {
         bar.setTitle(R.string.app_name);
         nuxeoAuthentication = new NuxeoAuthentication(this);
 
+        // credential = GoogleAccountCredential.usingOAuth2(context, scopes)
     }
 
     public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
@@ -106,10 +113,8 @@ public class LoginActivity extends AbstractActivity {
 
         if (gotsPrefs.isConnectedToServer()) {
             buildLayoutConnected();
-            return;
-        }
-
-        buildLayoutDisconnected();
+        } else
+            buildLayoutDisconnected();
 
     }
 
@@ -155,7 +160,7 @@ public class LoginActivity extends AbstractActivity {
                 // GoogleAnalyticsTracker.getInstance().trackEvent("Login", "GoogleAuthentication",
                 // "Request this new feature", 0);
 
-                launchGoogle();
+                selectAccount();
                 // tokenNuxeoConnect();
 
                 // finish();
@@ -337,7 +342,49 @@ public class LoginActivity extends AbstractActivity {
         }
     }
 
-    void launchGoogle() {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (AUTHTOKEN_CODE_RESULT == requestCode) {
+            if (resultCode == Activity.RESULT_OK)
+                requestOAuth2Token(selectedAccount);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    protected void requestOAuth2Token(final Account account) {
+        new AsyncTask<String, Integer, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+
+                GoogleAuthentication authentication = new GoogleAuthentication(getApplicationContext());
+                String token = null;
+                try {
+                    token = authentication.getToken(params[0]);
+                } catch (UserRecoverableAuthException e) {
+                    startActivityForResult(e.getIntent(), AUTHTOKEN_CODE_RESULT);
+                } catch (IOException e) {
+                    Log.e(TAG, e.getMessage(), e);
+                } catch (GoogleAuthException e) {
+                    Log.e(TAG, e.getMessage(), e);
+                }
+                if (token != null)
+                    authentication.getUserFriends(token, authentication.getUserID(token));
+                return token;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                if (result != null)
+                    Toast.makeText(LoginActivity.this, result, Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(LoginActivity.this, "Error requesting GoogleAuthUtil.getToken", Toast.LENGTH_SHORT).show();
+
+                super.onPostExecute(result);
+            }
+        }.execute(account.name);
+    }
+
+    void selectAccount() {
         AccountManager manager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
         Account[] accounts = manager.getAccounts();
         final List<Account> usableAccounts = new ArrayList<Account>();
@@ -348,45 +395,20 @@ public class LoginActivity extends AbstractActivity {
                 items.add(String.format("%s (%s)", account.name, account.type));
             }
         }
+        if (usableAccounts.size() > 1)
+            new AlertDialog.Builder(this).setTitle("Action").setItems(items.toArray(new String[items.size()]),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int item) {
+                            selectedAccount = usableAccounts.get(item);
+                            requestOAuth2Token(selectedAccount);
+                        }
 
-        new AlertDialog.Builder(this).setTitle("Action").setItems(items.toArray(new String[items.size()]),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int item) {
-
-                        new AsyncTask<String, Integer, String>() {
-                            @Override
-                            protected String doInBackground(String... params) {
-
-                                GoogleAuthentication authentication = new GoogleAuthentication(getApplicationContext());
-                                String token = null;
-                                try {
-                                    token = authentication.getToken(params[0]);
-                                } catch (UserRecoverableAuthException e) {
-                                    startActivityForResult(e.getIntent(), 0);
-                                } catch (IOException e) {
-                                    Log.e(TAG, e.getMessage(), e);
-                                } catch (GoogleAuthException e) {
-                                    Log.e(TAG, e.getMessage(), e);
-                                }
-                                return token;
-                            }
-
-                            @Override
-                            protected void onPostExecute(String result) {
-                                if (result != null)
-                                    Toast.makeText(LoginActivity.this, result, Toast.LENGTH_SHORT).show();
-                                else
-                                    Toast.makeText(LoginActivity.this, "Error requesting GoogleAuthUtil.getToken",
-                                            Toast.LENGTH_SHORT).show();
-                                ;
-
-                                super.onPostExecute(result);
-                            }
-                        }.execute(usableAccounts.get(item).name);
-                    }
-
-                }).show();
+                    }).show();
+        else if (usableAccounts.get(0) != null) {
+            selectedAccount = usableAccounts.get(0);
+            requestOAuth2Token(usableAccounts.get(0));
+        }
 
     }
 

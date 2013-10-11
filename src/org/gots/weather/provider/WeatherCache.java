@@ -58,9 +58,9 @@ public class WeatherCache {
 			weatherXmlStream = getLocalCache(fileName);
 
 		} catch (URISyntaxException e) {
-            Log.w(TAG, e.getMessage());
+            Log.w(TAG, e.getMessage(),e);
 		} catch (Exception e) {
-			Log.w(TAG, e.getMessage());
+			Log.w(TAG, e.getMessage(),e);
 			try {
 				if (currentDownloadTry < MAX_DOWNLOAD_TRY || !url.equals(WeatherCache.CURRENT_DOWNLOAD_URL)) {
 					WeatherCache.CURRENT_DOWNLOAD_URL = url;

@@ -16,13 +16,10 @@ import android.database.Cursor;
 
 public class LocalAllotmentProvider extends GotsDBHelper implements AllotmentProvider {
 
-
-
     public LocalAllotmentProvider(Context mContext) {
         super(mContext);
 
     }
-
 
     protected BaseAllotmentInterface convertToAllotment(Cursor cursor) {
         BaseAllotmentInterface lot = new Allotment();
@@ -58,7 +55,7 @@ public class LocalAllotmentProvider extends GotsDBHelper implements AllotmentPro
 
     public BaseAllotmentInterface getAllotment(int id) {
         BaseAllotmentInterface allotment = null;
-//        open();
+        // open();
         Cursor cursor;
 
         cursor = bdd.query(DatabaseHelper.ALLOTMENT_TABLE_NAME, null, DatabaseHelper.ALLOTMENT_ID + "=" + id, null,
@@ -68,7 +65,7 @@ public class LocalAllotmentProvider extends GotsDBHelper implements AllotmentPro
             allotment = convertToAllotment(cursor);
         }
         cursor.close();
-//        close();
+        // close();
         return allotment;
     }
 
@@ -76,17 +73,23 @@ public class LocalAllotmentProvider extends GotsDBHelper implements AllotmentPro
     public List<BaseAllotmentInterface> getMyAllotments() {
 
         ArrayList<BaseAllotmentInterface> allAllotment = new ArrayList<BaseAllotmentInterface>();
-//        open();
-        Cursor cursor = bdd.query(DatabaseHelper.ALLOTMENT_TABLE_NAME, null, null, null, null, null, null);
+        // open();
+        Cursor cursor = null;
+        try {
+            cursor = bdd.query(DatabaseHelper.ALLOTMENT_TABLE_NAME, null, null, null, null, null, null);
 
-        if (cursor.moveToFirst()) {
-            do {
-                BaseAllotmentInterface allotment = convertToAllotment(cursor);
-                allAllotment.add(allotment);
-            } while (cursor.moveToNext());
+            if (cursor.moveToFirst()) {
+                do {
+                    BaseAllotmentInterface allotment = convertToAllotment(cursor);
+                    allAllotment.add(allotment);
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            if (cursor != null)
+                cursor.close();
+            // close();
         }
-        cursor.close();
-//        close();
+        // close();
         return allAllotment;
     }
 
@@ -94,31 +97,31 @@ public class LocalAllotmentProvider extends GotsDBHelper implements AllotmentPro
     public BaseAllotmentInterface createAllotment(BaseAllotmentInterface allotment) {
 
         long rowid;
-//        open();
+        // open();
         ContentValues values = convertToContentValues(allotment);
 
         // values.put(DatabaseHelper.ACTIONSEED_DATEACTIONDONE, Calendar.getInstance().getTimeInMillis());
 
         rowid = bdd.insert(DatabaseHelper.ALLOTMENT_TABLE_NAME, null, values);
         allotment.setId(Long.valueOf(rowid).intValue());
-//        close();
+        // close();
         return allotment;
     }
 
     @Override
     public int removeAllotment(BaseAllotmentInterface allotment) {
-//        open();
+        // open();
         int nbRow = bdd.delete(DatabaseHelper.ALLOTMENT_TABLE_NAME,
                 DatabaseHelper.ALLOTMENT_ID + "=" + allotment.getId() + "", null);
-//        close();
+        // close();
         return nbRow;
     }
 
     @Override
     public BaseAllotmentInterface updateAllotment(BaseAllotmentInterface allotment) {
-//        open();
+        // open();
         ContentValues values = convertToContentValues(allotment);
-        Cursor cursor;
+        Cursor cursor = null;
         try {
 
             if (allotment.getUUID() != null) {
@@ -139,11 +142,12 @@ public class LocalAllotmentProvider extends GotsDBHelper implements AllotmentPro
                 int rowid = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ALLOTMENT_ID));
                 allotment.setId(rowid);
             }
-            cursor.close();
         } finally {
+            if (cursor != null)
+                cursor.close();
             // close();
         }
-//        close();
+        // close();
 
         return allotment;
     }

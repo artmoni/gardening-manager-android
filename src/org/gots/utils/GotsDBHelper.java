@@ -1,6 +1,7 @@
 package org.gots.utils;
 
 import org.gots.DatabaseHelper;
+import org.gots.garden.sql.GardenSQLite;
 import org.gots.preferences.GotsPreferences;
 
 import android.content.Context;
@@ -17,19 +18,34 @@ public class GotsDBHelper {
 
     protected GotsPreferences gotsPrefs;
 
+    private int databaseType = 0;
+
+    public final static int DATABASE_GARDEN_TYPE = 100;
+
     public GotsDBHelper(Context mContext) {
         this.mContext = mContext;
         gotsPrefs = GotsPreferences.getInstance().initIfNew(mContext);
         open();
     }
 
-    private void open() {
-        actionSeedSQLite = new DatabaseHelper(mContext,
-                GotsPreferences.getInstance().initIfNew(mContext).getCurrentGardenId());
+    public GotsDBHelper(Context mContext, int databaseType) {
+        this.mContext = mContext;
+        this.databaseType = databaseType;
+        gotsPrefs = GotsPreferences.getInstance().initIfNew(mContext);
+        open();
+    }
+
+    private synchronized void open() {
+        if (databaseType == DATABASE_GARDEN_TYPE)
+            actionSeedSQLite = new GardenSQLite(mContext);
+        else
+            actionSeedSQLite = new DatabaseHelper(mContext,
+                    GotsPreferences.getInstance().initIfNew(mContext).getCurrentGardenId());
+
         bdd = actionSeedSQLite.getWritableDatabase();
     }
 
-    public void close() {
+    public synchronized void close() {
         if (bdd != null && bdd.isOpen())
             bdd.close();
     }

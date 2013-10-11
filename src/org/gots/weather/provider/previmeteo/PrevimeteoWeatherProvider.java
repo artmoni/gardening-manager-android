@@ -34,7 +34,7 @@ import android.text.format.DateFormat;
 import android.util.Log;
 
 public class PrevimeteoWeatherProvider extends WeatherDBHelper implements WeatherProvider {
-    private static final String TAG = "PrevimeteoWeatherTask";
+    private static final String TAG = "PrevimeteoWeatherProvider";
 
     protected URL url;
 

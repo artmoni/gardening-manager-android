@@ -63,6 +63,8 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
     private String TAG = "DashboardActivity";
 
+    private MenuItem itemConnected;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +96,8 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         }
         weatherIntent = new Intent(this, WeatherUpdateService.class);
 
+        registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
+
         // if (GotsPreferences.getInstance(this).getOAuthtToken() == null) {
         // Intent intent = new Intent(this, AccountList.class);
         // startActivityForResult(intent, 0);
@@ -103,9 +107,26 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
     private BroadcastReceiver weatherBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            updateUI(intent);
+            if (BroadCastMessages.WEATHER_DISPLAY_EVENT.equals(intent.getAction())) {
+
+                updateUI(intent);
+            } else if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())) {
+                refreshConnectionState();
+
+            }
         }
+
     };
+
+    protected void refreshConnectionState() {
+        if (itemConnected == null) {
+            return;
+        }
+        if (gotsPrefs.isConnectedToServer())
+            itemConnected.setIcon(getResources().getDrawable(R.drawable.garden_connected));
+        else
+            itemConnected.setIcon(getResources().getDrawable(R.drawable.garden_disconnected));
+    }
 
     private void updateUI(Intent intent) {
         boolean isError = intent.getBooleanExtra("error", true);
@@ -182,13 +203,15 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         }
 
         startService(weatherIntent);
-        registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
 
         if (gotsPrefs.getCurrentGardenId() == -1) {
             Animation myFadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.tween);
             findViewById(R.id.dashboard_button_profile).startAnimation(myFadeInAnimation);
         } else
             findViewById(R.id.dashboard_button_profile).clearAnimation();
+
+        refreshConnectionState();
+
     }
 
     @Override
@@ -222,12 +245,12 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
             return true;
 
         case R.id.settings:
-//            Intent settingsIntent = new Intent(this, SettingsActivity.class);
-//            startActivity(settingsIntent);
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.setCustomAnimations(android.R.animator.fade_in,
-                    android.R.animator.fade_out);
-            ft.replace(R.id.idContent,new PreferenceActivity()).addToBackStack("back").commit();
+            // Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            // startActivity(settingsIntent);
+            // FragmentTransaction ft = getFragmentManager().beginTransaction();
+            // ft.setCustomAnimations(android.R.animator.fade_in,
+            // android.R.animator.fade_out);
+            // ft.replace(R.id.idContent,new PreferenceActivity()).addToBackStack("back").commit();
             return true;
         default:
             return super.onOptionsItemSelected(item);
@@ -238,8 +261,8 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.menu_dashboard, menu);
+        itemConnected = (MenuItem) menu.findItem(R.id.connection);
         return true;
     }
 
-    
 }

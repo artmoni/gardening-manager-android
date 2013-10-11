@@ -8,6 +8,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
@@ -17,10 +20,14 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.gots.ui.LoginActivity;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
+import com.google.android.gms.common.Scopes;
+import com.google.android.gms.plus.PlusClient;
+import com.google.android.gms.plus.model.people.Person;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -45,51 +52,51 @@ public class GoogleAuthentication {
         this.mContext = context;
     }
 
-//    protected void getAPIToken() {
-//        new AsyncTask<String, Void, String>() {
-//
-//            @Override
-//            protected String doInBackground(String... params) {
-//                try {
-//                    final String AUTHORIZE_URL = "https://accounts.google.com/o/oauth2/auth?response_type=code&client_id="
-//                            + CLIENT_ID + "&redirect_uri=" + REDIRECT_URI;
-//                    final String SCOPED_AUTHORIZE_URL = AUTHORIZE_URL + "&scope="
-//                            + URLEncoder.encode(G_PLUS_SCOPE + " " + USERINFO_SCOPE);
-//
-//                    HttpClient httpclient = new DefaultHttpClient();
-//                    HttpGet httpget = new HttpGet(SCOPED_AUTHORIZE_URL);
-//
-//                    HttpResponse response = httpclient.execute(httpget);
-//                    StatusLine serverCode = response.getStatusLine();
-//                    int code = serverCode.getStatusCode();
-//                    if (code == 200) {
-//                        InputStream is = response.getEntity().getContent();
-//                        JSONArray jsonArray = new JSONArray(convertStreamToString(is));
-//                        String authToken = (String) jsonArray.opt(0);
-//                        return authToken;
-//                        // bad token, invalidate and get a new one
-//                    } else if (code == 401) {
-//                        Log.e(TAG, "Server auth error: " + response.getStatusLine());
-//                        return null;
-//                        // unknown error, do something else
-//                    } else {
-//                        Log.e("Server returned the following error code: " + serverCode, "");
-//                        return null;
-//                    }
-//                } catch (MalformedURLException e) {
-//                } catch (IOException e) {
-//                } catch (JSONException e) {
-//                } finally {
-//                }
-//                return null;
-//            }
-//
-//            @Override
-//            protected void onPostExecute(String accessToken) {
-//                Log.d("AccessToken", " " + accessToken);
-//            }
-//        }.execute();
-//    }
+    // protected void getAPIToken() {
+    // new AsyncTask<String, Void, String>() {
+    //
+    // @Override
+    // protected String doInBackground(String... params) {
+    // try {
+    // final String AUTHORIZE_URL = "https://accounts.google.com/o/oauth2/auth?response_type=code&client_id="
+    // + CLIENT_ID + "&redirect_uri=" + REDIRECT_URI;
+    // final String SCOPED_AUTHORIZE_URL = AUTHORIZE_URL + "&scope="
+    // + URLEncoder.encode(G_PLUS_SCOPE + " " + USERINFO_SCOPE);
+    //
+    // HttpClient httpclient = new DefaultHttpClient();
+    // HttpGet httpget = new HttpGet(SCOPED_AUTHORIZE_URL);
+    //
+    // HttpResponse response = httpclient.execute(httpget);
+    // StatusLine serverCode = response.getStatusLine();
+    // int code = serverCode.getStatusCode();
+    // if (code == 200) {
+    // InputStream is = response.getEntity().getContent();
+    // JSONArray jsonArray = new JSONArray(convertStreamToString(is));
+    // String authToken = (String) jsonArray.opt(0);
+    // return authToken;
+    // // bad token, invalidate and get a new one
+    // } else if (code == 401) {
+    // Log.e(TAG, "Server auth error: " + response.getStatusLine());
+    // return null;
+    // // unknown error, do something else
+    // } else {
+    // Log.e("Server returned the following error code: " + serverCode, "");
+    // return null;
+    // }
+    // } catch (MalformedURLException e) {
+    // } catch (IOException e) {
+    // } catch (JSONException e) {
+    // } finally {
+    // }
+    // return null;
+    // }
+    //
+    // @Override
+    // protected void onPostExecute(String accessToken) {
+    // Log.d("AccessToken", " " + accessToken);
+    // }
+    // }.execute();
+    // }
 
     protected String convertStreamToString(InputStream inputStream) throws IOException {
         if (inputStream != null) {
@@ -111,39 +118,138 @@ public class GoogleAuthentication {
 
     public String getToken(String accountName) throws UserRecoverableAuthException, IOException, GoogleAuthException {
         String token = null;
-        final String G_PLUS_SCOPE = "oauth2:https://www.googleapis.com/auth/plus.me";
+
+        final String SCOPE_PREFIX = "oauth2:";
+        final String G_PLUS_SCOPE = "https://www.googleapis.com/auth/plus.me";
+
         final String USERINFO_SCOPE = "https://www.googleapis.com/auth/userinfo.profile";
 
-        final String SCOPES = G_PLUS_SCOPE + " " + USERINFO_SCOPE;
+        final String SCOPES = SCOPE_PREFIX + Scopes.PLUS_LOGIN;
+
         token = GoogleAuthUtil.getToken(mContext, accountName, SCOPES);
-
-        URL url = new URL("https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + token);
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        int serverCode = con.getResponseCode();
-        // successful query
-        if (serverCode == 200) {
-            try {
-                InputStream is = con.getInputStream();
-                JSONArray jsonArray;
-                jsonArray = new JSONArray(convertStreamToString(is));
-                String name = (String) jsonArray.opt(0);
-
-                // String name = getFirstName(readResponse(is));
-                Log.d(TAG, "Hello " + name + "!");
-                is.close();
-            } catch (JSONException e) {
-                return null;
-            }
-            // bad token, invalidate and get a new one
-        } else if (serverCode == 401) {
-            GoogleAuthUtil.invalidateToken(mContext, token);
-            // Log.e(TAG, "Server auth error: " + readResponse(con.getErrorStream()));
-            Log.e(TAG, "Server auth error: ");
-            // unknown error, do something else
-        } else {
-            Log.e("Server returned the following error code: " + serverCode, null);
-        }
+        Log.d(TAG, "GoogleAuthUtil.getToken=" + token);
 
         return token;
+    }
+
+    public String getUserID(String accessToken) {
+        URL url;
+        String userID = null;
+        try {
+            url = new URL("https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + accessToken);
+
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            int serverCode = con.getResponseCode();
+            // successful query
+            if (serverCode == 200) {
+                try {
+                    InputStream is = con.getInputStream();
+                    JSONObject jsonArray;
+                    jsonArray = new JSONObject(convertStreamToString(is));
+                    userID = (String) jsonArray.get("id");
+
+                    Log.d(TAG, "Google User ID= " + userID);
+                    is.close();
+                } catch (JSONException e) {
+                    Log.e(TAG, e.getMessage(), e);
+                    return null;
+                }
+                // bad token, invalidate and get a new one
+            } else if (serverCode == 401) {
+                GoogleAuthUtil.invalidateToken(mContext, accessToken);
+                // Log.e(TAG, "Server auth error: " + readResponse(con.getErrorStream()));
+                Log.e(TAG, "Server auth error: ");
+                // unknown error, do something else
+            } else {
+                Log.e("Server returned the following error code: " + serverCode, null);
+            }
+        } catch (MalformedURLException e1) {
+            Log.e(TAG, e1.getMessage(), e1);
+        } catch (IOException e1) {
+            Log.e(TAG, e1.getMessage(), e1);
+        }
+        return userID;
+    }
+
+    /*
+     * {
+     * "kind": "plus#peopleFeed",
+     * "etag": "\"LTv_6IJISeUQGTVXLjMeOtebkoM/TpYBX4SHaUdpT1vFSGaWTPuziFk\"",
+     * "title": "Google+ List of Visible People",
+     * "nextPageToken": "CGQQ_rSOpJoo",
+     * "totalItems": 166,
+     * "items": [
+     * {
+     * "kind": "plus#person",
+     * "etag": "\"LTv_6IJISeUQGTVXLjMeOtebkoM/yQDt23lqidObGrf1Slt734cfonM\"",
+     * "objectType": "person",
+     * "id": "103452520282063622981",
+     * "displayName": "Abdelwaheb Didi",
+     * "url": "https://profiles.google.com/103452520282063622981",
+     * "image": {
+     * "url": "https://lh4.googleusercontent.com/-eBavB406LE0/AAAAAAAAAAI/AAAAAAAAAAA/luk3KYRL5Go/photo.jpg?sz=50"
+     * }
+     * },
+     * {
+     * "kind": "plus#person",
+     * "etag": "\"LTv_6IJISeUQGTVXLjMeOtebkoM/GOPHYmZ5bYn78QroJ7fmYkE76I0\"",
+     * "objectType": "person",
+     * "id": "101208666708520907297",
+     * "displayName": "Adrien Lalanne-Cassou",
+     * "url": "https://plus.google.com/101208666708520907297",
+     * "image": {
+     * "url": "https://lh6.googleusercontent.com/-YPwvQKYzLhc/AAAAAAAAAAI/AAAAAAAAAAA/b1qXz9LNFYQ/photo.jpg?sz=50"
+     * }
+     * }
+     * }
+     */
+    public List<String> getUserFriends(String accessToken, String userId) {
+
+
+        URL url;
+        List<String> friends = new ArrayList<String>();
+        try {
+            url = new URL("https://www.googleapis.com/plus/v1/people/" + userId + "/people/visible?access_token="
+                    + accessToken);
+
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            int serverCode = con.getResponseCode();
+            // successful query
+            if (serverCode == 200) {
+                try {
+                    InputStream is = con.getInputStream();
+                    JSONArray jsonArray;
+                    JSONObject json = new JSONObject(convertStreamToString(is));
+                    jsonArray = json.getJSONArray("items");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+
+                        JSONObject jo = jsonArray.getJSONObject(i);
+                        String friendName = jo.getString("displayName");
+                        friends.add(friendName);
+                        
+                    }
+
+                    // String name = getFirstName(readResponse(is));
+                    Log.d(TAG, "Hello " + friends + "!");
+                    is.close();
+                } catch (JSONException e) {
+                    Log.e(TAG, e.getMessage(), e);
+                    return null;
+                }
+                // bad token, invalidate and get a new one
+            } else if (serverCode == 401) {
+                GoogleAuthUtil.invalidateToken(mContext, accessToken);
+                // Log.e(TAG, "Server auth error: " + readResponse(con.getErrorStream()));
+                Log.e(TAG, "Server auth error: ");
+                // unknown error, do something else
+            } else {
+                Log.e("Server returned the following error code: " + serverCode, null);
+            }
+        } catch (MalformedURLException e1) {
+            Log.e(TAG, e1.getMessage(), e1);
+        } catch (IOException e1) {
+            Log.e(TAG, e1.getMessage(), e1);
+        }
+        return friends;
     }
 }

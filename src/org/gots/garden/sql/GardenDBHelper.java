@@ -16,52 +16,31 @@ import java.util.List;
 
 import org.gots.bean.Garden;
 import org.gots.garden.GardenInterface;
+import org.gots.utils.GotsDBHelper;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-public class GardenDBHelper {
+public class GardenDBHelper extends GotsDBHelper {
 
     private static final String TAG = "GardenDBHelper";
 
-    // private List<BaseAllotmentInterface> allAllotment = new
-    // ArrayList<BaseAllotmentInterface>();
-
-    private GardenSQLite gardenSQLite;
-
-    private SQLiteDatabase bdd;
-
-    Context mContext;
-
     public GardenDBHelper(Context mContext) {
-        gardenSQLite = new GardenSQLite(mContext);
-        this.mContext = mContext;
-    }
-
-    public void open() {
-        bdd = gardenSQLite.getWritableDatabase();
-    }
-
-    public void close() {
-        bdd.close();
+        super(mContext, GotsDBHelper.DATABASE_GARDEN_TYPE);
     }
 
     public synchronized GardenInterface insertGarden(GardenInterface garden) {
         long rowid;
-        open();
         ContentValues values = new ContentValues();
         values.put(GardenSQLite.GARDEN_UUID, garden.getUUID());
-
         values.put(GardenSQLite.GARDEN_ADMINAREA, garden.getAdminArea());
         values.put(GardenSQLite.GARDEN_COUNTRYNAME, garden.getCountryName());
         values.put(GardenSQLite.GARDEN_LOCALITY, garden.getLocality());
 
         rowid = bdd.insert(GardenSQLite.GARDEN_TABLE_NAME, null, values);
         garden.setId(rowid);
-        close();
         return garden;
     }
 
@@ -73,7 +52,6 @@ public class GardenDBHelper {
     public synchronized GardenInterface getGarden(int gardenId) {
         GardenInterface garden = null;
         // SeedActionInterface searchedSeed = new GrowingSeed();
-        open();
         Cursor cursor;
         if (gardenId == -1)
             cursor = bdd.query(GardenSQLite.GARDEN_TABLE_NAME, null, null, null, null, null, null);
@@ -85,16 +63,11 @@ public class GardenDBHelper {
             garden = cursorToGarden(cursor);
         }
         cursor.close();
-        close();
         return garden;
     }
 
     private GardenInterface cursorToGarden(Cursor cursor) {
         GardenInterface garden = new Garden();
-        // ActionFactory factory = new ActionFactory();
-        // lot =
-        // factory.buildAction(mContext,cursor.getString(cursor.getColumnIndex(GardenDatabase.ACTION_NAME)));
-        // lot.setId(cursor.getInt(cursor.getColumnIndex(GardenDatabase.ACTION_ID)));
         garden.setId(cursor.getInt(cursor.getColumnIndex(GardenSQLite.GARDEN_ID)));
 
         garden.setAdminArea(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_ADMINAREA)));
@@ -106,7 +79,6 @@ public class GardenDBHelper {
     }
 
     public synchronized GardenInterface updateGarden(GardenInterface garden) {
-        open();
         ContentValues values = new ContentValues();
         values.put(GardenSQLite.GARDEN_ADMINAREA, garden.getAdminArea());
         values.put(GardenSQLite.GARDEN_COUNTRYNAME, garden.getCountryName());
@@ -133,17 +105,15 @@ public class GardenDBHelper {
             if (cursor.moveToFirst()) {
                 int rowid = cursor.getInt(cursor.getColumnIndex(GardenSQLite.GARDEN_ID));
                 garden.setId(rowid);
-                cursor.close();
             }
+            cursor.close();
         }
         Log.d(TAG, "Updating " + nbRows + " rows > " + garden);
-        close();
         return garden;
     }
 
     public synchronized List<GardenInterface> getGardens() {
         List<GardenInterface> gardens = new ArrayList<GardenInterface>();
-        open();
         Cursor cursor = bdd.query(GardenSQLite.GARDEN_TABLE_NAME, null, null, null, null, null, null);
         if (cursor.moveToFirst()) {
             do {
@@ -152,27 +122,21 @@ public class GardenDBHelper {
             } while (cursor.moveToNext());
         }
         cursor.close();
-        close();
         return gardens;
     }
 
     public synchronized int deleteGarden(GardenInterface garden) {
-        open();
         int rowid = bdd.delete(GardenSQLite.GARDEN_TABLE_NAME, GardenSQLite.GARDEN_ID + "=" + garden.getId(), null);
         if (rowid != 1) {
             Log.w("deleteGarden", "Garden=" + garden + " has not been found");
         }
-        close();
         return rowid;
     }
 
     public synchronized int getCountGarden() {
-        // SeedActionInterface searchedSeed = new GrowingSeed();
-        open();
         Cursor cursor = bdd.query(GardenSQLite.GARDEN_TABLE_NAME, null, null, null, null, null, null);
         int nbGarden = cursor.getCount();
         cursor.close();
-        close();
         return nbGarden;
     }
 

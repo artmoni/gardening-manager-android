@@ -153,47 +153,6 @@ public class GardenManager extends BroadcastReceiver {
         }.execute(garden);
     }
 
-    public void update() {
-        // new RefreshTask().execute(new Object(), false);
-
-    }
-
-    // private class RefreshTask extends AsyncTask<Object, Boolean, Long> {
-    // @Override
-    // protected Long doInBackground(Object... params) {
-    //
-    // GotsConnector connector;
-    // if (!isLocalStore)
-    // // connector = new SimpleConnector();
-    // connector = new NuxeoConnector(mContext);
-    // else
-    // connector = new LocalConnector(mContext);
-    // List<BaseSeedInterface> seeds = connector.getAllSeeds();
-    //
-    // VendorSeedDBHelper theSeedBank = new VendorSeedDBHelper(mContext);
-    // for (Iterator<BaseSeedInterface> iterator = seeds.iterator();
-    // iterator.hasNext();) {
-    // BaseSeedInterface baseSeedInterface = iterator.next();
-    // if (theSeedBank.getSeedByReference(baseSeedInterface.getReference()) ==
-    // null)
-    // theSeedBank.insertSeed(baseSeedInterface);
-    //
-    // }
-    // return null;
-    // }
-    //
-    // @Override
-    // protected void onPostExecute(Long result) {
-    // // VendorSeedDBHelper myBank = new VendorSeedDBHelper(mContext);
-    // // ArrayList<BaseSeedInterface> vendorSeeds;
-    // // vendorSeeds = myBank.getVendorSeeds();
-    //
-    // // setListAdapter(new ListVendorSeedAdapter(mContext, vendorSeeds));
-    // Toast.makeText(mContext, "Updated", 20).show();
-    //
-    // super.onPostExecute(result);
-    // }
-    // }
 
     public List<GardenInterface> getMyGardens(boolean force) {
         return gardenProvider.getMyGardens(force);

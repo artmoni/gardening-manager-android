@@ -72,15 +72,25 @@ public class ProfileActivity extends AbstractActivity {
         public void onReceive(Context context, Intent intent) {
             if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
                 // force_refresh = true;
-                onResume();
+                try {
+                    GardenSync gardenSync = new GardenSync(true);
+                    gardenSync.execute(getApplicationContext());
+
+                } catch (Exception e) {
+                    Log.e(TAG, e.getMessage());
+                }
             }
         }
     };
 
-    private boolean force_refresh = true;
-
     class GardenSync extends AsyncTask<Context, Void, List<GardenInterface>> {
         ProgressDialog dialog;
+
+        private boolean force_refresh = true;
+
+        public GardenSync(boolean force) {
+            force_refresh = force;
+        }
 
         @Override
         protected void onPreExecute() {
@@ -122,7 +132,7 @@ public class ProfileActivity extends AbstractActivity {
         super.onResume();
         // new GardenClass().execute(this);
         try {
-            GardenSync gardenSync = new GardenSync();
+            GardenSync gardenSync = new GardenSync(false);
             gardenSync.execute(this);
 
         } catch (Exception e) {
