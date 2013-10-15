@@ -97,13 +97,13 @@ public class ActionActivity extends AbstractActivity implements OnClickListener 
             finish();
             return true;
         case R.id.help:
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                    Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
-            startActivity(browserIntent);
+//            Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+//                    Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
+//            startActivity(browserIntent);
 
-            // Intent i = new Intent(this, WebHelpActivity.class);
-            // i.putExtra("org.gots.help.page", getClass().getSimpleName());
-            // startActivity(i);
+            Intent browserIntent = new Intent(this, WebHelpActivity.class);
+            browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
+            startActivity(browserIntent);
 
             return true;
 
