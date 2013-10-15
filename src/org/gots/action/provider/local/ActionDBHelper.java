@@ -26,7 +26,7 @@ import android.database.sqlite.SQLiteDatabase;
 public class ActionDBHelper extends GotsDBHelper {
 
     public ActionDBHelper(Context mContext) {
-        super(mContext);
+        super(mContext, GotsDBHelper.DATABASE_GARDEN_TYPE);
     }
 
     public long insertAction(BaseActionInterface action) {
@@ -98,16 +98,18 @@ public class ActionDBHelper extends GotsDBHelper {
         BaseActionInterface action = null;
         // SeedActionInterface searchedSeed = new GrowingSeed();
         // open();
+        Cursor cursor = null;
         try {
-            Cursor cursor = bdd.query(GardenSQLite.ACTION_TABLE_NAME, null, GardenSQLite.ACTION_NAME + "='" + name
-                    + "'", null, null, null, null);
+            cursor = bdd.query(GardenSQLite.ACTION_TABLE_NAME, null, GardenSQLite.ACTION_NAME + "='" + name + "'",
+                    null, null, null, null);
 
             if (cursor.moveToFirst()) {
                 action = cursorToAction(cursor);
                 cursor.close();
             }
         } finally {
-            // close();
+            if (cursor != null)
+                cursor.close();
         }
         return action;
 
