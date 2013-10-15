@@ -8,14 +8,14 @@
  * Contributors:
  *     sfleury - initial API and implementation
  ******************************************************************************/
-package org.gots.action.sql;
+package org.gots.action.provider.local;
 
 import java.util.ArrayList;
 
 import org.gots.action.ActionFactory;
 import org.gots.action.BaseActionInterface;
 import org.gots.action.PermanentActionInterface;
-import org.gots.garden.sql.GardenSQLite;
+import org.gots.garden.provider.local.GardenSQLite;
 import org.gots.utils.GotsDBHelper;
 
 import android.content.ContentValues;

@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.gots.ui;
 
-import java.util.ArrayList;
+import java.util.Calendar;
 
 import org.gots.R;
 import org.gots.action.bean.BuyingAction;
@@ -19,10 +19,7 @@ import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.adapter.ListSpeciesAdapter;
-import org.gots.seed.adapter.PlanningHarvestAdapter;
-import org.gots.seed.adapter.PlanningSowAdapter;
 import org.gots.seed.provider.local.sql.VendorSeedDBHelper;
-import org.gots.seed.view.PlanningWidget;
 import org.gots.seed.view.SeedWidgetLong;
 
 import android.content.Intent;
@@ -38,7 +35,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.Gallery;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -54,10 +51,9 @@ import com.google.zxing.integration.android.IntentResult;
 public class NewSeedActivity extends AbstractActivity implements OnClickListener {
     private static final String SELECTED_SPECIE = "selectedSpecie";
 
+    private DatePicker planningSow;
 
-    private PlanningWidget planningSow;
-
-    private PlanningWidget planningHarvest;
+    private DatePicker planningHarvest;
 
     private AutoCompleteTextView autoCompleteVariety;
 
@@ -81,7 +77,6 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
         bar.setTitle(R.string.seed_register_title);
 
         findViewById(R.id.imageBarCode).setOnClickListener(this);
-
         findViewById(R.id.buttonStock).setOnClickListener(this);
         findViewById(R.id.buttonCatalogue).setOnClickListener(this);
 
@@ -110,42 +105,76 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
         /*
          * PLANNING
          */
-        planningSow = (PlanningWidget) findViewById(R.id.IdSeedEditSowingPlanning);
-        planningSow.setAdapter(new PlanningSowAdapter(newSeed));
-        planningSow.setEditable(true);
+        planningSow = (DatePicker) findViewById(R.id.IdSeedDateSowingPlanning);
+        Calendar sowTime = Calendar.getInstance();
+        if (newSeed.getDateSowingMin() > 0)
+            sowTime.set(Calendar.MONTH, newSeed.getDateSowingMin());
 
-        Button validateSowing = (Button) findViewById(R.id.buttonUpdateSeed);
+        planningSow.init(sowTime.get(Calendar.YEAR), sowTime.get(Calendar.MONTH), sowTime.get(Calendar.DAY_OF_MONTH),
+                new DatePicker.OnDateChangedListener() {
 
-        validateSowing.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        newSeed.setDateSowingMin(planningSow.getMonth());
+                        newSeed.setDateSowingMax(planningSow.getMonth());
 
-            @Override
-            public void onClick(View v) {
-                if (planningSow.getSelectedMonth().size() > 0) {
-                    newSeed.setDateSowingMin(planningSow.getSelectedMonth().get(0));
-                    newSeed.setDateSowingMax(planningSow.getSelectedMonth().get(
-                            planningSow.getSelectedMonth().size() - 1));
-
-                    ArrayList<Integer> harvestMonth = planningHarvest.getSelectedMonth();
-                    if (harvestMonth.size() == 0) {
-                        Toast.makeText(getApplicationContext(), "Please select month to harvest", 3000).show();
-                        return;
+                        seedWidgetLong.setSeed(newSeed);
+                        seedWidgetLong.invalidate();
                     }
+                });
+        // planningSow.setAdapter(new PlanningSowAdapter(newSeed));
+        // planningSow.setEditable(true);
 
-                    int durationmin = harvestMonth.get(0) - newSeed.getDateSowingMin();
-                    newSeed.setDurationMin(durationmin * 30);
+        // Button validateSowing = (Button) findViewById(R.id.buttonUpdateSeed);
+        //
+        // validateSowing.setOnClickListener(new View.OnClickListener() {
+        //
+        // @Override
+        // public void onClick(View v) {
+        // if (planningSow.getSelectedMonth().size() > 0) {
+        // newSeed.setDateSowingMin(planningSow.getSelectedMonth().get(0));
+        // newSeed.setDateSowingMax(planningSow.getSelectedMonth().get(
+        // planningSow.getSelectedMonth().size() - 1));
+        //
+        // ArrayList<Integer> harvestMonth = planningHarvest.getSelectedMonth();
+        // if (harvestMonth.size() == 0) {
+        // Toast.makeText(getApplicationContext(), "Please select month to harvest", 3000).show();
+        // return;
+        // }
+        //
+        // int durationmin = harvestMonth.get(0) - newSeed.getDateSowingMin();
+        // newSeed.setDurationMin(durationmin * 30);
+        //
+        // int durationmax = harvestMonth.get(harvestMonth.size() - 1) - newSeed.getDateSowingMax();
+        // newSeed.setDurationMax(durationmax * 30);
+        //
+        // seedWidgetLong.setSeed(newSeed);
+        // seedWidgetLong.invalidate();
+        // }
+        // }
+        // });
 
-                    int durationmax = harvestMonth.get(harvestMonth.size() - 1) - newSeed.getDateSowingMax();
-                    newSeed.setDurationMax(durationmax * 30);
+        planningHarvest = (DatePicker) findViewById(R.id.IdSeedDateHarvestPlanning);
+        Calendar harvestTime = Calendar.getInstance();
+        if (newSeed.getDateSowingMin() > 0)
+            harvestTime.set(Calendar.MONTH, newSeed.getDateSowingMin() + newSeed.getDurationMin() / 30);
 
-                    seedWidgetLong.setSeed(newSeed);
-                    seedWidgetLong.invalidate();
-                }
-            }
-        });
+        planningHarvest.init(harvestTime.get(Calendar.YEAR), harvestTime.get(Calendar.MONTH),
+                harvestTime.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
 
-        planningHarvest = (PlanningWidget) findViewById(R.id.IdSeedEditHarvestPlanning);
-        planningHarvest.setAdapter(new PlanningHarvestAdapter(newSeed));
-        planningHarvest.setEditable(true);
+                    @Override
+                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        int durationmax = planningHarvest.getMonth() - planningSow.getMonth();
+                        newSeed.setDurationMin(durationmax * 30);
+                        newSeed.setDurationMax(durationmax * 30);
+
+                        seedWidgetLong.setSeed(newSeed);
+                        seedWidgetLong.invalidate();
+                    }
+                });
+
+        // planningHarvest.setAdapter(new PlanningHarvestAdapter(newSeed));
+        // planningHarvest.setEditable(true);
 
         seedWidgetLong = (SeedWidgetLong) findViewById(R.id.idSeedWidgetLong);
 

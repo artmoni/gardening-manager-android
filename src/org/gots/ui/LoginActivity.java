@@ -216,6 +216,10 @@ public class LoginActivity extends AbstractActivity {
         View disconnectLayout = findViewById(R.id.layoutDisconnect);
         disconnectLayout.setVisibility(View.VISIBLE);
 
+        TextView text = (TextView) findViewById(R.id.idConnectedDescription);
+        String textContent = String.valueOf(text.getText());
+        text.setText(textContent.replace("_ACCOUNT_", gotsPrefs.getNuxeoLogin()));
+
         Button buttonDisconnect = (Button) findViewById(R.id.buttonDisconnect);
         buttonDisconnect.setOnClickListener(new View.OnClickListener() {
 

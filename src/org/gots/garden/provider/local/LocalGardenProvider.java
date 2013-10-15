@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.gots.garden.GardenInterface;
 import org.gots.garden.provider.GardenProvider;
-import org.gots.garden.sql.GardenDBHelper;
 import org.gots.preferences.GotsPreferences;
 import org.gots.provider.AbstractProvider;
 

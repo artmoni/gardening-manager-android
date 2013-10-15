@@ -20,13 +20,13 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class MonthWidget extends LinearLayout implements OnClickListener {
+public class MonthWidget extends LinearLayout  {
 
 	private Context mContext;
 	private String monthText = "J";
 	private Boolean isSowingPeriod = false;
 	private Boolean isHarvestPeriod = false;
-	private boolean isEditable = false;
+//	private boolean isEditable = false;
 
 	// private LinearLayout child;
 
@@ -86,14 +86,24 @@ public class MonthWidget extends LinearLayout implements OnClickListener {
 
 	}
 
-	@Override
-	public void onClick(View v) {
-		setSelected(!isSelected());
-	}
+//	@Override
+//	public void onClick(View v) {
+//		setSelected(!isSelected());
+//	}
 	
-	public void setEditable(boolean isEditable) {
-		this.isEditable = isEditable;
-		setOnClickListener(this);
-		invalidate();
-	}
+//  public void setEditable(boolean isEditable) {
+//  this.isEditable = isEditable;
+////    setOnClickListener(this);
+//  invalidate();
+//}
+//	public void setEditable(boolean isEditable) {
+//		this.isEditable = isEditable;
+////		setOnClickListener(this);
+//		invalidate();
+//	}
+//	public void setEditable(boolean isEditable) {
+//		this.isEditable = isEditable;
+////		setOnClickListener(this);
+//		invalidate();
+//	}
 }

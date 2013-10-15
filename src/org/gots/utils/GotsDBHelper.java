@@ -1,7 +1,7 @@
 package org.gots.utils;
 
 import org.gots.DatabaseHelper;
-import org.gots.garden.sql.GardenSQLite;
+import org.gots.garden.provider.local.GardenSQLite;
 import org.gots.preferences.GotsPreferences;
 
 import android.content.Context;

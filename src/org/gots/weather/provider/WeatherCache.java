@@ -32,150 +32,165 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class WeatherCache {
 
-	private String rootDirectory;
-	private final int MAX_DOWNLOAD_TRY = 3;
-	private static URL CURRENT_DOWNLOAD_URL;
-	private static int currentDownloadTry = 0;
-	private static String TAG = "WeatherCache";
+    private String rootDirectory;
 
-	public WeatherCache() {
-		if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-			Log.w("WeatherCache", "Sdcard was not mounted !!");
+    private final int MAX_DOWNLOAD_TRY = 3;
 
-		} else {
-			rootDirectory = Environment.getExternalStorageDirectory().getAbsolutePath() + "/"+GotsPreferences.GARDENING_MANAGER_DIRECTORY+"/cache/";
+    private static URL CURRENT_DOWNLOAD_URL;
 
-			File directory = new File(rootDirectory);
-			directory.mkdirs();
-		}
-	}
+    private static int currentDownloadTry = 0;
 
-	public InputStream getCacheByURL(URL url) {
-		InputStream weatherXmlStream = null;
-		String fileName = "";
-		try {
-			fileName = md5(url.toURI().toString());
-			weatherXmlStream = getLocalCache(fileName);
+    private static String TAG = "WeatherCache";
 
-		} catch (URISyntaxException e) {
-            Log.w(TAG, e.getMessage(),e);
-		} catch (Exception e) {
-			Log.w(TAG, e.getMessage(),e);
-			try {
-				if (currentDownloadTry < MAX_DOWNLOAD_TRY || !url.equals(WeatherCache.CURRENT_DOWNLOAD_URL)) {
-					WeatherCache.CURRENT_DOWNLOAD_URL = url;
-					weatherXmlStream = downloadWeatherXML(url);
-					setLocalCache(fileName, weatherXmlStream);
-					currentDownloadTry++;
+    public WeatherCache() {
+        if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            Log.w("WeatherCache", "Sdcard was not mounted !!");
 
-					GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-					tracker.trackEvent("Weather", "Download", url.getPath(), currentDownloadTry);
+        } else {
+            rootDirectory = Environment.getExternalStorageDirectory().getAbsolutePath() + "/"
+                    + GotsPreferences.GARDENING_MANAGER_DIRECTORY + "/cache/";
 
+            File directory = new File(rootDirectory);
+            directory.mkdirs();
+        }
+    }
 
-				} else {
-					Log.w(TAG, MAX_DOWNLOAD_TRY + " Max download retry reached");
-				}
-			} catch (Exception downloadException) {
-				currentDownloadTry++;
-				Log.w(TAG, "[" + currentDownloadTry + "/"+MAX_DOWNLOAD_TRY+"] " + downloadException.getMessage()
-						+ " / " + url.toString());
+    public InputStream getCacheByURL(URL url) {
+        InputStream weatherXmlStream = null;
+        String fileName = "";
+        try {
+            fileName = md5(url.toURI().toString());
+            weatherXmlStream = getLocalCache(fileName);
 
-				// TODO a better way to store the error XML bad request data
-				fileName = md5("errorfile");
-				if (weatherXmlStream != null)
-					setLocalCache(fileName, weatherXmlStream);
+        } catch (URISyntaxException e) {
+            Log.w(TAG, e.getMessage(), e);
+        } catch (ObsoleteCacheException e) {
+            Log.w(TAG, e.getMessage());
+            weatherXmlStream = getRemoteWeather(url, weatherXmlStream, fileName);
+        }
+        return weatherXmlStream;
+    }
 
-			}
-		}
-		return weatherXmlStream;
-	}
+    protected InputStream getRemoteWeather(URL url, InputStream weatherXmlStream, String fileName) {
+        try {
+            if (currentDownloadTry < MAX_DOWNLOAD_TRY || !url.equals(WeatherCache.CURRENT_DOWNLOAD_URL)) {
+                WeatherCache.CURRENT_DOWNLOAD_URL = url;
+                weatherXmlStream = downloadWeatherXML(url);
+                setLocalCache(fileName, weatherXmlStream);
+                currentDownloadTry++;
 
-	public void clean(URL url) {
-		String fileName;
-		try {
-			fileName = md5(url.toURI().toString());
-			cleanLocalCache(fileName);
+                GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+                tracker.trackEvent("Weather", "Download", url.getPath(), currentDownloadTry);
 
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
-	}
+            } else {
+                Log.w(TAG, MAX_DOWNLOAD_TRY + " Max download retry reached");
+            }
+        } catch (Exception downloadException) {
+            currentDownloadTry++;
+            Log.w(TAG, "[" + currentDownloadTry + "/" + MAX_DOWNLOAD_TRY + "] " + downloadException.getMessage()
+                    + " / " + url.toString());
 
-	private InputStream downloadWeatherXML(URL url) throws URISyntaxException, ClientProtocolException, IOException {
-		HttpClient httpclient = new DefaultHttpClient();
-		HttpGet httpget = new HttpGet(url.toURI());
-		Log.i(TAG, "Get URI "+url.toURI().toString());
+            // TODO a better way to store the error XML bad request data
+            fileName = md5("errorfile");
+            if (weatherXmlStream != null)
+                setLocalCache(fileName, weatherXmlStream);
 
-		// create a response handler
-		ResponseHandler<String> responseHandler = new BasicResponseHandler();
-		String responseBody = httpclient.execute(httpget, responseHandler);
-		// Log.d(DEBUG_TAG, "response from httpclient:n "+responseBody);
+        }
+        return weatherXmlStream;
+    }
 
-		ByteArrayInputStream is = new ByteArrayInputStream(responseBody.getBytes());
+    public void clean(URL url) {
+        String fileName;
+        try {
+            fileName = md5(url.toURI().toString());
+            cleanLocalCache(fileName);
 
-		return is;
-	}
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
 
-	private InputStream getLocalCache(String filePath) throws FileNotFoundException, ObsoleteCacheException {
-		File f = new File(rootDirectory + filePath);
+    private InputStream downloadWeatherXML(URL url) throws URISyntaxException, ClientProtocolException, IOException {
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpGet httpget = new HttpGet(url.toURI());
+        Log.i(TAG, "Get URI " + url.toURI().toString());
 
-		Calendar lastModDate = new GregorianCalendar();
-		lastModDate.setTime(new Date(f.lastModified()));
-		Calendar today = Calendar.getInstance();
+        // create a response handler
+        ResponseHandler<String> responseHandler = new BasicResponseHandler();
+        String responseBody = httpclient.execute(httpget, responseHandler);
+        // Log.d(DEBUG_TAG, "response from httpclient:n "+responseBody);
 
-		FileInputStream fileInputStream = new FileInputStream(f);
+        ByteArrayInputStream is = new ByteArrayInputStream(responseBody.getBytes());
 
-		if (lastModDate.get(Calendar.DAY_OF_YEAR) < today.get(Calendar.DAY_OF_YEAR))
-			throw new ObsoleteCacheException();
+        return is;
+    }
 
-		Log.i(TAG, "Open cache " + f.getAbsolutePath());
-		return fileInputStream;
-	}
+    private InputStream getLocalCache(String filePath) throws ObsoleteCacheException {
+        File f = new File(rootDirectory + filePath);
 
-	private void setLocalCache(String filePath, InputStream weatherXmlStream) {
-		File f = new File(rootDirectory + filePath);
-		try {
+        Calendar lastModDate = new GregorianCalendar();
+        lastModDate.setTime(new Date(f.lastModified()));
+        Calendar today = Calendar.getInstance();
 
-			OutputStream os = new BufferedOutputStream(new FileOutputStream(f));
+        FileInputStream fileInputStream = null;
+        try {
+            fileInputStream = new FileInputStream(f);
 
-			byte buf[] = new byte[1024];
-			int len;
-			while ((len = weatherXmlStream.read(buf)) > 0)
-				os.write(buf, 0, len);
-			os.close();
-			// weatherXmlStream.close();
+            if (lastModDate.get(Calendar.DAY_OF_YEAR) < today.get(Calendar.DAY_OF_YEAR))
+                throw new ObsoleteCacheException();
 
-			Log.i(TAG, "Creating cache file " + f.getAbsolutePath());
+            Log.i(TAG, "Open cache " + f.getAbsolutePath());
+        } catch (FileNotFoundException e) {
+            Log.w(TAG, e.getMessage(), e);
+            throw new ObsoleteCacheException();
+        }
+        return fileInputStream;
+    }
 
-		} catch (Exception e) {
-			Log.e(TAG, "Error creating cache file " + e.getMessage());
-			e.printStackTrace();
-		}
-	}
+    private void setLocalCache(String filePath, InputStream weatherXmlStream) {
+        File f = new File(rootDirectory + filePath);
+        try {
 
-	private void cleanLocalCache(String fileName) {
-		File f = new File(rootDirectory + fileName);
-		f.delete();
+            OutputStream os = new BufferedOutputStream(new FileOutputStream(f));
 
-		Log.d(TAG, "Deleting cache file " + f.getAbsolutePath());
-	}
+            byte buf[] = new byte[1024];
+            int len;
+            while ((len = weatherXmlStream.read(buf)) > 0)
+                os.write(buf, 0, len);
+            os.close();
+            // weatherXmlStream.close();
 
-	private String md5(String s) {
-		try {
-			// Create MD5 Hash
-			MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
-			digest.update(s.getBytes());
-			byte messageDigest[] = digest.digest();
+            Log.i(TAG, "Creating cache file " + f.getAbsolutePath());
 
-			// Create Hex String
-			StringBuffer hexString = new StringBuffer();
-			for (int i = 0; i < messageDigest.length; i++)
-				hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
-			return hexString.toString();
+        } catch (Exception e) {
+            Log.e(TAG, "Error creating cache file " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-		return "";
-	}
+    private void cleanLocalCache(String fileName) {
+        File f = new File(rootDirectory + fileName);
+        f.delete();
+
+        Log.d(TAG, "Deleting cache file " + f.getAbsolutePath());
+    }
+
+    private String md5(String s) {
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
+            digest.update(s.getBytes());
+            byte messageDigest[] = digest.digest();
+
+            // Create Hex String
+            StringBuffer hexString = new StringBuffer();
+            for (int i = 0; i < messageDigest.length; i++)
+                hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
 }

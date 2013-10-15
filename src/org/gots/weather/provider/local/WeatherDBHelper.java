@@ -29,15 +29,9 @@ public class WeatherDBHelper extends GotsDBHelper {
 
     public synchronized WeatherConditionInterface insertWeather(WeatherConditionInterface weatherCondition) {
         long rowid;
-        // open();
         ContentValues values = getWeatherContentValues(weatherCondition);
 
-        try {
-
-            rowid = bdd.insert(DatabaseHelper.WEATHER_TABLE_NAME, null, values);
-        } finally {
-            // bdd.close();
-        }
+        rowid = bdd.insert(DatabaseHelper.WEATHER_TABLE_NAME, null, values);
 
         weatherCondition.setId((int) rowid);
         return weatherCondition;
@@ -45,16 +39,10 @@ public class WeatherDBHelper extends GotsDBHelper {
 
     public synchronized WeatherConditionInterface updateWeather(WeatherConditionInterface weatherCondition) {
         long rowid;
-        // open();
         ContentValues values = getWeatherContentValues(weatherCondition);
 
-        try {
-
-            rowid = bdd.update(DatabaseHelper.WEATHER_TABLE_NAME, values, DatabaseHelper.WEATHER_DAYOFYEAR + "="
-                    + weatherCondition.getDayofYear(), null);
-        } finally {
-            // bdd.close();
-        }
+        rowid = bdd.update(DatabaseHelper.WEATHER_TABLE_NAME, values, DatabaseHelper.WEATHER_DAYOFYEAR + "="
+                + weatherCondition.getDayofYear(), null);
 
         return weatherCondition;
     }

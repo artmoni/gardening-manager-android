@@ -8,7 +8,7 @@
  * Contributors:
  *     sfleury - initial API and implementation
  ******************************************************************************/
-package org.gots.action.sql;
+package org.gots.action.provider.local;
 
 import java.util.ArrayList;
 import java.util.Calendar;

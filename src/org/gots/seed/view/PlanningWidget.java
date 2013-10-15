@@ -24,11 +24,11 @@ public class PlanningWidget extends GridView {
     private Context mContext;
 
 
-    private Boolean isSowingPeriod = false;
-
-    private Boolean isHarvestPeriod = false;
-
-    private boolean isEditable;
+//    private Boolean isSowingPeriod = false;
+//
+//    private Boolean isHarvestPeriod = false;
+//
+//    private boolean isEditable;
 
     // private PlanningSowAdapter planningSowAdapter;
 
@@ -64,25 +64,25 @@ public class PlanningWidget extends GridView {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
-
-    public void setSowingPeriode(boolean isSowingPeriod) {
-        this.isSowingPeriod = isSowingPeriod;
-    }
-
-    public void setHarvestPeriode(boolean isHarvestPeriod) {
-        this.isHarvestPeriod = isHarvestPeriod;
-    }
+//
+//    public void setSowingPeriode(boolean isSowingPeriod) {
+//        this.isSowingPeriod = isSowingPeriod;
+//    }
+//
+//    public void setHarvestPeriode(boolean isHarvestPeriod) {
+//        this.isHarvestPeriod = isHarvestPeriod;
+//    }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
-        if (isEditable)
-            for (int i = 0; i < getChildCount(); i++) {
-                if (MonthWidget.class.isInstance(getChildAt(i))) {
-                    MonthWidget monthWidget = (MonthWidget) getChildAt(i);
-                    monthWidget.setEditable(isEditable);
-                }
-            }
+//        if (isEditable)
+//            for (int i = 0; i < getChildCount(); i++) {
+//                if (MonthWidget.class.isInstance(getChildAt(i))) {
+//                    MonthWidget monthWidget = (MonthWidget) getChildAt(i);
+//                    monthWidget.setEditable(isEditable);
+//                }
+//            }
         
         // MonthWidget monthWidget = new MonthWidget(getContext());
         // monthWidget.setMonthText("T");
@@ -114,10 +114,15 @@ public class PlanningWidget extends GridView {
         return selectedMonth;
     }
 
-    public void setEditable(boolean editable) {
-        this.isEditable = editable;
-        invalidate();
-
-    }
+//  public void setEditable(boolean editable) {
+//  this.isEditable = editable;
+//  invalidate();
+//
+//}
+//    public void setEditable(boolean editable) {
+//        this.isEditable = editable;
+//        invalidate();
+//
+//    }
 
 }

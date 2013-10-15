@@ -27,6 +27,7 @@ import org.gots.weather.WeatherSet;
 import org.gots.weather.provider.WeatherCache;
 import org.gots.weather.provider.local.WeatherDBHelper;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 import android.content.Context;
@@ -45,7 +46,6 @@ public class PrevimeteoWeatherProvider extends WeatherDBHelper implements Weathe
     private boolean iserror;
 
     private WeatherCache cache;
-
 
     public PrevimeteoWeatherProvider(Context context) {
         super(context);
@@ -70,7 +70,6 @@ public class PrevimeteoWeatherProvider extends WeatherDBHelper implements Weathe
         }
 
     }
-
 
     // @Override
     // protected WeatherConditionInterface doInBackground(Object... arg0) {
@@ -140,28 +139,6 @@ public class PrevimeteoWeatherProvider extends WeatherDBHelper implements Weathe
 
     }
 
-    // @Override
-    // protected void onPostExecute(WeatherConditionInterface conditionInterface) {
-    // updateCondition(conditionInterface, requestedDay);
-    //
-    // if (iserror) {
-    // // Toast.makeText(mContext,
-    // // mContext.getResources().getString(R.string.weather_citynotfound),
-    // // 30).show();
-    // Log.w(TAG, "Error updating weather");
-    //
-    // // cache.clean(url);
-    // } else
-    // Log.d(TAG, "Weather updated from " + queryString);
-    //
-    // super.onPostExecute(conditionInterface);
-    // }
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.gots.weather.provider.previmeteo.WeatherProvider#updateCondition(org.gots.weather.WeatherConditionInterface,
-     * java.util.Date)
-     */
     @Override
     public WeatherConditionInterface updateCondition(WeatherConditionInterface condition, Date day) {
         WeatherConditionInterface conditionInterface = null;

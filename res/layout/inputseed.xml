@@ -100,13 +100,18 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical" >
 
+                <DatePicker
+                    android:id="@+id/IdSeedDateSowingPlanning"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+<!-- 
                 <org.gots.seed.view.PlanningWidget
                     android:id="@+id/IdSeedEditSowingPlanning"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:columnWidth="15dp"
                     android:numColumns="12" >
-                </org.gots.seed.view.PlanningWidget>
+                </org.gots.seed.view.PlanningWidget> -->
             </LinearLayout>
 
             <TextView
@@ -119,20 +124,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" >
 
-                <org.gots.seed.view.PlanningWidget
+               <!--  <org.gots.seed.view.PlanningWidget
                     android:id="@+id/IdSeedEditHarvestPlanning"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:columnWidth="15dp"
                     android:numColumns="12" >
-                </org.gots.seed.view.PlanningWidget>
+                </org.gots.seed.view.PlanningWidget> -->
+                   <DatePicker
+                    android:id="@+id/IdSeedDateHarvestPlanning"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
-            <Button
+           <!--  <Button
                 android:id="@+id/buttonUpdateSeed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/seed.menu.update" />
+                android:text="@string/seed.menu.update" /> -->
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -160,7 +169,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:gravity="center_horizontal"
-                android:orientation="horizontal" >
+                android:orientation="vertical" >
 
                 <Button
                     android:id="@+id/buttonStock"

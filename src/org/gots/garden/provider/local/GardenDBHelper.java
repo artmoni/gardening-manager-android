@@ -8,7 +8,7 @@
  * Contributors:
  *     sfleury - initial API and implementation
  ******************************************************************************/
-package org.gots.garden.sql;
+package org.gots.garden.provider.local;
 
 import java.util.ArrayList;
 import java.util.Date;

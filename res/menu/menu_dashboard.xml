@@ -20,7 +20,7 @@
         android:title="@string/login.account" />
     <item
         android:id="@+id/connection"
-        android:icon="@drawable/garden_connected"
+        android:icon="@drawable/garden_disconnected"
         android:showAsAction="always"
         android:title="@string/login.disconnect"/>
     <item

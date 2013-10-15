@@ -15,7 +15,7 @@ import net.londatiga.android.QuickAction;
 import org.gots.action.GardeningActionInterface;
 import org.gots.action.bean.SowingAction;
 import org.gots.action.bean.WateringAction;
-import org.gots.action.sql.ActionDBHelper;
+import org.gots.action.provider.local.ActionDBHelper;
 import org.gots.action.view.ActionWidget;
 import org.gots.bean.Allotment;
 import org.gots.ui.MySeedsListActivity;

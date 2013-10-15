@@ -23,7 +23,7 @@ import org.gots.R;
 import org.gots.action.BaseActionInterface;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.bean.PhotoAction;
-import org.gots.action.sql.ActionSeedDBHelper;
+import org.gots.action.provider.local.ActionSeedDBHelper;
 import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
 import org.gots.seed.GrowingSeedInterface;

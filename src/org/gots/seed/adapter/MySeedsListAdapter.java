@@ -22,7 +22,7 @@ import org.gots.action.GardeningActionInterface;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.adapter.comparator.ISeedSpecieComparator;
 import org.gots.action.bean.ReduceQuantityAction;
-import org.gots.action.sql.ActionDBHelper;
+import org.gots.action.provider.local.ActionDBHelper;
 import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
 import org.gots.bean.BaseAllotmentInterface;

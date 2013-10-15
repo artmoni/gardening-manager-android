@@ -13,7 +13,7 @@ package org.gots;
 import java.util.ArrayList;
 
 import org.gots.action.AbstractActionSeed;
-import org.gots.garden.sql.GardenSQLite;
+import org.gots.garden.provider.local.GardenSQLite;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

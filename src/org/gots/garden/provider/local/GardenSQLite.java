@@ -8,7 +8,7 @@
  * Contributors:
  *     sfleury - initial API and implementation
  ******************************************************************************/
-package org.gots.garden.sql;
+package org.gots.garden.provider.local;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
