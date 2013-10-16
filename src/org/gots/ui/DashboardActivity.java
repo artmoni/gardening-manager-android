@@ -118,6 +118,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
     };
 
+
     protected void refreshConnectionState() {
         if (itemConnected == null) {
             return;
@@ -262,6 +263,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.menu_dashboard, menu);
         itemConnected = (MenuItem) menu.findItem(R.id.connection);
+        refreshConnectionState();
         return true;
     }
 
