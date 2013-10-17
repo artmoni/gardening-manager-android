@@ -114,10 +114,10 @@
     <string name="fillfields.specie">Veuillez choisir une espèce</string>
     <string name="fillfields.variety">Veuillez saisir une variété</string>
     <string name="fillfields.dates">Veuillez indiquer les dates</string>
-    <string name="login.disconnect.description">Votre compte _ACCOUNT_ est désormais synchronisé en ligne sur my.gardening-manager.com\nVous pouvez:</string>
-    <string name="login.disconnect.description2">Partager avec vos amis</string>
-    <string name="login.disconnect.description3">Créer et partager les plantes de votre catalogue</string>
-    <string name="login.disconnect.description4">Vous connecter depuis n\'importe quel appareil</string>
+    <string name="login.connect.description">Votre compte _ACCOUNT_ est désormais synchronisé en ligne sur my.gardening-manager.com\nVous pouvez:</string>
+    <string name="login.connect.description2">Partager avec vos amis</string>
+    <string name="login.connect.description3">Créer et partager les plantes de votre catalogue</string>
+    <string name="login.connect.description4">Vous connecter depuis n\'importe quel appareil</string>
     <string name="login.disconnect">Déconnexion</string>
     <string name="login.simple.description">Connectez vous au réseau Gardening Manager et prenez plaisir à suivre le jardin potager de vos amis.</string>
     <string name="garden.create">Créer mon potager</string>

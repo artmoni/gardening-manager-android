@@ -276,7 +276,7 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/login.disconnect.description" />
+                android:text="@string/login.connect.description" />
 
             <LinearLayout
                 android:layout_width="fill_parent"

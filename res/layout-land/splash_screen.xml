@@ -12,6 +12,14 @@
         android:orientation="vertical" >
 
         <LinearLayout
+            android:id="@+id/idAdsTop"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_line_action" >
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/webArtmoni"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

@@ -103,8 +103,7 @@
     <string name="action.beak">Beak</string>
     <string name="action.lighten">Lighten</string>
     <string name="profile.share.data">Share this garden with friends</string>
-            <string name="login.account">Account</string>
-    
+    <string name="login.account">Account</string>
     <string name="login.login">Login</string>
     <string name="login.password">Password</string>
     <string name="login.signin">Sign in</string>
@@ -114,12 +113,14 @@
     <string name="fillfields.dates">Please give the dates</string>
     <string name="garden.create">Create a new garden</string>
     <string name="login.connect">Connect me</string>
+    <string name="login.connect.state">You work safely online</string>
     <string name="login.connect.error">Connection failed, have you already create an account ? \n please verify your informations and try again. </string>
     <string name="login.disconnect">Sign out</string>
-    <string name="login.disconnect.description">Your account _ACCOUNT_ is now synchronized with my.gardening-manager.com online \n You can:</string>
-    <string name="login.disconnect.description2">Share with your friends</string>
-    <string name="login.disconnect.description3">Create and share your plant descriptions</string>
-    <string name="login.disconnect.description4">Use the application on any of your devices</string>
+    <string name="login.disconnect.state">You are not backuped, log in to be synchronized</string>
+    <string name="login.connect.description">Your account _ACCOUNT_ is now synchronized with my.gardening-manager.com online \n You can:</string>
+    <string name="login.connect.description2">Share with your friends</string>
+    <string name="login.connect.description3">Create and share your plant descriptions</string>
+    <string name="login.connect.description4">Use the application on any of your devices</string>
     <string name="login.sso.description">Use your Google account to synchronize Gardening Manager on any devices</string>
     <string name="login.simple.description">Connect to the Gardening Manager Network and take pleasure in following the vegetable garden of your friends.</string>
     <string name="login.creation.description">Create an account on Gardening Manager Server to synchronize and share your garden information with your friends</string>
