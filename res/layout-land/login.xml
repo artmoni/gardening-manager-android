@@ -25,7 +25,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_marginTop="60dp"
-        android:visibility="visible" >
+        android:visibility="gone" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -238,7 +238,7 @@
         </LinearLayout>
     </ScrollView>
 
-    <LinearLayout
+     <LinearLayout
         android:id="@+id/layoutDisconnect"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -246,44 +246,54 @@
         android:gravity="center_vertical|center_horizontal"
         android:orientation="vertical"
         android:padding="10dp"
-        android:visibility="gone" >
+        android:visibility="visible" >
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:src="@drawable/garden_connected" />
+
+        <TextView
+            android:id="@+id/idConnectedDescription"
+            style="@style/description_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:background="@drawable/bg_line_action"
-            android:gravity="center_vertical|center_horizontal"
-            android:orientation="vertical" >
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/login.connect.description" />
 
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:gravity="center" >
+        <TextView
+            style="@style/description_content"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/bg_line_action"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/login.connect.description2" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/garden_connected" />
-            </LinearLayout>
+        <TextView
+            style="@style/description_content"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/bg_line_action"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/login.connect.description3" />
 
-            <TextView
-                android:id="@+id/idConnectedDescription"
-                style="@style/description_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/login.connect.description" />
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1" >
-            </LinearLayout>
-        </LinearLayout>
+        <TextView
+            style="@style/description_content"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/bg_line_action"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/login.connect.description4" />
 
         <Button
             android:id="@+id/buttonDisconnect"
