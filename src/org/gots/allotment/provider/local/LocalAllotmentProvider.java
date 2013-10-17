@@ -22,21 +22,15 @@ public class LocalAllotmentProvider extends GotsDBHelper implements AllotmentPro
     }
 
     protected BaseAllotmentInterface convertToAllotment(Cursor cursor) {
-        BaseAllotmentInterface lot = new Allotment();
-        // ActionFactory factory = new ActionFactory();
-        // lot = factory.buildAction(mContext,cursor.getString(cursor.getColumnIndex(DatabaseHelper.ACTION_NAME)));
-        // lot.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTION_ID)));
-        lot.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ALLOTMENT_ID)));
-        lot.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ALLOTMENT_NAME)));
-        lot.setUUID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ALLOTMENT_UUID)));
-        return lot;
+        BaseAllotmentInterface allotment = new Allotment();
+        allotment.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ALLOTMENT_ID)));
+        allotment.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ALLOTMENT_NAME)));
+        allotment.setUUID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ALLOTMENT_UUID)));
+        return allotment;
     }
 
     protected ContentValues convertToContentValues(BaseAllotmentInterface allotment) {
         ContentValues values = new ContentValues();
-        // values.
-        // values.put(ActionSeedSQLite.ACTION_NAME, action.getName());
-        // values.put(DatabaseHelper.ALLOTMENT_ID, allotment.getId());
         values.put(DatabaseHelper.ALLOTMENT_NAME, allotment.getName());
         values.put(DatabaseHelper.ALLOTMENT_UUID, allotment.getUUID());
         return values;
@@ -65,7 +59,7 @@ public class LocalAllotmentProvider extends GotsDBHelper implements AllotmentPro
             allotment = convertToAllotment(cursor);
         }
         cursor.close();
-        // close();
+
         return allotment;
     }
 
@@ -73,7 +67,6 @@ public class LocalAllotmentProvider extends GotsDBHelper implements AllotmentPro
     public List<BaseAllotmentInterface> getMyAllotments() {
 
         ArrayList<BaseAllotmentInterface> allAllotment = new ArrayList<BaseAllotmentInterface>();
-        // open();
         Cursor cursor = null;
         try {
             cursor = bdd.query(DatabaseHelper.ALLOTMENT_TABLE_NAME, null, null, null, null, null, null);
@@ -87,9 +80,7 @@ public class LocalAllotmentProvider extends GotsDBHelper implements AllotmentPro
         } finally {
             if (cursor != null)
                 cursor.close();
-            // close();
         }
-        // close();
         return allAllotment;
     }
 
@@ -97,29 +88,22 @@ public class LocalAllotmentProvider extends GotsDBHelper implements AllotmentPro
     public BaseAllotmentInterface createAllotment(BaseAllotmentInterface allotment) {
 
         long rowid;
-        // open();
         ContentValues values = convertToContentValues(allotment);
-
-        // values.put(DatabaseHelper.ACTIONSEED_DATEACTIONDONE, Calendar.getInstance().getTimeInMillis());
 
         rowid = bdd.insert(DatabaseHelper.ALLOTMENT_TABLE_NAME, null, values);
         allotment.setId(Long.valueOf(rowid).intValue());
-        // close();
         return allotment;
     }
 
     @Override
     public int removeAllotment(BaseAllotmentInterface allotment) {
-        // open();
         int nbRow = bdd.delete(DatabaseHelper.ALLOTMENT_TABLE_NAME,
                 DatabaseHelper.ALLOTMENT_ID + "=" + allotment.getId() + "", null);
-        // close();
         return nbRow;
     }
 
     @Override
     public BaseAllotmentInterface updateAllotment(BaseAllotmentInterface allotment) {
-        // open();
         ContentValues values = convertToContentValues(allotment);
         Cursor cursor = null;
         try {
@@ -145,9 +129,7 @@ public class LocalAllotmentProvider extends GotsDBHelper implements AllotmentPro
         } finally {
             if (cursor != null)
                 cursor.close();
-            // close();
         }
-        // close();
 
         return allotment;
     }

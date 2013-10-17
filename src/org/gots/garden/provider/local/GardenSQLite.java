@@ -10,6 +10,9 @@
  ******************************************************************************/
 package org.gots.garden.provider.local;
 
+import org.gots.DatabaseHelper;
+import org.gots.preferences.GotsPreferences;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -19,6 +22,7 @@ public class GardenSQLite extends SQLiteOpenHelper {
 	// ************************ DATABASE **************
 	private static final int DATABASE_VERSION = 13;
 	private static String DATABASE_NAME = "garden";
+    private static GardenSQLite helper;
 	public final static String AUTHORITY = "org.gots.providers.garden";
 
 	private static final String TAG = "GardenDatabase";
@@ -73,10 +77,17 @@ public class GardenSQLite extends SQLiteOpenHelper {
 				+ ");";
 	//@formatter:on
 
-	public GardenSQLite(Context context) {
+	private GardenSQLite(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
+	 public static synchronized GardenSQLite getInstance(Context context) {
+	        if (helper == null ) {
+	            GotsPreferences.getInstance().initIfNew(context);
+	            helper = new GardenSQLite(context);
+	        }
 
+	        return helper;
+	    }
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(CREATE_TABLE_GARDEN);

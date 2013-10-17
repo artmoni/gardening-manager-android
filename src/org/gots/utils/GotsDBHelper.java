@@ -37,11 +37,10 @@ public class GotsDBHelper {
 
     private synchronized void open() {
         if (databaseType == DATABASE_GARDEN_TYPE)
-            actionSeedSQLite = new GardenSQLite(mContext);
+            actionSeedSQLite =  GardenSQLite.getInstance(mContext);
         else
-            actionSeedSQLite = new DatabaseHelper(mContext,
+            actionSeedSQLite = DatabaseHelper.getInstance(mContext,
                     GotsPreferences.getInstance().initIfNew(mContext).getCurrentGardenId());
-
         bdd = actionSeedSQLite.getWritableDatabase();
     }
 
@@ -52,7 +51,7 @@ public class GotsDBHelper {
 
     @Override
     protected void finalize() throws Throwable {
-        close();
+        // close();
         super.finalize();
     }
 
