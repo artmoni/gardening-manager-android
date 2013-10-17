@@ -38,6 +38,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
@@ -117,7 +118,6 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         }
 
     };
-
 
     protected void refreshConnectionState() {
         if (itemConnected == null) {
@@ -253,6 +253,14 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
             // android.R.animator.fade_out);
             // ft.replace(R.id.idContent,new PreferenceActivity()).addToBackStack("back").commit();
             return true;
+
+        case R.id.connection:
+            if (gotsPrefs.isConnectedToServer())
+                Toast.makeText(this, getResources().getString(R.string.login_connect_state), Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(this, getResources().getString(R.string.login_disconnect_state), Toast.LENGTH_SHORT).show();
+            return true;
+
         default:
             return super.onOptionsItemSelected(item);
         }
