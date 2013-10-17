@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import org.gots.action.AbstractActionSeed;
 import org.gots.garden.provider.local.GardenSQLite;
+import org.gots.preferences.GotsPreferences;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -275,28 +276,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 //    private static boolean newInstance=false;
 		//@formatter:on
+    private static DatabaseHelper helper = null;
 
-//    public static synchronized DatabaseHelper getInstance(Context context) {
-//        if (helper == null || newInstance) {
-//            GotsPreferences.getInstance().initIfNew(context);
-//            helper = new DatabaseHelper(context);
-//            
-//        }
-//
-//        return helper;
-//    }
+    private static int currentDatabaseId = -1;
 
-    public DatabaseHelper(Context context, int currentGardenId) {
-        super(context, DATABASE_NAME.concat(String.valueOf(currentGardenId)), null, DATABASE_VERSION);
-        
+    public static synchronized DatabaseHelper getInstance(Context context, int currentGardenId) {
+        if (helper == null || currentGardenId != currentDatabaseId) {
+            GotsPreferences.getInstance().initIfNew(context);
+            helper = new DatabaseHelper(context, currentGardenId);
+            currentDatabaseId = currentGardenId;
+        }
+
+        return helper;
     }
+
+    private DatabaseHelper(Context context, int currentGardenId) {
+        super(context, DATABASE_NAME.concat(String.valueOf(currentGardenId)), null, DATABASE_VERSION);
+
+    }
+
     /*
      * Change database after changing GotsPreferences.ORG_GOTS_CURRENT_GARDENID
      */
-//    public void changeDatabase() {
-//        close();
-//        newInstance = true;
-//    }
+    // public void changeDatabase() {
+    // close();
+    // newInstance = true;
+    // }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -427,7 +432,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         }
     }
-    
-    
 
 }
