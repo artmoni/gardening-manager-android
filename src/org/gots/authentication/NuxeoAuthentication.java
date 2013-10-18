@@ -123,6 +123,9 @@ public class NuxeoAuthentication {
         return device_id;
     }
 
+    /*
+     * Request a Nuxeo Token providing an oAuth2Token Access
+     */
     public String request_oauth2_token(String oAuth2Token) throws IOException {
 
         String token = null;
@@ -137,6 +140,7 @@ public class NuxeoAuthentication {
             params.add(new BasicNameValuePair("applicationName", gotsPrefs.getGardeningManagerAppname()));
             params.add(new BasicNameValuePair("deviceDescription", Build.MODEL + "(" + Build.MANUFACTURER + ")"));
             params.add(new BasicNameValuePair("permission", "ReadWrite"));
+            
             // params.add(new BasicNameValuePair("revoke", String.valueOf(revoke)));
 
             String paramString = URLEncodedUtils.format(params, "utf-8");
@@ -149,7 +153,8 @@ public class NuxeoAuthentication {
             // urlConnection.addRequestProperty("X-User-Id", login);
             urlConnection.addRequestProperty("X-Device-Id", gotsPrefs.getDeviceId());
             urlConnection.addRequestProperty("X-Application-Name", gotsPrefs.getGardeningManagerAppname());
-            urlConnection.addRequestProperty("Authorization", oAuth2Token);
+            urlConnection.addRequestProperty("provider", "GoogleOpenIDConnect");
+            urlConnection.addRequestProperty("token", oAuth2Token);
 
             // TODO urlConnection.setConnectTimeout
             in = new BufferedInputStream(urlConnection.getInputStream());
@@ -171,6 +176,8 @@ public class NuxeoAuthentication {
             if (in != null)
                 in.close();
         }
+        
+        
         return token;
     }
     // // TODO currently not used

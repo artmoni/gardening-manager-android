@@ -359,13 +359,19 @@ public class LoginActivity extends AbstractActivity {
 
     protected void requestOAuth2Token(final Account account) {
         new AsyncTask<String, Integer, String>() {
+
             @Override
             protected String doInBackground(String... params) {
 
                 GoogleAuthentication authentication = new GoogleAuthentication(getApplicationContext());
-                String token = null;
+                String googleToken = null;
+                String nuxeoToken = null;
                 try {
-                    token = authentication.getToken(params[0]);
+                    googleToken = authentication.getToken(params[0]);
+                    if (googleToken != null) {
+                        NuxeoAuthentication nuxeoAuthentication = new NuxeoAuthentication(getApplicationContext());
+                        nuxeoToken = nuxeoAuthentication.request_oauth2_token(googleToken);
+                    }
                 } catch (UserRecoverableAuthException e) {
                     startActivityForResult(e.getIntent(), AUTHTOKEN_CODE_RESULT);
                 } catch (IOException e) {
@@ -373,19 +379,21 @@ public class LoginActivity extends AbstractActivity {
                 } catch (GoogleAuthException e) {
                     Log.e(TAG, e.getMessage(), e);
                 }
-                if (token != null)
-                    authentication.getUserFriends(token, authentication.getUserID(token));
-                return token;
+                return nuxeoToken;
             }
 
             @Override
-            protected void onPostExecute(String result) {
-                if (result != null)
-                    Toast.makeText(LoginActivity.this, result, Toast.LENGTH_SHORT).show();
-                else
+            protected void onPostExecute(String resultToken) {
+                if (resultToken != null) {
+                    Toast.makeText(LoginActivity.this, resultToken, Toast.LENGTH_SHORT).show();
+                    gotsPrefs.setNuxeoLogin(account.name);
+                    gotsPrefs.setToken(resultToken);
+                    gotsPrefs.setConnectedToServer(true);
+                    onResume();
+                } else {
                     Toast.makeText(LoginActivity.this, "Error requesting GoogleAuthUtil.getToken", Toast.LENGTH_SHORT).show();
-
-                super.onPostExecute(result);
+                }
+                super.onPostExecute(resultToken);
             }
         }.execute(account.name);
     }
