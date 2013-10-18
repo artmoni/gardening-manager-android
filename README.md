@@ -1,5 +1,5 @@
-# Environnement
-## ANDROID Environnement
+# Environment
+## ANDROID Environment
     $ export ANDROID_HOME=/path/to/android-sdk/
     $ export PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
     $ android update sdk --no-ui
