@@ -9,8 +9,8 @@
   <version>0.21</version>
   <name>Gardening Manager</name>
   <properties>
-    <android.version>4.0.3</android.version>
-    <android.platform>16</android.platform>
+    <android.version>4.2</android.version>
+    <android.platform>17</android.platform>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
