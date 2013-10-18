@@ -17,14 +17,7 @@ import org.gots.garden.GardenInterface;
 import org.gots.weather.service.WeatherUpdateService;
 import org.gots.weather.view.WeatherView;
 import org.gots.weather.view.WeatherWidget;
-import org.nuxeo.android.automation.NetworkSettingsActivity;
-import org.nuxeo.android.automation.fragments.NetworkSettingsFragment;
-import org.nuxeo.android.automation.fragments.SettingsActivity;
-import org.nuxeo.android.context.NuxeoContext;
-import org.nuxeo.android.context.NuxeoContextProvider;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -224,7 +217,6 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
-        Intent i;
         switch (item.getItemId()) {
 
         case R.id.help:
