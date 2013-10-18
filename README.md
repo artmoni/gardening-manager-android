@@ -164,3 +164,8 @@ TODO: update
     -> store token (and connect to validate user creation)
     <- ++ If created user is not validated within a given delay, the user is deleted
 
+# WEB 
+	https://www.versioneye.com/user/projects/51cb703566ec030002008baf
+	https://www.ohloh.net/p/gardening-manager
+	http://translate.gardening-manager.com/
+	
