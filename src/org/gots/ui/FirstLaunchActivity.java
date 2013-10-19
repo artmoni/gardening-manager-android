@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.gots.R;
 import org.gots.authentication.GoogleAuthentication;
+import org.gots.authentication.NuxeoAuthentication;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -85,16 +86,22 @@ public class FirstLaunchActivity extends AbstractActivity {
         new AlertDialog.Builder(this).setTitle("Action").setItems(items.toArray(new String[items.size()]),
                 new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int item) {
+                    public void onClick(DialogInterface dialog, final int item) {
 
                         new AsyncTask<String, Integer, String>() {
+
                             @Override
                             protected String doInBackground(String... params) {
 
                                 GoogleAuthentication authentication = new GoogleAuthentication(getApplicationContext());
-                                String token = null;
+                                String googleToken = null;
+                                String nuxeoToken = null;
                                 try {
-                                    token = authentication.getToken(params[0]);
+                                    googleToken = authentication.getToken(params[0]);
+                                    if (googleToken != null) {
+                                        NuxeoAuthentication nuxeoAuthentication = new NuxeoAuthentication(getApplicationContext());
+                                        nuxeoToken = nuxeoAuthentication.request_oauth2_token(googleToken);
+                                    }
                                 } catch (UserRecoverableAuthException e) {
                                     startActivityForResult(e.getIntent(), 0);
                                 } catch (IOException e) {
@@ -102,20 +109,25 @@ public class FirstLaunchActivity extends AbstractActivity {
                                 } catch (GoogleAuthException e) {
                                     Log.e(TAG, e.getMessage(), e);
                                 }
-                                return token;
+                                return nuxeoToken;
                             }
 
                             @Override
-                            protected void onPostExecute(String result) {
-                                if (result != null){
-                                    Toast.makeText(FirstLaunchActivity.this, result, Toast.LENGTH_SHORT).show();
+                            protected void onPostExecute(String resultToken) {
+                                if (resultToken != null) {
+                                    Toast.makeText(getApplicationContext(), resultToken, Toast.LENGTH_SHORT).show();
+                                    gotsPrefs.setNuxeoLogin(usableAccounts.get(item).name);
+                                    gotsPrefs.setToken(resultToken);
+                                    gotsPrefs.setConnectedToServer(true);
+                                    
+                                    Intent intent = new Intent(FirstLaunchActivity.this, DashboardActivity.class);
+                                    startActivity(intent);
                                     finish();
-                                }
-                                else
-                                    Toast.makeText(FirstLaunchActivity.this,
-                                            "Login failed", Toast.LENGTH_SHORT).show();
 
-                                super.onPostExecute(result);
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Error requesting GoogleAuthUtil.getToken", Toast.LENGTH_SHORT).show();
+                                }
+                                super.onPostExecute(resultToken);
                             }
                         }.execute(usableAccounts.get(item).name);
                     }

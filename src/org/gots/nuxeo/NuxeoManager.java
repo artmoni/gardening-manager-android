@@ -27,6 +27,7 @@ import org.nuxeo.android.config.NuxeoServerConfig;
 import org.nuxeo.android.context.NuxeoContext;
 import org.nuxeo.android.context.NuxeoContextFactory;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
+import org.nuxeo.ecm.automation.client.jaxrs.RemoteException;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.impl.NotAvailableOffline;
 import org.nuxeo.ecm.automation.client.jaxrs.spi.auth.TokenRequestInterceptor;
@@ -117,7 +118,7 @@ public class NuxeoManager {
      * called from the main thread and tries to
      * perform a network call (Nuxeo server)
      */
-    public Session getSession() throws NotAvailableOffline {
+    public Session getSession() throws NotAvailableOffline, RemoteException {
         return getNuxeoClient().getSession();
     }
 

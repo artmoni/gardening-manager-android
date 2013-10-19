@@ -3,16 +3,15 @@ package org.gots.ui;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import org.gots.R;
 import org.gots.authentication.GoogleAuthentication;
 import org.gots.authentication.NuxeoAuthentication;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.preferences.GotsPreferences;
-import org.nuxeo.ecm.automation.client.jaxrs.Constants;
+import org.nuxeo.ecm.automation.client.jaxrs.RemoteException;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
-import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
+import org.nuxeo.ecm.automation.client.jaxrs.impl.NotAvailableOffline;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -26,7 +25,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.Settings.Secure;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -45,7 +43,6 @@ import com.actionbarsherlock.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 
 public class LoginActivity extends AbstractActivity {
     protected static final String TAG = "LoginActivity";
@@ -257,7 +254,6 @@ public class LoginActivity extends AbstractActivity {
                     dialog = ProgressDialog.show(LoginActivity.this, "",
                             getResources().getString(R.string.gots_loading), true);
                     dialog.setCanceledOnTouchOutside(true);
-                    // dialog.show();
                 }
             };
 
@@ -277,7 +273,10 @@ public class LoginActivity extends AbstractActivity {
                         cancel(true);
                 } catch (IOException e) {
                     Log.e(TAG, e.getMessage(), e);
-                    cancel(true);
+                } catch (NotAvailableOffline e) {
+                    Log.e(TAG, e.getMessage(), e);
+                } catch (RemoteException e) {
+                    Log.e(TAG, e.getMessage(), e);
                 }
                 return session;
             }

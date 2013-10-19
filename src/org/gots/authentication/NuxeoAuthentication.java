@@ -140,7 +140,9 @@ public class NuxeoAuthentication {
             params.add(new BasicNameValuePair("applicationName", gotsPrefs.getGardeningManagerAppname()));
             params.add(new BasicNameValuePair("deviceDescription", Build.MODEL + "(" + Build.MANUFACTURER + ")"));
             params.add(new BasicNameValuePair("permission", "ReadWrite"));
-            
+            params.add(new BasicNameValuePair("provider", "GoogleOpenIDConnect"));
+            params.add(new BasicNameValuePair("token", oAuth2Token));
+
             // params.add(new BasicNameValuePair("revoke", String.valueOf(revoke)));
 
             String paramString = URLEncodedUtils.format(params, "utf-8");
@@ -176,8 +178,7 @@ public class NuxeoAuthentication {
             if (in != null)
                 in.close();
         }
-        
-        
+
         return token;
     }
     // // TODO currently not used
