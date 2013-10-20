@@ -15,12 +15,10 @@ import java.util.ArrayList;
 import org.gots.R;
 import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.ads.GotsAdvertisement;
-import org.gots.help.HelpUriBuilder;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.local.sql.GrowingSeedDBHelper;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;

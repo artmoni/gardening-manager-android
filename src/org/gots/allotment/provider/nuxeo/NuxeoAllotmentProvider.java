@@ -12,12 +12,18 @@ import org.nuxeo.android.documentprovider.LazyUpdatableDocumentsList;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
 import org.nuxeo.ecm.automation.client.cache.CacheBehavior;
+import org.nuxeo.ecm.automation.client.cache.DeferredUpdateManager;
+import org.nuxeo.ecm.automation.client.cache.OperationType;
+import org.nuxeo.ecm.automation.client.jaxrs.AsyncCallback;
+import org.nuxeo.ecm.automation.client.jaxrs.Constants;
+import org.nuxeo.ecm.automation.client.jaxrs.OperationRequest;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PathRef;
+import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
 import android.content.Context;
 import android.util.Log;
@@ -34,6 +40,8 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
     protected String myApp;
 
     protected LazyUpdatableDocumentsList documentsList = null;
+
+    protected BaseAllotmentInterface currentAllotment;
 
     public NuxeoAllotmentProvider(Context context) {
         super(context);
@@ -118,7 +126,9 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
 
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);
-        BaseAllotmentInterface allotmentInterface = null;
+        DeferredUpdateManager deferredUpdateMgr = getNuxeoClient().getDeferredUpdatetManager();
+
+        currentAllotment = allotment;
         DocRef wsRef;
         try {
             wsRef = service.getUserHome();
@@ -126,14 +136,35 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
             Document gardenFolder = service.getDocument(new IdRef(
                     GardenManager.getInstance().getCurrentGarden().getUUID()));
             Document allotmentsFolder = service.getDocument(new PathRef(gardenFolder.getPath() + "/My Allotment"));
-            Document allotmentDocument = service.createDocument(allotmentsFolder, "Allotment", allotment.getName());
+            // Document allotmentDocument = service.createDocument(allotmentsFolder, "Allotment", allotment.getName());
 
-            Log.d(TAG, NuxeoAllotmentConverter.convert(allotmentDocument).toString());
+            PropertyMap properties = new PropertyMap();
+            properties.set("dc:title", allotment.getName());
+
+            OperationRequest createOperation = NuxeoManager.getInstance().getSession().newRequest("Document.Create").setHeader(
+                    Constants.HEADER_NX_SCHEMAS, "*").setInput(allotmentsFolder).set("type", "Allotment").set(
+                    "properties", properties);
+            AsyncCallback<Object> callback = new AsyncCallback<Object>() {
+                @Override
+                public void onSuccess(String executionId, Object data) {
+                    Document doc = (Document) data;
+                    currentAllotment.setUUID(doc.getId());
+                    currentAllotment = NuxeoAllotmentProvider.super.updateAllotment(currentAllotment);
+                    Log.d(TAG, "onSuccess " + data);
+                }
+
+                @Override
+                public void onError(String executionId, Throwable e) {
+                    Log.d(TAG, "onError " + e.getMessage());
+
+                }
+            };
+            deferredUpdateMgr.execDeferredUpdate(createOperation, callback, OperationType.CREATE, true);
 
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
-        return allotmentInterface;
+        return currentAllotment;
     }
 
     @Override

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.provider.local.LocalGardenProvider;
 import org.gots.nuxeo.NuxeoManager;
@@ -27,7 +26,6 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
 /**
@@ -221,9 +219,6 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
                     Document doc = (Document) data;
                     currentGarden.setUUID(doc.getId());
                     currentGarden = NuxeoGardenProvider.super.updateGarden(currentGarden);
-
-//                    mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
-
                     Log.d(TAG, "onSuccess " + data);
                     force_force = true;
                 }

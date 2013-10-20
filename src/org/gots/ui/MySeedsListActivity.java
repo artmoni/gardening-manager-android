@@ -17,7 +17,6 @@ import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.adapter.MySeedsListAdapter;
-import org.gots.seed.adapter.VendorSeedListAdapter;
 import org.gots.ui.fragment.AbstractListFragment;
 
 import android.content.BroadcastReceiver;

@@ -10,37 +10,28 @@
  ******************************************************************************/
 package org.gots.seed.adapter;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import org.gots.R;
 import org.gots.action.BaseActionInterface;
 import org.gots.action.GardeningActionInterface;
 import org.gots.action.SeedActionInterface;
-import org.gots.action.adapter.comparator.ISeedSpecieComparator;
 import org.gots.action.bean.ReduceQuantityAction;
 import org.gots.action.provider.local.ActionDBHelper;
 import org.gots.action.util.ActionState;
-import org.gots.action.view.ActionWidget;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.SeedUtil;
-import org.gots.seed.view.SeedWidgetLong;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.Toast;
 
 public class MySeedsListAdapter extends SeedListAdapter {

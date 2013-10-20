@@ -27,7 +27,6 @@ import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.bean.Garden;
 import org.gots.garden.GardenInterface;
-import org.gots.help.HelpUriBuilder;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.local.sql.VendorSeedDBHelper;
 
@@ -40,7 +39,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;

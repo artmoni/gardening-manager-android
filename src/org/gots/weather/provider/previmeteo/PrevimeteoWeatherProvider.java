@@ -27,7 +27,6 @@ import org.gots.weather.WeatherSet;
 import org.gots.weather.provider.WeatherCache;
 import org.gots.weather.provider.local.WeatherDBHelper;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 import android.content.Context;

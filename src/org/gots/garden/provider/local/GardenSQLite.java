@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.gots.garden.provider.local;
 
-import org.gots.DatabaseHelper;
 import org.gots.preferences.GotsPreferences;
 
 import android.content.Context;
