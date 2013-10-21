@@ -7,31 +7,20 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.StatusLine;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.gots.ui.LoginActivity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.content.Context;
+import android.util.Log;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.Scopes;
-import com.google.android.gms.plus.PlusClient;
-import com.google.android.gms.plus.model.people.Person;
-
-import android.content.Context;
-import android.os.AsyncTask;
-import android.util.Log;
 
 public class GoogleAuthentication {
     private String CLIENT_ID = "473239775303-khctmm26flfc9c3m97ge3uss4ajo8c3r.apps.googleusercontent.com";
@@ -120,11 +109,8 @@ public class GoogleAuthentication {
         String token = null;
 
         final String SCOPE_PREFIX = "oauth2:";
-        final String G_PLUS_SCOPE = "https://www.googleapis.com/auth/plus.me";
-
-        final String USERINFO_SCOPE = "https://www.googleapis.com/auth/userinfo.profile";
-
-        final String SCOPES = SCOPE_PREFIX + Scopes.PLUS_LOGIN;
+        final String SCOPES = SCOPE_PREFIX + Scopes.PLUS_LOGIN + " " + Scopes.PLUS_PROFILE + " "
+                + "https://www.googleapis.com/auth/userinfo.email";
 
         token = GoogleAuthUtil.getToken(mContext, accountName, SCOPES);
         Log.d(TAG, "GoogleAuthUtil.getToken=" + token);
@@ -205,7 +191,6 @@ public class GoogleAuthentication {
      */
     public List<String> getUserFriends(String accessToken, String userId) {
 
-
         URL url;
         List<String> friends = new ArrayList<String>();
         try {
@@ -226,7 +211,7 @@ public class GoogleAuthentication {
                         JSONObject jo = jsonArray.getJSONObject(i);
                         String friendName = jo.getString("displayName");
                         friends.add(friendName);
-                        
+
                     }
 
                     // String name = getFirstName(readResponse(is));

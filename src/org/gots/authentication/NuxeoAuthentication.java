@@ -5,43 +5,24 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.StatusLine;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.gots.preferences.GotsPreferences;
-import org.gots.ui.LoginActivity;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.nuxeo.ecm.automation.client.jaxrs.Constants;
-import org.nuxeo.ecm.automation.client.jaxrs.Session;
-import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
-
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
-import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.android.gms.auth.UserRecoverableAuthException;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.provider.Settings.Secure;
 import android.util.Base64;
 import android.util.Log;
-import android.widget.Toast;
+
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class NuxeoAuthentication {
 
@@ -128,6 +109,8 @@ public class NuxeoAuthentication {
      */
     public String request_oauth2_token(String oAuth2Token) throws IOException {
 
+        String device_id = getDeviceID();
+        gotsPrefs.setDeviceId(device_id);
         String token = null;
         InputStream in = null;
         try {
