@@ -62,7 +62,7 @@ public class WebHelpActivity extends AbstractActivity {
         });
 
         pd = ProgressDialog.show(this, "", getResources().getString(R.string.help_loading), true);
-
+        pd.setCanceledOnTouchOutside(true);
     }
 
     @Override
