@@ -197,12 +197,6 @@ public class SplashScreenActivity extends AbstractActivity {
         progressAction = findViewById(R.id.imageProgressAction);
         progressGarden = findViewById(R.id.imageProgressGarden);
 
-        if (!gotsPrefs.isPremium()) {
-            GotsAdvertisement ads = new GotsAdvertisement(this);
-
-            LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
-            layout.addView(ads.getAdsLayout());
-        }
         // registerReceiver(receiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
 
     }
@@ -386,6 +380,12 @@ public class SplashScreenActivity extends AbstractActivity {
 
         } else
             launchProgress();
+//        if (!gotsPrefs.isPremium()) {
+//            GotsAdvertisement ads = new GotsAdvertisement(this);
+//
+//            LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
+//            layout.addView(ads.getAdsLayout());
+//        }
         super.onResume();
     }
 
@@ -410,28 +410,26 @@ public class SplashScreenActivity extends AbstractActivity {
         // we know mobiletuts updates at right around 1130 GMT.
         // let's grab new stuff at around 11:45 GMT, inexactly
         Calendar updateTime = Calendar.getInstance();
-       
+
         Intent actionBroadcastReceiver = new Intent(context, ActionTODOBroadcastReceiver.class);
         PendingIntent actionTODOIntent = PendingIntent.getBroadcast(context, 0, actionBroadcastReceiver,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarms = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
         if (GotsPreferences.isDevelopment())
-            alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
-                    120000, actionTODOIntent);
+            alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(), 120000, actionTODOIntent);
         else {
             updateTime.set(Calendar.HOUR_OF_DAY, 20);
             alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
                     AlarmManager.INTERVAL_DAY, actionTODOIntent);
         }
-        
+
         Intent seedBroadcastReceiver = new Intent(context, SeedUpdateService.class);
         PendingIntent seedIntent = PendingIntent.getBroadcast(context, 0, seedBroadcastReceiver,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         if (GotsPreferences.isDevelopment())
-            alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
-                    120000, seedIntent);
+            alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(), 120000, seedIntent);
         else {
             updateTime.set(Calendar.HOUR_OF_DAY, 12);
             alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
