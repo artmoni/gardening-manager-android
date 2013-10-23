@@ -365,8 +365,9 @@ public class LoginActivity extends AbstractActivity {
                 GoogleAuthentication authentication = new GoogleAuthentication(getApplicationContext());
                 String googleToken = null;
                 String nuxeoToken = null;
+                String accountName = params[0];
                 try {
-                    googleToken = authentication.getToken(params[0]);
+                    googleToken = authentication.getToken(accountName);
                     if (googleToken != null) {
                         NuxeoAuthentication nuxeoAuthentication = new NuxeoAuthentication(getApplicationContext());
                         nuxeoToken = nuxeoAuthentication.request_oauth2_token(googleToken);

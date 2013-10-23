@@ -3,172 +3,177 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/background_simple"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:padding="10dp" >
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="horizontal" >
 
         <LinearLayout
-            android:id="@+id/idAdsTop"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_line_action" >
-        </LinearLayout>
+            android:orientation="vertical" >
 
-        <LinearLayout
-            android:id="@+id/webArtmoni"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/bg_line_action"
-            android:gravity="center_vertical" >
-
-            <ImageView
-                style="@style/logo"
-                android:src="@drawable/logo_artmoni" />
-
-            <TextView
-                android:id="@+id/TextView02"
+            <LinearLayout
+                android:id="@+id/webArtmoni"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:autoLink="web"
-                android:gravity="center"
-                android:text="@string/gots.credits.code"
-                android:textColor="#432D07"
-                android:textSize="14dip" />
-        </LinearLayout>
+                android:layout_marginTop="5dp"
+                android:background="@drawable/bg_line_action"
+                android:gravity="center_vertical" >
 
-        <LinearLayout
-            android:id="@+id/webSauterDansLesFlaques"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/bg_line_action"
-            android:gravity="center_vertical" >
+                <ImageView
+                    style="@style/logo"
+                    android:src="@drawable/logo_artmoni" />
 
-            <ImageView
-                style="@style/logo"
-                android:src="@drawable/logosdlf" />
+                <TextView
+                    android:id="@+id/TextView02"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:autoLink="web"
+                    android:gravity="center"
+                    android:text="@string/gots.credits.code"
+                    android:textColor="#432D07"
+                    android:textSize="14dip" />
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/TextView02"
+            <LinearLayout
+                android:id="@+id/webSauterDansLesFlaques"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:autoLink="web"
-                android:gravity="center"
-                android:text="@string/gots.credits.design"
-                android:textColor="#432D07"
-                android:textSize="14dip" />
-        </LinearLayout>
+                android:layout_marginTop="5dp"
+                android:background="@drawable/bg_line_action"
+                android:gravity="center_vertical" >
 
-        <LinearLayout
-            android:id="@+id/webSauterDansLesFlaques"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/bg_line_action"
-            android:gravity="center_vertical" >
+                <ImageView
+                    style="@style/logo"
+                    android:src="@drawable/logosdlf" />
 
-            <ImageView
-                style="@style/logo"
-                android:src="@drawable/ic_opensource" />
+                <TextView
+                    android:id="@+id/TextView02"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:autoLink="web"
+                    android:gravity="center"
+                    android:text="@string/gots.credits.design"
+                    android:textColor="#432D07"
+                    android:textSize="14dip" />
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/TextView02"
+            <LinearLayout
+                android:id="@+id/webSauterDansLesFlaques"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:autoLink="web"
-                android:gravity="center"
-                android:text="@string/gots.opensource"
-                android:textColor="#432D07"
-                android:textSize="14dip" />
-        </LinearLayout>
+                android:layout_marginTop="5dp"
+                android:background="@drawable/bg_line_action"
+                android:gravity="center_vertical" >
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal" >
+                <ImageView
+                    style="@style/logo"
+                    android:src="@drawable/ic_opensource" />
 
-            <ImageView
-                android:id="@+id/idSocialGoogle"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="5dp"
-                android:src="@drawable/social_google" />
+                <TextView
+                    android:id="@+id/TextView02"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:autoLink="web"
+                    android:gravity="center"
+                    android:text="@string/gots.opensource"
+                    android:textColor="#432D07"
+                    android:textSize="14dip" />
+            </LinearLayout>
 
-            <ImageView
-                android:id="@+id/idSocialFacebook"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="5dp"
-                android:src="@drawable/social_facebook" />
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal" >
 
-            <!--
+                <ImageView
+                    android:id="@+id/idSocialGoogle"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="5dp"
+                    android:src="@drawable/social_google" />
+
+                <ImageView
+                    android:id="@+id/idSocialFacebook"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="5dp"
+                    android:src="@drawable/social_facebook" />
+
+                <!--
              <ImageView
             android:id="@+id/idPrevimeteo"
             android:layout_width="80dp"
             android:layout_height="50dp"
             android:layout_margin="5dp"
             android:src="@drawable/logo_previmeteo" />
-            -->
+                -->
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/webSauterDansLesFlaques"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center_horizontal" >
+
+                <ImageView
+                    android:id="@+id/imageProgressWeather"
+                    style="@style/logo"
+                    android:background="@drawable/bg_state_critical"
+                    android:src="@drawable/weather_mostlysunny" />
+
+                <ImageView
+                    android:id="@+id/imageProgressSeed"
+                    style="@style/logo"
+                    android:background="@drawable/bg_state_critical"
+                    android:src="@drawable/specie_alliumporrum" />
+
+                <ImageView
+                    android:id="@+id/imageProgressAction"
+                    style="@style/logo"
+                    android:background="@drawable/bg_state_critical"
+                    android:src="@drawable/action_cut" />
+
+                <ImageView
+                    android:id="@+id/imageProgressGarden"
+                    style="@style/logo"
+                    android:background="@drawable/bg_state_critical"
+                    android:src="@drawable/garden_connected" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:src="@drawable/logosplah" />
+
+            <TextView
+                android:id="@+id/textVersion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="version"
+                android:textColor="#432D07"
+                android:textSize="15dip" />
         </LinearLayout>
     </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/idAdsTop"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="1" >
-
-        <LinearLayout
-            android:id="@+id/webSauterDansLesFlaques"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:gravity="center_horizontal" >
-
-            <ImageView
-                android:id="@+id/imageProgressWeather"
-                style="@style/logo"
-                android:background="@drawable/bg_state_critical"
-                android:src="@drawable/weather_mostlysunny" />
-
-            <ImageView
-                android:id="@+id/imageProgressSeed"
-                style="@style/logo"
-                android:background="@drawable/bg_state_critical"
-                android:src="@drawable/specie_alliumporrum" />
-
-            <ImageView
-                android:id="@+id/imageProgressAction"
-                style="@style/logo"
-                android:background="@drawable/bg_state_critical"
-                android:src="@drawable/action_cut" />
-
-            <ImageView
-                android:id="@+id/imageProgressGarden"
-                style="@style/logo"
-                android:background="@drawable/bg_state_critical"
-                android:src="@drawable/garden_connected" />
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_marginTop="50dp"
-            android:src="@drawable/logosplah" />
-
-        <TextView
-            android:id="@+id/textVersion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:text="version"
-            android:textColor="#432D07"
-            android:textSize="25dip" />
-    </RelativeLayout>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" >
+    </LinearLayout>
 
 </LinearLayout>
