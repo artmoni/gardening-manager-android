@@ -25,7 +25,9 @@ import org.gots.seed.adapter.ListGrowingSeedAdapter;
 import org.gots.seed.provider.local.sql.GrowingSeedDBHelper;
 import org.gots.ui.HutActivity;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
@@ -117,8 +119,7 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
                 AllotmentManager.getInstance().setCurrentAllotment(getItem(Integer.valueOf(v.getTag().toString())));
 
                 Intent i = new Intent(mContext, HutActivity.class);
-                i.putExtra("org.gots.allotment.reference",
-                        getItem(Integer.valueOf(v.getTag().toString())).getId());
+                i.putExtra("org.gots.allotment.reference", getItem(Integer.valueOf(v.getTag().toString())).getId());
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 mContext.startActivity(i);
             }
@@ -133,42 +134,42 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
         widget.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick(View v) {
-                new AsyncTask<BaseAllotmentInterface, Integer, Void>() {
-                    @Override
-                    protected void onPreExecute() {
+            public void onClick(final View v) {
 
-                        super.onPreExecute();
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext().getApplicationContext());
+                builder.setMessage("Delete").setCancelable(false).setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                new AsyncTask<BaseAllotmentInterface, Integer, Void>() {
+                                    @Override
+                                    protected void onPreExecute() {
+
+                                        super.onPreExecute();
+                                    }
+
+                                    @Override
+                                    protected Void doInBackground(BaseAllotmentInterface... params) {
+                                        GardeningActionInterface actionItem = delete;
+                                        actionItem.execute(params[0], null);
+                                        myAllotments.remove(params[0]);
+                                        return null;
+                                    }
+
+                                    @Override
+                                    protected void onPostExecute(Void result) {
+                                        notifyDataSetChanged();
+                                        super.onPostExecute(result);
+                                    }
+                                }.execute(getItem(Integer.valueOf(v.getTag().toString())));
+                                dialog.dismiss();
+                            }
+                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
                     }
+                });
 
-                    @Override
-                    protected Void doInBackground(BaseAllotmentInterface... params) {
-                        GardeningActionInterface actionItem = delete;
-                        actionItem.execute(params[0], null);
-                        myAllotments.remove(params[0]);
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Void result) {
-                        notifyDataSetChanged();
-                        super.onPostExecute(result);
-                    }
-                }.execute(getItem(Integer.valueOf(v.getTag().toString())));
-
-                // AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                // builder.setMessage(v.getContext().getResources().getString(R.string.action_delete_allotment)).setCancelable(
-                // false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                // public void onClick(DialogInterface dialog, int id) {
-                // dialog.dismiss();
-                // }
-                // }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                // public void onClick(DialogInterface dialog, int id) {
-                // dialog.cancel();
-                // }
-                // });
-                //
-                // builder.show();
+                builder.show();
 
             }
         });
