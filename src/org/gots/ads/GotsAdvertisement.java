@@ -46,6 +46,9 @@ public class GotsAdvertisement {
         adRequest.addKeyword("potager");
         adRequest.addKeyword("plant");
         adRequest.addKeyword("vegetable");
+        adRequest.addKeyword("bio");
+        adRequest.addKeyword("ecologique");
+        adRequest.addKeyword("ecologic");
 
         AdView adView;
         if (width >= 936)
