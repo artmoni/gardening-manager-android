@@ -199,6 +199,8 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         startService(weatherIntent);
 
         if (gotsPrefs.getCurrentGardenId() == -1) {
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
             Animation myFadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.tween);
             findViewById(R.id.dashboard_button_profile).startAnimation(myFadeInAnimation);
         } else

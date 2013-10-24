@@ -15,6 +15,14 @@
             android:layout_height="60dp"
             android:background="@drawable/bg_profile_top" />
 
+        <TextView
+            android:id="@+id/idSelectGarden"
+            style="@style/description_error"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/profile.menu.select" >
+        </TextView>
+
         <ListView
             android:id="@+id/IdGardenProfileList"
             android:layout_width="fill_parent"

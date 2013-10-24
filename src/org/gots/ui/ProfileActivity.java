@@ -28,6 +28,7 @@ import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -138,6 +139,12 @@ public class ProfileActivity extends AbstractActivity {
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
+        if (gardenManager.getCurrentGarden() == null || gardenManager.getCurrentGarden() != null
+                && gardenManager.getCurrentGarden().getId() == -1)
+            findViewById(R.id.idSelectGarden).setVisibility(View.VISIBLE);
+        else
+            findViewById(R.id.idSelectGarden).setVisibility(View.GONE);
+
         // buildGardenList();
         // weatherState.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_weather));
         // weatherState.setImageDrawable(getResources().getDrawable(R.drawable.weather_updating));
