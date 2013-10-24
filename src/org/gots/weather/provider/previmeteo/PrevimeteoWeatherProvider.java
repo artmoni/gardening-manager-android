@@ -82,7 +82,7 @@ public class PrevimeteoWeatherProvider extends WeatherDBHelper implements Weathe
 
             try {
                 Log.d(TAG, "getCondition " + DateFormat.format("MM/dd/yy h:mmaa", requestedDay));
-                cache = new WeatherCache();
+                cache = new WeatherCache(mContext);
 
                 InputStream is = cache.getCacheByURL(url);
 

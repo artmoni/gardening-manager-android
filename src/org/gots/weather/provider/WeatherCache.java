@@ -25,6 +25,7 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.gots.preferences.GotsPreferences;
 
+import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
@@ -32,7 +33,7 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class WeatherCache {
 
-    private String rootDirectory;
+    private File cacheDirectory;
 
     private final int MAX_DOWNLOAD_TRY = 3;
 
@@ -42,17 +43,8 @@ public class WeatherCache {
 
     private static String TAG = "WeatherCache";
 
-    public WeatherCache() {
-        if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            Log.w("WeatherCache", "Sdcard was not mounted !!");
-
-        } else {
-            rootDirectory = Environment.getExternalStorageDirectory().getAbsolutePath() + "/"
-                    + GotsPreferences.GARDENING_MANAGER_DIRECTORY + "/cache/";
-
-            File directory = new File(rootDirectory);
-            directory.mkdirs();
-        }
+    public WeatherCache(Context mContext) {
+        cacheDirectory = mContext.getCacheDir();
     }
 
     public InputStream getCacheByURL(URL url) {
@@ -126,7 +118,7 @@ public class WeatherCache {
     }
 
     private InputStream getLocalCache(String filePath) throws ObsoleteCacheException {
-        File f = new File(rootDirectory + filePath);
+        File f = new File(cacheDirectory, filePath);
 
         Calendar lastModDate = new GregorianCalendar();
         lastModDate.setTime(new Date(f.lastModified()));
@@ -148,7 +140,7 @@ public class WeatherCache {
     }
 
     private void setLocalCache(String filePath, InputStream weatherXmlStream) {
-        File f = new File(rootDirectory + filePath);
+        File f = new File(cacheDirectory, filePath);
         try {
 
             OutputStream os = new BufferedOutputStream(new FileOutputStream(f));
@@ -169,7 +161,7 @@ public class WeatherCache {
     }
 
     private void cleanLocalCache(String fileName) {
-        File f = new File(rootDirectory + fileName);
+        File f = new File(cacheDirectory, fileName);
         f.delete();
 
         Log.d(TAG, "Deleting cache file " + f.getAbsolutePath());
