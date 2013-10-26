@@ -23,6 +23,8 @@ import android.content.Context;
 public abstract class AbstractActionGarden implements GardeningActionInterface {
     private int id;
 
+    private String UUID;
+
     private String name;
 
     private String description;
@@ -170,5 +172,15 @@ public abstract class AbstractActionGarden implements GardeningActionInterface {
     public void setLogId(int id) {
         this.logid = id;
 
+    }
+
+    @Override
+    public String getUUID() {
+        return this.UUID;
+    }
+
+    @Override
+    public void setUUID(String uuid) {
+        this.UUID = uuid;
     }
 }

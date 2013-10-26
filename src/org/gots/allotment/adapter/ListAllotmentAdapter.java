@@ -20,9 +20,10 @@ import org.gots.action.view.ActionWidget;
 import org.gots.allotment.AllotmentManager;
 import org.gots.allotment.view.QuickAllotmentActionBuilder;
 import org.gots.bean.BaseAllotmentInterface;
+import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
-import org.gots.seed.provider.local.sql.GrowingSeedDBHelper;
+import org.gots.seed.provider.local.LocalGrowingSeedProvider;
 import org.gots.ui.HutActivity;
 
 import android.app.AlertDialog;
@@ -38,11 +39,12 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener {
     Context mContext;
 
-    private ListGrowingSeedAdapter lgsa;
+    private ListGrowingSeedAdapter listGrowingSeedAdapter;
 
     private GridView listSeeds;
 
@@ -86,13 +88,18 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
         if (convertView == null) {
             // ll = new LinearLayout(mContext);
             ll = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.list_allotments, parent, false);
+            if (GotsPreferences.DEBUG) {
+                TextView textView = new TextView(mContext);
+                textView.setText("(" + getItem(position).getId() + ")" + getItem(position).getUUID());
+                ll.addView(textView);
+            }
         }
-        GrowingSeedDBHelper helper = new GrowingSeedDBHelper(mContext);
+        LocalGrowingSeedProvider helper = new LocalGrowingSeedProvider(mContext);
         List<GrowingSeedInterface> mySeeds = helper.getSeedsByAllotment(myAllotments.get(position).getName());
 
-        lgsa = new ListGrowingSeedAdapter(mContext, mySeeds, this);
+        listGrowingSeedAdapter = new ListGrowingSeedAdapter(mContext, mySeeds, this);
         listSeeds = (GridView) ll.findViewById(R.id.IdGrowingSeedList);
-        listSeeds.setAdapter(lgsa);
+        listSeeds.setAdapter(listGrowingSeedAdapter);
 
         int nbcolumn = 4;
         int layoutsize = 100;
@@ -128,55 +135,21 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
         widget.setPadding(4, 4, 4, 8);
         menu.addView(widget);
 
-        final DeleteAction delete = new DeleteAction(mContext);
-        widget = new ActionWidget(mContext, delete);
-        widget.setTag(Integer.valueOf(position));
-        widget.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(final View v) {
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext().getApplicationContext());
-                builder.setMessage("Delete").setCancelable(false).setPositiveButton("OK",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                new AsyncTask<BaseAllotmentInterface, Integer, Void>() {
-                                    @Override
-                                    protected void onPreExecute() {
-
-                                        super.onPreExecute();
-                                    }
-
-                                    @Override
-                                    protected Void doInBackground(BaseAllotmentInterface... params) {
-                                        GardeningActionInterface actionItem = delete;
-                                        actionItem.execute(params[0], null);
-                                        myAllotments.remove(params[0]);
-                                        return null;
-                                    }
-
-                                    @Override
-                                    protected void onPostExecute(Void result) {
-                                        notifyDataSetChanged();
-                                        super.onPostExecute(result);
-                                    }
-                                }.execute(getItem(Integer.valueOf(v.getTag().toString())));
-                                dialog.dismiss();
-                            }
-                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-
-                builder.show();
-
-            }
-        });
-
-        widget.setPadding(4, 4, 4, 8);
-
-        menu.addView(widget);
+//        final DeleteAction delete = new DeleteAction(mContext);
+//        widget = new ActionWidget(mContext, delete);
+//        widget.setTag(Integer.valueOf(position));
+//        widget.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(final View v) {
+//                v.setSelected(!v.isSelected());
+//
+//            }
+//        });
+//
+//        widget.setPadding(4, 4, 4, 8);
+//
+//        menu.addView(widget);
 
         return ll;
     }

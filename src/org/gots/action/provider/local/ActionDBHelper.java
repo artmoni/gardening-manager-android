@@ -31,7 +31,7 @@ public class ActionDBHelper extends GotsDBHelper {
     public long insertAction(BaseActionInterface action) {
         long rowid;
         ContentValues values = getActionContentValues(action);
-      
+
         rowid = bdd.insert(GardenSQLite.ACTION_TABLE_NAME, null, values);
 
         return rowid;
@@ -111,7 +111,6 @@ public class ActionDBHelper extends GotsDBHelper {
                 cursor.close();
         }
         return action;
-
     }
 
     protected BaseActionInterface cursorToAction(Cursor cursor) {
@@ -121,6 +120,7 @@ public class ActionDBHelper extends GotsDBHelper {
         bsi.setDescription(cursor.getString(cursor.getColumnIndex(GardenSQLite.ACTION_DESCRIPTION)));
         bsi.setDuration(cursor.getInt(cursor.getColumnIndex(GardenSQLite.ACTION_DURATION)));
         bsi.setId(cursor.getInt(cursor.getColumnIndex(GardenSQLite.ACTION_ID)));
+        bsi.setUUID(cursor.getString(cursor.getColumnIndex(GardenSQLite.ACTION_UUID)));
         return bsi;
     }
 
@@ -129,6 +129,7 @@ public class ActionDBHelper extends GotsDBHelper {
         values.put(GardenSQLite.ACTION_NAME, action.getName());
         values.put(GardenSQLite.ACTION_DESCRIPTION, action.getDescription());
         values.put(GardenSQLite.ACTION_DURATION, action.getDuration());
+        values.put(GardenSQLite.ACTION_UUID, action.getUUID());
         return values;
     }
 

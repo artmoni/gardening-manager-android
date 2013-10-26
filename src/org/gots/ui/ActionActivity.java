@@ -16,7 +16,7 @@ import org.gots.R;
 import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.provider.local.sql.GrowingSeedDBHelper;
+import org.gots.seed.provider.local.LocalGrowingSeedProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -49,7 +49,7 @@ public class ActionActivity extends AbstractActivity implements OnClickListener 
         setContentView(R.layout.actions);
         int seedid = 0;
 
-        GrowingSeedDBHelper helper = new GrowingSeedDBHelper(this);
+        LocalGrowingSeedProvider helper = new LocalGrowingSeedProvider(this);
 
         if (getIntent().getExtras() != null)
             seedid = getIntent().getExtras().getInt("org.gots.seed.id");

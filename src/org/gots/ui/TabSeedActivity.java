@@ -17,8 +17,8 @@ import org.gots.R;
 import org.gots.help.HelpUriBuilder;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.provider.local.sql.GrowingSeedDBHelper;
-import org.gots.seed.provider.local.sql.VendorSeedDBHelper;
+import org.gots.seed.provider.local.LocalGrowingSeedProvider;
+import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
 
 import android.content.Context;
@@ -68,11 +68,11 @@ public class TabSeedActivity extends SherlockFragmentActivity {
             TabHost mTabHost = (TabHost) findViewById(android.R.id.tabhost);
 
             int seedId = getIntent().getExtras().getInt("org.gots.seed.id");
-            GrowingSeedDBHelper helper = new GrowingSeedDBHelper(this);
+            LocalGrowingSeedProvider helper = new LocalGrowingSeedProvider(this);
             mSeed = helper.getSeedById(seedId);
         } else if (getIntent().getExtras().getInt("org.gots.seed.vendorid") != 0) {
             int seedId = getIntent().getExtras().getInt("org.gots.seed.vendorid");
-            VendorSeedDBHelper helper = new VendorSeedDBHelper(getApplicationContext());
+            LocalSeedProvider helper = new LocalSeedProvider(getApplicationContext());
 
             mSeed = (GrowingSeedInterface) helper.getSeedById(seedId);
         } else
@@ -96,7 +96,6 @@ public class TabSeedActivity extends SherlockFragmentActivity {
         mTabsAdapter.addTab(
                 bar.newTab().setTag("event_list").setText(getString(R.string.seed_description_tabmenu_detail)),
                 SeedActivity.class, null);
-
 
         // ********************** Tab Wikipedia**********************
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

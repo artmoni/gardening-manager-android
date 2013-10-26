@@ -19,7 +19,7 @@ import android.util.Log;
 
 public class GardenSQLite extends SQLiteOpenHelper {
 	// ************************ DATABASE **************
-	private static final int DATABASE_VERSION = 13;
+	private static final int DATABASE_VERSION = 14;
 	private static String DATABASE_NAME = "garden";
     private static GardenSQLite helper;
 	public final static String AUTHORITY = "org.gots.providers.garden";
@@ -63,6 +63,7 @@ public class GardenSQLite extends SQLiteOpenHelper {
 
 	// public static final String GROWINGSEED_ID = "growingseed_id";
 	public static final String ACTION_ID = "_id";
+	public static final String ACTION_UUID = "uuid";
 	public static final String ACTION_NAME = "name";
 	public static final String ACTION_DESCRIPTION = "description";
 	public static final String ACTION_DURATION = "duration";
@@ -70,6 +71,7 @@ public class GardenSQLite extends SQLiteOpenHelper {
 	//@formatter:off
 		public static final String CREATE_TABLE_ACTION = "CREATE TABLE " + ACTION_TABLE_NAME 
 				+ " (" + ACTION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+				+ ACTION_UUID + " STRING,"
 				+ ACTION_NAME + " STRING,"
 				+ ACTION_DESCRIPTION + " STRING,"
 				+ ACTION_DURATION + " INTEGER"			
@@ -112,6 +114,9 @@ public class GardenSQLite extends SQLiteOpenHelper {
 		if (oldVersion < 13) {
 			db.execSQL("ALTER TABLE " + GARDEN_TABLE_NAME + " ADD COLUMN " + GARDEN_UUID + " VARCHAR(255);");
 		}
+		if (oldVersion < 14) {
+            db.execSQL("ALTER TABLE " + ACTION_TABLE_NAME + " ADD COLUMN " + ACTION_UUID + " VARCHAR(255);");
+        }
 	}
 
 	private void populateActions(SQLiteDatabase db) {

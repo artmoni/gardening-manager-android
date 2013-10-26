@@ -14,7 +14,7 @@ import java.util.Date;
 
 import org.gots.action.AbstractActionSeed;
 import org.gots.action.SeedActionInterface;
-import org.gots.action.provider.local.ActionSeedDBHelper;
+import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.seed.GrowingSeedInterface;
 
 import android.content.Context;
@@ -31,7 +31,7 @@ public class BeakeringAction extends AbstractActionSeed implements SeedActionInt
         super.execute(seed);
         seed.getActionToDo().remove(this);
         seed.getActionDone().add(this);
-        ActionSeedDBHelper asdh = new ActionSeedDBHelper(getContext());
+        LocalActionSeedProvider asdh = new LocalActionSeedProvider(getContext());
         asdh.doAction(this, seed);
         return 1;
     }

@@ -8,7 +8,7 @@
  * Contributors:
  *     sfleury - initial API and implementation
  ******************************************************************************/
-package org.gots.seed.provider.local.sql;
+package org.gots.seed.provider.local;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,9 +22,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-public class GrowingSeedDBHelper extends GotsDBHelper {
+public class LocalGrowingSeedProvider extends GotsDBHelper {
 
-    public GrowingSeedDBHelper(Context mContext) {
+    public LocalGrowingSeedProvider(Context mContext) {
         super(mContext);
     }
 
@@ -80,8 +80,8 @@ public class GrowingSeedDBHelper extends GotsDBHelper {
 
     private GrowingSeedInterface cursorToSeed(Cursor cursor) {
         GrowingSeedInterface bsi = null;
-        VendorSeedDBHelper sb = new VendorSeedDBHelper(mContext);
-        bsi = (GrowingSeedInterface) sb.getSeedById(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_SEED_ID)));
+        LocalSeedProvider localSeedProvider = new LocalSeedProvider(mContext);
+        bsi = (GrowingSeedInterface) localSeedProvider.getSeedById(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_SEED_ID)));
         if (bsi == null) {
             bsi = new GrowingSeed();
             bsi.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_SEED_ID)));
@@ -97,51 +97,39 @@ public class GrowingSeedDBHelper extends GotsDBHelper {
     public ArrayList<GrowingSeedInterface> getSeedsByAllotment(String allotmentReference) {
         ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
         GrowingSeedInterface searchedSeed = new GrowingSeed();
-        // open();
 
-        try {
-            Cursor cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null,
-                    DatabaseHelper.GROWINGSEED_ALLOTMENT_ID + "='" + allotmentReference + "'", null, null, null, null);
+        Cursor cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, DatabaseHelper.GROWINGSEED_ALLOTMENT_ID
+                + "='" + allotmentReference + "'", null, null, null, null);
 
-            if (cursor.moveToFirst()) {
-                do {
-                    searchedSeed = cursorToSeed(cursor);
-                    allSeeds.add(searchedSeed);
-                } while (cursor.moveToNext());
-            }
-            cursor.close();
-        } finally {
-            // close();
+        if (cursor.moveToFirst()) {
+            do {
+                searchedSeed = cursorToSeed(cursor);
+                allSeeds.add(searchedSeed);
+            } while (cursor.moveToNext());
         }
+        cursor.close();
         return allSeeds;
     }
 
     public GrowingSeedInterface getSeedById(int growingSeedId) {
         GrowingSeedInterface searchedSeed = null;
-        // open();
 
-        try {
-            Cursor cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, DatabaseHelper.GROWINGSEED_ID
-                    + "='" + growingSeedId + "'", null, null, null, null);
+        Cursor cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, DatabaseHelper.GROWINGSEED_ID + "='"
+                + growingSeedId + "'", null, null, null, null);
 
-            if (cursor.moveToFirst()) {
+        if (cursor.moveToFirst()) {
 
-                searchedSeed = cursorToSeed(cursor);
+            searchedSeed = cursorToSeed(cursor);
 
-            }
-            cursor.close();
-        } finally {
-            // close();
         }
+        cursor.close();
         return searchedSeed;
     }
 
     public void deleteGrowingSeed(GrowingSeedInterface seed) {
-        // open();
 
         bdd.delete(DatabaseHelper.GROWINGSEEDS_TABLE_NAME,
                 DatabaseHelper.GROWINGSEED_ID + "='" + seed.getGrowingSeedId() + "'", null);
-        // close();
     }
 
 }

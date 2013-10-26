@@ -21,14 +21,14 @@ import org.gots.R;
 import org.gots.action.BaseActionInterface;
 import org.gots.action.GardeningActionInterface;
 import org.gots.action.provider.local.ActionDBHelper;
-import org.gots.action.provider.local.ActionSeedDBHelper;
+import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.allotment.provider.local.LocalAllotmentProvider;
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.bean.Garden;
 import org.gots.garden.GardenInterface;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.provider.local.sql.VendorSeedDBHelper;
+import org.gots.seed.provider.local.LocalSeedProvider;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -345,10 +345,9 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
             helper.createAllotment(newAllotment);
 
             // Seed
-            VendorSeedDBHelper seedHelper = new VendorSeedDBHelper(getApplicationContext());
+            LocalSeedProvider seedHelper = new LocalSeedProvider(getApplicationContext());
 
-            // seedHelper.loadFromXML(this);
-            int nbSeed = seedHelper.getArraySeeds().length;
+            int nbSeed = seedHelper.getVendorSeeds(false).size();
             Random random = new Random();
             for (int i = 1; i <= 5 && i < nbSeed; i++) {
                 int alea = random.nextInt(nbSeed);
@@ -369,7 +368,7 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
                     cal.add(Calendar.MONTH, -3);
                     seed.setDateSowing(cal.getTime());
 
-                    ActionSeedDBHelper actionsHelper = new ActionSeedDBHelper(this);
+                    LocalActionSeedProvider actionsHelper = new LocalActionSeedProvider(this);
                     actionsHelper.insertAction(bakering, seed);
                 }
             }

@@ -25,9 +25,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-public class ActionSeedDBHelper extends GotsDBHelper {
+public class LocalActionSeedProvider extends GotsDBHelper {
 
-    public ActionSeedDBHelper(Context mContext) {
+    public LocalActionSeedProvider(Context mContext) {
         super(mContext);
     }
 
@@ -46,25 +46,6 @@ public class ActionSeedDBHelper extends GotsDBHelper {
         return rowid;
     }
 
-    public ArrayList<BaseActionInterface> getActions2() {
-        ArrayList<BaseActionInterface> allActions = new ArrayList<BaseActionInterface>();
-        Cursor cursor = null;
-        try {
-            cursor = bdd.query(DatabaseHelper.ACTIONSEEDS_TABLE_NAME, null, null, null, null, null, null);
-            if (cursor.moveToFirst()) {
-                do {
-                    BaseActionInterface action = cursorToAction(cursor);
-                    if (action != null)
-                        allActions.add(action);
-                } while (cursor.moveToNext());
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-        return allActions;
-    }
 
     private BaseActionInterface cursorToAction(Cursor cursor) {
         BaseActionInterface seedAction = null;

@@ -16,7 +16,7 @@ import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.provider.local.sql.VendorSeedDBHelper;
+import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.ui.fragment.AbstractFragmentActivity;
 
 import android.content.Context;
@@ -104,7 +104,7 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanResult != null && scanResult.getContents() != "") {
             Log.i("Scan result", scanResult.toString());
-            VendorSeedDBHelper helper = new VendorSeedDBHelper(mContext);
+            LocalSeedProvider helper = new LocalSeedProvider(mContext);
             BaseSeedInterface scanSeed = helper.getSeedByBarCode(scanResult.getContents());
             if (scanSeed != null) {
                 scanSeed.setNbSachet(scanSeed.getNbSachet() + 1);

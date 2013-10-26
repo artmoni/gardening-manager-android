@@ -26,7 +26,7 @@ import org.gots.action.bean.PhotoAction;
 import org.gots.action.bean.ScheduleAction;
 import org.gots.action.bean.WateringAction;
 import org.gots.action.provider.local.ActionDBHelper;
-import org.gots.action.provider.local.ActionSeedDBHelper;
+import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.action.view.ActionWidget;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.ui.NewActionActivity;
@@ -55,7 +55,7 @@ public class QuickSeedActionBuilder {
         mContext = context;
         final GrowingSeedInterface seed = (GrowingSeedInterface) v.getTag();
 
-        ActionSeedDBHelper helperActions = new ActionSeedDBHelper(mContext);
+        LocalActionSeedProvider helperActions = new LocalActionSeedProvider(mContext);
         ArrayList<BaseActionInterface> actions = helperActions.getActionsToDoBySeed(seed);
 
         quickAction = new QuickAction(mContext, QuickAction.HORIZONTAL);

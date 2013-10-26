@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.provider.local.sql.GrowingSeedDBHelper;
+import org.gots.seed.provider.local.LocalGrowingSeedProvider;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -64,7 +64,7 @@ public class ListActionActivity extends SherlockListFragment implements ListView
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         int seedid = 0;
-        GrowingSeedDBHelper helper = new GrowingSeedDBHelper(getActivity());
+        LocalGrowingSeedProvider helper = new LocalGrowingSeedProvider(getActivity());
 
         Bundle bundle = this.getArguments();
         seedid = bundle.getInt("org.gots.growingseed.id");

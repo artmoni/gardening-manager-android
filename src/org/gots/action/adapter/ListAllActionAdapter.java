@@ -23,11 +23,11 @@ import org.gots.R;
 import org.gots.action.BaseActionInterface;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.bean.PhotoAction;
-import org.gots.action.provider.local.ActionSeedDBHelper;
+import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.provider.local.sql.GrowingSeedDBHelper;
+import org.gots.seed.provider.local.LocalGrowingSeedProvider;
 import org.gots.seed.view.SeedWidget;
 import org.gots.weather.WeatherManager;
 import org.gots.weather.view.WeatherView;
@@ -76,7 +76,7 @@ public class ListAllActionAdapter extends BaseAdapter {
     public ListAllActionAdapter(Context context, ArrayList<GrowingSeedInterface> allSeeds, int status) {
         this.mContext = context;
         current_status = status;
-        ActionSeedDBHelper helper = new ActionSeedDBHelper(context);
+        LocalActionSeedProvider helper = new LocalActionSeedProvider(context);
 
         for (Iterator<GrowingSeedInterface> iterator = allSeeds.iterator(); iterator.hasNext();) {
             GrowingSeedInterface seed = iterator.next();
@@ -130,7 +130,7 @@ public class ListAllActionAdapter extends BaseAdapter {
 
         final BaseActionInterface currentAction = getItem(position);
 
-        GrowingSeedDBHelper helper = new GrowingSeedDBHelper(mContext);
+        LocalGrowingSeedProvider helper = new LocalGrowingSeedProvider(mContext);
         final GrowingSeedInterface seed = helper.getSeedById(currentAction.getGrowingSeedId());
 
         if (seed != null && BaseActionInterface.class.isInstance(currentAction)) {

@@ -36,6 +36,8 @@ public abstract class AbstractActionSeed implements SeedActionInterface, Compara
 
     private int id;
 
+    private String UUID;
+
     private int state;
 
     private Date dateActionTodo;
@@ -65,8 +67,8 @@ public abstract class AbstractActionSeed implements SeedActionInterface, Compara
         allotmentProvider.initIfNew(context);
         seedManager = GotsSeedManager.getInstance();
         seedManager.initIfNew(mContext);
-        
-        //Gardenmanager might not be declared here
+
+        // Gardenmanager might not be declared here
         gardenManager = GardenManager.getInstance();
         gardenManager.initIfNew(mContext);
     }
@@ -142,8 +144,6 @@ public abstract class AbstractActionSeed implements SeedActionInterface, Compara
         GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
         tracker.trackEvent("Seed", getName(), seed.getSpecie(), 0);
         // tracker.dispatch();
-        
-        
 
         return 1;
     }
@@ -200,4 +200,13 @@ public abstract class AbstractActionSeed implements SeedActionInterface, Compara
         return mContext;
     }
 
+    @Override
+    public String getUUID() {
+        return this.UUID;
+    }
+
+    @Override
+    public void setUUID(String uuid) {
+        this.UUID = uuid;
+    }
 }

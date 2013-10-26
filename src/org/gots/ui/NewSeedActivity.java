@@ -19,7 +19,7 @@ import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.adapter.ListSpeciesAdapter;
-import org.gots.seed.provider.local.sql.VendorSeedDBHelper;
+import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
 
 import android.content.Intent;
@@ -83,7 +83,7 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
         textViewBarCode = (TextView) findViewById(R.id.textViewBarCode);
 
         if (getIntent().getIntExtra("org.gots.seedid", -1) != -1) {
-            VendorSeedDBHelper helper = new VendorSeedDBHelper(getApplicationContext());
+            LocalSeedProvider helper = new LocalSeedProvider(getApplicationContext());
             newSeed = helper.getSeedById(getIntent().getIntExtra("org.gots.seedid", -1));
             isNewSeed = false;
 
@@ -251,7 +251,7 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
     }
 
     private void addToStock(BaseSeedInterface vendorseed) {
-        VendorSeedDBHelper helper = new VendorSeedDBHelper(getApplicationContext());
+        LocalSeedProvider helper = new LocalSeedProvider(getApplicationContext());
         if (vendorseed.getSeedId() >= 0) {
             GrowingSeedInterface seed = (GrowingSeedInterface) helper.getSeedById(vendorseed.getSeedId());
             BuyingAction buy = new BuyingAction(this);
@@ -262,15 +262,15 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
 
     private boolean validateSeed() {
         if (newSeed.getFamily() == null || "".equals(newSeed.getFamily())) {
-            Toast.makeText(this, getResources().getString(R.string.fillfields_specie), 3000).show();
+            Toast.makeText(this, getResources().getString(R.string.fillfields_specie), Toast.LENGTH_SHORT).show();
             return false;
         }
         if (newSeed.getVariety() == null || "".equals(newSeed.getVariety())) {
-            Toast.makeText(this, getResources().getString(R.string.fillfields_variety), 3000).show();
+            Toast.makeText(this, getResources().getString(R.string.fillfields_variety), Toast.LENGTH_SHORT).show();
             return false;
         }
         if (newSeed.getDateSowingMin() == -1 || newSeed.getDateSowingMax() == -1) {
-            Toast.makeText(this, getResources().getString(R.string.fillfields_dates), 3000).show();
+            Toast.makeText(this, getResources().getString(R.string.fillfields_dates), Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -291,7 +291,7 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
 	 *
 	 */
     private void initSpecieList() {
-        final VendorSeedDBHelper helper = new VendorSeedDBHelper(getApplicationContext());
+        final LocalSeedProvider helper = new LocalSeedProvider(getApplicationContext());
 
         String[] specieList = helper.getArraySpecie();
 
@@ -330,7 +330,7 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
 	 *
 	 */
     private void initVarietyList() {
-        VendorSeedDBHelper helper = new VendorSeedDBHelper(getApplicationContext());
+        LocalSeedProvider helper = new LocalSeedProvider(getApplicationContext());
 
         String[] referenceList = null;
         if (newSeed.getSpecie() != null)

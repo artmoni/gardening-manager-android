@@ -18,10 +18,10 @@ import java.util.Iterator;
 import org.gots.action.AbstractActionSeed;
 import org.gots.action.GardeningActionInterface;
 import org.gots.action.SeedActionInterface;
-import org.gots.action.provider.local.ActionSeedDBHelper;
+import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.provider.local.sql.GrowingSeedDBHelper;
+import org.gots.seed.provider.local.LocalGrowingSeedProvider;
 
 import android.content.Context;
 
@@ -41,7 +41,7 @@ public class WateringAction extends AbstractActionSeed implements SeedActionInte
         seed.getActionToDo().remove(this);
         seed.getActionDone().add(this);
 
-        ActionSeedDBHelper asdh = new ActionSeedDBHelper(getContext());
+        LocalActionSeedProvider asdh = new LocalActionSeedProvider(getContext());
         asdh.doAction(this, seed);
 
         return 0;
@@ -82,7 +82,7 @@ public class WateringAction extends AbstractActionSeed implements SeedActionInte
     @Override
     public int execute(BaseAllotmentInterface allotment, GrowingSeedInterface seed) {
 
-        GrowingSeedDBHelper helper = new GrowingSeedDBHelper(getContext());
+        LocalGrowingSeedProvider helper = new LocalGrowingSeedProvider(getContext());
         ArrayList<GrowingSeedInterface> listseeds = helper.getSeedsByAllotment(allotment.getName());
         for (Iterator<GrowingSeedInterface> iterator = listseeds.iterator(); iterator.hasNext();) {
             GrowingSeedInterface baseSeedInterface = iterator.next();

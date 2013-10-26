@@ -7,9 +7,9 @@ import org.gots.R;
 import org.gots.action.BaseActionInterface;
 import org.gots.action.adapter.SimpleListActionAdapter;
 import org.gots.action.provider.local.ActionDBHelper;
-import org.gots.action.provider.local.ActionSeedDBHelper;
+import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.provider.local.sql.GrowingSeedDBHelper;
+import org.gots.seed.provider.local.LocalGrowingSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
 
 import android.app.AlertDialog;
@@ -62,7 +62,7 @@ public class NewActionActivity extends AbstractActivity implements OnItemClickLi
         spinner.setAdapter(new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, list));
         if (getIntent().getExtras() != null) {
             Integer seedId = getIntent().getExtras().getInt("org.gots.seed.id");
-            GrowingSeedDBHelper seedHelper = new GrowingSeedDBHelper(this);
+            LocalGrowingSeedProvider seedHelper = new LocalGrowingSeedProvider(this);
             mySeed = seedHelper.getSeedById(seedId);
 
             SeedWidgetLong seed = (SeedWidgetLong) findViewById(R.id.seedWidgetLong);
@@ -135,7 +135,7 @@ public class NewActionActivity extends AbstractActivity implements OnItemClickLi
         } else {
             selectedAction.setDuration(duration);
 
-            ActionSeedDBHelper actionHelper = new ActionSeedDBHelper(this);
+            LocalActionSeedProvider actionHelper = new LocalActionSeedProvider(this);
             actionHelper.insertAction(selectedAction, mySeed);
 
             GoogleAnalyticsTracker.getInstance().trackEvent(getClass().getSimpleName(), "NewAction",

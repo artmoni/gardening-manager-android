@@ -14,43 +14,47 @@ import java.util.Date;
 
 public interface BaseActionInterface {
 
-	public abstract Date getDateActionTodo();
+    public abstract Date getDateActionTodo();
 
-	public abstract void setDateActionTodo(Date dateActionTodo);
+    public abstract void setDateActionTodo(Date dateActionTodo);
 
-	public abstract void setDateActionDone(Date dateActionDone);
+    public abstract void setDateActionDone(Date dateActionDone);
 
-	public abstract Date getDateActionDone();
+    public abstract Date getDateActionDone();
 
-	public abstract void setDuration(int duration);
+    public abstract void setDuration(int duration);
 
-	public abstract int getDuration();
+    public abstract int getDuration();
 
-	public abstract void setDescription(String description);
+    public abstract void setDescription(String description);
 
-	public abstract String getDescription();
+    public abstract String getDescription();
 
-	public abstract void setName(String name);
+    public abstract void setName(String name);
 
-	public abstract String getName();
+    public abstract String getName();
 
-	public abstract void setId(int id);
+    public abstract void setId(int id);
 
-	public abstract int getId();
+    public abstract int getId();
 
-	public abstract int getState();
+    public abstract void setUUID(String uuid);
 
-	public abstract void setState(int state);
+    public abstract String getUUID();
 
-	public abstract void setLogId(int id);
+    public abstract int getState();
 
-	public abstract int getLogId();
+    public abstract void setState(int state);
 
-	public abstract void setGrowingSeedId(int id);
+    public abstract void setLogId(int id);
 
-	public abstract int getGrowingSeedId();
+    public abstract int getLogId();
 
-	public abstract void setData(Object data);
+    public abstract void setGrowingSeedId(int id);
 
-	public abstract Object getData();
+    public abstract int getGrowingSeedId();
+
+    public abstract void setData(Object data);
+
+    public abstract Object getData();
 }

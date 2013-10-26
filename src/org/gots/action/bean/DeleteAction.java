@@ -20,7 +20,7 @@ import org.gots.action.PermanentActionInterface;
 import org.gots.action.SeedActionInterface;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.provider.local.sql.GrowingSeedDBHelper;
+import org.gots.seed.provider.local.LocalGrowingSeedProvider;
 
 import android.content.Context;
 
@@ -77,7 +77,7 @@ public class DeleteAction extends AbstractActionSeed implements PermanentActionI
 	@Override
 	public int execute(BaseAllotmentInterface allotment, GrowingSeedInterface seed) {
 
-		GrowingSeedDBHelper helper = new GrowingSeedDBHelper(getContext());
+		LocalGrowingSeedProvider helper = new LocalGrowingSeedProvider(getContext());
 		ArrayList<GrowingSeedInterface> listseeds = helper.getSeedsByAllotment(allotment.getName());
 		for (Iterator<GrowingSeedInterface> iterator = listseeds.iterator(); iterator.hasNext();) {
 			GrowingSeedInterface baseSeedInterface = iterator.next();
