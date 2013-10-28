@@ -24,7 +24,7 @@ import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     // ************************ DATABASE **************
-    private static final int DATABASE_VERSION = 15;
+    private static final int DATABASE_VERSION = 16;
 
     private static String DATABASE_NAME = "gots";
 
@@ -324,6 +324,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('aliaceae')");
         db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('chenopodiaceae')");
 
+        db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('grossulariaceae')");
+        db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('lauraceae')");
+        db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('rosaceae')");
+        db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('ericaceae')");
+
         db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
                 + ") VALUES ('Brassica oleracea',3)");
         db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
@@ -358,6 +363,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + ") VALUES ('Cucurbita maxima',4)");
         db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
                 + ") VALUES ('Spinacia oleracea',10)");
+
+        db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                + ") VALUES ('Ribes rubrum',11)");
+        db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                + ") VALUES ('Ribes uva crispa',11)");
+        db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                + ") VALUES ('Persea americana',12)");
+        db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                + ") VALUES ('Rubus idaeus',13)");
+        db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                + ") VALUES ('Fragaria x ananassa',13)");
+        db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                + ") VALUES ('Cichorium endivia',2)");
+        db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                + ") VALUES ('Pastinaca sativa',1)");
+        db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                + ") VALUES ('Vaccinium myrtillus',14)");
 
         Log.i(TAG, "onCreate");
 
@@ -421,6 +443,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     + ") VALUES ('Cucurbita maxima',4)");
             db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
                     + ") VALUES ('Spinacia oleracea',10)");
+        }
+
+        if (oldVersion < 16) {
+            db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('grossulariaceae')");
+            db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('lauraceae')");
+            db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('rosaceae')");
+            db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('ericaceae')");
+
+            db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                    + ") VALUES ('Ribes rubrum',11)");
+            db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                    + ") VALUES ('Ribes uva crispa',11)");
+            db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                    + ") VALUES ('Persea americana',12)");
+            db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                    + ") VALUES ('Rubus idaeus',13)");
+            db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                    + ") VALUES ('Fragaria x ananassa',13)");
+            db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                    + ") VALUES ('Cichorium endivia',2)");
+            db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                    + ") VALUES ('Pastinaca sativa',1)");
+            db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
+                    + ") VALUES ('Vaccinium myrtillus',14)");
         } else {
             db.execSQL("DROP TABLE IF EXISTS " + SEEDS_TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + GROWINGSEEDS_TABLE_NAME);
