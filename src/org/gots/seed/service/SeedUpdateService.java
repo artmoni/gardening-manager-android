@@ -14,11 +14,11 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
-public class SeedUpdateService extends Service {
+public class SeedUpdateService extends GotsService {
     public static final String ISNEWSEED = "org.gots.isnewseed";
 
 
-    private static Intent intent = null;
+    static Intent intent = null;
 
     private static boolean isNewSeed = false;
 
@@ -33,18 +33,9 @@ public class SeedUpdateService extends Service {
 
     @Override
     public IBinder onBind(Intent arg0) {
-
-        return null;
-    }
-
-    @Override
-    public void onCreate() {
-       
-        manager = GotsSeedManager.getInstance();
-        manager.initIfNew(this);
         intent = new Intent(BroadCastMessages.SEED_DISPLAYLIST);
 
-        super.onCreate();
+        return null;
     }
 
     @Override
@@ -64,12 +55,12 @@ public class SeedUpdateService extends Service {
 
             @Override
             protected List<BaseSeedInterface> doInBackground(Void... params) {
-                return manager.getVendorSeeds(true);
+                return seedManager.getVendorSeeds(true);
 
             }
 
             protected void onPostExecute(List<BaseSeedInterface> vendorSeeds) {
-                newSeeds = manager.getNewSeeds();
+                newSeeds = seedManager.getNewSeeds();
                 if (newSeeds != null && newSeeds.size() > 0) {
                     SeedNotification notification = new SeedNotification(getApplicationContext());
                     notification.createNotification (newSeeds);
@@ -92,7 +83,6 @@ public class SeedUpdateService extends Service {
         }
     };
 
-    private GotsSeedManager manager;
 
     private void displaySeedsAvailable() {
         Log.d(TAG, "displaySeedsAvailable send broadcast");
