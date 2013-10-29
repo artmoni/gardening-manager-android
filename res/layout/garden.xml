@@ -22,7 +22,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/background_simple"
-            android:cacheColorHint="#00000000" >
+            android:cacheColorHint="#00000000"
+            android:focusable="false" >
         </ListView>
 
         <LinearLayout

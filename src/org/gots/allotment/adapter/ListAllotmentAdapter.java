@@ -46,7 +46,7 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
 
     private ListGrowingSeedAdapter listGrowingSeedAdapter;
 
-    private GridView listSeeds;
+    // private GridView listSeeds;
 
     private List<BaseAllotmentInterface> myAllotments;
 
@@ -59,6 +59,7 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
     public ListAllotmentAdapter(Context mContext, List<BaseAllotmentInterface> allotments) {
         this.mContext = mContext;
         myAllotments = allotments;
+
     }
 
     public void setAllotments(List<BaseAllotmentInterface> allotments) {
@@ -81,40 +82,52 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
         return myAllotments.get(position).getId();
     }
 
+    public class Holder {
+        public GridView listSeeds;
+
+        public LinearLayout menu;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LinearLayout ll = (LinearLayout) convertView;
-
-        if (convertView == null) {
-            // ll = new LinearLayout(mContext);
+        Holder holder;
+        if (ll == null) {
+            holder = new Holder();
             ll = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.list_allotments, parent, false);
             if (GotsPreferences.DEBUG) {
                 TextView textView = new TextView(mContext);
                 textView.setText("(" + getItem(position).getId() + ")" + getItem(position).getUUID());
                 ll.addView(textView);
             }
-        }
+
+            holder.listSeeds = (GridView) ll.findViewById(R.id.IdGrowingSeedList);
+            holder.menu = (LinearLayout) ll.findViewById(R.id.idMenuAllotment);
+            ll.setTag(holder);
+            ll.setDescendantFocusability(LinearLayout.FOCUS_BLOCK_DESCENDANTS);
+        } else
+            holder = (Holder) ll.getTag();
+
         LocalGrowingSeedProvider helper = new LocalGrowingSeedProvider(mContext);
         List<GrowingSeedInterface> mySeeds = helper.getSeedsByAllotment(myAllotments.get(position).getName());
 
         listGrowingSeedAdapter = new ListGrowingSeedAdapter(mContext, mySeeds, this);
-        listSeeds = (GridView) ll.findViewById(R.id.IdGrowingSeedList);
-        listSeeds.setAdapter(listGrowingSeedAdapter);
+
+        holder.listSeeds.setAdapter(listGrowingSeedAdapter);
 
         int nbcolumn = 4;
         int layoutsize = 100;
-        if (listSeeds.getCount() == 0)
-            listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, layoutsize));
-        else if (listSeeds.getCount() % nbcolumn == 0)
-            listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                    (listSeeds.getCount() / 4) * layoutsize));
+        if (holder.listSeeds.getCount() == 0)
+            holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, layoutsize));
+        else if (holder.listSeeds.getCount() % nbcolumn == 0)
+            holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+                    (holder.listSeeds.getCount() / 4) * layoutsize));
         else
 
-            listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                    (listSeeds.getCount() / 4 + 1) * layoutsize));
+            holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+                    LayoutParams.WRAP_CONTENT));
 
-        LinearLayout menu = (LinearLayout) ll.findViewById(R.id.idMenuAllotment);
-        menu.removeAllViews();
+        holder.menu.removeAllViews();
 
         SowingAction sow = new SowingAction(mContext);
         ActionWidget widget = new ActionWidget(mContext, sow);
@@ -133,23 +146,7 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
         });
 
         widget.setPadding(4, 4, 4, 8);
-        menu.addView(widget);
-
-//        final DeleteAction delete = new DeleteAction(mContext);
-//        widget = new ActionWidget(mContext, delete);
-//        widget.setTag(Integer.valueOf(position));
-//        widget.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(final View v) {
-//                v.setSelected(!v.isSelected());
-//
-//            }
-//        });
-//
-//        widget.setPadding(4, 4, 4, 8);
-//
-//        menu.addView(widget);
+        holder.menu.addView(widget);
 
         return ll;
     }

@@ -194,7 +194,17 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     @Override
     public void remove(BaseSeedInterface vendorSeed) {
-        mSeedProvider.remove(vendorSeed);
+        new AsyncTask<BaseSeedInterface, Integer, Void>() {
+            @Override
+            protected Void doInBackground(BaseSeedInterface... params) {
+                mSeedProvider.remove(params[0]);
+                return null;
+            }
+
+            protected void onPostExecute(Void result) {
+                mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
+            };
+        }.execute(vendorSeed);
     }
 
     @Override
