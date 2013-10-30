@@ -398,10 +398,10 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         DocumentManager service = session.getAdapter(DocumentManager.class);
         try {
             service.remove(new IdRef(vendorSeed.getUUID()));
-            super.remove(vendorSeed);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
+        super.remove(vendorSeed);
 
     }
 

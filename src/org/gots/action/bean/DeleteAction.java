@@ -21,6 +21,7 @@ import org.gots.action.SeedActionInterface;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.local.LocalGrowingSeedProvider;
+import org.gots.seed.provider.local.LocalSeedProvider;
 
 import android.content.Context;
 
@@ -38,7 +39,9 @@ public class DeleteAction extends AbstractActionSeed implements PermanentActionI
 
 //		GrowingSeedDBHelper helper = new GrowingSeedDBHelper(getContext());
 //		helper.deleteGrowingSeed(seed);
-		seedManager.remove(seed);
+//		seedManager.removeGrowingSeed(seed);
+		LocalGrowingSeedProvider localSeedProvider = new LocalGrowingSeedProvider(getContext());
+		localSeedProvider.deleteGrowingSeed(seed);
 		return 1;
 
 	}
