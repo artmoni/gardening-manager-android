@@ -28,8 +28,6 @@ import org.gots.action.bean.PhotoAction;
 import org.gots.action.bean.ScheduleAction;
 import org.gots.action.bean.WateringAction;
 import org.gots.action.provider.GotsActionSeedProvider;
-import org.gots.action.provider.local.LocalActionProvider;
-import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.action.view.ActionWidget;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.ui.NewActionActivity;

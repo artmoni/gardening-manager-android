@@ -13,8 +13,6 @@ package org.gots.allotment.adapter;
 import java.util.List;
 
 import org.gots.R;
-import org.gots.action.GardeningActionInterface;
-import org.gots.action.bean.DeleteAction;
 import org.gots.action.bean.SowingAction;
 import org.gots.action.view.ActionWidget;
 import org.gots.allotment.AllotmentManager;
@@ -26,11 +24,8 @@ import org.gots.seed.adapter.ListGrowingSeedAdapter;
 import org.gots.seed.provider.local.LocalGrowingSeedProvider;
 import org.gots.ui.HutActivity;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;

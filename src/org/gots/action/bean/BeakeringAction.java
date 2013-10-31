@@ -14,8 +14,6 @@ import java.util.Date;
 
 import org.gots.action.AbstractActionSeed;
 import org.gots.action.SeedActionInterface;
-import org.gots.action.provider.GotsActionSeedProvider;
-import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.seed.GrowingSeedInterface;
 
 import android.content.Context;

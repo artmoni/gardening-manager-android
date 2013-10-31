@@ -8,7 +8,6 @@ import org.gots.allotment.provider.local.LocalAllotmentProvider;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.garden.GardenManager;
 import org.gots.nuxeo.NuxeoManager;
-import org.nuxeo.android.documentprovider.LazyUpdatableDocumentsList;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
 import org.nuxeo.ecm.automation.client.cache.CacheBehavior;

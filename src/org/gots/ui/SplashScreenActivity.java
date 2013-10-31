@@ -17,7 +17,6 @@ import java.util.List;
 import org.gots.R;
 import org.gots.action.service.ActionNotificationService;
 import org.gots.action.service.ActionTODOBroadcastReceiver;
-import org.gots.ads.GotsAdvertisement;
 import org.gots.garden.GardenInterface;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;

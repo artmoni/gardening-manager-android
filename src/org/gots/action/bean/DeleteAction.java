@@ -21,7 +21,6 @@ import org.gots.action.SeedActionInterface;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.local.LocalGrowingSeedProvider;
-import org.gots.seed.provider.local.LocalSeedProvider;
 
 import android.content.Context;
 

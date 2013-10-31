@@ -5,9 +5,7 @@ import java.util.List;
 
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.GotsSeedManager;
 
-import android.app.Service;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Handler;

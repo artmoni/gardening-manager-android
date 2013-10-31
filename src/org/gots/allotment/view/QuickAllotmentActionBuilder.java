@@ -16,7 +16,6 @@ import org.gots.action.GardeningActionInterface;
 import org.gots.action.GotsActionManager;
 import org.gots.action.bean.SowingAction;
 import org.gots.action.bean.WateringAction;
-import org.gots.action.provider.local.LocalActionProvider;
 import org.gots.action.view.ActionWidget;
 import org.gots.bean.Allotment;
 import org.gots.ui.MySeedsListActivity;
