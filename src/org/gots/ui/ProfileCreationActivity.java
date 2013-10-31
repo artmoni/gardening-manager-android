@@ -20,7 +20,11 @@ import java.util.Random;
 import org.gots.R;
 import org.gots.action.BaseActionInterface;
 import org.gots.action.GardeningActionInterface;
-import org.gots.action.provider.local.ActionDBHelper;
+import org.gots.action.GotsActionManager;
+import org.gots.action.GotsActionSeedManager;
+import org.gots.action.provider.GotsActionProvider;
+import org.gots.action.provider.GotsActionSeedProvider;
+import org.gots.action.provider.local.LocalActionProvider;
 import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.allotment.provider.local.LocalAllotmentProvider;
 import org.gots.bean.Allotment;
@@ -357,7 +361,7 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
                     seed.setNbSachet(alea % 3 + 1);
                     seedHelper.updateSeed(seed);
 
-                    ActionDBHelper actionHelper = new ActionDBHelper(getApplicationContext());
+                    GotsActionProvider actionHelper = new GotsActionManager(getApplicationContext());
                     BaseActionInterface bakering = actionHelper.getActionByName("beak");
                     GardeningActionInterface sowing = (GardeningActionInterface) actionHelper.getActionByName("sow");
 
@@ -368,8 +372,8 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
                     cal.add(Calendar.MONTH, -3);
                     seed.setDateSowing(cal.getTime());
 
-                    LocalActionSeedProvider actionsHelper = new LocalActionSeedProvider(this);
-                    actionsHelper.insertAction(bakering, seed);
+                    GotsActionSeedProvider actionsHelper = GotsActionSeedManager.getInstance().initIfNew(this);
+                    actionsHelper.insertAction(bakering, seed); 
                 }
             }
         }

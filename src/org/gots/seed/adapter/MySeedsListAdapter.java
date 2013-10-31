@@ -16,9 +16,11 @@ import java.util.List;
 
 import org.gots.action.BaseActionInterface;
 import org.gots.action.GardeningActionInterface;
+import org.gots.action.GotsActionManager;
+import org.gots.action.GotsActionSeedManager;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.bean.ReduceQuantityAction;
-import org.gots.action.provider.local.ActionDBHelper;
+import org.gots.action.provider.local.LocalActionProvider;
 import org.gots.action.util.ActionState;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
@@ -53,11 +55,10 @@ public class MySeedsListAdapter extends SeedListAdapter {
 
 
         holder.seedWidgetLong.setSeed(currentSeed);
-
         BaseActionInterface action = null;
         if (allotment != null) {
             // action = new SowingAction(mContext);
-            ActionDBHelper helper = new ActionDBHelper(mContext);
+            GotsActionManager helper = new GotsActionManager(mContext);
             action = helper.getActionByName("sow");
 
             if (Calendar.getInstance().get(Calendar.MONTH) >= currentSeed.getDateSowingMin()

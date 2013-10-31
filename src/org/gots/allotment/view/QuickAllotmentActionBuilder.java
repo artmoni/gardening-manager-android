@@ -13,9 +13,10 @@ package org.gots.allotment.view;
 import net.londatiga.android.QuickAction;
 
 import org.gots.action.GardeningActionInterface;
+import org.gots.action.GotsActionManager;
 import org.gots.action.bean.SowingAction;
 import org.gots.action.bean.WateringAction;
-import org.gots.action.provider.local.ActionDBHelper;
+import org.gots.action.provider.local.LocalActionProvider;
 import org.gots.action.view.ActionWidget;
 import org.gots.bean.Allotment;
 import org.gots.ui.MySeedsListActivity;
@@ -32,7 +33,7 @@ public class QuickAllotmentActionBuilder {
 
 		quickAction = new QuickAction(v.getContext(), QuickAction.HORIZONTAL);
 
-		ActionDBHelper helper = new ActionDBHelper(v.getContext());
+		GotsActionManager helper = new GotsActionManager(v.getContext());
 
 		SowingAction sowing = (SowingAction) helper.getActionByName("sow");
 		ActionWidget sowingWidget = new ActionWidget(v.getContext(), sowing);

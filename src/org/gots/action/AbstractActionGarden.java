@@ -49,12 +49,15 @@ public abstract class AbstractActionGarden implements GardeningActionInterface {
 
     protected GardenManager gardenManager;
 
+    protected GotsActionSeedManager actionSeedManager;
+
     public AbstractActionGarden(Context context) {
         this.mContext = context;
         seedManager = GotsSeedManager.getInstance();
         seedManager.initIfNew(mContext);
         gardenManager = GardenManager.getInstance();
         gardenManager.initIfNew(mContext);
+        actionSeedManager = GotsActionSeedManager.getInstance().initIfNew(mContext);
     }
 
     @Override

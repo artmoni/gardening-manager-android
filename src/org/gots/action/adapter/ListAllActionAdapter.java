@@ -21,8 +21,10 @@ import java.util.Locale;
 
 import org.gots.R;
 import org.gots.action.BaseActionInterface;
+import org.gots.action.GotsActionSeedManager;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.bean.PhotoAction;
+import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
@@ -76,17 +78,17 @@ public class ListAllActionAdapter extends BaseAdapter {
     public ListAllActionAdapter(Context context, ArrayList<GrowingSeedInterface> allSeeds, int status) {
         this.mContext = context;
         current_status = status;
-        LocalActionSeedProvider helper = new LocalActionSeedProvider(context);
+        GotsActionSeedProvider actionSeedProvider = GotsActionSeedManager.getInstance().initIfNew(context);
 
         for (Iterator<GrowingSeedInterface> iterator = allSeeds.iterator(); iterator.hasNext();) {
             GrowingSeedInterface seed = iterator.next();
             ArrayList<BaseActionInterface> seedActions;
 
             if (current_status == STATUS_TODO) {
-                seedActions = helper.getActionsToDoBySeed(seed);
+                seedActions = actionSeedProvider.getActionsToDoBySeed(seed);
 
             } else {
-                seedActions = helper.getActionsDoneBySeed(seed);
+                seedActions = actionSeedProvider.getActionsDoneBySeed(seed);
             }
 
             actions.addAll(seedActions);

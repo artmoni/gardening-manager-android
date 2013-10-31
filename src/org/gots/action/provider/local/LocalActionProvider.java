@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import org.gots.action.ActionFactory;
 import org.gots.action.BaseActionInterface;
 import org.gots.action.PermanentActionInterface;
+import org.gots.action.provider.GotsActionProvider;
 import org.gots.garden.provider.local.GardenSQLite;
 import org.gots.utils.GotsDBHelper;
 
@@ -22,12 +23,13 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-public class ActionDBHelper extends GotsDBHelper {
+public class LocalActionProvider extends GotsDBHelper implements GotsActionProvider{
 
-    public ActionDBHelper(Context mContext) {
+    public LocalActionProvider(Context mContext) {
         super(mContext, GotsDBHelper.DATABASE_GARDEN_TYPE);
     }
 
+    @Override
     public long insertAction(BaseActionInterface action) {
         long rowid;
         ContentValues values = getActionContentValues(action);
@@ -37,6 +39,7 @@ public class ActionDBHelper extends GotsDBHelper {
         return rowid;
     }
 
+    @Override
     public ArrayList<BaseActionInterface> getActions() {
         ArrayList<BaseActionInterface> allActions = new ArrayList<BaseActionInterface>();
         Cursor cursor = null;
@@ -77,6 +80,7 @@ public class ActionDBHelper extends GotsDBHelper {
         return exists;
     }
 
+    @Override
     public BaseActionInterface getActionByName(String name) {
         BaseActionInterface action = null;
         Cursor cursor = null;
@@ -95,6 +99,7 @@ public class ActionDBHelper extends GotsDBHelper {
 
     }
 
+    @Override
     public BaseActionInterface getActionById(int id) {
         BaseActionInterface action = null;
         Cursor cursor = null;

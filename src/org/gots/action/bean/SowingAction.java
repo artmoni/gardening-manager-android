@@ -17,8 +17,12 @@ import java.util.Iterator;
 import org.gots.action.AbstractActionGarden;
 import org.gots.action.BaseActionInterface;
 import org.gots.action.GardeningActionInterface;
+import org.gots.action.GotsActionManager;
+import org.gots.action.GotsActionSeedManager;
 import org.gots.action.PermanentActionInterface;
-import org.gots.action.provider.local.ActionDBHelper;
+import org.gots.action.provider.GotsActionProvider;
+import org.gots.action.provider.GotsActionSeedProvider;
+import org.gots.action.provider.local.LocalActionProvider;
 import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GrowingSeedInterface;
@@ -75,17 +79,17 @@ public class SowingAction extends AbstractActionGarden implements PermanentActio
 		LocalGrowingSeedProvider gsdh = new LocalGrowingSeedProvider(mContext);
 		seed.setDateSowing(Calendar.getInstance().getTime());
 		seed = gsdh.insertSeed(seed, allotment.getName());
-		
-		LocalActionSeedProvider actionSeedProvider = new LocalActionSeedProvider(mContext);
-		actionSeedProvider.insertAction(this, seed);
+
+		actionSeedManager.insertAction(this, seed);
 		//asdh.doAction(this, seed);
 
 		for (Iterator<BaseActionInterface> iterator = seed.getActionToDo().iterator(); iterator.hasNext();) {
-			ActionDBHelper actionHelper = new ActionDBHelper(mContext);
+		    GotsActionProvider actionHelper = new GotsActionManager(mContext);
+			
 			BaseActionInterface type1 = iterator.next();
 			if (type1 != null) {
 				BaseActionInterface type = actionHelper.getActionByName(type1.getName());
-				actionSeedProvider.insertAction(type, seed);
+				actionSeedManager.insertAction(type, seed);
 			}
 		}
 		GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();

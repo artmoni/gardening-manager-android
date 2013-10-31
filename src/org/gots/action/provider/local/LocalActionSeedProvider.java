@@ -17,6 +17,9 @@ import java.util.GregorianCalendar;
 
 import org.gots.DatabaseHelper;
 import org.gots.action.BaseActionInterface;
+import org.gots.action.GotsActionManager;
+import org.gots.action.provider.GotsActionProvider;
+import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.util.ActionState;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.utils.GotsDBHelper;
@@ -25,12 +28,13 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-public class LocalActionSeedProvider extends GotsDBHelper {
+public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionSeedProvider{
 
     public LocalActionSeedProvider(Context mContext) {
         super(mContext);
     }
 
+    @Override
     public long insertAction(BaseActionInterface action, GrowingSeedInterface seed) {
         long rowid;
         ContentValues values = new ContentValues();
@@ -49,7 +53,7 @@ public class LocalActionSeedProvider extends GotsDBHelper {
 
     private BaseActionInterface cursorToAction(Cursor cursor) {
         BaseActionInterface seedAction = null;
-        ActionDBHelper actionDBHelper = new ActionDBHelper(mContext);
+        GotsActionProvider actionDBHelper = new GotsActionManager(mContext);
         seedAction = actionDBHelper.getActionById(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_ACTION_ID)));
         if (seedAction != null) {
             seedAction.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_ACTION_ID)));
@@ -64,6 +68,7 @@ public class LocalActionSeedProvider extends GotsDBHelper {
         return seedAction;
     }
 
+    @Override
     public ArrayList<BaseActionInterface> getActionsDoneBySeed(GrowingSeedInterface seed) {
         ArrayList<BaseActionInterface> allActions = new ArrayList<BaseActionInterface>();
         if (seed != null) {
@@ -85,6 +90,7 @@ public class LocalActionSeedProvider extends GotsDBHelper {
         return allActions;
     }
 
+    @Override
     public ArrayList<BaseActionInterface> getActionsToDoBySeed(GrowingSeedInterface seed) {
         ArrayList<BaseActionInterface> allActions = new ArrayList<BaseActionInterface>();
         Cursor cursor = null;
@@ -132,6 +138,7 @@ public class LocalActionSeedProvider extends GotsDBHelper {
         action.setState(state);
     }
 
+    @Override
     public ArrayList<BaseActionInterface> getActionsToDo() {
         ArrayList<BaseActionInterface> allActions = new ArrayList<BaseActionInterface>();
         Cursor cursor = bdd.rawQuery("select * from " + DatabaseHelper.ACTIONSEEDS_TABLE_NAME + " actionseed"
@@ -149,6 +156,7 @@ public class LocalActionSeedProvider extends GotsDBHelper {
         return allActions;
     }
 
+    @Override
     public long doAction(BaseActionInterface action, GrowingSeedInterface seed) {
         long rowid;
         ContentValues values = new ContentValues();

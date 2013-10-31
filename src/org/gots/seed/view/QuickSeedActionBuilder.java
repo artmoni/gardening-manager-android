@@ -19,13 +19,16 @@ import net.londatiga.android.QuickAction;
 
 import org.gots.R;
 import org.gots.action.BaseActionInterface;
+import org.gots.action.GotsActionManager;
+import org.gots.action.GotsActionSeedManager;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.bean.DeleteAction;
 import org.gots.action.bean.DetailAction;
 import org.gots.action.bean.PhotoAction;
 import org.gots.action.bean.ScheduleAction;
 import org.gots.action.bean.WateringAction;
-import org.gots.action.provider.local.ActionDBHelper;
+import org.gots.action.provider.GotsActionSeedProvider;
+import org.gots.action.provider.local.LocalActionProvider;
 import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.action.view.ActionWidget;
 import org.gots.seed.GrowingSeedInterface;
@@ -55,7 +58,7 @@ public class QuickSeedActionBuilder {
         mContext = context;
         final GrowingSeedInterface seed = (GrowingSeedInterface) v.getTag();
 
-        LocalActionSeedProvider helperActions = new LocalActionSeedProvider(mContext);
+        GotsActionSeedProvider helperActions =  GotsActionSeedManager.getInstance().initIfNew(mContext);
         ArrayList<BaseActionInterface> actions = helperActions.getActionsToDoBySeed(seed);
 
         quickAction = new QuickAction(mContext, QuickAction.HORIZONTAL);
@@ -102,12 +105,12 @@ public class QuickSeedActionBuilder {
 
         quickAction.addActionItem(actionWidget);
 
-        ActionDBHelper helper = new ActionDBHelper(mContext);
+        GotsActionManager actionManager = new GotsActionManager(mContext);
 
         /*
          * ACTION WATERING
          */
-        final WateringAction wateringAction = (WateringAction) helper.getActionByName("water");
+        final WateringAction wateringAction = (WateringAction) actionManager.getActionByName("water");
         ActionWidget watering = new ActionWidget(mContext, wateringAction);
         watering.setOnClickListener(new View.OnClickListener() {
 
@@ -155,7 +158,7 @@ public class QuickSeedActionBuilder {
         /*
          * ACTION PHOTO
          */
-        final PhotoAction photoAction = (PhotoAction) helper.getActionByName("photo");
+        final PhotoAction photoAction = (PhotoAction) actionManager.getActionByName("photo");
         ActionWidget photoWidget = new ActionWidget(mContext, photoAction);
         photoWidget.setOnClickListener(new View.OnClickListener() {
 

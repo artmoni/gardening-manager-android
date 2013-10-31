@@ -42,6 +42,8 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     private boolean stockChanged;
 
+    private GotsPreferences gotsPrefs;
+
     private GotsSeedManager() {
         // mLocalProvider = new LocalSeedProvider(mContext);
         allSeeds = new ArrayList<BaseSeedInterface>();
@@ -50,7 +52,7 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     protected void setSeedProvider() {
         ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
-        if (GotsPreferences.getInstance().isConnectedToServer() && ni != null && ni.isConnected()) {
+        if (gotsPrefs.isConnectedToServer() && ni != null && ni.isConnected()) {
             mSeedProvider = new NuxeoSeedProvider(mContext);
         } else
             mSeedProvider = new LocalSeedProvider(mContext);
@@ -75,6 +77,7 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
             return this;
         }
         this.mContext = context;
+        gotsPrefs = GotsPreferences.getInstance().initIfNew(context);
         // mContext.registerReceiver(this, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
         setSeedProvider();
         initDone = true;

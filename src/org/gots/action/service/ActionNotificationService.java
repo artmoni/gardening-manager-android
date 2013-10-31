@@ -7,7 +7,9 @@ import java.util.List;
 
 import org.gots.R;
 import org.gots.action.BaseActionInterface;
+import org.gots.action.GotsActionSeedManager;
 import org.gots.action.bean.SowingAction;
+import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.garden.GardenManager;
 import org.gots.seed.BaseSeedInterface;
@@ -62,10 +64,10 @@ public class ActionNotificationService extends Service {
 
         for (Iterator<GrowingSeedInterface> iterator = allSeeds.iterator(); iterator.hasNext();) {
             GrowingSeedInterface seed = iterator.next();
-            LocalActionSeedProvider actionseedHelper = new LocalActionSeedProvider(this);
+            GotsActionSeedProvider actionseedManager = GotsActionSeedManager.getInstance().initIfNew(this);
             ArrayList<BaseActionInterface> seedActions;
 
-            seedActions = actionseedHelper.getActionsToDoBySeed(seed);
+            seedActions = actionseedManager.getActionsToDoBySeed(seed);
 
             actions.addAll(seedActions);
         }

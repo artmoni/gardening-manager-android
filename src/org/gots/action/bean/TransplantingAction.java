@@ -15,6 +15,7 @@ import java.util.Date;
 
 import org.gots.action.AbstractActionSeed;
 import org.gots.action.SeedActionInterface;
+import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.seed.GrowingSeedInterface;
 
@@ -33,8 +34,7 @@ public class TransplantingAction extends AbstractActionSeed implements SeedActio
         setDateActionDone(Calendar.getInstance().getTime());
         seed.getActionToDo().remove(this);
         seed.getActionDone().add(this);
-        LocalActionSeedProvider asdh = new LocalActionSeedProvider(getContext());
-        asdh.doAction(this, seed);
+        actionSeedManager.doAction(this, seed);
         return super.execute(seed);
     }
 

@@ -5,8 +5,10 @@ import java.util.List;
 
 import org.gots.R;
 import org.gots.action.BaseActionInterface;
+import org.gots.action.GotsActionManager;
 import org.gots.action.adapter.SimpleListActionAdapter;
-import org.gots.action.provider.local.ActionDBHelper;
+import org.gots.action.provider.GotsActionSeedProvider;
+import org.gots.action.provider.local.LocalActionProvider;
 import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.local.LocalGrowingSeedProvider;
@@ -47,7 +49,7 @@ public class NewActionActivity extends AbstractActivity implements OnItemClickLi
         setContentView(R.layout.inputaction);
 
 
-        ActionDBHelper helper = new ActionDBHelper(this);
+        GotsActionManager helper = new GotsActionManager(this);
         List<BaseActionInterface> actions = helper.getActions();
 
         listActions = (GridView) findViewById(R.id.idListAction);
@@ -135,7 +137,7 @@ public class NewActionActivity extends AbstractActivity implements OnItemClickLi
         } else {
             selectedAction.setDuration(duration);
 
-            LocalActionSeedProvider actionHelper = new LocalActionSeedProvider(this);
+            GotsActionSeedProvider actionHelper = new LocalActionSeedProvider(this);
             actionHelper.insertAction(selectedAction, mySeed);
 
             GoogleAnalyticsTracker.getInstance().trackEvent(getClass().getSimpleName(), "NewAction",

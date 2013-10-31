@@ -18,6 +18,7 @@ import java.util.Iterator;
 import org.gots.action.AbstractActionSeed;
 import org.gots.action.GardeningActionInterface;
 import org.gots.action.SeedActionInterface;
+import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GrowingSeedInterface;
@@ -41,8 +42,7 @@ public class WateringAction extends AbstractActionSeed implements SeedActionInte
         seed.getActionToDo().remove(this);
         seed.getActionDone().add(this);
 
-        LocalActionSeedProvider asdh = new LocalActionSeedProvider(getContext());
-        asdh.doAction(this, seed);
+        actionSeedManager.doAction(this, seed);
 
         return 0;
     }

@@ -18,6 +18,7 @@ import org.gots.action.AbstractActionSeed;
 import org.gots.action.GardeningActionInterface;
 import org.gots.action.PermanentActionInterface;
 import org.gots.action.SeedActionInterface;
+import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GrowingSeedInterface;
@@ -47,8 +48,7 @@ public class PhotoAction extends AbstractActionSeed implements PermanentActionIn
         seed.getActionToDo().remove(this);
         seed.getActionDone().add(this);
 
-        LocalActionSeedProvider asdh = new LocalActionSeedProvider(getContext());
-        asdh.doAction(this, seed);
+        actionSeedManager.doAction(this, seed);
 
         return 0;
     }

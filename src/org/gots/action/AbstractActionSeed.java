@@ -59,6 +59,8 @@ public abstract class AbstractActionSeed implements SeedActionInterface, Compara
 
     protected GardenManager gardenManager;
 
+    protected GotsActionSeedManager actionSeedManager;
+
     public AbstractActionSeed(Context context) {
         mContext = context;
         gotsPrefs = GotsPreferences.getInstance();
@@ -71,6 +73,8 @@ public abstract class AbstractActionSeed implements SeedActionInterface, Compara
         // Gardenmanager might not be declared here
         gardenManager = GardenManager.getInstance();
         gardenManager.initIfNew(mContext);
+
+        actionSeedManager = GotsActionSeedManager.getInstance().initIfNew(mContext);
     }
 
     public AbstractActionSeed(String name) {
