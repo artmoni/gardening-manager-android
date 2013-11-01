@@ -50,7 +50,7 @@ public class PrevimeteoWeatherProvider extends WeatherDBHelper implements Weathe
         super(context);
 
         try {
-            Address address = GardenManager.getInstance().getCurrentGarden().getAddress();
+            Address address = GardenManager.getInstance().initIfNew(context).getCurrentGarden().getAddress();
             String weatherURL;
 
             if (GotsPreferences.isDevelopment())

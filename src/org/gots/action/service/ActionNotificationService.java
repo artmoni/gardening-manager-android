@@ -24,14 +24,17 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.app.TaskStackBuilder;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 public class ActionNotificationService extends Service {
     private static final int NOTIFICATION = 100;
 
-    NotificationManager mNM;
+//    NotificationManager mNM;
 
     private ArrayList<BaseActionInterface> actions = new ArrayList<BaseActionInterface>();
 
@@ -45,7 +48,7 @@ public class ActionNotificationService extends Service {
 
     @Override
     public void onCreate() {
-        mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+//        mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         super.onCreate();
     }
@@ -109,7 +112,7 @@ public class ActionNotificationService extends Service {
 
     @Override
     public void onDestroy() {
-        mNM.cancel(NOTIFICATION);
+//        mNM.cancel(NOTIFICATION);
         Log.d(TAG, "Stopping service : " + actions.size() + " actions found");
         super.onDestroy();
 
@@ -132,18 +135,36 @@ public class ActionNotificationService extends Service {
         }
 
         // Set the icon, scrolling text and timestamp
-        Notification notification = new Notification(SeedWidget.getSeedDrawable(this, seed), title,
-                System.currentTimeMillis());
+        // Notification notification = new Notification(SeedWidget.getSeedDrawable(this, seed), title,
+        // System.currentTimeMillis());
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this).setSmallIcon(
+                SeedWidget.getSeedDrawable(this, seed)).setContentTitle(title).setContentText(content);
 
         // The PendingIntent to launch our activity if the user selects this
         // notification
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, ActionActivity.class), 0);
+//        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, ActionActivity.class), 0);
 
+        Intent resultIntent = new Intent(this, ActionActivity.class);
+
+        // The stack builder object will contain an artificial back stack for the
+        // started Activity.
+        // This ensures that navigating backward from the Activity leads out of
+        // your application to the Home screen.
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        // Adds the back stack for the Intent (but not the Intent itself)
+        stackBuilder.addParentStack(ActionActivity.class);
+        // Adds the Intent that starts the Activity to the top of the stack
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(resultPendingIntent);
+        mBuilder.setAutoCancel(true);
+        
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         // Set the info for the views that show in the notification panel.
-        notification.setLatestEventInfo(this, title, content, contentIntent);
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+        // notification.setLatestEventInfo(this, title, content, contentIntent);
+        // notification.flags |= Notification.FLAG_AUTO_CANCEL;
         // Send the notification.
-        mNM.notify(NOTIFICATION, notification);
+        mNotificationManager.notify(NOTIFICATION, mBuilder.getNotification());
 
     }
 }
