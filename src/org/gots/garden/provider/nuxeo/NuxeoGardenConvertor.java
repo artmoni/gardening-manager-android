@@ -11,7 +11,6 @@ public class NuxeoGardenConvertor {
     public static GardenInterface convert(Document gardenWorkspace) {
         GardenInterface garden = new Garden();
         garden.setName(gardenWorkspace.getTitle());
-        garden.setLocality(gardenWorkspace.getTitle());
         garden.setUUID(gardenWorkspace.getId());
 
         try {
@@ -26,7 +25,7 @@ public class NuxeoGardenConvertor {
             if (latitude != null)
                 garden.setGpsLatitude(latitude);
         } catch (NumberFormatException exception) {
-            Log.w("NuxeoGarden", garden + " has not a correct altitude");
+            Log.w("NuxeoGarden", garden + " has not a correct latitude");
         }
         try {
 
@@ -36,17 +35,23 @@ public class NuxeoGardenConvertor {
         } catch (NumberFormatException exception) {
             Log.w("NuxeoGarden", garden + " has not a correct longitude");
         }
-
+        garden.setLocality(gardenWorkspace.getString("garden:city"));
+        garden.setCountryName(gardenWorkspace.getString("garden:country"));
+        garden.setAdminArea(gardenWorkspace.getString("garden:region"));
 
         return garden;
     }
 
     public static Document convert(String parentPath, GardenInterface garden) {
         Document doc = new Document(parentPath, garden.getLocality(), "Garden");
-        doc.set("dc:title",garden.getLocality());
-        doc.set("garden:altitude",garden.getGpsAltitude());
-        doc.set("garden:longitude",garden.getGpsLongitude());
-        
+        doc.set("dc:title", garden.getLocality() + "(" + garden.getAdminArea() + ")");
+        doc.set("garden:altitude", garden.getGpsAltitude());
+        doc.set("garden:latitude", garden.getGpsLatitude());
+        doc.set("garden:longitude", garden.getGpsLongitude());
+        doc.set("garden:city", garden.getLocality());
+        doc.set("garden:region", garden.getAdminArea());
+        doc.set("garden:country", garden.getCountryName());
+
         return doc;
     }
 }

@@ -21,6 +21,7 @@ import org.gots.bean.BaseAllotmentInterface;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
+import org.gots.seed.provider.local.GotsGrowingSeedProvider;
 import org.gots.seed.provider.local.LocalGrowingSeedProvider;
 import org.gots.ui.HutActivity;
 
@@ -103,8 +104,8 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
         } else
             holder = (Holder) ll.getTag();
 
-        LocalGrowingSeedProvider helper = new LocalGrowingSeedProvider(mContext);
-        List<GrowingSeedInterface> mySeeds = helper.getSeedsByAllotment(myAllotments.get(position).getName());
+        GotsGrowingSeedProvider helper = new LocalGrowingSeedProvider(mContext);
+        List<GrowingSeedInterface> mySeeds = helper.getSeedsByAllotment(myAllotments.get(position));
 
         listGrowingSeedAdapter = new ListGrowingSeedAdapter(mContext, mySeeds, this);
 

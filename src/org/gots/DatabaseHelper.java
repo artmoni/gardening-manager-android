@@ -24,7 +24,7 @@ import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     // ************************ DATABASE **************
-    private static final int DATABASE_VERSION = 16;
+    private static final int DATABASE_VERSION = 17;
 
     private static String DATABASE_NAME = "gots";
 
@@ -151,6 +151,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String GROWINGSEED_ID = "_id";
 
+    public static final String GROWINGSEED_UUID = "uuid";
+
     public static final String GROWINGSEED_SEED_ID = "seed_id";
 
     public static final String GROWINGSEED_ALLOTMENT_ID = "allotment_id";
@@ -166,6 +168,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ GROWINGSEED_ALLOTMENT_ID + " INTEGER NOT NULL," 
 			+ GROWINGSEED_DATESOWING + " INTEGER,"
 			+ GROWINGSEED_DATELASTWATERING + " DATETIME"
+			+ GROWINGSEED_UUID+ " STRING"
+
 			// + "  FOREIGN KEY(" + SEED_ID
 			// + ") REFERENCES " + SeedSQLite.SEEDS_TABLE_NAME + "(" +
 			// SeedSQLite.SEED_ID + ")"
@@ -271,6 +275,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				+ ALLOTMENT_NAME + " STRING,"
 				+ ALLOTMENT_UUID + " STRING"
 					+ ");";
+
 
 //    private static DatabaseHelper helper = null;
 
@@ -467,6 +472,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     + ") VALUES ('Pastinaca sativa',1)");
             db.execSQL("Insert into " + SPECIE_TABLE_NAME + "(" + SPECIE_NAME + ", " + SPECIE_FAMILY_ID
                     + ") VALUES ('Vaccinium myrtillus',14)");
+        }
+
+        if (oldVersion < 17) {
+            db.execSQL("ALTER TABLE " + GROWINGSEEDS_TABLE_NAME + " ADD COLUMN " + GROWINGSEED_UUID + " STRING;");
+
         } else {
             db.execSQL("DROP TABLE IF EXISTS " + SEEDS_TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + GROWINGSEEDS_TABLE_NAME);
@@ -478,5 +488,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         }
     }
-
 }

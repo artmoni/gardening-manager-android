@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.gots.DatabaseHelper;
+import org.gots.bean.BaseAllotmentInterface;
+import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.utils.GotsDBHelper;
@@ -22,7 +24,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-public class LocalGrowingSeedProvider extends GotsDBHelper {
+public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowingSeedProvider {
 
     public LocalGrowingSeedProvider(Context mContext) {
         super(mContext);
@@ -35,28 +37,37 @@ public class LocalGrowingSeedProvider extends GotsDBHelper {
     // super.finalize();
     // }
 
-    public GrowingSeedInterface insertSeed(GrowingSeedInterface seed, String allotmentReference) {
+    /*
+     * (non-Javadoc)
+     * @see org.gots.seed.provider.local.GotsGrowingSeedProvider#insertSeed(org.gots.seed.GrowingSeedInterface,
+     * java.lang.String)
+     */
+    @Override
+    public GrowingSeedInterface insertSeed(GrowingSeedInterface growingSeed, BaseAllotmentInterface allotment) {
         long rowid;
-        // open();
 
-        ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.GROWINGSEED_SEED_ID, seed.getSeedId());
-        values.put(DatabaseHelper.GROWINGSEED_ALLOTMENT_ID, allotmentReference);
-        try {
-            if (seed.getDateSowing() != null)
-                values.put(DatabaseHelper.GROWINGSEED_DATESOWING, seed.getDateSowing().getTime());
-            if (seed.getDateLastWatering() != null)
-                values.put(DatabaseHelper.GROWINGSEED_DATELASTWATERING, seed.getDateLastWatering().getTime());
-            rowid = bdd.insert(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, values);
-            seed.setGrowingSeedId((int) rowid);
-        } finally {
-            // close();
-        }
+        rowid = bdd.insert(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, seedToValues(growingSeed, allotment));
+        growingSeed.setGrowingSeedId((int) rowid);
 
-        // seed.setId((int) rowid);
-        return seed;
+        return growingSeed;
     }
 
+    protected ContentValues seedToValues(GrowingSeedInterface seed, BaseAllotmentInterface allotment) {
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.GROWINGSEED_SEED_ID, seed.getSeedId());
+        values.put(DatabaseHelper.GROWINGSEED_ALLOTMENT_ID, allotment.getName());
+        if (seed.getDateSowing() != null)
+            values.put(DatabaseHelper.GROWINGSEED_DATESOWING, seed.getDateSowing().getTime());
+        if (seed.getDateLastWatering() != null)
+            values.put(DatabaseHelper.GROWINGSEED_DATELASTWATERING, seed.getDateLastWatering().getTime());
+        return values;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.gots.seed.provider.local.GotsGrowingSeedProvider#getGrowingSeeds()
+     */
+    @Override
     public ArrayList<GrowingSeedInterface> getGrowingSeeds() {
         ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
         GrowingSeedInterface searchedSeed = new GrowingSeed();
@@ -94,12 +105,17 @@ public class LocalGrowingSeedProvider extends GotsDBHelper {
         return bsi;
     }
 
-    public ArrayList<GrowingSeedInterface> getSeedsByAllotment(String allotmentReference) {
+    /*
+     * (non-Javadoc)
+     * @see org.gots.seed.provider.local.GotsGrowingSeedProvider#getSeedsByAllotment(java.lang.String)
+     */
+    @Override
+    public ArrayList<GrowingSeedInterface> getSeedsByAllotment(BaseAllotmentInterface allotment) {
         ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
         GrowingSeedInterface searchedSeed = new GrowingSeed();
 
         Cursor cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, DatabaseHelper.GROWINGSEED_ALLOTMENT_ID
-                + "='" + allotmentReference + "'", null, null, null, null);
+                + "='" + allotment.getName() + "'", null, null, null, null);
 
         if (cursor.moveToFirst()) {
             do {
@@ -111,6 +127,11 @@ public class LocalGrowingSeedProvider extends GotsDBHelper {
         return allSeeds;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.gots.seed.provider.local.GotsGrowingSeedProvider#getSeedById(int)
+     */
+    @Override
     public GrowingSeedInterface getSeedById(int growingSeedId) {
         GrowingSeedInterface searchedSeed = null;
 
@@ -126,10 +147,43 @@ public class LocalGrowingSeedProvider extends GotsDBHelper {
         return searchedSeed;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.gots.seed.provider.local.GotsGrowingSeedProvider#deleteGrowingSeed(org.gots.seed.GrowingSeedInterface)
+     */
+    @Override
     public void deleteGrowingSeed(GrowingSeedInterface seed) {
 
         bdd.delete(DatabaseHelper.GROWINGSEEDS_TABLE_NAME,
                 DatabaseHelper.GROWINGSEED_ID + "='" + seed.getGrowingSeedId() + "'", null);
+    }
+
+    public GrowingSeedInterface updateSeed(GrowingSeedInterface seed, BaseAllotmentInterface allotment) {
+
+        // Création d'un ContentValues (fonctionne comme une HashMap)
+        ContentValues values = seedToValues(seed, allotment);
+        Cursor cursor;
+
+        if (seed.getUUID() != null) {
+            int nbRows = bdd.update(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, values, DatabaseHelper.GROWINGSEED_UUID
+                    + "='" + seed.getUUID() + "'", null);
+
+            cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, DatabaseHelper.GROWINGSEED_UUID + "='"
+                    + seed.getUUID() + "'", null, null, null, null);
+
+        } else {
+            int rowid = bdd.update(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, values, DatabaseHelper.GROWINGSEED_ID + "='"
+                    + seed.getSeedId() + "'", null);
+            cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, DatabaseHelper.GROWINGSEED_ID + "='"
+                    + seed.getSeedId() + "'", null, null, null, null);
+
+        }
+        if (cursor.moveToFirst()) {
+            int rowid = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.SEED_ID));
+            seed.setId(rowid);
+        }
+        cursor.close();
+        return seed;
     }
 
 }

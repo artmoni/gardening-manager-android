@@ -32,7 +32,7 @@ public class QuickAllotmentActionBuilder {
 
 		quickAction = new QuickAction(v.getContext(), QuickAction.HORIZONTAL);
 
-		GotsActionManager helper = new GotsActionManager(v.getContext());
+		GotsActionManager helper = GotsActionManager.getInstance().initIfNew(v.getContext());
 
 		SowingAction sowing = (SowingAction) helper.getActionByName("sow");
 		ActionWidget sowingWidget = new ActionWidget(v.getContext(), sowing);

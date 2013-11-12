@@ -28,6 +28,7 @@ import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.provider.local.GotsGrowingSeedProvider;
 import org.gots.seed.provider.local.LocalGrowingSeedProvider;
 import org.gots.seed.view.SeedWidget;
 import org.gots.weather.WeatherManager;
@@ -131,7 +132,7 @@ public class ListAllActionAdapter extends BaseAdapter {
 
         final BaseActionInterface currentAction = getItem(position);
 
-        LocalGrowingSeedProvider helper = new LocalGrowingSeedProvider(mContext);
+        GotsGrowingSeedProvider helper = new LocalGrowingSeedProvider(mContext);
         final GrowingSeedInterface seed = helper.getSeedById(currentAction.getGrowingSeedId());
 
         if (seed != null && BaseActionInterface.class.isInstance(currentAction)) {

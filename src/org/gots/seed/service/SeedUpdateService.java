@@ -15,11 +15,7 @@ import android.util.Log;
 public class SeedUpdateService extends GotsService {
     public static final String ISNEWSEED = "org.gots.isnewseed";
 
-
-    static Intent intent = null;
-
     private static boolean isNewSeed = false;
-
 
     private List<BaseSeedInterface> newSeeds = new ArrayList<BaseSeedInterface>();
 
@@ -31,7 +27,6 @@ public class SeedUpdateService extends GotsService {
 
     @Override
     public IBinder onBind(Intent arg0) {
-        intent = new Intent(BroadCastMessages.SEED_DISPLAYLIST);
 
         return null;
     }
@@ -61,7 +56,7 @@ public class SeedUpdateService extends GotsService {
                 newSeeds = seedManager.getNewSeeds();
                 if (newSeeds != null && newSeeds.size() > 0) {
                     SeedNotification notification = new SeedNotification(getApplicationContext());
-                    notification.createNotification (newSeeds);
+                    notification.createNotification(newSeeds);
                 }
                 handler.removeCallbacks(sendUpdatesToUI);
                 handler.postDelayed(sendUpdatesToUI, 0); // 1 second
@@ -81,10 +76,11 @@ public class SeedUpdateService extends GotsService {
         }
     };
 
-
     private void displaySeedsAvailable() {
-        Log.d(TAG, "displaySeedsAvailable send broadcast");
+        Intent intent = null;
 
+        Log.d(TAG, "displaySeedsAvailable send broadcast");
+        intent = new Intent(BroadCastMessages.SEED_DISPLAYLIST);
         intent.putExtra(ISNEWSEED, isNewSeed);
         // intent.putExtra("counter", String.valueOf(++counter));
         sendBroadcast(intent);

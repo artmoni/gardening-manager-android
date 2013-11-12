@@ -15,6 +15,7 @@ import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.SeedUtil;
+import org.gots.seed.provider.local.GotsGrowingSeedProvider;
 import org.gots.seed.provider.local.LocalGrowingSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.seed.view.SeedWidget;
@@ -60,7 +61,7 @@ public class ActionNotificationService extends Service {
         // Display a notification about us starting. We put an icon in the
         // status bar.
         actions.clear();
-        LocalGrowingSeedProvider helper = new LocalGrowingSeedProvider(this);
+        GotsGrowingSeedProvider helper = new LocalGrowingSeedProvider(this);
         ArrayList<GrowingSeedInterface> allSeeds = helper.getGrowingSeeds();
         // if (allSeeds.size() > 0)
 

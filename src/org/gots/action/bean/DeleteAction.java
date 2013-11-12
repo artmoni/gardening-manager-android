@@ -20,6 +20,7 @@ import org.gots.action.PermanentActionInterface;
 import org.gots.action.SeedActionInterface;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.provider.local.GotsGrowingSeedProvider;
 import org.gots.seed.provider.local.LocalGrowingSeedProvider;
 
 import android.content.Context;
@@ -39,7 +40,7 @@ public class DeleteAction extends AbstractActionSeed implements PermanentActionI
 //		GrowingSeedDBHelper helper = new GrowingSeedDBHelper(getContext());
 //		helper.deleteGrowingSeed(seed);
 //		seedManager.removeGrowingSeed(seed);
-		LocalGrowingSeedProvider localSeedProvider = new LocalGrowingSeedProvider(getContext());
+		GotsGrowingSeedProvider localSeedProvider = new LocalGrowingSeedProvider(getContext());
 		localSeedProvider.deleteGrowingSeed(seed);
 		return 1;
 
@@ -79,8 +80,8 @@ public class DeleteAction extends AbstractActionSeed implements PermanentActionI
 	@Override
 	public int execute(BaseAllotmentInterface allotment, GrowingSeedInterface seed) {
 
-		LocalGrowingSeedProvider helper = new LocalGrowingSeedProvider(getContext());
-		ArrayList<GrowingSeedInterface> listseeds = helper.getSeedsByAllotment(allotment.getName());
+		GotsGrowingSeedProvider helper = new LocalGrowingSeedProvider(getContext());
+		ArrayList<GrowingSeedInterface> listseeds = helper.getSeedsByAllotment(allotment);
 		for (Iterator<GrowingSeedInterface> iterator = listseeds.iterator(); iterator.hasNext();) {
 			GrowingSeedInterface baseSeedInterface = iterator.next();
 			execute(baseSeedInterface);

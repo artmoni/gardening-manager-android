@@ -53,7 +53,7 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
 
     private BaseActionInterface cursorToAction(Cursor cursor) {
         BaseActionInterface seedAction = null;
-        GotsActionProvider actionDBHelper = new GotsActionManager(mContext);
+        GotsActionProvider actionDBHelper = GotsActionManager.getInstance().initIfNew(mContext);
         seedAction = actionDBHelper.getActionById(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_ACTION_ID)));
         if (seedAction != null) {
             seedAction.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_ACTION_ID)));

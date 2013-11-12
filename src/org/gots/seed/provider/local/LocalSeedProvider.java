@@ -273,7 +273,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
         return values;
     }
 
-    public BaseSeedInterface cursorToSeed(Cursor cursor) {
+    private BaseSeedInterface cursorToSeed(Cursor cursor) {
         BaseSeedInterface bsi = new GrowingSeed();
         bsi.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.SEED_ID)));
         bsi.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_NAME)));

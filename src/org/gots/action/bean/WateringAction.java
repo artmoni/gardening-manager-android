@@ -20,6 +20,7 @@ import org.gots.action.GardeningActionInterface;
 import org.gots.action.SeedActionInterface;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.provider.local.GotsGrowingSeedProvider;
 import org.gots.seed.provider.local.LocalGrowingSeedProvider;
 
 import android.content.Context;
@@ -80,8 +81,8 @@ public class WateringAction extends AbstractActionSeed implements SeedActionInte
     @Override
     public int execute(BaseAllotmentInterface allotment, GrowingSeedInterface seed) {
 
-        LocalGrowingSeedProvider helper = new LocalGrowingSeedProvider(getContext());
-        ArrayList<GrowingSeedInterface> listseeds = helper.getSeedsByAllotment(allotment.getName());
+        GotsGrowingSeedProvider helper = new LocalGrowingSeedProvider(getContext());
+        ArrayList<GrowingSeedInterface> listseeds = helper.getSeedsByAllotment(allotment);
         for (Iterator<GrowingSeedInterface> iterator = listseeds.iterator(); iterator.hasNext();) {
             GrowingSeedInterface baseSeedInterface = iterator.next();
             execute(baseSeedInterface);

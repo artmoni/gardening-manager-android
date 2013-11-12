@@ -20,6 +20,7 @@ import android.util.Log;
 public class NuxeoActionProvider extends LocalActionProvider {
 
     protected static final String TAG = "NuxeoActionProvider";
+    private ArrayList<BaseActionInterface> remoteActions;
 
     public NuxeoActionProvider(Context mContext) {
         super(mContext);
@@ -58,20 +59,20 @@ public class NuxeoActionProvider extends LocalActionProvider {
             for (Iterator<Document> iterator = docs.iterator(); iterator.hasNext();) {
                 Document document = iterator.next();
                 BaseActionInterface action = NuxeoActionConverter.convert(document);
-                if (seed != null) {
+                if (action != null) {
 
-                    remoteVendorSeeds.add(seed);
-                    Log.i(TAG, "Nuxeo Seed: " + seed);
+                    remoteActions.add(action);
+                    Log.i(TAG, "Nuxeo action: " + action);
                 } else {
-                    Log.w(TAG, "Nuxeo Seed conversion problem " + document.getTitle() + "- " + document.getId());
+                    Log.w(TAG, "Nuxeo action conversion problem " + document.getTitle() + "- " + document.getId());
                 }
             }
             // getNuxeoClient().shutdown();
-            myVendorSeeds = synchronize(localVendorSeeds, remoteVendorSeeds);
+//            myVendorSeeds = synchronize(localVendorSeeds, remoteActions);
         } catch (Exception e) {
             Log.e(TAG, "getAllSeeds " + e.getMessage(), e);
-            myVendorSeeds=super.getVendorSeeds(force);
+            remoteActions=super.getActions();
         }
-        return super.getActions();
+        return remoteActions;
     }
 }

@@ -33,14 +33,34 @@ public class GardenDBHelper extends GotsDBHelper {
 
     public synchronized GardenInterface insertGarden(GardenInterface garden) {
         long rowid;
+        ContentValues values = gardenToValues(garden);
+
+        rowid = bdd.insert(GardenSQLite.GARDEN_TABLE_NAME, null, values);
+        garden.setId(rowid);
+        return garden;
+    }
+
+    private ContentValues gardenToValues(GardenInterface garden) {
         ContentValues values = new ContentValues();
         values.put(GardenSQLite.GARDEN_UUID, garden.getUUID());
         values.put(GardenSQLite.GARDEN_ADMINAREA, garden.getAdminArea());
         values.put(GardenSQLite.GARDEN_COUNTRYNAME, garden.getCountryName());
         values.put(GardenSQLite.GARDEN_LOCALITY, garden.getLocality());
+        values.put(GardenSQLite.GARDEN_ALTITUDE, garden.getGpsAltitude());
+        values.put(GardenSQLite.GARDEN_LATITUDE, garden.getGpsLatitude());
+        values.put(GardenSQLite.GARDEN_LONGITUDE, garden.getGpsLongitude());
+        
+        return values;
+    }
 
-        rowid = bdd.insert(GardenSQLite.GARDEN_TABLE_NAME, null, values);
-        garden.setId(rowid);
+    private GardenInterface cursorToGarden(Cursor cursor) {
+        GardenInterface garden = new Garden();
+        garden.setId(cursor.getInt(cursor.getColumnIndex(GardenSQLite.GARDEN_ID)));
+        garden.setUUID(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_UUID)));
+        garden.setAdminArea(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_ADMINAREA)));
+        garden.setCountryName(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_COUNTRYNAME)));
+        garden.setLocality(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_LOCALITY)));
+        garden.setDateLastSynchro(new Date(cursor.getInt(cursor.getColumnIndex(GardenSQLite.GARDEN_LAST_SYNCHRO))));
         return garden;
     }
 
@@ -66,27 +86,8 @@ public class GardenDBHelper extends GotsDBHelper {
         return garden;
     }
 
-    private GardenInterface cursorToGarden(Cursor cursor) {
-        GardenInterface garden = new Garden();
-        garden.setId(cursor.getInt(cursor.getColumnIndex(GardenSQLite.GARDEN_ID)));
-
-        garden.setAdminArea(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_ADMINAREA)));
-        garden.setCountryName(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_COUNTRYNAME)));
-        garden.setLocality(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_LOCALITY)));
-        garden.setDateLastSynchro(new Date(cursor.getInt(cursor.getColumnIndex(GardenSQLite.GARDEN_LAST_SYNCHRO))));
-        garden.setUUID(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_UUID)));
-        return garden;
-    }
-
     public synchronized GardenInterface updateGarden(GardenInterface garden) {
-        ContentValues values = new ContentValues();
-        values.put(GardenSQLite.GARDEN_ADMINAREA, garden.getAdminArea());
-        values.put(GardenSQLite.GARDEN_COUNTRYNAME, garden.getCountryName());
-        values.put(GardenSQLite.GARDEN_LOCALITY, garden.getLocality());
-        values.put(GardenSQLite.GARDEN_LATITUDE, garden.getGpsLatitude());
-        values.put(GardenSQLite.GARDEN_LONGITUDE, garden.getGpsLongitude());
-        values.put(GardenSQLite.GARDEN_ALTITUDE, garden.getGpsAltitude());
-        values.put(GardenSQLite.GARDEN_UUID, garden.getUUID());
+        ContentValues values = gardenToValues(garden);
         int nbRows;
         Cursor cursor;
         if (garden.getId() > 0) {

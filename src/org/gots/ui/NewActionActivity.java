@@ -10,6 +10,7 @@ import org.gots.action.adapter.SimpleListActionAdapter;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.provider.local.GotsGrowingSeedProvider;
 import org.gots.seed.provider.local.LocalGrowingSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
 
@@ -48,7 +49,7 @@ public class NewActionActivity extends AbstractActivity implements OnItemClickLi
         setContentView(R.layout.inputaction);
 
 
-        GotsActionManager helper = new GotsActionManager(this);
+        GotsActionManager helper = GotsActionManager.getInstance().initIfNew(this);
         List<BaseActionInterface> actions = helper.getActions();
 
         listActions = (GridView) findViewById(R.id.idListAction);
@@ -63,7 +64,7 @@ public class NewActionActivity extends AbstractActivity implements OnItemClickLi
         spinner.setAdapter(new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, list));
         if (getIntent().getExtras() != null) {
             Integer seedId = getIntent().getExtras().getInt("org.gots.seed.id");
-            LocalGrowingSeedProvider seedHelper = new LocalGrowingSeedProvider(this);
+            GotsGrowingSeedProvider seedHelper = new LocalGrowingSeedProvider(this);
             mySeed = seedHelper.getSeedById(seedId);
 
             SeedWidgetLong seed = (SeedWidgetLong) findViewById(R.id.seedWidgetLong);

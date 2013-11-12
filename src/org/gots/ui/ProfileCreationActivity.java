@@ -359,7 +359,7 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
                     seed.setNbSachet(alea % 3 + 1);
                     seedHelper.updateSeed(seed);
 
-                    GotsActionProvider actionHelper = new GotsActionManager(getApplicationContext());
+                    GotsActionProvider actionHelper = GotsActionManager.getInstance().initIfNew(getApplicationContext());
                     BaseActionInterface bakering = actionHelper.getActionByName("beak");
                     GardeningActionInterface sowing = (GardeningActionInterface) actionHelper.getActionByName("sow");
 

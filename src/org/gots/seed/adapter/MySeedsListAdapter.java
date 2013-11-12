@@ -25,6 +25,7 @@ import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.SeedUtil;
+import org.gots.seed.provider.nuxeo.NuxeoGrowingSeedProvider;
 
 import android.app.Activity;
 import android.content.Context;
@@ -56,8 +57,9 @@ public class MySeedsListAdapter extends SeedListAdapter {
         BaseActionInterface action = null;
         if (allotment != null) {
             // action = new SowingAction(mContext);
-            GotsActionManager helper = new GotsActionManager(mContext);
+            GotsActionManager helper = GotsActionManager.getInstance().initIfNew(mContext);
             action = helper.getActionByName("sow");
+            holder.actionWidget.setAction(action);
 
             if (Calendar.getInstance().get(Calendar.MONTH) >= currentSeed.getDateSowingMin()
                     && Calendar.getInstance().get(Calendar.MONTH) <= currentSeed.getDateSowingMax())
@@ -66,46 +68,78 @@ public class MySeedsListAdapter extends SeedListAdapter {
                 action.setState(ActionState.WARNING);
             else
                 action.setState(ActionState.UNDEFINED);
+            holder.actionWidget.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    new AsyncTask<Void, Integer, Void>() {
+                        @Override
+                        protected Void doInBackground(Void... params) {
+                                NuxeoGrowingSeedProvider provider = new NuxeoGrowingSeedProvider(mContext);
+                                GrowingSeedInterface growingSeed = (GrowingSeedInterface)currentSeed;
+                                growingSeed.setDateSowing(Calendar.getInstance().getTime());
+                                provider.insertSeed(growingSeed, allotment);
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void result) {
+                            // notifyDataSetChanged();
+                            Toast.makeText(
+                                    mContext,
+                                    "Sowing", Toast.LENGTH_LONG).show();
+                            mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
+                            ((Activity) mContext).finish();
+                        }
+                    }.execute();
+
+                }
+            });
+            
+          
 
         } else {
             action = new ReduceQuantityAction(mContext);
             action.setState(ActionState.NORMAL);
+            
+
+            holder.actionWidget.setAction(action);
+            final BaseActionInterface baseActionInterface = action;
+            holder.actionWidget.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    new AsyncTask<Void, Integer, Void>() {
+                        @Override
+                        protected Void doInBackground(Void... params) {
+                            if (allotment != null) {
+                                GardeningActionInterface action = (GardeningActionInterface) baseActionInterface;
+                                action.execute(allotment, (GrowingSeedInterface) currentSeed);
+                                ((Activity) mContext).finish();
+                            } else {
+                                SeedActionInterface action = (SeedActionInterface) baseActionInterface;
+                                action.execute((GrowingSeedInterface) currentSeed);
+                            }
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void result) {
+                            // notifyDataSetChanged();
+                            Toast.makeText(
+                                    mContext,
+                                    SeedUtil.translateAction(mContext, baseActionInterface) + " - "
+                                            + SeedUtil.translateSpecie(mContext, currentSeed), Toast.LENGTH_LONG).show();
+                            mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
+                            super.onPostExecute(result);
+                        }
+                    }.execute();
+
+                }
+            });
         }
 
-        holder.actionWidget.setAction(action);
-        final BaseActionInterface baseActionInterface = action;
-        holder.actionWidget.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                new AsyncTask<Void, Integer, Void>() {
-                    @Override
-                    protected Void doInBackground(Void... params) {
-                        if (allotment != null) {
-                            GardeningActionInterface action = (GardeningActionInterface) baseActionInterface;
-                            action.execute(allotment, (GrowingSeedInterface) currentSeed);
-                            ((Activity) mContext).finish();
-                        } else {
-                            SeedActionInterface action = (SeedActionInterface) baseActionInterface;
-                            action.execute((GrowingSeedInterface) currentSeed);
-                        }
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Void result) {
-                        // notifyDataSetChanged();
-                        Toast.makeText(
-                                mContext,
-                                SeedUtil.translateAction(mContext, baseActionInterface) + " - "
-                                        + SeedUtil.translateSpecie(mContext, currentSeed), Toast.LENGTH_LONG).show();
-                        mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
-                        super.onPostExecute(result);
-                    }
-                }.execute();
-
-            }
-        });
+       
 
         try {
 

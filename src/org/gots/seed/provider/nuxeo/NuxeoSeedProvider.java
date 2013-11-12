@@ -222,7 +222,6 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
      * Return new remote seed or null if error
      */
     protected BaseSeedInterface createNuxeoVendorSeed(BaseSeedInterface currentSeed) {
-        // TODO debug Session has username Administrator with null password when disconnected
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);
 
@@ -237,9 +236,6 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             try {
                 Document root = service.getDocument(service.getUserHome());
 
-                // folder = (Document) session.newRequest("Document.Create").setInput(root).setHeader(
-                // Constants.HEADER_NX_SCHEMAS, "*").set("type", "Hut").set("name", "Catalog").set("properties",
-                // "dc:title=" + "Catalog").execute();
                 folder = service.createDocument(root, "Hut", "Catalog");
                 PropertyMap map = folder.getProperties();
                 map.set("dc:title", "Catalog");

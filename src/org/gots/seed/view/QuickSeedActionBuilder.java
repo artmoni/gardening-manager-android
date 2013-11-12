@@ -103,7 +103,7 @@ public class QuickSeedActionBuilder {
 
         quickAction.addActionItem(actionWidget);
 
-        GotsActionManager actionManager = new GotsActionManager(mContext);
+        GotsActionManager actionManager = GotsActionManager.getInstance().initIfNew(mContext);
 
         /*
          * ACTION WATERING
