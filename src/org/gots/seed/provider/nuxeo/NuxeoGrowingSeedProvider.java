@@ -23,7 +23,8 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
 
     private static final String TAG = "NuxeoGrowingSeedProvider";
 
-    private GrowingSeedInterface currentGrowingSeed=null;
+    private GrowingSeedInterface currentGrowingSeed = null;
+
     public NuxeoGrowingSeedProvider(Context mContext) {
         super(mContext);
     }
@@ -37,11 +38,11 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
     @Override
     public GrowingSeedInterface insertSeed(final GrowingSeedInterface growingSeed,
             final BaseAllotmentInterface allotment) {
-
+        growingSeed.setUUID(null);
         return insertNuxeoSeed(super.insertSeed(growingSeed, allotment), allotment);
     }
 
-    protected GrowingSeedInterface insertNuxeoSeed( GrowingSeedInterface growingSeed,
+    protected GrowingSeedInterface insertNuxeoSeed(GrowingSeedInterface growingSeed,
             final BaseAllotmentInterface allotment) {
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);
@@ -65,7 +66,7 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
                     Constants.HEADER_NX_SCHEMAS, "*").setInput(allotmentDoc).set("type", "GrowingSeed").set(
                     "properties", properties);
 
-               currentGrowingSeed = growingSeed;
+            currentGrowingSeed = growingSeed;
             AsyncCallback<Object> callback = new AsyncCallback<Object>() {
                 @Override
                 public void onSuccess(String executionId, Object data) {
@@ -96,7 +97,7 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
 
         return properties;
     }
-    
+
     @Override
     public void deleteGrowingSeed(GrowingSeedInterface seed) {
         Session session = getNuxeoClient().getSession();
@@ -108,6 +109,5 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
         }
         super.deleteGrowingSeed(seed);
     }
-   
-    
+
 }

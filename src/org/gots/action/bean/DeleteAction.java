@@ -40,8 +40,7 @@ public class DeleteAction extends AbstractActionSeed implements PermanentActionI
 //		GrowingSeedDBHelper helper = new GrowingSeedDBHelper(getContext());
 //		helper.deleteGrowingSeed(seed);
 //		seedManager.removeGrowingSeed(seed);
-		GotsGrowingSeedProvider localSeedProvider = new LocalGrowingSeedProvider(getContext());
-		localSeedProvider.deleteGrowingSeed(seed);
+		growingSeedManager.deleteGrowingSeed(seed);
 		return 1;
 
 	}
@@ -80,8 +79,7 @@ public class DeleteAction extends AbstractActionSeed implements PermanentActionI
 	@Override
 	public int execute(BaseAllotmentInterface allotment, GrowingSeedInterface seed) {
 
-		GotsGrowingSeedProvider helper = new LocalGrowingSeedProvider(getContext());
-		ArrayList<GrowingSeedInterface> listseeds = helper.getSeedsByAllotment(allotment);
+		ArrayList<GrowingSeedInterface> listseeds = growingSeedManager.getSeedsByAllotment(allotment);
 		for (Iterator<GrowingSeedInterface> iterator = listseeds.iterator(); iterator.hasNext();) {
 			GrowingSeedInterface baseSeedInterface = iterator.next();
 			execute(baseSeedInterface);

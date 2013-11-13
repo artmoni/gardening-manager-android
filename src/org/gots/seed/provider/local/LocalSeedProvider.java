@@ -232,7 +232,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
     }
 
     @Override
-    public void remove(BaseSeedInterface vendorSeed) {
+    public void deleteSeed(BaseSeedInterface vendorSeed) {
         long rowid;
         rowid = bdd.delete(DatabaseHelper.SEEDS_TABLE_NAME, DatabaseHelper.SEED_ID + "='" + vendorSeed.getSeedId()
                 + "'", null);

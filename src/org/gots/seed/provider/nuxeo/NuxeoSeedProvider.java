@@ -389,7 +389,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
     }
 
     @Override
-    public void remove(BaseSeedInterface vendorSeed) {
+    public void deleteSeed(BaseSeedInterface vendorSeed) {
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);
         try {
@@ -397,7 +397,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
-        super.remove(vendorSeed);
+        super.deleteSeed(vendorSeed);
 
     }
 

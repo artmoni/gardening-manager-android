@@ -24,12 +24,16 @@ import org.gots.ads.GotsAdvertisement;
 import org.gots.allotment.adapter.ListAllotmentAdapter;
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.weather.view.WeatherWidget;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -63,7 +67,9 @@ public class MyMainGarden extends AbstractActivity {
         bar.setTitle(R.string.dashboard_allotments_name);
 
         // GardenManager gm =GardenManager.getInstance();
+        registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.GROWINGSEED_DISPLAYLIST));
 
+        
         setContentView(R.layout.garden);
         listAllotments = (ListView) findViewById(R.id.IdGardenAllotmentsList);
         lsa = new ListAllotmentAdapter(MyMainGarden.this, new ArrayList<BaseAllotmentInterface>());
@@ -120,7 +126,12 @@ public class MyMainGarden extends AbstractActivity {
         this.menu = menu;
         return true;
     }
-
+    public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            onResume();
+        }
+    };
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection

@@ -21,6 +21,7 @@
  * *********************************************************************** */
 package org.gots.broadcast;
 
+import android.content.Intent;
 
 /**
  * @author jcarsique
@@ -29,6 +30,8 @@ package org.gots.broadcast;
 public final class BroadCastMessages {
 
     public final static String SEED_DISPLAYLIST = "org.gots.seed.broadcastevent";
+
+    public static final String GROWINGSEED_DISPLAYLIST = "org.gots.growingseed.broadcastevent";
 
     public final static String GARDEN_EVENT = "org.gots.garden.broadcastevent";
 

@@ -55,6 +55,8 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
     protected ContentValues seedToValues(GrowingSeedInterface seed, BaseAllotmentInterface allotment) {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.GROWINGSEED_SEED_ID, seed.getSeedId());
+        values.put(DatabaseHelper.GROWINGSEED_UUID, seed.getUUID());
+
         values.put(DatabaseHelper.GROWINGSEED_ALLOTMENT_ID, allotment.getName());
         if (seed.getDateSowing() != null)
             values.put(DatabaseHelper.GROWINGSEED_DATESOWING, seed.getDateSowing().getTime());
@@ -97,6 +99,7 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
             bsi = new GrowingSeed();
             bsi.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_SEED_ID)));
         }
+        bsi.setUUID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_UUID)));
         bsi.setGrowingSeedId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_ID)));
         bsi.setDateSowing(new Date(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_DATESOWING))));
         bsi.setDateLastWatering(new Date(
@@ -164,23 +167,23 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
         ContentValues values = seedToValues(seed, allotment);
         Cursor cursor;
 
-        if (seed.getUUID() != null) {
-            int nbRows = bdd.update(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, values, DatabaseHelper.GROWINGSEED_UUID
-                    + "='" + seed.getUUID() + "'", null);
-
-            cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, DatabaseHelper.GROWINGSEED_UUID + "='"
-                    + seed.getUUID() + "'", null, null, null, null);
-
-        } else {
+//        if (seed.getUUID() != null) {
+//            int nbRows = bdd.update(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, values, DatabaseHelper.GROWINGSEED_UUID
+//                    + "='" + seed.getUUID() + "'", null);
+//
+//            cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, DatabaseHelper.GROWINGSEED_UUID + "='"
+//                    + seed.getUUID() + "'", null, null, null, null);
+//
+//        } else {
             int rowid = bdd.update(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, values, DatabaseHelper.GROWINGSEED_ID + "='"
-                    + seed.getSeedId() + "'", null);
+                    + seed.getGrowingSeedId() + "'", null);
             cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, DatabaseHelper.GROWINGSEED_ID + "='"
-                    + seed.getSeedId() + "'", null, null, null, null);
+                    + seed.getGrowingSeedId() + "'", null, null, null, null);
 
-        }
+//        }
         if (cursor.moveToFirst()) {
-            int rowid = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.SEED_ID));
-            seed.setId(rowid);
+            int seedId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.SEED_ID));
+            seed.setId(seedId);
         }
         cursor.close();
         return seed;

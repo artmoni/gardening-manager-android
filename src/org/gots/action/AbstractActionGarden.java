@@ -15,6 +15,7 @@ import java.util.Date;
 
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.garden.GardenManager;
+import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 
@@ -53,6 +54,8 @@ public abstract class AbstractActionGarden implements GardeningActionInterface {
 
     protected GotsActionManager actionManager;
 
+    protected GotsGrowingSeedManager growingSeedManager;
+
     public AbstractActionGarden(Context context) {
         this.mContext = context;
         seedManager = GotsSeedManager.getInstance();
@@ -61,6 +64,8 @@ public abstract class AbstractActionGarden implements GardeningActionInterface {
         gardenManager.initIfNew(mContext);
         actionManager =GotsActionManager.getInstance().initIfNew(mContext);
         actionSeedManager = GotsActionSeedManager.getInstance().initIfNew(mContext);
+        growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(mContext);
+
     }
 
     @Override

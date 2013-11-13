@@ -15,6 +15,7 @@ import java.util.Locale;
 
 import org.gots.R;
 import org.gots.help.HelpUriBuilder;
+import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.local.GotsGrowingSeedProvider;
@@ -69,8 +70,7 @@ public class TabSeedActivity extends SherlockFragmentActivity {
             TabHost mTabHost = (TabHost) findViewById(android.R.id.tabhost);
 
             int seedId = getIntent().getExtras().getInt("org.gots.seed.id");
-            GotsGrowingSeedProvider helper = new LocalGrowingSeedProvider(this);
-            mSeed = helper.getSeedById(seedId);
+            mSeed =  GotsGrowingSeedManager.getInstance().initIfNew(this).getSeedById(seedId);
         } else if (getIntent().getExtras().getInt("org.gots.seed.vendorid") != 0) {
             int seedId = getIntent().getExtras().getInt("org.gots.seed.vendorid");
             LocalSeedProvider helper = new LocalSeedProvider(getApplicationContext());

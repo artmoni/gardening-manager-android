@@ -73,9 +73,8 @@ public class SowingAction extends AbstractActionGarden implements PermanentActio
 	public int execute(BaseAllotmentInterface allotment, GrowingSeedInterface seed) {
 		super.execute(allotment, seed);
 
-		GotsGrowingSeedProvider gsdh = new LocalGrowingSeedProvider(mContext);
 		seed.setDateSowing(Calendar.getInstance().getTime());
-		seed = gsdh.insertSeed(seed, allotment);
+		seed = growingSeedManager.insertSeed(seed, allotment);
 
 		
 		actionSeedManager.insertAction(this, seed);

@@ -9,6 +9,7 @@ import org.gots.action.GotsActionManager;
 import org.gots.action.adapter.SimpleListActionAdapter;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.provider.local.LocalActionSeedProvider;
+import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.local.GotsGrowingSeedProvider;
 import org.gots.seed.provider.local.LocalGrowingSeedProvider;
@@ -64,8 +65,8 @@ public class NewActionActivity extends AbstractActivity implements OnItemClickLi
         spinner.setAdapter(new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, list));
         if (getIntent().getExtras() != null) {
             Integer seedId = getIntent().getExtras().getInt("org.gots.seed.id");
-            GotsGrowingSeedProvider seedHelper = new LocalGrowingSeedProvider(this);
-            mySeed = seedHelper.getSeedById(seedId);
+            GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(this);
+            mySeed = growingSeedManager.getSeedById(seedId);
 
             SeedWidgetLong seed = (SeedWidgetLong) findViewById(R.id.seedWidgetLong);
             seed.setSeed(mySeed);

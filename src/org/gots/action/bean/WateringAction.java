@@ -81,8 +81,7 @@ public class WateringAction extends AbstractActionSeed implements SeedActionInte
     @Override
     public int execute(BaseAllotmentInterface allotment, GrowingSeedInterface seed) {
 
-        GotsGrowingSeedProvider helper = new LocalGrowingSeedProvider(getContext());
-        ArrayList<GrowingSeedInterface> listseeds = helper.getSeedsByAllotment(allotment);
+        ArrayList<GrowingSeedInterface> listseeds = growingSeedManager.getSeedsByAllotment(allotment);
         for (Iterator<GrowingSeedInterface> iterator = listseeds.iterator(); iterator.hasNext();) {
             GrowingSeedInterface baseSeedInterface = iterator.next();
             execute(baseSeedInterface);

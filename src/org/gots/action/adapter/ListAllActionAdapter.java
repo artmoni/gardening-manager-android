@@ -27,6 +27,7 @@ import org.gots.action.bean.PhotoAction;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
+import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.local.GotsGrowingSeedProvider;
 import org.gots.seed.provider.local.LocalGrowingSeedProvider;
@@ -132,8 +133,8 @@ public class ListAllActionAdapter extends BaseAdapter {
 
         final BaseActionInterface currentAction = getItem(position);
 
-        GotsGrowingSeedProvider helper = new LocalGrowingSeedProvider(mContext);
-        final GrowingSeedInterface seed = helper.getSeedById(currentAction.getGrowingSeedId());
+        final GrowingSeedInterface seed = GotsGrowingSeedManager.getInstance().initIfNew(mContext).getSeedById(
+                currentAction.getGrowingSeedId());
 
         if (seed != null && BaseActionInterface.class.isInstance(currentAction)) {
             ActionWidget actionWidget = (ActionWidget) ll.findViewById(R.id.idActionView);

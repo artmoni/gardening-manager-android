@@ -12,6 +12,7 @@ import org.gots.action.bean.SowingAction;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.garden.GardenManager;
 import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.SeedUtil;
@@ -61,8 +62,8 @@ public class ActionNotificationService extends Service {
         // Display a notification about us starting. We put an icon in the
         // status bar.
         actions.clear();
-        GotsGrowingSeedProvider helper = new LocalGrowingSeedProvider(this);
-        ArrayList<GrowingSeedInterface> allSeeds = helper.getGrowingSeeds();
+        GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(this);
+        ArrayList<GrowingSeedInterface> allSeeds =  growingSeedManager.getGrowingSeeds();
         // if (allSeeds.size() > 0)
 
         for (Iterator<GrowingSeedInterface> iterator = allSeeds.iterator(); iterator.hasNext();) {
@@ -79,7 +80,7 @@ public class ActionNotificationService extends Service {
         if (!actions.isEmpty()) {
             BaseActionInterface action = actions.iterator().next();
 
-            GrowingSeedInterface seed = helper.getSeedById(action.getGrowingSeedId());
+            GrowingSeedInterface seed = growingSeedManager.getSeedById(action.getGrowingSeedId());
             createNotification(action, seed);
 
         }

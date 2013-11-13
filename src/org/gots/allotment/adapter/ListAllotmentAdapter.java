@@ -19,6 +19,7 @@ import org.gots.allotment.AllotmentManager;
 import org.gots.allotment.view.QuickAllotmentActionBuilder;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.preferences.GotsPreferences;
+import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
 import org.gots.seed.provider.local.GotsGrowingSeedProvider;
@@ -46,6 +47,8 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
 
     private List<BaseAllotmentInterface> myAllotments;
 
+    private GotsGrowingSeedProvider growingSeedManager;
+
     @Override
     public void notifyDataSetChanged() {
 
@@ -55,7 +58,7 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
     public ListAllotmentAdapter(Context mContext, List<BaseAllotmentInterface> allotments) {
         this.mContext = mContext;
         myAllotments = allotments;
-
+        growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(mContext);
     }
 
     public void setAllotments(List<BaseAllotmentInterface> allotments) {
@@ -104,8 +107,7 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
         } else
             holder = (Holder) ll.getTag();
 
-        GotsGrowingSeedProvider helper = new LocalGrowingSeedProvider(mContext);
-        List<GrowingSeedInterface> mySeeds = helper.getSeedsByAllotment(myAllotments.get(position));
+        List<GrowingSeedInterface> mySeeds = growingSeedManager.getSeedsByAllotment(myAllotments.get(position));
 
         listGrowingSeedAdapter = new ListGrowingSeedAdapter(mContext, mySeeds, this);
 

@@ -48,14 +48,15 @@ public class AllotmentManager extends BroadcastReceiver implements AllotmentProv
     /**
      * If it was already called once, the method returns without any change.
      */
-    public synchronized void initIfNew(Context context) {
+    public synchronized AllotmentManager initIfNew(Context context) {
         if (initDone) {
-            return;
+            return this;
         }
         this.mContext = context;
         // mContext.registerReceiver(this, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
         setAllotmentProvider();
         initDone = true;
+        return this;
     }
 
     public void finalize() {

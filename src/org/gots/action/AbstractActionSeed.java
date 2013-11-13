@@ -17,6 +17,7 @@ import java.util.Date;
 import org.gots.allotment.AllotmentManager;
 import org.gots.garden.GardenManager;
 import org.gots.preferences.GotsPreferences;
+import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 
@@ -61,18 +62,16 @@ public abstract class AbstractActionSeed implements SeedActionInterface, Compara
 
     protected GotsActionSeedManager actionSeedManager;
 
+    protected GotsGrowingSeedManager growingSeedManager;
+
     public AbstractActionSeed(Context context) {
         mContext = context;
-        gotsPrefs = GotsPreferences.getInstance();
-        gotsPrefs.initIfNew(context);
-        allotmentProvider = AllotmentManager.getInstance();
-        allotmentProvider.initIfNew(context);
-        seedManager = GotsSeedManager.getInstance();
-        seedManager.initIfNew(mContext);
-
+        gotsPrefs = GotsPreferences.getInstance().initIfNew(context);
+        allotmentProvider = AllotmentManager.getInstance().initIfNew(context);
+        seedManager = GotsSeedManager.getInstance().initIfNew(mContext);
+        growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(mContext);
         // Gardenmanager might not be declared here
-        gardenManager = GardenManager.getInstance();
-        gardenManager.initIfNew(mContext);
+        gardenManager = GardenManager.getInstance().initIfNew(mContext);
 
         actionSeedManager = GotsActionSeedManager.getInstance().initIfNew(mContext);
     }

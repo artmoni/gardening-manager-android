@@ -9,24 +9,23 @@ public interface GotsSeedProvider {
 
     public List<BaseSeedInterface> getVendorSeeds(boolean force);
 
-    public void getAllFamilies();
-
-    public void getFamilyById(int id);
-
     public BaseSeedInterface getSeedById(int seedId);
 
-    public BaseSeedInterface createSeed(BaseSeedInterface seed);
+    public BaseSeedInterface createSeed(BaseSeedInterface newSeed);
 
-    public BaseSeedInterface updateSeed(BaseSeedInterface newSeed);
+    public BaseSeedInterface updateSeed(BaseSeedInterface currentSeed);
+
+    public void deleteSeed(BaseSeedInterface currentSeed);
 
     public void addToStock(BaseSeedInterface vendorSeed, GardenInterface garden);
 
     public void removeToStock(BaseSeedInterface vendorSeed, GardenInterface garden);
-    
+
     public List<BaseSeedInterface> getMyStock(GardenInterface garden);
-    
-    public void remove(BaseSeedInterface vendorSeed);
 
     public abstract List<BaseSeedInterface> getNewSeeds();
 
+    public void getAllFamilies();
+
+    public void getFamilyById(int id);
 }

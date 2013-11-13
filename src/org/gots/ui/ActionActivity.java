@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import org.gots.R;
 import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.ads.GotsAdvertisement;
+import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.local.GotsGrowingSeedProvider;
 import org.gots.seed.provider.local.LocalGrowingSeedProvider;
@@ -50,15 +51,15 @@ public class ActionActivity extends AbstractActivity implements OnClickListener 
         setContentView(R.layout.actions);
         int seedid = 0;
 
-        GotsGrowingSeedProvider helper = new LocalGrowingSeedProvider(this);
+        GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(this);
 
         if (getIntent().getExtras() != null)
             seedid = getIntent().getExtras().getInt("org.gots.seed.id");
 
         if (seedid > 0) {
-            allSeeds.add(helper.getSeedById(seedid));
+            allSeeds.add(growingSeedManager.getSeedById(seedid));
         } else
-            allSeeds = helper.getGrowingSeeds();
+            allSeeds = growingSeedManager.getGrowingSeeds();
         listActions = new ListAllActionAdapter(this, allSeeds, ListAllActionAdapter.STATUS_TODO);
         listAllotments = (ListView) findViewById(R.id.IdGardenActionsList);
         listAllotments.setAdapter(listActions);
