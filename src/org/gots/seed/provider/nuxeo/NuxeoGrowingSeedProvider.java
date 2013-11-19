@@ -79,13 +79,42 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
                     Log.w(TAG, "Nuxeo GrowingSeed conversion problem " + document.getTitle() + "- " + document.getId());
                 }
             }
-            // myGrowingSeeds = synchronize(localGrowingSeeds, remoteGrowingSeeds);
-            myGrowingSeeds = remoteGrowingSeeds;
+            myGrowingSeeds = synchronize(localGrowingSeeds, remoteGrowingSeeds, allotment);
+            // myGrowingSeeds = remoteGrowingSeeds;
         } catch (Exception e) {
             Log.e(TAG, "getGrowingSeedsByAllotment " + e.getMessage(), e);
             myGrowingSeeds = localGrowingSeeds;
         }
         return myGrowingSeeds;
+    }
+
+    private List<GrowingSeedInterface> synchronize(List<GrowingSeedInterface> localGrowingSeeds,
+            List<GrowingSeedInterface> remoteGrowingSeeds, BaseAllotmentInterface allotment) {
+        List<GrowingSeedInterface> myGrowingSeeds = remoteGrowingSeeds;
+
+        for (GrowingSeedInterface remoteGrowingSeed : remoteGrowingSeeds) {
+            boolean found = false;
+            for (GrowingSeedInterface localGrowingSeed : localGrowingSeeds) {
+                if (remoteGrowingSeed.getUUID().equals(localGrowingSeed.getUUID())) {
+                    found = true;
+                    break;
+                }
+            }
+            
+            if (!found)
+                super.insertSeed(remoteGrowingSeed, allotment);
+        }
+        
+        for (GrowingSeedInterface localGrowingSeed : localGrowingSeeds) {
+            boolean found=false;
+            for (GrowingSeedInterface remoteGrowingSeed : remoteGrowingSeeds) {
+                if (localGrowingSeed.getUUID()!=null&&localGrowingSeed.getUUID().equals(remoteGrowingSeed.getUUID()))
+                    found = true;
+            }
+            if (!found)
+                insertNuxeoSeed(localGrowingSeed, allotment);
+        }
+        return null;
     }
 
     @Override
