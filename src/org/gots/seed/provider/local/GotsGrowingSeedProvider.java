@@ -1,6 +1,7 @@
 package org.gots.seed.provider.local;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.BaseSeedInterface;
@@ -12,9 +13,9 @@ public interface GotsGrowingSeedProvider {
 
     public abstract ArrayList<GrowingSeedInterface> getGrowingSeeds();
 
-    public abstract ArrayList<GrowingSeedInterface> getSeedsByAllotment(BaseAllotmentInterface allotment);
+    public abstract List<GrowingSeedInterface> getGrowingSeedsByAllotment(BaseAllotmentInterface allotment);
 
-    public abstract GrowingSeedInterface getSeedById(int growingSeedId);
+    public abstract GrowingSeedInterface getGrowingSeedById(int growingSeedId);
 
     public abstract void deleteGrowingSeed(GrowingSeedInterface seed);
 

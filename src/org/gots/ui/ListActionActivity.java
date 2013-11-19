@@ -72,7 +72,7 @@ public class ListActionActivity extends SherlockListFragment implements ListView
         seedid = bundle.getInt("org.gots.growingseed.id");
 
         if (seedid > 0) {
-            allSeeds.add(growingSeedManager.getSeedById(seedid));
+            allSeeds.add(growingSeedManager.getGrowingSeedById(seedid));
         } else
             allSeeds = growingSeedManager.getGrowingSeeds();
 

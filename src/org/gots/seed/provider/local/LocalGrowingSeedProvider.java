@@ -12,6 +12,7 @@ package org.gots.seed.provider.local;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.gots.DatabaseHelper;
 import org.gots.bean.BaseAllotmentInterface;
@@ -76,6 +77,7 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
         // open();
 
         try {
+            // TODO replace allotment reference to Id instead of name
             Cursor cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, null, null, null, null, null);
 
             if (cursor.moveToFirst()) {
@@ -113,7 +115,7 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
      * @see org.gots.seed.provider.local.GotsGrowingSeedProvider#getSeedsByAllotment(java.lang.String)
      */
     @Override
-    public ArrayList<GrowingSeedInterface> getSeedsByAllotment(BaseAllotmentInterface allotment) {
+    public List<GrowingSeedInterface> getGrowingSeedsByAllotment(BaseAllotmentInterface allotment) {
         ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
         GrowingSeedInterface searchedSeed = new GrowingSeed();
 
@@ -135,7 +137,7 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
      * @see org.gots.seed.provider.local.GotsGrowingSeedProvider#getSeedById(int)
      */
     @Override
-    public GrowingSeedInterface getSeedById(int growingSeedId) {
+    public GrowingSeedInterface getGrowingSeedById(int growingSeedId) {
         GrowingSeedInterface searchedSeed = null;
 
         Cursor cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, DatabaseHelper.GROWINGSEED_ID + "='"
@@ -167,26 +169,41 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
         ContentValues values = seedToValues(seed, allotment);
         Cursor cursor;
 
-//        if (seed.getUUID() != null) {
-//            int nbRows = bdd.update(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, values, DatabaseHelper.GROWINGSEED_UUID
-//                    + "='" + seed.getUUID() + "'", null);
-//
-//            cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, DatabaseHelper.GROWINGSEED_UUID + "='"
-//                    + seed.getUUID() + "'", null, null, null, null);
-//
-//        } else {
-            int rowid = bdd.update(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, values, DatabaseHelper.GROWINGSEED_ID + "='"
-                    + seed.getGrowingSeedId() + "'", null);
-            cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, DatabaseHelper.GROWINGSEED_ID + "='"
-                    + seed.getGrowingSeedId() + "'", null, null, null, null);
+        // if (seed.getUUID() != null) {
+        // int nbRows = bdd.update(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, values, DatabaseHelper.GROWINGSEED_UUID
+        // + "='" + seed.getUUID() + "'", null);
+        //
+        // cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, DatabaseHelper.GROWINGSEED_UUID + "='"
+        // + seed.getUUID() + "'", null, null, null, null);
+        //
+        // } else {
+        int rowid = bdd.update(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, values, DatabaseHelper.GROWINGSEED_ID + "='"
+                + seed.getGrowingSeedId() + "'", null);
+        cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null,
+                DatabaseHelper.GROWINGSEED_ID + "='" + seed.getGrowingSeedId() + "'", null, null, null, null);
 
-//        }
+        // }
         if (cursor.moveToFirst()) {
-            int seedId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.SEED_ID));
+            int seedId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_SEED_ID));
             seed.setId(seedId);
         }
         cursor.close();
         return seed;
+    }
+
+    public GrowingSeedInterface getGrowingSeedsByUUID(String uuid) {
+        GrowingSeedInterface searchedSeed = null;
+
+        Cursor cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, DatabaseHelper.GROWINGSEED_UUID + "='"
+                + uuid + "'", null, null, null, null);
+
+        if (cursor.moveToFirst()) {
+
+            searchedSeed = cursorToSeed(cursor);
+
+        }
+        cursor.close();
+        return searchedSeed;
     }
 
 }

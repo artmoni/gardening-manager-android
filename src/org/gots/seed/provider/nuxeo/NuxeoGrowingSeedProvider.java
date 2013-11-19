@@ -1,19 +1,29 @@
 package org.gots.seed.provider.nuxeo;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.nuxeo.NuxeoManager;
+import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.GotsSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.local.LocalGrowingSeedProvider;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
+import org.nuxeo.ecm.automation.client.cache.CacheBehavior;
 import org.nuxeo.ecm.automation.client.cache.DeferredUpdateManager;
 import org.nuxeo.ecm.automation.client.cache.OperationType;
 import org.nuxeo.ecm.automation.client.jaxrs.AsyncCallback;
 import org.nuxeo.ecm.automation.client.jaxrs.Constants;
 import org.nuxeo.ecm.automation.client.jaxrs.OperationRequest;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
+import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
+import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
+import org.nuxeo.ecm.automation.client.jaxrs.model.PathRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
 import android.content.Context;
@@ -36,8 +46,50 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
     }
 
     @Override
-    public GrowingSeedInterface insertSeed(final GrowingSeedInterface growingSeed,
-            final BaseAllotmentInterface allotment) {
+    public List<GrowingSeedInterface> getGrowingSeedsByAllotment(BaseAllotmentInterface allotment) {
+        List<GrowingSeedInterface> remoteGrowingSeeds = new ArrayList<GrowingSeedInterface>();
+        List<GrowingSeedInterface> myGrowingSeeds = new ArrayList<GrowingSeedInterface>();
+        List<GrowingSeedInterface> localGrowingSeeds = super.getGrowingSeedsByAllotment(allotment);
+
+        boolean refresh = true;
+        try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
+
+            byte cacheParam = CacheBehavior.STORE;
+            if (refresh) {
+                cacheParam = (byte) (cacheParam | CacheBehavior.FORCE_REFRESH);
+                refresh = false;
+            }
+
+            Documents docs = service.query(
+                    "SELECT * FROM GrowingSeed WHERE ecm:currentLifeCycleState != \"deleted\" AND ecm:parentId=\'"
+                            + allotment.getUUID() + "\'", null, new String[] { "dc:modified DESC" }, "*", 0, 50,
+                    cacheParam);
+            // Documents docs = service.getChildren(new IdRef(allotment.getUUID()));
+            for (Iterator<Document> iterator = docs.iterator(); iterator.hasNext();) {
+                Document document = iterator.next();
+                GrowingSeedInterface growingSeed = NuxeoGrowingSeedConverter.convert(document);
+                if (growingSeed != null) {
+
+                    growingSeed = super.getGrowingSeedsByUUID(growingSeed.getUUID());
+                    remoteGrowingSeeds.add(growingSeed);
+                    Log.i(TAG, "Nuxeo GrowingSeed: " + growingSeed);
+                } else {
+                    Log.w(TAG, "Nuxeo GrowingSeed conversion problem " + document.getTitle() + "- " + document.getId());
+                }
+            }
+            // myGrowingSeeds = synchronize(localGrowingSeeds, remoteGrowingSeeds);
+            myGrowingSeeds = remoteGrowingSeeds;
+        } catch (Exception e) {
+            Log.e(TAG, "getGrowingSeedsByAllotment " + e.getMessage(), e);
+            myGrowingSeeds = localGrowingSeeds;
+        }
+        return myGrowingSeeds;
+    }
+
+    @Override
+    public GrowingSeedInterface insertSeed(GrowingSeedInterface growingSeed, BaseAllotmentInterface allotment) {
         growingSeed.setUUID(null);
         return insertNuxeoSeed(super.insertSeed(growingSeed, allotment), allotment);
     }
@@ -45,7 +97,7 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
     protected GrowingSeedInterface insertNuxeoSeed(GrowingSeedInterface growingSeed,
             final BaseAllotmentInterface allotment) {
         Session session = getNuxeoClient().getSession();
-        DocumentManager service = session.getAdapter(DocumentManager.class);
+        final DocumentManager service = session.getAdapter(DocumentManager.class);
         DeferredUpdateManager deferredUpdateMgr = getNuxeoClient().getDeferredUpdatetManager();
 
         Document allotmentDoc = null;
@@ -73,7 +125,17 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
                     Document doc = (Document) data;
                     currentGrowingSeed.setUUID(doc.getId());
                     NuxeoGrowingSeedProvider.super.updateSeed(currentGrowingSeed, allotment);
-                    Log.d(TAG, "onSuccess " + data);
+
+                    try {
+                        BaseSeedInterface seed = GotsSeedManager.getInstance().initIfNew(mContext).getSeedById(
+                                currentGrowingSeed.getSeedId());
+                        service.createRelation(new IdRef(seed.getUUID()), "http://purl.org/dc/terms/isFormatOf",
+                                new IdRef(doc.getId()));
+                        Log.d(TAG, "onSuccess " + data);
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        Log.e(TAG, "Create GrowingSeed relation " + e.getMessage(), e);
+                    }
                 }
 
                 @Override
@@ -83,6 +145,7 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
                 }
             };
             deferredUpdateMgr.execDeferredUpdate(createOperation, callback, OperationType.CREATE, true);
+
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }

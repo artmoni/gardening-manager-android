@@ -57,7 +57,7 @@ public class ActionActivity extends AbstractActivity implements OnClickListener 
             seedid = getIntent().getExtras().getInt("org.gots.seed.id");
 
         if (seedid > 0) {
-            allSeeds.add(growingSeedManager.getSeedById(seedid));
+            allSeeds.add(growingSeedManager.getGrowingSeedById(seedid));
         } else
             allSeeds = growingSeedManager.getGrowingSeeds();
         listActions = new ListAllActionAdapter(this, allSeeds, ListAllActionAdapter.STATUS_TODO);

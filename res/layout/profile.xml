@@ -15,14 +15,6 @@
             android:layout_height="60dp"
             android:background="@drawable/bg_profile_top" />
 
-        <TextView
-            android:id="@+id/idSelectGarden"
-            style="@style/description_error"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/profile.menu.select" >
-        </TextView>
-
         <ListView
             android:id="@+id/IdGardenProfileList"
             android:layout_width="fill_parent"
@@ -35,7 +27,8 @@
         <LinearLayout
             android:id="@+id/idAdsTop"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
         </LinearLayout>
     </LinearLayout>
 
@@ -43,7 +36,8 @@
         android:id="@+id/btReturn"
         android:layout_width="fill_parent"
         android:layout_height="70dp"
-        android:background="@drawable/bt_logo" >
+        android:background="@drawable/bt_logo"
+        android:orientation="horizontal" >
     </LinearLayout>
 
 </RelativeLayout>

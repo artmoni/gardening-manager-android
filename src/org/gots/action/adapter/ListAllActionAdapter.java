@@ -133,7 +133,7 @@ public class ListAllActionAdapter extends BaseAdapter {
 
         final BaseActionInterface currentAction = getItem(position);
 
-        final GrowingSeedInterface seed = GotsGrowingSeedManager.getInstance().initIfNew(mContext).getSeedById(
+        final GrowingSeedInterface seed = GotsGrowingSeedManager.getInstance().initIfNew(mContext).getGrowingSeedById(
                 currentAction.getGrowingSeedId());
 
         if (seed != null && BaseActionInterface.class.isInstance(currentAction)) {

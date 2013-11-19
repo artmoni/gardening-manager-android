@@ -48,25 +48,6 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
     @Override
     public List<BaseSeedInterface> getVendorSeeds(boolean force) {
-
-        // List<BaseSeedInterface> localVendorSeeds = ;
-
-        // if (documentsList != null && documentsList.getCurrentSize() > 0) {
-        // if (localVendorSeeds.size() == 0 || force) {
-        // localVendorSeeds = new ArrayList<BaseSeedInterface>();
-        // documentsList.refreshAll();
-        // for (int i = 0; i <= documentsList.getLoadedPageCount(); i++) {
-        // // for (Iterator<Document> iterator = documentsList.getIterator(); iterator.hasNext();) {
-        // Document documentSeed = documentsList.getDocument(i);
-        // if (documentSeed == null) {
-        // break;
-        // }
-        // BaseSeedInterface seed = NuxeoSeedConverter.convert(documentSeed);
-        // localVendorSeeds.add(super.updateSeed(seed));
-        // Log.d(TAG, "documentsList=" + documentSeed.getId() + " / " + seed);
-        // }
-
-        // }
         return getNuxeoVendorSeeds(super.getVendorSeeds(force), force);
     }
 
@@ -74,21 +55,10 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         List<BaseSeedInterface> remoteVendorSeeds = new ArrayList<BaseSeedInterface>();
         List<BaseSeedInterface> myVendorSeeds = new ArrayList<BaseSeedInterface>();
 
-        // client = new HttpAutomationClient(gotsPrefs.getNuxeoAutomationURI());
-        // if (gotsPrefs.isConnectedToServer())
-        // client.setRequestInterceptor(new TokenRequestInterceptor(myApp, myToken, myLogin, myDeviceId));
-
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager service = session.getAdapter(DocumentManager.class);
 
-            // Session session = client.getSession();
-
-            // Documents docs = (Documents) session.newRequest("Document.Query") //
-            // .setHeader(Constants.HEADER_NX_SCHEMAS, "*") //
-            // .set("query",
-            // "SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState <> 'deleted' ORDER BY dc:modified DESC") //
-            // .execute();
             byte cacheParam = CacheBehavior.STORE;
             boolean refresh = force;
             if (refresh) {
@@ -97,9 +67,6 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             }
             Documents docs = service.query("SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState != \"deleted\"",
                     null, new String[] { "dc:modified DESC" }, "*", 0, 50, cacheParam);
-            // documentsList = docs.asUpdatableDocumentsList();
-            // Documents docs =
-            // service.query("SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState <> 'deleted' ORDER BY dc:modified DESC");
 
             for (Iterator<Document> iterator = docs.iterator(); iterator.hasNext();) {
                 Document document = iterator.next();

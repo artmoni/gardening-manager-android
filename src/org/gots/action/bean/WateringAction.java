@@ -10,20 +10,19 @@
  ******************************************************************************/
 package org.gots.action.bean;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 import org.gots.action.AbstractActionSeed;
 import org.gots.action.GardeningActionInterface;
 import org.gots.action.SeedActionInterface;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.provider.local.GotsGrowingSeedProvider;
-import org.gots.seed.provider.local.LocalGrowingSeedProvider;
 
 import android.content.Context;
+import android.os.AsyncTask;
 
 public class WateringAction extends AbstractActionSeed implements SeedActionInterface, GardeningActionInterface {
 
@@ -80,13 +79,23 @@ public class WateringAction extends AbstractActionSeed implements SeedActionInte
 
     @Override
     public int execute(BaseAllotmentInterface allotment, GrowingSeedInterface seed) {
+        new AsyncTask<BaseAllotmentInterface, Integer, Void>() {
+            @Override
+            protected Void doInBackground(BaseAllotmentInterface... params) {
+                List<GrowingSeedInterface> listseeds = growingSeedManager.getGrowingSeedsByAllotment(params[0]);
+                for (Iterator<GrowingSeedInterface> iterator = listseeds.iterator(); iterator.hasNext();) {
+                    GrowingSeedInterface baseSeedInterface = iterator.next();
+                    WateringAction.this.execute(baseSeedInterface);
 
-        ArrayList<GrowingSeedInterface> listseeds = growingSeedManager.getSeedsByAllotment(allotment);
-        for (Iterator<GrowingSeedInterface> iterator = listseeds.iterator(); iterator.hasNext();) {
-            GrowingSeedInterface baseSeedInterface = iterator.next();
-            execute(baseSeedInterface);
+                }
 
-        }
+                return null;
+            }
+
+            protected void onPostExecute(Void result) {
+                // mContext.sendBroadcast(new Intent(BroadCastMessages.GROWINGSEED_DISPLAYLIST));
+            };
+        }.execute(allotment);
 
         return 0;
     }

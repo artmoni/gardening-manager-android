@@ -2,6 +2,7 @@ package org.gots.seed;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.gots.bean.BaseAllotmentInterface;
@@ -86,13 +87,13 @@ public class GotsGrowingSeedManager implements GotsGrowingSeedProvider {
     }
 
     @Override
-    public ArrayList<GrowingSeedInterface> getSeedsByAllotment(BaseAllotmentInterface allotment) {
-        return provider.getSeedsByAllotment(allotment);
+    public List<GrowingSeedInterface> getGrowingSeedsByAllotment(BaseAllotmentInterface allotment) {
+        return provider.getGrowingSeedsByAllotment(allotment);
     }
 
     @Override
-    public GrowingSeedInterface getSeedById(int growingSeedId) {
-        return provider.getSeedById(growingSeedId);
+    public GrowingSeedInterface getGrowingSeedById(int growingSeedId) {
+        return provider.getGrowingSeedById(growingSeedId);
     }
 
     @Override

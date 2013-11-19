@@ -57,7 +57,6 @@
     <string name="profile.menu.localize">Locate my garden</string>
     <string name="profile.menu.localize.description"> I geo-tag my garden to get the weather</string>
     <string name="profile.menu.add">Add a garden</string>
-    <string name="profile.menu.select">Select a garden</string>
     <string name="profile.menu.add.description">I can manage multiple gardens</string>
     <string name="profile.location.selectsource">Source choice</string>
     <string name="profile.location.validate">Validate</string>

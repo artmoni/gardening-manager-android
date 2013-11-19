@@ -10,10 +10,12 @@
  ******************************************************************************/
 package org.gots.allotment.adapter;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.gots.R;
 import org.gots.action.bean.SowingAction;
+import org.gots.action.bean.WateringAction;
 import org.gots.action.view.ActionWidget;
 import org.gots.allotment.AllotmentManager;
 import org.gots.allotment.view.QuickAllotmentActionBuilder;
@@ -28,6 +30,7 @@ import org.gots.ui.HutActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -88,7 +91,7 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         LinearLayout ll = (LinearLayout) convertView;
         Holder holder;
         if (ll == null) {
@@ -107,23 +110,34 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
         } else
             holder = (Holder) ll.getTag();
 
-        List<GrowingSeedInterface> mySeeds = growingSeedManager.getSeedsByAllotment(myAllotments.get(position));
+        new AsyncTask<LinearLayout, Integer, List<GrowingSeedInterface>>() {
+            Holder holder;
 
-        listGrowingSeedAdapter = new ListGrowingSeedAdapter(mContext, mySeeds, this);
+            @Override
+            protected List<GrowingSeedInterface> doInBackground(LinearLayout... params) {
+                holder = (Holder) params[0].getTag();
+                return growingSeedManager.getGrowingSeedsByAllotment(myAllotments.get(position));
 
-        holder.listSeeds.setAdapter(listGrowingSeedAdapter);
+            }
 
-        int nbcolumn = 4;
-        int layoutsize = 100;
-        if (holder.listSeeds.getCount() == 0)
-            holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, layoutsize));
-        else if (holder.listSeeds.getCount() % nbcolumn == 0)
-            holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                    (holder.listSeeds.getCount() / 4) * layoutsize));
-        else
+            protected void onPostExecute(List<GrowingSeedInterface> mySeeds) {
+                int nbcolumn = 4;
+                int layoutsize = 100;
 
-            holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                    LayoutParams.WRAP_CONTENT));
+                listGrowingSeedAdapter = new ListGrowingSeedAdapter(mContext, mySeeds, ListAllotmentAdapter.this);
+                holder.listSeeds.setAdapter(listGrowingSeedAdapter);
+
+                // if (holder.listSeeds.getCount() == 0)
+                // holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+                // layoutsize));
+                if (holder.listSeeds.getCount() % nbcolumn == 0)
+                    holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+                            (holder.listSeeds.getCount() / nbcolumn + 1) * layoutsize));
+                else
+                    holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+                            LayoutParams.WRAP_CONTENT));
+            };
+        }.execute(ll);
 
         holder.menu.removeAllViews();
 

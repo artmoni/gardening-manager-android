@@ -80,7 +80,7 @@ public class ActionNotificationService extends Service {
         if (!actions.isEmpty()) {
             BaseActionInterface action = actions.iterator().next();
 
-            GrowingSeedInterface seed = growingSeedManager.getSeedById(action.getGrowingSeedId());
+            GrowingSeedInterface seed = growingSeedManager.getGrowingSeedById(action.getGrowingSeedId());
             createNotification(action, seed);
 
         }

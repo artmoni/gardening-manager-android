@@ -122,8 +122,14 @@ public class ProfileActivity extends AbstractActivity {
             if (profileAdapter != null && profileAdapter.getCount() == 0) {
                 Intent intentCreation = new Intent(getApplicationContext(), ProfileCreationActivity.class);
                 startActivity(intentCreation);
+            } else {
+                // Select default current garden
+                if (gardenManager.getCurrentGarden() == null || gardenManager.getCurrentGarden() != null
+                        && gardenManager.getCurrentGarden().getId() == -1) {
+                    gardenManager.setCurrentGarden(profileAdapter.getItem(0));
+                }
+                super.onPostExecute(myGardens);
             }
-            super.onPostExecute(myGardens);
         }
 
     }
@@ -139,11 +145,11 @@ public class ProfileActivity extends AbstractActivity {
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
-        if (gardenManager.getCurrentGarden() == null || gardenManager.getCurrentGarden() != null
-                && gardenManager.getCurrentGarden().getId() == -1)
-            findViewById(R.id.idSelectGarden).setVisibility(View.VISIBLE);
-        else
-            findViewById(R.id.idSelectGarden).setVisibility(View.GONE);
+//        if (gardenManager.getCurrentGarden() == null || gardenManager.getCurrentGarden() != null
+//                && gardenManager.getCurrentGarden().getId() == -1) {
+//            findViewById(R.id.idSelectGarden).setVisibility(View.VISIBLE);
+//        } else
+//            findViewById(R.id.idSelectGarden).setVisibility(View.GONE);
 
         // buildGardenList();
         // weatherState.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_weather));

@@ -70,7 +70,7 @@ public class TabSeedActivity extends SherlockFragmentActivity {
             TabHost mTabHost = (TabHost) findViewById(android.R.id.tabhost);
 
             int seedId = getIntent().getExtras().getInt("org.gots.seed.id");
-            mSeed =  GotsGrowingSeedManager.getInstance().initIfNew(this).getSeedById(seedId);
+            mSeed =  GotsGrowingSeedManager.getInstance().initIfNew(this).getGrowingSeedById(seedId);
         } else if (getIntent().getExtras().getInt("org.gots.seed.vendorid") != 0) {
             int seedId = getIntent().getExtras().getInt("org.gots.seed.vendorid");
             LocalSeedProvider helper = new LocalSeedProvider(getApplicationContext());

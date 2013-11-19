@@ -66,7 +66,7 @@ public class NewActionActivity extends AbstractActivity implements OnItemClickLi
         if (getIntent().getExtras() != null) {
             Integer seedId = getIntent().getExtras().getInt("org.gots.seed.id");
             GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(this);
-            mySeed = growingSeedManager.getSeedById(seedId);
+            mySeed = growingSeedManager.getGrowingSeedById(seedId);
 
             SeedWidgetLong seed = (SeedWidgetLong) findViewById(R.id.seedWidgetLong);
             seed.setSeed(mySeed);

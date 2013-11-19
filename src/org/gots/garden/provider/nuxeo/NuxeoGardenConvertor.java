@@ -10,7 +10,7 @@ public class NuxeoGardenConvertor {
 
     public static GardenInterface convert(Document gardenWorkspace) {
         GardenInterface garden = new Garden();
-        garden.setName(gardenWorkspace.getTitle());
+
         garden.setUUID(gardenWorkspace.getId());
 
         try {
@@ -36,9 +36,11 @@ public class NuxeoGardenConvertor {
             Log.w("NuxeoGarden", garden + " has not a correct longitude");
         }
         garden.setLocality(gardenWorkspace.getString("garden:city"));
+        if ("null".equals(garden.getLocality()))
+            garden.setLocality(gardenWorkspace.getTitle());
         garden.setCountryName(gardenWorkspace.getString("garden:country"));
         garden.setAdminArea(gardenWorkspace.getString("garden:region"));
-
+        garden.setName(garden.getLocality() + " (" + gardenWorkspace.getString("dc:creator") + ")");
         return garden;
     }
 

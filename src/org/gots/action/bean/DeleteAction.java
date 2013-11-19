@@ -10,102 +10,112 @@
  ******************************************************************************/
 package org.gots.action.bean;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 import org.gots.action.AbstractActionSeed;
 import org.gots.action.GardeningActionInterface;
 import org.gots.action.PermanentActionInterface;
 import org.gots.action.SeedActionInterface;
 import org.gots.bean.BaseAllotmentInterface;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.provider.local.GotsGrowingSeedProvider;
-import org.gots.seed.provider.local.LocalGrowingSeedProvider;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
 
 public class DeleteAction extends AbstractActionSeed implements PermanentActionInterface, SeedActionInterface,
-		GardeningActionInterface {
+        GardeningActionInterface {
 
-	public DeleteAction(Context context) {
-	    super(context);
-		setName("delete");
-	}
+    public DeleteAction(Context context) {
+        super(context);
+        setName("delete");
+    }
 
-	@Override
-	public int execute(GrowingSeedInterface seed) {
-		super.execute(seed);
+    @Override
+    public int execute(GrowingSeedInterface seed) {
+        super.execute(seed);
 
-//		GrowingSeedDBHelper helper = new GrowingSeedDBHelper(getContext());
-//		helper.deleteGrowingSeed(seed);
-//		seedManager.removeGrowingSeed(seed);
-		growingSeedManager.deleteGrowingSeed(seed);
-		return 1;
+        // GrowingSeedDBHelper helper = new GrowingSeedDBHelper(getContext());
+        // helper.deleteGrowingSeed(seed);
+        // seedManager.removeGrowingSeed(seed);
+        growingSeedManager.deleteGrowingSeed(seed);
+        return 1;
 
-	}
-	public void setDateActionDone(Date dateActionDone) {
-		super.setDateActionDone(dateActionDone);
-	}
+    }
 
-	public Date getDateActionDone() {
-		return super.getDateActionDone();
-	}
+    public void setDateActionDone(Date dateActionDone) {
+        super.setDateActionDone(dateActionDone);
+    }
 
-	public void setDuration(int duration) {
-		super.setDuration(duration);
-	}
+    public Date getDateActionDone() {
+        return super.getDateActionDone();
+    }
 
-	public int getDuration() {
-		return super.getDuration();
-	}
+    public void setDuration(int duration) {
+        super.setDuration(duration);
+    }
 
-	public void setDescription(String description) {
-		super.setDescription(description);
-	}
+    public int getDuration() {
+        return super.getDuration();
+    }
 
-	public String getDescription() {
-		return super.getDescription();
-	}
+    public void setDescription(String description) {
+        super.setDescription(description);
+    }
 
-	public void setName(String name) {
-		super.setName(name);
-	}
+    public String getDescription() {
+        return super.getDescription();
+    }
 
-	public String getName() {
-		return super.getName();
-	}
+    public void setName(String name) {
+        super.setName(name);
+    }
 
-	@Override
-	public int execute(BaseAllotmentInterface allotment, GrowingSeedInterface seed) {
+    public String getName() {
+        return super.getName();
+    }
 
-		ArrayList<GrowingSeedInterface> listseeds = growingSeedManager.getSeedsByAllotment(allotment);
-		for (Iterator<GrowingSeedInterface> iterator = listseeds.iterator(); iterator.hasNext();) {
-			GrowingSeedInterface baseSeedInterface = iterator.next();
-			execute(baseSeedInterface);
-		}
+    @Override
+    public int execute(BaseAllotmentInterface allotment, GrowingSeedInterface seed) {
+        new AsyncTask<BaseAllotmentInterface, Integer, Void>() {
+            @Override
+            protected Void doInBackground(BaseAllotmentInterface... params) {
+                List<GrowingSeedInterface> listseeds = growingSeedManager.getGrowingSeedsByAllotment(params[0]);
+                for (Iterator<GrowingSeedInterface> iterator = listseeds.iterator(); iterator.hasNext();) {
+                    GrowingSeedInterface baseSeedInterface = iterator.next();
+                    DeleteAction.this.execute(baseSeedInterface);
+                }
 
-//		AllotmentDBHelper helperlot = new AllotmentDBHelper(getContext());
-//		helperlot.deleteAllotment(allotment);
-		allotmentProvider.removeAllotment(allotment);
-		return 0;
-	}
+                allotmentProvider.removeAllotment(params[0]);
+                return null;
+            }
 
-	@Override
-	public void setId(int id) {
-		super.setId(id);
-	}
+            protected void onPostExecute(Void result) {
+                // mContext.sendBroadcast(new Intent(BroadCastMessages.GROWINGSEED_DISPLAYLIST));
+            };
+        }.execute(allotment);
 
-	@Override
-	public int getId() {
-		return super.getId();
-	}
+        return 0;
+    }
 
-	public void setData(Object data) {
-	}
+    @Override
+    public void setId(int id) {
+        super.setId(id);
+    }
 
-	public Object getData() {
-		return null;
-	}
+    @Override
+    public int getId() {
+        return super.getId();
+    }
+
+    public void setData(Object data) {
+    }
+
+    public Object getData() {
+        return null;
+    }
 
 }
