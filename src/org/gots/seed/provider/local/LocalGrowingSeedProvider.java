@@ -16,7 +16,6 @@ import java.util.List;
 
 import org.gots.DatabaseHelper;
 import org.gots.bean.BaseAllotmentInterface;
-import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.utils.GotsDBHelper;

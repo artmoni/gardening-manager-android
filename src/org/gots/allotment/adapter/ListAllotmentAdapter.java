@@ -10,12 +10,10 @@
  ******************************************************************************/
 package org.gots.allotment.adapter;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.gots.R;
 import org.gots.action.bean.SowingAction;
-import org.gots.action.bean.WateringAction;
 import org.gots.action.view.ActionWidget;
 import org.gots.allotment.AllotmentManager;
 import org.gots.allotment.view.QuickAllotmentActionBuilder;
@@ -25,7 +23,6 @@ import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
 import org.gots.seed.provider.local.GotsGrowingSeedProvider;
-import org.gots.seed.provider.local.LocalGrowingSeedProvider;
 import org.gots.ui.HutActivity;
 
 import android.content.Context;

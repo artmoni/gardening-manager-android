@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.garden.GardenInterface;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.provider.local.GotsGrowingSeedProvider;
 import org.gots.seed.provider.local.LocalGrowingSeedProvider;

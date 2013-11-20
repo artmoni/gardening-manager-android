@@ -18,8 +18,6 @@ import org.gots.help.HelpUriBuilder;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.provider.local.GotsGrowingSeedProvider;
-import org.gots.seed.provider.local.LocalGrowingSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
 

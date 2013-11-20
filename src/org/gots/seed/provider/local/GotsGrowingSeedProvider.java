@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.gots.bean.BaseAllotmentInterface;
-import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
 
 public interface GotsGrowingSeedProvider {

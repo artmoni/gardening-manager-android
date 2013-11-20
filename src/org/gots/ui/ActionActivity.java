@@ -17,8 +17,6 @@ import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.provider.local.GotsGrowingSeedProvider;
-import org.gots.seed.provider.local.LocalGrowingSeedProvider;
 
 import android.content.Intent;
 import android.os.Bundle;

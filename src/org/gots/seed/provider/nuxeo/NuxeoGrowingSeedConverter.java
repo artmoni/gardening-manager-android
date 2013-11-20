@@ -1,6 +1,5 @@
 package org.gots.seed.provider.nuxeo;
 
-import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;

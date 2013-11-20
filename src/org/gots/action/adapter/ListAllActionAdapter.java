@@ -29,8 +29,6 @@ import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.provider.local.GotsGrowingSeedProvider;
-import org.gots.seed.provider.local.LocalGrowingSeedProvider;
 import org.gots.seed.view.SeedWidget;
 import org.gots.weather.WeatherManager;
 import org.gots.weather.view.WeatherView;

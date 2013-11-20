@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.provider.local.GotsGrowingSeedProvider;
-import org.gots.seed.provider.local.LocalGrowingSeedProvider;
 
 import android.content.Context;
 import android.os.Bundle;

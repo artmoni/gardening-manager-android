@@ -4,12 +4,8 @@ import java.util.ArrayList;
 
 import org.gots.action.provider.GotsActionProvider;
 import org.gots.action.provider.local.LocalActionProvider;
-import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.action.provider.nuxeo.NuxeoActionProvider;
 import org.gots.preferences.GotsPreferences;
-import org.gots.provider.AbstractProvider;
-import org.gots.seed.provider.local.LocalSeedProvider;
-import org.gots.seed.provider.nuxeo.NuxeoSeedProvider;
 import org.gots.utils.NotConfiguredException;
 
 import android.content.Context;

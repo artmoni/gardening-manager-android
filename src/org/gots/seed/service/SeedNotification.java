@@ -9,7 +9,6 @@ import org.gots.seed.view.SeedWidget;
 import org.gots.ui.ActionActivity;
 import org.gots.ui.HutActivity;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;

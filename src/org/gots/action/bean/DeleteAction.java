@@ -19,11 +19,9 @@ import org.gots.action.GardeningActionInterface;
 import org.gots.action.PermanentActionInterface;
 import org.gots.action.SeedActionInterface;
 import org.gots.bean.BaseAllotmentInterface;
-import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.GrowingSeedInterface;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 
 public class DeleteAction extends AbstractActionSeed implements PermanentActionInterface, SeedActionInterface,

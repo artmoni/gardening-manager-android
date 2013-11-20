@@ -17,13 +17,9 @@ import java.util.Iterator;
 import org.gots.action.AbstractActionGarden;
 import org.gots.action.BaseActionInterface;
 import org.gots.action.GardeningActionInterface;
-import org.gots.action.GotsActionManager;
 import org.gots.action.PermanentActionInterface;
-import org.gots.action.provider.GotsActionProvider;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.provider.local.GotsGrowingSeedProvider;
-import org.gots.seed.provider.local.LocalGrowingSeedProvider;
 
 import android.content.Context;
 
