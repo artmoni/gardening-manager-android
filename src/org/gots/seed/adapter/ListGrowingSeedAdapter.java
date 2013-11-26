@@ -31,13 +31,10 @@ public class ListGrowingSeedAdapter extends BaseAdapter implements OnClickListen
 	List<GrowingSeedInterface> mySeeds;
 
 	// String currentAllotmentReference;
-	BaseAdapter parentAdapter;
 
-	public ListGrowingSeedAdapter(Context mContext, List<GrowingSeedInterface> seeds, BaseAdapter parentAdapter) {
+	public ListGrowingSeedAdapter(Context mContext, List<GrowingSeedInterface> seeds) {
 		this.mContext = mContext;
-		// this.currentAllotmentReference = allotmentReference;
 		mySeeds = seeds;
-		this.parentAdapter = parentAdapter;
 
 	}
 
@@ -97,7 +94,7 @@ public class ListGrowingSeedAdapter extends BaseAdapter implements OnClickListen
 
 	@Override
 	public void onClick(View v) {
-		QuickSeedActionBuilder actionBuilder = new QuickSeedActionBuilder(mContext,(SeedWidget) v, parentAdapter);
+		QuickSeedActionBuilder actionBuilder = new QuickSeedActionBuilder(mContext,(SeedWidget) v);
 		actionBuilder.show();
 		// notifyDataSetChanged();
 	}

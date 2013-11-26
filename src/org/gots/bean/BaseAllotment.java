@@ -11,7 +11,8 @@
 package org.gots.bean;
 
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.gots.seed.GrowingSeedInterface;
 
@@ -25,7 +26,7 @@ public class BaseAllotment implements Serializable, BaseAllotmentInterface {
 
     private String description;
 
-    private HashMap<String, GrowingSeedInterface> seeds = new HashMap<String, GrowingSeedInterface>();
+    private List<GrowingSeedInterface> seeds = new ArrayList<GrowingSeedInterface>();
 
     private String uuid;
 
@@ -33,21 +34,13 @@ public class BaseAllotment implements Serializable, BaseAllotmentInterface {
         super();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.gots.bean.AllotmentInterface#getSeeds()
-     */
     @Override
-    public HashMap<String, GrowingSeedInterface> getSeeds() {
+    public List<GrowingSeedInterface> getSeeds() {
         return seeds;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.gots.bean.AllotmentInterface#setSeeds(java.util.HashMap)
-     */
     @Override
-    public void setSeeds(HashMap<String, GrowingSeedInterface> seeds) {
+    public void setSeeds(List<GrowingSeedInterface> seeds) {
         this.seeds = seeds;
     }
 
@@ -116,7 +109,5 @@ public class BaseAllotment implements Serializable, BaseAllotmentInterface {
     public void setUUID(String id) {
         uuid = id;
     }
-
-   
 
 }

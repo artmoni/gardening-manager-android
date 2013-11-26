@@ -10,15 +10,15 @@
  ******************************************************************************/
 package org.gots.bean;
 
-import java.util.HashMap;
+import java.util.List;
 
 import org.gots.seed.GrowingSeedInterface;
 
 public interface BaseAllotmentInterface {
 
-	public abstract HashMap<String, GrowingSeedInterface> getSeeds();
+	public abstract List<GrowingSeedInterface> getSeeds();
 
-	public abstract void setSeeds(HashMap<String, GrowingSeedInterface> seeds);
+	public abstract void setSeeds(List<GrowingSeedInterface> seeds);
 
 	public abstract String getName();
 

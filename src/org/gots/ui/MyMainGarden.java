@@ -25,6 +25,7 @@ import org.gots.allotment.adapter.ListAllotmentAdapter;
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.weather.view.WeatherWidget;
 
 import android.app.AlertDialog;
@@ -56,7 +57,7 @@ public class MyMainGarden extends AbstractActivity {
 
     private Menu menu;
 
-    private Map<Integer, BaseAllotmentInterface> selectedAllotments = new HashMap<Integer, BaseAllotmentInterface>();
+    private List<BaseAllotmentInterface> selectedAllotments = new ArrayList<BaseAllotmentInterface>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +70,6 @@ public class MyMainGarden extends AbstractActivity {
         // GardenManager gm =GardenManager.getInstance();
         registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.GROWINGSEED_DISPLAYLIST));
 
-        
         setContentView(R.layout.garden);
         listAllotments = (ListView) findViewById(R.id.IdGardenAllotmentsList);
         lsa = new ListAllotmentAdapter(MyMainGarden.this, new ArrayList<BaseAllotmentInterface>());
@@ -84,10 +84,10 @@ public class MyMainGarden extends AbstractActivity {
                 BaseAllotmentInterface selectAllotment = (BaseAllotmentInterface) listAllotments.getItemAtPosition(position);
                 if (menuSelectable.isSelected()) {
                     menuSelectable.setSelected(false);
-                    selectedAllotments.remove(selectAllotment.getId());
+                    selectedAllotments.remove(selectAllotment);
                 } else {
                     menuSelectable.setSelected(true);
-                    selectedAllotments.put(selectAllotment.getId(), selectAllotment);
+                    selectedAllotments.add(selectAllotment);
                 }
 
                 if (menu != null) {
@@ -101,8 +101,7 @@ public class MyMainGarden extends AbstractActivity {
             }
 
         });
-//        listAllotments.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-       
+        // listAllotments.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
         // listAllotments.setBackgroundDrawable(getResources().getDrawable(R.drawable.help_hut_2));
         if (!gotsPrefs.isPremium()) {
@@ -116,7 +115,6 @@ public class MyMainGarden extends AbstractActivity {
     @Override
     protected void onPause() {
         super.onPause();
-
     }
 
     @Override
@@ -126,12 +124,14 @@ public class MyMainGarden extends AbstractActivity {
         this.menu = menu;
         return true;
     }
+
     public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            onResume();
+            // onResume();
         }
     };
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
@@ -158,7 +158,7 @@ public class MyMainGarden extends AbstractActivity {
                 }
             }.execute();
 
-//            listAllotments.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_simple));
+            // listAllotments.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_simple));
             return true;
         case R.id.help:
             Intent browserIntent = new Intent(this, WebHelpActivity.class);
@@ -189,9 +189,9 @@ public class MyMainGarden extends AbstractActivity {
                             @Override
                             protected Void doInBackground(BaseAllotmentInterface... params) {
                                 GardeningActionInterface actionItem = new DeleteAction(MyMainGarden.this);
-                                for (Iterator<Map.Entry<Integer, BaseAllotmentInterface>> iterator = selectedAllotments.entrySet().iterator(); iterator.hasNext();) {
-                                    Map.Entry<Integer, BaseAllotmentInterface> pairs = iterator.next();
-                                    actionItem.execute(pairs.getValue(), null);
+                                for (Iterator<BaseAllotmentInterface> iterator = selectedAllotments.iterator(); iterator.hasNext();) {
+                                    BaseAllotmentInterface allotment = iterator.next();
+                                    actionItem.execute(allotment, null);
                                 }
                                 return null;
                             }
@@ -229,13 +229,22 @@ public class MyMainGarden extends AbstractActivity {
 
             @Override
             protected List<BaseAllotmentInterface> doInBackground(Void... params) {
-                return allotmentManager.getMyAllotments();
+                List<BaseAllotmentInterface> allotments = allotmentManager.getMyAllotments();
+                GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(
+                        MyMainGarden.this);
+
+                for (int i = 0; i < allotments.size(); i++) {
+
+                    allotments.get(i).setSeeds(growingSeedManager.getGrowingSeedsByAllotment(allotments.get(i)));
+                }
+                return allotments;
             }
 
             @Override
             protected void onPostExecute(List<BaseAllotmentInterface> result) {
-                lsa.setAllotments(result);
-                
+                if (result != null)
+                    lsa.setAllotments(result);
+
                 try {
                     dialog.dismiss();
                     dialog = null;

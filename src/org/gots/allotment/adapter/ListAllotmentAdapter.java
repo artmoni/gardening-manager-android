@@ -107,34 +107,37 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
         } else
             holder = (Holder) ll.getTag();
 
-        new AsyncTask<LinearLayout, Integer, List<GrowingSeedInterface>>() {
-            Holder holder;
+        //
+        // new AsyncTask<LinearLayout, Integer, List<GrowingSeedInterface>>() {
+        // Holder holder;
+        //
+        // @Override
+        // protected List<GrowingSeedInterface> doInBackground(LinearLayout... params) {
+        // holder = (Holder) params[0].getTag();
+        // return growingSeedManager.getGrowingSeedsByAllotment(myAllotments.get(position));
+        //
+        // }
+        //
+        // protected void onPostExecute(List<GrowingSeedInterface> mySeeds) {
+        //
+        // };
+        // }.execute(ll);
 
-            @Override
-            protected List<GrowingSeedInterface> doInBackground(LinearLayout... params) {
-                holder = (Holder) params[0].getTag();
-                return growingSeedManager.getGrowingSeedsByAllotment(myAllotments.get(position));
+        int nbcolumn = 4;
+        int layoutsize = 100;
 
-            }
+        listGrowingSeedAdapter = new ListGrowingSeedAdapter(mContext, getItem(position).getSeeds());
+        holder.listSeeds.setAdapter(listGrowingSeedAdapter);
 
-            protected void onPostExecute(List<GrowingSeedInterface> mySeeds) {
-                int nbcolumn = 4;
-                int layoutsize = 100;
-
-                listGrowingSeedAdapter = new ListGrowingSeedAdapter(mContext, mySeeds, ListAllotmentAdapter.this);
-                holder.listSeeds.setAdapter(listGrowingSeedAdapter);
-
-                // if (holder.listSeeds.getCount() == 0)
-                // holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                // layoutsize));
-                if (holder.listSeeds.getCount() % nbcolumn == 0)
-                    holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                            (holder.listSeeds.getCount() / nbcolumn + 1) * layoutsize));
-                else
-                    holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                            LayoutParams.WRAP_CONTENT));
-            };
-        }.execute(ll);
+        // if (holder.listSeeds.getCount() == 0)
+        // holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+        // layoutsize));
+        if (holder.listSeeds.getCount() % nbcolumn == 0)
+            holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+                    (holder.listSeeds.getCount() / nbcolumn + 1) * layoutsize));
+        else
+            holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+                    LayoutParams.WRAP_CONTENT));
 
         holder.menu.removeAllViews();
 

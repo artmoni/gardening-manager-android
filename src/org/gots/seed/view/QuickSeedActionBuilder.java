@@ -51,7 +51,7 @@ public class QuickSeedActionBuilder {
 
     private Context mContext;
 
-    public QuickSeedActionBuilder(Context context, final SeedWidget v, final BaseAdapter parentAdapter) {
+    public QuickSeedActionBuilder(Context context, final SeedWidget v) {
         parentView = v;
         mContext = context;
         final GrowingSeedInterface seed = (GrowingSeedInterface) v.getTag();
@@ -79,7 +79,7 @@ public class QuickSeedActionBuilder {
                 public void onClick(View v) {
                     SeedActionInterface actionItem = currentAction;
                     actionItem.execute(seed);
-                    parentAdapter.notifyDataSetChanged();
+//                    parentAdapter.notifyDataSetChanged();
                     quickAction.dismiss();
                 }
             });
@@ -116,7 +116,7 @@ public class QuickSeedActionBuilder {
             public void onClick(View v) {
                 SeedActionInterface actionItem = wateringAction;
                 actionItem.execute(seed);
-                parentAdapter.notifyDataSetChanged();
+//                parentAdapter.notifyDataSetChanged();
                 quickAction.dismiss();
 
             }
@@ -138,7 +138,7 @@ public class QuickSeedActionBuilder {
                             public void onClick(DialogInterface dialog, int id) {
                                 SeedActionInterface actionItem = deleteAction;
                                 actionItem.execute(seed);
-                                parentAdapter.notifyDataSetChanged();
+//                                parentAdapter.notifyDataSetChanged();
                                 quickAction.dismiss();
                                 dialog.dismiss();
                             }
@@ -179,7 +179,7 @@ public class QuickSeedActionBuilder {
                     actionItem.execute(seed);
 
                 }
-                parentAdapter.notifyDataSetChanged();
+//                parentAdapter.notifyDataSetChanged();
                 quickAction.dismiss();
             }
         });
@@ -205,7 +205,7 @@ public class QuickSeedActionBuilder {
                 } else {
                     actionItem.execute(seed);
                 }
-                parentAdapter.notifyDataSetChanged();
+//                parentAdapter.notifyDataSetChanged();
                 quickAction.dismiss();
             }
         });
