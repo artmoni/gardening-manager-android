@@ -31,8 +31,6 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
 
     private static final String TAG = "NuxeoGrowingSeedProvider";
 
-    private GrowingSeedInterface currentGrowingSeed = null;
-
     public NuxeoGrowingSeedProvider(Context mContext) {
         super(mContext);
     }
@@ -128,7 +126,7 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
         growingSeed.setUUID(null);
         return insertNuxeoSeed(super.insertSeed(growingSeed, allotment), allotment);
     }
-
+ 
     protected GrowingSeedInterface insertNuxeoSeed(GrowingSeedInterface growingSeed,
             final BaseAllotmentInterface allotment) {
         Session session = getNuxeoClient().getSession();
@@ -149,10 +147,10 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
             PropertyMap properties = getProperties(growingSeed);
             Document newSeed = service.createDocument(allotmentDoc, "GrowingSeed", growingSeed.getSpecie(), properties);
 
-            currentGrowingSeed.setUUID(newSeed.getId());
-            super.updateSeed(currentGrowingSeed, allotment);
+            growingSeed.setUUID(newSeed.getId());
+            growingSeed = super.updateSeed(growingSeed, allotment);
             BaseSeedInterface seed = GotsSeedManager.getInstance().initIfNew(mContext).getSeedById(
-                    currentGrowingSeed.getSeedId());
+                    growingSeed.getSeedId());
             service.createRelation(newSeed, "http://purl.org/dc/terms/isFormatOf", new IdRef(seed.getUUID()));
 
         } catch (Exception e) {

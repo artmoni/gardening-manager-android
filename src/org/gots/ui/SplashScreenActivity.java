@@ -59,8 +59,10 @@ public class SplashScreenActivity extends AbstractActivity {
             switch (msg.what) {
             case STOPSPLASH:
                 // remove SplashScreen from view
-                Intent intent = new Intent(that.get(), DashboardActivity.class);
-                that.get().startActivityForResult(intent, 3);
+                if (that.get() != null) {
+                    Intent intent = new Intent(that.get(), DashboardActivity.class);
+                    that.get().startActivityForResult(intent, 3);
+                }
                 // that.get().finish();
 
                 break;
@@ -379,12 +381,12 @@ public class SplashScreenActivity extends AbstractActivity {
 
         } else
             launchProgress();
-//        if (!gotsPrefs.isPremium()) {
-//            GotsAdvertisement ads = new GotsAdvertisement(this);
-//
-//            LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
-//            layout.addView(ads.getAdsLayout());
-//        }
+        // if (!gotsPrefs.isPremium()) {
+        // GotsAdvertisement ads = new GotsAdvertisement(this);
+        //
+        // LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
+        // layout.addView(ads.getAdsLayout());
+        // }
         super.onResume();
     }
 
