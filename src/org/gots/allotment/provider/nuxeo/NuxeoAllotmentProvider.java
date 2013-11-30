@@ -72,7 +72,7 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
             DocRef wsRef = service.getUserHome();
             // TODO Change this when garden UUID manage uuid and not path
             Document gardenFolder = service.getDocument(new IdRef(
-                    GardenManager.getInstance().getCurrentGarden().getUUID()));
+                    GardenManager.getInstance().initIfNew(mContext).getCurrentGarden().getUUID()));
             Document allotmentsFolder = service.getDocument(new PathRef(gardenFolder.getPath() + "/My Allotment"));
 
             Documents docs = service.query(

@@ -23,9 +23,9 @@ import org.gots.action.util.ActionState;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.SeedUtil;
-import org.gots.seed.provider.nuxeo.NuxeoGrowingSeedProvider;
 
 import android.app.Activity;
 import android.content.Context;
@@ -39,7 +39,6 @@ public class MySeedsListAdapter extends SeedListAdapter {
 
     private BaseAllotmentInterface allotment;
 
-
     public MySeedsListAdapter(Context context, BaseAllotmentInterface allotment, List<BaseSeedInterface> seeds) {
         super(context, seeds);
         this.allotment = allotment;
@@ -49,9 +48,8 @@ public class MySeedsListAdapter extends SeedListAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         View vi = super.getView(position, convertView, parent);
-        Holder holder = (Holder)vi.getTag();
+        Holder holder = (Holder) vi.getTag();
         final BaseSeedInterface currentSeed = getItem(position);
-
 
         holder.seedWidgetLong.setSeed(currentSeed);
         BaseActionInterface action = null;
@@ -75,19 +73,18 @@ public class MySeedsListAdapter extends SeedListAdapter {
                     new AsyncTask<Void, Integer, Void>() {
                         @Override
                         protected Void doInBackground(Void... params) {
-                                NuxeoGrowingSeedProvider provider = new NuxeoGrowingSeedProvider(mContext);
-                                GrowingSeedInterface growingSeed = (GrowingSeedInterface)currentSeed;
-                                growingSeed.setDateSowing(Calendar.getInstance().getTime());
-                                provider.insertSeed(growingSeed, allotment);
+                            GotsGrowingSeedManager provider = GotsGrowingSeedManager.getInstance().initIfNew(mContext);
+                            // NuxeoGrowingSeedProvider provider = new NuxeoGrowingSeedProvider(mContext);
+                            GrowingSeedInterface growingSeed = (GrowingSeedInterface) currentSeed;
+                            growingSeed.setDateSowing(Calendar.getInstance().getTime());
+                            provider.insertSeed(growingSeed, allotment);
                             return null;
                         }
 
                         @Override
                         protected void onPostExecute(Void result) {
                             // notifyDataSetChanged();
-                            Toast.makeText(
-                                    mContext,
-                                    "Sowing", Toast.LENGTH_LONG).show();
+                            Toast.makeText(mContext, "Sowing", Toast.LENGTH_LONG).show();
                             mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
                             ((Activity) mContext).finish();
                         }
@@ -95,13 +92,10 @@ public class MySeedsListAdapter extends SeedListAdapter {
 
                 }
             });
-            
-          
 
         } else {
             action = new ReduceQuantityAction(mContext);
             action.setState(ActionState.NORMAL);
-            
 
             holder.actionWidget.setAction(action);
             final BaseActionInterface baseActionInterface = action;
@@ -138,8 +132,6 @@ public class MySeedsListAdapter extends SeedListAdapter {
                 }
             });
         }
-
-       
 
         try {
 

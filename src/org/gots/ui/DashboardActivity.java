@@ -198,7 +198,8 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
         startService(weatherIntent);
 
-        if (gotsPrefs.getCurrentGardenId() == -1) {
+        // if (gotsPrefs.getCurrentGardenId() == -1) {
+        if (gardenManager.getCurrentGarden() == null) {
             Intent intent = new Intent(this, ProfileActivity.class);
             startActivity(intent);
             Animation myFadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.tween);
@@ -239,14 +240,14 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
             startActivity(loginIntent);
             return true;
 
-//        case R.id.settings:
-//            // Intent settingsIntent = new Intent(this, SettingsActivity.class);
-//            // startActivity(settingsIntent);
-//            // FragmentTransaction ft = getFragmentManager().beginTransaction();
-//            // ft.setCustomAnimations(android.R.animator.fade_in,
-//            // android.R.animator.fade_out);
-//            // ft.replace(R.id.idContent,new PreferenceActivity()).addToBackStack("back").commit();
-//            return true;
+            // case R.id.settings:
+            // // Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            // // startActivity(settingsIntent);
+            // // FragmentTransaction ft = getFragmentManager().beginTransaction();
+            // // ft.setCustomAnimations(android.R.animator.fade_in,
+            // // android.R.animator.fade_out);
+            // // ft.replace(R.id.idContent,new PreferenceActivity()).addToBackStack("back").commit();
+            // return true;
 
         case R.id.connection:
             if (gotsPrefs.isConnectedToServer())
