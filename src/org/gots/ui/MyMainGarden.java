@@ -113,6 +113,12 @@ public class MyMainGarden extends AbstractActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        unregisterReceiver(seedBroadcastReceiver);
+        super.onDestroy();
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
     }
