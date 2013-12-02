@@ -78,7 +78,7 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
             convertView.setTag(holder);
         } else
             holder = (Holder) convertView.getTag();
-        
+
         holder.seedWidgetLong.setSeed(getItem(position));
         holder.seedWidgetLong.setTag(holder);
         holder.seedWidgetLong.setOnClickListener(new View.OnClickListener() {
@@ -156,7 +156,8 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
                 List<BaseSeedInterface> nHolderList = new ArrayList<BaseSeedInterface>();
                 for (BaseSeedInterface seed : vendorSeeds) {
                     if (SeedUtil.translateSpecie(mContext, seed).toUpperCase().startsWith(
-                            constraint.toString().toUpperCase()))
+                            constraint.toString().toUpperCase())
+                            || seed.getVariety().toUpperCase().startsWith(constraint.toString().toUpperCase()))
                         nHolderList.add(seed);
                 }
                 results.values = nHolderList;
