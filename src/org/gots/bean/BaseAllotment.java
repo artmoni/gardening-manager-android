@@ -94,9 +94,9 @@ public class BaseAllotment implements Serializable, BaseAllotmentInterface {
     @Override
     public String toString() {
         String desc = new String();
-        desc.concat("(" + getId() + ")");
-        desc.concat("[" + getUUID() + "]");
-        desc.concat("[" + getName() + "]");
+        desc=desc.concat("(" + getId() + ")");
+        desc=desc.concat("[" + getUUID() + "]");
+        desc=desc.concat("[" + getName() + "]");
         return desc;
     }
 
