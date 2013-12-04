@@ -123,5 +123,7 @@
     <string name="login.disconnect">Déconnexion</string>
     <string name="login.simple.description">Connectez vous au réseau Gardening Manager et prenez plaisir à suivre le jardin potager de vos amis.</string>
     <string name="garden.create">Créer mon potager</string>
+    <string name="login.connect.state">Vous êtes synchronizé</string>
+    <string name="login.disconnect.state">Vous n\'avez pas sauvegardé, connectez vous et restez synchronisé</string>
 
 </resources>
