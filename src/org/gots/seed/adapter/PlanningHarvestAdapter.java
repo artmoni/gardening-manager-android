@@ -17,23 +17,23 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class PlanningHarvestAdapter extends PlanningAdapter {
-	BaseSeedInterface mSeed;
+    BaseSeedInterface mSeed;
 
-	public PlanningHarvestAdapter(BaseSeedInterface seed) {
-		mSeed = seed;
-	}
+    public PlanningHarvestAdapter(BaseSeedInterface seed) {
+        mSeed = seed;
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		MonthWidget monthWidget = new MonthWidget(parent.getContext());
-		monthWidget.setMonthText(getItem(position));
-//		monthWidget.setBackgroundDrawable(parent.getContext().getResources().getDrawable(R.drawable.selector_planning_harvest));
-		if (mSeed != null) {
-			if (position >= mSeed.getDateSowingMin() + mSeed.getDurationMax() / 30
-					&& position <= mSeed.getDateSowingMax() + mSeed.getDurationMax() / 30)
-				monthWidget.setHarvestPeriode(true);
-		}
-		return monthWidget;
-	}
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        MonthWidget monthWidget = new MonthWidget(parent.getContext());
+        monthWidget.setMonthText(getItem(position));
+        // monthWidget.setBackgroundDrawable(parent.getContext().getResources().getDrawable(R.drawable.selector_planning_harvest));
+        if (mSeed != null) {
+            if (position >= mSeed.getDateSowingMin() - 1 + mSeed.getDurationMax() / 30
+                    && position <= mSeed.getDateSowingMax() - 1 + mSeed.getDurationMax() / 30)
+                monthWidget.setHarvestPeriode(true);
+        }
+        return monthWidget;
+    }
 
 }

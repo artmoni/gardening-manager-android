@@ -11,10 +11,8 @@
 package org.gots.ui;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import org.gots.R;
@@ -235,6 +233,7 @@ public class MyMainGarden extends AbstractActivity {
 
             @Override
             protected List<BaseAllotmentInterface> doInBackground(Void... params) {
+
                 List<BaseAllotmentInterface> allotments = allotmentManager.getMyAllotments();
                 GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(
                         MyMainGarden.this);

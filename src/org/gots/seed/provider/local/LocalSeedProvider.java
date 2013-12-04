@@ -129,13 +129,13 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
 
     public synchronized BaseSeedInterface getSeedByBarCode(String barecode) {
         BaseSeedInterface searchedSeed = new GrowingSeed();
-        if (bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_BARECODE + "=\""
-                + barecode + "\"", null, null, null, null).moveToFirst()) {
-            searchedSeed = cursorToSeed(bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_BARECODE + "=\""
-                    + barecode + "\"", null, null, null, null));
+        if (bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_BARECODE + "=\"" + barecode + "\"",
+                null, null, null, null).moveToFirst()) {
+            searchedSeed = cursorToSeed(bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_BARECODE
+                    + "=\"" + barecode + "\"", null, null, null, null));
         }
-        bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_BARECODE + "=\""
-                + barecode + "\"", null, null, null, null).close();
+        bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_BARECODE + "=\"" + barecode + "\"", null,
+                null, null, null).close();
         return searchedSeed;
     }
 
@@ -176,27 +176,18 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
 
         // Création d'un ContentValues (fonctionne comme une HashMap)
         ContentValues values = getContentValuesFromSeed(seed);
-        Cursor cursor;
+//        Cursor cursor;
 
-        if (seed.getUUID() != null) {
-            int nbRows = bdd.update(DatabaseHelper.SEEDS_TABLE_NAME, values,
-                    DatabaseHelper.SEED_UUID + "='" + seed.getUUID() + "'", null);
-
-            cursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_UUID + "='" + seed.getUUID()
-                    + "'", null, null, null, null);
-
-        } else {
-            int rowid = bdd.update(DatabaseHelper.SEEDS_TABLE_NAME, values,
-                    DatabaseHelper.SEED_ID + "='" + seed.getSeedId() + "'", null);
-            cursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_ID + "='" + seed.getSeedId()
-                    + "'", null, null, null, null);
-
-        }
-        if (cursor.moveToFirst()) {
-            int rowid = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.SEED_ID));
-            seed.setId(rowid);
-        }
-        cursor.close();
+        int rowid = bdd.update(DatabaseHelper.SEEDS_TABLE_NAME, values,
+                DatabaseHelper.SEED_ID + "='" + seed.getSeedId() + "'", null);
+//        cursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_ID + "='" + seed.getSeedId()
+//                + "'", null, null, null, null);
+//
+//        if (cursor.moveToFirst()) {
+//            int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.SEED_ID));
+//            seed.setId(id);
+//        }
+//        cursor.close();
 
         return seed;
     }
@@ -302,5 +293,21 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
             bsi.getActionToDo().add(baseAction);
 
         return bsi;
+    }
+
+    public BaseSeedInterface getSeedByUUID(String uuid) {
+        Cursor cursor;
+        BaseSeedInterface searchedSeed = null;
+        if (uuid != null) {
+
+            cursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_UUID + "='" + uuid + "'",
+                    null, null, null, null);
+
+            if (cursor.moveToFirst()) {
+                searchedSeed = cursorToSeed(cursor);
+            }
+            cursor.close();
+        }
+        return searchedSeed;
     }
 }

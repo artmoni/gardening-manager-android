@@ -72,10 +72,10 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
                     Document originalSeed = service.getDocument(relations.get(0), "*");
 
                     NuxeoSeedProvider provider = new NuxeoSeedProvider(mContext);
-                    growingSeed = (GrowingSeedInterface) NuxeoSeedConverter.convert(originalSeed);
-                    growingSeed = (GrowingSeedInterface) provider.updateSeed(growingSeed);
+//                     growingSeed = (GrowingSeedInterface) NuxeoSeedConverter.convert(originalSeed);
+                    growingSeed = (GrowingSeedInterface) provider.getSeedByUUID(originalSeed.getId());
                     growingSeed = NuxeoGrowingSeedConverter.populate(growingSeed, growingSeedDocument);
-                    growingSeed = super.updateSeed(growingSeed, allotment);
+//                    growingSeed = super.updateGrowingSeed(growingSeed, allotment);
                     remoteGrowingSeeds.add(growingSeed);
                 }
             }
@@ -102,21 +102,27 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
 
             if (!found)
                 myGrowingSeeds.add(super.insertSeed(remoteGrowingSeed, allotment));
-            else
-                myGrowingSeeds.add(super.updateSeed(remoteGrowingSeed, allotment));
+            else{
+                GrowingSeedInterface updatableSeed =super.getGrowingSeedsByUUID(remoteGrowingSeed.getUUID());
+                remoteGrowingSeed.setGrowingSeedId(updatableSeed.getGrowingSeedId());
+                myGrowingSeeds.add(super.updateGrowingSeed(updatableSeed, allotment));
+            }
         }
 
         for (GrowingSeedInterface localGrowingSeed : localGrowingSeeds) {
-            boolean found = false;
-            for (GrowingSeedInterface remoteGrowingSeed : remoteGrowingSeeds) {
-                if (localGrowingSeed.getUUID() != null
-                        && localGrowingSeed.getUUID().equals(remoteGrowingSeed.getUUID())) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found)
+            if (localGrowingSeed.getUUID() == null)
                 myGrowingSeeds.add(insertNuxeoSeed(localGrowingSeed, allotment));
+            else {
+                boolean found = false;
+                for (GrowingSeedInterface remoteGrowingSeed : remoteGrowingSeeds) {
+                    if (localGrowingSeed.getUUID().equals(remoteGrowingSeed.getUUID())) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                    super.deleteGrowingSeed(localGrowingSeed);
+            }
         }
         return myGrowingSeeds;
     }
@@ -126,7 +132,7 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
         growingSeed.setUUID(null);
         return insertNuxeoSeed(super.insertSeed(growingSeed, allotment), allotment);
     }
- 
+
     protected GrowingSeedInterface insertNuxeoSeed(GrowingSeedInterface growingSeed,
             final BaseAllotmentInterface allotment) {
         Session session = getNuxeoClient().getSession();
@@ -148,11 +154,10 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
             Document newSeed = service.createDocument(allotmentDoc, "GrowingSeed", growingSeed.getSpecie(), properties);
 
             growingSeed.setUUID(newSeed.getId());
-            growingSeed = super.updateSeed(growingSeed, allotment);
+            growingSeed = super.updateGrowingSeed(growingSeed, allotment);
             BaseSeedInterface seed = GotsSeedManager.getInstance().initIfNew(mContext).getSeedById(
                     growingSeed.getSeedId());
             service.createRelation(newSeed, "http://purl.org/dc/terms/isFormatOf", new IdRef(seed.getUUID()));
-
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }

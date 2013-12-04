@@ -108,20 +108,11 @@ public class LocalAllotmentProvider extends GotsDBHelper implements AllotmentPro
         Cursor cursor = null;
         try {
 
-            if (allotment.getUUID() != null) {
-                int nbRow = bdd.update(DatabaseHelper.ALLOTMENT_TABLE_NAME, values, DatabaseHelper.ALLOTMENT_UUID
-                        + "=\"" + allotment.getUUID() + "\"", null);
+            int nbRow = bdd.update(DatabaseHelper.ALLOTMENT_TABLE_NAME, values, DatabaseHelper.ALLOTMENT_ID + "=\""
+                    + allotment.getId() + "\"", null);
+            cursor = bdd.query(DatabaseHelper.ALLOTMENT_TABLE_NAME, null, DatabaseHelper.ALLOTMENT_ID + "='"
+                    + allotment.getId() + "'", null, null, null, null);
 
-                cursor = bdd.query(DatabaseHelper.ALLOTMENT_TABLE_NAME, null, DatabaseHelper.ALLOTMENT_UUID + "='"
-                        + allotment.getUUID() + "'", null, null, null, null);
-
-            } else {
-                int nbRow = bdd.update(DatabaseHelper.ALLOTMENT_TABLE_NAME, values, DatabaseHelper.ALLOTMENT_ID + "=\""
-                        + allotment.getId() + "\"", null);
-                cursor = bdd.query(DatabaseHelper.ALLOTMENT_TABLE_NAME, null, DatabaseHelper.ALLOTMENT_ID + "='"
-                        + allotment.getId() + "'", null, null, null, null);
-
-            }
             if (cursor.moveToFirst()) {
                 int rowid = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ALLOTMENT_ID));
                 allotment.setId(rowid);
@@ -131,6 +122,20 @@ public class LocalAllotmentProvider extends GotsDBHelper implements AllotmentPro
                 cursor.close();
         }
 
+        return allotment;
+    }
+
+    public BaseAllotmentInterface getAllotmentByUUID(String uuid) {
+        BaseAllotmentInterface allotment = null;
+        Cursor cursor = null;
+        if (uuid != null) {
+
+            cursor = bdd.query(DatabaseHelper.ALLOTMENT_TABLE_NAME, null, DatabaseHelper.ALLOTMENT_UUID + "='" + uuid
+                    + "'", null, null, null, null);
+            if (cursor.moveToFirst()) {
+                allotment = convertToAllotment(cursor);
+            }
+        }
         return allotment;
     }
 

@@ -70,21 +70,22 @@ public class MySeedsListAdapter extends SeedListAdapter {
 
                 @Override
                 public void onClick(View v) {
-                    new AsyncTask<Void, Integer, Void>() {
+                    new AsyncTask<Void, Integer, GrowingSeedInterface>() {
                         @Override
-                        protected Void doInBackground(Void... params) {
+                        protected GrowingSeedInterface doInBackground(Void... params) {
                             GotsGrowingSeedManager provider = GotsGrowingSeedManager.getInstance().initIfNew(mContext);
                             // NuxeoGrowingSeedProvider provider = new NuxeoGrowingSeedProvider(mContext);
                             GrowingSeedInterface growingSeed = (GrowingSeedInterface) currentSeed;
                             growingSeed.setDateSowing(Calendar.getInstance().getTime());
-                            provider.insertSeed(growingSeed, allotment);
-                            return null;
+
+                            return provider.insertSeed(growingSeed, allotment);
                         }
 
                         @Override
-                        protected void onPostExecute(Void result) {
+                        protected void onPostExecute(GrowingSeedInterface seed) {
                             // notifyDataSetChanged();
-                            Toast.makeText(mContext, "Sowing", Toast.LENGTH_LONG).show();
+                            Toast.makeText(mContext, "Sowing" + " " + SeedUtil.translateSpecie(mContext, seed),
+                                    Toast.LENGTH_LONG).show();
                             mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
                             ((Activity) mContext).finish();
                         }

@@ -23,7 +23,7 @@ public class NuxeoAllotmentConverter {
     }
 
     public static Document convert(String parentPath, BaseAllotmentInterface allotment) {
-        Document doc = new Document(parentPath, allotment.getName(), "VendorSeed");
+        Document doc = new Document(parentPath, allotment.getName(), "Allotment");
         doc.set("dc:title", allotment.getName());
         
         return doc;

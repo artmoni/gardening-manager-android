@@ -12,10 +12,6 @@ import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
 import org.nuxeo.ecm.automation.client.cache.CacheBehavior;
 import org.nuxeo.ecm.automation.client.cache.DeferredUpdateManager;
-import org.nuxeo.ecm.automation.client.cache.OperationType;
-import org.nuxeo.ecm.automation.client.jaxrs.AsyncCallback;
-import org.nuxeo.ecm.automation.client.jaxrs.Constants;
-import org.nuxeo.ecm.automation.client.jaxrs.OperationRequest;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
@@ -40,7 +36,7 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
 
     // protected LazyUpdatableDocumentsList documentsList = null;
 
-    protected BaseAllotmentInterface currentAllotment;
+    // protected BaseAllotmentInterface currentAllotment;
 
     public NuxeoAllotmentProvider(Context context) {
         super(context);
@@ -58,12 +54,13 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
     @Override
     public List<BaseAllotmentInterface> getMyAllotments() {
         List<BaseAllotmentInterface> remoteAllotments = new ArrayList<BaseAllotmentInterface>();
-        // List<BaseAllotmentInterface> myAllotments = new ArrayList<BaseAllotmentInterface>();
+        List<BaseAllotmentInterface> myAllotments = new ArrayList<BaseAllotmentInterface>();
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager service = session.getAdapter(DocumentManager.class);
 
             byte cacheParam = CacheBehavior.STORE;
+            // TODO refresh depending on call
             boolean refresh = true;
             if (refresh) {
                 cacheParam = (byte) (cacheParam | CacheBehavior.FORCE_REFRESH);
@@ -90,26 +87,52 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
             }
 
             List<BaseAllotmentInterface> localAllotments = super.getMyAllotments();
-            boolean found;
-            for (BaseAllotmentInterface remoteAllotment : remoteAllotments) {
-                found = false;
-                for (BaseAllotmentInterface localAllotment : localAllotments) {
-
-                    if (remoteAllotment.getUUID().equals(localAllotment.getUUID())) {
-                        found = true;
-                        break;
-                    }
-                }
-                if (found)
-                    remoteAllotment = super.updateAllotment(remoteAllotment);
-                else
-                    remoteAllotment = super.createAllotment(remoteAllotment);
-
-            }
+            myAllotments = synchronize(remoteAllotments, localAllotments);
         } catch (Exception e) {
             Log.e(TAG, "getMyAllotments " + e.getMessage(), e);
         }
-        return remoteAllotments;
+        return myAllotments;
+    }
+
+    protected List<BaseAllotmentInterface> synchronize(List<BaseAllotmentInterface> remoteAllotments,
+            List<BaseAllotmentInterface> localAllotments) {
+        boolean found;
+        List<BaseAllotmentInterface> myAllotments = new ArrayList<BaseAllotmentInterface>();
+
+        for (BaseAllotmentInterface remoteAllotment : remoteAllotments) {
+            found = false;
+            for (BaseAllotmentInterface localAllotment : localAllotments) {
+
+                if (remoteAllotment.getUUID().equals(localAllotment.getUUID())) {
+                    found = true;
+                    break;
+                }
+            }
+            if (found)
+                myAllotments.add(super.getAllotmentByUUID(remoteAllotment.getUUID()));
+            else
+                myAllotments.add(super.createAllotment(remoteAllotment));
+
+        }
+
+        for (BaseAllotmentInterface localAllotment : localAllotments) {
+            found = false;
+            if (localAllotment.getUUID() == null)
+                myAllotments.add(createNuxeoAllotment(localAllotment));
+            else {
+                for (BaseAllotmentInterface remoteAllotment : remoteAllotments) {
+                    if (localAllotment.getUUID().equals(remoteAllotment.getUUID())) {
+                        found = true;
+                        break;
+                    }
+
+                }
+                if (!found)
+                    super.removeAllotment(localAllotment);
+            }
+        }
+
+        return myAllotments;
     }
 
     @Override
@@ -125,45 +148,24 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
 
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);
-        DeferredUpdateManager deferredUpdateMgr = getNuxeoClient().getDeferredUpdatetManager();
 
-        currentAllotment = allotment;
-        DocRef wsRef;
         try {
-            wsRef = service.getUserHome();
             // TODO Change this when garden UUID manage uuid and not path
             Document gardenFolder = service.getDocument(new IdRef(
                     GardenManager.getInstance().getCurrentGarden().getUUID()));
             Document allotmentsFolder = service.getDocument(new PathRef(gardenFolder.getPath() + "/My Allotment"));
-            // Document allotmentDocument = service.createDocument(allotmentsFolder, "Allotment", allotment.getName());
 
             PropertyMap properties = new PropertyMap();
             properties.set("dc:title", allotment.getName());
 
-            OperationRequest createOperation = NuxeoManager.getInstance().getSession().newRequest("Document.Create").setHeader(
-                    Constants.HEADER_NX_SCHEMAS, "*").setInput(allotmentsFolder).set("type", "Allotment").set(
-                    "properties", properties);
-            AsyncCallback<Object> callback = new AsyncCallback<Object>() {
-                @Override
-                public void onSuccess(String executionId, Object data) {
-                    Document doc = (Document) data;
-                    currentAllotment.setUUID(doc.getId());
-                    currentAllotment = NuxeoAllotmentProvider.super.updateAllotment(currentAllotment);
-                    Log.d(TAG, "onSuccess " + data);
-                }
-
-                @Override
-                public void onError(String executionId, Throwable e) {
-                    Log.d(TAG, "onError " + e.getMessage());
-
-                }
-            };
-            deferredUpdateMgr.execDeferredUpdate(createOperation, callback, OperationType.CREATE, true);
-
+            Document newAllotment = service.createDocument(allotmentsFolder, "Allotment", allotment.getName(),
+                    properties);
+            allotment.setUUID(newAllotment.getId());
+            allotment = super.updateAllotment(allotment);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
-        return currentAllotment;
+        return allotment;
     }
 
     @Override

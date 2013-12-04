@@ -83,7 +83,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             myVendorSeeds = synchronize(localVendorSeeds, remoteVendorSeeds);
         } catch (Exception e) {
             Log.e(TAG, "getAllSeeds " + e.getMessage(), e);
-            myVendorSeeds=super.getVendorSeeds(force);
+            myVendorSeeds = super.getVendorSeeds(force);
         }
         return myVendorSeeds;
     }
@@ -134,8 +134,8 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     }
                 }
                 if (!found) { // local only with UUID -> delete local
-                    //TODO take a decision if local seed should be remove if the remote description is removed.
-//                    super.remove(localSeed);
+                    // TODO take a decision if local seed should be remove if the remote description is removed.
+                    // super.remove(localSeed);
                 }
             }
         }
@@ -289,8 +289,8 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             int quantity = 0;
             stockitem = service.getDocument(new PathRef(stockFolder.getPath() + "/" + vendorSeed.getSpecie() + " "
                     + vendorSeed.getVariety()), true);
-//            stockitem = service.getDocument(new PathRef(stockFolder.getPath() + "/" + vendorSeed.getSpecie() + " "
-//                    + vendorSeed.getVariety()), "*");
+            // stockitem = service.getDocument(new PathRef(stockFolder.getPath() + "/" + vendorSeed.getSpecie() + " "
+            // + vendorSeed.getVariety()), "*");
             quantity = Integer.valueOf(stockitem.getString("stockitem:quantity"));
 
             if (quantity > 0) {
@@ -326,10 +326,10 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             Documents stockItems = service.query(
                     "SELECT * FROM StockItem WHERE ecm:currentLifeCycleState != \"deleted\" AND ecm:parentId=\""
                             + stockFolder.getId() + "\"", null, new String[] { "dc:modified DESC" }, "*", 0, 50,
-                            cacheParam);
+                    cacheParam);
 
             for (Iterator<Document> iterator = stockItems.iterator(); iterator.hasNext();) {
-//                Document stockItem = service.getDocument(iterator.next(), "*");
+                // Document stockItem = service.getDocument(iterator.next(), "*");
                 Document stockItem = iterator.next();
                 Documents relations = service.getRelations(stockItem, "http://purl.org/dc/terms/isFormatOf", true);
                 if (relations.size() >= 1) {
@@ -338,7 +338,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     BaseSeedInterface seed = NuxeoSeedConverter.convert(originalSeed);
                     seed.setNbSachet(Integer.valueOf(stockItem.getString("stockitem:quantity")));
 
-                    seed = super.updateSeed(seed);
+                    seed = super.getSeedByUUID(seed.getUUID());
                     if (seed.getNbSachet() > 0) {
                         mySeeds.add(seed);
                         Log.i(TAG, "getMyStock: " + seed.toString());

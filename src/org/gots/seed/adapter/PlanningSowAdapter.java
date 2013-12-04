@@ -31,7 +31,7 @@ public class PlanningSowAdapter extends PlanningAdapter {
 
 		if (mSeed != null) {
 
-			if (position >= mSeed.getDateSowingMin() && position <= mSeed.getDateSowingMax())
+			if (position >= mSeed.getDateSowingMin()-1 && position <= mSeed.getDateSowingMax()-1)
 				monthWidget.setSowingPeriode(true);
 
 			

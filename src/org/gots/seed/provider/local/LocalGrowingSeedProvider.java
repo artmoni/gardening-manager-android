@@ -162,31 +162,15 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
                 DatabaseHelper.GROWINGSEED_ID + "='" + seed.getGrowingSeedId() + "'", null);
     }
 
-    public GrowingSeedInterface updateSeed(GrowingSeedInterface seed, BaseAllotmentInterface allotment) {
+    public GrowingSeedInterface updateGrowingSeed(GrowingSeedInterface seed, BaseAllotmentInterface allotment) {
 
         // Création d'un ContentValues (fonctionne comme une HashMap)
         ContentValues values = seedToValues(seed, allotment);
         Cursor cursor;
 
-        if (seed.getUUID() != null) {
-            int nbRows = bdd.update(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, values, DatabaseHelper.GROWINGSEED_UUID
-                    + "='" + seed.getUUID() + "'", null);
+        int rowid = bdd.update(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, values, DatabaseHelper.GROWINGSEED_ID + "='"
+                + seed.getGrowingSeedId() + "'", null);
 
-            cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, DatabaseHelper.GROWINGSEED_UUID + "='"
-                    + seed.getUUID() + "'", null, null, null, null);
-
-        } else {
-            int rowid = bdd.update(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, values, DatabaseHelper.GROWINGSEED_ID + "='"
-                    + seed.getGrowingSeedId() + "'", null);
-            cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, DatabaseHelper.GROWINGSEED_ID + "='"
-                    + seed.getGrowingSeedId() + "'", null, null, null, null);
-
-        }
-        if (cursor.moveToFirst()) {
-            int seedId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_SEED_ID));
-            seed.setId(seedId);
-        }
-        cursor.close();
         return seed;
     }
 
