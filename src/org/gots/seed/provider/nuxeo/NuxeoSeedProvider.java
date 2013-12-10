@@ -334,12 +334,11 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 Documents relations = service.getRelations(stockItem, "http://purl.org/dc/terms/isFormatOf", true);
                 if (relations.size() >= 1) {
                     Document originalSeed = service.getDocument(relations.get(0), "*");
-                    // TODO get seed from super.getByUUID
-//                    BaseSeedInterface seed = NuxeoSeedConverter.convert(originalSeed);
+                    // BaseSeedInterface seed = NuxeoSeedConverter.convert(originalSeed);
                     BaseSeedInterface seed = super.getSeedByUUID(originalSeed.getId());
                     seed.setNbSachet(Integer.valueOf(stockItem.getString("stockitem:quantity")));
 
-//                    seed = super.getSeedByUUID(seed.getUUID());
+                    // seed = super.getSeedByUUID(seed.getUUID());
                     if (seed.getNbSachet() > 0) {
                         mySeeds.add(seed);
                         Log.i(TAG, "getMyStock: " + seed.toString());

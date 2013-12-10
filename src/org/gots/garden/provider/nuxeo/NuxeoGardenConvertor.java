@@ -40,7 +40,8 @@ public class NuxeoGardenConvertor {
             garden.setLocality(gardenWorkspace.getTitle());
         garden.setCountryName(gardenWorkspace.getString("garden:country"));
         garden.setAdminArea(gardenWorkspace.getString("garden:region"));
-        garden.setName(garden.getLocality() + " (" + gardenWorkspace.getString("dc:creator") + ")");
+        garden.setName(garden.getLocality());
+//        garden.setName(garden.getLocality() + " (" + gardenWorkspace.getString("dc:creator") + ")");
         return garden;
     }
 
