@@ -110,7 +110,10 @@ public class GoogleAuthentication {
 
         final String SCOPE_PREFIX = "oauth2:";
         final String SCOPES = SCOPE_PREFIX + Scopes.PLUS_LOGIN + " " + Scopes.PLUS_PROFILE + " "
-                + "https://www.googleapis.com/auth/userinfo.email";
+                + "https://www.googleapis.com/auth/userinfo.email"
+        // + " "
+        // + "https://www.googleapis.com/auth/userinfo.profile"
+                ;
 
         token = GoogleAuthUtil.getToken(mContext, accountName, SCOPES);
         Log.d(TAG, "GoogleAuthUtil.getToken=" + token);
@@ -160,7 +163,7 @@ public class GoogleAuthentication {
     /*
      * {
      * "kind": "plus#peopleFeed",
-     * "etag": "\"LTv_6IJISeUQGTVXLjMeOtebkoM/TpYBX4SHaUdpT1vFSGaWTPuziFk\"",
+     * "etag": "\"LTv_6IJISeUQGTVsLjMeOtebkoM/TpYBX4SHaUdpT1vFSGaWTPuziFk\"",
      * "title": "Google+ List of Visible People",
      * "nextPageToken": "CGQQ_rSOpJoo",
      * "totalItems": 166,
@@ -169,22 +172,22 @@ public class GoogleAuthentication {
      * "kind": "plus#person",
      * "etag": "\"LTv_6IJISeUQGTVXLjMeOtebkoM/yQDt23lqidObGrf1Slt734cfonM\"",
      * "objectType": "person",
-     * "id": "103452520282063622981",
-     * "displayName": "Abdelwaheb Didi",
-     * "url": "https://profiles.google.com/103452520282063622981",
+     * "id": "103452520282033622981",
+     * "displayName": "John Doe",
+     * "url": "https://profiles.google.com/103452520282063622980",
      * "image": {
-     * "url": "https://lh4.googleusercontent.com/-eBavB406LE0/AAAAAAAAAAI/AAAAAAAAAAA/luk3KYRL5Go/photo.jpg?sz=50"
+     * "url": "https://lh4.googleusercontent.com/-eBavB406LEE/AAAAAAAAAAI/AAAAAAAAAAA/luk3KYRL5Go/photo.jpg?sz=50"
      * }
      * },
      * {
      * "kind": "plus#person",
      * "etag": "\"LTv_6IJISeUQGTVXLjMeOtebkoM/GOPHYmZ5bYn78QroJ7fmYkE76I0\"",
      * "objectType": "person",
-     * "id": "101208666708520907297",
-     * "displayName": "Adrien Lalanne-Cassou",
-     * "url": "https://plus.google.com/101208666708520907297",
+     * "id": "101208666704520907297",
+     * "displayName": "Chist elle",
+     * "url": "https://plus.google.com/101208666708520407297",
      * "image": {
-     * "url": "https://lh6.googleusercontent.com/-YPwvQKYzLhc/AAAAAAAAAAI/AAAAAAAAAAA/b1qXz9LNFYQ/photo.jpg?sz=50"
+     * "url": "https://lh6.googleusercontent.com/-YPwvQdYzLhc/AAAAAAAAAAI/AAAAAAAAAAA/b1qXz9LNFYQ/photo.jpg?sz=50"
      * }
      * }
      * }
@@ -228,7 +231,7 @@ public class GoogleAuthentication {
                 Log.e(TAG, "Server auth error: ");
                 // unknown error, do something else
             } else {
-                Log.e("Server returned the following error code: " + serverCode, null);
+                Log.e(TAG, "Server returned the following error code: " + serverCode);
             }
         } catch (MalformedURLException e1) {
             Log.e(TAG, e1.getMessage(), e1);

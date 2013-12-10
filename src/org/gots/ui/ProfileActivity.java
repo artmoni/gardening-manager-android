@@ -10,13 +10,16 @@
  ******************************************************************************/
 package org.gots.ui;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
+import org.gots.authentication.GoogleAuthentication;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.adapter.ProfileAdapter;
+import org.gots.preferences.GotsPreferences;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -35,6 +38,8 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.UserRecoverableAuthException;
 
 public class ProfileActivity extends AbstractActivity {
 
@@ -103,6 +108,21 @@ public class ProfileActivity extends AbstractActivity {
 
         @Override
         protected List<GardenInterface> doInBackground(Context... params) {
+//
+//            try {
+//                GoogleAuthentication authentication = new GoogleAuthentication(ProfileActivity.this);
+//                String token = authentication.getToken(GotsPreferences.getInstance().initIfNew(ProfileActivity.this).getNuxeoLogin());
+//                authentication.getUserFriends(token, authentication.getUserID(token));
+//            } catch (UserRecoverableAuthException e1) {
+//                // TODO Auto-generated catch block
+//                e1.printStackTrace();
+//            } catch (IOException e1) {
+//                // TODO Auto-generated catch block
+//                e1.printStackTrace();
+//            } catch (GoogleAuthException e1) {
+//                // TODO Auto-generated catch block
+//                e1.printStackTrace();
+//            }
             return gardenManager.getMyGardens(force_refresh);
         }
 
@@ -144,11 +164,11 @@ public class ProfileActivity extends AbstractActivity {
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
-//        if (gardenManager.getCurrentGarden() == null || gardenManager.getCurrentGarden() != null
-//                && gardenManager.getCurrentGarden().getId() == -1) {
-//            findViewById(R.id.idSelectGarden).setVisibility(View.VISIBLE);
-//        } else
-//            findViewById(R.id.idSelectGarden).setVisibility(View.GONE);
+        // if (gardenManager.getCurrentGarden() == null || gardenManager.getCurrentGarden() != null
+        // && gardenManager.getCurrentGarden().getId() == -1) {
+        // findViewById(R.id.idSelectGarden).setVisibility(View.VISIBLE);
+        // } else
+        // findViewById(R.id.idSelectGarden).setVisibility(View.GONE);
 
         // buildGardenList();
         // weatherState.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_weather));
