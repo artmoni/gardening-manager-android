@@ -419,7 +419,7 @@ public class LoginActivity extends AbstractActivity {
                         }
 
                     }).show();
-        else if (usableAccounts.get(0) != null) {
+        else if (usableAccounts.size() == 1 && usableAccounts.get(0) != null) {
             selectedAccount = usableAccounts.get(0);
             requestOAuth2Token(usableAccounts.get(0));
         }
