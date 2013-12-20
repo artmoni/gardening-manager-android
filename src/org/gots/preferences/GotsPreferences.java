@@ -211,6 +211,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     public boolean isPremium() {
         return unlockPremium();
+//        return true;
     }
 
     public static String getAnalyticsApiKey() {
