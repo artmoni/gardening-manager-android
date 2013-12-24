@@ -29,6 +29,7 @@ import org.gots.action.bean.ScheduleAction;
 import org.gots.action.bean.WateringAction;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.view.ActionWidget;
+import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.ui.NewActionActivity;
 import org.gots.ui.TabSeedActivity;
@@ -38,9 +39,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.BaseAdapter;
+import android.widget.Toast;
 
 public class QuickSeedActionBuilder {
 
@@ -48,15 +51,32 @@ public class QuickSeedActionBuilder {
 
     private View parentView;
 
-
     private Context mContext;
+
+    private GrowingSeedInterface seed;
+
+    private class ActionTask extends AsyncTask<SeedActionInterface, Integer, Void> {
+        @Override
+        protected Void doInBackground(SeedActionInterface... params) {
+            SeedActionInterface actionItem = params[0];
+            actionItem.execute(seed);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            Toast.makeText(mContext, "action done", Toast.LENGTH_SHORT).show();
+            quickAction.dismiss();
+            super.onPostExecute(result);
+        }
+    }
 
     public QuickSeedActionBuilder(Context context, final SeedWidget v) {
         parentView = v;
         mContext = context;
-        final GrowingSeedInterface seed = (GrowingSeedInterface) v.getTag();
+        seed = (GrowingSeedInterface) v.getTag();
 
-        GotsActionSeedProvider helperActions =  GotsActionSeedManager.getInstance().initIfNew(mContext);
+        GotsActionSeedProvider helperActions = GotsActionSeedManager.getInstance().initIfNew(mContext);
         ArrayList<BaseActionInterface> actions = helperActions.getActionsToDoBySeed(seed);
 
         quickAction = new QuickAction(mContext, QuickAction.HORIZONTAL);
@@ -77,10 +97,8 @@ public class QuickSeedActionBuilder {
 
                 @Override
                 public void onClick(View v) {
-                    SeedActionInterface actionItem = currentAction;
-                    actionItem.execute(seed);
-//                    parentAdapter.notifyDataSetChanged();
-                    quickAction.dismiss();
+                    new ActionTask().execute(currentAction);
+
                 }
             });
 
@@ -114,10 +132,12 @@ public class QuickSeedActionBuilder {
 
             @Override
             public void onClick(View v) {
-                SeedActionInterface actionItem = wateringAction;
-                actionItem.execute(seed);
-//                parentAdapter.notifyDataSetChanged();
-                quickAction.dismiss();
+                new ActionTask().execute(wateringAction);
+
+                // SeedActionInterface actionItem = wateringAction;
+                // actionItem.execute(seed);
+                // // parentAdapter.notifyDataSetChanged();
+                // quickAction.dismiss();
 
             }
         });
@@ -136,10 +156,11 @@ public class QuickSeedActionBuilder {
                 builder.setMessage(mContext.getResources().getString(R.string.action_delete_seed)).setCancelable(false).setPositiveButton(
                         "OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                SeedActionInterface actionItem = deleteAction;
-                                actionItem.execute(seed);
-//                                parentAdapter.notifyDataSetChanged();
-                                quickAction.dismiss();
+                                new ActionTask().execute(deleteAction);
+                                // SeedActionInterface actionItem = deleteAction;
+                                // actionItem.execute(seed);
+                                // // parentAdapter.notifyDataSetChanged();
+                                // quickAction.dismiss();
                                 dialog.dismiss();
                             }
                         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -179,7 +200,7 @@ public class QuickSeedActionBuilder {
                     actionItem.execute(seed);
 
                 }
-//                parentAdapter.notifyDataSetChanged();
+                // parentAdapter.notifyDataSetChanged();
                 quickAction.dismiss();
             }
         });
@@ -205,7 +226,7 @@ public class QuickSeedActionBuilder {
                 } else {
                     actionItem.execute(seed);
                 }
-//                parentAdapter.notifyDataSetChanged();
+                // parentAdapter.notifyDataSetChanged();
                 quickAction.dismiss();
             }
         });

@@ -15,6 +15,7 @@ import org.gots.seed.view.SeedWidgetLong;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -47,16 +48,28 @@ public class NewActionActivity extends AbstractActivity implements OnItemClickLi
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.inputaction);
 
-
-        GotsActionManager helper = GotsActionManager.getInstance().initIfNew(this);
-        List<BaseActionInterface> actions = helper.getActions();
-
-        listActions = (GridView) findViewById(R.id.idListAction);
-        listActions.setAdapter(new SimpleListActionAdapter(actions));
+        new AsyncTask<String, Void, List<BaseActionInterface>>() {
+            private GotsActionManager helper;
+            protected void onPreExecute() {
+                
+                helper = GotsActionManager.getInstance().initIfNew(NewActionActivity.this);
+            };
+            @Override
+            protected List<BaseActionInterface> doInBackground(String... params) {
+                List<BaseActionInterface> actions = helper.getActions();
+                
+                return actions;
+            }
+            protected void onPostExecute(List<BaseActionInterface> actions) {
+                
+                listActions = (GridView) findViewById(R.id.idListAction);
+                listActions.setAdapter(new SimpleListActionAdapter(actions));
+                listActions.setOnItemClickListener(NewActionActivity.this);
+            };
+        }.execute();
 
         // listActions.setNumColumns(listActions.getCount());
 
-        listActions.setOnItemClickListener(this);
         // listActions.invalidate();
 
         spinner = (Spinner) findViewById(R.id.spinnerDuration);

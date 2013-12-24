@@ -74,8 +74,12 @@ public class GotsActionManager implements GotsActionProvider {
     }
 
     @Override
-    public long insertAction(BaseActionInterface action) {
-        return provider.insertAction(action);
+    public BaseActionInterface createAction(BaseActionInterface action) {
+        return provider.createAction(action);
     }
 
+    @Override
+    public BaseActionInterface updateAction(BaseActionInterface action) {
+        return provider.updateAction(action);
+    }
 }
