@@ -1,17 +1,13 @@
 package org.gots.action.provider.nuxeo;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import org.gots.action.BaseActionInterface;
 import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.nuxeo.android.repository.DocumentManager;
-import org.nuxeo.ecm.automation.client.cache.DeferredUpdateManager;
-import org.nuxeo.ecm.automation.client.cache.OperationType;
-import org.nuxeo.ecm.automation.client.jaxrs.AsyncCallback;
-import org.nuxeo.ecm.automation.client.jaxrs.Constants;
-import org.nuxeo.ecm.automation.client.jaxrs.OperationRequest;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
@@ -86,9 +82,10 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         try {
             // Document root = documentMgr.getUserHome();
 
-            // PropertyMap properties = new PropertyMap();
-            // properties.set("dc:title", action.getName());
-            documentMgr.copy(new DocRef(action.getUUID()), new DocRef(seed.getUUID()));
+            PropertyMap properties = new PropertyMap();
+            properties.set("dc:title", Calendar.getInstance().getTime());
+            Document newDoc = documentMgr.copy(new DocRef(action.getUUID()), new DocRef(seed.getUUID()));
+            documentMgr.update(newDoc, properties);
 
             // Document docAction = documentMgr.getDocument(action.getUUID());
             // if (docAction != null) {
@@ -101,4 +98,6 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         }
         return super.doAction(action, seed);
     }
+    
+    
 }
