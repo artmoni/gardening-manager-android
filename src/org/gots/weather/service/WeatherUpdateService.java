@@ -4,7 +4,7 @@ import java.util.Calendar;
 
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.weather.WeatherConditionInterface;
-import org.gots.weather.provider.local.WeatherDBHelper;
+import org.gots.weather.provider.local.LocalWeatherProvider;
 import org.gots.weather.provider.previmeteo.PrevimeteoWeatherProvider;
 import org.gots.weather.provider.previmeteo.WeatherProvider;
 
@@ -130,7 +130,7 @@ public class WeatherUpdateService extends Service {
     }
 
     private void updateCondition(WeatherConditionInterface condition, int day) {
-        WeatherDBHelper helper = new WeatherDBHelper(this);
+        LocalWeatherProvider helper = new LocalWeatherProvider(this);
 
         Calendar conditionDate = Calendar.getInstance();
         conditionDate.add(Calendar.DAY_OF_YEAR, day);

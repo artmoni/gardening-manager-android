@@ -21,13 +21,13 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-public class WeatherDBHelper extends GotsDBHelper {
+public class LocalWeatherProvider extends GotsDBHelper {
 
-    public WeatherDBHelper(Context mContext) {
+    public LocalWeatherProvider(Context mContext) {
         super(mContext);
     }
 
-    public synchronized WeatherConditionInterface insertWeather(WeatherConditionInterface weatherCondition) {
+    public WeatherConditionInterface insertWeather(WeatherConditionInterface weatherCondition) {
         long rowid;
         ContentValues values = getWeatherContentValues(weatherCondition);
 
@@ -37,13 +37,12 @@ public class WeatherDBHelper extends GotsDBHelper {
         return weatherCondition;
     }
 
-    public synchronized WeatherConditionInterface updateWeather(WeatherConditionInterface weatherCondition) {
+    public WeatherConditionInterface updateWeather(WeatherConditionInterface weatherCondition) {
         long rowid;
         ContentValues values = getWeatherContentValues(weatherCondition);
 
         rowid = bdd.update(DatabaseHelper.WEATHER_TABLE_NAME, values, DatabaseHelper.WEATHER_DAYOFYEAR + "="
                 + weatherCondition.getDayofYear(), null);
-
         return weatherCondition;
     }
 
@@ -64,6 +63,7 @@ public class WeatherDBHelper extends GotsDBHelper {
 
     private WeatherConditionInterface cursorToWeather(Cursor cursor) {
         WeatherConditionInterface condition = new WeatherCondition();
+        condition.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.WEATHER_ID)));
         condition.setCondition(cursor.getString(cursor.getColumnIndex(DatabaseHelper.WEATHER_CONDITION)));
         condition.setWindCondition(cursor.getString(cursor.getColumnIndex(DatabaseHelper.WEATHER_WINDCONDITION)));
         condition.setDayofYear(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.WEATHER_DAYOFYEAR)));
@@ -76,21 +76,19 @@ public class WeatherDBHelper extends GotsDBHelper {
         return condition;
     }
 
-    public synchronized WeatherConditionInterface getWeatherByDayofyear(int dayofyear) {
+    public WeatherConditionInterface getWeatherByDayofyear(int dayofyear) {
         WeatherConditionInterface weatherCondition = null;
         Cursor cursor = null;
-        // open();
         try {
             cursor = bdd.query(DatabaseHelper.WEATHER_TABLE_NAME, null, DatabaseHelper.WEATHER_DAYOFYEAR + "="
                     + dayofyear, null, null, null, null);
 
-            if (cursor.moveToFirst()) {
+            if (cursor.getCount() > 0 && cursor.moveToFirst()) {
                 weatherCondition = cursorToWeather(cursor);
             }
         } finally {
             if (cursor != null)
                 cursor.close();
-            // close();
         }
         return weatherCondition;
     }

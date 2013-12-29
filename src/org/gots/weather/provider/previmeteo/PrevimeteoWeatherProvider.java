@@ -25,7 +25,7 @@ import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.WeatherSet;
 import org.gots.weather.provider.WeatherCache;
-import org.gots.weather.provider.local.WeatherDBHelper;
+import org.gots.weather.provider.local.LocalWeatherProvider;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
@@ -33,7 +33,7 @@ import android.content.Context;
 import android.text.format.DateFormat;
 import android.util.Log;
 
-public class PrevimeteoWeatherProvider extends WeatherDBHelper implements WeatherProvider {
+public class PrevimeteoWeatherProvider extends LocalWeatherProvider implements WeatherProvider {
     private static final String TAG = "PrevimeteoWeatherProvider";
 
     protected URL url;
@@ -134,25 +134,28 @@ public class PrevimeteoWeatherProvider extends WeatherDBHelper implements Weathe
         else if (requestCalendar.get(Calendar.DAY_OF_YEAR) > Calendar.getInstance().get(Calendar.DAY_OF_YEAR))
             conditionInterface = ws.getWeatherForecastConditions().get(
                     requestCalendar.get(Calendar.DAY_OF_YEAR) - Calendar.getInstance().get(Calendar.DAY_OF_YEAR));
+        else
+            conditionInterface = super.getWeatherByDayofyear(requestCalendar.get(Calendar.DAY_OF_YEAR));
+
         return updateCondition(conditionInterface, requestedDay);
 
     }
 
     @Override
-    public WeatherConditionInterface updateCondition(WeatherConditionInterface condition, Date day) {
+    public WeatherConditionInterface updateCondition(WeatherConditionInterface weatherCondition, Date day) {
         WeatherConditionInterface conditionInterface = null;
         Calendar conditionDate = Calendar.getInstance();
+        conditionDate.setTime(day);
         // conditionDate.add(Calendar.DAY_OF_YEAR, day);
 
-        condition.setDate(day);
-        condition.setDayofYear(conditionDate.get(Calendar.DAY_OF_YEAR));
+        weatherCondition.setDate(day);
+        weatherCondition.setDayofYear(conditionDate.get(Calendar.DAY_OF_YEAR));
 
-        WeatherConditionInterface wc = super.getWeatherByDayofyear(conditionDate.get(Calendar.DAY_OF_YEAR));
 
-        if (wc == null)
-            conditionInterface = super.insertWeather(condition);
+        if (weatherCondition == null || weatherCondition.getCondition() == null)
+            conditionInterface = super.insertWeather(weatherCondition);
         else
-            conditionInterface = super.updateWeather(condition);
+            conditionInterface = super.updateWeather(weatherCondition);
         return conditionInterface;
     }
 }
