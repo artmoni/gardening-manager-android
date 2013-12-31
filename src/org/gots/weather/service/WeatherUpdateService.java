@@ -34,7 +34,6 @@ public class WeatherUpdateService extends Service {
     public void onCreate() {
         super.onCreate();
         intent = new Intent(BroadCastMessages.WEATHER_DISPLAY_EVENT);
-
     }
 
     @Override
@@ -96,8 +95,8 @@ public class WeatherUpdateService extends Service {
 
                     @Override
                     protected void onPostExecute(WeatherConditionInterface weatherCondition) {
-                        if (weatherCondition == null)
-                            isWeatherError = true;
+//                        if (weatherCondition == null)
+//                            isWeatherError = true;
                         handler.removeCallbacks(sendUpdatesToUI);
                         handler.postDelayed(sendUpdatesToUI, 0); // 1 second=1000
                         super.onPostExecute(weatherCondition);

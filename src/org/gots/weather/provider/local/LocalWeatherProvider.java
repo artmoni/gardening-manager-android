@@ -13,6 +13,7 @@ package org.gots.weather.provider.local;
 import java.util.Date;
 
 import org.gots.DatabaseHelper;
+import org.gots.garden.provider.local.GardenSQLite;
 import org.gots.utils.GotsDBHelper;
 import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
@@ -43,6 +44,14 @@ public class LocalWeatherProvider extends GotsDBHelper {
 
         rowid = bdd.update(DatabaseHelper.WEATHER_TABLE_NAME, values, DatabaseHelper.WEATHER_DAYOFYEAR + "="
                 + weatherCondition.getDayofYear(), null);
+
+        Cursor cursor = bdd.query(DatabaseHelper.WEATHER_TABLE_NAME, null, DatabaseHelper.WEATHER_DAYOFYEAR + "='"
+                + weatherCondition.getDayofYear() + "'", null, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            int weatherid = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.WEATHER_ID));
+            weatherCondition.setId(weatherid);
+        }
         return weatherCondition;
     }
 
@@ -83,7 +92,7 @@ public class LocalWeatherProvider extends GotsDBHelper {
             cursor = bdd.query(DatabaseHelper.WEATHER_TABLE_NAME, null, DatabaseHelper.WEATHER_DAYOFYEAR + "="
                     + dayofyear, null, null, null, null);
 
-            if (cursor.getCount() > 0 && cursor.moveToFirst()) {
+            if (cursor.moveToFirst()) {
                 weatherCondition = cursorToWeather(cursor);
             }
         } finally {
