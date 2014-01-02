@@ -66,7 +66,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 refresh = false;
             }
             Documents docs = service.query("SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState != \"deleted\"",
-                    null, new String[] { "dc:modified DESC" }, "*", 0, 50, cacheParam);
+                    null, new String[] { "dc:modified DESC" }, "*", 0, 100, cacheParam);
 
             for (Iterator<Document> iterator = docs.iterator(); iterator.hasNext();) {
                 Document document = iterator.next();
