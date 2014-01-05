@@ -75,34 +75,40 @@ public class QuickSeedActionBuilder {
         parentView = v;
         mContext = context;
         seed = (GrowingSeedInterface) v.getTag();
-
-        GotsActionSeedProvider helperActions = GotsActionSeedManager.getInstance().initIfNew(mContext);
-        ArrayList<BaseActionInterface> actions = helperActions.getActionsToDoBySeed(seed);
-
         quickAction = new QuickAction(mContext, QuickAction.HORIZONTAL);
 
-        for (Iterator<BaseActionInterface> iterator = actions.iterator(); iterator.hasNext();) {
-            BaseActionInterface baseActionInterface = iterator.next();
-            if (!SeedActionInterface.class.isInstance(baseActionInterface))
-                continue;
-            final SeedActionInterface currentAction = (SeedActionInterface) baseActionInterface;
+        new AsyncTask<Void, Void, Void>() {
 
-            ActionWidget actionWidget = new ActionWidget(mContext, currentAction);
+            @Override
+            protected Void doInBackground(Void... params) {
+                GotsActionSeedProvider helperActions = GotsActionSeedManager.getInstance().initIfNew(mContext);
+                ArrayList<BaseActionInterface> actions = helperActions.getActionsToDoBySeed(seed);
 
-            if (currentAction == null)
-                continue;
+                for (Iterator<BaseActionInterface> iterator = actions.iterator(); iterator.hasNext();) {
+                    BaseActionInterface baseActionInterface = iterator.next();
+                    if (!SeedActionInterface.class.isInstance(baseActionInterface))
+                        continue;
+                    final SeedActionInterface currentAction = (SeedActionInterface) baseActionInterface;
 
-            quickAction.addActionItem(actionWidget);
-            actionWidget.setOnClickListener(new View.OnClickListener() {
+                    ActionWidget actionWidget = new ActionWidget(mContext, currentAction);
 
-                @Override
-                public void onClick(View v) {
-                    new ActionTask().execute(currentAction);
+                    if (currentAction == null)
+                        continue;
+
+                    quickAction.addActionItem(actionWidget);
+                    actionWidget.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            new ActionTask().execute(currentAction);
+
+                        }
+                    });
 
                 }
-            });
-
-        }
+                return null;
+            }
+        }.execute();
 
         ScheduleAction planAction = new ScheduleAction(mContext);
         ActionWidget actionWidget = new ActionWidget(mContext, planAction);

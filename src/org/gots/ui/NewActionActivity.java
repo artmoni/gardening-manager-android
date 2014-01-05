@@ -6,6 +6,7 @@ import java.util.List;
 import org.gots.R;
 import org.gots.action.BaseActionInterface;
 import org.gots.action.GotsActionManager;
+import org.gots.action.GotsActionSeedManager;
 import org.gots.action.adapter.SimpleListActionAdapter;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.provider.local.LocalActionSeedProvider;
@@ -50,18 +51,21 @@ public class NewActionActivity extends AbstractActivity implements OnItemClickLi
 
         new AsyncTask<String, Void, List<BaseActionInterface>>() {
             private GotsActionManager helper;
+
             protected void onPreExecute() {
-                
+
                 helper = GotsActionManager.getInstance().initIfNew(NewActionActivity.this);
             };
+
             @Override
             protected List<BaseActionInterface> doInBackground(String... params) {
                 List<BaseActionInterface> actions = helper.getActions();
-                
+
                 return actions;
             }
+
             protected void onPostExecute(List<BaseActionInterface> actions) {
-                
+
                 listActions = (GridView) findViewById(R.id.idListAction);
                 listActions.setAdapter(new SimpleListActionAdapter(actions));
                 listActions.setOnItemClickListener(NewActionActivity.this);
@@ -149,12 +153,25 @@ public class NewActionActivity extends AbstractActivity implements OnItemClickLi
         } else {
             selectedAction.setDuration(duration);
 
-            GotsActionSeedProvider actionHelper = new LocalActionSeedProvider(this);
-            actionHelper.insertAction(selectedAction, mySeed);
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    GotsActionSeedProvider actionHelper = GotsActionSeedManager.getInstance().initIfNew(
+                            getApplicationContext());
+                    actionHelper.insertAction(selectedAction, mySeed);
+                    return null;
+                }
 
-            GoogleAnalyticsTracker.getInstance().trackEvent(getClass().getSimpleName(), "NewAction",
-                    selectedAction.getName(), 0);
-            finish();
+                @Override
+                protected void onPostExecute(Void result) {
+                    NewActionActivity.this.finish();
+                    GoogleAnalyticsTracker.getInstance().trackEvent(getClass().getSimpleName(), "NewAction",
+                            selectedAction.getName(), 0);
+                    super.onPostExecute(result);
+                }
+            }.execute();
+
+           
         }
     }
 
