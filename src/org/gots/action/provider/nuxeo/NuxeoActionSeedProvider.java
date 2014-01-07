@@ -9,6 +9,7 @@ import org.gots.action.BaseActionInterface;
 import org.gots.action.bean.DeleteAction;
 import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.nuxeo.NuxeoManager;
+import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.cache.CacheBehavior;
@@ -92,10 +93,11 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             PropertyMap properties = new PropertyMap();
             properties.set("action:dateactiondone", Calendar.getInstance().getTime());
             properties.set("action:description", action.getDescription());
-            properties.set("action:data", action.getData().toString());
+            if (action.getData() != null)
+                properties.set("action:data", action.getData().toString());
 
-            Document newDoc = documentMgr.copy(new DocRef(action.getUUID()), getActionsFolder(seed, documentMgr));
-            documentMgr.update(newDoc, properties);
+//            Document newDoc = documentMgr.copy(new DocRef(action.getUUID()), getActionsFolder(seed, documentMgr));
+            documentMgr.update(new DocRef(action.getUUID()), properties);
 
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
@@ -109,16 +111,19 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
         ArrayList<BaseActionInterface> actionsToDo = new ArrayList<BaseActionInterface>();
         try {
-             for (Document actionDoc : documentMgr.getChildren(getActionsFolder(seed, documentMgr))) {
-//            Documents stockItems = documentMgr.query(
-//                    "SELECT * FROM Document WHERE ecm:currentLifeCycleState != \"deleted\" AND ecm:parentId=\""
-//                            + getActionsFolder(seed, documentMgr).getId() + "\"", null,
-//                    new String[] { "dc:modified DESC" }, "*", 0, 50, CacheBehavior.FORCE_REFRESH);
-//            for (Document actionDoc : stockItems) {
+            // for (Document actionDoc : documentMgr.getChildren(getActionsFolder(seed, documentMgr))) {
+            Documents actionDocs = documentMgr.query(
+                    "SELECT * FROM Action WHERE ecm:currentLifeCycleState != \"deleted\" AND ecm:parentId=\""
+                            + getActionsFolder(seed, documentMgr).getId() + "\"", null,
+                    new String[] { "dc:modified DESC" }, "*", 0, 50, CacheBehavior.FORCE_REFRESH);
 
+            for (Document actionDoc : actionDocs) {
                 BaseActionInterface action = convert(actionDoc);
-                if (action.getDateActionDone() == null)
+                if (action.getDateActionDone() == null){
+                    super.populateState(action, seed);
+                    action.setGrowingSeedId(seed.getGrowingSeedId());
                     actionsToDo.add(action);
+                }
             }
 
         } catch (Exception e) {
@@ -133,10 +138,19 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
         ArrayList<BaseActionInterface> actionsDone = new ArrayList<BaseActionInterface>();
         try {
-            for (Document actionDoc : documentMgr.getChildren(getActionsFolder(seed, documentMgr))) {
+            Documents actionDocs = documentMgr.query(
+                    "SELECT * FROM Action WHERE ecm:currentLifeCycleState != \"deleted\" AND ecm:parentId=\""
+                            + getActionsFolder(seed, documentMgr).getId() + "\"", null,
+                    new String[] { "dc:modified DESC" }, "*", 0, 50, CacheBehavior.FORCE_REFRESH);
+
+            for (Document actionDoc : actionDocs) {
                 BaseActionInterface action = convert(actionDoc);
-                if (action.getDateActionDone() != null)
+                
+                if (action.getDateActionDone() != null){
+                    super.populateState(action, seed);
+                    action.setGrowingSeedId(seed.getGrowingSeedId());
                     actionsDone.add(action);
+                }
             }
 
         } catch (Exception e) {
@@ -150,9 +164,11 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         action.setDateActionDone(actionDoc.getDate("action:dateactiondone"));
         action.setDescription(actionDoc.getString("action:description"));
         action.setData(actionDoc.getString("action:data"));
+        action.setUUID(actionDoc.getId());
 
         if (actionDoc.getString("action:duration") != null)
             action.setDuration(Integer.parseInt(actionDoc.getString("action:duration")));
+        
         return action;
     }
 }

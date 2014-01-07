@@ -141,14 +141,15 @@ public abstract class BaseSeed implements Serializable, BaseSeedInterface {
     @Override
     public String toString() {
         String seed = new String();
-        seed = "#" + getSeedId() + "--------- " + getFamily() + " " + getSpecie() + " " + getVariety()
-                + " ------------";
-        seed += "\n-- UUID:\t" + getUUID();
-
-        seed += "\n-- Date Arrosage:\t" + getDateLastWatering();
-        seed += "\n-- Délais récolte:\t" + getDurationMin() + "/" + getDurationMax();
-        seed += "\n-- Nb Sachets:\t" + getNbSachet();
-        seed += "\n";
+        seed = seed.concat("[" + getSeedId() + "] " + getFamily() + " " + getSpecie() + " " + getVariety());
+        seed = seed.concat("-- UUID:\t" + getUUID());
+        seed = seed.concat("\n");
+        seed = seed.concat("-- Date Arrosage:\t" + getDateLastWatering());
+        seed = seed.concat("\n");
+        seed = seed.concat("-- Délais récolte:\t" + getDurationMin() + "/" + getDurationMax());
+        seed = seed.concat("\n");
+        seed = seed.concat("-- Nb Sachets:\t" + getNbSachet());
+        seed = seed.concat("\n");
         return seed;
     }
 

@@ -77,15 +77,17 @@ public class QuickSeedActionBuilder {
         seed = (GrowingSeedInterface) v.getTag();
         quickAction = new QuickAction(mContext, QuickAction.HORIZONTAL);
 
-        new AsyncTask<Void, Void, Void>() {
+        new AsyncTask<Void, Void, ArrayList<BaseActionInterface>>() {
 
             @Override
-            protected Void doInBackground(Void... params) {
+            protected ArrayList<BaseActionInterface> doInBackground(Void... params) {
                 GotsActionSeedProvider helperActions = GotsActionSeedManager.getInstance().initIfNew(mContext);
-                ArrayList<BaseActionInterface> actions = helperActions.getActionsToDoBySeed(seed);
 
-                for (Iterator<BaseActionInterface> iterator = actions.iterator(); iterator.hasNext();) {
-                    BaseActionInterface baseActionInterface = iterator.next();
+                return helperActions.getActionsToDoBySeed(seed);
+            }
+
+            protected void onPostExecute(ArrayList<BaseActionInterface> actions) {
+                for (BaseActionInterface baseActionInterface : actions) {
                     if (!SeedActionInterface.class.isInstance(baseActionInterface))
                         continue;
                     final SeedActionInterface currentAction = (SeedActionInterface) baseActionInterface;
@@ -106,8 +108,7 @@ public class QuickSeedActionBuilder {
                     });
 
                 }
-                return null;
-            }
+            };
         }.execute();
 
         ScheduleAction planAction = new ScheduleAction(mContext);

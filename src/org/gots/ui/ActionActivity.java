@@ -15,10 +15,12 @@ import java.util.ArrayList;
 import org.gots.R;
 import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.ads.GotsAdvertisement;
+import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,9 +32,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
-public class ActionActivity extends AbstractActivity implements OnClickListener {
-
-    private ListAllActionAdapter listActions;
+public class ActionActivity extends AbstractActivity {
 
     ListView listAllotments;
 
@@ -49,20 +49,40 @@ public class ActionActivity extends AbstractActivity implements OnClickListener 
         setContentView(R.layout.actions);
         int seedid = 0;
 
-        GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(this);
-
         if (getIntent().getExtras() != null)
             seedid = getIntent().getExtras().getInt("org.gots.seed.id");
 
-        if (seedid > 0) {
-            allSeeds.add(growingSeedManager.getGrowingSeedById(seedid));
-        } else
-            allSeeds = growingSeedManager.getGrowingSeeds();
-        listActions = new ListAllActionAdapter(this, allSeeds, ListAllActionAdapter.STATUS_TODO);
-        listAllotments = (ListView) findViewById(R.id.IdGardenActionsList);
-        listAllotments.setAdapter(listActions);
-        listAllotments.setDivider(null);
-        listAllotments.setDividerHeight(0);
+        new AsyncTask<Integer, Void, ArrayList<GrowingSeedInterface>>() {
+            private ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
+
+            private ListAllActionAdapter listActions;
+
+            @Override
+            protected ArrayList<GrowingSeedInterface> doInBackground(Integer... params) {
+                GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(
+                        getApplicationContext());
+
+                int seedid = params[0].intValue();
+                if (seedid > 0) {
+                    allSeeds.add(growingSeedManager.getGrowingSeedById(seedid));
+                } else {
+                    // allSeeds = growingSeedManager.getGrowingSeeds();
+                    for (BaseAllotmentInterface allotment : allotmentManager.getMyAllotments())
+                        allSeeds.addAll(growingSeedManager.getGrowingSeedsByAllotment(allotment));
+                }
+                listActions = new ListAllActionAdapter(getApplicationContext(), allSeeds,
+                        ListAllActionAdapter.STATUS_TODO);
+                return allSeeds;
+            }
+
+            protected void onPostExecute(ArrayList<GrowingSeedInterface> allSeeds) {
+
+                listAllotments = (ListView) findViewById(R.id.IdGardenActionsList);
+                listAllotments.setAdapter(listActions);
+                listAllotments.setDivider(null);
+                listAllotments.setDividerHeight(0);
+            };
+        }.execute(seedid);
 
         if (!gotsPrefs.isPremium()) {
             GotsAdvertisement ads = new GotsAdvertisement(this);
@@ -70,14 +90,12 @@ public class ActionActivity extends AbstractActivity implements OnClickListener 
             LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
             layout.addView(ads.getAdsLayout());
         }
+
     }
 
     @Override
     protected void onPause() {
-        // TODO Auto-generated method stub
         super.onPause();
-        // GardenFactory gf = new GardenFactory(this);
-        // gf.saveGarden(DashboardActivity.myGarden);
     }
 
     @Override
@@ -95,14 +113,9 @@ public class ActionActivity extends AbstractActivity implements OnClickListener 
             finish();
             return true;
         case R.id.help:
-//            Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-//                    Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
-//            startActivity(browserIntent);
-
             Intent browserIntent = new Intent(this, WebHelpActivity.class);
             browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
             startActivity(browserIntent);
-
             return true;
 
         default:
@@ -112,18 +125,13 @@ public class ActionActivity extends AbstractActivity implements OnClickListener 
 
     @Override
     protected void onResume() {
-        listActions.notifyDataSetChanged();
+        // listActions.notifyDataSetChanged();
         super.onResume();
     }
 
     @Override
-    public void onClick(View v) {
-
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        listActions.notifyDataSetChanged();
+        // listActions.notifyDataSetChanged();
         super.onActivityResult(requestCode, resultCode, data);
     }
 }

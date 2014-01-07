@@ -18,6 +18,7 @@ import org.gots.seed.GrowingSeedInterface;
 import org.gots.ui.TabSeedActivity;
 import org.gots.utils.GotsProgressBar;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.AttributeSet;
@@ -101,6 +102,7 @@ public class SeedWidget extends RelativeLayout implements OnClickListener {
 		if (!TabSeedActivity.class.isInstance(mContext) && v.getTag()!=null) {
 			Intent i = new Intent(mContext, TabSeedActivity.class);
 			i.putExtra("org.gots.seed.vendorid", ((BaseSeedInterface) v.getTag()).getSeedId());
+			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			mContext.startActivity(i);
 		}
 	}

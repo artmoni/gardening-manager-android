@@ -17,6 +17,7 @@ import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -30,7 +31,6 @@ import com.actionbarsherlock.app.SherlockListFragment;
 public class ListActionActivity extends SherlockListFragment implements ListView.OnScrollListener {
 
     // private String[] mStrings;
-    ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
 
     protected final class WindowRemover implements Runnable {
         public void run() {
@@ -64,15 +64,9 @@ public class ListActionActivity extends SherlockListFragment implements ListView
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         int seedid = 0;
-        GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(getActivity());
 
         Bundle bundle = this.getArguments();
         seedid = bundle.getInt("org.gots.growingseed.id");
-
-        if (seedid > 0) {
-            allSeeds.add(growingSeedManager.getGrowingSeedById(seedid));
-        } else
-            allSeeds = growingSeedManager.getGrowingSeeds();
 
         // ActionSeedDBHelper helper = new ActionSeedDBHelper(this);
         // ArrayList<BaseActionInterface> actions = helper.getActionsToDo();
@@ -83,9 +77,31 @@ public class ListActionActivity extends SherlockListFragment implements ListView
 
         // Use an existing ListAdapter that will map an array
         // of strings to TextViews
-        setListAdapter(new ListAllActionAdapter(getActivity(), allSeeds, ListAllActionAdapter.STATUS_DONE));
+        new AsyncTask<Integer, Void, ArrayList<GrowingSeedInterface>>() {
+            private ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
+            private ListAllActionAdapter listAllActionAdapter;
 
-        getListView().setOnScrollListener(this);
+            @Override
+            protected ArrayList<GrowingSeedInterface> doInBackground(Integer... params) {
+                GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(
+                        getActivity());
+
+                int seedid = params[0].intValue();
+                if (seedid > 0) {
+                    allSeeds.add(growingSeedManager.getGrowingSeedById(seedid));
+                } else
+                    allSeeds = growingSeedManager.getGrowingSeeds();
+                listAllActionAdapter = new ListAllActionAdapter(getActivity(), allSeeds, ListAllActionAdapter.STATUS_DONE);
+                return allSeeds;
+            }
+
+            protected void onPostExecute(ArrayList<GrowingSeedInterface> allSeeds) {
+                setListAdapter(listAllActionAdapter);
+
+                getListView().setOnScrollListener(ListActionActivity.this);
+            };
+        }.execute(seedid);
+
     }
 
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {

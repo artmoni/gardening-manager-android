@@ -212,4 +212,16 @@ public abstract class AbstractActionSeed implements SeedActionInterface, Compara
     public void setUUID(String uuid) {
         this.UUID = uuid;
     }
+
+    @Override
+    public String toString() {
+        String txt = new String();
+        txt = txt.concat("[" + getId() + "]" + getName());
+        txt = txt.concat(getUUID());
+        txt = txt.concat("\n");
+        txt = txt.concat("Duration=" + getDuration());
+        if (getDateActionDone() != null)
+            txt = txt.concat("\nDone on " + getDateActionDone());
+        return super.toString();
+    }
 }

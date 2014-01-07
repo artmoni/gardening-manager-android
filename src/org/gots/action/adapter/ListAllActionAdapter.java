@@ -40,6 +40,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,6 +49,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ListAllActionAdapter extends BaseAdapter {
 
@@ -74,13 +76,13 @@ public class ListAllActionAdapter extends BaseAdapter {
 
     private static final String TAG = "ListAllActionAdapter";
 
+    
     public ListAllActionAdapter(Context context, ArrayList<GrowingSeedInterface> allSeeds, int status) {
         this.mContext = context;
         current_status = status;
         GotsActionSeedProvider actionSeedProvider = GotsActionSeedManager.getInstance().initIfNew(context);
 
-        for (Iterator<GrowingSeedInterface> iterator = allSeeds.iterator(); iterator.hasNext();) {
-            GrowingSeedInterface seed = iterator.next();
+        for (GrowingSeedInterface seed : allSeeds) {
             ArrayList<BaseActionInterface> seedActions;
 
             if (current_status == STATUS_TODO) {
@@ -156,10 +158,22 @@ public class ListAllActionAdapter extends BaseAdapter {
                 actionWidget.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ((SeedActionInterface) currentAction).execute(seed);
-                        actions.remove(position);
-                        // seeds.remove(position);
-                        notifyDataSetChanged();
+                        new AsyncTask<SeedActionInterface, Integer, Void> (){
+                            @Override
+                            protected Void doInBackground(SeedActionInterface... params) {
+                                SeedActionInterface actionItem = params[0];
+                                actionItem.execute(seed);
+                                return null;
+                            }
+
+                            @Override
+                            protected void onPostExecute(Void result) {
+                                Toast.makeText(mContext, "action done", Toast.LENGTH_SHORT).show();
+                                actions.remove(position);
+                                notifyDataSetChanged();
+                                super.onPostExecute(result);
+                            }
+                        }.execute((SeedActionInterface)currentAction);
                     }
                 });
 

@@ -116,7 +116,7 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
         return allActions;
     }
 
-    private void populateState(BaseActionInterface action, GrowingSeedInterface seed) {
+    protected void populateState(BaseActionInterface action, GrowingSeedInterface seed) {
         int state = ActionState.UNDEFINED;
 
         if (seed != null && seed.getDateSowing() != null) {
