@@ -100,18 +100,37 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical" >
 
-                <DatePicker
-                    android:id="@+id/IdSeedDateSowingPlanning"
+                <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-<!-- 
+                    android:layout_height="wrap_content"
+                    android:text="Min" />
+
+                <DatePicker
+                    android:id="@+id/IdSeedDateSowingPlanningMin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:calendarViewShown="false" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Max" />
+
+                <DatePicker
+                    android:id="@+id/IdSeedDateSowingPlanningMax"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:calendarViewShown="false" />
+                <!--
                 <org.gots.seed.view.PlanningWidget
                     android:id="@+id/IdSeedEditSowingPlanning"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:columnWidth="15dp"
                     android:numColumns="12" >
-                </org.gots.seed.view.PlanningWidget> -->
+                </org.gots.seed.view.PlanningWidget>
+                -->
             </LinearLayout>
 
             <TextView
@@ -122,26 +141,49 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content" android:orientation="vertical">
 
-               <!--  <org.gots.seed.view.PlanningWidget
+                <!--
+                <org.gots.seed.view.PlanningWidget
                     android:id="@+id/IdSeedEditHarvestPlanning"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:columnWidth="15dp"
                     android:numColumns="12" >
-                </org.gots.seed.view.PlanningWidget> -->
-                   <DatePicker
-                    android:id="@+id/IdSeedDateHarvestPlanning"
+                </org.gots.seed.view.PlanningWidget>
+                -->
+
+                <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="Min" />
+
+                <DatePicker
+                    android:id="@+id/IdSeedDateHarvestPlanningMin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:calendarViewShown="false"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Max" />
+
+                <DatePicker
+                    android:id="@+id/IdSeedDateHarvestPlanningMax"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:calendarViewShown="false" />
             </LinearLayout>
 
-           <!--  <Button
+            <!--
+                 <Button
                 android:id="@+id/buttonUpdateSeed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/seed.menu.update" /> -->
+                android:text="@string/seed.menu.update" />
+            -->
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -180,6 +222,12 @@
                     android:id="@+id/buttonCatalogue"
                     style="@style/buttonRed"
                     android:text="@string/seed.action.add.catalogue" />
+
+                <Button
+                    android:id="@+id/buttonModify"
+                    style="@style/buttonGreen"
+                    android:text="@string/menu.edit"
+                    android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

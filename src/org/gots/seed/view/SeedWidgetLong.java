@@ -27,7 +27,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class SeedWidgetLong extends LinearLayout implements OnClickListener {
+public class SeedWidgetLong extends LinearLayout  {
     Context mContext;
 
     private GrowingSeedInterface mSeed;
@@ -48,7 +48,6 @@ public class SeedWidgetLong extends LinearLayout implements OnClickListener {
     private void initView() {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.seed_widget_long, this);
-        setOnClickListener(this);
     }
 
     @Override
@@ -85,8 +84,8 @@ public class SeedWidgetLong extends LinearLayout implements OnClickListener {
         if (GotsPreferences.DEBUG &&  mSeed.getUUID()!=null)
             seedVariety.setText(mSeed.getVariety() + "\n" + mSeed.getUUID().substring(0, 10));
 
-        PlanningWidget planning = (PlanningWidget) findViewById(R.id.IdSeedSowingPlanning);
-        planning.setAdapter(new PlanningSowAdapter(mSeed));
+        PlanningWidget planningSow = (PlanningWidget) findViewById(R.id.IdSeedSowingPlanning);
+        planningSow.setAdapter(new PlanningSowAdapter(mSeed));
         //
         PlanningWidget planningHarvest = (PlanningWidget) findViewById(R.id.IdSeedHarvestPlanning);
         planningHarvest.setAdapter(new PlanningHarvestAdapter(mSeed));
@@ -102,7 +101,8 @@ public class SeedWidgetLong extends LinearLayout implements OnClickListener {
             seedbag.setLayoutParams(params);
             stock.addView(seedbag, i);
         }
-        invalidate();
+        
+        
     }
 
     // public static String unAccent(String s) {
@@ -115,10 +115,7 @@ public class SeedWidgetLong extends LinearLayout implements OnClickListener {
     // return pattern.matcher(temp).replaceAll("");
     // }
 
-    @Override
-    public void onClick(View v) {
-
-    }
+   
 
     //
     // @Override
@@ -133,9 +130,9 @@ public class SeedWidgetLong extends LinearLayout implements OnClickListener {
     public void setSeed(BaseSeedInterface seed) {
         this.mSeed = (GrowingSeedInterface) seed;
         setupView();
-        invalidate();
-        requestLayout();
-        refreshDrawableState();
+//        invalidate();
+//        requestLayout();
+//        refreshDrawableState();
     }
 
 }

@@ -18,6 +18,7 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PathRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
+import org.simpleframework.xml.convert.Convert;
 
 import android.content.Context;
 import android.util.Log;
@@ -353,6 +354,19 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
         // service.getRelations(doc, predicate);
         return mySeeds;
+    }
+
+    @Override
+    public BaseSeedInterface updateSeed(BaseSeedInterface seed) {
+        Session session = getNuxeoClient().getSession();
+        DocumentManager service = session.getAdapter(DocumentManager.class);
+        try {
+            Document seedDoc = service.getDocument(new IdRef(seed.getUUID()));
+            service.update(new IdRef(seed.getUUID()), NuxeoSeedConverter.convert(seedDoc.getParentPath(), seed).getProperties());
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+        return super.updateSeed(seed);
     }
 
     @Override

@@ -142,7 +142,6 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     @Override
     public BaseSeedInterface updateSeed(BaseSeedInterface newSeed) {
         return mSeedProvider.updateSeed(newSeed);
-
     }
 
     @Override

@@ -131,6 +131,12 @@ public class VendorListActivity extends AbstractListFragment {
         updateVendorSeeds();
     }
 
+    @Override
+    public void onResume() {
+        updateVendorSeeds();
+        super.onResume();
+    }
+
     private ProgressDialog dialog;
 
     protected void updateVendorSeeds() {

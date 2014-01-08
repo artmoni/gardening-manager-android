@@ -29,7 +29,7 @@ public class PlanningHarvestAdapter extends PlanningAdapter {
         monthWidget.setMonthText(getItem(position));
         // monthWidget.setBackgroundDrawable(parent.getContext().getResources().getDrawable(R.drawable.selector_planning_harvest));
         if (mSeed != null) {
-            if (position >= mSeed.getDateSowingMin() - 1 + mSeed.getDurationMax() / 30
+            if (position >= mSeed.getDateSowingMin() - 1 + mSeed.getDurationMin() / 30
                     && position <= mSeed.getDateSowingMax() - 1 + mSeed.getDurationMax() / 30)
                 monthWidget.setHarvestPeriode(true);
         }
