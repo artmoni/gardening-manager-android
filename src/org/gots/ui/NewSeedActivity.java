@@ -100,6 +100,15 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
         } else {
             newSeed = new GrowingSeed();
         }
+        
+//        autoCompleteVariety.clearFocus();
+//        gallerySpecies.post(new Runnable() {
+//            public void run() {
+//                gallerySpecies.requestFocus();
+//
+//            }
+//        });
+        initview();
     }
 
     @Override
@@ -111,15 +120,22 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
 
     public void updatePlanning() {
 
-        if (planningSowMin.getMonth() > planningSowMax.getMonth())
-            planningSowMax.init(planningSowMin.getYear(), planningSowMin.getMonth(), planningSowMin.getDayOfMonth(),
-                    new PlanningUpdater());
+//        if (planningSowMin.getMonth() > planningSowMax.getMonth())
+//            planningSowMax.init(planningSowMin.getYear(), planningSowMin.getMonth(), planningSowMin.getDayOfMonth(),
+//                    new PlanningUpdater());
 
         newSeed.setDateSowingMin(planningSowMin.getMonth() + 1);
         newSeed.setDateSowingMax(planningSowMax.getMonth() + 1);
 
-        int durationmin = planningHarvestMin.getMonth() - planningSowMin.getMonth() ;
-        int durationmax = planningHarvestMax.getMonth() - planningSowMin.getMonth() ;
+        int durationmin = planningHarvestMin.getMonth() - planningSowMin.getMonth();
+
+        int durationmax;
+        if (planningHarvestMin.getMonth() <= planningHarvestMax.getMonth())
+            // [0][1][min][3][4][5][6][7][max][9][10][11]
+            durationmax = planningHarvestMax.getMonth() - planningSowMax.getMonth();
+        else
+            // [0][1][max][3][4][5][6][7][min][9][10][11]
+            durationmax = 12 - planningSowMax.getMonth() + planningHarvestMax.getMonth();
         newSeed.setDurationMin(durationmin * 30);
         newSeed.setDurationMax(durationmax * 30);
 
@@ -169,8 +185,7 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
             }
         } catch (SecurityException e) {
             Log.d("ERROR", e.getMessage());
-        } 
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             Log.d("ERROR", e.getMessage());
         } catch (IllegalAccessException e) {
             Log.d("ERROR", e.getMessage());
@@ -412,10 +427,7 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
             Log.i("Scan result", scanResult.toString());
             textViewBarCode.setText(scanResult.getContents());
             newSeed.setBareCode(textViewBarCode.getText().toString());
-            // seedWidgetLong.setSeed(newSeed);
-            // seedWidgetLong.invalidate();
         }
-        // super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -456,15 +468,9 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
 
     @Override
     protected void onResume() {
-        initview();
+//        initview();
 
-        autoCompleteVariety.clearFocus();
-        gallerySpecies.post(new Runnable() {
-            public void run() {
-                gallerySpecies.requestFocus();
-
-            }
-        });
+       
         super.onResume();
     }
 

@@ -31,11 +31,14 @@ public class PlanningSowAdapter extends PlanningAdapter {
 
         if (mSeed != null) {
 
-            if (position >= mSeed.getDateSowingMin() - 1 && position <= mSeed.getDateSowingMax() - 1)
+            int sowingMin = mSeed.getDateSowingMin() - 1;
+            int sowingMax = mSeed.getDateSowingMax() - 1;
+
+            if (position >= sowingMin && position <= sowingMax || (position <= sowingMax && sowingMax < sowingMin)
+                    || (position >= sowingMin && sowingMax < sowingMin))
                 monthWidget.setSowingPeriode(true);
 
         }
         return monthWidget;
     }
-
 }
