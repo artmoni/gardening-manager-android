@@ -41,6 +41,7 @@
     <string name="seed.description.family">Family</string>
     <string name="seed.description.specie">Species</string>
     <string name="seed.description.variety">Variety</string>
+    <string name="seed.description.barecode">Scan the bar code will make your future searches easier</string>
     <string name="seed.menu.add">Add a seed</string>
     <string name="seed.menu.add.barcode">Add by barcode</string>
     <string name="seed.menu.update">Update</string>

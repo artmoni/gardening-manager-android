@@ -16,7 +16,6 @@ import java.util.Calendar;
 import org.gots.R;
 import org.gots.action.bean.BuyingAction;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.garden.GardenInterface;
 import org.gots.help.HelpUriBuilder;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
@@ -100,14 +99,14 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
         } else {
             newSeed = new GrowingSeed();
         }
-        
-//        autoCompleteVariety.clearFocus();
-//        gallerySpecies.post(new Runnable() {
-//            public void run() {
-//                gallerySpecies.requestFocus();
-//
-//            }
-//        });
+
+        // autoCompleteVariety.clearFocus();
+        // gallerySpecies.post(new Runnable() {
+        // public void run() {
+        // gallerySpecies.requestFocus();
+        //
+        // }
+        // });
         initview();
     }
 
@@ -120,9 +119,9 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
 
     public void updatePlanning() {
 
-//        if (planningSowMin.getMonth() > planningSowMax.getMonth())
-//            planningSowMax.init(planningSowMin.getYear(), planningSowMin.getMonth(), planningSowMin.getDayOfMonth(),
-//                    new PlanningUpdater());
+        // if (planningSowMin.getMonth() > planningSowMax.getMonth())
+        // planningSowMax.init(planningSowMin.getYear(), planningSowMin.getMonth(), planningSowMin.getDayOfMonth(),
+        // new PlanningUpdater());
 
         newSeed.setDateSowingMin(planningSowMin.getMonth() + 1);
         newSeed.setDateSowingMax(planningSowMax.getMonth() + 1);
@@ -140,6 +139,32 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
         newSeed.setDurationMax(durationmax * 30);
 
         seedWidgetLong.setSeed(newSeed);
+    }
+
+    private void monthFilter(DatePicker picker) {
+        try {
+            Field f[] = picker.getClass().getDeclaredFields();
+            for (Field field : f) {
+                if (field.getName().equals("mDaySpinner")) {
+                    field.setAccessible(true);
+                    Object dayPicker = new Object();
+                    dayPicker = field.get(picker);
+                    ((View) dayPicker).setVisibility(View.GONE);
+                }
+                if (field.getName().equals("mYearSpinner")) {
+                    field.setAccessible(true);
+                    Object dayPicker = new Object();
+                    dayPicker = field.get(picker);
+                    ((View) dayPicker).setVisibility(View.GONE);
+                }
+            }
+        } catch (SecurityException e) {
+            Log.d("ERROR", e.getMessage());
+        } catch (IllegalArgumentException e) {
+            Log.d("ERROR", e.getMessage());
+        } catch (IllegalAccessException e) {
+            Log.d("ERROR", e.getMessage());
+        }
     }
 
     private void initview() {
@@ -167,29 +192,6 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
 
         planningSowMin.init(sowTimeMin.get(Calendar.YEAR), sowTimeMin.get(Calendar.MONTH),
                 sowTimeMin.get(Calendar.DAY_OF_MONTH), new PlanningUpdater());
-        try {
-            Field f[] = planningSowMin.getClass().getDeclaredFields();
-            for (Field field : f) {
-                if (field.getName().equals("mDayPicker")) {
-                    field.setAccessible(true);
-                    Object dayPicker = new Object();
-                    dayPicker = field.get(planningSowMin);
-                    ((View) dayPicker).setVisibility(View.GONE);
-                }
-                if (field.getName().equals("mYearPicker")) {
-                    field.setAccessible(true);
-                    Object dayPicker = new Object();
-                    dayPicker = field.get(planningSowMin);
-                    ((View) dayPicker).setVisibility(View.GONE);
-                }
-            }
-        } catch (SecurityException e) {
-            Log.d("ERROR", e.getMessage());
-        } catch (IllegalArgumentException e) {
-            Log.d("ERROR", e.getMessage());
-        } catch (IllegalAccessException e) {
-            Log.d("ERROR", e.getMessage());
-        }
 
         planningSowMax.init(sowTimeMax.get(Calendar.YEAR), sowTimeMax.get(Calendar.MONTH),
                 sowTimeMax.get(Calendar.DAY_OF_MONTH), new PlanningUpdater());
@@ -199,6 +201,11 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
 
         planningHarvestMax.init(harvestTimeMax.get(Calendar.YEAR), harvestTimeMax.get(Calendar.MONTH),
                 harvestTimeMax.get(Calendar.DAY_OF_MONTH), new PlanningUpdater());
+
+        monthFilter(planningSowMin);
+        monthFilter(planningSowMax);
+        monthFilter(planningHarvestMin);
+        monthFilter(planningHarvestMax);
 
         seedWidgetLong = (SeedWidgetLong) findViewById(R.id.idSeedWidgetLong);
 
@@ -468,9 +475,8 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
 
     @Override
     protected void onResume() {
-//        initview();
+        // initview();
 
-       
         super.onResume();
     }
 

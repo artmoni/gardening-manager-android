@@ -41,6 +41,7 @@
     <string name="seed.description.family">Famille</string>
     <string name="seed.description.specie">Espèce</string>
     <string name="seed.description.variety">Variété </string>
+    <string name="seed.description.barecode">Scanner le code barre rendra vos futurs recherches plus faciles</string>
     <string name="seed.menu.add">Ajouter une graine</string>
     <string name="seed.menu.add.barcode">Ajout par code barre</string>
     <string name="seed.menu.update">Mettre à jour</string>

@@ -32,19 +32,20 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_line_action"
-            android:orientation="vertical"
-            android:padding="10dp" >
+            android:orientation="vertical" >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@drawable/bg_line_action"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:orientation="vertical" >
+                android:orientation="vertical"
+                android:padding="5dp" >
 
                 <TextView
                     android:id="@+id/textView1"
+                    style="@style/description_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -58,6 +59,7 @@
                     android:focusableInTouchMode="true" />
 
                 <TextView
+                    style="@style/description_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -90,6 +92,7 @@
             </LinearLayout>
 
             <TextView
+                style="@style/description_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -98,9 +101,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:background="@drawable/bg_line_action"
+                android:orientation="horizontal"
+                android:padding="5dp" >
 
                 <TextView
+                    style="@style/description_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Min" />
@@ -112,6 +118,7 @@
                     android:calendarViewShown="false" />
 
                 <TextView
+                    style="@style/description_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -134,6 +141,7 @@
             </LinearLayout>
 
             <TextView
+                style="@style/description_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -141,7 +149,10 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_line_action"
+                android:orientation="horizontal"
+                android:padding="5dp" >
 
                 <!--
                 <org.gots.seed.view.PlanningWidget
@@ -154,6 +165,7 @@
                 -->
 
                 <TextView
+                    style="@style/description_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Min" />
@@ -162,9 +174,10 @@
                     android:id="@+id/IdSeedDateHarvestPlanningMin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:calendarViewShown="false"/>
+                    android:calendarViewShown="false" />
 
                 <TextView
+                    style="@style/description_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -177,33 +190,42 @@
                     android:calendarViewShown="false" />
             </LinearLayout>
 
-            <!--
-                 <Button
-                android:id="@+id/buttonUpdateSeed"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/seed.menu.update" />
-            -->
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal" >
-
-                <ImageView
-                    android:id="@+id/imageBarCode"
-                    android:layout_width="100dp"
-                    android:layout_height="58dp"
-                    android:contentDescription="barcode scanner"
-                    android:src="@drawable/codebarre" />
+                android:background="@drawable/bg_line_action"
+                android:orientation="horizontal"
+                android:padding="5dp" >
 
                 <TextView
-                    android:id="@+id/textViewBarCode"
-                    android:layout_width="100dp"
-                    android:layout_height="58dp"
-                    android:gravity="center_horizontal|bottom"
-                    android:text="0283878732" />
-            </RelativeLayout>
+                    style="@style/description_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/seed.description.barecode" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:orientation="vertical" >
+
+                    <ImageView
+                        android:id="@+id/imageBarCode"
+                        android:layout_width="100dp"
+                        android:layout_height="58dp"
+                        android:contentDescription="barcode scanner"
+                        android:src="@drawable/codebarre" />
+
+                    <TextView
+                        android:id="@+id/textViewBarCode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="0283878732" >
+                    </TextView>
+                </LinearLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/layoutSpecie"
