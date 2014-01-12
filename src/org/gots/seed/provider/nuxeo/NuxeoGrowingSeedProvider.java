@@ -72,10 +72,10 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
                     Document originalSeed = service.getDocument(relations.get(0), "*");
 
                     NuxeoSeedProvider provider = new NuxeoSeedProvider(mContext);
-//                     growingSeed = (GrowingSeedInterface) NuxeoSeedConverter.convert(originalSeed);
+                    // growingSeed = (GrowingSeedInterface) NuxeoSeedConverter.convert(originalSeed);
                     growingSeed = (GrowingSeedInterface) provider.getSeedByUUID(originalSeed.getId());
                     growingSeed = NuxeoGrowingSeedConverter.populate(growingSeed, growingSeedDocument);
-//                    growingSeed = super.updateGrowingSeed(growingSeed, allotment);
+                    // growingSeed = super.updateGrowingSeed(growingSeed, allotment);
                     remoteGrowingSeeds.add(growingSeed);
                 }
             }
@@ -102,8 +102,8 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
 
             if (!found)
                 myGrowingSeeds.add(super.insertSeed(remoteGrowingSeed, allotment));
-            else{
-                GrowingSeedInterface updatableSeed =super.getGrowingSeedsByUUID(remoteGrowingSeed.getUUID());
+            else {
+                GrowingSeedInterface updatableSeed = super.getGrowingSeedsByUUID(remoteGrowingSeed.getUUID());
                 remoteGrowingSeed.setGrowingSeedId(updatableSeed.getGrowingSeedId());
                 myGrowingSeeds.add(super.updateGrowingSeed(updatableSeed, allotment));
             }
@@ -151,12 +151,14 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
         try {
 
             PropertyMap properties = getProperties(growingSeed);
+            BaseSeedInterface seed = GotsSeedManager.getInstance().initIfNew(mContext).getSeedById(
+                    growingSeed.getSeedId());
+            properties.set("growingseed:vendorseedid", seed.getUUID());
+
             Document newSeed = service.createDocument(allotmentDoc, "GrowingSeed", growingSeed.getSpecie(), properties);
 
             growingSeed.setUUID(newSeed.getId());
             growingSeed = super.updateGrowingSeed(growingSeed, allotment);
-            BaseSeedInterface seed = GotsSeedManager.getInstance().initIfNew(mContext).getSeedById(
-                    growingSeed.getSeedId());
             service.createRelation(newSeed, "http://purl.org/dc/terms/isFormatOf", new IdRef(seed.getUUID()));
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);

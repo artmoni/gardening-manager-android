@@ -260,11 +260,14 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                         vendorSeed.getSpecie() + " " + vendorSeed.getVariety());
                 service.createRelation(stockitem, "http://purl.org/dc/terms/isFormatOf",
                         new PathRef(vendorSeed.getUUID()));
+                
             }
 
             PropertyMap map = new PropertyMap();
             map.set("stockitem:quantity", "" + ++quantity);
             map.set("dc:title", vendorSeed.getSpecie() + " " + vendorSeed.getVariety());
+            map.set("stockitem:vendorseedid", vendorSeed.getUUID());
+            
             service.update(stockitem, map);
             super.addToStock(vendorSeed, garden);
         } catch (Exception e) {
