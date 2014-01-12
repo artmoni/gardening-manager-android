@@ -28,6 +28,38 @@ public class NuxeoActionProvider extends LocalActionProvider {
     }
 
     @Override
+    public BaseActionInterface getActionByName(String name) {
+        BaseActionInterface action = null;
+        try {
+            NuxeoManager nuxeoManager = NuxeoManager.getInstance();
+            nuxeoManager.initIfNew(mContext);
+            Session session = nuxeoManager.getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
+
+            byte cacheParam = CacheBehavior.STORE;
+            boolean force = true;
+            boolean refresh = force;
+            if (refresh) {
+                cacheParam = (byte) (cacheParam | CacheBehavior.FORCE_REFRESH);
+                refresh = false;
+            }
+            Document root = service.getDocument("/default-domain/workspaces/Public hut/Actions");
+            Documents docs = service.query(
+                    "SELECT * FROM Action WHERE ecm:currentLifeCycleState != \"deleted\" And ecm:parentId = ? AND dc:title = ?",
+                    new String[] { root.getId(), name }, new String[] { "dc:modified DESC" }, "*", 0, 50, cacheParam);
+
+            if (docs.size() > 0)
+                action = NuxeoActionConverter.convert(mContext, docs.get(0));
+
+        } catch (Exception e) {
+            Log.e(TAG, "getActionByName " + e.getMessage(), e);
+            action = super.getActionByName(name);
+        }
+
+        return action;
+    }
+
+    @Override
     public ArrayList<BaseActionInterface> getActions() {
         remoteActions = new ArrayList<BaseActionInterface>();
         List<BaseActionInterface> localActions = super.getActions();

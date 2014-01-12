@@ -16,18 +16,25 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
 
 import org.gots.R;
 import org.gots.action.BaseActionInterface;
+import org.gots.action.GardeningActionInterface;
 import org.gots.action.GotsActionSeedManager;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.bean.PhotoAction;
+import org.gots.action.bean.SowingAction;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
+import org.gots.garden.GardenManager;
+import org.gots.garden.provider.local.GardenSQLite;
+import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsGrowingSeedManager;
+import org.gots.seed.GotsSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.view.SeedWidget;
 import org.gots.weather.WeatherManager;
@@ -76,7 +83,6 @@ public class ListAllActionAdapter extends BaseAdapter {
 
     private static final String TAG = "ListAllActionAdapter";
 
-    
     public ListAllActionAdapter(Context context, ArrayList<GrowingSeedInterface> allSeeds, int status) {
         this.mContext = context;
         current_status = status;
@@ -94,6 +100,18 @@ public class ListAllActionAdapter extends BaseAdapter {
 
             actions.addAll(seedActions);
         }
+        
+        if (current_status == STATUS_TODO||false)
+            for (BaseSeedInterface seed : GotsSeedManager.getInstance().initIfNew(context).getMyStock(
+                    GardenManager.getInstance().initIfNew(context).getCurrentGarden())) {
+                Calendar today = Calendar.getInstance();
+                int currentMonth = today.get(Calendar.MONTH) + 1;
+                GardeningActionInterface action = new SowingAction(mContext);
+                action.setGrowingSeedId(seed.getSeedId());
+                action.setState(ActionState.NORMAL);
+                if (currentMonth >= seed.getDateSowingMin() && currentMonth <= seed.getDateSowingMax())
+                    actions.add(action);
+            }
         if (current_status == STATUS_TODO)
             Collections.sort(actions, new IActionAscendantComparator());
         else
@@ -158,11 +176,13 @@ public class ListAllActionAdapter extends BaseAdapter {
                 actionWidget.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new AsyncTask<SeedActionInterface, Integer, Void> (){
+                        new AsyncTask<BaseActionInterface, Integer, Void>() {
                             @Override
-                            protected Void doInBackground(SeedActionInterface... params) {
-                                SeedActionInterface actionItem = params[0];
-                                actionItem.execute(seed);
+                            protected Void doInBackground(BaseActionInterface... params) {
+
+                                BaseActionInterface actionItem = params[0];
+                                if (SeedActionInterface.class.isInstance(actionItem))
+                                    ((SeedActionInterface) actionItem).execute(seed);
                                 return null;
                             }
 
@@ -173,7 +193,7 @@ public class ListAllActionAdapter extends BaseAdapter {
                                 notifyDataSetChanged();
                                 super.onPostExecute(result);
                             }
-                        }.execute((SeedActionInterface)currentAction);
+                        }.execute(currentAction);
                     }
                 });
 

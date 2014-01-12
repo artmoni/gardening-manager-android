@@ -83,7 +83,7 @@ public class GotsActionSeedManager implements GotsActionSeedProvider {
     }
 
     @Override
-    public long insertAction(BaseActionInterface action, GrowingSeedInterface seed) {
+    public BaseActionInterface insertAction(BaseActionInterface action, GrowingSeedInterface seed) {
         return provider.insertAction(action, seed);
     }
 

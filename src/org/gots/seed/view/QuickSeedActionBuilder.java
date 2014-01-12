@@ -135,6 +135,34 @@ public class QuickSeedActionBuilder {
 
         quickAction.addActionItem(actionWidget);
 
+        
+        /*
+         * ACTION DETAIL
+         */
+        final DetailAction detail = new DetailAction(mContext);
+        ActionWidget detailWidget = new ActionWidget(mContext, detail);
+        detailWidget.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                SeedActionInterface actionItem = detail;
+                if (DetailAction.class.isInstance(actionItem)) {
+                    // alert.show();
+                    final Intent i = new Intent(mContext, TabSeedActivity.class);
+                    i.putExtra("org.gots.seed.id", ((GrowingSeedInterface) parentView.getTag()).getGrowingSeedId());
+                    i.putExtra("org.gots.seed.url", ((GrowingSeedInterface) parentView.getTag()).getUrlDescription());
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivity(i);
+                } else {
+                    actionItem.execute(seed);
+                }
+                // parentAdapter.notifyDataSetChanged();
+                quickAction.dismiss();
+            }
+        });
+        quickAction.addPermanentActionItem(detailWidget);
+        
+        
         /*
          * ACTION WATERING
          */
@@ -280,31 +308,7 @@ public class QuickSeedActionBuilder {
 //        });
 //        quickAction.addPermanentActionItem(photoWidget);
 
-        /*
-         * ACTION DETAIL
-         */
-        final DetailAction detail = new DetailAction(mContext);
-        ActionWidget detailWidget = new ActionWidget(mContext, detail);
-        detailWidget.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                SeedActionInterface actionItem = detail;
-                if (DetailAction.class.isInstance(actionItem)) {
-                    // alert.show();
-                    final Intent i = new Intent(mContext, TabSeedActivity.class);
-                    i.putExtra("org.gots.seed.id", ((GrowingSeedInterface) parentView.getTag()).getGrowingSeedId());
-                    i.putExtra("org.gots.seed.url", ((GrowingSeedInterface) parentView.getTag()).getUrlDescription());
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    mContext.startActivity(i);
-                } else {
-                    actionItem.execute(seed);
-                }
-                // parentAdapter.notifyDataSetChanged();
-                quickAction.dismiss();
-            }
-        });
-        quickAction.addPermanentActionItem(detailWidget);
+      
 
     }
 

@@ -35,7 +35,7 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
     }
 
     @Override
-    public long insertAction(BaseActionInterface action, GrowingSeedInterface seed) {
+    public BaseActionInterface insertAction(BaseActionInterface action, GrowingSeedInterface seed) {
         long rowid;
         ContentValues values = new ContentValues();
 
@@ -47,7 +47,8 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
             values.put(DatabaseHelper.ACTIONSEED_DATEACTIONDONE, action.getDateActionDone().getTime());
 
         rowid = bdd.insert(DatabaseHelper.ACTIONSEEDS_TABLE_NAME, null, values);
-        return rowid;
+        action.setId((int)rowid);
+        return action;
     }
 
 

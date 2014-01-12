@@ -15,7 +15,7 @@ public interface GotsActionSeedProvider {
 
     public abstract ArrayList<BaseActionInterface> getActionsDoneBySeed(GrowingSeedInterface seed);
 
-    public abstract long insertAction(BaseActionInterface action, GrowingSeedInterface seed);
+    public abstract BaseActionInterface insertAction(BaseActionInterface action, GrowingSeedInterface seed);
 
    
 

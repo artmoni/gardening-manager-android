@@ -42,7 +42,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
     }
 
     @Override
-    public long insertAction(BaseActionInterface action, GrowingSeedInterface seed) {
+    public BaseActionInterface insertAction(BaseActionInterface action, GrowingSeedInterface seed) {
         Session session = NuxeoManager.getInstance().getNuxeoClient().getSession();
         DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
         try {
@@ -55,6 +55,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
 
                 Document doc = documentMgr.copy(docAction, getActionsFolder(seed, documentMgr));
                 documentMgr.update(doc, properties);
+                action.setUUID(doc.getId());
             }
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
