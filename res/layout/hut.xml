@@ -20,7 +20,9 @@
             android:id="@+id/linearlayoutSearchBox"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/bg_line_action"
             android:orientation="horizontal"
+            android:padding="5dp"
             android:visibility="gone" >
 
             <EditText
@@ -34,6 +36,7 @@
                 android:id="@+id/clearSearchFilter"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:contentDescription="clear Search Filter"
                 android:src="@drawable/ic_menu_close_clear_cancel" />
         </LinearLayout>
 
@@ -46,7 +49,8 @@
         <LinearLayout
             android:id="@+id/idAdsTop"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
         </LinearLayout>
     </LinearLayout>
     <!--
@@ -61,6 +65,7 @@
         android:id="@+id/btReturn"
         android:layout_width="fill_parent"
         android:layout_height="70dp"
-        android:background="@drawable/bt_logo" />
+        android:background="@drawable/bt_logo"
+        android:orientation="horizontal" />
 
 </RelativeLayout>
