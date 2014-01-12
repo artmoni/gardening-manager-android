@@ -14,7 +14,8 @@
             android:id="@+id/linearLayout1"
             android:layout_width="fill_parent"
             android:layout_height="60dp"
-            android:background="@drawable/bg_profile_top" />
+            android:background="@drawable/bg_profile_top"
+            android:orientation="horizontal" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -43,7 +44,8 @@
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:hint="City" />
+                    android:hint="City"
+                    android:singleLine="true" />
 
                 <CheckBox
                     android:id="@+id/checkboxSamples"
@@ -77,7 +79,8 @@
         android:id="@+id/btReturn"
         android:layout_width="fill_parent"
         android:layout_height="70dp"
-        android:background="@drawable/bt_logo" >
+        android:background="@drawable/bt_logo"
+        android:orientation="horizontal" >
     </LinearLayout>
 
 </RelativeLayout>
