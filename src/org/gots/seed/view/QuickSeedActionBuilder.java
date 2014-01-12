@@ -29,6 +29,7 @@ import org.gots.action.bean.ScheduleAction;
 import org.gots.action.bean.WateringAction;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.view.ActionWidget;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.ui.NewActionActivity;
@@ -55,6 +56,10 @@ public class QuickSeedActionBuilder {
 
     private GrowingSeedInterface seed;
 
+    GotsActionSeedManager actionSeedManager;
+
+    private GotsActionManager actionManager;
+
     private class ActionTask extends AsyncTask<SeedActionInterface, Integer, Void> {
         @Override
         protected Void doInBackground(SeedActionInterface... params) {
@@ -76,6 +81,8 @@ public class QuickSeedActionBuilder {
         mContext = context;
         seed = (GrowingSeedInterface) v.getTag();
         quickAction = new QuickAction(mContext, QuickAction.HORIZONTAL);
+        actionManager = GotsActionManager.getInstance().initIfNew(mContext);
+        actionSeedManager = GotsActionSeedManager.getInstance().initIfNew(mContext);
 
         new AsyncTask<Void, Void, ArrayList<BaseActionInterface>>() {
 
@@ -128,27 +135,46 @@ public class QuickSeedActionBuilder {
 
         quickAction.addActionItem(actionWidget);
 
-        GotsActionManager actionManager = GotsActionManager.getInstance().initIfNew(mContext);
-
         /*
          * ACTION WATERING
          */
-        final WateringAction wateringAction = (WateringAction) actionManager.getActionByName("water");
-        ActionWidget watering = new ActionWidget(mContext, wateringAction);
-        watering.setOnClickListener(new View.OnClickListener() {
+        new AsyncTask<Void, Integer, SeedActionInterface>() {
 
             @Override
-            public void onClick(View v) {
-                new ActionTask().execute(wateringAction);
+            protected SeedActionInterface doInBackground(Void... params) {
+                WateringAction wateringAction = (WateringAction) actionManager.getActionByName("water");
 
-                // SeedActionInterface actionItem = wateringAction;
-                // actionItem.execute(seed);
-                // // parentAdapter.notifyDataSetChanged();
-                // quickAction.dismiss();
-
+                return wateringAction;
             }
-        });
-        quickAction.addPermanentActionItem(watering);
+
+            protected void onPostExecute(final SeedActionInterface action) {
+                ActionWidget watering = new ActionWidget(mContext, action);
+                watering.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        new AsyncTask<SeedActionInterface, Integer, Void>() {
+                            @Override
+                            protected Void doInBackground(SeedActionInterface... params) {
+                                BaseActionInterface actionItem = params[0];
+                                actionItem = actionSeedManager.insertAction((BaseActionInterface) actionItem, seed);
+                                actionSeedManager.doAction(actionItem, seed);
+                                return null;
+                            }
+
+                            @Override
+                            protected void onPostExecute(Void result) {
+                                Toast.makeText(mContext, "action done", Toast.LENGTH_SHORT).show();
+                                quickAction.dismiss();
+                                super.onPostExecute(result);
+                            }
+                        }.execute(action);
+                    }
+                });
+                quickAction.addPermanentActionItem(watering);
+
+            };
+        }.execute();
 
         /*
          * ACTION DELETE
@@ -164,10 +190,7 @@ public class QuickSeedActionBuilder {
                         "OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 new ActionTask().execute(deleteAction);
-                                // SeedActionInterface actionItem = deleteAction;
-                                // actionItem.execute(seed);
-                                // // parentAdapter.notifyDataSetChanged();
-                                // quickAction.dismiss();
+                                mContext.sendBroadcast(new Intent(BroadCastMessages.GROWINGSEED_DISPLAYLIST));
                                 dialog.dismiss();
                             }
                         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -184,34 +207,78 @@ public class QuickSeedActionBuilder {
         /*
          * ACTION PHOTO
          */
-        final PhotoAction photoAction = (PhotoAction) actionManager.getActionByName("photo");
-        ActionWidget photoWidget = new ActionWidget(mContext, photoAction);
-        photoWidget.setOnClickListener(new View.OnClickListener() {
+        /*
+         * ACTION WATERING
+         */
+        new AsyncTask<Void, Integer, PhotoAction>() {
 
             @Override
-            public void onClick(View v) {
-                SeedActionInterface actionItem = photoAction;
-                if (PhotoAction.class.isInstance(actionItem)) {
-                    File f;
-                    Date now = new Date();
+            protected PhotoAction doInBackground(Void... params) {
+                PhotoAction photoAction = (PhotoAction) actionManager.getActionByName("photo");
 
-                    f = photoAction.getImageFile(now);
-                    actionItem.setData(f.getAbsoluteFile());
-
-                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-                    takePictureIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    mContext.startActivity(takePictureIntent);
-                    // TODO The action must not be executed if activity for result has been canceled because no image
-                    // has been taken but the database get the imagefile
-                    actionItem.execute(seed);
-
-                }
-                // parentAdapter.notifyDataSetChanged();
-                quickAction.dismiss();
+                return photoAction;
             }
-        });
-        quickAction.addPermanentActionItem(photoWidget);
+
+            protected void onPostExecute(final PhotoAction photoAction) {
+                ActionWidget photoWidget = new ActionWidget(mContext, photoAction);
+                photoWidget.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        SeedActionInterface actionItem = photoAction;
+                        if (PhotoAction.class.isInstance(actionItem)) {
+                            File f;
+                            Date now = new Date();
+
+                            f = photoAction.getImageFile(now);
+                            actionItem.setData(f.getAbsoluteFile());
+
+                            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+                            takePictureIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            mContext.startActivity(takePictureIntent);
+                            // TODO The action must not be executed if activity for result has been canceled because no
+                            // image
+                            // has been taken but the database get the imagefile
+                            actionItem.execute(seed);
+
+                        }
+                        // parentAdapter.notifyDataSetChanged();
+                        quickAction.dismiss();
+                    }
+                });
+                quickAction.addPermanentActionItem(photoWidget);
+
+            };
+        }.execute();
+//        final PhotoAction photoAction = (PhotoAction) actionManager.getActionByName("photo");
+//        ActionWidget photoWidget = new ActionWidget(mContext, photoAction);
+//        photoWidget.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                SeedActionInterface actionItem = photoAction;
+//                if (PhotoAction.class.isInstance(actionItem)) {
+//                    File f;
+//                    Date now = new Date();
+//
+//                    f = photoAction.getImageFile(now);
+//                    actionItem.setData(f.getAbsoluteFile());
+//
+//                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+//                    takePictureIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    mContext.startActivity(takePictureIntent);
+//                    // TODO The action must not be executed if activity for result has been canceled because no image
+//                    // has been taken but the database get the imagefile
+//                    actionItem.execute(seed);
+//
+//                }
+//                // parentAdapter.notifyDataSetChanged();
+//                quickAction.dismiss();
+//            }
+//        });
+//        quickAction.addPermanentActionItem(photoWidget);
 
         /*
          * ACTION DETAIL
