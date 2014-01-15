@@ -86,6 +86,14 @@
     <string name="specie.ocimumbasilicum">Basilic</string>
     <string name="specie.pastinacasativa">Panais</string>
     <string name="specie.perseaamericana">Avocat</string>
+    <string name="specie.cichoriumendivia">Chicorée endive</string>
+    <string name="specie.vacciniummyrtillus">Myrtille</string>
+    <string name="specie.ribesuvacrispa">Groseillier à maquereau</string>
+    <string name="specie.fragariaxananassa">Fraisier</string>
+    <string name="specie.ribesrubrum">Groseillier à grappes</string>
+    <string name="specie.fragariaxananassa">Strawberry</string>
+    <string name="specie.asparagusofficinalis">Asperge</string>
+    <string name="specie.cucurbitamaxima">Potiron</string>
     <string name="weather.citynotfound">Pas de prévisions météorologiques, choisissez une ville proche</string>
     <string name="location.notfound">Vous n\'avez pas pu être localisé</string>
     <string name="help.loading">Chargement de la documentation</string>
