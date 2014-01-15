@@ -250,7 +250,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     }
 
     public String getNuxeoLogin() {
-        return sharedPreferences.getString(ORG_GOTS_GARDEN_LOGIN, null);
+        return sharedPreferences.getString(ORG_GOTS_GARDEN_LOGIN, "");
     }
 
     public void setNuxeoLogin(String login) {
