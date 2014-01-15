@@ -24,7 +24,7 @@ import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     // ************************ DATABASE **************
-    private static final int DATABASE_VERSION = 17;
+    private static final int DATABASE_VERSION = 18;
 
     private static String DATABASE_NAME = "gots";
 
@@ -185,6 +185,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // "vnd.android.cursor.dir/vnd.gots.actionseed";
     public static final String ACTIONSEED_ID = "_id";
 
+    public static final String ACTIONSEED_UUID = "uuid";
+
     public static final String ACTIONSEED_GROWINGSEED_ID = "growingseed_id";
 
     public static final String ACTIONSEED_ACTION_ID = "action_id";
@@ -201,6 +203,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ " ("+ACTIONSEED_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," 
 			+ACTIONSEED_GROWINGSEED_ID + " INTEGER," 
 			+ ACTIONSEED_ACTION_ID + " INTEGER," 
+			+ ACTIONSEED_UUID + " STRING," 
 			+ ACTIONSEED_DATEACTIONDONE	+ " INTEGER,"
 			+ ACTIONSEED_DURATION+ " INTEGER,"
 			+ ACTIONSEED_DATA+ " VARCHAR(255)"
@@ -476,6 +479,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if (oldVersion < 17) {
             db.execSQL("ALTER TABLE " + GROWINGSEEDS_TABLE_NAME + " ADD COLUMN " + GROWINGSEED_UUID + " STRING;");
+
+        }
+        if (oldVersion < 18) {
+            db.execSQL("ALTER TABLE " + ACTIONSEEDS_TABLE_NAME + " ADD COLUMN " + ACTIONSEED_UUID + " STRING;");
 
         } else {
             db.execSQL("DROP TABLE IF EXISTS " + SEEDS_TABLE_NAME);

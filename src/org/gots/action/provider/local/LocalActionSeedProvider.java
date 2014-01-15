@@ -37,11 +37,7 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
     @Override
     public BaseActionInterface insertAction(BaseActionInterface action, GrowingSeedInterface seed) {
         long rowid;
-        ContentValues values = new ContentValues();
-
-        values.put(DatabaseHelper.ACTIONSEED_GROWINGSEED_ID, seed.getGrowingSeedId());
-        values.put(DatabaseHelper.ACTIONSEED_DURATION, action.getDuration());
-        values.put(DatabaseHelper.ACTIONSEED_ACTION_ID, action.getId());
+        ContentValues values = getContentValues(action, seed);
 
         if (action.getDateActionDone() != null)
             values.put(DatabaseHelper.ACTIONSEED_DATEACTIONDONE, action.getDateActionDone().getTime());
@@ -49,6 +45,16 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
         rowid = bdd.insert(DatabaseHelper.ACTIONSEEDS_TABLE_NAME, null, values);
         action.setId((int)rowid);
         return action;
+    }
+
+    protected ContentValues getContentValues(BaseActionInterface action, GrowingSeedInterface seed) {
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.ACTIONSEED_GROWINGSEED_ID, seed.getGrowingSeedId());
+        values.put(DatabaseHelper.ACTIONSEED_DURATION, action.getDuration());
+        values.put(DatabaseHelper.ACTIONSEED_ACTION_ID, action.getId());
+        values.put(DatabaseHelper.ACTIONSEED_UUID, action.getUUID());
+        
+        return values;
     }
 
 
@@ -65,6 +71,7 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
             seedAction.setLogId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_ID)));
 
             seedAction.setData(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_DATA)));
+            seedAction.setUUID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_UUID)));
         }
         return seedAction;
     }

@@ -22,6 +22,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -187,27 +188,36 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
         GoogleAnalyticsTracker.getInstance().dispatch();
 
-        ActionBar bar = getSupportActionBar();
+        new AsyncTask<Void, Void, GardenInterface>() {
+            ActionBar bar = getSupportActionBar();
 
-        GardenInterface currentGarden = gardenManager.getCurrentGarden();
-        if (currentGarden != null) {
-            bar.setTitle(currentGarden.getLocality());
-        } else {
-            bar.setTitle(gotsPrefs.getGardeningManagerAppname());
-        }
+            @Override
+            protected GardenInterface doInBackground(Void... params) {
+                return gardenManager.getCurrentGarden();
+            }
 
-        startService(weatherIntent);
+            @Override
+            protected void onPostExecute(GardenInterface currentGarden) {
+                if (currentGarden != null) {
+                    bar.setTitle(currentGarden.getLocality());
+                } else {
+                    bar.setTitle(gotsPrefs.getGardeningManagerAppname());
+                }
+                startService(weatherIntent);
 
-        // if (gotsPrefs.getCurrentGardenId() == -1) {
-        if (gardenManager.getCurrentGarden() == null) {
-            Intent intent = new Intent(this, ProfileActivity.class);
-            startActivity(intent);
-            Animation myFadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.tween);
-            findViewById(R.id.dashboard_button_profile).startAnimation(myFadeInAnimation);
-        } else
-            findViewById(R.id.dashboard_button_profile).clearAnimation();
+                // if (gotsPrefs.getCurrentGardenId() == -1) {
+                if (gardenManager.getCurrentGarden() == null) {
+                    Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                    startActivity(intent);
+                    Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
+                    findViewById(R.id.dashboard_button_profile).startAnimation(myFadeInAnimation);
+                } else
+                    findViewById(R.id.dashboard_button_profile).clearAnimation();
 
-        refreshConnectionState();
+                refreshConnectionState();
+                super.onPostExecute(currentGarden);
+            }
+        }.execute();
 
     }
 

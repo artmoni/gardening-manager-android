@@ -87,6 +87,9 @@ public class ActionNotificationService extends Service {
                         createNotification(action, seed);
 
                 }
+                
+                
+                
                 return null;
             }
         }.execute();
@@ -95,27 +98,27 @@ public class ActionNotificationService extends Service {
 
         // ##########
 
-        LocalSeedProvider helperVendor = new LocalSeedProvider(getApplicationContext());
-        List<BaseSeedInterface> allMySeeds = helperVendor.getMyStock(GardenManager.getInstance().initIfNew(this).getCurrentGarden());
-        List<BaseActionInterface> sowingActions = new ArrayList<BaseActionInterface>();
-        BaseSeedInterface sowingseed = new GrowingSeed();
-        for (Iterator<BaseSeedInterface> iterator = allMySeeds.iterator(); iterator.hasNext();) {
-            BaseSeedInterface seed = iterator.next();
-
-            Calendar cal = Calendar.getInstance();
-            if (cal.get(Calendar.MONTH) >= seed.getDateSowingMin()
-                    && cal.get(Calendar.MONTH) <= seed.getDateSowingMax()) {
-                BaseActionInterface action = new SowingAction(this);
-                sowingActions.add(action);
-                sowingseed = seed;
-            }
-
-        }
-
-        if (!sowingActions.isEmpty()) {
-            BaseActionInterface action = sowingActions.iterator().next();
-            createNotification(action, sowingseed);
-        }
+//        LocalSeedProvider helperVendor = new LocalSeedProvider(getApplicationContext());
+//        List<BaseSeedInterface> allMySeeds = helperVendor.getMyStock(GardenManager.getInstance().initIfNew(this).getCurrentGarden());
+//        List<BaseActionInterface> sowingActions = new ArrayList<BaseActionInterface>();
+//        BaseSeedInterface sowingseed = new GrowingSeed();
+//        for (Iterator<BaseSeedInterface> iterator = allMySeeds.iterator(); iterator.hasNext();) {
+//            BaseSeedInterface seed = iterator.next();
+//
+//            Calendar cal = Calendar.getInstance();
+//            if (cal.get(Calendar.MONTH) >= seed.getDateSowingMin()
+//                    && cal.get(Calendar.MONTH) <= seed.getDateSowingMax()) {
+//                BaseActionInterface action = new SowingAction(this);
+//                sowingActions.add(action);
+//                sowingseed = seed;
+//            }
+//
+//        }
+//
+//        if (!sowingActions.isEmpty()) {
+//            BaseActionInterface action = sowingActions.iterator().next();
+//            createNotification(action, sowingseed);
+//        }
 
         return super.onStartCommand(intent, flags, startId);
     }
