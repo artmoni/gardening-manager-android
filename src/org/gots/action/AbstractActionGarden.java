@@ -38,8 +38,6 @@ public abstract class AbstractActionGarden implements GardeningActionInterface {
 
     private Date dateActionTodo;
 
-    private int logid;
-
     private int growingSeedId;
 
     private Object data;
@@ -86,15 +84,6 @@ public abstract class AbstractActionGarden implements GardeningActionInterface {
         this.name = name;
     }
 
-    @Override
-    public int getGrowingSeedId() {
-        return growingSeedId;
-    }
-
-    @Override
-    public void setGrowingSeedId(int id) {
-        growingSeedId = id;
-    }
 
     @Override
     public String getName() {
@@ -174,16 +163,6 @@ public abstract class AbstractActionGarden implements GardeningActionInterface {
 
     }
 
-    @Override
-    public int getLogId() {
-        return this.logid;
-    }
-
-    @Override
-    public void setLogId(int id) {
-        this.logid = id;
-
-    }
 
     @Override
     public String getUUID() {

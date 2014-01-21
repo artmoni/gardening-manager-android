@@ -122,15 +122,6 @@ public interface BaseSeedInterface  {
 
 	public abstract void setActionDone(ArrayList<BaseActionInterface> actionDone);
 
-	//public abstract Object clone() throws CloneNotSupportedException;
-
-	public abstract boolean onActionAlert();
-
-	public abstract boolean onActionWarning();
-
-	public abstract void performNextAction();
-
-	public abstract void undoLastAction();
 
 	public abstract void setBareCode(String bare_code);
 

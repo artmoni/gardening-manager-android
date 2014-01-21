@@ -13,7 +13,7 @@ public class NuxeoActionConverter {
         if (action != null) {
             action.setUUID(document.getId());
             action.setDuration(Integer.valueOf(document.getString("action:duration")));
-            action.setDateActionDone(document.getDate("action:dateactiondone"));
+//            action.setDateActionDone(document.getDate("action:dateactiondone"));
         }
         return action;
     }

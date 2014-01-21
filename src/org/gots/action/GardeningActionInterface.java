@@ -10,11 +10,29 @@
  ******************************************************************************/
 package org.gots.action;
 
+import java.util.Date;
+
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GrowingSeedInterface;
 
 public interface GardeningActionInterface extends BaseActionInterface{
 	
 	public int execute(BaseAllotmentInterface allotment, GrowingSeedInterface seed);
+
+    Object getData();
+
+    void setData(Object data);
+
+    Date getDateActionDone();
+
+    void setDateActionDone(Date dateActionDone);
+
+    int getState();
+
+    void setState(int state);
+
+    Date getDateActionTodo();
+
+    void setDateActionTodo(Date dateActionTodo);
  
 }

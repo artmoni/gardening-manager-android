@@ -61,11 +61,11 @@ public class MySeedsListAdapter extends SeedListAdapter {
 
             if (Calendar.getInstance().get(Calendar.MONTH) >= currentSeed.getDateSowingMin()
                     && Calendar.getInstance().get(Calendar.MONTH) <= currentSeed.getDateSowingMax())
-                action.setState(ActionState.NORMAL);
+                holder.actionWidget.setState(ActionState.NORMAL);
             else if (Calendar.getInstance().get(Calendar.MONTH) + 1 >= currentSeed.getDateSowingMin())
-                action.setState(ActionState.WARNING);
+                holder.actionWidget.setState(ActionState.WARNING);
             else
-                action.setState(ActionState.UNDEFINED);
+                holder.actionWidget.setState(ActionState.UNDEFINED);
             holder.actionWidget.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -96,7 +96,7 @@ public class MySeedsListAdapter extends SeedListAdapter {
 
         } else {
             action = new ReduceQuantityAction(mContext);
-            action.setState(ActionState.NORMAL);
+//            action.setState(ActionState.NORMAL);
 
             holder.actionWidget.setAction(action);
             final BaseActionInterface baseActionInterface = action;

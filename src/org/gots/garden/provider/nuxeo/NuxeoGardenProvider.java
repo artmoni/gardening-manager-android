@@ -112,6 +112,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager service = session.getAdapter(DocumentManager.class);
+
             // gardensWorkspaces = service.getChildren(wsRef);
             // Documents gardensWorkspaces =
             // service.query("SELECT * FROM Garden WHERE ecm:currentLifeCycleState <> 'deleted' ORDER BY dc:modified DESC");
@@ -318,7 +319,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
     @Override
     public GardenInterface getCurrentGarden() {
         GardenInterface garden = super.getCurrentGarden();
-        if (garden.getUUID() == null) {
+        if (garden != null && garden.getUUID() == null) {
             garden = createGarden(garden);
             garden = super.updateGarden(garden);
         }

@@ -267,28 +267,6 @@ public class SimpleSeedInterface implements GrowingSeedInterface {
     }
 
     @Override
-    public boolean onActionAlert() {
-        // TODO ?
-        return false;
-    }
-
-    @Override
-    public boolean onActionWarning() {
-        // TODO ?
-        return false;
-    }
-
-    @Override
-    public void performNextAction() {
-        // TODO ?
-    }
-
-    @Override
-    public void undoLastAction() {
-        // TODO ?
-    }
-
-    @Override
     public void setBareCode(String bare_code) {
         barecode = bare_code;
     }

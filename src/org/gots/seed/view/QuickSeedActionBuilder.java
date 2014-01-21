@@ -28,6 +28,7 @@ import org.gots.action.bean.PhotoAction;
 import org.gots.action.bean.ScheduleAction;
 import org.gots.action.bean.WateringAction;
 import org.gots.action.provider.GotsActionSeedProvider;
+import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.preferences.GotsPreferences;
@@ -84,16 +85,16 @@ public class QuickSeedActionBuilder {
         actionManager = GotsActionManager.getInstance().initIfNew(mContext);
         actionSeedManager = GotsActionSeedManager.getInstance().initIfNew(mContext);
 
-        new AsyncTask<Void, Void, ArrayList<BaseActionInterface>>() {
+        new AsyncTask<Void, Void, ArrayList<SeedActionInterface>>() {
 
             @Override
-            protected ArrayList<BaseActionInterface> doInBackground(Void... params) {
+            protected ArrayList<SeedActionInterface> doInBackground(Void... params) {
                 GotsActionSeedProvider helperActions = GotsActionSeedManager.getInstance().initIfNew(mContext);
 
                 return helperActions.getActionsToDoBySeed(seed);
             }
 
-            protected void onPostExecute(ArrayList<BaseActionInterface> actions) {
+            protected void onPostExecute(ArrayList<SeedActionInterface> actions) {
                 for (BaseActionInterface baseActionInterface : actions) {
                     if (!SeedActionInterface.class.isInstance(baseActionInterface))
                         continue;
@@ -141,6 +142,7 @@ public class QuickSeedActionBuilder {
          */
         final DetailAction detail = new DetailAction(mContext);
         ActionWidget detailWidget = new ActionWidget(mContext, detail);
+        detailWidget.setState(ActionState.UNDEFINED);
         detailWidget.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -177,6 +179,7 @@ public class QuickSeedActionBuilder {
 
             protected void onPostExecute(final SeedActionInterface action) {
                 ActionWidget watering = new ActionWidget(mContext, action);
+                watering.setState(ActionState.UNDEFINED);
                 watering.setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -184,7 +187,7 @@ public class QuickSeedActionBuilder {
                         new AsyncTask<SeedActionInterface, Integer, Void>() {
                             @Override
                             protected Void doInBackground(SeedActionInterface... params) {
-                                BaseActionInterface actionItem = params[0];
+                                SeedActionInterface actionItem = params[0];
                                 actionItem = actionSeedManager.insertAction((BaseActionInterface) actionItem, seed);
                                 actionSeedManager.doAction(actionItem, seed);
                                 return null;
@@ -209,6 +212,8 @@ public class QuickSeedActionBuilder {
          */
         final DeleteAction deleteAction = new DeleteAction(mContext);
         ActionWidget delete = new ActionWidget(mContext, deleteAction);
+        delete.setState(ActionState.UNDEFINED);
+
         delete.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -235,9 +240,6 @@ public class QuickSeedActionBuilder {
         /*
          * ACTION PHOTO
          */
-        /*
-         * ACTION WATERING
-         */
         new AsyncTask<Void, Integer, PhotoAction>() {
 
             @Override
@@ -249,6 +251,8 @@ public class QuickSeedActionBuilder {
 
             protected void onPostExecute(final PhotoAction photoAction) {
                 ActionWidget photoWidget = new ActionWidget(mContext, photoAction);
+                photoWidget.setState(ActionState.UNDEFINED);
+
                 photoWidget.setOnClickListener(new View.OnClickListener() {
 
                     @Override

@@ -8,6 +8,7 @@ import java.util.List;
 import org.gots.R;
 import org.gots.action.BaseActionInterface;
 import org.gots.action.GotsActionSeedManager;
+import org.gots.action.SeedActionInterface;
 import org.gots.action.bean.SowingAction;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.garden.GardenManager;
@@ -36,7 +37,7 @@ public class ActionNotificationService extends Service {
 
     // NotificationManager mNM;
 
-    private ArrayList<BaseActionInterface> actions = new ArrayList<BaseActionInterface>();
+    private ArrayList<SeedActionInterface> actions = new ArrayList<SeedActionInterface>();
 
     private static final String TAG = "ActionNotificationService";
 
@@ -73,14 +74,14 @@ public class ActionNotificationService extends Service {
                     GrowingSeedInterface seed = iterator.next();
                     GotsActionSeedProvider actionseedManager = GotsActionSeedManager.getInstance().initIfNew(
                             ActionNotificationService.this);
-                    ArrayList<BaseActionInterface> seedActions;
+                    ArrayList<SeedActionInterface> seedActions;
 
                     seedActions = actionseedManager.getActionsToDoBySeed(seed);
 
                     actions.addAll(seedActions);
                 }
                 if (!actions.isEmpty()) {
-                    BaseActionInterface action = actions.iterator().next();
+                    SeedActionInterface action = actions.iterator().next();
 
                     GrowingSeedInterface seed = growingSeedManager.getGrowingSeedById(action.getGrowingSeedId());
                     if (seed != null)

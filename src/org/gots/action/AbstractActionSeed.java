@@ -37,13 +37,13 @@ public abstract class AbstractActionSeed implements SeedActionInterface, Compara
 
     private int id;
 
+    private int actionSeedId;
+
     private String UUID;
 
     private int state;
 
     private Date dateActionTodo;
-
-    private int logid;
 
     // private GrowingSeedInterface growingSeed;
     private int growingSeedId;
@@ -180,16 +180,6 @@ public abstract class AbstractActionSeed implements SeedActionInterface, Compara
     }
 
     @Override
-    public void setLogId(int id) {
-        this.logid = id;
-    }
-
-    @Override
-    public int getLogId() {
-        return this.logid;
-    }
-
-    @Override
     public Object getData() {
         return data;
     }
@@ -223,5 +213,15 @@ public abstract class AbstractActionSeed implements SeedActionInterface, Compara
         if (getDateActionDone() != null)
             txt = txt.concat("\nDone on " + getDateActionDone());
         return super.toString();
+    }
+
+    @Override
+    public int getActionSeedId() {
+        return actionSeedId;
+    }
+
+    @Override
+    public void setActionSeedId(int id) {
+        actionSeedId = id;
     }
 }

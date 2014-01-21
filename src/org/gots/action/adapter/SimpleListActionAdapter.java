@@ -37,7 +37,8 @@ public class SimpleListActionAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int arg0, View arg1, ViewGroup arg2) {
-		getItem(arg0).setState(ActionState.NORMAL);
+//		TODO ACTION STATE
+//	    getItem(arg0).setState(ActionState.NORMAL);
 		ActionWidget actionWidget = new ActionWidget(arg2.getContext(),getItem(arg0));
 		
 

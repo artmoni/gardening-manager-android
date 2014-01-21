@@ -63,27 +63,27 @@ public class GotsActionSeedManager implements GotsActionSeedProvider {
     }
 
     @Override
-    public long doAction(BaseActionInterface action, GrowingSeedInterface seed) {
+    public long doAction(SeedActionInterface action, GrowingSeedInterface seed) {
         return provider.doAction(action, seed);
     }
 
     @Override
-    public ArrayList<BaseActionInterface> getActionsToDo() {
+    public ArrayList<SeedActionInterface> getActionsToDo() {
         return provider.getActionsToDo();
     }
 
     @Override
-    public ArrayList<BaseActionInterface> getActionsToDoBySeed(GrowingSeedInterface seed) {
+    public ArrayList<SeedActionInterface> getActionsToDoBySeed(GrowingSeedInterface seed) {
         return provider.getActionsToDoBySeed(seed);
     }
 
     @Override
-    public ArrayList<BaseActionInterface> getActionsDoneBySeed(GrowingSeedInterface seed) {
+    public ArrayList<SeedActionInterface> getActionsDoneBySeed(GrowingSeedInterface seed) {
         return provider.getActionsDoneBySeed(seed);
     }
 
     @Override
-    public BaseActionInterface insertAction(BaseActionInterface action, GrowingSeedInterface seed) {
+    public SeedActionInterface insertAction(BaseActionInterface action, GrowingSeedInterface seed) {
         return provider.insertAction(action, seed);
     }
 

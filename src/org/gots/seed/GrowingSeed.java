@@ -17,7 +17,7 @@ import java.util.Iterator;
 
 import org.gots.action.BaseActionInterface;
 
-public class GrowingSeed extends BaseSeed implements IActionSeedAlert, GrowingSeedInterface {
+public class GrowingSeed extends BaseSeed implements GrowingSeedInterface {
     private int growingSeedId;
 
     private static final long serialVersionUID = 1L;
@@ -29,72 +29,6 @@ public class GrowingSeed extends BaseSeed implements IActionSeedAlert, GrowingSe
     public static final int NB_DAY_ALERT = 10;
 
     public static final int NB_DAY_WARNING = 5;
-
-    @Override
-    public boolean onActionAlert() {
-
-        for (Iterator<BaseActionInterface> iterator = getActionToDo().iterator(); iterator.hasNext();) {
-            BaseActionInterface currentAction = iterator.next();
-
-            // Check Action Alert
-            Calendar actionTime = new GregorianCalendar();
-            actionTime.setTime(this.getDateSowing());
-            actionTime.add(Calendar.DAY_OF_MONTH, currentAction.getDuration());
-
-            if (actionTime.getTimeInMillis() < Calendar.getInstance().getTimeInMillis() - (10 * 86400000)) {
-                return true;
-            }
-
-        }
-        return false;
-    }
-
-    @Override
-    public boolean onActionWarning() {
-
-        for (Iterator<BaseActionInterface> iterator = getActionToDo().iterator(); iterator.hasNext();) {
-            BaseActionInterface currentAction = iterator.next();
-
-            // Check Action Alert
-            Calendar actionTime = new GregorianCalendar();
-            actionTime.setTime(this.getDateSowing());
-            actionTime.add(Calendar.DAY_OF_MONTH, currentAction.getDuration());
-
-            if (actionTime.getTimeInMillis() > Calendar.getInstance().getTimeInMillis() - (NB_DAY_WARNING * 86400000)
-                    && actionTime.getTimeInMillis() < Calendar.getInstance().getTimeInMillis()
-                            + (NB_DAY_WARNING * 86400000)) {
-                return true;
-            }
-
-        }
-        return false;
-    }
-
-    /**
-     *
-     */
-    public void performNextAction() {
-        if (getActionToDo().size() > 0) {
-            BaseActionInterface currentAction = getActionToDo().get(getActionToDo().size() - 1);
-            currentAction.setDateActionDone(Calendar.getInstance().getTime());
-            getActionDone().add(currentAction);
-            getActionToDo().remove(getActionToDo().size() - 1);
-
-        }
-    }
-
-    /**
-     *
-     */
-    public void undoLastAction() {
-        if (getActionDone().size() > 0) {
-            BaseActionInterface currentAction = getActionDone().get(getActionDone().size() - 1);
-            currentAction.setDateActionDone(null);
-            getActionToDo().add(currentAction);
-            getActionDone().remove(getActionDone().size() - 1);
-
-        }
-    }
 
     @Override
     public Date getDateLastWatering() {

@@ -13,13 +13,14 @@ package org.gots.action.bean;
 import java.util.Date;
 
 import org.gots.action.AbstractActionGarden;
+import org.gots.action.AbstractActionSeed;
 import org.gots.action.PermanentActionInterface;
 import org.gots.action.SeedActionInterface;
 import org.gots.seed.GrowingSeedInterface;
 
 import android.content.Context;
 
-public class BuyingAction extends AbstractActionGarden implements PermanentActionInterface, SeedActionInterface {
+public class BuyingAction extends AbstractActionSeed implements PermanentActionInterface {
 
     public BuyingAction(Context context) {
         super(context);

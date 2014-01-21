@@ -62,7 +62,7 @@ public class ListAllActionAdapter extends BaseAdapter {
 
     private Context mContext;
 
-    private ArrayList<BaseActionInterface> actions = new ArrayList<BaseActionInterface>();
+    private ArrayList<SeedActionInterface> actions = new ArrayList<SeedActionInterface>();
 
     // private ArrayList<GrowingSeedInterface> seeds = new
     // ArrayList<GrowingSeedInterface>();
@@ -89,7 +89,7 @@ public class ListAllActionAdapter extends BaseAdapter {
         GotsActionSeedProvider actionSeedProvider = GotsActionSeedManager.getInstance().initIfNew(context);
 
         for (GrowingSeedInterface seed : allSeeds) {
-            ArrayList<BaseActionInterface> seedActions;
+            ArrayList<SeedActionInterface> seedActions;
 
             if (current_status == STATUS_TODO) {
                 seedActions = actionSeedProvider.getActionsToDoBySeed(seed);
@@ -101,17 +101,17 @@ public class ListAllActionAdapter extends BaseAdapter {
             actions.addAll(seedActions);
         }
         
-        if (current_status == STATUS_TODO||false)
-            for (BaseSeedInterface seed : GotsSeedManager.getInstance().initIfNew(context).getMyStock(
-                    GardenManager.getInstance().initIfNew(context).getCurrentGarden())) {
-                Calendar today = Calendar.getInstance();
-                int currentMonth = today.get(Calendar.MONTH) + 1;
-                GardeningActionInterface action = new SowingAction(mContext);
-                action.setGrowingSeedId(seed.getSeedId());
-                action.setState(ActionState.NORMAL);
-                if (currentMonth >= seed.getDateSowingMin() && currentMonth <= seed.getDateSowingMax())
-                    actions.add(action);
-            }
+//        if (current_status == STATUS_TODO||false)
+//            for (BaseSeedInterface seed : GotsSeedManager.getInstance().initIfNew(context).getMyStock(
+//                    GardenManager.getInstance().initIfNew(context).getCurrentGarden())) {
+//                Calendar today = Calendar.getInstance();
+//                int currentMonth = today.get(Calendar.MONTH) + 1;
+//                GardeningActionInterface action = new SowingAction(mContext);
+//                action.setGrowingSeedId(seed.getSeedId());
+//                action.setState(ActionState.NORMAL);
+//                if (currentMonth >= seed.getDateSowingMin() && currentMonth <= seed.getDateSowingMax())
+//                    actions.add(action);
+//            }
         if (current_status == STATUS_TODO)
             Collections.sort(actions, new IActionAscendantComparator());
         else
@@ -131,7 +131,7 @@ public class ListAllActionAdapter extends BaseAdapter {
     }
 
     @Override
-    public BaseActionInterface getItem(int position) {
+    public SeedActionInterface getItem(int position) {
         return actions.get(position);
     }
 
@@ -149,7 +149,7 @@ public class ListAllActionAdapter extends BaseAdapter {
         if (convertView == null)
             ll = LayoutInflater.from(mContext).inflate(R.layout.list_action, parent, false);
 
-        final BaseActionInterface currentAction = getItem(position);
+        final SeedActionInterface currentAction = getItem(position);
 
         final GrowingSeedInterface seed = GotsGrowingSeedManager.getInstance().initIfNew(mContext).getGrowingSeedById(
                 currentAction.getGrowingSeedId());
@@ -309,9 +309,9 @@ public class ListAllActionAdapter extends BaseAdapter {
         }
     }
 
-    class IActionDescendantComparator implements Comparator<BaseActionInterface> {
+    class IActionDescendantComparator implements Comparator<SeedActionInterface> {
         @Override
-        public int compare(BaseActionInterface obj1, BaseActionInterface obj2) {
+        public int compare(SeedActionInterface obj1, SeedActionInterface obj2) {
             int result = 0;
             if (obj1.getDateActionDone() != null && obj2.getDateActionDone() != null) {
                 result = obj1.getDateActionDone().getTime() > obj2.getDateActionDone().getTime() ? -1 : 0;
