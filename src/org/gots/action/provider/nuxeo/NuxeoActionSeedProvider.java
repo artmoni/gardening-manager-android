@@ -116,16 +116,14 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             // for (Document actionDoc : documentMgr.getChildren(getActionsFolder(seed, documentMgr))) {
             Documents actionDocs = documentMgr.query(
                     "SELECT * FROM Action WHERE ecm:currentLifeCycleState != \"deleted\" AND ecm:parentId=\""
-                            + getActionsFolder(seed, documentMgr).getId() + "\"", null,
-                    new String[] { "dc:modified DESC" }, "*", 0, 50, CacheBehavior.FORCE_REFRESH);
+                            + getActionsFolder(seed, documentMgr).getId() + "\" AND action:dateactiondone is null",
+                    null, new String[] { "dc:modified DESC" }, "*", 0, 50, CacheBehavior.FORCE_REFRESH);
 
             for (Document actionDoc : actionDocs) {
                 SeedActionInterface action = convert(actionDoc);
-                if (action.getDateActionDone() == null) {
-                    super.populateState(action, seed);
-                    action.setGrowingSeedId(seed.getGrowingSeedId());
-                    actionsToDo.add(action);
-                }
+                // super.populateState(action, seed);
+                action.setGrowingSeedId(seed.getGrowingSeedId());
+                actionsToDo.add(action);
             }
 
         } catch (Exception e) {
@@ -142,17 +140,14 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         try {
             Documents actionDocs = documentMgr.query(
                     "SELECT * FROM Action WHERE ecm:currentLifeCycleState != \"deleted\" AND ecm:parentId=\""
-                            + getActionsFolder(seed, documentMgr).getId() + "\"", null,
-                    new String[] { "dc:modified DESC" }, "*", 0, 50, CacheBehavior.FORCE_REFRESH);
+                            + getActionsFolder(seed, documentMgr).getId() + "\" AND action:dateactiondone is not null",
+                    null, new String[] { "dc:modified DESC" }, "*", 0, 50, CacheBehavior.FORCE_REFRESH);
 
             for (Document actionDoc : actionDocs) {
                 SeedActionInterface action = convert(actionDoc);
-
-                if (action.getDateActionDone() != null) {
-                    super.populateState(action, seed);
-                    action.setGrowingSeedId(seed.getGrowingSeedId());
-                    actionsDone.add(action);
-                }
+                // super.populateState(action, seed);
+                action.setGrowingSeedId(seed.getGrowingSeedId());
+                actionsDone.add(action);
             }
 
         } catch (Exception e) {
