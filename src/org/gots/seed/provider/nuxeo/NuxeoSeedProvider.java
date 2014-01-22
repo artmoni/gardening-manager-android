@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.gots.garden.GardenInterface;
+import org.gots.garden.GardenManager;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.provider.local.LocalSeedProvider;
@@ -122,9 +123,10 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         }
 
         for (BaseSeedInterface localSeed : localVendorSeeds) {
+
             if (localSeed.getUUID() == null) {
                 myVendorSeeds.add(localSeed);
-                createNuxeoVendorSeed(localSeed);
+                localSeed = createNuxeoVendorSeed(localSeed);
             } else {
                 boolean found = false;
                 for (BaseSeedInterface remoteSeed : remoteVendorSeeds) {
@@ -137,6 +139,11 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     // TODO take a decision if local seed should be remove if the remote description is removed.
                     // super.remove(localSeed);
                 }
+            }
+            
+            //TODO update remote stock from local stock
+            if (localSeed.getNbSachet() > 0) {
+                updateStock(localSeed,GardenManager.getInstance().initIfNew(mContext).getCurrentGarden());
             }
         }
 
@@ -238,6 +245,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         return nuxeoManager.getNuxeoClient();
     }
 
+    
     @Override
     public void addToStock(BaseSeedInterface vendorSeed, GardenInterface garden) {
         Session session = getNuxeoClient().getSession();
@@ -260,14 +268,14 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                         vendorSeed.getSpecie() + " " + vendorSeed.getVariety());
                 service.createRelation(stockitem, "http://purl.org/dc/terms/isFormatOf",
                         new PathRef(vendorSeed.getUUID()));
-                
+
             }
 
             PropertyMap map = new PropertyMap();
             map.set("stockitem:quantity", "" + ++quantity);
             map.set("dc:title", vendorSeed.getSpecie() + " " + vendorSeed.getVariety());
             map.set("stockitem:vendorseedid", vendorSeed.getUUID());
-            
+
             service.update(stockitem, map);
             super.addToStock(vendorSeed, garden);
         } catch (Exception e) {
@@ -276,6 +284,40 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
     }
 
+    public void updateStock(BaseSeedInterface vendorSeed, GardenInterface garden) {
+        Session session = getNuxeoClient().getSession();
+        DocumentManager service = session.getAdapter(DocumentManager.class);
+
+        try {
+            // TODO Change this when garden UUID manage uuid and not path
+            Document gardenFolder = service.getDocument(new IdRef(garden.getUUID()));
+            Document stockFolder = service.getDocument(new PathRef(gardenFolder.getPath() + "/My Stock"));
+
+            Document stockitem;
+            int quantity = vendorSeed.getNbSachet();
+            try {
+                stockitem = service.getDocument(new PathRef(stockFolder.getPath() + "/" + vendorSeed.getSpecie() + " "
+                        + vendorSeed.getVariety()), true);
+            } catch (Exception e) {
+                Log.i(TAG, e.getMessage(), e);
+                stockitem = service.createDocument(stockFolder, "StockItem",
+                        vendorSeed.getSpecie() + " " + vendorSeed.getVariety());
+                service.createRelation(stockitem, "http://purl.org/dc/terms/isFormatOf",
+                        new PathRef(vendorSeed.getUUID()));
+
+            }
+
+            PropertyMap map = new PropertyMap();
+            map.set("stockitem:quantity", "" + quantity);
+            map.set("dc:title", vendorSeed.getSpecie() + " " + vendorSeed.getVariety());
+            map.set("stockitem:vendorseedid", vendorSeed.getUUID());
+
+            service.update(stockitem, map);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+
+    }
     @Override
     public void removeToStock(BaseSeedInterface vendorSeed, GardenInterface garden) {
         Session session = getNuxeoClient().getSession();
@@ -364,7 +406,8 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         DocumentManager service = session.getAdapter(DocumentManager.class);
         try {
             Document seedDoc = service.getDocument(new IdRef(seed.getUUID()));
-            service.update(new IdRef(seed.getUUID()), NuxeoSeedConverter.convert(seedDoc.getParentPath(), seed).getProperties());
+            service.update(new IdRef(seed.getUUID()),
+                    NuxeoSeedConverter.convert(seedDoc.getParentPath(), seed).getProperties());
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
