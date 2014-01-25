@@ -1,8 +1,11 @@
 package org.gots.action.provider.nuxeo;
 
+import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
+import java.util.Random;
 
 import org.gots.action.ActionFactory;
 import org.gots.action.BaseActionInterface;
@@ -12,15 +15,21 @@ import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
+import org.nuxeo.android.cache.blob.BlobWithProperties;
+import org.nuxeo.android.layout.widgets.BlobWidgetWrapper;
 import org.nuxeo.android.repository.DocumentManager;
+import org.nuxeo.android.upload.FileUploader;
 import org.nuxeo.ecm.automation.client.cache.CacheBehavior;
+import org.nuxeo.ecm.automation.client.jaxrs.AsyncCallback;
 import org.nuxeo.ecm.automation.client.jaxrs.Constants;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.DocumentStatus;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
+import org.nuxeo.ecm.automation.client.jaxrs.model.FileBlob;
 import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
+import org.nuxeo.ecm.automation.client.jaxrs.model.PathRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
 import com.google.android.gms.dynamic.LifecycleDelegate;
@@ -167,5 +176,79 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             action.setDuration(Integer.parseInt(actionDoc.getString("action:duration")));
 
         return action;
+    }
+
+    PropertyMap blobProp = new PropertyMap();
+
+    protected void attachBlobToDocument(GrowingSeedInterface seed) {
+        Session session = NuxeoManager.getInstance().getNuxeoClient().getSession();
+        DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
+        Document seedDoc;
+        try {
+            seedDoc = documentMgr.getDocument(new IdRef(seed.getUUID()));
+            Document pictureBook = documentMgr.getDocument(new PathRef(seedDoc.getPath() + "/Picture"));
+
+            Document imageDoc = documentMgr.createDocument(pictureBook, "Picture", blobProp.getString("name"));
+            imageDoc.set("file:content", blobProp);
+            documentMgr.update(imageDoc, imageDoc.getProperties());
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void uploadPicture(final GrowingSeedInterface seed, File imageFile) {
+        Session session = NuxeoManager.getInstance().getNuxeoClient().getSession();
+        FileUploader uploader = session.getAdapter(FileUploader.class);
+
+        try {
+
+            FileBlob blobToUpload = new FileBlob(imageFile);
+            blobToUpload.setMimeType("image/jpeg");
+
+            String batchId = String.valueOf(new Random().nextInt());
+            final String fileId = blobToUpload.getFileName();
+
+            BlobWithProperties blobUploading = uploader.storeAndUpload(batchId, "0", blobToUpload,
+                    new AsyncCallback<Serializable>() {
+
+                        @Override
+                        public void onSuccess(String executionId, Serializable data) {
+                            attachBlobToDocument(seed);
+                            Log.i(TAG, "success");
+
+                        }
+
+                        @Override
+                        public void onError(String executionId, Throwable e) {
+                            Log.i(TAG, "errdroior");
+
+                        }
+                    });
+
+            String uploadUUID = blobUploading.getProperty(FileUploader.UPLOAD_UUID);
+
+            Log.i(TAG, "Started blob upload UUID " + uploadUUID);
+            blobProp.set("type", "blob");
+            blobProp.set("length", Long.valueOf(blobUploading.getLength()));
+            blobProp.set("mime-type", blobUploading.getMimeType());
+            blobProp.set("name", blobToUpload.getFileName());
+            // set information for server side Blob mapping
+            blobProp.set("upload-batch", batchId);
+            blobProp.set("upload-fileId", "0");
+            // set information for the update query to know it's
+            // dependencies
+            blobProp.set("android-require-type", "upload");
+            blobProp.set("android-require-uuid", uploadUUID);
+
+            // session.newRequest("Blob.Attach").setHeader(
+            // Constants.HEADER_NX_VOIDOP, "true").setInput(fb)
+            // .set("document", imageDoc.getPath()).execute();
+
+            // documentMgr.setBlob(imageDoc, fb);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+        // super.uploadPicture(seed);
     }
 }

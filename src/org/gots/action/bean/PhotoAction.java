@@ -47,7 +47,6 @@ public class PhotoAction extends AbstractActionSeed implements PermanentActionIn
         seed.getActionDone().add(this);
 
         actionSeedManager.doAction(this, seed);
-
         return 0;
     }
 

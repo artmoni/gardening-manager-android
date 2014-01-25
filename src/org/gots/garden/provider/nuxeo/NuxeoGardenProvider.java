@@ -126,8 +126,6 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
                     "SELECT * FROM Garden WHERE ecm:currentLifeCycleState != \"deleted\"", null,
                     new String[] { "dc:modified desc" }, "*", 0, 50, cacheParam);
 
-            documentsList = gardensWorkspaces.asUpdatableDocumentsList();
-
             // TODO JC Documents gardensWorkspaces = service.query(nxql, queryParams, sortInfo, schemaList, page,
             // pageSize, cacheFlags);
             // documentsList = gardensWorkspaces.asUpdatableDocumentsList();
@@ -200,7 +198,6 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 
         Session session = getNuxeoClient().getSession();
         DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
-        DeferredUpdateManager deferredUpdateMgr = getNuxeoClient().getDeferredUpdatetManager();
         try {
             Document root = documentMgr.getUserHome();
 

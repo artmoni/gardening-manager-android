@@ -36,6 +36,7 @@ import org.gots.seed.GrowingSeedInterface;
 import org.gots.ui.NewActionActivity;
 import org.gots.ui.TabSeedActivity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -259,20 +260,14 @@ public class QuickSeedActionBuilder {
                     public void onClick(View v) {
                         SeedActionInterface actionItem = photoAction;
                         if (PhotoAction.class.isInstance(actionItem)) {
-                            File f;
-                            Date now = new Date();
-
-                            f = photoAction.getImageFile(now);
-                            actionItem.setData(f.getAbsoluteFile());
-
-                            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-                            takePictureIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            mContext.startActivity(takePictureIntent);
-                            // TODO The action must not be executed if activity for result has been canceled because no
-                            // image
-                            // has been taken but the database get the imagefile
-                            actionItem.execute(seed);
+                            // alert.show();
+                            final Intent i = new Intent(mContext, TabSeedActivity.class);
+                            i.putExtra("org.gots.seed.id", ((GrowingSeedInterface) parentView.getTag()).getGrowingSeedId());
+                            i.putExtra("org.gots.seed.actionphoto","org.gots.seed.actionphoto");
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            mContext.startActivity(i);
+                            
+                           
 
                         }
                         // parentAdapter.notifyDataSetChanged();
@@ -283,35 +278,6 @@ public class QuickSeedActionBuilder {
 
             };
         }.execute();
-//        final PhotoAction photoAction = (PhotoAction) actionManager.getActionByName("photo");
-//        ActionWidget photoWidget = new ActionWidget(mContext, photoAction);
-//        photoWidget.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                SeedActionInterface actionItem = photoAction;
-//                if (PhotoAction.class.isInstance(actionItem)) {
-//                    File f;
-//                    Date now = new Date();
-//
-//                    f = photoAction.getImageFile(now);
-//                    actionItem.setData(f.getAbsoluteFile());
-//
-//                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-//                    takePictureIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    mContext.startActivity(takePictureIntent);
-//                    // TODO The action must not be executed if activity for result has been canceled because no image
-//                    // has been taken but the database get the imagefile
-//                    actionItem.execute(seed);
-//
-//                }
-//                // parentAdapter.notifyDataSetChanged();
-//                quickAction.dismiss();
-//            }
-//        });
-//        quickAction.addPermanentActionItem(photoWidget);
-
       
 
     }

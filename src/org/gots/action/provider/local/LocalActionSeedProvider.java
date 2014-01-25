@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.gots.action.provider.local;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -28,8 +29,11 @@ import org.gots.utils.GotsDBHelper;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionSeedProvider {
+
+    private String TAG = "LocalActionSeedProvider";
 
     public LocalActionSeedProvider(Context mContext) {
         super(mContext);
@@ -64,7 +68,7 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
     private SeedActionInterface cursorToAction(Cursor cursor) {
         SeedActionInterface seedAction = null;
         GotsActionProvider actionDBHelper = new LocalActionProvider(mContext);
-        seedAction = (SeedActionInterface)actionDBHelper.getActionById(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_ACTION_ID)));
+        seedAction = (SeedActionInterface) actionDBHelper.getActionById(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_ACTION_ID)));
         if (seedAction != null) {
             seedAction.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_ACTION_ID)));
             seedAction.setGrowingSeedId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_GROWINGSEED_ID)));
@@ -176,6 +180,11 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
         if (rowid == 0)
             rowid = bdd.insert(DatabaseHelper.ACTIONSEEDS_TABLE_NAME, null, values);
         return rowid;
+    }
+
+    @Override
+    public void uploadPicture(GrowingSeedInterface seed,File f) {
+        Log.d(TAG, "uploadPicture not implemented");
     }
 
 }

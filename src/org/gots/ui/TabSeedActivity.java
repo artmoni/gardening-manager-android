@@ -10,10 +10,14 @@
  ******************************************************************************/
 package org.gots.ui;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 
 import org.gots.R;
+import org.gots.action.GotsActionSeedManager;
+import org.gots.action.bean.PhotoAction;
 import org.gots.help.HelpUriBuilder;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
@@ -23,10 +27,14 @@ import org.gots.seed.view.SeedWidgetLong;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
@@ -48,6 +56,8 @@ public class TabSeedActivity extends SherlockFragmentActivity {
 
     private String urlDescription;
 
+    private File cameraPicture;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.seed_tab);
@@ -68,7 +78,7 @@ public class TabSeedActivity extends SherlockFragmentActivity {
             TabHost mTabHost = (TabHost) findViewById(android.R.id.tabhost);
 
             int seedId = getIntent().getExtras().getInt("org.gots.seed.id");
-            mSeed =  GotsGrowingSeedManager.getInstance().initIfNew(this).getGrowingSeedById(seedId);
+            mSeed = GotsGrowingSeedManager.getInstance().initIfNew(this).getGrowingSeedById(seedId);
         } else if (getIntent().getExtras().getInt("org.gots.seed.vendorid") != 0) {
             int seedId = getIntent().getExtras().getInt("org.gots.seed.vendorid");
             LocalSeedProvider helper = new LocalSeedProvider(getApplicationContext());
@@ -76,6 +86,21 @@ public class TabSeedActivity extends SherlockFragmentActivity {
             mSeed = (GrowingSeedInterface) helper.getSeedById(seedId);
         } else
             mSeed = new GrowingSeed(); // DEFAULT SEED
+
+        if (getIntent().getExtras().getString("org.gots.seed.actionphoto") != "") {
+            PhotoAction photoAction = new PhotoAction(getApplicationContext());
+            Date now = new Date();
+            cameraPicture = photoAction.getImageFile(now);
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(cameraPicture));
+            // takePictureIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivityForResult(takePictureIntent, 0);
+
+            // TODO The action must not be executed if activity for result has been canceled because no
+            // image
+            // has been taken but the database get the imagefile
+            // actionItem.execute(seed);
+        }
 
         bar.setTitle(mSeed.getSpecie());
 
@@ -108,6 +133,22 @@ public class TabSeedActivity extends SherlockFragmentActivity {
 
         }
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int arg1, Intent arg2) {
+        if (requestCode == 0) {
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    GotsActionSeedManager.getInstance().initIfNew(getApplicationContext()).uploadPicture(mSeed,
+                            cameraPicture);
+                    return null;
+                }
+            }.execute();
+
+        }
+        super.onActivityResult(requestCode, arg1, arg2);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package org.gots.action;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import org.gots.action.provider.GotsActionSeedProvider;
@@ -85,6 +86,11 @@ public class GotsActionSeedManager implements GotsActionSeedProvider {
     @Override
     public SeedActionInterface insertAction(BaseActionInterface action, GrowingSeedInterface seed) {
         return provider.insertAction(action, seed);
+    }
+    
+    @Override
+    public void uploadPicture(GrowingSeedInterface seed, File f) {
+        provider.uploadPicture(seed,f);
     }
 
 }

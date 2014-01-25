@@ -1,5 +1,6 @@
 package org.gots.action.provider;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import org.gots.action.BaseActionInterface;
@@ -17,6 +18,8 @@ public interface GotsActionSeedProvider {
     public abstract ArrayList<SeedActionInterface> getActionsDoneBySeed(GrowingSeedInterface seed);
 
     public abstract SeedActionInterface insertAction(BaseActionInterface action, GrowingSeedInterface seed);
+
+    public abstract void uploadPicture(GrowingSeedInterface seed, File imageFile);
 
    
 
