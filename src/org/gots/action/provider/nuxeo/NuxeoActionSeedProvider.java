@@ -4,35 +4,29 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.Random;
 
 import org.gots.action.ActionFactory;
 import org.gots.action.BaseActionInterface;
 import org.gots.action.SeedActionInterface;
-import org.gots.action.bean.DeleteAction;
 import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.nuxeo.NuxeoManager;
-import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.nuxeo.android.cache.blob.BlobWithProperties;
-import org.nuxeo.android.layout.widgets.BlobWidgetWrapper;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.android.upload.FileUploader;
 import org.nuxeo.ecm.automation.client.cache.CacheBehavior;
 import org.nuxeo.ecm.automation.client.jaxrs.AsyncCallback;
-import org.nuxeo.ecm.automation.client.jaxrs.Constants;
+import org.nuxeo.ecm.automation.client.jaxrs.OperationRequest;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
+import org.nuxeo.ecm.automation.client.jaxrs.model.Blob;
 import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
-import org.nuxeo.ecm.automation.client.jaxrs.model.DocumentStatus;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import org.nuxeo.ecm.automation.client.jaxrs.model.FileBlob;
 import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PathRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
-
-import com.google.android.gms.dynamic.LifecycleDelegate;
 
 import android.content.Context;
 import android.util.Log;
@@ -180,6 +174,8 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
 
     PropertyMap blobProp = new PropertyMap();
 
+    private Blob blobToUpload;
+
     protected void attachBlobToDocument(GrowingSeedInterface seed) {
         Session session = NuxeoManager.getInstance().getNuxeoClient().getSession();
         DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
@@ -188,9 +184,22 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             seedDoc = documentMgr.getDocument(new IdRef(seed.getUUID()));
             Document pictureBook = documentMgr.getDocument(new PathRef(seedDoc.getPath() + "/Picture"));
 
-            Document imageDoc = documentMgr.createDocument(pictureBook, "Picture", blobProp.getString("name"));
-            imageDoc.set("file:content", blobProp);
-            documentMgr.update(imageDoc, imageDoc.getProperties());
+            StringBuilder bourrin = new StringBuilder("{ ");
+            bourrin.append(" \"type\" : \"blob\"");
+            bourrin.append(", \"length\" : " + blobProp.get("length"));
+            bourrin.append(", \"mime-type\" : \"" + blobProp.get("mime-type") + "\"");
+            bourrin.append(", \"name\" : \"" + blobProp.get("name") + "\"");
+            bourrin.append(", \"upload-batch\" : \"" + blobProp.get("upload-batch") + "\"");
+            bourrin.append(", \"upload-fileId\" : \"" + blobProp.get("upload-fileId") + "\" ");
+            bourrin.append("}");
+            PropertyMap properties = new PropertyMap();
+            properties.set("dc:title", blobProp.getString("name"));
+            properties.set("originalPicture", bourrin.toString());
+            OperationRequest req = session.newRequest("Picture.Create").setInput(pictureBook).set("name",
+                    blobProp.getString("name")).set("properties", properties);
+            Document imageDoc = (Document) req.execute();
+            // Document imageDoc = documentMgr.createDocument(pictureBook, "Picture", blobProp.getString("name"),
+            // properties);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
@@ -203,13 +212,13 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
 
         try {
 
-            FileBlob blobToUpload = new FileBlob(imageFile);
+            blobToUpload = new FileBlob(imageFile);
             blobToUpload.setMimeType("image/jpeg");
 
             String batchId = String.valueOf(new Random().nextInt());
             final String fileId = blobToUpload.getFileName();
 
-            BlobWithProperties blobUploading = uploader.storeAndUpload(batchId, "0", blobToUpload,
+            BlobWithProperties blobUploading = uploader.storeAndUpload(batchId, fileId, blobToUpload,
                     new AsyncCallback<Serializable>() {
 
                         @Override
@@ -235,7 +244,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             blobProp.set("name", blobToUpload.getFileName());
             // set information for server side Blob mapping
             blobProp.set("upload-batch", batchId);
-            blobProp.set("upload-fileId", "0");
+            blobProp.set("upload-fileId", fileId);
             // set information for the update query to know it's
             // dependencies
             blobProp.set("android-require-type", "upload");
