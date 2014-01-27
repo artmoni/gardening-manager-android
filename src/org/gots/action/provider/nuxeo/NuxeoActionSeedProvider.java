@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Properties;
 import java.util.Random;
 
 import org.gots.action.ActionFactory;
@@ -18,7 +17,6 @@ import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.android.upload.FileUploader;
 import org.nuxeo.ecm.automation.client.cache.CacheBehavior;
 import org.nuxeo.ecm.automation.client.jaxrs.AsyncCallback;
-import org.nuxeo.ecm.automation.client.jaxrs.OperationRequest;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Blob;
 import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
@@ -185,22 +183,22 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             seedDoc = documentMgr.getDocument(new IdRef(seed.getUUID()));
             Document pictureBook = documentMgr.getDocument(new PathRef(seedDoc.getPath() + "/Picture"));
 
-            StringBuilder bourrin = new StringBuilder("{ ");
-            bourrin.append(" \"type\" : \"blob\"");
-            bourrin.append(", \"length\" : " + blobProp.get("length"));
-            bourrin.append(", \"mime-type\" : \"" + blobProp.get("mime-type") + "\"");
-            bourrin.append(", \"name\" : \"" + blobProp.get("name") + "\"");
-            bourrin.append(", \"upload-batch\" : \"" + blobProp.get("upload-batch") + "\"");
-            bourrin.append(", \"upload-fileId\" : \"" + blobProp.get("upload-fileId") + "\" ");
-            bourrin.append("}");
-            Properties properties = new Properties();
-            properties.put("dc:title", blobProp.getString("name"));
-            properties.put("originalPicture", bourrin.toString());
-            OperationRequest req = session.newRequest("Picture.Create").setInput(pictureBook).set("name",
-                    blobProp.getString("name")).set("properties", properties);
-            Document imageDoc = (Document) req.execute();
-            // Document imageDoc = documentMgr.createDocument(pictureBook, "Picture", blobProp.getString("name"),
-            // properties);
+            StringBuilder toJSON = new StringBuilder("{ ");
+            toJSON.append(" \"type\" : \"blob\"");
+            toJSON.append(", \"length\" : " + blobProp.get("length"));
+            toJSON.append(", \"mime-type\" : \"" + blobProp.get("mime-type") + "\"");
+            toJSON.append(", \"name\" : \"" + blobProp.get("name") + "\"");
+            toJSON.append(", \"upload-batch\" : \"" + blobProp.get("upload-batch") + "\"");
+            toJSON.append(", \"upload-fileId\" : \"" + blobProp.get("upload-fileId") + "\" ");
+            toJSON.append("}");
+            PropertyMap properties = new PropertyMap();
+            properties.set("dc:title", blobProp.getString("name"));
+            properties.set("file:content", toJSON.toString());
+            // OperationRequest req = session.newRequest("Picture.Create").setInput(pictureBook).set("name",
+            // blobProp.getString("name")).set("properties", properties);
+            // Document imageDoc = (Document) req.execute();
+            Document imageDoc = documentMgr.createDocument(pictureBook, "Picture", blobProp.getString("name"),
+                    properties);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
