@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Properties;
 import java.util.Random;
 
 import org.gots.action.ActionFactory;
@@ -192,9 +193,9 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             bourrin.append(", \"upload-batch\" : \"" + blobProp.get("upload-batch") + "\"");
             bourrin.append(", \"upload-fileId\" : \"" + blobProp.get("upload-fileId") + "\" ");
             bourrin.append("}");
-            PropertyMap properties = new PropertyMap();
-            properties.set("dc:title", blobProp.getString("name"));
-            properties.set("originalPicture", bourrin.toString());
+            Properties properties = new Properties();
+            properties.put("dc:title", blobProp.getString("name"));
+            properties.put("originalPicture", bourrin.toString());
             OperationRequest req = session.newRequest("Picture.Create").setInput(pictureBook).set("name",
                     blobProp.getString("name")).set("properties", properties);
             Document imageDoc = (Document) req.execute();
