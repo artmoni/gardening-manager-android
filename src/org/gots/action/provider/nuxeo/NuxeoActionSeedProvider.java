@@ -28,6 +28,7 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.PathRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
 import android.content.Context;
+import android.media.ExifInterface;
 import android.util.Log;
 
 public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
@@ -210,9 +211,14 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         FileUploader uploader = session.getAdapter(FileUploader.class);
 
         try {
-
+//            blobToUpload = new FileBlob(new File("/storage/extSdCard/test.jpg"));
+            
             blobToUpload = new FileBlob(imageFile);
             blobToUpload.setMimeType("image/jpeg");
+            ExifInterface exif = new ExifInterface(imageFile.getAbsolutePath());
+            String mString = "Your message here";     
+            exif.setAttribute("UserComment", mString);
+            exif.saveAttributes();
 
             String batchId = String.valueOf(new Random().nextInt());
             final String fileId = blobToUpload.getFileName();
