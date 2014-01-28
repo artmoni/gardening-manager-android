@@ -2,6 +2,7 @@ package org.gots.action;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.provider.local.LocalActionProvider;
@@ -74,18 +75,18 @@ public class GotsActionSeedManager implements GotsActionSeedProvider {
     }
 
     @Override
-    public ArrayList<SeedActionInterface> getActionsToDoBySeed(GrowingSeedInterface seed) {
+    public List<SeedActionInterface> getActionsToDoBySeed(GrowingSeedInterface seed) {
         return provider.getActionsToDoBySeed(seed);
     }
 
     @Override
-    public ArrayList<SeedActionInterface> getActionsDoneBySeed(GrowingSeedInterface seed) {
+    public List<SeedActionInterface> getActionsDoneBySeed(GrowingSeedInterface seed) {
         return provider.getActionsDoneBySeed(seed);
     }
 
     @Override
-    public SeedActionInterface insertAction(BaseActionInterface action, GrowingSeedInterface seed) {
-        return provider.insertAction(action, seed);
+    public SeedActionInterface insertAction(GrowingSeedInterface seed, BaseActionInterface action) {
+        return provider.insertAction(seed, action);
     }
     
     @Override

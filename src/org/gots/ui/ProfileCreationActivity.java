@@ -380,7 +380,7 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
                     seed.setDateSowing(cal.getTime());
 
                     GotsActionSeedProvider actionsHelper = GotsActionSeedManager.getInstance().initIfNew(this);
-                    actionsHelper.insertAction(bakering, seed);
+                    actionsHelper.insertAction(seed, bakering);
                 }
             }
         }

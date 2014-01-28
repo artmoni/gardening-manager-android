@@ -74,7 +74,7 @@ public class ActionNotificationService extends Service {
                     GrowingSeedInterface seed = iterator.next();
                     GotsActionSeedProvider actionseedManager = GotsActionSeedManager.getInstance().initIfNew(
                             ActionNotificationService.this);
-                    ArrayList<SeedActionInterface> seedActions;
+                    List<SeedActionInterface> seedActions;
 
                     seedActions = actionseedManager.getActionsToDoBySeed(seed);
 

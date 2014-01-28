@@ -19,6 +19,7 @@ import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -53,10 +54,15 @@ public class ActionActivity extends AbstractActivity {
             seedid = getIntent().getExtras().getInt("org.gots.seed.id");
 
         new AsyncTask<Integer, Void, ArrayList<GrowingSeedInterface>>() {
+            private ProgressDialog dialog;
             private ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
 
             private ListAllActionAdapter listActions;
-
+            protected void onPreExecute() {
+                dialog = ProgressDialog.show(ActionActivity.this, "", getResources().getString(R.string.gots_loading),
+                        true);
+                dialog.setCanceledOnTouchOutside(true);
+            };
             @Override
             protected ArrayList<GrowingSeedInterface> doInBackground(Integer... params) {
                 GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(
@@ -81,6 +87,12 @@ public class ActionActivity extends AbstractActivity {
                 listAllotments.setAdapter(listActions);
                 listAllotments.setDivider(null);
                 listAllotments.setDividerHeight(0);
+                try {
+                    dialog.dismiss();
+                    dialog = null;
+                } catch (Exception e) {
+                    // nothing
+                }
             };
         }.execute(seedid);
 

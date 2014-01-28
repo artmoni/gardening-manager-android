@@ -13,22 +13,32 @@ package org.gots.ui;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import org.gots.R;
 import org.gots.action.GotsActionSeedManager;
+import org.gots.action.SeedActionInterface;
+import org.gots.action.bean.DeleteAction;
 import org.gots.action.bean.PhotoAction;
+import org.gots.action.provider.nuxeo.NuxeoActionSeedProvider;
+import org.gots.ads.GotsAdvertisement;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.help.HelpUriBuilder;
+import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -40,7 +50,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.widget.Gallery;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
@@ -57,6 +71,10 @@ public class TabSeedActivity extends SherlockFragmentActivity {
     private String urlDescription;
 
     private File cameraPicture;
+
+    private PhotoAction photoAction;
+
+    private Gallery image;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,21 +104,39 @@ public class TabSeedActivity extends SherlockFragmentActivity {
             mSeed = (GrowingSeedInterface) helper.getSeedById(seedId);
         } else
             mSeed = new GrowingSeed(); // DEFAULT SEED
+        //
+        // if (getIntent().getExtras().getString("org.gots.seed.actionphoto") != "") {
+        // PhotoAction photoAction = new PhotoAction(getApplicationContext());
+        // Date now = new Date();
+        // cameraPicture = photoAction.getImageFile(now);
+        // Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(cameraPicture));
+        // // takePictureIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        // startActivityForResult(takePictureIntent, 0);
+        //
+        // // TODO The action must not be executed if activity for result has been canceled because no
+        // // image
+        // // has been taken but the database get the imagefile
+        // // actionItem.execute(seed);
 
-        if (getIntent().getExtras().getString("org.gots.seed.actionphoto") != "") {
-            PhotoAction photoAction = new PhotoAction(getApplicationContext());
-            Date now = new Date();
-            cameraPicture = photoAction.getImageFile(now);
-            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(cameraPicture));
-            // takePictureIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivityForResult(takePictureIntent, 0);
+        // }
 
-            // TODO The action must not be executed if activity for result has been canceled because no
-            // image
-            // has been taken but the database get the imagefile
-            // actionItem.execute(seed);
-        }
+        image = (Gallery) findViewById(R.id.idPictureGallery);
+
+        new AsyncTask<Void, Void, List<File>>() {
+            @Override
+            protected List<File> doInBackground(Void... params) {
+                NuxeoActionSeedProvider provider = new NuxeoActionSeedProvider(getApplicationContext());
+                List<File> imageFile = provider.getPicture(mSeed);
+
+                return imageFile;
+            }
+
+            protected void onPostExecute(List<File> result) {
+                image.setSpacing(10);
+                image.setAdapter(new GalleryImageAdapter(getApplicationContext(), result));
+            };
+        }.execute();
 
         bar.setTitle(mSeed.getSpecie());
 
@@ -133,6 +169,13 @@ public class TabSeedActivity extends SherlockFragmentActivity {
 
         }
 
+        if (!GotsPreferences.getInstance().initIfNew(getApplicationContext()).isPremium()) {
+            GotsAdvertisement ads = new GotsAdvertisement(this);
+
+            LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
+            layout.addView(ads.getAdsLayout());
+        }
+
     }
 
     @Override
@@ -143,6 +186,7 @@ public class TabSeedActivity extends SherlockFragmentActivity {
                 protected Void doInBackground(Void... params) {
                     GotsActionSeedManager.getInstance().initIfNew(getApplicationContext()).uploadPicture(mSeed,
                             cameraPicture);
+                    // photoAction.execute(mSeed);
                     return null;
                 }
             }.execute();
@@ -183,6 +227,53 @@ public class TabSeedActivity extends SherlockFragmentActivity {
             startActivity(browserIntent);
 
             return true;
+        case R.id.photo:
+            photoAction = new PhotoAction(getApplicationContext());
+            Date now = new Date();
+            cameraPicture = photoAction.getImageFile(now);
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(cameraPicture));
+            // takePictureIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivityForResult(takePictureIntent, 0);
+
+            // TODO The action must not be executed if activity for result has been canceled because no
+            // image
+            // has been taken but the database get the imagefile
+            // actionItem.execute(seed);
+            return true;
+        case R.id.delete:
+            final DeleteAction deleteAction = new DeleteAction(this);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(this.getResources().getString(R.string.action_delete_seed)).setCancelable(false).setPositiveButton(
+                    "OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            new AsyncTask<SeedActionInterface, Integer, Void>() {
+                                @Override
+                                protected Void doInBackground(SeedActionInterface... params) {
+                                    SeedActionInterface actionItem = params[0];
+                                    actionItem.execute(mSeed);
+                                    return null;
+                                }
+
+                                @Override
+                                protected void onPostExecute(Void result) {
+                                    Toast.makeText(getApplicationContext(), "action done", Toast.LENGTH_SHORT).show();
+                                    TabSeedActivity.this.finish();
+                                    super.onPostExecute(result);
+                                }
+                            }.execute(deleteAction);
+                            sendBroadcast(new Intent(BroadCastMessages.GROWINGSEED_DISPLAYLIST));
+                            dialog.dismiss();
+                        }
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.cancel();
+                }
+            });
+            builder.show();
+            return true;
+
         default:
             return super.onOptionsItemSelected(item);
         }

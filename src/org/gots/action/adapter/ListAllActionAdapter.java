@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 
 import org.gots.R;
@@ -89,7 +90,7 @@ public class ListAllActionAdapter extends BaseAdapter {
         GotsActionSeedProvider actionSeedProvider = GotsActionSeedManager.getInstance().initIfNew(context);
 
         for (GrowingSeedInterface seed : allSeeds) {
-            ArrayList<SeedActionInterface> seedActions;
+            List<SeedActionInterface> seedActions;
 
             if (current_status == STATUS_TODO) {
                 seedActions = actionSeedProvider.getActionsToDoBySeed(seed);

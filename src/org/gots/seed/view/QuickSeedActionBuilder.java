@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 import net.londatiga.android.QuickAction;
 
@@ -86,16 +87,16 @@ public class QuickSeedActionBuilder {
         actionManager = GotsActionManager.getInstance().initIfNew(mContext);
         actionSeedManager = GotsActionSeedManager.getInstance().initIfNew(mContext);
 
-        new AsyncTask<Void, Void, ArrayList<SeedActionInterface>>() {
+        new AsyncTask<Void, Void, List<SeedActionInterface>>() {
 
             @Override
-            protected ArrayList<SeedActionInterface> doInBackground(Void... params) {
+            protected List<SeedActionInterface> doInBackground(Void... params) {
                 GotsActionSeedProvider helperActions = GotsActionSeedManager.getInstance().initIfNew(mContext);
 
                 return helperActions.getActionsToDoBySeed(seed);
             }
 
-            protected void onPostExecute(ArrayList<SeedActionInterface> actions) {
+            protected void onPostExecute(List<SeedActionInterface> actions) {
                 for (BaseActionInterface baseActionInterface : actions) {
                     if (!SeedActionInterface.class.isInstance(baseActionInterface))
                         continue;
@@ -189,7 +190,7 @@ public class QuickSeedActionBuilder {
                             @Override
                             protected Void doInBackground(SeedActionInterface... params) {
                                 SeedActionInterface actionItem = params[0];
-                                actionItem = actionSeedManager.insertAction((BaseActionInterface) actionItem, seed);
+                                actionItem = actionSeedManager.insertAction(seed, (BaseActionInterface) actionItem);
                                 actionSeedManager.doAction(actionItem, seed);
                                 return null;
                             }
@@ -238,46 +239,46 @@ public class QuickSeedActionBuilder {
         });
         quickAction.addPermanentActionItem(delete);
 
-        /*
-         * ACTION PHOTO
-         */
-        new AsyncTask<Void, Integer, PhotoAction>() {
-
-            @Override
-            protected PhotoAction doInBackground(Void... params) {
-                PhotoAction photoAction = (PhotoAction) actionManager.getActionByName("photo");
-
-                return photoAction;
-            }
-
-            protected void onPostExecute(final PhotoAction photoAction) {
-                ActionWidget photoWidget = new ActionWidget(mContext, photoAction);
-                photoWidget.setState(ActionState.UNDEFINED);
-
-                photoWidget.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        SeedActionInterface actionItem = photoAction;
-                        if (PhotoAction.class.isInstance(actionItem)) {
-                            // alert.show();
-                            final Intent i = new Intent(mContext, TabSeedActivity.class);
-                            i.putExtra("org.gots.seed.id", ((GrowingSeedInterface) parentView.getTag()).getGrowingSeedId());
-                            i.putExtra("org.gots.seed.actionphoto","org.gots.seed.actionphoto");
-                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            mContext.startActivity(i);
-                            
-                           
-
-                        }
-                        // parentAdapter.notifyDataSetChanged();
-                        quickAction.dismiss();
-                    }
-                });
-                quickAction.addPermanentActionItem(photoWidget);
-
-            };
-        }.execute();
+//        /*
+//         * ACTION PHOTO
+//         */
+//        new AsyncTask<Void, Integer, PhotoAction>() {
+//
+//            @Override
+//            protected PhotoAction doInBackground(Void... params) {
+//                PhotoAction photoAction = (PhotoAction) actionManager.getActionByName("photo");
+//
+//                return photoAction;
+//            }
+//
+//            protected void onPostExecute(final PhotoAction photoAction) {
+//                ActionWidget photoWidget = new ActionWidget(mContext, photoAction);
+//                photoWidget.setState(ActionState.UNDEFINED);
+//
+//                photoWidget.setOnClickListener(new View.OnClickListener() {
+//
+//                    @Override
+//                    public void onClick(View v) {
+//                        SeedActionInterface actionItem = photoAction;
+//                        if (PhotoAction.class.isInstance(actionItem)) {
+//                            // alert.show();
+//                            final Intent i = new Intent(mContext, TabSeedActivity.class);
+//                            i.putExtra("org.gots.seed.id", ((GrowingSeedInterface) parentView.getTag()).getGrowingSeedId());
+//                            i.putExtra("org.gots.seed.actionphoto","org.gots.seed.actionphoto");
+//                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                            mContext.startActivity(i);
+//                            
+//                           
+//
+//                        }
+//                        // parentAdapter.notifyDataSetChanged();
+//                        quickAction.dismiss();
+//                    }
+//                });
+//                quickAction.addPermanentActionItem(photoWidget);
+//
+//            };
+//        }.execute();
       
 
     }

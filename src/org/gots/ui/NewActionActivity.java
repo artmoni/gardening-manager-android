@@ -158,7 +158,7 @@ public class NewActionActivity extends AbstractActivity implements OnItemClickLi
                 protected Void doInBackground(Void... params) {
                     GotsActionSeedProvider actionHelper = GotsActionSeedManager.getInstance().initIfNew(
                             getApplicationContext());
-                    actionHelper.insertAction(selectedAction, mySeed);
+                    actionHelper.insertAction(mySeed, selectedAction);
                     return null;
                 }
 

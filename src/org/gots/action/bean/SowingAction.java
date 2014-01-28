@@ -73,7 +73,7 @@ public class SowingAction extends AbstractActionGarden implements PermanentActio
 		seed = growingSeedManager.insertSeed(seed, allotment);
 
 		
-		actionSeedManager.insertAction(this, seed);
+		actionSeedManager.insertAction(seed, this);
 		//asdh.doAction(this, seed);
 
 		for (Iterator<BaseActionInterface> iterator = seed.getActionToDo().iterator(); iterator.hasNext();) {
@@ -81,7 +81,7 @@ public class SowingAction extends AbstractActionGarden implements PermanentActio
 			BaseActionInterface type1 = iterator.next();
 			if (type1 != null) {
 				BaseActionInterface type = actionManager.getActionByName(type1.getName());
-				actionSeedManager.insertAction(type, seed);
+				actionSeedManager.insertAction(seed, type);
 			}
 		}
 		GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
