@@ -9,7 +9,6 @@ import org.gots.action.GotsActionManager;
 import org.gots.action.GotsActionSeedManager;
 import org.gots.action.adapter.SimpleListActionAdapter;
 import org.gots.action.provider.GotsActionSeedProvider;
-import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.view.SeedWidgetLong;

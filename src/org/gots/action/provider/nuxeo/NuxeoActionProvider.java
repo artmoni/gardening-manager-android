@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.gots.action.BaseActionInterface;
 import org.gots.action.provider.local.LocalActionProvider;
-import org.gots.garden.GardenInterface;
 import org.gots.nuxeo.NuxeoManager;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.cache.CacheBehavior;

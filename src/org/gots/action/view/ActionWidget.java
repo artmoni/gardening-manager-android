@@ -12,7 +12,6 @@ package org.gots.action.view;
 
 import org.gots.R;
 import org.gots.action.BaseActionInterface;
-import org.gots.action.SeedActionInterface;
 import org.gots.action.util.ActionState;
 
 import android.content.Context;

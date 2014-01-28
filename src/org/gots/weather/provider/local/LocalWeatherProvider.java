@@ -13,7 +13,6 @@ package org.gots.weather.provider.local;
 import java.util.Date;
 
 import org.gots.DatabaseHelper;
-import org.gots.garden.provider.local.GardenSQLite;
 import org.gots.utils.GotsDBHelper;
 import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;

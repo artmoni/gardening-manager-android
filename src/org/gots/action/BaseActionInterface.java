@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.gots.action;
 
-import java.util.Date;
 
 public interface BaseActionInterface {
 

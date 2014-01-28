@@ -1,7 +1,5 @@
 package org.gots.action.provider.simple;
 
-import java.util.Date;
-
 import org.gots.action.BaseActionInterface;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;

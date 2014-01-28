@@ -5,9 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.gots.action.provider.GotsActionSeedProvider;
-import org.gots.action.provider.local.LocalActionProvider;
 import org.gots.action.provider.local.LocalActionSeedProvider;
-import org.gots.action.provider.nuxeo.NuxeoActionProvider;
 import org.gots.action.provider.nuxeo.NuxeoActionSeedProvider;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GrowingSeedInterface;

@@ -18,7 +18,6 @@ import org.gots.seed.GrowingSeedInterface;
 import org.gots.ui.TabSeedActivity;
 import org.gots.utils.GotsProgressBar;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.AttributeSet;
