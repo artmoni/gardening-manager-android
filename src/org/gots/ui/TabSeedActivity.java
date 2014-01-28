@@ -47,6 +47,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.View;
 import android.widget.Gallery;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
@@ -131,6 +132,7 @@ public class TabSeedActivity extends SherlockFragmentActivity {
             protected void onPostExecute(List<File> result) {
                 image.setSpacing(10);
                 image.setAdapter(new GalleryImageAdapter(getApplicationContext(), result));
+                image.setVisibility(View.VISIBLE);
             };
         }.execute();
 

@@ -32,6 +32,7 @@
             android:id="@+id/idPictureGallery"
             android:layout_width="fill_parent"
             android:layout_height="50dp"
+            android:visibility="gone"
              />
 
         <LinearLayout
