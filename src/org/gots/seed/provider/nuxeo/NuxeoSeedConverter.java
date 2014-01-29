@@ -1,5 +1,7 @@
 package org.gots.seed.provider.nuxeo;
 
+import java.util.Locale;
+
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
@@ -24,7 +26,7 @@ public class NuxeoSeedConverter {
             seed.setDescriptionDiseases(document.getString("vendorseed:description_diseases"));
             seed.setDescriptionGrowth(document.getString("vendorseed:description_growth"));
             seed.setDescriptionHarvest(document.getString("vendorseed:description_harvest"));
-            
+            seed.setLanguage(document.getString("vendorseed:language"));
             seed.setUUID(document.getId());
             return seed;
         } catch (Exception e) {
@@ -45,6 +47,8 @@ public class NuxeoSeedConverter {
         doc.set("vendorseed:specie", seed.getSpecie());
         doc.set("vendorseed:variety", seed.getVariety());
         doc.set("vendorseed:barcode", seed.getBareCode());
+        doc.set("vendorseed:language", Locale.getDefault().getLanguage());
+        
         return doc;
     }
 }

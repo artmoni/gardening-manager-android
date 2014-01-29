@@ -114,6 +114,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String SEED_ACTION1 = "action1";
 
     public static final String SEED_NBSACHET = "nbsachet";
+    
+    public static final String SEED_LANGUAGE = "language";
 
     //@formatter:off
 
@@ -137,6 +139,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ SEED_DATESOWINGMAX + " INTEGER," 
 			+ SEED_DURATIONMIN + " INTEGER," 
 			+ SEED_DURATIONMAX + " INTEGER,"
+			+ SEED_LANGUAGE + " STRING,"
 			+ SEED_NBSACHET + " INTEGER"
 			+ ");";
 	//@formatter:on
@@ -483,6 +486,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         if (oldVersion < 18) {
             db.execSQL("ALTER TABLE " + ACTIONSEEDS_TABLE_NAME + " ADD COLUMN " + ACTIONSEED_UUID + " STRING;");
+            db.execSQL("ALTER TABLE " + SEEDS_TABLE_NAME + " ADD COLUMN " + SEED_LANGUAGE + " STRING;");
 
         } else {
             db.execSQL("DROP TABLE IF EXISTS " + SEEDS_TABLE_NAME);

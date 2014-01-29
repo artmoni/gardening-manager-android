@@ -64,8 +64,20 @@ public abstract class BaseSeed implements Serializable, BaseSeedInterface {
 
     private int nb_sachet;
 
+    private String language;
+
     public BaseSeed() {
         super();
+    }
+
+    @Override
+    public void setLanguage(String string) {
+        language = string;
+    }
+
+    @Override
+    public String getLanguage() {
+        return language;
     }
 
     @Override

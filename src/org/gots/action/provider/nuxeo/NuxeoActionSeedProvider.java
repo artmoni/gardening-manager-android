@@ -35,6 +35,7 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.util.Log;
 
@@ -252,13 +253,14 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
                 PropertyMap properties = new PropertyMap();
                 properties.set("dc:title", "Picture");
 
-                pictureBook = documentMgr.createDocument(new PathRef(seedDoc.getPath()), "PictureBook", "Picture",properties);
+                pictureBook = documentMgr.createDocument(new PathRef(seedDoc.getPath()), "PictureBook", "Picture",
+                        properties);
             } catch (Exception e) {
                 Log.i(TAG, e.getMessage());
             }
 
         }
-        
+
         try {
             StringBuilder toJSON = new StringBuilder("{ ");
             toJSON.append(" \"type\" : \"blob\"");
@@ -286,6 +288,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
 
         try {
 
+            // SCALE IMAGE TO LOWER RESOLUTION
             Bitmap bm = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
             float scale;
             if (bm.getWidth() > bm.getHeight()) {
@@ -295,6 +298,23 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             }
             Bitmap scaledBm = Bitmap.createScaledBitmap(bm, (int) (bm.getWidth() * scale),
                     (int) (bm.getHeight() * scale), true);
+
+            // ROTATE IMAGE IF NOT LANDSCAPE
+            ExifInterface exif = new ExifInterface(imageFile.getAbsolutePath());
+            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+            Matrix matrix = new Matrix();
+            switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                matrix.postRotate(90);
+                scaledBm = Bitmap.createBitmap(scaledBm, 0, 0, scaledBm.getWidth(), scaledBm.getHeight(), matrix, true);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                matrix.postRotate(180);
+                scaledBm = Bitmap.createBitmap(scaledBm, 0, 0, scaledBm.getWidth(), scaledBm.getHeight(), matrix, true);
+                break;
+            }
+
             try {
                 FileOutputStream fos = new FileOutputStream(imageFile);
                 scaledBm.compress(Bitmap.CompressFormat.PNG, 90, fos);
@@ -305,12 +325,12 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
                 Log.d(TAG, "Error accessing file: " + e.getMessage());
             }
 
-           final FileBlob blobToUpload = new FileBlob(imageFile);
-            blobToUpload.setMimeType("image/jpeg");
-            ExifInterface exif = new ExifInterface(imageFile.getAbsolutePath());
             String mString = "Your message here";
             exif.setAttribute("UserComment", mString);
             exif.saveAttributes();
+
+            final FileBlob blobToUpload = new FileBlob(imageFile);
+            blobToUpload.setMimeType("image/jpeg");
 
             String batchId = String.valueOf(new Random().nextInt(1000));
             final String fileId = blobToUpload.getFileName();
@@ -320,7 +340,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
 
                         @Override
                         public void onSuccess(String executionId, Serializable data) {
-                            attachBlobToDocument(seed,blobToUpload);
+                            attachBlobToDocument(seed, blobToUpload);
                             Log.i(TAG, "success");
                         }
 

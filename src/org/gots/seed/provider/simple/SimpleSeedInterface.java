@@ -68,6 +68,18 @@ public class SimpleSeedInterface implements GrowingSeedInterface {
 
     private int seed_id;
 
+    private String language;
+
+    @Override
+    public String getLanguage() {
+        return language;
+    }
+
+    @Override
+    public void setLanguage(String string) {
+        language = string;
+    }
+
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();

@@ -71,7 +71,7 @@ public class TabSeedActivity extends SherlockFragmentActivity {
 
     private PhotoAction photoAction;
 
-    private Gallery image;
+    private Gallery pictureGallery;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,7 +118,7 @@ public class TabSeedActivity extends SherlockFragmentActivity {
 
         // }
 
-        image = (Gallery) findViewById(R.id.idPictureGallery);
+        pictureGallery = (Gallery) findViewById(R.id.idPictureGallery);
 
         new AsyncTask<Void, Void, List<File>>() {
             @Override
@@ -130,9 +130,11 @@ public class TabSeedActivity extends SherlockFragmentActivity {
             }
 
             protected void onPostExecute(List<File> result) {
-                image.setSpacing(10);
-                image.setAdapter(new GalleryImageAdapter(getApplicationContext(), result));
-                image.setVisibility(View.VISIBLE);
+                if (result.size() > 0) {
+                    pictureGallery.setSpacing(10);
+                    pictureGallery.setAdapter(new GalleryImageAdapter(getApplicationContext(), result));
+                } else
+                    pictureGallery.setVisibility(View.GONE);
             };
         }.execute();
 

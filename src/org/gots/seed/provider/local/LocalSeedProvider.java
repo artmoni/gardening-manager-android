@@ -257,6 +257,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
         values.put(DatabaseHelper.SEED_VARIETY, seed.getVariety());
         values.put(DatabaseHelper.SEED_URLDESCRIPTION, seed.getUrlDescription());
         values.put(DatabaseHelper.SEED_NBSACHET, seed.getNbSachet());
+        values.put(DatabaseHelper.SEED_LANGUAGE, seed.getLanguage());
 
         if (seed.getActionToDo() != null && seed.getActionToDo().size() > 0 && seed.getActionToDo().get(0) != null)
             values.put(DatabaseHelper.SEED_ACTION1, seed.getActionToDo().get(0).getName());
@@ -285,6 +286,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
         bsi.setDateSowingMax(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.SEED_DATESOWINGMAX)));
         bsi.setUrlDescription(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_URLDESCRIPTION)));
         bsi.setNbSachet(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.SEED_NBSACHET)));
+        bsi.setLanguage(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_LANGUAGE)));
 
         ActionFactory factory = new ActionFactory();
         BaseActionInterface baseAction = factory.buildAction(mContext,

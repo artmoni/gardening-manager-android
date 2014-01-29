@@ -25,7 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class SeedWidgetLong extends LinearLayout  {
+public class SeedWidgetLong extends LinearLayout {
     Context mContext;
 
     private GrowingSeedInterface mSeed;
@@ -62,10 +62,10 @@ public class SeedWidgetLong extends LinearLayout  {
         if (mSeed.getFamily() != null) {
             int familyImageRessource = getResources().getIdentifier(
                     "org.gots:drawable/family_" + mSeed.getFamily().toLowerCase(), null, null);
-           
+
             if (familyImageRessource != 0)
                 setBackgroundResource(familyImageRessource);
-            else 
+            else
                 setBackground(mContext.getResources().getDrawable(R.drawable.family_unknown));
         }
 
@@ -75,11 +75,11 @@ public class SeedWidgetLong extends LinearLayout  {
         TextView seedSpecie = (TextView) findViewById(R.id.IdSeedSpecie);
         seedSpecie.setText(SeedUtil.translateSpecie(mContext, mSeed));
         if (GotsPreferences.DEBUG)
-            seedSpecie.setText("("+mSeed.getSeedId()+")"+SeedUtil.translateSpecie(mContext, mSeed));
+            seedSpecie.setText("(" + mSeed.getSeedId() + ")" + SeedUtil.translateSpecie(mContext, mSeed));
 
         TextView seedVariety = (TextView) findViewById(R.id.IdSeedVariety);
         seedVariety.setText(mSeed.getVariety());
-        if (GotsPreferences.DEBUG &&  mSeed.getUUID()!=null)
+        if (GotsPreferences.DEBUG && mSeed.getUUID() != null)
             seedVariety.setText(mSeed.getVariety() + "\n" + mSeed.getUUID().substring(0, 10));
 
         PlanningWidget planningSow = (PlanningWidget) findViewById(R.id.IdSeedSowingPlanning);
@@ -99,8 +99,14 @@ public class SeedWidgetLong extends LinearLayout  {
             seedbag.setLayoutParams(params);
             stock.addView(seedbag, i);
         }
-        
-        
+
+        if (mSeed.getLanguage() != null && !"".equals(mSeed.getLanguage())) {
+            ImageView flag = (ImageView) findViewById(R.id.IdSeedLanguage);
+            int flagRessource = getResources().getIdentifier("org.gots:drawable/" + mSeed.getLanguage().toLowerCase(),
+                    null, null);
+            flag.setImageResource(flagRessource);
+        }
+
     }
 
     // public static String unAccent(String s) {
@@ -112,8 +118,6 @@ public class SeedWidgetLong extends LinearLayout  {
     // Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
     // return pattern.matcher(temp).replaceAll("");
     // }
-
-   
 
     //
     // @Override
@@ -128,9 +132,9 @@ public class SeedWidgetLong extends LinearLayout  {
     public void setSeed(BaseSeedInterface seed) {
         this.mSeed = (GrowingSeedInterface) seed;
         setupView();
-//        invalidate();
-//        requestLayout();
-//        refreshDrawableState();
+        // invalidate();
+        // requestLayout();
+        // refreshDrawableState();
     }
 
 }
