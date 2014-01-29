@@ -125,7 +125,7 @@
     <string name="fillfields.specie">Veuillez choisir une espèce</string>
     <string name="fillfields.variety">Veuillez saisir une variété</string>
     <string name="fillfields.dates">Veuillez indiquer les dates</string>
-    <string name="login.connect.description">Votre compte _ACCOUNT_ est désormais synchronisé en ligne sur my.gardening-manager.com\nVous pouvez:</string>
+    <string name="login.connect.description">Votre compte _ACCOUNT_ est désormais synchronisé en ligne sur my.gardening-manager.com</string>
     <string name="login.connect.description2">Partager avec vos amis</string>
     <string name="login.connect.description3">Créer et partager les plantes de votre catalogue</string>
     <string name="login.connect.description4">Vous connecter depuis n\'importe quel appareil</string>
