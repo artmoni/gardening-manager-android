@@ -7,7 +7,6 @@ import java.util.List;
 import org.gots.R;
 import org.gots.action.adapter.comparator.ISeedSpecieComparator;
 import org.gots.action.view.ActionWidget;
-import org.gots.ads.GotsAdvertisement;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.view.SeedWidgetLong;
@@ -46,8 +45,6 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
 
         Collections.sort(vendorSeeds, new ISeedSpecieComparator(context));
 
-        GotsAdvertisement ads = new GotsAdvertisement(mContext);
-        adsView = ads.getAdsLayout();
     }
 
     public SeedListAdapter() {
