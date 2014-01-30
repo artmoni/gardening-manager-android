@@ -128,7 +128,6 @@ public class VendorListActivity extends AbstractListFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        updateVendorSeeds();
     }
 
     @Override
@@ -139,16 +138,10 @@ public class VendorListActivity extends AbstractListFragment {
 
     private ProgressDialog dialog;
 
-    protected void updateVendorSeeds() {
+    protected synchronized void updateVendorSeeds() {
         new AsyncTask<Void, Integer, List<BaseSeedInterface>>() {
 
             protected void onPreExecute() {
-                try {
-                    dialog.dismiss();
-                    dialog = null;
-                } catch (Exception e) {
-                    // nothing
-                }
                 dialog = ProgressDialog.show(mContext, "", mContext.getResources().getString(R.string.gots_loading),
                         true);
                 dialog.setCanceledOnTouchOutside(true);
@@ -160,7 +153,10 @@ public class VendorListActivity extends AbstractListFragment {
 
             @Override
             protected List<BaseSeedInterface> doInBackground(Void... params) {
-                return seedProvider.getVendorSeeds(false);
+                List<BaseSeedInterface> catalogue = seedProvider.getVendorSeeds(false);
+                if (catalogue.size() == 0)
+                    catalogue = seedProvider.getVendorSeeds(true);
+                return catalogue;
             }
 
             protected void onPostExecute(List<BaseSeedInterface> vendorSeeds) {
@@ -188,18 +184,6 @@ public class VendorListActivity extends AbstractListFragment {
         }
         super.onPause();
     }
-
-    // protected void updateUI(Intent intent) {
-    // // boolean isnewseed = intent.getBooleanExtra(SeedUpdateService.ISNEWSEED, false);
-    // // if (isnewseed) {
-    // // seedProvider = new GotsSeedManager(mContext);
-    // // listVendorSeedAdapter = new ListVendorSeedAdapter(mContext, seedProvider.getVendorSeeds());
-    // //
-    // // setListAdapter(listVendorSeedAdapter);
-    // // listVendorSeedAdapter.notifyDataSetChanged();
-    // // }
-    // onResume();
-    // }
 
     @Override
     public void onDestroy() {
