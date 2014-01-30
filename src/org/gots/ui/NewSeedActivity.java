@@ -21,6 +21,7 @@ import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.adapter.ListSpeciesAdapter;
+import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
 
@@ -308,7 +309,7 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
     }
 
     private void addToStock(BaseSeedInterface vendorseed) {
-        LocalSeedProvider helper = new LocalSeedProvider(getApplicationContext());
+        GotsSeedProvider helper = new LocalSeedProvider(getApplicationContext());
         if (vendorseed.getSeedId() >= 0) {
             GrowingSeedInterface seed = (GrowingSeedInterface) helper.getSeedById(vendorseed.getSeedId());
             BuyingAction buy = new BuyingAction(this);

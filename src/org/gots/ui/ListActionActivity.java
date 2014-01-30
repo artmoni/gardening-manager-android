@@ -98,9 +98,10 @@ public class ListActionActivity extends SherlockListFragment implements ListView
             protected void onPostExecute(ArrayList<GrowingSeedInterface> allSeeds) {
                 setListAdapter(listAllActionAdapter);
 
-                getListView().setOnScrollListener(ListActionActivity.this);
             };
         }.execute(seedid);
+
+        getListView().setOnScrollListener(ListActionActivity.this);
 
     }
 

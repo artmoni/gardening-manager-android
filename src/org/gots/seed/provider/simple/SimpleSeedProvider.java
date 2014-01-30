@@ -172,4 +172,7 @@ public class SimpleSeedProvider implements GotsSeedProvider {
     public List<BaseSeedInterface> getNewSeeds() {
         return null;
     }
+
+    public void force_refresh(boolean refresh) {
+    }
 }

@@ -29,6 +29,7 @@ import org.gots.bean.BaseAllotmentInterface;
 import org.gots.bean.Garden;
 import org.gots.garden.GardenInterface;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
 
 import android.app.ProgressDialog;
@@ -355,7 +356,7 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
             helper.createAllotment(newAllotment);
 
             // Seed
-            LocalSeedProvider seedHelper = new LocalSeedProvider(getApplicationContext());
+            GotsSeedProvider seedHelper = new LocalSeedProvider(getApplicationContext());
 
             int nbSeed = seedHelper.getVendorSeeds(false).size();
             Random random = new Random();

@@ -37,6 +37,8 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
     protected String myApp;
 
+    private boolean refreshStock = false;
+
     // protected LazyUpdatableDocumentsList documentsList;
 
     public NuxeoSeedProvider(Context context) {
@@ -140,10 +142,10 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     // super.remove(localSeed);
                 }
             }
-            
-            //TODO update remote stock from local stock
+
+            // TODO update remote stock from local stock
             if (localSeed.getNbSachet() > 0) {
-                updateStock(localSeed,GardenManager.getInstance().initIfNew(mContext).getCurrentGarden());
+                updateStock(localSeed, GardenManager.getInstance().initIfNew(mContext).getCurrentGarden());
             }
         }
 
@@ -245,7 +247,6 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         return nuxeoManager.getNuxeoClient();
     }
 
-    
     @Override
     public void addToStock(BaseSeedInterface vendorSeed, GardenInterface garden) {
         Session session = getNuxeoClient().getSession();
@@ -318,6 +319,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         }
 
     }
+
     @Override
     public void removeToStock(BaseSeedInterface vendorSeed, GardenInterface garden) {
         Session session = getNuxeoClient().getSession();
@@ -360,13 +362,10 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         try {
             Document gardenFolder = service.getDocument(new IdRef(garden.getUUID()));
             Document stockFolder = service.getDocument(new PathRef(gardenFolder.getPath() + "/My Stock"));
-            // TODO GetChildren also returns deleted documents, take care about that
-            // Documents stockItems = service.getChildren(stockFolder);
-            boolean refresh = true;
             byte cacheParam = CacheBehavior.STORE;
-            if (refresh) {
+            if (refreshStock) {
                 cacheParam = (byte) (cacheParam | CacheBehavior.FORCE_REFRESH);
-                refresh = false;
+                refreshStock = false;
             }
             Documents stockItems = service.query(
                     "SELECT * FROM StockItem WHERE ecm:currentLifeCycleState != \"deleted\" AND ecm:parentId=\""
@@ -427,4 +426,8 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
     }
 
+    @Override
+    public void force_refresh(boolean refresh) {
+        this.refreshStock = refresh;
+    }
 }
