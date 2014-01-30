@@ -106,4 +106,7 @@ class PrestashopConnector implements GotsSeedProvider {
         return null;
     }
 
+    public void force_refresh(boolean refresh) {
+    }
+
 }

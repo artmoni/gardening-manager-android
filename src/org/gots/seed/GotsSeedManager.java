@@ -40,8 +40,6 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     private List<BaseSeedInterface> myStock;
 
-    private boolean stockChanged;
-
     private GotsPreferences gotsPrefs;
 
     private GotsSeedManager() {
@@ -94,7 +92,7 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     @Override
     public List<BaseSeedInterface> getVendorSeeds(boolean force) {
         if (force) {
-            NuxeoSeedProvider provider = new NuxeoSeedProvider(mContext);
+            GotsSeedProvider provider = new NuxeoSeedProvider(mContext);
             allSeeds = provider.getVendorSeeds(force);
             newSeeds = provider.getNewSeeds();
         }
@@ -154,8 +152,8 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
             }
 
             protected void onPostExecute(Void result) {
+                force_refresh(true);
                 mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
-                stockChanged = true;
 
             };
         }.execute(garden);
@@ -172,8 +170,8 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
             }
 
             protected void onPostExecute(Void result) {
+                force_refresh(true);
                 mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
-                stockChanged = true;
             };
         }.execute(garden);
 
@@ -181,7 +179,7 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     @Override
     public List<BaseSeedInterface> getMyStock(GardenInterface garden) {
-        if (stockChanged || myStock == null)
+//        if (stockChanged || myStock == null)
             myStock = mSeedProvider.getMyStock(garden);
         return myStock;
     }
@@ -212,6 +210,10 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     @Override
     public List<BaseSeedInterface> getNewSeeds() {
         return newSeeds;
+    }
+
+    public void force_refresh(boolean refresh) {
+        mSeedProvider.force_refresh(refresh);
     }
 
 }

@@ -288,6 +288,8 @@ public class SplashScreenActivity extends AbstractActivity {
             protected Void doInBackground(Void... params) {
 
                 // getApplicationContext().startService(startServiceIntent2);
+                seedManager.force_refresh(true);
+                seedManager.getMyStock(gardenManager.getCurrentGarden());
                 seedManager.getVendorSeeds(true);
                 return null;
             }
@@ -354,6 +356,7 @@ public class SplashScreenActivity extends AbstractActivity {
 
                 @Override
                 protected List<GardenInterface> doInBackground(Context... params) {
+                    
                     myGardens = gardenManager.getMyGardens(true);
                     return myGardens;
                 }

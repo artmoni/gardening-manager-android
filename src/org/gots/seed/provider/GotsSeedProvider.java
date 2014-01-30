@@ -28,4 +28,6 @@ public interface GotsSeedProvider {
     public void getAllFamilies();
 
     public void getFamilyById(int id);
+
+    public abstract void force_refresh(boolean refresh);
 }

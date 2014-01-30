@@ -312,4 +312,8 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
         }
         return searchedSeed;
     }
+
+    @Override
+    public void force_refresh(boolean refresh) {
+    }
 }

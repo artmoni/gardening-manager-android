@@ -19,6 +19,7 @@ import org.gots.R;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GardenManager;
 import org.gots.preferences.GotsPreferences;
+import org.gots.seed.service.SeedUpdateService;
 import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.WeatherManager;
@@ -188,9 +189,9 @@ public class ProfileAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
 
-                    gardenManager.setCurrentGarden(currentGarden);
                     
                     selectedGarden = getItem(position);
+                    gardenManager.setCurrentGarden(selectedGarden);
                     notifyDataSetChanged();
 
                     weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_weather));
@@ -205,6 +206,8 @@ public class ProfileAdapter extends BaseAdapter {
                         GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
                         tracker.trackEvent("Garden", "Select", gardenManager.getCurrentGarden().getLocality(),
                                 position + 1);
+                        Intent seedIntent = new Intent(mContext, SeedUpdateService.class);
+                        mContext.startService(seedIntent);
                     }
                 }
             });

@@ -29,6 +29,7 @@ import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
 
@@ -96,7 +97,7 @@ public class TabSeedActivity extends SherlockFragmentActivity {
             mSeed = GotsGrowingSeedManager.getInstance().initIfNew(this).getGrowingSeedById(seedId);
         } else if (getIntent().getExtras().getInt("org.gots.seed.vendorid") != 0) {
             int seedId = getIntent().getExtras().getInt("org.gots.seed.vendorid");
-            LocalSeedProvider helper = new LocalSeedProvider(getApplicationContext());
+            GotsSeedProvider helper = new LocalSeedProvider(getApplicationContext());
 
             mSeed = (GrowingSeedInterface) helper.getSeedById(seedId);
         } else
