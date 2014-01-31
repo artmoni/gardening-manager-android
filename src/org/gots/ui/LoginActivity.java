@@ -385,7 +385,10 @@ public class LoginActivity extends AbstractActivity {
             @Override
             protected void onPostExecute(String resultToken) {
                 if (resultToken != null) {
-                    Toast.makeText(LoginActivity.this, resultToken, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(
+                            getApplicationContext(),
+                            getResources().getString(R.string.login_connect_description).replace(
+                                    "_ACCOUNT_", gotsPrefs.getNuxeoLogin()), Toast.LENGTH_SHORT).show();
                     gotsPrefs.setNuxeoLogin(account.name);
                     gotsPrefs.setToken(resultToken);
                     gotsPrefs.setConnectedToServer(true);
