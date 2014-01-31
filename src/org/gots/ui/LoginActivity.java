@@ -8,16 +8,11 @@ import org.gots.R;
 import org.gots.authentication.GoogleAuthentication;
 import org.gots.authentication.NuxeoAuthentication;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.preferences.GotsPreferences;
-import org.nuxeo.ecm.automation.client.jaxrs.RemoteException;
-import org.nuxeo.ecm.automation.client.jaxrs.Session;
-import org.nuxeo.ecm.automation.client.jaxrs.impl.NotAvailableOffline;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,11 +23,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,15 +39,10 @@ import com.google.android.gms.auth.UserRecoverableAuthException;
 public class LoginActivity extends AbstractActivity {
     protected static final String TAG = "LoginActivity";
 
-    private Spinner loginSpinner;
-
-    private TextView passwordText;
-
     private ActionBar bar;
 
     private Menu mMenu;
 
-    private NuxeoAuthentication nuxeoAuthentication;
 
     protected int AUTHTOKEN_CODE_RESULT = 1;
 
@@ -70,9 +57,6 @@ public class LoginActivity extends AbstractActivity {
         bar = getSupportActionBar();
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setTitle(R.string.app_name);
-        nuxeoAuthentication = new NuxeoAuthentication(this);
-
-        // credential = GoogleAccountCredential.usingOAuth2(context, scopes)
     }
 
     public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
@@ -138,16 +122,7 @@ public class LoginActivity extends AbstractActivity {
 
     protected void buildLayoutDisconnected() {
 
-        if (GotsPreferences.isDevelopment()) {
-            findViewById(R.id.tableDebug).setVisibility(View.VISIBLE);
-
-        }
-        loginSpinner = (Spinner) findViewById(R.id.spinnerLogin);
-        ArrayAdapter<String> account_name_adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, getAccounts("com.google"));
-        loginSpinner.setAdapter(account_name_adapter);
-        passwordText = (TextView) findViewById(R.id.edittextPassword);
-        passwordText.setText(gotsPrefs.getNuxeoPassword());
+      
 
         LinearLayout buttonLayout = (LinearLayout) findViewById(R.id.idLayoutOAuth2);
         buttonLayout.setOnClickListener(new View.OnClickListener() {
@@ -160,6 +135,8 @@ public class LoginActivity extends AbstractActivity {
                 // "Request this new feature", 0);
 
                 selectAccount();
+                GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Login", "Request account", 0);
+
                 // tokenNuxeoConnect();
 
                 // finish();
@@ -168,45 +145,24 @@ public class LoginActivity extends AbstractActivity {
 
         });
 
-        Button buttoncreate = (Button) findViewById(R.id.buttonCreate);
-        buttoncreate.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Login", "Request account", 0);
-                sendEmail();
-            }
-
-        });
-
-        Button connect = (Button) findViewById(R.id.buttonConnect);
-        connect.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                connect();
-
-            }
-
-        });
     }
 
-    protected void sendEmail() {
-        // send mail
-        Intent i = new Intent(Intent.ACTION_SEND);
-        i.setType("message/rfc822");
-        i.putExtra(Intent.EXTRA_EMAIL, new String[] { "account@gardening-manager.com" });
-        i.putExtra(Intent.EXTRA_SUBJECT, "Gardening Manager / Account / Ask for new account");
-        i.putExtra(Intent.EXTRA_TEXT,
-                "Hello,\n\nI want to participate to the Gardening Manager beta version.\n\nMy Google account is: "
-                        + loginSpinner.getSelectedItem().toString()
-                        + "\n\nI know I will receive my password quickly.\n\n");
-        try {
-            startActivity(Intent.createChooser(i, "Send mail..."));
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(LoginActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-        }
-    }
+//    protected void sendEmail() {
+//        // send mail
+//        Intent i = new Intent(Intent.ACTION_SEND);
+//        i.setType("message/rfc822");
+//        i.putExtra(Intent.EXTRA_EMAIL, new String[] { "account@gardening-manager.com" });
+//        i.putExtra(Intent.EXTRA_SUBJECT, "Gardening Manager / Account / Ask for new account");
+//        i.putExtra(Intent.EXTRA_TEXT,
+//                "Hello,\n\nI want to participate to the Gardening Manager beta version.\n\nMy Google account is: "
+//                        + loginSpinner.getSelectedItem().toString()
+//                        + "\n\nI know I will receive my password quickly.\n\n");
+//        try {
+//            startActivity(Intent.createChooser(i, "Send mail..."));
+//        } catch (android.content.ActivityNotFoundException ex) {
+//            Toast.makeText(LoginActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
     protected void buildLayoutConnected() {
         findViewById(R.id.layoutConnect).setVisibility(View.GONE);
@@ -228,91 +184,86 @@ public class LoginActivity extends AbstractActivity {
         });
     }
 
-    protected void connect() {
-        new AsyncTask<Void, Integer, Session>() {
-            private ProgressDialog dialog;
-
-            private String login;
-
-            private String password;
-
-            @Override
-            protected void onPreExecute() {
-
-                login = String.valueOf(loginSpinner.getSelectedItem());
-                if (GotsPreferences.isDevelopment()) {
-                    EditText logindebug = (EditText) findViewById(R.id.edittextLoginDebug);
-                    login = logindebug.getText().toString();
-                }
-                password = passwordText.getText().toString();
-
-                if ("".equals(login) || "".equals(password)) {
-                    Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_missinginformation),
-                            Toast.LENGTH_SHORT).show();
-                    cancel(true);
-                } else {
-                    dialog = ProgressDialog.show(LoginActivity.this, "",
-                            getResources().getString(R.string.gots_loading), true);
-                    dialog.setCanceledOnTouchOutside(true);
-                }
-            };
-
-            @Override
-            protected Session doInBackground(Void... params) {
-                Session session = null;
-                try {
-                    if (nuxeoAuthentication.basicNuxeoConnect(login, password)) {
-
-                        nuxeoManager.shutdown();
-                        session = nuxeoManager.getSession();
-
-                        if ("Guest".equals(session.getLogin().getUsername())) {
-                            return null;
-                        }
-                    } else
-                        cancel(true);
-                } catch (IOException e) {
-                    Log.e(TAG, e.getMessage(), e);
-                } catch (NotAvailableOffline e) {
-                    Log.e(TAG, e.getMessage(), e);
-                } catch (RemoteException e) {
-                    Log.e(TAG, e.getMessage(), e);
-                }
-                return session;
-            }
-
-            @Override
-            protected void onPostExecute(Session result) {
-                if (dialog != null && dialog.isShowing())
-                    dialog.dismiss();
-                if (result == null) {
-                    Toast.makeText(LoginActivity.this, "Error logging", Toast.LENGTH_SHORT).show();
-                    LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.VISIBLE);
-                    gotsPrefs.setConnectedToServer(false);
-                    gotsPrefs.setNuxeoLogin(null);
-                    gotsPrefs.setLastSuccessfulNuxeoLogin(null);
-                    GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Login", "Failure", 0);
-
-                } else {
-                    LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.GONE);
-                    gotsPrefs.setConnectedToServer(true);
-                    gotsPrefs.setLastSuccessfulNuxeoLogin(login);
-                    gardenManager.getMyGardens(true);
-                    GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Login", "Success", 0);
-                }
-
-                onResume();
-            };
-
-            @Override
-            protected void onCancelled(Session result) {
-                if (dialog != null && dialog.isShowing())
-                    dialog.dismiss();
-            }
-
-        }.execute();
-        onResume();
-    }
+//    protected void connect() {
+//        new AsyncTask<Void, Integer, Session>() {
+//            private ProgressDialog dialog;
+//
+//            private String login;
+//
+//            private String password;
+//
+//            @Override
+//            protected void onPreExecute() {
+//
+//                login = String.valueOf(loginSpinner.getSelectedItem());
+//
+//                if ("".equals(login) || "".equals(password)) {
+//                    Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_missinginformation),
+//                            Toast.LENGTH_SHORT).show();
+//                    cancel(true);
+//                } else {
+//                    dialog = ProgressDialog.show(LoginActivity.this, "",
+//                            getResources().getString(R.string.gots_loading), true);
+//                    dialog.setCanceledOnTouchOutside(true);
+//                }
+//            };
+//
+//            @Override
+//            protected Session doInBackground(Void... params) {
+//                Session session = null;
+//                try {
+//                    if (nuxeoAuthentication.basicNuxeoConnect(login, password)) {
+//
+//                        nuxeoManager.shutdown();
+//                        session = nuxeoManager.getSession();
+//
+//                        if ("Guest".equals(session.getLogin().getUsername())) {
+//                            return null;
+//                        }
+//                    } else
+//                        cancel(true);
+//                } catch (IOException e) {
+//                    Log.e(TAG, e.getMessage(), e);
+//                } catch (NotAvailableOffline e) {
+//                    Log.e(TAG, e.getMessage(), e);
+//                } catch (RemoteException e) {
+//                    Log.e(TAG, e.getMessage(), e);
+//                }
+//                return session;
+//            }
+//
+//            @Override
+//            protected void onPostExecute(Session result) {
+//                if (dialog != null && dialog.isShowing())
+//                    dialog.dismiss();
+//                if (result == null) {
+//                    Toast.makeText(LoginActivity.this, "Error logging", Toast.LENGTH_SHORT).show();
+//                    LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.VISIBLE);
+//                    gotsPrefs.setConnectedToServer(false);
+//                    gotsPrefs.setNuxeoLogin(null);
+//                    gotsPrefs.setLastSuccessfulNuxeoLogin(null);
+//                    GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Login", "Failure", 0);
+//
+//                } else {
+//                    LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.GONE);
+//                    gotsPrefs.setConnectedToServer(true);
+//                    gotsPrefs.setLastSuccessfulNuxeoLogin(login);
+//                    gardenManager.getMyGardens(true);
+//                    GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Login", "Success", 0);
+//                }
+//
+//                onResume();
+//            };
+//
+//            @Override
+//            protected void onCancelled(Session result) {
+//                if (dialog != null && dialog.isShowing())
+//                    dialog.dismiss();
+//            }
+//
+//        }.execute();
+//        onResume();
+//    }
 
     protected void disconnect() {
         gotsPrefs.setNuxeoLogin(null);
@@ -338,8 +289,6 @@ public class LoginActivity extends AbstractActivity {
         case R.id.connection:
             if (gotsPrefs.isConnectedToServer())
                 disconnect();
-            else
-                connect();
             return true;
 
         default:
@@ -388,7 +337,7 @@ public class LoginActivity extends AbstractActivity {
                     Toast.makeText(
                             getApplicationContext(),
                             getResources().getString(R.string.login_connect_description).replace(
-                                    "_ACCOUNT_", gotsPrefs.getNuxeoLogin()), Toast.LENGTH_SHORT).show();
+                                    "_ACCOUNT_", gotsPrefs.getNuxeoLogin()), Toast.LENGTH_LONG).show();
                     gotsPrefs.setNuxeoLogin(account.name);
                     gotsPrefs.setToken(resultToken);
                     gotsPrefs.setConnectedToServer(true);
