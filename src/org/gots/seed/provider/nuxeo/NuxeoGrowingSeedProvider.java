@@ -53,20 +53,19 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
                 refresh = false;
             }
 
-            Documents docs = service.query(
+            Documents growingSeedDocuments = service.query(
                     "SELECT * FROM GrowingSeed WHERE ecm:currentLifeCycleState != \"deleted\" AND ecm:parentId=\'"
                             + allotment.getUUID() + "\'", null, new String[] { "dc:modified DESC" }, "*", 0, 50,
                     cacheParam);
             // Documents docs = service.getChildren(new IdRef(allotment.getUUID()));
-            for (Iterator<Document> iterator = docs.iterator(); iterator.hasNext();) {
-                Document growingSeedDocument = iterator.next();
+            NuxeoSeedProvider provider = new NuxeoSeedProvider(mContext);
+            for (Document growingSeedDocument : growingSeedDocuments) {
 
                 Documents relations = service.getRelations(growingSeedDocument, "http://purl.org/dc/terms/isFormatOf");
                 if (relations.size() >= 1) {
                     GrowingSeedInterface growingSeed;
                     Document originalSeed = service.getDocument(relations.get(0), "*");
 
-                    NuxeoSeedProvider provider = new NuxeoSeedProvider(mContext);
                     // growingSeed = (GrowingSeedInterface) NuxeoSeedConverter.convert(originalSeed);
                     growingSeed = (GrowingSeedInterface) provider.getSeedByUUID(originalSeed.getId());
                     growingSeed = NuxeoGrowingSeedConverter.populate(growingSeed, growingSeedDocument);
