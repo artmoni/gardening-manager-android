@@ -211,6 +211,11 @@ public class TabSeedActivity extends SherlockFragmentActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.menu_seeddescription, menu);
+        if (mSeed.getGrowingSeedId() == 0) {
+            menu.findItem(R.id.photo).setVisible(false);
+            menu.findItem(R.id.delete).setVisible(false);
+        }
+
         return true;
     }
 

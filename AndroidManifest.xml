@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.gots"
-    android:versionCode="22"
-    android:versionName="0.25-SNAPSHOT" >
+    android:versionCode="23"
+    android:versionName="0.25" >
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -51,7 +51,8 @@
         </activity>
         <activity
             android:name=".ui.MyMainGarden"
-            android:theme="@style/Theme.Styled" />
+            android:theme="@style/Theme.Styled"
+            android:uiOptions="splitActionBarWhenNarrow" />
         <activity
             android:name=".ui.DashboardActivity"
             android:theme="@style/Theme.Styled" >
@@ -65,7 +66,7 @@
         <activity
             android:name=".ui.ProfileActivity"
             android:theme="@style/Theme.Styled"
-            android:value="splitActionBarWhenNarrow" >
+            android:uiOptions="splitActionBarWhenNarrow" >
         </activity>
         <activity
             android:name=".ui.ProfileCreationActivity"
@@ -91,7 +92,7 @@
         <activity
             android:name=".ui.HutActivity"
             android:theme="@style/Theme.Styled"
-            android:value="splitActionBarWhenNarrow" />
+            android:uiOptions="splitActionBarWhenNarrow" />
         <activity android:name=".ui.MySeedsListActivity" />
         <activity android:name=".ui.MySeedsListFirstTimeActivity" />
         <activity
