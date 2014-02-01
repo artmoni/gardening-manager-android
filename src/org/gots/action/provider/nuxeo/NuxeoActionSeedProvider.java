@@ -137,7 +137,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
 
             for (Document actionDoc : actionDocs) {
                 SeedActionInterface action = convert(actionDoc);
-                // super.populateState(action, seed);
+                action = super.populateState(action, seed);
                 action.setGrowingSeedId(seed.getGrowingSeedId());
                 actionsToDo.add(action);
             }

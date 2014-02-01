@@ -159,7 +159,7 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
         return allActions;
     }
 
-    protected void populateState(SeedActionInterface action, GrowingSeedInterface seed) {
+    protected SeedActionInterface populateState(SeedActionInterface action, GrowingSeedInterface seed) {
         int state = ActionState.UNDEFINED;
 
         if (seed != null && seed.getDateSowing() != null) {
@@ -179,6 +179,7 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
                 state = ActionState.NORMAL;
         }
         action.setState(state);
+        return action;
     }
 
     @Override

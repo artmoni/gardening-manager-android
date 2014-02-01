@@ -64,7 +64,8 @@
         <activity android:name=".ui.VendorListActivity" />
         <activity
             android:name=".ui.ProfileActivity"
-            android:theme="@style/Theme.Styled" >
+            android:theme="@style/Theme.Styled"
+            android:value="splitActionBarWhenNarrow" >
         </activity>
         <activity
             android:name=".ui.ProfileCreationActivity"
@@ -84,12 +85,13 @@
             android:theme="@style/Theme.Styled" />
         <activity
             android:name=".ui.TabSeedActivity"
-            android:uiOptions="splitActionBarWhenNarrow"
-            android:theme="@style/Theme.Styled" />
+            android:theme="@style/Theme.Styled"
+            android:uiOptions="splitActionBarWhenNarrow" />
         <activity android:name=".ui.WebViewActivity" />
         <activity
             android:name=".ui.HutActivity"
-            android:theme="@style/Theme.Styled" />
+            android:theme="@style/Theme.Styled"
+            android:value="splitActionBarWhenNarrow" />
         <activity android:name=".ui.MySeedsListActivity" />
         <activity android:name=".ui.MySeedsListFirstTimeActivity" />
         <activity

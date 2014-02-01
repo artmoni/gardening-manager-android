@@ -240,6 +240,7 @@ public class ListAllActionAdapter extends BaseAdapter {
 
                 }
             }
+            actionWidget.setState(currentAction.getState());
             actionWidget.setAction(currentAction);
             // ll.invalidate();
 

@@ -93,6 +93,7 @@ public class QuickSeedActionBuilder {
                     final SeedActionInterface currentAction = (SeedActionInterface) baseActionInterface;
 
                     ActionWidget actionWidget = new ActionWidget(mContext, currentAction);
+                    actionWidget.setState(currentAction.getState());
 
                     if (currentAction == null)
                         continue;

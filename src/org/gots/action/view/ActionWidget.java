@@ -12,6 +12,7 @@ package org.gots.action.view;
 
 import org.gots.R;
 import org.gots.action.BaseActionInterface;
+import org.gots.action.SeedActionInterface;
 import org.gots.action.util.ActionState;
 
 import android.content.Context;
@@ -104,15 +105,13 @@ public class ActionWidget extends LinearLayout {
             actionImage.setImageDrawable(drawable);
         }
         setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.action_selector));
-//        invalidate();
+        // invalidate();
     }
 
     public void setAction(BaseActionInterface action) {
         this.mAction = action;
-
-        refreshDrawableState();
-//        requestLayout();
-//        invalidate();
+        // requestLayout();
+        // invalidate();
     }
 
     // private boolean match(int pixel) {
@@ -142,6 +141,8 @@ public class ActionWidget extends LinearLayout {
     // mItemClickListener = listener;
     // }
     public void setState(int state) {
-        this.state= state;
+        this.state = state;
+        refreshDrawableState();
+
     }
 }
