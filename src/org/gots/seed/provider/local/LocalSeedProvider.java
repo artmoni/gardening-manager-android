@@ -127,7 +127,8 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
         return searchedSeed;
     }
 
-    public synchronized BaseSeedInterface getSeedByBarCode(String barecode) {
+    @Override
+    public BaseSeedInterface getSeedByBarCode(String barecode) {
         BaseSeedInterface searchedSeed = new GrowingSeed();
         if (bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_BARECODE + "=\"" + barecode + "\"",
                 null, null, null, null).moveToFirst()) {

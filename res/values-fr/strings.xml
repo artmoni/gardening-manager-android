@@ -41,10 +41,12 @@
     <string name="seed.description.family">Famille</string>
     <string name="seed.description.specie">Espèce</string>
     <string name="seed.description.variety">Variété </string>
-    <string name="seed.description.barecode">Scanner le code barre rendra vos futurs recherches plus faciles</string>
+    <string name="seed.description.barecode">Associer le code-barre facilitera vos recherches</string>
+    <string name="seed.description.barcode.noresult">Aucune plante n\'est répertoriée avec ce code-barres. Soyez le premier à ajouter sa description au catalogue.</string>
     <string name="seed.menu.add">Ajouter une graine</string>
     <string name="seed.menu.add.barcode">Ajout par code barre</string>
     <string name="seed.menu.update">Mettre à jour</string>
+    <string name="seed.menu.search">Rechercher</string>
     <string name="action.planning">Planifier une action</string>
     <string name="action.delete.allotment">Vous allez supprimer une parcelle</string>
     <string name="action.delete.seed">Vous allez supprimer un légume</string>
@@ -91,7 +93,6 @@
     <string name="specie.ribesuvacrispa">Groseillier à maquereau</string>
     <string name="specie.fragariaxananassa">Fraisier</string>
     <string name="specie.ribesrubrum">Groseillier à grappes</string>
-    <string name="specie.fragariaxananassa">Strawberry</string>
     <string name="specie.asparagusofficinalis">Asperge</string>
     <string name="specie.cucurbitamaxima">Potiron</string>
     <string name="weather.citynotfound">Pas de prévisions météorologiques, choisissez une ville proche</string>

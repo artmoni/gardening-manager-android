@@ -175,4 +175,8 @@ public class SimpleSeedProvider implements GotsSeedProvider {
 
     public void force_refresh(boolean refresh) {
     }
+
+    public synchronized BaseSeedInterface getSeedByBarCode(String barecode) {
+        return null;
+    }
 }

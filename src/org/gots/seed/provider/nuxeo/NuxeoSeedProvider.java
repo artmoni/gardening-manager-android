@@ -91,6 +91,44 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         return myVendorSeeds;
     }
 
+    @Override
+    public BaseSeedInterface getSeedByBarCode(String barecode) {
+        List<BaseSeedInterface> remoteVendorSeeds = new ArrayList<BaseSeedInterface>();
+        BaseSeedInterface scannedSeed = null;
+        try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
+
+            byte cacheParam = CacheBehavior.STORE;
+            boolean refresh = true;
+            if (refresh) {
+                cacheParam = (byte) (cacheParam | CacheBehavior.FORCE_REFRESH);
+                refresh = false;
+            }
+            Documents docs = service.query(
+                    "SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState != \"deleted\" AND vendorseed:barcode=\""
+                            + barecode + "\"", null, new String[] { "dc:modified DESC" }, "*", 0, 200, cacheParam);
+
+            for (Iterator<Document> iterator = docs.iterator(); iterator.hasNext();) {
+                Document document = iterator.next();
+                BaseSeedInterface seed = NuxeoSeedConverter.convert(document);
+                if (seed != null) {
+
+                    remoteVendorSeeds.add(seed);
+                    Log.i(TAG, "Nuxeo Seed: " + seed);
+                } else {
+                    Log.w(TAG, "Nuxeo Seed conversion problem " + document.getTitle() + "- " + document.getId());
+                }
+            }
+            if (remoteVendorSeeds.size() > 0)
+                scannedSeed = remoteVendorSeeds.get(0);
+            
+        } catch (Exception e) {
+            Log.e(TAG, "getSeedByBarCode " + e.getMessage(), e);
+        }
+        return scannedSeed;
+    }
+
     protected List<BaseSeedInterface> synchronize(List<BaseSeedInterface> localVendorSeeds,
             List<BaseSeedInterface> remoteVendorSeeds) {
         newSeeds.clear();

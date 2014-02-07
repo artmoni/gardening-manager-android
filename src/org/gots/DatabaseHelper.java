@@ -332,7 +332,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('Lamiaceae')");
         db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('Liliaceae')");
         db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('Solanaceae')");
-        db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('aliaceae')");
+        db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('alliaceae')");
         db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('chenopodiaceae')");
 
         db.execSQL("Insert into " + FAMILY_TABLE_NAME + "(" + FAMILY_NAME + ") VALUES ('grossulariaceae')");

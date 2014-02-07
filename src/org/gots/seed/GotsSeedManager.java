@@ -179,8 +179,8 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     @Override
     public List<BaseSeedInterface> getMyStock(GardenInterface garden) {
-//        if (stockChanged || myStock == null)
-            myStock = mSeedProvider.getMyStock(garden);
+        // if (stockChanged || myStock == null)
+        myStock = mSeedProvider.getMyStock(garden);
         return myStock;
     }
 
@@ -214,6 +214,11 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     public void force_refresh(boolean refresh) {
         mSeedProvider.force_refresh(refresh);
+    }
+
+    @Override
+    public synchronized BaseSeedInterface getSeedByBarCode(String barecode) {
+        return mSeedProvider.getSeedByBarCode(barecode);
     }
 
 }

@@ -154,7 +154,8 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
                 for (BaseSeedInterface seed : vendorSeeds) {
                     if (SeedUtil.translateSpecie(mContext, seed).toUpperCase().startsWith(
                             constraint.toString().toUpperCase())
-                            || seed.getVariety().toUpperCase().startsWith(constraint.toString().toUpperCase()))
+                            || seed.getVariety().toUpperCase().startsWith(constraint.toString().toUpperCase())
+                            || constraint.toString().equals(seed.getBareCode()))
                         nHolderList.add(seed);
                 }
                 results.values = nHolderList;

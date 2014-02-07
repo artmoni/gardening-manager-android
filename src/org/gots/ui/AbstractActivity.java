@@ -82,6 +82,7 @@ public class AbstractActivity extends SherlockActivity {
         registerReceiver(seedManager, new IntentFilter(BroadCastMessages.GARDEN_SETTINGS_CHANGED));
         GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
         GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
+//        GoogleAnalyticsTracker.getInstance().setCustomVar(arg0, arg1, arg2, arg3)
         if (gotsPrefs.isPremium()) {
             GoogleAnalyticsTracker.getInstance().setDryRun(true);
         }

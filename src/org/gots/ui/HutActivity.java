@@ -21,6 +21,7 @@ import org.gots.ui.fragment.AbstractFragmentActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -48,9 +49,6 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
 
     ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
 
-    // TabHost tabHost;
-    private Context mContext;
-
     private ViewPager mViewPager;
 
     private int currentAllotment = -1;
@@ -65,7 +63,6 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
             currentAllotment = getIntent().getExtras().getInt("org.gots.allotment.reference");
 
         // GardenManager gm =GardenManager.getInstance();
-        mContext = this;
         setContentView(R.layout.hut);
 
         if (!gotsPref.isPremium()) {
@@ -75,6 +72,12 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
             layout.addView(ads.getAdsLayout());
         }
 
+    }
+
+    @Override
+    protected void onActivityResult(int arg0, int arg1, Intent arg2) {
+        super.onActivityResult(arg0, arg1, arg2);
+        
     }
 
     private void buildMyTabHost() {
@@ -100,21 +103,6 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
             bar.setSelectedNavigationItem(1);
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if (scanResult != null && scanResult.getContents() != "") {
-            Log.i("Scan result", scanResult.toString());
-            LocalSeedProvider helper = new LocalSeedProvider(mContext);
-            BaseSeedInterface scanSeed = helper.getSeedByBarCode(scanResult.getContents());
-            if (scanSeed != null) {
-                scanSeed.setNbSachet(scanSeed.getNbSachet() + 1);
-                helper.updateSeed(scanSeed);
-            }
-        }
-        buildMyTabHost();
-
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -136,7 +124,6 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
     @Override
     public void onTabReselected(Tab tab, FragmentTransaction ft) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -156,10 +143,6 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
             startActivity(i);
             return true;
 
-        case R.id.new_seed_barcode:
-            IntentIntegrator integrator = new IntentIntegrator(this);
-            integrator.initiateScan();
-            return true;
         case android.R.id.home:
             finish();
             return true;

@@ -27,6 +27,7 @@ public class NuxeoSeedConverter {
             seed.setDescriptionGrowth(document.getString("vendorseed:description_growth"));
             seed.setDescriptionHarvest(document.getString("vendorseed:description_harvest"));
             seed.setLanguage(document.getString("vendorseed:language"));
+            seed.setBareCode(document.getString("vendorseed:barcode"));
             seed.setUUID(document.getId());
             return seed;
         } catch (Exception e) {

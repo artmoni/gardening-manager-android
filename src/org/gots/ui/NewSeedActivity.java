@@ -101,6 +101,9 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
             newSeed = new GrowingSeed();
         }
 
+        if (getIntent().getStringExtra("org.gots.seed.barcode") != null)
+            newSeed.setBareCode(getIntent().getStringExtra("org.gots.seed.barcode"));
+
         // autoCompleteVariety.clearFocus();
         // gallerySpecies.post(new Runnable() {
         // public void run() {
