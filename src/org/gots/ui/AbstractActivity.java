@@ -91,9 +91,9 @@ public class AbstractActivity extends SherlockActivity {
         }
         if (gotsPrefs.isPremium()) {
 //            GoogleAnalyticsTracker.getInstance().setDryRun(true);
-            GoogleAnalyticsTracker.getInstance().setCustomVar(1, "Member Type","Premium", 1);
+            GoogleAnalyticsTracker.getInstance().setCustomVar(2, "Member Type","Premium", 1);
         }else
-            GoogleAnalyticsTracker.getInstance().setCustomVar(1, "Member Type","Guest", 1);
+            GoogleAnalyticsTracker.getInstance().setCustomVar(2, "Member Type","Guest", 1);
 
             
         super.onPostCreate(savedInstanceState);
