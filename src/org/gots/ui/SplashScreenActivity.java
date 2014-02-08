@@ -383,8 +383,9 @@ public class SplashScreenActivity extends AbstractActivity {
 
     @Override
     protected void onResume() {
-        int currentGardenId = gotsPrefs.getCurrentGardenId();
-        if (currentGardenId == -1) {
+//        int currentGardenId = gotsPrefs.getCurrentGardenId();
+//        gardenManager.getCurrentGarden();
+        if (gardenManager.getCurrentGarden() == null) {
             Intent intent = new Intent(this, FirstLaunchActivity.class);
             startActivityForResult(intent, 0);
 
