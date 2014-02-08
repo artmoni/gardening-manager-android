@@ -32,6 +32,7 @@ import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsSeedManager;
 
 import android.content.IntentFilter;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 
 import com.actionbarsherlock.app.SherlockActivity;
@@ -72,6 +73,7 @@ public class AbstractActivity extends SherlockActivity {
         allotmentManager.initIfNew(this);
         activities.add(this);
     }
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         registerReceiver(gardenManager, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
@@ -82,10 +84,18 @@ public class AbstractActivity extends SherlockActivity {
         registerReceiver(seedManager, new IntentFilter(BroadCastMessages.GARDEN_SETTINGS_CHANGED));
         GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
         GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
-//        GoogleAnalyticsTracker.getInstance().setCustomVar(arg0, arg1, arg2, arg3)
-        if (gotsPrefs.isPremium()) {
-            GoogleAnalyticsTracker.getInstance().setDryRun(true);
+        
+        try {
+            GoogleAnalyticsTracker.getInstance().setCustomVar(1, "App Version",getPackageManager().getPackageInfo(getPackageName(), 0).versionName, 1);
+        } catch (NameNotFoundException e) {
         }
+        if (gotsPrefs.isPremium()) {
+//            GoogleAnalyticsTracker.getInstance().setDryRun(true);
+            GoogleAnalyticsTracker.getInstance().setCustomVar(1, "Member Type","Premium", 1);
+        }else
+            GoogleAnalyticsTracker.getInstance().setCustomVar(1, "Member Type","Guest", 1);
+
+            
         super.onPostCreate(savedInstanceState);
     }
 
