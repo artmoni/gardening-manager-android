@@ -134,7 +134,7 @@
     <string name="login.simple.description">Connectez vous au réseau Gardening Manager et prenez plaisir à suivre le jardin potager de vos amis.</string>
     <string name="login.sso.description">Connectez vous avec votre compte Google pour synchroniser et sauvegarder Gardening Manager sur vos appareils</string>
     <string name="garden.create">Créer mon potager</string>
-    <string name="garden.create.description">Utilisez des fonctions simples en mode déconnecté sans sauvegarde ni fonction sociale</string>
+    <string name="garden.create.description">Utilisez des fonctions simples en mode déconnecté sans sauvegarde ni réseau sociale</string>
     <string name="login.connect.state">Vous êtes synchronizé</string>
     <string name="login.disconnect.state">Vous n\'avez pas sauvegardé, connectez vous et restez synchronisé</string>
 

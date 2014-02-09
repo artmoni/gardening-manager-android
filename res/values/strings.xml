@@ -125,7 +125,7 @@
     <string name="fillfields.variety">Please fill the variety</string>
     <string name="fillfields.dates">Please give the dates</string>
     <string name="garden.create">Create a new garden</string>
-    <string name="garden.create.description">Work offline without backup and social feature</string>
+    <string name="garden.create.description">Work offline without backup and social network</string>
     <string name="login.connect">Connect me</string>
     <string name="login.connect.state">You work safely online</string>
     <string name="login.connect.error">Connection failed, have you already create an account ? \n please verify your informations and try again. </string>
