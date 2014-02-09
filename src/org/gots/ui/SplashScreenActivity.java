@@ -18,9 +18,11 @@ import org.gots.R;
 import org.gots.action.service.ActionNotificationService;
 import org.gots.action.service.ActionTODOBroadcastReceiver;
 import org.gots.ads.GotsAdvertisement;
+import org.gots.authentication.ParrotAuthentication;
 import org.gots.garden.GardenInterface;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.provider.parrot.ParrotSeedProvider;
 import org.gots.seed.service.SeedNotification;
 import org.gots.seed.service.SeedUpdateService;
 import org.gots.weather.WeatherManager;
@@ -206,6 +208,7 @@ public class SplashScreenActivity extends AbstractActivity {
             LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
             layout.addView(ads.getAdsLayout());
         }
+
     }
 
     // BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -338,6 +341,27 @@ public class SplashScreenActivity extends AbstractActivity {
             }
         }.execute();
 
+        new AsyncTask<Void, Integer, Void>() {
+
+            protected void onPreExecute() {
+            };
+
+            @Override
+            protected Void doInBackground(Void... params) {
+
+                ParrotAuthentication authentication = new ParrotAuthentication();
+                authentication.getToken();
+                ParrotSeedProvider provider = new ParrotSeedProvider(getApplicationContext());
+                provider.getVendorSeeds(true);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                super.onPostExecute(result);
+            }
+        }.execute();
+
         /*
          * Synchronize Server
          */
@@ -356,7 +380,7 @@ public class SplashScreenActivity extends AbstractActivity {
 
                 @Override
                 protected List<GardenInterface> doInBackground(Context... params) {
-                    
+
                     myGardens = gardenManager.getMyGardens(true);
                     return myGardens;
                 }
@@ -383,8 +407,8 @@ public class SplashScreenActivity extends AbstractActivity {
 
     @Override
     protected void onResume() {
-//        int currentGardenId = gotsPrefs.getCurrentGardenId();
-//        gardenManager.getCurrentGarden();
+        // int currentGardenId = gotsPrefs.getCurrentGardenId();
+        // gardenManager.getCurrentGarden();
         if (gardenManager.getCurrentGarden() == null) {
             Intent intent = new Intent(this, FirstLaunchActivity.class);
             startActivityForResult(intent, 0);

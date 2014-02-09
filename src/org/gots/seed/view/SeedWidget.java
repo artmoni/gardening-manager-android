@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.gots.seed.view;
 
+import java.io.File;
 import java.util.Calendar;
 
 import org.gots.R;
@@ -20,6 +21,8 @@ import org.gots.utils.GotsProgressBar;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,6 +80,15 @@ public class SeedWidget extends RelativeLayout implements OnClickListener {
 		int vegetableImageRessource = getSeedDrawable(getContext(), mSeed);
 		if (vegetableImageRessource != 0 && seedView != null)
 			seedView.setImageResource(vegetableImageRessource);
+		else
+		{
+            File file = new File(mContext.getCacheDir() + "/" + mSeed.getSpecie().toLowerCase().replaceAll("\\s", ""));
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+//            options.inSampleSize = 2;
+            Bitmap image = BitmapFactory.decodeFile(file.getPath(), options);
+            seedView.setImageBitmap(image);
+		}
 
 		setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.action_selector));
 

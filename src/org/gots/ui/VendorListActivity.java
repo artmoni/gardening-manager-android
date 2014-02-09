@@ -19,6 +19,7 @@ import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.adapter.SeedListAdapter;
 import org.gots.seed.adapter.VendorSeedListAdapter;
+import org.gots.seed.provider.parrot.ParrotSeedProvider;
 import org.gots.seed.service.SeedUpdateService;
 import org.gots.ui.fragment.AbstractListFragment;
 
@@ -218,6 +219,8 @@ public class VendorListActivity extends AbstractListFragment {
 
             @Override
             protected List<BaseSeedInterface> doInBackground(Void... params) {
+                // List<BaseSeedInterface> catalogue = seedProvider.getVendorSeeds(false);
+                ParrotSeedProvider seedProvider = new ParrotSeedProvider(getActivity());
                 List<BaseSeedInterface> catalogue = seedProvider.getVendorSeeds(false);
                 if (catalogue.size() == 0)
                     catalogue = seedProvider.getVendorSeeds(true);

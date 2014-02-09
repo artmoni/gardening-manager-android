@@ -9,7 +9,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -31,60 +34,59 @@ import android.util.Log;
 
 public class ParrotAuthentication {
     // https://apiflowerpower.parrot.com//user/v1/authenticate?Accept-Language=fr&grant_type=password&client_id=sebastien.fleury@gmail.com&client_secret=arfkUnBAcTL99ynPXelq2u7msb7aMkOk2LgVZP7w4CANMFBZ&username=apiflowerpower.demo@parrot.com&password=api_demo
-    String baseName = "https://apiflowerpower.parrot.com";
+    private String baseName = "https://apiflowerpower.parrot.com";
 
-    String username = "apiflowerpower.demo@parrot.com";
+    private String username = "apiflowerpower.demo@parrot.com";
 
-    String password = "api_demo";
+    private String password = "api_demo";
 
-    String clientId = "sebastien.fleury@gmail.com";
+    private String clientId = "sebastien.fleury@gmail.com";
 
-    String clientSecret = "arfkUnBAcTL99ynPXelq2u7msb7aMkOk2LgVZP7w4CANMFBZ";
+    private String clientSecret = "arfkUnBAcTL99ynPXelq2u7msb7aMkOk2LgVZP7w4CANMFBZ";
+
+    private String access_token = null;
 
     private String TAG = "ParrotAuthentication";
 
-    public String api_json(String api_url, List<NameValuePair> params, String method, String headers)
+    private String api_json(String api_url, List<NameValuePair> params, String method, Map<String, String> headers)
             throws IOException {
         URL url = new URL(baseName + api_url);
 
         HttpClient httpclient = new DefaultHttpClient();
-        StringBuilder builder = new StringBuilder();
-
+        String json = "";
         try {
-            // Add your data
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-            nameValuePairs.add(new BasicNameValuePair("Accept-Language", "fr"));
             nameValuePairs.addAll(params);
             String paramString = URLEncodedUtils.format(nameValuePairs, "utf-8");
-            HttpGet httppost = new HttpGet(url.toString() + "?" + paramString);
 
-            // httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            HttpGet httpGet = new HttpGet(url.toString() + "?" + paramString);
 
-            // Execute HTTP Post Request
-            HttpResponse response = httpclient.execute(httppost);
+            httpGet.addHeader("Accept-Language", "fr");
+            if (headers != null)
+                for (Map.Entry<String, String> header : headers.entrySet()) {
+                    httpGet.addHeader(header.getKey(), header.getValue());
+                }
+
+            HttpResponse response = httpclient.execute(httpGet);
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();
             if (statusCode == 200) {
                 HttpEntity entity = response.getEntity();
-                InputStream content = entity.getContent();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(content));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    builder.append(line);
-                }
+                json = convertStreamToString(entity.getContent());
             } else {
                 Log.e(TAG, "Failed to download file");
             }
         } catch (ClientProtocolException e) {
-            // TODO Auto-generated catch block
+            Log.w(TAG, e.getMessage(), e);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+            Log.w(TAG, e.getMessage(), e);
         }
 
-        return builder.toString();
+        return json;
     }
 
     public String getToken() {
+        String api_authentication = "/user/v1/authenticate";
         String token = null;
         try {
             List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -93,14 +95,25 @@ public class ParrotAuthentication {
             params.add(new BasicNameValuePair("client_secret", clientSecret));
             params.add(new BasicNameValuePair("username", username));
             params.add(new BasicNameValuePair("password", password));
-            JSONObject json = new JSONObject(api_json("/user/v1/authenticate", params, "", ""));
+            JSONObject json = new JSONObject(api_json(api_authentication, params, "", null));
             token = json.getString("access_token");
+            access_token = token;
         } catch (IOException e) {
             Log.w(TAG, e.getMessage(), e);
         } catch (JSONException e) {
             Log.w(TAG, e.getMessage(), e);
         }
         return token;
+    }
+
+    public JSONObject getJSON(String api_key) throws JSONException, IOException {
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        // params.add(new BasicNameValuePair("grant_type", "password"));
+
+        Map<String, String> headers = new HashMap<String, String>();
+        headers.put("Authorization", "Bearer " + access_token);
+        JSONObject json = new JSONObject(api_json(api_key, params, "", headers));
+        return json;
     }
 
     protected String convertStreamToString(InputStream inputStream) throws IOException {
