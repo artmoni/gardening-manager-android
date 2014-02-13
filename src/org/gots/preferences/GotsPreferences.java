@@ -109,6 +109,16 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     private boolean initDone = false;
 
+    public static final String URL_FACEBOOK_GARDENING_MANAGER = "http://www.facebook.com/pages/Gardening-Manager/120589404779871";
+
+    public static final String URL_GOOGLEPLUS_GARDENING_MANAGER = "https://plus.google.com/u/0/b/108868805153744305734/communities/105269291264998461912";
+
+    public static final String URL_SAUTERDANSLESFLAQUES = "http://www.sauterdanslesflaques.com";
+
+    public static final String URL_ARTMONI = "http://www.artmoni.eu";
+
+    public static final String URL_TRANSLATE_GARDENING_MANAGER = "http://translate.gardening-manager.com";
+
     private GotsPreferences() {
     }
 

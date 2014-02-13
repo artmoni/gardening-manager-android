@@ -137,5 +137,6 @@
     <string name="garden.create.description">Utilisez des fonctions simples en mode déconnecté sans sauvegarde ni réseau sociale</string>
     <string name="login.connect.state">Vous êtes synchronizé</string>
     <string name="login.disconnect.state">Vous n\'avez pas sauvegardé, connectez vous et restez synchronisé</string>
+    <string name="translate.button">J\'aide à la traduction</string>
 
 </resources>

@@ -141,5 +141,16 @@
     <string name="login.signup">Sign up for Gardening Manager</string>
     <string name="login.email">Email</string>
     <string name="login.missinginformation">Some informations are missing</string>
-
+    <string name="translate.button">I want to translate</string>
+    <string name="synchro.weather.checking">Updating weather in progress</string>
+    <string name="synchro.weather.ok">Weather updated</string>
+    <string name="synchro.seeds.checking">Updating plant catalog in progress</string>
+    <string name="synchro.seeds.ok">Plant catalog updated</string>
+    <string name="synchro.actions.checking">Updating actions list in progress</string>
+    <string name="synchro.actions.ok">Actions list updated</string>
+    <string name="synchro.garden.checking">Updating shared garden in progress</string>
+    <string name="synchro.garden.ok">Shared garden updated</string>
+    
+    
+    
 </resources>
