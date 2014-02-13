@@ -13,6 +13,7 @@ package org.gots.ui;
 import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import org.gots.R;
 import org.gots.action.service.ActionNotificationService;
@@ -147,6 +148,11 @@ public class SplashScreenActivity extends AbstractActivity {
         setButtonClickable(R.id.idSocialGoogle, GotsPreferences.URL_GOOGLEPLUS_GARDENING_MANAGER);
         setButtonClickable(R.id.idSocialFacebook, GotsPreferences.URL_FACEBOOK_GARDENING_MANAGER);
         setButtonClickable(R.id.idTranslateButton, GotsPreferences.URL_TRANSLATE_GARDENING_MANAGER);
+
+        ImageView flag = (ImageView) findViewById(R.id.imageTranslateFlag);
+        int flagRessource = getResources().getIdentifier("org.gots:drawable/" + Locale.getDefault().getLanguage(),
+                null, null);
+        flag.setImageResource(flagRessource);
 
         progressWeather = findViewById(R.id.imageProgressWeather);
         progressSeed = findViewById(R.id.imageProgressSeed);

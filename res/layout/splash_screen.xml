@@ -40,11 +40,13 @@
                 android:textSize="15sp" />
 
             <ImageView
+                android:id="@+id/imageTranslateFlag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:background="@drawable/ca"
                 android:contentDescription="@string/login.signin" />
+
         </LinearLayout>
     </LinearLayout>
 
