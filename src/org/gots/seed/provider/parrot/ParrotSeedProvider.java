@@ -22,10 +22,16 @@ public class ParrotSeedProvider extends LocalSeedProvider {
 
     private String TAG = "ParrotSeedProvider";
 
+    private String filterCriteria = "";
+
     public ParrotSeedProvider(Context context) {
         super(context);
         authentication = new ParrotAuthentication();
         authentication.getToken();
+    }
+
+    public void setSearchCriteria(String filterCriteria) {
+        this.filterCriteria = filterCriteria;
     }
 
     public List<String> getVendorSeedsByName(String searchCriteria) {
@@ -49,7 +55,7 @@ public class ParrotSeedProvider extends LocalSeedProvider {
     @Override
     public List<BaseSeedInterface> getVendorSeeds(boolean force) {
         List<BaseSeedInterface> parrotPlants = new ArrayList<BaseSeedInterface>();
-        List<String> plantsId = getVendorSeedsByName("ros");
+        List<String> plantsId = getVendorSeedsByName(filterCriteria);
         try {
 
             StringBuilder builder = new StringBuilder();
@@ -86,7 +92,7 @@ public class ParrotSeedProvider extends LocalSeedProvider {
             for (BaseSeedInterface localSeed : localVendorSeeds) {
                 if (remoteSeed.getUUID() != null && remoteSeed.getUUID().equals(localSeed.getUUID())) {
                     found = true;
-                    myVendorSeeds.add(localSeed);
+//                    myVendorSeeds.add(localSeed);
 
                     break;
                 }
@@ -96,10 +102,10 @@ public class ParrotSeedProvider extends LocalSeedProvider {
                 // myVendorSeeds.add();
                 ;
             else {
-                BaseSeedInterface seed = super.createSeed(remoteSeed);
-                myVendorSeeds.add(seed);
-                newSeeds.add(seed);
+                remoteSeed = super.createSeed(remoteSeed);
+                newSeeds.add(remoteSeed);
             }
+            myVendorSeeds.add(remoteSeed);
         }
 
         // for (BaseSeedInterface localSeed : localVendorSeeds) {

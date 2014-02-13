@@ -49,6 +49,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 public class VendorListActivity extends AbstractListFragment {
+    private String TAG = VendorListActivity.class.getName();
 
     public Context mContext;
 
@@ -154,19 +155,23 @@ public class VendorListActivity extends AbstractListFragment {
         filter.setText(currentFilter);
 
         filter.addTextChangedListener(new TextWatcher() {
+
             @Override
             public void afterTextChanged(Editable arg0) {
-
+                Log.i(TAG, "afterTextChanged");
+             
             }
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                Log.i(TAG, "beforeTextChanged");
 
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 listVendorSeedAdapter.getFilter().filter(s.toString());
+                currentFilter=s;
             }
         });
         ImageButton clear = (ImageButton) getActivity().findViewById(R.id.clearSearchFilter);
@@ -174,8 +179,9 @@ public class VendorListActivity extends AbstractListFragment {
 
             @Override
             public void onClick(View v) {
-                currentFilter = "";
-                closeSearchBox();
+                updateVendorSeeds();
+//                currentFilter = "";
+//                closeSearchBox();
             }
 
         });
@@ -201,7 +207,7 @@ public class VendorListActivity extends AbstractListFragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    @Override
+    @Override 
     public void onResume() {
         updateVendorSeeds();
         super.onResume();
@@ -221,6 +227,7 @@ public class VendorListActivity extends AbstractListFragment {
             protected List<BaseSeedInterface> doInBackground(Void... params) {
                 // List<BaseSeedInterface> catalogue = seedProvider.getVendorSeeds(false);
                 ParrotSeedProvider seedProvider = new ParrotSeedProvider(getActivity());
+                seedProvider.setSearchCriteria(currentFilter.toString());
                 List<BaseSeedInterface> catalogue = seedProvider.getVendorSeeds(false);
                 if (catalogue.size() == 0)
                     catalogue = seedProvider.getVendorSeeds(true);

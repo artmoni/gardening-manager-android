@@ -29,8 +29,10 @@ public class ParrotSeedConverter {
             seed.setDescriptionCultivation(plant.getString("description"));
             seed.setDescriptionGrowth(plant.getString("growth"));
             seed.setDescriptionDiseases(plant.getString("pests"));
-            seed.setDescriptionHarvest("");
-            seed.setSpecie(plant.getString("species_name"));
+            seed.setDescriptionHarvest("harvesting");
+            seed.setSpecie(plant.getString("latin_name"));
+            seed.setVariety(plant.getString("subspecies_name"));
+            
             seed.setUUID(plant.getString("id"));
             // JSONArray common_names = (JSONArray)plant.getJSONArray("common_names");
             // for (int i = 0; i < common_names.length(); i++) {
@@ -51,18 +53,20 @@ public class ParrotSeedConverter {
     }
 
     private void downloadImage(String plantName, String url) {
-        try {
-            URLConnection conn = new URL(url).openConnection();
-            conn.connect();
-            Bitmap image = BitmapFactory.decodeStream(conn.getInputStream());
-            File file = new File(mContext.getCacheDir() + "/" + plantName.toLowerCase().replaceAll("\\s", ""));
-            FileOutputStream out = new FileOutputStream(file);
-            image.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            out.flush();
-            out.close();
+        File file = new File(mContext.getCacheDir() + "/" + plantName.toLowerCase().replaceAll("\\s", ""));
+        if (!file.exists()) {
+            try {
+                URLConnection conn = new URL(url).openConnection();
+                conn.connect();
+                Bitmap image = BitmapFactory.decodeStream(conn.getInputStream());
+                FileOutputStream out = new FileOutputStream(file);
+                image.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                out.flush();
+                out.close();
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return;
     }

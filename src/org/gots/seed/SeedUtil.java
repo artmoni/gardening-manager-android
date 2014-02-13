@@ -44,7 +44,7 @@ public class SeedUtil {
         if (growingSeedInterface == null)
             return "";
         String translateSpecie = growingSeedInterface.getSpecie();
-        if (translateSpecie == null)
+        if (translateSpecie == null || "null".equals(translateSpecie))
             return "";
         int specieRessourceString = context.getResources().getIdentifier(
                 "org.gots:string/specie." + translateSpecie.toLowerCase().replaceAll("\\s", ""), null, null);
@@ -55,7 +55,7 @@ public class SeedUtil {
 
     public static String translateAction(Context context, BaseActionInterface action) {
         String translateAction = action.getName();
-        if (translateAction == null)
+        if (translateAction == null||"null".equals(translateAction))
             return "";
         int actionRessourceString = context.getResources().getIdentifier(
                 "org.gots:string/action." + translateAction.toLowerCase().replaceAll("\\s", ""), null, null);

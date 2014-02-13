@@ -59,16 +59,16 @@ public class SeedWidgetLong extends LinearLayout {
         if (mSeed == null)
             return;
 
-        if (mSeed.getFamily() != null) {
+        try {
             int familyImageRessource = getResources().getIdentifier(
                     "org.gots:drawable/family_" + mSeed.getFamily().toLowerCase(), null, null);
 
             if (familyImageRessource != 0)
                 setBackgroundResource(familyImageRessource);
-            else
-                setBackground(mContext.getResources().getDrawable(R.drawable.family_unknown));
+        } catch (Exception e) {
+            setBackground(mContext.getResources().getDrawable(R.drawable.family_unknown));
         }
-
+        
         SeedWidget seedWidget = (SeedWidget) findViewById(R.id.idSeedWidget2);
         seedWidget.setSeed(mSeed);
 
