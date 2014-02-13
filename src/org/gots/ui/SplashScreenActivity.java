@@ -91,6 +91,14 @@ public class SplashScreenActivity extends AbstractActivity {
 
     private int asyncCounter;
 
+    private TextView textprogressWeather;
+
+    private TextView textprogressAction;
+
+    private TextView textprogressSeed;
+
+    private TextView textprogressGarden;
+
     private Handler getSplashHandler() {
         if (splashHandler == null) {
             WeakReference<Activity> that = new WeakReference<Activity>(this);
@@ -134,74 +142,22 @@ public class SplashScreenActivity extends AbstractActivity {
             };
         }.execute();
 
-        View artmoni = (View) findViewById(R.id.webArtmoni);
-        artmoni.setOnClickListener(new LinearLayout.OnClickListener() {
+        setButtonClickable(R.id.webArtmoni, GotsPreferences.URL_ARTMONI);
+        setButtonClickable(R.id.webSauterDansLesFlaques, GotsPreferences.URL_SAUTERDANSLESFLAQUES);
+        setButtonClickable(R.id.idSocialGoogle, GotsPreferences.URL_GOOGLEPLUS_GARDENING_MANAGER);
+        setButtonClickable(R.id.idSocialFacebook, GotsPreferences.URL_FACEBOOK_GARDENING_MANAGER);
+        setButtonClickable(R.id.idTranslateButton, GotsPreferences.URL_TRANSLATE_GARDENING_MANAGER);
 
-            @Override
-            public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.artmoni.eu"));
-                startActivity(browserIntent);
-
-            }
-        });
-
-        View sauterdanslesflaques = (View) findViewById(R.id.webSauterDansLesFlaques);
-        sauterdanslesflaques.setOnClickListener(new LinearLayout.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.sauterdanslesflaques.com"));
-                startActivity(browserIntent);
-
-            }
-        });
-
-        ImageView socialGoogle = (ImageView) findViewById(R.id.idSocialGoogle);
-        socialGoogle.setOnClickListener(new LinearLayout.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent browserIntent = new Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("https://plus.google.com/u/0/b/108868805153744305734/communities/105269291264998461912"));
-                startActivity(browserIntent);
-
-            }
-        });
-
-        ImageView socialFacebook = (ImageView) findViewById(R.id.idSocialFacebook);
-        socialFacebook.setOnClickListener(new LinearLayout.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("http://www.facebook.com/pages/Gardening-Manager/120589404779871"));
-                startActivity(browserIntent);
-
-            }
-        });
-
-        // *********** ACTIVATION DEPENDS ON PREVIMETEO BUSINESS RELATIONS *******
-        // ImageView previmeteo = (ImageView) findViewById(R.id.idPrevimeteo);
-        // previmeteo.setOnClickListener(new LinearLayout.OnClickListener() {
-        //
-        // @Override
-        // public void onClick(View v) {
-        // Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-        // Uri.parse("http://www.previmeteo.com/"));
-        // startActivity(browserIntent);
-        //
-        // }
-        // });
-        // Intent startServiceIntent = new Intent(this,
-        // NotificationService.class);
-        // this.startService(startServiceIntent);
         progressWeather = findViewById(R.id.imageProgressWeather);
         progressSeed = findViewById(R.id.imageProgressSeed);
         progressAction = findViewById(R.id.imageProgressAction);
         progressGarden = findViewById(R.id.imageProgressGarden);
 
-        // registerReceiver(receiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
+        textprogressWeather = (TextView) findViewById(R.id.textProgressWeather);
+        textprogressSeed = (TextView) findViewById(R.id.textProgressSeed);
+        textprogressAction = (TextView) findViewById(R.id.textProgressAction);
+        textprogressGarden = (TextView) findViewById(R.id.textProgressGarden);
+
         if (!gotsPrefs.isPremium()) {
             GotsAdvertisement ads = new GotsAdvertisement(this);
 
@@ -211,21 +167,18 @@ public class SplashScreenActivity extends AbstractActivity {
 
     }
 
-    // BroadcastReceiver receiver = new BroadcastReceiver() {
-    //
-    // @Override
-    // public void onReceive(Context context, Intent intent) {
-    // if (intent.getAction().equals(BroadCastMessages.WEATHER_DISPLAY_EVENT)) {
-    // progressWeather.clearAnimation();
-    // progressWeather.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
-    // removeProgress();
-    //
-    // }
-    //
-    // }
-    // };
+    protected void setButtonClickable(int viewId, final String urlTranslateGardeningManager) {
+        View buttonTranslate = (View) findViewById(viewId);
+        buttonTranslate.setOnClickListener(new LinearLayout.OnClickListener() {
 
-    private Intent weatherServiceIntent;
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlTranslateGardeningManager));
+                startActivity(browserIntent);
+
+            }
+        });
+    }
 
     protected void addProgress() {
         asyncCounter++;
@@ -256,6 +209,8 @@ public class SplashScreenActivity extends AbstractActivity {
                 addProgress();
                 Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
                 progressWeather.startAnimation(myFadeInAnimation);
+                textprogressWeather.setText(getResources().getString(R.string.synchro_weather_checking));
+
             };
 
             @Override
@@ -270,6 +225,8 @@ public class SplashScreenActivity extends AbstractActivity {
                 progressWeather.clearAnimation();
                 progressWeather.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
                 removeProgress();
+                textprogressWeather.setText(getResources().getString(R.string.synchro_weather_ok));
+
                 super.onPostExecute(result);
 
             }
@@ -284,6 +241,8 @@ public class SplashScreenActivity extends AbstractActivity {
             protected void onPreExecute() {
                 Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
                 progressSeed.startAnimation(myFadeInAnimation);
+                textprogressSeed.setText(getResources().getString(R.string.synchro_seeds_checking));
+
                 addProgress();
             };
 
@@ -308,6 +267,8 @@ public class SplashScreenActivity extends AbstractActivity {
                 progressSeed.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
                 // getApplicationContext().stopService(startServiceIntent2);
                 removeProgress();
+                textprogressSeed.setText(getResources().getString(R.string.synchro_seeds_ok));
+
                 super.onPostExecute(result);
 
             }
@@ -322,6 +283,8 @@ public class SplashScreenActivity extends AbstractActivity {
             protected void onPreExecute() {
                 Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
                 progressAction.startAnimation(myFadeInAnimation);
+                textprogressAction.setText(getResources().getString(R.string.synchro_actions_checking));
+
                 addProgress();
             };
 
@@ -335,6 +298,7 @@ public class SplashScreenActivity extends AbstractActivity {
             protected void onPostExecute(Void result) {
                 progressAction.clearAnimation();
                 progressAction.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
+                textprogressAction.setText(getResources().getString(R.string.synchro_actions_ok));
                 getApplicationContext().stopService(startServiceIntent3);
                 removeProgress();
                 super.onPostExecute(result);
@@ -366,6 +330,8 @@ public class SplashScreenActivity extends AbstractActivity {
          * Synchronize Server
          */
         if (gotsPrefs.isConnectedToServer()) {
+            findViewById(R.id.layoutProgressGarden).setVisibility(View.VISIBLE);
+
             new AsyncTask<Context, Void, List<GardenInterface>>() {
                 ProgressDialog dialog;
 
@@ -375,6 +341,8 @@ public class SplashScreenActivity extends AbstractActivity {
                 protected void onPreExecute() {
                     Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
                     progressGarden.startAnimation(myFadeInAnimation);
+                    textprogressGarden.setText(getResources().getString(R.string.synchro_garden_checking));
+
                     super.onPreExecute();
                 }
 
@@ -389,13 +357,14 @@ public class SplashScreenActivity extends AbstractActivity {
                 protected void onPostExecute(List<GardenInterface> result) {
                     progressGarden.clearAnimation();
                     progressGarden.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
+                    textprogressGarden.setText(getResources().getString(R.string.synchro_garden_ok));
 
                     super.onPostExecute(result);
                 }
 
             }.execute();
         } else {
-            progressGarden.setVisibility(View.GONE);
+            findViewById(R.id.layoutProgressGarden).setVisibility(View.GONE);
         }
     }
 
@@ -407,20 +376,11 @@ public class SplashScreenActivity extends AbstractActivity {
 
     @Override
     protected void onResume() {
-        // int currentGardenId = gotsPrefs.getCurrentGardenId();
-        // gardenManager.getCurrentGarden();
         if (gardenManager.getCurrentGarden() == null) {
             Intent intent = new Intent(this, FirstLaunchActivity.class);
             startActivityForResult(intent, 0);
-
         } else
             launchProgress();
-        // if (!gotsPrefs.isPremium()) {
-        // GotsAdvertisement ads = new GotsAdvertisement(this);
-        //
-        // LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
-        // layout.addView(ads.getAdsLayout());
-        // }
         super.onResume();
     }
 
