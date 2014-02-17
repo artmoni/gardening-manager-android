@@ -114,12 +114,6 @@ public class AboutActivity extends AbstractActivity {
         textprogressAction = (TextView) findViewById(R.id.textProgressAction);
         textprogressGarden = (TextView) findViewById(R.id.textProgressGarden);
 
-        if (!gotsPrefs.isPremium()) {
-            GotsAdvertisement ads = new GotsAdvertisement(this);
-
-            LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
-            layout.addView(ads.getAdsLayout());
-        }
     }
 
     protected void setButtonClickable(int viewId, final String url) {
