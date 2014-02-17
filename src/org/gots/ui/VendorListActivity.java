@@ -35,15 +35,15 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -84,7 +84,7 @@ public class VendorListActivity extends AbstractListFragment {
             mContext.startService(seedIntent);
             return true;
         case R.id.new_seed_barcode:
-            IntentIntegratorSupportV4 integrator = new IntentIntegratorSupportV4(this);
+            IntentIntegrator integrator = new IntentIntegrator(getActivity());
             integrator.initiateScan();
             return true;
         default:

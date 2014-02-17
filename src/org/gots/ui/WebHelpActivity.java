@@ -13,18 +13,18 @@ package org.gots.ui;
 import org.gots.R;
 import org.gots.help.HelpUriBuilder;
 
+import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.view.MenuItem;
 
 public class WebHelpActivity extends AbstractActivity {
     private ProgressDialog pd;
@@ -40,7 +40,7 @@ public class WebHelpActivity extends AbstractActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.help);
 
-        ActionBar bar = getSupportActionBar();
+        ActionBar bar = getActionBar();
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setTitle("Documentation");
 

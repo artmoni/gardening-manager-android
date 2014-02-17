@@ -4,14 +4,14 @@ import org.gots.allotment.AllotmentManager;
 import org.gots.garden.GardenManager;
 import org.gots.seed.GotsSeedManager;
 
+import android.app.ListFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.actionbarsherlock.app.SherlockListFragment;
 
-public class AbstractListFragment extends SherlockListFragment {
+public class AbstractListFragment extends ListFragment {
     protected GotsSeedManager seedProvider;
     protected AllotmentManager allotmentManager;
     protected GardenManager gardenManager;

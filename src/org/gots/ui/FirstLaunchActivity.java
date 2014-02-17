@@ -10,18 +10,18 @@ import org.gots.authentication.NuxeoAuthentication;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.view.MenuItem;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 
@@ -35,7 +35,7 @@ public class FirstLaunchActivity extends AbstractActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.first_launch);
 
-        ActionBar bar = getSupportActionBar();
+        ActionBar bar = getActionBar();
         // bar.setDisplayHomeAsUpEnabled(true);
         bar.setTitle(R.string.app_name);
     }

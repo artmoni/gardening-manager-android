@@ -16,6 +16,7 @@ import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 
+import android.app.ListFragment;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,9 +27,8 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.SherlockListFragment;
 
-public class ListActionActivity extends SherlockListFragment implements ListView.OnScrollListener {
+public class ListActionActivity extends ListFragment implements ListView.OnScrollListener {
 
     // private String[] mStrings;
 

@@ -31,18 +31,18 @@ import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsSeedManager;
 
+import android.app.Activity;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 
-import com.actionbarsherlock.app.SherlockActivity;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 /**
  * @author jcarsique
  * 
  */
-public class AbstractActivity extends SherlockActivity {
+public class AbstractActivity extends Activity {
     private static final String TAG = "AbstractActivity";
 
     protected GotsPreferences gotsPrefs;

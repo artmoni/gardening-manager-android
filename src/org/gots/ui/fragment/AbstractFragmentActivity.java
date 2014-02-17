@@ -7,11 +7,11 @@ import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsSeedManager;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class AbstractFragmentActivity extends SherlockFragmentActivity {
+public class AbstractFragmentActivity extends FragmentActivity {
     protected GotsPreferences gotsPref;
     protected GotsSeedManager seedProvider;
     protected GardenManager gardenProvider;

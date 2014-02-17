@@ -1,18 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-<TextView  
-    android:layout_height="wrap_content" 
-    android:text="Click one of the buttons to select a date/time."
-    android:layout_gravity="center" android:layout_width="wrap_content"/>
-<Button android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="Select DefaultDate" android:id="@+id/defaultDateSelectButton"></Button>
-<Button android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="Select AlternativeDate" android:id="@+id/alternativeDateSelectButton"></Button>
-<Button android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="Select CustomDate" android:id="@+id/customDateSelectButton"></Button>
-<Button android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="Select Month/Year" android:id="@+id/monthYearDateSelectButton"></Button>
-<Button android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="Select Time" android:id="@+id/timeSelectButton"></Button>
-<Button android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="Select DateTime" android:id="@+id/dateTimeSelectButton"></Button>
-<TextView android:id="@+id/selectedDateLabel" android:gravity="center" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_centerInParent="true" android:textSize="25dp"></TextView>
-</LinearLayout>
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!-- The main content view -->
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <!-- The navigation drawer -->
+    <ListView android:id="@+id/left_drawer"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        android:background="#111"/>
+</android.support.v4.widget.DrawerLayout>

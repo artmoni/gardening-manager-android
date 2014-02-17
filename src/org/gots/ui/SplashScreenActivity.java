@@ -38,7 +38,7 @@ public class SplashScreenActivity extends AboutActivity {
             case STOPSPLASH:
                 // remove SplashScreen from view
                 if (that.get() != null) {
-                    Intent intent = new Intent(that.get(), DashboardActivity.class);
+                    Intent intent = new Intent(that.get(), MainActivity.class);
                     that.get().startActivityForResult(intent, 3);
                 }
                 // that.get().finish();

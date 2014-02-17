@@ -14,6 +14,7 @@ import org.gots.R;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsSeedManager;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,9 +22,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.SherlockFragment;
 
-public class SeedActivity extends SherlockFragment {
+public class SeedActivity extends Fragment {
     private int seedId;
 
     protected BaseSeedInterface mSeed;

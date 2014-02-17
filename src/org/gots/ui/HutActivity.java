@@ -19,26 +19,26 @@ import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.ui.fragment.AbstractFragmentActivity;
 
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
+import android.app.ListFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.ActionBar.Tab;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.app.SherlockListFragment;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -77,11 +77,11 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
     @Override
     protected void onActivityResult(int arg0, int arg1, Intent arg2) {
         super.onActivityResult(arg0, arg1, arg2);
-        
+
     }
 
     private void buildMyTabHost() {
-        ActionBar bar = getSupportActionBar();
+        ActionBar bar = getActionBar();
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setTitle(R.string.dashboard_hut_name);
 
@@ -111,24 +111,24 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
     }
 
     @Override
-    public void onTabSelected(Tab tab, FragmentTransaction ft) {
+    public void onTabSelected(Tab tab, android.app.FragmentTransaction ft) {
         // mViewPager.getAdapter().notifyDataSetChanged();
     }
 
     @Override
-    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+    public void onTabUnselected(Tab tab, android.app.FragmentTransaction ft) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void onTabReselected(Tab tab, FragmentTransaction ft) {
+    public void onTabReselected(Tab tab, android.app.FragmentTransaction ft) {
         // TODO Auto-generated method stub
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getSupportMenuInflater();
+        MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_hut, menu);
         return true;
     }
@@ -190,10 +190,10 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
 
         private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
 
-        public TabsAdapter(SherlockFragmentActivity activity, ViewPager pager) {
+        public TabsAdapter(FragmentActivity activity, ViewPager pager) {
             super(activity.getSupportFragmentManager());
             mContext = activity;
-            mActionBar = activity.getSupportActionBar();
+            mActionBar = activity.getActionBar();
             mViewPager = pager;
             mViewPager.setAdapter(this);
             mViewPager.setOnPageChangeListener(this);
@@ -229,7 +229,7 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
         public void onPageSelected(int position) {
             mActionBar.setSelectedNavigationItem(position);
 
-            SherlockListFragment fragment = (SherlockListFragment) getSupportFragmentManager().findFragmentByTag(
+            ListFragment fragment = (ListFragment) getFragmentManager().findFragmentByTag(
                     "android:switcher:" + R.id.pager + ":" + position);
             if (fragment != null && fragment.getListAdapter() != null)
                 ((BaseAdapter) fragment.getListAdapter()).notifyDataSetChanged();
@@ -239,7 +239,7 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
         public void onPageScrollStateChanged(int state) {
         }
 
-        public void onTabSelected(Tab tab, FragmentTransaction ft) {
+        public void onTabSelected(Tab tab, android.app.FragmentTransaction ft) {
             Object tag = tab.getTag();
             for (int i = 0; i < mTabs.size(); i++) {
                 if (mTabs.get(i) == tag) {
@@ -249,10 +249,10 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
             }
         }
 
-        public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+        public void onTabUnselected(Tab tab, android.app.FragmentTransaction ft) {
         }
 
-        public void onTabReselected(Tab tab, FragmentTransaction ft) {
+        public void onTabReselected(Tab tab, android.app.FragmentTransaction ft) {
         }
 
     }

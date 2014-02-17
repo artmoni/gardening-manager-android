@@ -38,11 +38,11 @@
         android:debuggable="true"
         android:icon="@drawable/launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.Sherlock" >
+        >
         <activity
             android:name=".ui.SplashScreenActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Styled" >
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -51,59 +51,64 @@
         </activity>
         <activity
             android:name=".ui.MyMainGarden"
-            android:theme="@style/Theme.Styled"
+           
             android:uiOptions="splitActionBarWhenNarrow" />
         <activity
             android:name=".ui.DashboardActivity"
-            android:theme="@style/Theme.Styled" >
+            >
         </activity>
         <activity android:name=".ui.AllotmentActivity" />
         <activity
             android:name=".ui.SeedActivity"
-            android:theme="@style/Theme.Styled" />
+            />
         <activity android:name=".ui.CameraView" />
         <activity android:name=".ui.VendorListActivity" />
         <activity
             android:name=".ui.ProfileActivity"
-            android:theme="@style/Theme.Styled"
+           
+            android:uiOptions="splitActionBarWhenNarrow" >
+        </activity>
+         <activity
+            android:name=".ui.MainActivity"
+           
             android:uiOptions="splitActionBarWhenNarrow" >
         </activity>
         <activity
             android:name=".ui.ProfileCreationActivity"
-            android:theme="@style/Theme.Styled" />
+            />
         <activity
             android:name=".ui.ListActionActivity"
-            android:theme="@style/Theme.Styled" />
+            />
         <activity
             android:name=".ui.ActionActivity"
-            android:theme="@style/Theme.Styled" />
+            />
         <activity android:name=".ui.NewActionActivity" />
         <activity
             android:name=".ui.AboutActivity"
-            android:theme="@style/Theme.Styled" />
+            />
         <activity
             android:name=".ui.WebHelpActivity"
-            android:theme="@style/Theme.Styled" />
+            />
         <activity
             android:name=".ui.TabSeedActivity"
-            android:theme="@style/Theme.Styled"
+           
             android:uiOptions="splitActionBarWhenNarrow" />
         <activity android:name=".ui.WebViewActivity" />
         <activity
             android:name=".ui.HutActivity"
-            android:theme="@style/Theme.Styled"
+           
             android:uiOptions="splitActionBarWhenNarrow" />
         <activity android:name=".ui.MySeedsListActivity" />
         <activity android:name=".ui.MySeedsListFirstTimeActivity" />
         <activity
             android:name=".ui.NewSeedActivity"
-            android:theme="@style/Theme.Styled" />
+            />
         <activity
             android:name=".ui.AccountList"
-            android:theme="@style/Theme.Styled" />
+            />
         <activity
             android:name=".ui.LoginActivity"
-            android:theme="@style/Theme.Styled" >
+            >
             <intent-filter>
                 <data
                     android:host="my.gardening-manager.com"
@@ -118,13 +123,13 @@
         </activity>
         <activity
             android:name=".ui.FirstLaunchActivity"
-            android:theme="@style/Theme.Styled" />
+            />
         <activity
             android:name="com.google.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
         <activity
             android:name=".ui.PreferenceActivity"
-            android:theme="@style/Theme.Styled" />
+            />
         <!--
         <provider
         android:authorities="org.gots.providers.seeds

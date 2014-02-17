@@ -33,7 +33,11 @@ import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
 
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
 import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -43,25 +47,21 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Gallery;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.ActionBar.Tab;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 
-public class TabSeedActivity extends SherlockFragmentActivity {
+public class TabSeedActivity extends FragmentActivity {
     ViewPager mViewPager;
 
     GrowingSeedInterface mSeed = null;
@@ -78,11 +78,11 @@ public class TabSeedActivity extends SherlockFragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.seed_tab);
 
-        ActionBar bar = getSupportActionBar();
+        ActionBar bar = getActionBar();
         bar.setDisplayHomeAsUpEnabled(true);
         // bar.setDisplayShowTitleEnabled(false);
 
-        getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         // ********************** **********************
         if (getIntent().getExtras() == null) {
@@ -209,7 +209,7 @@ public class TabSeedActivity extends SherlockFragmentActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getSupportMenuInflater();
+        MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_seeddescription, menu);
         if (mSeed.getGrowingSeedId() == 0) {
             menu.findItem(R.id.photo).setVisible(false);
@@ -317,10 +317,10 @@ public class TabSeedActivity extends SherlockFragmentActivity {
 
         private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
 
-        public TabsAdapter(SherlockFragmentActivity activity, ViewPager pager) {
+        public TabsAdapter(FragmentActivity activity, ViewPager pager) {
             super(activity.getSupportFragmentManager());
             mContext = activity;
-            mActionBar = activity.getSupportActionBar();
+            mActionBar = activity.getActionBar();
             mViewPager = pager;
             mViewPager.setAdapter(this);
             mViewPager.setOnPageChangeListener(this);
@@ -341,13 +341,13 @@ public class TabSeedActivity extends SherlockFragmentActivity {
         }
 
         @Override
-        public Fragment getItem(int position) {
+        public android.support.v4.app.Fragment getItem(int position) {
             TabInfo info = mTabs.get(position);
             Bundle bundle = new Bundle();
             bundle.putInt("org.gots.seed.id", mSeed.getSeedId());
             bundle.putInt("org.gots.growingseed.id", mSeed.getGrowingSeedId());
             bundle.putString("org.gots.seed.url", urlDescription);
-            Fragment fragment = Fragment.instantiate(mContext, info.clss.getName(), info.args);
+            android.support.v4.app.Fragment fragment = android.support.v4.app.Fragment.instantiate(mContext, info.clss.getName(), info.args);
             fragment.setArguments(bundle);
             return fragment;
         }
