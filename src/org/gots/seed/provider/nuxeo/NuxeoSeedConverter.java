@@ -48,7 +48,7 @@ public class NuxeoSeedConverter {
         doc.set("vendorseed:specie", seed.getSpecie());
         doc.set("vendorseed:variety", seed.getVariety());
         doc.set("vendorseed:barcode", seed.getBareCode());
-        doc.set("vendorseed:language", Locale.getDefault().getLanguage());
+        doc.set("vendorseed:language", Locale.getDefault().getCountry().toLowerCase());
         
         return doc;
     }

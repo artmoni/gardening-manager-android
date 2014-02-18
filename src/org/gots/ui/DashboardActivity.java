@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.gots.ui;
 
+import java.util.Locale;
+
 import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.broadcast.BroadCastMessages;
@@ -65,7 +67,6 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         super.onCreate(savedInstanceState);
 
         // NewRelic.withApplicationToken( "AA89617084bf906d3a0425f6cf6a382ce574b3acd8" ).start(this.getApplication());
-
         setContentView(R.layout.dashboard);
 
         // attach event handler to dash buttons
