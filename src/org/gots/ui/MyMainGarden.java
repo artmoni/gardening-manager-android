@@ -9,7 +9,7 @@
  *     sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.ui;
-
+ 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
