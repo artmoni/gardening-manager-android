@@ -6,7 +6,11 @@
         android:icon="@drawable/action_photo"
         android:showAsAction="always"
         android:title="@string/action.photo"/>
-    
+    <item
+        android:id="@+id/download"
+        android:icon="@drawable/action_detail"
+        android:showAsAction="always"
+        android:title="@string/action.history"/>
     <item
         android:id="@+id/help"
         android:icon="@drawable/help"

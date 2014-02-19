@@ -8,11 +8,13 @@ import org.gots.garden.GardenInterface;
 import org.gots.garden.GardenManager;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
 import org.nuxeo.ecm.automation.client.cache.CacheBehavior;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
+import org.nuxeo.ecm.automation.client.jaxrs.model.Blob;
 import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
@@ -466,5 +468,18 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
     @Override
     public void force_refresh(boolean refresh) {
         this.refreshStock = refresh;
+    }
+
+    public void downloadHistory(GrowingSeedInterface mSeed) {
+        Session session = getNuxeoClient().getSession();
+         DocumentManager service = session.getAdapter(DocumentManager.class);
+        try {
+            Document doc = service.getDocument(new DocRef(mSeed.getUUID()));
+            Blob blob = (Blob) session.newRequest("seedGrowingHistory").setInput(doc).execute();
+            if (blob == null)
+                return;
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
     }
 }

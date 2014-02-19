@@ -31,6 +31,7 @@ import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
+import org.gots.seed.provider.nuxeo.NuxeoSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
 
 import android.app.AlertDialog;
@@ -231,6 +232,22 @@ public class TabSeedActivity extends SherlockFragmentActivity {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW,
                     Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
             startActivity(browserIntent);
+
+            return true;
+        case R.id.download:
+            new AsyncTask<Void, Integer, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    NuxeoSeedProvider provider = new NuxeoSeedProvider(getApplicationContext());
+                    provider.downloadHistory(mSeed);
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void result) {
+                    super.onPostExecute(result);
+                }
+            }.execute();
 
             return true;
         case R.id.photo:
