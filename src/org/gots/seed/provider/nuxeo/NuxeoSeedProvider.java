@@ -70,7 +70,6 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             }
             Documents docs = service.query("SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState != \"deleted\"",
                     null, new String[] { "dc:modified DESC" }, "*", 0, 200, cacheParam);
-
             for (Iterator<Document> iterator = docs.iterator(); iterator.hasNext();) {
                 Document document = iterator.next();
                 BaseSeedInterface seed = NuxeoSeedConverter.convert(document);
@@ -122,7 +121,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             }
             if (remoteVendorSeeds.size() > 0)
                 scannedSeed = remoteVendorSeeds.get(0);
-            
+
         } catch (Exception e) {
             Log.e(TAG, "getSeedByBarCode " + e.getMessage(), e);
         }
