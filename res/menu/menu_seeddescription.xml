@@ -8,7 +8,7 @@
         android:title="@string/action.photo"/>
     <item
         android:id="@+id/download"
-        android:icon="@drawable/action_detail"
+        android:icon="@drawable/action_download"
         android:showAsAction="always"
         android:title="@string/action.history"/>
     <item

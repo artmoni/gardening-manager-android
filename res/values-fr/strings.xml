@@ -138,5 +138,6 @@
     <string name="login.connect.state">Vous êtes synchronizé</string>
     <string name="login.disconnect.state">Vous n\'avez pas sauvegardé, connectez vous et restez synchronisé</string>
     <string name="translate.button">J\'aide à la traduction</string>
-
+    <string name="login.connect.restricted">Vous devez être connecté pour utiliser cette fonctionnalité</string>
+    
 </resources>
