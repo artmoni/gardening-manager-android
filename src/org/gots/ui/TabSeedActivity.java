@@ -21,9 +21,12 @@ import org.gots.action.GotsActionSeedManager;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.bean.DeleteAction;
 import org.gots.action.bean.PhotoAction;
+import org.gots.action.provider.GotsActionProvider;
+import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.provider.nuxeo.NuxeoActionSeedProvider;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.exception.LicenceException;
 import org.gots.help.HelpUriBuilder;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
@@ -33,8 +36,12 @@ import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.seed.provider.nuxeo.NuxeoSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
+import org.nuxeo.ecm.automation.client.jaxrs.model.Blob;
+import org.nuxeo.ecm.automation.client.jaxrs.model.FileBlob;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -63,6 +70,8 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 public class TabSeedActivity extends SherlockFragmentActivity {
+    protected static final String TAG = "TabSeedActivity";
+
     ViewPager mViewPager;
 
     GrowingSeedInterface mSeed = null;
@@ -125,14 +134,19 @@ public class TabSeedActivity extends SherlockFragmentActivity {
         new AsyncTask<Void, Void, List<File>>() {
             @Override
             protected List<File> doInBackground(Void... params) {
-                NuxeoActionSeedProvider provider = new NuxeoActionSeedProvider(getApplicationContext());
-                List<File> imageFile = provider.getPicture(mSeed);
-
-                return imageFile;
+                try {
+                    GotsActionSeedProvider provider = GotsActionSeedManager.getInstance().initIfNew(
+                            getApplicationContext());
+                    List<File> imageFile = provider.getPicture(mSeed);
+                    return imageFile;
+                } catch (LicenceException e) {
+                    Log.w(TAG, e.getMessage());
+                    return null;
+                }
             }
 
             protected void onPostExecute(List<File> result) {
-                if (result.size() > 0) {
+                if (result != null && result.size() > 0) {
                     pictureGallery.setSpacing(10);
                     pictureGallery.setAdapter(new GalleryImageAdapter(getApplicationContext(), result));
                 } else
@@ -235,17 +249,44 @@ public class TabSeedActivity extends SherlockFragmentActivity {
 
             return true;
         case R.id.download:
-            new AsyncTask<Void, Integer, Void>() {
+            new AsyncTask<Void, Integer, File>() {
+                boolean licenceAvailable = true;
+
                 @Override
-                protected Void doInBackground(Void... params) {
-                    NuxeoSeedProvider provider = new NuxeoSeedProvider(getApplicationContext());
-                    provider.downloadHistory(mSeed);
-                    return null;
+                protected File doInBackground(Void... params) {
+                    try {
+                        GotsActionSeedProvider provider = GotsActionSeedManager.getInstance().initIfNew(
+                                getApplicationContext());
+                        return provider.downloadHistory(mSeed);
+                    } catch (LicenceException e) {
+                        Log.w(TAG, e.getMessage());
+                        licenceAvailable = false;
+                        return null;
+                    }
                 }
 
                 @Override
-                protected void onPostExecute(Void result) {
-                    super.onPostExecute(result);
+                protected void onPostExecute(File result) {
+                    if (!licenceAvailable) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(TabSeedActivity.this);
+                        builder.setMessage(getResources().getString(R.string.login_connect_restricted)).setCancelable(false).setPositiveButton(getResources().getString(R.string.login_connect),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                                        startActivity(loginIntent);
+                                    }
+                                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                        builder.show();
+                    }
+                    if (result != null) {
+                        Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
+                        pdfIntent.setDataAndType(Uri.fromFile(result), "application/pdf");
+                        startActivity(pdfIntent);
+                    }
                 }
             }.execute();
 

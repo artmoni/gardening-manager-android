@@ -151,6 +151,7 @@
     <string name="synchro.actions.ok">Actions list updated</string>
     <string name="synchro.garden.checking">Updating shared garden in progress</string>
     <string name="synchro.garden.ok">Shared garden updated</string>
+    <string name="login.connect.restricted">This feature is restricted to connected users</string>
     
     
     

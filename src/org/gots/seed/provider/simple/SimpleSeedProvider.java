@@ -179,4 +179,5 @@ public class SimpleSeedProvider implements GotsSeedProvider {
     public synchronized BaseSeedInterface getSeedByBarCode(String barecode) {
         return null;
     }
+
 }

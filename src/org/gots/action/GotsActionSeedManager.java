@@ -7,6 +7,7 @@ import java.util.List;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.action.provider.nuxeo.NuxeoActionSeedProvider;
+import org.gots.exception.LicenceException;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.utils.NotConfiguredException;
@@ -27,8 +28,7 @@ public class GotsActionSeedManager implements GotsActionSeedProvider {
 
     private Context mContext;
 
-    private GotsPreferences gotsPrefs;        
-
+    private GotsPreferences gotsPrefs;
 
     public static synchronized GotsActionSeedManager getInstance() {
         if (instance == null) {
@@ -41,7 +41,7 @@ public class GotsActionSeedManager implements GotsActionSeedProvider {
         return instance;
     }
 
-    public synchronized GotsActionSeedManager initIfNew(Context context) {
+    public synchronized GotsActionSeedProvider initIfNew(Context context) {
         if (initDone) {
             return this;
         }
@@ -86,10 +86,26 @@ public class GotsActionSeedManager implements GotsActionSeedProvider {
     public SeedActionInterface insertAction(GrowingSeedInterface seed, BaseActionInterface action) {
         return provider.insertAction(seed, action);
     }
-    
+
     @Override
     public void uploadPicture(GrowingSeedInterface seed, File f) {
-        provider.uploadPicture(seed,f);
+        provider.uploadPicture(seed, f);
+    }
+
+    @Override
+    public File downloadHistory(GrowingSeedInterface mSeed) throws LicenceException {
+        if (provider instanceof NuxeoActionSeedProvider)
+            return provider.downloadHistory(mSeed);
+        else
+            throw new LicenceException();
+    }
+
+    @Override
+    public List<File> getPicture(GrowingSeedInterface mSeed) throws LicenceException {
+        if (provider instanceof NuxeoActionSeedProvider)
+            return provider.getPicture(mSeed);
+        else
+            throw new LicenceException();
     }
 
 }

@@ -8,12 +8,15 @@ import android.content.Context;
 import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SpinnerAdapter;
 
 public class GalleryImageAdapter implements SpinnerAdapter {
+
+    private static final String TAG = "GalleryImageAdapter";
 
     List<File> imagesList = new ArrayList<File>();
 
@@ -46,12 +49,15 @@ public class GalleryImageAdapter implements SpinnerAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        ImageView image = new ImageView(mContext);
+        try{
         Bitmap bitmap = BitmapFactory.decodeFile(getItem(position).getAbsolutePath());
         Bitmap bitmapResized = Bitmap.createScaledBitmap(bitmap, parent.getHeight(), parent.getHeight(), false);
 
-        ImageView image = new ImageView(mContext);
         image.setImageBitmap(bitmapResized);
-
+        }catch(Exception e){
+            Log.w(TAG, e.getMessage());
+        }
         return image;
     }
 

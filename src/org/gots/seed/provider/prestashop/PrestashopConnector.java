@@ -113,4 +113,6 @@ class PrestashopConnector implements GotsSeedProvider {
         return null;
     }
 
+   
+
 }

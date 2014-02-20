@@ -49,7 +49,7 @@ public class QuickSeedActionBuilder {
 
     private GrowingSeedInterface seed;
 
-    GotsActionSeedManager actionSeedManager;
+    GotsActionSeedProvider actionSeedManager;
 
     private GotsActionManager actionManager;
 

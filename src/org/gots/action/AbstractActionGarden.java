@@ -13,6 +13,7 @@ package org.gots.action;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.garden.GardenManager;
 import org.gots.seed.GotsGrowingSeedManager;
@@ -48,7 +49,7 @@ public abstract class AbstractActionGarden implements GardeningActionInterface {
 
     protected GardenManager gardenManager;
 
-    protected GotsActionSeedManager actionSeedManager;
+    protected GotsActionSeedProvider actionSeedManager;
 
     protected GotsActionManager actionManager;
 
