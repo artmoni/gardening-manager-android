@@ -36,6 +36,10 @@ public class ActionNotificationService extends Service {
 
     private static final String TAG = "ActionNotificationService";
 
+    private GotsGrowingSeedManager growingSeedManager;
+
+    private GotsActionSeedProvider actionseedManager;
+
     @Override
     public IBinder onBind(Intent arg0) {
 
@@ -44,7 +48,9 @@ public class ActionNotificationService extends Service {
 
     @Override
     public void onCreate() {
-        // mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(ActionNotificationService.this);
+        actionseedManager = GotsActionSeedManager.getInstance().initIfNew(
+                ActionNotificationService.this);
 
         super.onCreate();
     }
@@ -60,15 +66,11 @@ public class ActionNotificationService extends Service {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(
-                        ActionNotificationService.this);
                 ArrayList<GrowingSeedInterface> allSeeds = growingSeedManager.getGrowingSeeds();
                 // if (allSeeds.size() > 0)
 
                 for (Iterator<GrowingSeedInterface> iterator = allSeeds.iterator(); iterator.hasNext();) {
                     GrowingSeedInterface seed = iterator.next();
-                    GotsActionSeedProvider actionseedManager = GotsActionSeedManager.getInstance().initIfNew(
-                            ActionNotificationService.this);
                     List<SeedActionInterface> seedActions;
 
                     seedActions = actionseedManager.getActionsToDoBySeed(seed);
@@ -83,38 +85,10 @@ public class ActionNotificationService extends Service {
                         createNotification(action, seed);
 
                 }
-                
-                
-                
+
                 return null;
             }
         }.execute();
-
-        // GrowingSeedDBHelper helper = new GrowingSeedDBHelper(this);
-
-        // ##########
-
-//        LocalSeedProvider helperVendor = new LocalSeedProvider(getApplicationContext());
-//        List<BaseSeedInterface> allMySeeds = helperVendor.getMyStock(GardenManager.getInstance().initIfNew(this).getCurrentGarden());
-//        List<BaseActionInterface> sowingActions = new ArrayList<BaseActionInterface>();
-//        BaseSeedInterface sowingseed = new GrowingSeed();
-//        for (Iterator<BaseSeedInterface> iterator = allMySeeds.iterator(); iterator.hasNext();) {
-//            BaseSeedInterface seed = iterator.next();
-//
-//            Calendar cal = Calendar.getInstance();
-//            if (cal.get(Calendar.MONTH) >= seed.getDateSowingMin()
-//                    && cal.get(Calendar.MONTH) <= seed.getDateSowingMax()) {
-//                BaseActionInterface action = new SowingAction(this);
-//                sowingActions.add(action);
-//                sowingseed = seed;
-//            }
-//
-//        }
-//
-//        if (!sowingActions.isEmpty()) {
-//            BaseActionInterface action = sowingActions.iterator().next();
-//            createNotification(action, sowingseed);
-//        }
 
         return super.onStartCommand(intent, flags, startId);
     }
