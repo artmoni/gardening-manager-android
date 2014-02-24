@@ -54,6 +54,7 @@
                         android:textSize="15sp" />
 
                     <ImageView
+                        android:id="@+id/imageTranslateFlag"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
@@ -151,8 +152,6 @@
             android:layout_weight="1"
             android:orientation="vertical" >
 
-            
-
             <ImageView
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -167,48 +166,46 @@
                 android:text="version"
                 android:textColor="#432D07"
                 android:textSize="15dip" />
+
             <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_line_action"
-        android:gravity="center_horizontal"
-        android:padding="5dp" >
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_line_action"
+                android:gravity="center_horizontal"
+                android:padding="5dp" >
 
-        <ImageView
-            android:id="@+id/webArtmoni"
-            style="@style/logo"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/logo_artmoni" />
+                <ImageView
+                    android:id="@+id/webArtmoni"
+                    style="@style/logo"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/logo_artmoni" />
 
-        <ImageView
-            android:id="@+id/webSauterDansLesFlaques"
-            style="@style/logo"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/logosdlf" />
+                <ImageView
+                    android:id="@+id/webSauterDansLesFlaques"
+                    style="@style/logo"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/logosdlf" />
 
-        <ImageView
-            android:id="@+id/idSocialGoogle"
-            style="@style/logo"
-            android:src="@drawable/social_google" />
+                <ImageView
+                    android:id="@+id/idSocialGoogle"
+                    style="@style/logo"
+                    android:src="@drawable/social_google" />
 
-        <ImageView
-            android:id="@+id/idSocialFacebook"
-            style="@style/logo"
-            android:src="@drawable/social_facebook" />
+                <ImageView
+                    android:id="@+id/idSocialFacebook"
+                    style="@style/logo"
+                    android:src="@drawable/social_facebook" />
 
-        <!--
+                <!--
              <ImageView
             android:id="@+id/idPrevimeteo"
             android:layout_width="80dp"
             android:layout_height="50dp"
             android:layout_margin="5dp"
             android:src="@drawable/logo_previmeteo" />
-        -->
-    </LinearLayout>
+                -->
+            </LinearLayout>
         </LinearLayout>
-        
     </LinearLayout>
-
-   
 
 </LinearLayout>

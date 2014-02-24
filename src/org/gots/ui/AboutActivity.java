@@ -3,11 +3,13 @@ package org.gots.ui;
 import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import org.gots.R;
 import org.gots.action.service.ActionNotificationService;
 import org.gots.action.service.ActionTODOBroadcastReceiver;
 import org.gots.ads.GotsAdvertisement;
+import org.gots.analytics.GotsAnalytics;
 import org.gots.garden.GardenInterface;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;
@@ -38,11 +40,10 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class AboutActivity extends AbstractActivity {
-    
 
-  
     protected static Handler splashHandler;
 
     private View progressSeed;
@@ -114,7 +115,10 @@ public class AboutActivity extends AbstractActivity {
         textprogressAction = (TextView) findViewById(R.id.textProgressAction);
         textprogressGarden = (TextView) findViewById(R.id.textProgressGarden);
 
-       
+        ImageView flag = (ImageView) findViewById(R.id.imageTranslateFlag);
+        int flagRessource = getResources().getIdentifier("org.gots:drawable/" + Locale.getDefault().getCountry().toLowerCase(),
+                null, null);
+        flag.setImageResource(flagRessource);
     }
 
     protected void setButtonClickable(int viewId, final String url) {
@@ -125,7 +129,8 @@ public class AboutActivity extends AbstractActivity {
             public void onClick(View v) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(browserIntent);
-
+                GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
+                GoogleAnalyticsTracker.getInstance().trackPageView(url);
             }
         });
     }
@@ -137,7 +142,7 @@ public class AboutActivity extends AbstractActivity {
 
     protected void removeProgress() {
         asyncCounter--;
-       
+
     };
 
     protected void launchProgress() {
