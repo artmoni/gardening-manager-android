@@ -58,7 +58,6 @@
       <artifactId>actionbarsherlock</artifactId>
       <version>4.4.0</version>
       <type>apklib</type>
-     
     </dependency>
     <dependency>
       <groupId>com.google.android.analytics</groupId>
@@ -74,7 +73,6 @@
       <groupId>com.google.zxing</groupId>
       <artifactId>android-integration</artifactId>
       <version>2.3.0</version>
-      
     </dependency>
     <dependency>
       <groupId>org.simpleframework</groupId>
@@ -251,7 +249,7 @@
     <!-- </build> -->
     <!-- </profile> -->
     <profile>
-      <id>sign</id>
+      <id>release</id>
       <activation>
         <property>
           <name>performRelease</name>
@@ -263,7 +261,6 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-jarsigner-plugin</artifactId>
-            <version>1.2</version>
             <executions>
               <execution>
                 <id>signing</id>
@@ -274,51 +271,52 @@
                 <phase>package</phase>
                 <inherited>true</inherited>
                 <configuration>
-                  <archiveDirectory></archiveDirectory>
+                  <removeExistingSignatures>true</removeExistingSignatures>
+                  <archiveDirectory />
                   <includes>
-                    <include>target/*.apk</include>
+                    <include>${project.build.directory}/${project.artifactId}.apk</include>
                   </includes>
-                  <keystore>${keystore.path}</keystore>
-                  <storepass>@rtM0n!</storepass>
-                  <keypass>@rtM0n!</keypass>
-                  <alias>artmonimobile</alias>
-                  <arguments>
-                    <argument>-sigalg</argument>
-                    <argument>MD5withRSA</argument>
-                    <argument>-digestalg</argument>
-                    <argument>SHA1</argument>
-                  </arguments>
+                  <keystore>${sign.keystore}</keystore>
+                  <alias>${sign.alias}</alias>
+                  <storepass>${sign.storepass}</storepass>
+                  <keypass>${sign.keypass}</keypass>
+                  <verbose>true</verbose>
                 </configuration>
               </execution>
             </executions>
           </plugin>
-          <!-- <plugin> -->
-          <!-- <groupId>com.jayway.maven.plugins.android.generation2</groupId> -->
-          <!-- <artifactId>maven-android-plugin</artifactId> -->
-          <!-- <inherited>true</inherited> -->
-          <!-- <configuration> -->
-          <!-- <sign> -->
-          <!-- <debug>false</debug> -->
-          <!-- </sign> -->
-          <!-- <zipalign> -->
-          <!-- <verbose>true</verbose> -->
-          <!-- <inputApk>${project.build.directory}/${project.artifactId}.apk</inputApk> -->
-          <!-- <outputApk>${project.build.directory}/${project.artifactId}-signed-aligned.apk -->
-          <!-- </outputApk> -->
-          <!-- </zipalign> -->
-          <!-- </configuration> -->
-          <!-- <executions> -->
-          <!-- <execution> -->
-          <!-- <id>alignApk</id> -->
-          <!-- <phase>package</phase> -->
-          <!-- <goals> -->
-          <!-- <goal>zipalign</goal> -->
-          <!-- </goals> -->
-          <!-- </execution> -->
-          <!-- </executions> -->
-          <!-- </plugin> -->
+          <plugin>
+            <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+            <artifactId>maven-android-plugin</artifactId>
+            <inherited>true</inherited>
+            <configuration>
+              <sign>
+                <debug>false</debug>
+              </sign>
+              <zipalign>
+                <verbose>true</verbose>
+                <inputApk>${project.build.directory}/${project.artifactId}.apk</inputApk>
+                <outputApk>${project.build.directory}/${project.artifactId}-signed-aligned.apk 
+                </outputApk>
+              </zipalign>
+            </configuration>
+            <executions>
+              <execution>
+                <id>alignApk</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>zipalign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
         </plugins>
       </build>
     </profile>
   </profiles>
+  <scm>
+    <connection>scm:git:https://github.com/artmoni/gardening-manager-android</connection>
+    <developerConnection>scm:git:https://github.com/artmoni/gardening-manager-android</developerConnection>
+    <url>https://github.com/artmoni/gardening-manager-android</url>
+  </scm>
 </project>
