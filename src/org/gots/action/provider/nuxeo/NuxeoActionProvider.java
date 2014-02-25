@@ -44,14 +44,14 @@ public class NuxeoActionProvider extends LocalActionProvider {
             }
             Document root = service.getDocument("/default-domain/workspaces/Public hut/Actions");
             Documents docs = service.query(
-                    "SELECT * FROM Action WHERE ecm:currentLifeCycleState != \"deleted\" And ecm:parentId = ? AND dc:title = ?",
+                    "SELECT * FROM Action WHERE ecm:currentLifeCycleState != \"deleted\" And ecm:parentId = \"?\" AND dc:title = \"?\"",
                     new String[] { root.getId(), name }, new String[] { "dc:modified DESC" }, "*", 0, 50, cacheParam);
 
             if (docs.size() > 0)
                 action = NuxeoActionConverter.convert(mContext, docs.get(0));
 
         } catch (Exception e) {
-            Log.e(TAG, "getActionByName " + e.getMessage(), e);
+            Log.e(TAG, "getActionByName (" + name + ")" + e.getMessage(), e);
             action = super.getActionByName(name);
         }
 

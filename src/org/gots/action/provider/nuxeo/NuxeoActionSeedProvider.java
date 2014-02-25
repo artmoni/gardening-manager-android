@@ -18,7 +18,7 @@ import org.gots.action.BaseActionInterface;
 import org.gots.action.GotsActionManager;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.provider.local.LocalActionSeedProvider;
-import org.gots.exception.LicenceException;
+import org.gots.exception.GotsServerRestrictedException;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.nuxeo.android.cache.blob.BlobWithProperties;
@@ -383,7 +383,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
     }
 
     @Override
-    public List<File> getPicture(GrowingSeedInterface mSeed) throws LicenceException {
+    public List<File> getPicture(GrowingSeedInterface mSeed) throws GotsServerRestrictedException {
         Session session = getNuxeoClient().getSession();
         DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
         Document seedDoc;
@@ -415,7 +415,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
     }
 
     @Override
-    public File downloadHistory(GrowingSeedInterface mSeed) throws LicenceException {
+    public File downloadHistory(GrowingSeedInterface mSeed) throws GotsServerRestrictedException {
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);
         try {
@@ -424,6 +424,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             File dir = new File(Environment.getExternalStorageDirectory(), "Gardening-Manager");
             File pdfFile = new File(dir, blob.getFileName().replaceAll(" ", "-"));
             copy(blob.getFile(), pdfFile);
+            blob.getFile().delete();
             if (pdfFile.exists())
                 return pdfFile;
         } catch (Exception e) {

@@ -7,7 +7,7 @@ import java.util.List;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.action.provider.nuxeo.NuxeoActionSeedProvider;
-import org.gots.exception.LicenceException;
+import org.gots.exception.GotsServerRestrictedException;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.utils.NotConfiguredException;
@@ -93,19 +93,19 @@ public class GotsActionSeedManager implements GotsActionSeedProvider {
     }
 
     @Override
-    public File downloadHistory(GrowingSeedInterface mSeed) throws LicenceException {
+    public File downloadHistory(GrowingSeedInterface mSeed) throws GotsServerRestrictedException {
         if (provider instanceof NuxeoActionSeedProvider)
             return provider.downloadHistory(mSeed);
         else
-            throw new LicenceException();
+            throw new GotsServerRestrictedException();
     }
 
     @Override
-    public List<File> getPicture(GrowingSeedInterface mSeed) throws LicenceException {
+    public List<File> getPicture(GrowingSeedInterface mSeed) throws GotsServerRestrictedException {
         if (provider instanceof NuxeoActionSeedProvider)
             return provider.getPicture(mSeed);
         else
-            throw new LicenceException();
+            throw new GotsServerRestrictedException();
     }
 
 }

@@ -1,6 +1,6 @@
 package org.gots.exception;
 
-public class LicenceException extends Exception {
+public class GotsServerRestrictedException extends Exception {
     @Override
     public String getMessage() {
         return "Premium licence missing";

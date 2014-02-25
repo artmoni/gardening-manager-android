@@ -26,7 +26,7 @@ import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.provider.nuxeo.NuxeoActionSeedProvider;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.exception.LicenceException;
+import org.gots.exception.GotsServerRestrictedException;
 import org.gots.help.HelpUriBuilder;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
@@ -139,7 +139,7 @@ public class TabSeedActivity extends SherlockFragmentActivity {
                             getApplicationContext());
                     List<File> imageFile = provider.getPicture(mSeed);
                     return imageFile;
-                } catch (LicenceException e) {
+                } catch (GotsServerRestrictedException e) {
                     Log.w(TAG, e.getMessage());
                     return null;
                 }
@@ -258,7 +258,7 @@ public class TabSeedActivity extends SherlockFragmentActivity {
                         GotsActionSeedProvider provider = GotsActionSeedManager.getInstance().initIfNew(
                                 getApplicationContext());
                         return provider.downloadHistory(mSeed);
-                    } catch (LicenceException e) {
+                    } catch (GotsServerRestrictedException e) {
                         Log.w(TAG, e.getMessage());
                         licenceAvailable = false;
                         return null;
