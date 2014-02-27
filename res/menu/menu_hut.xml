@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <item
+   <!--  <item
         android:id="@+id/idSeedFilter"
         android:icon="@drawable/ic_search"
         android:showAsAction="always"
-        android:title="@string/seed.menu.search"/>
+        android:title="@string/seed.menu.search"/> -->
     <item
         android:id="@+id/new_seed"
         android:icon="@drawable/bt_add_seed"

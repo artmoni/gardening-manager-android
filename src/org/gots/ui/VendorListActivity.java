@@ -35,12 +35,16 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -55,9 +59,9 @@ public class VendorListActivity extends AbstractListFragment {
 
     public SeedListAdapter listVendorSeedAdapter;
 
-    protected CharSequence currentFilter = "";
-
     private ProgressDialog dialog;
+
+    protected String currentFilter = "";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,9 +82,9 @@ public class VendorListActivity extends AbstractListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-        case R.id.idSeedFilter:
-            displaySearchBox();
-            return true;
+        // case R.id.idSeedFilter:
+        // displaySearchBox();
+        // return true;
         case R.id.refresh_seed:
             Intent seedIntent = new Intent(mContext, SeedUpdateService.class);
             mContext.startService(seedIntent);
@@ -112,7 +116,7 @@ public class VendorListActivity extends AbstractListFragment {
                         // seedProvider.addToStock(scanSeed, gardenProvider.getCurrentGarden());
                         // updateVendorSeeds();
                         // listVendorSeedAdapter.notifyDataSetChanged();
-                        currentFilter = scanSeed.getBareCode();
+                        // currentFilter = scanSeed.getBareCode();
                     } else {
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
                         alertDialogBuilder.setTitle(getResources().getString(R.string.seed_menu_add_barcode));
@@ -148,56 +152,22 @@ public class VendorListActivity extends AbstractListFragment {
 
     }
 
-    private void displaySearchBox() {
-
-        getActivity().findViewById(R.id.linearlayoutSearchBox).setVisibility(View.VISIBLE);
-        EditText filter = (EditText) getActivity().findViewById(R.id.edittextSearchFilter);
-        filter.setText(currentFilter);
-
-        filter.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-                Log.i(TAG, "afterTextChanged");
-             
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                Log.i(TAG, "beforeTextChanged");
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                listVendorSeedAdapter.getFilter().filter(s.toString());
-                currentFilter=s;
-            }
-        });
-        ImageButton clear = (ImageButton) getActivity().findViewById(R.id.clearSearchFilter);
-        clear.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                updateVendorSeeds();
-//                currentFilter = "";
-//                closeSearchBox();
-            }
-
-        });
-    }
-
-    private void closeSearchBox() {
-        EditText filter = (EditText) getActivity().findViewById(R.id.edittextSearchFilter);
-        filter.setText("");
-        getActivity().findViewById(R.id.linearlayoutSearchBox).setVisibility(View.GONE);
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(filter.getWindowToken(), 0);
-    }
+    //
+    // private void closeSearchBox() {
+    // EditText filter = (EditText) getActivity().findViewById(R.id.edittextSearchFilter);
+    // filter.setText("");
+    // // getActivity().findViewById(R.id.linearlayoutSearchBox).setVisibility(View.GONE);
+    // InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+    // imm.hideSoftInputFromWindow(filter.getWindowToken(), 0);
+    // }
 
     public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (intent.getExtras() != null) {
+
+                currentFilter = intent.getStringExtra(BroadCastMessages.SEED_DISPLAYLIST_FILTER);
+            }
             updateVendorSeeds();
         }
     };
@@ -207,7 +177,7 @@ public class VendorListActivity extends AbstractListFragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    @Override 
+    @Override
     public void onResume() {
         updateVendorSeeds();
         super.onResume();
@@ -227,7 +197,7 @@ public class VendorListActivity extends AbstractListFragment {
             protected List<BaseSeedInterface> doInBackground(Void... params) {
                 // List<BaseSeedInterface> catalogue = seedProvider.getVendorSeeds(false);
                 ParrotSeedProvider seedProvider = new ParrotSeedProvider(getActivity());
-                seedProvider.setSearchCriteria(currentFilter.toString());
+                seedProvider.setSearchCriteria(currentFilter);
                 List<BaseSeedInterface> catalogue = seedProvider.getVendorSeeds(false);
                 if (catalogue.size() == 0)
                     catalogue = seedProvider.getVendorSeeds(true);
@@ -242,9 +212,9 @@ public class VendorListActivity extends AbstractListFragment {
                     // nothing
                 }
                 listVendorSeedAdapter.setSeeds(vendorSeeds);
-                listVendorSeedAdapter.getFilter().filter(currentFilter);
-                if (!"".equals(currentFilter) && currentFilter != null)
-                    displaySearchBox();
+                // listVendorSeedAdapter.getFilter().filter(currentFilter);
+                // if (!"".equals(currentFilter) && currentFilter != null)
+                // buildSearchBox();
                 listVendorSeedAdapter.notifyDataSetChanged();
 
                 super.onPostExecute(vendorSeeds);

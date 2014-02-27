@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.local.LocalSeedProvider;
@@ -27,10 +28,19 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
@@ -44,6 +54,8 @@ import com.google.zxing.integration.android.IntentResult;
 
 public class HutActivity extends AbstractFragmentActivity implements ActionBar.TabListener {
 
+    protected static final String TAG = "HutActivity";
+
     // private ListVendorSeedAdapter lvsea;
     ListView listSeeds;
 
@@ -54,6 +66,18 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
     private int currentAllotment = -1;
 
     private TabsAdapter mTabsAdapter;
+
+    protected CharSequence currentFilter = "";
+
+    private EditText searchEditText;
+
+    private ImageView searchButton;
+
+    private int SWITCH_BUTTON_SEARCH = 1;
+
+    private int SWITCH_BUTTON_CLEAR = 0;
+
+    private int SWITCH_BUTTON = SWITCH_BUTTON_SEARCH;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,12 +96,79 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
             layout.addView(ads.getAdsLayout());
         }
 
+        searchEditText = (EditText) findViewById(R.id.edittextSearchFilter);
+        searchButton = (ImageView) findViewById(R.id.clearSearchFilter);
+
+        buildSearchBox();
+
     }
 
-    @Override
-    protected void onActivityResult(int arg0, int arg1, Intent arg2) {
-        super.onActivityResult(arg0, arg1, arg2);
-        
+    private void buildSearchBox() {
+
+        searchEditText.setText(currentFilter);
+        searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    searchSeed();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        searchEditText.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                SWITCH_BUTTON = SWITCH_BUTTON_SEARCH;
+                switchSearchButton();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // listVendorSeedAdapter.getFilter().filter(s.toString());
+                currentFilter = s;
+            }
+        });
+        searchButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                searchSeed();
+            }
+
+        });
+    }
+
+    protected void searchSeed() {
+        Intent seedIntent = new Intent(BroadCastMessages.SEED_DISPLAYLIST);
+        if (SWITCH_BUTTON == SWITCH_BUTTON_SEARCH) {
+            Bundle extras = new Bundle();
+            extras.putString(BroadCastMessages.SEED_DISPLAYLIST_FILTER, currentFilter.toString());
+            seedIntent.putExtras(extras);
+            SWITCH_BUTTON = SWITCH_BUTTON_CLEAR;
+            switchSearchButton();
+        } else {
+            SWITCH_BUTTON = SWITCH_BUTTON_SEARCH;
+            searchEditText.setText("");
+            switchSearchButton();
+        }
+        sendBroadcast(seedIntent);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
+    }
+
+    private void switchSearchButton() {
+        if (SWITCH_BUTTON == SWITCH_BUTTON_SEARCH)
+            searchButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_search));
+        else
+            searchButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_close_clear_cancel));
     }
 
     private void buildMyTabHost() {

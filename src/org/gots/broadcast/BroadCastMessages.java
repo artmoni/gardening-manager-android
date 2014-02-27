@@ -21,7 +21,6 @@
  * *********************************************************************** */
 package org.gots.broadcast;
 
-
 /**
  * @author jcarsique
  * 
@@ -29,6 +28,8 @@ package org.gots.broadcast;
 public final class BroadCastMessages {
 
     public final static String SEED_DISPLAYLIST = "org.gots.seed.broadcastevent";
+
+    public final static String SEED_DISPLAYLIST_FILTER = "org.gots.seed.broadcastevent.filter";
 
     public static final String GROWINGSEED_DISPLAYLIST = "org.gots.growingseed.broadcastevent";
 
