@@ -177,18 +177,18 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
 
         // Création d'un ContentValues (fonctionne comme une HashMap)
         ContentValues values = getContentValuesFromSeed(seed);
-//        Cursor cursor;
+        // Cursor cursor;
 
         int rowid = bdd.update(DatabaseHelper.SEEDS_TABLE_NAME, values,
                 DatabaseHelper.SEED_ID + "='" + seed.getSeedId() + "'", null);
-//        cursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_ID + "='" + seed.getSeedId()
-//                + "'", null, null, null, null);
-//
-//        if (cursor.moveToFirst()) {
-//            int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.SEED_ID));
-//            seed.setId(id);
-//        }
-//        cursor.close();
+        // cursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_ID + "='" + seed.getSeedId()
+        // + "'", null, null, null, null);
+        //
+        // if (cursor.moveToFirst()) {
+        // int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.SEED_ID));
+        // seed.setId(id);
+        // }
+        // cursor.close();
 
         return seed;
     }
@@ -316,5 +316,25 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
 
     @Override
     public void force_refresh(boolean refresh) {
+    }
+
+    @Override
+    public List<BaseSeedInterface> getVendorSeedsByName(String currentFilter) {
+        ArrayList<BaseSeedInterface> vendorSeeds = new ArrayList<BaseSeedInterface>();
+        try {
+            BaseSeedInterface searchedSeed = new GrowingSeed();
+            Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_VARIETY+" LIKE %"+currentFilter+"%", null, null, null, null);
+
+            if (managedCursor.moveToFirst()) {
+                do {
+                    searchedSeed = cursorToSeed(managedCursor);
+                    vendorSeeds.add(searchedSeed);
+                } while (managedCursor.moveToNext());
+            }
+            managedCursor.close();
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+        return vendorSeeds;
     }
 }

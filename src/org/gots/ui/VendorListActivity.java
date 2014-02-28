@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.gots.ui;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.adapter.SeedListAdapter;
 import org.gots.seed.adapter.VendorSeedListAdapter;
+import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.parrot.ParrotSeedProvider;
 import org.gots.seed.service.SeedUpdateService;
 import org.gots.ui.fragment.AbstractListFragment;
@@ -32,19 +34,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -63,6 +56,10 @@ public class VendorListActivity extends AbstractListFragment {
 
     protected String currentFilter = "";
 
+    final static public String PROVIDER = "org.gots.provider";
+
+    private GotsSeedProvider seedProvider;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
@@ -70,6 +67,33 @@ public class VendorListActivity extends AbstractListFragment {
         mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.SEED_DISPLAYLIST));
         listVendorSeedAdapter = new VendorSeedListAdapter(mContext, new ArrayList<BaseSeedInterface>());
         setListAdapter(listVendorSeedAdapter);
+        Bundle args = getArguments();
+        String providerClass = args.getString(PROVIDER);
+            try {
+                seedProvider = (GotsSeedProvider) Class.forName(providerClass).getConstructor(
+                        Context.class).newInstance(getActivity().getApplicationContext());
+            } catch (IllegalArgumentException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (java.lang.InstantiationException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+       
+        // seedProvider = new ParrotSeedProvider(getActivity());
+
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -196,9 +220,13 @@ public class VendorListActivity extends AbstractListFragment {
             @Override
             protected List<BaseSeedInterface> doInBackground(Void... params) {
                 // List<BaseSeedInterface> catalogue = seedProvider.getVendorSeeds(false);
-                ParrotSeedProvider seedProvider = new ParrotSeedProvider(getActivity());
-                seedProvider.setSearchCriteria(currentFilter);
-                List<BaseSeedInterface> catalogue = seedProvider.getVendorSeeds(false);
+//                seedProvider.setSearchCriteria(currentFilter);
+                List<BaseSeedInterface> catalogue ;
+                if (currentFilter.isEmpty())
+                    catalogue = seedProvider.getVendorSeeds(false);
+                else
+                    catalogue = seedProvider.getVendorSeedsByName(currentFilter);
+
                 if (catalogue.size() == 0)
                     catalogue = seedProvider.getVendorSeeds(true);
                 return catalogue;

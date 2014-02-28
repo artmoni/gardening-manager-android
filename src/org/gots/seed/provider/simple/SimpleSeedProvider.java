@@ -157,7 +157,9 @@ public class SimpleSeedProvider implements GotsSeedProvider {
     public void removeToStock(BaseSeedInterface vendorSeed, GardenInterface garden) {
         // TODO Auto-generated method stub
 
-    }@Override
+    }
+
+    @Override
     public List<BaseSeedInterface> getMyStock(GardenInterface garden) {
         // TODO Auto-generated method stub
         return null;
@@ -166,7 +168,7 @@ public class SimpleSeedProvider implements GotsSeedProvider {
     @Override
     public void deleteSeed(BaseSeedInterface vendorSeed) {
         // TODO Auto-generated method stub
-        
+
     }
 
     public List<BaseSeedInterface> getNewSeeds() {
@@ -177,6 +179,12 @@ public class SimpleSeedProvider implements GotsSeedProvider {
     }
 
     public synchronized BaseSeedInterface getSeedByBarCode(String barecode) {
+        return null;
+    }
+
+    @Override
+    public List<BaseSeedInterface> getVendorSeedsByName(String currentFilter) {
+        Log.e(getClass().getName(), getVendorSeedsByName(currentFilter).toString() + " not implemented");
         return null;
     }
 }

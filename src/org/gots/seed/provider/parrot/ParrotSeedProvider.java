@@ -26,6 +26,10 @@ public class ParrotSeedProvider extends LocalSeedProvider {
 
     public ParrotSeedProvider(Context context) {
         super(context);
+
+    }
+
+    private void getToken() {
         authentication = new ParrotAuthentication();
         authentication.getToken();
     }
@@ -34,7 +38,8 @@ public class ParrotSeedProvider extends LocalSeedProvider {
         this.filterCriteria = filterCriteria;
     }
 
-    public List<String> getVendorSeedsByName(String searchCriteria) {
+    public List<String> getVendorSeeds(String searchCriteria) {
+        getToken();
         String api_4_02_search = "/search/v5/plants/" + searchCriteria + "?generate_index=ASC";
         List<String> listId = new ArrayList<String>();
         try {
@@ -53,9 +58,41 @@ public class ParrotSeedProvider extends LocalSeedProvider {
     }
 
     @Override
-    public List<BaseSeedInterface> getVendorSeeds(boolean force) {
+    public List<BaseSeedInterface> getVendorSeedsByName(String currentFilter) {
+        getToken();
         List<BaseSeedInterface> parrotPlants = new ArrayList<BaseSeedInterface>();
-        List<String> plantsId = getVendorSeedsByName(filterCriteria);
+        List<String> plantsId = getVendorSeeds(currentFilter);
+        try {
+
+            StringBuilder builder = new StringBuilder();
+            for (String plantId : plantsId) {
+                builder.append(plantId);
+                builder.append(",");
+            }
+            String api_5_06_plants = "/plant_library/v1/plants/" + builder.toString();
+            JSONObject json_plants = (JSONObject) authentication.getJSON(api_5_06_plants);
+            JSONArray plants = json_plants.getJSONArray("plants");
+            for (int i = 0; i < plants.length(); i++) {
+                JSONObject plant = plants.getJSONObject(i);
+                ParrotSeedConverter converter = new ParrotSeedConverter(mContext);
+                BaseSeedInterface seed = converter.convert(plant);
+                parrotPlants.add(seed);
+            }
+
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage(), e);
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+
+        return synchronize(super.getVendorSeedsByName(currentFilter), parrotPlants);
+    }
+
+    @Override
+    public List<BaseSeedInterface> getVendorSeeds(boolean force) {
+        getToken();
+        List<BaseSeedInterface> parrotPlants = new ArrayList<BaseSeedInterface>();
+        List<String> plantsId = getVendorSeeds(filterCriteria);
         try {
 
             StringBuilder builder = new StringBuilder();
@@ -84,6 +121,8 @@ public class ParrotSeedProvider extends LocalSeedProvider {
 
     protected List<BaseSeedInterface> synchronize(List<BaseSeedInterface> localVendorSeeds,
             List<BaseSeedInterface> remoteVendorSeeds) {
+        getToken();
+
         newSeeds.clear();
         List<BaseSeedInterface> myVendorSeeds = new ArrayList<BaseSeedInterface>();
 
@@ -92,7 +131,7 @@ public class ParrotSeedProvider extends LocalSeedProvider {
             for (BaseSeedInterface localSeed : localVendorSeeds) {
                 if (remoteSeed.getUUID() != null && remoteSeed.getUUID().equals(localSeed.getUUID())) {
                     found = true;
-//                    myVendorSeeds.add(localSeed);
+                    // myVendorSeeds.add(localSeed);
 
                     break;
                 }

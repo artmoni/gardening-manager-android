@@ -221,4 +221,9 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
         return mSeedProvider.getSeedByBarCode(barecode);
     }
 
+    @Override
+    public List<BaseSeedInterface> getVendorSeedsByName(String currentFilter) {
+        return mSeedProvider.getVendorSeedsByName(currentFilter);
+    }
+
 }

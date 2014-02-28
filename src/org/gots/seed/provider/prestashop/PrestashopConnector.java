@@ -113,4 +113,10 @@ class PrestashopConnector implements GotsSeedProvider {
         return null;
     }
 
+    @Override
+    public List<BaseSeedInterface> getVendorSeedsByName(String currentFilter) {
+        Log.e(getClass().getName(), getVendorSeedsByName(currentFilter).toString() + " not implemented");
+        return null;
+    }
+
 }

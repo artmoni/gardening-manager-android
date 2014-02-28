@@ -32,4 +32,6 @@ public interface GotsSeedProvider {
     public abstract void force_refresh(boolean refresh);
 
     public abstract BaseSeedInterface getSeedByBarCode(String barecode);
+
+    public List<BaseSeedInterface> getVendorSeedsByName(String currentFilter);
 }
