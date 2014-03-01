@@ -84,18 +84,23 @@ public class AbstractActivity extends SherlockActivity {
         registerReceiver(seedManager, new IntentFilter(BroadCastMessages.GARDEN_SETTINGS_CHANGED));
         GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
         GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
-        
+
         try {
-            GoogleAnalyticsTracker.getInstance().setCustomVar(1, "App Version",getPackageManager().getPackageInfo(getPackageName(), 0).versionName, 1);
+            GoogleAnalyticsTracker.getInstance().setCustomVar(1, "App Version",
+                    getPackageManager().getPackageInfo(getPackageName(), 0).versionName, 1);
         } catch (NameNotFoundException e) {
         }
-        if (gotsPrefs.isPremium()) {
-//            GoogleAnalyticsTracker.getInstance().setDryRun(true);
-            GoogleAnalyticsTracker.getInstance().setCustomVar(2, "Member Type","Premium", 1);
-        }else
-            GoogleAnalyticsTracker.getInstance().setCustomVar(2, "Member Type","Guest", 1);
 
-            
+        if (gotsPrefs.isPremium()) {
+            GoogleAnalyticsTracker.getInstance().setCustomVar(2, "Member Type", "Premium", 1);
+        } else
+            GoogleAnalyticsTracker.getInstance().setCustomVar(2, "Member Type", "Guest", 1);
+
+        if (gotsPrefs.isConnectedToServer()) {
+            GoogleAnalyticsTracker.getInstance().setCustomVar(2, "Member Connected", "Connected", 1);
+        } else
+            GoogleAnalyticsTracker.getInstance().setCustomVar(2, "Member Connected", "Guest", 1);
+
         super.onPostCreate(savedInstanceState);
     }
 

@@ -67,6 +67,7 @@ Clone ActionBarSherlock to use its APK lib:
     $ mvn clean install android:deploy android:run [-Dandroid.sdk.path=/path/to/android-sdk/]
  
 ## RELEASE PROCESS 
+	$ mvn --settings settings.xml -Penv-release,release clean install
 
 ### Verify package certificate
 

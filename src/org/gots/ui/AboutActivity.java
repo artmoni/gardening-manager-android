@@ -114,6 +114,11 @@ public class AboutActivity extends AbstractActivity {
         textprogressAction = (TextView) findViewById(R.id.textProgressAction);
         textprogressGarden = (TextView) findViewById(R.id.textProgressGarden);
 
+
+        ImageView flag = (ImageView) findViewById(R.id.imageTranslateFlag);
+        int flagRessource = getResources().getIdentifier("org.gots:drawable/" + Locale.getDefault().getCountry().toLowerCase(),
+                null, null);
+        flag.setImageResource(flagRessource);
     }
 
     protected void setButtonClickable(int viewId, final String url) {

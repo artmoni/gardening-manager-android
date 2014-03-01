@@ -39,7 +39,6 @@ public class NuxeoSeedConverter {
     public static Document convert(String parentPath, BaseSeedInterface seed) {
         Document doc = new Document(parentPath, seed.getName(), "VendorSeed");
         doc.set("dc:title", seed.getVariety());
-//        doc.set("dc:description", seed.getdes);
         doc.set("vendorseed:datesowingmin", String.valueOf(seed.getDateSowingMin()));
         doc.set("vendorseed:datesowingmax", String.valueOf(seed.getDateSowingMax()));
         doc.set("vendorseed:durationmin", String.valueOf(seed.getDurationMin()));
@@ -48,7 +47,7 @@ public class NuxeoSeedConverter {
         doc.set("vendorseed:specie", seed.getSpecie());
         doc.set("vendorseed:variety", seed.getVariety());
         doc.set("vendorseed:barcode", seed.getBareCode());
-        doc.set("vendorseed:language", Locale.getDefault().getLanguage());
+        doc.set("vendorseed:language", Locale.getDefault().getCountry().toLowerCase());
         
         return doc;
     }
