@@ -41,7 +41,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     private static final String TAG = "GotsPreferences";
 
-    public static final boolean ISDEVELOPMENT = true;
+    public static final boolean ISDEVELOPMENT = false;
 
     public static final boolean DEBUG = false;
 
@@ -84,7 +84,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     private static final String GARDENING_MANAGER_DOCUMENTATION_URL = "http://doc.gardening-manager.com";
 
-    private static final String GARDENING_MANAGER_NUXEO_AUTOMATION_TEST = "http://192.168.10.201:8080/nuxeo/";
+    private static final String GARDENING_MANAGER_NUXEO_AUTOMATION_TEST = "http://services.gardening-manager.com/test/";
 
     private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://services.gardening-manager.com/nuxeo/";
 

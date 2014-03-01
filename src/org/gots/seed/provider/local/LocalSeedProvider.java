@@ -323,7 +323,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
         ArrayList<BaseSeedInterface> vendorSeeds = new ArrayList<BaseSeedInterface>();
         try {
             BaseSeedInterface searchedSeed = new GrowingSeed();
-            Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_VARIETY+" LIKE %"+currentFilter+"%", null, null, null, null);
+            Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_VARIETY+" LIKE \"%"+currentFilter+"%\"", null, null, null, null);
 
             if (managedCursor.moveToFirst()) {
                 do {
