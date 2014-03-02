@@ -1,6 +1,5 @@
 package org.gots.ui;
 
-import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -8,7 +7,6 @@ import java.util.Locale;
 import org.gots.R;
 import org.gots.action.service.ActionNotificationService;
 import org.gots.action.service.ActionTODOBroadcastReceiver;
-import org.gots.ads.GotsAdvertisement;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.garden.GardenInterface;
 import org.gots.preferences.GotsPreferences;
@@ -17,7 +15,6 @@ import org.gots.seed.service.SeedNotification;
 import org.gots.seed.service.SeedUpdateService;
 import org.gots.weather.WeatherManager;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
@@ -36,10 +33,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class AboutActivity extends AbstractActivity {

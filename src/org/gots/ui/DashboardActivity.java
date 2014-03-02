@@ -10,8 +10,6 @@
  ******************************************************************************/
 package org.gots.ui;
 
-import java.util.Locale;
-
 import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.broadcast.BroadCastMessages;
