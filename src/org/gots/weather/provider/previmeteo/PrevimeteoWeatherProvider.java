@@ -46,8 +46,11 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider implements W
 
     private WeatherCache cache;
 
+    private GotsPreferences gotsPreferences;
+
     public PrevimeteoWeatherProvider(Context context) {
         super(context);
+        gotsPreferences = GotsPreferences.getInstance().initIfNew(context);
 
         try {
             Address address = GardenManager.getInstance().initIfNew(context).getCurrentGarden().getAddress();
@@ -56,7 +59,7 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider implements W
             if (GotsPreferences.isDevelopment())
                 weatherURL = "http://www.gardening-manager.com/weather/weather-error.xml";
             else
-                weatherURL = "http://api.previmeteo.com/" + GotsPreferences.getWeatherApiKey() + "/ig/api?weather="
+                weatherURL = "http://api.previmeteo.com/" + gotsPreferences.getWeatherApiKey() + "/ig/api?weather="
                         + address.getLocality() + "," + context.getResources().getConfiguration().locale.getCountry()
                         + "&hl=fr";
 
