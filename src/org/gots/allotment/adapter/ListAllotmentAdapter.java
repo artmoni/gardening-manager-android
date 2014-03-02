@@ -26,11 +26,14 @@ import org.gots.ui.HutActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.LinearLayout;
@@ -120,22 +123,28 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
         //
         // };
         // }.execute(ll);
+        WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
 
-        int nbcolumn = 4;
-        int layoutsize = 100;
-
+        int layoutsize = 200;
+        int nbcolumn = (width - 200) / layoutsize;
+        holder.listSeeds.setNumColumns(nbcolumn);
+        
         listGrowingSeedAdapter = new ListGrowingSeedAdapter(mContext, getItem(position).getSeeds());
         holder.listSeeds.setAdapter(listGrowingSeedAdapter);
 
-        // if (holder.listSeeds.getCount() == 0)
         // holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
         // layoutsize));
-        if (holder.listSeeds.getCount() % nbcolumn == 0)
-            holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+//        if (holder.listSeeds.getCount() % nbcolumn == 0)
+            holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
                     (holder.listSeeds.getCount() / nbcolumn + 1) * layoutsize));
-        else
-            holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                    LayoutParams.WRAP_CONTENT));
+//        else
+//            holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+//                    ((holder.listSeeds.getCount() / nbcolumn) + 1) * layoutsize));
 
         holder.menu.removeAllViews();
 

@@ -60,7 +60,7 @@ public abstract class AbstractActionGarden implements GardeningActionInterface {
         seedManager.initIfNew(mContext);
         gardenManager = GardenManager.getInstance();
         gardenManager.initIfNew(mContext);
-        actionManager =GotsActionManager.getInstance().initIfNew(mContext);
+        actionManager = GotsActionManager.getInstance().initIfNew(mContext);
         actionSeedManager = GotsActionSeedManager.getInstance().initIfNew(mContext);
         growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(mContext);
 
@@ -83,7 +83,6 @@ public abstract class AbstractActionGarden implements GardeningActionInterface {
     public AbstractActionGarden(String name) {
         this.name = name;
     }
-
 
     @Override
     public String getName() {
@@ -162,7 +161,6 @@ public abstract class AbstractActionGarden implements GardeningActionInterface {
         this.dateActionTodo = dateActionTodo;
 
     }
-
 
     @Override
     public String getUUID() {
