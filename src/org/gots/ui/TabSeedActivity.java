@@ -11,6 +11,8 @@
 package org.gots.ui;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,7 +34,9 @@ import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
+import org.gots.utils.FileUtilities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -49,6 +53,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Gallery;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
@@ -62,6 +67,10 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 public class TabSeedActivity extends SherlockFragmentActivity {
+    private static final int PICK_IMAGE = 0;
+
+    protected static final String TAG = "TabSeedActivity";
+
     ViewPager mViewPager;
 
     GrowingSeedInterface mSeed = null;
@@ -74,8 +83,13 @@ public class TabSeedActivity extends SherlockFragmentActivity {
 
     private Gallery pictureGallery;
 
+    GotsPreferences gotsPreferences;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null)
+            cameraPicture = new File(savedInstanceState.getString("CAMERA_FILENAME"));
+        gotsPreferences = GotsPreferences.getInstance().initIfNew(getApplicationContext());
         setContentView(R.layout.seed_tab);
 
         ActionBar bar = getSupportActionBar();
@@ -139,6 +153,24 @@ public class TabSeedActivity extends SherlockFragmentActivity {
             };
         }.execute();
 
+        pictureGallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                File f = (File) arg0.getItemAtPosition(position);
+                File dest = new File(gotsPreferences.getGARDENING_MANAGER_DIRECTORY(), f.getName());
+                try {
+                    FileUtilities.copy(f, dest);
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.setDataAndType(Uri.fromFile(dest), "image/*");
+                    startActivity(intent);
+                } catch (IOException e) {
+                    Log.w(TAG, e.getMessage());
+                }
+
+            }
+        });
+
         bar.setTitle(mSeed.getSpecie());
 
         SeedWidgetLong seedWidget = (SeedWidgetLong) findViewById(R.id.IdSeedWidgetLong);
@@ -180,26 +212,28 @@ public class TabSeedActivity extends SherlockFragmentActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int arg1, Intent arg2) {
-        if (requestCode == 0) {
-            new AsyncTask<Void, Void, Void>() {
-                @Override
-                protected Void doInBackground(Void... params) {
-                    GotsActionSeedManager.getInstance().initIfNew(getApplicationContext()).uploadPicture(mSeed,
-                            cameraPicture);
-                    // photoAction.execute(mSeed);
-                    return null;
-                }
-            }.execute();
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
+        if (resultCode != Activity.RESULT_CANCELED)
+            if (requestCode == PICK_IMAGE) {
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        GotsActionSeedManager.getInstance().initIfNew(getApplicationContext()).uploadPicture(mSeed,
+                                cameraPicture);
+                        // photoAction.execute(mSeed);
+                        return null;
+                    }
+                }.execute();
 
-        }
-        super.onActivityResult(requestCode, arg1, arg2);
+            }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        // first saving my state, so the bundle wont be empty.
-        // http://code.google.com/p/android/issues/detail?id=19917
+        super.onSaveInstanceState(outState);
+        if (cameraPicture != null)
+            outState.putString("CAMERA_FILENAME", cameraPicture.getAbsolutePath());
     }
 
     @Override
@@ -236,16 +270,12 @@ public class TabSeedActivity extends SherlockFragmentActivity {
         case R.id.photo:
             photoAction = new PhotoAction(getApplicationContext());
             Date now = new Date();
-            cameraPicture = photoAction.getImageFile(now);
+            cameraPicture = new File(photoAction.getImageFile(now).getAbsolutePath());
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(cameraPicture));
             // takePictureIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivityForResult(takePictureIntent, 0);
+            startActivityForResult(takePictureIntent, PICK_IMAGE);
 
-            // TODO The action must not be executed if activity for result has been canceled because no
-            // image
-            // has been taken but the database get the imagefile
-            // actionItem.execute(seed);
             return true;
         case R.id.delete:
             final DeleteAction deleteAction = new DeleteAction(this);

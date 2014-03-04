@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.gots"
     android:versionCode="24"
-    android:versionName="0.26-SNAPSHOT" >
+    android:versionName="0.25.2" >
 
     <uses-sdk
         android:minSdkVersion="8"

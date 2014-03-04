@@ -20,6 +20,7 @@
  * *********************************************************************** */
 package org.gots.preferences;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -38,6 +39,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -82,7 +84,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     // private static final String ADMOB_API_KEY = "a14f50fa231b26d";
 
-    public static final String GARDENING_MANAGER_DIRECTORY = "Gardening-Manager";
+    public final String GARDENING_MANAGER_DIRECTORY = "Gardening-Manager";
 
     public static final String GARDENING_MANAGER_APPNAME = "Gardening Manager";
 
@@ -366,6 +368,11 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     public String getDocumentationURI() {
         return GARDENING_MANAGER_DOCUMENTATION_URL;
+    }
+
+    public File getGARDENING_MANAGER_DIRECTORY() {
+
+        return new File(Environment.getExternalStorageDirectory(), GARDENING_MANAGER_DIRECTORY);
     }
 
 }

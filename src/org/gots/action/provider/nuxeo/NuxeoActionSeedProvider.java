@@ -242,8 +242,8 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         Document seedDoc;
         Document pictureBook = null;
         try {
-            seedDoc = documentMgr.getDocument(new IdRef(seed.getUUID()));
-            pictureBook = documentMgr.getChild(new PathRef(seedDoc.getPath()), "Picture");
+            seedDoc = documentMgr.getDocument(new IdRef(seed.getUUID()), true);
+            pictureBook = documentMgr.getDocument(new PathRef(seedDoc.getPath()) + "/Picture");
         } catch (Exception e) {
             Log.i(TAG, e.getMessage());
         }
@@ -385,17 +385,15 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
                             + pictureBook.getId() + "\"", null, new String[] { "dc:modified DESC" }, "*", 0, 50,
                     CacheBehavior.FORCE_REFRESH);
             for (Document doc : pictureList) {
-                if (!"deleted".equals(doc.getState())) {
-                    Log.i(TAG, doc.getName());
+                Log.i(TAG, doc.getName());
 
-                    doc = documentMgr.getDocument(doc, "*");
-                    // get the file content property
-                    PropertyMap map = doc.getProperties().getMap("file:content");
-                    // get the data URL
-                    String path = map.getString("data");
-                    FileBlob blob = (FileBlob) session.getFile(path);
-                    imageFiles.add(blob.getFile());
-                }
+                doc = documentMgr.getDocument(doc, "*");
+                // get the file content property
+                PropertyMap map = doc.getProperties().getMap("file:content");
+                // get the data URL
+                String path = map.getString("data");
+                FileBlob blob = (FileBlob) session.getFile(path);
+                imageFiles.add(blob.getFile());
             }
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
