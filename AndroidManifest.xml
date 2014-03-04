@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.gots"
-    android:versionCode="24"
+    android:versionCode="25"
     android:versionName="0.25.2" >
 
     <uses-sdk
@@ -25,7 +25,9 @@
     <!-- LOGIN WITH GARDENING MANAGER SERVER USING LOCAL ACCOUNTS -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-
+  
+    <uses-permission android:name="com.android.vending.BILLING" />
+    
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
