@@ -185,7 +185,6 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
-        AppRater.showRateDialog(getApplicationContext(), null);
         GoogleAnalyticsTracker.getInstance().dispatch();
 
         new AsyncTask<Void, Void, GardenInterface>() {

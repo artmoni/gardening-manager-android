@@ -1,5 +1,8 @@
 package org.gots.inapp;
 
+import org.gots.R;
+import org.gots.preferences.GotsPreferences;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -12,20 +15,22 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class AppRater {
-    private final static String APP_TITLE = "YOUR-APP-NAME";
+    private final static String APP_TITLE = "Gardening Manager";
 
-    private final static String APP_PNAME = "YOUR-PACKAGE-NAME";
+    private final static String APP_PNAME = "org.gots";
 
     private final static int DAYS_UNTIL_PROMPT = 3;
 
-    private final static int LAUNCHES_UNTIL_PROMPT = 7;
+    private final static int LAUNCHES_UNTIL_PROMPT = 10;
 
     public static void app_launched(Context mContext) {
         SharedPreferences prefs = mContext.getSharedPreferences("apprater", 0);
-        if (prefs.getBoolean("dontshowagain", false)) { return ; }
-        
+        if (prefs.getBoolean("dontshowagain", false)) {
+            return;
+        }
+
         SharedPreferences.Editor editor = prefs.edit();
-        
+
         // Increment launch counter
         long launch_count = prefs.getLong("launch_count", 0) + 1;
         editor.putLong("launch_count", launch_count);
@@ -36,32 +41,35 @@ public class AppRater {
             date_firstLaunch = System.currentTimeMillis();
             editor.putLong("date_firstlaunch", date_firstLaunch);
         }
-        
+
         // Wait at least n days before opening
         if (launch_count >= LAUNCHES_UNTIL_PROMPT) {
-            if (System.currentTimeMillis() <= date_firstLaunch + 
-                    (DAYS_UNTIL_PROMPT * 24 * 60 * 60 * 1000)) {
+            if (System.currentTimeMillis() <= date_firstLaunch + (DAYS_UNTIL_PROMPT * 24 * 60 * 60 * 1000)) {
                 showRateDialog(mContext, editor);
             }
         }
-        
+
         editor.commit();
-    }    public static void showRateDialog(final Context mContext, final SharedPreferences.Editor editor) {
+    }
+
+    public static void showRateDialog(final Context mContext, final SharedPreferences.Editor editor) {
         final Dialog dialog = new Dialog(mContext);
-        dialog.setTitle("Rate " + APP_TITLE);
+        dialog.setTitle(mContext.getResources().getString(R.string.inapp_rating_title) + " " + APP_TITLE);
 
         LinearLayout ll = new LinearLayout(mContext);
         ll.setOrientation(LinearLayout.VERTICAL);
 
         TextView tv = new TextView(mContext);
-        
-        tv.setText("If you enjoy using " + APP_TITLE + ", please take a moment to rate it. Thanks for your support!");
+
+        GotsPreferences gotsPrefs = GotsPreferences.getInstance().initIfNew(mContext);
+        tv.setText(mContext.getResources().getString(R.string.inapp_rating_descrition).replace("_APP_TITLE_",
+                gotsPrefs.getGardeningManagerAppname()));
         tv.setWidth(240);
         tv.setPadding(4, 0, 4, 10);
         ll.addView(tv);
 
-        Button b1 = new Button(mContext);
-        b1.setText("Rate " + APP_TITLE);
+        Button b1 = new Button(mContext); 
+        b1.setText(mContext.getResources().getString(R.string.inapp_rating_title)+" " + APP_TITLE);
         b1.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + APP_PNAME)));
@@ -71,7 +79,7 @@ public class AppRater {
         ll.addView(b1);
 
         Button b2 = new Button(mContext);
-        b2.setText("Remind me later");
+        b2.setText(mContext.getResources().getString(R.string.inapp_rating_later));
         b2.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 dialog.dismiss();
@@ -80,7 +88,7 @@ public class AppRater {
         ll.addView(b2);
 
         Button b3 = new Button(mContext);
-        b3.setText("No, thanks");
+        b3.setText(mContext.getResources().getString(R.string.inapp_rating_cancel));
         b3.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 if (editor != null) {
