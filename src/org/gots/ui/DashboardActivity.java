@@ -14,6 +14,7 @@ import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
+import org.gots.inapp.AppRater;
 import org.gots.weather.service.WeatherUpdateService;
 import org.gots.weather.view.WeatherView;
 import org.gots.weather.view.WeatherWidget;
@@ -184,7 +185,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
-
+        AppRater.showRateDialog(getApplicationContext(), null);
         GoogleAnalyticsTracker.getInstance().dispatch();
 
         new AsyncTask<Void, Void, GardenInterface>() {
