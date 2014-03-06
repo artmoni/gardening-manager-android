@@ -27,6 +27,7 @@ import org.gots.action.provider.nuxeo.NuxeoActionSeedProvider;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.help.HelpUriBuilder;
+import org.gots.inapp.GotsBillingDialog;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
@@ -189,6 +190,12 @@ public class TabSeedActivity extends SherlockFragmentActivity {
         mTabsAdapter.addTab(
                 bar.newTab().setTag("event_list").setText(getString(R.string.seed_description_tabmenu_detail)),
                 SeedActivity.class, null);
+        
+        // // ********************** Tab description **********************
+        mTabsAdapter.addTab(
+                bar.newTab().setTag("event_list").setText(getString(R.string.seed_description_tabmenu_detail)),
+                GotsBillingDialog.class, null);
+
 
         // ********************** Tab Wikipedia**********************
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

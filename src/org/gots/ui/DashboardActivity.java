@@ -14,6 +14,8 @@ import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
+import org.gots.inapp.GotsBillingDialog;
+import org.gots.inapp.GotsPurchaseItem;
 import org.gots.weather.service.WeatherUpdateService;
 import org.gots.weather.view.WeatherView;
 import org.gots.weather.view.WeatherWidget;
@@ -24,6 +26,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,6 +41,9 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.android.vending.billing.util.IabHelper;
+import com.android.vending.billing.util.IabResult;
+import com.android.vending.billing.util.Purchase;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class DashboardActivity extends AbstractActivity implements OnClickListener {
@@ -60,6 +66,8 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
     private MenuItem itemConnected;
 
+    IabHelper buyHelper;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,25 +85,53 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
         weatherWidgetLayout = (LinearLayout) findViewById(R.id.WeatherWidget);
 
+        checkPremiumAds();
+        weatherIntent = new Intent(this, WeatherUpdateService.class);
+
+        registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
+
+    }
+
+    protected void checkPremiumAds() {
         // ADMOB
         LinearLayout layout = (LinearLayout) findViewById(R.id.bannerAd);
         if (!gotsPrefs.isPremium()) {
             adView = new GotsAdvertisement(this);
-            adView.getPremiumAds(layout);
+            View ads = adView.getPremiumAds(layout);
+            buyHelper = new IabHelper(getApplicationContext(), gotsPrefs.getPlayStorePubKey());
+            buyHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+                @Override
+                public void onIabSetupFinished(IabResult result) {
+                    // update();
+                    Toast.makeText(getApplicationContext(), "Set up finished!", Toast.LENGTH_SHORT).show();
 
+                }
+            });
+            ads.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    buyHelper.launchPurchaseFlow(DashboardActivity.this, GotsPurchaseItem.SKU_PREMIUM,
+                            GotsPurchaseItem.BUY_REQUEST_CODE, new IabHelper.OnIabPurchaseFinishedListener() {
+                                @Override
+                                public void onIabPurchaseFinished(IabResult result, Purchase info) {
+                                    if (result.isSuccess()) {
+                                        Toast.makeText(getApplicationContext(), "Thanks for buying!",
+                                                Toast.LENGTH_SHORT).show();
+                                        // update();
+                                        gotsPrefs.setPremium(true);
+                                        onResume();
+                                    }
+                                }
+
+                            });
+                }
+            });
         } else {
             layout.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_dashboard_top));
             ImageView logo = (ImageView) findViewById(R.id.idImageLogo);
             logo.setBackgroundDrawable(getResources().getDrawable(R.drawable.bt_logo_premium));
         }
-        weatherIntent = new Intent(this, WeatherUpdateService.class);
-
-        registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
-
-        // if (GotsPreferences.getInstance(this).getOAuthtToken() == null) {
-        // Intent intent = new Intent(this, AccountList.class);
-        // startActivityForResult(intent, 0);
-        // }
     }
 
     private BroadcastReceiver weatherBroadcastReceiver = new BroadcastReceiver() {
@@ -179,11 +215,14 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         super.onDestroy();
         unregisterReceiver(weatherBroadcastReceiver);
         stopService(weatherIntent);
+        if (buyHelper != null)
+            buyHelper.dispose();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        checkPremiumAds();
 
         GoogleAnalyticsTracker.getInstance().dispatch();
 
@@ -248,6 +287,11 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
             return true;
+        case R.id.premium:
+            FragmentManager fm = getSupportFragmentManager();
+            GotsBillingDialog editNameDialog = new GotsBillingDialog();
+            editNameDialog.show(fm, "fragment_edit_name");
+            return true;
 
             // case R.id.settings:
             // // Intent settingsIntent = new Intent(this, SettingsActivity.class);
@@ -276,7 +320,24 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         inflater.inflate(R.menu.menu_dashboard, menu);
         itemConnected = (MenuItem) menu.findItem(R.id.connection);
         refreshConnectionState();
+        if (gotsPrefs.isPremium())
+            menu.findItem(R.id.premium).setVisible(false);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult(" + requestCode + "," + resultCode + "," + data);
+
+        // Pass on the activity result to the helper for handling
+        if (!buyHelper.handleActivityResult(requestCode, resultCode, data)) {
+            // not handled, so handle it ourselves (here's where you'd
+            // perform any handling of activity results not related to in-app
+            // billing...
+            super.onActivityResult(requestCode, resultCode, data);
+        } else {
+            Log.d(TAG, "onActivityResult handled by IABUtil.");
+        }
     }
 
 }

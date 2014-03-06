@@ -3,6 +3,7 @@ package org.gots.inapp;
 import java.util.ArrayList;
 
 import org.gots.R;
+import org.gots.preferences.GotsPreferences;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,18 +14,18 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.android.vending.billing.util.IabHelper;
 import com.android.vending.billing.util.IabResult;
 import com.android.vending.billing.util.Inventory;
 import com.android.vending.billing.util.Purchase;
 import com.android.vending.billing.util.SkuDetails;
 
-public class BuyPremiumActivity extends SherlockFragment {
+public class GotsBillingDialogTest extends SherlockDialogFragment {
 
     protected static final String SKU = "android.test.purchased";
-
-    private static final String PUBKEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtAFVYGad4FaKIZ9A0W2JfMh+B1PQMU+tal9B0XYbEJdZy6UCwqoH42/YLDn0GTjKA+ozAZJtaQqoU/ew95tYKEYszj067HfVehpRtKxLlySFMnqdai0SuGyl5EI4QQovsw3wFU1ihELWBaCg2CcTJqk1jXcWaxsqPPPWty5tAcMwQDWZ0cw6uw8QddztiKlw5IB1XTWdhZTuPL/RcR0Ns+lbEB2kdosozekXr+dRqZ4+PKyHn+j8/407hb76gqn9CmrGhOsJ3E7aOVRCZWZ9nf6aJfFYJP5JY/QHsa+9OsiSj8QXS2vic3ay+MazF09bteN7Wnb15Y9CBK/sM2RAqQIDAQAB";
 
     protected static final int BUY_REQUEST_CODE = 12345;
 
@@ -38,13 +39,16 @@ public class BuyPremiumActivity extends SherlockFragment {
 
     private IabHelper buyHelper;
 
+    View v;
+
     @Override
     public void onCreate(Bundle arg0) {
         super.onCreate(arg0);
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_main, container, false);
+        v = inflater.inflate(R.layout.activity_main, container, false);
+        getDialog().setTitle(getResources().getString(R.string.gots_billing_title));
         butUpdate = (Button) v.findViewById(R.id.button_update);
 
         butBuy = (Button) v.findViewById(R.id.button_buy);
@@ -53,6 +57,7 @@ public class BuyPremiumActivity extends SherlockFragment {
         butConsume = (Button) v.findViewById(R.id.button_consume);
         butConsume.setEnabled(false);
 
+        String PUBKEY = GotsPreferences.getInstance().initIfNew(getActivity()).getPlayStorePubKey();
         buyHelper = new IabHelper(getActivity(), PUBKEY);
 
         butUpdate.setOnClickListener(new OnClickListener() {
@@ -125,7 +130,7 @@ public class BuyPremiumActivity extends SherlockFragment {
                     SkuDetails details = inv.getSkuDetails(SKU);
                     String price = details.getPrice();
 
-                    TextView tvPrice = (TextView) getView().findViewById(R.id.textview_price);
+                    TextView tvPrice = (TextView) v.findViewById(R.id.textview_price);
                     tvPrice.setText(price);
 
                     purchase = inv.getPurchase(SKU);
@@ -145,6 +150,11 @@ public class BuyPremiumActivity extends SherlockFragment {
                 }
             }
         });
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
 }

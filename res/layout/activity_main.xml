@@ -5,10 +5,10 @@
     tools:context=".MainActivity" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/idPurchaseDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="tetetet et etet" />
+        android:text="Purchase Description" />
 
     <Button
         android:id="@+id/button_buy"
