@@ -64,6 +64,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppRater.app_launched(this);
 
         // NewRelic.withApplicationToken( "AA89617084bf906d3a0425f6cf6a382ce574b3acd8" ).start(this.getApplication());
         setContentView(R.layout.dashboard);
