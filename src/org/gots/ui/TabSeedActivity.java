@@ -25,6 +25,7 @@ import org.gots.action.bean.DeleteAction;
 import org.gots.action.bean.PhotoAction;
 import org.gots.action.provider.nuxeo.NuxeoActionSeedProvider;
 import org.gots.ads.GotsAdvertisement;
+import org.gots.analytics.GotsAnalytics;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.help.HelpUriBuilder;
 import org.gots.preferences.GotsPreferences;
@@ -65,6 +66,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class TabSeedActivity extends SherlockFragmentActivity {
     private static final int PICK_IMAGE = 0;
@@ -89,7 +91,12 @@ public class TabSeedActivity extends SherlockFragmentActivity {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null)
             cameraPicture = new File(savedInstanceState.getString("CAMERA_FILENAME"));
+        
         gotsPreferences = GotsPreferences.getInstance().initIfNew(getApplicationContext());
+        GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
+        GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
+
+        
         setContentView(R.layout.seed_tab);
 
         ActionBar bar = getSupportActionBar();
