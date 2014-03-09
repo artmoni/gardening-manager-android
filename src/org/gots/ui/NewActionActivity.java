@@ -14,11 +14,16 @@ import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.view.SeedWidgetLong;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -28,6 +33,7 @@ import android.widget.GridView;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class NewActionActivity extends AbstractActivity implements OnItemClickListener, OnClickListener {
@@ -46,7 +52,12 @@ public class NewActionActivity extends AbstractActivity implements OnItemClickLi
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         setContentView(R.layout.inputaction);
+        ActionBar bar = getSupportActionBar();
+        bar.setTitle(getResources().getString(R.string.action_planning));
+        bar.setDisplayHomeAsUpEnabled(true);
 
         new AsyncTask<String, Void, List<BaseActionInterface>>() {
             private GotsActionManager helper;
@@ -66,6 +77,16 @@ public class NewActionActivity extends AbstractActivity implements OnItemClickLi
             protected void onPostExecute(List<BaseActionInterface> actions) {
 
                 listActions = (GridView) findViewById(R.id.idListAction);
+                WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+                Display display = wm.getDefaultDisplay();
+                Point size = new Point();
+                display.getSize(size);
+                int width = size.x;
+                int height = size.y;
+
+                int layoutsize = 200;
+                int nbcolumn = (width - 200) / layoutsize;
+                listActions.setNumColumns(nbcolumn);
                 listActions.setAdapter(new SimpleListActionAdapter(actions));
                 listActions.setOnItemClickListener(NewActionActivity.this);
             };
@@ -91,7 +112,6 @@ public class NewActionActivity extends AbstractActivity implements OnItemClickLi
         Button validate = (Button) findViewById(R.id.buttonPlanAction);
         validate.setOnClickListener(this);
 
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -106,6 +126,17 @@ public class NewActionActivity extends AbstractActivity implements OnItemClickLi
         default:
             break;
         }
+    }
+
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        switch (item.getItemId()) {
+
+        case android.R.id.home:
+            finish();
+            return true;
+        }
+        return super.onMenuItemSelected(featureId, item);
     }
 
     private void scheduleAction() {
@@ -170,7 +201,6 @@ public class NewActionActivity extends AbstractActivity implements OnItemClickLi
                 }
             }.execute();
 
-           
         }
     }
 

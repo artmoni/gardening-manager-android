@@ -226,6 +226,26 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
     }
 
     @Override
+    public BaseSeedInterface getSeedByUUID(String uuid) {
+        BaseSeedInterface localSeed = super.getSeedByUUID(uuid);
+        BaseSeedInterface remoteSeed = null;
+        if (localSeed != null)
+            return localSeed;
+
+        Session session = getNuxeoClient().getSession();
+        DocumentManager service = session.getAdapter(DocumentManager.class);
+        try {
+            Document doc = service.getDocument(new IdRef(uuid));
+            remoteSeed = NuxeoSeedConverter.convert(doc);
+            remoteSeed = super.createSeed(remoteSeed);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
+
+        return remoteSeed;
+    }
+
+    @Override
     public BaseSeedInterface createSeed(BaseSeedInterface seed) {
         super.createSeed(seed);
         return createNuxeoVendorSeed(seed);

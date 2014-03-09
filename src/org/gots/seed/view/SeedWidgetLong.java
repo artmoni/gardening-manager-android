@@ -54,6 +54,7 @@ public class SeedWidgetLong extends LinearLayout {
         setupView();
     }
 
+    @SuppressWarnings("deprecation")
     private void setupView() {
 
         if (mSeed == null)
@@ -65,8 +66,14 @@ public class SeedWidgetLong extends LinearLayout {
 
             if (familyImageRessource != 0)
                 setBackgroundResource(familyImageRessource);
-            else
-                setBackground(mContext.getResources().getDrawable(R.drawable.family_unknown));
+            else {
+                int sdk = android.os.Build.VERSION.SDK_INT;
+                if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                    setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.family_unknown));
+                } else {
+                    setBackground(mContext.getResources().getDrawable(R.drawable.family_unknown));
+                }
+            }
         }
 
         SeedWidget seedWidget = (SeedWidget) findViewById(R.id.idSeedWidget2);

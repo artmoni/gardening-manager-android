@@ -4,12 +4,15 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.gots.R;
+
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.SpinnerAdapter;
 
@@ -21,7 +24,7 @@ public class GalleryImageAdapter implements SpinnerAdapter {
 
     public GalleryImageAdapter(Context context, List<File> images) {
         mContext = context;
-        imagesList=images;
+        imagesList = images;
     }
 
     @Override
@@ -36,7 +39,7 @@ public class GalleryImageAdapter implements SpinnerAdapter {
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     @Override
@@ -46,10 +49,15 @@ public class GalleryImageAdapter implements SpinnerAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        ImageView image = new ImageView(mContext);
+        if (!getItem(position).exists() && parent.getHeight() >= 0) {
+            image.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.action_photo));
+            image.setLayoutParams(new LayoutParams(parent.getHeight(), parent.getHeight()));
+            return image;
+        }
         Bitmap bitmap = BitmapFactory.decodeFile(getItem(position).getAbsolutePath());
         Bitmap bitmapResized = Bitmap.createScaledBitmap(bitmap, parent.getHeight(), parent.getHeight(), false);
 
-        ImageView image = new ImageView(mContext);
         image.setImageBitmap(bitmapResized);
 
         return image;
