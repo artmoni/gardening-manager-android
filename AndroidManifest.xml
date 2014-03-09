@@ -25,9 +25,8 @@
     <!-- LOGIN WITH GARDENING MANAGER SERVER USING LOCAL ACCOUNTS -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-  
     <uses-permission android:name="com.android.vending.BILLING" />
-    
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -79,7 +78,9 @@
         <activity
             android:name=".ui.ActionActivity"
             android:theme="@style/Theme.Styled" />
-        <activity android:name=".ui.NewActionActivity" />
+        <activity
+            android:name=".ui.NewActionActivity"
+            android:theme="@style/Theme.Styled" />
         <activity
             android:name=".ui.AboutActivity"
             android:theme="@style/Theme.Styled" />
