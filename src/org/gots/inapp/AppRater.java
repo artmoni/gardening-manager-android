@@ -43,7 +43,7 @@ public class AppRater {
         }
 
         // Wait at least n days before opening
-        if (launch_count >= LAUNCHES_UNTIL_PROMPT) {
+        if (launch_count > 1 && launch_count % LAUNCHES_UNTIL_PROMPT == 0) {
             if (System.currentTimeMillis() <= date_firstLaunch + (DAYS_UNTIL_PROMPT * 24 * 60 * 60 * 1000)) {
                 showRateDialog(mContext, editor);
             }
@@ -68,8 +68,8 @@ public class AppRater {
         tv.setPadding(4, 0, 4, 10);
         ll.addView(tv);
 
-        Button b1 = new Button(mContext); 
-        b1.setText(mContext.getResources().getString(R.string.inapp_rating_title)+" " + APP_TITLE);
+        Button b1 = new Button(mContext);
+        b1.setText(mContext.getResources().getString(R.string.inapp_rating_title) + " " + APP_TITLE);
         b1.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + APP_PNAME)));
