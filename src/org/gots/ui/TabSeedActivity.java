@@ -89,14 +89,17 @@ public class TabSeedActivity extends SherlockFragmentActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null)
-            cameraPicture = new File(savedInstanceState.getString("CAMERA_FILENAME"));
-        
+        if (savedInstanceState != null) {
+
+            String cameraFilename = savedInstanceState.getString("CAMERA_FILENAME");
+            if (cameraFilename != null)
+                cameraPicture = new File(cameraFilename);
+        }
+
         gotsPreferences = GotsPreferences.getInstance().initIfNew(getApplicationContext());
         GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
         GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
-        
         setContentView(R.layout.seed_tab);
 
         ActionBar bar = getSupportActionBar();
@@ -253,6 +256,7 @@ public class TabSeedActivity extends SherlockFragmentActivity {
         MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.menu_seeddescription, menu);
         if (mSeed.getGrowingSeedId() == 0) {
+            menu.findItem(R.id.planning).setVisible(false);
             menu.findItem(R.id.photo).setVisible(false);
             menu.findItem(R.id.delete).setVisible(false);
         }
@@ -273,6 +277,14 @@ public class TabSeedActivity extends SherlockFragmentActivity {
                     Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
             startActivity(browserIntent);
 
+            return true;
+
+        case R.id.planning:
+            Intent planningIntent = new Intent(this, NewActionActivity.class);
+            planningIntent.putExtra("org.gots.seed.id", mSeed.getGrowingSeedId());
+            planningIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            startActivity(planningIntent);
             return true;
         case R.id.photo:
             photoAction = new PhotoAction(getApplicationContext());
