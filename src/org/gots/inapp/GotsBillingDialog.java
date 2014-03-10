@@ -2,6 +2,8 @@ package org.gots.inapp;
 
 import java.util.ArrayList;
 
+import javax.print.attribute.standard.Finishings;
+
 import org.gots.R;
 import org.gots.preferences.GotsPreferences;
 
@@ -29,7 +31,8 @@ import com.google.android.apps.analytics.Transaction;
 public class GotsBillingDialog extends SherlockDialogFragment {
 
     protected static final String SKU = GotsPurchaseItem.SKU_PREMIUM;
-//    protected static final String SKU = GotsPurchaseItem.SKU_TEST_PURCHASE;
+
+    // protected static final String SKU = GotsPurchaseItem.SKU_TEST_PURCHASE;
 
     protected static final int BUY_REQUEST_CODE = 12345;
 
@@ -78,18 +81,19 @@ public class GotsBillingDialog extends SherlockDialogFragment {
                                 if (result.isSuccess()) {
                                     Toast.makeText(getActivity(), "Thanks for buying!", Toast.LENGTH_SHORT).show();
                                     update();
-                                    
-                                    Transaction myTrans = new Transaction.Builder(
-                                            "0_123456",                                           // (String) Transaction Id, should be unique.
-                                            (long) (0.1 * 1000000))                              // (long) Order total (in micros)
-                                            .setStoreName("In-App Store")                       // (String) Affiliation
-                                            .setTotalTax((long) (0.17 * 1000000))         // (long) Total tax (in micros)
-                                            .setShippingCost(0)                           // (long) Total shipping cost (in micros)
-                                            .build();
+
+                                    Transaction myTrans = new Transaction.Builder("0_123456", // (String) Transaction
+                                                                                              // Id, should be unique.
+                                            (long) (0.1 * 1000000)) // (long) Order total (in micros)
+                                    .setStoreName("In-App Store") // (String) Affiliation
+                                    .setTotalTax((long) (0.17 * 1000000)) // (long) Total tax (in micros)
+                                    .setShippingCost(0) // (long) Total shipping cost (in micros)
+                                    .build();
 
                                 }
                             }
                         });
+                getDialog().dismiss();
             }
         });
         return v;
@@ -101,7 +105,7 @@ public class GotsBillingDialog extends SherlockDialogFragment {
         buyHelper.queryInventoryAsync(true, moreSkus, new IabHelper.QueryInventoryFinishedListener() {
             @Override
             public void onQueryInventoryFinished(IabResult result, Inventory inv) {
-                if (result.isSuccess()) {
+                if (result.isSuccess() && getDialog() != null) {
                     SkuDetails details = inv.getSkuDetails(SKU);
                     String price = details.getPrice();
 

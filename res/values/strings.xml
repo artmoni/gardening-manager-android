@@ -150,17 +150,14 @@
     <string name="synchro.actions.ok">Actions list updated</string>
     <string name="synchro.garden.checking">Updating shared garden in progress</string>
     <string name="synchro.garden.ok">Shared garden updated</string>
-<<<<<<< HEAD
     <string name="synchro.purchase.checking">Updating purchase feature</string>
     <string name="synchro.purchase.ok">Purchase feature list updated</string>
     <string name="gots.billing.title">Remove all ads and unlock all feature</string>
         
-=======
     <string name="inapp.rating.title">Rate</string>
     <string name="inapp.rating.later">Remind me later</string>
     <string name="inapp.rating.cancel">No, thanks</string>
     <string name="inapp.rating.descrition">If you enjoy using _APP_TITLE_, please take a moment to rate it. Thanks for your support!</string>
->>>>>>> master
     
     
     
