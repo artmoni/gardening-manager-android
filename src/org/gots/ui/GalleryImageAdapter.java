@@ -50,15 +50,14 @@ public class GalleryImageAdapter implements SpinnerAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView image = new ImageView(mContext);
-        if (!getItem(position).exists() && parent.getHeight() >= 0) {
+        try {
+            Bitmap bitmap = BitmapFactory.decodeFile(getItem(position).getAbsolutePath());
+            Bitmap bitmapResized = Bitmap.createScaledBitmap(bitmap, parent.getHeight(), parent.getHeight(), false);
+            image.setImageBitmap(bitmapResized);
+        } catch (Exception e) {
             image.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.action_photo));
-            image.setLayoutParams(new LayoutParams(parent.getHeight(), parent.getHeight()));
-            return image;
+//            image.setLayoutParams(new LayoutParams(parent.getHeight(), parent.getHeight()));
         }
-        Bitmap bitmap = BitmapFactory.decodeFile(getItem(position).getAbsolutePath());
-        Bitmap bitmapResized = Bitmap.createScaledBitmap(bitmap, parent.getHeight(), parent.getHeight(), false);
-
-        image.setImageBitmap(bitmapResized);
 
         return image;
     }
