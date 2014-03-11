@@ -39,7 +39,7 @@
         android:debuggable="true"
         android:icon="@drawable/launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.Sherlock" >
+        android:theme="@style/Theme.Styled" >
         <activity
             android:name=".ui.SplashScreenActivity"
             android:label="@string/app_name"
@@ -77,9 +77,6 @@
             android:theme="@style/Theme.Styled" />
         <activity
             android:name=".ui.ActionActivity"
-            android:theme="@style/Theme.Styled" />
-        <activity
-            android:name=".ui.NewActionActivity"
             android:theme="@style/Theme.Styled" />
         <activity
             android:name=".ui.AboutActivity"

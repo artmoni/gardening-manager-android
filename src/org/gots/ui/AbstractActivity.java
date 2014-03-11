@@ -36,13 +36,14 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 /**
  * @author jcarsique
  * 
  */
-public class AbstractActivity extends SherlockActivity {
+public class AbstractActivity extends SherlockFragmentActivity{
     private static final String TAG = "AbstractActivity";
 
     protected GotsPreferences gotsPrefs;

@@ -48,7 +48,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -126,22 +128,6 @@ public class TabSeedActivity extends SherlockFragmentActivity {
             mSeed = (GrowingSeedInterface) helper.getSeedById(seedId);
         } else
             mSeed = new GrowingSeed(); // DEFAULT SEED
-        //
-        // if (getIntent().getExtras().getString("org.gots.seed.actionphoto") != "") {
-        // PhotoAction photoAction = new PhotoAction(getApplicationContext());
-        // Date now = new Date();
-        // cameraPicture = photoAction.getImageFile(now);
-        // Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(cameraPicture));
-        // // takePictureIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        // startActivityForResult(takePictureIntent, 0);
-        //
-        // // TODO The action must not be executed if activity for result has been canceled because no
-        // // image
-        // // has been taken but the database get the imagefile
-        // // actionItem.execute(seed);
-
-        // }
 
         pictureGallery = (Gallery) findViewById(R.id.idPictureGallery);
 
@@ -280,11 +266,13 @@ public class TabSeedActivity extends SherlockFragmentActivity {
             return true;
 
         case R.id.planning:
-            Intent planningIntent = new Intent(this, NewActionActivity.class);
-            planningIntent.putExtra("org.gots.seed.id", mSeed.getGrowingSeedId());
-            planningIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            startActivity(planningIntent);
+            FragmentManager fm = getSupportFragmentManager();
+            DialogFragment editNameDialog = new NewActionActivity();
+            Bundle data = new Bundle();
+            data.putInt("org.gots.seed.id", mSeed.getGrowingSeedId());
+            editNameDialog.setArguments(data);
+            editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+            editNameDialog.show(fm, "fragment_edit_name");
             return true;
         case R.id.photo:
             photoAction = new PhotoAction(getApplicationContext());

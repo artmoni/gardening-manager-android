@@ -20,9 +20,11 @@ import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Display;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -32,11 +34,12 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class NewActionActivity extends AbstractActivity implements OnItemClickListener, OnClickListener {
+public class NewActionActivity extends SherlockDialogFragment implements OnItemClickListener, OnClickListener {
 
     Integer[] list = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
 
@@ -50,21 +53,23 @@ public class NewActionActivity extends AbstractActivity implements OnItemClickLi
 
     private RadioGroup radioGroup;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    private String TAG = "NewActionActivity";
 
-        setContentView(R.layout.inputaction);
-        ActionBar bar = getSupportActionBar();
-        bar.setTitle(getResources().getString(R.string.action_planning));
-        bar.setDisplayHomeAsUpEnabled(true);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        View v = inflater.inflate(R.layout.inputaction, container);
+        // ActionBar bar = getSupportActionBar();
+        getDialog().setTitle(getResources().getString(R.string.action_planning));
+        // bar.setDisplayHomeAsUpEnabled(true);
+        listActions = (GridView) v.findViewById(R.id.idListAction);
 
         new AsyncTask<String, Void, List<BaseActionInterface>>() {
             private GotsActionManager helper;
 
             protected void onPreExecute() {
 
-                helper = GotsActionManager.getInstance().initIfNew(NewActionActivity.this);
+                helper = GotsActionManager.getInstance().initIfNew(getActivity());
             };
 
             @Override
@@ -76,8 +81,8 @@ public class NewActionActivity extends AbstractActivity implements OnItemClickLi
 
             protected void onPostExecute(List<BaseActionInterface> actions) {
 
-                listActions = (GridView) findViewById(R.id.idListAction);
-                WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+                WindowManager wm = (WindowManager) getActivity().getApplicationContext().getSystemService(
+                        Context.WINDOW_SERVICE);
                 Display display = wm.getDefaultDisplay();
                 Point size = new Point();
                 display.getSize(size);
@@ -96,21 +101,23 @@ public class NewActionActivity extends AbstractActivity implements OnItemClickLi
 
         // listActions.invalidate();
 
-        spinner = (Spinner) findViewById(R.id.spinnerDuration);
-        spinner.setAdapter(new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, list));
-        if (getIntent().getExtras() != null) {
-            Integer seedId = getIntent().getExtras().getInt("org.gots.seed.id");
-            GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(this);
+        spinner = (Spinner) v.findViewById(R.id.spinnerDuration);
+        spinner.setAdapter(new ArrayAdapter<Integer>(getActivity(), android.R.layout.simple_spinner_item, list));
+        if (getArguments() != null) {
+            Bundle args = getArguments();
+            Integer seedId = args.getInt("org.gots.seed.id");
+            GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(getActivity());
             mySeed = growingSeedManager.getGrowingSeedById(seedId);
 
-            SeedWidgetLong seed = (SeedWidgetLong) findViewById(R.id.seedWidgetLong);
+            SeedWidgetLong seed = (SeedWidgetLong) v.findViewById(R.id.seedWidgetLong);
             seed.setSeed(mySeed);
         }
 
-        radioGroup = (RadioGroup) findViewById(R.id.radioGroupSelectDuration);
+        radioGroup = (RadioGroup) v.findViewById(R.id.radioGroupSelectDuration);
 
-        Button validate = (Button) findViewById(R.id.buttonPlanAction);
+        Button validate = (Button) v.findViewById(R.id.buttonPlanAction);
         validate.setOnClickListener(this);
+        return v;
 
     }
 
@@ -128,19 +135,11 @@ public class NewActionActivity extends AbstractActivity implements OnItemClickLi
         }
     }
 
-    @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        switch (item.getItemId()) {
-
-        case android.R.id.home:
-            finish();
-            return true;
-        }
-        return super.onMenuItemSelected(featureId, item);
-    }
-
     private void scheduleAction() {
-
+        if (mySeed == null) {
+            Log.e(TAG, "seed is null");
+            return;
+        }
         int duration = (Integer) spinner.getSelectedItem();
 
         int radioButtonID = radioGroup.getCheckedRadioButtonId();
@@ -167,18 +166,19 @@ public class NewActionActivity extends AbstractActivity implements OnItemClickLi
         duration += durationorig;
 
         if (selectedAction == null) {
+            Toast.makeText(getActivity(), "Please select an action", Toast.LENGTH_LONG).show();
             // AlertDialog alert = new AlertDialog(this);
-            AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-            builder.setMessage("Please select an action").setCancelable(false).setPositiveButton("OK",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                        }
-                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    dialog.cancel();
-                    finish();
-                }
-            });
+            // AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            // builder.setMessage("Please select an action").setCancelable(false).setPositiveButton("OK",
+            // new DialogInterface.OnClickListener() {
+            // public void onClick(DialogInterface dialog, int id) {
+            // }
+            // }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            // public void onClick(DialogInterface dialog, int id) {
+            // dialog.cancel();
+            // // finish();
+            // }
+            // });
 
         } else {
             selectedAction.setDuration(duration);
@@ -186,17 +186,17 @@ public class NewActionActivity extends AbstractActivity implements OnItemClickLi
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
-                    GotsActionSeedProvider actionHelper = GotsActionSeedManager.getInstance().initIfNew(
-                            getApplicationContext());
+                    GotsActionSeedProvider actionHelper = GotsActionSeedManager.getInstance().initIfNew(getActivity());
                     actionHelper.insertAction(mySeed, selectedAction);
                     return null;
                 }
 
                 @Override
                 protected void onPostExecute(Void result) {
-                    NewActionActivity.this.finish();
+                    // NewActionActivity.this.finish();
                     GoogleAnalyticsTracker.getInstance().trackEvent(getClass().getSimpleName(), "NewAction",
                             selectedAction.getName(), 0);
+                    dismiss();
                     super.onPostExecute(result);
                 }
             }.execute();
