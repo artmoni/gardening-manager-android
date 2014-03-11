@@ -259,10 +259,9 @@ public class TabSeedActivity extends SherlockFragmentActivity {
             finish();
             return true;
         case R.id.help:
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                    Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
+            Intent browserIntent = new Intent(this, WebHelpActivity.class);
+            browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
             startActivity(browserIntent);
-
             return true;
 
         case R.id.planning:
