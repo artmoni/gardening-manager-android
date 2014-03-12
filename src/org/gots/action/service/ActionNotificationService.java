@@ -6,13 +6,11 @@ import java.util.List;
 
 import org.gots.R;
 import org.gots.action.BaseActionInterface;
-import org.gots.action.GotsActionSeedManager;
 import org.gots.action.SeedActionInterface;
-import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.SeedUtil;
+import org.gots.seed.service.GotsService;
 import org.gots.seed.view.SeedWidget;
 import org.gots.ui.ActionActivity;
 
@@ -27,7 +25,7 @@ import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-public class ActionNotificationService extends Service {
+public class ActionNotificationService extends GotsService {
     private static final int NOTIFICATION = 100;
 
     // NotificationManager mNM;
@@ -35,19 +33,6 @@ public class ActionNotificationService extends Service {
     private ArrayList<SeedActionInterface> actions = new ArrayList<SeedActionInterface>();
 
     private static final String TAG = "ActionNotificationService";
-
-    @Override
-    public IBinder onBind(Intent arg0) {
-
-        return null;
-    }
-
-    @Override
-    public void onCreate() {
-        // mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-        super.onCreate();
-    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -60,15 +45,11 @@ public class ActionNotificationService extends Service {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(
-                        ActionNotificationService.this);
                 ArrayList<GrowingSeedInterface> allSeeds = growingSeedManager.getGrowingSeeds();
                 // if (allSeeds.size() > 0)
 
                 for (Iterator<GrowingSeedInterface> iterator = allSeeds.iterator(); iterator.hasNext();) {
                     GrowingSeedInterface seed = iterator.next();
-                    GotsActionSeedProvider actionseedManager = GotsActionSeedManager.getInstance().initIfNew(
-                            ActionNotificationService.this);
                     List<SeedActionInterface> seedActions;
 
                     seedActions = actionseedManager.getActionsToDoBySeed(seed);
@@ -83,38 +64,10 @@ public class ActionNotificationService extends Service {
                         createNotification(action, seed);
 
                 }
-                
-                
-                
+
                 return null;
             }
         }.execute();
-
-        // GrowingSeedDBHelper helper = new GrowingSeedDBHelper(this);
-
-        // ##########
-
-//        LocalSeedProvider helperVendor = new LocalSeedProvider(getApplicationContext());
-//        List<BaseSeedInterface> allMySeeds = helperVendor.getMyStock(GardenManager.getInstance().initIfNew(this).getCurrentGarden());
-//        List<BaseActionInterface> sowingActions = new ArrayList<BaseActionInterface>();
-//        BaseSeedInterface sowingseed = new GrowingSeed();
-//        for (Iterator<BaseSeedInterface> iterator = allMySeeds.iterator(); iterator.hasNext();) {
-//            BaseSeedInterface seed = iterator.next();
-//
-//            Calendar cal = Calendar.getInstance();
-//            if (cal.get(Calendar.MONTH) >= seed.getDateSowingMin()
-//                    && cal.get(Calendar.MONTH) <= seed.getDateSowingMax()) {
-//                BaseActionInterface action = new SowingAction(this);
-//                sowingActions.add(action);
-//                sowingseed = seed;
-//            }
-//
-//        }
-//
-//        if (!sowingActions.isEmpty()) {
-//            BaseActionInterface action = sowingActions.iterator().next();
-//            createNotification(action, sowingseed);
-//        }
 
         return super.onStartCommand(intent, flags, startId);
     }

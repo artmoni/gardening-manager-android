@@ -6,11 +6,13 @@
         <item name="android:layout_height">50dp</item>
         <item name="android:layout_margin">2dp</item>
     </style>
-  <style name="logo_synchro">
+
+    <style name="logo_synchro">
         <item name="android:layout_width">30dp</item>
         <item name="android:layout_height">30dp</item>
         <item name="android:layout_margin">2dp</item>
     </style>
+
     <style name="DashboardButton">
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:layout_width">wrap_content</item>
@@ -216,6 +218,23 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/text_color_dark</item>
         <item name="android:background">@drawable/tab_green</item>
+    </style>
+
+    <style name="CustomDialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowBackground">@null</item>
+        <item name="android:windowNoTitle">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:alwaysDrawnWithCache">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowTitleStyle">@style/CustomDialogTitle</item>
+    </style>
+
+    <style name="CustomDialogTitle" parent="android:style/Theme.Dialog">
+        <item name="android:background">@color/text_color_dark</item>
+        <item name="titleTextStyle">@style/Widget.Styled.TitleTextStyle</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="Theme.Styled" parent="Theme.Sherlock.Light.DarkActionBar">

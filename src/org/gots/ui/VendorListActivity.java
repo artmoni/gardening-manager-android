@@ -124,7 +124,7 @@ public class VendorListActivity extends AbstractListFragment {
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         final IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if (scanResult != null && scanResult.getContents() != "") {
+        if (scanResult != null && scanResult.getContents() != null) {
             Log.i("Scan result", scanResult.toString());
 
             new AsyncTask<Void, Void, BaseSeedInterface>() {

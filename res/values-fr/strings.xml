@@ -138,5 +138,9 @@
     <string name="login.connect.state">Vous êtes synchronizé</string>
     <string name="login.disconnect.state">Vous n\'avez pas sauvegardé, connectez vous et restez synchronisé</string>
     <string name="translate.button">Participer à la traduction</string>
-
+<string name="inapp.rating.title">Evaluer</string>
+    <string name="inapp.rating.later">Reporter à plus tard</string>
+    <string name="inapp.rating.cancel">Je ne m\'exprime pas</string>
+    <string name="inapp.rating.descrition">Si vous appréciez _APP_TITLE_, merci de prendre un moment pour noter l\'application. Merci de votre soutien!</string>
+    
 </resources>

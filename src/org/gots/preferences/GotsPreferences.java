@@ -20,8 +20,13 @@
  * *********************************************************************** */
 package org.gots.preferences;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.Properties;
 
+import org.gots.R;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.utils.NotConfiguredException;
 import org.nuxeo.android.config.NuxeoServerConfig;
@@ -34,6 +39,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -72,13 +78,13 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     // public static final String ORG_GOTS_GARDEN_TOKEN = "org.gots.garden.token";
     public static final String ORG_GOTS_GARDEN_TOKEN = NuxeoServerConfig.PREF_SERVER_TOKEN;
 
-    private static final String ANALYTICS_API_KEY = "UA-916500-18";
+    // private String ANALYTICS_API_KEY = "UA-916500-18";
 
-    private static final String WEATHER_API_KEY = "6ba97b2306fd5b9d47992d8716dab16a";
+    // private static final String WEATHER_API_KEY = "";
 
-    private static final String ADMOB_API_KEY = "a14f50fa231b26d";
+    // private static final String ADMOB_API_KEY = "a14f50fa231b26d";
 
-    public static final String GARDENING_MANAGER_DIRECTORY = "Gardening-Manager";
+    public final String GARDENING_MANAGER_DIRECTORY = "Gardening-Manager";
 
     public static final String GARDENING_MANAGER_APPNAME = "Gardening Manager";
 
@@ -119,6 +125,8 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     public static final String URL_TRANSLATE_GARDENING_MANAGER = "http://translate.gardening-manager.com";
 
+    private Properties properties = new Properties();
+
     private GotsPreferences() {
     }
 
@@ -143,6 +151,13 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
         if (!initDone) {
             mContext = context;
             setSharedPreferences(PreferenceManager.getDefaultSharedPreferences(context));
+            InputStream propertiesStream = null;
+            try {
+                propertiesStream = mContext.getResources().openRawResource(R.raw.config);
+                properties.load(propertiesStream);
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage());
+            }
             setGardeningManagerServerURI(ISDEVELOPMENT ? GARDENING_MANAGER_NUXEO_AUTOMATION_TEST : GARDENING_MANAGER_NUXEO_AUTOMATION);
             initDone = true;
         }
@@ -221,20 +236,20 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     public boolean isPremium() {
         return unlockPremium();
-//        return true;
+        // return true;
     }
 
-    public static String getAnalyticsApiKey() {
-        return ANALYTICS_API_KEY;
+    public String getAnalyticsApiKey() {
+        return properties.getProperty("analytics.apikey");
     }
 
-    public static String getWeatherApiKey() {
-        return WEATHER_API_KEY;
+    public String getWeatherApiKey() {
+        return properties.getProperty("previmeteo.apikey");
     }
 
-    public static String getAdmobApiKey() {
+    public String getAdmobApiKey() {
 
-        return ADMOB_API_KEY;
+        return properties.getProperty("admob.apikey");
     }
 
     public void setGardeningManagerServerURI(String uri) {
@@ -353,6 +368,11 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     public String getDocumentationURI() {
         return GARDENING_MANAGER_DOCUMENTATION_URL;
+    }
+
+    public File getGARDENING_MANAGER_DIRECTORY() {
+
+        return new File(Environment.getExternalStorageDirectory(), GARDENING_MANAGER_DIRECTORY);
     }
 
 }

@@ -10,12 +10,11 @@
  ******************************************************************************/
 package org.gots.ui;
 
-import java.util.Locale;
-
 import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
+import org.gots.inapp.AppRater;
 import org.gots.weather.service.WeatherUpdateService;
 import org.gots.weather.view.WeatherView;
 import org.gots.weather.view.WeatherWidget;
@@ -65,6 +64,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppRater.app_launched(this);
 
         // NewRelic.withApplicationToken( "AA89617084bf906d3a0425f6cf6a382ce574b3acd8" ).start(this.getApplication());
         setContentView(R.layout.dashboard);
@@ -186,7 +186,6 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
-
         GoogleAnalyticsTracker.getInstance().dispatch();
 
         new AsyncTask<Void, Void, GardenInterface>() {
@@ -234,8 +233,6 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         switch (item.getItemId()) {
 
         case R.id.help:
-            // Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-            // Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
             Intent browserIntent = new Intent(this, WebHelpActivity.class);
             browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
             startActivity(browserIntent);

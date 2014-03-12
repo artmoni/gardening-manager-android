@@ -25,8 +25,11 @@ public class GotsAdvertisement {
 
     protected String appPackageName = "org.gots.premium";
 
+    GotsPreferences gotsPreferences ;
+    
     public GotsAdvertisement(Context mContext) {
         this.mContext = mContext;
+        gotsPreferences=GotsPreferences.getInstance().initIfNew(mContext);
     }
 
     public View getAdsLayout() {
@@ -52,11 +55,11 @@ public class GotsAdvertisement {
 
         AdView adView;
         if (width >= 936)
-            adView = new AdView((Activity) mContext, AdSize.IAB_BANNER, GotsPreferences.getAdmobApiKey());
+            adView = new AdView((Activity) mContext, AdSize.IAB_BANNER, gotsPreferences.getAdmobApiKey());
         else if (width >= 640)
-            adView = new AdView((Activity) mContext, AdSize.BANNER, GotsPreferences.getAdmobApiKey());
+            adView = new AdView((Activity) mContext, AdSize.BANNER, gotsPreferences.getAdmobApiKey());
         else
-            adView = new AdView((Activity) mContext, AdSize.SMART_BANNER, GotsPreferences.getAdmobApiKey());
+            adView = new AdView((Activity) mContext, AdSize.SMART_BANNER, gotsPreferences.getAdmobApiKey());
 
         adView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         adView.setGravity(Gravity.CENTER);

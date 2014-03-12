@@ -12,6 +12,8 @@ package org.gots.ui;
 
 import java.lang.ref.WeakReference;
 
+import org.gots.inapp.AppRater;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
@@ -40,6 +42,7 @@ public class SplashScreenActivity extends AboutActivity {
                 if (that.get() != null) {
                     Intent intent = new Intent(that.get(), DashboardActivity.class);
                     that.get().startActivityForResult(intent, 3);
+
                 }
                 // that.get().finish();
 

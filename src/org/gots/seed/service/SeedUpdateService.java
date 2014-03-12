@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.garden.GardenManager;
 import org.gots.seed.BaseSeedInterface;
 
 import android.content.Intent;

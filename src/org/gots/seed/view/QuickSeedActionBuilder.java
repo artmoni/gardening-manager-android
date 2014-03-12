@@ -31,11 +31,16 @@ import org.gots.seed.GrowingSeedInterface;
 import org.gots.ui.NewActionActivity;
 import org.gots.ui.TabSeedActivity;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.Toast;
 
@@ -118,18 +123,24 @@ public class QuickSeedActionBuilder {
 
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(mContext, NewActionActivity.class);
-                i.putExtra("org.gots.seed.id", seed.getGrowingSeedId());
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                mContext.startActivity(i);
+                // Intent i = new Intent(mContext, NewActionActivity.class);
+                // i.putExtra("org.gots.seed.id", seed.getGrowingSeedId());
+                // i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                //
+                // mContext.startActivity(i);
+                FragmentManager fm = ((SherlockFragmentActivity) mContext).getSupportFragmentManager();
+                DialogFragment editNameDialog = new NewActionActivity();
+                Bundle data = new Bundle();
+                data.putInt("org.gots.seed.id", seed.getGrowingSeedId());
+                editNameDialog.setArguments(data);
+                editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+                editNameDialog.show(fm, "fragment_edit_name");
                 quickAction.dismiss();
             }
         });
 
         quickAction.addActionItem(actionWidget);
 
-        
         /*
          * ACTION DETAIL
          */
@@ -156,8 +167,7 @@ public class QuickSeedActionBuilder {
             }
         });
         quickAction.addPermanentActionItem(detailWidget);
-        
-        
+
         /*
          * ACTION WATERING
          */
@@ -230,47 +240,46 @@ public class QuickSeedActionBuilder {
         });
         quickAction.addPermanentActionItem(delete);
 
-//        /*
-//         * ACTION PHOTO
-//         */
-//        new AsyncTask<Void, Integer, PhotoAction>() {
-//
-//            @Override
-//            protected PhotoAction doInBackground(Void... params) {
-//                PhotoAction photoAction = (PhotoAction) actionManager.getActionByName("photo");
-//
-//                return photoAction;
-//            }
-//
-//            protected void onPostExecute(final PhotoAction photoAction) {
-//                ActionWidget photoWidget = new ActionWidget(mContext, photoAction);
-//                photoWidget.setState(ActionState.UNDEFINED);
-//
-//                photoWidget.setOnClickListener(new View.OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(View v) {
-//                        SeedActionInterface actionItem = photoAction;
-//                        if (PhotoAction.class.isInstance(actionItem)) {
-//                            // alert.show();
-//                            final Intent i = new Intent(mContext, TabSeedActivity.class);
-//                            i.putExtra("org.gots.seed.id", ((GrowingSeedInterface) parentView.getTag()).getGrowingSeedId());
-//                            i.putExtra("org.gots.seed.actionphoto","org.gots.seed.actionphoto");
-//                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                            mContext.startActivity(i);
-//                            
-//                           
-//
-//                        }
-//                        // parentAdapter.notifyDataSetChanged();
-//                        quickAction.dismiss();
-//                    }
-//                });
-//                quickAction.addPermanentActionItem(photoWidget);
-//
-//            };
-//        }.execute();
-      
+        // /*
+        // * ACTION PHOTO
+        // */
+        // new AsyncTask<Void, Integer, PhotoAction>() {
+        //
+        // @Override
+        // protected PhotoAction doInBackground(Void... params) {
+        // PhotoAction photoAction = (PhotoAction) actionManager.getActionByName("photo");
+        //
+        // return photoAction;
+        // }
+        //
+        // protected void onPostExecute(final PhotoAction photoAction) {
+        // ActionWidget photoWidget = new ActionWidget(mContext, photoAction);
+        // photoWidget.setState(ActionState.UNDEFINED);
+        //
+        // photoWidget.setOnClickListener(new View.OnClickListener() {
+        //
+        // @Override
+        // public void onClick(View v) {
+        // SeedActionInterface actionItem = photoAction;
+        // if (PhotoAction.class.isInstance(actionItem)) {
+        // // alert.show();
+        // final Intent i = new Intent(mContext, TabSeedActivity.class);
+        // i.putExtra("org.gots.seed.id", ((GrowingSeedInterface) parentView.getTag()).getGrowingSeedId());
+        // i.putExtra("org.gots.seed.actionphoto","org.gots.seed.actionphoto");
+        // i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        // mContext.startActivity(i);
+        //
+        //
+        //
+        // }
+        // // parentAdapter.notifyDataSetChanged();
+        // quickAction.dismiss();
+        // }
+        // });
+        // quickAction.addPermanentActionItem(photoWidget);
+        //
+        // };
+        // }.execute();
 
     }
 

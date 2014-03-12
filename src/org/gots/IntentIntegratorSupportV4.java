@@ -17,10 +17,10 @@ package org.gots;
  * limitations under the License.
  */
 
-import com.google.zxing.integration.android.IntentIntegrator;
-
 import android.content.Intent;
 import android.support.v4.app.Fragment;
+
+import com.google.zxing.integration.android.IntentIntegrator;
 
 /**
  * IntentIntegrator for the V4 Android compatibility package.

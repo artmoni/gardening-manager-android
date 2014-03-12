@@ -10,8 +10,9 @@
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:layout_gravity="right"
+        android:background="@drawable/parcelle_contextual_bar"
         android:gravity="right"
-        android:orientation="horizontal" android:background="@drawable/parcelle_contextual_bar">
+        android:orientation="horizontal" >
 
         <LinearLayout
             android:layout_width="wrap_content"

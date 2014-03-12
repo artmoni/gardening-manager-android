@@ -2,7 +2,6 @@ package org.gots.ui.fragment;
 
 import org.gots.analytics.GotsAnalytics;
 import org.gots.garden.GardenManager;
-import org.gots.garden.provider.GardenProvider;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsSeedManager;
 
