@@ -149,9 +149,6 @@ public class VendorListActivity extends AbstractListFragment {
                                 false).setPositiveButton(getResources().getString(R.string.seed_action_add_catalogue),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
-                                        // if this button is clicked, close
-                                        // current activity
-                                        // MainActivity.this.finish();
                                         Intent i = new Intent(mContext, NewSeedActivity.class);
                                         i.putExtra("org.gots.seed.barcode", scanResult.getContents());
                                         mContext.startActivity(i);
@@ -159,8 +156,6 @@ public class VendorListActivity extends AbstractListFragment {
                                 }).setNegativeButton(getResources().getString(R.string.button_cancel),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
-                                        // if this button is clicked, just close
-                                        // the dialog box and do nothing
                                         dialog.cancel();
                                     }
                                 });
