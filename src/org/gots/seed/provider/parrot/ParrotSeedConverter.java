@@ -29,7 +29,7 @@ public class ParrotSeedConverter {
             seed.setDescriptionCultivation(plant.getString("description"));
             seed.setDescriptionGrowth(plant.getString("growth"));
             seed.setDescriptionDiseases(plant.getString("pests"));
-            seed.setDescriptionHarvest("harvesting");
+            seed.setDescriptionHarvest(plant.getString("harvesting"));
             seed.setSpecie(plant.getString("latin_name"));
             if (plant.getString("subspecies_name") != null && !"null".equals(plant.getString("subspecies_name")))
                 seed.setVariety(plant.getString("subspecies_name"));
