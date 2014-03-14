@@ -30,7 +30,7 @@ public class ParrotSeedProvider extends LocalSeedProvider {
     }
 
     private void getToken() {
-        authentication = new ParrotAuthentication();
+        authentication = new ParrotAuthentication(mContext);
         authentication.getToken();
     }
 

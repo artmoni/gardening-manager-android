@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import org.apache.http.HttpEntity;
@@ -26,27 +27,48 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.gots.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.util.Log;
 
 public class ParrotAuthentication {
     // https://apiflowerpower.parrot.com//user/v1/authenticate?Accept-Language=fr&grant_type=password&client_id=sebastien.fleury@gmail.com&client_secret=arfkUnBAcTL99ynPXelq2u7msb7aMkOk2LgVZP7w4CANMFBZ&username=apiflowerpower.demo@parrot.com&password=api_demo
     private String baseName = "https://apiflowerpower.parrot.com";
 
-    private String username = "apiflowerpower.demo@parrot.com";
+    private String username = "";
 
-    private String password = "api_demo";
+    private String password = "";
 
-    private String clientId = "sebastien.fleury@gmail.com";
+    private String clientId = "";
 
-    private String clientSecret = "arfkUnBAcTL99ynPXelq2u7msb7aMkOk2LgVZP7w4CANMFBZ";
+    private String clientSecret = "";
 
     private String access_token = null;
 
     private String TAG = "ParrotAuthentication";
+
+    private Context mContext;
+
+    private Properties properties =new Properties();
+    
+    public ParrotAuthentication(Context context) {
+        mContext = context;
+        InputStream propertiesStream = null;
+        try {
+            propertiesStream = mContext.getResources().openRawResource(R.raw.config);
+            properties.load(propertiesStream);
+            clientId=properties.getProperty("parrot.clientid");
+            clientSecret=properties.getProperty("parrot.clientsecret");
+            username=properties.getProperty("parrot.username");
+            password=properties.getProperty("parrot.password");
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage());
+        }
+    }
 
     private String api_json(String api_url, List<NameValuePair> params, String method, Map<String, String> headers)
             throws IOException {
