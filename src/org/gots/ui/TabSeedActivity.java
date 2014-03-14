@@ -227,9 +227,14 @@ public class TabSeedActivity extends SherlockFragmentActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (cameraPicture != null)
-            outState.putString("CAMERA_FILENAME", cameraPicture.getAbsolutePath());
+        // workaround nullpointer exception bug
+        try {
+            super.onSaveInstanceState(outState);
+            if (cameraPicture != null)
+                outState.putString("CAMERA_FILENAME", cameraPicture.getAbsolutePath());
+        } catch (Exception e) {
+            Log.e(TAG, "onSaveInstanceState workaround nullpointer exception bug");
+        }
     }
 
     @Override
