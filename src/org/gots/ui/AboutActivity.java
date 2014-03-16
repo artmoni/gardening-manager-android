@@ -9,6 +9,7 @@ import org.gots.action.service.ActionNotificationService;
 import org.gots.action.service.ActionTODOBroadcastReceiver;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.garden.GardenInterface;
+import org.gots.inapp.GotsBillingService;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.service.SeedNotification;
@@ -47,6 +48,8 @@ public class AboutActivity extends AbstractActivity {
 
     private View progressGarden;
 
+    private View progressPurchase;
+
     protected int asyncCounter;
 
     private TextView textprogressWeather;
@@ -56,6 +59,8 @@ public class AboutActivity extends AbstractActivity {
     private TextView textprogressSeed;
 
     private TextView textprogressGarden;
+
+    private TextView textprogressPurchase;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,15 +107,17 @@ public class AboutActivity extends AbstractActivity {
         progressSeed = findViewById(R.id.imageProgressSeed);
         progressAction = findViewById(R.id.imageProgressAction);
         progressGarden = findViewById(R.id.imageProgressGarden);
+        progressPurchase = findViewById(R.id.imageProgressPurchase);
 
         textprogressWeather = (TextView) findViewById(R.id.textProgressWeather);
         textprogressSeed = (TextView) findViewById(R.id.textProgressSeed);
         textprogressAction = (TextView) findViewById(R.id.textProgressAction);
         textprogressGarden = (TextView) findViewById(R.id.textProgressGarden);
+        textprogressPurchase = (TextView) findViewById(R.id.textProgressPurchase);
 
         ImageView flag = (ImageView) findViewById(R.id.imageTranslateFlag);
-        int flagRessource = getResources().getIdentifier("org.gots:drawable/" + Locale.getDefault().getCountry().toLowerCase(),
-                null, null);
+        int flagRessource = getResources().getIdentifier(
+                "org.gots:drawable/" + Locale.getDefault().getCountry().toLowerCase(), null, null);
         flag.setImageResource(flagRessource);
     }
 
@@ -248,7 +255,36 @@ public class AboutActivity extends AbstractActivity {
                 super.onPostExecute(result);
             }
         }.execute();
+        /*
+         * Synchronize inApp Purchase
+         */
+        new AsyncTask<Void, Integer, Void>() {
+            Intent startServiceIntent4 = new Intent(getApplicationContext(), GotsBillingService.class);
 
+            protected void onPreExecute() {
+                Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
+                progressPurchase.startAnimation(myFadeInAnimation);
+                textprogressAction.setText(getResources().getString(R.string.synchro_purchase_checking));
+
+                addProgress();
+            };
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                getApplicationContext().startService(startServiceIntent4);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                progressPurchase.clearAnimation();
+                progressPurchase.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
+                textprogressAction.setText(getResources().getString(R.string.synchro_purchase_ok));
+                getApplicationContext().stopService(startServiceIntent4);
+                removeProgress();
+                super.onPostExecute(result);
+            }
+        }.execute();
         /*
          * Synchronize Server
          */

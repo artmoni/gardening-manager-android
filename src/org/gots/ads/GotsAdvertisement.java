@@ -5,8 +5,6 @@ import org.gots.preferences.GotsPreferences;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,18 +16,18 @@ import android.widget.LinearLayout;
 import com.google.ads.AdRequest;
 import com.google.ads.AdSize;
 import com.google.ads.AdView;
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class GotsAdvertisement {
-    Context mContext;
+    private Context mContext;
 
     protected String appPackageName = "org.gots.premium";
 
-    GotsPreferences gotsPreferences ;
-    
+    GotsPreferences gotsPreferences;
+
+
     public GotsAdvertisement(Context mContext) {
         this.mContext = mContext;
-        gotsPreferences=GotsPreferences.getInstance().initIfNew(mContext);
+        gotsPreferences = GotsPreferences.getInstance().initIfNew(mContext);
     }
 
     public View getAdsLayout() {
@@ -73,18 +71,6 @@ public class GotsAdvertisement {
     public View getPremiumAds(ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View ads = inflater.inflate(R.layout.premium_ads, parent);
-        ads.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                GoogleAnalyticsTracker.getInstance().trackPageView(GotsAdvertisement.class.getSimpleName() + "Premium");
-                GoogleAnalyticsTracker.getInstance().dispatch();
-
-                Intent marketIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName));
-                marketIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-                mContext.startActivity(marketIntent);
-            }
-        });
         return ads;
     }
 }

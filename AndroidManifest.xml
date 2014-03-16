@@ -30,6 +30,8 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
+    
+    <uses-permission android:name="com.android.vending.BILLING" />
     <!--
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -93,6 +95,10 @@
             android:name=".ui.HutActivity"
             android:theme="@style/Theme.Styled"
             android:uiOptions="splitActionBarWhenNarrow" />
+        <activity
+            android:name=".inapp.BuyPremiumActivity"
+            android:theme="@style/Theme.Styled"
+            android:uiOptions="splitActionBarWhenNarrow" />
         <activity android:name=".ui.MySeedsListActivity" />
         <activity android:name=".ui.MySeedsListFirstTimeActivity" />
         <activity
@@ -148,6 +154,7 @@
         <service android:name=".action.service.ActionNotificationService" />
         <service android:name=".weather.service.WeatherUpdateService" />
         <service android:name=".seed.service.SeedUpdateService" />
+        <service android:name=".inapp.GotsBillingService" />
     </application>
 
 </manifest>

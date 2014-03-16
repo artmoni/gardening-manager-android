@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
+import org.gots.inapp.GotsBillingDialog;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.ui.fragment.AbstractFragmentActivity;
 
@@ -89,7 +90,7 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
         // // ********************** Tab description **********************
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds)),
                 VendorListActivity.class, null);
-
+        
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
                 MySeedsListActivity.class, null);
         // an allotment is selected
@@ -223,6 +224,7 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
         public void onPageSelected(int position) {
             mActionBar.setSelectedNavigationItem(position);
 
+            
             SherlockListFragment fragment = (SherlockListFragment) getSupportFragmentManager().findFragmentByTag(
                     "android:switcher:" + R.id.pager + ":" + position);
             if (fragment != null && fragment.getListAdapter() != null)
