@@ -17,10 +17,13 @@ import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.adapter.PlanningHarvestAdapter;
 import org.gots.seed.adapter.PlanningSowAdapter;
+import org.gots.seed.provider.nuxeo.NuxeoSeedProvider;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -114,6 +117,22 @@ public class SeedWidgetLong extends LinearLayout {
             flag.setImageResource(flagRessource);
         }
 
+        ImageView like = (ImageView) findViewById(R.id.IdSeedLike);
+        like.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        NuxeoSeedProvider provider = new NuxeoSeedProvider(mContext);
+                        provider.like(mSeed);
+                        return null;
+                    }
+                }.execute();
+
+            }
+        });
     }
 
     // public static String unAccent(String s) {

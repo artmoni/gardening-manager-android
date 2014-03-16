@@ -13,6 +13,7 @@ import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
 import org.nuxeo.ecm.automation.client.cache.CacheBehavior;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
+import org.nuxeo.ecm.automation.client.jaxrs.model.Blob;
 import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
@@ -70,11 +71,10 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             }
             Documents docs = service.query("SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState != \"deleted\"",
                     null, new String[] { "dc:modified DESC" }, "*", 0, 200, cacheParam);
-            for (Iterator<Document> iterator = docs.iterator(); iterator.hasNext();) {
-                Document document = iterator.next();
+            for (Document document : docs) {
                 BaseSeedInterface seed = NuxeoSeedConverter.convert(document);
+                Blob likeStatus = service.getLikeStatus(document);
                 if (seed != null) {
-
                     remoteVendorSeeds.add(seed);
                     Log.i(TAG, "Nuxeo Seed: " + seed);
                 } else {
@@ -487,4 +487,17 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
     public void force_refresh(boolean refresh) {
         this.refreshStock = refresh;
     }
+
+    public void like(BaseSeedInterface vendorSeed) {
+        Session session = getNuxeoClient().getSession();
+        DocumentManager service = session.getAdapter(DocumentManager.class);
+        Blob likeStatus;
+        try {
+            Document doc = service.getDocument(new IdRef(vendorSeed.getUUID()));
+            likeStatus = service.like(doc);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+    }
+
 }
