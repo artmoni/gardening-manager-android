@@ -35,10 +35,11 @@
     <!--
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
+           android:debuggable="false"
+   
     -->
 
     <application
-        android:debuggable="true"
         android:icon="@drawable/launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.Styled" >
