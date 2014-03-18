@@ -7,6 +7,7 @@ import javax.print.attribute.standard.Finishings;
 import org.gots.R;
 import org.gots.preferences.GotsPreferences;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -134,8 +135,22 @@ public class GotsBillingDialog extends SherlockDialogFragment {
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (!buyHelper.handleActivityResult(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data);
+        } else {
+            Log.i(TAG, "onActivityResult handled by IABUtil.");
+        }
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        buyHelper.dispose();
+    }
 }

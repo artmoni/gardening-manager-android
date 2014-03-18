@@ -49,4 +49,10 @@ public class GotsBillingService extends GotsService {
         });
         return super.onStartCommand(intent, flags, startId);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        buyHelper.dispose();
+    }
 }
