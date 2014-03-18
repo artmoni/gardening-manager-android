@@ -14,6 +14,7 @@ import org.gots.R;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.LikeStatus;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.adapter.PlanningHarvestAdapter;
 import org.gots.seed.adapter.PlanningSowAdapter;
@@ -32,6 +33,10 @@ public class SeedWidgetLong extends LinearLayout {
     Context mContext;
 
     private GrowingSeedInterface mSeed;
+
+    private TextView likeCount;
+
+    private ImageView like;
 
     public SeedWidgetLong(Context context) {
         super(context);
@@ -57,7 +62,6 @@ public class SeedWidgetLong extends LinearLayout {
         setupView();
     }
 
-    @SuppressWarnings("deprecation")
     private void setupView() {
 
         if (mSeed == null)
@@ -117,22 +121,40 @@ public class SeedWidgetLong extends LinearLayout {
             flag.setImageResource(flagRessource);
         }
 
-        ImageView like = (ImageView) findViewById(R.id.IdSeedLike);
+        likeCount = (TextView) findViewById(R.id.textSeedLike);
+        like = (ImageView) findViewById(R.id.ImageSeedLike);
+
+        displayLikeStatus(mSeed.getLikeStatus());
+
         like.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                new AsyncTask<Void, Void, Void>() {
+                new AsyncTask<Void, Void, LikeStatus>() {
                     @Override
-                    protected Void doInBackground(Void... params) {
+                    protected LikeStatus doInBackground(Void... params) {
                         NuxeoSeedProvider provider = new NuxeoSeedProvider(mContext);
-                        provider.like(mSeed);
-                        return null;
+                        return provider.like(mSeed, mSeed.getLikeStatus().getUserLikeStatus() == 1);
                     }
+
+                    protected void onPostExecute(LikeStatus result) {
+                        mSeed.setLikeStatus(result);
+                        displayLikeStatus(result);
+                    };
                 }.execute();
 
             }
         });
+    }
+
+    protected void displayLikeStatus(LikeStatus likeStatus) {
+        if (likeStatus != null && likeStatus.getLikesCount() > 0)
+            likeCount.setText(String.valueOf(likeStatus.getLikesCount()));
+
+        if (likeStatus != null && likeStatus.getUserLikeStatus() > 0)
+            like.setImageDrawable(getResources().getDrawable(R.drawable.ic_like));
+        else
+            like.setImageDrawable(getResources().getDrawable(R.drawable.ic_like_unknown));
     }
 
     // public static String unAccent(String s) {

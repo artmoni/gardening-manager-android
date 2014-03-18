@@ -9,6 +9,7 @@ import org.gots.action.BaseActionInterface;
 import org.gots.action.provider.simple.SimpleAction;
 import org.gots.bean.SeedCategory;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.LikeStatus;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -349,4 +350,15 @@ public class SimpleSeedInterface implements GrowingSeedInterface {
         date_sowing = dateSowing;
     }
 
+    @Override
+    public void setLikeStatus(LikeStatus likes) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public LikeStatus getLikeStatus() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

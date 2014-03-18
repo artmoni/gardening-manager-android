@@ -8,6 +8,7 @@ import org.gots.garden.GardenInterface;
 import org.gots.garden.GardenManager;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.LikeStatus;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
@@ -74,7 +75,9 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             for (Document document : docs) {
                 BaseSeedInterface seed = NuxeoSeedConverter.convert(document);
                 Blob likeStatus = service.getLikeStatus(document);
+                LikeStatus likes = NuxeoSeedConverter.getLikeStatus(likeStatus);
                 if (seed != null) {
+                    seed.setLikeStatus(likes);
                     remoteVendorSeeds.add(seed);
                     Log.i(TAG, "Nuxeo Seed: " + seed);
                 } else {
@@ -82,7 +85,8 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 }
             }
             // getNuxeoClient().shutdown();
-            myVendorSeeds = synchronize(localVendorSeeds, remoteVendorSeeds);
+            // myVendorSeeds = synchronize(localVendorSeeds, remoteVendorSeeds);
+            myVendorSeeds = remoteVendorSeeds;
         } catch (Exception e) {
             Log.e(TAG, "getAllSeeds " + e.getMessage(), e);
             myVendorSeeds = super.getVendorSeeds(force);
@@ -488,16 +492,23 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         this.refreshStock = refresh;
     }
 
-    public void like(BaseSeedInterface vendorSeed) {
+    public LikeStatus like(BaseSeedInterface vendorSeed, boolean cancel) {
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);
         Blob likeStatus;
+        LikeStatus likes = new LikeStatus();
         try {
             Document doc = service.getDocument(new IdRef(vendorSeed.getUUID()));
-            likeStatus = service.like(doc);
+            if (!cancel)
+                likeStatus = service.like(doc);
+            else
+                likeStatus = service.cancelLike(doc);
+
+            likes = NuxeoSeedConverter.getLikeStatus(likeStatus);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
+        return likes;
     }
 
 }
