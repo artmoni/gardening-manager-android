@@ -82,9 +82,18 @@ public class NewActionActivity extends SherlockDialogFragment implements OnItemC
                         Context.WINDOW_SERVICE);
                 Display display = wm.getDefaultDisplay();
                 Point size = new Point();
-                display.getSize(size);
-                int width = size.x;
-                int height = size.y;
+                int width;
+                int height;
+                int sdk = android.os.Build.VERSION.SDK_INT;
+                if (sdk < android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                    width=display.getWidth();
+                    height=display.getHeight();
+                }
+                else{
+                    display.getSize(size);
+                    width= size.x;
+                    height=size.y;
+                }
 
                 int layoutsize = 200;
                 int nbcolumn = (width - 200) / layoutsize;
