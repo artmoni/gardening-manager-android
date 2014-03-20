@@ -47,6 +47,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         myLogin = gotsPrefs.getNuxeoLogin();
         myDeviceId = gotsPrefs.getDeviceId();
         myApp = gotsPrefs.getGardeningManagerAppname();
+        NuxeoManager.getInstance().initIfNew(context);
     }
 
     @Override
@@ -299,9 +300,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
     }
 
     protected AndroidAutomationClient getNuxeoClient() {
-        NuxeoManager nuxeoManager = NuxeoManager.getInstance();
-        nuxeoManager.initIfNew(mContext);
-        return nuxeoManager.getNuxeoClient();
+        return NuxeoManager.getInstance().getNuxeoClient();
     }
 
     @Override

@@ -27,12 +27,11 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
 
     public NuxeoGrowingSeedProvider(Context mContext) {
         super(mContext);
+        NuxeoManager.getInstance().initIfNew(mContext);
     }
 
     protected AndroidAutomationClient getNuxeoClient() {
-        NuxeoManager nuxeoManager = NuxeoManager.getInstance();
-        nuxeoManager.initIfNew(mContext);
-        return nuxeoManager.getNuxeoClient();
+        return NuxeoManager.getInstance().getNuxeoClient();
     }
 
     @Override
