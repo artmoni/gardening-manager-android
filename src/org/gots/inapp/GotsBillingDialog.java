@@ -60,7 +60,6 @@ public class GotsBillingDialog extends SherlockDialogFragment {
         textDescription = (TextView) v.findViewById(R.id.idPurchaseDescription);
 
         butBuy = (Button) v.findViewById(R.id.button_buy);
-        butBuy.setEnabled(false);
 
         String PUBKEY = GotsPreferences.getInstance().initIfNew(getActivity()).getPlayStorePubKey();
         buyHelper = new IabHelper(getActivity(), PUBKEY);
@@ -68,6 +67,8 @@ public class GotsBillingDialog extends SherlockDialogFragment {
         buyHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
             @Override
             public void onIabSetupFinished(IabResult result) {
+                if (!result.isSuccess())
+                    return;
                 update();
             }
         });
