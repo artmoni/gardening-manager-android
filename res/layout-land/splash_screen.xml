@@ -144,6 +144,27 @@
                     android:layout_height="wrap_content"
                     android:text="@string/synchro.garden.ok" />
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutProgressPurchase"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:id="@+id/imageProgressPurchase"
+                    style="@style/logo_synchro"
+                    android:background="@drawable/bg_state_ok"
+                    android:src="@drawable/action_buy_online" />
+
+                <TextView
+                    android:id="@+id/textProgressPurchase"
+                    style="@style/description_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/synchro.purchase.ok" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout

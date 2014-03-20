@@ -4,122 +4,6 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal" >
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <org.gots.seed.view.SeedWidget
-            android:id="@+id/idSeedWidget2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
-            android:src="@drawable/vegetdefault" >
-        </org.gots.seed.view.SeedWidget>
-
-        <TableLayout
-            android:id="@+id/tableLayout1"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:shrinkColumns="1" >
-
-            <!-- 2 columns -->
-
-            <TableRow
-                android:id="@+id/tableRow1"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="2dip" >
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_span="2"
-                    android:orientation="horizontal" >
-
-                    <TextView
-                        android:id="@+id/IdSeedSpecie"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingRight="5dp"
-                        android:text="Specie"
-                        android:textColor="@color/text_color_dark"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/IdSeedVariety"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Variety"
-                        android:textColor="@color/text_color_dark"
-                        android:textSize="12sp"
-                        android:textStyle="bold|italic" />
-                </LinearLayout>
-            </TableRow>
-
-            <!-- edittext span 2 column -->
-
-            <TableRow
-                android:id="@+id/tableRow2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/action.sow"
-                    android:textColor="@color/green_dark"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
-                <org.gots.seed.view.PlanningWidget
-                    android:id="@+id/IdSeedSowingPlanning"
-                    android:layout_width="192dp"
-                    android:layout_height="20dp"
-                    android:numColumns="12" >
-                </org.gots.seed.view.PlanningWidget>
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/tableRow3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/action.harvest"
-                    android:textColor="@color/action_error_color"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
-                <org.gots.seed.view.PlanningWidget
-                    android:id="@+id/IdSeedHarvestPlanning"
-                    android:layout_width="192dp"
-                    android:layout_height="20dp"
-                    android:numColumns="12" >
-                </org.gots.seed.view.PlanningWidget>
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/tableRow4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp" >
-
-                <LinearLayout
-                    android:id="@+id/idSeedStock"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_span="2"
-                    android:gravity="center_horizontal" >
-                </LinearLayout>
-            </TableRow>
-        </TableLayout>
-    </LinearLayout>
-
     <ImageView
         android:id="@+id/IdSeedLanguage"
         android:layout_width="20dp"
@@ -127,7 +11,90 @@
         android:layout_alignParentRight="true"
         android:src="@drawable/fr" />
 
-    <RelativeLayout
+    <org.gots.seed.view.PlanningWidget
+        android:id="@+id/IdSeedHarvestPlanning"
+        android:layout_width="192dp"
+        android:layout_height="20dp"
+        android:layout_below="@+id/IdSeedSowingPlanning"
+        android:layout_toRightOf="@+id/textView1"
+        android:numColumns="12" >
+    </org.gots.seed.view.PlanningWidget>
+
+    <org.gots.seed.view.PlanningWidget
+        android:id="@+id/IdSeedSowingPlanning"
+        android:layout_width="192dp"
+        android:layout_height="20dp"
+        android:layout_alignLeft="@+id/IdSeedHarvestPlanning"
+        android:layout_below="@+id/IdSeedLanguage"
+        android:numColumns="12" >
+    </org.gots.seed.view.PlanningWidget>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/IdSeedHarvestPlanning"
+        android:layout_toRightOf="@+id/idSeedWidget2"
+        android:text="@string/action.harvest"
+        android:textColor="@color/action_error_color"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/IdSeedSowingPlanning"
+        android:layout_toLeftOf="@+id/IdSeedSowingPlanning"
+        android:text="@string/action.sow"
+        android:textColor="@color/green_dark"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/IdSeedSpecie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/IdSeedSowingPlanning"
+        android:layout_toRightOf="@+id/idSeedWidget2"
+        android:paddingRight="5dp"
+        android:text="Specie"
+        android:textColor="@color/text_color_dark"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/IdSeedVariety"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/IdSeedSpecie"
+        android:layout_alignBottom="@+id/IdSeedSpecie"
+        android:layout_toRightOf="@+id/IdSeedSpecie"
+        android:text="Variety"
+        android:textColor="@color/text_color_dark"
+        android:textSize="12sp"
+        android:textStyle="bold|italic" />
+
+    <LinearLayout
+        android:id="@+id/idSeedStock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:layout_toRightOf="@+id/IdSeedSpecie"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal" >
+    </LinearLayout>
+
+    <org.gots.seed.view.SeedWidget
+        android:id="@+id/idSeedWidget2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center_vertical"
+        android:src="@drawable/vegetdefault" >
+    </org.gots.seed.view.SeedWidget>
+
+ <RelativeLayout
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_alignParentRight="true"
@@ -145,9 +112,11 @@
             style="@style/seed_variety_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:text="1234"
             android:textSize="6dp" />
+
     </RelativeLayout>
 
 </RelativeLayout>
