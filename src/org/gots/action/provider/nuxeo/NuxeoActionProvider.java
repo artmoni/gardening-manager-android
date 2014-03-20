@@ -8,6 +8,7 @@ import org.gots.action.BaseActionInterface;
 import org.gots.action.provider.local.LocalActionProvider;
 import org.gots.nuxeo.NuxeoManager;
 import org.nuxeo.android.repository.DocumentManager;
+import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
 import org.nuxeo.ecm.automation.client.cache.CacheBehavior;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
@@ -24,15 +25,14 @@ public class NuxeoActionProvider extends LocalActionProvider {
 
     public NuxeoActionProvider(Context mContext) {
         super(mContext);
+        NuxeoManager.getInstance().initIfNew(mContext);
     }
 
     @Override
     public BaseActionInterface getActionByName(String name) {
         BaseActionInterface action = null;
         try {
-            NuxeoManager nuxeoManager = NuxeoManager.getInstance();
-            nuxeoManager.initIfNew(mContext);
-            Session session = nuxeoManager.getNuxeoClient().getSession();
+            Session session = getNuxeoClient().getSession();
             DocumentManager service = session.getAdapter(DocumentManager.class);
 
             byte cacheParam = CacheBehavior.STORE;
@@ -58,14 +58,16 @@ public class NuxeoActionProvider extends LocalActionProvider {
         return action;
     }
 
+    protected AndroidAutomationClient getNuxeoClient() {
+        return NuxeoManager.getInstance().getNuxeoClient();
+    }
+
     @Override
     public ArrayList<BaseActionInterface> getActions() {
         remoteActions = new ArrayList<BaseActionInterface>();
         List<BaseActionInterface> localActions = super.getActions();
         try {
-            NuxeoManager nuxeoManager = NuxeoManager.getInstance();
-            nuxeoManager.initIfNew(mContext);
-            Session session = nuxeoManager.getNuxeoClient().getSession();
+            Session session = getNuxeoClient().getSession();
             DocumentManager service = session.getAdapter(DocumentManager.class);
 
             byte cacheParam = CacheBehavior.STORE;
