@@ -118,7 +118,7 @@ public class GotsBillingDialog extends SherlockDialogFragment {
                     textDescription.setText(description);
 
                     Button tvPrice = (Button) v.findViewById(R.id.button_buy);
-                    tvPrice.setText(tvPrice.getText() + " (" + price + ")");
+                    tvPrice.setText(tvPrice.getText() + " " + price);
 
                     purchase = inv.getPurchase(SKU);
 
