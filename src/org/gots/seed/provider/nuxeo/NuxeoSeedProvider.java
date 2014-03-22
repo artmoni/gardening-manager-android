@@ -86,8 +86,8 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 }
             }
             // getNuxeoClient().shutdown();
-            // myVendorSeeds = synchronize(localVendorSeeds, remoteVendorSeeds);
-            myVendorSeeds = remoteVendorSeeds;
+            myVendorSeeds = synchronize(localVendorSeeds, remoteVendorSeeds);
+            // myVendorSeeds = remoteVendorSeeds;
         } catch (Exception e) {
             Log.e(TAG, "getAllSeeds " + e.getMessage(), e);
             myVendorSeeds = super.getVendorSeeds(force);
@@ -504,6 +504,8 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 likeStatus = service.cancelLike(doc);
 
             likes = NuxeoSeedConverter.getLikeStatus(likeStatus);
+            vendorSeed.setLikeStatus(likes);
+            super.updateSeed(vendorSeed);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
