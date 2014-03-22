@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.exception.GotsException;
 import org.gots.garden.GardenInterface;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.provider.GotsSeedProvider;
@@ -221,4 +222,8 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
         return mSeedProvider.getSeedByBarCode(barecode);
     }
 
+    @Override
+    public LikeStatus like(BaseSeedInterface mSeed, boolean cancelLike) throws GotsException {
+        return mSeedProvider.like(mSeed, cancelLike);
+    }
 }

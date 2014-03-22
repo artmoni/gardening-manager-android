@@ -11,18 +11,25 @@
 package org.gots.seed.view;
 
 import org.gots.R;
+import org.gots.exception.GotsException;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.GotsSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.LikeStatus;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.adapter.PlanningHarvestAdapter;
 import org.gots.seed.adapter.PlanningSowAdapter;
 import org.gots.seed.provider.nuxeo.NuxeoSeedProvider;
+import org.gots.ui.LoginActivity;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -31,6 +38,8 @@ import android.widget.TextView;
 
 public class SeedWidgetLong extends LinearLayout {
     Context mContext;
+
+    private String TAG = "SeedWidgetLong";
 
     private GrowingSeedInterface mSeed;
 
@@ -131,15 +140,29 @@ public class SeedWidgetLong extends LinearLayout {
             @Override
             public void onClick(View v) {
                 new AsyncTask<Void, Void, LikeStatus>() {
+                    GotsException exception = null;
+
                     @Override
                     protected LikeStatus doInBackground(Void... params) {
-                        NuxeoSeedProvider provider = new NuxeoSeedProvider(mContext);
-                        return provider.like(mSeed, mSeed.getLikeStatus().getUserLikeStatus() == 1);
+                        GotsSeedManager manager = GotsSeedManager.getInstance().initIfNew(mContext);
+                        try {
+                            return manager.like(mSeed, mSeed.getLikeStatus().getUserLikeStatus() == 1);
+                        } catch (GotsException e) {
+                            exception = e;
+                            return null;
+                        }
                     }
 
                     protected void onPostExecute(LikeStatus result) {
+                        if (result == null && exception != null) {
+                             exception.getWindowsMessage();
+
+                           
+                            return;
+                        }
                         mSeed.setLikeStatus(result);
                         displayLikeStatus(result);
+
                     };
                 }.execute();
 
