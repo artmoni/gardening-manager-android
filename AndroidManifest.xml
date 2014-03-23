@@ -25,18 +25,16 @@
     <!-- LOGIN WITH GARDENING MANAGER SERVER USING LOCAL ACCOUNTS -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-    <uses-permission android:name="com.android.vending.BILLING" />
 
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
-    
+
     <uses-permission android:name="com.android.vending.BILLING" />
     <!--
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
            android:debuggable="false"
-   
     -->
 
     <application
@@ -155,7 +153,6 @@
         <service android:name=".action.service.ActionNotificationService" />
         <service android:name=".weather.service.WeatherUpdateService" />
         <service android:name=".seed.service.SeedUpdateService" />
-        <service android:name=".inapp.GotsBillingService" />
     </application>
 
 </manifest>

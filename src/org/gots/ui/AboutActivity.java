@@ -1,5 +1,6 @@
 package org.gots.ui;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -10,6 +11,7 @@ import org.gots.action.service.ActionTODOBroadcastReceiver;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.garden.GardenInterface;
 import org.gots.inapp.GotsBillingService;
+import org.gots.inapp.GotsPurchaseItem;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.service.SeedNotification;
@@ -27,6 +29,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -34,9 +37,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.vending.billing.util.IabHelper;
+import com.android.vending.billing.util.IabResult;
+import com.android.vending.billing.util.Inventory;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class AboutActivity extends AbstractActivity {
+    private String TAG = "AboutActivity";
 
     protected static Handler splashHandler;
 
@@ -261,6 +268,8 @@ public class AboutActivity extends AbstractActivity {
         new AsyncTask<Void, Integer, Void>() {
             Intent startServiceIntent4 = new Intent(getApplicationContext(), GotsBillingService.class);
 
+            IabHelper buyHelper;
+
             protected void onPreExecute() {
                 Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
                 progressPurchase.startAnimation(myFadeInAnimation);
@@ -271,7 +280,35 @@ public class AboutActivity extends AbstractActivity {
 
             @Override
             protected Void doInBackground(Void... params) {
-                getApplicationContext().startService(startServiceIntent4);
+                // getApplicationContext().startService(startServiceIntent4);
+                final ArrayList<String> moreSkus = new ArrayList<String>();
+                moreSkus.add(GotsPurchaseItem.SKU_PREMIUM);
+                buyHelper = new IabHelper(getApplicationContext(), gotsPrefs.getPlayStorePubKey());
+
+                buyHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+
+                    @Override
+                    public void onIabSetupFinished(IabResult result) {
+                        // Toast.makeText(getApplicationContext(), "Set up finished!", Toast.LENGTH_SHORT).show();
+                        Log.i(TAG, "Set up finished!");
+
+                        if (result.isSuccess())
+                            buyHelper.queryInventoryAsync(true, moreSkus,
+                                    new IabHelper.QueryInventoryFinishedListener() {
+                                        @Override
+                                        public void onQueryInventoryFinished(IabResult result, Inventory inv) {
+                                            if (result.isSuccess()) {
+                                                boolean isPremium = inv.hasPurchase(GotsPurchaseItem.SKU_PREMIUM);
+                                                gotsPrefs.setPremium(isPremium);
+                                                Log.i(TAG, "Successful got inventory!");
+
+                                            } else {
+                                                Log.i(TAG, "Error getting inventory!");
+                                            }
+                                        }
+                                    });
+                    }
+                });
                 return null;
             }
 
