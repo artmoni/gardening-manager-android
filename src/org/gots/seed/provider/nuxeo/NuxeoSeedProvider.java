@@ -439,7 +439,9 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 if (relations.size() >= 1) {
                     Document originalSeed = service.getDocument(relations.get(0), "*");
                     // BaseSeedInterface seed = NuxeoSeedConverter.convert(originalSeed);
-                    BaseSeedInterface seed = super.getSeedByUUID(originalSeed.getId());
+                    BaseSeedInterface seed = getSeedByUUID(originalSeed.getId());
+                    if (seed == null)
+                        continue;
                     seed.setNbSachet(Integer.valueOf(stockItem.getString("stockitem:quantity")));
 
                     // seed = super.getSeedByUUID(seed.getUUID());
