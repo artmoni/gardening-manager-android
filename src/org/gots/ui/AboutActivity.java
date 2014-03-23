@@ -10,7 +10,6 @@ import org.gots.action.service.ActionNotificationService;
 import org.gots.action.service.ActionTODOBroadcastReceiver;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.garden.GardenInterface;
-import org.gots.inapp.GotsBillingService;
 import org.gots.inapp.GotsPurchaseItem;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;
@@ -68,6 +67,8 @@ public class AboutActivity extends AbstractActivity {
     private TextView textprogressGarden;
 
     private TextView textprogressPurchase;
+
+    private IabHelper buyHelper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -262,66 +263,101 @@ public class AboutActivity extends AbstractActivity {
                 super.onPostExecute(result);
             }
         }.execute();
-        /*
-         * Synchronize inApp Purchase
-         */
-        new AsyncTask<Void, Integer, Void>() {
-            Intent startServiceIntent4 = new Intent(getApplicationContext(), GotsBillingService.class);
 
-            IabHelper buyHelper;
+         final ArrayList<String> moreSkus = new ArrayList<String>();
+        moreSkus.add(GotsPurchaseItem.SKU_PREMIUM);
+        buyHelper = new IabHelper(getApplicationContext(), gotsPrefs.getPlayStorePubKey());
 
-            protected void onPreExecute() {
-                Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
-                progressPurchase.startAnimation(myFadeInAnimation);
-                textprogressAction.setText(getResources().getString(R.string.synchro_purchase_checking));
+        Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
+        progressPurchase.startAnimation(myFadeInAnimation);
+        textprogressAction.setText(getResources().getString(R.string.synchro_purchase_checking));
 
-                addProgress();
-            };
+        addProgress();
+        buyHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
 
             @Override
-            protected Void doInBackground(Void... params) {
-                // getApplicationContext().startService(startServiceIntent4);
-                final ArrayList<String> moreSkus = new ArrayList<String>();
-                moreSkus.add(GotsPurchaseItem.SKU_PREMIUM);
-                buyHelper = new IabHelper(getApplicationContext(), gotsPrefs.getPlayStorePubKey());
+            public void onIabSetupFinished(IabResult result) {
+                // Toast.makeText(getApplicationContext(), "Set up finished!", Toast.LENGTH_SHORT).show();
+                Log.i(TAG, "Set up finished!");
 
-                buyHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+                if (result.isSuccess())
+                    buyHelper.queryInventoryAsync(true, moreSkus, new IabHelper.QueryInventoryFinishedListener() {
+                        @Override
+                        public void onQueryInventoryFinished(IabResult result, Inventory inv) {
+                            if (result.isSuccess()) {
+                                boolean isPremium = inv.hasPurchase(GotsPurchaseItem.SKU_PREMIUM);
+                                gotsPrefs.setPremium(isPremium);
+                                Log.i(TAG, "Successful got inventory!");
 
-                    @Override
-                    public void onIabSetupFinished(IabResult result) {
-                        // Toast.makeText(getApplicationContext(), "Set up finished!", Toast.LENGTH_SHORT).show();
-                        Log.i(TAG, "Set up finished!");
-
-                        if (result.isSuccess())
-                            buyHelper.queryInventoryAsync(true, moreSkus,
-                                    new IabHelper.QueryInventoryFinishedListener() {
-                                        @Override
-                                        public void onQueryInventoryFinished(IabResult result, Inventory inv) {
-                                            if (result.isSuccess()) {
-                                                boolean isPremium = inv.hasPurchase(GotsPurchaseItem.SKU_PREMIUM);
-                                                gotsPrefs.setPremium(isPremium);
-                                                Log.i(TAG, "Successful got inventory!");
-
-                                            } else {
-                                                Log.i(TAG, "Error getting inventory!");
-                                            }
-                                        }
-                                    });
-                    }
-                });
-                return null;
+                            } else {
+                                Log.i(TAG, "Error getting inventory!");
+                            }
+                            progressPurchase.clearAnimation();
+                            progressPurchase.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
+                            textprogressAction.setText(getResources().getString(R.string.synchro_purchase_ok));
+                            // getApplicationContext().stopService(startServiceIntent4);
+                            removeProgress();
+                        }
+                    });
             }
+        });
 
-            @Override
-            protected void onPostExecute(Void result) {
-                progressPurchase.clearAnimation();
-                progressPurchase.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
-                textprogressAction.setText(getResources().getString(R.string.synchro_purchase_ok));
-                getApplicationContext().stopService(startServiceIntent4);
-                removeProgress();
-                super.onPostExecute(result);
-            }
-        }.execute();
+        // new AsyncTask<Void, Integer, Void>() {
+        // // Intent startServiceIntent4 = new Intent(getApplicationContext(), GotsBillingService.class);
+        //
+        //
+        // protected void onPreExecute() {
+        // Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
+        // progressPurchase.startAnimation(myFadeInAnimation);
+        // textprogressAction.setText(getResources().getString(R.string.synchro_purchase_checking));
+        //
+        // addProgress();
+        // };
+        //
+        // @Override
+        // protected Void doInBackground(Void... params) {
+        // // getApplicationContext().startService(startServiceIntent4);
+        // final ArrayList<String> moreSkus = new ArrayList<String>();
+        // moreSkus.add(GotsPurchaseItem.SKU_PREMIUM);
+        // buyHelper = new IabHelper(getApplicationContext(), gotsPrefs.getPlayStorePubKey());
+        //
+        // buyHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+        //
+        // @Override
+        // public void onIabSetupFinished(IabResult result) {
+        // // Toast.makeText(getApplicationContext(), "Set up finished!", Toast.LENGTH_SHORT).show();
+        // Log.i(TAG, "Set up finished!");
+        //
+        // if (result.isSuccess())
+        // buyHelper.queryInventoryAsync(true, moreSkus,
+        // new IabHelper.QueryInventoryFinishedListener() {
+        // @Override
+        // public void onQueryInventoryFinished(IabResult result, Inventory inv) {
+        // if (result.isSuccess()) {
+        // boolean isPremium = inv.hasPurchase(GotsPurchaseItem.SKU_PREMIUM);
+        // gotsPrefs.setPremium(isPremium);
+        // Log.i(TAG, "Successful got inventory!");
+        //
+        // } else {
+        // Log.i(TAG, "Error getting inventory!");
+        // }
+        // }
+        // });
+        // }
+        // });
+        // return null;
+        // }
+        //
+        // @Override
+        // protected void onPostExecute(Void result) {
+        // progressPurchase.clearAnimation();
+        // progressPurchase.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
+        // textprogressAction.setText(getResources().getString(R.string.synchro_purchase_ok));
+        // // getApplicationContext().stopService(startServiceIntent4);
+        // removeProgress();
+        // super.onPostExecute(result);
+        // }
+        // }.execute();
         /*
          * Synchronize Server
          */
