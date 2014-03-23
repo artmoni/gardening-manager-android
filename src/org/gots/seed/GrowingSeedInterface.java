@@ -26,4 +26,5 @@ public interface GrowingSeedInterface extends BaseSeedInterface {
 
 	public abstract void setDateLastWatering(Date dateLastWatering);
 
+
 }

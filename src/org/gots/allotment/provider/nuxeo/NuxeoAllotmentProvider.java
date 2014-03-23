@@ -43,6 +43,7 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
         myLogin = gotsPrefs.getNuxeoLogin();
         myDeviceId = gotsPrefs.getDeviceId();
         myApp = gotsPrefs.getGardeningManagerAppname();
+        NuxeoManager.getInstance().initIfNew(context);
     }
 
     @Override

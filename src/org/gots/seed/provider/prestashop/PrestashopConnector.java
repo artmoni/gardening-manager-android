@@ -3,8 +3,10 @@ package org.gots.seed.provider.prestashop;
 import java.io.InputStream;
 import java.util.List;
 
+import org.gots.exception.GotsException;
 import org.gots.garden.GardenInterface;
 import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.LikeStatus;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
@@ -113,4 +115,8 @@ class PrestashopConnector implements GotsSeedProvider {
         return null;
     }
 
+    @Override
+    public LikeStatus like(BaseSeedInterface mSeed, boolean b) throws GotsException {
+        return null;
+    }
 }

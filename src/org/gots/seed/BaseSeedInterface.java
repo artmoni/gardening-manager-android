@@ -133,4 +133,9 @@ public interface BaseSeedInterface {
     public abstract void setLanguage(String string);
 
     public abstract String getLanguage();
+
+    public abstract void setLikeStatus(LikeStatus likes);
+
+    public abstract LikeStatus getLikeStatus();
+
 }

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import org.gots.action.AbstractActionSeed;
 import org.gots.garden.provider.local.GardenSQLite;
 import org.gots.preferences.GotsPreferences;
+import org.gots.seed.LikeStatus;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -24,7 +25,7 @@ import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     // ************************ DATABASE **************
-    private static final int DATABASE_VERSION = 18;
+    private static final int DATABASE_VERSION = 19;
 
     private static String DATABASE_NAME = "gots";
 
@@ -114,8 +115,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String SEED_ACTION1 = "action1";
 
     public static final String SEED_NBSACHET = "nbsachet";
-    
+
     public static final String SEED_LANGUAGE = "language";
+
+    public static final String SEED_LIKE_COUNT = "likenumber";
+
+    public static final String SEED_LIKE_STATUS = "likestatus";
 
     //@formatter:off
 
@@ -140,7 +145,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ SEED_DURATIONMIN + " INTEGER," 
 			+ SEED_DURATIONMAX + " INTEGER,"
 			+ SEED_LANGUAGE + " STRING,"
-			+ SEED_NBSACHET + " INTEGER"
+			+ SEED_NBSACHET + " INTEGER,"
+			+ SEED_LIKE_COUNT + " INTEGER,"
+			+ SEED_LIKE_STATUS + " INTEGER"
 			+ ");";
 	//@formatter:on
 
@@ -487,6 +494,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (oldVersion < 18) {
             db.execSQL("ALTER TABLE " + ACTIONSEEDS_TABLE_NAME + " ADD COLUMN " + ACTIONSEED_UUID + " STRING;");
             db.execSQL("ALTER TABLE " + SEEDS_TABLE_NAME + " ADD COLUMN " + SEED_LANGUAGE + " STRING;");
+
+        }
+        if (oldVersion < 19) {
+            db.execSQL("ALTER TABLE " + SEEDS_TABLE_NAME + " ADD COLUMN " + SEED_LIKE_COUNT + " INTEGER;");
+            db.execSQL("ALTER TABLE " + SEEDS_TABLE_NAME + " ADD COLUMN " + SEED_LIKE_STATUS + " INTEGER;");
 
         } else {
             db.execSQL("DROP TABLE IF EXISTS " + SEEDS_TABLE_NAME);

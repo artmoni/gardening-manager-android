@@ -60,6 +60,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 
     public NuxeoGardenProvider(Context context) {
         super(context);
+        NuxeoManager.getInstance().initIfNew(mContext);
     }
 
     protected AndroidAutomationClient getNuxeoClient() {
