@@ -94,12 +94,12 @@
         android:src="@drawable/vegetdefault" >
     </org.gots.seed.view.SeedWidget>
 
- <RelativeLayout
+    <RelativeLayout
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_marginRight="20dp" >
+        android:layout_marginRight="30dp" >
 
         <ImageView
             android:id="@+id/ImageSeedLike"
@@ -114,8 +114,10 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:textSize="8dp" />
-
+            android:text="12"
+            android:textColor="@color/text_color_light"
+            android:textSize="8sp"
+            android:textStyle="bold" />
     </RelativeLayout>
 
 </RelativeLayout>

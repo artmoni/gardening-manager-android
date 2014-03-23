@@ -155,9 +155,28 @@ public class SeedWidgetLong extends LinearLayout {
 
                     protected void onPostExecute(LikeStatus result) {
                         if (result == null && exception != null) {
-                             exception.getWindowsMessage();
+                            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
 
-                           
+                            // set title
+                            alertDialogBuilder.setTitle(exception.getMessage());
+
+                            alertDialogBuilder.setMessage("").setCancelable(false).setPositiveButton(
+                                    mContext.getResources().getString(R.string.login_connect),
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            Intent loginIntent = new Intent(mContext, LoginActivity.class);
+                                            mContext.startActivity(loginIntent);
+                                        }
+                                    }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+
+                            AlertDialog alertDialog = alertDialogBuilder.create();
+
+                            alertDialog.show();
+
                             return;
                         }
                         mSeed.setLikeStatus(result);
