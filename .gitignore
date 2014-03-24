@@ -23,4 +23,4 @@ settings.xml
 .settings/
 target/
 /project.properties
-res/raw/config.properties
+/config.sfl
