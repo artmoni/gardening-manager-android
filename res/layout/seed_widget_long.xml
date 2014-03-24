@@ -95,8 +95,8 @@
     </org.gots.seed.view.SeedWidget>
 
     <RelativeLayout
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="30dp" >
@@ -114,9 +114,9 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:text="12"
+            android:text="123"
             android:textColor="@color/text_color_light"
-            android:textSize="8sp"
+            android:textSize="12sp"
             android:textStyle="bold" />
     </RelativeLayout>
 
