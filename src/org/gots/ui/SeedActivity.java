@@ -13,6 +13,7 @@ package org.gots.ui;
 import org.gots.R;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsSeedManager;
+import org.gots.seed.provider.GotsSeedProvider;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -30,7 +31,7 @@ public class SeedActivity extends SherlockFragment {
 
     protected int resultCameraActivity = 1;
 
-    private GotsSeedManager seedManager;
+    private GotsSeedProvider seedManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

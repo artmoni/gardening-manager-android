@@ -17,8 +17,10 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.gots.exception.GotsException;
 import org.gots.garden.GardenInterface;
 import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.LikeStatus;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
@@ -185,6 +187,11 @@ public class SimpleSeedProvider implements GotsSeedProvider {
     @Override
     public List<BaseSeedInterface> getVendorSeedsByName(String currentFilter) {
         Log.e(getClass().getName(), getVendorSeedsByName(currentFilter).toString() + " not implemented");
+        return null;
+    }
+
+    public LikeStatus like(BaseSeedInterface mSeed, boolean b) throws GotsException {
+        // TODO Auto-generated method stub
         return null;
     }
 }

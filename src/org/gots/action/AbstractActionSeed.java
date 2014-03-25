@@ -20,6 +20,7 @@ import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.provider.GotsSeedProvider;
 
 import android.content.Context;
 
@@ -56,7 +57,7 @@ public abstract class AbstractActionSeed implements SeedActionInterface, Compara
 
     private Context mContext;
 
-    protected GotsSeedManager seedManager;
+    protected GotsSeedProvider seedManager;
 
     protected GardenManager gardenManager;
 

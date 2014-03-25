@@ -23,6 +23,11 @@
         android:icon="@drawable/garden_disconnected"
         android:showAsAction="always"
         android:title="@string/login.disconnect"/>
+    <item
+        android:id="@+id/premium"
+        android:icon="@drawable/logo_premium"
+        android:showAsAction="never"
+        android:title="Premium"/>
     <!-- <item
         android:id="@+id/settings"
         android:icon="@drawable/ic_compose"

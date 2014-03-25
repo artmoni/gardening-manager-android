@@ -66,6 +66,8 @@ public abstract class BaseSeed implements Serializable, BaseSeedInterface {
 
     private String language;
 
+    private LikeStatus likeStatus;
+
     public BaseSeed() {
         super();
     }
@@ -340,6 +342,16 @@ public abstract class BaseSeed implements Serializable, BaseSeedInterface {
     public void setDescriptionDiseases(String description_diseases) {
         this.description_diseases = description_diseases;
 
+    }
+
+    @Override
+    public LikeStatus getLikeStatus() {
+        return likeStatus;
+    }
+
+    @Override
+    public void setLikeStatus(LikeStatus likeStatus) {
+        this.likeStatus = likeStatus;
     }
 
 }

@@ -4,6 +4,11 @@ import java.util.Locale;
 
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
+import org.gots.seed.LikeStatus;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.nuxeo.ecm.automation.client.jaxrs.model.Blob;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 
 import android.util.Log;
@@ -48,7 +53,22 @@ public class NuxeoSeedConverter {
         doc.set("vendorseed:variety", seed.getVariety());
         doc.set("vendorseed:barcode", seed.getBareCode());
         doc.set("vendorseed:language", Locale.getDefault().getCountry().toLowerCase());
-        
+
         return doc;
+    }
+
+    public static LikeStatus getLikeStatus(Blob likeStatus) {
+        LikeStatus likes = new LikeStatus();
+        try {
+            // {"userLikeStatus":0,"username":"Guest","dislikesCount":0,"likesCount":0,"activityObject":"doc:default:625e24be-cead-496d-a017-3526273b4de8"}
+            JSONObject json = new JSONObject(likeStatus.toString());
+            likes.setUserLikeStatus(json.getInt("userLikeStatus"));
+            likes.setLikesCount(json.getInt("likesCount"));
+
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return likes;
+
     }
 }

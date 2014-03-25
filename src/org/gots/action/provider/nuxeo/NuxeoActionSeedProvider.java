@@ -20,6 +20,7 @@ import org.gots.seed.GrowingSeedInterface;
 import org.nuxeo.android.cache.blob.BlobWithProperties;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.android.upload.FileUploader;
+import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
 import org.nuxeo.ecm.automation.client.cache.CacheBehavior;
 import org.nuxeo.ecm.automation.client.jaxrs.AsyncCallback;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
@@ -45,11 +46,15 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
 
     public NuxeoActionSeedProvider(Context mContext) {
         super(mContext);
+        NuxeoManager.getInstance().initIfNew(mContext);
+    }
+
+    protected AndroidAutomationClient getNuxeoClient() {
+        return NuxeoManager.getInstance().getNuxeoClient();
     }
 
     @Override
     public ArrayList<SeedActionInterface> getActionsToDo() {
-        // TODO Auto-generated method stub
         return super.getActionsToDo();
     }
 
@@ -60,7 +65,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
     }
 
     protected SeedActionInterface insertNuxeoAction(GrowingSeedInterface seed, BaseActionInterface action) {
-        Session session = NuxeoManager.getInstance().getNuxeoClient().getSession();
+        Session session = getNuxeoClient().getSession();
         DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
         try {
             PropertyMap properties = new PropertyMap();
@@ -104,7 +109,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
 
     @Override
     public long doAction(SeedActionInterface action, GrowingSeedInterface seed) {
-        Session session = NuxeoManager.getInstance().getNuxeoClient().getSession();
+        Session session = getNuxeoClient().getSession();
         DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
         try {
 
@@ -125,7 +130,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
 
     @Override
     public List<SeedActionInterface> getActionsToDoBySeed(GrowingSeedInterface seed) {
-        Session session = NuxeoManager.getInstance().getNuxeoClient().getSession();
+        Session session = getNuxeoClient().getSession();
         DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
         List<SeedActionInterface> actionsToDo = new ArrayList<SeedActionInterface>();
         try {
@@ -199,7 +204,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
 
     @Override
     public List<SeedActionInterface> getActionsDoneBySeed(GrowingSeedInterface seed) {
-        Session session = NuxeoManager.getInstance().getNuxeoClient().getSession();
+        Session session = getNuxeoClient().getSession();
         DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
         ArrayList<SeedActionInterface> actionsDone = new ArrayList<SeedActionInterface>();
         try {
@@ -237,7 +242,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
     PropertyMap blobProp = new PropertyMap();
 
     protected void attachBlobToDocument(GrowingSeedInterface seed, Blob blob) {
-        Session session = NuxeoManager.getInstance().getNuxeoClient().getSession();
+        Session session = getNuxeoClient().getSession();
         DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
         Document seedDoc;
         Document pictureBook = null;
@@ -283,7 +288,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
 
     @Override
     public void uploadPicture(final GrowingSeedInterface seed, File imageFile) {
-        Session session = NuxeoManager.getInstance().getNuxeoClient().getSession();
+        Session session = getNuxeoClient().getSession();
         FileUploader uploader = session.getAdapter(FileUploader.class);
 
         try {
@@ -373,7 +378,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
     }
 
     public List<File> getPicture(GrowingSeedInterface mSeed) {
-        Session session = NuxeoManager.getInstance().getNuxeoClient().getSession();
+        Session session = getNuxeoClient().getSession();
         DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
         Document seedDoc;
         List<File> imageFiles = new ArrayList<File>();

@@ -13,20 +13,17 @@ import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.view.SeedWidgetLong;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -85,9 +82,18 @@ public class NewActionActivity extends SherlockDialogFragment implements OnItemC
                         Context.WINDOW_SERVICE);
                 Display display = wm.getDefaultDisplay();
                 Point size = new Point();
-                display.getSize(size);
-                int width = size.x;
-                int height = size.y;
+                int width;
+                int height;
+                int sdk = android.os.Build.VERSION.SDK_INT;
+                if (sdk < android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                    width=display.getWidth();
+                    height=display.getHeight();
+                }
+                else{
+                    display.getSize(size);
+                    width= size.x;
+                    height=size.y;
+                }
 
                 int layoutsize = 200;
                 int nbcolumn = (width - 200) / layoutsize;

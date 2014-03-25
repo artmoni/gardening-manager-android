@@ -126,25 +126,34 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
         WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
-        display.getSize(size);
-        int width = size.x;
-        int height = size.y;
-
+        int width;
+        int height;
+        int sdk = android.os.Build.VERSION.SDK_INT;
+        if (sdk < android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            width = display.getWidth();
+            height = display.getHeight();
+        } else {
+            display.getSize(size);
+            width = size.x;
+            height = size.y;
+        }
         int layoutsize = 200;
         int nbcolumn = (width - 200) / layoutsize;
+        if (nbcolumn < 1)
+            nbcolumn = 1;
         holder.listSeeds.setNumColumns(nbcolumn);
-        
+
         listGrowingSeedAdapter = new ListGrowingSeedAdapter(mContext, getItem(position).getSeeds());
         holder.listSeeds.setAdapter(listGrowingSeedAdapter);
 
         // holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
         // layoutsize));
-//        if (holder.listSeeds.getCount() % nbcolumn == 0)
-            holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
-                    (holder.listSeeds.getCount() / nbcolumn + 1) * layoutsize));
-//        else
-//            holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
-//                    ((holder.listSeeds.getCount() / nbcolumn) + 1) * layoutsize));
+        // if (holder.listSeeds.getCount() % nbcolumn == 0)
+        holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+                (holder.listSeeds.getCount() / nbcolumn + 1) * layoutsize));
+        // else
+        // holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+        // ((holder.listSeeds.getCount() / nbcolumn) + 1) * layoutsize));
 
         holder.menu.removeAllViews();
 

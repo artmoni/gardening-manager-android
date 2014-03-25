@@ -127,6 +127,18 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     private Properties properties = new Properties();
 
+    /*
+     * FEATURE LIST
+     */
+    private boolean GOTS_PREMIUM = false;
+
+    /*
+     * InApp Billing properties
+     */
+
+    // private static final String PUBKEY =
+    // "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtAFVYGad4FaKIZ9A0W2JfMh+B1PQMU+tal9B0XYbEJdZy6UCwqoH42/YLDn0GTjKA+ozAZJtaQqoU/ew95tYKEYszj067HfVehpRtKxLlySFMnqdai0SuGyl5EI4QQovsw3wFU1ihELWBaCg2CcTJqk1jXcWaxsqPPPWty5tAcMwQDWZ0cw6uw8QddztiKlw5IB1XTWdhZTuPL/RcR0Ns+lbEB2kdosozekXr+dRqZ4+PKyHn+j8/407hb76gqn9CmrGhOsJ3E7aOVRCZWZ9nf6aJfFYJP5JY/QHsa+9OsiSj8QXS2vic3ay+MazF09bteN7Wnb15Y9CBK/sM2RAqQIDAQAB";
+
     private GotsPreferences() {
     }
 
@@ -235,8 +247,11 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     }
 
     public boolean isPremium() {
-        return unlockPremium();
-        // return true;
+        return GOTS_PREMIUM ? true : unlockPremium();
+    }
+
+    public void setPremium(boolean isPremium) {
+        GOTS_PREMIUM = isPremium;
     }
 
     public String getAnalyticsApiKey() {
@@ -373,6 +388,11 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     public File getGARDENING_MANAGER_DIRECTORY() {
 
         return new File(Environment.getExternalStorageDirectory(), GARDENING_MANAGER_DIRECTORY);
+    }
+
+    public String getPlayStorePubKey() {
+
+        return properties.getProperty("playstore.pubkey");
     }
 
 }
