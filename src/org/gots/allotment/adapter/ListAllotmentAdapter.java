@@ -22,11 +22,13 @@ import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
 import org.gots.seed.provider.local.GotsGrowingSeedProvider;
+import org.gots.sensor.parrot.ParrotSensorProvider;
 import org.gots.ui.HutActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
+import android.os.AsyncTask;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +38,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -176,6 +179,27 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
         widget.setPadding(4, 4, 4, 8);
         holder.menu.addView(widget);
 
+        // SowingAction sow = new SowingAction(mContext);
+        ImageView widgetSensor = new ImageView(mContext);
+        widgetSensor.setBackground(mContext.getResources().getDrawable(R.drawable.ic_sensor_parrot));
+        widgetSensor.setTag(position);
+        widgetSensor.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        ParrotSensorProvider sensorProvider = new ParrotSensorProvider(mContext);
+                        sensorProvider.getSensors();
+                        return null;
+                    }
+                }.execute();
+            }
+        });
+
+        widgetSensor.setPadding(4, 4, 4, 8);
+        holder.menu.addView(widgetSensor);
         return ll;
     }
 

@@ -14,16 +14,13 @@ import java.util.ArrayList;
 
 import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
-<<<<<<< HEAD
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.seed.provider.nuxeo.NuxeoSeedProvider;
 import org.gots.seed.provider.parrot.ParrotSeedProvider;
-=======
 import org.gots.inapp.GotsBillingDialog;
->>>>>>> master
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.ui.fragment.AbstractFragmentActivity;
 
@@ -188,22 +185,16 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
         mTabsAdapter = new TabsAdapter(this, mViewPager);
         bar.removeAllTabs();
         // // ********************** Tab description **********************
-<<<<<<< HEAD
         Bundle nuxeoArgs = new Bundle();
         nuxeoArgs.putString(VendorListActivity.PROVIDER, NuxeoSeedProvider.class.getName());
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds_veget)),
                 VendorListActivity.class, nuxeoArgs);
-       
+        
         Bundle parrotArgs = new Bundle();
         parrotArgs.putString(VendorListActivity.PROVIDER, ParrotSeedProvider.class.getName());
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds_plant)),
                 VendorListActivity.class, parrotArgs);
 
-=======
-        mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds)),
-                VendorListActivity.class, null);
-        
->>>>>>> master
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
                 MySeedsListActivity.class, null);
         // an allotment is selected
