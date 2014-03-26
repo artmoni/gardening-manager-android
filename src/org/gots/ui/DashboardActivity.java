@@ -14,9 +14,8 @@ import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
-import org.gots.inapp.GotsBillingDialog;
-import org.gots.inapp.GotsPurchaseItem;
 import org.gots.inapp.AppRater;
+import org.gots.inapp.GotsBillingDialog;
 import org.gots.weather.service.WeatherUpdateService;
 import org.gots.weather.view.WeatherView;
 import org.gots.weather.view.WeatherWidget;
@@ -42,9 +41,6 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.android.vending.billing.util.IabHelper;
-import com.android.vending.billing.util.IabResult;
-import com.android.vending.billing.util.Purchase;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class DashboardActivity extends AbstractActivity implements OnClickListener {

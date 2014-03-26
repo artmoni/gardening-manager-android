@@ -16,7 +16,6 @@ import java.util.Calendar;
 import org.gots.R;
 import org.gots.action.bean.BuyingAction;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.help.HelpUriBuilder;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
@@ -27,7 +26,6 @@ import org.gots.seed.view.SeedWidgetLong;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;

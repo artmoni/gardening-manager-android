@@ -20,7 +20,6 @@ import org.gots.seed.LikeStatus;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.adapter.PlanningHarvestAdapter;
 import org.gots.seed.adapter.PlanningSowAdapter;
-import org.gots.seed.provider.nuxeo.NuxeoSeedProvider;
 import org.gots.ui.LoginActivity;
 
 import android.app.AlertDialog;
@@ -29,7 +28,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;

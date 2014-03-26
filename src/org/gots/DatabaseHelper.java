@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import org.gots.action.AbstractActionSeed;
 import org.gots.garden.provider.local.GardenSQLite;
 import org.gots.preferences.GotsPreferences;
-import org.gots.seed.LikeStatus;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

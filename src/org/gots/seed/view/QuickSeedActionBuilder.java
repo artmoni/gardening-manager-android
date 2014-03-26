@@ -31,8 +31,6 @@ import org.gots.seed.GrowingSeedInterface;
 import org.gots.ui.NewActionActivity;
 import org.gots.ui.TabSeedActivity;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -43,6 +41,8 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.Toast;
+
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 public class QuickSeedActionBuilder {
 

@@ -12,8 +12,6 @@ package org.gots.ui;
 
 import java.lang.ref.WeakReference;
 
-import org.gots.inapp.AppRater;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;

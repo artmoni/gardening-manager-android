@@ -12,7 +12,6 @@ package org.gots.ui;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,8 +26,6 @@ import org.gots.action.provider.nuxeo.NuxeoActionSeedProvider;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.help.HelpUriBuilder;
-import org.gots.inapp.GotsBillingDialog;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;

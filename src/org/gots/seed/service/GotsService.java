@@ -2,7 +2,6 @@ package org.gots.seed.service;
 
 import org.gots.action.GotsActionSeedManager;
 import org.gots.action.provider.GotsActionSeedProvider;
-import org.gots.action.service.ActionNotificationService;
 import org.gots.garden.GardenManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;

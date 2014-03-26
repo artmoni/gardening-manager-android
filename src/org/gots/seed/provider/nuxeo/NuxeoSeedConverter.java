@@ -5,7 +5,6 @@ import java.util.Locale;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.LikeStatus;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Blob;

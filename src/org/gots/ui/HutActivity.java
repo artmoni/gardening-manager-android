@@ -14,7 +14,6 @@ import java.util.ArrayList;
 
 import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
-import org.gots.inapp.GotsBillingDialog;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.ui.fragment.AbstractFragmentActivity;
 
