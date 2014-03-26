@@ -151,8 +151,7 @@ public class LocalActionProvider extends GotsDBHelper implements GotsActionProvi
 
     protected BaseActionInterface cursorToAction(Cursor cursor) {
         BaseActionInterface bsi;
-        ActionFactory factory = new ActionFactory();
-        bsi = factory.buildAction(mContext, cursor.getString(cursor.getColumnIndex(GardenSQLite.ACTION_NAME)));
+        bsi = ActionFactory.buildAction(mContext, cursor.getString(cursor.getColumnIndex(GardenSQLite.ACTION_NAME)));
         bsi.setDescription(cursor.getString(cursor.getColumnIndex(GardenSQLite.ACTION_DESCRIPTION)));
         bsi.setDuration(cursor.getInt(cursor.getColumnIndex(GardenSQLite.ACTION_DURATION)));
         bsi.setId(cursor.getInt(cursor.getColumnIndex(GardenSQLite.ACTION_ID)));

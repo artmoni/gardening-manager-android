@@ -278,7 +278,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             PropertyMap properties = new PropertyMap();
             properties.set("dc:title", blobProp.getString("name"));
             properties.set("file:content", toJSON.toString());
-            Document imageDoc = documentMgr.createDocument(pictureBook, "Picture", blobProp.getString("name"),
+            documentMgr.createDocument(pictureBook, "Picture", blobProp.getString("name"),
                     properties);
         } catch (Exception e) {
             Log.i(TAG, e.getMessage());

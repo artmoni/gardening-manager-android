@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.gots.action.BaseActionInterface;
 import org.gots.action.provider.simple.SimpleAction;
-import org.gots.bean.SeedCategory;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.LikeStatus;
 import org.simpleframework.xml.Element;
@@ -148,16 +147,6 @@ public class SimpleSeedInterface implements GrowingSeedInterface {
         sowingDateMin = dateSowing;
     }
 
-    @Override
-    public void setCategory(SeedCategory category) {
-        // TODO ?
-    }
-
-    @Override
-    public SeedCategory getCategory() {
-        // TODO ?
-        return null;
-    }
 
     @Override
     public void setDateSowingMax(int dateSowingMax) {

@@ -5,6 +5,7 @@ import org.gots.preferences.GotsPreferences;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Point;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -24,20 +25,26 @@ public class GotsAdvertisement {
 
     GotsPreferences gotsPreferences;
 
-
     public GotsAdvertisement(Context mContext) {
         this.mContext = mContext;
         gotsPreferences = GotsPreferences.getInstance().initIfNew(mContext);
     }
 
+    @SuppressWarnings("deprecation")
     public View getAdsLayout() {
         View convertView;
         Display display = ((Activity) mContext).getWindowManager().getDefaultDisplay();
-        // int width = display.getWidth();
-        // int height = display.getHeight();
-
+        Point size = new Point();
+        display.getSize(size);
+        int width;
+        int sdk = android.os.Build.VERSION.SDK_INT;
+        if (sdk < android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            width = display.getWidth();
+        } else {
+            display.getSize(size);
+            width = size.x;
+        }
         final float density = mContext.getResources().getDisplayMetrics().density;
-        int width = ((Activity) mContext).getWindowManager().getDefaultDisplay().getWidth();
         width = Math.round(((float) width) / density);
 
         AdRequest adRequest = new AdRequest();

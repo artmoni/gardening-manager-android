@@ -42,8 +42,8 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
  * @author jcarsique
  * 
  */
-public class AbstractActivity extends SherlockFragmentActivity{
-    private static final String TAG = "AbstractActivity";
+public class AbstractActivity extends SherlockFragmentActivity {
+    // private static final String TAG = AbstractActivity.class.getSimpleName();
 
     protected GotsPreferences gotsPrefs;
 

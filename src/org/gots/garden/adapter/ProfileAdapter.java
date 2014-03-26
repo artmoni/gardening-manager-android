@@ -25,7 +25,6 @@ import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.WeatherManager;
 import org.gots.weather.view.WeatherView;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -56,8 +55,6 @@ public class ProfileAdapter extends BaseAdapter {
 
     private GardenInterface selectedGarden;
 
-    private View currentView;
-
     public ProfileAdapter(Context context, List<GardenInterface> myGardens) {
         mContext = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -87,6 +84,7 @@ public class ProfileAdapter extends BaseAdapter {
         return 0;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
@@ -110,13 +108,16 @@ public class ProfileAdapter extends BaseAdapter {
             weatherState.setVisibility(View.VISIBLE);
             // weatherHistory.setVisibility(View.VISIBLE);
             weatherHistoryContainer.setVisibility(View.VISIBLE);
-
-            weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_weather));
+            int sdk = android.os.Build.VERSION.SDK_INT;
+            if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_weather));
+            } else {
+                weatherState.setBackground(mContext.getResources().getDrawable(R.drawable.bg_weather));
+            }
             // mContext.startService(weatherIntent);
             // mContext.registerReceiver(weatherBroadcastReceiver, new
             // IntentFilter(
             // WeatherUpdateService.BROADCAST_ACTION));
-            currentView = vi;
 
         } else {
             vi.setSelected(false);
@@ -189,7 +190,6 @@ public class ProfileAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
 
-                    
                     selectedGarden = getItem(position);
                     gardenManager.setCurrentGarden(selectedGarden);
                     notifyDataSetChanged();
@@ -200,7 +200,6 @@ public class ProfileAdapter extends BaseAdapter {
                     // mContext.registerReceiver(weatherBroadcastReceiver, new
                     // IntentFilter(
                     // WeatherUpdateService.BROADCAST_ACTION));
-                    currentView = v;
 
                     if (gardenManager.getCurrentGarden() != null) {
                         GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
@@ -216,33 +215,7 @@ public class ProfileAdapter extends BaseAdapter {
 
     }
 
-    private BroadcastReceiver weatherBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            updateUI(intent);
-
-        }
-    };
-
     private ViewGroup weatherHistory;
-
-    private void updateUI(Intent intent) {
-        boolean isError = intent.getBooleanExtra("error", true);
-        ImageView weatherConnected = (ImageView) currentView.findViewById(R.id.idWeatherConnected);
-
-        TextView txtError = (TextView) currentView.findViewById(R.id.idTextAlert);
-        if (isError) {
-            txtError.setVisibility(View.VISIBLE);
-            weatherConnected.setImageDrawable(mContext.getResources().getDrawable(R.drawable.weather_disconnected));
-            weatherConnected.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_state_critical));
-
-        } else {
-            txtError.setVisibility(View.GONE);
-            weatherConnected.setImageDrawable(mContext.getResources().getDrawable(R.drawable.weather_connected));
-            weatherConnected.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_state_ok));
-        }
-        // buildWeatherList();
-    }
 
     @Override
     public void notifyDataSetChanged() {

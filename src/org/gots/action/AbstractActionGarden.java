@@ -38,8 +38,6 @@ public abstract class AbstractActionGarden implements GardeningActionInterface {
 
     private Date dateActionTodo;
 
-    private int growingSeedId;
-
     private Object data;
 
     protected Context mContext;

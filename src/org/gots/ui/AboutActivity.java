@@ -66,8 +66,6 @@ public class AboutActivity extends AbstractActivity {
 
     private TextView textprogressGarden;
 
-    private TextView textprogressPurchase;
-
     private IabHelper buyHelper;
 
     @Override
@@ -121,7 +119,6 @@ public class AboutActivity extends AbstractActivity {
         textprogressSeed = (TextView) findViewById(R.id.textProgressSeed);
         textprogressAction = (TextView) findViewById(R.id.textProgressAction);
         textprogressGarden = (TextView) findViewById(R.id.textProgressGarden);
-        textprogressPurchase = (TextView) findViewById(R.id.textProgressPurchase);
 
         ImageView flag = (ImageView) findViewById(R.id.imageTranslateFlag);
         int flagRessource = getResources().getIdentifier(
@@ -365,7 +362,6 @@ public class AboutActivity extends AbstractActivity {
             findViewById(R.id.layoutProgressGarden).setVisibility(View.VISIBLE);
 
             new AsyncTask<Context, Void, List<GardenInterface>>() {
-                ProgressDialog dialog;
 
                 private List<GardenInterface> myGardens;
 

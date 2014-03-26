@@ -14,7 +14,6 @@ import org.gots.R;
 import org.gots.help.HelpUriBuilder;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -28,8 +27,6 @@ import com.actionbarsherlock.view.MenuItem;
 
 public class WebHelpActivity extends AbstractActivity {
     private ProgressDialog pd;
-
-    private String baseHelpURL = "http://www.gardening-manager.com";
 
     public static final String URL = "org.gots.doc.classsimplename";
 
@@ -48,7 +45,7 @@ public class WebHelpActivity extends AbstractActivity {
         mWebView = (WebView) findViewById(R.id.webViewHelp);
         mWebView.setWebViewClient(new WebHelpClient());
 
-        mWebView.getSettings().setJavaScriptEnabled(true);
+        // mWebView.getSettings().setJavaScriptEnabled(true);
 
         mWebView.loadUrl(Uri.parse(HelpUriBuilder.getUri(helpClass)).toString());
 
@@ -67,7 +64,6 @@ public class WebHelpActivity extends AbstractActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent i;
         switch (item.getItemId()) {
 
         case android.R.id.home:

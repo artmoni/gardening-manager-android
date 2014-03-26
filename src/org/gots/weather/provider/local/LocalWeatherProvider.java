@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.gots.weather.provider.local;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import org.gots.DatabaseHelper;
@@ -38,11 +39,10 @@ public class LocalWeatherProvider extends GotsDBHelper {
     }
 
     public WeatherConditionInterface updateWeather(WeatherConditionInterface weatherCondition) {
-        long rowid;
         ContentValues values = getWeatherContentValues(weatherCondition);
 
-        rowid = bdd.update(DatabaseHelper.WEATHER_TABLE_NAME, values, DatabaseHelper.WEATHER_DAYOFYEAR + "="
-                + weatherCondition.getDayofYear(), null);
+        bdd.update(DatabaseHelper.WEATHER_TABLE_NAME, values,
+                DatabaseHelper.WEATHER_DAYOFYEAR + "=" + weatherCondition.getDayofYear(), null);
 
         Cursor cursor = bdd.query(DatabaseHelper.WEATHER_TABLE_NAME, null, DatabaseHelper.WEATHER_DAYOFYEAR + "='"
                 + weatherCondition.getDayofYear() + "'", null, null, null, null);
@@ -58,8 +58,10 @@ public class LocalWeatherProvider extends GotsDBHelper {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.WEATHER_CONDITION, weatherCondition.getCondition());
         values.put(DatabaseHelper.WEATHER_WINDCONDITION, weatherCondition.getWindCondition());
-        values.put(DatabaseHelper.WEATHER_DATE, weatherCondition.getDate().getTime());
-        values.put(DatabaseHelper.WEATHER_YEAR, weatherCondition.getDate().getYear());
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(weatherCondition.getDate());
+        values.put(DatabaseHelper.WEATHER_DATE, cal.getTimeInMillis());
+        values.put(DatabaseHelper.WEATHER_YEAR, cal.get(Calendar.YEAR));
         values.put(DatabaseHelper.WEATHER_DAYOFYEAR, weatherCondition.getDayofYear());
         values.put(DatabaseHelper.WEATHER_HUMIDITY, weatherCondition.getHumidity());
         values.put(DatabaseHelper.WEATHER_ICONURL, weatherCondition.getIconURL());

@@ -29,8 +29,6 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
     protected static final String TAG = "NuxeoSeedProvider";
 
-    private static final long TIMEOUT = 10;
-
     String myToken;
 
     String myLogin;
@@ -385,9 +383,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);
 
-        DocRef wsRef;
         try {
-            wsRef = service.getUserHome();
             // TODO Change this when garden UUID manage uuid and not path
             Document gardenFolder = service.getDocument(new IdRef(garden.getUUID()));
             Document stockFolder = service.getDocument(new PathRef(gardenFolder.getPath() + "/My Stock"));

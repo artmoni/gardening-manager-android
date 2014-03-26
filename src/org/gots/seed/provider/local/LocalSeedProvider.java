@@ -181,9 +181,8 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
         // Création d'un ContentValues (fonctionne comme une HashMap)
         ContentValues values = getContentValuesFromSeed(seed);
         // Cursor cursor;
-
-        int rowid = bdd.update(DatabaseHelper.SEEDS_TABLE_NAME, values,
-                DatabaseHelper.SEED_ID + "='" + seed.getSeedId() + "'", null);
+        bdd.update(DatabaseHelper.SEEDS_TABLE_NAME, values, DatabaseHelper.SEED_ID + "='" + seed.getSeedId() + "'",
+                null);
         // cursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_ID + "='" + seed.getSeedId()
         // + "'", null, null, null, null);
         //
@@ -228,9 +227,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
 
     @Override
     public void deleteSeed(BaseSeedInterface vendorSeed) {
-        long rowid;
-        rowid = bdd.delete(DatabaseHelper.SEEDS_TABLE_NAME, DatabaseHelper.SEED_ID + "='" + vendorSeed.getSeedId()
-                + "'", null);
+        bdd.delete(DatabaseHelper.SEEDS_TABLE_NAME, DatabaseHelper.SEED_ID + "='" + vendorSeed.getSeedId() + "'", null);
 
     }
 
@@ -301,8 +298,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
         like.setUserLikeStatus(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.SEED_LIKE_STATUS)));
         bsi.setLikeStatus(like);
 
-        ActionFactory factory = new ActionFactory();
-        BaseActionInterface baseAction = factory.buildAction(mContext,
+        BaseActionInterface baseAction = ActionFactory.buildAction(mContext,
                 cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_ACTION1)));
         if (baseAction != null)
             bsi.getActionToDo().add(baseAction);

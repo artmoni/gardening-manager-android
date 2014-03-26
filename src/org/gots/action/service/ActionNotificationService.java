@@ -124,7 +124,7 @@ public class ActionNotificationService extends GotsService {
         // notification.setLatestEventInfo(this, title, content, contentIntent);
         // notification.flags |= Notification.FLAG_AUTO_CANCEL;
         // Send the notification.
-        mNotificationManager.notify(NOTIFICATION, mBuilder.getNotification());
+        mNotificationManager.notify(NOTIFICATION, mBuilder.build());
 
     }
 }

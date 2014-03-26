@@ -100,9 +100,6 @@ public class QuickSeedActionBuilder {
                     ActionWidget actionWidget = new ActionWidget(mContext, currentAction);
                     actionWidget.setState(currentAction.getState());
 
-                    if (currentAction == null)
-                        continue;
-
                     quickAction.addActionItem(actionWidget);
                     actionWidget.setOnClickListener(new View.OnClickListener() {
 

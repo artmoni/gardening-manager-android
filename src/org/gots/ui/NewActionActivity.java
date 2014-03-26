@@ -76,6 +76,7 @@ public class NewActionActivity extends SherlockDialogFragment implements OnItemC
                 return actions;
             }
 
+            @SuppressWarnings("deprecation")
             protected void onPostExecute(List<BaseActionInterface> actions) {
 
                 WindowManager wm = (WindowManager) getActivity().getApplicationContext().getSystemService(
@@ -83,16 +84,13 @@ public class NewActionActivity extends SherlockDialogFragment implements OnItemC
                 Display display = wm.getDefaultDisplay();
                 Point size = new Point();
                 int width;
-                int height;
                 int sdk = android.os.Build.VERSION.SDK_INT;
                 if (sdk < android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                     width=display.getWidth();
-                    height=display.getHeight();
                 }
                 else{
                     display.getSize(size);
                     width= size.x;
-                    height=size.y;
                 }
 
                 int layoutsize = 200;

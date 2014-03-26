@@ -35,104 +35,108 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 public class GoogleWeatherTask extends AsyncTask<Object, Integer, WeatherConditionInterface> {
-	protected URL url;
-	private Date requestedDay;
-	private boolean force = false;
+    protected URL url;
 
-	private static String queryString;
-	private static int today;
-	private static WeatherSet ws;
+    private Date requestedDay;
 
-	public GoogleWeatherTask(Address address, Date requestedDay) {
-		this.requestedDay = requestedDay;
+    private boolean force = false;
 
-		try {
-			String weatherURL;
+    private static String queryString;
 
-			if (GotsPreferences.isDevelopment())
-				weatherURL = "http://92.243.19.29/weather.xml";
-			else
-				weatherURL = "http://www.google.com/ig/api?weather=" + address.getLocality() + ","
-						+ address.getCountryName();
+    private static int today;
 
-			if (today != Calendar.getInstance().getTime().getDay())
-				force = true;
-			if (queryString != weatherURL)
-				force = true;
+    private static WeatherSet ws;
 
-			today = Calendar.getInstance().getTime().getDay();
-			queryString = weatherURL;
+    public GoogleWeatherTask(Address address, Date requestedDay) {
+        this.requestedDay = requestedDay;
 
-			url = new URL(queryString.replace(" ", "%20"));
-		} catch (Exception e) {
-			Log.e("WeatherTask", e.getMessage());
-		}
-	}
+        try {
+            String weatherURL;
 
-	@Override
-	protected WeatherConditionInterface doInBackground(Object... arg0) {
-		if (force || ws == null) {
+            if (GotsPreferences.isDevelopment())
+                weatherURL = "http://92.243.19.29/weather.xml";
+            else
+                weatherURL = "http://www.google.com/ig/api?weather=" + address.getLocality() + ","
+                        + address.getCountryName();
 
-			try {
+            if (today != Calendar.getInstance().get(Calendar.DAY_OF_YEAR))
+                force = true;
+            if (queryString != weatherURL)
+                force = true;
 
-				// android.os.Debug.waitForDebugger();
-				/*************/
+            today = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
+            queryString = weatherURL;
 
-				HttpClient httpclient = new DefaultHttpClient();
-				HttpGet httpget = new HttpGet(url.toURI());
+            url = new URL(queryString.replace(" ", "%20"));
+        } catch (Exception e) {
+            Log.e("WeatherTask", e.getMessage());
+        }
+    }
 
-				// create a response handler
-				ResponseHandler<String> responseHandler = new BasicResponseHandler();
+    @Override
+    protected WeatherConditionInterface doInBackground(Object... arg0) {
+        if (force || ws == null) {
 
-				String responseBody = httpclient.execute(httpget, responseHandler);
-				// Log.d(DEBUG_TAG, "response from httpclient:n "+responseBody);
+            try {
 
-				ByteArrayInputStream is = new ByteArrayInputStream(responseBody.getBytes());
+                // android.os.Debug.waitForDebugger();
+                /*************/
 
-				/* Get a SAXParser from the SAXPArserFactory. */
-				SAXParserFactory spf = SAXParserFactory.newInstance();
-				SAXParser sp = spf.newSAXParser();
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpGet httpget = new HttpGet(url.toURI());
 
-				/* Get the XMLReader of the SAXParser we created. */
-				XMLReader xr = sp.getXMLReader();
+                // create a response handler
+                ResponseHandler<String> responseHandler = new BasicResponseHandler();
 
-				/* Create a new ContentHandler and apply it to the XML-Reader */
-				GoogleWeatherHandler gwh = new GoogleWeatherHandler();
-				xr.setContentHandler(gwh);
+                String responseBody = httpclient.execute(httpget, responseHandler);
+                // Log.d(DEBUG_TAG, "response from httpclient:n "+responseBody);
 
-				// InputSource is = new InputSource(url.openStream());
-				/* Parse the xml-data our URL-call returned. */
-				xr.parse(new InputSource(is));
+                ByteArrayInputStream is = new ByteArrayInputStream(responseBody.getBytes());
 
-				/* Our Handler now provides the parsed weather-data to us. */
-				ws = gwh.getWeatherSet();
-			} catch (Exception e) {
-				Log.e("WeatherManager", "WeatherQueryError", e);
+                /* Get a SAXParser from the SAXPArserFactory. */
+                SAXParserFactory spf = SAXParserFactory.newInstance();
+                SAXParser sp = spf.newSAXParser();
 
-			}
-			force = false;
-		}
-		Calendar requestCalendar = Calendar.getInstance();
-		requestCalendar.setTime(requestedDay);
-		if (ws == null)
-			return new WeatherCondition(requestedDay);
-		else if (requestCalendar.get(Calendar.DAY_OF_YEAR) == Calendar.getInstance().get(Calendar.DAY_OF_YEAR))
-			return ws.getWeatherCurrentCondition();
-		else if (requestCalendar.get(Calendar.DAY_OF_YEAR) > Calendar.getInstance().get(Calendar.DAY_OF_YEAR))
-			return ws.getWeatherForecastConditions().get(
-					requestCalendar.get(Calendar.DAY_OF_YEAR) - Calendar.getInstance().get(Calendar.DAY_OF_YEAR));
-		return new WeatherCondition(requestedDay);
+                /* Get the XMLReader of the SAXParser we created. */
+                XMLReader xr = sp.getXMLReader();
 
-	}
+                /* Create a new ContentHandler and apply it to the XML-Reader */
+                GoogleWeatherHandler gwh = new GoogleWeatherHandler();
+                xr.setContentHandler(gwh);
 
-	@Override
-	protected void onPostExecute(WeatherConditionInterface result) {
-		if (force)
-			Log.i("GoogleWeatherTask", "Use cache");
-		else
-			Log.i("GoogleWeatherTask", "executing request " + queryString);
+                // InputSource is = new InputSource(url.openStream());
+                /* Parse the xml-data our URL-call returned. */
+                xr.parse(new InputSource(is));
 
-		super.onPostExecute(result);
-	}
+                /* Our Handler now provides the parsed weather-data to us. */
+                ws = gwh.getWeatherSet();
+            } catch (Exception e) {
+                Log.e("WeatherManager", "WeatherQueryError", e);
+
+            }
+            force = false;
+        }
+        Calendar requestCalendar = Calendar.getInstance();
+        requestCalendar.setTime(requestedDay);
+        if (ws == null)
+            return new WeatherCondition(requestedDay);
+        else if (requestCalendar.get(Calendar.DAY_OF_YEAR) == Calendar.getInstance().get(Calendar.DAY_OF_YEAR))
+            return ws.getWeatherCurrentCondition();
+        else if (requestCalendar.get(Calendar.DAY_OF_YEAR) > Calendar.getInstance().get(Calendar.DAY_OF_YEAR))
+            return ws.getWeatherForecastConditions().get(
+                    requestCalendar.get(Calendar.DAY_OF_YEAR) - Calendar.getInstance().get(Calendar.DAY_OF_YEAR));
+        return new WeatherCondition(requestedDay);
+
+    }
+
+    @Override
+    protected void onPostExecute(WeatherConditionInterface result) {
+        if (force)
+            Log.i("GoogleWeatherTask", "Use cache");
+        else
+            Log.i("GoogleWeatherTask", "executing request " + queryString);
+
+        super.onPostExecute(result);
+    }
 
 }

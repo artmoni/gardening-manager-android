@@ -33,8 +33,6 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
 
     protected LayoutInflater inflater;
 
-    private View adsView;
-
     public SeedListAdapter(Context context, List<BaseSeedInterface> vendorSeeds) {
         // super(context);
         this.vendorSeeds = vendorSeeds;

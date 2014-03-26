@@ -57,13 +57,10 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
     private Intent weatherIntent;
 
-    // private ImageView weatherState;
-
     private String TAG = "DashboardActivity";
 
     private MenuItem itemConnected;
 
-//    IabHelper buyHelper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

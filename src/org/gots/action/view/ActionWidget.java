@@ -87,6 +87,7 @@ public class ActionWidget extends LinearLayout {
         inflater.inflate(R.layout.action_widget, this);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
@@ -103,7 +104,12 @@ public class ActionWidget extends LinearLayout {
             Drawable drawable = mContext.getResources().getDrawable(actionImageRessource);
             actionImage.setImageDrawable(drawable);
         }
-        setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.action_selector));
+        int sdk = android.os.Build.VERSION.SDK_INT;
+        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.action_selector));
+        } else {
+            setBackground(mContext.getResources().getDrawable(R.drawable.action_selector));
+        }
         // invalidate();
     }
 

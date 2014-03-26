@@ -37,7 +37,7 @@ import android.widget.TextView;
 public class SeedWidgetLong extends LinearLayout {
     Context mContext;
 
-    private String TAG = "SeedWidgetLong";
+    // private String TAG = SeedWidgetLong.class.getSimpleName();
 
     private GrowingSeedInterface mSeed;
 
@@ -69,6 +69,7 @@ public class SeedWidgetLong extends LinearLayout {
         setupView();
     }
 
+    @SuppressWarnings("deprecation")
     private void setupView() {
 
         if (mSeed == null)
@@ -100,8 +101,6 @@ public class SeedWidgetLong extends LinearLayout {
 
         TextView seedVariety = (TextView) findViewById(R.id.IdSeedVariety);
         seedVariety.setText(mSeed.getVariety());
-        if (GotsPreferences.DEBUG && mSeed.getUUID() != null)
-            seedVariety.setText(mSeed.getVariety() + "\n" + mSeed.getUUID().substring(0, 10));
 
         PlanningWidget planningSow = (PlanningWidget) findViewById(R.id.IdSeedSowingPlanning);
         planningSow.setAdapter(new PlanningSowAdapter(mSeed));
@@ -132,6 +131,8 @@ public class SeedWidgetLong extends LinearLayout {
         like = (ImageView) findViewById(R.id.ImageSeedLike);
 
         displayLikeStatus(mSeed.getLikeStatus());
+        if (mSeed.getUUID() == null)
+            like.setVisibility(View.GONE);
 
         like.setOnClickListener(new View.OnClickListener() {
 

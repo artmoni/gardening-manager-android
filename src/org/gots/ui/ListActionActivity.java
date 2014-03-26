@@ -16,12 +16,10 @@ import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -46,19 +44,11 @@ public class ListActionActivity extends SherlockListFragment implements ListView
 
     }
 
-    private WindowRemover mWindowRemover = new WindowRemover();
-
     Handler mHandler = new Handler();
-
-    private WindowManager mWindowManager;
 
     protected TextView mDialogText;
 
     protected boolean mShowing;
-
-    private boolean mReady;
-
-    private char mPrevLetter = Character.MIN_VALUE;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -68,17 +58,9 @@ public class ListActionActivity extends SherlockListFragment implements ListView
         Bundle bundle = this.getArguments();
         seedid = bundle.getInt("org.gots.growingseed.id");
 
-        // ActionSeedDBHelper helper = new ActionSeedDBHelper(this);
-        // ArrayList<BaseActionInterface> actions = helper.getActionsToDo();
-        // Arrays.sort(mStrings);
-
-        // *******************************************
-        mWindowManager = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
-
-        // Use an existing ListAdapter that will map an array
-        // of strings to TextViews
         new AsyncTask<Integer, Void, ArrayList<GrowingSeedInterface>>() {
             private ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
+
             private ListAllActionAdapter listAllActionAdapter;
 
             @Override
@@ -91,7 +73,8 @@ public class ListActionActivity extends SherlockListFragment implements ListView
                     allSeeds.add(growingSeedManager.getGrowingSeedById(seedid));
                 } else
                     allSeeds = growingSeedManager.getGrowingSeeds();
-                listAllActionAdapter = new ListAllActionAdapter(getActivity(), allSeeds, ListAllActionAdapter.STATUS_DONE);
+                listAllActionAdapter = new ListAllActionAdapter(getActivity(), allSeeds,
+                        ListAllActionAdapter.STATUS_DONE);
                 return allSeeds;
             }
 

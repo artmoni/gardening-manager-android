@@ -19,9 +19,7 @@ import org.gots.allotment.AllotmentManager;
 import org.gots.allotment.view.QuickAllotmentActionBuilder;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.preferences.GotsPreferences;
-import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
-import org.gots.seed.provider.local.GotsGrowingSeedProvider;
 import org.gots.ui.HutActivity;
 
 import android.content.Context;
@@ -48,7 +46,6 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
 
     private List<BaseAllotmentInterface> myAllotments;
 
-    private GotsGrowingSeedProvider growingSeedManager;
 
     @Override
     public void notifyDataSetChanged() {
@@ -59,7 +56,6 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
     public ListAllotmentAdapter(Context mContext, List<BaseAllotmentInterface> allotments) {
         this.mContext = mContext;
         myAllotments = allotments;
-        growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(mContext);
     }
 
     public void setAllotments(List<BaseAllotmentInterface> allotments) {
@@ -88,6 +84,7 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
         public LinearLayout menu;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         LinearLayout ll = (LinearLayout) convertView;
@@ -127,15 +124,12 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
         int width;
-        int height;
         int sdk = android.os.Build.VERSION.SDK_INT;
         if (sdk < android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             width = display.getWidth();
-            height = display.getHeight();
         } else {
             display.getSize(size);
             width = size.x;
-            height = size.y;
         }
         int layoutsize = 200;
         int nbcolumn = (width - 200) / layoutsize;

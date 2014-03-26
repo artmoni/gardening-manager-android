@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.gots.action.BaseActionInterface;
-import org.gots.bean.SeedCategory;
 
 /**
  *
@@ -73,10 +72,6 @@ public interface BaseSeedInterface {
     public abstract int getDateSowingMin();
 
     public abstract void setDateSowingMin(int dateSowing);
-
-    public abstract void setCategory(SeedCategory category);
-
-    public abstract SeedCategory getCategory();
 
     public abstract void setDateSowingMax(int dateSowingMax);
 

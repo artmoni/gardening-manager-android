@@ -309,15 +309,15 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
 
     }
 
-    private void addToStock(BaseSeedInterface vendorseed) {
-        GotsSeedProvider helper = new LocalSeedProvider(getApplicationContext());
-        if (vendorseed.getSeedId() >= 0) {
-            GrowingSeedInterface seed = (GrowingSeedInterface) helper.getSeedById(vendorseed.getSeedId());
-            BuyingAction buy = new BuyingAction(this);
-            buy.execute(seed);
-        }
-
-    }
+    // private void addToStock(BaseSeedInterface vendorseed) {
+    // GotsSeedProvider helper = new LocalSeedProvider(getApplicationContext());
+    // if (vendorseed.getSeedId() >= 0) {
+    // GrowingSeedInterface seed = (GrowingSeedInterface) helper.getSeedById(vendorseed.getSeedId());
+    // BuyingAction buy = new BuyingAction(this);
+    // buy.execute(seed);
+    // }
+    //
+    // }
 
     private boolean validateSeed() {
         if (newSeed.getFamily() == null || "".equals(newSeed.getFamily())) {

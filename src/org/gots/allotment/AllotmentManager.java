@@ -15,7 +15,6 @@ import android.content.Context;
 import android.content.Intent;
 
 public class AllotmentManager extends BroadcastReceiver implements AllotmentProvider {
-    private static final String TAG = "GardenManager";
 
     private static AllotmentManager instance;
 
@@ -71,7 +70,6 @@ public class AllotmentManager extends BroadcastReceiver implements AllotmentProv
         if (GotsPreferences.getInstance().isConnectedToServer()) {
             allotmentProvider = new NuxeoAllotmentProvider(mContext);
         } else {
-
             allotmentProvider = new LocalAllotmentProvider(mContext);
         }
     }

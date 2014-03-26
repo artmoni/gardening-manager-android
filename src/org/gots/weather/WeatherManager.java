@@ -22,10 +22,6 @@ import android.content.Context;
 
 public class WeatherManager {
 
-    private static WeatherManager instance;
-
-    private WeatherSet ws;
-
     private Integer temperatureLimitHot;
 
     private Integer temperatureLimitCold;

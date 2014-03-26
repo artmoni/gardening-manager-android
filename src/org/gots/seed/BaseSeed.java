@@ -14,7 +14,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.gots.action.BaseActionInterface;
-import org.gots.bean.SeedCategory;
 
 public abstract class BaseSeed implements Serializable, BaseSeedInterface {
 
@@ -55,8 +54,6 @@ public abstract class BaseSeed implements Serializable, BaseSeedInterface {
     private int durationMin;
 
     private int durationMax;
-
-    private SeedCategory category;
 
     private String urlDescription;
 
@@ -133,16 +130,6 @@ public abstract class BaseSeed implements Serializable, BaseSeedInterface {
     }
 
     @Override
-    public void setCategory(SeedCategory category) {
-        this.category = category;
-    }
-
-    @Override
-    public SeedCategory getCategory() {
-        return category;
-    }
-
-    @Override
     public void setDateSowingMax(int dateSowingMax) {
         this.dateSowingMax = dateSowingMax;
     }
@@ -174,7 +161,6 @@ public abstract class BaseSeed implements Serializable, BaseSeedInterface {
         newSeed.getActionDone().addAll(getActionDone());
         newSeed.setActionToDo(new ArrayList<BaseActionInterface>());
         newSeed.getActionToDo().addAll(getActionToDo());
-        newSeed.setCategory(category);
         newSeed.setDateSowingMax(dateSowingMax);
         newSeed.setDateSowingMin(dateSowingMin);
         newSeed.setDescriptionGrowth(description_growth);

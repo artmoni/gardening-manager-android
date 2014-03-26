@@ -23,11 +23,11 @@ import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.Scopes;
 
 public class GoogleAuthentication {
-    private String CLIENT_ID = "473239775303-khctmm26flfc9c3m97ge3uss4ajo8c3r.apps.googleusercontent.com";
-
-    private String CLIENT_SECRET = "sdxIz8qR2xdIE4FaYb3CZYvz";
-
-    private String REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob";
+//    private String CLIENT_ID = "473239775303-khctmm26flfc9c3m97ge3uss4ajo8c3r.apps.googleusercontent.com";
+//
+//    private String CLIENT_SECRET = "sdxIz8qR2xdIE4FaYb3CZYvz";
+//
+//    private String REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob";
 
     final String G_PLUS_SCOPE = "https://www.googleapis.com/auth/plus.me";
 

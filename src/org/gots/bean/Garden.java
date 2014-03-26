@@ -10,190 +10,155 @@
  ******************************************************************************/
 package org.gots.bean;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 import org.gots.garden.GardenInterface;
 
 public class Garden implements GardenInterface {
-	private long id;
-	private String name;
-	private String description;
-	// private HashMap<String, WeatherCondition> weatherHistory=new
-	// HashMap<String, WeatherCondition>();
-	private ArrayList<Allotment> allotments = new ArrayList<Allotment>();
+    private long id;
 
-	private double gpsLatitude;
-	private double gpsLongitude;
-	private Address address = new Address();
-	private Date dateLastSynchro;
-	private double gpsAltitude;
-	private String uuid;
+    private String name;
 
-	@Override
-	public double getGpsLatitude() {
-		return gpsLatitude;
-	}
+    private String description;
 
-	@Override
-	public void setGpsLatitude(double gpsLatitude) {
-		this.gpsLatitude = gpsLatitude;
-	}
+    private double gpsLatitude;
 
-	@Override
-	public double getGpsLongitude() {
-		return gpsLongitude;
-	}
+    private double gpsLongitude;
 
-	@Override
-	public void setGpsLongitude(double gpsLongitude) {
-		this.gpsLongitude = gpsLongitude;
-	}
+    private Address address = new Address();
 
-	@Override
-	public String getName() {
-		return name;
-	}
+    private Date dateLastSynchro;
 
-	@Override
-	public void setName(String name) {
-		this.name = name;
-	}
+    private double gpsAltitude;
 
-	@Override
-	public String getDescription() {
-		return description;
-	}
+    private String uuid;
 
-	@Override
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    @Override
+    public double getGpsLatitude() {
+        return gpsLatitude;
+    }
 
-	//
-	// public HashMap<String, Allotment> getAllotments() {
-	// return allotments;
-	// }
-	//
-	// public void setAllotments(HashMap<String, Allotment> allotments) {
-	// this.allotments = allotments;
-	// }
-	// public void setAllotments(ArrayList<Allotment> allotments) {
-	// this.allotments = allotments;
-	// }
+    @Override
+    public void setGpsLatitude(double gpsLatitude) {
+        this.gpsLatitude = gpsLatitude;
+    }
 
-	// @Override
-	// public BaseAllotmentInterface getAllotment(String reference) {
-	// BaseAllotmentInterface searchAllotment = null;
-	// for (Iterator iterator = allotments.iterator(); iterator.hasNext();) {
-	// BaseAllotmentInterface allotment = (BaseAllotmentInterface)
-	// iterator.next();
-	// if (allotment.getName().equals(reference))
-	// searchAllotment = allotment;
-	// }
-	// return searchAllotment;
-	// }
+    @Override
+    public double getGpsLongitude() {
+        return gpsLongitude;
+    }
 
-	// @Override
-	// public ArrayList<Allotment> getAllotments() {
-	// return allotments;
-	// }
+    @Override
+    public void setGpsLongitude(double gpsLongitude) {
+        this.gpsLongitude = gpsLongitude;
+    }
 
-	// public HashMap<String, WeatherCondition> getWeatherHistory() {
-	// return weatherHistory;
-	// }
-	//
-	// public void setWeatherHistory(HashMap<String, WeatherCondition>
-	// weatherHistory) {
-	// this.weatherHistory = weatherHistory;
-	// }
+    @Override
+    public String getName() {
+        return name;
+    }
 
-	@Override
-	public Address getAddress() {
-		return address;
-	}
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	@Override
-	public void setAddress(Address address) {
-		this.address = address;
-	}
+    @Override
+    public String getDescription() {
+        return description;
+    }
 
-	@Override
-	public String getAdminArea() {
-		return getAddress().getAdminArea();
-	}
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	@Override
-	public String getCountryName() {
-		return getAddress().getCountryName();
-	}
+    @Override
+    public Address getAddress() {
+        return address;
+    }
 
-	@Override
-	public String getLocality() {
-		return getAddress().getLocality();
-	}
+    @Override
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 
-	@Override
-	public void setAdminArea(String adminArea) {
-		this.address.setAdminArea(adminArea);
-	}
+    @Override
+    public String getAdminArea() {
+        return getAddress().getAdminArea();
+    }
 
-	@Override
-	public void setCountryName(String countryName) {
-		this.address.setCountryName(countryName);
-	}
+    @Override
+    public String getCountryName() {
+        return getAddress().getCountryName();
+    }
 
-	@Override
-	public void setLocality(String locality) {
-		this.address.setLocality(locality);
+    @Override
+    public String getLocality() {
+        return getAddress().getLocality();
+    }
 
-	}
+    @Override
+    public void setAdminArea(String adminArea) {
+        this.address.setAdminArea(adminArea);
+    }
 
-	@Override
-	public long getId() {
-		return id;
-	}
+    @Override
+    public void setCountryName(String countryName) {
+        this.address.setCountryName(countryName);
+    }
 
-	@Override
-	public void setId(long id) {
-		this.id = id;
-	}
+    @Override
+    public void setLocality(String locality) {
+        this.address.setLocality(locality);
 
-	@Override
-	public Date getDateLastSynchro() {
-		return this.dateLastSynchro;
-	}
+    }
 
-	@Override
-	public void setDateLastSynchro(Date dateLastSynchro) {
-		this.dateLastSynchro = dateLastSynchro;
-	}
+    @Override
+    public long getId() {
+        return id;
+    }
 
-	@Override
-	public double getGpsAltitude() {
+    @Override
+    public void setId(long id) {
+        this.id = id;
+    }
 
-		return gpsAltitude;
-	}
+    @Override
+    public Date getDateLastSynchro() {
+        return this.dateLastSynchro;
+    }
 
-	@Override
-	public void setGpsAltitude(double gpsAltitude) {
-		this.gpsAltitude = gpsAltitude;
+    @Override
+    public void setDateLastSynchro(Date dateLastSynchro) {
+        this.dateLastSynchro = dateLastSynchro;
+    }
 
-	}
+    @Override
+    public double getGpsAltitude() {
 
-	@Override
-	public void setUUID(String id) {
-		uuid = id;
-	}
+        return gpsAltitude;
+    }
 
-	@Override
-	public String getUUID() {
-		return uuid;
-	}
+    @Override
+    public void setGpsAltitude(double gpsAltitude) {
+        this.gpsAltitude = gpsAltitude;
 
-	@Override
-	public String toString() {
-		String gardenString = "#" + getId() + " --" + getLocality() + " -- " + "UUID[" + getUUID() + "]\n";
-		return gardenString;
-	}
+    }
+
+    @Override
+    public void setUUID(String id) {
+        uuid = id;
+    }
+
+    @Override
+    public String getUUID() {
+        return uuid;
+    }
+
+    @Override
+    public String toString() {
+        String gardenString = "#" + getId() + " --" + getLocality() + " -- " + "UUID[" + getUUID() + "]\n";
+        return gardenString;
+    }
 }

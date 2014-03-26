@@ -22,7 +22,6 @@ import com.android.vending.billing.util.IabResult;
 import com.android.vending.billing.util.Inventory;
 import com.android.vending.billing.util.Purchase;
 import com.android.vending.billing.util.SkuDetails;
-import com.google.android.apps.analytics.Transaction;
 
 public class GotsBillingDialog extends SherlockDialogFragment {
 
@@ -79,13 +78,13 @@ public class GotsBillingDialog extends SherlockDialogFragment {
                                     Toast.makeText(getActivity(), "Thanks for buying!", Toast.LENGTH_SHORT).show();
                                     update();
 
-                                    Transaction myTrans = new Transaction.Builder("0_123456", // (String) Transaction
-                                                                                              // Id, should be unique.
-                                            (long) (0.1 * 1000000)) // (long) Order total (in micros)
-                                    .setStoreName("In-App Store") // (String) Affiliation
-                                    .setTotalTax((long) (0.17 * 1000000)) // (long) Total tax (in micros)
-                                    .setShippingCost(0) // (long) Total shipping cost (in micros)
-                                    .build();
+//                                    Transaction myTrans = new Transaction.Builder("0_123456", // (String) Transaction
+//                                                                                              // Id, should be unique.
+//                                            (long) (0.1 * 1000000)) // (long) Order total (in micros)
+//                                    .setStoreName("In-App Store") // (String) Affiliation
+//                                    .setTotalTax((long) (0.17 * 1000000)) // (long) Total tax (in micros)
+//                                    .setShippingCost(0) // (long) Total shipping cost (in micros)
+//                                    .build();
 
                                 }
                             }
