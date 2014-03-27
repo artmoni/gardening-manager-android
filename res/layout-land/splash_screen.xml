@@ -217,6 +217,11 @@
                     style="@style/logo"
                     android:src="@drawable/social_facebook" />
 
+                <ImageView
+                    android:id="@+id/idSocialTwitter"
+                    style="@style/logo"
+                    android:src="@drawable/social_twitter" />
+
                 <!--
              <ImageView
             android:id="@+id/idPrevimeteo"

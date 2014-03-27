@@ -107,6 +107,7 @@ public class AboutActivity extends AbstractActivity {
         setButtonClickable(R.id.webSauterDansLesFlaques, GotsPreferences.URL_SAUTERDANSLESFLAQUES);
         setButtonClickable(R.id.idSocialGoogle, GotsPreferences.URL_GOOGLEPLUS_GARDENING_MANAGER);
         setButtonClickable(R.id.idSocialFacebook, GotsPreferences.URL_FACEBOOK_GARDENING_MANAGER);
+        setButtonClickable(R.id.idSocialTwitter, GotsPreferences.URL_TWITTER_GARDENING_MANAGER);
         setButtonClickable(R.id.idTranslateButton, GotsPreferences.URL_TRANSLATE_GARDENING_MANAGER);
 
         progressWeather = findViewById(R.id.imageProgressWeather);
