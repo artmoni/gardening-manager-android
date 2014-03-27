@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.gots"
-    android:versionCode="27"
-    android:versionName="0.27-SNAPSHOT" >
+    android:versionCode="28"
+    android:versionName="0.27" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -40,6 +40,7 @@
     <application
         android:icon="@drawable/launcher"
         android:label="@string/app_name"
+           android:debuggable="false"
         android:theme="@style/Theme.Styled" >
         <activity
             android:name=".ui.SplashScreenActivity"
