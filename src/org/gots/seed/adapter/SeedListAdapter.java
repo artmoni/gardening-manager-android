@@ -7,7 +7,6 @@ import java.util.List;
 import org.gots.R;
 import org.gots.action.adapter.comparator.ISeedSpecieComparator;
 import org.gots.action.view.ActionWidget;
-import org.gots.ads.GotsAdvertisement;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.view.SeedWidgetLong;
@@ -34,8 +33,6 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
 
     protected LayoutInflater inflater;
 
-    private View adsView;
-
     public SeedListAdapter(Context context, List<BaseSeedInterface> vendorSeeds) {
         // super(context);
         this.vendorSeeds = vendorSeeds;
@@ -46,8 +43,6 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
 
         Collections.sort(vendorSeeds, new ISeedSpecieComparator(context));
 
-        GotsAdvertisement ads = new GotsAdvertisement(mContext);
-        adsView = ads.getAdsLayout();
     }
 
     public SeedListAdapter() {
@@ -157,7 +152,8 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
                 for (BaseSeedInterface seed : vendorSeeds) {
                     if (SeedUtil.translateSpecie(mContext, seed).toUpperCase().startsWith(
                             constraint.toString().toUpperCase())
-                            || seed.getVariety().toUpperCase().startsWith(constraint.toString().toUpperCase()))
+                            || seed.getVariety().toUpperCase().startsWith(constraint.toString().toUpperCase())
+                            || constraint.toString().equals(seed.getBareCode()))
                         nHolderList.add(seed);
                 }
                 results.values = nHolderList;

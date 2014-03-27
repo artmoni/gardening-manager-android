@@ -60,6 +60,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 
     public NuxeoGardenProvider(Context context) {
         super(context);
+        NuxeoManager.getInstance().initIfNew(mContext);
     }
 
     protected AndroidAutomationClient getNuxeoClient() {
@@ -111,6 +112,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager service = session.getAdapter(DocumentManager.class);
+
             // gardensWorkspaces = service.getChildren(wsRef);
             // Documents gardensWorkspaces =
             // service.query("SELECT * FROM Garden WHERE ecm:currentLifeCycleState <> 'deleted' ORDER BY dc:modified DESC");
@@ -123,8 +125,6 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
             Documents gardensWorkspaces = service.query(
                     "SELECT * FROM Garden WHERE ecm:currentLifeCycleState != \"deleted\"", null,
                     new String[] { "dc:modified desc" }, "*", 0, 50, cacheParam);
-
-            documentsList = gardensWorkspaces.asUpdatableDocumentsList();
 
             // TODO JC Documents gardensWorkspaces = service.query(nxql, queryParams, sortInfo, schemaList, page,
             // pageSize, cacheFlags);
@@ -193,46 +193,51 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 
     @Override
     public GardenInterface createGarden(GardenInterface garden) {
-
-        return createNuxeoGarden(super.createGarden(garden));
-    }
-
-    protected GardenInterface createNuxeoGarden(GardenInterface localGarden) {
-        Log.i(TAG, "createRemoteGarden " + localGarden);
+        Log.i(TAG, "createGarden " + garden);
+        currentGarden = garden;
 
         Session session = getNuxeoClient().getSession();
         DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
-        DeferredUpdateManager deferredUpdateMgr = getNuxeoClient().getDeferredUpdatetManager();
-        currentGarden = localGarden;
         try {
             Document root = documentMgr.getUserHome();
 
-            PropertyMap properties = new PropertyMap();
-            properties.set("dc:title", localGarden.getLocality());
+            PropertyMap properties = NuxeoGardenConvertor.convert(root.getPath(), garden).getProperties();
 
-            OperationRequest createOperation = NuxeoManager.getInstance().getSession().newRequest("Document.Create").setHeader(
-                    Constants.HEADER_NX_SCHEMAS, "*").setInput(root).set("type", "Garden").set("properties", properties);
-
-            AsyncCallback<Object> callback = new AsyncCallback<Object>() {
-                @Override
-                public void onSuccess(String executionId, Object data) {
-                    Document doc = (Document) data;
-                    currentGarden.setUUID(doc.getId());
-                    currentGarden = NuxeoGardenProvider.super.updateGarden(currentGarden);
-                    Log.d(TAG, "onSuccess " + data);
-                    force_force = true;
-                }
-
-                @Override
-                public void onError(String executionId, Throwable e) {
-                    Log.d(TAG, "onError " + e.getMessage());
-
-                }
-            };
-            deferredUpdateMgr.execDeferredUpdate(createOperation, callback, OperationType.CREATE, true);
+            Document newGarden = documentMgr.createDocument(root, "Garden", garden.getLocality());
+            documentMgr.update(newGarden, properties);
+            garden.setUUID(newGarden.getId());
+            //
+            //
+            //
+            // OperationRequest createOperation =
+            // NuxeoManager.getInstance().getSession().newRequest("Document.Create").setHeader(
+            // Constants.HEADER_NX_SCHEMAS, "*").setInput(root).set("type", "Garden").set("properties", properties);
+            //
+            // AsyncCallback<Object> callback = new AsyncCallback<Object>() {
+            // @Override
+            // public void onSuccess(String executionId, Object data) {
+            // Document doc = (Document) data;
+            // currentGarden.setUUID(doc.getId());
+            // currentGarden = NuxeoGardenProvider.super.updateGarden(currentGarden);
+            // Log.d(TAG, "onSuccess " + data);
+            // force_force = true;
+            // }
+            //
+            // @Override
+            // public void onError(String executionId, Throwable e) {
+            // Log.d(TAG, "onError " + e.getMessage());
+            //
+            // }
+            // };
+            // deferredUpdateMgr.execDeferredUpdate(createOperation, callback, OperationType.CREATE, true);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
+
+        return super.createGarden(garden);
+    }
+
+    protected GardenInterface createNuxeoGarden(GardenInterface localGarden) {
 
         return localGarden;
     }
@@ -254,9 +259,12 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
         currentGarden = garden;
         OperationRequest updateOperation;
         try {
-            PropertyMap props = new PropertyMap();
-            props.set("dc:title", garden.getLocality());
+            // PropertyMap props = new PropertyMap();
+            // props.set("dc:title", garden.getLocality());
+
             Document doc = service.getDocument(garden.getUUID());
+            PropertyMap props = NuxeoGardenConvertor.convert(doc.getParentPath(), garden).getProperties();
+
             updateOperation = NuxeoManager.getInstance().getSession().newRequest("Document.Update").setHeader(
                     Constants.HEADER_NX_SCHEMAS, "*").setInput(doc).set("properties", props);
 
@@ -303,6 +311,17 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
     public void removeGarden(GardenInterface garden) {
         super.removeGarden(garden);
         removeNuxeoGarden(garden);
+    }
+
+    @Override
+    public GardenInterface getCurrentGarden() {
+        GardenInterface garden = super.getCurrentGarden();
+        if (garden != null && garden.getUUID() == null) {
+            garden = createGarden(garden);
+            garden = super.updateGarden(garden);
+        }
+
+        return garden;
     }
 
     protected void removeNuxeoGarden(final GardenInterface garden) {

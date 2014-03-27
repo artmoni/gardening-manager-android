@@ -101,6 +101,7 @@ public class SeedWidget extends RelativeLayout implements OnClickListener {
 		if (!TabSeedActivity.class.isInstance(mContext) && v.getTag()!=null) {
 			Intent i = new Intent(mContext, TabSeedActivity.class);
 			i.putExtra("org.gots.seed.vendorid", ((BaseSeedInterface) v.getTag()).getSeedId());
+			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			mContext.startActivity(i);
 		}
 	}

@@ -10,10 +10,7 @@ e * Copyright (c) 2012 sfleury.
  ******************************************************************************/
 package org.gots.seed.view;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
+import java.util.List;
 
 import net.londatiga.android.QuickAction;
 
@@ -24,11 +21,12 @@ import org.gots.action.GotsActionSeedManager;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.bean.DeleteAction;
 import org.gots.action.bean.DetailAction;
-import org.gots.action.bean.PhotoAction;
 import org.gots.action.bean.ScheduleAction;
 import org.gots.action.bean.WateringAction;
 import org.gots.action.provider.GotsActionSeedProvider;
+import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.ui.NewActionActivity;
 import org.gots.ui.TabSeedActivity;
@@ -37,10 +35,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
-import android.provider.MediaStore;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
-import android.widget.BaseAdapter;
+import android.widget.Toast;
+
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 public class QuickSeedActionBuilder {
 
@@ -48,43 +50,69 @@ public class QuickSeedActionBuilder {
 
     private View parentView;
 
-
     private Context mContext;
+
+    private GrowingSeedInterface seed;
+
+    GotsActionSeedManager actionSeedManager;
+
+    private GotsActionManager actionManager;
+
+    private class ActionTask extends AsyncTask<SeedActionInterface, Integer, Void> {
+        @Override
+        protected Void doInBackground(SeedActionInterface... params) {
+            SeedActionInterface actionItem = params[0];
+            actionItem.execute(seed);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            Toast.makeText(mContext, "action done", Toast.LENGTH_SHORT).show();
+            quickAction.dismiss();
+            super.onPostExecute(result);
+        }
+    }
 
     public QuickSeedActionBuilder(Context context, final SeedWidget v) {
         parentView = v;
         mContext = context;
-        final GrowingSeedInterface seed = (GrowingSeedInterface) v.getTag();
-
-        GotsActionSeedProvider helperActions =  GotsActionSeedManager.getInstance().initIfNew(mContext);
-        ArrayList<BaseActionInterface> actions = helperActions.getActionsToDoBySeed(seed);
-
+        seed = (GrowingSeedInterface) v.getTag();
         quickAction = new QuickAction(mContext, QuickAction.HORIZONTAL);
+        actionManager = GotsActionManager.getInstance().initIfNew(mContext);
+        actionSeedManager = GotsActionSeedManager.getInstance().initIfNew(mContext);
 
-        for (Iterator<BaseActionInterface> iterator = actions.iterator(); iterator.hasNext();) {
-            BaseActionInterface baseActionInterface = iterator.next();
-            if (!SeedActionInterface.class.isInstance(baseActionInterface))
-                continue;
-            final SeedActionInterface currentAction = (SeedActionInterface) baseActionInterface;
+        new AsyncTask<Void, Void, List<SeedActionInterface>>() {
 
-            ActionWidget actionWidget = new ActionWidget(mContext, currentAction);
+            @Override
+            protected List<SeedActionInterface> doInBackground(Void... params) {
+                GotsActionSeedProvider helperActions = GotsActionSeedManager.getInstance().initIfNew(mContext);
 
-            if (currentAction == null)
-                continue;
+                return helperActions.getActionsToDoBySeed(seed);
+            }
 
-            quickAction.addActionItem(actionWidget);
-            actionWidget.setOnClickListener(new View.OnClickListener() {
+            protected void onPostExecute(List<SeedActionInterface> actions) {
+                for (BaseActionInterface baseActionInterface : actions) {
+                    if (!SeedActionInterface.class.isInstance(baseActionInterface))
+                        continue;
+                    final SeedActionInterface currentAction = (SeedActionInterface) baseActionInterface;
 
-                @Override
-                public void onClick(View v) {
-                    SeedActionInterface actionItem = currentAction;
-                    actionItem.execute(seed);
-//                    parentAdapter.notifyDataSetChanged();
-                    quickAction.dismiss();
+                    ActionWidget actionWidget = new ActionWidget(mContext, currentAction);
+                    actionWidget.setState(currentAction.getState());
+
+                    quickAction.addActionItem(actionWidget);
+                    actionWidget.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            new ActionTask().execute(currentAction);
+
+                        }
+                    });
+
                 }
-            });
-
-        }
+            };
+        }.execute();
 
         ScheduleAction planAction = new ScheduleAction(mContext);
         ActionWidget actionWidget = new ActionWidget(mContext, planAction);
@@ -92,104 +120,30 @@ public class QuickSeedActionBuilder {
 
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(mContext, NewActionActivity.class);
-                i.putExtra("org.gots.seed.id", seed.getGrowingSeedId());
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                mContext.startActivity(i);
+                // Intent i = new Intent(mContext, NewActionActivity.class);
+                // i.putExtra("org.gots.seed.id", seed.getGrowingSeedId());
+                // i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                //
+                // mContext.startActivity(i);
+                FragmentManager fm = ((SherlockFragmentActivity) mContext).getSupportFragmentManager();
+                DialogFragment editNameDialog = new NewActionActivity();
+                Bundle data = new Bundle();
+                data.putInt("org.gots.seed.id", seed.getGrowingSeedId());
+                editNameDialog.setArguments(data);
+                editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+                editNameDialog.show(fm, "fragment_edit_name");
                 quickAction.dismiss();
             }
         });
 
         quickAction.addActionItem(actionWidget);
 
-        GotsActionManager actionManager = GotsActionManager.getInstance().initIfNew(mContext);
-
-        /*
-         * ACTION WATERING
-         */
-        final WateringAction wateringAction = (WateringAction) actionManager.getActionByName("water");
-        ActionWidget watering = new ActionWidget(mContext, wateringAction);
-        watering.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                SeedActionInterface actionItem = wateringAction;
-                actionItem.execute(seed);
-//                parentAdapter.notifyDataSetChanged();
-                quickAction.dismiss();
-
-            }
-        });
-        quickAction.addPermanentActionItem(watering);
-
-        /*
-         * ACTION DELETE
-         */
-        final DeleteAction deleteAction = new DeleteAction(mContext);
-        ActionWidget delete = new ActionWidget(mContext, deleteAction);
-        delete.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                builder.setMessage(mContext.getResources().getString(R.string.action_delete_seed)).setCancelable(false).setPositiveButton(
-                        "OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                SeedActionInterface actionItem = deleteAction;
-                                actionItem.execute(seed);
-//                                parentAdapter.notifyDataSetChanged();
-                                quickAction.dismiss();
-                                dialog.dismiss();
-                            }
-                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-                builder.show();
-
-            }
-        });
-        quickAction.addPermanentActionItem(delete);
-
-        /*
-         * ACTION PHOTO
-         */
-        final PhotoAction photoAction = (PhotoAction) actionManager.getActionByName("photo");
-        ActionWidget photoWidget = new ActionWidget(mContext, photoAction);
-        photoWidget.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                SeedActionInterface actionItem = photoAction;
-                if (PhotoAction.class.isInstance(actionItem)) {
-                    File f;
-                    Date now = new Date();
-
-                    f = photoAction.getImageFile(now);
-                    actionItem.setData(f.getAbsoluteFile());
-
-                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-                    takePictureIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    mContext.startActivity(takePictureIntent);
-                    // TODO The action must not be executed if activity for result has been canceled because no image
-                    // has been taken but the database get the imagefile
-                    actionItem.execute(seed);
-
-                }
-//                parentAdapter.notifyDataSetChanged();
-                quickAction.dismiss();
-            }
-        });
-        quickAction.addPermanentActionItem(photoWidget);
-
         /*
          * ACTION DETAIL
          */
         final DetailAction detail = new DetailAction(mContext);
         ActionWidget detailWidget = new ActionWidget(mContext, detail);
+        detailWidget.setState(ActionState.UNDEFINED);
         detailWidget.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -205,11 +159,124 @@ public class QuickSeedActionBuilder {
                 } else {
                     actionItem.execute(seed);
                 }
-//                parentAdapter.notifyDataSetChanged();
+                // parentAdapter.notifyDataSetChanged();
                 quickAction.dismiss();
             }
         });
         quickAction.addPermanentActionItem(detailWidget);
+
+        /*
+         * ACTION WATERING
+         */
+        new AsyncTask<Void, Integer, SeedActionInterface>() {
+
+            @Override
+            protected SeedActionInterface doInBackground(Void... params) {
+                WateringAction wateringAction = (WateringAction) actionManager.getActionByName("water");
+
+                return wateringAction;
+            }
+
+            protected void onPostExecute(final SeedActionInterface action) {
+                ActionWidget watering = new ActionWidget(mContext, action);
+                watering.setState(ActionState.UNDEFINED);
+                watering.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        new AsyncTask<SeedActionInterface, Integer, Void>() {
+                            @Override
+                            protected Void doInBackground(SeedActionInterface... params) {
+                                SeedActionInterface actionItem = params[0];
+                                actionItem = actionSeedManager.insertAction(seed, (BaseActionInterface) actionItem);
+                                actionSeedManager.doAction(actionItem, seed);
+                                return null;
+                            }
+
+                            @Override
+                            protected void onPostExecute(Void result) {
+                                Toast.makeText(mContext, "action done", Toast.LENGTH_SHORT).show();
+                                quickAction.dismiss();
+                                super.onPostExecute(result);
+                            }
+                        }.execute(action);
+                    }
+                });
+                quickAction.addPermanentActionItem(watering);
+
+            };
+        }.execute();
+
+        /*
+         * ACTION DELETE
+         */
+        final DeleteAction deleteAction = new DeleteAction(mContext);
+        ActionWidget delete = new ActionWidget(mContext, deleteAction);
+        delete.setState(ActionState.UNDEFINED);
+
+        delete.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setMessage(mContext.getResources().getString(R.string.action_delete_seed)).setCancelable(false).setPositiveButton(
+                        "OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                new ActionTask().execute(deleteAction);
+                                mContext.sendBroadcast(new Intent(BroadCastMessages.GROWINGSEED_DISPLAYLIST));
+                                dialog.dismiss();
+                            }
+                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+                builder.show();
+
+            }
+        });
+        quickAction.addPermanentActionItem(delete);
+
+        // /*
+        // * ACTION PHOTO
+        // */
+        // new AsyncTask<Void, Integer, PhotoAction>() {
+        //
+        // @Override
+        // protected PhotoAction doInBackground(Void... params) {
+        // PhotoAction photoAction = (PhotoAction) actionManager.getActionByName("photo");
+        //
+        // return photoAction;
+        // }
+        //
+        // protected void onPostExecute(final PhotoAction photoAction) {
+        // ActionWidget photoWidget = new ActionWidget(mContext, photoAction);
+        // photoWidget.setState(ActionState.UNDEFINED);
+        //
+        // photoWidget.setOnClickListener(new View.OnClickListener() {
+        //
+        // @Override
+        // public void onClick(View v) {
+        // SeedActionInterface actionItem = photoAction;
+        // if (PhotoAction.class.isInstance(actionItem)) {
+        // // alert.show();
+        // final Intent i = new Intent(mContext, TabSeedActivity.class);
+        // i.putExtra("org.gots.seed.id", ((GrowingSeedInterface) parentView.getTag()).getGrowingSeedId());
+        // i.putExtra("org.gots.seed.actionphoto","org.gots.seed.actionphoto");
+        // i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        // mContext.startActivity(i);
+        //
+        //
+        //
+        // }
+        // // parentAdapter.notifyDataSetChanged();
+        // quickAction.dismiss();
+        // }
+        // });
+        // quickAction.addPermanentActionItem(photoWidget);
+        //
+        // };
+        // }.execute();
 
     }
 

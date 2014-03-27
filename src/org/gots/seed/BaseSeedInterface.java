@@ -32,112 +32,105 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.gots.action.BaseActionInterface;
-import org.gots.bean.SeedCategory;
 
 /**
  *
  */
-public interface BaseSeedInterface  {
-	public abstract int getSeedId();
+public interface BaseSeedInterface {
+    public abstract int getSeedId();
 
-	public abstract void setId(int id);
+    public abstract void setId(int id);
 
-	public abstract String getUrlDescription();
+    public abstract String getUrlDescription();
 
-	public abstract void setUrlDescription(String urlDescription);
+    public abstract void setUrlDescription(String urlDescription);
 
-	public abstract String getName();
+    public abstract String getName();
 
-	public abstract void setName(String name);
+    public abstract void setName(String name);
 
-	public abstract String getDescriptionGrowth();
+    public abstract String getDescriptionGrowth();
 
-	public abstract void setDescriptionGrowth(String description_growth);
+    public abstract void setDescriptionGrowth(String description_growth);
 
-	public abstract String getDescriptionCultivation();
+    public abstract String getDescriptionCultivation();
 
-	public abstract void setDescriptionCultivation(String description_cultivation);
+    public abstract void setDescriptionCultivation(String description_cultivation);
 
-	public abstract String getDescriptionHarvest();
+    public abstract String getDescriptionHarvest();
 
-	public abstract void setDescriptionHarvest(String description_harvest);
+    public abstract void setDescriptionHarvest(String description_harvest);
 
-	public abstract String getDescriptionDiseases();
+    public abstract String getDescriptionDiseases();
 
-	public abstract void setDescriptionDiseases(String description_diseases);
+    public abstract void setDescriptionDiseases(String description_diseases);
 
-	public abstract String getUUID();
+    public abstract String getUUID();
 
-	public abstract void setUUID(String reference);
+    public abstract void setUUID(String reference);
 
-	public abstract int getDateSowingMin();
+    public abstract int getDateSowingMin();
 
-	public abstract void setDateSowingMin(int dateSowing);
+    public abstract void setDateSowingMin(int dateSowing);
 
-	public abstract void setCategory(SeedCategory category);
+    public abstract void setDateSowingMax(int dateSowingMax);
 
-	public abstract SeedCategory getCategory();
+    public abstract int getDateSowingMax();
 
-	public abstract void setDateSowingMax(int dateSowingMax);
+    public abstract Date getDateLastWatering();
 
-	public abstract int getDateSowingMax();
+    public abstract void setDateLastWatering(Date dateLastWatering);
 
-	public abstract Date getDateLastWatering();
+    public abstract int getDurationMin();
 
-	public abstract void setDateLastWatering(Date dateLastWatering);
+    public abstract void setDurationMin(int durationMin);
 
-	public abstract int getDurationMin();
+    public abstract int getDurationMax();
 
-	public abstract void setDurationMin(int durationMin);
+    public abstract void setDurationMax(int durationMax);
 
-	public abstract int getDurationMax();
+    public abstract String getOrder();
 
-	public abstract void setDurationMax(int durationMax);
+    public abstract void setOrder(String order);
 
-	public abstract String getOrder();
+    public abstract String getFamily();
 
-	public abstract void setOrder(String order);
+    public abstract void setFamily(String family);
 
-	public abstract String getFamily();
+    public abstract String getGenus();
 
-	public abstract void setFamily(String family);
+    public abstract void setGenus(String genus);
 
-	public abstract String getGenus();
+    public abstract String getSpecie();
 
-	public abstract void setGenus(String genus);
+    public abstract void setSpecie(String species);
 
-	public abstract String getSpecie();
+    public abstract String getVariety();
 
-	public abstract void setSpecie(String species);
+    public abstract void setVariety(String variety);
 
-	public abstract String getVariety();
+    public abstract ArrayList<BaseActionInterface> getActionToDo();
 
-	public abstract void setVariety(String variety);
+    public abstract void setActionToDo(ArrayList<BaseActionInterface> actionToDo);
 
-	public abstract ArrayList<BaseActionInterface> getActionToDo();
+    public abstract ArrayList<BaseActionInterface> getActionDone();
 
-	public abstract void setActionToDo(ArrayList<BaseActionInterface> actionToDo);
+    public abstract void setActionDone(ArrayList<BaseActionInterface> actionDone);
 
-	public abstract ArrayList<BaseActionInterface> getActionDone();
+    public abstract void setBareCode(String bare_code);
 
-	public abstract void setActionDone(ArrayList<BaseActionInterface> actionDone);
+    public abstract String getBareCode();
 
-	//public abstract Object clone() throws CloneNotSupportedException;
+    public abstract void setNbSachet(int nbSeedBag);
 
-	public abstract boolean onActionAlert();
+    public abstract Integer getNbSachet();
 
-	public abstract boolean onActionWarning();
+    public abstract void setLanguage(String string);
 
-	public abstract void performNextAction();
+    public abstract String getLanguage();
 
-	public abstract void undoLastAction();
+    public abstract void setLikeStatus(LikeStatus likes);
 
-	public abstract void setBareCode(String bare_code);
-
-	public abstract String getBareCode();
-
-	public abstract void setNbSachet(int nbSeedBag);
-
-	public abstract Integer getNbSachet();
+    public abstract LikeStatus getLikeStatus();
 
 }

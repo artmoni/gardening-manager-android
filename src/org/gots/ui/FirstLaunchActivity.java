@@ -99,7 +99,8 @@ public class FirstLaunchActivity extends AbstractActivity {
                                 try {
                                     googleToken = authentication.getToken(params[0]);
                                     if (googleToken != null) {
-                                        NuxeoAuthentication nuxeoAuthentication = new NuxeoAuthentication(getApplicationContext());
+                                        NuxeoAuthentication nuxeoAuthentication = new NuxeoAuthentication(
+                                                getApplicationContext());
                                         nuxeoToken = nuxeoAuthentication.request_oauth2_token(googleToken);
                                     }
                                 } catch (UserRecoverableAuthException e) {
@@ -115,17 +116,21 @@ public class FirstLaunchActivity extends AbstractActivity {
                             @Override
                             protected void onPostExecute(String resultToken) {
                                 if (resultToken != null) {
-                                    Toast.makeText(getApplicationContext(), resultToken, Toast.LENGTH_SHORT).show();
                                     gotsPrefs.setNuxeoLogin(usableAccounts.get(item).name);
                                     gotsPrefs.setToken(resultToken);
                                     gotsPrefs.setConnectedToServer(true);
-                                    
+                                    Toast.makeText(
+                                            getApplicationContext(),
+                                            getResources().getString(R.string.login_connect_description).replace(
+                                                    "_ACCOUNT_", gotsPrefs.getNuxeoLogin()), Toast.LENGTH_SHORT).show();
+
                                     Intent intent = new Intent(FirstLaunchActivity.this, DashboardActivity.class);
                                     startActivity(intent);
                                     finish();
 
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "Error requesting GoogleAuthUtil.getToken", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Error requesting GoogleAuthUtil.getToken",
+                                            Toast.LENGTH_SHORT).show();
                                 }
                                 super.onPostExecute(resultToken);
                             }

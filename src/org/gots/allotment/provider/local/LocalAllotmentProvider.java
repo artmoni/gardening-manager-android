@@ -108,7 +108,7 @@ public class LocalAllotmentProvider extends GotsDBHelper implements AllotmentPro
         Cursor cursor = null;
         try {
 
-            int nbRow = bdd.update(DatabaseHelper.ALLOTMENT_TABLE_NAME, values, DatabaseHelper.ALLOTMENT_ID + "=\""
+            bdd.update(DatabaseHelper.ALLOTMENT_TABLE_NAME, values, DatabaseHelper.ALLOTMENT_ID + "=\""
                     + allotment.getId() + "\"", null);
             cursor = bdd.query(DatabaseHelper.ALLOTMENT_TABLE_NAME, null, DatabaseHelper.ALLOTMENT_ID + "='"
                     + allotment.getId() + "'", null, null, null, null);

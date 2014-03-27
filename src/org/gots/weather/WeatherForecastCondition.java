@@ -10,36 +10,26 @@
  ******************************************************************************/
 package org.gots.weather;
 
-
 /**
  * Holds the information between the <forecast_conditions>-tag of what the
  * Google Weather API returned.
  */
-public class WeatherForecastCondition extends WeatherCondition{
+public class WeatherForecastCondition extends WeatherCondition {
 
-	// ===========================================================
-	// Fields
-	// ===========================================================
+    // ===========================================================
+    // Fields
+    // ===========================================================
 
-	private Integer tempMin = null;
-	private Integer tempMax = null;
+    // ===========================================================
+    // Constructors
+    // ===========================================================
 
-	// ===========================================================
-	// Constructors
-	// ===========================================================
+    public WeatherForecastCondition() {
 
-	public WeatherForecastCondition() {
+    }
 
-	}
-
-	// ===========================================================
-	// Getter & Setter
-	// ===========================================================
-
-
-
-	
-	
-
+    // ===========================================================
+    // Getter & Setter
+    // ===========================================================
 
 }

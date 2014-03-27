@@ -11,9 +11,7 @@ import org.gots.nuxeo.NuxeoManager;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
 import org.nuxeo.ecm.automation.client.cache.CacheBehavior;
-import org.nuxeo.ecm.automation.client.cache.DeferredUpdateManager;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
-import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
@@ -44,6 +42,7 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
         myLogin = gotsPrefs.getNuxeoLogin();
         myDeviceId = gotsPrefs.getDeviceId();
         myApp = gotsPrefs.getGardeningManagerAppname();
+        NuxeoManager.getInstance().initIfNew(context);
     }
 
     @Override
@@ -66,7 +65,6 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
                 cacheParam = (byte) (cacheParam | CacheBehavior.FORCE_REFRESH);
                 refresh = false;
             }
-            DocRef wsRef = service.getUserHome();
             // TODO Change this when garden UUID manage uuid and not path
             Document gardenFolder = service.getDocument(new IdRef(
                     GardenManager.getInstance().initIfNew(mContext).getCurrentGarden().getUUID()));

@@ -12,7 +12,8 @@ public interface GotsActionProvider {
 
     public abstract ArrayList<BaseActionInterface> getActions();
 
-    public abstract long insertAction(BaseActionInterface action);
+    public abstract BaseActionInterface createAction(BaseActionInterface action);
 
+    public abstract BaseActionInterface updateAction(BaseActionInterface action);
 
 }

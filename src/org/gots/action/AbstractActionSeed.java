@@ -20,6 +20,7 @@ import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.provider.GotsSeedProvider;
 
 import android.content.Context;
 
@@ -37,13 +38,13 @@ public abstract class AbstractActionSeed implements SeedActionInterface, Compara
 
     private int id;
 
+    private int actionSeedId;
+
     private String UUID;
 
     private int state;
 
     private Date dateActionTodo;
-
-    private int logid;
 
     // private GrowingSeedInterface growingSeed;
     private int growingSeedId;
@@ -56,7 +57,7 @@ public abstract class AbstractActionSeed implements SeedActionInterface, Compara
 
     private Context mContext;
 
-    protected GotsSeedManager seedManager;
+    protected GotsSeedProvider seedManager;
 
     protected GardenManager gardenManager;
 
@@ -180,16 +181,6 @@ public abstract class AbstractActionSeed implements SeedActionInterface, Compara
     }
 
     @Override
-    public void setLogId(int id) {
-        this.logid = id;
-    }
-
-    @Override
-    public int getLogId() {
-        return this.logid;
-    }
-
-    @Override
     public Object getData() {
         return data;
     }
@@ -211,5 +202,27 @@ public abstract class AbstractActionSeed implements SeedActionInterface, Compara
     @Override
     public void setUUID(String uuid) {
         this.UUID = uuid;
+    }
+
+    @Override
+    public String toString() {
+        String txt = new String();
+        txt = txt.concat("[" + getId() + "]" + getName());
+        txt = txt.concat(getUUID());
+        txt = txt.concat("\n");
+        txt = txt.concat("Duration=" + getDuration());
+        if (getDateActionDone() != null)
+            txt = txt.concat("\nDone on " + getDateActionDone());
+        return super.toString();
+    }
+
+    @Override
+    public int getActionSeedId() {
+        return actionSeedId;
+    }
+
+    @Override
+    public void setActionSeedId(int id) {
+        actionSeedId = id;
     }
 }

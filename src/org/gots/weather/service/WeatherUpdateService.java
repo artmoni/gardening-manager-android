@@ -4,7 +4,6 @@ import java.util.Calendar;
 
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.weather.WeatherConditionInterface;
-import org.gots.weather.provider.local.WeatherDBHelper;
 import org.gots.weather.provider.previmeteo.PrevimeteoWeatherProvider;
 import org.gots.weather.provider.previmeteo.WeatherProvider;
 
@@ -34,7 +33,6 @@ public class WeatherUpdateService extends Service {
     public void onCreate() {
         super.onCreate();
         intent = new Intent(BroadCastMessages.WEATHER_DISPLAY_EVENT);
-
     }
 
     @Override
@@ -96,8 +94,8 @@ public class WeatherUpdateService extends Service {
 
                     @Override
                     protected void onPostExecute(WeatherConditionInterface weatherCondition) {
-                        if (weatherCondition == null)
-                            isWeatherError = true;
+//                        if (weatherCondition == null)
+//                            isWeatherError = true;
                         handler.removeCallbacks(sendUpdatesToUI);
                         handler.postDelayed(sendUpdatesToUI, 0); // 1 second=1000
                         super.onPostExecute(weatherCondition);
@@ -129,22 +127,22 @@ public class WeatherUpdateService extends Service {
 
     }
 
-    private void updateCondition(WeatherConditionInterface condition, int day) {
-        WeatherDBHelper helper = new WeatherDBHelper(this);
-
-        Calendar conditionDate = Calendar.getInstance();
-        conditionDate.add(Calendar.DAY_OF_YEAR, day);
-
-        condition.setDate(conditionDate.getTime());
-        condition.setDayofYear(conditionDate.get(Calendar.DAY_OF_YEAR));
-
-        WeatherConditionInterface wc = helper.getWeatherByDayofyear(conditionDate.get(Calendar.DAY_OF_YEAR));
-
-        if (wc == null)
-            helper.insertWeather(condition);
-        else
-            helper.updateWeather(condition);
-        return;
-
-    }
+//    private void updateCondition(WeatherConditionInterface condition, int day) {
+//        LocalWeatherProvider helper = new LocalWeatherProvider(this);
+//
+//        Calendar conditionDate = Calendar.getInstance();
+//        conditionDate.add(Calendar.DAY_OF_YEAR, day);
+//
+//        condition.setDate(conditionDate.getTime());
+//        condition.setDayofYear(conditionDate.get(Calendar.DAY_OF_YEAR));
+//
+//        WeatherConditionInterface wc = helper.getWeatherByDayofyear(conditionDate.get(Calendar.DAY_OF_YEAR));
+//
+//        if (wc == null)
+//            helper.insertWeather(condition);
+//        else
+//            helper.updateWeather(condition);
+//        return;
+//
+//    }
 }

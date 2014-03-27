@@ -10,29 +10,55 @@
  ******************************************************************************/
 package org.gots.ui;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import org.gots.R;
-import org.gots.help.HelpUriBuilder;
+import org.gots.action.GotsActionSeedManager;
+import org.gots.action.SeedActionInterface;
+import org.gots.action.bean.DeleteAction;
+import org.gots.action.bean.PhotoAction;
+import org.gots.action.provider.nuxeo.NuxeoActionSeedProvider;
+import org.gots.ads.GotsAdvertisement;
+import org.gots.analytics.GotsAnalytics;
+import org.gots.broadcast.BroadCastMessages;
+import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
+import org.gots.utils.FileUtilities;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Gallery;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
@@ -40,16 +66,40 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class TabSeedActivity extends SherlockFragmentActivity {
+    private static final int PICK_IMAGE = 0;
+
+    protected static final String TAG = "TabSeedActivity";
+
     ViewPager mViewPager;
 
     GrowingSeedInterface mSeed = null;
 
     private String urlDescription;
 
+    private File cameraPicture;
+
+    private PhotoAction photoAction;
+
+    private Gallery pictureGallery;
+
+    GotsPreferences gotsPreferences;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+
+            String cameraFilename = savedInstanceState.getString("CAMERA_FILENAME");
+            if (cameraFilename != null)
+                cameraPicture = new File(cameraFilename);
+        }
+
+        gotsPreferences = GotsPreferences.getInstance().initIfNew(getApplicationContext());
+        GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
+        GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
+
         setContentView(R.layout.seed_tab);
 
         ActionBar bar = getSupportActionBar();
@@ -65,17 +115,53 @@ public class TabSeedActivity extends SherlockFragmentActivity {
             return;
         }
         if (getIntent().getExtras().getInt("org.gots.seed.id") != 0) {
-            TabHost mTabHost = (TabHost) findViewById(android.R.id.tabhost);
-
             int seedId = getIntent().getExtras().getInt("org.gots.seed.id");
-            mSeed =  GotsGrowingSeedManager.getInstance().initIfNew(this).getGrowingSeedById(seedId);
+            mSeed = GotsGrowingSeedManager.getInstance().initIfNew(this).getGrowingSeedById(seedId);
         } else if (getIntent().getExtras().getInt("org.gots.seed.vendorid") != 0) {
             int seedId = getIntent().getExtras().getInt("org.gots.seed.vendorid");
-            LocalSeedProvider helper = new LocalSeedProvider(getApplicationContext());
+            GotsSeedProvider helper = new LocalSeedProvider(getApplicationContext());
 
             mSeed = (GrowingSeedInterface) helper.getSeedById(seedId);
         } else
             mSeed = new GrowingSeed(); // DEFAULT SEED
+
+        pictureGallery = (Gallery) findViewById(R.id.idPictureGallery);
+
+        new AsyncTask<Void, Void, List<File>>() {
+            @Override
+            protected List<File> doInBackground(Void... params) {
+                NuxeoActionSeedProvider provider = new NuxeoActionSeedProvider(getApplicationContext());
+                List<File> imageFile = provider.getPicture(mSeed);
+
+                return imageFile;
+            }
+
+            protected void onPostExecute(List<File> result) {
+                if (result.size() > 0) {
+                    pictureGallery.setSpacing(10);
+                    pictureGallery.setAdapter(new GalleryImageAdapter(getApplicationContext(), result));
+                } else
+                    pictureGallery.setVisibility(View.GONE);
+            };
+        }.execute();
+
+        pictureGallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                File f = (File) arg0.getItemAtPosition(position);
+                File dest = new File(gotsPreferences.getGARDENING_MANAGER_DIRECTORY(), f.getName());
+                try {
+                    FileUtilities.copy(f, dest);
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.setDataAndType(Uri.fromFile(dest), "image/*");
+                    startActivity(intent);
+                } catch (IOException e) {
+                    Log.w(TAG, e.getMessage());
+                }
+
+            }
+        });
 
         bar.setTitle(mSeed.getSpecie());
 
@@ -108,12 +194,38 @@ public class TabSeedActivity extends SherlockFragmentActivity {
 
         }
 
+        if (!GotsPreferences.getInstance().initIfNew(getApplicationContext()).isPremium()) {
+            GotsAdvertisement ads = new GotsAdvertisement(this);
+
+            LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
+            layout.addView(ads.getAdsLayout());
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
+        if (resultCode != Activity.RESULT_CANCELED)
+            if (requestCode == PICK_IMAGE) {
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        GotsActionSeedManager.getInstance().initIfNew(getApplicationContext()).uploadPicture(mSeed,
+                                cameraPicture);
+                        // photoAction.execute(mSeed);
+                        return null;
+                    }
+                }.execute();
+
+            }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        // first saving my state, so the bundle wont be empty.
-        // http://code.google.com/p/android/issues/detail?id=19917
+        super.onSaveInstanceState(outState);
+        if (cameraPicture != null)
+            outState.putString("CAMERA_FILENAME", cameraPicture.getAbsolutePath());
     }
 
     @Override
@@ -125,6 +237,12 @@ public class TabSeedActivity extends SherlockFragmentActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.menu_seeddescription, menu);
+        if (mSeed.getGrowingSeedId() == 0) {
+            menu.findItem(R.id.planning).setVisible(false);
+            menu.findItem(R.id.photo).setVisible(false);
+            menu.findItem(R.id.delete).setVisible(false);
+        }
+
         return true;
     }
 
@@ -137,11 +255,63 @@ public class TabSeedActivity extends SherlockFragmentActivity {
             finish();
             return true;
         case R.id.help:
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                    Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
+            Intent browserIntent = new Intent(this, WebHelpActivity.class);
+            browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
             startActivity(browserIntent);
+            return true;
+
+        case R.id.planning:
+            FragmentManager fm = getSupportFragmentManager();
+            DialogFragment editNameDialog = new NewActionActivity();
+            Bundle data = new Bundle();
+            data.putInt("org.gots.seed.id", mSeed.getGrowingSeedId());
+            editNameDialog.setArguments(data);
+            editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+            editNameDialog.show(fm, "fragment_edit_name");
+            return true;
+        case R.id.photo:
+            photoAction = new PhotoAction(getApplicationContext());
+            Date now = new Date();
+            cameraPicture = new File(photoAction.getImageFile(now).getAbsolutePath());
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(cameraPicture));
+            // takePictureIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivityForResult(takePictureIntent, PICK_IMAGE);
 
             return true;
+        case R.id.delete:
+            final DeleteAction deleteAction = new DeleteAction(this);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(this.getResources().getString(R.string.action_delete_seed)).setCancelable(false).setPositiveButton(
+                    "OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            new AsyncTask<SeedActionInterface, Integer, Void>() {
+                                @Override
+                                protected Void doInBackground(SeedActionInterface... params) {
+                                    SeedActionInterface actionItem = params[0];
+                                    actionItem.execute(mSeed);
+                                    return null;
+                                }
+
+                                @Override
+                                protected void onPostExecute(Void result) {
+                                    Toast.makeText(getApplicationContext(), "action done", Toast.LENGTH_SHORT).show();
+                                    TabSeedActivity.this.finish();
+                                    super.onPostExecute(result);
+                                }
+                            }.execute(deleteAction);
+                            sendBroadcast(new Intent(BroadCastMessages.GROWINGSEED_DISPLAYLIST));
+                            dialog.dismiss();
+                        }
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.cancel();
+                }
+            });
+            builder.show();
+            return true;
+
         default:
             return super.onOptionsItemSelected(item);
         }

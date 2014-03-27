@@ -48,6 +48,8 @@ public class SeedUpdateService extends GotsService {
 
             @Override
             protected List<BaseSeedInterface> doInBackground(Void... params) {
+                seedManager.force_refresh(true);
+                seedManager.getMyStock(gardenManager.getCurrentGarden());
                 return seedManager.getVendorSeeds(true);
 
             }

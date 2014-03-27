@@ -17,8 +17,10 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.gots.exception.GotsException;
 import org.gots.garden.GardenInterface;
 import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.LikeStatus;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
@@ -157,7 +159,9 @@ public class SimpleSeedProvider implements GotsSeedProvider {
     public void removeToStock(BaseSeedInterface vendorSeed, GardenInterface garden) {
         // TODO Auto-generated method stub
 
-    }@Override
+    }
+
+    @Override
     public List<BaseSeedInterface> getMyStock(GardenInterface garden) {
         // TODO Auto-generated method stub
         return null;
@@ -166,10 +170,23 @@ public class SimpleSeedProvider implements GotsSeedProvider {
     @Override
     public void deleteSeed(BaseSeedInterface vendorSeed) {
         // TODO Auto-generated method stub
-        
+
     }
 
     public List<BaseSeedInterface> getNewSeeds() {
+        return null;
+    }
+
+    public void force_refresh(boolean refresh) {
+    }
+
+    public synchronized BaseSeedInterface getSeedByBarCode(String barecode) {
+        return null;
+    }
+
+    @Override
+    public LikeStatus like(BaseSeedInterface mSeed, boolean b) throws GotsException {
+        // TODO Auto-generated method stub
         return null;
     }
 }

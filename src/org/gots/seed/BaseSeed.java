@@ -14,7 +14,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.gots.action.BaseActionInterface;
-import org.gots.bean.SeedCategory;
 
 public abstract class BaseSeed implements Serializable, BaseSeedInterface {
 
@@ -56,16 +55,28 @@ public abstract class BaseSeed implements Serializable, BaseSeedInterface {
 
     private int durationMax;
 
-    private SeedCategory category;
-
     private String urlDescription;
 
     private String bare_code;
 
     private int nb_sachet;
 
+    private String language;
+
+    private LikeStatus likeStatus;
+
     public BaseSeed() {
         super();
+    }
+
+    @Override
+    public void setLanguage(String string) {
+        language = string;
+    }
+
+    @Override
+    public String getLanguage() {
+        return language;
     }
 
     @Override
@@ -119,16 +130,6 @@ public abstract class BaseSeed implements Serializable, BaseSeedInterface {
     }
 
     @Override
-    public void setCategory(SeedCategory category) {
-        this.category = category;
-    }
-
-    @Override
-    public SeedCategory getCategory() {
-        return category;
-    }
-
-    @Override
     public void setDateSowingMax(int dateSowingMax) {
         this.dateSowingMax = dateSowingMax;
     }
@@ -141,14 +142,15 @@ public abstract class BaseSeed implements Serializable, BaseSeedInterface {
     @Override
     public String toString() {
         String seed = new String();
-        seed = "#" + getSeedId() + "--------- " + getFamily() + " " + getSpecie() + " " + getVariety()
-                + " ------------";
-        seed += "\n-- UUID:\t" + getUUID();
-
-        seed += "\n-- Date Arrosage:\t" + getDateLastWatering();
-        seed += "\n-- Délais récolte:\t" + getDurationMin() + "/" + getDurationMax();
-        seed += "\n-- Nb Sachets:\t" + getNbSachet();
-        seed += "\n";
+        seed = seed.concat("[" + getSeedId() + "] " + getFamily() + " " + getSpecie() + " " + getVariety());
+        seed = seed.concat("-- UUID:\t" + getUUID());
+        seed = seed.concat("\n");
+        seed = seed.concat("-- Date Arrosage:\t" + getDateLastWatering());
+        seed = seed.concat("\n");
+        seed = seed.concat("-- Délais récolte:\t" + getDurationMin() + "/" + getDurationMax());
+        seed = seed.concat("\n");
+        seed = seed.concat("-- Nb Sachets:\t" + getNbSachet());
+        seed = seed.concat("\n");
         return seed;
     }
 
@@ -159,7 +161,6 @@ public abstract class BaseSeed implements Serializable, BaseSeedInterface {
         newSeed.getActionDone().addAll(getActionDone());
         newSeed.setActionToDo(new ArrayList<BaseActionInterface>());
         newSeed.getActionToDo().addAll(getActionToDo());
-        newSeed.setCategory(category);
         newSeed.setDateSowingMax(dateSowingMax);
         newSeed.setDateSowingMin(dateSowingMin);
         newSeed.setDescriptionGrowth(description_growth);
@@ -327,6 +328,16 @@ public abstract class BaseSeed implements Serializable, BaseSeedInterface {
     public void setDescriptionDiseases(String description_diseases) {
         this.description_diseases = description_diseases;
 
+    }
+
+    @Override
+    public LikeStatus getLikeStatus() {
+        return likeStatus;
+    }
+
+    @Override
+    public void setLikeStatus(LikeStatus likeStatus) {
+        this.likeStatus = likeStatus;
     }
 
 }

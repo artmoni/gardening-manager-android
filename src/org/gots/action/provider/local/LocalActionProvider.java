@@ -22,21 +22,52 @@ import org.gots.utils.GotsDBHelper;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
-public class LocalActionProvider extends GotsDBHelper implements GotsActionProvider{
+public class LocalActionProvider extends GotsDBHelper implements GotsActionProvider {
+
+    private String TAG = "LocalActionProvider";
 
     public LocalActionProvider(Context mContext) {
         super(mContext, GotsDBHelper.DATABASE_GARDEN_TYPE);
     }
 
     @Override
-    public long insertAction(BaseActionInterface action) {
+    public BaseActionInterface createAction(BaseActionInterface action) {
         long rowid;
         ContentValues values = getActionContentValues(action);
 
         rowid = bdd.insert(GardenSQLite.ACTION_TABLE_NAME, null, values);
+        action.setId((int) rowid);
+        return action;
+    }
 
-        return rowid;
+    @Override
+    public BaseActionInterface updateAction(BaseActionInterface action) {
+        ContentValues values = getActionContentValues(action);
+        int nbRows;
+        Cursor cursor;
+        if (action.getId() > 0) {
+            nbRows = bdd.update(GardenSQLite.ACTION_TABLE_NAME, values, GardenSQLite.ACTION_ID + "='" + action.getId()
+                    + "'", null);
+            cursor = bdd.query(GardenSQLite.ACTION_TABLE_NAME, null, GardenSQLite.ACTION_ID + "='" + action.getId()
+                    + "'", null, null, null, null);
+        } else {
+
+            nbRows = bdd.update(GardenSQLite.ACTION_TABLE_NAME, values,
+                    GardenSQLite.ACTION_UUID + "='" + action.getUUID() + "'", null);
+
+            cursor = bdd.query(GardenSQLite.ACTION_TABLE_NAME, null, GardenSQLite.ACTION_UUID + "='" + action.getUUID()
+                    + "'", null, null, null, null);
+
+            if (cursor.moveToFirst()) {
+                int rowid = cursor.getInt(cursor.getColumnIndex(GardenSQLite.ACTION_ID));
+                action.setId(rowid);
+            }
+            cursor.close();
+        }
+        Log.d(TAG, "Updating " + nbRows + " rows > " + action);
+        return action;
     }
 
     @Override
@@ -120,8 +151,7 @@ public class LocalActionProvider extends GotsDBHelper implements GotsActionProvi
 
     protected BaseActionInterface cursorToAction(Cursor cursor) {
         BaseActionInterface bsi;
-        ActionFactory factory = new ActionFactory();
-        bsi = factory.buildAction(mContext, cursor.getString(cursor.getColumnIndex(GardenSQLite.ACTION_NAME)));
+        bsi = ActionFactory.buildAction(mContext, cursor.getString(cursor.getColumnIndex(GardenSQLite.ACTION_NAME)));
         bsi.setDescription(cursor.getString(cursor.getColumnIndex(GardenSQLite.ACTION_DESCRIPTION)));
         bsi.setDuration(cursor.getInt(cursor.getColumnIndex(GardenSQLite.ACTION_DURATION)));
         bsi.setId(cursor.getInt(cursor.getColumnIndex(GardenSQLite.ACTION_ID)));

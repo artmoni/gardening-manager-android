@@ -6,9 +6,12 @@ import java.util.List;
 import org.gots.DatabaseHelper;
 import org.gots.action.ActionFactory;
 import org.gots.action.BaseActionInterface;
+import org.gots.exception.GotsException;
+import org.gots.exception.GotsUserNotConnectedException;
 import org.gots.garden.GardenInterface;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
+import org.gots.seed.LikeStatus;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.utils.GotsDBHelper;
 
@@ -127,7 +130,8 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
         return searchedSeed;
     }
 
-    public synchronized BaseSeedInterface getSeedByBarCode(String barecode) {
+    @Override
+    public BaseSeedInterface getSeedByBarCode(String barecode) {
         BaseSeedInterface searchedSeed = new GrowingSeed();
         if (bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_BARECODE + "=\"" + barecode + "\"",
                 null, null, null, null).moveToFirst()) {
@@ -176,18 +180,17 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
 
         // Création d'un ContentValues (fonctionne comme une HashMap)
         ContentValues values = getContentValuesFromSeed(seed);
-//        Cursor cursor;
-
-        int rowid = bdd.update(DatabaseHelper.SEEDS_TABLE_NAME, values,
-                DatabaseHelper.SEED_ID + "='" + seed.getSeedId() + "'", null);
-//        cursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_ID + "='" + seed.getSeedId()
-//                + "'", null, null, null, null);
-//
-//        if (cursor.moveToFirst()) {
-//            int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.SEED_ID));
-//            seed.setId(id);
-//        }
-//        cursor.close();
+        // Cursor cursor;
+        bdd.update(DatabaseHelper.SEEDS_TABLE_NAME, values, DatabaseHelper.SEED_ID + "='" + seed.getSeedId() + "'",
+                null);
+        // cursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_ID + "='" + seed.getSeedId()
+        // + "'", null, null, null, null);
+        //
+        // if (cursor.moveToFirst()) {
+        // int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.SEED_ID));
+        // seed.setId(id);
+        // }
+        // cursor.close();
 
         return seed;
     }
@@ -224,9 +227,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
 
     @Override
     public void deleteSeed(BaseSeedInterface vendorSeed) {
-        long rowid;
-        rowid = bdd.delete(DatabaseHelper.SEEDS_TABLE_NAME, DatabaseHelper.SEED_ID + "='" + vendorSeed.getSeedId()
-                + "'", null);
+        bdd.delete(DatabaseHelper.SEEDS_TABLE_NAME, DatabaseHelper.SEED_ID + "='" + vendorSeed.getSeedId() + "'", null);
 
     }
 
@@ -257,7 +258,12 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
         values.put(DatabaseHelper.SEED_VARIETY, seed.getVariety());
         values.put(DatabaseHelper.SEED_URLDESCRIPTION, seed.getUrlDescription());
         values.put(DatabaseHelper.SEED_NBSACHET, seed.getNbSachet());
+        values.put(DatabaseHelper.SEED_LANGUAGE, seed.getLanguage());
 
+        if (seed.getLikeStatus() != null) {
+            values.put(DatabaseHelper.SEED_LIKE_COUNT, seed.getLikeStatus().getLikesCount());
+            values.put(DatabaseHelper.SEED_LIKE_STATUS, seed.getLikeStatus().getUserLikeStatus());
+        }
         if (seed.getActionToDo() != null && seed.getActionToDo().size() > 0 && seed.getActionToDo().get(0) != null)
             values.put(DatabaseHelper.SEED_ACTION1, seed.getActionToDo().get(0).getName());
 
@@ -285,9 +291,14 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
         bsi.setDateSowingMax(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.SEED_DATESOWINGMAX)));
         bsi.setUrlDescription(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_URLDESCRIPTION)));
         bsi.setNbSachet(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.SEED_NBSACHET)));
+        bsi.setLanguage(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_LANGUAGE)));
 
-        ActionFactory factory = new ActionFactory();
-        BaseActionInterface baseAction = factory.buildAction(mContext,
+        LikeStatus like = new LikeStatus();
+        like.setLikesCount(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.SEED_LIKE_COUNT)));
+        like.setUserLikeStatus(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.SEED_LIKE_STATUS)));
+        bsi.setLikeStatus(like);
+
+        BaseActionInterface baseAction = ActionFactory.buildAction(mContext,
                 cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_ACTION1)));
         if (baseAction != null)
             bsi.getActionToDo().add(baseAction);
@@ -309,5 +320,14 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
             cursor.close();
         }
         return searchedSeed;
+    }
+
+    @Override
+    public void force_refresh(boolean refresh) {
+    }
+
+    @Override
+    public LikeStatus like(BaseSeedInterface mSeed, boolean b) throws GotsException {
+        throw new GotsUserNotConnectedException(mContext);
     }
 }

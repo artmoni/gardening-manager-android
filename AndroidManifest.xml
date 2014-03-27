@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.gots"
-    android:versionCode="20"
-    android:versionName="0.23-SNAPSHOT" >
+    android:versionCode="28"
+    android:versionName="0.27" >
 
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="17" />
-   
+
     <uses-permission
         android:name="android.permission.ACCESS_FINE_LOCATION"
         android:required="false" />
@@ -29,15 +29,19 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
+
+    <uses-permission android:name="com.android.vending.BILLING" />
     <!--
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
+           android:debuggable="false"
     -->
 
     <application
         android:icon="@drawable/launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.Sherlock" >
+           android:debuggable="false"
+        android:theme="@style/Theme.Styled" >
         <activity
             android:name=".ui.SplashScreenActivity"
             android:label="@string/app_name"
@@ -50,7 +54,8 @@
         </activity>
         <activity
             android:name=".ui.MyMainGarden"
-            android:theme="@style/Theme.Styled" />
+            android:theme="@style/Theme.Styled"
+            android:uiOptions="splitActionBarWhenNarrow" />
         <activity
             android:name=".ui.DashboardActivity"
             android:theme="@style/Theme.Styled" >
@@ -59,11 +64,11 @@
         <activity
             android:name=".ui.SeedActivity"
             android:theme="@style/Theme.Styled" />
-        <activity android:name=".ui.CameraView" />
         <activity android:name=".ui.VendorListActivity" />
         <activity
             android:name=".ui.ProfileActivity"
-            android:theme="@style/Theme.Styled" >
+            android:theme="@style/Theme.Styled"
+            android:uiOptions="splitActionBarWhenNarrow" >
         </activity>
         <activity
             android:name=".ui.ProfileCreationActivity"
@@ -74,7 +79,6 @@
         <activity
             android:name=".ui.ActionActivity"
             android:theme="@style/Theme.Styled" />
-        <activity android:name=".ui.NewActionActivity" />
         <activity
             android:name=".ui.AboutActivity"
             android:theme="@style/Theme.Styled" />
@@ -83,11 +87,17 @@
             android:theme="@style/Theme.Styled" />
         <activity
             android:name=".ui.TabSeedActivity"
-            android:theme="@style/Theme.Styled" />
+            android:theme="@style/Theme.Styled"
+            android:uiOptions="splitActionBarWhenNarrow" />
         <activity android:name=".ui.WebViewActivity" />
         <activity
             android:name=".ui.HutActivity"
-            android:theme="@style/Theme.Styled" />
+            android:theme="@style/Theme.Styled"
+            android:uiOptions="splitActionBarWhenNarrow" />
+        <activity
+            android:name=".inapp.BuyPremiumActivity"
+            android:theme="@style/Theme.Styled"
+            android:uiOptions="splitActionBarWhenNarrow" />
         <activity android:name=".ui.MySeedsListActivity" />
         <activity android:name=".ui.MySeedsListFirstTimeActivity" />
         <activity

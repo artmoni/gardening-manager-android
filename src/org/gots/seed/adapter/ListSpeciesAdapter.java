@@ -18,8 +18,7 @@ public class ListSpeciesAdapter extends BaseAdapter {
 
     private BaseSeedInterface mSelectedSeed;
 
-    public ListSpeciesAdapter(Context context, String[] species,
-            BaseSeedInterface newSeed) {
+    public ListSpeciesAdapter(Context context, String[] species, BaseSeedInterface newSeed) {
         mContext = context;
         mSpecies = species;
         mSelectedSeed = newSeed;
@@ -40,6 +39,7 @@ public class ListSpeciesAdapter extends BaseAdapter {
         return 0;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // SeedWidget seedWidget = new SeedWidget(mContext);
@@ -49,16 +49,26 @@ public class ListSpeciesAdapter extends BaseAdapter {
         //
         String specie = getItem(position);
         int vegetableImageRessource = mContext.getResources().getIdentifier(
-                "org.gots:drawable/specie_"
-                        + specie.trim().toLowerCase(Locale.US).replaceAll(
-                                "\\s", ""), null, null);
+                "org.gots:drawable/specie_" + specie.trim().toLowerCase(Locale.US).replaceAll("\\s", ""), null, null);
         ImageView v = new ImageView(mContext);
         v.setImageResource(vegetableImageRessource);
-        v.setBackgroundDrawable(mContext.getResources().getDrawable(
-                R.drawable.seed_selector));
+
+        int sdk = android.os.Build.VERSION.SDK_INT;
+        if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            v.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.seed_selector));
+            if (specie.equals(mSelectedSeed.getSpecie())) {
+                v.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_state_warning));
+            }
+        } else {
+            v.setBackground(mContext.getResources().getDrawable(
+                    R.drawable.seed_selector));
+            if (specie.equals(mSelectedSeed.getSpecie())) {
+                v.setBackground(mContext.getResources().getDrawable(
+                        R.drawable.bg_state_warning));
+            }        }
+        v.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.seed_selector));
         if (specie.equals(mSelectedSeed.getSpecie())) {
-            v.setBackgroundDrawable(mContext.getResources().getDrawable(
-                    R.drawable.bg_state_warning));
+            v.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_state_warning));
         }
         v.setTag(specie);
         return v;

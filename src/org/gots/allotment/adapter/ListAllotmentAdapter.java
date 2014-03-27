@@ -19,20 +19,19 @@ import org.gots.allotment.AllotmentManager;
 import org.gots.allotment.view.QuickAllotmentActionBuilder;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.preferences.GotsPreferences;
-import org.gots.seed.GotsGrowingSeedManager;
-import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
-import org.gots.seed.provider.local.GotsGrowingSeedProvider;
 import org.gots.ui.HutActivity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.graphics.Point;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.LinearLayout;
@@ -47,7 +46,6 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
 
     private List<BaseAllotmentInterface> myAllotments;
 
-    private GotsGrowingSeedProvider growingSeedManager;
 
     @Override
     public void notifyDataSetChanged() {
@@ -58,7 +56,6 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
     public ListAllotmentAdapter(Context mContext, List<BaseAllotmentInterface> allotments) {
         this.mContext = mContext;
         myAllotments = allotments;
-        growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(mContext);
     }
 
     public void setAllotments(List<BaseAllotmentInterface> allotments) {
@@ -87,6 +84,7 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
         public LinearLayout menu;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         LinearLayout ll = (LinearLayout) convertView;
@@ -122,22 +120,34 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
         //
         // };
         // }.execute(ll);
-
-        int nbcolumn = 4;
-        int layoutsize = 100;
+        WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        int width;
+        int sdk = android.os.Build.VERSION.SDK_INT;
+        if (sdk < android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            width = display.getWidth();
+        } else {
+            Point size = new Point();
+            display.getSize(size);
+            width = size.x;
+        }
+        int layoutsize = 200;
+        int nbcolumn = (width - 200) / layoutsize;
+        if (nbcolumn < 1)
+            nbcolumn = 1;
+        holder.listSeeds.setNumColumns(nbcolumn);
 
         listGrowingSeedAdapter = new ListGrowingSeedAdapter(mContext, getItem(position).getSeeds());
         holder.listSeeds.setAdapter(listGrowingSeedAdapter);
 
-        // if (holder.listSeeds.getCount() == 0)
         // holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
         // layoutsize));
-        if (holder.listSeeds.getCount() % nbcolumn == 0)
-            holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                    (holder.listSeeds.getCount() / nbcolumn + 1) * layoutsize));
-        else
-            holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                    LayoutParams.WRAP_CONTENT));
+        // if (holder.listSeeds.getCount() % nbcolumn == 0)
+        holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+                (holder.listSeeds.getCount() / nbcolumn + 1) * layoutsize));
+        // else
+        // holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+        // ((holder.listSeeds.getCount() / nbcolumn) + 1) * layoutsize));
 
         holder.menu.removeAllViews();
 

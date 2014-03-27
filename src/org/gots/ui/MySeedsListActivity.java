@@ -104,37 +104,4 @@ public class MySeedsListActivity extends AbstractListFragment {
         getActivity().unregisterReceiver(seedBroadcastReceiver);
         super.onDestroy();
     }
-    // @Override
-    // protected void onResume() {
-    // super.onResume();
-    // listAdapter.notifyDataSetChanged();
-    //
-    // }
-    //
-    // @Override
-    // public boolean onCreateOptionsMenu(Menu menu) {
-    // // MenuInflater inflater = getMenuInflater();
-    // // inflater.inflate(R.menu.menu_stock, menu);
-    // return super.onCreateOptionsMenu(menu);
-    // }
-    //
-    // @Override
-    // public boolean onOptionsItemSelected(MenuItem item) {
-    // switch (item.getItemId()) {
-    //
-    // case R.id.new_seed_barcode:
-    // IntentIntegrator integrator = new IntentIntegrator(this);
-    // integrator.initiateScan();
-    // return true;
-    // case R.id.help:
-    // Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-    // Uri.parse(HelpUriBuilder.getUri(getClass().getSimpleName())));
-    // startActivity(browserIntent);
-    //
-    // return true;
-    // default:
-    // return super.onOptionsItemSelected(item);
-    // }
-    //
-    // }
 }

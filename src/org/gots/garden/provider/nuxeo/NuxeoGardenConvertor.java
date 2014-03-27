@@ -41,13 +41,16 @@ public class NuxeoGardenConvertor {
         garden.setCountryName(gardenWorkspace.getString("garden:country"));
         garden.setAdminArea(gardenWorkspace.getString("garden:region"));
         garden.setName(garden.getLocality());
+        
+        
+        
 //        garden.setName(garden.getLocality() + " (" + gardenWorkspace.getString("dc:creator") + ")");
         return garden;
     }
 
     public static Document convert(String parentPath, GardenInterface garden) {
         Document doc = new Document(parentPath, garden.getLocality(), "Garden");
-        doc.set("dc:title", garden.getLocality() + "(" + garden.getAdminArea() + ")");
+        doc.set("dc:title", garden.getLocality() + " (" + garden.getAdminArea() + ")");
         doc.set("garden:altitude", garden.getGpsAltitude());
         doc.set("garden:latitude", garden.getGpsLatitude());
         doc.set("garden:longitude", garden.getGpsLongitude());

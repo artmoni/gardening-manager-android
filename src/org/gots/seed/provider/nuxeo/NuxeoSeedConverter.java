@@ -1,7 +1,13 @@
 package org.gots.seed.provider.nuxeo;
 
+import java.util.Locale;
+
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
+import org.gots.seed.LikeStatus;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.nuxeo.ecm.automation.client.jaxrs.model.Blob;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 
 import android.util.Log;
@@ -24,7 +30,8 @@ public class NuxeoSeedConverter {
             seed.setDescriptionDiseases(document.getString("vendorseed:description_diseases"));
             seed.setDescriptionGrowth(document.getString("vendorseed:description_growth"));
             seed.setDescriptionHarvest(document.getString("vendorseed:description_harvest"));
-            
+            seed.setLanguage(document.getString("vendorseed:language"));
+            seed.setBareCode(document.getString("vendorseed:barcode"));
             seed.setUUID(document.getId());
             return seed;
         } catch (Exception e) {
@@ -36,7 +43,6 @@ public class NuxeoSeedConverter {
     public static Document convert(String parentPath, BaseSeedInterface seed) {
         Document doc = new Document(parentPath, seed.getName(), "VendorSeed");
         doc.set("dc:title", seed.getVariety());
-//        doc.set("dc:description", seed.getdes);
         doc.set("vendorseed:datesowingmin", String.valueOf(seed.getDateSowingMin()));
         doc.set("vendorseed:datesowingmax", String.valueOf(seed.getDateSowingMax()));
         doc.set("vendorseed:durationmin", String.valueOf(seed.getDurationMin()));
@@ -45,6 +51,23 @@ public class NuxeoSeedConverter {
         doc.set("vendorseed:specie", seed.getSpecie());
         doc.set("vendorseed:variety", seed.getVariety());
         doc.set("vendorseed:barcode", seed.getBareCode());
+        doc.set("vendorseed:language", Locale.getDefault().getCountry().toLowerCase());
+
         return doc;
+    }
+
+    public static LikeStatus getLikeStatus(Blob likeStatus) {
+        LikeStatus likes = new LikeStatus();
+        try {
+            // {"userLikeStatus":0,"username":"Guest","dislikesCount":0,"likesCount":0,"activityObject":"doc:default:625e24be-cead-496d-a017-3526273b4de8"}
+            JSONObject json = new JSONObject(likeStatus.toString());
+            likes.setUserLikeStatus(json.getInt("userLikeStatus"));
+            likes.setLikesCount(json.getInt("likesCount"));
+
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return likes;
+
     }
 }

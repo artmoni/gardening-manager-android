@@ -1,56 +1,36 @@
 package org.gots.action.service;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
 import org.gots.R;
 import org.gots.action.BaseActionInterface;
-import org.gots.action.GotsActionSeedManager;
-import org.gots.action.bean.SowingAction;
-import org.gots.action.provider.GotsActionSeedProvider;
-import org.gots.garden.GardenManager;
+import org.gots.action.SeedActionInterface;
 import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.GotsGrowingSeedManager;
-import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.SeedUtil;
-import org.gots.seed.provider.local.LocalSeedProvider;
+import org.gots.seed.service.GotsService;
 import org.gots.seed.view.SeedWidget;
 import org.gots.ui.ActionActivity;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
-import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
-import android.os.IBinder;
+import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
-public class ActionNotificationService extends Service {
+public class ActionNotificationService extends GotsService {
     private static final int NOTIFICATION = 100;
 
-//    NotificationManager mNM;
+    // NotificationManager mNM;
 
-    private ArrayList<BaseActionInterface> actions = new ArrayList<BaseActionInterface>();
+    private ArrayList<SeedActionInterface> actions = new ArrayList<SeedActionInterface>();
 
     private static final String TAG = "ActionNotificationService";
-
-    @Override
-    public IBinder onBind(Intent arg0) {
-
-        return null;
-    }
-
-    @Override
-    public void onCreate() {
-//        mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-        super.onCreate();
-    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -59,59 +39,40 @@ public class ActionNotificationService extends Service {
         // Display a notification about us starting. We put an icon in the
         // status bar.
         actions.clear();
-        GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(this);
-        ArrayList<GrowingSeedInterface> allSeeds =  growingSeedManager.getGrowingSeeds();
-        // if (allSeeds.size() > 0)
 
-        for (Iterator<GrowingSeedInterface> iterator = allSeeds.iterator(); iterator.hasNext();) {
-            GrowingSeedInterface seed = iterator.next();
-            GotsActionSeedProvider actionseedManager = GotsActionSeedManager.getInstance().initIfNew(this);
-            ArrayList<BaseActionInterface> seedActions;
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                ArrayList<GrowingSeedInterface> allSeeds = growingSeedManager.getGrowingSeeds();
+                // if (allSeeds.size() > 0)
 
-            seedActions = actionseedManager.getActionsToDoBySeed(seed);
+                for (Iterator<GrowingSeedInterface> iterator = allSeeds.iterator(); iterator.hasNext();) {
+                    GrowingSeedInterface seed = iterator.next();
+                    List<SeedActionInterface> seedActions;
 
-            actions.addAll(seedActions);
-        }
-        // GrowingSeedDBHelper helper = new GrowingSeedDBHelper(this);
+                    seedActions = actionseedManager.getActionsToDoBySeed(seed);
 
-        if (!actions.isEmpty()) {
-            BaseActionInterface action = actions.iterator().next();
+                    actions.addAll(seedActions);
+                }
+                if (!actions.isEmpty()) {
+                    SeedActionInterface action = actions.iterator().next();
 
-            GrowingSeedInterface seed = growingSeedManager.getGrowingSeedById(action.getGrowingSeedId());
-            createNotification(action, seed);
+                    GrowingSeedInterface seed = growingSeedManager.getGrowingSeedById(action.getGrowingSeedId());
+                    if (seed != null)
+                        createNotification(action, seed);
 
-        }
+                }
 
-        // ##########
-
-        LocalSeedProvider helperVendor = new LocalSeedProvider(getApplicationContext());
-        List<BaseSeedInterface> allMySeeds = helperVendor.getMyStock(GardenManager.getInstance().initIfNew(this).getCurrentGarden());
-        List<BaseActionInterface> sowingActions = new ArrayList<BaseActionInterface>();
-        BaseSeedInterface sowingseed = new GrowingSeed();
-        for (Iterator<BaseSeedInterface> iterator = allMySeeds.iterator(); iterator.hasNext();) {
-            BaseSeedInterface seed = iterator.next();
-
-            Calendar cal = Calendar.getInstance();
-            if (cal.get(Calendar.MONTH) >= seed.getDateSowingMin()
-                    && cal.get(Calendar.MONTH) <= seed.getDateSowingMax()) {
-                BaseActionInterface action = new SowingAction(this);
-                sowingActions.add(action);
-                sowingseed = seed;
+                return null;
             }
-
-        }
-
-        if (!sowingActions.isEmpty()) {
-            BaseActionInterface action = sowingActions.iterator().next();
-            createNotification(action, sowingseed);
-        }
+        }.execute();
 
         return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     public void onDestroy() {
-//        mNM.cancel(NOTIFICATION);
+        // mNM.cancel(NOTIFICATION);
         Log.d(TAG, "Stopping service : " + actions.size() + " actions found");
         super.onDestroy();
 
@@ -141,7 +102,7 @@ public class ActionNotificationService extends Service {
 
         // The PendingIntent to launch our activity if the user selects this
         // notification
-//        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, ActionActivity.class), 0);
+        // PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, ActionActivity.class), 0);
 
         Intent resultIntent = new Intent(this, ActionActivity.class);
 
@@ -157,13 +118,13 @@ public class ActionNotificationService extends Service {
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.setContentIntent(resultPendingIntent);
         mBuilder.setAutoCancel(true);
-        
+
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         // Set the info for the views that show in the notification panel.
         // notification.setLatestEventInfo(this, title, content, contentIntent);
         // notification.flags |= Notification.FLAG_AUTO_CANCEL;
         // Send the notification.
-        mNotificationManager.notify(NOTIFICATION, mBuilder.getNotification());
+        mNotificationManager.notify(NOTIFICATION, mBuilder.build());
 
     }
 }

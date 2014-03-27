@@ -1,7 +1,5 @@
 package org.gots.action.provider.simple;
 
-import java.util.Date;
-
 import org.gots.action.BaseActionInterface;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
@@ -17,30 +15,6 @@ public class SimpleAction implements BaseActionInterface {
 
     @Attribute(name = "uuid")
     String uuid;
-
-    @Override
-    public Date getDateActionTodo() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void setDateActionTodo(Date dateActionTodo) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void setDateActionDone(Date dateActionDone) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public Date getDateActionDone() {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
     @Override
     public void setDuration(int duration) {
@@ -86,54 +60,6 @@ public class SimpleAction implements BaseActionInterface {
     public int getId() {
         // TODO Auto-generated method stub
         return 0;
-    }
-
-    @Override
-    public int getState() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public void setState(int state) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public int getLogId() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public void setLogId(int id) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void setGrowingSeedId(int id) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public int getGrowingSeedId() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public Object getData() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void setData(Object data) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override

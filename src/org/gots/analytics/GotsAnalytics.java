@@ -18,6 +18,8 @@ public class GotsAnalytics {
     // protected static String apiKey = GotsPreferences.ANALYTICS_API_KEY;
     protected Context context;
 
+    private GotsPreferences gotsPreferences;
+
     /**
      * NOTE: you should use your Application context, not your Activity context,
      * in order to avoid memory leaks.
@@ -33,6 +35,7 @@ public class GotsAnalytics {
     protected GotsAnalytics(int dispatchIntervalSecs, Application context) {
         this.dispatchIntervalSecs = dispatchIntervalSecs;
         this.context = context;
+
     }
 
     /**
@@ -42,11 +45,13 @@ public class GotsAnalytics {
      * synchronize them yourself.
      */
     public void incrementActivityCount() {
+        gotsPreferences = GotsPreferences.getInstance().initIfNew(context);
+
         if (activityCount == 0) {
             if (dispatchIntervalSecs == null) {
-                GoogleAnalyticsTracker.getInstance().startNewSession(GotsPreferences.getAnalyticsApiKey(), context);
+                GoogleAnalyticsTracker.getInstance().startNewSession(gotsPreferences.getAnalyticsApiKey(), context);
             } else {
-                GoogleAnalyticsTracker.getInstance().startNewSession(GotsPreferences.getAnalyticsApiKey(),
+                GoogleAnalyticsTracker.getInstance().startNewSession(gotsPreferences.getAnalyticsApiKey(),
                         dispatchIntervalSecs, context);
             }
 
@@ -73,8 +78,10 @@ public class GotsAnalytics {
      * Get or create an instance of GoogleAnalyticsSessionManager
      */
     public static GotsAnalytics getInstance(Application application) {
-        if (INSTANCE == null)
+        if (INSTANCE == null) {
             INSTANCE = new GotsAnalytics(application);
+
+        }
         return INSTANCE;
     }
 

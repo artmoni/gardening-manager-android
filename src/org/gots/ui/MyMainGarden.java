@@ -256,26 +256,6 @@ public class MyMainGarden extends AbstractActivity {
                 } catch (Exception e) {
                     // nothing
                 }
-                // if (listAllotments.getCount() == 0) {
-                // final String classname = getClass().getSimpleName();
-                // new AlertDialog.Builder(getApplicationContext()).setIcon(R.drawable.help).setTitle(
-                // R.string.menu_help_firstlaunch).setPositiveButton(R.string.button_ok,
-                // new DialogInterface.OnClickListener() {
-                // public void onClick(DialogInterface dialog, int whichButton) {
-                //
-                // Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                // Uri.parse(HelpUriBuilder.getUri(classname)));
-                // startActivity(browserIntent);
-                // }
-                // }).setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
-                // public void onClick(DialogInterface dialog, int whichButton) {
-                //
-                // /* User clicked Cancel so do some stuff */
-                // }
-                // }).show();
-                // // Intent intent = new Intent(this, MyMainGardenFirstTime.class);
-                // // startActivity(intent);
-                // }
                 super.onPostExecute(result);
             }
         }.execute();

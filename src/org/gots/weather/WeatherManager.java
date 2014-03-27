@@ -22,10 +22,6 @@ import android.content.Context;
 
 public class WeatherManager {
 
-    private static WeatherManager instance;
-
-    private WeatherSet ws;
-
     private Integer temperatureLimitHot;
 
     private Integer temperatureLimitCold;
@@ -40,7 +36,6 @@ public class WeatherManager {
     public WeatherManager(Context context) {
         this.mContext = context;
         provider = new PrevimeteoWeatherProvider(mContext);
-
     }
 
     public Integer getTemperatureLimitHot() {
@@ -71,7 +66,6 @@ public class WeatherManager {
      * GetCondition from today until passed argument (-i or +i)
      */
     public WeatherConditionInterface getCondition(int i) {
-        WeatherConditionInterface conditionInterface;
 
         Calendar weatherCalendar = Calendar.getInstance();
         weatherCalendar.add(Calendar.DAY_OF_YEAR, i);
@@ -84,12 +78,9 @@ public class WeatherManager {
     public WeatherConditionInterface getCondition(Date weatherDate) {
         WeatherConditionInterface conditionInterface;
         try {
-            // WeatherTask wt = new DatabaseWeatherTask(mContext, weatherDate);
-            // conditionInterface = wt.execute().get();
             conditionInterface = provider.getCondition(weatherDate);
         } catch (Exception e) {
             conditionInterface = new WeatherCondition(weatherDate);
-
         }
 
         return conditionInterface;
@@ -100,11 +91,9 @@ public class WeatherManager {
         for (int i = -nbDays; i <= nbDays; i++) {
 
             try {
-
                 conditions.add(getCondition(i));
             } catch (Exception e) {
                 conditions.add(new WeatherCondition());
-
                 e.printStackTrace();
             }
         }

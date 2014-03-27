@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
 import java.util.Random;
 
 import org.gots.R;
@@ -30,6 +29,7 @@ import org.gots.bean.BaseAllotmentInterface;
 import org.gots.bean.Garden;
 import org.gots.garden.GardenInterface;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
 
 import android.app.ProgressDialog;
@@ -74,6 +74,8 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
 
     private int mode = 0;
 
+    private TextView editTextLocality;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +99,7 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
     }
 
     private void buildProfile() {
+        editTextLocality = (TextView) findViewById(R.id.editTextLocality);
 
         findViewById(R.id.buttonValidatePosition).setOnClickListener(this);
 
@@ -166,15 +169,14 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
             // position
             // que l'on a récupéré
             List<Address> adresses = geo.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-
             if (adresses != null && adresses.size() == 1) {
                 address = adresses.get(0);
-                TextView location = (TextView) findViewById(R.id.editTextLocality);
+                editTextLocality.setTag(address);
 
-                if ("".equals(location.getText().toString()))
-                    location.setHint(String.format("%s", address.getLocality()));
+                if ("".equals(editTextLocality.getText().toString()))
+                    editTextLocality.setHint(String.format("%s", address.getLocality()));
                 else
-                    location.setText(String.format("%s", address.getLocality()));
+                    editTextLocality.setText(String.format("%s", address.getLocality()));
             } else {
                 // sinon on affiche un message d'erreur
                 ((TextView) findViewById(R.id.editTextLocality)).setHint(getResources().getString(
@@ -279,7 +281,7 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
             @Override
             protected Void doInBackground(String... params) {
                 garden = gardenManager.getCurrentGarden();
-                garden.setLocality(params[0]);
+                buildGarden();
                 gardenManager.updateCurrentGarden(garden);
                 return null;
             }
@@ -315,13 +317,21 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
         }
     }
 
-    private void createNewProfile() {
-
+    private void buildGarden() {
         if (location != null) {
-            garden.setGpsLatitude(location.getLatitude());
-            garden.setGpsLongitude(location.getLongitude());
-            garden.setGpsAltitude(location.getAltitude());
+            Address address = (Address) editTextLocality.getTag();
+            if (address != null) {
+                garden.setAdminArea(address.getAdminArea());
+                garden.setCountryName(address.getCountryName());
+                garden.setGpsLatitude(address.getLatitude());
+                garden.setGpsLongitude(address.getLongitude());
+                garden.setGpsAltitude(location.getAltitude());
+            }
         }
+    }
+
+    private void createNewProfile() {
+        buildGarden();
 
         String locality = ((TextView) (findViewById(R.id.editTextLocality))).getText().toString();
 
@@ -329,7 +339,6 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
             locality = ((TextView) (findViewById(R.id.editTextLocality))).getHint().toString();
 
         garden.setLocality(locality);
-        garden.setCountryName(Locale.getDefault().getDisplayCountry());
 
         gardenManager.addGarden(garden);
 
@@ -347,7 +356,7 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
             helper.createAllotment(newAllotment);
 
             // Seed
-            LocalSeedProvider seedHelper = new LocalSeedProvider(getApplicationContext());
+            GotsSeedProvider seedHelper = new LocalSeedProvider(getApplicationContext());
 
             int nbSeed = seedHelper.getVendorSeeds(false).size();
             Random random = new Random();
@@ -371,7 +380,7 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
                     seed.setDateSowing(cal.getTime());
 
                     GotsActionSeedProvider actionsHelper = GotsActionSeedManager.getInstance().initIfNew(this);
-                    actionsHelper.insertAction(bakering, seed); 
+                    actionsHelper.insertAction(seed, bakering);
                 }
             }
         }

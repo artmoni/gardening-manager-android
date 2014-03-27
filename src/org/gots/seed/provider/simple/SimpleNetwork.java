@@ -18,60 +18,63 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import android.os.AsyncTask;
 
 public class SimpleNetwork extends AsyncTask<String, Integer, InputStream> {
-	String result;
-	private static final String GOTS_APIKEY = "PY0XHE11WE4VQNJ18DXUQFZ7OJR5YVBR";
-	private String HOST = "services.gardening-manager.com";
-	private String PATH = "/seeds/";
-	private String URL = "http://" + HOST + PATH;
-	private InputStream instream;
+    String result;
 
-	private String urlFormatter() {
-		String lang = Locale.getDefault().getLanguage();
-		String filename = "seed";
-		String fileextension = ".xml";
-		if ("fr".equals(lang))
-			filename += "-" + lang + fileextension;
-		else
-			filename += fileextension;
-		
-		return URL+filename ;
-	}
+    private static final String GOTS_APIKEY = "PY0XHE11WE4VQNJ18DXUQFZ7OJR5YVBR";
 
-	@Override
-	protected InputStream doInBackground(String... params) {
+    private String HOST = "services.gardening-manager.com";
 
-		CredentialsProvider credProvider = new BasicCredentialsProvider();
-		credProvider.setCredentials(new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT),
-				new UsernamePasswordCredentials(GOTS_APIKEY, ""));
+    private String PATH = "/seeds/";
 
-		DefaultHttpClient httpClient = new DefaultHttpClient();
-		httpClient.setCredentialsProvider(credProvider);
+    private String URL = "http://" + HOST + PATH;
 
-		HttpResponse response;
-		InputStream is = null;
-		try {
+    private String urlFormatter() {
+        String lang = Locale.getDefault().getLanguage();
+        String filename = "seed";
+        String fileextension = ".xml";
+        if ("fr".equals(lang))
+            filename += "-" + lang + fileextension;
+        else
+            filename += fileextension;
 
-			HttpGet httpGet = new HttpGet(urlFormatter());
+        return URL + filename;
+    }
 
-			response = httpClient.execute(httpGet);
+    @Override
+    protected InputStream doInBackground(String... params) {
 
-			StatusLine statusLine = response.getStatusLine();
-			if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
-				is = response.getEntity().getContent();
+        CredentialsProvider credProvider = new BasicCredentialsProvider();
+        credProvider.setCredentials(new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT),
+                new UsernamePasswordCredentials(GOTS_APIKEY, ""));
 
-			} else {
-				// Closes the connection.
-				response.getEntity().getContent().close();
-				throw new IOException(statusLine.getReasonPhrase());
-			}
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return is;
-		// return null;
-	}
+        DefaultHttpClient httpClient = new DefaultHttpClient();
+        httpClient.setCredentialsProvider(credProvider);
+
+        HttpResponse response;
+        InputStream is = null;
+        try {
+
+            HttpGet httpGet = new HttpGet(urlFormatter());
+
+            response = httpClient.execute(httpGet);
+
+            StatusLine statusLine = response.getStatusLine();
+            if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
+                is = response.getEntity().getContent();
+
+            } else {
+                // Closes the connection.
+                response.getEntity().getContent().close();
+                throw new IOException(statusLine.getReasonPhrase());
+            }
+        } catch (ClientProtocolException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return is;
+        // return null;
+    }
 }

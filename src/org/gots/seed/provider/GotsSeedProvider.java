@@ -2,8 +2,10 @@ package org.gots.seed.provider;
 
 import java.util.List;
 
+import org.gots.exception.GotsException;
 import org.gots.garden.GardenInterface;
 import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.LikeStatus;
 
 public interface GotsSeedProvider {
 
@@ -28,4 +30,10 @@ public interface GotsSeedProvider {
     public void getAllFamilies();
 
     public void getFamilyById(int id);
+
+    public abstract void force_refresh(boolean refresh);
+
+    public abstract BaseSeedInterface getSeedByBarCode(String barecode);
+
+    public abstract LikeStatus like(BaseSeedInterface mSeed, boolean cancelLike) throws GotsException;
 }

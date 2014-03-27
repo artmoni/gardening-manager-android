@@ -44,7 +44,7 @@
     <string name="seed.menu.update">actualización</string>
     <string name="action.planning">Planear una acción</string>
     <string name="action.delete.allotment">Esta suprimiendo una parcela</string>
-    <string name="action.delete.seed">Esta suprimiendo una parcela</string>
+    <string name="action.delete.seed">Esta suprimiendo una semilla</string>
     <string name="action.delete">Suprimir</string>
         <string name="menu.edit">Modificar</string>
     

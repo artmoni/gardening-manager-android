@@ -23,11 +23,11 @@ import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.Scopes;
 
 public class GoogleAuthentication {
-    private String CLIENT_ID = "473239775303-khctmm26flfc9c3m97ge3uss4ajo8c3r.apps.googleusercontent.com";
-
-    private String CLIENT_SECRET = "sdxIz8qR2xdIE4FaYb3CZYvz";
-
-    private String REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob";
+//    private String CLIENT_ID = "473239775303-khctmm26flfc9c3m97ge3uss4ajo8c3r.apps.googleusercontent.com";
+//
+//    private String CLIENT_SECRET = "sdxIz8qR2xdIE4FaYb3CZYvz";
+//
+//    private String REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob";
 
     final String G_PLUS_SCOPE = "https://www.googleapis.com/auth/plus.me";
 
@@ -40,52 +40,6 @@ public class GoogleAuthentication {
     public GoogleAuthentication(Context context) {
         this.mContext = context;
     }
-
-    // protected void getAPIToken() {
-    // new AsyncTask<String, Void, String>() {
-    //
-    // @Override
-    // protected String doInBackground(String... params) {
-    // try {
-    // final String AUTHORIZE_URL = "https://accounts.google.com/o/oauth2/auth?response_type=code&client_id="
-    // + CLIENT_ID + "&redirect_uri=" + REDIRECT_URI;
-    // final String SCOPED_AUTHORIZE_URL = AUTHORIZE_URL + "&scope="
-    // + URLEncoder.encode(G_PLUS_SCOPE + " " + USERINFO_SCOPE);
-    //
-    // HttpClient httpclient = new DefaultHttpClient();
-    // HttpGet httpget = new HttpGet(SCOPED_AUTHORIZE_URL);
-    //
-    // HttpResponse response = httpclient.execute(httpget);
-    // StatusLine serverCode = response.getStatusLine();
-    // int code = serverCode.getStatusCode();
-    // if (code == 200) {
-    // InputStream is = response.getEntity().getContent();
-    // JSONArray jsonArray = new JSONArray(convertStreamToString(is));
-    // String authToken = (String) jsonArray.opt(0);
-    // return authToken;
-    // // bad token, invalidate and get a new one
-    // } else if (code == 401) {
-    // Log.e(TAG, "Server auth error: " + response.getStatusLine());
-    // return null;
-    // // unknown error, do something else
-    // } else {
-    // Log.e("Server returned the following error code: " + serverCode, "");
-    // return null;
-    // }
-    // } catch (MalformedURLException e) {
-    // } catch (IOException e) {
-    // } catch (JSONException e) {
-    // } finally {
-    // }
-    // return null;
-    // }
-    //
-    // @Override
-    // protected void onPostExecute(String accessToken) {
-    // Log.d("AccessToken", " " + accessToken);
-    // }
-    // }.execute();
-    // }
 
     protected String convertStreamToString(InputStream inputStream) throws IOException {
         if (inputStream != null) {

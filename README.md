@@ -16,29 +16,26 @@ http://source.android.com/source/initializing.html
     $ sudo ln -s /usr/lib/i386-linux-gnu/mesa/libGL.so.1 /usr/lib/i386-linux-gnu/libGL.so
     $ apt-get install lib32z1-dev bison flex lib32ncurses5-dev libx11-dev gperf g++-multilib
 
-## Eclipse Addons
-https://dl-ssl.google.com/android/eclipse/
+## Eclipse
+Install ADT: https://dl-ssl.google.com/android/eclipse/
 
-# ECLIPSE MAVEN INTEGRATION
-
-Use android-m2e  
+Use android-m2e 
 http://blog.xebia.fr/2010/03/23/maven-et-android-comment-utiliser-le-plugin/
 
 ## INCLUDE EXTERNALS IN MAVEN REPOSITORY
+Project https://github.com/artmoni/gardening-manager-maven is load automatically in pom.xml
 
-TODO: is this still required?
 
-    $ mvn install:install-file -Dfile=GoogleAnalytics/libGoogleAnalytics.jar -Dversion=1.4.2 -DartifactId=analytics -DgroupId=com.google.android.analytics -Dpackaging=jar
-    $ mvn install:install-file -Dfile=GoogleAdMobAdsSdkAndroid-4.3.1/GoogleAdMobAdsSdk-4.3.1.jar -Dversion=4.3.1 -DartifactId=admob -DgroupId=com.google.android.admob -Dpackaging=jar
-    $ mvn install:install-file -Dfile=JakeWharton-ActionBarSherlock-e5c2d1c/library/bin/actionbarsherlock.jar -Dversion=4.2.0 -DartifactId=actionbarsherlock -DgroupId=com.actionbarsherlock -Dpackaging=jar
-    $ mvn install:install-file -Dfile=simple-xml-2.6.4/jar/simple-xml-2.6.4.jar -Dversion=2.6.4 -DartifactId=org.simpleframework -DgroupId=simple-xml -Dpackaging=jar
-    $ mvn install:install-file -Dfile=opensocial-1.0.jar -Dversion=1.0 -DartifactId=opensocial -DgroupId=org.opensocial -Dpackaging=jar
+Clone ActionBarSherlock to use its APK lib:
+
+    $ git clone https://github.com/JakeWharton/ActionBarSherlock
+    # Then link the library project with your project
 
 ## INCLUDE ANDROID SDK IN MAVEN REPOSITORY
 
 With android SDK Manager, install those tools:
 
-- Android 4.0.3 API (or more recent)
+- Android 4.0.3 API (or later)
   - SDK Plateforme
   - ARM EABI V7
   - Google API
@@ -48,25 +45,20 @@ Use maven-android-sdk-deployer to feed the local repository:
 
     $ git clone https://github.com/mosabua/maven-android-sdk-deployer
     $ cd maven-android-sdk-deployer
-    $ export ANDROID_HOME=/home/sfleury/Projets/Android/android-sdk-linux
+    $ export ANDROID_HOME=/path/to/android-sdk/
     $ mvn install -P 4.2
-
-
-Clone ActionBarSherlock to use its APK lib:
-
-    $ git clone https://github.com/JakeWharton/ActionBarSherlock
-    # Then link the library project with your project
 
 # Build
 ## Compile
 
-    $ mvn install [--settings settings.xml] [-P env-dev]
+    $ mvn clean install [--settings settings.xml] [-P env-dev]
 
-# Compile And Deploy From Maven 
+## Deploy 
 
-    $ mvn clean install android:deploy android:run [-Dandroid.sdk.path=/path/to/android-sdk/]
+    $ mvn android:deploy android:run [-Dandroid.sdk.path=/path/to/android-sdk/]
  
-## RELEASE PROCESS 
+## Release 
+	$ mvn --settings settings.xml -Penv-release,release clean install
 
 ### Verify package certificate
 
@@ -90,30 +82,6 @@ Sign with release certificate
 # PROCESS IMAGE
 
     $ mogrify -resize 100x100 veget_*.jpg
-
-# JARSIGNER
-
-http://afleurentdidier.wordpress.com/2010/02/21/comment-publier-son-application-sur-landroid-market/
-
-    $ keytool -genkeypair -alias artmonimobile -validity 10000
-    Tapez le mot de passe du Keystore :  
-    Ressaisissez le nouveau mot de passe : 
-    Quels sont vos prénom et nom ?
-      [Unknown] :  Sébastien FLEURY
-    Quel est le nom de votre unité organisationnelle ?
-      [Unknown] :  Artmoni mobile
-    Quelle est le nom de votre organisation ?
-      [Unknown] :  Artmoni
-    Quel est le nom de votre ville de résidence ?
-      [Unknown] :  Boissy l'Aillerie
-    Quel est le nom de votre état ou province ?
-      [Unknown] :  France
-    Quel est le code de pays à deux lettres pour cette unité ?
-      [Unknown] :  FR
-    Est-ce CN=Sébastien FLEURY, OU=Artmoni mobile, O=Artmoni, L=Boissy l'Aillerie, ST=France, C=FR ?
-      [non] :  oui
-    Spécifiez le mot de passe de la clé pour <artmonimobile>
-    	(appuyez sur Entrée s'il s'agit du mot de passe du Keystore) : 
 
 # NUXEO INTEGRATION
 

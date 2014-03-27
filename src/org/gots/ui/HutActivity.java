@@ -14,9 +14,7 @@ import java.util.ArrayList;
 
 import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
-import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.ui.fragment.AbstractFragmentActivity;
 
 import android.content.Context;
@@ -26,7 +24,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -38,8 +35,6 @@ import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 public class HutActivity extends AbstractFragmentActivity implements ActionBar.TabListener {
 
@@ -47,9 +42,6 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
     ListView listSeeds;
 
     ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
-
-    // TabHost tabHost;
-    private Context mContext;
 
     private ViewPager mViewPager;
 
@@ -65,7 +57,6 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
             currentAllotment = getIntent().getExtras().getInt("org.gots.allotment.reference");
 
         // GardenManager gm =GardenManager.getInstance();
-        mContext = this;
         setContentView(R.layout.hut);
 
         if (!gotsPref.isPremium()) {
@@ -75,6 +66,12 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
             layout.addView(ads.getAdsLayout());
         }
 
+    }
+
+    @Override
+    protected void onActivityResult(int arg0, int arg1, Intent arg2) {
+        super.onActivityResult(arg0, arg1, arg2);
+        
     }
 
     private void buildMyTabHost() {
@@ -92,27 +89,12 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
         // // ********************** Tab description **********************
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds)),
                 VendorListActivity.class, null);
-
+        
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
                 MySeedsListActivity.class, null);
         // an allotment is selected
         if (currentAllotment >= 0)
             bar.setSelectedNavigationItem(1);
-    }
-
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if (scanResult != null && scanResult.getContents() != "") {
-            Log.i("Scan result", scanResult.toString());
-            LocalSeedProvider helper = new LocalSeedProvider(mContext);
-            BaseSeedInterface scanSeed = helper.getSeedByBarCode(scanResult.getContents());
-            if (scanSeed != null) {
-                scanSeed.setNbSachet(scanSeed.getNbSachet() + 1);
-                helper.updateSeed(scanSeed);
-            }
-        }
-        buildMyTabHost();
-
     }
 
     @Override
@@ -136,7 +118,6 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
     @Override
     public void onTabReselected(Tab tab, FragmentTransaction ft) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -156,10 +137,6 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
             startActivity(i);
             return true;
 
-        case R.id.new_seed_barcode:
-            IntentIntegrator integrator = new IntentIntegrator(this);
-            integrator.initiateScan();
-            return true;
         case android.R.id.home:
             finish();
             return true;
@@ -246,6 +223,7 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
         public void onPageSelected(int position) {
             mActionBar.setSelectedNavigationItem(position);
 
+            
             SherlockListFragment fragment = (SherlockListFragment) getSupportFragmentManager().findFragmentByTag(
                     "android:switcher:" + R.id.pager + ":" + position);
             if (fragment != null && fragment.getListAdapter() != null)

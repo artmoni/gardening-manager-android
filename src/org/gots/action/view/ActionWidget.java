@@ -22,116 +22,132 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 public class ActionWidget extends LinearLayout {
-	private BaseActionInterface mAction;
-	private Context mContext;
-	// private OnActionItemClickListener mItemClickListener;
+    private BaseActionInterface mAction;
 
-	private static final int[] STATE_OK = { R.attr.state_ok };
-	private static final int[] STATE_WARNING = { R.attr.state_warning };
-	private static final int[] STATE_CRITICAL = { R.attr.state_critical };
-	private static final int[] STATE_UNDEFINED = { R.attr.state_undefined };
+    private Context mContext;
 
-	public ActionWidget(Context context, BaseActionInterface action) {
-		super(context);
-		mContext = context;
-		initView();
-		setAction(action);
-	}
+    // private OnActionItemClickListener mItemClickListener;
 
-	public ActionWidget(Context context, AttributeSet set) {
-		super(context, set);
-		mContext = context;
-		initView();
-	}
+    private int state = ActionState.NORMAL;
 
-	@Override
-	protected int[] onCreateDrawableState(int extraSpace) {
-		final int[] drawableState = super.onCreateDrawableState(extraSpace + 4);
-		if (isOk()) {
-			mergeDrawableStates(drawableState, STATE_OK);
-		} else if (isWarning()) {
-			mergeDrawableStates(drawableState, STATE_WARNING);
-		} else if (isCritical()) {
-			mergeDrawableStates(drawableState, STATE_CRITICAL);
-		} else if (isUndefined())
-			mergeDrawableStates(drawableState, STATE_UNDEFINED);
-		return drawableState;
-	}
+    private static final int[] STATE_OK = { R.attr.state_ok };
 
-	private boolean isOk() {
-		return mAction == null ? false : mAction.getState() == ActionState.NORMAL;
-	}
-	private boolean isUndefined() {
-		return mAction == null ? false : mAction.getState() == ActionState.UNDEFINED;
-	}
+    private static final int[] STATE_WARNING = { R.attr.state_warning };
 
-	private boolean isWarning() {
-		return mAction == null ? false : mAction.getState() == ActionState.WARNING;
+    private static final int[] STATE_CRITICAL = { R.attr.state_critical };
 
-	}
+    private static final int[] STATE_UNDEFINED = { R.attr.state_undefined };
 
-	private boolean isCritical() {
-		return mAction == null ? false : mAction.getState() == ActionState.CRITICAL;
-	}
+    public ActionWidget(Context context, BaseActionInterface action) {
+        super(context);
+        mContext = context;
+        initView();
+        setAction(action);
+    }
 
-	private void initView() {
-		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		inflater.inflate(R.layout.action_widget, this);
-	}
+    public ActionWidget(Context context, AttributeSet set) {
+        super(context, set);
+        mContext = context;
+        initView();
+    }
 
-	@Override
-	protected void onLayout(boolean changed, int l, int t, int r, int b) {
-		super.onLayout(changed, l, t, r, b);
+    @Override
+    protected int[] onCreateDrawableState(int extraSpace) {
+        final int[] drawableState = super.onCreateDrawableState(extraSpace + 4);
+        if (isOk()) {
+            mergeDrawableStates(drawableState, STATE_OK);
+        } else if (isWarning()) {
+            mergeDrawableStates(drawableState, STATE_WARNING);
+        } else if (isCritical()) {
+            mergeDrawableStates(drawableState, STATE_CRITICAL);
+        } else if (isUndefined())
+            mergeDrawableStates(drawableState, STATE_UNDEFINED);
+        return drawableState;
+    }
 
-		if (mAction == null)
-			return;
+    private boolean isOk() {
+        return state == ActionState.NORMAL;
+    }
 
-		ImageView actionImage = (ImageView) findViewById(R.id.idSeedActionImage);
+    private boolean isUndefined() {
+        return state == ActionState.UNDEFINED;
+    }
 
-		int actionImageRessource = mContext.getResources().getIdentifier(
-				"org.gots:drawable/action_" + mAction.getName(), null, null);
+    private boolean isWarning() {
+        return state == ActionState.WARNING;
 
-		if (actionImageRessource != 0) {
-			Drawable drawable = mContext.getResources().getDrawable(actionImageRessource);
-			actionImage.setImageDrawable(drawable);
-		}
-		setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.action_selector)); 	
-		invalidate();
-	}
+    }
 
-	public void setAction(BaseActionInterface action) {
-		this.mAction = action;
+    private boolean isCritical() {
+        return state == ActionState.CRITICAL;
+    }
 
-		refreshDrawableState();
-		requestLayout();
-		invalidate();
-	}
+    private void initView() {
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater.inflate(R.layout.action_widget, this);
+    }
 
-	// private boolean match(int pixel) {
-	// // There may be a better way to match, but I wanted to do a comparison
-	// // ignoring
-	// // transparency, so I couldn't just do a direct integer compare.
-	// return pixel == Color.BLACK;
-	// }
+    @SuppressWarnings("deprecation")
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        super.onLayout(changed, l, t, r, b);
 
-	// /**
-	// * Listener for item click
-	// *
-	// */
-	// public interface OnActionItemClickListener {
-	// public abstract void onItemClick(ActionWidget source, BaseActionInterface
-	// baseActionInterface);
-	// }
+        if (mAction == null)
+            return;
 
-	// /**
-	// * Set listener for action item clicked.
-	// *
-	// * @param listener
-	// * Listener
-	// */
-	// public void setOnActionItemClickListener(OnActionItemClickListener
-	// listener) {
-	// mItemClickListener = listener;
-	// }
+        ImageView actionImage = (ImageView) findViewById(R.id.idSeedActionImage);
 
+        int actionImageRessource = mContext.getResources().getIdentifier(
+                "org.gots:drawable/action_" + mAction.getName(), null, null);
+
+        if (actionImageRessource != 0) {
+            Drawable drawable = mContext.getResources().getDrawable(actionImageRessource);
+            actionImage.setImageDrawable(drawable);
+        }
+        int sdk = android.os.Build.VERSION.SDK_INT;
+        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.action_selector));
+        } else {
+            setBackground(mContext.getResources().getDrawable(R.drawable.action_selector));
+        }
+        // invalidate();
+    }
+
+    public void setAction(BaseActionInterface action) {
+        this.mAction = action;
+        // requestLayout();
+        // invalidate();
+    }
+
+    // private boolean match(int pixel) {
+    // // There may be a better way to match, but I wanted to do a comparison
+    // // ignoring
+    // // transparency, so I couldn't just do a direct integer compare.
+    // return pixel == Color.BLACK;
+    // }
+
+    // /**
+    // * Listener for item click
+    // *
+    // */
+    // public interface OnActionItemClickListener {
+    // public abstract void onItemClick(ActionWidget source, BaseActionInterface
+    // baseActionInterface);
+    // }
+
+    // /**
+    // * Set listener for action item clicked.
+    // *
+    // * @param listener
+    // * Listener
+    // */
+    // public void setOnActionItemClickListener(OnActionItemClickListener
+    // listener) {
+    // mItemClickListener = listener;
+    // }
+    public void setState(int state) {
+        this.state = state;
+        refreshDrawableState();
+
+    }
 }

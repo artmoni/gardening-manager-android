@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 
 import org.gots.R;
@@ -40,6 +40,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,12 +49,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ListAllActionAdapter extends BaseAdapter {
 
     private Context mContext;
 
-    private ArrayList<BaseActionInterface> actions = new ArrayList<BaseActionInterface>();
+    private ArrayList<SeedActionInterface> actions = new ArrayList<SeedActionInterface>();
 
     // private ArrayList<GrowingSeedInterface> seeds = new
     // ArrayList<GrowingSeedInterface>();
@@ -79,9 +81,8 @@ public class ListAllActionAdapter extends BaseAdapter {
         current_status = status;
         GotsActionSeedProvider actionSeedProvider = GotsActionSeedManager.getInstance().initIfNew(context);
 
-        for (Iterator<GrowingSeedInterface> iterator = allSeeds.iterator(); iterator.hasNext();) {
-            GrowingSeedInterface seed = iterator.next();
-            ArrayList<BaseActionInterface> seedActions;
+        for (GrowingSeedInterface seed : allSeeds) {
+            List<SeedActionInterface> seedActions;
 
             if (current_status == STATUS_TODO) {
                 seedActions = actionSeedProvider.getActionsToDoBySeed(seed);
@@ -92,6 +93,18 @@ public class ListAllActionAdapter extends BaseAdapter {
 
             actions.addAll(seedActions);
         }
+        
+//        if (current_status == STATUS_TODO||false)
+//            for (BaseSeedInterface seed : GotsSeedManager.getInstance().initIfNew(context).getMyStock(
+//                    GardenManager.getInstance().initIfNew(context).getCurrentGarden())) {
+//                Calendar today = Calendar.getInstance();
+//                int currentMonth = today.get(Calendar.MONTH) + 1;
+//                GardeningActionInterface action = new SowingAction(mContext);
+//                action.setGrowingSeedId(seed.getSeedId());
+//                action.setState(ActionState.NORMAL);
+//                if (currentMonth >= seed.getDateSowingMin() && currentMonth <= seed.getDateSowingMax())
+//                    actions.add(action);
+//            }
         if (current_status == STATUS_TODO)
             Collections.sort(actions, new IActionAscendantComparator());
         else
@@ -111,7 +124,7 @@ public class ListAllActionAdapter extends BaseAdapter {
     }
 
     @Override
-    public BaseActionInterface getItem(int position) {
+    public SeedActionInterface getItem(int position) {
         return actions.get(position);
     }
 
@@ -129,7 +142,7 @@ public class ListAllActionAdapter extends BaseAdapter {
         if (convertView == null)
             ll = LayoutInflater.from(mContext).inflate(R.layout.list_action, parent, false);
 
-        final BaseActionInterface currentAction = getItem(position);
+        final SeedActionInterface currentAction = getItem(position);
 
         final GrowingSeedInterface seed = GotsGrowingSeedManager.getInstance().initIfNew(mContext).getGrowingSeedById(
                 currentAction.getGrowingSeedId());
@@ -156,10 +169,24 @@ public class ListAllActionAdapter extends BaseAdapter {
                 actionWidget.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ((SeedActionInterface) currentAction).execute(seed);
-                        actions.remove(position);
-                        // seeds.remove(position);
-                        notifyDataSetChanged();
+                        new AsyncTask<BaseActionInterface, Integer, Void>() {
+                            @Override
+                            protected Void doInBackground(BaseActionInterface... params) {
+
+                                BaseActionInterface actionItem = params[0];
+                                if (SeedActionInterface.class.isInstance(actionItem))
+                                    ((SeedActionInterface) actionItem).execute(seed);
+                                return null;
+                            }
+
+                            @Override
+                            protected void onPostExecute(Void result) {
+                                Toast.makeText(mContext, "action done", Toast.LENGTH_SHORT).show();
+                                actions.remove(position);
+                                notifyDataSetChanged();
+                                super.onPostExecute(result);
+                            }
+                        }.execute(currentAction);
                     }
                 });
 
@@ -213,6 +240,7 @@ public class ListAllActionAdapter extends BaseAdapter {
 
                 }
             }
+            actionWidget.setState(currentAction.getState());
             actionWidget.setAction(currentAction);
             // ll.invalidate();
 
@@ -275,9 +303,9 @@ public class ListAllActionAdapter extends BaseAdapter {
         }
     }
 
-    class IActionDescendantComparator implements Comparator<BaseActionInterface> {
+    class IActionDescendantComparator implements Comparator<SeedActionInterface> {
         @Override
-        public int compare(BaseActionInterface obj1, BaseActionInterface obj2) {
+        public int compare(SeedActionInterface obj1, SeedActionInterface obj2) {
             int result = 0;
             if (obj1.getDateActionDone() != null && obj2.getDateActionDone() != null) {
                 result = obj1.getDateActionDone().getTime() > obj2.getDateActionDone().getTime() ? -1 : 0;

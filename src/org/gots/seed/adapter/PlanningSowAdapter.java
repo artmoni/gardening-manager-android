@@ -17,29 +17,28 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class PlanningSowAdapter extends PlanningAdapter {
-	BaseSeedInterface mSeed;
+    BaseSeedInterface mSeed;
 
-	public PlanningSowAdapter(BaseSeedInterface seed) {
-		mSeed = seed;
-	}
+    public PlanningSowAdapter(BaseSeedInterface seed) {
+        mSeed = seed;
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		MonthWidget monthWidget = new MonthWidget(parent.getContext());
-		monthWidget.setMonthText(getItem(position));
-//		monthWidget.setBackgroundDrawable(parent.getContext().getResources().getDrawable(R.drawable.selector_planning));
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        MonthWidget monthWidget = new MonthWidget(parent.getContext());
+        monthWidget.setMonthText(getItem(position));
+        // monthWidget.setBackgroundDrawable(parent.getContext().getResources().getDrawable(R.drawable.selector_planning));
 
-		if (mSeed != null) {
+        if (mSeed != null) {
 
-			if (position >= mSeed.getDateSowingMin()-1 && position <= mSeed.getDateSowingMax()-1)
-				monthWidget.setSowingPeriode(true);
+            int sowingMin = mSeed.getDateSowingMin() - 1;
+            int sowingMax = mSeed.getDateSowingMax() - 1;
 
-			
-		}
-		monthWidget.invalidate();
-		return monthWidget;
-	}
-	
-	
+            if (position >= sowingMin && position <= sowingMax || (position <= sowingMax && sowingMax < sowingMin)
+                    || (position >= sowingMin && sowingMax < sowingMin))
+                monthWidget.setSowingPeriode(true);
 
+        }
+        return monthWidget;
+    }
 }

@@ -11,10 +11,10 @@ import org.gots.ui.HutActivity;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 
 public class SeedNotification {
     private Context mContext;
@@ -84,6 +84,6 @@ public class SeedNotification {
         // notification.setLatestEventInfo(this, title, content, contentIntent);
         // notification.flags |= Notification.FLAG_AUTO_CANCEL;
         // Send the notification.
-        mNotificationManager.notify(NOTIFICATION, mBuilder.getNotification());
+        mNotificationManager.notify(NOTIFICATION, mBuilder.build());
     }
 }

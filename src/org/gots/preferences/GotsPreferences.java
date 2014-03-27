@@ -20,8 +20,13 @@
  * *********************************************************************** */
 package org.gots.preferences;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.Properties;
 
+import org.gots.R;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.utils.NotConfiguredException;
 import org.nuxeo.android.config.NuxeoServerConfig;
@@ -34,6 +39,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -72,19 +78,19 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     // public static final String ORG_GOTS_GARDEN_TOKEN = "org.gots.garden.token";
     public static final String ORG_GOTS_GARDEN_TOKEN = NuxeoServerConfig.PREF_SERVER_TOKEN;
 
-    private static final String ANALYTICS_API_KEY = "UA-916500-18";
+    // private String ANALYTICS_API_KEY = "UA-916500-18";
 
-    private static final String WEATHER_API_KEY = "6ba97b2306fd5b9d47992d8716dab16a";
+    // private static final String WEATHER_API_KEY = "";
 
-    private static final String ADMOB_API_KEY = "a14f50fa231b26d";
+    // private static final String ADMOB_API_KEY = "a14f50fa231b26d";
 
-    public static final String GARDENING_MANAGER_DIRECTORY = "Gardening-Manager";
+    public final String GARDENING_MANAGER_DIRECTORY = "Gardening-Manager";
 
     public static final String GARDENING_MANAGER_APPNAME = "Gardening Manager";
 
     private static final String GARDENING_MANAGER_DOCUMENTATION_URL = "http://doc.gardening-manager.com";
 
-    private static final String GARDENING_MANAGER_NUXEO_AUTOMATION_TEST = "http://services.gardening-manager.com/nuxeo/";
+    private static final String GARDENING_MANAGER_NUXEO_AUTOMATION_TEST = "http://192.168.10.201:8080/nuxeo/";
 
     private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://services.gardening-manager.com/nuxeo/";
 
@@ -108,6 +114,32 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     private static Exception firstCall;
 
     private boolean initDone = false;
+
+    public static final String URL_TWITTER_GARDENING_MANAGER = "https://twitter.com/GardeningApp";
+
+    public static final String URL_FACEBOOK_GARDENING_MANAGER = "http://www.facebook.com/pages/Gardening-Manager/120589404779871";
+
+    public static final String URL_GOOGLEPLUS_GARDENING_MANAGER = "https://plus.google.com/u/0/b/108868805153744305734/communities/105269291264998461912";
+
+    public static final String URL_SAUTERDANSLESFLAQUES = "http://www.sauterdanslesflaques.com";
+
+    public static final String URL_ARTMONI = "http://www.artmoni.eu";
+
+    public static final String URL_TRANSLATE_GARDENING_MANAGER = "http://translate.gardening-manager.com";
+
+    private Properties properties = new Properties();
+
+    /*
+     * FEATURE LIST
+     */
+    private boolean GOTS_PREMIUM = false;
+
+    /*
+     * InApp Billing properties
+     */
+
+    // private static final String PUBKEY =
+    // "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtAFVYGad4FaKIZ9A0W2JfMh+B1PQMU+tal9B0XYbEJdZy6UCwqoH42/YLDn0GTjKA+ozAZJtaQqoU/ew95tYKEYszj067HfVehpRtKxLlySFMnqdai0SuGyl5EI4QQovsw3wFU1ihELWBaCg2CcTJqk1jXcWaxsqPPPWty5tAcMwQDWZ0cw6uw8QddztiKlw5IB1XTWdhZTuPL/RcR0Ns+lbEB2kdosozekXr+dRqZ4+PKyHn+j8/407hb76gqn9CmrGhOsJ3E7aOVRCZWZ9nf6aJfFYJP5JY/QHsa+9OsiSj8QXS2vic3ay+MazF09bteN7Wnb15Y9CBK/sM2RAqQIDAQAB";
 
     private GotsPreferences() {
     }
@@ -133,6 +165,13 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
         if (!initDone) {
             mContext = context;
             setSharedPreferences(PreferenceManager.getDefaultSharedPreferences(context));
+            InputStream propertiesStream = null;
+            try {
+                propertiesStream = mContext.getResources().openRawResource(R.raw.config);
+                properties.load(propertiesStream);
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage());
+            }
             setGardeningManagerServerURI(ISDEVELOPMENT ? GARDENING_MANAGER_NUXEO_AUTOMATION_TEST : GARDENING_MANAGER_NUXEO_AUTOMATION);
             initDone = true;
         }
@@ -210,20 +249,24 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     }
 
     public boolean isPremium() {
-        return unlockPremium();
+        return GOTS_PREMIUM ? true : unlockPremium();
     }
 
-    public static String getAnalyticsApiKey() {
-        return ANALYTICS_API_KEY;
+    public void setPremium(boolean isPremium) {
+        GOTS_PREMIUM = isPremium;
     }
 
-    public static String getWeatherApiKey() {
-        return WEATHER_API_KEY;
+    public String getAnalyticsApiKey() {
+        return properties.getProperty("analytics.apikey");
     }
 
-    public static String getAdmobApiKey() {
+    public String getWeatherApiKey() {
+        return properties.getProperty("previmeteo.apikey");
+    }
 
-        return ADMOB_API_KEY;
+    public String getAdmobApiKey() {
+
+        return properties.getProperty("admob.apikey");
     }
 
     public void setGardeningManagerServerURI(String uri) {
@@ -249,7 +292,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     }
 
     public String getNuxeoLogin() {
-        return sharedPreferences.getString(ORG_GOTS_GARDEN_LOGIN, null);
+        return sharedPreferences.getString(ORG_GOTS_GARDEN_LOGIN, "");
     }
 
     public void setNuxeoLogin(String login) {
@@ -342,6 +385,16 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     public String getDocumentationURI() {
         return GARDENING_MANAGER_DOCUMENTATION_URL;
+    }
+
+    public File getGARDENING_MANAGER_DIRECTORY() {
+
+        return new File(Environment.getExternalStorageDirectory(), GARDENING_MANAGER_DIRECTORY);
+    }
+
+    public String getPlayStorePubKey() {
+
+        return properties.getProperty("playstore.pubkey");
     }
 
 }

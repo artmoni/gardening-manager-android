@@ -1,13 +1,19 @@
 package org.gots.action;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.provider.local.LocalActionSeedProvider;
+import org.gots.action.provider.nuxeo.NuxeoActionSeedProvider;
+import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.utils.NotConfiguredException;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 public class GotsActionSeedManager implements GotsActionSeedProvider {
 
@@ -21,7 +27,8 @@ public class GotsActionSeedManager implements GotsActionSeedProvider {
 
     private Context mContext;
 
-    
+    private GotsPreferences gotsPrefs;        
+
 
     public static synchronized GotsActionSeedManager getInstance() {
         if (instance == null) {
@@ -40,39 +47,49 @@ public class GotsActionSeedManager implements GotsActionSeedProvider {
         }
         this.mContext = context;
         // mContext.registerReceiver(this, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
+        gotsPrefs = GotsPreferences.getInstance().initIfNew(context);
         setProvider();
         initDone = true;
         return this;
     }
 
     public void setProvider() {
-        provider = new LocalActionSeedProvider(mContext);
+        ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo ni = cm.getActiveNetworkInfo();
+        if (gotsPrefs.isConnectedToServer() && ni != null && ni.isConnected()) {
+            provider = new NuxeoActionSeedProvider(mContext);
+        } else
+            provider = new LocalActionSeedProvider(mContext);
     }
 
     @Override
-    public long doAction(BaseActionInterface action, GrowingSeedInterface seed) {
+    public long doAction(SeedActionInterface action, GrowingSeedInterface seed) {
         return provider.doAction(action, seed);
     }
 
     @Override
-    public ArrayList<BaseActionInterface> getActionsToDo() {
+    public ArrayList<SeedActionInterface> getActionsToDo() {
         return provider.getActionsToDo();
     }
 
     @Override
-    public ArrayList<BaseActionInterface> getActionsToDoBySeed(GrowingSeedInterface seed) {
+    public List<SeedActionInterface> getActionsToDoBySeed(GrowingSeedInterface seed) {
         return provider.getActionsToDoBySeed(seed);
     }
 
     @Override
-    public ArrayList<BaseActionInterface> getActionsDoneBySeed(GrowingSeedInterface seed) {
+    public List<SeedActionInterface> getActionsDoneBySeed(GrowingSeedInterface seed) {
         return provider.getActionsDoneBySeed(seed);
     }
 
     @Override
-    public long insertAction(BaseActionInterface action, GrowingSeedInterface seed) {
-        // TODO Auto-generated method stub
-        return 0;
+    public SeedActionInterface insertAction(GrowingSeedInterface seed, BaseActionInterface action) {
+        return provider.insertAction(seed, action);
+    }
+    
+    @Override
+    public void uploadPicture(GrowingSeedInterface seed, File f) {
+        provider.uploadPicture(seed,f);
     }
 
 }

@@ -86,6 +86,8 @@ public class NuxeoManager {
         gotsPrefs.initIfNew(context);
 
         nxConfig = new NuxeoServerConfig(context);
+        nxConfig.setLogin("");
+        nxConfig.setPassword("");
         nxConfig.setSharedPrefs(gotsPrefs.getSharedPrefs());
         nxConfig.setCacheKey(NuxeoServerConfig.PREF_SERVER_TOKEN);
         nuxeoContext = NuxeoContextFactory.getNuxeoContext(context, nxConfig);

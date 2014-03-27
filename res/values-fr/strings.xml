@@ -41,9 +41,12 @@
     <string name="seed.description.family">Famille</string>
     <string name="seed.description.specie">Espèce</string>
     <string name="seed.description.variety">Variété </string>
+    <string name="seed.description.barecode">Associer le code-barre facilitera vos recherches</string>
+    <string name="seed.description.barcode.noresult">Aucune plante n\'est répertoriée avec ce code-barres. Soyez le premier à ajouter sa description au catalogue.</string>
     <string name="seed.menu.add">Ajouter une graine</string>
     <string name="seed.menu.add.barcode">Ajout par code barre</string>
     <string name="seed.menu.update">Mettre à jour</string>
+    <string name="seed.menu.search">Rechercher</string>
     <string name="action.planning">Planifier une action</string>
     <string name="action.delete.allotment">Vous allez supprimer une parcelle</string>
     <string name="action.delete.seed">Vous allez supprimer un légume</string>
@@ -85,6 +88,13 @@
     <string name="specie.ocimumbasilicum">Basilic</string>
     <string name="specie.pastinacasativa">Panais</string>
     <string name="specie.perseaamericana">Avocat</string>
+    <string name="specie.cichoriumendivia">Chicorée endive</string>
+    <string name="specie.vacciniummyrtillus">Myrtille</string>
+    <string name="specie.ribesuvacrispa">Groseillier à maquereau</string>
+    <string name="specie.fragariaxananassa">Fraisier</string>
+    <string name="specie.ribesrubrum">Groseillier à grappes</string>
+    <string name="specie.asparagusofficinalis">Asperge</string>
+    <string name="specie.cucurbitamaxima">Potiron</string>
     <string name="weather.citynotfound">Pas de prévisions météorologiques, choisissez une ville proche</string>
     <string name="location.notfound">Vous n\'avez pas pu être localisé</string>
     <string name="help.loading">Chargement de la documentation</string>
@@ -116,14 +126,22 @@
     <string name="fillfields.specie">Veuillez choisir une espèce</string>
     <string name="fillfields.variety">Veuillez saisir une variété</string>
     <string name="fillfields.dates">Veuillez indiquer les dates</string>
-    <string name="login.connect.description">Votre compte _ACCOUNT_ est désormais synchronisé en ligne sur my.gardening-manager.com\nVous pouvez:</string>
+    <string name="login.connect.description">Votre compte _ACCOUNT_ est désormais synchronisé en ligne sur my.gardening-manager.com</string>
     <string name="login.connect.description2">Partager avec vos amis</string>
     <string name="login.connect.description3">Créer et partager les plantes de votre catalogue</string>
     <string name="login.connect.description4">Vous connecter depuis n\'importe quel appareil</string>
     <string name="login.disconnect">Déconnexion</string>
     <string name="login.simple.description">Connectez vous au réseau Gardening Manager et prenez plaisir à suivre le jardin potager de vos amis.</string>
+    <string name="login.sso.description">Connectez vous avec votre compte Google pour synchroniser et sauvegarder Gardening Manager sur vos appareils</string>
     <string name="garden.create">Créer mon potager</string>
+    <string name="garden.create.description">Utilisez des fonctions simples en mode déconnecté sans sauvegarde ni réseau sociale</string>
     <string name="login.connect.state">Vous êtes synchronizé</string>
     <string name="login.disconnect.state">Vous n\'avez pas sauvegardé, connectez vous et restez synchronisé</string>
+    <string name="translate.button">Participer à la traduction</string>
+    <string name="inapp.rating.title">Evaluer</string>
+    <string name="inapp.rating.later">Reporter à plus tard</string>
+    <string name="inapp.rating.cancel">Je ne m\'exprime pas</string>
+    <string name="inapp.rating.descrition">Si vous appréciez _APP_TITLE_, merci de prendre un moment pour noter l\'application. Merci de votre soutien!</string>
+    <string name="inapp.purchase.noaccount">Un compte Google est nécessaire pour l\'achat de fonctionnalités</string>
 
 </resources>

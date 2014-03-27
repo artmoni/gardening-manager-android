@@ -41,13 +41,17 @@
     <string name="seed.description.family">Family</string>
     <string name="seed.description.specie">Species</string>
     <string name="seed.description.variety">Variety</string>
+    <string name="seed.description.barecode">Associate the barcode will facilitate your search</string>
+    <string name="seed.description.barcode.noresult">No plant has been found with this barcode. Be the first to add its description to the catalog.</string>
     <string name="seed.menu.add">Add a seed</string>
     <string name="seed.menu.add.barcode">Add by barcode</string>
     <string name="seed.menu.update">Update</string>
+    <string name="seed.menu.search">Search</string>
     <string name="action.planning">Plan an action</string>
     <string name="action.delete.allotment">You are deleting a plot</string>
-    <string name="action.delete.seed">You are deleting a plot</string>
+    <string name="action.delete.seed">You are deleting a plant</string>
     <string name="action.delete">Delete</string>
+    <string name="action.photo">Take a picture</string>
     <string name="menu.edit">Modify</string>
     <string name="allotment.action.add.message">Name your plot</string>
     <string name="allotment.description1">I select the menu button to add a plot.</string>
@@ -85,6 +89,14 @@
     <string name="specie.solanummelongena">Eggplant</string>
     <string name="specie.pastinacasativa">Parsnip</string>
     <string name="specie.perseaamericana">Avocado</string>
+    <string name="specie.cichoriumendivia">Endive</string>
+    <string name="specie.vacciniummyrtillus">Bilberry</string>
+    <string name="specie.ocimumbasilicum">Basilic</string>
+    <string name="specie.ribesuvacrispa">Gooseberry</string>
+    <string name="specie.fragariaxananassa">Strawberry</string>
+    <string name="specie.ribesrubrum">Redcurrant</string>
+    <string name="specie.asparagusofficinalis">Asparagus</string>
+    <string name="specie.cucurbitamaxima">Squash</string>
     <string name="help.loading">Please wait, web help is loading</string>
     <string name="menu.help">Help</string>
     <string name="menu.about">About</string>
@@ -113,20 +125,42 @@
     <string name="fillfields.variety">Please fill the variety</string>
     <string name="fillfields.dates">Please give the dates</string>
     <string name="garden.create">Create a new garden</string>
+    <string name="garden.create.description">Work offline without backup and social network</string>
     <string name="login.connect">Connect me</string>
     <string name="login.connect.state">You work safely online</string>
     <string name="login.connect.error">Connection failed, have you already create an account ? \n please verify your informations and try again. </string>
     <string name="login.disconnect">Sign out</string>
     <string name="login.disconnect.state">You are not backuped, log in to be synchronized</string>
-    <string name="login.connect.description">Your account _ACCOUNT_ is now synchronized with my.gardening-manager.com online \n You can:</string>
+    <string name="login.connect.description">Your account _ACCOUNT_ is now synchronized with my.gardening-manager.com online</string>
     <string name="login.connect.description2">Share with your friends</string>
     <string name="login.connect.description3">Create and share your plant descriptions</string>
     <string name="login.connect.description4">Use the application on any of your devices</string>
-    <string name="login.sso.description">Use your Google account to synchronize Gardening Manager on any devices</string>
+    <string name="login.sso.description">Use your Google account to synchronize and backup Gardening Manager on your devices</string>
     <string name="login.simple.description">Connect to the Gardening Manager Network and take pleasure in following the vegetable garden of your friends.</string>
     <string name="login.creation.description">Create an account on Gardening Manager Server to synchronize and share your garden information with your friends</string>
     <string name="login.signup">Sign up for Gardening Manager</string>
     <string name="login.email">Email</string>
     <string name="login.missinginformation">Some informations are missing</string>
-
+    <string name="translate.button">I want to translate</string>
+    <string name="synchro.weather.checking">Updating weather in progress</string>
+    <string name="synchro.weather.ok">Weather updated</string>
+    <string name="synchro.seeds.checking">Updating plant catalog in progress</string>
+    <string name="synchro.seeds.ok">Plant catalog updated</string>
+    <string name="synchro.actions.checking">Updating actions list in progress</string>
+    <string name="synchro.actions.ok">Actions list updated</string>
+    <string name="synchro.garden.checking">Updating shared garden in progress</string>
+    <string name="synchro.garden.ok">Shared garden updated</string>
+    <string name="synchro.purchase.checking">Updating purchase feature</string>
+    <string name="synchro.purchase.ok">Purchase feature list updated</string>
+    <string name="gots.billing.title">Remove all ads and unlock all feature</string>
+        
+    <string name="inapp.rating.title">Rate</string>
+    <string name="inapp.rating.later">Remind me later</string>
+    <string name="inapp.rating.cancel">No, thanks</string>
+    <string name="inapp.rating.descrition">If you enjoy using _APP_TITLE_, please take a moment to rate it. Thanks for your support!</string>
+    <string name="inapp.purchase.noaccount">You need a Google account to buy features</string>
+    <string name="inapp.purchase.buy">Buy</string>
+    
+    
+    
 </resources>

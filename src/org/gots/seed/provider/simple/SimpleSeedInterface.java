@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.gots.action.BaseActionInterface;
 import org.gots.action.provider.simple.SimpleAction;
-import org.gots.bean.SeedCategory;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.LikeStatus;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -67,6 +67,18 @@ public class SimpleSeedInterface implements GrowingSeedInterface {
     private Integer nbSachet = 0;
 
     private int seed_id;
+
+    private String language;
+
+    @Override
+    public String getLanguage() {
+        return language;
+    }
+
+    @Override
+    public void setLanguage(String string) {
+        language = string;
+    }
 
     @Override
     public Object clone() throws CloneNotSupportedException {
@@ -135,16 +147,6 @@ public class SimpleSeedInterface implements GrowingSeedInterface {
         sowingDateMin = dateSowing;
     }
 
-    @Override
-    public void setCategory(SeedCategory category) {
-        // TODO ?
-    }
-
-    @Override
-    public SeedCategory getCategory() {
-        // TODO ?
-        return null;
-    }
 
     @Override
     public void setDateSowingMax(int dateSowingMax) {
@@ -267,28 +269,6 @@ public class SimpleSeedInterface implements GrowingSeedInterface {
     }
 
     @Override
-    public boolean onActionAlert() {
-        // TODO ?
-        return false;
-    }
-
-    @Override
-    public boolean onActionWarning() {
-        // TODO ?
-        return false;
-    }
-
-    @Override
-    public void performNextAction() {
-        // TODO ?
-    }
-
-    @Override
-    public void undoLastAction() {
-        // TODO ?
-    }
-
-    @Override
     public void setBareCode(String bare_code) {
         barecode = bare_code;
     }
@@ -359,4 +339,15 @@ public class SimpleSeedInterface implements GrowingSeedInterface {
         date_sowing = dateSowing;
     }
 
+    @Override
+    public void setLikeStatus(LikeStatus likes) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public LikeStatus getLikeStatus() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

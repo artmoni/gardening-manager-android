@@ -81,7 +81,7 @@ public class GotsProgressBar extends View {
 		if (percent > 100f)
 			percent = 100f;
 		if (percent >= 90f)
-			paint.setColor(getContext().getResources().getColor(R.color.action_ok_color));
+			paint.setColor(getContext().getResources().getColor(R.color.action_error_color));
 
 		else if (percent >= 80f)
 			// paint.setColor(Color.rgb(255, 140, 0));
@@ -89,7 +89,7 @@ public class GotsProgressBar extends View {
 
 		else
 			// paint.setARGB(255, 80, 150, 30);
-			paint.setColor(getContext().getResources().getColor(R.color.action_error_color));
+			paint.setColor(getContext().getResources().getColor(R.color.action_ok_color));
 
 		// int height=new Float(f*getHeight()).intValue();
 

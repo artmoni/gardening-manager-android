@@ -38,10 +38,6 @@ public abstract class AbstractActionGarden implements GardeningActionInterface {
 
     private Date dateActionTodo;
 
-    private int logid;
-
-    private int growingSeedId;
-
     private Object data;
 
     protected Context mContext;
@@ -62,7 +58,7 @@ public abstract class AbstractActionGarden implements GardeningActionInterface {
         seedManager.initIfNew(mContext);
         gardenManager = GardenManager.getInstance();
         gardenManager.initIfNew(mContext);
-        actionManager =GotsActionManager.getInstance().initIfNew(mContext);
+        actionManager = GotsActionManager.getInstance().initIfNew(mContext);
         actionSeedManager = GotsActionSeedManager.getInstance().initIfNew(mContext);
         growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(mContext);
 
@@ -84,16 +80,6 @@ public abstract class AbstractActionGarden implements GardeningActionInterface {
 
     public AbstractActionGarden(String name) {
         this.name = name;
-    }
-
-    @Override
-    public int getGrowingSeedId() {
-        return growingSeedId;
-    }
-
-    @Override
-    public void setGrowingSeedId(int id) {
-        growingSeedId = id;
     }
 
     @Override
@@ -171,17 +157,6 @@ public abstract class AbstractActionGarden implements GardeningActionInterface {
     @Override
     public void setDateActionTodo(Date dateActionTodo) {
         this.dateActionTodo = dateActionTodo;
-
-    }
-
-    @Override
-    public int getLogId() {
-        return this.logid;
-    }
-
-    @Override
-    public void setLogId(int id) {
-        this.logid = id;
 
     }
 

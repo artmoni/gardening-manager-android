@@ -32,19 +32,20 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_line_action"
-            android:orientation="vertical"
-            android:padding="10dp" >
+            android:orientation="vertical" >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@drawable/bg_line_action"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:orientation="vertical" >
+                android:orientation="vertical"
+                android:padding="5dp" >
 
                 <TextView
                     android:id="@+id/textView1"
+                    style="@style/description_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -58,6 +59,7 @@
                     android:focusableInTouchMode="true" />
 
                 <TextView
+                    style="@style/description_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -75,7 +77,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:ems="10"
-                        android:hint="@string/seed.description.variety" >
+                        android:hint="@string/seed.description.variety"
+                        android:singleLine="true" >
 
                         <requestFocus />
                     </AutoCompleteTextView>
@@ -90,6 +93,7 @@
             </LinearLayout>
 
             <TextView
+                style="@style/description_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -98,23 +102,47 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:background="@drawable/bg_line_action"
+                android:orientation="horizontal"
+                android:padding="5dp" >
+
+                <TextView
+                    style="@style/description_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Min" />
 
                 <DatePicker
-                    android:id="@+id/IdSeedDateSowingPlanning"
+                    android:id="@+id/IdSeedDateSowingPlanningMin"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-<!-- 
+                    android:layout_height="wrap_content"
+                    android:calendarViewShown="false" />
+
+                <TextView
+                    style="@style/description_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Max" />
+
+                <DatePicker
+                    android:id="@+id/IdSeedDateSowingPlanningMax"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:calendarViewShown="false" />
+                <!--
                 <org.gots.seed.view.PlanningWidget
                     android:id="@+id/IdSeedEditSowingPlanning"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:columnWidth="15dp"
                     android:numColumns="12" >
-                </org.gots.seed.view.PlanningWidget> -->
+                </org.gots.seed.view.PlanningWidget>
+                -->
             </LinearLayout>
 
             <TextView
+                style="@style/description_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -122,46 +150,83 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_line_action"
+                android:orientation="horizontal"
+                android:padding="5dp" >
 
-               <!--  <org.gots.seed.view.PlanningWidget
+                <!--
+                <org.gots.seed.view.PlanningWidget
                     android:id="@+id/IdSeedEditHarvestPlanning"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:columnWidth="15dp"
                     android:numColumns="12" >
-                </org.gots.seed.view.PlanningWidget> -->
-                   <DatePicker
-                    android:id="@+id/IdSeedDateHarvestPlanning"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-           <!--  <Button
-                android:id="@+id/buttonUpdateSeed"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/seed.menu.update" /> -->
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal" >
-
-                <ImageView
-                    android:id="@+id/imageBarCode"
-                    android:layout_width="100dp"
-                    android:layout_height="58dp"
-                    android:contentDescription="barcode scanner"
-                    android:src="@drawable/codebarre" />
+                </org.gots.seed.view.PlanningWidget>
+                -->
 
                 <TextView
-                    android:id="@+id/textViewBarCode"
-                    android:layout_width="100dp"
-                    android:layout_height="58dp"
-                    android:gravity="center_horizontal|bottom"
-                    android:text="0283878732" />
-            </RelativeLayout>
+                    style="@style/description_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Min" />
+
+                <DatePicker
+                    android:id="@+id/IdSeedDateHarvestPlanningMin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:calendarViewShown="false" />
+
+                <TextView
+                    style="@style/description_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Max" />
+
+                <DatePicker
+                    android:id="@+id/IdSeedDateHarvestPlanningMax"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:calendarViewShown="false" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_line_action"
+                android:orientation="horizontal"
+                android:padding="5dp" >
+
+                <TextView
+                    style="@style/description_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/seed.description.barecode" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:orientation="vertical" >
+
+                    <ImageView
+                        android:id="@+id/imageBarCode"
+                        android:layout_width="100dp"
+                        android:layout_height="58dp"
+                        android:contentDescription="barcode scanner"
+                        android:src="@drawable/codebarre" />
+
+                    <TextView
+                        android:id="@+id/textViewBarCode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="0283878732" >
+                    </TextView>
+                </LinearLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/layoutSpecie"
@@ -180,6 +245,12 @@
                     android:id="@+id/buttonCatalogue"
                     style="@style/buttonRed"
                     android:text="@string/seed.action.add.catalogue" />
+
+                <Button
+                    android:id="@+id/buttonModify"
+                    style="@style/buttonGreen"
+                    android:text="@string/menu.edit"
+                    android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

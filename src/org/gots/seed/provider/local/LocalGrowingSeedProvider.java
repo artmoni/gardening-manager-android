@@ -18,6 +18,7 @@ import org.gots.DatabaseHelper;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.utils.GotsDBHelper;
 
 import android.content.ContentValues;
@@ -94,7 +95,7 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
 
     private GrowingSeedInterface cursorToSeed(Cursor cursor) {
         GrowingSeedInterface bsi = null;
-        LocalSeedProvider localSeedProvider = new LocalSeedProvider(mContext);
+        GotsSeedProvider localSeedProvider = new LocalSeedProvider(mContext);
         bsi = (GrowingSeedInterface) localSeedProvider.getSeedById(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_SEED_ID)));
         if (bsi == null) {
             bsi = new GrowingSeed();
@@ -166,10 +167,9 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
 
         // Création d'un ContentValues (fonctionne comme une HashMap)
         ContentValues values = seedToValues(seed, allotment);
-        Cursor cursor;
 
-        int rowid = bdd.update(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, values, DatabaseHelper.GROWINGSEED_ID + "='"
-                + seed.getGrowingSeedId() + "'", null);
+        bdd.update(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, values,
+                DatabaseHelper.GROWINGSEED_ID + "='" + seed.getGrowingSeedId() + "'", null);
 
         return seed;
     }
