@@ -5,8 +5,7 @@
     <color name="green">#00ff00</color>
     <color name="blue">#0000ff</color>
     <color name="white">#ffffff</color>
-        <color name="black">#000000</color>
-    
+    <color name="black">#000000</color>
     <color name="action_ok_color">#92c051</color>
     <color name="action_warning_color">#D7ae68</color>
     <color name="action_error_color">#b65635</color>

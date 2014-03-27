@@ -122,12 +122,12 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
         // }.execute(ll);
         WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
-        Point size = new Point();
         int width;
         int sdk = android.os.Build.VERSION.SDK_INT;
         if (sdk < android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             width = display.getWidth();
         } else {
+            Point size = new Point();
             display.getSize(size);
             width = size.x;
         }

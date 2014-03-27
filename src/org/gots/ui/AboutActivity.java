@@ -261,44 +261,49 @@ public class AboutActivity extends AbstractActivity {
             }
         }.execute();
 
-         final ArrayList<String> moreSkus = new ArrayList<String>();
+        final ArrayList<String> moreSkus = new ArrayList<String>();
         moreSkus.add(GotsPurchaseItem.SKU_PREMIUM);
         buyHelper = new IabHelper(getApplicationContext(), gotsPrefs.getPlayStorePubKey());
 
         Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
         progressPurchase.startAnimation(myFadeInAnimation);
         textprogressAction.setText(getResources().getString(R.string.synchro_purchase_checking));
+        try {
+            addProgress();
+            buyHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
 
-        addProgress();
-        buyHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+                @Override
+                public void onIabSetupFinished(IabResult result) {
+                    // Toast.makeText(getApplicationContext(), "Set up finished!", Toast.LENGTH_SHORT).show();
+                    Log.i(TAG, "Set up finished!");
 
-            @Override
-            public void onIabSetupFinished(IabResult result) {
-                // Toast.makeText(getApplicationContext(), "Set up finished!", Toast.LENGTH_SHORT).show();
-                Log.i(TAG, "Set up finished!");
+                    if (result.isSuccess())
+                        buyHelper.queryInventoryAsync(true, moreSkus, new IabHelper.QueryInventoryFinishedListener() {
+                            @Override
+                            public void onQueryInventoryFinished(IabResult result, Inventory inv) {
+                                if (result.isSuccess()) {
+                                    boolean isPremium = inv.hasPurchase(GotsPurchaseItem.SKU_PREMIUM);
+                                    gotsPrefs.setPremium(isPremium);
+                                    Log.i(TAG, "Successful got inventory!");
 
-                if (result.isSuccess())
-                    buyHelper.queryInventoryAsync(true, moreSkus, new IabHelper.QueryInventoryFinishedListener() {
-                        @Override
-                        public void onQueryInventoryFinished(IabResult result, Inventory inv) {
-                            if (result.isSuccess()) {
-                                boolean isPremium = inv.hasPurchase(GotsPurchaseItem.SKU_PREMIUM);
-                                gotsPrefs.setPremium(isPremium);
-                                Log.i(TAG, "Successful got inventory!");
-
-                            } else {
-                                Log.i(TAG, "Error getting inventory!");
+                                } else {
+                                    Log.i(TAG, "Error getting inventory!");
+                                }
+                                progressPurchase.clearAnimation();
+                                progressPurchase.setBackgroundDrawable(getResources().getDrawable(
+                                        R.drawable.bg_state_ok));
+                                textprogressAction.setText(getResources().getString(R.string.synchro_purchase_ok));
+                                // getApplicationContext().stopService(startServiceIntent4);
+                                removeProgress();
                             }
-                            progressPurchase.clearAnimation();
-                            progressPurchase.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
-                            textprogressAction.setText(getResources().getString(R.string.synchro_purchase_ok));
-                            // getApplicationContext().stopService(startServiceIntent4);
-                            removeProgress();
-                        }
-                    });
-            }
-        });
+                        });
+                }
+            });
+        } catch (Exception e) {
+            Log.e(TAG, "IabHelper can not be initialized"+e.getMessage());
+            removeProgress();
 
+        }
         // new AsyncTask<Void, Integer, Void>() {
         // // Intent startServiceIntent4 = new Intent(getApplicationContext(), GotsBillingService.class);
         //

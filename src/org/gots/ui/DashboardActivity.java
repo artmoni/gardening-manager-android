@@ -10,6 +10,9 @@
  ******************************************************************************/
 package org.gots.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.broadcast.BroadCastMessages;
@@ -32,6 +35,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -43,7 +47,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class DashboardActivity extends AbstractActivity implements OnClickListener {
+public class DashboardActivity extends AbstractActivity implements OnClickListener, ActionBar.OnNavigationListener {
     // GoogleAnalyticsTracker tracker;
     GotsAdvertisement adView;
 
@@ -61,11 +65,14 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
     private MenuItem itemConnected;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AppRater.app_launched(this);
+
+        final ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
         // NewRelic.withApplicationToken( "AA89617084bf906d3a0425f6cf6a382ce574b3acd8" ).start(this.getApplication());
         setContentView(R.layout.dashboard);
@@ -85,6 +92,30 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
         registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
 
+        // List gardens in drop down menu
+
+//        displayGardenMenu(actionBar);
+    }
+
+    protected void displayGardenMenu(final ActionBar actionBar) {
+        myGardens = gardenManager.getMyGardens(false);
+        GardenInterface currentGarden = gardenManager.getCurrentGarden();
+        int selectedGardenIndex = 0;
+        String[] dropdownValues = new String[myGardens.size()];
+        for (int i = 0; i < myGardens.size(); i++) {
+            GardenInterface garden = myGardens.get(i);
+            dropdownValues[i] = garden.getLocality();
+            if (garden.getId() == currentGarden.getId())
+                selectedGardenIndex = i;
+        }
+        if (dropdownValues.length > 0) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.sherlock_spinner_item,
+                    android.R.id.text1, dropdownValues);
+
+            adapter.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
+            actionBar.setListNavigationCallbacks(adapter, this);
+            actionBar.setSelectedNavigationItem(selectedGardenIndex);
+        }
     }
 
     protected void checkPremiumAds() {
@@ -93,15 +124,6 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         if (!gotsPrefs.isPremium()) {
             adView = new GotsAdvertisement(this);
             View ads = adView.getPremiumAds(layout);
-//            buyHelper = new IabHelper(getApplicationContext(), gotsPrefs.getPlayStorePubKey());
-//            buyHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
-//                @Override
-//                public void onIabSetupFinished(IabResult result) {
-//                    // update();
-//                    Toast.makeText(getApplicationContext(), "Set up finished!", Toast.LENGTH_SHORT).show();
-//
-//                }
-//            });
             ads.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -109,20 +131,6 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
                     FragmentManager fm = getSupportFragmentManager();
                     GotsBillingDialog editNameDialog = new GotsBillingDialog();
                     editNameDialog.show(fm, "fragment_edit_name");
-//                    buyHelper.launchPurchaseFlow(DashboardActivity.this, GotsPurchaseItem.SKU_PREMIUM,
-//                            GotsPurchaseItem.BUY_REQUEST_CODE, new IabHelper.OnIabPurchaseFinishedListener() {
-//                                @Override
-//                                public void onIabPurchaseFinished(IabResult result, Purchase info) {
-//                                    if (result.isSuccess()) {
-//                                        Toast.makeText(getApplicationContext(), "Thanks for buying!",
-//                                                Toast.LENGTH_SHORT).show();
-//                                        // update();
-//                                        gotsPrefs.setPremium(true);
-//                                        onResume();
-//                                    }
-//                                }
-//
-//                            });
                 }
             });
         } else {
@@ -145,6 +153,8 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         }
 
     };
+
+    private List<GardenInterface> myGardens;
 
     protected void refreshConnectionState() {
         if (itemConnected == null) {
@@ -213,8 +223,8 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         super.onDestroy();
         unregisterReceiver(weatherBroadcastReceiver);
         stopService(weatherIntent);
-//        if (buyHelper != null)
-//            buyHelper.dispose();
+        // if (buyHelper != null)
+        // buyHelper.dispose();
     }
 
     @Override
@@ -224,36 +234,51 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
         GoogleAnalyticsTracker.getInstance().dispatch();
 
-        new AsyncTask<Void, Void, GardenInterface>() {
-            ActionBar bar = getSupportActionBar();
+        startService(weatherIntent);
 
-            @Override
-            protected GardenInterface doInBackground(Void... params) {
-                return gardenManager.getCurrentGarden();
-            }
+        // if (gotsPrefs.getCurrentGardenId() == -1) {
+        if (gardenManager.getCurrentGarden() == null) {
+            Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+            startActivity(intent);
+            Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
+            findViewById(R.id.dashboard_button_profile).startAnimation(myFadeInAnimation);
+        } else
+            findViewById(R.id.dashboard_button_profile).clearAnimation();
 
-            @Override
-            protected void onPostExecute(GardenInterface currentGarden) {
-                if (currentGarden != null) {
-                    bar.setTitle(currentGarden.getLocality());
-                } else {
-                    bar.setTitle(gotsPrefs.getGardeningManagerAppname());
-                }
-                startService(weatherIntent);
+        displayGardenMenu(getSupportActionBar());
+        refreshConnectionState();
 
-                // if (gotsPrefs.getCurrentGardenId() == -1) {
-                if (gardenManager.getCurrentGarden() == null) {
-                    Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                    startActivity(intent);
-                    Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
-                    findViewById(R.id.dashboard_button_profile).startAnimation(myFadeInAnimation);
-                } else
-                    findViewById(R.id.dashboard_button_profile).clearAnimation();
-
-                refreshConnectionState();
-                super.onPostExecute(currentGarden);
-            }
-        }.execute();
+        // new AsyncTask<Void, Void, GardenInterface>() {
+        // ActionBar bar = getSupportActionBar();
+        //
+        // @Override
+        // protected GardenInterface doInBackground(Void... params) {
+        // return gardenManager.getCurrentGarden();
+        // }
+        //
+        // @Override
+        // protected void onPostExecute(GardenInterface currentGarden) {
+        // if (currentGarden != null) {
+        // bar.setTitle(currentGarden.getLocality());
+        // } else {
+        // bar.setTitle(gotsPrefs.getGardeningManagerAppname());
+        // }
+        // startService(weatherIntent);
+        //
+        // // if (gotsPrefs.getCurrentGardenId() == -1) {
+        // if (gardenManager.getCurrentGarden() == null) {
+        // Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+        // startActivity(intent);
+        // Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
+        // findViewById(R.id.dashboard_button_profile).startAnimation(myFadeInAnimation);
+        // } else
+        // findViewById(R.id.dashboard_button_profile).clearAnimation();
+        //
+        // refreshConnectionState();
+        // displayGardenMenu(getSupportActionBar());
+        // super.onPostExecute(currentGarden);
+        // }
+        // }.execute();
 
     }
 
@@ -326,14 +351,22 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         Log.d(TAG, "onActivityResult(" + requestCode + "," + resultCode + "," + data);
 
         // Pass on the activity result to the helper for handling
-//        if (!buyHelper.handleActivityResult(requestCode, resultCode, data)) {
-//            // not handled, so handle it ourselves (here's where you'd
-//            // perform any handling of activity results not related to in-app
-//            // billing...
-//            super.onActivityResult(requestCode, resultCode, data);
-//        } else {
-//            Log.d(TAG, "onActivityResult handled by IABUtil.");
-//        }
+        // if (!buyHelper.handleActivityResult(requestCode, resultCode, data)) {
+        // // not handled, so handle it ourselves (here's where you'd
+        // // perform any handling of activity results not related to in-app
+        // // billing...
+        // super.onActivityResult(requestCode, resultCode, data);
+        // } else {
+        // Log.d(TAG, "onActivityResult handled by IABUtil.");
+        // }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+        // Toast.makeText(getBaseContext(), "You selected : " + myGardens.get(itemPosition), Toast.LENGTH_SHORT).show();
+        gardenManager.setCurrentGarden(myGardens.get(itemPosition));
+        startService(weatherIntent);
+        return false;
     }
 
 }

@@ -248,6 +248,42 @@
         <item name="divider">@drawable/tab_divider</item>
         <item name="android:dropDownItemStyle">@style/Widget.DropDownItemLight</item>
         <item name="android:autoCompleteTextViewStyle">@style/Widget.AutoCompleteTextViewLight</item>
+        <item name="android:spinnerDropDownItemStyle">@style/DropDownItem</item>
+        <item name="spinnerDropDownItemStyle">@style/DropDownItem</item>
+        <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
+        <item name="spinnerItemStyle">@style/SpinnerItem</item>
+        <item name="android:actionDropDownStyle">@style/DropDownNav</item>
+        <item name="actionDropDownStyle">@style/DropDownNav</item>
+    </style>
+
+    <style name="SpinnerItem" parent="Widget.Sherlock.TextView.SpinnerItem">
+        <item name="android:textAppearance">@style/Custom.TextAppearance.Sherlock.Widget.TextView.SpinnerItem</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="Custom.TextAppearance.Sherlock.Widget.TextView.SpinnerItem" parent="TextAppearance.Sherlock.Widget.TextView.SpinnerItem">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/green_light</item>
+        <item name="android:shadowColor">#4ccfff</item>
+        <item name="android:shadowDy">3</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="DropDownNav" parent="Widget.Sherlock.Spinner.DropDown.ActionBar"></style>
+
+    <style name="DropDownItem" parent="Widget.Sherlock.TextView.SpinnerItem">
+        <item name="android:background">@color/text_color_dark</item>
+        <item name="background">@color/text_color_dark</item>
+        <item name="android:textAppearance">@style/Custom.TextAppearance.Sherlock.Widget.TextView.DropDownItem</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+    </style>
+    
+     <style name="Custom.TextAppearance.Sherlock.Widget.TextView.DropDownItem" parent="TextAppearance.Sherlock.Widget.TextView.SpinnerItem">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/text_color_light</item>
+        <item name="android:textStyle">normal</item>
     </style>
 
     <style name="Widget.Styled.ActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">

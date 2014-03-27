@@ -121,7 +121,7 @@ public class GardenManager extends BroadcastReceiver {
         gardenProvider.setCurrentGarden(garden);
         mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
 
-        Log.d(TAG, "setCurrentGarden [" + garden.getId() + "] " + garden.getLocality()
+        Log.d(TAG, "[" + garden.getId() + "] " + garden.getLocality()
                 + " has been set as current workspace");
     }
 
