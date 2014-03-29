@@ -20,7 +20,7 @@ import org.gots.seed.LikeStatus;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.adapter.PlanningHarvestAdapter;
 import org.gots.seed.adapter.PlanningSowAdapter;
-import org.gots.ui.LoginActivity;
+import org.gots.ui.LoginDialogFragment;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -163,7 +163,7 @@ public class SeedWidgetLong extends LinearLayout {
                                     mContext.getResources().getString(R.string.login_connect),
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
-                                            Intent loginIntent = new Intent(mContext, LoginActivity.class);
+                                            Intent loginIntent = new Intent(mContext, LoginDialogFragment.class);
                                             mContext.startActivity(loginIntent);
                                         }
                                     }).setNegativeButton("No", new DialogInterface.OnClickListener() {

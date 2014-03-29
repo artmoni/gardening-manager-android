@@ -10,12 +10,20 @@
  ******************************************************************************/
 package org.gots.garden.adapter;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.gots.R;
+import org.gots.authentication.GoogleAuthentication;
+import org.gots.authentication.GotsSocialAuthentication;
+import org.gots.authentication.User;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GardenManager;
 import org.gots.preferences.GotsPreferences;
@@ -27,6 +35,9 @@ import org.gots.weather.view.WeatherView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +48,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+import com.google.android.gms.auth.UserRecoverableAuthException;
 
 public class ProfileAdapter extends BaseAdapter {
 
@@ -63,6 +75,9 @@ public class ProfileAdapter extends BaseAdapter {
 
         this.myGardens = myGardens;
         selectedGarden = gardenManager.getCurrentGarden();
+
+        gotsPreferences = GotsPreferences.getInstance().initIfNew(mContext);
+
     }
 
     @Override
@@ -83,6 +98,52 @@ public class ProfileAdapter extends BaseAdapter {
         // TODO Auto-generated method stub
         return 0;
     }
+
+    private void downloadImage(String userid, String url) {
+        File file = new File(mContext.getCacheDir() + "/" + userid.toLowerCase().replaceAll("\\s", ""));
+        if (!file.exists()) {
+            try {
+                URLConnection conn = new URL(url).openConnection();
+                conn.connect();
+                Bitmap image = BitmapFactory.decodeStream(conn.getInputStream());
+                FileOutputStream out = new FileOutputStream(file);
+                image.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                out.flush();
+                out.close();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return;
+    }
+
+    AsyncTask<ImageView, Void, Void> userInfo = new AsyncTask<ImageView, Void, Void>() {
+        ImageView imageProfile;
+        @Override
+        protected Void doInBackground(ImageView... params) {
+            imageProfile=params[0];
+            GotsSocialAuthentication authentication = new GoogleAuthentication(mContext);
+            try {
+                String token = authentication.getToken(gotsPreferences.getNuxeoLogin());
+                user = authentication.getUser(token);
+                downloadImage(user.getId(), user.getPictureURL());
+            } catch (UserRecoverableAuthException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        protected void onPostExecute(Void result) {
+            File file = new File(mContext.getCacheDir() + "/" + user.getId().toLowerCase().replaceAll("\\s", ""));
+            Bitmap usrLogo = BitmapFactory.decodeFile(file.getAbsolutePath());
+            imageProfile.setImageBitmap(usrLogo);
+        };
+    };
 
     @SuppressWarnings("deprecation")
     @Override
@@ -114,6 +175,8 @@ public class ProfileAdapter extends BaseAdapter {
             } else {
                 weatherState.setBackground(mContext.getResources().getDrawable(R.drawable.bg_weather));
             }
+
+           userInfo.execute(imageProfile);
             // mContext.startService(weatherIntent);
             // mContext.registerReceiver(weatherBroadcastReceiver, new
             // IntentFilter(
@@ -216,6 +279,10 @@ public class ProfileAdapter extends BaseAdapter {
     }
 
     private ViewGroup weatherHistory;
+
+    private User user;
+
+    private GotsPreferences gotsPreferences;
 
     @Override
     public void notifyDataSetChanged() {

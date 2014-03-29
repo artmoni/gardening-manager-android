@@ -48,6 +48,11 @@
   </repositories>
   <dependencies>
     <dependency>
+      <groupId>io.oauth</groupId>
+      <artifactId>oauth-android</artifactId>
+      <version>0.1</version>
+    </dependency>
+    <dependency>
       <groupId>android</groupId>
       <artifactId>android</artifactId>
       <version>4.2.2_r2</version>
@@ -220,7 +225,6 @@
           <undeployBeforeDeploy>false</undeployBeforeDeploy>
         </configuration>
       </plugin>
-      
     </plugins>
   </build>
   <profiles>

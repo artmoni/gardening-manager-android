@@ -40,7 +40,6 @@
     <application
         android:icon="@drawable/launcher"
         android:label="@string/app_name"
-           android:debuggable="false"
         android:theme="@style/Theme.Styled" >
         <activity
             android:name=".ui.SplashScreenActivity"

@@ -14,10 +14,7 @@
         android:id="@+id/about"
         android:showAsAction="never"
         android:title="@string/menu.about"/>
-    <item
-        android:id="@+id/login"
-        android:showAsAction="never"
-        android:title="@string/login.account" />
+    
     <item
         android:id="@+id/connection"
         android:icon="@drawable/garden_disconnected"

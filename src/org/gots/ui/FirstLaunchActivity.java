@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.gots.R;
 import org.gots.authentication.GoogleAuthentication;
+import org.gots.authentication.GotsSocialAuthentication;
 import org.gots.authentication.NuxeoAuthentication;
 
 import android.accounts.Account;
@@ -93,7 +94,7 @@ public class FirstLaunchActivity extends AbstractActivity {
                             @Override
                             protected String doInBackground(String... params) {
 
-                                GoogleAuthentication authentication = new GoogleAuthentication(getApplicationContext());
+                                GotsSocialAuthentication authentication = new GoogleAuthentication(getApplicationContext());
                                 String googleToken = null;
                                 String nuxeoToken = null;
                                 try {

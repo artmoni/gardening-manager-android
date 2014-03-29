@@ -22,12 +22,12 @@ import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.Scopes;
 
-public class GoogleAuthentication {
-//    private String CLIENT_ID = "473239775303-khctmm26flfc9c3m97ge3uss4ajo8c3r.apps.googleusercontent.com";
-//
-//    private String CLIENT_SECRET = "sdxIz8qR2xdIE4FaYb3CZYvz";
-//
-//    private String REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob";
+public class GoogleAuthentication implements GotsSocialAuthentication {
+    // private String CLIENT_ID = "473239775303-khctmm26flfc9c3m97ge3uss4ajo8c3r.apps.googleusercontent.com";
+    //
+    // private String CLIENT_SECRET = "sdxIz8qR2xdIE4FaYb3CZYvz";
+    //
+    // private String REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob";
 
     final String G_PLUS_SCOPE = "https://www.googleapis.com/auth/plus.me";
 
@@ -59,19 +59,114 @@ public class GoogleAuthentication {
         }
     }
 
-    public String getToken(String accountName) throws UserRecoverableAuthException, IOException, GoogleAuthException {
+    @Override
+    public String getToken(String accountName) throws UserRecoverableAuthException, IOException {
         String token = null;
 
         final String SCOPE_PREFIX = "oauth2:";
         final String SCOPES = SCOPE_PREFIX + Scopes.PLUS_LOGIN + " " + Scopes.PLUS_PROFILE + " "
                 + "https://www.googleapis.com/auth/userinfo.email";
 
-        token = GoogleAuthUtil.getToken(mContext, accountName, SCOPES);
+        try {
+            token = GoogleAuthUtil.getToken(mContext, accountName, SCOPES);
+        } catch (GoogleAuthException e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
         Log.d(TAG, "GoogleAuthUtil.getToken=" + token);
 
         return token;
     }
 
+    public String getEmail(String accessToken, String userid) {
+        URL url;
+        String login = null;
+        try {
+
+            url = new URL("https://www.googleapis.com/plus/v1/people/" + userid + "?access_token=" + accessToken);
+
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            int serverCode = con.getResponseCode();
+            // successful query
+            if (serverCode == 200) {
+                try {
+                    InputStream is = con.getInputStream();
+                    JSONObject jsonArray;
+                    jsonArray = new JSONObject(convertStreamToString(is));
+
+                    login = (String) jsonArray.getJSONObject("emails").get("value");
+
+                    Log.d(TAG, "Google login = " + login);
+                    is.close();
+                } catch (JSONException e) {
+                    Log.e(TAG, e.getMessage(), e);
+                    return null;
+                }
+                // bad token, invalidate and get a new one
+            } else if (serverCode == 401) {
+                GoogleAuthUtil.invalidateToken(mContext, accessToken);
+                // Log.e(TAG, "Server auth error: " + readResponse(con.getErrorStream()));
+                Log.e(TAG, "Server auth error: ");
+                // unknown error, do something else
+            } else {
+                Log.e(TAG, "Server returned the following error code: " + serverCode);
+
+            }
+        } catch (MalformedURLException e1) {
+            Log.e(TAG, e1.getMessage(), e1);
+        } catch (IOException e1) {
+            Log.e(TAG, e1.getMessage(), e1);
+        }
+        return login;
+    }
+
+    @Override
+    public User getUser(String accessToken) {
+        URL url;
+        User user = new User();
+        try {
+            url = new URL("https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + accessToken);
+
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            int serverCode = con.getResponseCode();
+            // successful query
+            if (serverCode == 200) {
+                try {
+                    InputStream is = con.getInputStream();
+                    JSONObject jsonArray;
+                    jsonArray = new JSONObject(convertStreamToString(is));
+
+                    user.setId((String) jsonArray.get("id"));
+                    user.setFamily_name((String) jsonArray.get("family_name"));
+                    user.setGiven_name((String) jsonArray.get("given_name"));
+                    user.setPictureURL((String) jsonArray.get("picture"));
+                    user.setLocale((String) jsonArray.get("locale"));
+                    user.setName((String) jsonArray.get("name"));
+                    user.setGender((String) jsonArray.get("gender"));
+                    user.setEmail(getEmail(accessToken, "me"));
+                    Log.d(TAG, "Google User = " + user.getName());
+                    is.close();
+                } catch (JSONException e) {
+                    Log.e(TAG, e.getMessage(), e);
+                    return null;
+                }
+                // bad token, invalidate and get a new one
+            } else if (serverCode == 401) {
+                GoogleAuthUtil.invalidateToken(mContext, accessToken);
+                // Log.e(TAG, "Server auth error: " + readResponse(con.getErrorStream()));
+                Log.e(TAG, "Server auth error: ");
+                // unknown error, do something else
+            } else {
+                Log.e("Server returned the following error code: " + serverCode, null);
+            }
+        } catch (MalformedURLException e1) {
+            Log.e(TAG, e1.getMessage(), e1);
+        } catch (IOException e1) {
+            Log.e(TAG, e1.getMessage(), e1);
+        }
+        return user;
+    }
+
+    @Override
     public String getUserID(String accessToken) {
         URL url;
         String userID = null;
@@ -143,6 +238,7 @@ public class GoogleAuthentication {
      * }
      * }
      */
+    @Override
     public List<String> getUserFriends(String accessToken, String userId) {
 
         URL url;

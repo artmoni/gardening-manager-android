@@ -91,10 +91,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         weatherIntent = new Intent(this, WeatherUpdateService.class);
 
         registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
-
-        // List gardens in drop down menu
-
-//        displayGardenMenu(actionBar);
+        registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
     }
 
     protected void displayGardenMenu(final ActionBar actionBar) {
@@ -304,10 +301,12 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
             startActivity(aboutIntent);
 
             return true;
-        case R.id.login:
-            Intent loginIntent = new Intent(this, LoginActivity.class);
-            startActivity(loginIntent);
-            return true;
+//        case R.id.login:
+//            // Intent loginIntent = new Intent(this, LoginDialogFragment.class);
+//            // startActivity(loginIntent);
+//            LoginDialogFragment login = new LoginDialogFragment();
+//            login.show(getSupportFragmentManager(), TAG);
+//            return true;
         case R.id.premium:
             FragmentManager fm = getSupportFragmentManager();
             GotsBillingDialog editNameDialog = new GotsBillingDialog();
@@ -324,10 +323,12 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
             // return true;
 
         case R.id.connection:
-            if (gotsPrefs.isConnectedToServer())
-                Toast.makeText(this, getResources().getString(R.string.login_connect_state), Toast.LENGTH_SHORT).show();
-            else
-                Toast.makeText(this, getResources().getString(R.string.login_disconnect_state), Toast.LENGTH_SHORT).show();
+            LoginDialogFragment login = new LoginDialogFragment();
+            login.show(getSupportFragmentManager(), TAG);
+//            if (gotsPrefs.isConnectedToServer())
+//                Toast.makeText(this, getResources().getString(R.string.login_connect_state), Toast.LENGTH_SHORT).show();
+//            else
+//                Toast.makeText(this, getResources().getString(R.string.login_disconnect_state), Toast.LENGTH_SHORT).show();
             return true;
 
         default:

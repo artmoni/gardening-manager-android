@@ -130,7 +130,7 @@
     <string name="login.connect.state">You work safely online</string>
     <string name="login.connect.error">Connection failed, have you already create an account ? \n please verify your informations and try again. </string>
     <string name="login.disconnect">Sign out</string>
-    <string name="login.disconnect.state">You are not backuped, log in to be synchronized</string>
+    <string name="login.disconnect.state">You work offline</string>
     <string name="login.connect.description">Your account _ACCOUNT_ is now synchronized with my.gardening-manager.com online</string>
     <string name="login.connect.description2">Share with your friends</string>
     <string name="login.connect.description3">Create and share your plant descriptions</string>
