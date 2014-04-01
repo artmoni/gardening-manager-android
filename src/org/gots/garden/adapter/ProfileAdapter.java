@@ -118,11 +118,12 @@ public class ProfileAdapter extends BaseAdapter {
         return;
     }
 
-    AsyncTask<ImageView, Void, Void> userInfo = new AsyncTask<ImageView, Void, Void>() {
+    public class UserInfo extends AsyncTask<ImageView, Void, Void> {
         ImageView imageProfile;
+
         @Override
         protected Void doInBackground(ImageView... params) {
-            imageProfile=params[0];
+            imageProfile = params[0];
             GotsSocialAuthentication authentication = new GoogleAuthentication(mContext);
             try {
                 String token = authentication.getToken(gotsPreferences.getNuxeoLogin());
@@ -139,11 +140,13 @@ public class ProfileAdapter extends BaseAdapter {
         }
 
         protected void onPostExecute(Void result) {
-            File file = new File(mContext.getCacheDir() + "/" + user.getId().toLowerCase().replaceAll("\\s", ""));
-            Bitmap usrLogo = BitmapFactory.decodeFile(file.getAbsolutePath());
-            imageProfile.setImageBitmap(usrLogo);
+            if (user != null) {
+                File file = new File(mContext.getCacheDir() + "/" + user.getId().toLowerCase().replaceAll("\\s", ""));
+                Bitmap usrLogo = BitmapFactory.decodeFile(file.getAbsolutePath());
+                imageProfile.setImageBitmap(usrLogo);
+            }
         };
-    };
+    }
 
     @SuppressWarnings("deprecation")
     @Override
@@ -175,8 +178,8 @@ public class ProfileAdapter extends BaseAdapter {
             } else {
                 weatherState.setBackground(mContext.getResources().getDrawable(R.drawable.bg_weather));
             }
-
-           userInfo.execute(imageProfile);
+            UserInfo userInfoTask = new UserInfo();
+            userInfoTask.execute(imageProfile);
             // mContext.startService(weatherIntent);
             // mContext.registerReceiver(weatherBroadcastReceiver, new
             // IntentFilter(

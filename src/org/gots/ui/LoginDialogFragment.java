@@ -499,9 +499,11 @@ public class LoginDialogFragment extends AbstractDialogFragment {
                     gotsPrefs.setNuxeoLogin(account.name);
                     gotsPrefs.setToken(resultToken);
                     gotsPrefs.setConnectedToServer(true);
-                    onResume();
+                    // onResume();
+                    getDialog().dismiss();
                 } else {
-                    Toast.makeText(getActivity(), "Error requesting GoogleAuthUtil.getToken", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Please check your internet connection or try later",
+                            Toast.LENGTH_SHORT).show();
                 }
                 super.onPostExecute(resultToken);
             }

@@ -316,10 +316,10 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
     @Override
     public GardenInterface getCurrentGarden() {
         GardenInterface garden = super.getCurrentGarden();
-        if (garden != null && garden.getUUID() == null) {
-            garden = createGarden(garden);
-            garden = super.updateGarden(garden);
-        }
+//        if (garden != null && garden.getUUID() == null) {
+//            garden = createGarden(garden);
+//            garden = super.updateGarden(garden);
+//        }
 
         return garden;
     }
