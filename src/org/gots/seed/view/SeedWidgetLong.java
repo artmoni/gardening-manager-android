@@ -22,11 +22,13 @@ import org.gots.seed.adapter.PlanningHarvestAdapter;
 import org.gots.seed.adapter.PlanningSowAdapter;
 import org.gots.ui.LoginDialogFragment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -159,12 +161,14 @@ public class SeedWidgetLong extends LinearLayout {
                             // set title
                             alertDialogBuilder.setTitle(exception.getMessage());
 
-                            alertDialogBuilder.setMessage("").setCancelable(false).setPositiveButton(
+                            alertDialogBuilder.setMessage(exception.getMessageDescription()).setCancelable(false).setPositiveButton(
                                     mContext.getResources().getString(R.string.login_connect),
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
-                                            Intent loginIntent = new Intent(mContext, LoginDialogFragment.class);
-                                            mContext.startActivity(loginIntent);
+//                                            Intent loginIntent = new Intent(mContext, LoginDialogFragment.class);
+//                                            mContext.startActivity(loginIntent);
+                                            LoginDialogFragment dialogFragment = new LoginDialogFragment();
+                                            dialogFragment.show(((FragmentActivity)mContext).getSupportFragmentManager(), "");
                                         }
                                     }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
