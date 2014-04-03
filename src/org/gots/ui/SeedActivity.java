@@ -16,15 +16,17 @@ import org.gots.seed.GotsSeedManager;
 import org.gots.seed.provider.GotsSeedProvider;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.SherlockFragment;
 
-public class SeedActivity extends SherlockFragment {
+public class SeedActivity extends Fragment {
     private int seedId;
 
     protected BaseSeedInterface mSeed;
@@ -59,7 +61,6 @@ public class SeedActivity extends SherlockFragment {
         TextView seedDescriptionTitle = (TextView) v.findViewById(R.id.IdSeedDescriptionEnvironmentTitle);
         seedDescriptionTitle.setOnClickListener(new View.OnClickListener() {
 
-            @Override
             public void onClick(View v) {
                 if (seedDescriptionEnvironnement.getVisibility() == View.VISIBLE)
                     seedDescriptionEnvironnement.setVisibility(View.GONE);
@@ -73,7 +74,6 @@ public class SeedActivity extends SherlockFragment {
         TextView seedDescriptionCultureTitle = (TextView) v.findViewById(R.id.IdSeedDescriptionCultureTitle);
         seedDescriptionCultureTitle.setOnClickListener(new View.OnClickListener() {
 
-            @Override
             public void onClick(View v) {
                 if (seedDescriptionCulture.getVisibility() == View.VISIBLE)
                     seedDescriptionCulture.setVisibility(View.GONE);
@@ -87,7 +87,6 @@ public class SeedActivity extends SherlockFragment {
         TextView seedDescriptionEnnemiTitle = (TextView) v.findViewById(R.id.IdSeedDescriptionEnnemiTitle);
         seedDescriptionEnnemiTitle.setOnClickListener(new View.OnClickListener() {
 
-            @Override
             public void onClick(View v) {
                 if (seedDescriptionEnnemi.getVisibility() == View.VISIBLE)
                     seedDescriptionEnnemi.setVisibility(View.GONE);
@@ -101,7 +100,6 @@ public class SeedActivity extends SherlockFragment {
         TextView seedDescriptionHarvest = (TextView) v.findViewById(R.id.IdSeedDescriptionHarvestTitle);
         seedDescriptionHarvest.setOnClickListener(new View.OnClickListener() {
 
-            @Override
             public void onClick(View v) {
                 if (seedDescriptionCultureHarvest.getVisibility() == View.VISIBLE)
                     seedDescriptionCultureHarvest.setVisibility(View.GONE);

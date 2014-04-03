@@ -41,10 +41,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class DashboardActivity extends AbstractActivity implements OnClickListener, ActionBar.OnNavigationListener {
@@ -106,10 +106,10 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
                 selectedGardenIndex = i;
         }
         if (dropdownValues.length > 0) {
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.sherlock_spinner_item,
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,
                     android.R.id.text1, dropdownValues);
 
-            adapter.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
             actionBar.setListNavigationCallbacks(adapter, this);
             actionBar.setSelectedNavigationItem(selectedGardenIndex);
         }
@@ -338,7 +338,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getSupportMenuInflater();
+        MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_dashboard, menu);
         itemConnected = (MenuItem) menu.findItem(R.id.connection);
         refreshConnectionState();

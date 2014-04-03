@@ -40,10 +40,10 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBar;;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 public class MyMainGarden extends AbstractActivity {
 
@@ -123,7 +123,7 @@ public class MyMainGarden extends AbstractActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getSupportMenuInflater();
+        MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_garden, menu);
         this.menu = menu;
         return true;

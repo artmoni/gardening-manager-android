@@ -27,16 +27,16 @@ import android.support.v4.view.ViewPager;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.Tab;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.ListFragment;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.ActionBar.Tab;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.app.SherlockListFragment;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
-
-public class HutActivity extends AbstractFragmentActivity implements ActionBar.TabListener {
+public class HutActivity extends AbstractFragmentActivity  {
 
     // private ListVendorSeedAdapter lvsea;
     ListView listSeeds;
@@ -71,7 +71,7 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
     @Override
     protected void onActivityResult(int arg0, int arg1, Intent arg2) {
         super.onActivityResult(arg0, arg1, arg2);
-        
+
     }
 
     private void buildMyTabHost() {
@@ -89,7 +89,7 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
         // // ********************** Tab description **********************
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds)),
                 VendorListActivity.class, null);
-        
+
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
                 MySeedsListActivity.class, null);
         // an allotment is selected
@@ -105,24 +105,8 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
     }
 
     @Override
-    public void onTabSelected(Tab tab, FragmentTransaction ft) {
-        // mViewPager.getAdapter().notifyDataSetChanged();
-    }
-
-    @Override
-    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void onTabReselected(Tab tab, FragmentTransaction ft) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getSupportMenuInflater();
+        MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_hut, menu);
         return true;
     }
@@ -184,7 +168,7 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
 
         private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
 
-        public TabsAdapter(SherlockFragmentActivity activity, ViewPager pager) {
+        public TabsAdapter(ActionBarActivity activity, ViewPager pager) {
             super(activity.getSupportFragmentManager());
             mContext = activity;
             mActionBar = activity.getSupportActionBar();
@@ -223,8 +207,7 @@ public class HutActivity extends AbstractFragmentActivity implements ActionBar.T
         public void onPageSelected(int position) {
             mActionBar.setSelectedNavigationItem(position);
 
-            
-            SherlockListFragment fragment = (SherlockListFragment) getSupportFragmentManager().findFragmentByTag(
+            ListFragment fragment = (ListFragment) getSupportFragmentManager().findFragmentByTag(
                     "android:switcher:" + R.id.pager + ":" + position);
             if (fragment != null && fragment.getListAdapter() != null)
                 ((BaseAdapter) fragment.getListAdapter()).notifyDataSetChanged();

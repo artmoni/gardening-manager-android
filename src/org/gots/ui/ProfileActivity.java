@@ -31,10 +31,10 @@ import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 public class ProfileActivity extends AbstractActivity {
 
@@ -181,7 +181,7 @@ public class ProfileActivity extends AbstractActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        MenuInflater inflater = getSupportMenuInflater();
+        MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_profile, menu);
 
         return super.onCreateOptionsMenu(menu);

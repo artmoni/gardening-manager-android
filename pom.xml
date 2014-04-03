@@ -3,16 +3,24 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
 >
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.gots</groupId>
-  <artifactId>gardening-manager</artifactId>
+  
+   <parent>
+    <groupId>org.gots</groupId>
+    <artifactId>gardening-manager</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+  
+  <artifactId>gardening-manager-android</artifactId>
   <packaging>apk</packaging>
-  <version>0.27</version>
-  <name>Gardening Manager</name>
+  <version>0.28-SNAPSHOT</version>
+  <name>Gardening Manager Android</name>
+  
   <properties>
     <android.version>4.2</android.version>
     <android.platform>17</android.platform>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <compatibility.version>18</compatibility.version>
   </properties>
   <repositories>
     <repository>
@@ -58,11 +66,24 @@
       <version>4.2.2_r2</version>
       <scope>provided</scope>
     </dependency>
-    <dependency>
+    <!-- <dependency>
       <groupId>com.actionbarsherlock</groupId>
       <artifactId>actionbarsherlock</artifactId>
-      <version>4.4.0</version>
+      <version>4.4.0</version> 
       <type>apklib</type>
+    </dependency> -->
+    <dependency>
+        <groupId>android.support</groupId>
+        <artifactId>compatibility-v7-appcompat</artifactId>
+        <version>${compatibility.version}</version>
+        <type>apklib</type>
+    </dependency>
+
+    <dependency>
+        <groupId>android.support</groupId>
+        <artifactId>compatibility-v7-appcompat</artifactId>
+        <version>${compatibility.version}</version>
+        <type>jar</type>
     </dependency>
     <dependency>
       <groupId>com.google.android.analytics</groupId>
@@ -206,6 +227,7 @@
       <artifactId>commons-codec</artifactId>
       <version>1.9</version>
     </dependency>
+   
   </dependencies>
   <build>
     <sourceDirectory>src</sourceDirectory>

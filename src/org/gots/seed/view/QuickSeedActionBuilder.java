@@ -38,11 +38,11 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 public class QuickSeedActionBuilder {
 
@@ -125,7 +125,7 @@ public class QuickSeedActionBuilder {
                 // i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 //
                 // mContext.startActivity(i);
-                FragmentManager fm = ((SherlockFragmentActivity) mContext).getSupportFragmentManager();
+                FragmentManager fm = ((FragmentActivity) mContext).getSupportFragmentManager();
                 DialogFragment editNameDialog = new NewActionActivity();
                 Bundle data = new Bundle();
                 data.putInt("org.gots.seed.id", seed.getGrowingSeedId());

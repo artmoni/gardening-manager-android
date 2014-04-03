@@ -6,6 +6,7 @@ import org.gots.R;
 import org.gots.preferences.GotsPreferences;
 
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,14 +15,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.android.vending.billing.util.IabHelper;
 import com.android.vending.billing.util.IabResult;
 import com.android.vending.billing.util.Inventory;
 import com.android.vending.billing.util.Purchase;
 import com.android.vending.billing.util.SkuDetails;
 
-public class GotsBillingDialogTest extends SherlockDialogFragment {
+public class GotsBillingDialogTest extends DialogFragment {
 
     protected static final String SKU = "android.test.purchased";
 

@@ -41,7 +41,7 @@ import com.android.vending.billing.util.IabResult;
 import com.android.vending.billing.util.Inventory;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class AboutActivity extends AbstractActivity {
+public class AboutActivity extends AbstractActivity { 
     private String TAG = "AboutActivity";
 
     protected static Handler splashHandler;

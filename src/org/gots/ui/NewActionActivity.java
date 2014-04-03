@@ -17,6 +17,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -33,10 +34,9 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class NewActionActivity extends SherlockDialogFragment implements OnItemClickListener, OnClickListener {
+public class NewActionActivity extends DialogFragment implements OnItemClickListener, OnClickListener {
 
     Integer[] list = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
 

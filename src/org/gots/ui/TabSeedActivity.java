@@ -48,6 +48,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
@@ -59,16 +60,16 @@ import android.widget.Gallery;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.Toast;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.Tab;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.ActionBar.Tab;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class TabSeedActivity extends SherlockFragmentActivity {
+public class TabSeedActivity extends ActionBarActivity {
     private static final int PICK_IMAGE = 0;
 
     protected static final String TAG = "TabSeedActivity";
@@ -195,7 +196,7 @@ public class TabSeedActivity extends SherlockFragmentActivity {
         }
 
         if (!GotsPreferences.getInstance().initIfNew(getApplicationContext()).isPremium()) {
-            GotsAdvertisement ads = new GotsAdvertisement(this);
+            GotsAdvertisement ads = new GotsAdvertisement(getApplicationContext());
 
             LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
             layout.addView(ads.getAdsLayout());
@@ -204,7 +205,7 @@ public class TabSeedActivity extends SherlockFragmentActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         if (resultCode != Activity.RESULT_CANCELED)
             if (requestCode == PICK_IMAGE) {
                 new AsyncTask<Void, Void, Void>() {
@@ -235,7 +236,7 @@ public class TabSeedActivity extends SherlockFragmentActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getSupportMenuInflater();
+        MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_seeddescription, menu);
         if (mSeed.getGrowingSeedId() == 0) {
             menu.findItem(R.id.planning).setVisible(false);
@@ -349,7 +350,7 @@ public class TabSeedActivity extends SherlockFragmentActivity {
 
         private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
 
-        public TabsAdapter(SherlockFragmentActivity activity, ViewPager pager) {
+        public TabsAdapter(ActionBarActivity activity, ViewPager pager) {
             super(activity.getSupportFragmentManager());
             mContext = activity;
             mActionBar = activity.getSupportActionBar();

@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
 
     <item
         android:id="@+id/idSeedFilter"
         android:icon="@drawable/ic_search"
-        android:showAsAction="always"
-        android:title="@string/seed.menu.search"/>
+        android:title="@string/seed.menu.search"
+        app:showAsAction="always"/>
     <item
         android:id="@+id/new_seed"
         android:icon="@drawable/bt_add_seed"
-        android:showAsAction="always"
-        android:title="@string/seed.menu.add"/>
+        android:title="@string/seed.menu.add"
+        app:showAsAction="always"/>
     <item
         android:id="@+id/help"
         android:icon="@drawable/help"
-        android:showAsAction="never"
-        android:title="@string/menu.help"/>
+        android:title="@string/menu.help"
+        app:showAsAction="never"/>
 
 </menu>

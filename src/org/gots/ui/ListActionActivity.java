@@ -19,14 +19,14 @@ import org.gots.seed.GrowingSeedInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.SherlockListFragment;
 
-public class ListActionActivity extends SherlockListFragment implements ListView.OnScrollListener {
+public class ListActionActivity extends ListFragment implements ListView.OnScrollListener {
 
     // private String[] mStrings;
 

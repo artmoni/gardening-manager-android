@@ -24,10 +24,11 @@ import java.security.SignatureException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 
+import org.gots.BuildConfig;
+
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.actionbarsherlock.BuildConfig;
 
 /**
  * Security-related methods. For a secure implementation, all of this code

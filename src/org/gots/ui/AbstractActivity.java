@@ -34,15 +34,15 @@ import org.gots.seed.GotsSeedManager;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 /**
  * @author jcarsique
  * 
  */
-public class AbstractActivity extends SherlockFragmentActivity {
+public class AbstractActivity extends ActionBarActivity {
     // private static final String TAG = AbstractActivity.class.getSimpleName();
 
     protected GotsPreferences gotsPrefs;

@@ -14,15 +14,14 @@ import org.gots.R;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.actionbarsherlock.app.SherlockFragment;
-
-public class WebViewActivity extends SherlockFragment {
+public class WebViewActivity extends Fragment {
     private ProgressDialog pd;
 
     @Override

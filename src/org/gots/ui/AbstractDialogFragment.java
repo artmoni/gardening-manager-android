@@ -3,10 +3,10 @@ package org.gots.ui;
 import org.gots.preferences.GotsPreferences;
 
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
 
-public class AbstractDialogFragment extends SherlockDialogFragment {
+public class AbstractDialogFragment extends DialogFragment {
 
     protected GotsPreferences gotsPrefs;
 
