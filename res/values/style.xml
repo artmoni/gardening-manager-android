@@ -221,7 +221,6 @@
     </style>
 
     <style name="CustomDialog" parent="android:style/Theme.Dialog">
-        <item name="android:windowBackground">@null</item>
         <item name="android:windowNoTitle">false</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowIsFloating">true</item>
@@ -233,19 +232,14 @@
 
     <style name="CustomDialogTitle" parent="android:style/Theme.Dialog">
         <item name="android:background">@color/text_color_dark</item>
-        <item name="titleTextStyle">@style/Widget.Styled.TitleTextStyle</item>
         <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="Theme.Styled" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="actionBarStyle">@style/Widget.Styled.ActionBar</item>
         <item name="android:actionBarStyle">@style/Widget.Styled.ActionBar</item>
-        <item name="actionBarTabTextStyle">@style/Widget.Styled.TabTextStyle</item>
         <item name="android:actionBarTabTextStyle">@style/Widget.Styled.TabTextStyle</item>
-        <item name="actionBarTabStyle">@style/Widget.Styled.TabBar</item>
         <item name="android:actionBarTabStyle">@style/Widget.Styled.TabBar</item>
         <item name="android:divider">@drawable/tab_divider</item>
-        <item name="divider">@drawable/tab_divider</item>
         <item name="android:dropDownItemStyle">@style/Widget.DropDownItemLight</item>
         <item name="android:autoCompleteTextViewStyle">@style/Widget.AutoCompleteTextViewLight</item>
         <item name="android:spinnerDropDownItemStyle">@style/DropDownItem</item>
@@ -278,19 +272,16 @@
         <item name="android:paddingLeft">8dp</item>
         <item name="android:paddingRight">8dp</item>
     </style>
-    
-     <style name="Custom.TextAppearance.Sherlock.Widget.TextView.DropDownItem" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
+
+    <style name="Custom.TextAppearance.Sherlock.Widget.TextView.DropDownItem" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/text_color_light</item>
         <item name="android:textStyle">normal</item>
     </style>
 
     <style name="Widget.Styled.ActionBar" parent="Widget.AppCompat.Light.ActionBar.Solid.Inverse">
-        <item name="background">@color/text_color_dark</item>
         <item name="android:background">@color/text_color_dark</item>
-        <item name="titleTextStyle">@style/Widget.Styled.TitleTextStyle</item>
         <item name="android:titleTextStyle">@style/Widget.Styled.TitleTextStyle</item>
-        <item name="backgroundSplit">@drawable/tab_divider</item>
         <item name="android:backgroundSplit">@drawable/tab_divider</item>
     </style>
 
@@ -301,9 +292,7 @@
 
     <style name="Widget.Styled.TabBar" parent="Widget.AppCompat.ActionBar.TabView">
         <item name="android:background">@drawable/selector_tab</item>
-        <item name="background">@drawable/selector_tab</item>
         <item name="android:divider">@drawable/tab_divider</item>
-        <item name="divider">@drawable/tab_divider</item>
     </style>
 
     <style name="Widget.Styled.TabTextStyle" parent="Widget.AppCompat.ActionBar.TabText">

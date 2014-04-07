@@ -25,11 +25,11 @@ http://blog.xebia.fr/2010/03/23/maven-et-android-comment-utiliser-le-plugin/
 ## INCLUDE EXTERNALS IN MAVEN REPOSITORY
 Project https://github.com/artmoni/gardening-manager-maven is load automatically in pom.xml
 
+Android Compatibility version (for device < 4.0)
+    File->Import (android-sdk\extras\android\support\v7). Choose "appcompat"
+    Project-> properties->Android. In the section library "Add" and choose "appCompat"
+    That is all!
 
-Clone ActionBarSherlock to use its APK lib:
-
-    $ git clone https://github.com/JakeWharton/ActionBarSherlock
-    # Then link the library project with your project
 
 ## INCLUDE ANDROID SDK IN MAVEN REPOSITORY
 

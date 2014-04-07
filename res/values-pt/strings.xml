@@ -88,8 +88,6 @@
   <string name="button.close">Fechar</string>
   <string name="button.ok">OK</string>
   <string name="button.cancel">Cancelar</string>
-  <string name="weather.citynotfound">Nenhum boletim meteorológico nesta localidade, insira uma área urbana proxima</string>
-  <string name="location.notfound">Você não pôde ser localizado</string>
   <string name="notification.action.title">O _SPECIE_ precisa de você</string>
   <string name="notification.action.content">e _NBACTIONS_ outra (s) acção (s)</string>
   <string name="notification.seed.title">Recentemente disponível _SPECIE_</string>

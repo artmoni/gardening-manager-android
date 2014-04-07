@@ -9,7 +9,7 @@
     <string name="gots.opensource">Projet Open Source,\n la participation est ouverte à tous</string>
     <string name="gots.loading">Veuillez patienter, chargement en cours</string>
     <string name="day">Jour</string>
-    <string name="week">semaine</string>
+    <string name="week">semaine</string> 
     <string name="month">mois</string>
     <string name="seed.register.title">Ajout variété</string>
     <string name="seed.action.date">Effectuée le :</string>
@@ -95,8 +95,6 @@
     <string name="specie.ribesrubrum">Groseillier à grappes</string>
     <string name="specie.asparagusofficinalis">Asperge</string>
     <string name="specie.cucurbitamaxima">Potiron</string>
-    <string name="weather.citynotfound">Pas de prévisions météorologiques, choisissez une ville proche</string>
-    <string name="location.notfound">Vous n\'avez pas pu être localisé</string>
     <string name="help.loading">Chargement de la documentation</string>
     <string name="menu.help">Aide</string>
     <string name="menu.about">A propos</string>

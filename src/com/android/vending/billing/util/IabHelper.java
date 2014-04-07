@@ -236,13 +236,11 @@ public class IabHelper {
         // Connection to IAB service
         logDebug("Starting in-app billing setup.");
         mServiceConn = new ServiceConnection() {
-            @Override
             public void onServiceDisconnected(ComponentName name) {
                 logDebug("Billing service disconnected.");
                 mService = null;
             }
 
-            @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 if (mDisposed)
                     return;
