@@ -3,18 +3,15 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
 >
   <modelVersion>4.0.0</modelVersion>
-  
-   <parent>
+  <parent>
     <groupId>org.gots</groupId>
     <artifactId>gardening-manager</artifactId>
     <version>1.0.0-SNAPSHOT</version>
   </parent>
-  
   <artifactId>gardening-manager-android</artifactId>
   <packaging>apk</packaging>
   <version>0.28-SNAPSHOT</version>
   <name>Gardening Manager Android</name>
-  
   <properties>
     <android.version>4.2</android.version>
     <android.platform>17</android.platform>
@@ -66,137 +63,73 @@
       <version>4.2.2_r2</version>
       <scope>provided</scope>
     </dependency>
-    <!-- <dependency>
-      <groupId>com.actionbarsherlock</groupId>
-      <artifactId>actionbarsherlock</artifactId>
-      <version>4.4.0</version> 
-      <type>apklib</type>
-    </dependency> -->
+    <!-- <dependency> <groupId>com.actionbarsherlock</groupId> <artifactId>actionbarsherlock</artifactId> 
+      <version>4.4.0</version> <type>apklib</type> </dependency> -->
     <dependency>
-        <groupId>android.support</groupId>
-        <artifactId>compatibility-v7-appcompat</artifactId>
-        <version>${compatibility.version}</version>
-        <type>apklib</type>
+      <groupId>android.support</groupId>
+      <artifactId>compatibility-v4</artifactId>
     </dependency>
-
     <dependency>
-        <groupId>android.support</groupId>
-        <artifactId>compatibility-v7-appcompat</artifactId>
-        <version>${compatibility.version}</version>
-        <type>jar</type>
+      <groupId>android.support</groupId>
+      <artifactId>compatibility-v7</artifactId>
+      <type>apklib</type>
+    </dependency>
+    <dependency>
+      <groupId>android.support</groupId>
+      <artifactId>compatibility-v7</artifactId>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>android.support</groupId>
+      <artifactId>compatibility-v7-appcompat</artifactId>
+      <type>apklib</type>
+    </dependency>
+    <dependency>
+      <groupId>android.support</groupId>
+      <artifactId>compatibility-v7-appcompat</artifactId>
+      <type>jar</type>
     </dependency>
     <dependency>
       <groupId>com.google.android.analytics</groupId>
       <artifactId>analytics</artifactId>
-      <version>1.4.2</version>
     </dependency>
     <dependency>
       <groupId>com.google.android.admob</groupId>
       <artifactId>admob</artifactId>
-      <version>6.2.1-r8</version>
     </dependency>
     <dependency>
       <groupId>com.google.zxing</groupId>
       <artifactId>android-integration</artifactId>
-      <version>2.3.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.simpleframework</groupId>
-      <artifactId>simple-xml</artifactId>
-      <version>2.6.4</version>
-      <exclusions>
-        <!-- StAX is not available on Android -->
-        <exclusion>
-          <artifactId>stax</artifactId>
-          <groupId>stax</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>stax-api</artifactId>
-          <groupId>stax</groupId>
-        </exclusion>
-        <!-- Provided by Android -->
-        <exclusion>
-          <artifactId>xpp3</artifactId>
-          <groupId>xpp3</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <!-- ********* NUXEO INTEGRATION BEGIN********* -->
-    <!-- <dependency> -->
-    <!-- <groupId>org.nuxeo.ecm.automation</groupId> -->
-    <!-- <artifactId>nuxeo-automation-client</artifactId> -->
-    <!-- <version>2.0-SNAPSHOT</version> -->
-    <!-- </dependency> -->
     <dependency>
       <groupId>org.nuxeo.android</groupId>
       <artifactId>nuxeo-android-connector</artifactId>
-      <version>2.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.nuxeo.android</groupId>
       <artifactId>nuxeo-android-connector-ui</artifactId>
-      <version>2.0-SNAPSHOT</version>
       <type>apklib</type>
     </dependency>
-    <!-- <dependency> -->
-    <!-- <groupId>net.sf.json-lib</groupId> -->
-    <!-- <artifactId>json-lib</artifactId> -->
-    <!-- <version>2.4</version> -->
-    <!-- <classifier>jdk15</classifier> -->
-    <!-- </dependency> -->
-    <!-- <dependency> -->
-    <!-- <groupId>net.sf.ezmorph</groupId> -->
-    <!-- <artifactId>ezmorph</artifactId> -->
-    <!-- <version>1.0.6</version> -->
-    <!-- </dependency> -->
-    <!-- <dependency> -->
-    <!-- <groupId>org.apache.httpcomponents</groupId> -->
-    <!-- <artifactId>httpcore</artifactId> -->
-    <!-- <version>4.2.3</version> -->
-    <!-- </dependency> -->
-    <!-- <dependency> -->
-    <!-- <groupId>org.apache.httpcomponents</groupId> -->
-    <!-- <artifactId>httpclient</artifactId> -->
-    <!-- <version>4.2.3</version> -->
-    <!-- </dependency> -->
-    <!-- <dependency> -->
-    <!-- <groupId>javax.mail</groupId> -->
-    <!-- <artifactId>mail</artifactId> -->
-    <!-- <version>1.4.6</version> -->
-    <!-- </dependency> -->
-    <!-- ********* NUXEO INTEGRATION END********* -->
-    <!-- ********* SOCIALAUTH INTEGRATION BEGIN********* -->
-    <!-- <dependency> -->
-    <!-- <groupId>org.brickred</groupId> -->
-    <!-- <artifactId>socialauth</artifactId> -->
-    <!-- <version>3.0</version> -->
-    <!-- </dependency> -->
-    <!-- <dependency> -->
-    <!-- <groupId>org.openid4java</groupId> -->
-    <!-- <artifactId>openid4java</artifactId> -->
-    <!-- <version>0.9.7</version> -->
-    <!-- </dependency> -->
-    <!-- <dependency> -->
-    <!-- <groupId>org.opensocial</groupId> -->
-    <!-- <artifactId>opensocial</artifactId> -->
-    <!-- <version>1.0</version> -->
-    <!-- </dependency> -->
     <dependency>
       <groupId>com.google.android.gms</groupId>
       <artifactId>google-play-services</artifactId>
       <version>12</version>
       <type>apklib</type>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.google.android.gms</groupId>
       <artifactId>google-play-services</artifactId>
       <version>12</version>
       <type>jar</type>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.google.api-client</groupId>
       <artifactId>google-api-client</artifactId>
       <version>1.17.0-rc</version>
+      <scope>provided</scope>
       <exclusions>
         <exclusion>
           <artifactId>xpp3</artifactId>
@@ -216,18 +149,19 @@
         </exclusion>
       </exclusions>
     </dependency>
-    <dependency>
-      <groupId>com.google.api-client</groupId>
-      <artifactId>google-api-client-android</artifactId>
-      <version>1.17.0-rc</version>
-    </dependency>
+   
     <!-- ********* SOCIALAUTH INTEGRATION END********* -->
-    <dependency>
+   <!--  <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
       <version>1.9</version>
+      <scope>provided</scope>
     </dependency>
-   
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>provided</scope>
+    </dependency> -->
   </dependencies>
   <build>
     <sourceDirectory>src</sourceDirectory>
@@ -235,7 +169,7 @@
       <plugin>
         <groupId>com.jayway.maven.plugins.android.generation2</groupId>
         <artifactId>android-maven-plugin</artifactId>
-        <version>3.6.1</version>
+        <version>3.9.0-rc.1</version>
         <extensions>true</extensions>
         <configuration>
           <sdk>
