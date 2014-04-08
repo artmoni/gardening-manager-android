@@ -1,8 +1,19 @@
-# Environment
-## ANDROID Environment
+Gardening Manager development plateforme is based on maven
+This short documentation explain how to configure the developer environment with Eclipse, Android ADT and Maven
+
+# ANDROID
+## Install Android
     $ export ANDROID_HOME=/path/to/android-sdk/
     $ export PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
     $ android update sdk --no-ui
+    
+With android SDK Manager, install those tools:
+
+	- Android 4.0.3 API (or later)
+	- SDK Plateforme
+	- ARM EABI V7
+	- Google API
+	- Extras (All)
 
 ## Linux Android initialization
 http://source.android.com/source/initializing.html
@@ -16,31 +27,18 @@ http://source.android.com/source/initializing.html
     $ sudo ln -s /usr/lib/i386-linux-gnu/mesa/libGL.so.1 /usr/lib/i386-linux-gnu/libGL.so
     $ apt-get install lib32z1-dev bison flex lib32ncurses5-dev libx11-dev gperf g++-multilib
 
-## Eclipse
+# ECLIPSE
+## Install Android Developer Tool (ADT)
 Install ADT: https://dl-ssl.google.com/android/eclipse/
 
-Use android-m2e 
+## Maven in eclipse with m2e 
+Use android-m2e to mavenize the project and manage dependencies inside your eclipse environment
 http://blog.xebia.fr/2010/03/23/maven-et-android-comment-utiliser-le-plugin/
 
-## INCLUDE EXTERNALS IN MAVEN REPOSITORY
+# MAVEN 
 Project https://github.com/artmoni/gardening-manager-maven is load automatically in pom.xml
 
-Android Compatibility version (for device < 4.0)
-    File->Import (android-sdk\extras\android\support\v7). Choose "appcompat"
-    Project-> properties->Android. In the section library "Add" and choose "appCompat"
-    That is all!
-
-
 ## INCLUDE ANDROID SDK IN MAVEN REPOSITORY
-
-With android SDK Manager, install those tools:
-
-- Android 4.0.3 API (or later)
-  - SDK Plateforme
-  - ARM EABI V7
-  - Google API
-- Extras (All)
-
 Use maven-android-sdk-deployer to feed the local repository:
 
     $ git clone https://github.com/mosabua/maven-android-sdk-deployer
@@ -48,7 +46,6 @@ Use maven-android-sdk-deployer to feed the local repository:
     $ export ANDROID_HOME=/path/to/android-sdk/
     $ mvn install -P 4.2
 
-# Build
 ## Compile
 
     $ mvn clean install [--settings settings.xml] [-P env-dev]
@@ -70,6 +67,13 @@ Sign with release certificate
 
     $ jarsigner -sigalg MD5withRSA -digestalg SHA1 -keystore '$KEYSTORE_DIR/keystore' -storepass 'STORE_PASS' -keypass 'KEY_PASS' $PROJECT_HOME/target/gardening-manager-*.apk artmonimobile
     $ zipalign  4 target/gardening-manager-0.14.apk target/gardening-manager-*-signed.apk
+
+
+#########################
+### Android AppCompat Compatibility version for device < 4.0
+    File->Import (android-sdk\extras\android\support\v7). Choose "appcompat"
+    Project-> properties->Android. In the section library "Add" and choose "appCompat"
+    That is all!
 
 # SQLITE
 
