@@ -1,16 +1,25 @@
-Gardening Manager development plateforme is based on maven
+Gardening Manager development plateform is processed maven
 This short documentation explain how to configure the developer environment with Eclipse, Android ADT and Maven
+
+# Quick step installation guide
+1. git clone https://github.com/artmoni/gardening-manager-android
+2. Get the Android SDK http://developer.android.com/sdk/index.html
+3. Configure your Android environment
+4. git clone https://github.com/mosabua/maven-android-sdk-deployer
+5. git clone https://github.com/artmoni/nuxeo-android.git
+	* mvn clean install
+6. Compile gardening manager with maven
 
 # ANDROID
 ## Install Android
-    $ export ANDROID_HOME=/path/to/android-sdk/
-    $ export PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
-    $ android update sdk --no-ui
+    1. export ANDROID_HOME=/path/to/android-sdk/
+    2. export PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
+    3. android update sdk --no-ui
     
 With android SDK Manager, install those tools:
 
 	- Android 4.0.3 API (or later)
-	- SDK Plateforme
+	- SDK Plateform
 	- ARM EABI V7
 	- Google API
 	- Extras (All)
@@ -35,6 +44,12 @@ Install ADT: https://dl-ssl.google.com/android/eclipse/
 Use android-m2e to mavenize the project and manage dependencies inside your eclipse environment
 http://blog.xebia.fr/2010/03/23/maven-et-android-comment-utiliser-le-plugin/
 
+### Android AppCompat Compatibility version for device < 4.0
+Import AppCompat Android project from SDK extras directory
+    File->Import (android-sdk\extras\android\support\v7). Choose "appcompat"
+    Project-> properties->Android. In the section library "Add" and choose "appCompat"
+    That is all!
+    
 # MAVEN 
 Project https://github.com/artmoni/gardening-manager-maven is load automatically in pom.xml
 
@@ -45,9 +60,6 @@ Use maven-android-sdk-deployer to feed the local repository:
     $ cd maven-android-sdk-deployer
     $ export ANDROID_HOME=/path/to/android-sdk/
     $ mvn install -P 4.2
-
-## Export Android path
-	export ANDROID_HOME=/path/to/your/android/installation
 
 ## Compile
 
@@ -73,10 +85,7 @@ Sign with release certificate
 
 
 #########################
-### Android AppCompat Compatibility version for device < 4.0
-    File->Import (android-sdk\extras\android\support\v7). Choose "appcompat"
-    Project-> properties->Android. In the section library "Add" and choose "appCompat"
-    That is all!
+
 
 # SQLITE
 
@@ -91,11 +100,6 @@ Sign with release certificate
     $ mogrify -resize 100x100 veget_*.jpg
 
 # NUXEO INTEGRATION
-
-TODO: deprecated part
-
-    $ mvn install:install-file -Dfile=../nuxeo-android/nuxeo-automation-thin-client/target/nuxeo-automation-thin-client-2.0-SNAPSHOT.jar -Dversion=2.0-SNAPSHOT -DartifactId=nuxeo-automation-client -DgroupId=org.nuxeo.ecm.automation -Dpackaging=jar
-    $ mvn install:install-file -Dfile=../nuxeo-android/nuxeo-android-connector/target/nuxeo-android-connector-2.0-SNAPSHOT.jar -Dversion=2.0-SNAPSHOT -DartifactId=nuxeo-android-connector -DgroupId=org.nuxeo.android -Dpackaging=jar
 
 ## run nuxeo shell
 
