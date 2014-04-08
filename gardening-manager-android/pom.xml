@@ -17,7 +17,6 @@
     <android.platform>17</android.platform>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <compatibility.version>18</compatibility.version>
   </properties>
   <repositories>
     <repository>
@@ -150,18 +149,7 @@
       </exclusions>
     </dependency>
    
-    <!-- ********* SOCIALAUTH INTEGRATION END********* -->
-   <!--  <dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-      <version>1.9</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>provided</scope>
-    </dependency> -->
+   
   </dependencies>
   <build>
     <sourceDirectory>src</sourceDirectory>
@@ -184,31 +172,7 @@
     </plugins>
   </build>
   <profiles>
-    <!-- <profile> -->
-    <!-- <id>emma</id> -->
-    <!-- <build> -->
-    <!-- <plugins> -->
-    <!-- <plugin> -->
-    <!-- <groupId>com.jayway.maven.plugins.android.generation2</groupId> -->
-    <!-- <artifactId>android-maven-plugin</artifactId> -->
-    <!-- <configuration> -->
-    <!-- emma start -->
-    <!-- <emma> -->
-    <!-- <enable>true</enable> -->
-    <!-- <classFolders>${project.basedir}/target/classes/</classFolders> -->
-    <!-- <outputMetaFile>${project.basedir}/target/emma/coverage.em</outputMetaFile> -->
-    <!-- </emma> -->
-    <!-- emma stop -->
-    <!-- <dex> -->
-    <!-- <noLocals>true</noLocals> -->
-    <!-- must be set for emma -->
-    <!-- </dex> -->
-    <!-- </configuration> -->
-    <!-- <extensions>true</extensions> -->
-    <!-- </plugin> -->
-    <!-- </plugins> -->
-    <!-- </build> -->
-    <!-- </profile> -->
+   
     <profile>
       <id>release</id>
       <activation>
