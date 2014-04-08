@@ -83,6 +83,9 @@
             <avd>Device</avd>
             <wait>2000</wait>
           </emulator>
+          <test>
+            <createReport>true</createReport>
+          </test>
         </configuration>
       </plugin>
     </plugins>
