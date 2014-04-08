@@ -46,6 +46,9 @@ Use maven-android-sdk-deployer to feed the local repository:
     $ export ANDROID_HOME=/path/to/android-sdk/
     $ mvn install -P 4.2
 
+## Export Android path
+	export ANDROID_HOME=/path/to/your/android/installation
+
 ## Compile
 
     $ mvn clean install [--settings settings.xml] [-P env-dev]
