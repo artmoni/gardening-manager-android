@@ -13,7 +13,6 @@
   <version>0.28-SNAPSHOT</version>
   <name>Gardening Manager Instrumentation</name>
   <properties>
-    <android.sdk.path>/home/sfleury/Projets/Android/android-sdk-linux/</android.sdk.path>
     <android.version>4.2</android.version>
     <android.platform>16</android.platform>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
