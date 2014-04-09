@@ -5,320 +5,175 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.gots</groupId>
   <artifactId>gardening-manager</artifactId>
-  <packaging>apk</packaging>
-  <version>0.26-SNAPSHOT</version>
-  <name>Gardening Manager</name>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>Gardening Manager - Parent</name>
   <properties>
-    <android.version>4.2</android.version>
-    <android.platform>17</android.platform>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <server_schema>http</server_schema>
+    <compatibility.version>18</compatibility.version>
   </properties>
-  <repositories>
-    <repository>
-      <id>gardening-manager-maven</id>
-      <url>http://github.com/artmoni/gardening-manager-maven/raw/master</url>
-    </repository>
-    <repository>
-      <id>jakewharton</id>
-      <url>http://r.jakewharton.com/maven/release/</url>
-    </repository>
-    <repository>
-      <id>google-api-services</id>
-      <url>http://mavenrepo.google-api-java-client.googlecode.com/hg</url>
-    </repository>
-    <repository>
-      <id>public-releases</id>
-      <url>https://maven.nuxeo.org/nexus/content/repositories/public-releases/</url>
-    </repository>
-    <repository>
-      <id>public-snapshots</id>
-      <url>https://maven-us.nuxeo.org/nexus/content/repositories/public-snapshots/</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>sonatype-oss-public</id>
-      <url>https://oss.sonatype.org/content/groups/public/</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-    </repository>
-  </repositories>
-  <dependencies>
-    <dependency>
-      <groupId>android</groupId>
-      <artifactId>android</artifactId>
-      <version>4.2.2_r2</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.actionbarsherlock</groupId>
-      <artifactId>actionbarsherlock</artifactId>
-      <version>4.4.0</version>
-      <type>apklib</type>
-     
-    </dependency>
-    <dependency>
-      <groupId>com.google.android.analytics</groupId>
-      <artifactId>analytics</artifactId>
-      <version>1.4.2</version>
-    </dependency>
-    <dependency>
-      <groupId>com.google.android.admob</groupId>
-      <artifactId>admob</artifactId>
-      <version>6.2.1-r8</version>
-    </dependency>
-    <dependency>
-      <groupId>com.google.zxing</groupId>
-      <artifactId>android-integration</artifactId>
-      <version>2.3.0</version>
-      
-    </dependency>
-    <dependency>
-      <groupId>org.simpleframework</groupId>
-      <artifactId>simple-xml</artifactId>
-      <version>2.6.4</version>
-      <exclusions>
-        <!-- StAX is not available on Android -->
-        <exclusion>
-          <artifactId>stax</artifactId>
-          <groupId>stax</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>stax-api</artifactId>
-          <groupId>stax</groupId>
-        </exclusion>
-        <!-- Provided by Android -->
-        <exclusion>
-          <artifactId>xpp3</artifactId>
-          <groupId>xpp3</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <!-- ********* NUXEO INTEGRATION BEGIN********* -->
-    <!-- <dependency> -->
-    <!-- <groupId>org.nuxeo.ecm.automation</groupId> -->
-    <!-- <artifactId>nuxeo-automation-client</artifactId> -->
-    <!-- <version>2.0-SNAPSHOT</version> -->
-    <!-- </dependency> -->
-    <dependency>
-      <groupId>org.nuxeo.android</groupId>
-      <artifactId>nuxeo-android-connector</artifactId>
-      <version>2.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>org.nuxeo.android</groupId>
-      <artifactId>nuxeo-android-connector-ui</artifactId>
-      <version>2.0-SNAPSHOT</version>
-      <type>apklib</type>
-    </dependency>
-    <!-- <dependency> -->
-    <!-- <groupId>net.sf.json-lib</groupId> -->
-    <!-- <artifactId>json-lib</artifactId> -->
-    <!-- <version>2.4</version> -->
-    <!-- <classifier>jdk15</classifier> -->
-    <!-- </dependency> -->
-    <!-- <dependency> -->
-    <!-- <groupId>net.sf.ezmorph</groupId> -->
-    <!-- <artifactId>ezmorph</artifactId> -->
-    <!-- <version>1.0.6</version> -->
-    <!-- </dependency> -->
-    <!-- <dependency> -->
-    <!-- <groupId>org.apache.httpcomponents</groupId> -->
-    <!-- <artifactId>httpcore</artifactId> -->
-    <!-- <version>4.2.3</version> -->
-    <!-- </dependency> -->
-    <!-- <dependency> -->
-    <!-- <groupId>org.apache.httpcomponents</groupId> -->
-    <!-- <artifactId>httpclient</artifactId> -->
-    <!-- <version>4.2.3</version> -->
-    <!-- </dependency> -->
-    <!-- <dependency> -->
-    <!-- <groupId>javax.mail</groupId> -->
-    <!-- <artifactId>mail</artifactId> -->
-    <!-- <version>1.4.6</version> -->
-    <!-- </dependency> -->
-    <!-- ********* NUXEO INTEGRATION END********* -->
-    <!-- ********* SOCIALAUTH INTEGRATION BEGIN********* -->
-    <!-- <dependency> -->
-    <!-- <groupId>org.brickred</groupId> -->
-    <!-- <artifactId>socialauth</artifactId> -->
-    <!-- <version>3.0</version> -->
-    <!-- </dependency> -->
-    <!-- <dependency> -->
-    <!-- <groupId>org.openid4java</groupId> -->
-    <!-- <artifactId>openid4java</artifactId> -->
-    <!-- <version>0.9.7</version> -->
-    <!-- </dependency> -->
-    <!-- <dependency> -->
-    <!-- <groupId>org.opensocial</groupId> -->
-    <!-- <artifactId>opensocial</artifactId> -->
-    <!-- <version>1.0</version> -->
-    <!-- </dependency> -->
-    <dependency>
-      <groupId>com.google.android.gms</groupId>
-      <artifactId>google-play-services</artifactId>
-      <version>12</version>
-      <type>apklib</type>
-    </dependency>
-    <dependency>
-      <groupId>com.google.android.gms</groupId>
-      <artifactId>google-play-services</artifactId>
-      <version>12</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>com.google.api-client</groupId>
-      <artifactId>google-api-client</artifactId>
-      <version>1.17.0-rc</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>xpp3</artifactId>
-          <groupId>xpp3</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>httpclient</artifactId>
-          <groupId>org.apache.httpcomponents</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>junit</artifactId>
-          <groupId>junit</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>android</artifactId>
-          <groupId>com.google.android</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>com.google.api-client</groupId>
-      <artifactId>google-api-client-android</artifactId>
-      <version>1.17.0-rc</version>
-    </dependency>
-    <!-- ********* SOCIALAUTH INTEGRATION END********* -->
-    <dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-      <version>1.9</version>
-    </dependency>
-  </dependencies>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.google.zxing</groupId>
+        <artifactId>android-integration</artifactId>
+        <version>2.3.0</version>
+      </dependency>
+      <dependency>
+        <groupId>com.google.android.analytics</groupId>
+        <artifactId>analytics</artifactId>
+        <version>1.4.2</version>
+      </dependency>
+      <dependency>
+        <groupId>com.google.android.admob</groupId>
+        <artifactId>admob</artifactId>
+        <version>6.2.1-r8</version>
+      </dependency>
+      <dependency>
+        <groupId>org.nuxeo.android</groupId>
+        <artifactId>nuxeo-android-connector</artifactId>
+        <version>2.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.nuxeo.android</groupId>
+        <artifactId>nuxeo-android-connector-ui</artifactId>
+        <version>2.0-SNAPSHOT</version>
+        <type>apklib</type>
+      </dependency>
+      <dependency>
+        <groupId>android.support</groupId>
+        <artifactId>compatibility-v4</artifactId>
+        <version>${compatibility.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>android.support</groupId>
+        <artifactId>compatibility-v7</artifactId>
+        <version>${compatibility.version}</version>
+        <type>apklib</type>
+      </dependency>
+      <dependency>
+        <groupId>android.support</groupId>
+        <artifactId>compatibility-v7</artifactId>
+        <version>${compatibility.version}</version>
+        <type>jar</type>
+      </dependency>
+      <dependency>
+        <groupId>android.support</groupId>
+        <artifactId>compatibility-v7-appcompat</artifactId>
+        <version>${compatibility.version}</version>
+        <type>apklib</type>
+      </dependency>
+      <dependency>
+        <groupId>android.support</groupId>
+        <artifactId>compatibility-v7-appcompat</artifactId>
+        <version>${compatibility.version}</version>
+        <type>jar</type>
+      </dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.8.1</version>
+      </dependency>
+      <dependency>
+        <groupId>com.google.android</groupId>
+        <artifactId>android</artifactId>
+        <version>4.1.1.4</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <build>
-    <sourceDirectory>src</sourceDirectory>
-    <plugins>
-      <plugin>
-        <groupId>com.jayway.maven.plugins.android.generation2</groupId>
-        <artifactId>android-maven-plugin</artifactId>
-        <version>3.6.1</version>
-        <extensions>true</extensions>
-        <configuration>
-          <sdk>
-            <path>${sdk.path}</path>
-            <platform>${android.platform}</platform>
-          </sdk>
-          <nativeLibrariesDirectory>ignored</nativeLibrariesDirectory>
-          <deleteConflictingFiles>true</deleteConflictingFiles>
-          <undeployBeforeDeploy>false</undeployBeforeDeploy>
-        </configuration>
-      </plugin>
-    </plugins>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-jarsigner-plugin</artifactId>
+          <version>1.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>2.5</version>
+          <configuration>
+            <encoding>UTF-8</encoding>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+          <artifactId>android-maven-plugin</artifactId>
+          <version>3.9.0-rc.1</version>
+          <configuration>
+            <sdk>
+              <platform>16</platform>
+            </sdk>
+            <emulator>
+              <avd>23</avd>
+              <wait>10000</wait>
+              <!--<options>-no-skin</options> -->
+            </emulator>
+            <zipalign>
+              <verbose>true</verbose>
+            </zipalign>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>1.5</version>
+        </plugin>
+        <!--This plugin's configuration is used to store Eclipse m2e settings 
+          only. It has no influence on the Maven build itself. -->
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                    <artifactId>android-maven-plugin</artifactId>
+                    <versionRange>[3.2.0,)</versionRange>
+                    <goals>
+                      <goal>manifest-update</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <execute />
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
   <profiles>
-    <!-- <profile> -->
-    <!-- <id>emma</id> -->
-    <!-- <build> -->
-    <!-- <plugins> -->
-    <!-- <plugin> -->
-    <!-- <groupId>com.jayway.maven.plugins.android.generation2</groupId> -->
-    <!-- <artifactId>android-maven-plugin</artifactId> -->
-    <!-- <configuration> -->
-    <!-- emma start -->
-    <!-- <emma> -->
-    <!-- <enable>true</enable> -->
-    <!-- <classFolders>${project.basedir}/target/classes/</classFolders> -->
-    <!-- <outputMetaFile>${project.basedir}/target/emma/coverage.em</outputMetaFile> -->
-    <!-- </emma> -->
-    <!-- emma stop -->
-    <!-- <dex> -->
-    <!-- <noLocals>true</noLocals> -->
-    <!-- must be set for emma -->
-    <!-- </dex> -->
-    <!-- </configuration> -->
-    <!-- <extensions>true</extensions> -->
-    <!-- </plugin> -->
-    <!-- </plugins> -->
-    <!-- </build> -->
-    <!-- </profile> -->
     <profile>
-      <id>sign</id>
+      <!-- the standard profile runs the instrumentation tests -->
+      <id>standard</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <modules>
+        <module>gardening-manager-android</module>
+        <module>gardening-manager-instrumentation</module>
+      </modules>
+    </profile>
+    <profile>
+      <!-- the release profile does sign, proguard, zipalign ... but does 
+        not run instrumentation tests -->
+      <id>release</id>
+      <!-- via this activation the profile is automatically used when the 
+        release is done with the maven release plugin -->
       <activation>
         <property>
           <name>performRelease</name>
           <value>true</value>
         </property>
       </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jarsigner-plugin</artifactId>
-            <version>1.2</version>
-            <executions>
-              <execution>
-                <id>signing</id>
-                <goals>
-                  <goal>sign</goal>
-                  <goal>verify</goal>
-                </goals>
-                <phase>package</phase>
-                <inherited>true</inherited>
-                <configuration>
-                  <archiveDirectory></archiveDirectory>
-                  <includes>
-                    <include>target/*.apk</include>
-                  </includes>
-                  <keystore>${keystore.path}</keystore>
-                  <storepass>@rtM0n!</storepass>
-                  <keypass>@rtM0n!</keypass>
-                  <alias>artmonimobile</alias>
-                  <arguments>
-                    <argument>-sigalg</argument>
-                    <argument>MD5withRSA</argument>
-                    <argument>-digestalg</argument>
-                    <argument>SHA1</argument>
-                  </arguments>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <!-- <plugin> -->
-          <!-- <groupId>com.jayway.maven.plugins.android.generation2</groupId> -->
-          <!-- <artifactId>maven-android-plugin</artifactId> -->
-          <!-- <inherited>true</inherited> -->
-          <!-- <configuration> -->
-          <!-- <sign> -->
-          <!-- <debug>false</debug> -->
-          <!-- </sign> -->
-          <!-- <zipalign> -->
-          <!-- <verbose>true</verbose> -->
-          <!-- <inputApk>${project.build.directory}/${project.artifactId}.apk</inputApk> -->
-          <!-- <outputApk>${project.build.directory}/${project.artifactId}-signed-aligned.apk -->
-          <!-- </outputApk> -->
-          <!-- </zipalign> -->
-          <!-- </configuration> -->
-          <!-- <executions> -->
-          <!-- <execution> -->
-          <!-- <id>alignApk</id> -->
-          <!-- <phase>package</phase> -->
-          <!-- <goals> -->
-          <!-- <goal>zipalign</goal> -->
-          <!-- </goals> -->
-          <!-- </execution> -->
-          <!-- </executions> -->
-          <!-- </plugin> -->
-        </plugins>
-      </build>
+      <modules>
+        <module>gardening-manager-android</module>
+      </modules>
     </profile>
   </profiles>
 </project>
