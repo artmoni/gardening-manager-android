@@ -75,7 +75,7 @@
         <artifactId>android-maven-plugin</artifactId>
         <configuration>
           <sdk>
-            <path>/home/sfleury/Projets/Android/android-sdk-linux/</path>
+            <path>${sdk.path}</path>
             <platform>16</platform>
           </sdk>
           <emulator>
