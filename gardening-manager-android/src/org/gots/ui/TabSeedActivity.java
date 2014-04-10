@@ -359,7 +359,7 @@ public class TabSeedActivity extends ActionBarActivity {
                     }
                     if (!licenceAvailable){
                         FragmentManager fm = getSupportFragmentManager();
-                        GotsBillingDialog editNameDialog = new GotsBillingDialog();
+                        GotsBillingDialog editNameDialog = new GotsBillingDialog(GotsPurchaseItem.SKU_FEATURE_PDFHISTORY);
                         editNameDialog.show(fm, "fragment_edit_name");
                     }
                     if (result != null) {
