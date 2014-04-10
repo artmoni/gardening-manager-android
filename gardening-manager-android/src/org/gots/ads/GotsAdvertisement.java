@@ -4,8 +4,11 @@ import org.gots.R;
 import org.gots.preferences.GotsPreferences;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.graphics.Point;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -33,7 +36,7 @@ public class GotsAdvertisement {
     @SuppressWarnings("deprecation")
     public View getAdsLayout() {
         View convertView;
-        Display display = ((Activity) mContext).getWindowManager().getDefaultDisplay();
+        Display display =  ((Activity)mContext).getWindowManager().getDefaultDisplay();
         int width;
         int sdk = android.os.Build.VERSION.SDK_INT;
         if (sdk < android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
