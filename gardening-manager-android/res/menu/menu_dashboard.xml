@@ -12,6 +12,11 @@
         android:title="@string/menu.help"
         app:showAsAction="ifRoom"/>
     <item
+        android:id="@+id/premium"
+        android:icon="@drawable/action_buy_online"
+        android:title="Premium"
+        app:showAsAction="always"/>
+    <item
         android:id="@+id/about"
         android:title="@string/menu.about"
         app:showAsAction="never"/>
@@ -20,10 +25,7 @@
         android:icon="@drawable/garden_disconnected"
         android:title="@string/login.disconnect"
         app:showAsAction="always"/>
-    <item
-        android:id="@+id/premium"
-        android:title="Premium"
-        app:showAsAction="never"/>
+
     <!--
          <item
         android:id="@+id/settings"
