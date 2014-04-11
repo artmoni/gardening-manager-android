@@ -115,20 +115,17 @@
       <artifactId>google-play-services</artifactId>
       <version>12</version>
       <type>apklib</type>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.google.android.gms</groupId>
       <artifactId>google-play-services</artifactId>
       <version>12</version>
       <type>jar</type>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.google.api-client</groupId>
       <artifactId>google-api-client</artifactId>
       <version>1.17.0-rc</version>
-      <scope>compile</scope>
       <exclusions>
         <exclusion>
           <artifactId>xpp3</artifactId>
