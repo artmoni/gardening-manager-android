@@ -243,11 +243,12 @@ public class LoginDialogFragment extends AbstractDialogFragment {
                 // Log.w(TAG, oAuthData.toString());
                 // }
                 // });
-                selectAccount("com.facebook.auth.login");
 
-                // selectAccount();
-                GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Login", "Request account", 0);
+                // selectAccount("com.facebook.auth.login");
 
+                GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Login", "Request facebook", 0);
+                Toast.makeText(getActivity(), getResources().getString(R.string.feature_unavalaible),
+                        Toast.LENGTH_SHORT);
                 // tokenNuxeoConnect();
 
                 // finish();
@@ -258,72 +259,8 @@ public class LoginDialogFragment extends AbstractDialogFragment {
 
     }
 
-    // /*
-    // * get Token as param
-    // */
-    // AsyncTask<String, Integer, String> serverConnection = new AsyncTask<String, Integer, String>() {
-    // User user = null;
-    //
-    // @Override
-    // protected String doInBackground(String... params) {
-    // GotsSocialAuthentication authentication = new GoogleAuthentication(getActivity());
-    // user = authentication.getUser(params[0]);
-    //
-    // NuxeoAuthentication nuxeoAuthentication = new NuxeoAuthentication(getActivity());
-    // String nuxeoToken = null;
-    // try {
-    // nuxeoToken = nuxeoAuthentication.request_oauth2_token(params[0]);
-    // } catch (IOException e) {
-    // Log.e(TAG, e.getMessage());
-    // }
-    // return nuxeoToken;
-    // }
-    //
-    // @Override
-    // protected void onPostExecute(String resultToken) {
-    // if (resultToken != null && user != null) {
-    // Toast.makeText(
-    // getActivity(),
-    // getResources().getString(R.string.login_connect_description).replace("_ACCOUNT_",
-    // gotsPrefs.getNuxeoLogin()), Toast.LENGTH_LONG).show();
-    // gotsPrefs.setNuxeoLogin(user.getEmail());
-    // gotsPrefs.setToken(resultToken);
-    // gotsPrefs.setConnectedToServer(true);
-    // onResume();
-    // } else {
-    // Toast.makeText(getActivity(), "Error requesting GoogleAuthUtil.getToken", Toast.LENGTH_SHORT).show();
-    // }
-    // super.onPostExecute(resultToken);
-    // }
-    // };
-
-    // protected void sendEmail() {
-    // // send mail
-    // Intent i = new Intent(Intent.ACTION_SEND);
-    // i.setType("message/rfc822");
-    // i.putExtra(Intent.EXTRA_EMAIL, new String[] { "account@gardening-manager.com" });
-    // i.putExtra(Intent.EXTRA_SUBJECT, "Gardening Manager / Account / Ask for new account");
-    // i.putExtra(Intent.EXTRA_TEXT,
-    // "Hello,\n\nI want to participate to the Gardening Manager beta version.\n\nMy Google account is: "
-    // + loginSpinner.getSelectedItem().toString()
-    // + "\n\nI know I will receive my password quickly.\n\n");
-    // try {
-    // startActivity(Intent.createChooser(i, "Send mail..."));
-    // } catch (android.content.ActivityNotFoundException ex) {
-    // Toast.makeText(LoginActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-    // }
-    // }
-
     protected void buildLayoutConnected() {
 
-        TextView text1 = (TextView) v.findViewById(R.id.textView1);
-        TextView text2 = (TextView) v.findViewById(R.id.textView2);
-
-        // String textContent = String.valueOf(getResources().getString(R.string.login_connect_state));
-        // text1.setText(textContent.replace("_ACCOUNT_", gotsPrefs.getNuxeoLogin()));
-        text1.setText("");
-
-        text2.setText("");
         v.findViewById(R.id.idLayoutOAuthGoogle).setVisibility(View.GONE);
         v.findViewById(R.id.idLayoutOAuthFacebook).setVisibility(View.GONE);
 
@@ -341,87 +278,6 @@ public class LoginDialogFragment extends AbstractDialogFragment {
         });
     }
 
-    // protected void connect() {
-    // new AsyncTask<Void, Integer, Session>() {
-    // private ProgressDialog dialog;
-    //
-    // private String login;
-    //
-    // private String password;
-    //
-    // @Override
-    // protected void onPreExecute() {
-    //
-    // login = String.valueOf(loginSpinner.getSelectedItem());
-    //
-    // if ("".equals(login) || "".equals(password)) {
-    // Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_missinginformation),
-    // Toast.LENGTH_SHORT).show();
-    // cancel(true);
-    // } else {
-    // dialog = ProgressDialog.show(LoginActivity.this, "",
-    // getResources().getString(R.string.gots_loading), true);
-    // dialog.setCanceledOnTouchOutside(true);
-    // }
-    // };
-    //
-    // @Override
-    // protected Session doInBackground(Void... params) {
-    // Session session = null;
-    // try {
-    // if (nuxeoAuthentication.basicNuxeoConnect(login, password)) {
-    //
-    // nuxeoManager.shutdown();
-    // session = nuxeoManager.getSession();
-    //
-    // if ("Guest".equals(session.getLogin().getUsername())) {
-    // return null;
-    // }
-    // } else
-    // cancel(true);
-    // } catch (IOException e) {
-    // Log.e(TAG, e.getMessage(), e);
-    // } catch (NotAvailableOffline e) {
-    // Log.e(TAG, e.getMessage(), e);
-    // } catch (RemoteException e) {
-    // Log.e(TAG, e.getMessage(), e);
-    // }
-    // return session;
-    // }
-    //
-    // @Override
-    // protected void onPostExecute(Session result) {
-    // if (dialog != null && dialog.isShowing())
-    // dialog.dismiss();
-    // if (result == null) {
-    // Toast.makeText(LoginActivity.this, "Error logging", Toast.LENGTH_SHORT).show();
-    // LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.VISIBLE);
-    // gotsPrefs.setConnectedToServer(false);
-    // gotsPrefs.setNuxeoLogin(null);
-    // gotsPrefs.setLastSuccessfulNuxeoLogin(null);
-    // GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Login", "Failure", 0);
-    //
-    // } else {
-    // LoginActivity.this.findViewById(R.id.textConnectError).setVisibility(View.GONE);
-    // gotsPrefs.setConnectedToServer(true);
-    // gotsPrefs.setLastSuccessfulNuxeoLogin(login);
-    // gardenManager.getMyGardens(true);
-    // GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Login", "Success", 0);
-    // }
-    //
-    // onResume();
-    // };
-    //
-    // @Override
-    // protected void onCancelled(Session result) {
-    // if (dialog != null && dialog.isShowing())
-    // dialog.dismiss();
-    // }
-    //
-    // }.execute();
-    // onResume();
-    // }
-
     protected void disconnect() {
         AccountManager manager = (AccountManager) getActivity().getSystemService(FragmentActivity.ACCOUNT_SERVICE);
         manager.invalidateAuthToken("com.google", gotsPrefs.getToken());
@@ -429,28 +285,6 @@ public class LoginDialogFragment extends AbstractDialogFragment {
         gotsPrefs.setNuxeoPassword("");
         gotsPrefs.setConnectedToServer(false);
     }
-
-    // @Override
-    // public boolean onOptionsItemSelected(MenuItem item) {
-    // switch (item.getItemId()) {
-    //
-    // case android.R.id.home:
-    // finish();
-    // return true;
-    // case R.id.help:
-    // Intent browserIntent = new Intent(this, WebHelpActivity.class);
-    // browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
-    // startActivity(browserIntent);
-    // return true;
-    // case R.id.connection:
-    // if (gotsPrefs.isConnectedToServer())
-    // disconnect();
-    // return true;
-    //
-    // default:
-    // return super.onOptionsItemSelected(item);
-    // }
-    // }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

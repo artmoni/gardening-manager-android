@@ -8,74 +8,7 @@
     android:orientation="vertical"
     android:padding="10dp" >
 
-    <!--
-     <LinearLayout
-        android:id="@+id/layoutDisconnect"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:layout_margin="10dp"
-        android:background="@drawable/bg_line_action"
-        android:gravity="center_horizontal|center_vertical"
-        android:orientation="vertical"
-        android:padding="10dp"
-        android:visibility="gone" >
-
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center"
-            android:src="@drawable/garden_connected" />
-
-        <TextView
-            android:id="@+id/idConnectedDescription"
-            style="@style/description_content"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="@string/login.connect.description" />
-
-        <TextView
-            style="@style/description_content"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="@string/login.connect.description2" />
-
-        <TextView
-            style="@style/description_content"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="@string/login.connect.description3" />
-
-        <TextView
-            style="@style/description_content"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="@string/login.connect.description4" />
-
-        <Button
-            android:id="@+id/buttonDisconnect"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/button_red_selector"
-            android:text="@string/login.disconnect"
-            android:textColor="@color/white"
-            android:visibility="gone" />
-    </LinearLayout>
-    -->
-
+   
     <TextView
         android:id="@+id/textView1"
         style="@style/seed_description_content"
@@ -83,16 +16,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView2"
         android:layout_centerHorizontal="true"
-        android:text="@string/login.simple.description" />
-
-    <TextView
-        android:id="@+id/textView2"
-        style="@style/seed_description_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/login.disconnect.state" />
+        android:text="@string/login.simple.description" />
 
     <Button
         android:id="@+id/idLayoutOAuthDisconnect"

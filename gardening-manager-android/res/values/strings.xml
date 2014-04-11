@@ -136,7 +136,7 @@
     <string name="login.connect.description3">Create and share your plant descriptions</string>
     <string name="login.connect.description4">Use the application on any of your devices</string>
     <string name="login.sso.description">Use your Google account to synchronize and backup Gardening Manager on your devices</string>
-    <string name="login.simple.description">Connect to the Gardening Manager Network and take pleasure in following the vegetable garden of your friends.</string>
+    <string name="login.simple.description">Synchronize your garden on Gardening Manager Cloud and share with friends</string>
     <string name="login.creation.description">Create an account on Gardening Manager Server to synchronize and share your garden information with your friends</string>
     <string name="login.signup">Sign up for Gardening Manager</string>
     <string name="login.email">Email</string>
