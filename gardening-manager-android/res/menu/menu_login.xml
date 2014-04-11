@@ -13,7 +13,7 @@
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/connection"
-        android:icon="@drawable/garden_connected"
+        android:icon="@drawable/garden_shared"
         android:title="@string/login.disconnect"
         app:showAsAction="withText"/>
 
