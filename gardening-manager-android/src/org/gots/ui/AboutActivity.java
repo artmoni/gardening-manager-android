@@ -65,6 +65,7 @@ public class AboutActivity extends AbstractActivity {
     private TextView textprogressSeed;
 
     private TextView textprogressGarden;
+    private TextView textprogressPurchase;
 
     private IabHelper buyHelper;
 
@@ -120,6 +121,7 @@ public class AboutActivity extends AbstractActivity {
         textprogressSeed = (TextView) findViewById(R.id.textProgressSeed);
         textprogressAction = (TextView) findViewById(R.id.textProgressAction);
         textprogressGarden = (TextView) findViewById(R.id.textProgressGarden);
+        textprogressPurchase = (TextView) findViewById(R.id.textProgressPurchase);
 
         ImageView flag = (ImageView) findViewById(R.id.imageTranslateFlag);
         int flagRessource = getResources().getIdentifier(
@@ -166,6 +168,7 @@ public class AboutActivity extends AbstractActivity {
                 addProgress();
                 Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
                 progressWeather.startAnimation(myFadeInAnimation);
+                textprogressWeather.setTextColor(getResources().getColor(R.color.action_warning_color));
                 textprogressWeather.setText(getResources().getString(R.string.synchro_weather_checking));
 
             };
@@ -181,8 +184,10 @@ public class AboutActivity extends AbstractActivity {
             protected void onPostExecute(Void result) {
                 progressWeather.clearAnimation();
                 progressWeather.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
+
                 removeProgress();
                 textprogressWeather.setText(getResources().getString(R.string.synchro_weather_ok));
+                textprogressWeather.setTextColor(getResources().getColor(R.color.text_color_dark));
 
                 super.onPostExecute(result);
 
@@ -199,6 +204,7 @@ public class AboutActivity extends AbstractActivity {
                 Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
                 progressSeed.startAnimation(myFadeInAnimation);
                 textprogressSeed.setText(getResources().getString(R.string.synchro_seeds_checking));
+                ((TextView)findViewById(R.id.textProgressSeed)).setTextColor(getResources().getColor(R.color.action_warning_color));
 
                 addProgress();
             };
@@ -223,8 +229,10 @@ public class AboutActivity extends AbstractActivity {
                 progressSeed.clearAnimation();
                 progressSeed.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
                 // getApplicationContext().stopService(startServiceIntent2);
+
                 removeProgress();
                 textprogressSeed.setText(getResources().getString(R.string.synchro_seeds_ok));
+                textprogressSeed.setTextColor(getResources().getColor(R.color.text_color_dark));
 
                 super.onPostExecute(result);
 
@@ -241,6 +249,7 @@ public class AboutActivity extends AbstractActivity {
                 Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
                 progressAction.startAnimation(myFadeInAnimation);
                 textprogressAction.setText(getResources().getString(R.string.synchro_actions_checking));
+                textprogressAction.setTextColor(getResources().getColor(R.color.action_warning_color));
 
                 addProgress();
             };
@@ -256,19 +265,26 @@ public class AboutActivity extends AbstractActivity {
                 progressAction.clearAnimation();
                 progressAction.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
                 textprogressAction.setText(getResources().getString(R.string.synchro_actions_ok));
+                textprogressAction.setTextColor(getResources().getColor(R.color.text_color_dark));
+
                 getApplicationContext().stopService(startServiceIntent3);
                 removeProgress();
                 super.onPostExecute(result);
             }
         }.execute();
 
+        /*
+         * Synchronize Purchase feature
+         */
         final ArrayList<String> moreSkus = new ArrayList<String>();
         moreSkus.add(GotsPurchaseItem.SKU_PREMIUM);
         buyHelper = new IabHelper(getApplicationContext(), gotsPrefs.getPlayStorePubKey());
 
         Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
         progressPurchase.startAnimation(myFadeInAnimation);
-        textprogressAction.setText(getResources().getString(R.string.synchro_purchase_checking));
+        textprogressPurchase.setText(getResources().getString(R.string.synchro_purchase_checking));
+        textprogressPurchase.setTextColor(getResources().getColor(R.color.action_warning_color));
+
         try {
             addProgress();
             buyHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
@@ -293,7 +309,9 @@ public class AboutActivity extends AbstractActivity {
                                 progressPurchase.clearAnimation();
                                 progressPurchase.setBackgroundDrawable(getResources().getDrawable(
                                         R.drawable.bg_state_ok));
-                                textprogressAction.setText(getResources().getString(R.string.synchro_purchase_ok));
+                                textprogressPurchase.setText(getResources().getString(R.string.synchro_purchase_ok));
+                                textprogressPurchase.setTextColor(getResources().getColor(R.color.text_color_dark));
+
                                 // getApplicationContext().stopService(startServiceIntent4);
                                 removeProgress();
                             }
@@ -376,6 +394,7 @@ public class AboutActivity extends AbstractActivity {
                     Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
                     progressGarden.startAnimation(myFadeInAnimation);
                     textprogressGarden.setText(getResources().getString(R.string.synchro_garden_checking));
+                    textprogressGarden.setTextColor(getResources().getColor(R.color.action_warning_color));
 
                     super.onPreExecute();
                 }
@@ -392,6 +411,7 @@ public class AboutActivity extends AbstractActivity {
                     progressGarden.clearAnimation();
                     progressGarden.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
                     textprogressGarden.setText(getResources().getString(R.string.synchro_garden_ok));
+                    textprogressGarden.setTextColor(getResources().getColor(R.color.text_color_dark));
 
                     super.onPostExecute(result);
                 }

@@ -135,7 +135,7 @@
                     android:id="@+id/imageProgressGarden"
                     style="@style/logo_synchro"
                     android:background="@drawable/bg_state_ok"
-                    android:src="@drawable/garden_connected" />
+                    android:src="@drawable/garden_shared" />
 
                 <TextView
                     android:id="@+id/textProgressGarden"
