@@ -1,9 +1,12 @@
 package org.gots.action.provider.nuxeo;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -15,6 +18,7 @@ import org.gots.action.BaseActionInterface;
 import org.gots.action.GotsActionManager;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.provider.local.LocalActionSeedProvider;
+import org.gots.exception.GotsServerRestrictedException;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.nuxeo.android.cache.blob.BlobWithProperties;
@@ -38,6 +42,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.os.Environment;
 import android.util.Log;
 
 public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
@@ -50,7 +55,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
     }
 
     protected AndroidAutomationClient getNuxeoClient() {
-        return NuxeoManager.getInstance().getNuxeoClient();
+        return NuxeoManager.getInstance().initIfNew(mContext).getNuxeoClient();
     }
 
     @Override
@@ -278,8 +283,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             PropertyMap properties = new PropertyMap();
             properties.set("dc:title", blobProp.getString("name"));
             properties.set("file:content", toJSON.toString());
-            documentMgr.createDocument(pictureBook, "Picture", blobProp.getString("name"),
-                    properties);
+            documentMgr.createDocument(pictureBook, "Picture", blobProp.getString("name"), properties);
         } catch (Exception e) {
             Log.i(TAG, e.getMessage());
         }
@@ -377,6 +381,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         // super.uploadPicture(seed);
     }
 
+    @Override
     public List<File> getPicture(GrowingSeedInterface mSeed) {
         Session session = getNuxeoClient().getSession();
         DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
@@ -405,4 +410,38 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         }
         return imageFiles;
     }
+
+    @Override
+    public File downloadHistory(GrowingSeedInterface mSeed) throws GotsServerRestrictedException {
+        Session session = getNuxeoClient().getSession();
+        DocumentManager service = session.getAdapter(DocumentManager.class);
+        try {
+            Document doc = service.getDocument(new DocRef(mSeed.getUUID()));
+            FileBlob blob = (FileBlob) session.newRequest("seedGrowingActionHistory").setInput(doc).execute();
+            File dir = new File(Environment.getExternalStorageDirectory(), "Gardening-Manager");
+            File pdfFile = new File(dir, blob.getFileName().replaceAll(" ", "-"));
+            copy(blob.getFile(), pdfFile);
+            blob.getFile().delete();
+            if (pdfFile.exists())
+                return pdfFile;
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+        return null;
+    }
+
+    public void copy(File src, File dst) throws IOException {
+        InputStream in = new FileInputStream(src);
+        OutputStream out = new FileOutputStream(dst);
+
+        // Transfer bytes from in to out
+        byte[] buf = new byte[1024];
+        int len;
+        while ((len = in.read(buf)) > 0) {
+            out.write(buf, 0, len);
+        }
+        in.close();
+        out.close();
+    }
+
 }

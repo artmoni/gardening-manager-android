@@ -14,6 +14,7 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 
+import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.allotment.AllotmentManager;
 import org.gots.garden.GardenManager;
 import org.gots.preferences.GotsPreferences;
@@ -61,7 +62,7 @@ public abstract class AbstractActionSeed implements SeedActionInterface, Compara
 
     protected GardenManager gardenManager;
 
-    protected GotsActionSeedManager actionSeedManager;
+    protected GotsActionSeedProvider actionSeedManager;
 
     protected GotsGrowingSeedManager growingSeedManager;
 

@@ -23,6 +23,7 @@ import org.gots.action.SeedActionInterface;
 import org.gots.action.provider.GotsActionProvider;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.util.ActionState;
+import org.gots.exception.GotsServerRestrictedException;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.utils.GotsDBHelper;
 
@@ -215,6 +216,15 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
     @Override
     public void uploadPicture(GrowingSeedInterface seed, File f) {
         Log.d(TAG, "uploadPicture not implemented");
+    }
+
+    @Override
+    public File downloadHistory(GrowingSeedInterface mSeed) throws GotsServerRestrictedException {
+        return null;
+    }
+
+    public List<File> getPicture(GrowingSeedInterface mSeed) throws GotsServerRestrictedException {
+        return null;
     }
 
 }

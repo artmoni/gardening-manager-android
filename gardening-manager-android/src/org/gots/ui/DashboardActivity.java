@@ -102,7 +102,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         for (int i = 0; i < myGardens.size(); i++) {
             GardenInterface garden = myGardens.get(i);
             dropdownValues[i] = garden.getLocality();
-            if (garden.getId() == currentGarden.getId())
+            if (garden != null && currentGarden != null && garden.getId() == currentGarden.getId())
                 selectedGardenIndex = i;
         }
         if (dropdownValues.length > 0) {
@@ -301,12 +301,12 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
             startActivity(aboutIntent);
 
             return true;
-//        case R.id.login:
-//            // Intent loginIntent = new Intent(this, LoginDialogFragment.class);
-//            // startActivity(loginIntent);
-//            LoginDialogFragment login = new LoginDialogFragment();
-//            login.show(getSupportFragmentManager(), TAG);
-//            return true;
+            // case R.id.login:
+            // // Intent loginIntent = new Intent(this, LoginDialogFragment.class);
+            // // startActivity(loginIntent);
+            // LoginDialogFragment login = new LoginDialogFragment();
+            // login.show(getSupportFragmentManager(), TAG);
+            // return true;
         case R.id.premium:
             FragmentManager fm = getSupportFragmentManager();
             GotsBillingDialog editNameDialog = new GotsBillingDialog();
@@ -325,10 +325,11 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         case R.id.connection:
             LoginDialogFragment login = new LoginDialogFragment();
             login.show(getSupportFragmentManager(), TAG);
-//            if (gotsPrefs.isConnectedToServer())
-//                Toast.makeText(this, getResources().getString(R.string.login_connect_state), Toast.LENGTH_SHORT).show();
-//            else
-//                Toast.makeText(this, getResources().getString(R.string.login_disconnect_state), Toast.LENGTH_SHORT).show();
+            // if (gotsPrefs.isConnectedToServer())
+            // Toast.makeText(this, getResources().getString(R.string.login_connect_state), Toast.LENGTH_SHORT).show();
+            // else
+            // Toast.makeText(this, getResources().getString(R.string.login_disconnect_state),
+            // Toast.LENGTH_SHORT).show();
             return true;
 
         default:

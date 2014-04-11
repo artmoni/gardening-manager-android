@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+
+
+<meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type">
+<title>Gardening Manager</title>
+
+
+
+
+<style type="text/css">
+h1 {
+	color: #E5DFC5;
+}
+
+h2 {
+	color: #D7AE58;
+}
+
+p {
+	color: #E5DFC5;
+}
+</style>
+</head>
+<body>
+	<table align="center" border="0" cellpadding="2" cellspacing="2"
+		height="673" width="515">
+
+		<tbody>
+			<tr>
+				<td align="center" valign="top">
+					<div style="text-align: left;">
+						<img alt=""
+							src="http://gots.artmoni.eu/wp-content/uploads/2012/08/copy-logo-gardeningmanager1.png">
+					</div>
+				</td>
+			</tr>
+			<tr>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<table style="text-align: left; width: 500" border="1"
+						cellpadding="2" cellspacing="2">
+						<tbody>
+							<tr>
+								<td
+									style="vertical-align: top; background-color: rgb(72, 101, 28);"><span
+									style="color: white;">Species</span><br></td>
+								<td
+									style="vertical-align: top; background-color: rgb(146, 192, 81);">${Context["seedspecies"]}</td>
+								<td colspan="1" rowspan="2" style="vertical-align: top;"><br>
+								</td>
+							</tr>
+							<tr>
+								<td
+									style="vertical-align: top; background-color: rgb(72, 101, 28);"><span
+									style="color: white;">Variety</span><br></td>
+								<td
+									style="vertical-align: top; background-color: rgb(146, 192, 81);">${Context["seedvariety"]}</td>
+
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td align="center" valign="top">
+					<table
+						style="text-align: left; width: 500 margin-left: auto; margin-right: auto;"
+						border="0" cellpadding="2" cellspacing="2">
+						<tbody>
+							<tr>
+								<td style="vertical-align: top;"><img
+									style="width: 64px; height: 55px;" alt=""
+									src="http://my.gardening-manager.com/nuxeo/nxfile/default/65c8c2ed-854f-4ed1-bbc4-6fc8fea2d287/blobholder:0/sow.png"><br>
+								</td>
+								<td style="vertical-align: top;">${Context["seeddatesowing"]}</td>
+								<td><img
+									style="width: 45px; height: 74px;" alt=""
+									src="http://doc.gardening-manager.com/wp-content/blogs.dir/1/files/2014/04/separator.png"></td>
+								<td style="vertical-align: top;"><img
+									style="width: 52px; height: 47px;" alt=""
+									src="http://my.gardening-manager.com/nuxeo/nxfile/default/c3941615-09c6-4af5-81be-9110c252ce88/blobholder:0/harvest.png"><br>
+								</td>
+								<td style="vertical-align: top;"><code>
+										<br>
+									</code> <code></code></td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;"><table
+						style="width: 515px; height: 673px; text-align: left; margin-left: auto; margin-right: auto;"
+						border="1" cellpadding="2" cellspacing="2">
+
+						<tbody>
+							<#list This as doc>
+							<tr>
+								<td
+									style="vertical-align: top; background-color: rgb(72, 101, 28);"><font
+									color="#ffffff"><img style="width: 50px; height: 50px;"
+										alt=""
+										src="http://doc.gardening-manager.com/wp-content/blogs.dir/1/files/2014/04/action_${doc.title}.png"><br>
+								</font></td>
+								<td style="vertical-align: top;">${doc['action:dateactiondone']}</td>
+								<td style="vertical-align: top;">${doc['action:data']}</td>
+								<td style="vertical-align: top;">${doc['action:description']}</td>
+							</tr>
+							</#list>
+						</tbody>
+					</table></td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top; text-align: right;"><font
+					color="#ffffff"><a href="http://www.gardening-manager.com/"><img
+							style="border: 0px solid; width: 200px; height: 100px;" alt=""
+							src="http://www.barcodesinc.com/generator/image.php?code=$%7BDocument%5B"
+							vendorseed:variety=""
+							]}&amp;style="197&amp;type=C128B&amp;width=200&amp;height=100&amp;xres=1&amp;font=3&quot;"
+							align="top"></a></font></td>
+			</tr>
+		</tbody>
+	</table>
+
+</body>
+</html>

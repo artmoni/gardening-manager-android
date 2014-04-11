@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.gots.action.BaseActionInterface;
 import org.gots.action.SeedActionInterface;
+import org.gots.exception.GotsServerRestrictedException;
 import org.gots.seed.GrowingSeedInterface;
 
 public interface GotsActionSeedProvider {
@@ -22,6 +23,8 @@ public interface GotsActionSeedProvider {
 
     public abstract void uploadPicture(GrowingSeedInterface seed, File imageFile);
 
-   
+    public abstract File downloadHistory(GrowingSeedInterface mSeed) throws GotsServerRestrictedException;
+
+    public abstract List<File> getPicture(GrowingSeedInterface mSeed) throws GotsServerRestrictedException;
 
 }

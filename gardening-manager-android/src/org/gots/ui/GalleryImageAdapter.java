@@ -10,12 +10,15 @@ import android.content.Context;
 import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SpinnerAdapter;
 
 public class GalleryImageAdapter implements SpinnerAdapter {
+
+    private static final String TAG = "GalleryImageAdapter";
 
     List<File> imagesList = new ArrayList<File>();
 
@@ -55,7 +58,7 @@ public class GalleryImageAdapter implements SpinnerAdapter {
             image.setImageBitmap(bitmapResized);
         } catch (Exception e) {
             image.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.action_photo));
-//            image.setLayoutParams(new LayoutParams(parent.getHeight(), parent.getHeight()));
+            // image.setLayoutParams(new LayoutParams(parent.getHeight(), parent.getHeight()));
         }
 
         return image;

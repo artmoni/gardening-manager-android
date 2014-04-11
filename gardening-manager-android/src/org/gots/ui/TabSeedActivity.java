@@ -22,10 +22,13 @@ import org.gots.action.GotsActionSeedManager;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.bean.DeleteAction;
 import org.gots.action.bean.PhotoAction;
-import org.gots.action.provider.nuxeo.NuxeoActionSeedProvider;
+import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.exception.GotsServerRestrictedException;
+import org.gots.inapp.GotsBillingDialog;
+import org.gots.inapp.GotsPurchaseItem;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
@@ -48,25 +51,28 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Gallery;
-import android.widget.LinearLayout;
-import android.widget.TabHost;
-import android.widget.Toast;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.Gallery;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.android.vending.billing.util.IabHelper;
+import com.android.vending.billing.util.IabResult;
+import com.android.vending.billing.util.Inventory;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class TabSeedActivity extends ActionBarActivity {
@@ -131,14 +137,19 @@ public class TabSeedActivity extends ActionBarActivity {
         new AsyncTask<Void, Void, List<File>>() {
             @Override
             protected List<File> doInBackground(Void... params) {
-                NuxeoActionSeedProvider provider = new NuxeoActionSeedProvider(getApplicationContext());
-                List<File> imageFile = provider.getPicture(mSeed);
-
-                return imageFile;
+                try {
+                    GotsActionSeedProvider provider = GotsActionSeedManager.getInstance().initIfNew(
+                            getApplicationContext());
+                    List<File> imageFile = provider.getPicture(mSeed);
+                    return imageFile;
+                } catch (GotsServerRestrictedException e) {
+                    Log.w(TAG, e.getMessage());
+                    return null;
+                }
             }
 
             protected void onPostExecute(List<File> result) {
-                if (result.size() > 0) {
+                if (result != null && result.size() > 0) {
                     pictureGallery.setSpacing(10);
                     pictureGallery.setAdapter(new GalleryImageAdapter(getApplicationContext(), result));
                 } else
@@ -196,7 +207,7 @@ public class TabSeedActivity extends ActionBarActivity {
         }
 
         if (!GotsPreferences.getInstance().initIfNew(getApplicationContext()).isPremium()) {
-            GotsAdvertisement ads = new GotsAdvertisement(getApplicationContext());
+            GotsAdvertisement ads = new GotsAdvertisement(this);
 
             LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
             layout.addView(ads.getAdsLayout());
@@ -269,6 +280,96 @@ public class TabSeedActivity extends ActionBarActivity {
             editNameDialog.setArguments(data);
             editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
             editNameDialog.show(fm, "fragment_edit_name");
+            return true;
+        case R.id.download:
+            new AsyncTask<Void, Integer, File>() {
+                boolean licenceAvailable = false;
+
+                IabHelper buyHelper;
+
+                protected void onPreExecute() {
+                    final ArrayList<String> moreSkus = new ArrayList<String>();
+                    moreSkus.add(GotsPurchaseItem.SKU_FEATURE_PDFHISTORY);
+                    buyHelper = new IabHelper(getApplicationContext(), gotsPreferences.getPlayStorePubKey());
+
+                    try {
+                        buyHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+
+                            @Override
+                            public void onIabSetupFinished(IabResult result) {
+                                // Toast.makeText(getApplicationContext(), "Set up finished!",
+                                // Toast.LENGTH_SHORT).show();
+                                Log.i(TAG, "Set up finished!");
+
+                                if (result.isSuccess())
+                                    buyHelper.queryInventoryAsync(true, moreSkus,
+                                            new IabHelper.QueryInventoryFinishedListener() {
+                                                @Override
+                                                public void onQueryInventoryFinished(IabResult result, Inventory inv) {
+                                                    if (result.isSuccess()) {
+                                                        licenceAvailable = inv.hasPurchase(GotsPurchaseItem.SKU_FEATURE_PDFHISTORY);
+                                                        Log.w(TAG, "Feature " + GotsPurchaseItem.SKU_FEATURE_PDFHISTORY
+                                                                + " unlocked");
+                                                    } else {
+                                                        Log.w(TAG, "Feature " + GotsPurchaseItem.SKU_FEATURE_PDFHISTORY
+                                                                + " not available");
+                                                    }
+                                                }
+                                            });
+                            }
+                        });
+                    } catch (Exception e) {
+                        Log.e(TAG, "IabHelper can not be initialized" + e.getMessage());
+
+                    }
+                };
+
+                @Override
+                protected File doInBackground(Void... params) {
+                    if (licenceAvailable)
+                        try {
+                            GotsActionSeedProvider provider = GotsActionSeedManager.getInstance().initIfNew(
+                                    getApplicationContext());
+                            return provider.downloadHistory(mSeed);
+                        } catch (GotsServerRestrictedException e) {
+                            Log.w(TAG, e.getMessage());
+                            licenceAvailable = false;
+                            return null;
+                        }
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(File result) {
+                    if (!gotsPreferences.isConnectedToServer()) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(TabSeedActivity.this);
+                        builder.setMessage(getResources().getString(R.string.login_connect_restricted)).setCancelable(
+                                false).setPositiveButton(getResources().getString(R.string.login_connect),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        LoginDialogFragment dialogFragment = new LoginDialogFragment();
+                                        dialogFragment.show(getSupportFragmentManager(), "");
+                                    }
+                                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                        builder.show();
+                    }
+                    if (!licenceAvailable){
+                        FragmentManager fm = getSupportFragmentManager();
+                        GotsBillingDialog editNameDialog = new GotsBillingDialog(GotsPurchaseItem.SKU_FEATURE_PDFHISTORY);
+                        editNameDialog.show(fm, "fragment_edit_name");
+                    }
+                    if (result != null) {
+                        Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
+                        pdfIntent.setDataAndType(Uri.fromFile(result), "application/pdf");
+                        startActivity(pdfIntent);
+                    }
+                }
+            }.execute();
+
             return true;
         case R.id.photo:
             photoAction = new PhotoAction(getApplicationContext());

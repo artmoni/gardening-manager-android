@@ -6,8 +6,11 @@ import java.util.List;
 
 import org.gots.R;
 import org.gots.action.BaseActionInterface;
+import org.gots.action.GotsActionSeedManager;
 import org.gots.action.SeedActionInterface;
+import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.service.GotsService;
@@ -31,6 +34,19 @@ public class ActionNotificationService extends GotsService {
     private ArrayList<SeedActionInterface> actions = new ArrayList<SeedActionInterface>();
 
     private static final String TAG = "ActionNotificationService";
+
+    private GotsGrowingSeedManager growingSeedManager;
+
+    private GotsActionSeedProvider actionseedManager;
+
+    @Override
+    public void onCreate() {
+        growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(ActionNotificationService.this);
+        actionseedManager = GotsActionSeedManager.getInstance().initIfNew(
+                ActionNotificationService.this);
+
+        super.onCreate();
+    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {

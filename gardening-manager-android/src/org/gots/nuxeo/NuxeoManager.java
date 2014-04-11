@@ -77,9 +77,9 @@ public class NuxeoManager {
     /**
      * If it was already called once, the method returns without any change.
      */
-    public synchronized void initIfNew(Context context) {
+    public synchronized NuxeoManager initIfNew(Context context) {
         if (initDone) {
-            return;
+            return this;
         }
 
         gotsPrefs = GotsPreferences.getInstance();
@@ -99,6 +99,7 @@ public class NuxeoManager {
                 + " password="
                 + (GotsPreferences.ISDEVELOPMENT ? nxConfig.getPassword()
                         : "******"));
+        return this;
     }
 
     public AndroidAutomationClient getNuxeoClient() {

@@ -79,14 +79,6 @@ public class AppRater {
         ll.addView(b1);
 
         Button b2 = new Button(mContext);
-        b2.setText(mContext.getResources().getString(R.string.inapp_rating_later));
-        b2.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        ll.addView(b2);
-
         Button b3 = new Button(mContext);
         b3.setText(mContext.getResources().getString(R.string.inapp_rating_cancel));
         b3.setOnClickListener(new OnClickListener() {
@@ -99,6 +91,15 @@ public class AppRater {
             }
         });
         ll.addView(b3);
+        
+        b2.setText(mContext.getResources().getString(R.string.inapp_rating_later));
+        b2.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        ll.addView(b2);
+
 
         dialog.setContentView(ll);
         dialog.show();
