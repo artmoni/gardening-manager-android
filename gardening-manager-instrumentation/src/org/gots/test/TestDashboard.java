@@ -8,18 +8,21 @@ import org.gots.ui.MyMainGarden;
 import org.gots.ui.ProfileActivity;
 import org.gots.ui.SplashScreenActivity;
 
+import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridView;
+import android.widget.ListView;
 
+import com.google.api.client.util.Lists;
 import com.jayway.android.robotium.solo.Solo;
 
 public class TestDashboard extends ActivityInstrumentationTestCase2<DashboardActivity> {
     private Solo solo;
 
     public TestDashboard() {
-        // super("org.gots.ui",SplashScreenActivity.class);
         super(DashboardActivity.class);
     }
 
@@ -48,18 +51,33 @@ public class TestDashboard extends ActivityInstrumentationTestCase2<DashboardAct
         View btGarden = (View) solo.getView(R.id.dashboard_button_allotment);
         solo.clickOnView(btGarden);
         solo.waitForActivity(MyMainGarden.class);
-        solo.assertCurrentActivity("Wrong activity Hut", MyMainGarden.class);
+        solo.assertCurrentActivity("Wrong activity Allotment", MyMainGarden.class);
 
+        solo.waitForView(R.id.IdGardenAllotmentsList);
+        Activity allotmentActivity = solo.getCurrentActivity();
+        ListView listAllotments = (ListView) allotmentActivity.findViewById(R.id.IdGardenAllotmentsList);
+        if (listAllotments != null && listAllotments.getCount() > 0) {
+            Log.i("allotmentActivity", "listAllotments.getCount=" + listAllotments.getCount());
+            GridView listSeeds = (GridView) listAllotments.getChildAt(0).findViewById(R.id.IdGrowingSeedList);
+            if (listSeeds != null && listSeeds.getCount() > 0) {
+                Log.i("allotmentActivity", "listSeeds.getCount=" + listSeeds.getCount());
+                View btSeed = (View) listSeeds.getChildAt(0);
+                solo.clickOnView(btSeed);
+            }
+        }
+      
         // Return dashboard
         btHome = (View) solo.getView(android.R.id.home);
         solo.clickOnView(btHome);
+        solo.clickOnView(btHome);
+
         solo.assertCurrentActivity("Wrong activity Dashboard", DashboardActivity.class);
 
         // Action Activity
         View btAction = (View) solo.getView(R.id.dashboard_button_action);
         solo.clickOnView(btAction);
         solo.waitForActivity(ActionActivity.class);
-        solo.assertCurrentActivity("Wrong activity Hut", ActionActivity.class);
+        solo.assertCurrentActivity("Wrong activity Action", ActionActivity.class);
 
         // Return dashboard
         btHome = (View) solo.getView(android.R.id.home);
@@ -70,7 +88,7 @@ public class TestDashboard extends ActivityInstrumentationTestCase2<DashboardAct
         View btProfile = (View) solo.getView(R.id.dashboard_button_profile);
         solo.clickOnView(btProfile);
         solo.waitForActivity(ProfileActivity.class);
-        solo.assertCurrentActivity("Wrong activity Hut", ProfileActivity.class);
+        solo.assertCurrentActivity("Wrong activity Profile", ProfileActivity.class);
 
         // Return dashboard
         btHome = (View) solo.getView(android.R.id.home);
