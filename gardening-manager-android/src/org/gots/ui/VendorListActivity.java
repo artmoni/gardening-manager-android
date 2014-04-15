@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.gots.IntentIntegratorSupportV4;
 import org.gots.R;
+import org.gots.analytics.GotsAnalytics;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.adapter.SeedListAdapter;
@@ -40,10 +41,11 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
-
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -75,17 +77,23 @@ public class VendorListActivity extends AbstractListFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
+        GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
         switch (item.getItemId()) {
         case R.id.idSeedFilter:
             displaySearchBox();
+            tracker.trackEvent("Catalog", "menu", "displaySearchBox", 0);
+
             return true;
         case R.id.refresh_seed:
             Intent seedIntent = new Intent(mContext, SeedUpdateService.class);
             mContext.startService(seedIntent);
+            tracker.trackEvent("Catalog", "menu", "refreshSeed", 0);
+
             return true;
         case R.id.new_seed_barcode:
             IntentIntegratorSupportV4 integrator = new IntentIntegratorSupportV4(this);
             integrator.initiateScan();
+            tracker.trackEvent("Catalog", "menu", "scanBarCode", 0);
             return true;
         default:
             return super.onOptionsItemSelected(item);
@@ -178,6 +186,18 @@ public class VendorListActivity extends AbstractListFragment {
             }
 
         });
+
+        ImageButton preferred = (ImageButton) getActivity().findViewById(R.id.idSearchFilterLike);
+        preferred.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                listVendorSeedAdapter.getFilter().filter("LIKE");
+
+            }
+
+        });
+
     }
 
     private void closeSearchBox() {

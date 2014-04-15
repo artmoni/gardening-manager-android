@@ -110,14 +110,16 @@
         <TextView
             android:id="@+id/textSeedLike"
             style="@style/seed_variety_description"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:gravity="center_horizontal"
             android:text=""
-            android:textColor="@color/text_color_light"
+            android:textColor="@color/green_light"
             android:textSize="12sp"
             android:textStyle="bold" />
+
     </RelativeLayout>
 
 </RelativeLayout>

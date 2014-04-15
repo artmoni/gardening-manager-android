@@ -165,10 +165,11 @@ public class SeedWidgetLong extends LinearLayout {
                                     mContext.getResources().getString(R.string.login_connect),
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
-//                                            Intent loginIntent = new Intent(mContext, LoginDialogFragment.class);
-//                                            mContext.startActivity(loginIntent);
+                                            // Intent loginIntent = new Intent(mContext, LoginDialogFragment.class);
+                                            // mContext.startActivity(loginIntent);
                                             LoginDialogFragment dialogFragment = new LoginDialogFragment();
-                                            dialogFragment.show(((FragmentActivity)mContext).getSupportFragmentManager(), "");
+                                            dialogFragment.show(
+                                                    ((FragmentActivity) mContext).getSupportFragmentManager(), "");
                                         }
                                     }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
@@ -193,13 +194,19 @@ public class SeedWidgetLong extends LinearLayout {
     }
 
     protected void displayLikeStatus(LikeStatus likeStatus) {
-        if (likeStatus != null && likeStatus.getLikesCount() > 0)
+        likeCount.setTextColor(getResources().getColor(R.color.text_color_dark));
+        if (likeStatus != null && likeStatus.getLikesCount() > 0) {
             likeCount.setText(String.valueOf(likeStatus.getLikesCount()));
+        } else
+            likeCount.setText(String.valueOf(""));
 
-        if (likeStatus != null && likeStatus.getUserLikeStatus() > 0)
+        if (likeStatus != null && likeStatus.getUserLikeStatus() > 0) {
             like.setImageDrawable(getResources().getDrawable(R.drawable.ic_like));
-        else
+            likeCount.setTextColor(getResources().getColor(R.color.text_color_light));
+
+        } else {
             like.setImageDrawable(getResources().getDrawable(R.drawable.ic_like_unknown));
+        }
     }
 
     // public static String unAccent(String s) {

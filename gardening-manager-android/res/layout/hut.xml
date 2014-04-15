@@ -30,7 +30,15 @@
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Search filter" />
+                android:hint="Search filter"
+                android:imeOptions="actionSearch" />
+
+            <ImageButton
+                android:id="@+id/idSearchFilterLike"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/ic_like"
+                android:contentDescription="filter favorite" />
 
             <ImageButton
                 android:id="@+id/clearSearchFilter"

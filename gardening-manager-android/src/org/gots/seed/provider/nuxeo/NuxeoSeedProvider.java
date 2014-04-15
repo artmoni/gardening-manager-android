@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GardenManager;
@@ -80,8 +81,10 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 cacheParam = (byte) (cacheParam | CacheBehavior.FORCE_REFRESH);
                 refresh = false;
             }
-            Documents docs = service.query("SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState != \"deleted\"",
-                    null, new String[] { "dc:modified DESC" }, "*", 0, 200, cacheParam);
+            Documents docs = service.query(
+                    "SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState != \"deleted\" AND vendorseed:language=\""
+                            + Locale.getDefault().getCountry().toLowerCase() + "\"", null,
+                    new String[] { "dc:modified DESC" }, "*", 0, 200, cacheParam);
             for (Document document : docs) {
                 BaseSeedInterface seed = NuxeoSeedConverter.convert(document);
                 Blob likeStatus = service.getLikeStatus(document);

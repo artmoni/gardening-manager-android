@@ -8,6 +8,7 @@ import org.gots.R;
 import org.gots.action.adapter.comparator.ISeedSpecieComparator;
 import org.gots.action.view.ActionWidget;
 import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.LikeStatus;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.view.SeedWidgetLong;
 
@@ -144,11 +145,19 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults results = new FilterResults();
+            List<BaseSeedInterface> nHolderList = new ArrayList<BaseSeedInterface>();
             if (constraint == null || constraint.length() == 0) {
                 results.values = vendorSeeds;
                 results.count = vendorSeeds.size();
+            } else if ("LIKE".equals(constraint)) {
+                for (BaseSeedInterface seed : vendorSeeds) {
+                    if (seed.getLikeStatus() != null && seed.getLikeStatus().getUserLikeStatus() > 0)
+                        nHolderList.add(seed);
+                }
+                results.values = nHolderList;
+                results.count = nHolderList.size();
+
             } else {
-                List<BaseSeedInterface> nHolderList = new ArrayList<BaseSeedInterface>();
                 for (BaseSeedInterface seed : vendorSeeds) {
                     if (SeedUtil.translateSpecie(mContext, seed).toUpperCase().startsWith(
                             constraint.toString().toUpperCase())
