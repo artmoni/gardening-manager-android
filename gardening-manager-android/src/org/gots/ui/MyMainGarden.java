@@ -102,7 +102,7 @@ public class MyMainGarden extends AbstractActivity {
         // listAllotments.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
         // listAllotments.setBackgroundDrawable(getResources().getDrawable(R.drawable.help_hut_2));
-        if (!gotsPrefs.isPremium()) {
+        if (!gotsPurchase.isPremium()) {
             GotsAdvertisement ads = new GotsAdvertisement(this);
 
             LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);

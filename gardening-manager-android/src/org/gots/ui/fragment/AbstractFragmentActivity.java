@@ -2,6 +2,7 @@ package org.gots.ui.fragment;
 
 import org.gots.analytics.GotsAnalytics;
 import org.gots.garden.GardenManager;
+import org.gots.inapp.GotsPurchaseItem;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsSeedManager;
 
@@ -15,6 +16,7 @@ public class AbstractFragmentActivity extends ActionBarActivity {
     protected GotsPreferences gotsPref;
     protected GotsSeedManager seedProvider;
     protected GardenManager gardenProvider;
+    protected GotsPurchaseItem gotsPurchase;
 
     @Override
     protected void onCreate(Bundle arg0) {
@@ -22,7 +24,7 @@ public class AbstractFragmentActivity extends ActionBarActivity {
         GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
         gotsPref=GotsPreferences.getInstance();
         gotsPref.initIfNew(this);
-        
+        gotsPurchase = new GotsPurchaseItem(this);
         seedProvider = GotsSeedManager.getInstance();
         seedProvider.initIfNew(getApplicationContext());
         gardenProvider = GardenManager.getInstance();

@@ -278,6 +278,7 @@ public class AboutActivity extends AbstractActivity {
          */
         final ArrayList<String> moreSkus = new ArrayList<String>();
         moreSkus.add(GotsPurchaseItem.SKU_PREMIUM);
+        moreSkus.add(GotsPurchaseItem.SKU_FEATURE_PDFHISTORY);
         buyHelper = new IabHelper(getApplicationContext(), gotsPrefs.getPlayStorePubKey());
 
         Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
@@ -299,8 +300,8 @@ public class AboutActivity extends AbstractActivity {
                             @Override
                             public void onQueryInventoryFinished(IabResult result, Inventory inv) {
                                 if (result.isSuccess()) {
-                                    boolean isPremium = inv.hasPurchase(GotsPurchaseItem.SKU_PREMIUM);
-                                    gotsPrefs.setPremium(isPremium);
+                                    gotsPurchase.setPremium(inv.hasPurchase(GotsPurchaseItem.SKU_PREMIUM));
+                                    gotsPurchase.setFeatureExportPDF(inv.hasPurchase(GotsPurchaseItem.SKU_FEATURE_PDFHISTORY));
                                     Log.i(TAG, "Successful got inventory!");
 
                                 } else {

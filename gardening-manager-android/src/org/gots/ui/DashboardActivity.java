@@ -118,7 +118,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
     protected void checkPremiumAds() {
         // ADMOB
         LinearLayout layout = (LinearLayout) findViewById(R.id.bannerAd);
-        if (!gotsPrefs.isPremium()) {
+        if (!gotsPurchase.isPremium()) {
             adView = new GotsAdvertisement(this);
             View ads = adView.getPremiumAds(layout);
             ads.setOnClickListener(new View.OnClickListener() {
@@ -343,7 +343,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         inflater.inflate(R.menu.menu_dashboard, menu);
         itemConnected = (MenuItem) menu.findItem(R.id.connection);
         refreshConnectionState();
-        if (gotsPrefs.isPremium())
+        if (gotsPurchase.isPremium())
             menu.findItem(R.id.premium).setVisible(false);
         return true;
     }

@@ -129,14 +129,6 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     private Properties properties = new Properties();
 
-    /*
-     * FEATURE LIST
-     */
-    private boolean GOTS_PREMIUM = false;
-
-    /*
-     * InApp Billing properties
-     */
 
     // private static final String PUBKEY =
     // "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtAFVYGad4FaKIZ9A0W2JfMh+B1PQMU+tal9B0XYbEJdZy6UCwqoH42/YLDn0GTjKA+ozAZJtaQqoU/ew95tYKEYszj067HfVehpRtKxLlySFMnqdai0SuGyl5EI4QQovsw3wFU1ihELWBaCg2CcTJqk1jXcWaxsqPPPWty5tAcMwQDWZ0cw6uw8QddztiKlw5IB1XTWdhZTuPL/RcR0Ns+lbEB2kdosozekXr+dRqZ4+PKyHn+j8/407hb76gqn9CmrGhOsJ3E7aOVRCZWZ9nf6aJfFYJP5JY/QHsa+9OsiSj8QXS2vic3ay+MazF09bteN7Wnb15Y9CBK/sM2RAqQIDAQAB";
@@ -248,13 +240,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
         return sharedPreferences.getBoolean(key, defValue);
     }
 
-    public boolean isPremium() {
-        return GOTS_PREMIUM ? true : unlockPremium();
-    }
-
-    public void setPremium(boolean isPremium) {
-        GOTS_PREMIUM = isPremium;
-    }
+   
 
     public String getAnalyticsApiKey() {
         return properties.getProperty("analytics.apikey");
@@ -323,25 +309,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
         set(ORG_GOTS_GARDEN_TOKEN, token);
     }
 
-    private boolean unlockPremium() {
-        boolean unlocked = false;
-        PackageManager pm = mContext.getPackageManager();
-        List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
-
-        for (ApplicationInfo applicationInfo : packages) {
-            try {
-
-                PackageInfo packageInfo = pm.getPackageInfo(applicationInfo.packageName, PackageManager.GET_PERMISSIONS);
-                if ("org.gots.premium".equals(packageInfo.packageName)) {
-                    unlocked = true;
-                }
-            } catch (NameNotFoundException e) {
-                Log.e(TAG, e.getMessage(), e);
-            }
-        }
-        return unlocked;
-
-    }
+    
 
     public String getDeviceId() {
         return get(ORG_GOTS_GARDEN_DEVICEID, "");

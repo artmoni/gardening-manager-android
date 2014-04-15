@@ -94,7 +94,7 @@ public class ActionActivity extends AbstractActivity {
             };
         }.execute(seedid);
 
-        if (!gotsPrefs.isPremium()) {
+        if (!gotsPurchase.isPremium()) {
             GotsAdvertisement ads = new GotsAdvertisement(this);
 
             LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);

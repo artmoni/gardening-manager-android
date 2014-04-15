@@ -59,7 +59,7 @@ public class HutActivity extends AbstractFragmentActivity  {
         // GardenManager gm =GardenManager.getInstance();
         setContentView(R.layout.hut);
 
-        if (!gotsPref.isPremium()) {
+        if (!gotsPurchase.isPremium()) {
             GotsAdvertisement ads = new GotsAdvertisement(this);
 
             LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);

@@ -58,7 +58,7 @@ public class ProfileActivity extends AbstractActivity {
 
         this.registerReceiver(gardenBroadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_EVENT));
 
-        if (!gotsPrefs.isPremium()) {
+        if (!gotsPurchase.isPremium()) {
             GotsAdvertisement ads = new GotsAdvertisement(this);
 
             LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);

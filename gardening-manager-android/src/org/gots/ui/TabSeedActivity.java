@@ -40,6 +40,7 @@ import org.gots.utils.FileUtilities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -94,6 +95,8 @@ public class TabSeedActivity extends ActionBarActivity {
 
     GotsPreferences gotsPreferences;
 
+    private GotsPurchaseItem gotsPurchase;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
@@ -104,6 +107,7 @@ public class TabSeedActivity extends ActionBarActivity {
         }
 
         gotsPreferences = GotsPreferences.getInstance().initIfNew(getApplicationContext());
+        gotsPurchase = new GotsPurchaseItem(this);
         GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
         GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
@@ -206,7 +210,7 @@ public class TabSeedActivity extends ActionBarActivity {
 
         }
 
-        if (!GotsPreferences.getInstance().initIfNew(getApplicationContext()).isPremium()) {
+        if (!gotsPurchase.isPremium()) {
             GotsAdvertisement ads = new GotsAdvertisement(this);
 
             LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
@@ -286,42 +290,49 @@ public class TabSeedActivity extends ActionBarActivity {
                 boolean licenceAvailable = false;
 
                 IabHelper buyHelper;
+                private ProgressDialog dialog;
 
                 protected void onPreExecute() {
-                    final ArrayList<String> moreSkus = new ArrayList<String>();
-                    moreSkus.add(GotsPurchaseItem.SKU_FEATURE_PDFHISTORY);
-                    buyHelper = new IabHelper(getApplicationContext(), gotsPreferences.getPlayStorePubKey());
-
-                    try {
-                        buyHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
-
-                            @Override
-                            public void onIabSetupFinished(IabResult result) {
-                                // Toast.makeText(getApplicationContext(), "Set up finished!",
-                                // Toast.LENGTH_SHORT).show();
-                                Log.i(TAG, "Set up finished!");
-
-                                if (result.isSuccess())
-                                    buyHelper.queryInventoryAsync(true, moreSkus,
-                                            new IabHelper.QueryInventoryFinishedListener() {
-                                                @Override
-                                                public void onQueryInventoryFinished(IabResult result, Inventory inv) {
-                                                    if (result.isSuccess()) {
-                                                        licenceAvailable = inv.hasPurchase(GotsPurchaseItem.SKU_FEATURE_PDFHISTORY);
-                                                        Log.w(TAG, "Feature " + GotsPurchaseItem.SKU_FEATURE_PDFHISTORY
-                                                                + " unlocked");
-                                                    } else {
-                                                        Log.w(TAG, "Feature " + GotsPurchaseItem.SKU_FEATURE_PDFHISTORY
-                                                                + " not available");
-                                                    }
-                                                }
-                                            });
-                            }
-                        });
-                    } catch (Exception e) {
-                        Log.e(TAG, "IabHelper can not be initialized" + e.getMessage());
-
-                    }
+                    GotsPurchaseItem purchaseItem = new GotsPurchaseItem(getApplicationContext());
+                    licenceAvailable=purchaseItem.getFeatureExportPDF();
+                    dialog = ProgressDialog.show(TabSeedActivity.this, "", getResources().getString(R.string.gots_loading),
+                            true);
+                    dialog.setCanceledOnTouchOutside(true);
+//                    final ArrayList<String> moreSkus = new ArrayList<String>();
+//                    moreSkus.add(GotsPurchaseItem.SKU_FEATURE_PDFHISTORY);
+//                    buyHelper = new IabHelper(getApplicationContext(), gotsPreferences.getPlayStorePubKey());
+//
+//                    try {
+//                        buyHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+//
+//                            @Override
+//                            public void onIabSetupFinished(IabResult result) {
+//                                // Toast.makeText(getApplicationContext(), "Set up finished!",
+//                                // Toast.LENGTH_SHORT).show();
+//                                Log.i(TAG, "Set up finished!");
+//
+//                                if (result.isSuccess())
+//                                    buyHelper.queryInventoryAsync(true, moreSkus,
+//                                            new IabHelper.QueryInventoryFinishedListener() {
+//                                                @Override
+//                                                public void onQueryInventoryFinished(IabResult result, Inventory inv) {
+//                                                    if (result.isSuccess()) {
+//                                                        licenceAvailable = inv.hasPurchase(GotsPurchaseItem.SKU_FEATURE_PDFHISTORY);
+//                                                        Log.w(TAG, "Feature " + GotsPurchaseItem.SKU_FEATURE_PDFHISTORY
+//                                                                + " unlocked");
+//                                                        gotsPreferences.setFeatureExportPDF(licenceAvailable);
+//                                                    } else {
+//                                                        Log.w(TAG, "Feature " + GotsPurchaseItem.SKU_FEATURE_PDFHISTORY
+//                                                                + " not available");
+//                                                    }
+//                                                }
+//                                            });
+//                            }
+//                        });
+//                    } catch (Exception e) {
+//                        Log.e(TAG, "IabHelper can not be initialized" + e.getMessage());
+//
+//                    }
                 };
 
                 @Override
@@ -341,6 +352,12 @@ public class TabSeedActivity extends ActionBarActivity {
 
                 @Override
                 protected void onPostExecute(File result) {
+                    try {
+                        dialog.dismiss();
+                        dialog = null;
+                    } catch (Exception e) {
+                        // nothing
+                    }
                     if (!gotsPreferences.isConnectedToServer()) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(TabSeedActivity.this);
                         builder.setMessage(getResources().getString(R.string.login_connect_restricted)).setCancelable(
@@ -357,9 +374,10 @@ public class TabSeedActivity extends ActionBarActivity {
                         });
                         builder.show();
                     }
-                    if (!licenceAvailable){
+                    if (!licenceAvailable) {
                         FragmentManager fm = getSupportFragmentManager();
-                        GotsBillingDialog editNameDialog = new GotsBillingDialog(GotsPurchaseItem.SKU_FEATURE_PDFHISTORY);
+                        GotsBillingDialog editNameDialog = new GotsBillingDialog(
+                                GotsPurchaseItem.SKU_FEATURE_PDFHISTORY);
                         editNameDialog.show(fm, "fragment_edit_name");
                     }
                     if (result != null) {
@@ -367,6 +385,7 @@ public class TabSeedActivity extends ActionBarActivity {
                         pdfIntent.setDataAndType(Uri.fromFile(result), "application/pdf");
                         startActivity(pdfIntent);
                     }
+                   
                 }
             }.execute();
 

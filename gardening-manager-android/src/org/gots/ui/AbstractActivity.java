@@ -27,6 +27,7 @@ import org.gots.allotment.AllotmentManager;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenManager;
+import org.gots.inapp.GotsPurchaseItem;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsSeedManager;
@@ -47,6 +48,8 @@ public class AbstractActivity extends ActionBarActivity {
 
     protected GotsPreferences gotsPrefs;
 
+    protected GotsPurchaseItem gotsPurchase;
+
     protected GardenManager gardenManager;
 
     protected NuxeoManager nuxeoManager;
@@ -63,6 +66,7 @@ public class AbstractActivity extends ActionBarActivity {
         // TODO All this should be part of the application/service/...
         gotsPrefs = GotsPreferences.getInstance();
         gotsPrefs.initIfNew(this);
+        gotsPurchase = new GotsPurchaseItem(this);
         nuxeoManager = NuxeoManager.getInstance();
         nuxeoManager.initIfNew(this);
         gardenManager = GardenManager.getInstance();
@@ -91,7 +95,7 @@ public class AbstractActivity extends ActionBarActivity {
         } catch (NameNotFoundException e) {
         }
 
-        if (gotsPrefs.isPremium()) {
+        if (gotsPurchase.isPremium()) {
             GoogleAnalyticsTracker.getInstance().setCustomVar(2, "Member Type", "Premium", 1);
         } else
             GoogleAnalyticsTracker.getInstance().setCustomVar(2, "Member Type", "Guest", 1);

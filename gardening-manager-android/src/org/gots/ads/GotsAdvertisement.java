@@ -4,11 +4,8 @@ import org.gots.R;
 import org.gots.preferences.GotsPreferences;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.graphics.Point;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -50,8 +47,8 @@ public class GotsAdvertisement {
         width = Math.round(((float) width) / density);
 
         AdRequest adRequest = new AdRequest();
-        if (GotsPreferences.getInstance().isPremium())
-            adRequest.addTestDevice(AdRequest.TEST_EMULATOR);
+//        if (gotsPurchase.isPremium())
+//            adRequest.addTestDevice(AdRequest.TEST_EMULATOR);
         adRequest.addKeyword("garden");
         adRequest.addKeyword("potager");
         adRequest.addKeyword("plant");

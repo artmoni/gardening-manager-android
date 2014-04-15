@@ -65,7 +65,6 @@ public class TestDashboard extends ActivityInstrumentationTestCase2<DashboardAct
                 solo.clickOnView(btSeed);
             }
         }
-      
         // Return dashboard
         btHome = (View) solo.getView(android.R.id.home);
         solo.clickOnView(btHome);
