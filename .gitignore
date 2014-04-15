@@ -24,3 +24,5 @@ settings.xml
 target/
 /project.properties
 /config.sfl
+/target
+/target

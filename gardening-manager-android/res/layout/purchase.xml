@@ -1,0 +1,101 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    tools:context=".MainActivity" >
+
+    <RelativeLayout
+        android:id="@+id/idPurchaseFeature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="10dp"
+        android:background="@drawable/bg_line_action"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="10dp" >
+
+        <TextView
+            android:id="@+id/idPurchaseFeatureTitle"
+            style="@style/purchase_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:singleLine="false"
+            android:text="@string/inapp.purchase.noaccount" />
+
+        <TextView
+            android:id="@+id/idPurchaseFeatureDescription"
+            style="@style/seed_description_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/idPurchaseFeatureTitle"
+            android:singleLine="false"
+            android:text="@string/inapp.purchase.noaccount" />
+
+        <Button
+            android:id="@+id/idPurchaseFeatureButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/idPurchaseFeatureDescription"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/button_red_selector"
+            android:text="@string/inapp.purchase.buy"
+            android:textColor="@color/white" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/idPurchasePremium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/idPurchaseFeature"
+        android:layout_margin="10dp"
+        android:background="@drawable/bg_line_action"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="10dp" >
+
+        <TextView
+            android:id="@+id/idPurchasePremiumTitle"
+            style="@style/purchase_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:singleLine="false"
+            android:text="title" />
+
+        <TextView
+            android:id="@+id/idPurchasePremiumDescription"
+            style="@style/seed_description_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/idPurchasePremiumTitle"
+            android:singleLine="false"
+            android:text="@string/inapp.purchase.noaccount" />
+
+        <Button
+            android:id="@+id/idPurchasePremiumButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/idPurchasePremiumDescription"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/button_red_selector"
+            android:text="@string/inapp.purchase.buy"
+            android:textColor="@color/white" />
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/logo_premium" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
