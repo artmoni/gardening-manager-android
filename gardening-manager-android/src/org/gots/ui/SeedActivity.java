@@ -19,12 +19,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 
 public class SeedActivity extends Fragment {
     private int seedId;
@@ -56,7 +56,7 @@ public class SeedActivity extends Fragment {
         mSeed = seedManager.getSeedById(seedId);
 
         final TextView seedDescriptionEnvironnement = (TextView) v.findViewById(R.id.IdSeedDescriptionEnvironment);
-        seedDescriptionEnvironnement.setText(mSeed.getDescriptionGrowth());
+        seedDescriptionEnvironnement.setText(Html.fromHtml(mSeed.getDescriptionGrowth()));
 
         TextView seedDescriptionTitle = (TextView) v.findViewById(R.id.IdSeedDescriptionEnvironmentTitle);
         seedDescriptionTitle.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +70,7 @@ public class SeedActivity extends Fragment {
         });
 
         final TextView seedDescriptionCulture = (TextView) v.findViewById(R.id.IdSeedDescriptionCulture);
-        seedDescriptionCulture.setText(mSeed.getDescriptionCultivation());
+        seedDescriptionCulture.setText(Html.fromHtml(mSeed.getDescriptionCultivation()));
         TextView seedDescriptionCultureTitle = (TextView) v.findViewById(R.id.IdSeedDescriptionCultureTitle);
         seedDescriptionCultureTitle.setOnClickListener(new View.OnClickListener() {
 
@@ -83,7 +83,7 @@ public class SeedActivity extends Fragment {
         });
 
         final TextView seedDescriptionEnnemi = (TextView) v.findViewById(R.id.IdSeedDescriptionEnnemi);
-        seedDescriptionEnnemi.setText(mSeed.getDescriptionDiseases());
+        seedDescriptionEnnemi.setText(Html.fromHtml(mSeed.getDescriptionDiseases()));
         TextView seedDescriptionEnnemiTitle = (TextView) v.findViewById(R.id.IdSeedDescriptionEnnemiTitle);
         seedDescriptionEnnemiTitle.setOnClickListener(new View.OnClickListener() {
 
@@ -96,7 +96,7 @@ public class SeedActivity extends Fragment {
         });
 
         final TextView seedDescriptionCultureHarvest = (TextView) v.findViewById(R.id.IdSeedDescriptionHarvest);
-        seedDescriptionCultureHarvest.setText(mSeed.getDescriptionHarvest());
+        seedDescriptionCultureHarvest.setText(Html.fromHtml(mSeed.getDescriptionHarvest()));
         TextView seedDescriptionHarvest = (TextView) v.findViewById(R.id.IdSeedDescriptionHarvestTitle);
         seedDescriptionHarvest.setOnClickListener(new View.OnClickListener() {
 
@@ -110,8 +110,7 @@ public class SeedActivity extends Fragment {
 
         return v;
     }
-    
-    
+
     // @Override
     // protected void onActivityResult(int requestCode, int resultCode, Intent
     // data) {
