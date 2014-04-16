@@ -1,6 +1,7 @@
 package org.gots.authentication;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -69,6 +70,7 @@ public class ParrotAuthentication {
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());
         }
+       
     }
 
     private String api_json(String api_url, List<NameValuePair> params, String method, Map<String, String> headers)
@@ -76,6 +78,7 @@ public class ParrotAuthentication {
         URL url = new URL(baseName + api_url);
 
         HttpClient httpclient = new DefaultHttpClient();
+
         String json = "";
         try {
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();

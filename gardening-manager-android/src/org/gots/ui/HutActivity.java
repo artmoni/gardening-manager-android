@@ -53,7 +53,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-public class HutActivity extends AbstractFragmentActivity  {
+public class HutActivity extends AbstractFragmentActivity {
 
     protected static final String TAG = "HutActivity";
 
@@ -145,6 +145,16 @@ public class HutActivity extends AbstractFragmentActivity  {
             }
 
         });
+        View preferred = (View) findViewById(R.id.idSearchFilterLike);
+        preferred.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                currentFilter = "LIKE";
+                searchSeed();
+            }
+
+        });
     }
 
     protected void searchSeed() {
@@ -171,6 +181,7 @@ public class HutActivity extends AbstractFragmentActivity  {
         else
             searchButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_close_clear_cancel));
     }
+
     private void buildMyTabHost() {
         ActionBar bar = getSupportActionBar();
         bar.setDisplayHomeAsUpEnabled(true);
@@ -188,13 +199,13 @@ public class HutActivity extends AbstractFragmentActivity  {
         nuxeoArgs.putString(VendorListActivity.PROVIDER, NuxeoSeedProvider.class.getName());
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds_veget)),
                 VendorListActivity.class, nuxeoArgs);
-        
+
         Bundle parrotArgs = new Bundle();
         parrotArgs.putString(VendorListActivity.PROVIDER, ParrotSeedProvider.class.getName());
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds_plant)),
                 VendorListActivity.class, parrotArgs);
-//        mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds)),
-//                VendorListActivity.class, null);
+        // mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds)),
+        // VendorListActivity.class, null);
 
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
                 MySeedsListActivity.class, null);
