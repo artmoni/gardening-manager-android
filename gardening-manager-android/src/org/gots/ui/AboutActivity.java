@@ -317,6 +317,10 @@ public class AboutActivity extends AbstractActivity {
                                 removeProgress();
                             }
                         });
+                    else{
+                        removeProgress();
+                    }
+                  
                 }
             });
         } catch (Exception e) {
