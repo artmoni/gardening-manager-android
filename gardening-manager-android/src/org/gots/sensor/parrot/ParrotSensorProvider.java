@@ -32,14 +32,14 @@ public class ParrotSensorProvider extends LocalSeedProvider {
     }
 
     private void getToken() {
-        authentication = new ParrotAuthentication(mContext);
+        authentication = ParrotAuthentication.getInstance(mContext);
         authentication.getToken();
     }
 
     public void setSearchCriteria(String filterCriteria) {
         this.filterCriteria = filterCriteria;
     }
-
+ 
     public List<ParrotSensor> getSensors() {
         getToken();
         String api_1_25_sync = "/sensor_data/v2/sync?include_s3_urls=1";

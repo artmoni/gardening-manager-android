@@ -27,12 +27,11 @@ public class ParrotSeedProvider extends LocalSeedProvider {
 
     public ParrotSeedProvider(Context context) {
         super(context);
-        
 
     }
 
     private void getToken() {
-        authentication = new ParrotAuthentication(mContext);
+        authentication = ParrotAuthentication.getInstance(mContext);
         authentication.getToken();
     }
 
@@ -94,11 +93,11 @@ public class ParrotSeedProvider extends LocalSeedProvider {
     public List<BaseSeedInterface> getVendorSeeds(boolean force) {
         getToken();
         List<BaseSeedInterface> parrotPlants = new ArrayList<BaseSeedInterface>();
-        if ("".equals(filterCriteria)){
-            final String ALLOWED_CHARACTERS ="qwertyuiopasdfghjklzxcvbnm";
-            final Random random=new Random();
-            filterCriteria=String.valueOf(ALLOWED_CHARACTERS.charAt(random.nextInt(ALLOWED_CHARACTERS.length())));
-        }
+//        if ("".equals(filterCriteria)) {
+//            final String ALLOWED_CHARACTERS = "qwertyuiopasdfghjklzxcvbnm";
+//            final Random random = new Random();
+//            filterCriteria = String.valueOf(ALLOWED_CHARACTERS.charAt(random.nextInt(ALLOWED_CHARACTERS.length())));
+//        }
         List<String> plantsId = getVendorSeeds(filterCriteria);
         try {
 
@@ -107,15 +106,26 @@ public class ParrotSeedProvider extends LocalSeedProvider {
                 builder.append(plantId);
                 builder.append(",");
             }
+            //TODO WIP
             String api_5_06_plants = "/plant_library/v1/plants/" + builder.toString();
-            JSONObject json_plants = (JSONObject) authentication.getJSON(api_5_06_plants);
-            JSONArray plants = json_plants.getJSONArray("plants");
-            for (int i = 0; i < plants.length(); i++) {
-                JSONObject plant = plants.getJSONObject(i);
+            for (String string : plantsId) {
+                String api_5_01_plants = "/plant_library/v1/plant/" + string;
+                JSONObject json_plant = (JSONObject) authentication.getJSON(api_5_01_plants);
+                JSONObject plant = json_plant.getJSONObject("response");
                 ParrotSeedConverter converter = new ParrotSeedConverter(mContext);
                 BaseSeedInterface seed = converter.convert(plant);
                 parrotPlants.add(seed);
             }
+            // for (int i = 0; i < plants.length(); i++) {
+            // String api_5_01_plants = "/plant_library/v1/plant/" + builder.toString();
+            //
+            // JSONObject json_plants = (JSONObject) authentication.getJSON(api_5_06_plants);
+            // JSONArray plants = json_plants.getJSONArray("plants");
+            // JSONObject plant = plants.getJSONObject(i);
+            // ParrotSeedConverter converter = new ParrotSeedConverter(mContext);
+            // BaseSeedInterface seed = converter.convert(plant);
+            // parrotPlants.add(seed);
+            // }
 
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage(), e);
@@ -138,20 +148,20 @@ public class ParrotSeedProvider extends LocalSeedProvider {
             for (BaseSeedInterface localSeed : localVendorSeeds) {
                 if (remoteSeed.getUUID() != null && remoteSeed.getUUID().equals(localSeed.getUUID())) {
                     found = true;
-                    // myVendorSeeds.add(localSeed);
-
+//                     myVendorSeeds.add(localSeed);
+                    remoteSeed.setId(localSeed.getSeedId());
                     break;
                 }
             }
-            if (found)
-                // myVendorSeeds.add(super.updateSeed(remoteSeed));
+            if (found){
+                myVendorSeeds.add(super.updateSeed(remoteSeed));
+            }
                 // myVendorSeeds.add();
-                ;
             else {
                 remoteSeed = super.createSeed(remoteSeed);
                 newSeeds.add(remoteSeed);
             }
-            myVendorSeeds.add(remoteSeed);
+//            myVendorSeeds.add(remoteSeed);
         }
 
         // for (BaseSeedInterface localSeed : localVendorSeeds) {

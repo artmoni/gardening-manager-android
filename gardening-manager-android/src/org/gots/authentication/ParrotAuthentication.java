@@ -7,7 +7,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
+import java.net.Proxy;
+import java.net.Proxy.Type;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.net.http.HttpResponseCache;
 import android.util.Log;
 
 public class ParrotAuthentication {
@@ -57,7 +61,9 @@ public class ParrotAuthentication {
 
     private Properties properties = new Properties();
 
-    public ParrotAuthentication(Context context) {
+    private static ParrotAuthentication instance;
+
+    private ParrotAuthentication(Context context) {
         mContext = context;
         InputStream propertiesStream = null;
         try {
@@ -70,14 +76,37 @@ public class ParrotAuthentication {
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());
         }
-       
+        enableHttpResponseCache();
+
+    }
+
+    public static ParrotAuthentication getInstance(Context context) {
+        if (instance == null) {
+            instance = new ParrotAuthentication(context);
+        }
+        return instance;
+    }
+
+    private void enableHttpResponseCache() {
+        try {
+            long httpCacheSize = 10 * 1024 * 1024; // 10 MiB
+            File httpCacheDir = new File(mContext.getCacheDir(), "http");
+             Class.forName("android.net.http.HttpResponseCache").getMethod("install", File.class, long.class).invoke(
+             null, httpCacheDir, httpCacheSize);
+//            HttpResponseCache.install(httpCacheDir, httpCacheSize);
+//            Log.i(TAG, "getHitCount=" + HttpResponseCache.getInstalled().getHitCount() + " getRequestCount="
+//                    + HttpResponseCache.getInstalled().getRequestCount() + " getNetworkCount="
+//                    + HttpResponseCache.getInstalled().getNetworkCount());
+
+        } catch (Exception httpResponseCacheNotAvailable) {
+            Log.i(TAG, httpResponseCacheNotAvailable.getMessage());
+        }
     }
 
     private String api_json(String api_url, List<NameValuePair> params, String method, Map<String, String> headers)
             throws IOException {
-        URL url = new URL(baseName + api_url);
 
-        HttpClient httpclient = new DefaultHttpClient();
+        // HttpClient httpclient = new DefaultHttpClient();
 
         String json = "";
         try {
@@ -85,20 +114,38 @@ public class ParrotAuthentication {
             nameValuePairs.addAll(params);
             String paramString = URLEncodedUtils.format(nameValuePairs, "utf-8");
 
-            HttpGet httpGet = new HttpGet(url.toString() + "?" + paramString);
+            // HttpGet httpGet = new HttpGet(url.toString() + "?" + paramString);
+            URL url = new URL(baseName + api_url + "?" + paramString);
 
-            httpGet.addHeader("Accept-Language", Locale.getDefault().getCountry().toLowerCase());
+            // Proxy proxy = new Proxy(Proxy.Type.HTTP , new InetSocketAddress("", 80));
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setUseCaches(true);
+            con.setRequestProperty("Accept-Language", Locale.getDefault().getCountry().toLowerCase());
+
+            /*
+             * CACHE CONTROL
+             */
+            int maxStale = 60 * 60 * 24 * 28; // tolerate 4-weeks stale
+            con.addRequestProperty("Cache-Control", "max-stale=" + maxStale);
+
+            // con.addRequestProperty("Cache-Control", "only-if-cached");
+
+            // httpGet.addHeader("Accept-Language", Locale.getDefault().getCountry().toLowerCase());
             if (headers != null)
                 for (Map.Entry<String, String> header : headers.entrySet()) {
-                    httpGet.addHeader(header.getKey(), header.getValue());
-                }
+                    // httpGet.addHeader(header.getKey(), header.getValue());
+                    con.setRequestProperty(header.getKey(), header.getValue());
 
-            HttpResponse response = httpclient.execute(httpGet);
-            StatusLine statusLine = response.getStatusLine();
-            int statusCode = statusLine.getStatusCode();
-            if (statusCode == 200) {
-                HttpEntity entity = response.getEntity();
-                json = convertStreamToString(entity.getContent());
+                }
+            // readStream(con.getInputStream());
+
+            // HttpResponse response = httpclient.execute(httpGet);
+            // StatusLine statusLine = response.getStatusLine();
+            // int statusCode = statusLine.getStatusCode();
+            if (con.getResponseCode() == 200) {
+
+                // HttpEntity entity = response.getEntity();
+                json = convertStreamToString(con.getInputStream());
             } else {
                 Log.e(TAG, "Failed to download file");
             }
@@ -110,6 +157,44 @@ public class ParrotAuthentication {
 
         return json;
     }
+
+    // private String api_json(String api_url, List<NameValuePair> params, String method, Map<String, String> headers)
+    // throws IOException {
+    // URL url = new URL(baseName + api_url);
+    //
+    // HttpClient httpclient = new DefaultHttpClient();
+    //
+    // String json = "";
+    // try {
+    // List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+    // nameValuePairs.addAll(params);
+    // String paramString = URLEncodedUtils.format(nameValuePairs, "utf-8");
+    //
+    // HttpGet httpGet = new HttpGet(url.toString() + "?" + paramString);
+    //
+    // httpGet.addHeader("Accept-Language", Locale.getDefault().getCountry().toLowerCase());
+    // if (headers != null)
+    // for (Map.Entry<String, String> header : headers.entrySet()) {
+    // httpGet.addHeader(header.getKey(), header.getValue());
+    // }
+    //
+    // HttpResponse response = httpclient.execute(httpGet);
+    // StatusLine statusLine = response.getStatusLine();
+    // int statusCode = statusLine.getStatusCode();
+    // if (statusCode == 200) {
+    // HttpEntity entity = response.getEntity();
+    // json = convertStreamToString(entity.getContent());
+    // } else {
+    // Log.e(TAG, "Failed to download file");
+    // }
+    // } catch (ClientProtocolException e) {
+    // Log.w(TAG, e.getMessage(), e);
+    // } catch (IOException e) {
+    // Log.w(TAG, e.getMessage(), e);
+    // }
+    //
+    // return json;
+    // }
 
     public String getToken() {
         String api_authentication = "/user/v1/authenticate";

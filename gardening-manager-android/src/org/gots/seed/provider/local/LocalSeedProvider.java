@@ -182,7 +182,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
 
         // Création d'un ContentValues (fonctionne comme une HashMap)
         ContentValues values = getContentValuesFromSeed(seed);
-        // Cursor cursor;
+//         Cursor cursor;
         bdd.update(DatabaseHelper.SEEDS_TABLE_NAME, values, DatabaseHelper.SEED_ID + "='" + seed.getSeedId() + "'",
                 null);
         // cursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_ID + "='" + seed.getSeedId()
