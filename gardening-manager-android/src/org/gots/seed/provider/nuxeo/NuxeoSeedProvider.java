@@ -332,6 +332,11 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             Document stockitem;
             int quantity = 0;
             try {
+                Document seedDoc = service.getDocument(new IdRef(vendorSeed.getUUID()));
+            } catch (Exception e) {
+                createNuxeoVendorSeed(vendorSeed);
+            }
+            try {
                 stockitem = service.getDocument(new PathRef(stockFolder.getPath() + "/" + vendorSeed.getSpecie() + " "
                         + vendorSeed.getVariety()), true);
                 quantity = Integer.valueOf(stockitem.getString("stockitem:quantity"));

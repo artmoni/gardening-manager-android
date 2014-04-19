@@ -205,8 +205,8 @@ public class HutActivity extends AbstractFragmentActivity {
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds_plant)),
                 VendorListActivity.class, parrotArgs);
 
-//        mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
-//                MySeedsListActivity.class, null);
+        mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
+                MySeedsListActivity.class, null);
      
         // an allotment is selected
         if (currentAllotment >= 0)
