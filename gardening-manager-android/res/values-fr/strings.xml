@@ -9,7 +9,7 @@
     <string name="gots.opensource">Projet Open Source,\n la participation est ouverte à tous</string>
     <string name="gots.loading">Veuillez patienter, chargement en cours</string>
     <string name="day">Jour</string>
-    <string name="week">semaine</string> 
+    <string name="week">semaine</string>
     <string name="month">mois</string>
     <string name="seed.register.title">Ajout variété</string>
     <string name="seed.action.date">Effectuée le :</string>
@@ -65,6 +65,9 @@
     <string name="profile.sample.data">Tester l\'application avec un potager déjà créé</string>
     <string name="hut.menu.myseeds">Mon stock</string>
     <string name="hut.menu.vendorseeds">Catalogue</string>
+    <string name="hut.menu.favorites">Mes favoris</string>
+    <string name="hut.menu.thismonth">Ce mois</string>
+    <string name="hut.menu.filter">Filtre</string>
     <string name="garden.cityname.inputtitle">Ville du potager</string>
     <string name="garden.cityname.inputmessage">Veuillez saisir la ville dans laquelle se trouve votre potager</string>
     <string name="dashboard.hut.name">Catalogue</string>
@@ -137,7 +140,6 @@
     <string name="login.disconnect.state">Vous n\'avez pas sauvegardé, connectez vous et restez synchronisé</string>
     <string name="translate.button">J\'aide à la traduction</string>
     <string name="login.connect.restricted">Vous devez être connecté pour utiliser cette fonctionnalité</string>
-    
     <string name="login.disconnect.state">Vous travaillez déconnecté</string>
     <string name="translate.button">Participer à la traduction</string>
     <string name="inapp.rating.title">Evaluer</string>

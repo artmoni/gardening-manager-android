@@ -11,6 +11,7 @@
 package org.gots.ui;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
@@ -24,19 +25,29 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
+import android.widget.Filterable;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
-public class HutActivity extends AbstractFragmentActivity  {
+public class HutActivity extends AbstractFragmentActivity {
 
     // private ListVendorSeedAdapter lvsea;
     ListView listSeeds;
@@ -58,7 +69,16 @@ public class HutActivity extends AbstractFragmentActivity  {
 
         // GardenManager gm =GardenManager.getInstance();
         setContentView(R.layout.hut);
+        final ActionBar actionBar = getSupportActionBar();
 
+        actionBar.setCustomView(R.layout.actionbar_catalog);
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayUseLogoEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+
+        // displaySpinnerFilter();
+        displaySearchBox();
         if (!gotsPurchase.isPremium()) {
             GotsAdvertisement ads = new GotsAdvertisement(this);
 
@@ -67,6 +87,112 @@ public class HutActivity extends AbstractFragmentActivity  {
         }
 
     }
+
+    String currentFilter = "";
+
+    private void displaySearchBox() {
+        final EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
+        filter.setText(currentFilter);
+
+        filter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable arg0) {
+                findViewById(R.id.clearSearchFilter).setBackground(getResources().getDrawable(R.drawable.ic_search));
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+        });
+        ImageButton search = (ImageButton) findViewById(R.id.clearSearchFilter);
+        search.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (v.getBackground().equals(getResources().getDrawable(R.drawable.ic_menu_close_clear_cancel))) {
+                    currentFilter = "";
+                    findViewById(R.id.clearSearchFilter).setBackground(getResources().getDrawable(R.drawable.ic_search));
+                } else {
+                    currentFilter = filter.getText().toString();
+
+                    findViewById(R.id.clearSearchFilter).setBackground(
+                            getResources().getDrawable(R.drawable.ic_menu_close_clear_cancel));
+                }
+                
+                Fragment fragment = (Fragment) getSupportFragmentManager().findFragmentByTag(
+                        "android:switcher:" + R.id.pager + ":" + mTabsAdapter.getCurrentItem());
+                if (fragment instanceof ListFragment) {
+                    Filterable fragFilter = (Filterable) ((ListFragment) fragment).getListAdapter();
+                    fragFilter.getFilter().filter(currentFilter.toString());
+                }
+
+                EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(filter.getWindowToken(), 0);
+            }
+
+        });
+    }
+
+    // protected void displaySpinnerFilter() {
+    // Spinner searchFilter = (Spinner) findViewById(R.id.idSpinnerSearch);
+    // List<String> list = new ArrayList<String>();
+    // list.add(getResources().getString(R.string.hut_menu_filter));
+    // list.add(getResources().getString(R.string.hut_menu_vendorseeds));
+    // list.add(getResources().getString(R.string.hut_menu_myseeds));
+    // list.add(getResources().getString(R.string.hut_menu_favorites));
+    // list.add(getResources().getString(R.string.hut_menu_thismonth));
+    // ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
+    // searchFilter.setAdapter(dataAdapter);
+    // searchFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    // @Override
+    // public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+    // if (position == 0) {
+    //
+    // }
+    // Bundle args = new Bundle();
+    // switch (position) {
+    // case 1:
+    // mTabsAdapter.addTab(
+    // getSupportActionBar().newTab().setTag("event_list").setText(
+    // getString(R.string.hut_menu_vendorseeds)), VendorListActivity.class, null);
+    // break;
+    // case 2:
+    // mTabsAdapter.addTab(
+    // getSupportActionBar().newTab().setTag("event_list").setText(
+    // getString(R.string.hut_menu_myseeds)), MySeedsListActivity.class, null);
+    // break;
+    // case 3:
+    // args.putBoolean(VendorListActivity.FILTER_FAVORITES, true);
+    // mTabsAdapter.addTab(
+    // getSupportActionBar().newTab().setTag("event_list").setText(
+    // getString(R.string.hut_menu_favorites)), VendorListActivity.class, args);
+    // break;
+    // case 4:
+    // args.putBoolean(VendorListActivity.FILTER_THISMONTH, true);
+    // mTabsAdapter.addTab(
+    // getSupportActionBar().newTab().setTag("event_list").setText(
+    // getString(R.string.hut_menu_thismonth)), VendorListActivity.class, args);
+    // break;
+    //
+    // default:
+    // break;
+    // }
+    // }
+    //
+    // @Override
+    // public void onNothingSelected(AdapterView<?> parent) {
+    // // TODO Auto-generated method stub
+    //
+    // }
+    // });
+    // }
 
     @Override
     protected void onActivityResult(int arg0, int arg1, Intent arg2) {
@@ -87,11 +213,23 @@ public class HutActivity extends AbstractFragmentActivity  {
         mTabsAdapter = new TabsAdapter(this, mViewPager);
         bar.removeAllTabs();
         // // ********************** Tab description **********************
+        Bundle args;
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds)),
                 VendorListActivity.class, null);
 
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
                 MySeedsListActivity.class, null);
+
+        if (gotsPref.isConnectedToServer()) {
+            args = new Bundle();
+            args.putBoolean(VendorListActivity.FILTER_FAVORITES, true);
+            mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_favorites)),
+                    VendorListActivity.class, args);
+        }
+        args = new Bundle();
+        args.putBoolean(VendorListActivity.FILTER_THISMONTH, true);
+        mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_thismonth)),
+                VendorListActivity.class, args);
         // an allotment is selected
         if (currentAllotment >= 0)
             bar.setSelectedNavigationItem(1);
@@ -194,10 +332,10 @@ public class HutActivity extends AbstractFragmentActivity  {
         @Override
         public Fragment getItem(int position) {
             TabInfo info = mTabs.get(position);
-            Bundle bundle = new Bundle();
 
             Fragment fragment = Fragment.instantiate(mContext, info.clss.getName(), info.args);
-            fragment.setArguments(bundle);
+            if (info.args != null)
+                fragment.setArguments(info.args);
             return fragment;
         }
 
@@ -233,5 +371,8 @@ public class HutActivity extends AbstractFragmentActivity  {
         public void onTabReselected(Tab tab, FragmentTransaction ft) {
         }
 
+        public int getCurrentItem() {
+            return mViewPager.getCurrentItem();
+        }
     }
 }

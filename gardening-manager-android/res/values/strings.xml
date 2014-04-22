@@ -68,6 +68,9 @@
     <string name="profile.sample.data">Begin with an already created garden</string>
     <string name="hut.menu.myseeds">My stock</string>
     <string name="hut.menu.vendorseeds">Catalog</string>
+    <string name="hut.menu.favorites">My favorites</string>
+    <string name="hut.menu.thismonth">This month</string>
+    <string name="hut.menu.filter">Filter</string>
     <string name="garden.cityname.inputtitle">Garden place</string>
     <string name="garden.cityname.inputmessage">Please enter your garden place</string>
     <string name="dashboard.hut.name">Catalog</string>

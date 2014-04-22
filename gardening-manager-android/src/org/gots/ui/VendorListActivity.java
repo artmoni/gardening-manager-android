@@ -51,6 +51,10 @@ import com.google.zxing.integration.android.IntentResult;
 
 public class VendorListActivity extends AbstractListFragment {
 
+    protected static final String FILTER_FAVORITES = "filter.favorites";
+
+    protected static final String FILTER_THISMONTH = "filter.thismonth";
+
     public Context mContext;
 
     public SeedListAdapter listVendorSeedAdapter;
@@ -66,6 +70,7 @@ public class VendorListActivity extends AbstractListFragment {
         mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.SEED_DISPLAYLIST));
         listVendorSeedAdapter = new VendorSeedListAdapter(mContext, new ArrayList<BaseSeedInterface>());
         setListAdapter(listVendorSeedAdapter);
+
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -79,11 +84,11 @@ public class VendorListActivity extends AbstractListFragment {
         // Handle item selection
         GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
         switch (item.getItemId()) {
-        case R.id.idSeedFilter:
-            displaySearchBox();
-            tracker.trackEvent("Catalog", "menu", "displaySearchBox", 0);
-
-            return true;
+//        case R.id.idSeedFilter:
+////            displaySearchBox();
+//            tracker.trackEvent("Catalog", "menu", "displaySearchBox", 0);
+//
+//            return true;
         case R.id.refresh_seed:
             Intent seedIntent = new Intent(mContext, SeedUpdateService.class);
             mContext.startService(seedIntent);
@@ -115,7 +120,7 @@ public class VendorListActivity extends AbstractListFragment {
 
                 protected void onPostExecute(BaseSeedInterface scanSeed) {
                     if (scanSeed != null) {
-                        // seedProvider.addToStock(scanSeed, gardenProvider.getCurrentGarden());
+                        // seedProv�ider.addToStock(scanSeed, gardenProvider.getCurrentGarden());
                         // updateVendorSeeds();
                         // listVendorSeedAdapter.notifyDataSetChanged();
                         currentFilter = scanSeed.getBareCode();
@@ -154,56 +159,14 @@ public class VendorListActivity extends AbstractListFragment {
 
     }
 
-    private void displaySearchBox() {
+    
 
-        getActivity().findViewById(R.id.linearlayoutSearchBox).setVisibility(View.VISIBLE);
-        EditText filter = (EditText) getActivity().findViewById(R.id.edittextSearchFilter);
-        filter.setText(currentFilter);
-
-        filter.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable arg0) {
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                listVendorSeedAdapter.getFilter().filter(s.toString());
-            }
-        });
-        ImageButton clear = (ImageButton) getActivity().findViewById(R.id.clearSearchFilter);
-        clear.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                currentFilter = "";
-                closeSearchBox();
-            }
-
-        });
-
-        ImageButton preferred = (ImageButton) getActivity().findViewById(R.id.idSearchFilterLike);
-        preferred.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                listVendorSeedAdapter.getFilter().filter("LIKE");
-
-            }
-
-        });
-
-    }
+    
 
     private void closeSearchBox() {
         EditText filter = (EditText) getActivity().findViewById(R.id.edittextSearchFilter);
         filter.setText("");
-        getActivity().findViewById(R.id.linearlayoutSearchBox).setVisibility(View.GONE);
+//        getActivity().findViewById(R.id.linearlayoutSearchBox).setVisibility(View.GONE);
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(filter.getWindowToken(), 0);
     }
@@ -253,9 +216,15 @@ public class VendorListActivity extends AbstractListFragment {
                 }
                 listVendorSeedAdapter.setSeeds(vendorSeeds);
                 listVendorSeedAdapter.getFilter().filter(currentFilter);
-                if (!"".equals(currentFilter) && currentFilter != null)
-                    displaySearchBox();
+//                if (!"".equals(currentFilter) && currentFilter != null)
+//                    displaySearchBox();
                 listVendorSeedAdapter.notifyDataSetChanged();
+
+                Bundle args = getArguments();
+                if (args != null && args.getBoolean(FILTER_FAVORITES))
+                    listVendorSeedAdapter.getFilter().filter("LIKE");
+                else if (args != null && args.getBoolean(FILTER_THISMONTH))
+                    listVendorSeedAdapter.getFilter().filter("THISMONTH");
 
                 super.onPostExecute(vendorSeeds);
             };
