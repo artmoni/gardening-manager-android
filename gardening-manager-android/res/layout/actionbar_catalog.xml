@@ -1,0 +1,50 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <!--
+     <TextView
+    android:id="@+id/textView1"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="2"
+    android:text="my App name"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    android:textColor="#000000" />
+    -->
+
+
+    <!--
+    <Spinner
+        android:id="@+id/idSpinnerSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/imageView1" />
+    -->
+
+    <ImageButton
+        android:id="@+id/clearSearchFilter"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/ic_search"
+        android:contentDescription="clear Search Filter" />
+
+    <EditText
+        android:id="@+id/edittextSearchFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/clearSearchFilter"
+        android:layout_toLeftOf="@+id/clearSearchFilter"
+        android:layout_weight="1"
+        android:ems="10"
+        android:hint="@string/hut.menu.filter"
+        android:imeOptions="actionSearch"
+        android:singleLine="true"
+        android:textColorHint="@color/text_color_light" >
+    </EditText>
+
+</RelativeLayout>
