@@ -36,4 +36,8 @@ public interface GotsSeedProvider {
     public abstract BaseSeedInterface getSeedByBarCode(String barecode);
 
     public abstract LikeStatus like(BaseSeedInterface mSeed, boolean cancelLike) throws GotsException;
+
+    public abstract List<BaseSeedInterface> getMyFavorites();
+
+    public abstract List<BaseSeedInterface> getSeedBySowingMonth(int month);
 }

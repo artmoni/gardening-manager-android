@@ -90,19 +90,22 @@ public class HutActivity extends AbstractFragmentActivity {
 
     String currentFilter = "";
 
+    boolean clearFilter = true;
+
     private void displaySearchBox() {
         final EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
+
         filter.setText(currentFilter);
 
         filter.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable arg0) {
-                findViewById(R.id.clearSearchFilter).setBackground(getResources().getDrawable(R.drawable.ic_search));
             }
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                findViewById(R.id.clearSearchFilter).setBackground(getResources().getDrawable(R.drawable.ic_search));
+                clearFilter = false;
             }
 
             @Override
@@ -115,16 +118,17 @@ public class HutActivity extends AbstractFragmentActivity {
 
             @Override
             public void onClick(View v) {
-                if (v.getBackground().equals(getResources().getDrawable(R.drawable.ic_menu_close_clear_cancel))) {
+                if (clearFilter) {
                     currentFilter = "";
+                    clearFilter = false;
                     findViewById(R.id.clearSearchFilter).setBackground(getResources().getDrawable(R.drawable.ic_search));
                 } else {
                     currentFilter = filter.getText().toString();
-
+                    clearFilter = true;
                     findViewById(R.id.clearSearchFilter).setBackground(
                             getResources().getDrawable(R.drawable.ic_menu_close_clear_cancel));
                 }
-                
+
                 Fragment fragment = (Fragment) getSupportFragmentManager().findFragmentByTag(
                         "android:switcher:" + R.id.pager + ":" + mTabsAdapter.getCurrentItem());
                 if (fragment instanceof ListFragment) {
@@ -132,12 +136,22 @@ public class HutActivity extends AbstractFragmentActivity {
                     fragFilter.getFilter().filter(currentFilter.toString());
                 }
 
-                EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(filter.getWindowToken(), 0);
+//                EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
+//                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                imm.hideSoftInputFromWindow(filter.getWindowToken(), 0);
             }
 
         });
+
+    }
+
+    @Override
+    protected void onPostResume() {
+//        final EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
+//        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//         imm.hideSoftInputFromWindow(filter.getWindowToken(), 0);
+//        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+        super.onPostResume();
     }
 
     // protected void displaySpinnerFilter() {

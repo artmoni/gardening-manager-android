@@ -2,6 +2,7 @@ package org.gots.seed.provider.local;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.gots.DatabaseHelper;
@@ -16,6 +17,8 @@ import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.LikeStatus;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.utils.GotsDBHelper;
+
+import com.google.android.gms.internal.ba;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -331,5 +334,25 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
     @Override
     public LikeStatus like(BaseSeedInterface mSeed, boolean b) throws GotsException {
         throw new GotsUserNotConnectedException(mContext);
+    }
+
+    @Override
+    public List<BaseSeedInterface> getMyFavorites() {
+        List<BaseSeedInterface> favorites = new ArrayList<BaseSeedInterface>();
+        for (BaseSeedInterface baseSeedInterface : getVendorSeeds(false)) {
+            if (baseSeedInterface.getLikeStatus().getUserLikeStatus() > 0)
+                favorites.add(baseSeedInterface);
+        }
+        return favorites;
+    }
+
+    @Override
+    public List<BaseSeedInterface> getSeedBySowingMonth(int month) {
+        List<BaseSeedInterface> monthlySeed = new ArrayList<BaseSeedInterface>();
+        for (BaseSeedInterface baseSeedInterface : getVendorSeeds(false)) {
+            if (month >= baseSeedInterface.getDateSowingMin() && month <= baseSeedInterface.getDateSowingMax())
+                monthlySeed.add(baseSeedInterface);
+        }
+        return monthlySeed;
     }
 }

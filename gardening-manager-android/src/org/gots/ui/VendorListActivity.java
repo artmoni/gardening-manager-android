@@ -11,6 +11,7 @@
 package org.gots.ui;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.gots.IntentIntegratorSupportV4;
@@ -84,11 +85,11 @@ public class VendorListActivity extends AbstractListFragment {
         // Handle item selection
         GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
         switch (item.getItemId()) {
-//        case R.id.idSeedFilter:
-////            displaySearchBox();
-//            tracker.trackEvent("Catalog", "menu", "displaySearchBox", 0);
-//
-//            return true;
+        // case R.id.idSeedFilter:
+        // // displaySearchBox();
+        // tracker.trackEvent("Catalog", "menu", "displaySearchBox", 0);
+        //
+        // return true;
         case R.id.refresh_seed:
             Intent seedIntent = new Intent(mContext, SeedUpdateService.class);
             mContext.startService(seedIntent);
@@ -159,18 +160,6 @@ public class VendorListActivity extends AbstractListFragment {
 
     }
 
-    
-
-    
-
-    private void closeSearchBox() {
-        EditText filter = (EditText) getActivity().findViewById(R.id.edittextSearchFilter);
-        filter.setText("");
-//        getActivity().findViewById(R.id.linearlayoutSearchBox).setVisibility(View.GONE);
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(filter.getWindowToken(), 0);
-    }
-
     public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -201,9 +190,20 @@ public class VendorListActivity extends AbstractListFragment {
 
             @Override
             protected List<BaseSeedInterface> doInBackground(Void... params) {
-                List<BaseSeedInterface> catalogue = seedProvider.getVendorSeeds(false);
-                if (catalogue.size() == 0)
-                    catalogue = seedProvider.getVendorSeeds(true);
+
+                Bundle args = getArguments();
+                List<BaseSeedInterface> catalogue = new ArrayList<BaseSeedInterface>();
+                if (args == null) {
+                    catalogue = seedProvider.getVendorSeeds(false);
+                    if (catalogue.size() == 0)
+                        catalogue = seedProvider.getVendorSeeds(true);
+                } else if (args.getBoolean(FILTER_FAVORITES))
+                    // listVendorSeedAdapter.getFilter().filter("LIKE");
+                    catalogue = seedProvider.getMyFavorites();
+                else if (args.getBoolean(FILTER_THISMONTH))
+                    // listVendorSeedAdapter.getFilter().filter("THISMONTH");
+                    catalogue = seedProvider.getSeedBySowingMonth(Calendar.getInstance().get(Calendar.MONTH));
+
                 return catalogue;
             }
 
@@ -216,15 +216,9 @@ public class VendorListActivity extends AbstractListFragment {
                 }
                 listVendorSeedAdapter.setSeeds(vendorSeeds);
                 listVendorSeedAdapter.getFilter().filter(currentFilter);
-//                if (!"".equals(currentFilter) && currentFilter != null)
-//                    displaySearchBox();
+                // if (!"".equals(currentFilter) && currentFilter != null)
+                // displaySearchBox();
                 listVendorSeedAdapter.notifyDataSetChanged();
-
-                Bundle args = getArguments();
-                if (args != null && args.getBoolean(FILTER_FAVORITES))
-                    listVendorSeedAdapter.getFilter().filter("LIKE");
-                else if (args != null && args.getBoolean(FILTER_THISMONTH))
-                    listVendorSeedAdapter.getFilter().filter("THISMONTH");
 
                 super.onPostExecute(vendorSeeds);
             };
