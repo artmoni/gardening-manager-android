@@ -91,7 +91,7 @@
         <activity
             android:name=".ui.HutActivity"
             android:theme="@style/Theme.Styled"
-            android:uiOptions="splitActionBarWhenNarrow" />
+            android:uiOptions="splitActionBarWhenNarrow" android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
             android:name=".inapp.BuyPremiumActivity"
             android:theme="@style/Theme.Styled"
