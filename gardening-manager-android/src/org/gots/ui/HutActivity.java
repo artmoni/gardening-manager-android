@@ -120,6 +120,7 @@ public class HutActivity extends AbstractFragmentActivity {
             public void onClick(View v) {
                 if (clearFilter) {
                     currentFilter = "";
+                    filter.setText(currentFilter);
                     clearFilter = false;
                     findViewById(R.id.clearSearchFilter).setBackground(getResources().getDrawable(R.drawable.ic_search));
                 } else {
