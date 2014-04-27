@@ -52,7 +52,7 @@
     <string name="action.delete.seed">You are deleting a plant</string>
     <string name="action.delete">Delete</string>
     <string name="action.photo">Take a picture</string>
-    <string name="action.history">Download history</string>
+    <string name="action.download">Download</string>
     <string name="menu.edit">Modify</string>
     <string name="allotment.action.add.message">Name your plot</string>
     <string name="allotment.description1">I select the menu button to add a plot.</string>
@@ -165,6 +165,7 @@
     <string name="inapp.rating.descrition">If you enjoy using _APP_TITLE_, please take a moment to rate it. Thanks for your support!</string>
     <string name="inapp.purchase.noaccount">You need a Google account to buy features</string>
     <string name="inapp.purchase.buy">Buy</string>
+    <string name="inapp.purchase.title">Additional features</string>
     
     
     

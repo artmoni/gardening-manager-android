@@ -244,8 +244,11 @@
     </style>
 
     <style name="CustomDialogTitle" parent="android:style/Theme.Dialog">
-        <item name="android:background">@color/text_color_dark</item>
+        <item name="android:background">@color/text_color_light</item>
+        <item name="android:textColor">@color/green_dark</item>
         <item name="android:textAllCaps">true</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
     </style>
 
     <style name="Theme.Styled" parent="Theme.AppCompat.Light.DarkActionBar">

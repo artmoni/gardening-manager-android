@@ -50,6 +50,9 @@
     <string name="action.planning">Planifier une action</string>
     <string name="action.delete.allotment">Vous allez supprimer une parcelle</string>
     <string name="action.delete.seed">Vous allez supprimer un légume</string>
+    <string name="action.delete">Supprimer</string>
+    <string name="action.photo">Photo</string>
+    <string name="action.download">Télécharger</string>
     <string name="menu.edit">Modifier</string>
     <string name="allotment.action.add.message">Nommez votre parcelle</string>
     <string name="allotment.description1">Je sélectionne le bouton menu pour ajouter une parcelle.</string>
@@ -147,5 +150,6 @@
     <string name="inapp.rating.cancel">Je ne m\'exprime pas</string>
     <string name="inapp.rating.descrition">Si vous appréciez _APP_TITLE_, merci de prendre un moment pour noter l\'application. Merci de votre soutien!</string>
     <string name="inapp.purchase.noaccount">Un compte Google est nécessaire pour l\'achat de fonctionnalités</string>
-
+    <string name="inapp.purchase.title">Fonctionnalités supplémentaires</string>
+    
 </resources>
