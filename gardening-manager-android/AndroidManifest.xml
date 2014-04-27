@@ -72,7 +72,8 @@
         </activity>
         <activity
             android:name=".ui.ProfileCreationActivity"
-            android:theme="@style/Theme.Styled" />
+            android:theme="@style/Theme.Styled"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".ui.ListActionActivity"
             android:theme="@style/Theme.Styled" />

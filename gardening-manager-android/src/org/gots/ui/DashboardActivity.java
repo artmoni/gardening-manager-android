@@ -45,6 +45,7 @@ import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Window;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
@@ -113,7 +114,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         String[] dropdownValues = new String[myGardens.size()];
         for (int i = 0; i < myGardens.size(); i++) {
             GardenInterface garden = myGardens.get(i);
-            dropdownValues[i] = garden.getLocality();
+            dropdownValues[i] = garden.getName();
             if (garden != null && currentGarden != null && garden.getId() == currentGarden.getId())
                 selectedGardenIndex = i;
         }
@@ -141,6 +142,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
                     GotsBillingDialog purchaseDialog = new GotsBillingDialog();
                     purchaseDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
                     purchaseDialog.show(fm, "fragment_edit_name");
+                 
                 }
             });
         } else {

@@ -178,12 +178,13 @@ public class ProfileAdapter extends BaseAdapter {
             } else {
                 weatherState.setBackground(mContext.getResources().getDrawable(R.drawable.bg_weather));
             }
-            UserInfo userInfoTask = new UserInfo();
-            userInfoTask.execute(imageProfile);
-            // mContext.startService(weatherIntent);
-            // mContext.registerReceiver(weatherBroadcastReceiver, new
-            // IntentFilter(
-            // WeatherUpdateService.BROADCAST_ACTION));
+            if (gotsPreferences.isConnectedToServer()) {
+                UserInfo userInfoTask = new UserInfo();
+                userInfoTask.execute(imageProfile);
+            }// mContext.startService(weatherIntent);
+             // mContext.registerReceiver(weatherBroadcastReceiver, new
+             // IntentFilter(
+             // WeatherUpdateService.BROADCAST_ACTION));
 
         } else {
             vi.setSelected(false);

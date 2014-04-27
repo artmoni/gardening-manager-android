@@ -203,7 +203,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 
             PropertyMap properties = NuxeoGardenConvertor.convert(root.getPath(), garden).getProperties();
 
-            Document newGarden = documentMgr.createDocument(root, "Garden", garden.getLocality());
+            Document newGarden = documentMgr.createDocument(root, "Garden", garden.getName());
             documentMgr.update(newGarden, properties);
             garden.setUUID(newGarden.getId());
             //
@@ -316,10 +316,10 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
     @Override
     public GardenInterface getCurrentGarden() {
         GardenInterface garden = super.getCurrentGarden();
-//        if (garden != null && garden.getUUID() == null) {
-//            garden = createGarden(garden);
-//            garden = super.updateGarden(garden);
-//        }
+        // if (garden != null && garden.getUUID() == null) {
+        // garden = createGarden(garden);
+        // garden = super.updateGarden(garden);
+        // }
 
         return garden;
     }

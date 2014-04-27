@@ -43,19 +43,21 @@ public class GardenDBHelper extends GotsDBHelper {
     private ContentValues gardenToValues(GardenInterface garden) {
         ContentValues values = new ContentValues();
         values.put(GardenSQLite.GARDEN_UUID, garden.getUUID());
+        values.put(GardenSQLite.GARDEN_NAME, garden.getName());
         values.put(GardenSQLite.GARDEN_ADMINAREA, garden.getAdminArea());
         values.put(GardenSQLite.GARDEN_COUNTRYNAME, garden.getCountryName());
         values.put(GardenSQLite.GARDEN_LOCALITY, garden.getLocality());
         values.put(GardenSQLite.GARDEN_ALTITUDE, garden.getGpsAltitude());
         values.put(GardenSQLite.GARDEN_LATITUDE, garden.getGpsLatitude());
         values.put(GardenSQLite.GARDEN_LONGITUDE, garden.getGpsLongitude());
-        
+
         return values;
     }
 
     private GardenInterface cursorToGarden(Cursor cursor) {
         GardenInterface garden = new Garden();
         garden.setId(cursor.getInt(cursor.getColumnIndex(GardenSQLite.GARDEN_ID)));
+        garden.setName(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_NAME)));
         garden.setUUID(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_UUID)));
         garden.setAdminArea(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_ADMINAREA)));
         garden.setCountryName(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_COUNTRYNAME)));

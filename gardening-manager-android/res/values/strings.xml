@@ -71,7 +71,7 @@
     <string name="hut.menu.favorites">My favorites</string>
     <string name="hut.menu.thismonth">This month</string>
     <string name="hut.menu.filter">Filter</string>
-    <string name="garden.cityname.inputtitle">Garden place</string>
+    <string name="garden.cityname.inputtitle">Location</string>
     <string name="garden.cityname.inputmessage">Please enter your garden place</string>
     <string name="dashboard.hut.name">Catalog</string>
     <string name="dashboard.allotments.name">Garden</string>
@@ -129,6 +129,7 @@
     <string name="fillfields.variety">Please fill the variety</string>
     <string name="fillfields.dates">Please give the dates</string>
     <string name="garden.create">Create a new garden</string>
+    <string name="garden.name">Garden\'s name</string>
     <string name="garden.create.description">Work offline without backup and social network</string>
     <string name="login.connect">Connect me</string>
     <string name="login.connect.state">You work safely online</string>

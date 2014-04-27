@@ -38,14 +38,57 @@
                     android:padding="10dp"
                     android:src="@drawable/dashboard_button_profile_selector" />
 
-                <EditText
-                    android:id="@+id/editTextLocality"
-                    style="@style/description_content"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:hint="City"
-                    android:singleLine="true" />
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <TableRow
+                        android:id="@+id/tableRow1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+
+                        <TextView
+                            style="@style/description_content"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/garden.name" />
+
+                        <EditText
+                            android:id="@+id/editTextGardenName"
+                            style="@style/description_content"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:gravity="center"
+                            android:hint="My garden at home"
+                            android:singleLine="true" >
+
+                            <requestFocus />
+                        </EditText>
+                    </TableRow>
+
+                    <TableRow
+                        android:id="@+id/tableRow2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+
+                        <TextView
+                            style="@style/description_content"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/garden.cityname.inputtitle" />
+
+                        <EditText
+                            android:id="@+id/editTextLocality"
+                            style="@style/description_content"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:gravity="center"
+                            android:hint="City"
+                            android:singleLine="true" />
+                    </TableRow>
+                </TableLayout>
 
                 <CheckBox
                     android:id="@+id/checkboxSamples"

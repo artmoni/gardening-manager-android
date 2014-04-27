@@ -71,8 +71,9 @@
     <string name="hut.menu.favorites">Mes favoris</string>
     <string name="hut.menu.thismonth">Ce mois</string>
     <string name="hut.menu.filter">Filtre</string>
-    <string name="garden.cityname.inputtitle">Ville du potager</string>
+    <string name="garden.cityname.inputtitle">Localisation</string>
     <string name="garden.cityname.inputmessage">Veuillez saisir la ville dans laquelle se trouve votre potager</string>
+    <string name="garden.name">Nom du jardin</string>
     <string name="dashboard.hut.name">Catalogue</string>
     <string name="dashboard.allotments.name">Potager</string>
     <string name="dashboard.actions.name">Actions</string>
@@ -151,5 +152,5 @@
     <string name="inapp.rating.descrition">Si vous appréciez _APP_TITLE_, merci de prendre un moment pour noter l\'application. Merci de votre soutien!</string>
     <string name="inapp.purchase.noaccount">Un compte Google est nécessaire pour l\'achat de fonctionnalités</string>
     <string name="inapp.purchase.title">Fonctionnalités supplémentaires</string>
-    
+
 </resources>

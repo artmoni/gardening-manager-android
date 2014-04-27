@@ -19,7 +19,7 @@ import android.util.Log;
 
 public class GardenSQLite extends SQLiteOpenHelper {
 	// ************************ DATABASE **************
-	private static final int DATABASE_VERSION = 14;
+	private static final int DATABASE_VERSION = 15;
 	private static String DATABASE_NAME = "garden";
     private static GardenSQLite helper;
 	public final static String AUTHORITY = "org.gots.providers.garden";
@@ -37,6 +37,7 @@ public class GardenSQLite extends SQLiteOpenHelper {
 	public static final String GARDEN_LOCALITY = "locality";
 	public static final String GARDEN_ADMINAREA = "adminarea";
 	public static final String GARDEN_COUNTRYNAME = "countryname";
+	public static final String GARDEN_NAME = "name";
 
 	public static final String GARDEN_LAST_SYNCHRO = "last_synchro";
 
@@ -44,6 +45,7 @@ public class GardenSQLite extends SQLiteOpenHelper {
 		public static final String CREATE_TABLE_GARDEN = "CREATE TABLE " + GARDEN_TABLE_NAME 
 				+ " (" + GARDEN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
 				+ GARDEN_UUID + " STRING,"
+				+ GARDEN_NAME + " STRING,"
 				+ GARDEN_LOCALITY + " STRING,"
 				+ GARDEN_ADMINAREA + " STRING,"
 				+ GARDEN_COUNTRYNAME + " STRING,"
@@ -115,7 +117,10 @@ public class GardenSQLite extends SQLiteOpenHelper {
 			db.execSQL("ALTER TABLE " + GARDEN_TABLE_NAME + " ADD COLUMN " + GARDEN_UUID + " VARCHAR(255);");
 		}
 		if (oldVersion < 14) {
-            db.execSQL("ALTER TABLE " + ACTION_TABLE_NAME + " ADD COLUMN " + ACTION_UUID + " VARCHAR(255);");
+		    db.execSQL("ALTER TABLE " + ACTION_TABLE_NAME + " ADD COLUMN " + ACTION_UUID + " VARCHAR(255);");
+		}
+		if (oldVersion < 15) {
+            db.execSQL("ALTER TABLE " + GARDEN_TABLE_NAME + " ADD COLUMN " + GARDEN_NAME + " VARCHAR(255);");
         }
 	}
 
