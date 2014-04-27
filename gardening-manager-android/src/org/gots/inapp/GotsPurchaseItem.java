@@ -22,8 +22,8 @@ public class GotsPurchaseItem {
 
     public static String SKU_PREMIUM = "gots.premium";
 
-    // public static String SKU_FEATURE_PDFHISTORY = "gots.feature.pdfhistory";
-    public static String SKU_FEATURE_PDFHISTORY = SKU_TEST_PURCHASE;
+     public static String SKU_FEATURE_PDFHISTORY = "gots.feature.pdfhistory";
+//    public static String SKU_FEATURE_PDFHISTORY = SKU_TEST_PURCHASE;
 
     private SharedPreferences prefs;
 

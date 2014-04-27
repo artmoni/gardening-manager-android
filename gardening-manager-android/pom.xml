@@ -145,8 +145,6 @@
         </exclusion>
       </exclusions>
     </dependency>
-   
-   
   </dependencies>
   <build>
     <sourceDirectory>src</sourceDirectory>
@@ -168,7 +166,6 @@
     </plugins>
   </build>
   <profiles>
-   
     <profile>
       <id>release</id>
       <activation>
@@ -214,7 +211,7 @@
           </plugin>
           <plugin>
             <groupId>com.jayway.maven.plugins.android.generation2</groupId>
-            <artifactId>maven-android-plugin</artifactId>
+            <artifactId>android-maven-plugin</artifactId>
             <inherited>true</inherited>
             <configuration>
               <sign>

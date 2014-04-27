@@ -56,6 +56,10 @@ public class VendorListActivity extends AbstractListFragment {
 
     protected static final String FILTER_THISMONTH = "filter.thismonth";
 
+    protected static final String FILTER_BARCODE = "filter.barcode";
+
+    protected static final String FILTER_DATA = "filter.data";
+
     public Context mContext;
 
     public SeedListAdapter listVendorSeedAdapter;
@@ -96,68 +100,10 @@ public class VendorListActivity extends AbstractListFragment {
             tracker.trackEvent("Catalog", "menu", "refreshSeed", 0);
 
             return true;
-        case R.id.new_seed_barcode:
-            IntentIntegratorSupportV4 integrator = new IntentIntegratorSupportV4(this);
-            integrator.initiateScan();
-            tracker.trackEvent("Catalog", "menu", "scanBarCode", 0);
-            return true;
+
         default:
             return super.onOptionsItemSelected(item);
         }
-    }
-
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        final IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if (scanResult != null && scanResult.getContents() != null) {
-            Log.i("Scan result", scanResult.toString());
-
-            new AsyncTask<Void, Void, BaseSeedInterface>() {
-                @Override
-                protected BaseSeedInterface doInBackground(Void... params) {
-                    BaseSeedInterface scanSeed = seedProvider.getSeedByBarCode(scanResult.getContents());
-
-                    return scanSeed;
-                }
-
-                protected void onPostExecute(BaseSeedInterface scanSeed) {
-                    if (scanSeed != null) {
-                        // seedProv�ider.addToStock(scanSeed, gardenProvider.getCurrentGarden());
-                        // updateVendorSeeds();
-                        // listVendorSeedAdapter.notifyDataSetChanged();
-                        currentFilter = scanSeed.getBareCode();
-                    } else {
-                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-                        alertDialogBuilder.setTitle(getResources().getString(R.string.seed_menu_add_barcode));
-                        alertDialogBuilder.setMessage(
-                                getResources().getString(R.string.seed_description_barcode_noresult)).setCancelable(
-                                false).setPositiveButton(getResources().getString(R.string.seed_action_add_catalogue),
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        // if this button is clicked, close
-                                        // current activity
-                                        // MainActivity.this.finish();
-                                        Intent i = new Intent(mContext, NewSeedActivity.class);
-                                        i.putExtra("org.gots.seed.barcode", scanResult.getContents());
-                                        mContext.startActivity(i);
-                                    }
-                                }).setNegativeButton(getResources().getString(R.string.button_cancel),
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        // if this button is clicked, just close
-                                        // the dialog box and do nothing
-                                        dialog.cancel();
-                                    }
-                                });
-
-                        AlertDialog alertDialog = alertDialogBuilder.create();
-                        alertDialog.show();
-                    }
-                };
-            }.execute();
-
-        }
-        // buildMyTabHost();
-
     }
 
     public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
@@ -200,7 +146,10 @@ public class VendorListActivity extends AbstractListFragment {
                 } else if (args.getBoolean(FILTER_FAVORITES))
                     // listVendorSeedAdapter.getFilter().filter("LIKE");
                     catalogue = seedProvider.getMyFavorites();
-                else if (args.getBoolean(FILTER_THISMONTH))
+                else if (args.getBoolean(FILTER_BARCODE)) {
+                    // listVendorSeedAdapter.getFilter().filter("LIKE");
+                    catalogue.add(seedProvider.getSeedByBarCode(args.getString(FILTER_DATA)));
+                } else if (args.getBoolean(FILTER_THISMONTH))
                     // listVendorSeedAdapter.getFilter().filter("THISMONTH");
                     catalogue = seedProvider.getSeedBySowingMonth(Calendar.getInstance().get(Calendar.MONTH));
 
@@ -241,4 +190,5 @@ public class VendorListActivity extends AbstractListFragment {
         mContext.unregisterReceiver(seedBroadcastReceiver);
         super.onDestroy();
     }
+
 }

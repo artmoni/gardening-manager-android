@@ -13,13 +13,21 @@ package org.gots.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.gots.IntentIntegratorSupportV4;
 import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
+import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.ui.fragment.AbstractFragmentActivity;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -34,6 +42,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
@@ -41,6 +50,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -94,7 +104,6 @@ public class HutActivity extends AbstractFragmentActivity {
 
     private void displaySearchBox() {
         final EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
-
         filter.setText(currentFilter);
 
         filter.addTextChangedListener(new TextWatcher() {
@@ -137,9 +146,9 @@ public class HutActivity extends AbstractFragmentActivity {
                     fragFilter.getFilter().filter(currentFilter.toString());
                 }
 
-//                EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
-//                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//                imm.hideSoftInputFromWindow(filter.getWindowToken(), 0);
+                // EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
+                // InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                // imm.hideSoftInputFromWindow(filter.getWindowToken(), 0);
             }
 
         });
@@ -148,10 +157,10 @@ public class HutActivity extends AbstractFragmentActivity {
 
     @Override
     protected void onPostResume() {
-//        final EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
-//        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//         imm.hideSoftInputFromWindow(filter.getWindowToken(), 0);
-//        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+        // final EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
+        // InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        // imm.hideSoftInputFromWindow(filter.getWindowToken(), 0);
+        // imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
         super.onPostResume();
     }
 
@@ -209,9 +218,78 @@ public class HutActivity extends AbstractFragmentActivity {
     // });
     // }
 
-    @Override
-    protected void onActivityResult(int arg0, int arg1, Intent arg2) {
-        super.onActivityResult(arg0, arg1, arg2);
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        final IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        if (scanResult != null && scanResult.getContents() != null) {
+            Log.i("Scan result", scanResult.toString());
+
+            new AsyncTask<Void, Void, BaseSeedInterface>() {
+                @Override
+                protected BaseSeedInterface doInBackground(Void... params) {
+                    BaseSeedInterface scanSeed = seedProvider.getSeedByBarCode(scanResult.getContents());
+                    if (scanSeed!=null){
+                        seedProvider.addToStock(scanSeed, gardenProvider.getCurrentGarden());
+                    }
+
+                    return scanSeed;
+                }
+
+                protected void onPostExecute(BaseSeedInterface scanSeed) {
+                    if (scanSeed != null) {
+                        // seedProv�ider.addToStock(scanSeed, gardenProvider.getCurrentGarden());
+                        // updateVendorSeeds();
+                        // listVendorSeedAdapter.notifyDataSetChanged();
+                        currentFilter = scanSeed.getBareCode();
+                        Toast.makeText(getApplicationContext(), scanSeed.getSpecie()+" Added to stock", Toast.LENGTH_LONG).show();
+
+//                        Bundle args = new Bundle();
+//                        args.putString(VendorListActivity.FILTER_DATA, scanSeed.getBareCode());
+//                        args.putBoolean(VendorListActivity.FILTER_BARCODE, true);
+
+//                        ListFragment fragment = (ListFragment) getSupportFragmentManager().findFragmentByTag(
+//                                "android:switcher:" + R.id.pager + ":" + 1);
+//                        if (fragment == null
+//                                || (fragment.getArguments() != null && !fragment.getArguments().getBoolean(
+//                                        VendorListActivity.FILTER_BARCODE))) {
+//                            mTabsAdapter.addTab(getSupportActionBar().newTab().setTag("result").setText("Result"),
+//                                    VendorListActivity.class, args);
+//                            mTabsAdapter.setCurrentItem(mTabsAdapter.getCount() - 1);
+//                        }else
+//                        {
+//                        }
+
+                    } else {
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HutActivity.this);
+                        alertDialogBuilder.setTitle(getResources().getString(R.string.seed_menu_add_barcode));
+                        alertDialogBuilder.setMessage(
+                                getResources().getString(R.string.seed_description_barcode_noresult)).setCancelable(
+                                false).setPositiveButton(getResources().getString(R.string.seed_action_add_catalogue),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        // if this button is clicked, close
+                                        // current activity
+                                        // MainActivity.this.finish();
+                                        Intent i = new Intent(HutActivity.this, NewSeedActivity.class);
+                                        i.putExtra("org.gots.seed.barcode", scanResult.getContents());
+                                        startActivity(i);
+                                    }
+                                }).setNegativeButton(getResources().getString(R.string.button_cancel),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        // if this button is clicked, just close
+                                        // the dialog box and do nothing
+                                        dialog.cancel();
+                                    }
+                                });
+
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+                        alertDialog.show();
+                    }
+                };
+            }.execute();
+
+        }
+        // buildMyTabHost();
 
     }
 
@@ -277,7 +355,11 @@ public class HutActivity extends AbstractFragmentActivity {
         case android.R.id.home:
             finish();
             return true;
-
+        case R.id.new_seed_barcode:
+            IntentIntegrator integrator = new IntentIntegrator(this);
+            integrator.initiateScan();
+            // tracker.trackEvent("Catalog", "menu", "scanBarCode", 0);
+            return true;
         case R.id.help:
             Intent browserIntent = new Intent(this, WebHelpActivity.class);
             browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
@@ -388,6 +470,11 @@ public class HutActivity extends AbstractFragmentActivity {
 
         public int getCurrentItem() {
             return mViewPager.getCurrentItem();
+        }
+
+        public void setCurrentItem(int itemId) {
+            // mViewPager.setCurrentItem(itemId);
+            mActionBar.setSelectedNavigationItem(itemId);
         }
     }
 }
