@@ -11,6 +11,7 @@
 package org.gots.seed.view;
 
 import org.gots.R;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.exception.GotsException;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;
@@ -185,6 +186,7 @@ public class SeedWidgetLong extends LinearLayout {
                         }
                         mSeed.setLikeStatus(result);
                         displayLikeStatus(result);
+                        mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
 
                     };
                 }.execute();
