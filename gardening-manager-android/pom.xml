@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+>
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.gots</groupId>
@@ -9,15 +11,14 @@
   <artifactId>gardening-manager-android</artifactId>
   <packaging>apk</packaging>
   <version>0.29-SNAPSHOT</version>
-  
   <name>Gardening Manager Android</name>
   <properties>
     <android.version>4.2</android.version>
     <android.platform>17</android.platform>
+    <android.versioncode>28</android.versioncode>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
- 
   <repositories>
     <repository>
       <id>gardening-manager-maven</id>
@@ -225,6 +226,29 @@
               </zipalign>
             </configuration>
             <executions>
+              <execution>
+                <id>update-manifest</id>
+                <goals>
+                  <goal>manifest-update</goal>
+                </goals>
+                <configuration>
+                  <manifest>
+                    <versionName>${project.version}</versionName>
+                    <versionCodeUpdateFromVersion>true</versionCodeUpdateFromVersion>
+                    <debuggable>false</debuggable>
+                   <!--  <supports-screens>
+                      <anyDensity>true</anyDensity>
+                      <xlargeScreens>false</xlargeScreens>
+                    </supports-screens>
+                    <compatible-screens>
+                      <compatible-screen>
+                        <screenSize>small</screenSize>
+                        <screenDensity>ldpi</screenDensity>
+                      </compatible-screen>
+                    </compatible-screens> -->
+                  </manifest>
+                </configuration>
+              </execution>
               <execution>
                 <id>alignApk</id>
                 <phase>package</phase>
