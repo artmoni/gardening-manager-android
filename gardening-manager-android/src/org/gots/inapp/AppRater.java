@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -54,10 +55,12 @@ public class AppRater {
 
     public static void showRateDialog(final Context mContext, final SharedPreferences.Editor editor) {
         final Dialog dialog = new Dialog(mContext);
+//        final Dialog dialog = new Dialog(mContext, R.style.CustomDialog);
         dialog.setTitle(mContext.getResources().getString(R.string.inapp_rating_title) + " " + APP_TITLE);
-
+        
         LinearLayout ll = new LinearLayout(mContext);
         ll.setOrientation(LinearLayout.VERTICAL);
+        ll.setBackgroundColor(mContext.getResources().getColor(R.color.white));
 
         TextView tv = new TextView(mContext);
 
@@ -91,7 +94,7 @@ public class AppRater {
             }
         });
         ll.addView(b3);
-        
+
         b2.setText(mContext.getResources().getString(R.string.inapp_rating_later));
         b2.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -99,7 +102,6 @@ public class AppRater {
             }
         });
         ll.addView(b2);
-
 
         dialog.setContentView(ll);
         dialog.show();
