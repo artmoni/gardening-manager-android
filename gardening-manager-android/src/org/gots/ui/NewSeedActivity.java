@@ -11,6 +11,7 @@
 package org.gots.ui;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import org.gots.R;
@@ -23,6 +24,7 @@ import org.gots.seed.adapter.ListSpeciesAdapter;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
+import org.omg.PortableServer.REQUEST_PROCESSING_POLICY_ID;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -38,15 +40,17 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Gallery;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.speech.RecognizerIntent;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -74,6 +78,22 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
 
     private DatePicker planningHarvestMax;
 
+    private EditText descriptionGrowth;
+
+    private EditText descriptionDiseases;
+
+    private EditText descriptionEnvironment;
+
+    private EditText descriptionHarvest;
+
+    private View descriptionDiseasesVoice;
+
+    private View descriptionGrowthVoice;
+
+    private View descriptionHarvestVoice;
+
+    private View descriptionEnvironmentVoice;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,8 +106,16 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
 
         findViewById(R.id.imageBarCode).setOnClickListener(this);
         findViewById(R.id.buttonStock).setOnClickListener(this);
-        findViewById(R.id.buttonCatalogue).setOnClickListener(this);
+        // findViewById(R.id.buttonCatalogue).setOnClickListener(this);
         findViewById(R.id.buttonModify).setOnClickListener(this);
+        descriptionGrowth = (EditText) findViewById(R.id.IdSeedDescriptionCulture);
+        descriptionDiseases = (EditText) findViewById(R.id.IdSeedDescriptionEnnemi);
+        descriptionEnvironment = (EditText) findViewById(R.id.IdSeedDescriptionEnvironment);
+        descriptionHarvest = (EditText) findViewById(R.id.IdSeedDescriptionHarvest);
+        descriptionGrowthVoice = (View) findViewById(R.id.IdSeedDescriptionCultureVoice);
+        descriptionDiseasesVoice = (View) findViewById(R.id.IdSeedDescriptionEnnemiVoice);
+        descriptionEnvironmentVoice = (View) findViewById(R.id.IdSeedDescriptionEnvironmentVoice);
+        descriptionHarvestVoice = (View) findViewById(R.id.IdSeedDescriptionHarvestVoice);
 
         textViewBarCode = (TextView) findViewById(R.id.textViewBarCode);
 
@@ -247,12 +275,24 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
          */
         textViewBarCode.setText(newSeed.getBareCode());
 
+        /*
+         * DESCRIPTION
+         */
+        descriptionGrowth.setText(newSeed.getDescriptionGrowth());
+        descriptionDiseases.setText(newSeed.getDescriptionDiseases());
+        descriptionHarvest.setText(newSeed.getDescriptionHarvest());
+        descriptionEnvironment.setText(newSeed.getDescriptionCultivation());
+
+        descriptionDiseasesVoice.setOnClickListener(this);
+        descriptionEnvironmentVoice.setOnClickListener(this);
+        descriptionGrowthVoice.setOnClickListener(this);
+        descriptionHarvestVoice.setOnClickListener(this);
         // if (savedInstanceState != null &&
         // savedInstanceState.getInt(SELECTED_SPECIE) != 0)
         // gallerySpecies.setSelection(savedInstanceState.getInt(SELECTED_SPECIE));
 
         if (!isNewSeed) {
-            findViewById(R.id.buttonCatalogue).setVisibility(View.GONE);
+            // findViewById(R.id.buttonCatalogue).setVisibility(View.GONE);
             findViewById(R.id.buttonStock).setVisibility(View.GONE);
             findViewById(R.id.buttonModify).setVisibility(View.VISIBLE);
         }
@@ -265,6 +305,11 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
 
     @Override
     public void onClick(View v) {
+        newSeed.setDescriptionDiseases(descriptionDiseases.getText().toString());
+        newSeed.setDescriptionCultivation(descriptionEnvironment.getText().toString());
+        newSeed.setDescriptionHarvest(descriptionHarvest.getText().toString());
+        newSeed.setDescriptionGrowth(descriptionGrowth.getText().toString());
+        Intent intent;
         switch (v.getId()) {
         case R.id.imageBarCode:
             scanBarCode();
@@ -297,12 +342,38 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
 
             }
             break;
-        case R.id.buttonCatalogue:
-            if (validateSeed()) {
-                seedManager.createSeed(newSeed);
-                finish();
-            }
+
+        case R.id.IdSeedDescriptionCultureVoice:
+            intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speech recognition demo");
+            startActivityForResult(intent, REQUEST_GROWTH);
             break;
+        case R.id.IdSeedDescriptionEnnemiVoice:
+            intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speech recognition demo");
+            startActivityForResult(intent, REQUEST_DISEASES);
+            break;
+        case R.id.IdSeedDescriptionEnvironmentVoice:
+            intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speech recognition demo");
+            startActivityForResult(intent, REQUEST_ENVIRONMENT);
+            break;
+        case R.id.IdSeedDescriptionHarvestVoice:
+            intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speech recognition demo");
+            startActivityForResult(intent, REQUEST_HARVEST);
+            break;
+
+        // case R.id.buttonCatalogue:
+        // if (validateSeed()) {
+        // seedManager.createSeed(newSeed);
+        // finish();
+        // }
+        // break;
         default:
             break;
         }
@@ -429,6 +500,16 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
         integrator.initiateScan();
     }
 
+    public static final int REQUEST_SCAN = 0;
+
+    public static final int REQUEST_HARVEST = 1;
+
+    public static final int REQUEST_DISEASES = 2;
+
+    public static final int REQUEST_GROWTH = 3;
+
+    public static final int REQUEST_ENVIRONMENT = 4;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
@@ -436,6 +517,29 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
             Log.i("Scan result", scanResult.toString());
             textViewBarCode.setText(scanResult.getContents());
             newSeed.setBareCode(textViewBarCode.getText().toString());
+        } else {
+            ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            if (matches.size() > 0)
+                switch (requestCode) {
+                case REQUEST_GROWTH:
+                    descriptionGrowth.setText(matches.get(0));
+                    newSeed.setDescriptionGrowth(matches.toArray().toString());
+                    break;
+                case REQUEST_DISEASES:
+                    descriptionDiseases.setText(matches.get(0));
+                    newSeed.setDescriptionDiseases(matches.toArray().toString());
+                    break;
+                case REQUEST_ENVIRONMENT:
+                    descriptionEnvironment.setText(matches.get(0));
+                    newSeed.setDescriptionCultivation(matches.toArray().toString());
+                    break;
+                case REQUEST_HARVEST:
+                    descriptionHarvest.setText(matches.get(0));
+                    newSeed.setDescriptionHarvest(matches.toArray().toString());
+                    break;
+                default:
+                    break;
+                }
         }
     }
 
