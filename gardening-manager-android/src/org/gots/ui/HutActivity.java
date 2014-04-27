@@ -42,6 +42,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
@@ -51,10 +52,12 @@ import android.support.v4.app.ListFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 
 public class HutActivity extends AbstractFragmentActivity {
@@ -122,29 +125,30 @@ public class HutActivity extends AbstractFragmentActivity {
 
             }
         });
+
+        filter.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    performSearch(filter);
+                    EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(filter.getWindowToken(), 0);
+                    return true;
+                }
+                return false;
+            }
+        });
         ImageButton search = (ImageButton) findViewById(R.id.clearSearchFilter);
         search.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                if (clearFilter) {
-                    currentFilter = "";
-                    filter.setText(currentFilter);
-                    clearFilter = false;
-                    findViewById(R.id.clearSearchFilter).setBackground(getResources().getDrawable(R.drawable.ic_search));
-                } else {
-                    currentFilter = filter.getText().toString();
-                    clearFilter = true;
-                    findViewById(R.id.clearSearchFilter).setBackground(
-                            getResources().getDrawable(R.drawable.ic_menu_close_clear_cancel));
-                }
-
-                Fragment fragment = (Fragment) getSupportFragmentManager().findFragmentByTag(
-                        "android:switcher:" + R.id.pager + ":" + mTabsAdapter.getCurrentItem());
-                if (fragment instanceof ListFragment) {
-                    Filterable fragFilter = (Filterable) ((ListFragment) fragment).getListAdapter();
-                    fragFilter.getFilter().filter(currentFilter.toString());
-                }
+                performSearch(filter);
+                 EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
+                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                 imm.hideSoftInputFromWindow(filter.getWindowToken(), 0);
 
                 // EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
                 // InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -227,7 +231,7 @@ public class HutActivity extends AbstractFragmentActivity {
                 @Override
                 protected BaseSeedInterface doInBackground(Void... params) {
                     BaseSeedInterface scanSeed = seedProvider.getSeedByBarCode(scanResult.getContents());
-                    if (scanSeed!=null){
+                    if (scanSeed != null) {
                         seedProvider.addToStock(scanSeed, gardenProvider.getCurrentGarden());
                     }
 
@@ -240,23 +244,24 @@ public class HutActivity extends AbstractFragmentActivity {
                         // updateVendorSeeds();
                         // listVendorSeedAdapter.notifyDataSetChanged();
                         currentFilter = scanSeed.getBareCode();
-                        Toast.makeText(getApplicationContext(), scanSeed.getSpecie()+" Added to stock", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), scanSeed.getSpecie() + " Added to stock",
+                                Toast.LENGTH_LONG).show();
 
-//                        Bundle args = new Bundle();
-//                        args.putString(VendorListActivity.FILTER_DATA, scanSeed.getBareCode());
-//                        args.putBoolean(VendorListActivity.FILTER_BARCODE, true);
+                        // Bundle args = new Bundle();
+                        // args.putString(VendorListActivity.FILTER_DATA, scanSeed.getBareCode());
+                        // args.putBoolean(VendorListActivity.FILTER_BARCODE, true);
 
-//                        ListFragment fragment = (ListFragment) getSupportFragmentManager().findFragmentByTag(
-//                                "android:switcher:" + R.id.pager + ":" + 1);
-//                        if (fragment == null
-//                                || (fragment.getArguments() != null && !fragment.getArguments().getBoolean(
-//                                        VendorListActivity.FILTER_BARCODE))) {
-//                            mTabsAdapter.addTab(getSupportActionBar().newTab().setTag("result").setText("Result"),
-//                                    VendorListActivity.class, args);
-//                            mTabsAdapter.setCurrentItem(mTabsAdapter.getCount() - 1);
-//                        }else
-//                        {
-//                        }
+                        // ListFragment fragment = (ListFragment) getSupportFragmentManager().findFragmentByTag(
+                        // "android:switcher:" + R.id.pager + ":" + 1);
+                        // if (fragment == null
+                        // || (fragment.getArguments() != null && !fragment.getArguments().getBoolean(
+                        // VendorListActivity.FILTER_BARCODE))) {
+                        // mTabsAdapter.addTab(getSupportActionBar().newTab().setTag("result").setText("Result"),
+                        // VendorListActivity.class, args);
+                        // mTabsAdapter.setCurrentItem(mTabsAdapter.getCount() - 1);
+                        // }else
+                        // {
+                        // }
 
                     } else {
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HutActivity.this);
@@ -368,6 +373,27 @@ public class HutActivity extends AbstractFragmentActivity {
             return true;
         default:
             return super.onOptionsItemSelected(item);
+        }
+    }
+
+    protected void performSearch(final EditText filter) {
+        if (clearFilter) {
+            currentFilter = "";
+            filter.setText(currentFilter);
+            clearFilter = false;
+            findViewById(R.id.clearSearchFilter).setBackground(getResources().getDrawable(R.drawable.ic_search));
+        } else {
+            currentFilter = filter.getText().toString();
+            clearFilter = true;
+            findViewById(R.id.clearSearchFilter).setBackground(
+                    getResources().getDrawable(R.drawable.ic_menu_close_clear_cancel));
+        }
+
+        Fragment fragment = (Fragment) getSupportFragmentManager().findFragmentByTag(
+                "android:switcher:" + R.id.pager + ":" + mTabsAdapter.getCurrentItem());
+        if (fragment instanceof ListFragment) {
+            Filterable fragFilter = (Filterable) ((ListFragment) fragment).getListAdapter();
+            fragFilter.getFilter().filter(currentFilter.toString());
         }
     }
 
