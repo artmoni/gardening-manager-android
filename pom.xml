@@ -5,13 +5,17 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.gots</groupId>
   <artifactId>gardening-manager</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0</version>
   <packaging>pom</packaging>
   <name>Gardening Manager - Parent</name>
   <properties>
     <server_schema>http</server_schema>
     <compatibility.version>18</compatibility.version>
   </properties>
+  <scm>
+    <developerConnection>scm:git:ssh://git@github.com:artmoni/gardening-manager-android.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
   <dependencyManagement>
     <dependencies>
       <dependency>
