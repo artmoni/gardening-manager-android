@@ -114,7 +114,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         String[] dropdownValues = new String[myGardens.size()];
         for (int i = 0; i < myGardens.size(); i++) {
             GardenInterface garden = myGardens.get(i);
-            dropdownValues[i] = garden.getName();
+            dropdownValues[i] = garden.getName() != null ? garden.getName() : garden.getLocality();
             if (garden != null && currentGarden != null && garden.getId() == currentGarden.getId())
                 selectedGardenIndex = i;
         }
@@ -142,7 +142,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
                     GotsBillingDialog purchaseDialog = new GotsBillingDialog();
                     purchaseDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
                     purchaseDialog.show(fm, "fragment_edit_name");
-                 
+
                 }
             });
         } else {
@@ -321,6 +321,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         case R.id.premium:
             FragmentManager fm = getSupportFragmentManager();
             GotsBillingDialog editNameDialog = new GotsBillingDialog();
+            editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
             editNameDialog.show(fm, "fragment_edit_name");
             return true;
 
