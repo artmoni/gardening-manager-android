@@ -3,7 +3,7 @@
     package="org.gots"
     android:versionCode="29001"
     android:versionName="0.30-SNAPSHOT" >
-
+ 
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="19" />

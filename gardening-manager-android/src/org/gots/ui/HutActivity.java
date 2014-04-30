@@ -316,10 +316,12 @@ public class HutActivity extends AbstractFragmentActivity {
         Bundle args;
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds)),
                 VendorListActivity.class, null);
-        Bundle parrotArgs = new Bundle();
-        parrotArgs.putString(VendorListActivity.FILTER_PARROT, ParrotSeedProvider.class.getName());
+//        Bundle parrotArgs = new Bundle();
+//        parrotArgs.putString(VendorListActivity.FILTER_PARROT, ParrotSeedProvider.class.getName());
+        args = new Bundle();
+        args.putBoolean(VendorListActivity.FILTER_PARROT, true);
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds_plant)),
-                VendorListActivity.class, parrotArgs);
+                VendorListActivity.class, args);
 
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
                 MySeedsListActivity.class, null);
