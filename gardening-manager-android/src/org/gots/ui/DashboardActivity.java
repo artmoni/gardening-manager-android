@@ -99,33 +99,48 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
     }
 
     protected void displayGardenMenu(final ActionBar actionBar) {
-        myGardens = gardenManager.getMyGardens(false);
-        GardenInterface currentGarden = gardenManager.getCurrentGarden();
 
-        if (currentGarden == null)
-            if (myGardens.size() > 0)
-                gardenManager.setCurrentGarden(myGardens.get(0));
-            else {
-                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                startActivity(intent);
+        new AsyncTask<Void, Void, GardenInterface>() {
+
+            @Override
+            protected GardenInterface doInBackground(Void... params) {
+                myGardens = gardenManager.getMyGardens(false);
+                GardenInterface currentGarden = gardenManager.getCurrentGarden();
+
+                if (currentGarden == null)
+                    myGardens = gardenManager.getMyGardens(true);
+
+                return currentGarden;
             }
 
-        int selectedGardenIndex = 0;
-        String[] dropdownValues = new String[myGardens.size()];
-        for (int i = 0; i < myGardens.size(); i++) {
-            GardenInterface garden = myGardens.get(i);
-            dropdownValues[i] = garden.getName() != null ? garden.getName() : garden.getLocality();
-            if (garden != null && currentGarden != null && garden.getId() == currentGarden.getId())
-                selectedGardenIndex = i;
-        }
-        if (dropdownValues.length > 0) {
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,
-                    android.R.id.text1, dropdownValues);
+            protected void onPostExecute(GardenInterface currentGarden) {
+                if (currentGarden == null)
 
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-            actionBar.setListNavigationCallbacks(adapter, this);
-            actionBar.setSelectedNavigationItem(selectedGardenIndex);
-        }
+                    if (myGardens.size() > 0)
+                        gardenManager.setCurrentGarden(myGardens.get(0));
+                    else {
+                        Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                        startActivity(intent);
+                    }
+                int selectedGardenIndex = 0;
+                String[] dropdownValues = new String[myGardens.size()];
+                for (int i = 0; i < myGardens.size(); i++) {
+                    GardenInterface garden = myGardens.get(i);
+                    dropdownValues[i] = garden.getName() != null ? garden.getName() : garden.getLocality();
+                    if (garden != null && currentGarden != null && garden.getId() == currentGarden.getId())
+                        selectedGardenIndex = i;
+                }
+                if (dropdownValues.length > 0) {
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(DashboardActivity.this,
+                            android.R.layout.simple_spinner_item, android.R.id.text1, dropdownValues);
+
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+                    actionBar.setListNavigationCallbacks(adapter, DashboardActivity.this);
+                    actionBar.setSelectedNavigationItem(selectedGardenIndex);
+                }
+            };
+        }.execute();
+
     }
 
     protected void checkPremiumAds() {
