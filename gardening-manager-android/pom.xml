@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+>
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.gots</groupId>
@@ -8,7 +10,7 @@
   </parent>
   <artifactId>gardening-manager-android</artifactId>
   <packaging>apk</packaging>
-  <version>0.30-SNAPSHOT</version>
+  <version>0.29.1</version>
   <name>Gardening Manager Android</name>
   <properties>
     <android.version>4.2</android.version>
@@ -233,16 +235,10 @@
                     <versionName>${project.version}</versionName>
                     <versionCodeUpdateFromVersion>true</versionCodeUpdateFromVersion>
                     <debuggable>false</debuggable>
-                   <!--  <supports-screens>
-                      <anyDensity>true</anyDensity>
-                      <xlargeScreens>false</xlargeScreens>
-                    </supports-screens>
-                    <compatible-screens>
-                      <compatible-screen>
-                        <screenSize>small</screenSize>
-                        <screenDensity>ldpi</screenDensity>
-                      </compatible-screen>
-                    </compatible-screens> -->
+                    <!-- <supports-screens> <anyDensity>true</anyDensity> 
+                      <xlargeScreens>false</xlargeScreens> </supports-screens> <compatible-screens> 
+                      <compatible-screen> <screenSize>small</screenSize> <screenDensity>ldpi</screenDensity> 
+                      </compatible-screen> </compatible-screens> -->
                   </manifest>
                 </configuration>
               </execution>
@@ -252,6 +248,14 @@
                 <goals>
                   <goal>zipalign</goal>
                 </goals>
+                <configuration>
+                  <zipalign>
+                    <skip>false</skip>
+                    <verbose>true</verbose>
+                    <inputApk>${project.build.directory}/${project.artifactId}-${project.version}.apk</inputApk>
+                    <outputApk>${project.build.directory}/${project.artifactId}-release-v${project.version}.apk</outputApk>
+                  </zipalign>
+                </configuration>
               </execution>
             </executions>
           </plugin>
