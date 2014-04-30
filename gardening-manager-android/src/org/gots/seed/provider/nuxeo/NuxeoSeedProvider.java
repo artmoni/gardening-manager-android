@@ -92,7 +92,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 if (seed != null) {
                     seed.setLikeStatus(likes);
                     remoteVendorSeeds.add(seed);
-                    Log.i(TAG, "Nuxeo Seed: " + seed);
+                    Log.i(TAG, seed.toString());
                 } else {
                     Log.w(TAG, "Nuxeo Seed conversion problem " + document.getTitle() + "- " + document.getId());
                 }
