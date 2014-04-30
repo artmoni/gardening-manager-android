@@ -29,6 +29,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
@@ -40,11 +41,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Window;
+
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class DashboardActivity extends AbstractActivity implements OnClickListener, ActionBar.OnNavigationListener {
@@ -64,6 +66,8 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
     private String TAG = "DashboardActivity";
 
     private MenuItem itemConnected;
+
+    private List<GardenInterface> myGardens;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -95,24 +99,48 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
     }
 
     protected void displayGardenMenu(final ActionBar actionBar) {
-        myGardens = gardenManager.getMyGardens(false);
-        GardenInterface currentGarden = gardenManager.getCurrentGarden();
-        int selectedGardenIndex = 0;
-        String[] dropdownValues = new String[myGardens.size()];
-        for (int i = 0; i < myGardens.size(); i++) {
-            GardenInterface garden = myGardens.get(i);
-            dropdownValues[i] = garden.getLocality();
-            if (garden != null && currentGarden != null && garden.getId() == currentGarden.getId())
-                selectedGardenIndex = i;
-        }
-        if (dropdownValues.length > 0) {
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,
-                    android.R.id.text1, dropdownValues);
 
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-            actionBar.setListNavigationCallbacks(adapter, this);
-            actionBar.setSelectedNavigationItem(selectedGardenIndex);
-        }
+        new AsyncTask<Void, Void, GardenInterface>() {
+
+            @Override
+            protected GardenInterface doInBackground(Void... params) {
+                myGardens = gardenManager.getMyGardens(false);
+                GardenInterface currentGarden = gardenManager.getCurrentGarden();
+
+                if (currentGarden == null)
+                    myGardens = gardenManager.getMyGardens(true);
+
+                return currentGarden;
+            }
+
+            protected void onPostExecute(GardenInterface currentGarden) {
+                if (currentGarden == null)
+
+                    if (myGardens.size() > 0)
+                        gardenManager.setCurrentGarden(myGardens.get(0));
+                    else {
+                        Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                        startActivity(intent);
+                    }
+                int selectedGardenIndex = 0;
+                String[] dropdownValues = new String[myGardens.size()];
+                for (int i = 0; i < myGardens.size(); i++) {
+                    GardenInterface garden = myGardens.get(i);
+                    dropdownValues[i] = garden.getName() != null ? garden.getName() : garden.getLocality();
+                    if (garden != null && currentGarden != null && garden.getId() == currentGarden.getId())
+                        selectedGardenIndex = i;
+                }
+                if (dropdownValues.length > 0) {
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(DashboardActivity.this,
+                            android.R.layout.simple_spinner_item, android.R.id.text1, dropdownValues);
+
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+                    actionBar.setListNavigationCallbacks(adapter, DashboardActivity.this);
+                    actionBar.setSelectedNavigationItem(selectedGardenIndex);
+                }
+            };
+        }.execute();
+
     }
 
     protected void checkPremiumAds() {
@@ -126,8 +154,10 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
                 @Override
                 public void onClick(View v) {
                     FragmentManager fm = getSupportFragmentManager();
-                    GotsBillingDialog editNameDialog = new GotsBillingDialog();
-                    editNameDialog.show(fm, "fragment_edit_name");
+                    GotsBillingDialog purchaseDialog = new GotsBillingDialog();
+                    purchaseDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+                    purchaseDialog.show(fm, "fragment_edit_name");
+
                 }
             });
         } else {
@@ -150,8 +180,6 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         }
 
     };
-
-    private List<GardenInterface> myGardens;
 
     protected void refreshConnectionState() {
         if (itemConnected == null) {
@@ -234,13 +262,11 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         startService(weatherIntent);
 
         // if (gotsPrefs.getCurrentGardenId() == -1) {
-        if (gardenManager.getCurrentGarden() == null) {
-            Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-            startActivity(intent);
-            Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
-            findViewById(R.id.dashboard_button_profile).startAnimation(myFadeInAnimation);
-        } else
-            findViewById(R.id.dashboard_button_profile).clearAnimation();
+
+        // Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
+        // findViewById(R.id.dashboard_button_profile).startAnimation(myFadeInAnimation);
+        // } else
+        // findViewById(R.id.dashboard_button_profile).clearAnimation();
 
         displayGardenMenu(getSupportActionBar());
         refreshConnectionState();
@@ -310,6 +336,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         case R.id.premium:
             FragmentManager fm = getSupportFragmentManager();
             GotsBillingDialog editNameDialog = new GotsBillingDialog();
+            editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
             editNameDialog.show(fm, "fragment_edit_name");
             return true;
 

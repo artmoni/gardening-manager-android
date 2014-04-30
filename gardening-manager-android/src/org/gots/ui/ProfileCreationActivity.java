@@ -76,6 +76,8 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
 
     private TextView editTextLocality;
 
+    private TextView editTextName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +102,7 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
 
     private void buildProfile() {
         editTextLocality = (TextView) findViewById(R.id.editTextLocality);
+        editTextName = (TextView) findViewById(R.id.editTextGardenName);
 
         findViewById(R.id.buttonValidatePosition).setOnClickListener(this);
 
@@ -272,20 +275,25 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
 
     private void updateProfile() {
 
-        String locality = ((TextView) (findViewById(R.id.editTextLocality))).getText().toString();
-
-        if ("".equals(locality))
-            locality = ((TextView) (findViewById(R.id.editTextLocality))).getHint().toString();
-
         new AsyncTask<String, Integer, Void>() {
             @Override
             protected Void doInBackground(String... params) {
                 garden = gardenManager.getCurrentGarden();
+                String locality = editTextLocality.getText().toString();
+
+                if ("".equals(locality))
+                    locality = editTextLocality.getHint().toString();
+
+                if (editTextName.getText() != null && !"".equals(editTextName.getText()))
+                    garden.setName(editTextName.getText().toString());
+                else
+                    garden.setName(locality.replace("\'", " "));
+                
                 buildGarden();
                 gardenManager.updateCurrentGarden(garden);
                 return null;
             }
-        }.execute(locality);
+        }.execute();
 
     }
 
@@ -339,6 +347,10 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
             locality = ((TextView) (findViewById(R.id.editTextLocality))).getHint().toString();
 
         garden.setLocality(locality);
+        if (editTextName.getText() != null && !"".equals(editTextName.getText()))
+            garden.setName(editTextName.getText().toString());
+        else
+            garden.setName(locality.replace("\'", " "));
 
         gardenManager.addGarden(garden);
 

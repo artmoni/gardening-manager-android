@@ -56,7 +56,7 @@ public class NuxeoSeedConverter {
         doc.set("vendorseed:description_diseases", seed.getDescriptionDiseases());
         doc.set("vendorseed:description_growth", seed.getDescriptionGrowth());
         doc.set("vendorseed:description_harvest", seed.getDescriptionHarvest());
-        
+
 
         return doc;
     }

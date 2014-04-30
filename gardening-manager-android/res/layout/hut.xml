@@ -16,40 +16,6 @@
             android:background="@drawable/bg_hut_top" >
         </LinearLayout> -->
 
-        <LinearLayout
-            android:id="@+id/linearlayoutSearchBox"
-            android:layout_width="fill_parent"
-            android:layout_height="60dp"
-            android:background="@drawable/bg_line_action"
-            android:orientation="horizontal"
-            android:padding="5dp"
-            android:visibility="visible" >
-
-            <EditText
-                android:id="@+id/edittextSearchFilter"
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Search filter"
-                android:singleLine="true"
-                android:imeOptions="actionSearch" />
-
-            <ImageButton
-                android:id="@+id/idSearchFilterLike"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/ic_like"
-                android:contentDescription="filter favorite" />
-
-            <ImageView
-                android:id="@+id/clearSearchFilter"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/button_green_selector"
-                android:contentDescription="clear Search Filter"
-                android:src="@drawable/ic_search" />
-        </LinearLayout>
-
         <android.support.v4.view.ViewPager
             android:id="@+id/pager"
             android:layout_width="match_parent"

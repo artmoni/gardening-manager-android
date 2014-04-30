@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import org.gots.R;
 import org.gots.preferences.GotsPreferences;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -13,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,9 +47,9 @@ public class GotsBillingDialog extends DialogFragment {
     private IabHelper buyHelper;
 
     View v;
-    
+
     private TextView textDescription;
-    
+
     private TextView textDescriptionFeature;
 
     private TextView textTitlePremium;
@@ -63,11 +66,19 @@ public class GotsBillingDialog extends DialogFragment {
     @Override
     public void onCreate(Bundle arg0) {
         super.onCreate(arg0);
+
     }
+
+//    @Override
+//    public Dialog onCreateDialog(Bundle savedInstanceState) {
+//        return new AlertDialog.Builder(getActivity()).setIcon(R.drawable.logo_premium).setTitle(
+//                getResources().getString(R.string.inapp_purchase_title))
+//
+//        .create();
+//    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.purchase, container, false);
-
         textDescription = (TextView) v.findViewById(R.id.idPurchasePremiumDescription);
         textDescriptionFeature = (TextView) v.findViewById(R.id.idPurchaseFeatureDescription);
         textTitlePremium = (TextView) v.findViewById(R.id.idPurchasePremiumTitle);
@@ -75,6 +86,11 @@ public class GotsBillingDialog extends DialogFragment {
 
         butBuyPremium = (Button) v.findViewById(R.id.idPurchasePremiumButton);
         butBuyFeature = (Button) v.findViewById(R.id.idPurchaseFeatureButton);
+
+        getDialog().setTitle(getResources().getString(R.string.inapp_purchase_title));
+//        getDialog().requestWindowFeature(Window.FEATURE_LEFT_ICON);
+//        // getDialog().getWindow().setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.launcher);
+//        getDialog().setFeatureDrawable(Window.FEATURE_LEFT_ICON, getResources().getDrawable(R.drawable.launcher));
 
         String PUBKEY = GotsPreferences.getInstance().initIfNew(getActivity()).getPlayStorePubKey();
         buyHelper = new IabHelper(getActivity(), PUBKEY);
@@ -153,7 +169,6 @@ public class GotsBillingDialog extends DialogFragment {
                     String price = details.getPrice();
 
                     String title = details.getTitle();
-                    getDialog().setTitle(title);
                     textTitlePremium.setText(title);
 
                     String description = details.getDescription();
@@ -170,7 +185,6 @@ public class GotsBillingDialog extends DialogFragment {
                         String priceFeature = detailsFeature.getPrice();
 
                         String titleFeature = detailsFeature.getTitle();
-                        getDialog().setTitle(titleFeature);
                         textTitleFeature.setText(titleFeature);
 
                         String descriptionFeature = detailsFeature.getDescription();

@@ -11,51 +11,57 @@
 package org.gots.ui;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import org.gots.IntentIntegratorSupportV4;
 import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
-import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.provider.local.LocalSeedProvider;
-import org.gots.seed.provider.nuxeo.NuxeoSeedProvider;
 import org.gots.seed.provider.parrot.ParrotSeedProvider;
-import org.gots.inapp.GotsBillingDialog;
-import org.gots.seed.GrowingSeedInterface;
 import org.gots.ui.fragment.AbstractFragmentActivity;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.Filterable;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 
 public class HutActivity extends AbstractFragmentActivity {
-
-    protected static final String TAG = "HutActivity";
 
     // private ListVendorSeedAdapter lvsea;
     ListView listSeeds;
@@ -68,18 +74,6 @@ public class HutActivity extends AbstractFragmentActivity {
 
     private TabsAdapter mTabsAdapter;
 
-    protected CharSequence currentFilter = "";
-
-    private EditText searchEditText;
-
-    private ImageView searchButton;
-
-    private int SWITCH_BUTTON_SEARCH = 1;
-
-    private int SWITCH_BUTTON_CLEAR = 0;
-
-    private int SWITCH_BUTTON = SWITCH_BUTTON_SEARCH;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,7 +83,16 @@ public class HutActivity extends AbstractFragmentActivity {
 
         // GardenManager gm =GardenManager.getInstance();
         setContentView(R.layout.hut);
+        final ActionBar actionBar = getSupportActionBar();
 
+        actionBar.setCustomView(R.layout.actionbar_catalog);
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayUseLogoEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+
+        // displaySpinnerFilter();
+        displaySearchBox();
         if (!gotsPurchase.isPremium()) {
             GotsAdvertisement ads = new GotsAdvertisement(this);
 
@@ -97,89 +100,204 @@ public class HutActivity extends AbstractFragmentActivity {
             layout.addView(ads.getAdsLayout());
         }
 
-        searchEditText = (EditText) findViewById(R.id.edittextSearchFilter);
-        searchButton = (ImageView) findViewById(R.id.clearSearchFilter);
-
-        buildSearchBox();
-
     }
 
-    private void buildSearchBox() {
+    String currentFilter = "";
 
-        searchEditText.setText(currentFilter);
-        searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+    boolean clearFilter = true;
 
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    searchSeed();
-                    return true;
-                }
-                return false;
-            }
-        });
+    private void displaySearchBox() {
+        final EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
+        filter.setText(currentFilter);
 
-        searchEditText.addTextChangedListener(new TextWatcher() {
-
+        filter.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable arg0) {
             }
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                SWITCH_BUTTON = SWITCH_BUTTON_SEARCH;
-                switchSearchButton();
+                findViewById(R.id.clearSearchFilter).setBackgroundDrawable(
+                        getResources().getDrawable(R.drawable.ic_search));
+                clearFilter = false;
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // listVendorSeedAdapter.getFilter().filter(s.toString());
-                currentFilter = s;
+
             }
         });
-        searchButton.setOnClickListener(new View.OnClickListener() {
+
+        filter.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    performSearch(filter);
+                    EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(filter.getWindowToken(), 0);
+                    return true;
+                }
+                return false;
+            }
+        });
+        ImageButton search = (ImageButton) findViewById(R.id.clearSearchFilter);
+        search.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                searchSeed();
+                performSearch(filter);
+                EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(filter.getWindowToken(), 0);
+
+                // EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
+                // InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                // imm.hideSoftInputFromWindow(filter.getWindowToken(), 0);
             }
 
         });
-        View preferred = (View) findViewById(R.id.idSearchFilterLike);
-        preferred.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                currentFilter = "LIKE";
-                searchSeed();
-            }
-
-        });
     }
 
-    protected void searchSeed() {
-        Intent seedIntent = new Intent(BroadCastMessages.SEED_DISPLAYLIST);
-        if (SWITCH_BUTTON == SWITCH_BUTTON_SEARCH) {
-            Bundle extras = new Bundle();
-            extras.putString(BroadCastMessages.SEED_DISPLAYLIST_FILTER, currentFilter.toString());
-            seedIntent.putExtras(extras);
-            SWITCH_BUTTON = SWITCH_BUTTON_CLEAR;
-            switchSearchButton();
-        } else {
-            SWITCH_BUTTON = SWITCH_BUTTON_SEARCH;
-            searchEditText.setText("");
-            switchSearchButton();
+    @Override
+    protected void onPostResume() {
+        // final EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
+        // InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        // imm.hideSoftInputFromWindow(filter.getWindowToken(), 0);
+        // imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+        super.onPostResume();
+    }
+
+    // protected void displaySpinnerFilter() {
+    // Spinner searchFilter = (Spinner) findViewById(R.id.idSpinnerSearch);
+    // List<String> list = new ArrayList<String>();
+    // list.add(getResources().getString(R.string.hut_menu_filter));
+    // list.add(getResources().getString(R.string.hut_menu_vendorseeds));
+    // list.add(getResources().getString(R.string.hut_menu_myseeds));
+    // list.add(getResources().getString(R.string.hut_menu_favorites));
+    // list.add(getResources().getString(R.string.hut_menu_thismonth));
+    // ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
+    // searchFilter.setAdapter(dataAdapter);
+    // searchFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    // @Override
+    // public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+    // if (position == 0) {
+    //
+    // }
+    // Bundle args = new Bundle();
+    // switch (position) {
+    // case 1:
+    // mTabsAdapter.addTab(
+    // getSupportActionBar().newTab().setTag("event_list").setText(
+    // getString(R.string.hut_menu_vendorseeds)), VendorListActivity.class, null);
+    // break;
+    // case 2:
+    // mTabsAdapter.addTab(
+    // getSupportActionBar().newTab().setTag("event_list").setText(
+    // getString(R.string.hut_menu_myseeds)), MySeedsListActivity.class, null);
+    // break;
+    // case 3:
+    // args.putBoolean(VendorListActivity.FILTER_FAVORITES, true);
+    // mTabsAdapter.addTab(
+    // getSupportActionBar().newTab().setTag("event_list").setText(
+    // getString(R.string.hut_menu_favorites)), VendorListActivity.class, args);
+    // break;
+    // case 4:
+    // args.putBoolean(VendorListActivity.FILTER_THISMONTH, true);
+    // mTabsAdapter.addTab(
+    // getSupportActionBar().newTab().setTag("event_list").setText(
+    // getString(R.string.hut_menu_thismonth)), VendorListActivity.class, args);
+    // break;
+    //
+    // default:
+    // break;
+    // }
+    // }
+    //
+    // @Override
+    // public void onNothingSelected(AdapterView<?> parent) {
+    // // TODO Auto-generated method stub
+    //
+    // }
+    // });
+    // }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        final IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        if (scanResult != null && scanResult.getContents() != null) {
+            Log.i("Scan result", scanResult.toString());
+
+            new AsyncTask<Void, Void, BaseSeedInterface>() {
+                @Override
+                protected BaseSeedInterface doInBackground(Void... params) {
+                    BaseSeedInterface scanSeed = seedProvider.getSeedByBarCode(scanResult.getContents());
+                    if (scanSeed != null) {
+                        seedProvider.addToStock(scanSeed, gardenProvider.getCurrentGarden());
+                    }
+
+                    return scanSeed;
+                }
+
+                protected void onPostExecute(BaseSeedInterface scanSeed) {
+                    if (scanSeed != null) {
+                        // seedProv�ider.addToStock(scanSeed, gardenProvider.getCurrentGarden());
+                        // updateVendorSeeds();
+                        // listVendorSeedAdapter.notifyDataSetChanged();
+                        currentFilter = scanSeed.getBareCode();
+                        Toast.makeText(getApplicationContext(), scanSeed.getSpecie() + " Added to stock",
+                                Toast.LENGTH_LONG).show();
+
+                        // Bundle args = new Bundle();
+                        // args.putString(VendorListActivity.FILTER_DATA, scanSeed.getBareCode());
+                        // args.putBoolean(VendorListActivity.FILTER_BARCODE, true);
+
+                        // ListFragment fragment = (ListFragment) getSupportFragmentManager().findFragmentByTag(
+                        // "android:switcher:" + R.id.pager + ":" + 1);
+                        // if (fragment == null
+                        // || (fragment.getArguments() != null && !fragment.getArguments().getBoolean(
+                        // VendorListActivity.FILTER_BARCODE))) {
+                        // mTabsAdapter.addTab(getSupportActionBar().newTab().setTag("result").setText("Result"),
+                        // VendorListActivity.class, args);
+                        // mTabsAdapter.setCurrentItem(mTabsAdapter.getCount() - 1);
+                        // }else
+                        // {
+                        // }
+
+                    } else {
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HutActivity.this);
+                        alertDialogBuilder.setTitle(getResources().getString(R.string.seed_menu_add_barcode));
+                        alertDialogBuilder.setMessage(
+                                getResources().getString(R.string.seed_description_barcode_noresult)).setCancelable(
+                                false).setPositiveButton(getResources().getString(R.string.seed_action_add_catalogue),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        // if this button is clicked, close
+                                        // current activity
+                                        // MainActivity.this.finish();
+                                        Intent i = new Intent(HutActivity.this, NewSeedActivity.class);
+                                        i.putExtra("org.gots.seed.barcode", scanResult.getContents());
+                                        startActivity(i);
+                                    }
+                                }).setNegativeButton(getResources().getString(R.string.button_cancel),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        // if this button is clicked, just close
+                                        // the dialog box and do nothing
+                                        dialog.cancel();
+                                    }
+                                });
+
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+                        alertDialog.show();
+                    }
+                };
+            }.execute();
+
         }
-        sendBroadcast(seedIntent);
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
-    }
+        // buildMyTabHost();
 
-    private void switchSearchButton() {
-        if (SWITCH_BUTTON == SWITCH_BUTTON_SEARCH)
-            searchButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_search));
-        else
-            searchButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_close_clear_cancel));
     }
 
     private void buildMyTabHost() {
@@ -195,19 +313,27 @@ public class HutActivity extends AbstractFragmentActivity {
         mTabsAdapter = new TabsAdapter(this, mViewPager);
         bar.removeAllTabs();
         // // ********************** Tab description **********************
-        Bundle nuxeoArgs = new Bundle();
-//        nuxeoArgs.putString(VendorListActivity.PROVIDER, NuxeoSeedProvider.class.getName());
-//        mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds_veget)),
-//                VendorListActivity.class, nuxeoArgs);
-
+        Bundle args;
+        mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds)),
+                VendorListActivity.class, null);
         Bundle parrotArgs = new Bundle();
-        parrotArgs.putString(VendorListActivity.PROVIDER, ParrotSeedProvider.class.getName());
+        parrotArgs.putString(VendorListActivity.FILTER_PARROT, ParrotSeedProvider.class.getName());
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds_plant)),
                 VendorListActivity.class, parrotArgs);
 
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
                 MySeedsListActivity.class, null);
-     
+
+        if (gotsPref.isConnectedToServer()) {
+            args = new Bundle();
+            args.putBoolean(VendorListActivity.FILTER_FAVORITES, true);
+            mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_favorites)),
+                    VendorListActivity.class, args);
+        }
+        args = new Bundle();
+        args.putBoolean(VendorListActivity.FILTER_THISMONTH, true);
+        mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_thismonth)),
+                VendorListActivity.class, args);
         // an allotment is selected
         if (currentAllotment >= 0)
             bar.setSelectedNavigationItem(1);
@@ -240,7 +366,11 @@ public class HutActivity extends AbstractFragmentActivity {
         case android.R.id.home:
             finish();
             return true;
-
+        case R.id.new_seed_barcode:
+            IntentIntegrator integrator = new IntentIntegrator(this);
+            integrator.initiateScan();
+            // tracker.trackEvent("Catalog", "menu", "scanBarCode", 0);
+            return true;
         case R.id.help:
             Intent browserIntent = new Intent(this, WebHelpActivity.class);
             browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
@@ -249,6 +379,27 @@ public class HutActivity extends AbstractFragmentActivity {
             return true;
         default:
             return super.onOptionsItemSelected(item);
+        }
+    }
+
+    protected void performSearch(final EditText filter) {
+        if (clearFilter) {
+            currentFilter = "";
+            filter.setText(currentFilter);
+            clearFilter = false;
+            findViewById(R.id.clearSearchFilter).setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_search));
+        } else {
+            currentFilter = filter.getText().toString();
+            clearFilter = true;
+            findViewById(R.id.clearSearchFilter).setBackgroundDrawable(
+                    getResources().getDrawable(R.drawable.ic_menu_close_clear_cancel));
+        }
+
+        Fragment fragment = (Fragment) getSupportFragmentManager().findFragmentByTag(
+                "android:switcher:" + R.id.pager + ":" + mTabsAdapter.getCurrentItem());
+        if (fragment instanceof ListFragment) {
+            Filterable fragFilter = (Filterable) ((ListFragment) fragment).getListAdapter();
+            fragFilter.getFilter().filter(currentFilter.toString());
         }
     }
 
@@ -310,11 +461,10 @@ public class HutActivity extends AbstractFragmentActivity {
         @Override
         public Fragment getItem(int position) {
             TabInfo info = mTabs.get(position);
-            Bundle bundle = new Bundle();
-            if (info.args != null)
-                bundle.putAll(info.args);
+
             Fragment fragment = Fragment.instantiate(mContext, info.clss.getName(), info.args);
-            fragment.setArguments(bundle);
+            if (info.args != null)
+                fragment.setArguments(info.args);
             return fragment;
         }
 
@@ -350,5 +500,13 @@ public class HutActivity extends AbstractFragmentActivity {
         public void onTabReselected(Tab tab, FragmentTransaction ft) {
         }
 
+        public int getCurrentItem() {
+            return mViewPager.getCurrentItem();
+        }
+
+        public void setCurrentItem(int itemId) {
+            // mViewPager.setCurrentItem(itemId);
+            mActionBar.setSelectedNavigationItem(itemId);
+        }
     }
 }

@@ -39,6 +39,7 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
@@ -289,7 +290,28 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         }
 
     }
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+    // Raw height and width of image
+    final int height = options.outHeight;
+    final int width = options.outWidth;
+    int inSampleSize = 1;
 
+    if (height > reqHeight || width > reqWidth) {
+
+        final int halfHeight = height / 2;
+        final int halfWidth = width / 2;
+
+        // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+        // height and width larger than the requested height and width.
+        while ((halfHeight / inSampleSize) > reqHeight
+                && (halfWidth / inSampleSize) > reqWidth) {
+            inSampleSize *= 2;
+        }
+    }
+
+    return inSampleSize;
+}
     @Override
     public void uploadPicture(final GrowingSeedInterface seed, File imageFile) {
         Session session = getNuxeoClient().getSession();
@@ -298,15 +320,23 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         try {
 
             // SCALE IMAGE TO LOWER RESOLUTION
-            Bitmap bm = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-            float scale;
-            if (bm.getWidth() > bm.getHeight()) {
-                scale = 800 / (float) bm.getWidth();
-            } else {
-                scale = 800 / (float) bm.getHeight();
-            }
-            Bitmap scaledBm = Bitmap.createScaledBitmap(bm, (int) (bm.getWidth() * scale),
-                    (int) (bm.getHeight() * scale), true);
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            Bitmap bm = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
+            options.inSampleSize = calculateInSampleSize(options, 200   , 200);
+            options.inJustDecodeBounds = false;
+            bm = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
+
+//            float scale;
+//            if (bm.getWidth() > bm.getHeight()) {
+//                scale = 800 / (float) bm.getWidth();
+//            } else {
+//                scale = 800 / (float) bm.getHeight();
+//            }
+//            Bitmap scaledBm = Bitmap.createScaledBitmap(bm, (int) (bm.getWidth() * scale),
+//                    (int) (bm.getHeight() * scale), true);
+            Bitmap scaledBm = Bitmap.createScaledBitmap(bm, (int) (bm.getWidth() ),
+                    (int) (bm.getHeight() ), true);
 
             // ROTATE IMAGE IF NOT LANDSCAPE
             ExifInterface exif = new ExifInterface(imageFile.getAbsolutePath());
@@ -326,7 +356,8 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
 
             try {
                 FileOutputStream fos = new FileOutputStream(imageFile);
-                scaledBm.compress(Bitmap.CompressFormat.PNG, 90, fos);
+//                scaledBm.compress(Bitmap.CompressFormat.PNG, 90, fos);
+                bm.compress(Bitmap.CompressFormat.PNG, 90, fos);
                 fos.close();
             } catch (FileNotFoundException e) {
                 Log.d(TAG, "File not found: " + e.getMessage());

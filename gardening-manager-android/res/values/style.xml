@@ -48,7 +48,8 @@
         <item name="android:layout_marginRight">10dp</item>
         <item name="android:textAllCaps">true</item>
     </style>
-  <style name="purchase_title">
+
+    <style name="purchase_title">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">40dp</item>
         <item name="android:gravity">center_horizontal</item>
@@ -60,6 +61,7 @@
         <item name="android:layout_marginLeft">10dp</item>
         <item name="android:layout_marginRight">10dp</item>
     </style>
+
     <style name="seed_description_content">
         <item name="android:layout_marginLeft">10dp</item>
         <item name="android:layout_marginRight">10dp</item>
@@ -242,8 +244,11 @@
     </style>
 
     <style name="CustomDialogTitle" parent="android:style/Theme.Dialog">
-        <item name="android:background">@color/text_color_dark</item>
+        <item name="android:background">@color/text_color_light</item>
+        <item name="android:textColor">@color/green_dark</item>
         <item name="android:textAllCaps">true</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
     </style>
 
     <style name="Theme.Styled" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -264,6 +269,10 @@
         <item name="android:textAppearance">@style/Custom.TextAppearance.Sherlock.Widget.TextView.SpinnerItem</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textAllCaps">true</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:textColor">@color/green_light</item>
+        <item name="android:background">@color/text_color_dark</item>
+        <item name="background">@color/text_color_dark</item>
     </style>
 
     <style name="Custom.TextAppearance.Sherlock.Widget.TextView.SpinnerItem" parent="Widget.AppCompat.DropDownItem.Spinner">
@@ -276,17 +285,17 @@
 
     <style name="DropDownNav" parent="Widget.AppCompat.Light.Spinner.DropDown.ActionBar"></style>
 
-    <style name="DropDownItem" parent="Widget.AppCompat.Light.DropDownItem.Spinner">
-        <item name="android:background">@color/text_color_dark</item>
-        <item name="background">@color/text_color_dark</item>
+    <style name="DropDownItem" parent="Widget.AppCompat.DropDownItem.Spinner">
+        <item name="android:background">@color/text_color_light</item>
+        <item name="background">@color/text_color_light</item>
         <item name="android:textAppearance">@style/Custom.TextAppearance.Sherlock.Widget.TextView.DropDownItem</item>
-        <item name="android:paddingLeft">8dp</item>
+        <item name="android:padding">8dp</item>
         <item name="android:paddingRight">8dp</item>
     </style>
 
     <style name="Custom.TextAppearance.Sherlock.Widget.TextView.DropDownItem" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/text_color_light</item>
+        <item name="android:textColor">@color/text_color_dark</item>
         <item name="android:textStyle">normal</item>
     </style>
 
@@ -310,6 +319,8 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/text_color_light</item>
         <item name="android:textSize">13dp</item>
+        <item name="android:divider">@drawable/tab_divider</item>
+        <item name="android:showDividers">middle</item>
     </style>
 
     <style name="SpinnerTextViewItem" parent="@android:style/Widget.TextView">

@@ -7,11 +7,11 @@
   <parent>
     <groupId>org.gots</groupId>
     <artifactId>gardening-manager</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
   </parent>
   <artifactId>gardening-manager-android</artifactId>
   <packaging>apk</packaging>
-  <version>0.28-SNAPSHOT</version>
+  <version>0.30-SNAPSHOT</version>
   <name>Gardening Manager Android</name>
   <properties>
     <android.version>4.2</android.version>
@@ -151,8 +151,6 @@
         </exclusion>
       </exclusions>
     </dependency>
-   
-   
   </dependencies>
   <build>
     <sourceDirectory>src</sourceDirectory>
@@ -174,7 +172,6 @@
     </plugins>
   </build>
   <profiles>
-   
     <profile>
       <id>release</id>
       <activation>
@@ -220,7 +217,7 @@
           </plugin>
           <plugin>
             <groupId>com.jayway.maven.plugins.android.generation2</groupId>
-            <artifactId>maven-android-plugin</artifactId>
+            <artifactId>android-maven-plugin</artifactId>
             <inherited>true</inherited>
             <configuration>
               <sign>
@@ -235,11 +232,36 @@
             </configuration>
             <executions>
               <execution>
+                <id>update-manifest</id>
+                <goals>
+                  <goal>manifest-update</goal>
+                </goals>
+                <configuration>
+                  <manifest>
+                    <versionName>${project.version}</versionName>
+                    <versionCodeUpdateFromVersion>true</versionCodeUpdateFromVersion>
+                    <debuggable>false</debuggable>
+                    <!-- <supports-screens> <anyDensity>true</anyDensity> 
+                      <xlargeScreens>false</xlargeScreens> </supports-screens> <compatible-screens> 
+                      <compatible-screen> <screenSize>small</screenSize> <screenDensity>ldpi</screenDensity> 
+                      </compatible-screen> </compatible-screens> -->
+                  </manifest>
+                </configuration>
+              </execution>
+              <execution>
                 <id>alignApk</id>
                 <phase>package</phase>
                 <goals>
                   <goal>zipalign</goal>
                 </goals>
+                <configuration>
+                  <zipalign>
+                    <skip>false</skip>
+                    <verbose>true</verbose>
+                    <inputApk>${project.build.directory}/${project.artifactId}-${project.version}.apk</inputApk>
+                    <outputApk>${project.build.directory}/${project.artifactId}-release-v${project.version}.apk</outputApk>
+                  </zipalign>
+                </configuration>
               </execution>
             </executions>
           </plugin>
@@ -251,5 +273,6 @@
     <connection>scm:git:https://github.com/artmoni/gardening-manager-android</connection>
     <developerConnection>scm:git:https://github.com/artmoni/gardening-manager-android</developerConnection>
     <url>https://github.com/artmoni/gardening-manager-android</url>
+    <tag>HEAD</tag>
   </scm>
 </project>

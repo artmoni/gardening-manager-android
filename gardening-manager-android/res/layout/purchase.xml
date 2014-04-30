@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    tools:context=".MainActivity" >
+    tools:context=".MainActivity" android:background="@color/text_color_light">
 
     <RelativeLayout
         android:id="@+id/idPurchaseFeature"
@@ -67,7 +67,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:singleLine="false"
-            android:text="title" />
+            android:text="@string/inapp.purchase.noaccount" />
 
         <TextView
             android:id="@+id/idPurchasePremiumDescription"
@@ -88,13 +88,13 @@
             android:text="@string/inapp.purchase.buy"
             android:textColor="@color/white" />
 
-        <ImageView
+        <!-- <ImageView
             android:id="@+id/imageView1"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/logo_premium" />
+            android:src="@drawable/logo_premium" /> -->
 
     </RelativeLayout>
 

@@ -38,4 +38,8 @@ public interface GotsSeedProvider {
     public List<BaseSeedInterface> getVendorSeedsByName(String currentFilter);
 
     public abstract LikeStatus like(BaseSeedInterface mSeed, boolean cancelLike) throws GotsException;
+
+    public abstract List<BaseSeedInterface> getMyFavorites();
+
+    public abstract List<BaseSeedInterface> getSeedBySowingMonth(int month);
 }

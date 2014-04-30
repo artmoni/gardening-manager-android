@@ -230,4 +230,13 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     public LikeStatus like(BaseSeedInterface mSeed, boolean cancelLike) throws GotsException {
         return mSeedProvider.like(mSeed, cancelLike);
     }
+    
+    @Override
+    public List<BaseSeedInterface> getMyFavorites() {
+        return mSeedProvider.getMyFavorites();
+    }
+    @Override
+    public List<BaseSeedInterface> getSeedBySowingMonth(int month) {
+        return mSeedProvider.getSeedBySowingMonth(month);
+    }
 }

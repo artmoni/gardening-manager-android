@@ -5,8 +5,8 @@
     <item
         android:id="@+id/download"
         android:icon="@drawable/action_download"
-        android:showAsAction="always"
-        android:title="@string/action.history"/>
+        app:showAsAction="always"
+        android:title="@string/action.download"/>
     <item
         android:id="@+id/planning"
         android:icon="@drawable/action_schedule"
@@ -20,12 +20,12 @@
     <item
         android:id="@+id/help"
         android:icon="@drawable/help"
-        app:showAsAction="always"
+        app:showAsAction="never"
         android:title="@string/menu.help"/>
     <item
         android:id="@+id/delete"
         android:icon="@drawable/action_delete"
-        app:showAsAction="ifRoom"
+        app:showAsAction="never"
         android:title="@string/action.delete"/>
 
 </menu>

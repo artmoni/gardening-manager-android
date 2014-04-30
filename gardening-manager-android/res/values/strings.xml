@@ -52,7 +52,7 @@
     <string name="action.delete.seed">You are deleting a plant</string>
     <string name="action.delete">Delete</string>
     <string name="action.photo">Take a picture</string>
-    <string name="action.history">Download history</string>
+    <string name="action.download">Download</string>
     <string name="menu.edit">Modify</string>
     <string name="allotment.action.add.message">Name your plot</string>
     <string name="allotment.description1">I select the menu button to add a plot.</string>
@@ -71,8 +71,12 @@
     <string name="hut.menu.vendorseeds.veget">Vegetable</string>
     <string name="hut.menu.vendorseeds.plant">Plant</string>
     <string name="garden.cityname.inputtitle">Garden place</string>
+    <string name="hut.menu.favorites">My favorites</string>
+    <string name="hut.menu.thismonth">This month</string>
+    <string name="hut.menu.filter">Filter</string>
+    <string name="garden.cityname.inputtitle">Location</string>
     <string name="garden.cityname.inputmessage">Please enter your garden place</string>
-    <string name="dashboard.hut.name">Shed</string>
+    <string name="dashboard.hut.name">Catalog</string>
     <string name="dashboard.allotments.name">Garden</string>
     <string name="dashboard.actions.name">Actions</string>
     <string name="dashboard.profile.name">Profile</string>
@@ -128,6 +132,7 @@
     <string name="fillfields.variety">Please fill the variety</string>
     <string name="fillfields.dates">Please give the dates</string>
     <string name="garden.create">Create a new garden</string>
+    <string name="garden.name">Garden\'s name</string>
     <string name="garden.create.description">Work offline without backup and social network</string>
     <string name="login.connect">Connect me</string>
     <string name="login.connect.state">You work safely online</string>
@@ -164,6 +169,7 @@
     <string name="inapp.rating.descrition">If you enjoy using _APP_TITLE_, please take a moment to rate it. Thanks for your support!</string>
     <string name="inapp.purchase.noaccount">You need a Google account to buy features</string>
     <string name="inapp.purchase.buy">Buy</string>
+    <string name="inapp.purchase.title">Additional features</string>
     
     
     

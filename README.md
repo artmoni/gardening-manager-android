@@ -70,7 +70,8 @@ Use maven-android-sdk-deployer to feed the local repository:
     $ mvn android:deploy android:run [-Dandroid.sdk.path=/path/to/android-sdk/]
  
 ## Release 
-	$ mvn --settings settings.xml -Penv-release,release clean install
+	$ mvn --settings settings.xml -Prelease clean install
+	$ mvn --settings settings.xml -Prelease release:prepare android:manifest-update
 
 ### Verify package certificate
 

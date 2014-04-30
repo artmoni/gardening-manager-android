@@ -283,12 +283,12 @@ public class TabSeedActivity extends ActionBarActivity {
 
         case R.id.planning:
             FragmentManager fm = getSupportFragmentManager();
-            DialogFragment editNameDialog = new NewActionActivity();
+            DialogFragment purchaseDialog = new NewActionActivity();
             Bundle data = new Bundle();
             data.putInt("org.gots.seed.id", mSeed.getGrowingSeedId());
-            editNameDialog.setArguments(data);
-            editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
-            editNameDialog.show(fm, "fragment_edit_name");
+            purchaseDialog.setArguments(data);
+            purchaseDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+            purchaseDialog.show(fm, "fragment_planning");
             return true;
         case R.id.download:
             new AsyncTask<Void, Integer, File>() {
@@ -384,6 +384,8 @@ public class TabSeedActivity extends ActionBarActivity {
                         FragmentManager fm = getSupportFragmentManager();
                         GotsBillingDialog editNameDialog = new GotsBillingDialog(
                                 GotsPurchaseItem.SKU_FEATURE_PDFHISTORY);
+                        editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+
                         editNameDialog.show(fm, "fragment_edit_name");
                     }
                     if (result != null) {

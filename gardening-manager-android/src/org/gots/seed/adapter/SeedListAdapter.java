@@ -1,6 +1,7 @@
 package org.gots.seed.adapter;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -152,6 +153,15 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
             } else if ("LIKE".equals(constraint)) {
                 for (BaseSeedInterface seed : vendorSeeds) {
                     if (seed.getLikeStatus() != null && seed.getLikeStatus().getUserLikeStatus() > 0)
+                        nHolderList.add(seed);
+                }
+                results.values = nHolderList;
+                results.count = nHolderList.size();
+
+            } else if ("THISMONTH".equals(constraint)) {
+                for (BaseSeedInterface seed : vendorSeeds) {
+                    int month=Calendar.getInstance().get(Calendar.MONTH);
+                    if (seed.getDateSowingMin()>= month && seed.getDateSowingMax()<=month)
                         nHolderList.add(seed);
                 }
                 results.values = nHolderList;
