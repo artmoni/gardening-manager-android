@@ -13,7 +13,6 @@
   <properties>
     <android.version>4.2</android.version>
     <android.platform>17</android.platform>
-    <android.versioncode>28</android.versioncode>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>

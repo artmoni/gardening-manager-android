@@ -248,7 +248,7 @@ public class LoginDialogFragment extends AbstractDialogFragment {
 
                 GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Login", "Request facebook", 0);
                 Toast.makeText(getActivity(), getResources().getString(R.string.feature_unavalaible),
-                        Toast.LENGTH_SHORT);
+                        Toast.LENGTH_SHORT).show();;
                 // tokenNuxeoConnect();
 
                 // finish();
