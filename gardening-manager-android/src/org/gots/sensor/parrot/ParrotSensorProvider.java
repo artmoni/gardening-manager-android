@@ -60,4 +60,43 @@ public class ParrotSensorProvider extends LocalSeedProvider {
         return sensors;
     }
 
+    public List<ParrotLocationsStatus> getStatus() {
+        getToken();
+        String api_1_28_status = "/sensor_data/v1/garden_locations_status";
+        List<ParrotLocationsStatus> locationsStatuses = new ArrayList<ParrotLocationsStatus>();
+        try {
+            JSONObject json = (JSONObject) authentication.getJSON(api_1_28_status);
+            JSONArray jsonlocations = json.getJSONArray("locations");
+            Gson gson = new Gson();
+            for (int i = 0; i < jsonlocations.length(); i++) {
+                ParrotLocationsStatus locationStatus = gson.fromJson(jsonlocations.getString(i), ParrotLocationsStatus.class);
+                locationsStatuses.add(locationStatus);
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage(), e);
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+        return locationsStatuses;
+    }
+    
+    public List<ParrotLocation> getLocations() {
+        getToken();
+        String api_1_25_status = "/sensor_data/v2/sync?include_s3_urls=1";
+        List<ParrotLocation> sensorLocations = new ArrayList<ParrotLocation>();
+        try {
+            JSONObject json = (JSONObject) authentication.getJSON(api_1_25_status);
+            JSONArray jsonlocations = json.getJSONArray("locations");
+            Gson gson = new Gson();
+            for (int i = 0; i < jsonlocations.length(); i++) {
+                ParrotLocation location = gson.fromJson(jsonlocations.getString(i), ParrotLocation.class);
+                sensorLocations.add(location);
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage(), e);
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+        return sensorLocations;
+    }
 }

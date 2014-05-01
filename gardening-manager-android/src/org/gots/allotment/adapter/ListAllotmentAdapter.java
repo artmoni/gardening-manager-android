@@ -21,10 +21,14 @@ import org.gots.bean.BaseAllotmentInterface;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
 import org.gots.seed.provider.local.GotsGrowingSeedProvider;
+import org.gots.sensor.SensorListAdapter;
+import org.gots.sensor.parrot.ParrotSensor;
 import org.gots.sensor.parrot.ParrotSensorProvider;
 import org.gots.ui.HutActivity;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.AsyncTask;
@@ -40,6 +44,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener {
     Context mContext;
@@ -49,7 +54,6 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
     // private GridView listSeeds;
 
     private List<BaseAllotmentInterface> myAllotments;
-
 
     @Override
     public void notifyDataSetChanged() {
@@ -176,19 +180,40 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
 
         // SowingAction sow = new SowingAction(mContext);
         ImageView widgetSensor = new ImageView(mContext);
-        widgetSensor.setBackground(mContext.getResources().getDrawable(R.drawable.ic_sensor_parrot));
+        widgetSensor.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_sensor));
+        widgetSensor.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.action_selector));
         widgetSensor.setTag(position);
         widgetSensor.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                new AsyncTask<Void, Void, Void>() {
+                new AsyncTask<Void, Void, List<ParrotSensor>>() {
+                    private SensorListAdapter sensorListAdapter;
+
                     @Override
-                    protected Void doInBackground(Void... params) {
+                    protected List<ParrotSensor> doInBackground(Void... params) {
                         ParrotSensorProvider sensorProvider = new ParrotSensorProvider(mContext);
-                        sensorProvider.getSensors();
-                        return null;
+                        List<ParrotSensor> sensors = sensorProvider.getSensors();
+                        sensorProvider.getStatus();
+                        sensorProvider.getLocations();
+
+                        return sensors;
                     }
+
+                    protected void onPostExecute(List<ParrotSensor> result) {
+                        sensorListAdapter = new SensorListAdapter(mContext, result);
+                        new AlertDialog.Builder(mContext).setAdapter(sensorListAdapter,
+                                new DialogInterface.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Toast.makeText(mContext,
+                                                sensorListAdapter.getItem(which).getSensor_serial(),
+                                                Toast.LENGTH_SHORT).show();
+                                        ;
+                                    }
+                                }).show();
+                    };
                 }.execute();
             }
         });
