@@ -10,11 +10,11 @@
   </parent>
   <artifactId>gardening-manager-test</artifactId>
   <packaging>apk</packaging>
-  <version>0.28-SNAPSHOT</version>
+  <version>0.30-SNAPSHOT</version>
   <name>Gardening Manager Instrumentation</name>
   <properties>
     <android.version>4.2</android.version>
-    <android.platform>16</android.platform>
+    <android.platform>10</android.platform>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
@@ -22,14 +22,14 @@
     <dependency>
       <groupId>org.gots</groupId>
       <artifactId>gardening-manager-android</artifactId>
-      <version>0.28-SNAPSHOT</version>
+      <version>0.30-SNAPSHOT</version>
       <type>jar</type>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.gots</groupId>
       <artifactId>gardening-manager-android</artifactId>
-      <version>0.28-SNAPSHOT</version>
+      <version>0.30-SNAPSHOT</version>
       <type>apk</type>
       <scope>provided</scope>
     </dependency>
@@ -76,7 +76,7 @@
         <configuration>
           <sdk>
             <path>${sdk.path}</path>
-            <platform>16</platform>
+            <platform>10</platform>
           </sdk>
           <emulator>
             <avd>Device</avd>

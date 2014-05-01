@@ -89,7 +89,8 @@ public class HutActivity extends AbstractFragmentActivity {
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
-
+        actionBar.setHomeButtonEnabled(true);
+        
         // displaySpinnerFilter();
         displaySearchBox();
         if (!gotsPurchase.isPremium()) {
