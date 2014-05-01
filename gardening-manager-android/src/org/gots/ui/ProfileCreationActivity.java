@@ -288,7 +288,7 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
                     garden.setName(editTextName.getText().toString());
                 else
                     garden.setName(locality.replace("\'", " "));
-                
+
                 buildGarden();
                 gardenManager.updateCurrentGarden(garden);
                 return null;
@@ -347,10 +347,10 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
             locality = ((TextView) (findViewById(R.id.editTextLocality))).getHint().toString();
 
         garden.setLocality(locality);
-        if (editTextName.getText() != null && !"".equals(editTextName.getText()))
-            garden.setName(editTextName.getText().toString());
-        else
+        if (editTextName.getText() == null || "".equals(editTextName.getText().toString()))
             garden.setName(locality.replace("\'", " "));
+        else
+            garden.setName(editTextName.getText().toString());
 
         gardenManager.addGarden(garden);
 
