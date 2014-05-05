@@ -151,7 +151,7 @@ public class VendorListActivity extends AbstractListFragment {
                     catalogue.add(seedProvider.getSeedByBarCode(args.getString(FILTER_DATA)));
                 } else if (args.getBoolean(FILTER_THISMONTH))
                     // listVendorSeedAdapter.getFilter().filter("THISMONTH");
-                    catalogue = seedProvider.getSeedBySowingMonth(Calendar.getInstance().get(Calendar.MONTH));
+                    catalogue = seedProvider.getSeedBySowingMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
 
                 return catalogue;
             }
