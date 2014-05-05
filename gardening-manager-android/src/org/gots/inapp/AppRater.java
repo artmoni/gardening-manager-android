@@ -1,7 +1,10 @@
 package org.gots.inapp;
 
 import org.gots.R;
+import org.gots.analytics.GotsAnalytics;
 import org.gots.preferences.GotsPreferences;
+
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -24,6 +27,8 @@ public class AppRater {
 
     private final static int LAUNCHES_UNTIL_PROMPT = 10;
 
+    private static int launch_count;
+
     public static void app_launched(Context mContext) {
         SharedPreferences prefs = mContext.getSharedPreferences("apprater", 0);
         if (prefs.getBoolean("dontshowagain", false)) {
@@ -32,9 +37,8 @@ public class AppRater {
 
         SharedPreferences.Editor editor = prefs.edit();
 
-        // Increment launch counter
-        long launch_count = prefs.getLong("launch_count", 0) + 1;
-        editor.putLong("launch_count", launch_count);
+        launch_count = prefs.getInt("app_launch_count", 0) + 1;
+        editor.putInt("app_launch_count", launch_count);
 
         // Get date of first launch
         Long date_firstLaunch = prefs.getLong("date_firstlaunch", 0);
@@ -77,6 +81,8 @@ public class AppRater {
             public void onClick(View v) {
                 mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + APP_PNAME)));
                 dialog.dismiss();
+                GoogleAnalyticsTracker.getInstance().trackEvent("Button", "AppRater", "rate",launch_count);;        
+
             }
         });
         ll.addView(b1);
@@ -87,8 +93,11 @@ public class AppRater {
         b3.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 if (editor != null) {
+                    
                     editor.putBoolean("dontshowagain", true);
                     editor.commit();
+                    GoogleAnalyticsTracker.getInstance().trackEvent("Button", "AppRater", "dontshowagain", launch_count);;        
+
                 }
                 dialog.dismiss();
             }
@@ -99,6 +108,8 @@ public class AppRater {
         b2.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 dialog.dismiss();
+                GoogleAnalyticsTracker.getInstance().trackEvent("Button", "AppRater", "showlater", launch_count);;        
+
             }
         });
         ll.addView(b2);
