@@ -16,15 +16,19 @@ import java.util.List;
 
 import org.gots.action.SeedActionInterface;
 import org.gots.action.bean.BuyingAction;
+import org.gots.action.bean.SowingAction;
 import org.gots.action.util.ActionState;
+import org.gots.action.view.ActionWidget;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.ui.MyMainGarden;
 import org.gots.ui.NewSeedActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.speech.RecognizerIntent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -32,7 +36,7 @@ public class VendorSeedListAdapter extends SeedListAdapter {
 
     private BuyingAction buying;
 
-  
+    private SowingAction sowing;
 
     public VendorSeedListAdapter(Context context, List<BaseSeedInterface> vendorSeeds) {
         super(context, vendorSeeds);
@@ -42,15 +46,14 @@ public class VendorSeedListAdapter extends SeedListAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         View vi = super.getView(position, convertView, parent);
-        Holder holder = (Holder)vi.getTag();
+        Holder holder = (Holder) vi.getTag();
         final BaseSeedInterface currentSeed = getItem(position);
-        
 
-        
         buying = new BuyingAction(mContext);
         buying.setState(ActionState.NORMAL);
-        holder.actionWidget.setAction(buying);
-        holder.actionWidget.setOnClickListener(new View.OnClickListener() {
+        ActionWidget actionWidget = new ActionWidget(mContext, buying);
+        actionWidget.setAction(buying);
+        actionWidget.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -76,6 +79,8 @@ public class VendorSeedListAdapter extends SeedListAdapter {
                 // currentSeed.getVariety(), 30).show();
             }
         });
+        holder.actionBox.addView(actionWidget);
+
         // actionWidget.setOnActionItemClickListener(new
         // ActionWidget.OnActionItemClickListener() {
         //

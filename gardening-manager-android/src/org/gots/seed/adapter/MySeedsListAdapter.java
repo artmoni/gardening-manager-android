@@ -19,13 +19,16 @@ import org.gots.action.GardeningActionInterface;
 import org.gots.action.GotsActionManager;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.bean.ReduceQuantityAction;
+import org.gots.action.bean.SowingAction;
 import org.gots.action.util.ActionState;
+import org.gots.action.view.ActionWidget;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.SeedUtil;
+import org.gots.ui.MyMainGarden;
 
 import android.app.Activity;
 import android.content.Context;
@@ -57,16 +60,17 @@ public class MySeedsListAdapter extends SeedListAdapter {
             // action = new SowingAction(mContext);
             GotsActionManager helper = GotsActionManager.getInstance().initIfNew(mContext);
             action = helper.getActionByName("sow");
-            holder.actionWidget.setAction(action);
+            ActionWidget actionWidget =new ActionWidget(mContext, action);
+            actionWidget.setAction(action);
 
             if (Calendar.getInstance().get(Calendar.MONTH) >= currentSeed.getDateSowingMin()
                     && Calendar.getInstance().get(Calendar.MONTH) <= currentSeed.getDateSowingMax())
-                holder.actionWidget.setState(ActionState.NORMAL);
+                actionWidget.setState(ActionState.NORMAL);
             else if (Calendar.getInstance().get(Calendar.MONTH) + 1 >= currentSeed.getDateSowingMin())
-                holder.actionWidget.setState(ActionState.WARNING);
+                actionWidget.setState(ActionState.WARNING);
             else
-                holder.actionWidget.setState(ActionState.UNDEFINED);
-            holder.actionWidget.setOnClickListener(new View.OnClickListener() {
+                actionWidget.setState(ActionState.UNDEFINED);
+            actionWidget.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
@@ -95,12 +99,14 @@ public class MySeedsListAdapter extends SeedListAdapter {
             });
 
         } else {
-            action = new ReduceQuantityAction(mContext);
-//            action.setState(ActionState.NORMAL);
+            holder.actionBox.removeAllViews();
 
-            holder.actionWidget.setAction(action);
+            action = new ReduceQuantityAction(mContext);
+            // action.setState(ActionState.NORMAL);
+            ActionWidget reduceWidget = new ActionWidget(mContext, action);
+            reduceWidget.setAction(action);
             final BaseActionInterface baseActionInterface = action;
-            holder.actionWidget.setOnClickListener(new View.OnClickListener() {
+            reduceWidget.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
@@ -132,6 +138,24 @@ public class MySeedsListAdapter extends SeedListAdapter {
 
                 }
             });
+
+            SowingAction sowing = new SowingAction(mContext);
+            sowing.setState(ActionState.NORMAL);
+            ActionWidget sowingWidget = new ActionWidget(mContext, sowing);
+            sowingWidget.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, MyMainGarden.class);
+                    intent.putExtra(MyMainGarden.SELECT_ALLOTMENT, true);
+                    intent.putExtra(MyMainGarden.VENDOR_SEED_ID, currentSeed.getSeedId());
+                    mContext.startActivity(intent);
+
+                }
+            });
+            
+            holder.actionBox.addView(reduceWidget);
+            holder.actionBox.addView(sowingWidget);
         }
 
         try {
