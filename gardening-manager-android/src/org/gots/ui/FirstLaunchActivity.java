@@ -132,6 +132,7 @@ public class FirstLaunchActivity extends AbstractActivity {
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Error requesting GoogleAuthUtil.getToken",
                                             Toast.LENGTH_SHORT).show();
+                                    
                                 }
                                 super.onPostExecute(resultToken);
                             }
