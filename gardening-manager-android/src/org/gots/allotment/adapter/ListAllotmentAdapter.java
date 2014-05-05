@@ -21,7 +21,9 @@ import org.gots.bean.BaseAllotmentInterface;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
 import org.gots.seed.provider.local.GotsGrowingSeedProvider;
+import org.gots.sensor.LocationListAdapter;
 import org.gots.sensor.SensorListAdapter;
+import org.gots.sensor.parrot.ParrotLocation;
 import org.gots.sensor.parrot.ParrotSensor;
 import org.gots.sensor.parrot.ParrotSensorProvider;
 import org.gots.ui.HutActivity;
@@ -187,21 +189,22 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
 
             @Override
             public void onClick(View v) {
-                new AsyncTask<Void, Void, List<ParrotSensor>>() {
-                    private SensorListAdapter sensorListAdapter;
+                new AsyncTask<Void, Void, List<ParrotLocation>>() {
+                    private LocationListAdapter sensorListAdapter;
 
                     @Override
-                    protected List<ParrotSensor> doInBackground(Void... params) {
+                    protected List<ParrotLocation> doInBackground(Void... params) {
                         ParrotSensorProvider sensorProvider = new ParrotSensorProvider(mContext);
                         List<ParrotSensor> sensors = sensorProvider.getSensors();
+                        List<ParrotLocation> locations = sensorProvider.getLocations();
                         sensorProvider.getStatus();
-                        sensorProvider.getLocations();
 
-                        return sensors;
+                        return locations;
                     }
 
-                    protected void onPostExecute(List<ParrotSensor> result) {
-                        sensorListAdapter = new SensorListAdapter(mContext, result);
+                    protected void onPostExecute(List<ParrotLocation> result) {
+//                        sensorListAdapter = new SensorListAdapter(mContext, result);
+                        sensorListAdapter = new LocationListAdapter(mContext, result);
                         new AlertDialog.Builder(mContext).setAdapter(sensorListAdapter,
                                 new DialogInterface.OnClickListener() {
 

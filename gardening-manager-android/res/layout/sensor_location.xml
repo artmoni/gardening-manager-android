@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" android:padding="5dp" android:background="@drawable/bg_line_selector">
+
+    <ImageView
+        android:id="@+id/sensorImage"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/flowerpower_brown" />
+
+    <TextView
+        android:id="@+id/sensorLocationPlantAssignedDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+                style="@style/seed_description_content"
+        android:text="PlantAssignedDate" />
+
+    <TextView
+        android:id="@+id/sensorLocationName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"        style="@style/seed_description_title"
+        android:textColor="@color/green_light"
+        
+        android:text="NickName" />
+
+    <TextView
+        android:id="@+id/sensorLocationDescription"
+        style="@style/seed_description_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sensorLocationName"
+        android:layout_centerHorizontal="true"
+        android:text="Description" />
+
+</RelativeLayout>

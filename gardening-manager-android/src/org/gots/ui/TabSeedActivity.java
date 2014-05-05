@@ -304,41 +304,6 @@ public class TabSeedActivity extends ActionBarActivity {
                     dialog = ProgressDialog.show(TabSeedActivity.this, "",
                             getResources().getString(R.string.gots_loading), true);
                     dialog.setCanceledOnTouchOutside(true);
-                    // final ArrayList<String> moreSkus = new ArrayList<String>();
-                    // moreSkus.add(GotsPurchaseItem.SKU_FEATURE_PDFHISTORY);
-                    // buyHelper = new IabHelper(getApplicationContext(), gotsPreferences.getPlayStorePubKey());
-                    //
-                    // try {
-                    // buyHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
-                    //
-                    // @Override
-                    // public void onIabSetupFinished(IabResult result) {
-                    // // Toast.makeText(getApplicationContext(), "Set up finished!",
-                    // // Toast.LENGTH_SHORT).show();
-                    // Log.i(TAG, "Set up finished!");
-                    //
-                    // if (result.isSuccess())
-                    // buyHelper.queryInventoryAsync(true, moreSkus,
-                    // new IabHelper.QueryInventoryFinishedListener() {
-                    // @Override
-                    // public void onQueryInventoryFinished(IabResult result, Inventory inv) {
-                    // if (result.isSuccess()) {
-                    // licenceAvailable = inv.hasPurchase(GotsPurchaseItem.SKU_FEATURE_PDFHISTORY);
-                    // Log.w(TAG, "Feature " + GotsPurchaseItem.SKU_FEATURE_PDFHISTORY
-                    // + " unlocked");
-                    // gotsPreferences.setFeatureExportPDF(licenceAvailable);
-                    // } else {
-                    // Log.w(TAG, "Feature " + GotsPurchaseItem.SKU_FEATURE_PDFHISTORY
-                    // + " not available");
-                    // }
-                    // }
-                    // });
-                    // }
-                    // });
-                    // } catch (Exception e) {
-                    // Log.e(TAG, "IabHelper can not be initialized" + e.getMessage());
-                    //
-                    // }
                 };
 
                 @Override

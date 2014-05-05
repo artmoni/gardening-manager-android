@@ -43,7 +43,7 @@ public class SensorListAdapter extends BaseAdapter {
             v = vi.inflate(R.layout.sensor, null);
             h = new SensorHolder();
             h.sensorImg = (ImageView) v.findViewById(R.id.sensorImage);
-            h.sensorName = (TextView) v.findViewById(R.id.sensorNickname);
+            h.sensorName = (TextView) v.findViewById(R.id.sensorLocationName);
 
             v.setTag(h);
         } else {
