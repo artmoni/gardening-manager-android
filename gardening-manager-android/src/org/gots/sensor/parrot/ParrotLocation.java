@@ -15,7 +15,7 @@ public class ParrotLocation {
     int display_order;
 
     @SerializedName("first_sample_utc")
-    Date first_sample_utc;
+    String first_sample_utc;
 
     @SerializedName("ignore_fertilizer_alert")
     boolean ignore_fertilizer_alert;
@@ -36,10 +36,10 @@ public class ParrotLocation {
     int is_indoor;
 
     @SerializedName("last_sample_upload")
-    Date last_sample_upload;
+    String last_sample_upload;
 
     @SerializedName("last_sample_utc")
-    Date last_sample_utc;
+    String last_sample_utc;
 
     @SerializedName("latitude")
     Float latitude;
@@ -92,11 +92,11 @@ public class ParrotLocation {
         this.display_order = display_order;
     }
 
-    public Date getFirst_sample_utc() {
+    public String getFirst_sample_utc() {
         return first_sample_utc;
     }
 
-    public void setFirst_sample_utc(Date first_sample_utc) {
+    public void setFirst_sample_utc(String first_sample_utc) {
         this.first_sample_utc = first_sample_utc;
     }
 
@@ -148,19 +148,19 @@ public class ParrotLocation {
         this.is_indoor = is_indoor;
     }
 
-    public Date getLast_sample_upload() {
+    public String getLast_sample_upload() {
         return last_sample_upload;
     }
 
-    public void setLast_sample_upload(Date last_sample_upload) {
+    public void setLast_sample_upload(String last_sample_upload) {
         this.last_sample_upload = last_sample_upload;
     }
 
-    public Date getLast_sample_utc() {
+    public String getLast_sample_utc() {
         return last_sample_utc;
     }
 
-    public void setLast_sample_utc(Date last_sample_utc) {
+    public void setLast_sample_utc(String last_sample_utc) {
         this.last_sample_utc = last_sample_utc;
     }
 

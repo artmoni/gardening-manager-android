@@ -39,13 +39,16 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 public class MyMainGarden extends AbstractActivity {
+
+    public static final String SELECT_ALLOTMENT = "allotment.select";
+
+    public static final String VENDOR_SEED_ID = "allotment.vendorseedid";
 
     private ListAllotmentAdapter lsa;
 
@@ -70,7 +73,7 @@ public class MyMainGarden extends AbstractActivity {
 
         setContentView(R.layout.garden);
         listAllotments = (ListView) findViewById(R.id.IdGardenAllotmentsList);
-        lsa = new ListAllotmentAdapter(MyMainGarden.this, new ArrayList<BaseAllotmentInterface>());
+        lsa = new ListAllotmentAdapter(MyMainGarden.this, new ArrayList<BaseAllotmentInterface>(), getIntent().getExtras());
         listAllotments.setAdapter(lsa);
         listAllotments.setDivider(null);
         listAllotments.setDividerHeight(0);

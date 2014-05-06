@@ -154,13 +154,12 @@ public class VendorListActivity extends AbstractListFragment {
                     catalogue.add(seedProvider.getSeedByBarCode(args.getString(FILTER_DATA)));
                 } else if (args.getBoolean(FILTER_THISMONTH))
                     // listVendorSeedAdapter.getFilter().filter("THISMONTH");
-                    catalogue = seedProvider.getSeedBySowingMonth(Calendar.getInstance().get(Calendar.MONTH));
+                catalogue = seedProvider.getSeedBySowingMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
                 else if (args.getBoolean(FILTER_PARROT)) {
                     ParrotSeedProvider parrotProvider = new ParrotSeedProvider(mContext);
                     catalogue = parrotProvider.getVendorSeeds(true);
 
                 }
-                // listVendorSeedAdapter.getFilter().filter("THISMONTH");
 
                 return catalogue;
             }

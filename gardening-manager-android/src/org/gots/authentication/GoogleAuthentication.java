@@ -72,7 +72,6 @@ public class GoogleAuthentication implements GotsSocialAuthentication {
             token = GoogleAuthUtil.getToken(mContext, accountName, SCOPES);
         } catch (GoogleAuthException e) {
             Log.e(TAG, e.getMessage(), e);
-            Toast.makeText(mContext, "Network problem", Toast.LENGTH_LONG).show();;
         }
         Log.d(TAG, "GoogleAuthUtil.getToken=" + token);
 

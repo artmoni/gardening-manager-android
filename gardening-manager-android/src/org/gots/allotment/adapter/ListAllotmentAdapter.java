@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.gots.allotment.adapter;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.gots.R;
@@ -18,22 +19,28 @@ import org.gots.action.view.ActionWidget;
 import org.gots.allotment.AllotmentManager;
 import org.gots.allotment.view.QuickAllotmentActionBuilder;
 import org.gots.bean.BaseAllotmentInterface;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.preferences.GotsPreferences;
+import org.gots.seed.GotsGrowingSeedManager;
+import org.gots.seed.GotsSeedManager;
+import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.SeedUtil;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
-import org.gots.seed.provider.local.GotsGrowingSeedProvider;
 import org.gots.sensor.LocationListAdapter;
-import org.gots.sensor.SensorListAdapter;
 import org.gots.sensor.parrot.ParrotLocation;
 import org.gots.sensor.parrot.ParrotSensor;
 import org.gots.sensor.parrot.ParrotSensorProvider;
 import org.gots.ui.HutActivity;
+import org.gots.ui.MyMainGarden;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +48,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -57,15 +66,23 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
 
     private List<BaseAllotmentInterface> myAllotments;
 
+    private boolean isSelectable;
+
+    private int currentSeedId;
+
     @Override
     public void notifyDataSetChanged() {
 
         super.notifyDataSetChanged();
     }
 
-    public ListAllotmentAdapter(Context mContext, List<BaseAllotmentInterface> allotments) {
+    public ListAllotmentAdapter(Context mContext, List<BaseAllotmentInterface> allotments, Bundle bundle) {
         this.mContext = mContext;
         myAllotments = allotments;
+        if (bundle != null) {
+            isSelectable = bundle.getBoolean(MyMainGarden.SELECT_ALLOTMENT);
+            currentSeedId = bundle.getInt(MyMainGarden.VENDOR_SEED_ID);
+        }
     }
 
     public void setAllotments(List<BaseAllotmentInterface> allotments) {
@@ -164,18 +181,52 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
         SowingAction sow = new SowingAction(mContext);
         ActionWidget widget = new ActionWidget(mContext, sow);
         widget.setTag(position);
-        widget.setOnClickListener(new View.OnClickListener() {
+        if (isSelectable) {
+            Animation myFadeInAnimation = AnimationUtils.loadAnimation(mContext, R.anim.tween);
 
-            @Override
-            public void onClick(View v) {
-                AllotmentManager.getInstance().setCurrentAllotment(getItem(Integer.valueOf(v.getTag().toString())));
+            widget.startAnimation(myFadeInAnimation);
+            widget.setOnClickListener(new View.OnClickListener() {
 
-                Intent i = new Intent(mContext, HutActivity.class);
-                i.putExtra("org.gots.allotment.reference", getItem(Integer.valueOf(v.getTag().toString())).getId());
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mContext.startActivity(i);
-            }
-        });
+                @Override
+                public void onClick(View v) {
+                    new AsyncTask<Void, Integer, GrowingSeedInterface>() {
+                        @Override
+                        protected GrowingSeedInterface doInBackground(Void... params) {
+
+                            GotsGrowingSeedManager provider = GotsGrowingSeedManager.getInstance().initIfNew(mContext);
+                            GotsSeedManager seedManager = GotsSeedManager.getInstance().initIfNew(mContext);
+                            // NuxeoGrowingSeedProvider provider = new NuxeoGrowingSeedProvider(mContext);
+                            GrowingSeedInterface growingSeed = (GrowingSeedInterface) seedManager.getSeedById(currentSeedId);
+                            growingSeed.setDateSowing(Calendar.getInstance().getTime());
+
+                            return provider.insertSeed(growingSeed, getItem(position));
+                        }
+
+                        @Override
+                        protected void onPostExecute(GrowingSeedInterface seed) {
+                            // notifyDataSetChanged();
+                            Toast.makeText(mContext, "Sowing" + " " + SeedUtil.translateSpecie(mContext, seed),
+                                    Toast.LENGTH_LONG).show();
+                            mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
+                            ((Activity) mContext).finish();
+                        }
+                    }.execute();
+                }
+            });
+        } else {
+            widget.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    AllotmentManager.getInstance().setCurrentAllotment(getItem(Integer.valueOf(v.getTag().toString())));
+
+                    Intent i = new Intent(mContext, HutActivity.class);
+                    i.putExtra("org.gots.allotment.reference", getItem(Integer.valueOf(v.getTag().toString())).getId());
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivity(i);
+                }
+            });
+        }
 
         widget.setPadding(4, 4, 4, 8);
         holder.menu.addView(widget);
@@ -198,6 +249,7 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
                         List<ParrotSensor> sensors = sensorProvider.getSensors();
                         List<ParrotLocation> locations = sensorProvider.getLocations();
                         sensorProvider.getStatus();
+                        sensorProvider.getSamples(locations.get(0).getLocation_identifier());
 
                         return locations;
                     }
