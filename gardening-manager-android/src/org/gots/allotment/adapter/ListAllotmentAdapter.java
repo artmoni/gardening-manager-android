@@ -28,6 +28,7 @@ import org.gots.seed.SeedUtil;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
 import org.gots.sensor.LocationListAdapter;
 import org.gots.sensor.parrot.ParrotLocation;
+import org.gots.sensor.parrot.ParrotSampleFertilizer;
 import org.gots.sensor.parrot.ParrotSensor;
 import org.gots.sensor.parrot.ParrotSensorProvider;
 import org.gots.ui.HutActivity;
@@ -41,6 +42,7 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +52,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.webkit.WebView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -243,31 +246,48 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
                 new AsyncTask<Void, Void, List<ParrotLocation>>() {
                     private LocationListAdapter sensorListAdapter;
 
+                    List<ParrotSampleFertilizer> samples = null;
+
                     @Override
                     protected List<ParrotLocation> doInBackground(Void... params) {
                         ParrotSensorProvider sensorProvider = new ParrotSensorProvider(mContext);
                         List<ParrotSensor> sensors = sensorProvider.getSensors();
                         List<ParrotLocation> locations = sensorProvider.getLocations();
                         sensorProvider.getStatus();
-                        sensorProvider.getSamples(locations.get(0).getLocation_identifier());
+                        samples = sensorProvider.getSamples(locations.get(0).getLocation_identifier());
 
                         return locations;
                     }
 
                     protected void onPostExecute(List<ParrotLocation> result) {
-//                        sensorListAdapter = new SensorListAdapter(mContext, result);
+                        // sensorListAdapter = new SensorListAdapter(mContext, result);
                         sensorListAdapter = new LocationListAdapter(mContext, result);
                         new AlertDialog.Builder(mContext).setAdapter(sensorListAdapter,
                                 new DialogInterface.OnClickListener() {
 
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        Toast.makeText(mContext,
-                                                sensorListAdapter.getItem(which).getSensor_serial(),
+                                        Toast.makeText(mContext, sensorListAdapter.getItem(which).getSensor_serial(),
                                                 Toast.LENGTH_SHORT).show();
                                         ;
                                     }
                                 }).show();
+
+                        if (samples != null) {
+                            WebView webView = new WebView(mContext);
+                            String chd = new String();
+                            for (ParrotSampleFertilizer fertilizer : samples) {
+                                chd = chd.concat(String.valueOf(fertilizer.getFertilizer_level() * 100));
+                                chd = chd.concat(",");
+                            }
+                            chd = chd.substring(0, chd.length() - 1);
+                            String url = "http://chart.apis.google.com/chart?cht=ls&chs=250x100&chd=t:" + chd;
+                            webView.loadUrl(url);
+                            Log.d(ListAllotmentAdapter.class.getName(), url);
+                            AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
+                            alert.setView(webView);
+                            alert.show();
+                        }
                     };
                 }.execute();
             }
