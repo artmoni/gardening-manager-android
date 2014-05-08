@@ -17,12 +17,14 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 
@@ -30,6 +32,8 @@ import com.google.android.gms.auth.UserRecoverableAuthException;
 
 public class FirstLaunchActivity extends AbstractActivity {
     private String TAG = "FirstLaunchActivity";
+
+    private Menu optionsMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,10 +95,14 @@ public class FirstLaunchActivity extends AbstractActivity {
 
                         new AsyncTask<String, Integer, String>() {
 
+                            protected void onPreExecute() {
+                                setRefreshActionButtonState(true);
+                            };
+
                             @Override
                             protected String doInBackground(String... params) {
-
-                                GotsSocialAuthentication authentication = new GoogleAuthentication(getApplicationContext());
+                                GotsSocialAuthentication authentication = new GoogleAuthentication(
+                                        getApplicationContext());
                                 String googleToken = null;
                                 String nuxeoToken = null;
                                 try {
@@ -116,6 +124,7 @@ public class FirstLaunchActivity extends AbstractActivity {
 
                             @Override
                             protected void onPostExecute(String resultToken) {
+                                setRefreshActionButtonState(false);
                                 if (resultToken != null) {
                                     gotsPrefs.setNuxeoLogin(usableAccounts.get(item).name);
                                     gotsPrefs.setToken(resultToken);
@@ -132,7 +141,7 @@ public class FirstLaunchActivity extends AbstractActivity {
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Error requesting GoogleAuthUtil.getToken",
                                             Toast.LENGTH_SHORT).show();
-                                    
+
                                 }
                                 super.onPostExecute(resultToken);
                             }
@@ -162,4 +171,27 @@ public class FirstLaunchActivity extends AbstractActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        this.optionsMenu = menu;
+        inflater.inflate(R.menu.menu_firstlaunch, menu);
+        MenuItem itemRefresh = (MenuItem) menu.findItem(R.id.connection);
+        // refreshConnectionState();
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    public void setRefreshActionButtonState(final boolean refreshing) {
+
+        if (optionsMenu != null) {
+            final MenuItem refreshItem = optionsMenu.findItem(R.id.menuRefresh);
+            if (refreshItem != null) {
+                if (refreshing) {
+                    refreshItem.setActionView(R.layout.actionbar_indeterminate_progress);
+                } else {
+                    refreshItem.setActionView(null);
+                }
+            }
+        }
+    }
 }
