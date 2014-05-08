@@ -23,6 +23,8 @@ import org.gots.weather.service.WeatherUpdateService;
 import org.gots.weather.view.WeatherView;
 import org.gots.weather.view.WeatherWidget;
 
+import android.app.ActionBar.LayoutParams;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -39,6 +41,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.app.ActionBar;
@@ -96,6 +99,33 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
         registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
         registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
+
+        showHelpOverlay();
+
+    }
+
+    private void showHelpOverlay() {
+
+        final Dialog dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar);
+
+        dialog.setContentView(R.layout.dashboard_overlay);
+
+        RelativeLayout layout = (RelativeLayout) dialog.findViewById(R.id.overlayLayout);
+        layout.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+
+                dialog.dismiss();
+
+            }
+
+        });
+
+        ImageView image = (ImageView) layout.findViewById(R.id.imageView1);
+        image.setLayoutParams(new LayoutParams(findViewById(R.id.dashboard_button_hut).getLayoutParams()));
+        dialog.show();
+
     }
 
     protected void displayGardenMenu(final ActionBar actionBar) {
