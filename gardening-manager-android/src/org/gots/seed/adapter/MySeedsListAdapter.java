@@ -99,7 +99,6 @@ public class MySeedsListAdapter extends SeedListAdapter {
             });
 
         } else {
-            holder.actionBox.removeAllViews();
 
             action = new ReduceQuantityAction(mContext);
             // action.setState(ActionState.NORMAL);

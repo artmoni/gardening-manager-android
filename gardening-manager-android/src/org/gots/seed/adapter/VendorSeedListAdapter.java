@@ -47,6 +47,7 @@ public class VendorSeedListAdapter extends SeedListAdapter {
 
         View vi = super.getView(position, convertView, parent);
         Holder holder = (Holder) vi.getTag();
+
         final BaseSeedInterface currentSeed = getItem(position);
 
         buying = new BuyingAction(mContext);

@@ -45,8 +45,6 @@ public class MonthWidget extends LinearLayout  {
 	private void initView() {
 		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		inflater.inflate(R.layout.month_widget, this);
-		setOnClickListener(null);
-
 	}
 
 	public void setMonthText(String month) {
