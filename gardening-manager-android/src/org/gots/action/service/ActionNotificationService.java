@@ -9,6 +9,7 @@ import org.gots.action.BaseActionInterface;
 import org.gots.action.GotsActionSeedManager;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.provider.GotsActionSeedProvider;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
@@ -42,8 +43,7 @@ public class ActionNotificationService extends GotsService {
     @Override
     public void onCreate() {
         growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(ActionNotificationService.this);
-        actionseedManager = GotsActionSeedManager.getInstance().initIfNew(
-                ActionNotificationService.this);
+        actionseedManager = GotsActionSeedManager.getInstance().initIfNew(ActionNotificationService.this);
 
         super.onCreate();
     }
@@ -57,6 +57,29 @@ public class ActionNotificationService extends GotsService {
         actions.clear();
 
         new AsyncTask<Void, Void, Void>() {
+
+            private Thread thread;
+
+            boolean shouldcontinue = true;
+
+            protected void onPreExecute() {
+                thread = new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            while (shouldcontinue) {
+                                sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
+                                sleep(1000);
+                            }
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+
+                thread.start();
+            };
+
             @Override
             protected Void doInBackground(Void... params) {
                 ArrayList<GrowingSeedInterface> allSeeds = growingSeedManager.getGrowingSeeds();
@@ -67,7 +90,6 @@ public class ActionNotificationService extends GotsService {
                     List<SeedActionInterface> seedActions;
 
                     seedActions = actionseedManager.getActionsToDoBySeed(seed);
-
                     actions.addAll(seedActions);
                 }
                 if (!actions.isEmpty()) {
@@ -81,6 +103,12 @@ public class ActionNotificationService extends GotsService {
 
                 return null;
             }
+
+            protected void onPostExecute(Void result) {
+                shouldcontinue = false;
+                sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
+
+            };
         }.execute();
 
         return super.onStartCommand(intent, flags, startId);

@@ -18,7 +18,6 @@ import org.gots.IntentIntegratorSupportV4;
 import org.gots.R;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.layout.ProgressViewActionBar;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.adapter.SeedListAdapter;
 import org.gots.seed.adapter.VendorSeedListAdapter;
@@ -139,6 +138,7 @@ public class VendorListActivity extends AbstractListFragment {
     public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            
             updateVendorSeeds();
         }
     };

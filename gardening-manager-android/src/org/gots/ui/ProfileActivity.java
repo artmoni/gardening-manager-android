@@ -17,6 +17,7 @@ import org.gots.ads.GotsAdvertisement;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.adapter.ProfileAdapter;
+import org.gots.garden.service.GardenNotificationService;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -30,7 +31,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -65,6 +65,7 @@ public class ProfileActivity extends AbstractActivity {
             layout.addView(ads.getAdsLayout());
         }
 
+        setProgressAction(new Intent(this, GardenNotificationService.class));
     }
 
     public BroadcastReceiver gardenBroadcastReceiver = new BroadcastReceiver() {
@@ -94,10 +95,11 @@ public class ProfileActivity extends AbstractActivity {
 
         @Override
         protected void onPreExecute() {
-            dialog = ProgressDialog.show(ProfileActivity.this, "", getResources().getString(R.string.gots_loading),
-                    true);
-            dialog.setCanceledOnTouchOutside(true);
+            // dialog = ProgressDialog.show(ProfileActivity.this, "", getResources().getString(R.string.gots_loading),
+            // true);
+            // dialog.setCanceledOnTouchOutside(true);
             // dialog.show();
+            setActionRefresh(true);
             super.onPreExecute();
         }
 
@@ -109,12 +111,13 @@ public class ProfileActivity extends AbstractActivity {
         @Override
         protected void onPostExecute(List<GardenInterface> myGardens) {
             force_refresh = false;
-            try {
-                dialog.dismiss();
-                dialog = null;
-            } catch (Exception e) {
-                // nothing
-            }
+            // try {
+            // dialog.dismiss();
+            // dialog = null;
+            // } catch (Exception e) {
+            // // nothing
+            // }
+
             profileAdapter = new ProfileAdapter(ProfileActivity.this, myGardens);
             profileList.setAdapter(profileAdapter);
             profileAdapter.notifyDataSetChanged();
@@ -127,8 +130,9 @@ public class ProfileActivity extends AbstractActivity {
                         && gardenManager.getCurrentGarden().getId() == -1) {
                     gardenManager.setCurrentGarden(profileAdapter.getItem(0));
                 }
-                super.onPostExecute(myGardens);
             }
+            setActionRefresh(false);
+            super.onPostExecute(myGardens);
         }
 
     }
@@ -144,11 +148,11 @@ public class ProfileActivity extends AbstractActivity {
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
-//        if (gardenManager.getCurrentGarden() == null || gardenManager.getCurrentGarden() != null
-//                && gardenManager.getCurrentGarden().getId() == -1) {
-//            findViewById(R.id.idSelectGarden).setVisibility(View.VISIBLE);
-//        } else
-//            findViewById(R.id.idSelectGarden).setVisibility(View.GONE);
+        // if (gardenManager.getCurrentGarden() == null || gardenManager.getCurrentGarden() != null
+        // && gardenManager.getCurrentGarden().getId() == -1) {
+        // findViewById(R.id.idSelectGarden).setVisibility(View.VISIBLE);
+        // } else
+        // findViewById(R.id.idSelectGarden).setVisibility(View.GONE);
 
         // buildGardenList();
         // weatherState.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_weather));

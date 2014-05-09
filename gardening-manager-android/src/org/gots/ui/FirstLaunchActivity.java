@@ -36,10 +36,6 @@ import com.google.android.gms.auth.UserRecoverableAuthException;
 public class FirstLaunchActivity extends AbstractActivity {
     private String TAG = "FirstLaunchActivity";
 
-    private Menu optionsMenu;
-
-    private View progressView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,7 +97,7 @@ public class FirstLaunchActivity extends AbstractActivity {
                         new AsyncTask<String, Integer, String>() {
 
                             protected void onPreExecute() {
-                                setRefreshActionButtonState(true);
+                                setActionRefresh(true);
                                 findViewById(R.id.textViewError).setVisibility(View.GONE);
 
                             };
@@ -150,7 +146,7 @@ public class FirstLaunchActivity extends AbstractActivity {
                                     // Toast.LENGTH_SHORT).show();
                                     findViewById(R.id.textViewError).setVisibility(View.VISIBLE);
                                 }
-                                setRefreshActionButtonState(false);
+                                setActionRefresh(false);
                                 super.onPostExecute(resultToken);
                             }
                         }.execute(usableAccounts.get(item).name);
@@ -182,7 +178,6 @@ public class FirstLaunchActivity extends AbstractActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        this.optionsMenu = menu;
         inflater.inflate(R.menu.menu_firstlaunch, menu);
         MenuItem itemRefresh = (MenuItem) menu.findItem(R.id.menuRefresh);
         itemRefresh.setVisible(false);
@@ -190,25 +185,4 @@ public class FirstLaunchActivity extends AbstractActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    public void setRefreshActionButtonState(final boolean refreshing) {
-
-        if (optionsMenu != null) {
-            final MenuItem refreshItem = optionsMenu.findItem(R.id.menuRefresh);
-            Animation mCycleFadeAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate);
-            if (progressView == null)
-                progressView = getLayoutInflater().inflate(R.layout.actionbar_indeterminate_progress, null);
-
-            if (refreshItem != null) {
-                if (refreshing) {
-                    refreshItem.setActionView(progressView);
-                    progressView.startAnimation(mCycleFadeAnimation);
-                    refreshItem.setVisible(true);
-                } else {
-                    progressView.clearAnimation();
-                    refreshItem.setActionView(null);
-                    refreshItem.setVisible(false);
-                }
-            }
-        }
-    }
 }

@@ -23,6 +23,7 @@ package org.gots.ui;
 
 import java.util.ArrayList;
 
+import org.gots.R;
 import org.gots.allotment.AllotmentManager;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.broadcast.BroadCastMessages;
@@ -32,10 +33,19 @@ import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsSeedManager;
 
+import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
@@ -43,7 +53,7 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
  * @author jcarsique
  * 
  */
-public class AbstractActivity extends ActionBarActivity {
+public abstract class AbstractActivity extends ActionBarActivity {
     // private static final String TAG = AbstractActivity.class.getSimpleName();
 
     protected GotsPreferences gotsPrefs;
@@ -57,6 +67,12 @@ public class AbstractActivity extends ActionBarActivity {
     protected GotsSeedManager seedManager;
 
     protected AllotmentManager allotmentManager;
+
+    private View progressView;
+
+    private Menu menu;
+
+    private Intent progressIntent = null;
 
     private static ArrayList<AbstractActivity> activities = new ArrayList<AbstractActivity>();
 
@@ -86,6 +102,9 @@ public class AbstractActivity extends ActionBarActivity {
         registerReceiver(allotmentManager, new IntentFilter(BroadCastMessages.GARDEN_SETTINGS_CHANGED));
         registerReceiver(seedManager, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
         registerReceiver(seedManager, new IntentFilter(BroadCastMessages.GARDEN_SETTINGS_CHANGED));
+        registerReceiver(progressReceiver, new IntentFilter(BroadCastMessages.PROGRESS_UPDATE));
+        registerReceiver(progressReceiver, new IntentFilter(BroadCastMessages.PROGRESS_FINISHED));
+
         GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
         GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
@@ -108,13 +127,29 @@ public class AbstractActivity extends ActionBarActivity {
         super.onPostCreate(savedInstanceState);
     }
 
+    private BroadcastReceiver progressReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (BroadCastMessages.PROGRESS_UPDATE.equals(intent.getAction()))
+                setActionRefresh(true);
+            else if (BroadCastMessages.PROGRESS_FINISHED.equals(intent.getAction()))
+                setActionRefresh(false);
+        }
+    };
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         activities.remove(this);
+
+        if (progressIntent != null)
+            stopService(progressIntent);
+
         unregisterReceiver(gardenManager);
         unregisterReceiver(allotmentManager);
         unregisterReceiver(seedManager);
+        unregisterReceiver(progressReceiver);
         if (activities.size() == 0) {
             nuxeoManager.shutdown();
             gardenManager.finalize();
@@ -124,5 +159,56 @@ public class AbstractActivity extends ActionBarActivity {
         }
         GoogleAnalyticsTracker.getInstance().dispatch();
         GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_common, menu);
+        this.menu = menu;
+        menu.findItem(R.id.refresh_seed).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (progressIntent != null) {
+                    startService(progressIntent);
+                }
+                return true;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    protected void setActionRefresh(boolean refresh) {
+        if (menu == null)
+            return;
+        MenuItem itemRefresh = menu.findItem(R.id.refresh_seed);
+        if (itemRefresh == null)
+            return;
+
+        if (refresh) {
+            if (progressView == null)
+                progressView = (View) getLayoutInflater().inflate(R.layout.actionbar_indeterminate_progress, null);
+            // ProgressViewActionBar iv = new ProgressViewActionBar(mContext);
+            // iv.animateBackground();
+            if (progressView.getAnimation() == null) {
+                Animation rotation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
+                rotation.setRepeatCount(Animation.INFINITE);
+                progressView.startAnimation(rotation);
+            }
+            itemRefresh.setActionView(progressView);
+        } else {
+            if (progressView != null) {
+                progressView.clearAnimation();
+                if (progressIntent == null)
+                    progressView.setVisibility(View.GONE);
+            }
+            itemRefresh.setActionView(null);
+
+        }
+
+    }
+
+    protected void setProgressAction(Intent intent) {
+        progressIntent = intent;
     }
 }

@@ -78,7 +78,26 @@ public class WeatherUpdateService extends Service {
 
                 new AsyncTask<Integer, Integer, WeatherConditionInterface>() {
 
+                    private Thread thread;
+
+                    boolean shouldcontinue = true;
+
                     protected void onPreExecute() {
+                        thread = new Thread() {
+                            @Override
+                            public void run() {
+                                try {
+                                    while (shouldcontinue) {
+                                        sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
+                                        sleep(1000);
+                                    }
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        };
+
+                        thread.start();
                     };
 
                     @Override
@@ -89,15 +108,17 @@ public class WeatherUpdateService extends Service {
                                 getApplicationContext());
 
                         return previmeteoWeatherProvider.getCondition(cal.getTime());
-                        
+
                     }
 
                     @Override
                     protected void onPostExecute(WeatherConditionInterface weatherCondition) {
-//                        if (weatherCondition == null)
-//                            isWeatherError = true;
+                        // if (weatherCondition == null)
+                        // isWeatherError = true;
                         handler.removeCallbacks(sendUpdatesToUI);
                         handler.postDelayed(sendUpdatesToUI, 0); // 1 second=1000
+                        shouldcontinue = false;
+                        sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
                         super.onPostExecute(weatherCondition);
 
                     }
@@ -127,22 +148,22 @@ public class WeatherUpdateService extends Service {
 
     }
 
-//    private void updateCondition(WeatherConditionInterface condition, int day) {
-//        LocalWeatherProvider helper = new LocalWeatherProvider(this);
-//
-//        Calendar conditionDate = Calendar.getInstance();
-//        conditionDate.add(Calendar.DAY_OF_YEAR, day);
-//
-//        condition.setDate(conditionDate.getTime());
-//        condition.setDayofYear(conditionDate.get(Calendar.DAY_OF_YEAR));
-//
-//        WeatherConditionInterface wc = helper.getWeatherByDayofyear(conditionDate.get(Calendar.DAY_OF_YEAR));
-//
-//        if (wc == null)
-//            helper.insertWeather(condition);
-//        else
-//            helper.updateWeather(condition);
-//        return;
-//
-//    }
+    // private void updateCondition(WeatherConditionInterface condition, int day) {
+    // LocalWeatherProvider helper = new LocalWeatherProvider(this);
+    //
+    // Calendar conditionDate = Calendar.getInstance();
+    // conditionDate.add(Calendar.DAY_OF_YEAR, day);
+    //
+    // condition.setDate(conditionDate.getTime());
+    // condition.setDayofYear(conditionDate.get(Calendar.DAY_OF_YEAR));
+    //
+    // WeatherConditionInterface wc = helper.getWeatherByDayofyear(conditionDate.get(Calendar.DAY_OF_YEAR));
+    //
+    // if (wc == null)
+    // helper.insertWeather(condition);
+    // else
+    // helper.updateWeather(condition);
+    // return;
+    //
+    // }
 }

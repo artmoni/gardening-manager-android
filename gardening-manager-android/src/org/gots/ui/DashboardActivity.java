@@ -93,7 +93,8 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
         checkPremiumAds();
         weatherIntent = new Intent(this, WeatherUpdateService.class);
-
+        setProgressAction(weatherIntent);
+        
         registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
         registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
     }
@@ -372,7 +373,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         refreshConnectionState();
         if (gotsPurchase.isPremium())
             menu.findItem(R.id.premium).setVisible(false);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

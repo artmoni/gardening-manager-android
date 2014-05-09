@@ -20,6 +20,7 @@ import org.gots.action.GardeningActionInterface;
 import org.gots.action.bean.DeleteAction;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.allotment.adapter.ListAllotmentAdapter;
+import org.gots.allotment.service.AllotmentNotificationService;
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
@@ -56,7 +57,7 @@ public class MyMainGarden extends AbstractActivity {
 
     WeatherWidget weatherWidget;
 
-    private Menu menu;
+    Menu menu;
 
     private List<BaseAllotmentInterface> selectedAllotments = new ArrayList<BaseAllotmentInterface>();
 
@@ -73,7 +74,8 @@ public class MyMainGarden extends AbstractActivity {
 
         setContentView(R.layout.garden);
         listAllotments = (ListView) findViewById(R.id.IdGardenAllotmentsList);
-        lsa = new ListAllotmentAdapter(MyMainGarden.this, new ArrayList<BaseAllotmentInterface>(), getIntent().getExtras());
+        lsa = new ListAllotmentAdapter(MyMainGarden.this, new ArrayList<BaseAllotmentInterface>(),
+                getIntent().getExtras());
         listAllotments.setAdapter(lsa);
         listAllotments.setDivider(null);
         listAllotments.setDividerHeight(0);
@@ -111,6 +113,8 @@ public class MyMainGarden extends AbstractActivity {
             LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
             layout.addView(ads.getAdsLayout());
         }
+
+        setProgressAction(new Intent(this, AllotmentNotificationService.class));
     }
 
     @Override
@@ -129,13 +133,16 @@ public class MyMainGarden extends AbstractActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_garden, menu);
         this.menu = menu;
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             // onResume();
+            if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
+                setActionRefresh(false);
+            }
         }
     };
 
@@ -190,6 +197,8 @@ public class MyMainGarden extends AbstractActivity {
                         new AsyncTask<BaseAllotmentInterface, Integer, Void>() {
                             @Override
                             protected void onPreExecute() {
+                                setActionRefresh(true);
+
                                 super.onPreExecute();
                             }
 
@@ -207,6 +216,8 @@ public class MyMainGarden extends AbstractActivity {
                             protected void onPostExecute(Void result) {
                                 selectedAllotments.clear();
                                 onResume();
+                                setActionRefresh(false);
+
                                 super.onPostExecute(result);
                             }
                         }.execute();
@@ -221,17 +232,13 @@ public class MyMainGarden extends AbstractActivity {
         builder.show();
     }
 
-    private ProgressDialog dialog;
-
     @Override
     protected void onResume() {
         super.onResume();
         new AsyncTask<Void, Integer, List<BaseAllotmentInterface>>() {
 
             protected void onPreExecute() {
-                dialog = ProgressDialog.show(MyMainGarden.this, "", getResources().getString(R.string.gots_loading),
-                        true);
-                dialog.setCanceledOnTouchOutside(true);
+                setActionRefresh(true);
             };
 
             @Override
@@ -252,13 +259,8 @@ public class MyMainGarden extends AbstractActivity {
             protected void onPostExecute(List<BaseAllotmentInterface> result) {
                 if (result != null)
                     lsa.setAllotments(result);
+                setActionRefresh(false);
 
-                try {
-                    dialog.dismiss();
-                    dialog = null;
-                } catch (Exception e) {
-                    // nothing
-                }
                 super.onPostExecute(result);
             }
         }.execute();
