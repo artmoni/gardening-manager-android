@@ -4,8 +4,9 @@
 
     <item
         android:id="@+id/refresh_seed"
+        android:actionLayout="@layout/actionbar_indeterminate_progress"
         android:icon="@drawable/bt_update"
         android:title="@string/seed.menu.update"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 
 </menu>

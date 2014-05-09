@@ -3,6 +3,7 @@ package org.gots.ui;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.Inflater;
 
 import org.gots.R;
 import org.gots.authentication.GoogleAuthentication;
@@ -24,6 +25,8 @@ import android.widget.Button;
 import android.widget.Toast;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
@@ -34,6 +37,8 @@ public class FirstLaunchActivity extends AbstractActivity {
     private String TAG = "FirstLaunchActivity";
 
     private Menu optionsMenu;
+
+    private View progressView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +102,8 @@ public class FirstLaunchActivity extends AbstractActivity {
 
                             protected void onPreExecute() {
                                 setRefreshActionButtonState(true);
+                                findViewById(R.id.textViewError).setVisibility(View.GONE);
+
                             };
 
                             @Override
@@ -124,7 +131,6 @@ public class FirstLaunchActivity extends AbstractActivity {
 
                             @Override
                             protected void onPostExecute(String resultToken) {
-                                setRefreshActionButtonState(false);
                                 if (resultToken != null) {
                                     gotsPrefs.setNuxeoLogin(usableAccounts.get(item).name);
                                     gotsPrefs.setToken(resultToken);
@@ -139,10 +145,12 @@ public class FirstLaunchActivity extends AbstractActivity {
                                     finish();
 
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "Error requesting GoogleAuthUtil.getToken",
-                                            Toast.LENGTH_SHORT).show();
-
+                                    // Toast.makeText(getApplicationContext(),
+                                    // "Error requesting GoogleAuthUtil.getToken",
+                                    // Toast.LENGTH_SHORT).show();
+                                    findViewById(R.id.textViewError).setVisibility(View.VISIBLE);
                                 }
+                                setRefreshActionButtonState(false);
                                 super.onPostExecute(resultToken);
                             }
                         }.execute(usableAccounts.get(item).name);
@@ -176,7 +184,8 @@ public class FirstLaunchActivity extends AbstractActivity {
         MenuInflater inflater = getMenuInflater();
         this.optionsMenu = menu;
         inflater.inflate(R.menu.menu_firstlaunch, menu);
-        MenuItem itemRefresh = (MenuItem) menu.findItem(R.id.connection);
+        MenuItem itemRefresh = (MenuItem) menu.findItem(R.id.menuRefresh);
+        itemRefresh.setVisible(false);
         // refreshConnectionState();
         return super.onCreateOptionsMenu(menu);
     }
@@ -185,11 +194,19 @@ public class FirstLaunchActivity extends AbstractActivity {
 
         if (optionsMenu != null) {
             final MenuItem refreshItem = optionsMenu.findItem(R.id.menuRefresh);
+            Animation mCycleFadeAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate);
+            if (progressView == null)
+                progressView = getLayoutInflater().inflate(R.layout.actionbar_indeterminate_progress, null);
+
             if (refreshItem != null) {
                 if (refreshing) {
-                    refreshItem.setActionView(R.layout.actionbar_indeterminate_progress);
+                    refreshItem.setActionView(progressView);
+                    progressView.startAnimation(mCycleFadeAnimation);
+                    refreshItem.setVisible(true);
                 } else {
+                    progressView.clearAnimation();
                     refreshItem.setActionView(null);
+                    refreshItem.setVisible(false);
                 }
             }
         }

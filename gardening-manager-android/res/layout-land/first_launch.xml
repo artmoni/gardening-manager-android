@@ -33,41 +33,71 @@
         android:padding="10dp"
         android:visibility="visible" >
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:gravity="center_horizontal|bottom"
             android:orientation="vertical"
-            android:padding="10dp" >
+            android:visibility="visible" >
+
+            <Button
+                android:id="@+id/buttonCreate"
+                style="@style/buttonRed"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:text="@string/garden.create"
+                android:textSize="20sp" />
 
             <ImageView
+                android:id="@+id/imageView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
                 android:src="@drawable/garden_unshared" />
 
             <TextView
                 style="@style/description_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/imageView2"
+                android:layout_centerHorizontal="true"
                 android:gravity="center_horizontal|center_vertical"
-                android:paddingBottom="10dp"
-                android:text="@string/garden.create.description"
-                />
+                android:text="@string/garden.create.description" />
+        </RelativeLayout>
 
-            <Button
-                android:id="@+id/buttonCreate"
-                style="@style/buttonRed"
-                android:text="@string/garden.create" android:textSize="20sp" />
-        </LinearLayout>
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:orientation="vertical" >
 
-<ImageView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:src="@drawable/dashboard_button_profile_selector" android:layout_gravity="center_vertical"/>
+            <TextView
+                android:id="@+id/textViewError"
+                style="@style/description_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imageView1"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="@string/synchro.error.server"
+                android:textColor="@color/action_error_color"
+                android:visibility="gone" />
 
-        <LinearLayout
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/dashboard_button_profile_selector" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_gravity="center_vertical"
@@ -76,61 +106,51 @@
             android:orientation="vertical" >
 
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:id="@+id/buttonConnect"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:background="@drawable/button_green_selector"
                 android:gravity="center_horizontal|center_vertical"
-                android:orientation="vertical"
-                android:padding="10dp" >
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/garden_shared" />
+                android:orientation="horizontal" >
 
                 <TextView
-                    style="@style/description_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal|center_vertical"
-                    android:paddingBottom="10dp"
-                    android:text="@string/login.sso.description"
-                     />
+                    android:layout_gravity="center_vertical"
+                    android:paddingRight="10dp"
+                    android:text="@string/login.signin"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
 
-                <LinearLayout
-                    android:id="@+id/buttonConnect"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/button_green_selector"
-                    android:gravity="center_horizontal|center_vertical"
-                    android:orientation="horizontal" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:paddingRight="10dp"
-                        android:text="@string/login.signin"
-                        android:textColor="@color/white"
-                        android:textSize="20sp" />
-
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="right"
-                        android:background="@drawable/social_google"
-                        android:contentDescription="@string/login.signin" />
-                </LinearLayout>
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="right"
+                    android:background="@drawable/social_google"
+                    android:contentDescription="@string/login.signin" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="fill_parent"
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/garden_shared" />
+
+            <TextView
+                style="@style/description_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imageView3"
+                android:layout_centerHorizontal="true"
                 android:gravity="center_horizontal|center_vertical"
-                android:orientation="vertical" >
-            </LinearLayout>
-        </LinearLayout>
+                android:text="@string/login.sso.description" />
+
+        </RelativeLayout>
+
     </LinearLayout>
 
     <LinearLayout
