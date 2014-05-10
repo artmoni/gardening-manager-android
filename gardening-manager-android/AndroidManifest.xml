@@ -24,8 +24,6 @@
 
     <!-- LOGIN WITH GARDENING MANAGER SERVER USING LOCAL ACCOUNTS -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    
-    
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
@@ -147,6 +145,12 @@
         android:authorities="org.gots.providers.seeds
         android:name="org.gots.providers.SeedSQLite" />
         -->
+        <provider
+            android:name="org.gots.providers.DummySeedProvider"
+            android:authorities="org.gots.providers.seeds"
+            android:label="DummyProvider"
+            android:syncable="true" />
+
         <receiver android:name=".service.BootBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
