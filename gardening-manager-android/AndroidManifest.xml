@@ -26,6 +26,9 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_SYNC_STATS" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -159,7 +162,19 @@
 
         <service android:name=".action.service.ActionNotificationService" />
         <service android:name=".weather.service.WeatherUpdateService" />
-        <service android:name=".seed.service.SeedUpdateService" />
+        <service android:name=".seed.service.SeedUpdateService" >
+        </service>
+        <service
+            android:name=".seed.service.SeedSyncService"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/sync_adapter" />
+        </service>
         <service android:name=".allotment.service.AllotmentNotificationService" />
         <service android:name=".allotment.service.ProfilNotificationService" />
         <service android:name=".authentication.GotsAuthenticatorService" >

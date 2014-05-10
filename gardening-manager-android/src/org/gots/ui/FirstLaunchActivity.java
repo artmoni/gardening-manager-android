@@ -6,12 +6,15 @@ import java.util.List;
 import java.util.zip.Inflater;
 
 import org.gots.R;
+import org.gots.authentication.AuthenticationActivity;
 import org.gots.authentication.GoogleAuthentication;
 import org.gots.authentication.GotsSocialAuthentication;
 import org.gots.authentication.NuxeoAuthentication;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -44,6 +47,8 @@ public class FirstLaunchActivity extends AbstractActivity {
         ActionBar bar = getSupportActionBar();
         // bar.setDisplayHomeAsUpEnabled(true);
         bar.setTitle(R.string.app_name);
+
+//        requestToken();
     }
 
     @Override
@@ -185,4 +190,53 @@ public class FirstLaunchActivity extends AbstractActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    private static final int ACCOUNT_CODE = 1601;
+
+    private void chooseAccount() {
+        // use https://github.com/frakbot/Android-AccountChooser for
+        // compatibility with older devices
+        Intent intent = AccountManager.newChooseAccountIntent(null, null, new String[] { "gardening-manager" }, false,
+                null, null, null, null);
+        startActivityForResult(intent, ACCOUNT_CODE);
+    }
+
+    private void requestToken() {
+        Account userAccount = null;
+        String user = gotsPrefs.getNuxeoLogin();
+        AccountManager accountManager = AccountManager.get(this);
+        for (Account account : accountManager.getAccountsByType("gardening-manager")) {
+            if (account.name.equals(user)) {
+                userAccount = account;
+
+                break;
+            }
+        }
+
+        accountManager.getAuthToken(userAccount, AuthenticationActivity.AUTH_TOKEN_TYPE, null, this,
+                new OnTokenAcquired(), null);
+    }
+
+    private static final int AUTHORIZATION_CODE = 1993;
+
+    private class OnTokenAcquired implements AccountManagerCallback<Bundle> {
+
+        @Override
+        public void run(AccountManagerFuture<Bundle> result) {
+            try {
+                Bundle bundle = result.getResult();
+
+                Intent launch = (Intent) bundle.get(AccountManager.KEY_INTENT);
+                if (launch != null) {
+                    startActivityForResult(launch, AUTHORIZATION_CODE);
+                } else {
+                    String token = bundle.getString(AccountManager.KEY_AUTHTOKEN);
+
+                    gotsPrefs.setToken(token);
+
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 }

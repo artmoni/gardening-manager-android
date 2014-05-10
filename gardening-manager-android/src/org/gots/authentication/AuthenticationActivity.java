@@ -54,7 +54,7 @@ public class AuthenticationActivity extends AccountAuthenticatorActivity {
 
     public static final String ARG_IS_ADDING_NEW_ACCOUNT = "new";
 
-    private static final String AUTH_TOKEN_TYPE = "token.nuxeo";
+    public static final String AUTH_TOKEN_TYPE = "token.nuxeo";
 
     @Override
     protected void onCreate(Bundle icicle) {
