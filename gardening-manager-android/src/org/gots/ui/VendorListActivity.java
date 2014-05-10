@@ -222,7 +222,7 @@ public class VendorListActivity extends AbstractListFragment {
     @Override
     public void onDestroy() {
         if (seedBroadcastReceiver != null)
-            getActivity().unregisterReceiver(seedBroadcastReceiver);
+            mContext.unregisterReceiver(seedBroadcastReceiver);
         super.onDestroy();
     }
 
