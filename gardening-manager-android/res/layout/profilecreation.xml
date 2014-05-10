@@ -95,9 +95,10 @@
                     style="@style/description_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="true"
+                    android:checked="false"
                     android:gravity="center_vertical"
-                    android:text="@string/profile.sample.data" />
+                    android:text="@string/profile.sample.data"
+                    android:visibility="gone" />
 
                 <!--
                      <CheckBox
