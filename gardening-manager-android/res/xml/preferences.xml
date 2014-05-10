@@ -3,19 +3,33 @@
 
     <PreferenceCategory
         android:key="pref_key_category_1"
-        android:title="Nuxeo" >
-        <Preference
-            android:key="nuxeo.serverUrl"
-            android:summary="test"
-            android:title="nuxeo.serverUrl" />
-        <Preference
-            android:key="nuxeo.login"
-            android:summary="test"
-            android:title="nuxeo.login" />
-        <Preference
-            android:key="org.gots.garden.connected"
-            android:summary="test"
-            android:title="isConnected" />
-    </PreferenceCategory>
+        android:title="Gardening in the Cloud" />
+
+    <EditTextPreference
+        android:key="nuxeo.serverUrl"
+        android:summary="test"
+        android:title="nuxeo.serverUrl" />
+    <EditTextPreference
+        android:key="nuxeo.login"
+        android:summary="test"
+        android:title="nuxeo.login" />
+
+    <CheckBoxPreference
+        android:key="org.gots.garden.connected"
+        android:summary="test"
+        android:title="isConnected" />
+
+    <PreferenceCategory
+        android:key="pref_key_category_2"
+        android:title="Synchronization" />
+
+    <EditTextPreference
+        android:key="sync.seconde"
+        android:summary="Synchro"
+        android:title="36000" />
+    <EditTextPreference
+        android:key="sync.minute"
+        android:summary="sync.minute"
+        android:title="1000" />
 
 </PreferenceScreen>
