@@ -132,9 +132,9 @@ public abstract class AbstractActivity extends ActionBarActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (BroadCastMessages.PROGRESS_UPDATE.equals(intent.getAction()))
-                setActionRefresh(true);
+                setProgressRefresh(true);
             else if (BroadCastMessages.PROGRESS_FINISHED.equals(intent.getAction()))
-                setActionRefresh(false);
+                setProgressRefresh(false);
         }
     };
 
@@ -178,7 +178,7 @@ public abstract class AbstractActivity extends ActionBarActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    protected void setActionRefresh(boolean refresh) {
+    protected void setProgressRefresh(boolean refresh) {
         if (menu == null)
             return;
         MenuItem itemRefresh = menu.findItem(R.id.refresh_seed);

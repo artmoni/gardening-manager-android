@@ -102,7 +102,7 @@ public class FirstLaunchActivity extends AbstractActivity {
                         new AsyncTask<String, Integer, String>() {
 
                             protected void onPreExecute() {
-                                setActionRefresh(true);
+                                setProgressRefresh(true);
                                 findViewById(R.id.textViewError).setVisibility(View.GONE);
 
                             };
@@ -151,7 +151,7 @@ public class FirstLaunchActivity extends AbstractActivity {
                                     // Toast.LENGTH_SHORT).show();
                                     findViewById(R.id.textViewError).setVisibility(View.VISIBLE);
                                 }
-                                setActionRefresh(false);
+                                setProgressRefresh(false);
                                 super.onPostExecute(resultToken);
                             }
                         }.execute(usableAccounts.get(item).name);
