@@ -176,8 +176,7 @@
         <service android:name=".seed.service.SeedUpdateService" />
         <service
             android:name=".seed.service.SeedSyncService"
-            android:exported="true"
-            android:process=":sync" >
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
@@ -188,8 +187,7 @@
         </service>
         <service
             android:name=".garden.service.GardenSyncService"
-            android:exported="true"
-            android:process=":sync" >
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
