@@ -141,7 +141,7 @@ public class MyMainGarden extends AbstractActivity {
         public void onReceive(Context context, Intent intent) {
             // onResume();
             if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
-                setActionRefresh(false);
+                setProgressRefresh(false);
             }
         }
     };
@@ -197,7 +197,7 @@ public class MyMainGarden extends AbstractActivity {
                         new AsyncTask<BaseAllotmentInterface, Integer, Void>() {
                             @Override
                             protected void onPreExecute() {
-                                setActionRefresh(true);
+                                setProgressRefresh(true);
 
                                 super.onPreExecute();
                             }
@@ -216,7 +216,7 @@ public class MyMainGarden extends AbstractActivity {
                             protected void onPostExecute(Void result) {
                                 selectedAllotments.clear();
                                 onResume();
-                                setActionRefresh(false);
+                                setProgressRefresh(false);
 
                                 super.onPostExecute(result);
                             }
@@ -238,7 +238,7 @@ public class MyMainGarden extends AbstractActivity {
         new AsyncTask<Void, Integer, List<BaseAllotmentInterface>>() {
 
             protected void onPreExecute() {
-                setActionRefresh(true);
+                setProgressRefresh(true);
             };
 
             @Override
@@ -259,7 +259,7 @@ public class MyMainGarden extends AbstractActivity {
             protected void onPostExecute(List<BaseAllotmentInterface> result) {
                 if (result != null)
                     lsa.setAllotments(result);
-                setActionRefresh(false);
+                setProgressRefresh(false);
 
                 super.onPostExecute(result);
             }

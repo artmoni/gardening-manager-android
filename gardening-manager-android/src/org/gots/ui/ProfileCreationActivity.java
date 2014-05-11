@@ -68,8 +68,6 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
 
     private String tag = "ProfileActivity";
 
-    private ProgressDialog pd;
-
     GardenInterface garden = new Garden();
 
     private int mode = 0;
@@ -110,13 +108,13 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
         if (gardenManager.getCurrentGarden() != null)
             ((CheckBox) findViewById(R.id.checkboxSamples)).setChecked(false);
 
-        mlocManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
         if (mode == OPTION_EDIT && gardenManager.getCurrentGarden() != null
-                && gardenManager.getCurrentGarden().getLocality() != null)
-            ((TextView) findViewById(R.id.editTextLocality)).setText(gardenManager.getCurrentGarden().getLocality());
+                && gardenManager.getCurrentGarden().getLocality() != null) {
+            editTextLocality.setText(gardenManager.getCurrentGarden().getLocality());
+            editTextName.setText(gardenManager.getCurrentGarden().getName());
+        }
 
-        ((TextView) findViewById(R.id.editTextLocality)).setOnClickListener(new View.OnClickListener() {
+        editTextLocality.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -133,18 +131,20 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        if (mode != OPTION_EDIT)
-            getPosition();
+        // if (mode != OPTION_EDIT)
+        // getPosition();
     }
 
     private void getPosition() {
-        setProgressBarIndeterminateVisibility(true);
+        // setProgressBarIndeterminateVisibility(true);
+        setProgressRefresh(true);
+        mlocManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_FINE);
 
-        pd = ProgressDialog.show(this, "", getResources().getString(R.string.gots_loading), false);
-        pd.setCanceledOnTouchOutside(true);
+        // pd = ProgressDialog.show(this, "", getResources().getString(R.string.gots_loading), false);
+        // pd.setCanceledOnTouchOutside(true);
 
         // bestprovider can be null because we ask only for enabled providers
         // (getBestProvider(criteria, TRUE);)
@@ -197,16 +197,11 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
     @Override
     public void onLocationChanged(Location location) {
 
-        setProgressBarIndeterminateVisibility(false);
-        if (!pd.isShowing()) {
-            return;
-        }
-
         this.location = location;
         displayAddress();
-        if (pd != null && pd.isShowing()) {
-            pd.cancel();
-        }
+
+        setProgressRefresh(false);
+
         mlocManager.removeUpdates(this);
     }
 

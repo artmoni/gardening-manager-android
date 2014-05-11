@@ -99,7 +99,7 @@ public class ProfileActivity extends AbstractActivity {
             // true);
             // dialog.setCanceledOnTouchOutside(true);
             // dialog.show();
-            setActionRefresh(true);
+            setProgressRefresh(true);
             super.onPreExecute();
         }
 
@@ -131,7 +131,7 @@ public class ProfileActivity extends AbstractActivity {
                     gardenManager.setCurrentGarden(profileAdapter.getItem(0));
                 }
             }
-            setActionRefresh(false);
+            setProgressRefresh(false);
             super.onPostExecute(myGardens);
         }
 
