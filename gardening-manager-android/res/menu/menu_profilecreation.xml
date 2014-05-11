@@ -9,7 +9,7 @@
     <item
         android:id="@+id/localize_gaden"
         android:icon="@drawable/bt_localize_garden"
-        android:title="@string/garden.menu.add.button"
+        android:title="@string/profile.menu.localize"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/help"

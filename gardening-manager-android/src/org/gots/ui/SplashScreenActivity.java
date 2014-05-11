@@ -12,6 +12,12 @@ package org.gots.ui;
 
 import java.lang.ref.WeakReference;
 
+import org.gots.authentication.AuthenticationActivity;
+
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
@@ -49,6 +55,7 @@ public class SplashScreenActivity extends AboutActivity {
             super.handleMessage(msg);
         }
     }
+
     private Handler getSplashHandler() {
         if (splashHandler == null) {
             WeakReference<Activity> that = new WeakReference<Activity>(this);
@@ -56,6 +63,7 @@ public class SplashScreenActivity extends AboutActivity {
         }
         return splashHandler;
     }
+
     @Override
     protected void removeProgress() {
         super.removeProgress();
@@ -65,6 +73,7 @@ public class SplashScreenActivity extends AboutActivity {
             getSplashHandler().sendMessageDelayed(msg, SPLASHTIME);
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         int currentGardenId = gotsPrefs.getCurrentGardenId();
@@ -78,7 +87,8 @@ public class SplashScreenActivity extends AboutActivity {
             getSplashHandler().sendMessageDelayed(msg, SPLASHTIME);
         } else
             finish();
-    
+
         super.onActivityResult(requestCode, resultCode, data);
     }
+
 }

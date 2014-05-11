@@ -38,7 +38,8 @@ public class PreferenceActivity extends android.preference.PreferenceActivity im
         displayPreference(NuxeoServerConfig.PREF_SERVER_LOGIN, gotsPreferences.getNuxeoLogin());
         displayPreference(NuxeoServerConfig.PREF_SERVER_URL, gotsPreferences.getGardeningManagerServerURI());
         displayPreference(NuxeoServerConfig.PREF_SERVER_TOKEN, gotsPreferences.getToken());
-        displayPreference(GotsPreferences.SYNC_SCHEDULE, gotsPreferences.get(GotsPreferences.SYNC_SCHEDULE, null));
+        displayPreference(GotsPreferences.SYNC_SCHEDULE,
+                String.valueOf(gotsPreferences.getScheduleTimeForNotification()));
         // displayPreference(NuxeoServerConfig.PREF_SERVER_LOGIN, gotsPreferences.getNuxeoLogin());
 
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
@@ -63,11 +64,11 @@ public class PreferenceActivity extends android.preference.PreferenceActivity im
         if (GotsPreferences.SYNC_SCHEDULE.equals(key)) {
             ContentResolver.setSyncAutomatically(mAccount, DummySeedProvider.AUTHORITY, true);
             ContentResolver.addPeriodicSync(mAccount, DummySeedProvider.AUTHORITY, new Bundle(),
-                    Integer.valueOf(gotsPreferences.get(key, "1")) * SYNC_INTERVAL);
+                    gotsPreferences.getScheduleTimeForNotification() * SYNC_INTERVAL);
 
             ContentResolver.setSyncAutomatically(mAccount, GardenContentProvider.AUTHORITY, true);
             ContentResolver.addPeriodicSync(mAccount, GardenContentProvider.AUTHORITY, new Bundle(),
-                    Integer.valueOf(gotsPreferences.get(key, "1")) * SYNC_INTERVAL);
+                    gotsPreferences.getScheduleTimeForNotification() * SYNC_INTERVAL);
 
         }
     }

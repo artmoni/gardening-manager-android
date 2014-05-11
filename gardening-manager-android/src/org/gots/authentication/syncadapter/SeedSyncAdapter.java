@@ -30,89 +30,44 @@ public class SeedSyncAdapter extends GotsSyncAdapter {
 
     }
 
+    private Thread thread;
+
+    boolean shouldcontinue = true;
+
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider,
             SyncResult syncResult) {
         Log.d("SeedSyncAdapter", "onPerformSync for account[" + account.name + "]");
 
-        new AsyncTask<Void, Integer, List<BaseSeedInterface>>() {
-
-            private Thread thread;
-
-            boolean shouldcontinue = true;
-
-            protected void onPreExecute() {
-                thread = new Thread() {
-                    @Override
-                    public void run() {
-                        try {
-                            while (shouldcontinue) {
-                                getContext().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
-                                sleep(1000);
-                            }
-
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                };
-
-                thread.start();
-                super.onPreExecute();
-            };
-
+        thread = new Thread() {
             @Override
-            protected List<BaseSeedInterface> doInBackground(Void... params) {
-                seedManager.force_refresh(true);
-                seedManager.getMyStock(gardenManager.getCurrentGarden());
-                return seedManager.getVendorSeeds(true);
+            public void run() {
+                try {
+                    while (shouldcontinue) {
+                        getContext().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
+                        sleep(1000);
+                    }
 
-            }
-
-            protected void onPostExecute(List<BaseSeedInterface> vendorSeeds) {
-
-                List<BaseSeedInterface> newSeeds = seedManager.getNewSeeds();
-                if (newSeeds != null && newSeeds.size() > 0) {
-                    SeedNotification notification = new SeedNotification(getContext());
-                    notification.createNotification(newSeeds);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-                // handler.removeCallbacks(sendUpdatesToUI);
-                // handler.postDelayed(sendUpdatesToUI, 0); // 1 second
-                shouldcontinue = false;
-                getContext().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
+            }
+        };
 
-                super.onPostExecute(vendorSeeds);
-            };
-        }.execute();
+        thread.start();
 
-        // try {
-        // // Get the auth token for the current account
-        // String authToken = mAccountManager.blockingGetAuthToken(account, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS,
-        // true);
-        // ParseComServerAccessor parseComService = new ParseComServerAccessor();
-        //
-        // // Get shows from the remote server
-        // List remoteTvShows = parseComService.getShows(authToken);
-        //
-        // // Get shows from the local storage
-        // ArrayList localTvShows = new ArrayList();
-        // Cursor curTvShows = provider.query(TvShowsContract.CONTENT_URI, null, null, null, null);
-        // if (curTvShows != null) {
-        // while (curTvShows.moveToNext()) {
-        // localTvShows.add(TvShow.fromCursor(curTvShows));
-        // }
-        // curTvShows.close();
-        // }
-        // // TODO See what Local shows are missing on Remote
-        //
-        // // TODO See what Remote shows are missing on Local
-        //
-        // // TODO Updating remote tv shows
-        //
-        // // TODO Updating local tv shows
-        //
-        // } catch (Exception e) {
-        // e.printStackTrace();
-        // }
+        seedManager.force_refresh(true);
+        seedManager.getMyStock(gardenManager.getCurrentGarden());
+
+        List<BaseSeedInterface> newSeeds = seedManager.getNewSeeds();
+        if (newSeeds != null && newSeeds.size() > 0) {
+            SeedNotification notification = new SeedNotification(getContext());
+            notification.createNotification(newSeeds);
+        }
+        // handler.removeCallbacks(sendUpdatesToUI);
+        // handler.postDelayed(sendUpdatesToUI, 0); // 1 second
+        shouldcontinue = false;
+        getContext().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
+
     }
 }

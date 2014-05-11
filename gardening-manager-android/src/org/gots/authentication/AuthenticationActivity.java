@@ -74,9 +74,30 @@ public class AuthenticationActivity extends AccountAuthenticatorActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(AuthenticationActivity.this, AuthenticationActivity.class);
-                startActivityForResult(intent, 1);
+                // Intent intent = new Intent(AuthenticationActivity.this, AuthenticationActivity.class);
+                // startActivityForResult(intent, 1);
+                Intent res = new Intent();
+                res.putExtra(AccountManager.KEY_ACCOUNT_NAME, "guest");
+                res.putExtra(AccountManager.KEY_ACCOUNT_TYPE, mAccountType);
+                res.putExtra(PARAM_USER_PASS, "");
+                finishLogin(res);
 
+                AccountManager accountManager = AccountManager.get(getApplicationContext());
+
+                Account[] accounts = accountManager.getAccountsByType("com.facebook.auth.login");
+                if (accounts.length > 0)
+                    GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Type", "Facebook",
+                            accounts.length);
+
+                accounts = accountManager.getAccountsByType("com.twitter.android.auth.login");
+                if (accounts.length > 0)
+                    GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Type", "Twitter",
+                            accounts.length);
+
+                accounts = accountManager.getAccountsByType("com.google");
+                if (accounts.length > 0)
+                    GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Type", "Google", accounts.length);
+                finish();
             }
 
         });

@@ -104,7 +104,7 @@ public class VendorListActivity extends AbstractListFragment {
             Intent seedIntent = new Intent(mContext, SeedUpdateService.class);
             mContext.startService(seedIntent);
             tracker.trackEvent("Catalog", "menu", "refreshSeed", 0);
-            setActionRefresh(true);
+//            setActionRefresh(true);
             return true;
 
         default:
@@ -112,28 +112,28 @@ public class VendorListActivity extends AbstractListFragment {
         }
     }
 
-    protected void setActionRefresh(boolean refresh) {
-        if (itemRefresh == null)
-            return;
-
-        if (refresh) {
-            if (progressView == null)
-                progressView = (View) getActivity().getLayoutInflater().inflate(
-                        R.layout.actionbar_indeterminate_progress, null);
-            // ProgressViewActionBar iv = new ProgressViewActionBar(mContext);
-            // iv.animateBackground();
-            Animation rotation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
-            rotation.setRepeatCount(Animation.INFINITE);
-            progressView.startAnimation(rotation);
-            itemRefresh.setActionView(progressView);
-        } else {
-            if (progressView != null)
-                progressView.clearAnimation();
-            itemRefresh.setActionView(null);
-
-        }
-
-    }
+//    protected void setActionRefresh(boolean refresh) {
+//        if (itemRefresh == null)
+//            return;
+//
+//        if (refresh) {
+//            if (progressView == null)
+//                progressView = (View) getActivity().getLayoutInflater().inflate(
+//                        R.layout.actionbar_indeterminate_progress, null);
+//            // ProgressViewActionBar iv = new ProgressViewActionBar(mContext);
+//            // iv.animateBackground();
+//            Animation rotation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
+//            rotation.setRepeatCount(Animation.INFINITE);
+//            progressView.startAnimation(rotation);
+//            itemRefresh.setActionView(progressView);
+//        } else {
+//            if (progressView != null)
+//                progressView.clearAnimation();
+//            itemRefresh.setActionView(null);
+//
+//        }
+//
+//    }
 
     public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -165,7 +165,7 @@ public class VendorListActivity extends AbstractListFragment {
                 // dialog = ProgressDialog.show(mContext, "", mContext.getResources().getString(R.string.gots_loading),
                 // true);
                 // dialog.setCanceledOnTouchOutside(true);
-                setActionRefresh(true);
+//                setActionRefresh(true);
                 super.onPreExecute();
             };
 
@@ -201,7 +201,7 @@ public class VendorListActivity extends AbstractListFragment {
                 // if (progressBar != null)
                 //
                 // progressBar.stopAnimatingBackground();
-                setActionRefresh(false);
+//                setActionRefresh(false);
 
                 super.onPostExecute(vendorSeeds);
             };

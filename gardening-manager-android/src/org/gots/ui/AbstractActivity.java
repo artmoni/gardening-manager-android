@@ -40,6 +40,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -195,14 +196,16 @@ public abstract class AbstractActivity extends ActionBarActivity {
                 rotation.setRepeatCount(Animation.INFINITE);
                 progressView.startAnimation(rotation);
             }
-            itemRefresh.setActionView(progressView);
+//            itemRefresh.setActionView(progressView);
+            itemRefresh = MenuItemCompat.setActionView(itemRefresh, progressView);
         } else {
             if (progressView != null) {
                 progressView.clearAnimation();
                 if (progressIntent == null)
                     progressView.setVisibility(View.GONE);
             }
-            itemRefresh.setActionView(null);
+//            itemRefresh.setActionView(null);
+            itemRefresh = MenuItemCompat.setActionView(itemRefresh, null);
 
         }
 

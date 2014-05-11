@@ -184,8 +184,6 @@ public class FirstLaunchActivity extends AbstractActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_firstlaunch, menu);
-        MenuItem itemRefresh = (MenuItem) menu.findItem(R.id.menuRefresh);
-        itemRefresh.setVisible(false);
         // refreshConnectionState();
         return super.onCreateOptionsMenu(menu);
     }

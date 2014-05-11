@@ -18,10 +18,14 @@ import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.adapter.ProfileAdapter;
 import org.gots.garden.service.GardenNotificationService;
+import org.gots.provider.GardenContentProvider;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -142,9 +146,15 @@ public class ProfileActivity extends AbstractActivity {
         super.onResume();
         // new GardenClass().execute(this);
         try {
-            GardenSync gardenSync = new GardenSync(false);
-            gardenSync.execute(this);
-
+            // GardenSync gardenSync = new GardenSync(false);
+            // gardenSync.execute(this);
+            AccountManager accountManager = AccountManager.get(getApplicationContext());
+            Account[] accounts = accountManager.getAccountsByType("gardening-manager");
+            Account a;
+            if (accounts.length>0){
+                a = accounts[0];
+                ContentResolver.requestSync(a, GardenContentProvider.AUTHORITY, new Bundle());
+            }
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }

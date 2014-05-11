@@ -9,6 +9,7 @@ import org.gots.R;
 import org.gots.action.service.ActionNotificationService;
 import org.gots.action.service.ActionTODOBroadcastReceiver;
 import org.gots.analytics.GotsAnalytics;
+import org.gots.authentication.AuthenticationActivity;
 import org.gots.garden.GardenInterface;
 import org.gots.inapp.GotsPurchaseItem;
 import org.gots.preferences.GotsPreferences;
@@ -16,6 +17,7 @@ import org.gots.seed.service.SeedUpdateService;
 import org.gots.weather.WeatherManager;
 
 import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.ContentResolver;
@@ -196,8 +198,8 @@ public class AboutActivity extends AbstractActivity {
          * Synchronize Seeds
          */
 
-        Account newAccount = new Account(gotsPrefs.getNuxeoLogin(), "gardening-manager");
-        ContentResolver.requestSync(newAccount, "org.gots.providers.seeds", Bundle.EMPTY);
+        // Account newAccount = new Account("Guest", "gardening-manager");
+        // ContentResolver.requestSync(newAccount, "org.gots.providers.seeds", Bundle.EMPTY);
         // new AsyncTask<Void, Integer, Void>() {
         // // Intent startServiceIntent2 = new Intent(getApplicationContext(), SeedUpdateService.class);
         //
@@ -437,9 +439,17 @@ public class AboutActivity extends AbstractActivity {
 
     @Override
     protected void onResume() {
-        if (gardenManager.getCurrentGarden() == null) {
-            Intent intent = new Intent(this, FirstLaunchActivity.class);
-            startActivityForResult(intent, 0);
+        // if (gardenManager.getCurrentGarden() == null) {
+        // Intent intent = new Intent(this, FirstLaunchActivity.class);
+        // startActivityForResult(intent, 0);
+        // } else
+        AccountManager accountManager = AccountManager.get(this);
+        Account[] accounts = accountManager.getAccountsByType("gardening-manager");
+        if (accounts.length == 0) {
+            Intent intent = new Intent(this, AuthenticationActivity.class);
+            intent.putExtra(AuthenticationActivity.ARG_ACCOUNT_TYPE, "gardening-manager");
+            intent.putExtra(AuthenticationActivity.ARG_IS_ADDING_NEW_ACCOUNT, true);
+            startActivity(intent);
         } else
             launchProgress();
         super.onResume();

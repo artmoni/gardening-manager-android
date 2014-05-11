@@ -10,9 +10,9 @@
         android:summary="Sync frequency, notifications, etc."
         android:title="Account Settings" >
         <intent
-            android:action="fm.last.android.activity.Preferences.ACCOUNT_SETUP"
+            android:action="org.gots.ui.PreferenceActivity.ACCOUNT_SETUP"
             android:targetClass="org.gots.ui.PreferenceActivity"
-            android:targetPackage="org.gots.ui" />
+            android:targetPackage="org.gots" />
     </PreferenceScreen>
 
 </PreferenceScreen>
