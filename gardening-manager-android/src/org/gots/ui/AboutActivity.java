@@ -12,15 +12,13 @@ import org.gots.analytics.GotsAnalytics;
 import org.gots.garden.GardenInterface;
 import org.gots.inapp.GotsPurchaseItem;
 import org.gots.preferences.GotsPreferences;
-import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.service.SeedNotification;
 import org.gots.seed.service.SeedUpdateService;
 import org.gots.weather.WeatherManager;
 
-import android.accounts.AccountManager;
+import android.accounts.Account;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -197,48 +195,51 @@ public class AboutActivity extends AbstractActivity {
         /*
          * Synchronize Seeds
          */
-        new AsyncTask<Void, Integer, Void>() {
-            // Intent startServiceIntent2 = new Intent(getApplicationContext(), SeedUpdateService.class);
 
-            protected void onPreExecute() {
-                Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
-                progressSeed.startAnimation(myFadeInAnimation);
-                textprogressSeed.setText(getResources().getString(R.string.synchro_seeds_checking));
-                ((TextView) findViewById(R.id.textProgressSeed)).setTextColor(getResources().getColor(
-                        R.color.action_warning_color));
-
-                addProgress();
-            };
-
-            @Override
-            protected Void doInBackground(Void... params) {
-
-                // getApplicationContext().startService(startServiceIntent2);
-                seedManager.force_refresh(true);
-                seedManager.getMyStock(gardenManager.getCurrentGarden());
-                seedManager.getVendorSeeds(true);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void result) {
-                List<BaseSeedInterface> newSeeds = seedManager.getNewSeeds();
-                if (newSeeds.size() > 0) {
-                    SeedNotification notification = new SeedNotification(getApplicationContext());
-                    notification.createNotification(newSeeds);
-                }
-                progressSeed.clearAnimation();
-                progressSeed.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
-                // getApplicationContext().stopService(startServiceIntent2);
-
-                removeProgress();
-                textprogressSeed.setText(getResources().getString(R.string.synchro_seeds_ok));
-                textprogressSeed.setTextColor(getResources().getColor(R.color.text_color_dark));
-
-                super.onPostExecute(result);
-
-            }
-        }.execute();
+        Account newAccount = new Account(gotsPrefs.getNuxeoLogin(), "gardening-manager");
+        ContentResolver.requestSync(newAccount, "org.gots.providers.seeds", Bundle.EMPTY);
+        // new AsyncTask<Void, Integer, Void>() {
+        // // Intent startServiceIntent2 = new Intent(getApplicationContext(), SeedUpdateService.class);
+        //
+        // protected void onPreExecute() {
+        // Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
+        // progressSeed.startAnimation(myFadeInAnimation);
+        // textprogressSeed.setText(getResources().getString(R.string.synchro_seeds_checking));
+        // ((TextView) findViewById(R.id.textProgressSeed)).setTextColor(getResources().getColor(
+        // R.color.action_warning_color));
+        //
+        // addProgress();
+        // };
+        //
+        // @Override
+        // protected Void doInBackground(Void... params) {
+        //
+        // // getApplicationContext().startService(startServiceIntent2);
+        // seedManager.force_refresh(true);
+        // seedManager.getMyStock(gardenManager.getCurrentGarden());
+        // seedManager.getVendorSeeds(true);
+        // return null;
+        // }
+        //
+        // @Override
+        // protected void onPostExecute(Void result) {
+        // List<BaseSeedInterface> newSeeds = seedManager.getNewSeeds();
+        // if (newSeeds.size() > 0) {
+        // SeedNotification notification = new SeedNotification(getApplicationContext());
+        // notification.createNotification(newSeeds);
+        // }
+        // progressSeed.clearAnimation();
+        // progressSeed.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
+        // // getApplicationContext().stopService(startServiceIntent2);
+        //
+        // removeProgress();
+        // textprogressSeed.setText(getResources().getString(R.string.synchro_seeds_ok));
+        // textprogressSeed.setTextColor(getResources().getColor(R.color.text_color_dark));
+        //
+        // super.onPostExecute(result);
+        //
+        // }
+        // }.execute();
 
         /*
          * Synchronize Actions

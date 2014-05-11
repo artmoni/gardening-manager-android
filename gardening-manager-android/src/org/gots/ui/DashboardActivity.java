@@ -23,6 +23,7 @@ import org.gots.weather.service.WeatherUpdateService;
 import org.gots.weather.view.WeatherView;
 import org.gots.weather.view.WeatherWidget;
 
+import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -53,7 +54,6 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
     public static final String LAUNCHER_ACTION = "org.gots.dashboard.action";
 
     public static final String LAUNCHER_CATALOGUE = "org.gots.dashboard.catalogue";
-
 
     // GoogleAnalyticsTracker tracker;
     GotsAdvertisement adView;
@@ -356,14 +356,13 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
             editNameDialog.show(fm, "fragment_edit_name");
             return true;
 
-            // case R.id.settings:
-            // // Intent settingsIntent = new Intent(this, SettingsActivity.class);
-            // // startActivity(settingsIntent);
-            // // FragmentTransaction ft = getFragmentManager().beginTransaction();
-            // // ft.setCustomAnimations(android.R.animator.fade_in,
-            // // android.R.animator.fade_out);
-            // // ft.replace(R.id.idContent,new PreferenceActivity()).addToBackStack("back").commit();
-            // return true;
+        case R.id.settings:
+            Intent settingsIntent = new Intent(this, PreferenceActivity.class);
+            startActivity(settingsIntent);
+//            FragmentTransaction ft = getFragmentManager().beginTransaction();
+//            ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+//            ft.replace(R.id.idContent, new PreferenceActivity()).addToBackStack("back").commit();
+            return true;
 
         case R.id.connection:
             LoginDialogFragment login = new LoginDialogFragment();

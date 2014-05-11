@@ -25,13 +25,10 @@
         android:icon="@drawable/garden_disconnected"
         android:title="@string/login.disconnect"
         app:showAsAction="always"/>
-
-    <!--
-         <item
+    <item
         android:id="@+id/settings"
         android:icon="@drawable/ic_compose"
         android:showAsAction="always"
         android:title="settings"/>
-    -->
 
 </menu>

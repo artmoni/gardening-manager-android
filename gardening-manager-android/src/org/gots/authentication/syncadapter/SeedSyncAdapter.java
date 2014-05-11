@@ -1,10 +1,10 @@
-package org.gots.authentication;
+package org.gots.authentication.syncadapter;
 
 import java.util.List;
 
 import org.gots.action.GotsActionSeedManager;
-import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.allotment.AllotmentManager;
+import org.gots.authentication.GotsSyncAdapter;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenManager;
 import org.gots.preferences.GotsPreferences;
@@ -24,33 +24,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
-public class SeedSyncAdapter extends AbstractThreadedSyncAdapter {
-    private final AccountManager mAccountManager;
-
-    private GotsPreferences gotsPrefs;
-
-    private GotsSeedManager seedManager;
-
-    private GardenManager gardenManager;
-
-    private GotsActionSeedProvider actionseedManager;
-
-    private AllotmentManager allotmentManager;
-
-    private GotsGrowingSeedManager growingSeedManager;
-
+public class SeedSyncAdapter extends GotsSyncAdapter {
     public SeedSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
-        mAccountManager = AccountManager.get(context);
-
-        gotsPrefs = GotsPreferences.getInstance();
-        gotsPrefs.initIfNew(getContext());
-
-        seedManager = GotsSeedManager.getInstance().initIfNew(getContext());
-        gardenManager = GardenManager.getInstance().initIfNew(getContext());
-        growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(getContext());
-        actionseedManager = GotsActionSeedManager.getInstance().initIfNew(getContext());
-        allotmentManager = AllotmentManager.getInstance().initIfNew(getContext());
 
     }
 

@@ -150,6 +150,11 @@
             android:authorities="org.gots.providers.seeds"
             android:label="@string/dashboard.hut.name"
             android:syncable="true" />
+        <provider
+            android:name="org.gots.provider.GardenContentProvider"
+            android:authorities="org.gots.providers.garden"
+            android:label="@string/dashboard.allotments.name"
+            android:syncable="true" />
 
         <receiver android:name=".service.BootBroadcastReceiver" >
             <intent-filter>
@@ -179,7 +184,19 @@
 
             <meta-data
                 android:name="android.content.SyncAdapter"
-                android:resource="@xml/sync_adapter" />
+                android:resource="@xml/sync_adapter_seed" />
+        </service>
+        <service
+            android:name=".garden.service.GardenSyncService"
+            android:exported="true"
+            android:process=":sync" >
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/sync_adapter_garden" />
         </service>
         <service android:name=".allotment.service.AllotmentNotificationService" />
         <service android:name=".allotment.service.ProfilNotificationService" />

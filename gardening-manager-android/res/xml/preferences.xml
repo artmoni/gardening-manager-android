@@ -5,31 +5,39 @@
         android:key="pref_key_category_1"
         android:title="Gardening in the Cloud" />
 
-    <EditTextPreference
+    <Preference
         android:key="nuxeo.serverUrl"
-        android:summary="test"
-        android:title="nuxeo.serverUrl" />
-    <EditTextPreference
-        android:key="nuxeo.login"
-        android:summary="test"
-        android:title="nuxeo.login" />
+        android:summary="Gardening Manager Cloud ressource"
+        android:title="Server" />
 
-    <CheckBoxPreference
+    <Preference
+        android:key="nuxeo.login"
+        android:summary="Your login to the server"
+        android:title="Login" />
+    <Preference
+        android:key="nuxeo.auth.token"
+        android:summary="Authentication Token"
+        android:title="Token" />
+
+    <!--
+         <CheckBoxPreference
         android:key="org.gots.garden.connected"
         android:summary="test"
         android:title="isConnected" />
+    -->
 
     <PreferenceCategory
         android:key="pref_key_category_2"
         android:title="Synchronization" />
 
-    <EditTextPreference
-        android:key="sync.seconde"
-        android:summary="Synchro"
-        android:title="36000" />
-    <EditTextPreference
-        android:key="sync.minute"
-        android:summary="sync.minute"
-        android:title="1000" />
+    <ListPreference
+        android:defaultValue="1"
+        android:entries="@array/frequencyArray"
+        android:entryValues="@array/frequencyValues"
+        android:key="sync.schedule"
+        android:summary="Notification scheduler"
+        android:title="Schedule notification" />
+
+    
 
 </PreferenceScreen>
