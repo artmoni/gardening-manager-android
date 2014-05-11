@@ -146,9 +146,9 @@
         android:name="org.gots.providers.SeedSQLite" />
         -->
         <provider
-            android:name="org.gots.providers.DummySeedProvider"
+            android:name="org.gots.provider.DummySeedProvider"
             android:authorities="org.gots.providers.seeds"
-            android:label="DummyProvider"
+            android:label="@string/dashboard.hut.name"
             android:syncable="true" />
 
         <receiver android:name=".service.BootBroadcastReceiver" >
