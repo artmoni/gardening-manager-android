@@ -69,7 +69,7 @@ public class ProfileActivity extends AbstractActivity {
             layout.addView(ads.getAdsLayout());
         }
 
-        setProgressAction(new Intent(this, GardenNotificationService.class));
+//        setProgressAction(new Intent(this, GardenNotificationService.class));
     }
 
     public BroadcastReceiver gardenBroadcastReceiver = new BroadcastReceiver() {

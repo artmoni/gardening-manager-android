@@ -40,6 +40,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.support.v4.view.MenuCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -72,8 +73,6 @@ public abstract class AbstractActivity extends ActionBarActivity {
     private View progressView;
 
     private Menu menu;
-
-    private Intent progressIntent = null;
 
     private static ArrayList<AbstractActivity> activities = new ArrayList<AbstractActivity>();
 
@@ -144,9 +143,6 @@ public abstract class AbstractActivity extends ActionBarActivity {
         super.onDestroy();
         activities.remove(this);
 
-        if (progressIntent != null)
-            stopService(progressIntent);
-
         unregisterReceiver(gardenManager);
         unregisterReceiver(allotmentManager);
         unregisterReceiver(seedManager);
@@ -170,14 +166,16 @@ public abstract class AbstractActivity extends ActionBarActivity {
 
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (progressIntent != null) {
-                    startService(progressIntent);
-                }
+                onRefresh();
                 return true;
             }
         });
         return super.onCreateOptionsMenu(menu);
     }
+
+     protected void onRefresh(){
+         
+     }
 
     protected void setProgressRefresh(boolean refresh) {
         if (menu == null)
@@ -189,29 +187,23 @@ public abstract class AbstractActivity extends ActionBarActivity {
         if (refresh) {
             if (progressView == null)
                 progressView = (View) getLayoutInflater().inflate(R.layout.actionbar_indeterminate_progress, null);
-            // ProgressViewActionBar iv = new ProgressViewActionBar(mContext);
-            // iv.animateBackground();
             if (progressView.getAnimation() == null) {
                 Animation rotation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
                 rotation.setRepeatCount(Animation.INFINITE);
                 progressView.startAnimation(rotation);
             }
-//            itemRefresh.setActionView(progressView);
-            itemRefresh = MenuItemCompat.setActionView(itemRefresh, progressView);
+             itemRefresh.setActionView(progressView);
+//            itemRefresh = MenuItemCompat.setActionView(itemRefresh, progressView);
+            itemRefresh.getActionView().setBackgroundColor(getResources().getColor(R.color.action_warning_color));
         } else {
             if (progressView != null) {
                 progressView.clearAnimation();
-                if (progressIntent == null)
-                    progressView.setVisibility(View.GONE);
             }
-//            itemRefresh.setActionView(null);
-            itemRefresh = MenuItemCompat.setActionView(itemRefresh, null);
+             itemRefresh.setActionView(null);
+//            itemRefresh = MenuItemCompat.setActionView(itemRefresh, null);
 
         }
 
     }
 
-    protected void setProgressAction(Intent intent) {
-        progressIntent = intent;
-    }
 }

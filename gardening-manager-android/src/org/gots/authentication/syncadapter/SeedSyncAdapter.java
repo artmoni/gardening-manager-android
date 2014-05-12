@@ -38,25 +38,28 @@ public class SeedSyncAdapter extends GotsSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider,
             SyncResult syncResult) {
         Log.d("SeedSyncAdapter", "onPerformSync for account[" + account.name + "]");
+        getContext().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
 
-        thread = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    while (shouldcontinue) {
-                        getContext().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
-                        sleep(1000);
-                    }
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        thread.start();
+//        thread = new Thread() {
+//            @Override
+//            public void run() {
+//                try {
+//                    while (shouldcontinue) {
+//                        getContext().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
+//                        sleep(1000);
+//                    }
+//
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        };
+//
+//        thread.start();
 
         seedManager.force_refresh(true);
+        seedManager.getVendorSeeds(true);
+
         seedManager.getMyStock(gardenManager.getCurrentGarden());
 
         List<BaseSeedInterface> newSeeds = seedManager.getNewSeeds();

@@ -98,7 +98,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
         checkPremiumAds();
         weatherIntent = new Intent(this, WeatherUpdateService.class);
-        setProgressAction(weatherIntent);
+//        setProgressAction(weatherIntent);
 
         registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
         registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));

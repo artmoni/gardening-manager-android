@@ -45,21 +45,23 @@ public class GardenSyncAdapter extends GotsSyncAdapter {
             SyncResult syncResult) {
         Log.d("GardenSyncAdapter", "onPerformSync for account[" + account.name + "]");
         gardens.clear();
-        thread = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    while (shouldcontinue) {
-                        mContext.sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
-                        sleep(1000);
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        thread.start();
+        getContext().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
+//
+//        thread = new Thread() {
+//            @Override
+//            public void run() {
+//                try {
+//                    while (shouldcontinue) {
+//                        mContext.sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
+//                        sleep(1000);
+//                    }
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        };
+//
+//        thread.start();
 
         gardens = gardenManager.getMyGardens(true);
         shouldcontinue=false;

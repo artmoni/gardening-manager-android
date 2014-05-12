@@ -14,45 +14,22 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import org.gots.IntentIntegratorSupportV4;
-import org.gots.R;
-import org.gots.analytics.GotsAnalytics;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.adapter.SeedListAdapter;
 import org.gots.seed.adapter.VendorSeedListAdapter;
-import org.gots.seed.service.SeedUpdateService;
 import org.gots.ui.fragment.AbstractListFragment;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 public class VendorListActivity extends AbstractListFragment {
 
@@ -83,57 +60,7 @@ public class VendorListActivity extends AbstractListFragment {
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_catalogue, menu);
-        itemRefresh = (MenuItem) menu.findItem(R.id.refresh_seed);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-        switch (item.getItemId()) {
-        // case R.id.idSeedFilter:
-        // // displaySearchBox();
-        // tracker.trackEvent("Catalog", "menu", "displaySearchBox", 0);
-        //
-        // return true;
-        case R.id.refresh_seed:
-            Intent seedIntent = new Intent(mContext, SeedUpdateService.class);
-            mContext.startService(seedIntent);
-            tracker.trackEvent("Catalog", "menu", "refreshSeed", 0);
-//            setActionRefresh(true);
-            return true;
-
-        default:
-            return super.onOptionsItemSelected(item);
-        }
-    }
-
-//    protected void setActionRefresh(boolean refresh) {
-//        if (itemRefresh == null)
-//            return;
-//
-//        if (refresh) {
-//            if (progressView == null)
-//                progressView = (View) getActivity().getLayoutInflater().inflate(
-//                        R.layout.actionbar_indeterminate_progress, null);
-//            // ProgressViewActionBar iv = new ProgressViewActionBar(mContext);
-//            // iv.animateBackground();
-//            Animation rotation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
-//            rotation.setRepeatCount(Animation.INFINITE);
-//            progressView.startAnimation(rotation);
-//            itemRefresh.setActionView(progressView);
-//        } else {
-//            if (progressView != null)
-//                progressView.clearAnimation();
-//            itemRefresh.setActionView(null);
-//
-//        }
-//
-//    }
+  
 
     public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -142,10 +69,6 @@ public class VendorListActivity extends AbstractListFragment {
             updateVendorSeeds();
         }
     };
-
-    private MenuItem itemRefresh;
-
-    private View progressView;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {

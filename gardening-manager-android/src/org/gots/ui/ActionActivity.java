@@ -65,7 +65,7 @@ public class ActionActivity extends AbstractActivity {
             layout.addView(ads.getAdsLayout());
         }
         Intent actionIntent = new Intent(this, ActionNotificationService.class);
-        setProgressAction(actionIntent);
+//        setProgressAction(actionIntent);
 
 //        registerReceiver(actionBroadcastReceiver, new IntentFilter(BroadCastMessages.PROGRESS_FINISHED));
         startService(new Intent(this,ActionNotificationService.class));

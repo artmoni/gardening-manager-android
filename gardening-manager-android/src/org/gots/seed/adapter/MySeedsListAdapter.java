@@ -47,6 +47,7 @@ public class MySeedsListAdapter extends SeedListAdapter {
         this.allotment = allotment;
     }
 
+    
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 

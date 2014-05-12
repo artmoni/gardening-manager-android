@@ -27,9 +27,11 @@ import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.weather.view.WeatherWidget;
 
+import android.accounts.Account;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -114,7 +116,18 @@ public class MyMainGarden extends AbstractActivity {
             layout.addView(ads.getAdsLayout());
         }
 
-        setProgressAction(new Intent(this, AllotmentNotificationService.class));
+        // setProgressAction(new Intent(this, AllotmentNotificationService.class));
+    }
+
+    @Override
+    protected void onRefresh() {
+        Account newAccount = new Account("guest", "gardening-manager");
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        ContentResolver.setSyncAutomatically(newAccount, "org.gots.providers.garden", true);
+        ContentResolver.requestSync(newAccount, "org.gots.providers.garden", bundle);
+        super.onRefresh();
     }
 
     @Override
