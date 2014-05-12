@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import com.google.api.client.util.Lists;
 import com.jayway.android.robotium.solo.Solo;
@@ -36,6 +37,7 @@ public class TestDashboard extends ActivityInstrumentationTestCase2<DashboardAct
     public void testSimpleNavigation() {
         DashboardActivity activity = getActivity();
         assertNotNull(activity);
+        
         // Hut Activity
         Button btHut = (Button) solo.getView(R.id.dashboard_button_hut);
         solo.clickOnView(btHut);
@@ -68,7 +70,6 @@ public class TestDashboard extends ActivityInstrumentationTestCase2<DashboardAct
         // Return dashboard
         btHome = (View) solo.getView(android.R.id.home);
         solo.clickOnView(btHome);
-        solo.clickOnView(btHome);
 
         solo.assertCurrentActivity("Wrong activity Dashboard", DashboardActivity.class);
 
@@ -100,7 +101,14 @@ public class TestDashboard extends ActivityInstrumentationTestCase2<DashboardAct
     protected void tearDown() throws Exception {
         solo.finishOpenedActivities();
     }
+    
+    
 
+    public void testChangeGarden() {
+
+        Spinner gardenSelector = (Spinner)solo.getView(R.id.gard)
+    }
+    
     // public void testDisplayBlackBox() {
     // // solo.assertCurrentActivity("wrong activity", SplashScreenActivity.class);
     // // //Enter 10 in first editfield

@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="30001" android:versionName="0.30.2-SNAPSHOT" package="org.gots">
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="10"
         android:targetSdkVersion="19" />
 
     <uses-permission
@@ -34,15 +34,8 @@
            android:debuggable="false"
     -->
 
-    <application
-        android:debuggable="true"
-        android:icon="@drawable/launcher"
-        android:label="@string/app_name"
-        android:theme="@style/Theme.Styled" >
-        <activity
-            android:name=".ui.SplashScreenActivity"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.Styled" >
+    <application android:debuggable="true" android:icon="@drawable/launcher" android:label="@string/app_name" android:theme="@style/Theme.Styled">
+        <activity android:label="@string/app_name" android:name=".ui.SplashScreenActivity" android:theme="@style/Theme.Styled">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -150,9 +143,12 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".action.service.ActionNotificationService" />
-        <service android:name=".weather.service.WeatherUpdateService" />
-        <service android:name=".seed.service.SeedUpdateService" />
+        <service android:name=".action.service.ActionNotificationService"/>
+        <service android:name=".weather.service.WeatherUpdateService"/>
+        <service android:name=".seed.service.SeedUpdateService"/>
+        <service android:name=".allotment.service.AllotmentNotificationService"/>
+        <service android:name=".allotment.service.ProfilNotificationService"/>
+        
     </application>
 
 </manifest>

@@ -42,7 +42,7 @@ import com.android.vending.billing.util.IabResult;
 import com.android.vending.billing.util.Inventory;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class AboutActivity extends AbstractActivity { 
+public class AboutActivity extends AbstractActivity {
     private String TAG = "AboutActivity";
 
     protected static Handler splashHandler;
@@ -66,6 +66,7 @@ public class AboutActivity extends AbstractActivity {
     private TextView textprogressSeed;
 
     private TextView textprogressGarden;
+
     private TextView textprogressPurchase;
 
     private IabHelper buyHelper;
@@ -145,12 +146,10 @@ public class AboutActivity extends AbstractActivity {
 
     protected void addProgress() {
         asyncCounter++;
-
     };
 
     protected void removeProgress() {
         asyncCounter--;
-
     };
 
     protected void launchProgress() {
@@ -204,7 +203,8 @@ public class AboutActivity extends AbstractActivity {
                 Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
                 progressSeed.startAnimation(myFadeInAnimation);
                 textprogressSeed.setText(getResources().getString(R.string.synchro_seeds_checking));
-                ((TextView)findViewById(R.id.textProgressSeed)).setTextColor(getResources().getColor(R.color.action_warning_color));
+                ((TextView) findViewById(R.id.textProgressSeed)).setTextColor(getResources().getColor(
+                        R.color.action_warning_color));
 
                 addProgress();
             };
@@ -317,14 +317,14 @@ public class AboutActivity extends AbstractActivity {
                                 removeProgress();
                             }
                         });
-                    else{
+                    else {
                         removeProgress();
                     }
-                  
+
                 }
             });
         } catch (Exception e) {
-            Log.e(TAG, "IabHelper can not be initialized"+e.getMessage());
+            Log.e(TAG, "IabHelper can not be initialized" + e.getMessage());
             removeProgress();
 
         }

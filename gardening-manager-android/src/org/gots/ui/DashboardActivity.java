@@ -50,6 +50,11 @@ import android.view.Window;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class DashboardActivity extends AbstractActivity implements OnClickListener, ActionBar.OnNavigationListener {
+    public static final String LAUNCHER_ACTION = "org.gots.dashboard.action";
+
+    public static final String LAUNCHER_CATALOGUE = "org.gots.dashboard.catalogue";
+
+
     // GoogleAnalyticsTracker tracker;
     GotsAdvertisement adView;
 
@@ -93,9 +98,20 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
         checkPremiumAds();
         weatherIntent = new Intent(this, WeatherUpdateService.class);
+        setProgressAction(weatherIntent);
 
         registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
         registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
+
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        if (LAUNCHER_ACTION.equals(getIntent().getAction())) {
+            startActivity(new Intent(this, ActionActivity.class));
+        } else if (LAUNCHER_CATALOGUE.equals(getIntent().getAction()))
+            startActivity(new Intent(this, HutActivity.class));
+        super.onPostCreate(savedInstanceState);
     }
 
     protected void displayGardenMenu(final ActionBar actionBar) {
@@ -372,7 +388,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         refreshConnectionState();
         if (gotsPurchase.isPremium())
             menu.findItem(R.id.premium).setVisible(false);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

@@ -40,9 +40,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -85,6 +89,8 @@ public class VendorListActivity extends AbstractListFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_catalogue, menu);
+        itemRefresh = (MenuItem) menu.findItem(R.id.refresh_seed);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -101,7 +107,7 @@ public class VendorListActivity extends AbstractListFragment {
             Intent seedIntent = new Intent(mContext, SeedUpdateService.class);
             mContext.startService(seedIntent);
             tracker.trackEvent("Catalog", "menu", "refreshSeed", 0);
-
+            setActionRefresh(true);
             return true;
 
         default:
@@ -109,12 +115,40 @@ public class VendorListActivity extends AbstractListFragment {
         }
     }
 
+    protected void setActionRefresh(boolean refresh) {
+        if (itemRefresh == null)
+            return;
+
+        if (refresh) {
+            if (progressView == null)
+                progressView = (View) getActivity().getLayoutInflater().inflate(
+                        R.layout.actionbar_indeterminate_progress, null);
+            // ProgressViewActionBar iv = new ProgressViewActionBar(mContext);
+            // iv.animateBackground();
+            Animation rotation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
+            rotation.setRepeatCount(Animation.INFINITE);
+            progressView.startAnimation(rotation);
+            itemRefresh.setActionView(progressView);
+        } else {
+            if (progressView != null)
+                progressView.clearAnimation();
+            itemRefresh.setActionView(null);
+
+        }
+
+    }
+
     public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            
             updateVendorSeeds();
         }
     };
+
+    private MenuItem itemRefresh;
+
+    private View progressView;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -131,9 +165,10 @@ public class VendorListActivity extends AbstractListFragment {
         new AsyncTask<Void, Integer, List<BaseSeedInterface>>() {
 
             protected void onPreExecute() {
-                dialog = ProgressDialog.show(mContext, "", mContext.getResources().getString(R.string.gots_loading),
-                        true);
-                dialog.setCanceledOnTouchOutside(true);
+                // dialog = ProgressDialog.show(mContext, "", mContext.getResources().getString(R.string.gots_loading),
+                // true);
+                // dialog.setCanceledOnTouchOutside(true);
+                setActionRefresh(true);
                 super.onPreExecute();
             };
 
@@ -165,17 +200,16 @@ public class VendorListActivity extends AbstractListFragment {
             }
 
             protected void onPostExecute(List<BaseSeedInterface> vendorSeeds) {
-                try {
-                    dialog.dismiss();
-                    dialog = null;
-                } catch (Exception e) {
-                    // nothing
-                }
+
                 listVendorSeedAdapter.setSeeds(vendorSeeds);
                 listVendorSeedAdapter.getFilter().filter(currentFilter);
                 // if (!"".equals(currentFilter) && currentFilter != null)
                 // displaySearchBox();
                 listVendorSeedAdapter.notifyDataSetChanged();
+                // if (progressBar != null)
+                //
+                // progressBar.stopAnimatingBackground();
+                setActionRefresh(false);
 
                 super.onPostExecute(vendorSeeds);
             };
@@ -195,7 +229,8 @@ public class VendorListActivity extends AbstractListFragment {
 
     @Override
     public void onDestroy() {
-        mContext.unregisterReceiver(seedBroadcastReceiver);
+        if (seedBroadcastReceiver != null)
+            mContext.unregisterReceiver(seedBroadcastReceiver);
         super.onDestroy();
     }
 

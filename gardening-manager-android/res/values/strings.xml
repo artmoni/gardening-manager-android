@@ -158,11 +158,11 @@
     <string name="synchro.actions.ok">Actions list updated</string>
     <string name="synchro.garden.checking">Updating shared garden in progress</string>
     <string name="synchro.garden.ok">Shared garden updated</string>
+    <string name="synchro.error.server">We are sorry, server is not available at this time, try again or verify your internet connection.</string>
     <string name="login.connect.restricted">This feature is restricted to connected users</string>
     <string name="synchro.purchase.checking">Updating purchase feature</string>
     <string name="synchro.purchase.ok">Purchase feature list updated</string>
     <string name="gots.billing.title">Remove all ads and unlock all feature</string>
-        
     <string name="inapp.rating.title">Rate</string>
     <string name="inapp.rating.later">Remind me later</string>
     <string name="inapp.rating.cancel">No, thanks</string>
@@ -170,7 +170,5 @@
     <string name="inapp.purchase.noaccount">You need a Google account to buy features</string>
     <string name="inapp.purchase.buy">Buy</string>
     <string name="inapp.purchase.title">Additional features</string>
-    
-    
-    
+
 </resources>

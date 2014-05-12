@@ -3,6 +3,7 @@ package org.gots.ui;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.Inflater;
 
 import org.gots.R;
 import org.gots.authentication.GoogleAuthentication;
@@ -17,12 +18,16 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 
@@ -91,10 +96,16 @@ public class FirstLaunchActivity extends AbstractActivity {
 
                         new AsyncTask<String, Integer, String>() {
 
+                            protected void onPreExecute() {
+                                setProgressRefresh(true);
+                                findViewById(R.id.textViewError).setVisibility(View.GONE);
+
+                            };
+
                             @Override
                             protected String doInBackground(String... params) {
-
-                                GotsSocialAuthentication authentication = new GoogleAuthentication(getApplicationContext());
+                                GotsSocialAuthentication authentication = new GoogleAuthentication(
+                                        getApplicationContext());
                                 String googleToken = null;
                                 String nuxeoToken = null;
                                 try {
@@ -130,10 +141,12 @@ public class FirstLaunchActivity extends AbstractActivity {
                                     finish();
 
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "Error requesting GoogleAuthUtil.getToken",
-                                            Toast.LENGTH_SHORT).show();
-                                    
+                                    // Toast.makeText(getApplicationContext(),
+                                    // "Error requesting GoogleAuthUtil.getToken",
+                                    // Toast.LENGTH_SHORT).show();
+                                    findViewById(R.id.textViewError).setVisibility(View.VISIBLE);
                                 }
+                                setProgressRefresh(false);
                                 super.onPostExecute(resultToken);
                             }
                         }.execute(usableAccounts.get(item).name);
@@ -160,6 +173,16 @@ public class FirstLaunchActivity extends AbstractActivity {
         default:
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_firstlaunch, menu);
+        MenuItem itemRefresh = (MenuItem) menu.findItem(R.id.menuRefresh);
+        itemRefresh.setVisible(false);
+        // refreshConnectionState();
+        return super.onCreateOptionsMenu(menu);
     }
 
 }

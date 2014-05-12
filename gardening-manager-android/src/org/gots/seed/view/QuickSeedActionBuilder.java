@@ -188,6 +188,7 @@ public class QuickSeedActionBuilder {
                             @Override
                             protected Void doInBackground(SeedActionInterface... params) {
                                 SeedActionInterface actionItem = params[0];
+                                actionItem.setDuration(0);
                                 actionItem = actionSeedManager.insertAction(seed, (BaseActionInterface) actionItem);
                                 actionSeedManager.doAction(actionItem, seed);
                                 return null;

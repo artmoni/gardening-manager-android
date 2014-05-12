@@ -21,6 +21,8 @@
  * *********************************************************************** */
 package org.gots.broadcast;
 
+import android.content.Intent;
+
 /**
  * @author jcarsique
  * 
@@ -44,6 +46,10 @@ public final class BroadCastMessages {
     public static final String GARDEN_EVENT_CREATION = "org.gots.garden.create";
 
     public static final String KEY_GARDEN_ID = "org.gots.garden.id";
+
+    public static final String PROGRESS_UPDATE = "org.gots.progress.update";
+
+    public static final String PROGRESS_FINISHED = "org.gots.progress.stop";
 
     private BroadCastMessages() {
         throw new AssertionError();

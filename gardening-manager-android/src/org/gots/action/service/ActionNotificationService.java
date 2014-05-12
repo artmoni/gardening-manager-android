@@ -9,6 +9,7 @@ import org.gots.action.BaseActionInterface;
 import org.gots.action.GotsActionSeedManager;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.provider.GotsActionSeedProvider;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
@@ -16,6 +17,7 @@ import org.gots.seed.SeedUtil;
 import org.gots.seed.service.GotsService;
 import org.gots.seed.view.SeedWidget;
 import org.gots.ui.ActionActivity;
+import org.gots.ui.DashboardActivity;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -42,8 +44,7 @@ public class ActionNotificationService extends GotsService {
     @Override
     public void onCreate() {
         growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(ActionNotificationService.this);
-        actionseedManager = GotsActionSeedManager.getInstance().initIfNew(
-                ActionNotificationService.this);
+        actionseedManager = GotsActionSeedManager.getInstance().initIfNew(ActionNotificationService.this);
 
         super.onCreate();
     }
@@ -57,6 +58,29 @@ public class ActionNotificationService extends GotsService {
         actions.clear();
 
         new AsyncTask<Void, Void, Void>() {
+
+            private Thread thread;
+
+            boolean shouldcontinue = true;
+
+            protected void onPreExecute() {
+                thread = new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            while (shouldcontinue) {
+                                sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
+                                sleep(1000);
+                            }
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+
+                thread.start();
+            };
+
             @Override
             protected Void doInBackground(Void... params) {
                 ArrayList<GrowingSeedInterface> allSeeds = growingSeedManager.getGrowingSeeds();
@@ -67,7 +91,6 @@ public class ActionNotificationService extends GotsService {
                     List<SeedActionInterface> seedActions;
 
                     seedActions = actionseedManager.getActionsToDoBySeed(seed);
-
                     actions.addAll(seedActions);
                 }
                 if (!actions.isEmpty()) {
@@ -81,6 +104,12 @@ public class ActionNotificationService extends GotsService {
 
                 return null;
             }
+
+            protected void onPostExecute(Void result) {
+                shouldcontinue = false;
+                sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
+
+            };
         }.execute();
 
         return super.onStartCommand(intent, flags, startId);
@@ -120,7 +149,8 @@ public class ActionNotificationService extends GotsService {
         // notification
         // PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, ActionActivity.class), 0);
 
-        Intent resultIntent = new Intent(this, ActionActivity.class);
+        Intent resultIntent = new Intent(this, DashboardActivity.class);
+        resultIntent.setAction(DashboardActivity.LAUNCHER_ACTION);
 
         // The stack builder object will contain an artificial back stack for the
         // started Activity.

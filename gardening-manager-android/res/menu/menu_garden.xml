@@ -5,18 +5,18 @@
     <item
         android:id="@+id/new_allotment"
         android:icon="@drawable/bt_add_allotment"
-        app:showAsAction="ifRoom"
-        android:title="@string/garden.menu.add.button"/>
+        android:title="@string/garden.menu.add.button"
+        app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/help"
         android:icon="@drawable/help"
-        app:showAsAction="ifRoom"
-        android:title="@string/menu.help"/>
+        android:title="@string/menu.help"
+        app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/delete_garden"
         android:icon="@drawable/action_delete"
-        app:showAsAction="ifRoom"
         android:title="@string/action.delete"
-        android:visible="false"/>
+        android:visible="false"
+        app:showAsAction="ifRoom"/>
 
 </menu>

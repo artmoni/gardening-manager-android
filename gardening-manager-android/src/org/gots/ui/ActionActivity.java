@@ -14,18 +14,23 @@ import java.util.ArrayList;
 
 import org.gots.R;
 import org.gots.action.adapter.ListAllActionAdapter;
+import org.gots.action.service.ActionNotificationService;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.bean.BaseAllotmentInterface;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.weather.service.WeatherUpdateService;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,6 +42,8 @@ public class ActionActivity extends AbstractActivity {
 
     ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
 
+    private int seedid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,21 +53,52 @@ public class ActionActivity extends AbstractActivity {
         bar.setTitle(R.string.dashboard_actions_name);
 
         setContentView(R.layout.actions);
-        int seedid = 0;
+        seedid = 0;
 
         if (getIntent().getExtras() != null)
             seedid = getIntent().getExtras().getInt("org.gots.seed.id");
 
+        if (!gotsPurchase.isPremium()) {
+            GotsAdvertisement ads = new GotsAdvertisement(this);
+
+            LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
+            layout.addView(ads.getAdsLayout());
+        }
+        Intent actionIntent = new Intent(this, ActionNotificationService.class);
+        setProgressAction(actionIntent);
+
+//        registerReceiver(actionBroadcastReceiver, new IntentFilter(BroadCastMessages.PROGRESS_FINISHED));
+        startService(new Intent(this,ActionNotificationService.class));
+    }
+    public BroadcastReceiver actionBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+//            if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
+//            }
+        }
+    };
+
+    
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
         new AsyncTask<Integer, Void, ArrayList<GrowingSeedInterface>>() {
-            private ProgressDialog dialog;
             private ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
 
             private ListAllActionAdapter listActions;
+
             protected void onPreExecute() {
-                dialog = ProgressDialog.show(ActionActivity.this, "", getResources().getString(R.string.gots_loading),
-                        true);
-                dialog.setCanceledOnTouchOutside(true);
+                // dialog = ProgressDialog.show(ActionActivity.this, "",
+                // getResources().getString(R.string.gots_loading),
+                // true);
+                // dialog.setCanceledOnTouchOutside(true);
+//                setActionRefresh(true);
             };
+
             @Override
             protected ArrayList<GrowingSeedInterface> doInBackground(Integer... params) {
                 GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(
@@ -85,34 +123,16 @@ public class ActionActivity extends AbstractActivity {
                 listAllotments.setAdapter(listActions);
                 listAllotments.setDivider(null);
                 listAllotments.setDividerHeight(0);
-                try {
-                    dialog.dismiss();
-                    dialog = null;
-                } catch (Exception e) {
-                    // nothing
-                }
             };
         }.execute(seedid);
-
-        if (!gotsPurchase.isPremium()) {
-            GotsAdvertisement ads = new GotsAdvertisement(this);
-
-            LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
-            layout.addView(ads.getAdsLayout());
-        }
-
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
+        super.onPostCreate(savedInstanceState);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_action, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

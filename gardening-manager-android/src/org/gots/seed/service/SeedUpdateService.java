@@ -41,8 +41,26 @@ public class SeedUpdateService extends GotsService {
         // mRemoteProvider.getVendorSeeds();
         new AsyncTask<Void, Integer, List<BaseSeedInterface>>() {
 
-            protected void onPreExecute() {
+            private Thread thread;
+            boolean shouldcontinue = true;
 
+            protected void onPreExecute() {
+                thread = new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            while (shouldcontinue) {
+                                sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
+                                sleep(1000);
+                            }
+                            
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+
+                thread.start();
                 super.onPreExecute();
             };
 
@@ -62,6 +80,8 @@ public class SeedUpdateService extends GotsService {
                 }
                 handler.removeCallbacks(sendUpdatesToUI);
                 handler.postDelayed(sendUpdatesToUI, 0); // 1 second
+shouldcontinue=false;                sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
+                
                 super.onPostExecute(vendorSeeds);
                 stopSelf();
             };
