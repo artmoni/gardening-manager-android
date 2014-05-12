@@ -13,6 +13,8 @@ import org.gots.authentication.AuthenticationActivity;
 import org.gots.garden.GardenInterface;
 import org.gots.inapp.GotsPurchaseItem;
 import org.gots.preferences.GotsPreferences;
+import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.service.SeedNotification;
 import org.gots.seed.service.SeedUpdateService;
 import org.gots.weather.WeatherManager;
 
@@ -197,9 +199,10 @@ public class AboutActivity extends AbstractActivity {
         /*
          * Synchronize Seeds
          */
-
-        // Account newAccount = new Account("Guest", "gardening-manager");
-        // ContentResolver.requestSync(newAccount, "org.gots.providers.seeds", Bundle.EMPTY);
+      
+         Account newAccount = new Account("Guest", "gardening-manager");
+         ContentResolver.setSyncAutomatically(newAccount, "org.gots.providers.seeds", true);
+         ContentResolver.requestSync(newAccount, "org.gots.providers.seeds", Bundle.EMPTY);
         // new AsyncTask<Void, Integer, Void>() {
         // // Intent startServiceIntent2 = new Intent(getApplicationContext(), SeedUpdateService.class);
         //
