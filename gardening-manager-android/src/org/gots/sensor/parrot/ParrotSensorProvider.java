@@ -121,4 +121,24 @@ public class ParrotSensorProvider extends LocalSeedProvider {
         }
         return sensorSampleFertilizers;
     }
+    public List<ParrotSampleTemperature> getSamples2(String locationId) {
+        getToken();
+        String api_1_03_sample = "/sensor_data/v2/sample/location/" + locationId;
+        List<ParrotSampleTemperature> sensorSampleTemperature = new ArrayList<ParrotSampleTemperature>();
+        try {
+            JSONObject json = (JSONObject) authentication.getJSON(api_1_03_sample);
+            JSONArray jsonFertilizer = json.getJSONArray("samples");
+            Gson gson = new Gson();
+            for (int i = 0; i < jsonFertilizer.length(); i++) {
+                ParrotSampleTemperature location = gson.fromJson(jsonFertilizer.getString(i),
+                        ParrotSampleTemperature.class);
+                sensorSampleTemperature.add(location);
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage(), e);
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+        return sensorSampleTemperature;
+    }
 }

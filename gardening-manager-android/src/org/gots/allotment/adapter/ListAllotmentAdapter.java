@@ -29,6 +29,7 @@ import org.gots.seed.adapter.ListGrowingSeedAdapter;
 import org.gots.sensor.LocationListAdapter;
 import org.gots.sensor.parrot.ParrotLocation;
 import org.gots.sensor.parrot.ParrotSampleFertilizer;
+import org.gots.sensor.parrot.ParrotSampleTemperature;
 import org.gots.sensor.parrot.ParrotSensor;
 import org.gots.sensor.parrot.ParrotSensorProvider;
 import org.gots.ui.HutActivity;
@@ -247,6 +248,7 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
                     private LocationListAdapter sensorListAdapter;
 
                     List<ParrotSampleFertilizer> samples = null;
+                    List<ParrotSampleTemperature> samplesTemp = null;
 
                     @Override
                     protected List<ParrotLocation> doInBackground(Void... params) {
@@ -255,6 +257,7 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
                         List<ParrotLocation> locations = sensorProvider.getLocations();
                         sensorProvider.getStatus();
                         samples = sensorProvider.getSamples(locations.get(0).getLocation_identifier());
+                        samplesTemp = sensorProvider.getSamples2(locations.get(0).getLocation_identifier());
 
                         return locations;
                     }
@@ -279,6 +282,24 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
                             for (ParrotSampleFertilizer fertilizer : samples) {
                                 chd = chd.concat(String.valueOf(fertilizer.getFertilizer_level() * 100));
                                 chd = chd.concat(",");
+                            }
+                            chd = chd.substring(0, chd.length() - 1);
+                            String url = "http://chart.apis.google.com/chart?cht=ls&chs=250x100&chd=t:" + chd;
+                            webView.loadUrl(url);
+                            Log.d(ListAllotmentAdapter.class.getName(), url);
+                            AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
+                            alert.setView(webView);
+                            alert.show();
+                        }
+                        if (samplesTemp != null) {
+                            WebView webView = new WebView(mContext);
+                            String chd = new String();
+                            int i=0;
+                            for (ParrotSampleTemperature sampleTemp : samplesTemp) {
+                                chd = chd.concat(String.valueOf(sampleTemp.getAir_temperature_celsius() ));
+                                chd = chd.concat(",");
+                                if (i++>=50)
+                                    break;
                             }
                             chd = chd.substring(0, chd.length() - 1);
                             String url = "http://chart.apis.google.com/chart?cht=ls&chs=250x100&chd=t:" + chd;
