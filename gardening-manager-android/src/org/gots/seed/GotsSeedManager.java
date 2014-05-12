@@ -33,9 +33,9 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     private boolean initDone = false;
 
-    private List<BaseSeedInterface> newSeeds;
+    private List<BaseSeedInterface> newSeeds = new ArrayList<BaseSeedInterface>();
 
-    private List<BaseSeedInterface> allSeeds;
+    private List<BaseSeedInterface> allSeeds = new ArrayList<BaseSeedInterface>();
 
     private static Exception firstCall;
 
@@ -92,13 +92,20 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     @Override
     public List<BaseSeedInterface> getVendorSeeds(boolean force) {
+        if (!force && allSeeds.size() > 0)
+            return allSeeds;
+
         ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
         if (force && ni != null && ni.isConnected()) {
             GotsSeedProvider provider = new NuxeoSeedProvider(mContext);
             allSeeds = provider.getVendorSeeds(force);
             newSeeds = provider.getNewSeeds();
+        } else {
+            LocalSeedProvider provider = new LocalSeedProvider(mContext);
+            allSeeds = provider.getVendorSeeds(force);
         }
+
         return allSeeds;
     }
 
