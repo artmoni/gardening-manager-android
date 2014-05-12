@@ -222,7 +222,7 @@ public class AboutActivity extends AbstractActivity {
             @Override
             protected void onPostExecute(Void result) {
                 List<BaseSeedInterface> newSeeds = seedManager.getNewSeeds();
-                if (newSeeds.size() > 0) {
+                if (newSeeds != null && newSeeds.size() > 0) {
                     SeedNotification notification = new SeedNotification(getApplicationContext());
                     notification.createNotification(newSeeds);
                 }

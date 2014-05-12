@@ -97,6 +97,7 @@ public class MySeedsListAdapter extends SeedListAdapter {
 
                 }
             });
+            holder.actionBox.addView(actionWidget);
 
         } else {
 
@@ -137,7 +138,7 @@ public class MySeedsListAdapter extends SeedListAdapter {
 
                 }
             });
-
+            
             SowingAction sowing = new SowingAction(mContext);
             sowing.setState(ActionState.NORMAL);
             ActionWidget sowingWidget = new ActionWidget(mContext, sowing);
