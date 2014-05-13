@@ -19,12 +19,15 @@ import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.inapp.AppRater;
 import org.gots.inapp.GotsBillingDialog;
+import org.gots.provider.ActionsContentProvider;
 import org.gots.weather.service.WeatherUpdateService;
 import org.gots.weather.view.WeatherView;
 import org.gots.weather.view.WeatherWidget;
 
+import android.accounts.Account;
 import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -98,7 +101,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
         checkPremiumAds();
         weatherIntent = new Intent(this, WeatherUpdateService.class);
-//        setProgressAction(weatherIntent);
+        // setProgressAction(weatherIntent);
 
         registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
         registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
@@ -359,9 +362,9 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         case R.id.settings:
             Intent settingsIntent = new Intent(this, PreferenceActivity.class);
             startActivity(settingsIntent);
-//            FragmentTransaction ft = getFragmentManager().beginTransaction();
-//            ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-//            ft.replace(R.id.idContent, new PreferenceActivity()).addToBackStack("back").commit();
+            // FragmentTransaction ft = getFragmentManager().beginTransaction();
+            // ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+            // ft.replace(R.id.idContent, new PreferenceActivity()).addToBackStack("back").commit();
             return true;
 
         case R.id.connection:
@@ -413,4 +416,8 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         return false;
     }
 
+    @Override
+    protected void onRefresh() {
+        startService(weatherIntent);
+    }
 }

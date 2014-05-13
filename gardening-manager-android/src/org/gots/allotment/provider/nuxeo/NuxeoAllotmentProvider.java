@@ -88,6 +88,7 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
             myAllotments = synchronize(remoteAllotments, localAllotments);
         } catch (Exception e) {
             Log.e(TAG, "getMyAllotments " + e.getMessage(), e);
+            return super.getMyAllotments();
         }
         return myAllotments;
     }

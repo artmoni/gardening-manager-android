@@ -58,7 +58,7 @@
     <string name="allotment.description1">Je sélectionne le bouton menu pour ajouter une parcelle.</string>
     <string name="allotment.description2">Le menu parcelle, j\'effectue des actions sur une parcelle. Par exemple: je plante une graine.</string>
     <string name="allotment.description3">Je suis l\'évolution de mes légumes, je note mes actions, j\'obtiens des informations.</string>
-    <string name="garden.menu.add.button">Ajouter une parcelle</string>
+    <string name="allotment.button.add">Ajouter une parcelle</string>
     <string name="profile.menu.localize">Localiser mon potager</string>
     <string name="profile.menu.localize.description">Je géolocalise mon potager pour obtenir la météo</string>
     <string name="profile.menu.add">Ajouter un potager</string>

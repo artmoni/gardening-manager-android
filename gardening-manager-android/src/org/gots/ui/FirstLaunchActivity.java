@@ -237,4 +237,9 @@ public class FirstLaunchActivity extends AbstractActivity {
             }
         }
     }
+    @Override
+    protected void onRefresh() {
+        // TODO Auto-generated method stub
+        
+    }
 }

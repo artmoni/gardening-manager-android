@@ -13,6 +13,7 @@ import org.gots.authentication.AuthenticationActivity;
 import org.gots.garden.GardenInterface;
 import org.gots.inapp.GotsPurchaseItem;
 import org.gots.preferences.GotsPreferences;
+import org.gots.provider.SeedsContentProvider;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.service.SeedNotification;
 import org.gots.seed.service.SeedUpdateService;
@@ -199,10 +200,13 @@ public class AboutActivity extends AbstractActivity {
         /*
          * Synchronize Seeds
          */
-      
-         Account newAccount = new Account("Guest", "gardening-manager");
-         ContentResolver.setSyncAutomatically(newAccount, "org.gots.providers.seeds", true);
-         ContentResolver.requestSync(newAccount, "org.gots.providers.seeds", Bundle.EMPTY);
+
+        Account newAccount = gotsPrefs.getUserAccount();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        ContentResolver.setSyncAutomatically(newAccount, SeedsContentProvider.AUTHORITY, true);
+        ContentResolver.requestSync(newAccount, SeedsContentProvider.AUTHORITY, bundle);
         // new AsyncTask<Void, Integer, Void>() {
         // // Intent startServiceIntent2 = new Intent(getApplicationContext(), SeedUpdateService.class);
         //
@@ -487,6 +491,11 @@ public class AboutActivity extends AbstractActivity {
             alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
                     AlarmManager.INTERVAL_DAY, seedIntent);
         }
+    }
+    
+    @Override
+    protected void onRefresh() {
+        
     }
 
 }

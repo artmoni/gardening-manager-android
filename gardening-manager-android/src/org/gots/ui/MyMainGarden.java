@@ -24,6 +24,7 @@ import org.gots.allotment.service.AllotmentNotificationService;
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.provider.AllotmentContentProvider;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.weather.view.WeatherWidget;
 
@@ -121,13 +122,9 @@ public class MyMainGarden extends AbstractActivity {
 
     @Override
     protected void onRefresh() {
-        Account newAccount = new Account("guest", "gardening-manager");
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-        ContentResolver.setSyncAutomatically(newAccount, "org.gots.providers.garden", true);
-        ContentResolver.requestSync(newAccount, "org.gots.providers.garden", bundle);
-        super.onRefresh();
+        Account userAccount = gotsPrefs.getUserAccount();
+        ContentResolver.setSyncAutomatically(userAccount, AllotmentContentProvider.AUTHORITY, true);
+        ContentResolver.requestSync(userAccount, AllotmentContentProvider.AUTHORITY, Bundle.EMPTY);
     }
 
     @Override
@@ -262,7 +259,6 @@ public class MyMainGarden extends AbstractActivity {
                         MyMainGarden.this);
 
                 for (int i = 0; i < allotments.size(); i++) {
-
                     allotments.get(i).setSeeds(growingSeedManager.getGrowingSeedsByAllotment(allotments.get(i)));
                 }
                 return allotments;

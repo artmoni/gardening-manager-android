@@ -16,14 +16,17 @@ import java.util.List;
 import org.gots.IntentIntegratorSupportV4;
 import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
+import org.gots.provider.AllotmentContentProvider;
+import org.gots.provider.SeedsContentProvider;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.ui.fragment.AbstractFragmentActivity;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import android.accounts.Account;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -60,7 +63,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 
-public class HutActivity extends AbstractFragmentActivity {
+public class HutActivity extends AbstractActivity {
 
     // private ListVendorSeedAdapter lvsea;
     ListView listSeeds;
@@ -90,7 +93,7 @@ public class HutActivity extends AbstractFragmentActivity {
         actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setHomeButtonEnabled(true);
-        
+
         // displaySpinnerFilter();
         displaySearchBox();
         if (!gotsPurchase.isPremium()) {
@@ -117,7 +120,8 @@ public class HutActivity extends AbstractFragmentActivity {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                findViewById(R.id.clearSearchFilter).setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_search));
+                findViewById(R.id.clearSearchFilter).setBackgroundDrawable(
+                        getResources().getDrawable(R.drawable.ic_search));
                 clearFilter = false;
             }
 
@@ -147,9 +151,9 @@ public class HutActivity extends AbstractFragmentActivity {
             @Override
             public void onClick(View v) {
                 performSearch(filter);
-                 EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
-                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                 imm.hideSoftInputFromWindow(filter.getWindowToken(), 0);
+                EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(filter.getWindowToken(), 0);
 
                 // EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
                 // InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -231,9 +235,9 @@ public class HutActivity extends AbstractFragmentActivity {
             new AsyncTask<Void, Void, BaseSeedInterface>() {
                 @Override
                 protected BaseSeedInterface doInBackground(Void... params) {
-                    BaseSeedInterface scanSeed = seedProvider.getSeedByBarCode(scanResult.getContents());
+                    BaseSeedInterface scanSeed = seedManager.getSeedByBarCode(scanResult.getContents());
                     if (scanSeed != null) {
-                        seedProvider.addToStock(scanSeed, gardenProvider.getCurrentGarden());
+                        seedManager.addToStock(scanSeed, gardenManager.getCurrentGarden());
                     }
 
                     return scanSeed;
@@ -319,7 +323,7 @@ public class HutActivity extends AbstractFragmentActivity {
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
                 MySeedsListActivity.class, null);
 
-        if (gotsPref.isConnectedToServer()) {
+        if (gotsPrefs.isConnectedToServer()) {
             args = new Bundle();
             args.putBoolean(VendorListActivity.FILTER_FAVORITES, true);
             mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_favorites)),
@@ -345,7 +349,7 @@ public class HutActivity extends AbstractFragmentActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_hut, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -357,7 +361,6 @@ public class HutActivity extends AbstractFragmentActivity {
             i = new Intent(this, NewSeedActivity.class);
             startActivity(i);
             return true;
-
         case android.R.id.home:
             finish();
             return true;
@@ -370,7 +373,6 @@ public class HutActivity extends AbstractFragmentActivity {
             Intent browserIntent = new Intent(this, WebHelpActivity.class);
             browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
             startActivity(browserIntent);
-
             return true;
         default:
             return super.onOptionsItemSelected(item);
@@ -503,5 +505,11 @@ public class HutActivity extends AbstractFragmentActivity {
             // mViewPager.setCurrentItem(itemId);
             mActionBar.setSelectedNavigationItem(itemId);
         }
+    }
+    @Override
+    protected void onRefresh() {
+        Account userAccount = gotsPrefs.getUserAccount();
+        ContentResolver.setSyncAutomatically(userAccount, SeedsContentProvider.AUTHORITY, true);
+        ContentResolver.requestSync(userAccount, SeedsContentProvider.AUTHORITY, Bundle.EMPTY);
     }
 }

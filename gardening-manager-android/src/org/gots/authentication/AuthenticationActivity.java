@@ -6,11 +6,13 @@ import java.util.List;
 
 import org.gots.R;
 import org.gots.analytics.GotsAnalytics;
+import org.gots.preferences.GotsPreferences;
 
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -56,16 +58,19 @@ public class AuthenticationActivity extends AccountAuthenticatorActivity {
 
     public static final String AUTH_TOKEN_TYPE = "token.nuxeo";
 
+    private GotsPreferences gotsPreferences;
+
     @Override
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         this.setContentView(R.layout.first_launch);
 
+        gotsPreferences = GotsPreferences.getInstance().initIfNew(getApplicationContext());
+
         if (getIntent().getExtras() != null) {
             Bundle extras = getIntent().getExtras();
             mAuthTokenType = extras.getString(ARG_AUTH_TYPE);
             mAccountType = extras.getString(ARG_ACCOUNT_TYPE);
-
         }
 
         Button buttonCreateProfile = (Button) findViewById(R.id.buttonCreate);
@@ -133,11 +138,11 @@ public class AuthenticationActivity extends AccountAuthenticatorActivity {
     void launchGoogle() {
         AccountManager manager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
         Account[] accounts = manager.getAccounts();
-        final List<Account> usableAccounts = new ArrayList<Account>();
+        final List<Account> googleAccounts = new ArrayList<Account>();
         List<String> items = new ArrayList<String>();
         for (Account account : accounts) {
             if ("com.google".equals(account.type)) {
-                usableAccounts.add(account);
+                googleAccounts.add(account);
                 items.add(String.format("%s (%s)", account.name, account.type));
             }
         }
@@ -170,7 +175,7 @@ public class AuthenticationActivity extends AccountAuthenticatorActivity {
                                                 getApplicationContext());
                                         nuxeoToken = nuxeoAuthentication.request_oauth2_token(googleToken);
 
-                                        res.putExtra(AccountManager.KEY_ACCOUNT_NAME, usableAccounts.get(item).name);
+                                        res.putExtra(AccountManager.KEY_ACCOUNT_NAME, googleAccounts.get(item).name);
                                         res.putExtra(AccountManager.KEY_ACCOUNT_TYPE, mAccountType);
                                         res.putExtra(AccountManager.KEY_AUTHTOKEN, nuxeoToken);
                                         res.putExtra(PARAM_USER_PASS, "");
@@ -209,7 +214,7 @@ public class AuthenticationActivity extends AccountAuthenticatorActivity {
                                 // setActionRefresh(false);
                                 super.onPostExecute(resultToken);
                             }
-                        }.execute(usableAccounts.get(item).name);
+                        }.execute(googleAccounts.get(item).name);
                     }
 
                 }).show();
@@ -220,11 +225,16 @@ public class AuthenticationActivity extends AccountAuthenticatorActivity {
         AccountManager mAccountManager = AccountManager.get(this);
         String accountName = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
         String accountPassword = intent.getStringExtra(PARAM_USER_PASS);
-        final Account account = new Account(accountName, intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
+         final Account account = new Account(accountName, intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
+//        final Account account = gotsPreferences.getUserAccount();
+
         if (getIntent().getBooleanExtra(ARG_IS_ADDING_NEW_ACCOUNT, false)) {
             String authtoken = intent.getStringExtra(AccountManager.KEY_AUTHTOKEN);
             // Creating the account on the device and setting the auth token we got
             // (Not setting the auth token will cause another call to the server to authenticate the user)
+//            Bundle bundle = new Bundle();
+//            bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+//            bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
             mAccountManager.addAccountExplicitly(account, accountPassword, null);
             mAccountManager.setAuthToken(account, AUTH_TOKEN_TYPE, authtoken);
         } else {
@@ -232,7 +242,6 @@ public class AuthenticationActivity extends AccountAuthenticatorActivity {
         }
         setAccountAuthenticatorResult(intent.getExtras());
         setResult(RESULT_OK, intent);
-        finish();
     }
     // public void onSaveClick(View v) {
     // TextView tvUsername;

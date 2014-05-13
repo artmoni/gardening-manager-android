@@ -5,9 +5,9 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
-public class DummySeedProvider extends ContentProvider {
+public class AllotmentContentProvider extends ContentProvider {
 
-    public static String AUTHORITY = "org.gots.providers.seeds";
+    public static String AUTHORITY = "org.gots.providers.allotment";
 
     @Override
     public boolean onCreate() {

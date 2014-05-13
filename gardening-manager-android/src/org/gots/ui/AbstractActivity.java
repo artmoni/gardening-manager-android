@@ -173,9 +173,7 @@ public abstract class AbstractActivity extends ActionBarActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-     protected void onRefresh(){
-         
-     }
+     abstract protected void onRefresh();
 
     protected void setProgressRefresh(boolean refresh) {
         if (menu == null)
@@ -191,16 +189,16 @@ public abstract class AbstractActivity extends ActionBarActivity {
                 Animation rotation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
                 rotation.setRepeatCount(Animation.INFINITE);
                 progressView.startAnimation(rotation);
+//                progressView.setBackgroundColor(getResources().getColor(R.color.action_warning_color));
             }
-             itemRefresh.setActionView(progressView);
-//            itemRefresh = MenuItemCompat.setActionView(itemRefresh, progressView);
-            itemRefresh.getActionView().setBackgroundColor(getResources().getColor(R.color.action_warning_color));
+//             itemRefresh.setActionView(progressView);
+            itemRefresh = MenuItemCompat.setActionView(itemRefresh, progressView);
         } else {
             if (progressView != null) {
                 progressView.clearAnimation();
             }
-             itemRefresh.setActionView(null);
-//            itemRefresh = MenuItemCompat.setActionView(itemRefresh, null);
+//             itemRefresh.setActionView(null);
+            itemRefresh = MenuItemCompat.setActionView(itemRefresh, null);
 
         }
 

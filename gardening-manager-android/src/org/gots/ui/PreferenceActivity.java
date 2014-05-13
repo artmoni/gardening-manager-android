@@ -2,7 +2,7 @@ package org.gots.ui;
 
 import org.gots.R;
 import org.gots.preferences.GotsPreferences;
-import org.gots.provider.DummySeedProvider;
+import org.gots.provider.SeedsContentProvider;
 import org.gots.provider.GardenContentProvider;
 import org.nuxeo.android.config.NuxeoServerConfig;
 
@@ -62,8 +62,8 @@ public class PreferenceActivity extends android.preference.PreferenceActivity im
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         displayPreference(key, gotsPreferences.get(key, null));
         if (GotsPreferences.SYNC_SCHEDULE.equals(key)) {
-            ContentResolver.setSyncAutomatically(mAccount, DummySeedProvider.AUTHORITY, true);
-            ContentResolver.addPeriodicSync(mAccount, DummySeedProvider.AUTHORITY, new Bundle(),
+            ContentResolver.setSyncAutomatically(mAccount, SeedsContentProvider.AUTHORITY, true);
+            ContentResolver.addPeriodicSync(mAccount, SeedsContentProvider.AUTHORITY, new Bundle(),
                     gotsPreferences.getScheduleTimeForNotification() * SYNC_INTERVAL);
 
             ContentResolver.setSyncAutomatically(mAccount, GardenContentProvider.AUTHORITY, true);

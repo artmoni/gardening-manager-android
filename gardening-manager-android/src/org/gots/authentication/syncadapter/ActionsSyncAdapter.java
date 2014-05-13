@@ -24,8 +24,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
-public class SeedSyncAdapter extends GotsSyncAdapter {
-    public SeedSyncAdapter(Context context, boolean autoInitialize) {
+public class ActionsSyncAdapter extends GotsSyncAdapter {
+    public ActionsSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
 
     }
@@ -33,20 +33,21 @@ public class SeedSyncAdapter extends GotsSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider,
             SyncResult syncResult) {
-        Log.d("SeedSyncAdapter", "onPerformSync for account[" + account.name + "]");
+        Log.d("ActionsSyncAdapter", "onPerformSync for account[" + account.name + "]");
         getContext().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
-
-        seedManager.force_refresh(true);
-        
-        seedManager.getVendorSeeds(true);
-
-        seedManager.getMyStock(gardenManager.getCurrentGarden());
-
-        List<BaseSeedInterface> newSeeds = seedManager.getNewSeeds();
-        if (newSeeds != null && newSeeds.size() > 0) {
-            SeedNotification notification = new SeedNotification(getContext());
-            notification.createNotification(newSeeds);
-        }
+//
+//
+//        seedManager.force_refresh(true);
+//        seedManager.getVendorSeeds(true);
+//
+//        seedManager.getMyStock(gardenManager.getCurrentGarden());
+//
+//        List<BaseSeedInterface> newSeeds = seedManager.getNewSeeds();
+//        if (newSeeds != null && newSeeds.size() > 0) {
+//            SeedNotification notification = new SeedNotification(getContext());
+//            notification.createNotification(newSeeds);
+//        }
+        actionseedManager.getActionsToDo();
         getContext().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
 
     }

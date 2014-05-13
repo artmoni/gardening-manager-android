@@ -69,7 +69,7 @@ public class ProfileActivity extends AbstractActivity {
             layout.addView(ads.getAdsLayout());
         }
 
-//        setProgressAction(new Intent(this, GardenNotificationService.class));
+        // setProgressAction(new Intent(this, GardenNotificationService.class));
     }
 
     public BroadcastReceiver gardenBroadcastReceiver = new BroadcastReceiver() {
@@ -151,7 +151,7 @@ public class ProfileActivity extends AbstractActivity {
             AccountManager accountManager = AccountManager.get(getApplicationContext());
             Account[] accounts = accountManager.getAccountsByType("gardening-manager");
             Account a;
-            if (accounts.length>0){
+            if (accounts.length > 0) {
                 a = accounts[0];
                 ContentResolver.requestSync(a, GardenContentProvider.AUTHORITY, new Bundle());
             }
@@ -194,17 +194,11 @@ public class ProfileActivity extends AbstractActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_profile, menu);
-
         return super.onCreateOptionsMenu(menu);
     }
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        return super.onPrepareOptionsMenu(menu);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -221,7 +215,7 @@ public class ProfileActivity extends AbstractActivity {
             startActivity(browserIntent);
             return true;
 
-        case R.id.new_gaden:
+        case R.id.new_garden:
             Intent i = new Intent(this, ProfileCreationActivity.class);
             startActivity(i);
             return true;
@@ -264,6 +258,13 @@ public class ProfileActivity extends AbstractActivity {
         default:
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onRefresh() {
+        Account userAccount = gotsPrefs.getUserAccount();
+        ContentResolver.setSyncAutomatically(userAccount, "org.gots.providers.garden", true);
+        ContentResolver.requestSync(userAccount, "org.gots.providers.garden", Bundle.EMPTY);
     }
 
 }
