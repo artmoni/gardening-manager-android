@@ -42,10 +42,16 @@ public class GardenSyncAdapter extends GotsSyncAdapter {
             SyncResult syncResult) {
         Log.d("GardenSyncAdapter", "onPerformSync for account[" + account.name + "]");
        
-        getContext().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
-
+        final Intent intent = new Intent();
+        intent.setAction(BroadCastMessages.PROGRESS_UPDATE);
+        intent.putExtra("AUTHORITY", authority);
+        getContext().sendBroadcast(intent);
+        
+        
         gardens = gardenManager.getMyGardens(true);
-        mContext.sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
+        
+        intent.setAction(BroadCastMessages.PROGRESS_FINISHED);
+        getContext().sendBroadcast(intent);
 
     }
 }

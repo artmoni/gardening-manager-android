@@ -34,21 +34,24 @@ public class ActionsSyncAdapter extends GotsSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider,
             SyncResult syncResult) {
         Log.d("ActionsSyncAdapter", "onPerformSync for account[" + account.name + "]");
-        getContext().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
-//
-//
-//        seedManager.force_refresh(true);
-//        seedManager.getVendorSeeds(true);
-//
-//        seedManager.getMyStock(gardenManager.getCurrentGarden());
-//
-//        List<BaseSeedInterface> newSeeds = seedManager.getNewSeeds();
-//        if (newSeeds != null && newSeeds.size() > 0) {
-//            SeedNotification notification = new SeedNotification(getContext());
-//            notification.createNotification(newSeeds);
-//        }
+        final Intent intent = new Intent();
+        intent.setAction(BroadCastMessages.PROGRESS_UPDATE);
+        intent.putExtra("AUTHORITY", authority);
+        getContext().sendBroadcast(intent);
+        //
+        //
+        // seedManager.force_refresh(true);
+        // seedManager.getVendorSeeds(true);
+        //
+        // seedManager.getMyStock(gardenManager.getCurrentGarden());
+        //
+        // List<BaseSeedInterface> newSeeds = seedManager.getNewSeeds();
+        // if (newSeeds != null && newSeeds.size() > 0) {
+        // SeedNotification notification = new SeedNotification(getContext());
+        // notification.createNotification(newSeeds);
+        // }
         actionseedManager.getActionsToDo();
-        getContext().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
-
+        intent.setAction(BroadCastMessages.PROGRESS_FINISHED);
+        getContext().sendBroadcast(intent);
     }
 }

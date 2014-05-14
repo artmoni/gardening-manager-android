@@ -30,25 +30,29 @@ public class AllotmentSyncAdapter extends GotsSyncAdapter {
 
     }
 
-
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider,
             SyncResult syncResult) {
         Log.d("AllotmentSyncAdapter", "onPerformSync for account[" + account.name + "]");
-        getContext().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
-//
-//        seedManager.force_refresh(true);
-//        seedManager.getVendorSeeds(true);
-//
-//        seedManager.getMyStock(gardenManager.getCurrentGarden());
-//
-//        List<BaseSeedInterface> newSeeds = seedManager.getNewSeeds();
-//        if (newSeeds != null && newSeeds.size() > 0) {
-//            SeedNotification notification = new SeedNotification(getContext());
-//            notification.createNotification(newSeeds);
-//        }
+
+        final Intent intent = new Intent();
+        intent.setAction(BroadCastMessages.PROGRESS_UPDATE);
+        intent.putExtra("AUTHORITY", authority);
+        getContext().sendBroadcast(intent);
+
+        // seedManager.force_refresh(true);
+        // seedManager.getVendorSeeds(true);
+        //
+        // seedManager.getMyStock(gardenManager.getCurrentGarden());
+        //
+        // List<BaseSeedInterface> newSeeds = seedManager.getNewSeeds();
+        // if (newSeeds != null && newSeeds.size() > 0) {
+        // SeedNotification notification = new SeedNotification(getContext());
+        // notification.createNotification(newSeeds);
+        // }
         allotmentManager.getMyAllotments();
-        getContext().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
+        intent.setAction(BroadCastMessages.PROGRESS_FINISHED);
+        getContext().sendBroadcast(intent);
 
     }
 }

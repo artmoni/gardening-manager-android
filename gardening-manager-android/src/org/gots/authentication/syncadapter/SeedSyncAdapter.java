@@ -34,10 +34,14 @@ public class SeedSyncAdapter extends GotsSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider,
             SyncResult syncResult) {
         Log.d("SeedSyncAdapter", "onPerformSync for account[" + account.name + "]");
-        getContext().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
+
+        final Intent intent = new Intent();
+        intent.setAction(BroadCastMessages.PROGRESS_UPDATE);
+        intent.putExtra("AUTHORITY", authority);
+        getContext().sendBroadcast(intent);
 
         seedManager.force_refresh(true);
-        
+
         seedManager.getVendorSeeds(true);
 
         seedManager.getMyStock(gardenManager.getCurrentGarden());
@@ -47,7 +51,9 @@ public class SeedSyncAdapter extends GotsSyncAdapter {
             SeedNotification notification = new SeedNotification(getContext());
             notification.createNotification(newSeeds);
         }
-        getContext().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
+        
+        intent.setAction(BroadCastMessages.PROGRESS_FINISHED);
+        getContext().sendBroadcast(intent);
 
     }
 }

@@ -13,13 +13,18 @@ package org.gots.ui;
 import java.lang.ref.WeakReference;
 
 import org.gots.authentication.AuthenticationActivity;
+import org.gots.broadcast.BroadCastMessages;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
@@ -45,15 +50,21 @@ public class SplashScreenActivity extends AboutActivity {
                 // remove SplashScreen from view
                 if (that.get() != null) {
                     Intent intent = new Intent(that.get(), DashboardActivity.class);
-                    that.get().startActivityForResult(intent, 3);
-
+                    that.get().startActivity(intent);
+                    that.get().finish();
                 }
-                // that.get().finish();
 
                 break;
             }
             super.handleMessage(msg);
         }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        onRefresh(null);
+
     }
 
     private Handler getSplashHandler() {
@@ -67,28 +78,24 @@ public class SplashScreenActivity extends AboutActivity {
     @Override
     protected void removeProgress() {
         super.removeProgress();
-        if (asyncCounter == 0) {
+        if (refreshCounter == 0) {
             Message msg = new Message();
             msg.what = STOPSPLASH;
             getSplashHandler().sendMessageDelayed(msg, SPLASHTIME);
         }
     }
+
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        int currentGardenId = gotsPrefs.getCurrentGardenId();
-        if (requestCode == 3) {
-            finish();
-            return;
+    protected void onResume() {
+        AccountManager accountManager = AccountManager.get(this);
+        Account[] accounts = accountManager.getAccountsByType("gardening-manager");
+        if (accounts.length == 0) {
+            Intent intent = new Intent(this, AuthenticationActivity.class);
+            intent.putExtra(AuthenticationActivity.ARG_ACCOUNT_TYPE, "gardening-manager");
+            intent.putExtra(AuthenticationActivity.ARG_IS_ADDING_NEW_ACCOUNT, true);
+            startActivity(intent);
         }
-        if (currentGardenId > -1 || gotsPrefs.isConnectedToServer()) {
-            Message msg = new Message();
-            msg.what = STOPSPLASH;
-            getSplashHandler().sendMessageDelayed(msg, SPLASHTIME);
-        } else
-            finish();
-
-        super.onActivityResult(requestCode, resultCode, data);
+        super.onResume();
     }
-
 }
