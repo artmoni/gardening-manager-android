@@ -7,9 +7,7 @@ import java.util.List;
 
 import org.gots.R;
 import org.gots.action.adapter.comparator.ISeedSpecieComparator;
-import org.gots.action.view.ActionWidget;
 import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.LikeStatus;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.view.SeedWidgetLong;
 

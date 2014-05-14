@@ -21,7 +21,6 @@
  * *********************************************************************** */
 package org.gots.broadcast;
 
-import android.content.Intent;
 
 /**
  * @author jcarsique

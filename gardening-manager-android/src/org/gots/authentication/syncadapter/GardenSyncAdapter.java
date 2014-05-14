@@ -3,26 +3,15 @@ package org.gots.authentication.syncadapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.gots.action.GotsActionSeedManager;
-import org.gots.allotment.AllotmentManager;
 import org.gots.authentication.GotsSyncAdapter;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
-import org.gots.garden.GardenManager;
-import org.gots.preferences.GotsPreferences;
-import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.GotsGrowingSeedManager;
-import org.gots.seed.GotsSeedManager;
-import org.gots.seed.service.SeedNotification;
 
 import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SyncResult;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 

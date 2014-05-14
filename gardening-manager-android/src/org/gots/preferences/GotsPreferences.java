@@ -23,7 +23,6 @@ package org.gots.preferences;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.Properties;
 
 import org.gots.R;
@@ -32,15 +31,10 @@ import org.gots.utils.NotConfiguredException;
 import org.nuxeo.android.config.NuxeoServerConfig;
 
 import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;

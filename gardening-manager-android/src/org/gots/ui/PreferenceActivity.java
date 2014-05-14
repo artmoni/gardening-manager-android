@@ -2,8 +2,8 @@ package org.gots.ui;
 
 import org.gots.R;
 import org.gots.preferences.GotsPreferences;
-import org.gots.provider.SeedsContentProvider;
 import org.gots.provider.GardenContentProvider;
+import org.gots.provider.SeedsContentProvider;
 import org.nuxeo.android.config.NuxeoServerConfig;
 
 import android.accounts.Account;

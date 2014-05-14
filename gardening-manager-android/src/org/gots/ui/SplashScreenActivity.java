@@ -13,17 +13,11 @@ package org.gots.ui;
 import java.lang.ref.WeakReference;
 
 import org.gots.authentication.AuthenticationActivity;
-import org.gots.broadcast.BroadCastMessages;
-
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;

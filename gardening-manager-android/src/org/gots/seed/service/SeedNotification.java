@@ -8,7 +8,6 @@ import org.gots.seed.SeedUtil;
 import org.gots.seed.view.SeedWidget;
 import org.gots.ui.ActionActivity;
 import org.gots.ui.DashboardActivity;
-import org.gots.ui.HutActivity;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;

@@ -23,7 +23,6 @@ import org.gots.seed.adapter.PlanningHarvestAdapter;
 import org.gots.seed.adapter.PlanningSowAdapter;
 import org.gots.ui.LoginDialogFragment;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;

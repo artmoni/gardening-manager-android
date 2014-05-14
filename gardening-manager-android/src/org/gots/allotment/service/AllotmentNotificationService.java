@@ -1,32 +1,14 @@
 package org.gots.allotment.service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import org.gots.R;
-import org.gots.action.BaseActionInterface;
-import org.gots.action.GotsActionSeedManager;
-import org.gots.action.SeedActionInterface;
-import org.gots.action.provider.GotsActionSeedProvider;
-import org.gots.allotment.AllotmentManager;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.GotsGrowingSeedManager;
-import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.SeedUtil;
 import org.gots.seed.service.GotsService;
-import org.gots.seed.view.SeedWidget;
-import org.gots.ui.ActionActivity;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
 public class AllotmentNotificationService extends GotsService {

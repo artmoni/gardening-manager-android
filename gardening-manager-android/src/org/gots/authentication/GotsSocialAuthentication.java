@@ -3,7 +3,6 @@ package org.gots.authentication;
 import java.io.IOException;
 import java.util.List;
 
-import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 
 public interface GotsSocialAuthentication {

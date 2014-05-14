@@ -3,7 +3,6 @@ package org.gots.ui;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.Inflater;
 
 import org.gots.R;
 import org.gots.authentication.AuthenticationActivity;
@@ -20,16 +19,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-import android.support.v7.app.ActionBar;
-import android.view.MenuItem;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;

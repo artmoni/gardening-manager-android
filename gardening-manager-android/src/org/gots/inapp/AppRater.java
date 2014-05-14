@@ -1,22 +1,20 @@
 package org.gots.inapp;
 
 import org.gots.R;
-import org.gots.analytics.GotsAnalytics;
 import org.gots.preferences.GotsPreferences;
-
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class AppRater {
     private final static String APP_TITLE = "Gardening Manager";

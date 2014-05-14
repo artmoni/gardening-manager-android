@@ -16,7 +16,6 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;

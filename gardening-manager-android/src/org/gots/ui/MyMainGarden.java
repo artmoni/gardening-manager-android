@@ -20,7 +20,6 @@ import org.gots.action.GardeningActionInterface;
 import org.gots.action.bean.DeleteAction;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.allotment.adapter.ListAllotmentAdapter;
-import org.gots.allotment.service.AllotmentNotificationService;
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
@@ -28,25 +27,22 @@ import org.gots.provider.AllotmentContentProvider;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.weather.view.WeatherWidget;
 
-import android.accounts.Account;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 
 public class MyMainGarden extends AbstractActivity {
 

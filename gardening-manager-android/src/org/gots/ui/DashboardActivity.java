@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.gots.ui;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.gots.R;
@@ -19,15 +18,11 @@ import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.inapp.AppRater;
 import org.gots.inapp.GotsBillingDialog;
-import org.gots.provider.ActionsContentProvider;
 import org.gots.weather.service.WeatherUpdateService;
 import org.gots.weather.view.WeatherView;
 import org.gots.weather.view.WeatherWidget;
 
-import android.accounts.Account;
-import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -35,21 +30,17 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.support.v7.app.ActionBar;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.Window;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 

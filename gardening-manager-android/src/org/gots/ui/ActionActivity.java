@@ -17,28 +17,19 @@ import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.action.service.ActionNotificationService;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.bean.BaseAllotmentInterface;
-import org.gots.broadcast.BroadCastMessages;
 import org.gots.provider.ActionsContentProvider;
-import org.gots.provider.SeedsContentProvider;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.weather.service.WeatherUpdateService;
 
-import android.accounts.Account;
-import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 
 public class ActionActivity extends AbstractActivity {
 

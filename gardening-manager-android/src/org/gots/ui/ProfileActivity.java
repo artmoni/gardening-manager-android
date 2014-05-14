@@ -17,10 +17,8 @@ import org.gots.ads.GotsAdvertisement;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.adapter.ProfileAdapter;
-import org.gots.garden.service.GardenNotificationService;
 import org.gots.provider.GardenContentProvider;
 
-import android.accounts.AccountManager;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -30,13 +28,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 
 public class ProfileActivity extends AbstractActivity {
 
