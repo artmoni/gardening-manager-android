@@ -141,24 +141,25 @@ public abstract class AbstractActivity extends ActionBarActivity {
         }
     };
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        activities.remove(this);
+    protected void onPause() {
+        if (isFinishing()) {
+            activities.remove(this);
 
-        unregisterReceiver(gardenManager);
-        unregisterReceiver(allotmentManager);
-        unregisterReceiver(seedManager);
-        unregisterReceiver(progressReceiver);
-        if (activities.size() == 0) {
-            nuxeoManager.shutdown();
-            gardenManager.finalize();
-            seedManager.finalize();
-            allotmentManager.finalize();
+            unregisterReceiver(gardenManager);
+            unregisterReceiver(allotmentManager);
+            unregisterReceiver(seedManager);
+            unregisterReceiver(progressReceiver);
+            if (activities.size() == 0) {
+                nuxeoManager.shutdown();
+                gardenManager.finalize();
+                seedManager.finalize();
+                allotmentManager.finalize();
 
+            }
+            GoogleAnalyticsTracker.getInstance().dispatch();
+            GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
         }
-        GoogleAnalyticsTracker.getInstance().dispatch();
-        GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
+        super.onPause();
     }
 
     @Override

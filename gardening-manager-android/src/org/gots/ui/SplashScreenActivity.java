@@ -28,7 +28,7 @@ public class SplashScreenActivity extends AboutActivity {
     // private static final long SPLASHTIME = 3000;
     private static final long SPLASHTIME = 1000;
 
-    static final class SplashHandler extends Handler {
+    final class SplashHandler extends Handler {
 
         private WeakReference<Activity> that;
 
@@ -45,13 +45,18 @@ public class SplashScreenActivity extends AboutActivity {
                 if (that.get() != null) {
                     Intent intent = new Intent(that.get(), DashboardActivity.class);
                     that.get().startActivity(intent);
-                    that.get().finish();
+                    SplashScreenActivity.this.finish();
                 }
 
                 break;
             }
             super.handleMessage(msg);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int arg0, int arg1, Intent arg2) {
+        super.onActivityResult(arg0, arg1, arg2);
     }
 
     @Override
@@ -78,7 +83,6 @@ public class SplashScreenActivity extends AboutActivity {
             getSplashHandler().sendMessageDelayed(msg, SPLASHTIME);
         }
     }
-
 
     @Override
     protected void onResume() {
