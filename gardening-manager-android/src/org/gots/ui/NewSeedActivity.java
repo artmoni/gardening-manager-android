@@ -593,9 +593,4 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
             updatePlanning();
         }
     }
-    @Override
-    protected void onRefresh() {
-        // TODO Auto-generated method stub
-        
-    }
 }

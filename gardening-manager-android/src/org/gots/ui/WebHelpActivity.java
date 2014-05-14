@@ -107,7 +107,7 @@ public class WebHelpActivity extends AbstractActivity {
     }
 
     @Override
-    protected void onRefresh() {
+    protected void onRefresh(String AUTHORITY) {
         mWebView.reload();
     }
 }

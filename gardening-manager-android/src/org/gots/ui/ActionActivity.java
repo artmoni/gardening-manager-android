@@ -133,9 +133,7 @@ public class ActionActivity extends AbstractActivity {
     }
 
     @Override
-    protected void onRefresh() {
-        Account userAccount = gotsPrefs.getUserAccount();
-        ContentResolver.setSyncAutomatically(userAccount, ActionsContentProvider.AUTHORITY, true);
-        ContentResolver.requestSync(userAccount, ActionsContentProvider.AUTHORITY, Bundle.EMPTY);
+    protected void onRefresh(String AUTHORITY) {
+        super.onRefresh(ActionsContentProvider.AUTHORITY);
     }
 }

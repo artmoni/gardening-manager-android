@@ -507,9 +507,7 @@ public class HutActivity extends AbstractActivity {
         }
     }
     @Override
-    protected void onRefresh() {
-        Account userAccount = gotsPrefs.getUserAccount();
-        ContentResolver.setSyncAutomatically(userAccount, SeedsContentProvider.AUTHORITY, true);
-        ContentResolver.requestSync(userAccount, SeedsContentProvider.AUTHORITY, Bundle.EMPTY);
+    protected void onRefresh(String AUTHORITY) {
+        super.onRefresh(SeedsContentProvider.AUTHORITY);
     }
 }

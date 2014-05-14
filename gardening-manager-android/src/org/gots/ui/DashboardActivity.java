@@ -417,7 +417,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
     }
 
     @Override
-    protected void onRefresh() {
+    protected void onRefresh(String AUTHORITY) {
         startService(weatherIntent);
     }
 }

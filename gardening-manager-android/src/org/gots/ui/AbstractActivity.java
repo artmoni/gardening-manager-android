@@ -33,8 +33,10 @@ import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsSeedManager;
 
+import android.accounts.Account;
 import android.app.Service;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -43,6 +45,7 @@ import android.os.Bundle;
 import android.support.v4.view.MenuCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -56,6 +59,8 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
  * 
  */
 public abstract class AbstractActivity extends ActionBarActivity {
+    private static final String TAG = "AbstractActivity";
+
     // private static final String TAG = AbstractActivity.class.getSimpleName();
 
     protected GotsPreferences gotsPrefs;
@@ -166,14 +171,12 @@ public abstract class AbstractActivity extends ActionBarActivity {
 
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                onRefresh();
+                onRefresh(null);
                 return true;
             }
         });
         return super.onCreateOptionsMenu(menu);
     }
-
-     abstract protected void onRefresh();
 
     protected void setProgressRefresh(boolean refresh) {
         if (menu == null)
@@ -189,19 +192,29 @@ public abstract class AbstractActivity extends ActionBarActivity {
                 Animation rotation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
                 rotation.setRepeatCount(Animation.INFINITE);
                 progressView.startAnimation(rotation);
-//                progressView.setBackgroundColor(getResources().getColor(R.color.action_warning_color));
+                // progressView.setBackgroundColor(getResources().getColor(R.color.action_warning_color));
             }
-//             itemRefresh.setActionView(progressView);
+            // itemRefresh.setActionView(progressView);
             itemRefresh = MenuItemCompat.setActionView(itemRefresh, progressView);
         } else {
             if (progressView != null) {
                 progressView.clearAnimation();
             }
-//             itemRefresh.setActionView(null);
+            // itemRefresh.setActionView(null);
             itemRefresh = MenuItemCompat.setActionView(itemRefresh, null);
 
         }
 
+    }
+
+    protected void onRefresh(String AUTHORITY) {
+        if (AUTHORITY == null || "".equals(AUTHORITY)) {
+            Log.d(TAG, "You call onRefresh without Content Resolver Authority");
+            return;
+        }
+        Account userAccount = gotsPrefs.getUserAccount();
+        ContentResolver.setSyncAutomatically(userAccount, AUTHORITY, true);
+        ContentResolver.requestSync(userAccount, AUTHORITY, Bundle.EMPTY);
     }
 
 }

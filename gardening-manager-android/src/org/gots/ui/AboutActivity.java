@@ -13,6 +13,9 @@ import org.gots.authentication.AuthenticationActivity;
 import org.gots.garden.GardenInterface;
 import org.gots.inapp.GotsPurchaseItem;
 import org.gots.preferences.GotsPreferences;
+import org.gots.provider.ActionsContentProvider;
+import org.gots.provider.AllotmentContentProvider;
+import org.gots.provider.GardenContentProvider;
 import org.gots.provider.SeedsContentProvider;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.service.SeedNotification;
@@ -165,37 +168,37 @@ public class AboutActivity extends AbstractActivity {
         /*
          * Synchronize Weather
          */
-        new AsyncTask<Void, Integer, Void>() {
-
-            protected void onPreExecute() {
-                addProgress();
-                Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
-                progressWeather.startAnimation(myFadeInAnimation);
-                textprogressWeather.setTextColor(getResources().getColor(R.color.action_warning_color));
-                textprogressWeather.setText(getResources().getString(R.string.synchro_weather_checking));
-
-            };
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                WeatherManager manager = new WeatherManager(getApplicationContext());
-                manager.getConditionSet(2);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void result) {
-                progressWeather.clearAnimation();
-                progressWeather.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
-
-                removeProgress();
-                textprogressWeather.setText(getResources().getString(R.string.synchro_weather_ok));
-                textprogressWeather.setTextColor(getResources().getColor(R.color.text_color_dark));
-
-                super.onPostExecute(result);
-
-            }
-        }.execute();
+//        new AsyncTask<Void, Integer, Void>() {
+//
+//            protected void onPreExecute() {
+//                addProgress();
+//                Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
+//                progressWeather.startAnimation(myFadeInAnimation);
+//                textprogressWeather.setTextColor(getResources().getColor(R.color.action_warning_color));
+//                textprogressWeather.setText(getResources().getString(R.string.synchro_weather_checking));
+//
+//            };
+//
+//            @Override
+//            protected Void doInBackground(Void... params) {
+//                WeatherManager manager = new WeatherManager(getApplicationContext());
+//                manager.getConditionSet(2);
+//                return null;
+//            }
+//
+//            @Override
+//            protected void onPostExecute(Void result) {
+//                progressWeather.clearAnimation();
+//                progressWeather.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
+//
+//                removeProgress();
+//                textprogressWeather.setText(getResources().getString(R.string.synchro_weather_ok));
+//                textprogressWeather.setTextColor(getResources().getColor(R.color.text_color_dark));
+//
+//                super.onPostExecute(result);
+//
+//            }
+//        }.execute();
 
         /*
          * Synchronize Seeds
@@ -205,8 +208,15 @@ public class AboutActivity extends AbstractActivity {
         Bundle bundle = new Bundle();
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        
         ContentResolver.setSyncAutomatically(newAccount, SeedsContentProvider.AUTHORITY, true);
         ContentResolver.requestSync(newAccount, SeedsContentProvider.AUTHORITY, bundle);
+        ContentResolver.setSyncAutomatically(newAccount, GardenContentProvider.AUTHORITY, true);
+        ContentResolver.requestSync(newAccount, GardenContentProvider.AUTHORITY, bundle);
+        ContentResolver.setSyncAutomatically(newAccount, ActionsContentProvider.AUTHORITY, true);
+        ContentResolver.requestSync(newAccount, ActionsContentProvider.AUTHORITY, bundle);
+        ContentResolver.setSyncAutomatically(newAccount, AllotmentContentProvider.AUTHORITY, true);
+        ContentResolver.requestSync(newAccount, AllotmentContentProvider.AUTHORITY, bundle);
         // new AsyncTask<Void, Integer, Void>() {
         // // Intent startServiceIntent2 = new Intent(getApplicationContext(), SeedUpdateService.class);
         //
@@ -253,36 +263,36 @@ public class AboutActivity extends AbstractActivity {
         /*
          * Synchronize Actions
          */
-        new AsyncTask<Void, Integer, Void>() {
-            Intent startServiceIntent3 = new Intent(getApplicationContext(), ActionNotificationService.class);
-
-            protected void onPreExecute() {
-                Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
-                progressAction.startAnimation(myFadeInAnimation);
-                textprogressAction.setText(getResources().getString(R.string.synchro_actions_checking));
-                textprogressAction.setTextColor(getResources().getColor(R.color.action_warning_color));
-
-                addProgress();
-            };
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                getApplicationContext().startService(startServiceIntent3);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void result) {
-                progressAction.clearAnimation();
-                progressAction.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
-                textprogressAction.setText(getResources().getString(R.string.synchro_actions_ok));
-                textprogressAction.setTextColor(getResources().getColor(R.color.text_color_dark));
-
-                getApplicationContext().stopService(startServiceIntent3);
-                removeProgress();
-                super.onPostExecute(result);
-            }
-        }.execute();
+//        new AsyncTask<Void, Integer, Void>() {
+//            Intent startServiceIntent3 = new Intent(getApplicationContext(), ActionNotificationService.class);
+//
+//            protected void onPreExecute() {
+//                Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
+//                progressAction.startAnimation(myFadeInAnimation);
+//                textprogressAction.setText(getResources().getString(R.string.synchro_actions_checking));
+//                textprogressAction.setTextColor(getResources().getColor(R.color.action_warning_color));
+//
+//                addProgress();
+//            };
+//
+//            @Override
+//            protected Void doInBackground(Void... params) {
+//                getApplicationContext().startService(startServiceIntent3);
+//                return null;
+//            }
+//
+//            @Override
+//            protected void onPostExecute(Void result) {
+//                progressAction.clearAnimation();
+//                progressAction.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
+//                textprogressAction.setText(getResources().getString(R.string.synchro_actions_ok));
+//                textprogressAction.setTextColor(getResources().getColor(R.color.text_color_dark));
+//
+//                getApplicationContext().stopService(startServiceIntent3);
+//                removeProgress();
+//                super.onPostExecute(result);
+//            }
+//        }.execute();
 
         /*
          * Synchronize Purchase feature
@@ -398,44 +408,44 @@ public class AboutActivity extends AbstractActivity {
         /*
          * Synchronize Server
          */
-        if (gotsPrefs.isConnectedToServer()) {
-            findViewById(R.id.layoutProgressGarden).setVisibility(View.VISIBLE);
-
-            new AsyncTask<Context, Void, List<GardenInterface>>() {
-
-                private List<GardenInterface> myGardens;
-
-                @Override
-                protected void onPreExecute() {
-                    Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
-                    progressGarden.startAnimation(myFadeInAnimation);
-                    textprogressGarden.setText(getResources().getString(R.string.synchro_garden_checking));
-                    textprogressGarden.setTextColor(getResources().getColor(R.color.action_warning_color));
-
-                    super.onPreExecute();
-                }
-
-                @Override
-                protected List<GardenInterface> doInBackground(Context... params) {
-
-                    myGardens = gardenManager.getMyGardens(true);
-                    return myGardens;
-                }
-
-                @Override
-                protected void onPostExecute(List<GardenInterface> result) {
-                    progressGarden.clearAnimation();
-                    progressGarden.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
-                    textprogressGarden.setText(getResources().getString(R.string.synchro_garden_ok));
-                    textprogressGarden.setTextColor(getResources().getColor(R.color.text_color_dark));
-
-                    super.onPostExecute(result);
-                }
-
-            }.execute();
-        } else {
-            findViewById(R.id.layoutProgressGarden).setVisibility(View.GONE);
-        }
+//        if (gotsPrefs.isConnectedToServer()) {
+//            findViewById(R.id.layoutProgressGarden).setVisibility(View.VISIBLE);
+//
+//            new AsyncTask<Context, Void, List<GardenInterface>>() {
+//
+//                private List<GardenInterface> myGardens;
+//
+//                @Override
+//                protected void onPreExecute() {
+//                    Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
+//                    progressGarden.startAnimation(myFadeInAnimation);
+//                    textprogressGarden.setText(getResources().getString(R.string.synchro_garden_checking));
+//                    textprogressGarden.setTextColor(getResources().getColor(R.color.action_warning_color));
+//
+//                    super.onPreExecute();
+//                }
+//
+//                @Override
+//                protected List<GardenInterface> doInBackground(Context... params) {
+//
+//                    myGardens = gardenManager.getMyGardens(true);
+//                    return myGardens;
+//                }
+//
+//                @Override
+//                protected void onPostExecute(List<GardenInterface> result) {
+//                    progressGarden.clearAnimation();
+//                    progressGarden.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
+//                    textprogressGarden.setText(getResources().getString(R.string.synchro_garden_ok));
+//                    textprogressGarden.setTextColor(getResources().getColor(R.color.text_color_dark));
+//
+//                    super.onPostExecute(result);
+//                }
+//
+//            }.execute();
+//        } else {
+//            findViewById(R.id.layoutProgressGarden).setVisibility(View.GONE);
+//        }
     }
 
     @Override
@@ -493,9 +503,4 @@ public class AboutActivity extends AbstractActivity {
         }
     }
     
-    @Override
-    protected void onRefresh() {
-        
-    }
-
 }

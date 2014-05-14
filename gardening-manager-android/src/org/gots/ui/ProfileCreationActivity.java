@@ -394,9 +394,4 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
 
     }
 
-    @Override
-    protected void onRefresh() {
-        // TODO Auto-generated method stub
-
-    }
 }

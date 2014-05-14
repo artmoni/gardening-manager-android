@@ -27,9 +27,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 public class GardenSyncAdapter extends GotsSyncAdapter {
-    private Thread thread;
-
-    boolean shouldcontinue = true;
 
     private List<GardenInterface> gardens = new ArrayList<GardenInterface>();
 
@@ -44,27 +41,10 @@ public class GardenSyncAdapter extends GotsSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider,
             SyncResult syncResult) {
         Log.d("GardenSyncAdapter", "onPerformSync for account[" + account.name + "]");
-        gardens.clear();
+       
         getContext().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
-//
-//        thread = new Thread() {
-//            @Override
-//            public void run() {
-//                try {
-//                    while (shouldcontinue) {
-//                        mContext.sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
-//                        sleep(1000);
-//                    }
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        };
-//
-//        thread.start();
 
         gardens = gardenManager.getMyGardens(true);
-        shouldcontinue=false;
         mContext.sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
 
     }

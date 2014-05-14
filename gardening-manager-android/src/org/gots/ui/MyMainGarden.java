@@ -121,10 +121,8 @@ public class MyMainGarden extends AbstractActivity {
     }
 
     @Override
-    protected void onRefresh() {
-        Account userAccount = gotsPrefs.getUserAccount();
-        ContentResolver.setSyncAutomatically(userAccount, AllotmentContentProvider.AUTHORITY, true);
-        ContentResolver.requestSync(userAccount, AllotmentContentProvider.AUTHORITY, Bundle.EMPTY);
+    protected void onRefresh(String AUTHORITY) {
+        super.onRefresh(AllotmentContentProvider.AUTHORITY);
     }
 
     @Override
