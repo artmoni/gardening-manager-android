@@ -77,7 +77,6 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
-        // NewRelic.withApplicationToken( "AA89617084bf906d3a0425f6cf6a382ce574b3acd8" ).start(this.getApplication());
         setContentView(R.layout.dashboard);
 
         // attach event handler to dash buttons
@@ -92,7 +91,6 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
         checkPremiumAds();
         weatherIntent = new Intent(this, WeatherUpdateService.class);
-        // setProgressAction(weatherIntent);
 
         registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
         registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
@@ -182,7 +180,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         public void onReceive(Context context, Intent intent) {
             if (BroadCastMessages.WEATHER_DISPLAY_EVENT.equals(intent.getAction())) {
 
-                updateUI(intent);
+                updateWeatherWidget(intent);
             } else if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())) {
                 refreshConnectionState();
 
@@ -201,7 +199,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
             itemConnected.setIcon(getResources().getDrawable(R.drawable.garden_disconnected));
     }
 
-    private void updateUI(Intent intent) {
+    private void updateWeatherWidget(Intent intent) {
         boolean isError = intent.getBooleanExtra("error", true);
         Log.d(TAG, "=>" + isError);
 
@@ -281,38 +279,6 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         displayGardenMenu(getSupportActionBar());
         refreshConnectionState();
 
-        // new AsyncTask<Void, Void, GardenInterface>() {
-        // ActionBar bar = getSupportActionBar();
-        //
-        // @Override
-        // protected GardenInterface doInBackground(Void... params) {
-        // return gardenManager.getCurrentGarden();
-        // }
-        //
-        // @Override
-        // protected void onPostExecute(GardenInterface currentGarden) {
-        // if (currentGarden != null) {
-        // bar.setTitle(currentGarden.getLocality());
-        // } else {
-        // bar.setTitle(gotsPrefs.getGardeningManagerAppname());
-        // }
-        // startService(weatherIntent);
-        //
-        // // if (gotsPrefs.getCurrentGardenId() == -1) {
-        // if (gardenManager.getCurrentGarden() == null) {
-        // Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-        // startActivity(intent);
-        // Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
-        // findViewById(R.id.dashboard_button_profile).startAnimation(myFadeInAnimation);
-        // } else
-        // findViewById(R.id.dashboard_button_profile).clearAnimation();
-        //
-        // refreshConnectionState();
-        // displayGardenMenu(getSupportActionBar());
-        // super.onPostExecute(currentGarden);
-        // }
-        // }.execute();
-
     }
 
     @Override
@@ -337,12 +303,6 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
             startActivity(aboutIntent);
 
             return true;
-            // case R.id.login:
-            // // Intent loginIntent = new Intent(this, LoginDialogFragment.class);
-            // // startActivity(loginIntent);
-            // LoginDialogFragment login = new LoginDialogFragment();
-            // login.show(getSupportFragmentManager(), TAG);
-            // return true;
         case R.id.premium:
             FragmentManager fm = getSupportFragmentManager();
             GotsBillingDialog editNameDialog = new GotsBillingDialog();
@@ -361,11 +321,6 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         case R.id.connection:
             LoginDialogFragment login = new LoginDialogFragment();
             login.show(getSupportFragmentManager(), TAG);
-            // if (gotsPrefs.isConnectedToServer())
-            // Toast.makeText(this, getResources().getString(R.string.login_connect_state), Toast.LENGTH_SHORT).show();
-            // else
-            // Toast.makeText(this, getResources().getString(R.string.login_disconnect_state),
-            // Toast.LENGTH_SHORT).show();
             return true;
 
         default:
@@ -385,23 +340,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "onActivityResult(" + requestCode + "," + resultCode + "," + data);
-
-        // Pass on the activity result to the helper for handling
-        // if (!buyHelper.handleActivityResult(requestCode, resultCode, data)) {
-        // // not handled, so handle it ourselves (here's where you'd
-        // // perform any handling of activity results not related to in-app
-        // // billing...
-        // super.onActivityResult(requestCode, resultCode, data);
-        // } else {
-        // Log.d(TAG, "onActivityResult handled by IABUtil.");
-        // }
-    }
-
-    @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-        // Toast.makeText(getBaseContext(), "You selected : " + myGardens.get(itemPosition), Toast.LENGTH_SHORT).show();
         gardenManager.setCurrentGarden(myGardens.get(itemPosition));
         startService(weatherIntent);
         return false;
