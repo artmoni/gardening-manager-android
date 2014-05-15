@@ -21,9 +21,9 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.gots.R;
-import org.gots.authentication.GoogleAuthentication;
 import org.gots.authentication.GotsSocialAuthentication;
-import org.gots.authentication.User;
+import org.gots.authentication.provider.google.GoogleAuthentication;
+import org.gots.authentication.provider.google.User;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GardenManager;
 import org.gots.preferences.GotsPreferences;

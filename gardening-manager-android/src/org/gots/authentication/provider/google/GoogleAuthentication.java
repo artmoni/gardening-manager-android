@@ -1,4 +1,4 @@
-package org.gots.authentication;
+package org.gots.authentication.provider.google;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.gots.authentication.GotsSocialAuthentication;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -20,7 +20,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ListFragment;
-import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -28,21 +27,6 @@ import android.widget.TextView;
 
 public class ListActionActivity extends ListFragment implements ListView.OnScrollListener {
 
-    // private String[] mStrings;
-
-    protected final class WindowRemover implements Runnable {
-        public void run() {
-            removeWindow();
-        }
-
-        protected void removeWindow() {
-            if (mShowing) {
-                mShowing = false;
-                mDialogText.setVisibility(View.INVISIBLE);
-            }
-        }
-
-    }
 
     Handler mHandler = new Handler();
 

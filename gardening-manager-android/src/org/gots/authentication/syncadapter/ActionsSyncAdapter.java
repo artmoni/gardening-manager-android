@@ -38,6 +38,7 @@ public class ActionsSyncAdapter extends GotsSyncAdapter {
         // notification.createNotification(newSeeds);
         // }
         actionseedManager.getActionsToDo();
+        
         intent.setAction(BroadCastMessages.PROGRESS_FINISHED);
         getContext().sendBroadcast(intent);
     }

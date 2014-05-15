@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.gots.R;
 import org.gots.analytics.GotsAnalytics;
+import org.gots.authentication.provider.google.GoogleAuthentication;
+import org.gots.authentication.provider.nuxeo.NuxeoAuthentication;
 import org.gots.preferences.GotsPreferences;
 
 import android.accounts.Account;

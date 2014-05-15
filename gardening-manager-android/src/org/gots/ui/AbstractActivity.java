@@ -24,6 +24,8 @@ package org.gots.ui;
 import java.util.ArrayList;
 
 import org.gots.R;
+import org.gots.action.GotsActionSeedManager;
+import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.allotment.AllotmentManager;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.broadcast.BroadCastMessages;
@@ -73,6 +75,8 @@ public abstract class AbstractActivity extends ActionBarActivity {
 
     protected AllotmentManager allotmentManager;
 
+    protected GotsActionSeedManager actionseedProvider;
+
     private View progressView;
 
     private Menu menu;
@@ -94,7 +98,8 @@ public abstract class AbstractActivity extends ActionBarActivity {
         seedManager.initIfNew(this);
         allotmentManager = AllotmentManager.getInstance();
         allotmentManager.initIfNew(this);
-        activities.add(this);
+        actionseedProvider = GotsActionSeedManager.getInstance();
+        actionseedProvider.initIfNew(this);
     }
 
     @Override
@@ -107,6 +112,7 @@ public abstract class AbstractActivity extends ActionBarActivity {
         registerReceiver(seedManager, new IntentFilter(BroadCastMessages.GARDEN_SETTINGS_CHANGED));
         registerReceiver(progressReceiver, new IntentFilter(BroadCastMessages.PROGRESS_UPDATE));
         registerReceiver(progressReceiver, new IntentFilter(BroadCastMessages.PROGRESS_FINISHED));
+        activities.add(this);
 
         GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
         GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
@@ -155,7 +161,6 @@ public abstract class AbstractActivity extends ActionBarActivity {
             gardenManager.finalize();
             seedManager.finalize();
             allotmentManager.finalize();
-
         }
         GoogleAnalyticsTracker.getInstance().dispatch();
         GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
@@ -198,10 +203,19 @@ public abstract class AbstractActivity extends ActionBarActivity {
             if (progressView != null) {
                 progressView.clearAnimation();
             }
+
             // itemRefresh.setActionView(null);
             itemRefresh = MenuItemCompat.setActionView(itemRefresh, null);
 
         }
+        itemRefresh.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                onRefresh(null);
+                return true;
+            }
+        });
 
     }
 
@@ -212,7 +226,10 @@ public abstract class AbstractActivity extends ActionBarActivity {
         }
         Account userAccount = gotsPrefs.getUserAccount();
         ContentResolver.setSyncAutomatically(userAccount, AUTHORITY, true);
-        ContentResolver.requestSync(userAccount, AUTHORITY, Bundle.EMPTY);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        ContentResolver.requestSync(userAccount, AUTHORITY, bundle);
     }
 
 }

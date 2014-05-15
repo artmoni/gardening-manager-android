@@ -1,4 +1,4 @@
-package org.gots.authentication;
+package org.gots.authentication.provider.nuxeo;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;

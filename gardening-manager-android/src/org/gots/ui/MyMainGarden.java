@@ -243,6 +243,7 @@ public class MyMainGarden extends AbstractActivity {
 
             protected void onPreExecute() {
                 setProgressRefresh(true);
+                super.onPreExecute();
             };
 
             @Override

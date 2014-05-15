@@ -78,26 +78,8 @@ public class WeatherUpdateService extends Service {
 
                 new AsyncTask<Integer, Integer, WeatherConditionInterface>() {
 
-                    private Thread thread;
-
-                    boolean shouldcontinue = true;
-
                     protected void onPreExecute() {
-                        thread = new Thread() {
-                            @Override
-                            public void run() {
-                                try {
-                                    while (shouldcontinue) {
-                                        sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
-                                        sleep(1000);
-                                    }
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        };
-
-                        thread.start();
+                        sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
                     };
 
                     @Override
@@ -117,7 +99,6 @@ public class WeatherUpdateService extends Service {
                         // isWeatherError = true;
                         handler.removeCallbacks(sendUpdatesToUI);
                         handler.postDelayed(sendUpdatesToUI, 0); // 1 second=1000
-                        shouldcontinue = false;
                         sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
                         super.onPostExecute(weatherCondition);
 

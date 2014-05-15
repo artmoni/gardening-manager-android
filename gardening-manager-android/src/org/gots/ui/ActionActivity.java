@@ -11,8 +11,10 @@
 package org.gots.ui;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.gots.R;
+import org.gots.action.SeedActionInterface;
 import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.action.service.ActionNotificationService;
 import org.gots.ads.GotsAdvertisement;
@@ -39,6 +41,8 @@ public class ActionActivity extends AbstractActivity {
 
     private int seedid;
 
+    List<SeedActionInterface> seedActions;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +63,7 @@ public class ActionActivity extends AbstractActivity {
             LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
             layout.addView(ads.getAdsLayout());
         }
-        startService(new Intent(this, ActionNotificationService.class));
+        // startService(new Intent(this, ActionNotificationService.class));
     }
 
     @Override
@@ -69,21 +73,30 @@ public class ActionActivity extends AbstractActivity {
 
             private ListAllActionAdapter listActions;
 
+            protected void onPreExecute() {
+                setProgressRefresh(true);
+            };
+
             @Override
             protected ArrayList<GrowingSeedInterface> doInBackground(Integer... params) {
                 GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(
                         getApplicationContext());
-
                 int seedid = params[0].intValue();
                 if (seedid > 0) {
                     allSeeds.add(growingSeedManager.getGrowingSeedById(seedid));
                 } else {
-                    // allSeeds = growingSeedManager.getGrowingSeeds();
                     for (BaseAllotmentInterface allotment : allotmentManager.getMyAllotments())
                         allSeeds.addAll(growingSeedManager.getGrowingSeedsByAllotment(allotment));
                 }
-                listActions = new ListAllActionAdapter(getApplicationContext(), allSeeds,
+
+                for (GrowingSeedInterface seed : allSeeds) {
+
+                    seedActions = actionseedProvider.getActionsToDoBySeed(seed);
+                }
+
+                listActions = new ListAllActionAdapter(getApplicationContext(), seedActions,
                         ListAllActionAdapter.STATUS_TODO);
+
                 return allSeeds;
             }
 
@@ -93,6 +106,7 @@ public class ActionActivity extends AbstractActivity {
                 listAllotments.setAdapter(listActions);
                 listAllotments.setDivider(null);
                 listAllotments.setDividerHeight(0);
+                setProgressRefresh(false);
             };
         }.execute(seedid);
         super.onPostCreate(savedInstanceState);
