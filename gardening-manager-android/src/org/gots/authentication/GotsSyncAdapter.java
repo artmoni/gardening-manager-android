@@ -22,12 +22,8 @@ public class GotsSyncAdapter extends AbstractThreadedSyncAdapter {
 
     protected GotsPreferences gotsPrefs;
 
-    protected GotsSeedManager seedManager;
-
-    protected GardenManager gardenManager;
-
-    protected GotsActionSeedProvider actionseedManager;
-
+   
+  
     protected AllotmentManager allotmentManager;
 
     protected GotsGrowingSeedManager growingSeedManager;
@@ -39,10 +35,7 @@ public class GotsSyncAdapter extends AbstractThreadedSyncAdapter {
         gotsPrefs = GotsPreferences.getInstance();
         gotsPrefs.initIfNew(getContext());
 
-        seedManager = GotsSeedManager.getInstance().initIfNew(getContext());
-        gardenManager = GardenManager.getInstance().initIfNew(getContext());
         growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(getContext());
-        actionseedManager = GotsActionSeedManager.getInstance().initIfNew(getContext());
         allotmentManager = AllotmentManager.getInstance().initIfNew(getContext());
     }
 

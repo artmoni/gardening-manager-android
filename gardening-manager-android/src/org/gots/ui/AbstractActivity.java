@@ -170,6 +170,12 @@ public abstract class AbstractActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_common, menu);
         this.menu = menu;
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.refresh_seed).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
 
             @Override
@@ -178,7 +184,7 @@ public abstract class AbstractActivity extends ActionBarActivity {
                 return true;
             }
         });
-        return super.onCreateOptionsMenu(menu);
+        return super.onPrepareOptionsMenu(menu);
     }
 
     protected void setProgressRefresh(boolean refresh) {

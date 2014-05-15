@@ -11,8 +11,12 @@
 package org.gots.ui;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import org.gots.action.GotsActionSeedManager;
+import org.gots.action.SeedActionInterface;
 import org.gots.action.adapter.ListAllActionAdapter;
+import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 
@@ -24,9 +28,7 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-
 public class ListActionActivity extends ListFragment implements ListView.OnScrollListener {
-
 
     Handler mHandler = new Handler();
 
@@ -57,7 +59,14 @@ public class ListActionActivity extends ListFragment implements ListView.OnScrol
                     allSeeds.add(growingSeedManager.getGrowingSeedById(seedid));
                 } else
                     allSeeds = growingSeedManager.getGrowingSeeds();
-                listAllActionAdapter = new ListAllActionAdapter(getActivity(), allSeeds,
+                GotsActionSeedProvider actionseedProvider = GotsActionSeedManager.getInstance().initIfNew(getActivity());
+
+                List<SeedActionInterface> seedActions = new ArrayList<SeedActionInterface>();
+                for (GrowingSeedInterface seed : allSeeds) {
+
+                    seedActions = actionseedProvider.getActionsToDoBySeed(seed);
+                }
+                listAllActionAdapter = new ListAllActionAdapter(getActivity(), seedActions,
                         ListAllActionAdapter.STATUS_DONE);
                 return allSeeds;
             }

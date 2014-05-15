@@ -57,7 +57,6 @@ public class SplashScreenActivity extends AboutActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        onRefresh(null);
 
     }
 
@@ -79,17 +78,24 @@ public class SplashScreenActivity extends AboutActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int arg0, int arg1, Intent arg2) {
+        onRefresh(null);
+        super.onActivityResult(arg0, arg1, arg2);
+    }
 
     @Override
     protected void onResume() {
         AccountManager accountManager = AccountManager.get(this);
         Account[] accounts = accountManager.getAccountsByType("gardening-manager");
-        if (accounts.length == 0) {
+        if (accounts.length == 0 || gotsPrefs.getCurrentGardenId() == 0) {
             Intent intent = new Intent(this, AuthenticationActivity.class);
             intent.putExtra(AuthenticationActivity.ARG_ACCOUNT_TYPE, "gardening-manager");
             intent.putExtra(AuthenticationActivity.ARG_IS_ADDING_NEW_ACCOUNT, true);
-            startActivity(intent);
-        }
+            startActivityForResult(intent, 1);
+        } else
+            onRefresh(null);
+
         super.onResume();
     }
 }

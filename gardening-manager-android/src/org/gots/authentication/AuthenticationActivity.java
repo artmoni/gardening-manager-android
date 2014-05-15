@@ -226,8 +226,8 @@ public class AuthenticationActivity extends AccountAuthenticatorActivity {
         AccountManager mAccountManager = AccountManager.get(this);
         String accountName = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
         String accountPassword = intent.getStringExtra(PARAM_USER_PASS);
-         final Account account = new Account(accountName, intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
-//        final Account account = gotsPreferences.getUserAccount();
+//         final Account account = new Account(accountName, intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
+        final Account account = gotsPreferences.getUserAccount();
 
         if (getIntent().getBooleanExtra(ARG_IS_ADDING_NEW_ACCOUNT, false)) {
             String authtoken = intent.getStringExtra(AccountManager.KEY_AUTHTOKEN);
