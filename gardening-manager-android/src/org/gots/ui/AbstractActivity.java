@@ -214,14 +214,14 @@ public abstract class AbstractActivity extends ActionBarActivity {
             itemRefresh = MenuItemCompat.setActionView(itemRefresh, null);
 
         }
-        itemRefresh.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                onRefresh(null);
-                return true;
-            }
-        });
+//        itemRefresh.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+//
+//            @Override
+//            public boolean onMenuItemClick(MenuItem item) {
+//                onRefresh(null);
+//                return true;
+//            }
+//        });
 
     }
 

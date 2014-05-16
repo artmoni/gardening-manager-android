@@ -41,6 +41,7 @@ import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.BaseAdapter;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -57,8 +58,6 @@ public class ProfileAdapter extends BaseAdapter {
     private List<GardenInterface> myGardens = new ArrayList<GardenInterface>();
 
     private LayoutInflater inflater;
-
-    private ImageView weatherState;
 
     // private Intent weatherIntent;
     private WeatherManager weatherManager;
@@ -158,7 +157,6 @@ public class ProfileAdapter extends BaseAdapter {
             vi = inflater.inflate(R.layout.list_garden, null);
 
         TextView gardenName = (TextView) vi.findViewById(R.id.idGardenName);
-        weatherState = (ImageView) vi.findViewById(R.id.idWeatherConnected);
         ImageView imageProfile = (ImageView) vi.findViewById(R.id.imageProfile);
         weatherHistory = (LinearLayout) vi.findViewById(R.id.layoutWeatherHistory);
         final HorizontalScrollView weatherHistoryContainer = (HorizontalScrollView) vi.findViewById(R.id.scrollWeatherHistory);
@@ -169,15 +167,9 @@ public class ProfileAdapter extends BaseAdapter {
         if (selectedGarden != null && currentGarden != null && selectedGarden.getId() == currentGarden.getId()) {
             vi.setSelected(true);
             imageProfile.setVisibility(View.VISIBLE);
-            weatherState.setVisibility(View.VISIBLE);
             // weatherHistory.setVisibility(View.VISIBLE);
             weatherHistoryContainer.setVisibility(View.VISIBLE);
             int sdk = android.os.Build.VERSION.SDK_INT;
-            if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_weather));
-            } else {
-                weatherState.setBackground(mContext.getResources().getDrawable(R.drawable.bg_weather));
-            }
             if (gotsPreferences.isConnectedToServer()) {
                 UserInfo userInfoTask = new UserInfo();
                 userInfoTask.execute(imageProfile);
@@ -190,7 +182,6 @@ public class ProfileAdapter extends BaseAdapter {
             vi.setSelected(false);
             // vi.getBackground().setAlpha(200);
             imageProfile.setVisibility(View.GONE);
-            weatherState.setVisibility(View.GONE);
             // weatherHistory.setVisibility(View.GONE);
             weatherHistoryContainer.setVisibility(View.GONE);
 
@@ -198,9 +189,12 @@ public class ProfileAdapter extends BaseAdapter {
 
         if (GotsPreferences.DEBUG)
             gardenName.setText(currentGarden.toString());
-        else if (currentGarden.getName() != null)
-            gardenName.setText(currentGarden.getName());
-        else
+        else if (currentGarden.getName() != null) {
+            String title = currentGarden.getName();
+            title.concat("(" + currentGarden.getAddress().getLocality() + "");
+            gardenName.setText(title);
+
+        } else
             gardenName.setText(currentGarden.getAddress().getLocality());
 
         // weatherState.setOnClickListener(new View.OnClickListener() {
@@ -249,6 +243,7 @@ public class ProfileAdapter extends BaseAdapter {
                 weatherHistory.addView(view);
 
             }
+            displayWeatherChart(vi);
         } else
             vi.setOnClickListener(new View.OnClickListener() {
 
@@ -259,8 +254,6 @@ public class ProfileAdapter extends BaseAdapter {
                     gardenManager.setCurrentGarden(selectedGarden);
                     notifyDataSetChanged();
 
-                    weatherState.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_weather));
-                    weatherState.setImageDrawable(mContext.getResources().getDrawable(R.drawable.weather_updating));
                     // mContext.startService(weatherIntent);
                     // mContext.registerReceiver(weatherBroadcastReceiver, new
                     // IntentFilter(
@@ -278,6 +271,32 @@ public class ProfileAdapter extends BaseAdapter {
 
         return vi;
 
+    }
+
+    private void displayWeatherChart(View parent) {
+        // idWeatherConnected
+        WebView webView = (WebView) parent.findViewById(R.id.idWeatherConnected);
+        String chd = new String();
+        for (int i = -10; i <= 0; i++) {
+            WeatherConditionInterface condition;
+            try {
+                condition = weatherManager.getCondition(i);
+            } catch (Exception e) {
+                Calendar weatherday = new GregorianCalendar();
+                weatherday.setTime(Calendar.getInstance().getTime());
+                weatherday.add(Calendar.DAY_OF_YEAR, i);
+
+                condition = new WeatherCondition();
+                condition.setDate(weatherday.getTime());
+            }
+
+            chd = chd.concat(String.valueOf(condition.getTempCelciusMin()));
+            chd = chd.concat(",");
+        }
+        if (chd.length() > 1)
+            chd = chd.substring(0, chd.length() - 1);
+        String url = "http://chart.apis.google.com/chart?cht=ls&chs=250x100&chd=t:" + chd;
+        webView.loadUrl(url);
     }
 
     private ViewGroup weatherHistory;
