@@ -175,16 +175,19 @@ public abstract class AbstractActivity extends ActionBarActivity {
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.findItem(R.id.refresh_seed).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+    public boolean onOptionsItemSelected(MenuItem item) {
 
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                onRefresh(null);
-                return true;
-            }
-        });
-        return super.onPrepareOptionsMenu(menu);
+        switch (item.getItemId()) {
+        case R.id.refresh_seed:
+            onRefresh(null);
+            Log.d(TAG, getClass().getName());
+            break;
+
+        default:
+            break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     protected void setProgressRefresh(boolean refresh) {
@@ -201,27 +204,14 @@ public abstract class AbstractActivity extends ActionBarActivity {
                 Animation rotation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
                 rotation.setRepeatCount(Animation.INFINITE);
                 progressView.startAnimation(rotation);
-                // progressView.setBackgroundColor(getResources().getColor(R.color.action_warning_color));
             }
-            // itemRefresh.setActionView(progressView);
             itemRefresh = MenuItemCompat.setActionView(itemRefresh, progressView);
         } else {
             if (progressView != null) {
                 progressView.clearAnimation();
             }
-
-            // itemRefresh.setActionView(null);
             itemRefresh = MenuItemCompat.setActionView(itemRefresh, null);
-
         }
-//        itemRefresh.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-//
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item) {
-//                onRefresh(null);
-//                return true;
-//            }
-//        });
 
     }
 
