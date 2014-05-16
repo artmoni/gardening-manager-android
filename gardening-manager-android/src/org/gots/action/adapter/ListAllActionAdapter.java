@@ -79,7 +79,9 @@ public class ListAllActionAdapter extends BaseAdapter {
     public ListAllActionAdapter(Context context, List<SeedActionInterface> allActions, int status) {
         this.mContext = context;
         current_status = status;
-        actions.addAll(allActions);
+        if (allActions != null) {
+            actions.addAll(allActions);
+        }
 
         if (current_status == STATUS_TODO)
             Collections.sort(actions, new IActionAscendantComparator());

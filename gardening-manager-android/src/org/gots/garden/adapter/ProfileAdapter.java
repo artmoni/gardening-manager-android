@@ -15,6 +15,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -38,6 +39,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -159,7 +161,8 @@ public class ProfileAdapter extends BaseAdapter {
         TextView gardenName = (TextView) vi.findViewById(R.id.idGardenName);
         ImageView imageProfile = (ImageView) vi.findViewById(R.id.imageProfile);
         weatherHistory = (LinearLayout) vi.findViewById(R.id.layoutWeatherHistory);
-        final HorizontalScrollView weatherHistoryContainer = (HorizontalScrollView) vi.findViewById(R.id.scrollWeatherHistory);
+        // final HorizontalScrollView weatherHistoryContainer = (HorizontalScrollView)
+        // vi.findViewById(R.id.scrollWeatherHistory);
 
         final GardenInterface currentGarden = getItem(position);
         // weatherIntent = new Intent(mContext, WeatherUpdateService.class);
@@ -168,7 +171,7 @@ public class ProfileAdapter extends BaseAdapter {
             vi.setSelected(true);
             imageProfile.setVisibility(View.VISIBLE);
             // weatherHistory.setVisibility(View.VISIBLE);
-            weatherHistoryContainer.setVisibility(View.VISIBLE);
+            // weatherHistoryContainer.setVisibility(View.VISIBLE);
             int sdk = android.os.Build.VERSION.SDK_INT;
             if (gotsPreferences.isConnectedToServer()) {
                 UserInfo userInfoTask = new UserInfo();
@@ -183,7 +186,7 @@ public class ProfileAdapter extends BaseAdapter {
             // vi.getBackground().setAlpha(200);
             imageProfile.setVisibility(View.GONE);
             // weatherHistory.setVisibility(View.GONE);
-            weatherHistoryContainer.setVisibility(View.GONE);
+            // weatherHistoryContainer.setVisibility(View.GONE);
 
         }
 
@@ -191,7 +194,7 @@ public class ProfileAdapter extends BaseAdapter {
             gardenName.setText(currentGarden.toString());
         else if (currentGarden.getName() != null) {
             String title = currentGarden.getName();
-            title.concat("(" + currentGarden.getAddress().getLocality() + "");
+            title = title.concat(" (" + currentGarden.getAddress().getLocality() + ")");
             gardenName.setText(title);
 
         } else
@@ -214,13 +217,13 @@ public class ProfileAdapter extends BaseAdapter {
 
         // *************** WEATHER HISTORY
         if (vi.isSelected()) {
-            weatherHistoryContainer.post(new Runnable() {
-                @Override
-                public void run() {
-                    weatherHistoryContainer.scrollTo(weatherHistoryContainer.getWidth(),
-                            weatherHistoryContainer.getHeight());
-                }
-            });
+            // weatherHistoryContainer.post(new Runnable() {
+            // @Override
+            // public void run() {
+            // weatherHistoryContainer.scrollTo(weatherHistoryContainer.getWidth(),
+            // weatherHistoryContainer.getHeight());
+            // }
+            // });
             if (weatherHistory.getChildCount() > 0)
                 weatherHistory.removeAllViews();
 
@@ -276,7 +279,10 @@ public class ProfileAdapter extends BaseAdapter {
     private void displayWeatherChart(View parent) {
         // idWeatherConnected
         WebView webView = (WebView) parent.findViewById(R.id.idWeatherConnected);
-        String chd = new String();
+        String serieTempMin = new String();
+        String serieTempMax = new String();
+        String chl = new String();
+
         for (int i = -10; i <= 0; i++) {
             WeatherConditionInterface condition;
             try {
@@ -290,12 +296,28 @@ public class ProfileAdapter extends BaseAdapter {
                 condition.setDate(weatherday.getTime());
             }
 
-            chd = chd.concat(String.valueOf(condition.getTempCelciusMin()));
-            chd = chd.concat(",");
+            serieTempMin = serieTempMin.concat(String.valueOf(condition.getTempCelciusMin()));
+            serieTempMin = serieTempMin.concat(",");
+            serieTempMax = serieTempMax.concat(String.valueOf(condition.getTempCelciusMax()));
+            serieTempMax = serieTempMax.concat(",");
+            chl = chl.concat(DateFormat.format("dd", condition.getDate()).toString());
+            chl = chl.concat(",");
         }
-        if (chd.length() > 1)
-            chd = chd.substring(0, chd.length() - 1);
-        String url = "http://chart.apis.google.com/chart?cht=ls&chs=250x100&chd=t:" + chd;
+        if (serieTempMin.length() > 1)
+            serieTempMin = serieTempMin.substring(0, serieTempMin.length() - 1);
+        if (serieTempMax.length() > 1)
+            serieTempMax = serieTempMax.substring(0, serieTempMax.length() - 1);
+        if (chl.length() > 1)
+            chl = chl.substring(0, chl.length() - 1);
+
+        Calendar min = Calendar.getInstance();
+        min.setTime(weatherManager.getCondition(-10).getDate());
+        Calendar max = Calendar.getInstance();
+        max.setTime(weatherManager.getCondition(0).getDate());
+
+        String url = "http://chart.apis.google.com/chart?cht=lc&chs=250x100&chd=t:" + serieTempMin + "|" + serieTempMax
+                + "&chxt=x,y&chxr=0," + min.get(Calendar.DAY_OF_MONTH) + "," + max.get(Calendar.DAY_OF_MONTH)
+                + ",1|1,-50,50&chds=-50,50&chco=009999,B65635";
         webView.loadUrl(url);
     }
 

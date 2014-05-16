@@ -232,7 +232,7 @@
                   <manifest>
                     <versionName>${project.version}</versionName>
                     <versionCodeUpdateFromVersion>true</versionCodeUpdateFromVersion>
-                    <debuggable>false</debuggable>
+                    <debuggable>true</debuggable>
                     <!-- <supports-screens> <anyDensity>true</anyDensity> 
                       <xlargeScreens>false</xlargeScreens> </supports-screens> <compatible-screens> 
                       <compatible-screen> <screenSize>small</screenSize> <screenDensity>ldpi</screenDensity> 
