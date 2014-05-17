@@ -300,7 +300,11 @@ public class ProfileAdapter extends BaseAdapter {
             serieTempMin = serieTempMin.concat(",");
             serieTempMax = serieTempMax.concat(String.valueOf(condition.getTempCelciusMax()));
             serieTempMax = serieTempMax.concat(",");
-            chl = chl.concat(DateFormat.format("dd", condition.getDate()).toString());
+            if (condition.getDate() != null)
+                chl = chl.concat(DateFormat.format("dd", condition.getDate()).toString());
+
+            else
+                chl = chl.concat("?");
             chl = chl.concat(",");
         }
         if (serieTempMin.length() > 1)
@@ -311,9 +315,11 @@ public class ProfileAdapter extends BaseAdapter {
             chl = chl.substring(0, chl.length() - 1);
 
         Calendar min = Calendar.getInstance();
-        min.setTime(weatherManager.getCondition(-10).getDate());
+        if (weatherManager.getCondition(-10).getDate() != null)
+            min.setTime(weatherManager.getCondition(-10).getDate());
         Calendar max = Calendar.getInstance();
-        max.setTime(weatherManager.getCondition(0).getDate());
+        if (weatherManager.getCondition(0).getDate() != null)
+            max.setTime(weatherManager.getCondition(0).getDate());
 
         String url = "http://chart.apis.google.com/chart?cht=lc&chs=250x100&chd=t:" + serieTempMin + "|" + serieTempMax
                 + "&chxt=x,y&chxr=0," + min.get(Calendar.DAY_OF_MONTH) + "," + max.get(Calendar.DAY_OF_MONTH)

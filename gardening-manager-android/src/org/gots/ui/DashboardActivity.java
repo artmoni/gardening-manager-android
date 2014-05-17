@@ -143,8 +143,9 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
                 for (int i = 0; i < myGardens.size(); i++) {
                     GardenInterface garden = myGardens.get(i);
                     dropdownValues[i] = garden.getName() != null ? garden.getName() : garden.getLocality();
-                    if (garden != null && currentGarden != null && garden.getId() == currentGarden.getId())
+                    if (garden != null && currentGarden != null && garden.getId() == currentGarden.getId()) {
                         selectedGardenIndex = i;
+                    }
                 }
                 if (dropdownValues.length > 0) {
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(DashboardActivity.this,
@@ -209,7 +210,6 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
     private void updateUI(Intent intent) {
         boolean isError = intent.getBooleanExtra("error", true);
-        Log.d(TAG, "=>" + isError);
 
         handle.removeAllViews();
         weatherWidgetLayout.removeAllViews();
@@ -219,12 +219,14 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
             txtError.setText(getResources().getText(R.string.weather_citynotfound));
             txtError.setTextColor(getResources().getColor(R.color.text_color_light));
             handle.addView(txtError);
+            Log.d(TAG, "WeatherWidget display error");
 
         } else {
             weatherWidget2 = new WeatherWidget(this, WeatherView.IMAGE);
             handle.addView(weatherWidget2);
             weatherWidget = new WeatherWidget(this, WeatherView.TEXT);
             weatherWidgetLayout.addView(weatherWidget);
+            Log.d(TAG, "WeatherWidget display ok");
         }
 
     }

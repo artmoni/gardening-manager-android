@@ -209,16 +209,17 @@ public class AboutActivity extends AbstractActivity {
 
     protected void setButtonClickable(int viewId, final String url) {
         View button = (View) findViewById(viewId);
-        button.setOnClickListener(new LinearLayout.OnClickListener() {
+        if (button != null)
+            button.setOnClickListener(new LinearLayout.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                startActivity(browserIntent);
-                GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
-                GoogleAnalyticsTracker.getInstance().trackPageView(url);
-            }
-        });
+                @Override
+                public void onClick(View v) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(browserIntent);
+                    GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
+                    GoogleAnalyticsTracker.getInstance().trackPageView(url);
+                }
+            });
     }
 
     protected void addProgress() {
@@ -280,8 +281,8 @@ public class AboutActivity extends AbstractActivity {
         ContentResolver.requestSync(newAccount, GardenContentProvider.AUTHORITY, bundle);
         ContentResolver.setSyncAutomatically(newAccount, ActionsContentProvider.AUTHORITY, true);
         ContentResolver.requestSync(newAccount, ActionsContentProvider.AUTHORITY, bundle);
-//        ContentResolver.setSyncAutomatically(newAccount, AllotmentContentProvider.AUTHORITY, true);
-//        ContentResolver.requestSync(newAccount, AllotmentContentProvider.AUTHORITY, bundle);
+        // ContentResolver.setSyncAutomatically(newAccount, AllotmentContentProvider.AUTHORITY, true);
+        // ContentResolver.requestSync(newAccount, AllotmentContentProvider.AUTHORITY, bundle);
 
         /*
          * Synchronize Purchase feature
