@@ -31,6 +31,7 @@ import org.gots.utils.NotConfiguredException;
 import org.nuxeo.android.config.NuxeoServerConfig;
 
 import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -377,7 +378,11 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
         // if (accounts.length > 0)
         // return accounts[0];
 
-        return new Account(getNuxeoLogin(), ACCOUNT_TYPE);
+        AccountManager mAccountManager = AccountManager.get(mContext);
+        final Account account = new Account(getNuxeoLogin(), ACCOUNT_TYPE);
+        mAccountManager.addAccountExplicitly(account, getNuxeoPassword(), null);
+
+        return account;
     }
 
     public void setUserAccount(Account userAccount) {

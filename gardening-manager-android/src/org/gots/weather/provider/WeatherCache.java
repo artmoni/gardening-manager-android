@@ -131,7 +131,7 @@ public class WeatherCache {
 
             Log.i(TAG, "Open cache " + f.getAbsolutePath());
         } catch (FileNotFoundException e) {
-            Log.w(TAG, e.getMessage(), e);
+            Log.w(TAG, e.getMessage());
             throw new ObsoleteCacheException();
         }
         return fileInputStream;
@@ -154,7 +154,6 @@ public class WeatherCache {
 
         } catch (Exception e) {
             Log.e(TAG, "Error creating cache file " + e.getMessage());
-            e.printStackTrace();
         }
     }
 

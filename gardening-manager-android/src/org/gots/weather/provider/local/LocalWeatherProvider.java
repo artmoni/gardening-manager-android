@@ -87,7 +87,7 @@ public class LocalWeatherProvider extends GotsDBHelper {
     }
 
     public WeatherConditionInterface getWeatherByDayofyear(int dayofyear) {
-        WeatherConditionInterface weatherCondition = null;
+        WeatherConditionInterface weatherCondition = new WeatherCondition();
         Cursor cursor = null;
         try {
             cursor = bdd.query(DatabaseHelper.WEATHER_TABLE_NAME, null, DatabaseHelper.WEATHER_DAYOFYEAR + "="

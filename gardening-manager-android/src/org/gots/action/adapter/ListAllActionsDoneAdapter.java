@@ -12,15 +12,15 @@ package org.gots.action.adapter;
 
 import java.util.ArrayList;
 
+import org.gots.action.SeedActionInterface;
 import org.gots.seed.GrowingSeedInterface;
 
 import android.content.Context;
 
 public class ListAllActionsDoneAdapter extends ListAllActionAdapter {
 
-	public ListAllActionsDoneAdapter(Context context, ArrayList<GrowingSeedInterface> allSeeds, int status) {
-		super(context, allSeeds, status);
-		// TODO Auto-generated constructor stub
+	public ListAllActionsDoneAdapter(Context context, ArrayList<SeedActionInterface> allActions, int status) {
+		super(context, allActions, status);
 	}
 
 }

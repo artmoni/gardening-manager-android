@@ -24,6 +24,8 @@ package org.gots.ui;
 import java.util.ArrayList;
 
 import org.gots.R;
+import org.gots.action.GotsActionSeedManager;
+import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.allotment.AllotmentManager;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.broadcast.BroadCastMessages;
@@ -73,6 +75,8 @@ public abstract class AbstractActivity extends ActionBarActivity {
 
     protected AllotmentManager allotmentManager;
 
+    protected GotsActionSeedManager actionseedProvider;
+
     private View progressView;
 
     private Menu menu;
@@ -94,7 +98,8 @@ public abstract class AbstractActivity extends ActionBarActivity {
         seedManager.initIfNew(this);
         allotmentManager = AllotmentManager.getInstance();
         allotmentManager.initIfNew(this);
-        activities.add(this);
+        actionseedProvider = GotsActionSeedManager.getInstance();
+        actionseedProvider.initIfNew(this);
     }
 
     @Override
@@ -107,6 +112,7 @@ public abstract class AbstractActivity extends ActionBarActivity {
         registerReceiver(seedManager, new IntentFilter(BroadCastMessages.GARDEN_SETTINGS_CHANGED));
         registerReceiver(progressReceiver, new IntentFilter(BroadCastMessages.PROGRESS_UPDATE));
         registerReceiver(progressReceiver, new IntentFilter(BroadCastMessages.PROGRESS_FINISHED));
+        activities.add(this);
 
         GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
         GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
@@ -141,23 +147,20 @@ public abstract class AbstractActivity extends ActionBarActivity {
         }
     };
 
-    protected void onPause() {
-        if (isFinishing()) {
-            activities.remove(this);
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        activities.remove(this);
 
-            unregisterReceiver(gardenManager);
-            unregisterReceiver(allotmentManager);
-            unregisterReceiver(seedManager);
-            unregisterReceiver(progressReceiver);
-            if (activities.size() == 0) {
-                nuxeoManager.shutdown();
-                gardenManager.finalize();
-                seedManager.finalize();
-                allotmentManager.finalize();
-
-            }
-            GoogleAnalyticsTracker.getInstance().dispatch();
-            GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
+        unregisterReceiver(gardenManager);
+        unregisterReceiver(allotmentManager);
+        unregisterReceiver(seedManager);
+        unregisterReceiver(progressReceiver);
+        if (activities.size() == 0) {
+            nuxeoManager.shutdown();
+            gardenManager.finalize();
+            seedManager.finalize();
+            allotmentManager.finalize();
         }
         super.onPause();
     }
@@ -166,15 +169,24 @@ public abstract class AbstractActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_common, menu);
         this.menu = menu;
-        menu.findItem(R.id.refresh_seed).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
 
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                onRefresh(null);
-                return true;
-            }
-        });
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+        case R.id.refresh_seed:
+            onRefresh(null);
+            Log.d(TAG, getClass().getName());
+            break;
+
+        default:
+            break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     protected void setProgressRefresh(boolean refresh) {
@@ -191,17 +203,13 @@ public abstract class AbstractActivity extends ActionBarActivity {
                 Animation rotation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
                 rotation.setRepeatCount(Animation.INFINITE);
                 progressView.startAnimation(rotation);
-                // progressView.setBackgroundColor(getResources().getColor(R.color.action_warning_color));
             }
-            // itemRefresh.setActionView(progressView);
             itemRefresh = MenuItemCompat.setActionView(itemRefresh, progressView);
         } else {
             if (progressView != null) {
                 progressView.clearAnimation();
             }
-            // itemRefresh.setActionView(null);
             itemRefresh = MenuItemCompat.setActionView(itemRefresh, null);
-
         }
 
     }
@@ -213,7 +221,10 @@ public abstract class AbstractActivity extends ActionBarActivity {
         }
         Account userAccount = gotsPrefs.getUserAccount();
         ContentResolver.setSyncAutomatically(userAccount, AUTHORITY, true);
-        ContentResolver.requestSync(userAccount, AUTHORITY, Bundle.EMPTY);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        ContentResolver.requestSync(userAccount, AUTHORITY, bundle);
     }
 
 }

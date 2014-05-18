@@ -1,7 +1,10 @@
 package org.gots.authentication.syncadapter;
 
+import org.gots.action.GotsActionSeedManager;
+import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.authentication.GotsSyncAdapter;
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.seed.GotsSeedManager;
 
 import android.accounts.Account;
 import android.content.ContentProviderClient;
@@ -12,6 +15,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 public class ActionsSyncAdapter extends GotsSyncAdapter {
+    protected GotsSeedManager seedManager;
+
     public ActionsSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
 
@@ -37,7 +42,10 @@ public class ActionsSyncAdapter extends GotsSyncAdapter {
         // SeedNotification notification = new SeedNotification(getContext());
         // notification.createNotification(newSeeds);
         // }
+         GotsActionSeedProvider actionseedManager= GotsActionSeedManager.getInstance().initIfNew(getContext());
+
         actionseedManager.getActionsToDo();
+        
         intent.setAction(BroadCastMessages.PROGRESS_FINISHED);
         getContext().sendBroadcast(intent);
     }

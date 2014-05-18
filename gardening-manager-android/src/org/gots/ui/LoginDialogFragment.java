@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.gots.R;
-import org.gots.authentication.GoogleAuthentication;
 import org.gots.authentication.GotsSocialAuthentication;
-import org.gots.authentication.NuxeoAuthentication;
+import org.gots.authentication.provider.google.GoogleAuthentication;
+import org.gots.authentication.provider.nuxeo.NuxeoAuthentication;
 import org.gots.broadcast.BroadCastMessages;
 
 import android.accounts.Account;

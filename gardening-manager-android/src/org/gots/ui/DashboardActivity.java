@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
+import org.gots.authentication.AuthenticationActivity;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.inapp.AppRater;
@@ -22,6 +23,7 @@ import org.gots.weather.service.WeatherUpdateService;
 import org.gots.weather.view.WeatherView;
 import org.gots.weather.view.WeatherWidget;
 
+import android.accounts.AccountManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -99,11 +101,11 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
         if (LAUNCHER_ACTION.equals(getIntent().getAction())) {
             startActivity(new Intent(this, ActionActivity.class));
         } else if (LAUNCHER_CATALOGUE.equals(getIntent().getAction()))
             startActivity(new Intent(this, HutActivity.class));
-        super.onPostCreate(savedInstanceState);
     }
 
     protected void displayGardenMenu(final ActionBar actionBar) {
@@ -127,16 +129,21 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
                     if (myGardens.size() > 0)
                         gardenManager.setCurrentGarden(myGardens.get(0));
                     else {
-                        Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), ProfileCreationActivity.class);
                         startActivity(intent);
+                        // AccountManager accountManager = AccountManager.get(getApplicationContext()
+                        // );
+                        // accountManager.addAccount(accountType, authTokenType, requiredFeatures, addAccountOptions,
+                        // activity, callback, handler)
                     }
                 int selectedGardenIndex = 0;
                 String[] dropdownValues = new String[myGardens.size()];
                 for (int i = 0; i < myGardens.size(); i++) {
                     GardenInterface garden = myGardens.get(i);
                     dropdownValues[i] = garden.getName() != null ? garden.getName() : garden.getLocality();
-                    if (garden != null && currentGarden != null && garden.getId() == currentGarden.getId())
+                    if (garden != null && currentGarden != null && garden.getId() == currentGarden.getId()) {
                         selectedGardenIndex = i;
+                    }
                 }
                 if (dropdownValues.length > 0) {
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(DashboardActivity.this,
@@ -201,7 +208,6 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
     private void updateWeatherWidget(Intent intent) {
         boolean isError = intent.getBooleanExtra("error", true);
-        Log.d(TAG, "=>" + isError);
 
         handle.removeAllViews();
         weatherWidgetLayout.removeAllViews();
@@ -211,12 +217,14 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
             txtError.setText(getResources().getText(R.string.weather_citynotfound));
             txtError.setTextColor(getResources().getColor(R.color.text_color_light));
             handle.addView(txtError);
+            Log.d(TAG, "WeatherWidget display error");
 
         } else {
             weatherWidget2 = new WeatherWidget(this, WeatherView.IMAGE);
             handle.addView(weatherWidget2);
             weatherWidget = new WeatherWidget(this, WeatherView.TEXT);
             weatherWidgetLayout.addView(weatherWidget);
+            Log.d(TAG, "WeatherWidget display ok");
         }
 
     }
@@ -281,11 +289,6 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

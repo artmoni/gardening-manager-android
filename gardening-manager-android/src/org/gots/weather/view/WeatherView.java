@@ -134,8 +134,9 @@ public class WeatherView extends LinearLayout {
             break;
         }
         try {
-            Calendar t = new GregorianCalendar();
-            t.setTime(mWeather.getDate());
+            Calendar t = Calendar.getInstance();
+            if (mWeather.getDate() != null)
+                t.setTime(mWeather.getDate());
 
             tempMin.setText("" + mWeather.getTempCelciusMin());
 

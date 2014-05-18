@@ -175,9 +175,9 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
                 address = adresses.get(0);
                 editTextLocality.setTag(address);
 
-                if ("".equals(editTextLocality.getText().toString()))
-                    editTextLocality.setHint(String.format("%s", address.getLocality()));
-                else
+                // if ("".equals(editTextLocality.getText().toString()))
+                // editTextLocality.setHint(String.format("%s", address.getLocality()));
+                // else
                     editTextLocality.setText(String.format("%s", address.getLocality()));
             } else {
                 // sinon on affiche un message d'erreur
