@@ -26,33 +26,34 @@ public class SplashScreenActivity extends AboutActivity {
     private static final int STOPSPLASH = 0;
 
     // private static final long SPLASHTIME = 3000;
-    private static final long SPLASHTIME = 1000;
+    // private static final long SPLASHTIME = 1000;
 
-    static final class SplashHandler extends Handler {
-
-        private WeakReference<Activity> that;
-
-        public SplashHandler(WeakReference<Activity> that) {
-            this.that = that;
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-
-            switch (msg.what) {
-            case STOPSPLASH:
-                // remove SplashScreen from view
-                if (that.get() != null) {
-                    Intent intent = new Intent(that.get(), DashboardActivity.class);
-                    that.get().startActivity(intent);
-                    that.get().finish();
-                }
-
-                break;
-            }
-            super.handleMessage(msg);
-        }
-    }
+    // static final class SplashHandler extends Handler {
+    //
+    // private WeakReference<Activity> that;
+    //
+    // public SplashHandler(WeakReference<Activity> that) {
+    // this.that = that;
+    // }
+    //
+    // @Override
+    // public void handleMessage(Message msg) {
+    //
+    // switch (msg.what) {
+    // case STOPSPLASH:
+    // // remove SplashScreen from view
+    // if (that.get() != null) {
+    // // that.get().finish();
+    // // Intent intent = new Intent(that.get(), DashboardActivity.class);
+    // // that.get().startActivity(intent);
+    //
+    // }
+    //
+    // break;
+    // }
+    // super.handleMessage(msg);
+    // }
+    // }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,27 +61,34 @@ public class SplashScreenActivity extends AboutActivity {
 
     }
 
-    private Handler getSplashHandler() {
-        if (splashHandler == null) {
-            WeakReference<Activity> that = new WeakReference<Activity>(this);
-            splashHandler = new SplashHandler(that);
-        }
-        return splashHandler;
-    }
+    // private Handler getSplashHandler() {
+    // if (splashHandler == null) {
+    // WeakReference<Activity> that = new WeakReference<Activity>(this);
+    // splashHandler = new SplashHandler(that);
+    // }
+    // return splashHandler;
+    // }
 
     @Override
     protected void removeProgress() {
         super.removeProgress();
         if (refreshCounter == 0) {
-            Message msg = new Message();
-            msg.what = STOPSPLASH;
-            getSplashHandler().sendMessageDelayed(msg, SPLASHTIME);
+            // Message msg = new Message();
+            // msg.what = STOPSPLASH;
+            // getSplashHandler().sendMessageDelayed(msg, SPLASHTIME);
+            Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
         }
     }
 
     @Override
     protected void onActivityResult(int arg0, int arg1, Intent arg2) {
-        onRefresh(null);
+        if (arg1 == 1)
+            onRefresh(null);
+        else if (arg1 == 2)
+            finish();
         super.onActivityResult(arg0, arg1, arg2);
     }
 

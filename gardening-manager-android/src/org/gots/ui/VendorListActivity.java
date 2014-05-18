@@ -54,9 +54,9 @@ public class VendorListActivity extends AbstractListFragment {
 //        setHasOptionsMenu(true);
         mContext = getActivity();
         mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.SEED_DISPLAYLIST));
+//        mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.PROGRESS_FINISHED));
         listVendorSeedAdapter = new VendorSeedListAdapter(mContext, new ArrayList<BaseSeedInterface>());
         setListAdapter(listVendorSeedAdapter);
-
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 

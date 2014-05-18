@@ -103,11 +103,11 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
         if (LAUNCHER_ACTION.equals(getIntent().getAction())) {
             startActivity(new Intent(this, ActionActivity.class));
         } else if (LAUNCHER_CATALOGUE.equals(getIntent().getAction()))
             startActivity(new Intent(this, HutActivity.class));
-        super.onPostCreate(savedInstanceState);
     }
 
     protected void displayGardenMenu(final ActionBar actionBar) {
@@ -323,11 +323,6 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
