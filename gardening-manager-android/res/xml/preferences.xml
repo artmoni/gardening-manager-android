@@ -3,7 +3,7 @@
 
     <PreferenceCategory
         android:key="pref_key_category_1"
-        android:title="Gardening in the Cloud" />
+        android:title="Account" />
 
     <Preference
         android:key="nuxeo.serverUrl"

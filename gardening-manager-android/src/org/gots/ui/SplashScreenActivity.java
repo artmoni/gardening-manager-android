@@ -52,8 +52,6 @@ public class SplashScreenActivity extends AboutActivity {
     protected void onActivityResult(int arg0, int arg1, Intent arg2) {
         if (arg1 == 1)
             onRefresh(null);
-        else if (arg1 == 2)
-            finish();
         super.onActivityResult(arg0, arg1, arg2);
     }
 

@@ -44,6 +44,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.BaseAdapter;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -101,6 +102,8 @@ public class ProfileAdapter extends BaseAdapter {
     }
 
     private void downloadImage(String userid, String url) {
+        if (userid == null)
+            return;
         File file = new File(mContext.getCacheDir() + "/" + userid.toLowerCase().replaceAll("\\s", ""));
         if (!file.exists()) {
             try {
@@ -141,7 +144,7 @@ public class ProfileAdapter extends BaseAdapter {
         }
 
         protected void onPostExecute(Void result) {
-            if (user != null) {
+            if (user != null && user.getId() != null) {
                 File file = new File(mContext.getCacheDir() + "/" + user.getId().toLowerCase().replaceAll("\\s", ""));
                 Bitmap usrLogo = BitmapFactory.decodeFile(file.getAbsolutePath());
                 imageProfile.setImageBitmap(usrLogo);
@@ -149,7 +152,6 @@ public class ProfileAdapter extends BaseAdapter {
         };
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
@@ -278,7 +280,7 @@ public class ProfileAdapter extends BaseAdapter {
 
     private void displayWeatherChart(View parent) {
         // idWeatherConnected
-        WebView webView = (WebView) parent.findViewById(R.id.idWeatherConnected);
+        final WebView webView = (WebView) parent.findViewById(R.id.idWeatherConnected);
         String serieTempMin = new String();
         String serieTempMax = new String();
         String chl = new String();
@@ -324,6 +326,14 @@ public class ProfileAdapter extends BaseAdapter {
         String url = "http://chart.apis.google.com/chart?cht=lc&chs=250x100&chd=t:" + serieTempMin + "|" + serieTempMax
                 + "&chxt=x,y&chxr=0," + min.get(Calendar.DAY_OF_MONTH) + "," + max.get(Calendar.DAY_OF_MONTH)
                 + ",1|1,-50,50&chds=-50,50&chco=009999,B65635";
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                // Log.i("WEB_VIEW_TEST", "error code:" + errorCode);
+                super.onReceivedError(view, errorCode, description, failingUrl);
+                webView.setVisibility(View.GONE);
+            }
+        });
         webView.loadUrl(url);
     }
 

@@ -162,7 +162,6 @@ public abstract class AbstractActivity extends ActionBarActivity {
             seedManager.finalize();
             allotmentManager.finalize();
         }
-        super.onPause();
     }
 
     @Override
