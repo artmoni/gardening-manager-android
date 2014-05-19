@@ -149,8 +149,7 @@ public class AboutActivity extends AbstractActivity {
                     Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
                     progressSeed.startAnimation(myFadeInAnimation);
                     textprogressSeed.setText(getResources().getString(R.string.synchro_seeds_checking));
-                    ((TextView) findViewById(R.id.textProgressSeed)).setTextColor(getResources().getColor(
-                            R.color.action_warning_color));
+                    textprogressSeed.setTextColor(getResources().getColor(R.color.action_warning_color));
 
                 } else if (AllotmentContentProvider.AUTHORITY.equals(authority)) {
 
