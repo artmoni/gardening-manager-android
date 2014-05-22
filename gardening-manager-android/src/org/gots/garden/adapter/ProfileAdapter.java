@@ -40,6 +40,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +53,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 
 public class ProfileAdapter extends BaseAdapter {
@@ -138,6 +140,8 @@ public class ProfileAdapter extends BaseAdapter {
                 e.printStackTrace();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (GoogleAuthException e) {
                 e.printStackTrace();
             }
             return null;

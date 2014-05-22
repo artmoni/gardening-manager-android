@@ -61,65 +61,60 @@ public class GoogleAuthentication implements GotsSocialAuthentication {
     }
 
     @Override
-    public String getToken(String accountName) throws UserRecoverableAuthException, IOException {
+    public String getToken(String accountName) throws GoogleAuthException, IOException {
         String token = null;
 
         final String SCOPE_PREFIX = "oauth2:";
         final String SCOPES = SCOPE_PREFIX + Scopes.PLUS_LOGIN + " " + Scopes.PLUS_PROFILE + " "
                 + "https://www.googleapis.com/auth/userinfo.email";
 
-        try {
-            token = GoogleAuthUtil.getToken(mContext, accountName, SCOPES);
-        } catch (GoogleAuthException e) {
-            Log.e(TAG, e.getMessage(), e);
-        }
+        token = GoogleAuthUtil.getToken(mContext, accountName, SCOPES);
         Log.d(TAG, "GoogleAuthUtil.getToken=" + token);
 
         return token;
     }
 
-    
-//    public String getEmail(String accessToken, String userid) {
-//        URL url;
-//        String login = null;
-//        try {
-//
-//            url = new URL("https://www.googleapis.com/plus/v1/people/" + userid + "?access_token=" + accessToken);
-//
-//            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-//            int serverCode = con.getResponseCode();
-//            // successful query
-//            if (serverCode == 200) {
-//                try {
-//                    InputStream is = con.getInputStream();
-//                    JSONObject jsonArray;
-//                    jsonArray = new JSONObject(convertStreamToString(is));
-//
-//                    login = (String) jsonArray.getJSONObject("emails").get("value");
-//
-//                    Log.d(TAG, "Google login = " + login);
-//                    is.close();
-//                } catch (JSONException e) {
-//                    Log.e(TAG, e.getMessage(), e);
-//                    return null;
-//                }
-//                // bad token, invalidate and get a new one
-//            } else if (serverCode == 401) {
-//                GoogleAuthUtil.invalidateToken(mContext, accessToken);
-//                // Log.e(TAG, "Server auth error: " + readResponse(con.getErrorStream()));
-//                Log.e(TAG, "Server auth error: ");
-//                // unknown error, do something else
-//            } else {
-//                Log.e(TAG, "Server returned the following error code: " + serverCode);
-//
-//            }
-//        } catch (MalformedURLException e1) {
-//            Log.e(TAG, e1.getMessage(), e1);
-//        } catch (IOException e1) {
-//            Log.e(TAG, e1.getMessage(), e1);
-//        }
-//        return login;
-//    }
+    // public String getEmail(String accessToken, String userid) {
+    // URL url;
+    // String login = null;
+    // try {
+    //
+    // url = new URL("https://www.googleapis.com/plus/v1/people/" + userid + "?access_token=" + accessToken);
+    //
+    // HttpURLConnection con = (HttpURLConnection) url.openConnection();
+    // int serverCode = con.getResponseCode();
+    // // successful query
+    // if (serverCode == 200) {
+    // try {
+    // InputStream is = con.getInputStream();
+    // JSONObject jsonArray;
+    // jsonArray = new JSONObject(convertStreamToString(is));
+    //
+    // login = (String) jsonArray.getJSONObject("emails").get("value");
+    //
+    // Log.d(TAG, "Google login = " + login);
+    // is.close();
+    // } catch (JSONException e) {
+    // Log.e(TAG, e.getMessage(), e);
+    // return null;
+    // }
+    // // bad token, invalidate and get a new one
+    // } else if (serverCode == 401) {
+    // GoogleAuthUtil.invalidateToken(mContext, accessToken);
+    // // Log.e(TAG, "Server auth error: " + readResponse(con.getErrorStream()));
+    // Log.e(TAG, "Server auth error: ");
+    // // unknown error, do something else
+    // } else {
+    // Log.e(TAG, "Server returned the following error code: " + serverCode);
+    //
+    // }
+    // } catch (MalformedURLException e1) {
+    // Log.e(TAG, e1.getMessage(), e1);
+    // } catch (IOException e1) {
+    // Log.e(TAG, e1.getMessage(), e1);
+    // }
+    // return login;
+    // }
 
     @Override
     public User getUser(String accessToken) {
@@ -144,7 +139,7 @@ public class GoogleAuthentication implements GotsSocialAuthentication {
                     user.setLocale((String) jsonArray.get("locale"));
                     user.setName((String) jsonArray.get("name"));
                     user.setGender((String) jsonArray.get("gender"));
-//                    user.setEmail(getEmail(accessToken, "me"));
+                    // user.setEmail(getEmail(accessToken, "me"));
                     Log.d(TAG, "Google User = " + user.getName());
                     is.close();
                 } catch (JSONException e) {

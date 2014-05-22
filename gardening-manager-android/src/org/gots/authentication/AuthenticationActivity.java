@@ -226,16 +226,17 @@ public class AuthenticationActivity extends AccountAuthenticatorActivity {
         AccountManager mAccountManager = AccountManager.get(this);
         String accountName = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
         String accountPassword = intent.getStringExtra(PARAM_USER_PASS);
-//         final Account account = new Account(accountName, intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
+        // final Account account = new Account(accountName, intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
         final Account account = gotsPreferences.getUserAccount();
 
         if (getIntent().getBooleanExtra(ARG_IS_ADDING_NEW_ACCOUNT, false)) {
             String authtoken = intent.getStringExtra(AccountManager.KEY_AUTHTOKEN);
             // Creating the account on the device and setting the auth token we got
             // (Not setting the auth token will cause another call to the server to authenticate the user)
-//            Bundle bundle = new Bundle();
-//            bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-//            bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+            // Bundle bundle = new Bundle();
+            // bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+            // bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+            gotsPreferences.setNuxeoLogin(accountName);
             mAccountManager.addAccountExplicitly(account, accountPassword, null);
             mAccountManager.setAuthToken(account, AUTH_TOKEN_TYPE, authtoken);
         } else {

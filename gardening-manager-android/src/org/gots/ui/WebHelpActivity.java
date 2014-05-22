@@ -49,14 +49,14 @@ public class WebHelpActivity extends AbstractActivity {
 
         mWebView.loadUrl(Uri.parse(HelpUriBuilder.getUri(helpClass)).toString());
 
-        Button close = (Button) findViewById(R.id.buttonClose);
-        close.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+//        Button close = (Button) findViewById(R.id.buttonClose);
+//        close.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//            }
+//        });
 
     }
 

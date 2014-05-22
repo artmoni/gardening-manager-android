@@ -76,6 +76,26 @@
         <item name="android:background">@drawable/fond_bl_arr</item>
     </style>
 
+    <style name="tutorial_title">
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">left</item>
+        <item name="android:drawablePadding">0dp</item>
+        <item name="android:textSize">30dp</item>
+        <item name="android:textColor">@color/action_error_color</item>
+    </style>
+
+    <style name="tutorial_description">
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">left</item>
+        <item name="android:drawablePadding">0dp</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:textColor">@color/green_dark</item>
+    </style>
+
     <style name="description_content">
         <item name="android:layout_marginLeft">10dp</item>
         <item name="android:layout_marginRight">10dp</item>

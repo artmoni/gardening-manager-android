@@ -28,6 +28,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 
 public class LoginDialogFragment extends AbstractDialogFragment {
@@ -296,6 +297,8 @@ public class LoginDialogFragment extends AbstractDialogFragment {
                     startActivityForResult(e.getIntent(), AUTHTOKEN_CODE_RESULT);
                 } catch (IOException e) {
                     Log.e(TAG, e.getMessage(), e);
+                }catch (GoogleAuthException e) {
+                    Log.e(TAG, e.getMessage(), e);
                 }
                 return nuxeoToken;
             }
@@ -303,13 +306,13 @@ public class LoginDialogFragment extends AbstractDialogFragment {
             @Override
             protected void onPostExecute(String resultToken) {
                 if (resultToken != null) {
+                    gotsPrefs.setNuxeoLogin(account.name);
+                    gotsPrefs.setToken(resultToken);
+                    gotsPrefs.setConnectedToServer(true);
                     Toast.makeText(
                             getActivity(),
                             getResources().getString(R.string.login_connect_description).replace("_ACCOUNT_",
                                     gotsPrefs.getNuxeoLogin()), Toast.LENGTH_LONG).show();
-                    gotsPrefs.setNuxeoLogin(account.name);
-                    gotsPrefs.setToken(resultToken);
-                    gotsPrefs.setConnectedToServer(true);
                     // onResume();
                     getDialog().dismiss();
                 } else {

@@ -175,47 +175,47 @@ public class ListAllActionAdapter extends BaseAdapter {
                 textviewActionStatus.setText(mContext.getResources().getString(R.string.seed_action_done));
 
                 Calendar rightNow = Calendar.getInstance();
-                rightNow.setTime(currentAction.getDateActionDone());
-                // rightNow.add(Calendar.DAY_OF_YEAR,
-                // currentAction.getDuration());
-                textviewActionDate.setText(dateFormat.format(currentAction.getDateActionDone()));
+                if (currentAction.getDateActionDone() != null) {
+                    rightNow.setTime(currentAction.getDateActionDone());
+                    textviewActionDate.setText(dateFormat.format(rightNow.getTime()));
+                    WeatherView weatherView = (WeatherView) ll.findViewById(R.id.idWeatherView);
+                    weatherView.setWeather(manager.getCondition(rightNow.getTime()));
 
-                WeatherView weatherView = (WeatherView) ll.findViewById(R.id.idWeatherView);
-                weatherView.setWeather(manager.getCondition(rightNow.getTime()));
+                    currentAction.setState(ActionState.NORMAL);
 
-                currentAction.setState(ActionState.NORMAL);
+                    if (PhotoAction.class.isInstance(currentAction) && currentAction.getData() != null) {
+                        final File imgFile = new File(currentAction.getData().toString());
 
-                if (PhotoAction.class.isInstance(currentAction) && currentAction.getData() != null) {
-                    final File imgFile = new File(currentAction.getData().toString());
+                        try {
+                            Bitmap imageBitmap = getThumbnail(imgFile);
+                            // Bitmap imageBitmap = getThumbnail(
+                            // mContext.getContentResolver(),
+                            // imgFile.getAbsolutePath());
+                            ImageView seedImage = (ImageView) ll.findViewById(R.id.imageviewPhoto);
+                            int padding = (THUMBNAIL_WIDTH - imageBitmap.getWidth()) / 2;
+                            seedImage.setPadding(padding, 0, padding, 0);
+                            seedImage.setImageBitmap(imageBitmap);
 
-                    try {
-                        Bitmap imageBitmap = getThumbnail(imgFile);
-                        // Bitmap imageBitmap = getThumbnail(
-                        // mContext.getContentResolver(),
-                        // imgFile.getAbsolutePath());
-                        ImageView seedImage = (ImageView) ll.findViewById(R.id.imageviewPhoto);
-                        int padding = (THUMBNAIL_WIDTH - imageBitmap.getWidth()) / 2;
-                        seedImage.setPadding(padding, 0, padding, 0);
-                        seedImage.setImageBitmap(imageBitmap);
+                            seedImage.setVisibility(View.VISIBLE);
+                            weatherView.setVisibility(View.GONE);
 
-                        seedImage.setVisibility(View.VISIBLE);
-                        weatherView.setVisibility(View.GONE);
+                            seedImage.setOnClickListener(new View.OnClickListener() {
 
-                        seedImage.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent();
+                                    intent.setAction(Intent.ACTION_VIEW);
+                                    intent.setDataAndType(Uri.parse("file://" + imgFile.getAbsolutePath()), "image/*");
+                                    mContext.startActivity(intent);
+                                }
+                            });
+                        } catch (Exception e) {
+                            Log.e(getClass().getName(),
+                                    "imgFile.getPath()=" + imgFile.getPath() + " - " + e.getMessage());
+                            // ll.setVisibility(View.GONE);
+                        }
 
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent();
-                                intent.setAction(Intent.ACTION_VIEW);
-                                intent.setDataAndType(Uri.parse("file://" + imgFile.getAbsolutePath()), "image/*");
-                                mContext.startActivity(intent);
-                            }
-                        });
-                    } catch (Exception e) {
-                        Log.e(getClass().getName(), "imgFile.getPath()=" + imgFile.getPath() + " - " + e.getMessage());
-                        // ll.setVisibility(View.GONE);
                     }
-
                 }
             }
             actionWidget.setState(currentAction.getState());

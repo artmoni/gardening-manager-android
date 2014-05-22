@@ -174,7 +174,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
             if (localGarden.getUUID() == null) { // local only without
                                                  // UUID => create
                                                  // remote
-                myGardens.add(createNuxeoGarden(localGarden));
+                myGardens.add(createGarden(localGarden));
             } else {
                 boolean found = false;
                 for (GardenInterface remoteGarden : remoteGardens) {
@@ -194,7 +194,6 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
     @Override
     public GardenInterface createGarden(GardenInterface garden) {
         Log.i(TAG, "createGarden " + garden);
-        currentGarden = garden;
 
         Session session = getNuxeoClient().getSession();
         DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
@@ -232,15 +231,19 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
             // deferredUpdateMgr.execDeferredUpdate(createOperation, callback, OperationType.CREATE, true);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
+            if (garden.getId() == 0)
+                garden = super.createGarden(garden);
         }
+        
+        currentGarden = garden;
 
-        return super.createGarden(garden);
+        return garden;
     }
 
-    protected GardenInterface createNuxeoGarden(GardenInterface localGarden) {
-
-        return localGarden;
-    }
+    // protected GardenInterface createNuxeoGarden(GardenInterface localGarden) {
+    //
+    // return localGarden;
+    // }
 
     @Override
     public GardenInterface updateGarden(GardenInterface garden) {

@@ -41,6 +41,7 @@ public class SplashScreenActivity extends AboutActivity {
             // Message msg = new Message();
             // msg.what = STOPSPLASH;
             // getSplashHandler().sendMessageDelayed(msg, SPLASHTIME);
+//            Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
             Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
