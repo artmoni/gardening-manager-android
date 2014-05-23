@@ -13,44 +13,34 @@
         android:layout_below="@+id/textView1"
         android:layout_centerHorizontal="true"
         android:gravity="center"
-        android:text="@string/tutorial.a.description"
+        android:text="@string/tutorial.e.description"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:src="@drawable/tutorial_temp" />
-
-    <ImageView
-        android:id="@+id/ImageView01"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="95dp"
-        android:src="@drawable/bt_localize_garden" />
+        android:src="@drawable/bt_dashboard_profile" />
 
     <TextView
         android:id="@+id/textView1"
         style="@style/tutorial_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ImageView01"
+        android:layout_below="@+id/imageView1"
         android:layout_centerHorizontal="true"
         android:gravity="center"
-        android:text="@string/tutorial.a.title"
+        android:text="@string/tutorial.e.title"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignBottom="@+id/imageView2"
-        android:layout_toLeftOf="@+id/imageView2"
-        android:src="@drawable/weather_mostlysunny" />
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/garden_shared" />
 
 </RelativeLayout>

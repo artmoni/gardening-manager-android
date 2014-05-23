@@ -55,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/idWeatherConnected"
+        android:layout_alignRight="@+id/idWeatherChart"
         android:visibility="gone" >
 
         <LinearLayout
@@ -67,7 +67,7 @@
     </HorizontalScrollView>
 
     <WebView
-        android:id="@+id/idWeatherConnected"
+        android:id="@+id/idWeatherChart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/idGardenName"

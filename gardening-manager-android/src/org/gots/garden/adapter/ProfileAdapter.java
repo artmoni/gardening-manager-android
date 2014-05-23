@@ -167,6 +167,7 @@ public class ProfileAdapter extends BaseAdapter {
         TextView gardenName = (TextView) vi.findViewById(R.id.idGardenName);
         ImageView imageProfile = (ImageView) vi.findViewById(R.id.imageProfile);
         weatherHistory = (LinearLayout) vi.findViewById(R.id.layoutWeatherHistory);
+        View weatherChart = vi.findViewById(R.id.idWeatherChart);
         // final HorizontalScrollView weatherHistoryContainer = (HorizontalScrollView)
         // vi.findViewById(R.id.scrollWeatherHistory);
 
@@ -176,6 +177,7 @@ public class ProfileAdapter extends BaseAdapter {
         if (selectedGarden != null && currentGarden != null && selectedGarden.getId() == currentGarden.getId()) {
             vi.setSelected(true);
             imageProfile.setVisibility(View.VISIBLE);
+            weatherChart.setVisibility(View.VISIBLE);
             // weatherHistory.setVisibility(View.VISIBLE);
             // weatherHistoryContainer.setVisibility(View.VISIBLE);
             int sdk = android.os.Build.VERSION.SDK_INT;
@@ -189,6 +191,8 @@ public class ProfileAdapter extends BaseAdapter {
 
         } else {
             vi.setSelected(false);
+            weatherChart.setVisibility(View.GONE);
+
             // vi.getBackground().setAlpha(200);
             imageProfile.setVisibility(View.GONE);
             // weatherHistory.setVisibility(View.GONE);
@@ -284,7 +288,7 @@ public class ProfileAdapter extends BaseAdapter {
 
     private void displayWeatherChart(View parent) {
         // idWeatherConnected
-        final WebView webView = (WebView) parent.findViewById(R.id.idWeatherConnected);
+        final WebView webView = (WebView) parent.findViewById(R.id.idWeatherChart);
         String serieTempMin = new String();
         String serieTempMax = new String();
         String chl = new String();

@@ -74,8 +74,7 @@
                         android:layout_gravity="center_vertical"
                         android:paddingRight="10dp"
                         android:text="@string/login.signin"
-                        android:textColor="@color/white"
-                        android:textSize="20sp" />
+                        android:textColor="@color/white" />
 
                     <ImageView
                         android:layout_width="40dp"
@@ -134,8 +133,7 @@
                 <Button
                     android:id="@+id/buttonCreate"
                     style="@style/buttonRed"
-                    android:text="@string/garden.create"
-                    android:textSize="20sp" />
+                    android:text="@string/garden.create" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
