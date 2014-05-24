@@ -17,7 +17,7 @@ import org.gots.ads.GotsAdvertisement;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.adapter.ProfileAdapter;
-import org.gots.garden.service.GardenNotificationService;
+import org.gots.provider.GardenContentProvider;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -28,13 +28,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 
 public class ProfileActivity extends AbstractActivity {
 
@@ -65,16 +65,14 @@ public class ProfileActivity extends AbstractActivity {
             layout.addView(ads.getAdsLayout());
         }
 
-        setProgressAction(new Intent(this, GardenNotificationService.class));
     }
 
     public BroadcastReceiver gardenBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
-                // force_refresh = true;
                 try {
-                    GardenSync gardenSync = new GardenSync(true);
+                    GardenSync gardenSync = new GardenSync();
                     gardenSync.execute(getApplicationContext());
 
                 } catch (Exception e) {
@@ -87,36 +85,19 @@ public class ProfileActivity extends AbstractActivity {
     class GardenSync extends AsyncTask<Context, Void, List<GardenInterface>> {
         ProgressDialog dialog;
 
-        private boolean force_refresh = true;
-
-        public GardenSync(boolean force) {
-            force_refresh = force;
-        }
-
         @Override
         protected void onPreExecute() {
-            // dialog = ProgressDialog.show(ProfileActivity.this, "", getResources().getString(R.string.gots_loading),
-            // true);
-            // dialog.setCanceledOnTouchOutside(true);
-            // dialog.show();
             setProgressRefresh(true);
             super.onPreExecute();
         }
 
         @Override
         protected List<GardenInterface> doInBackground(Context... params) {
-            return gardenManager.getMyGardens(force_refresh);
+            return gardenManager.getMyGardens(false);
         }
 
         @Override
         protected void onPostExecute(List<GardenInterface> myGardens) {
-            force_refresh = false;
-            // try {
-            // dialog.dismiss();
-            // dialog = null;
-            // } catch (Exception e) {
-            // // nothing
-            // }
 
             profileAdapter = new ProfileAdapter(ProfileActivity.this, myGardens);
             profileList.setAdapter(profileAdapter);
@@ -140,40 +121,12 @@ public class ProfileActivity extends AbstractActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // new GardenClass().execute(this);
         try {
-            GardenSync gardenSync = new GardenSync(false);
+            GardenSync gardenSync = new GardenSync();
             gardenSync.execute(this);
-
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
-        // if (gardenManager.getCurrentGarden() == null || gardenManager.getCurrentGarden() != null
-        // && gardenManager.getCurrentGarden().getId() == -1) {
-        // findViewById(R.id.idSelectGarden).setVisibility(View.VISIBLE);
-        // } else
-        // findViewById(R.id.idSelectGarden).setVisibility(View.GONE);
-
-        // buildGardenList();
-        // weatherState.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_weather));
-        // weatherState.setImageDrawable(getResources().getDrawable(R.drawable.weather_updating));
-        // startService(weatherIntent);
-        // registerReceiver(weatherBroadcastReceiver, new
-        // IntentFilter(WeatherUpdateService.BROADCAST_ACTION));
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
-    }
-
-    @Override
-    protected void onPause() {
-
-        super.onPause();
-        // unregisterReceiver(weatherBroadcastReceiver);
-        // stopService(weatherIntent);
     }
 
     @Override
@@ -184,16 +137,9 @@ public class ProfileActivity extends AbstractActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_profile, menu);
-
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -211,7 +157,7 @@ public class ProfileActivity extends AbstractActivity {
             startActivity(browserIntent);
             return true;
 
-        case R.id.new_gaden:
+        case R.id.new_garden:
             Intent i = new Intent(this, ProfileCreationActivity.class);
             startActivity(i);
             return true;
@@ -254,6 +200,11 @@ public class ProfileActivity extends AbstractActivity {
         default:
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onRefresh(String AUTHORITY) {
+        super.onRefresh(GardenContentProvider.AUTHORITY);
     }
 
 }

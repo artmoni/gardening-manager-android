@@ -11,24 +11,22 @@
 package org.gots.ui;
 
 import org.gots.R;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.help.HelpUriBuilder;
 
-import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 
-import android.support.v7.app.ActionBar;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-
 public class WebHelpActivity extends AbstractActivity {
-    private ProgressDialog pd;
 
     public static final String URL = "org.gots.doc.classsimplename";
 
@@ -51,17 +49,15 @@ public class WebHelpActivity extends AbstractActivity {
 
         mWebView.loadUrl(Uri.parse(HelpUriBuilder.getUri(helpClass)).toString());
 
-        Button close = (Button) findViewById(R.id.buttonClose);
-        close.setOnClickListener(new View.OnClickListener() {
+//        Button close = (Button) findViewById(R.id.buttonClose);
+//        close.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//            }
+//        });
 
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        pd = ProgressDialog.show(this, "", getResources().getString(R.string.help_loading), true);
-        pd.setCanceledOnTouchOutside(true);
     }
 
     @Override
@@ -88,7 +84,12 @@ public class WebHelpActivity extends AbstractActivity {
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
-            pd.dismiss();
+            sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
+        }
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
+            super.onPageStarted(view, url, favicon);
         }
 
     }
@@ -100,5 +101,10 @@ public class WebHelpActivity extends AbstractActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onRefresh(String AUTHORITY) {
+        mWebView.reload();
     }
 }

@@ -11,18 +11,12 @@
 package org.gots.ui;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import org.gots.IntentIntegratorSupportV4;
 import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
+import org.gots.provider.SeedsContentProvider;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.seed.provider.parrot.ParrotSeedProvider;
-import org.gots.ui.fragment.AbstractFragmentActivity;
-
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -33,23 +27,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.EditText;
-import android.widget.Filterable;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.ListFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -60,8 +42,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.BaseAdapter;
+import android.widget.EditText;
+import android.widget.Filterable;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-public class HutActivity extends AbstractFragmentActivity {
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
+public class HutActivity extends AbstractActivity {
 
     // private ListVendorSeedAdapter lvsea;
     ListView listSeeds;
@@ -91,7 +84,7 @@ public class HutActivity extends AbstractFragmentActivity {
         actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setHomeButtonEnabled(true);
-        
+
         // displaySpinnerFilter();
         displaySearchBox();
         if (!gotsPurchase.isPremium()) {
@@ -233,9 +226,9 @@ public class HutActivity extends AbstractFragmentActivity {
             new AsyncTask<Void, Void, BaseSeedInterface>() {
                 @Override
                 protected BaseSeedInterface doInBackground(Void... params) {
-                    BaseSeedInterface scanSeed = seedProvider.getSeedByBarCode(scanResult.getContents());
+                    BaseSeedInterface scanSeed = seedManager.getSeedByBarCode(scanResult.getContents());
                     if (scanSeed != null) {
-                        seedProvider.addToStock(scanSeed, gardenProvider.getCurrentGarden());
+                        seedManager.addToStock(scanSeed, gardenManager.getCurrentGarden());
                     }
 
                     return scanSeed;
@@ -327,7 +320,7 @@ public class HutActivity extends AbstractFragmentActivity {
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
                 MySeedsListActivity.class, null);
 
-        if (gotsPref.isConnectedToServer()) {
+        if (gotsPrefs.isConnectedToServer()) {
             args = new Bundle();
             args.putBoolean(VendorListActivity.FILTER_FAVORITES, true);
             mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_favorites)),
@@ -353,7 +346,7 @@ public class HutActivity extends AbstractFragmentActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_hut, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -365,7 +358,6 @@ public class HutActivity extends AbstractFragmentActivity {
             i = new Intent(this, NewSeedActivity.class);
             startActivity(i);
             return true;
-
         case android.R.id.home:
             finish();
             return true;
@@ -378,7 +370,6 @@ public class HutActivity extends AbstractFragmentActivity {
             Intent browserIntent = new Intent(this, WebHelpActivity.class);
             browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
             startActivity(browserIntent);
-
             return true;
         default:
             return super.onOptionsItemSelected(item);
@@ -511,5 +502,9 @@ public class HutActivity extends AbstractFragmentActivity {
             // mViewPager.setCurrentItem(itemId);
             mActionBar.setSelectedNavigationItem(itemId);
         }
+    }
+    @Override
+    protected void onRefresh(String AUTHORITY) {
+        super.onRefresh(SeedsContentProvider.AUTHORITY);
     }
 }

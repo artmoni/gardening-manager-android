@@ -3,19 +3,41 @@
 
     <PreferenceCategory
         android:key="pref_key_category_1"
-        android:title="Nuxeo" >
-        <Preference
-            android:key="nuxeo.serverUrl"
-            android:summary="test"
-            android:title="nuxeo.serverUrl" />
-        <Preference
-            android:key="nuxeo.login"
-            android:summary="test"
-            android:title="nuxeo.login" />
-        <Preference
-            android:key="org.gots.garden.connected"
-            android:summary="test"
-            android:title="isConnected" />
-    </PreferenceCategory>
+        android:title="Account" />
+
+    <Preference
+        android:key="nuxeo.serverUrl"
+        android:summary="Gardening Manager Cloud ressource"
+        android:title="Server" />
+
+    <Preference
+        android:key="nuxeo.login"
+        android:summary="Your login to the server"
+        android:title="Login" />
+    <Preference
+        android:key="nuxeo.auth.token"
+        android:summary="Authentication Token"
+        android:title="Token" />
+
+    <!--
+         <CheckBoxPreference
+        android:key="org.gots.garden.connected"
+        android:summary="test"
+        android:title="isConnected" />
+    -->
+
+    <PreferenceCategory
+        android:key="pref_key_category_2"
+        android:title="Synchronization" />
+
+    <ListPreference
+        android:defaultValue="1"
+        android:entries="@array/frequencyArray"
+        android:entryValues="@array/frequencyValues"
+        android:key="sync.schedule"
+        android:summary="Notification scheduler"
+        android:title="Schedule notification" />
+
+    
 
 </PreferenceScreen>

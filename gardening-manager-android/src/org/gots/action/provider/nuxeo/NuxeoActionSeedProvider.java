@@ -39,7 +39,6 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;

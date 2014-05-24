@@ -64,16 +64,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Gallery;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.vending.billing.util.IabHelper;
-import com.android.vending.billing.util.IabResult;
-import com.android.vending.billing.util.Inventory;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class TabSeedActivity extends ActionBarActivity {

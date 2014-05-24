@@ -58,7 +58,7 @@
     <string name="allotment.description1">Je sélectionne le bouton menu pour ajouter une parcelle.</string>
     <string name="allotment.description2">Le menu parcelle, j\'effectue des actions sur une parcelle. Par exemple: je plante une graine.</string>
     <string name="allotment.description3">Je suis l\'évolution de mes légumes, je note mes actions, j\'obtiens des informations.</string>
-    <string name="garden.menu.add.button">Ajouter une parcelle</string>
+    <string name="allotment.button.add">Ajouter une parcelle</string>
     <string name="profile.menu.localize">Localiser mon potager</string>
     <string name="profile.menu.localize.description">Je géolocalise mon potager pour obtenir la météo</string>
     <string name="profile.menu.add">Ajouter un potager</string>
@@ -152,5 +152,15 @@
     <string name="inapp.rating.descrition">Si vous appréciez _APP_TITLE_, merci de prendre un moment pour noter l\'application. Merci de votre soutien!</string>
     <string name="inapp.purchase.noaccount">Un compte Google est nécessaire pour l\'achat de fonctionnalités</string>
     <string name="inapp.purchase.title">Fonctionnalités supplémentaires</string>
+    <string name="tutorial.a.title">Geolocalisez votre jardin </string>
+    <string name="tutorial.a.description">Conservez l’historique météo et cultivez avec la lune</string>
+    <string name="tutorial.b.title">Accédez à un catalogue de graines</string>
+    <string name="tutorial.b.description">recherchez par filtre: plantes préférées, à semer ce mois-ci et créez de nouvelles fiches</string>
+    <string name="tutorial.c.title">Visualisez votre jardin </string>
+    <string name="tutorial.c.description">créez vos parcelles, semez vos plantes et suivez la progression des cultures</string>
+    <string name="tutorial.d.title">Planifiez des actions</string>
+    <string name="tutorial.d.description">soyez alerté lorqu’il est temps et conservez l’historique des tâches effectuées</string>
+    <string name="tutorial.e.title">Rejoignez une communauté de jardiniers</string>
+    <string name="tutorial.e.description">découvrez des jardins originaux et partagez vos créations</string>
 
 </resources>

@@ -23,12 +23,12 @@ import org.gots.seed.adapter.PlanningHarvestAdapter;
 import org.gots.seed.adapter.PlanningSowAdapter;
 import org.gots.ui.LoginDialogFragment;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -161,7 +161,6 @@ public class SeedWidgetLong extends LinearLayout {
 
                             // set title
                             alertDialogBuilder.setTitle(exception.getMessage());
-
                             alertDialogBuilder.setMessage(exception.getMessageDescription()).setCancelable(false).setPositiveButton(
                                     mContext.getResources().getString(R.string.login_connect),
                                     new DialogInterface.OnClickListener() {
@@ -169,6 +168,7 @@ public class SeedWidgetLong extends LinearLayout {
                                             // Intent loginIntent = new Intent(mContext, LoginDialogFragment.class);
                                             // mContext.startActivity(loginIntent);
                                             LoginDialogFragment dialogFragment = new LoginDialogFragment();
+                                            dialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
                                             dialogFragment.show(
                                                     ((FragmentActivity) mContext).getSupportFragmentManager(), "");
                                         }

@@ -50,7 +50,7 @@
   <string name="allotment.description1">Eu seleciono o botão menu para adicionar um enredo.</string>
   <string name="allotment.description2">A parcela do menu, eu executar ações em uma parcela. Por exemplo: eu plantar uma semente.</string>
   <string name="allotment.description3">Eu sou a evolução de meus legumes, constato que as minhas ações, obter informações.</string>
-  <string name="garden.menu.add.button">Adicionar uma parcela</string>
+  <string name="allotment.button.add">Adicionar uma parcela</string>
   <string name="profile.menu.localize">Localizar a minha Horta</string>
   <string name="profile.menu.localize.description">Eu geocalise minha horta, para obter o tempo</string>
   <string name="profile.menu.add">Adicionar uma horta</string>

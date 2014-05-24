@@ -1,54 +1,32 @@
 package org.gots.ui;
 
-import io.oauth.OAuth;
-import io.oauth.OAuthCallback;
-import io.oauth.OAuthData;
-import io.oauth.OAuthRequest;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.gots.R;
-import org.gots.authentication.GoogleAuthentication;
 import org.gots.authentication.GotsSocialAuthentication;
-import org.gots.authentication.NuxeoAuthentication;
-import org.gots.authentication.User;
+import org.gots.authentication.provider.google.GoogleAuthentication;
+import org.gots.authentication.provider.nuxeo.NuxeoAuthentication;
 import org.gots.broadcast.BroadCastMessages;
-import org.json.JSONObject;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.DialogFragment;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
@@ -319,6 +297,8 @@ public class LoginDialogFragment extends AbstractDialogFragment {
                     startActivityForResult(e.getIntent(), AUTHTOKEN_CODE_RESULT);
                 } catch (IOException e) {
                     Log.e(TAG, e.getMessage(), e);
+                }catch (GoogleAuthException e) {
+                    Log.e(TAG, e.getMessage(), e);
                 }
                 return nuxeoToken;
             }
@@ -326,13 +306,13 @@ public class LoginDialogFragment extends AbstractDialogFragment {
             @Override
             protected void onPostExecute(String resultToken) {
                 if (resultToken != null) {
+                    gotsPrefs.setNuxeoLogin(account.name);
+                    gotsPrefs.setToken(resultToken);
+                    gotsPrefs.setConnectedToServer(true);
                     Toast.makeText(
                             getActivity(),
                             getResources().getString(R.string.login_connect_description).replace("_ACCOUNT_",
                                     gotsPrefs.getNuxeoLogin()), Toast.LENGTH_LONG).show();
-                    gotsPrefs.setNuxeoLogin(account.name);
-                    gotsPrefs.setToken(resultToken);
-                    gotsPrefs.setConnectedToServer(true);
                     // onResume();
                     getDialog().dismiss();
                 } else {

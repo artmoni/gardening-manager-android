@@ -1,4 +1,4 @@
-package org.gots.authentication;
+package org.gots.authentication.provider.google;
 
 public class User {
     // {"picture":"https:\/\/lh4.googleusercontent.com\/-C23of948LvY\/AAAAAAAAAAI\/AAAAAAAAF1c\/TUU9HK73SHk\/photo.jpg",

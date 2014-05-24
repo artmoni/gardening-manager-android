@@ -20,15 +20,14 @@ import org.gots.action.GardeningActionInterface;
 import org.gots.action.bean.DeleteAction;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.allotment.adapter.ListAllotmentAdapter;
-import org.gots.allotment.service.AllotmentNotificationService;
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.provider.AllotmentContentProvider;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.weather.view.WeatherWidget;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -36,14 +35,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 
 public class MyMainGarden extends AbstractActivity {
 
@@ -114,7 +113,12 @@ public class MyMainGarden extends AbstractActivity {
             layout.addView(ads.getAdsLayout());
         }
 
-        setProgressAction(new Intent(this, AllotmentNotificationService.class));
+        // setProgressAction(new Intent(this, AllotmentNotificationService.class));
+    }
+
+    @Override
+    protected void onRefresh(String AUTHORITY) {
+        super.onRefresh(AllotmentContentProvider.AUTHORITY);
     }
 
     @Override
@@ -239,6 +243,7 @@ public class MyMainGarden extends AbstractActivity {
 
             protected void onPreExecute() {
                 setProgressRefresh(true);
+                super.onPreExecute();
             };
 
             @Override
@@ -249,7 +254,6 @@ public class MyMainGarden extends AbstractActivity {
                         MyMainGarden.this);
 
                 for (int i = 0; i < allotments.size(); i++) {
-
                     allotments.get(i).setSeeds(growingSeedManager.getGrowingSeedsByAllotment(allotments.get(i)));
                 }
                 return allotments;

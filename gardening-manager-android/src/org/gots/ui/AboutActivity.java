@@ -1,28 +1,29 @@
 package org.gots.ui;
 
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
 import org.gots.R;
-import org.gots.action.service.ActionNotificationService;
 import org.gots.action.service.ActionTODOBroadcastReceiver;
 import org.gots.analytics.GotsAnalytics;
-import org.gots.garden.GardenInterface;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.inapp.GotsPurchaseItem;
 import org.gots.preferences.GotsPreferences;
-import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.service.SeedNotification;
+import org.gots.provider.ActionsContentProvider;
+import org.gots.provider.AllotmentContentProvider;
+import org.gots.provider.GardenContentProvider;
+import org.gots.provider.SeedsContentProvider;
 import org.gots.seed.service.SeedUpdateService;
-import org.gots.weather.WeatherManager;
 
+import android.accounts.Account;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
@@ -57,7 +58,7 @@ public class AboutActivity extends AbstractActivity {
 
     private View progressPurchase;
 
-    protected int asyncCounter;
+    protected int refreshCounter;
 
     private TextView textprogressWeather;
 
@@ -129,31 +130,109 @@ public class AboutActivity extends AbstractActivity {
         int flagRessource = getResources().getIdentifier(
                 "org.gots:drawable/" + Locale.getDefault().getCountry().toLowerCase(), null, null);
         flag.setImageResource(flagRessource);
+
+        registerReceiver(updateReceiver, new IntentFilter(BroadCastMessages.PROGRESS_UPDATE));
+        registerReceiver(updateReceiver, new IntentFilter(BroadCastMessages.PROGRESS_FINISHED));
     }
+
+    private BroadcastReceiver updateReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String authority = "";
+            if (intent.getExtras() != null)
+                authority = intent.getExtras().getString("AUTHORITY");
+
+            if (BroadCastMessages.PROGRESS_UPDATE.equals(intent.getAction())) {
+                addProgress();
+                if (SeedsContentProvider.AUTHORITY.equals(authority)) {
+                    Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
+                    progressSeed.startAnimation(myFadeInAnimation);
+                    textprogressSeed.setText(getResources().getString(R.string.synchro_seeds_checking));
+                    textprogressSeed.setTextColor(getResources().getColor(R.color.action_warning_color));
+
+                } else if (AllotmentContentProvider.AUTHORITY.equals(authority)) {
+
+                } else if (GardenContentProvider.AUTHORITY.equals(authority)) {
+                    Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
+                    progressGarden.startAnimation(myFadeInAnimation);
+                    textprogressGarden.setText(getResources().getString(R.string.synchro_garden_checking));
+                    textprogressGarden.setTextColor(getResources().getColor(R.color.action_warning_color));
+
+                } else if (ActionsContentProvider.AUTHORITY.equals(authority)) {
+                    Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
+                    progressAction.startAnimation(myFadeInAnimation);
+                    textprogressAction.setText(getResources().getString(R.string.synchro_actions_checking));
+                    textprogressAction.setTextColor(getResources().getColor(R.color.action_warning_color));
+
+                }
+                // else if (WeatherContentProvider.AUTHORITY.equals(authority)) {
+                // Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
+                // progressWeather.startAnimation(myFadeInAnimation);
+                // textprogressWeather.setTextColor(getResources().getColor(R.color.action_warning_color));
+                // textprogressWeather.setText(getResources().getString(R.string.synchro_weather_checking));
+                // }
+            } else if (BroadCastMessages.PROGRESS_FINISHED.equals(intent.getAction())) {
+                if (SeedsContentProvider.AUTHORITY.equals(authority)) {
+                    progressSeed.clearAnimation();
+                    progressSeed.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
+                    textprogressSeed.setText(getResources().getString(R.string.synchro_seeds_ok));
+                    textprogressSeed.setTextColor(getResources().getColor(R.color.text_color_dark));
+
+                } else if (AllotmentContentProvider.AUTHORITY.equals(authority)) {
+
+                } else if (GardenContentProvider.AUTHORITY.equals(authority)) {
+                    progressGarden.clearAnimation();
+                    progressGarden.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
+                    textprogressGarden.setText(getResources().getString(R.string.synchro_garden_ok));
+                    textprogressGarden.setTextColor(getResources().getColor(R.color.text_color_dark));
+
+                } else if (ActionsContentProvider.AUTHORITY.equals(authority)) {
+                    progressAction.clearAnimation();
+                    progressAction.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
+                    textprogressAction.setText(getResources().getString(R.string.synchro_actions_ok));
+                    textprogressAction.setTextColor(getResources().getColor(R.color.text_color_dark));
+
+                }
+                // else if (WeatherContentProvider.AUTHORITY.equals(authority)) {
+                // progressWeather.clearAnimation();
+                // progressWeather.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
+                //
+                // textprogressWeather.setText(getResources().getString(R.string.synchro_weather_ok));
+                // textprogressWeather.setTextColor(getResources().getColor(R.color.text_color_dark));
+                // }
+                removeProgress();
+            }
+        }
+    };
 
     protected void setButtonClickable(int viewId, final String url) {
         View button = (View) findViewById(viewId);
-        button.setOnClickListener(new LinearLayout.OnClickListener() {
+        if (button != null)
+            button.setOnClickListener(new LinearLayout.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                startActivity(browserIntent);
-
-            }
-        });
+                @Override
+                public void onClick(View v) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(browserIntent);
+                    GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
+                    GoogleAnalyticsTracker.getInstance().trackPageView(url);
+                }
+            });
     }
 
     protected void addProgress() {
-        asyncCounter++;
+        refreshCounter++;
     };
 
     protected void removeProgress() {
-        asyncCounter--;
+        refreshCounter--;
     };
 
-    protected void launchProgress() {
-        asyncCounter = 0;
+    @Override
+    protected void onRefresh(String AUTHORITY) {
+        refreshCounter = 0;
+
         // weatherServiceIntent = new Intent(getApplicationContext(), WeatherUpdateService.class);
 
         // getApplicationContext().startService(weatherServiceIntent);
@@ -161,117 +240,48 @@ public class AboutActivity extends AbstractActivity {
         /*
          * Synchronize Weather
          */
-        new AsyncTask<Void, Integer, Void>() {
+        // new AsyncTask<Void, Integer, Void>() {
+        //
+        // protected void onPreExecute() {
+        // addProgress();
 
-            protected void onPreExecute() {
-                addProgress();
-                Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
-                progressWeather.startAnimation(myFadeInAnimation);
-                textprogressWeather.setTextColor(getResources().getColor(R.color.action_warning_color));
-                textprogressWeather.setText(getResources().getString(R.string.synchro_weather_checking));
+        //
+        // };
+        //
+        // @Override
+        // protected Void doInBackground(Void... params) {
+        // WeatherManager manager = new WeatherManager(getApplicationContext());
+        // manager.getConditionSet(2);
+        // return null;
+        // }
+        //
+        // @Override
+        // protected void onPostExecute(Void result) {
 
-            };
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                WeatherManager manager = new WeatherManager(getApplicationContext());
-                manager.getConditionSet(2);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void result) {
-                progressWeather.clearAnimation();
-                progressWeather.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
-
-                removeProgress();
-                textprogressWeather.setText(getResources().getString(R.string.synchro_weather_ok));
-                textprogressWeather.setTextColor(getResources().getColor(R.color.text_color_dark));
-
-                super.onPostExecute(result);
-
-            }
-        }.execute();
+        //
+        // removeProgress();
+        // super.onPostExecute(result);
+        //
+        // }
+        // }.execute();
 
         /*
          * Synchronize Seeds
          */
-        new AsyncTask<Void, Integer, Void>() {
-            // Intent startServiceIntent2 = new Intent(getApplicationContext(), SeedUpdateService.class);
 
-            protected void onPreExecute() {
-                Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
-                progressSeed.startAnimation(myFadeInAnimation);
-                textprogressSeed.setText(getResources().getString(R.string.synchro_seeds_checking));
-                ((TextView) findViewById(R.id.textProgressSeed)).setTextColor(getResources().getColor(
-                        R.color.action_warning_color));
+        Account newAccount = gotsPrefs.getUserAccount();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
 
-                addProgress();
-            };
-
-            @Override
-            protected Void doInBackground(Void... params) {
-
-                // getApplicationContext().startService(startServiceIntent2);
-                seedManager.force_refresh(true);
-                seedManager.getMyStock(gardenManager.getCurrentGarden());
-                seedManager.getVendorSeeds(true);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void result) {
-                List<BaseSeedInterface> newSeeds = seedManager.getNewSeeds();
-                if (newSeeds.size() > 0) {
-                    SeedNotification notification = new SeedNotification(getApplicationContext());
-                    notification.createNotification(newSeeds);
-                }
-                progressSeed.clearAnimation();
-                progressSeed.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
-                // getApplicationContext().stopService(startServiceIntent2);
-
-                removeProgress();
-                textprogressSeed.setText(getResources().getString(R.string.synchro_seeds_ok));
-                textprogressSeed.setTextColor(getResources().getColor(R.color.text_color_dark));
-
-                super.onPostExecute(result);
-
-            }
-        }.execute();
-
-        /*
-         * Synchronize Actions
-         */
-        new AsyncTask<Void, Integer, Void>() {
-            Intent startServiceIntent3 = new Intent(getApplicationContext(), ActionNotificationService.class);
-
-            protected void onPreExecute() {
-                Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
-                progressAction.startAnimation(myFadeInAnimation);
-                textprogressAction.setText(getResources().getString(R.string.synchro_actions_checking));
-                textprogressAction.setTextColor(getResources().getColor(R.color.action_warning_color));
-
-                addProgress();
-            };
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                getApplicationContext().startService(startServiceIntent3);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void result) {
-                progressAction.clearAnimation();
-                progressAction.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
-                textprogressAction.setText(getResources().getString(R.string.synchro_actions_ok));
-                textprogressAction.setTextColor(getResources().getColor(R.color.text_color_dark));
-
-                getApplicationContext().stopService(startServiceIntent3);
-                removeProgress();
-                super.onPostExecute(result);
-            }
-        }.execute();
+        ContentResolver.setSyncAutomatically(newAccount, SeedsContentProvider.AUTHORITY, true);
+        ContentResolver.requestSync(newAccount, SeedsContentProvider.AUTHORITY, bundle);
+        ContentResolver.setSyncAutomatically(newAccount, GardenContentProvider.AUTHORITY, true);
+        ContentResolver.requestSync(newAccount, GardenContentProvider.AUTHORITY, bundle);
+        ContentResolver.setSyncAutomatically(newAccount, ActionsContentProvider.AUTHORITY, true);
+        ContentResolver.requestSync(newAccount, ActionsContentProvider.AUTHORITY, bundle);
+        // ContentResolver.setSyncAutomatically(newAccount, AllotmentContentProvider.AUTHORITY, true);
+        // ContentResolver.requestSync(newAccount, AllotmentContentProvider.AUTHORITY, bundle);
 
         /*
          * Synchronize Purchase feature
@@ -387,60 +397,40 @@ public class AboutActivity extends AbstractActivity {
         /*
          * Synchronize Server
          */
-        if (gotsPrefs.isConnectedToServer()) {
-            findViewById(R.id.layoutProgressGarden).setVisibility(View.VISIBLE);
+        // if (gotsPrefs.isConnectedToServer()) {
+        // findViewById(R.id.layoutProgressGarden).setVisibility(View.VISIBLE);
+        //
+        // new AsyncTask<Context, Void, List<GardenInterface>>() {
+        //
+        // private List<GardenInterface> myGardens;
+        //
+        // @Override
+        // protected void onPreExecute() {
+        // Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
+        // progressGarden.startAnimation(myFadeInAnimation);
+        // textprogressGarden.setText(getResources().getString(R.string.synchro_garden_checking));
+        // textprogressGarden.setTextColor(getResources().getColor(R.color.action_warning_color));
+        //
+        // super.onPreExecute();
+        // }
+        //
+        // @Override
+        // protected List<GardenInterface> doInBackground(Context... params) {
+        //
+        // myGardens = gardenManager.getMyGardens(true);
+        // return myGardens;
+        // }
+        //
+        // @Override
+        // protected void onPostExecute(List<GardenInterface> result) {
 
-            new AsyncTask<Context, Void, List<GardenInterface>>() {
-
-                private List<GardenInterface> myGardens;
-
-                @Override
-                protected void onPreExecute() {
-                    Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
-                    progressGarden.startAnimation(myFadeInAnimation);
-                    textprogressGarden.setText(getResources().getString(R.string.synchro_garden_checking));
-                    textprogressGarden.setTextColor(getResources().getColor(R.color.action_warning_color));
-
-                    super.onPreExecute();
-                }
-
-                @Override
-                protected List<GardenInterface> doInBackground(Context... params) {
-
-                    myGardens = gardenManager.getMyGardens(true);
-                    return myGardens;
-                }
-
-                @Override
-                protected void onPostExecute(List<GardenInterface> result) {
-                    progressGarden.clearAnimation();
-                    progressGarden.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
-                    textprogressGarden.setText(getResources().getString(R.string.synchro_garden_ok));
-                    textprogressGarden.setTextColor(getResources().getColor(R.color.text_color_dark));
-
-                    super.onPostExecute(result);
-                }
-
-            }.execute();
-        } else {
-            findViewById(R.id.layoutProgressGarden).setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-
-        super.onPostCreate(savedInstanceState);
-    }
-
-    @Override
-    protected void onResume() {
-        if (gardenManager.getCurrentGarden() == null) {
-            Intent intent = new Intent(this, FirstLaunchActivity.class);
-            startActivityForResult(intent, 0);
-        } else
-            launchProgress();
-        super.onResume();
+        // super.onPostExecute(result);
+        // }
+        //
+        // }.execute();
+        // } else {
+        // findViewById(R.id.layoutProgressGarden).setVisibility(View.GONE);
+        // }
     }
 
     private void setRecurringAlarm(Context context) {
@@ -474,4 +464,9 @@ public class AboutActivity extends AbstractActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(updateReceiver);
+        super.onDestroy();
+    }
 }

@@ -22,13 +22,11 @@ import org.gots.action.view.ActionWidget;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.ui.MyMainGarden;
 import org.gots.ui.NewSeedActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.speech.RecognizerIntent;
 import android.view.View;
 import android.view.ViewGroup;
 

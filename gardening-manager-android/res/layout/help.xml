@@ -12,9 +12,9 @@
         android:layout_height="0dip"
         android:layout_weight="1" />
 
-    <Button
+   <!--  <Button
         android:id="@+id/buttonClose"
         style="@style/buttonRed"
-        android:text="@string/button.close" />
+        android:text="@string/button.close" /> -->
 
 </LinearLayout>

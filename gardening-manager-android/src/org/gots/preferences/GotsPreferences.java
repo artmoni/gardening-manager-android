@@ -23,7 +23,6 @@ package org.gots.preferences;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.Properties;
 
 import org.gots.R;
@@ -31,14 +30,12 @@ import org.gots.broadcast.BroadCastMessages;
 import org.gots.utils.NotConfiguredException;
 import org.nuxeo.android.config.NuxeoServerConfig;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -50,6 +47,8 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     public static final boolean ISDEVELOPMENT = false;
 
     public static final boolean DEBUG = false;
+
+    Account userAccount;
 
     // /**
     // * @see NuxeoServerConfig#PREF_SERVER_PASSWORD
@@ -129,6 +128,9 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     private Properties properties = new Properties();
 
+    public static final String SYNC_SCHEDULE = "sync.schedule";
+
+    private static final String ACCOUNT_TYPE = "gardening-manager";
 
     // private static final String PUBKEY =
     // "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtAFVYGad4FaKIZ9A0W2JfMh+B1PQMU+tal9B0XYbEJdZy6UCwqoH42/YLDn0GTjKA+ozAZJtaQqoU/ew95tYKEYszj067HfVehpRtKxLlySFMnqdai0SuGyl5EI4QQovsw3wFU1ihELWBaCg2CcTJqk1jXcWaxsqPPPWty5tAcMwQDWZ0cw6uw8QddztiKlw5IB1XTWdhZTuPL/RcR0Ns+lbEB2kdosozekXr+dRqZ4+PKyHn+j8/407hb76gqn9CmrGhOsJ3E7aOVRCZWZ9nf6aJfFYJP5JY/QHsa+9OsiSj8QXS2vic3ay+MazF09bteN7Wnb15Y9CBK/sM2RAqQIDAQAB";
@@ -240,8 +242,6 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
         return sharedPreferences.getBoolean(key, defValue);
     }
 
-   
-
     public String getAnalyticsApiKey() {
         return properties.getProperty("analytics.apikey");
     }
@@ -278,7 +278,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     }
 
     public String getNuxeoLogin() {
-        return sharedPreferences.getString(ORG_GOTS_GARDEN_LOGIN, "");
+        return sharedPreferences.getString(ORG_GOTS_GARDEN_LOGIN, "guest");
     }
 
     public void setNuxeoLogin(String login) {
@@ -309,7 +309,14 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
         set(ORG_GOTS_GARDEN_TOKEN, token);
     }
 
-    
+    public void setScheduleTimeForNotification(long timeinsec) {
+        set(SYNC_SCHEDULE, timeinsec);
+    }
+
+    public long getScheduleTimeForNotification() {
+        return Long.valueOf(sharedPreferences.getString(SYNC_SCHEDULE, "1"));
+
+    }
 
     public String getDeviceId() {
         return get(ORG_GOTS_GARDEN_DEVICEID, "");
@@ -363,6 +370,23 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     public String getPlayStorePubKey() {
 
         return properties.getProperty("playstore.pubkey");
+    }
+
+    public Account getUserAccount() {
+        // AccountManager accountManager = AccountManager.get(mContext);
+        // Account[] accounts = accountManager.getAccountsByType(ACCOUNT_TYPE);
+        // if (accounts.length > 0)
+        // return accounts[0];
+
+        AccountManager mAccountManager = AccountManager.get(mContext);
+        final Account account = new Account(getNuxeoLogin(), ACCOUNT_TYPE);
+        mAccountManager.addAccountExplicitly(account, getNuxeoPassword(), null);
+
+        return account;
+    }
+
+    public void setUserAccount(Account userAccount) {
+        this.userAccount = userAccount;
     }
 
 }

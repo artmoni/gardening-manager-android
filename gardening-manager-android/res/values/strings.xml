@@ -58,7 +58,7 @@
     <string name="allotment.description1">I select the menu button to add a plot.</string>
     <string name="allotment.description2">The plot menu, I \'performs actions on a plot. For example: I plant a seed</string>
     <string name="allotment.description3">I monitor development of my vegetables, I note my actions, I get informations.</string>
-    <string name="garden.menu.add.button">Add a plot</string>
+    <string name="allotment.button.add">Add a plot</string>
     <string name="profile.menu.localize">Locate my garden</string>
     <string name="profile.menu.localize.description"> I geo-tag my garden to get the weather</string>
     <string name="profile.menu.add">Add a garden</string>
@@ -109,6 +109,7 @@
     <string name="menu.about">About</string>
     <string name="menu.help.firstlaunch">Do you want to have a look on the documentation?</string>
     <string name="button.close">Close</string>
+    <string name="button.next">Next</string>
     <string name="button.ok">OK</string>
     <string name="button.cancel">Cancel</string>
     <string name="weather.citynotfound">No weather forecast, choose a closer city</string>
@@ -170,5 +171,15 @@
     <string name="inapp.purchase.noaccount">You need a Google account to buy features</string>
     <string name="inapp.purchase.buy">Buy</string>
     <string name="inapp.purchase.title">Additional features</string>
+    <string name="tutorial.a.title">Geolocalize you garden</string>
+    <string name="tutorial.a.description">keep weather history and grow with the moon</string>
+    <string name="tutorial.b.title">Access a large catalogue of seeds</string>
+    <string name="tutorial.b.description">search by filter: my favorite plants, what to sow this month and create new records</string>
+    <string name="tutorial.c.title">Visualize your garden</string>
+    <string name="tutorial.c.description">create your allotments, sow plants and follow cultures evolution</string>
+    <string name="tutorial.d.title">Schedule the actions to do</string>
+    <string name="tutorial.d.description">be notified on time and keep history</string>
+    <string name="tutorial.e.title">Join a community of gardeners</string>
+    <string name="tutorial.e.description">Discover original gardens and share your creations</string>
 
 </resources>

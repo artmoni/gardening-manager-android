@@ -24,6 +24,8 @@ package org.gots.ui;
 import java.util.ArrayList;
 
 import org.gots.R;
+import org.gots.action.GotsActionSeedManager;
+import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.allotment.AllotmentManager;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.broadcast.BroadCastMessages;
@@ -33,14 +35,17 @@ import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsSeedManager;
 
-import android.app.Service;
+import android.accounts.Account;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,6 +59,8 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
  * 
  */
 public abstract class AbstractActivity extends ActionBarActivity {
+    private static final String TAG = "AbstractActivity";
+
     // private static final String TAG = AbstractActivity.class.getSimpleName();
 
     protected GotsPreferences gotsPrefs;
@@ -68,11 +75,11 @@ public abstract class AbstractActivity extends ActionBarActivity {
 
     protected AllotmentManager allotmentManager;
 
+    protected GotsActionSeedManager actionseedProvider;
+
     private View progressView;
 
     private Menu menu;
-
-    private Intent progressIntent = null;
 
     private static ArrayList<AbstractActivity> activities = new ArrayList<AbstractActivity>();
 
@@ -91,7 +98,8 @@ public abstract class AbstractActivity extends ActionBarActivity {
         seedManager.initIfNew(this);
         allotmentManager = AllotmentManager.getInstance();
         allotmentManager.initIfNew(this);
-        activities.add(this);
+        actionseedProvider = GotsActionSeedManager.getInstance();
+        actionseedProvider.initIfNew(this);
     }
 
     @Override
@@ -104,6 +112,7 @@ public abstract class AbstractActivity extends ActionBarActivity {
         registerReceiver(seedManager, new IntentFilter(BroadCastMessages.GARDEN_SETTINGS_CHANGED));
         registerReceiver(progressReceiver, new IntentFilter(BroadCastMessages.PROGRESS_UPDATE));
         registerReceiver(progressReceiver, new IntentFilter(BroadCastMessages.PROGRESS_FINISHED));
+        activities.add(this);
 
         GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
         GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
@@ -143,9 +152,6 @@ public abstract class AbstractActivity extends ActionBarActivity {
         super.onDestroy();
         activities.remove(this);
 
-        if (progressIntent != null)
-            stopService(progressIntent);
-
         unregisterReceiver(gardenManager);
         unregisterReceiver(allotmentManager);
         unregisterReceiver(seedManager);
@@ -155,27 +161,31 @@ public abstract class AbstractActivity extends ActionBarActivity {
             gardenManager.finalize();
             seedManager.finalize();
             allotmentManager.finalize();
-
         }
-        GoogleAnalyticsTracker.getInstance().dispatch();
-        GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_common, menu);
         this.menu = menu;
-        menu.findItem(R.id.refresh_seed).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
 
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (progressIntent != null) {
-                    startService(progressIntent);
-                }
-                return true;
-            }
-        });
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+        case R.id.refresh_seed:
+            onRefresh(null);
+            Log.d(TAG, getClass().getName());
+            break;
+
+        default:
+            break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     protected void setProgressRefresh(boolean refresh) {
@@ -188,27 +198,32 @@ public abstract class AbstractActivity extends ActionBarActivity {
         if (refresh) {
             if (progressView == null)
                 progressView = (View) getLayoutInflater().inflate(R.layout.actionbar_indeterminate_progress, null);
-            // ProgressViewActionBar iv = new ProgressViewActionBar(mContext);
-            // iv.animateBackground();
             if (progressView.getAnimation() == null) {
                 Animation rotation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
                 rotation.setRepeatCount(Animation.INFINITE);
                 progressView.startAnimation(rotation);
             }
-            itemRefresh.setActionView(progressView);
+            itemRefresh = MenuItemCompat.setActionView(itemRefresh, progressView);
         } else {
             if (progressView != null) {
                 progressView.clearAnimation();
-                if (progressIntent == null)
-                    progressView.setVisibility(View.GONE);
             }
-            itemRefresh.setActionView(null);
-
+            itemRefresh = MenuItemCompat.setActionView(itemRefresh, null);
         }
 
     }
 
-    protected void setProgressAction(Intent intent) {
-        progressIntent = intent;
+    protected void onRefresh(String AUTHORITY) {
+        if (AUTHORITY == null || "".equals(AUTHORITY)) {
+            Log.d(TAG, "You call onRefresh without Content Resolver Authority");
+            return;
+        }
+        Account userAccount = gotsPrefs.getUserAccount();
+        ContentResolver.setSyncAutomatically(userAccount, AUTHORITY, true);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        ContentResolver.requestSync(userAccount, AUTHORITY, bundle);
     }
+
 }

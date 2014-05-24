@@ -11,30 +11,27 @@
 package org.gots.ui;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.gots.R;
+import org.gots.action.SeedActionInterface;
 import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.action.service.ActionNotificationService;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.bean.BaseAllotmentInterface;
-import org.gots.broadcast.BroadCastMessages;
+import org.gots.provider.ActionsContentProvider;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.weather.service.WeatherUpdateService;
 
-import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 
 public class ActionActivity extends AbstractActivity {
 
@@ -43,6 +40,8 @@ public class ActionActivity extends AbstractActivity {
     ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
 
     private int seedid;
+
+    List<SeedActionInterface> seedActions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,24 +63,7 @@ public class ActionActivity extends AbstractActivity {
             LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
             layout.addView(ads.getAdsLayout());
         }
-        Intent actionIntent = new Intent(this, ActionNotificationService.class);
-        setProgressAction(actionIntent);
-
-//        registerReceiver(actionBroadcastReceiver, new IntentFilter(BroadCastMessages.PROGRESS_FINISHED));
-        startService(new Intent(this,ActionNotificationService.class));
-    }
-    public BroadcastReceiver actionBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-//            if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
-//            }
-        }
-    };
-
-    
-    @Override
-    protected void onPause() {
-        super.onPause();
+        // startService(new Intent(this, ActionNotificationService.class));
     }
 
     @Override
@@ -92,28 +74,29 @@ public class ActionActivity extends AbstractActivity {
             private ListAllActionAdapter listActions;
 
             protected void onPreExecute() {
-                // dialog = ProgressDialog.show(ActionActivity.this, "",
-                // getResources().getString(R.string.gots_loading),
-                // true);
-                // dialog.setCanceledOnTouchOutside(true);
-//                setActionRefresh(true);
+                setProgressRefresh(true);
             };
 
             @Override
             protected ArrayList<GrowingSeedInterface> doInBackground(Integer... params) {
                 GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(
                         getApplicationContext());
-
                 int seedid = params[0].intValue();
                 if (seedid > 0) {
                     allSeeds.add(growingSeedManager.getGrowingSeedById(seedid));
                 } else {
-                    // allSeeds = growingSeedManager.getGrowingSeeds();
                     for (BaseAllotmentInterface allotment : allotmentManager.getMyAllotments())
                         allSeeds.addAll(growingSeedManager.getGrowingSeedsByAllotment(allotment));
                 }
-                listActions = new ListAllActionAdapter(getApplicationContext(), allSeeds,
+
+                for (GrowingSeedInterface seed : allSeeds) {
+
+                    seedActions = actionseedProvider.getActionsToDoBySeed(seed);
+                }
+
+                listActions = new ListAllActionAdapter(getApplicationContext(), seedActions,
                         ListAllActionAdapter.STATUS_TODO);
+
                 return allSeeds;
             }
 
@@ -123,6 +106,7 @@ public class ActionActivity extends AbstractActivity {
                 listAllotments.setAdapter(listActions);
                 listAllotments.setDivider(null);
                 listAllotments.setDividerHeight(0);
+                setProgressRefresh(false);
             };
         }.execute(seedid);
         super.onPostCreate(savedInstanceState);
@@ -154,14 +138,7 @@ public class ActionActivity extends AbstractActivity {
     }
 
     @Override
-    protected void onResume() {
-        // listActions.notifyDataSetChanged();
-        super.onResume();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // listActions.notifyDataSetChanged();
-        super.onActivityResult(requestCode, resultCode, data);
+    protected void onRefresh(String AUTHORITY) {
+        super.onRefresh(ActionsContentProvider.AUTHORITY);
     }
 }

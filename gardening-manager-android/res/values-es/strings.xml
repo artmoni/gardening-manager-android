@@ -52,7 +52,7 @@
     <string name="allotment.description1">Selecciono el button menú para añadir una parcela.</string>
     <string name="allotment.description2"> Menú de la parcela, / cumplio una acción en la parcela. Por ejemplo : sembro una semilla </string>
     <string name="allotment.description3">Controlo el desarrolo de mis vegetales, tengo notas de mis acciónes, tengo noticias.</string>
-    <string name="garden.menu.add.button">Añadir una parcela</string>
+    <string name="allotment.button.add">Añadir una parcela</string>
     <string name="profile.menu.localize">Localizar mi jardín</string>
     <string name="profile.menu.localize.description"> Geolocalizo mi jardín para obtener el tiempo </string>
     <string name="profile.menu.add">Añadir un jardín</string>

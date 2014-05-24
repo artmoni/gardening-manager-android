@@ -30,7 +30,6 @@ import org.gots.sensor.LocationListAdapter;
 import org.gots.sensor.parrot.ParrotLocation;
 import org.gots.sensor.parrot.ParrotSampleFertilizer;
 import org.gots.sensor.parrot.ParrotSampleTemperature;
-import org.gots.sensor.parrot.ParrotSensor;
 import org.gots.sensor.parrot.ParrotSensorProvider;
 import org.gots.ui.HutActivity;
 import org.gots.ui.MyMainGarden;
@@ -43,13 +42,13 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar.LayoutParams;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -162,7 +161,7 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
             display.getSize(size);
             width = size.x;
         }
-        int layoutsize = 200;
+        int layoutsize = 50;
         int nbcolumn = (width - 200) / layoutsize;
         if (nbcolumn < 1)
             nbcolumn = 1;
@@ -170,12 +169,17 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
 
         listGrowingSeedAdapter = new ListGrowingSeedAdapter(mContext, getItem(position).getSeeds());
         holder.listSeeds.setAdapter(listGrowingSeedAdapter);
-
         // holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
         // layoutsize));
         // if (holder.listSeeds.getCount() % nbcolumn == 0)
-        holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
-                (holder.listSeeds.getCount() / nbcolumn + 1) * layoutsize));
+        // holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+        // (holder.listSeeds.getCount() / nbcolumn + 1) * layoutsize + layoutsize));
+        if (listGrowingSeedAdapter.getCount() > 0) {
+            holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+                    LayoutParams.WRAP_CONTENT));
+        } else
+            holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 100));
+
         // else
         // holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
         // ((holder.listSeeds.getCount() / nbcolumn) + 1) * layoutsize));
@@ -237,7 +241,7 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
 
         // SowingAction sow = new SowingAction(mContext);
         ImageView widgetSensor = new ImageView(mContext);
-        widgetSensor.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_sensor));
+        widgetSensor.setImageDrawable(mContext.getResources().getDrawable(R.drawable.flowerpower_brown));
         widgetSensor.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.action_selector));
         widgetSensor.setTag(position);
         widgetSensor.setOnClickListener(new View.OnClickListener() {
@@ -253,7 +257,6 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
                     @Override
                     protected List<ParrotLocation> doInBackground(Void... params) {
                         ParrotSensorProvider sensorProvider = new ParrotSensorProvider(mContext);
-                        List<ParrotSensor> sensors = sensorProvider.getSensors();
                         List<ParrotLocation> locations = sensorProvider.getLocations();
                         sensorProvider.getStatus();
                         samples = sensorProvider.getSamples(locations.get(0).getLocation_identifier());
