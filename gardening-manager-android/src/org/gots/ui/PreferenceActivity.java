@@ -2,6 +2,8 @@ package org.gots.ui;
 
 import org.gots.R;
 import org.gots.preferences.GotsPreferences;
+import org.gots.provider.ActionsContentProvider;
+import org.gots.provider.AllotmentContentProvider;
 import org.gots.provider.GardenContentProvider;
 import org.gots.provider.SeedsContentProvider;
 import org.nuxeo.android.config.NuxeoServerConfig;
@@ -13,6 +15,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.Preference;
+import android.util.Log;
 
 public class PreferenceActivity extends android.preference.PreferenceActivity implements
         OnSharedPreferenceChangeListener {
@@ -26,6 +29,8 @@ public class PreferenceActivity extends android.preference.PreferenceActivity im
     public static final long SECONDS_PER_MINUTE = 60L;
 
     public static final long SYNC_INTERVAL = SECONDS_PER_MINUTE * MINUTE_PER_HOUR * HOUR_PER_DAY;
+
+    private static final String TAG = "PreferenceActivity";
 
     private Account mAccount;
 
@@ -60,7 +65,11 @@ public class PreferenceActivity extends android.preference.PreferenceActivity im
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        displayPreference(key, gotsPreferences.get(key, null));
+        try {
+            displayPreference(key, gotsPreferences.get(key, null));
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
         if (GotsPreferences.SYNC_SCHEDULE.equals(key)) {
             ContentResolver.setSyncAutomatically(mAccount, SeedsContentProvider.AUTHORITY, true);
             ContentResolver.addPeriodicSync(mAccount, SeedsContentProvider.AUTHORITY, new Bundle(),
@@ -68,6 +77,14 @@ public class PreferenceActivity extends android.preference.PreferenceActivity im
 
             ContentResolver.setSyncAutomatically(mAccount, GardenContentProvider.AUTHORITY, true);
             ContentResolver.addPeriodicSync(mAccount, GardenContentProvider.AUTHORITY, new Bundle(),
+                    gotsPreferences.getScheduleTimeForNotification() * SYNC_INTERVAL);
+
+            ContentResolver.setSyncAutomatically(mAccount, ActionsContentProvider.AUTHORITY, true);
+            ContentResolver.addPeriodicSync(mAccount, ActionsContentProvider.AUTHORITY, new Bundle(),
+                    gotsPreferences.getScheduleTimeForNotification() * SYNC_INTERVAL);
+
+            ContentResolver.setSyncAutomatically(mAccount, AllotmentContentProvider.AUTHORITY, true);
+            ContentResolver.addPeriodicSync(mAccount, AllotmentContentProvider.AUTHORITY, new Bundle(),
                     gotsPreferences.getScheduleTimeForNotification() * SYNC_INTERVAL);
 
         }

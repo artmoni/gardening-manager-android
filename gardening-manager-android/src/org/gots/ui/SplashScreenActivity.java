@@ -19,7 +19,6 @@ import android.os.Bundle;
 
 public class SplashScreenActivity extends AboutActivity {
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,9 +40,10 @@ public class SplashScreenActivity extends AboutActivity {
             // Message msg = new Message();
             // msg.what = STOPSPLASH;
             // getSplashHandler().sendMessageDelayed(msg, SPLASHTIME);
-//            Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
-            Intent intent = new Intent(getApplicationContext(), TutorialActivity.class);
+            // Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+            Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//            startActivityForResult(intent, 2);
             startActivity(intent);
             finish();
         }
@@ -53,6 +53,8 @@ public class SplashScreenActivity extends AboutActivity {
     protected void onActivityResult(int arg0, int arg1, Intent arg2) {
         if (arg1 == 1)
             onRefresh(null);
+        if (arg1 == 2)
+            startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
         super.onActivityResult(arg0, arg1, arg2);
     }
 
@@ -60,7 +62,7 @@ public class SplashScreenActivity extends AboutActivity {
     protected void onResume() {
         AccountManager accountManager = AccountManager.get(this);
         Account[] accounts = accountManager.getAccountsByType("gardening-manager");
-        if (accounts.length == 0 || gotsPrefs.getCurrentGardenId() == 0) {
+        if (accounts.length == 0) {
             Intent intent = new Intent(this, AuthenticationActivity.class);
             intent.putExtra(AuthenticationActivity.ARG_ACCOUNT_TYPE, "gardening-manager");
             intent.putExtra(AuthenticationActivity.ARG_IS_ADDING_NEW_ACCOUNT, true);

@@ -29,7 +29,7 @@
 
     <Button
         android:id="@+id/buttonCreate"
-        style="@style/buttonRed"
+        style="@style/buttonGreen"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="10dp"
@@ -38,7 +38,7 @@
 
     <Button
         android:id="@+id/buttonConnect"
-        style="@style/buttonGreen"
+        style="@style/buttonRed"
         android:layout_alignBaseline="@+id/buttonCreate"
         android:layout_alignBottom="@+id/buttonCreate"
         android:layout_marginRight="10dp"

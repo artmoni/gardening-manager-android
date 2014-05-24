@@ -19,8 +19,6 @@ import android.widget.Button;
 
 public class TutorialActivity extends AbstractActivity {
 
-    private int current_fragment = 0;
-
     int[] tutorialList = { R.layout.tutorial_a, R.layout.tutorial_b, R.layout.tutorial_c, R.layout.tutorial_d,
             R.layout.tutorial_e };
 
@@ -72,20 +70,6 @@ public class TutorialActivity extends AbstractActivity {
     protected void onRefresh(String AUTHORITY) {
         mPager.setCurrentItem(0);
     }
-
-    // protected void changeScreen() {
-    // if (current_fragment >= 0 && current_fragment < tutorialList.length) {
-    // FragmentManager fragmentManager = getSupportFragmentManager();
-    // FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-    // TutorialFragment fragment = new TutorialFragment(tutorialList[current_fragment]);
-    // fragmentTransaction.setCustomAnimations(R.anim.slide_out_up, R.anim.slide_in_up);
-    // fragmentTransaction.addToBackStack(null);
-    // // fragmentTransaction.add(R.id.fragmentTutorial, fragment);
-    // // fragmentTransaction.replace(R.id.fragmentTutorial, fragment);
-    // fragmentTransaction.commit();
-    // } else
-    // finish();
-    // }
 
     /**
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
