@@ -1,21 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical" android:padding="5dp" android:background="@drawable/bg_line_selector">
+    android:layout_height="fill_parent"
+    android:background="@drawable/background_simple"
+    android:orientation="vertical" >
 
-    <WebView
-        android:id="@+id/webViewTemperature"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_centerHorizontal="true" />
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
 
-    <WebView
-        android:id="@+id/webViewFertilizer"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_alignLeft="@+id/webViewTemperature"
-        android:layout_below="@+id/webViewTemperature"
-        android:layout_marginTop="20dp" />
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@color/text_color_light"
+            android:text="Temperature" />
 
-</RelativeLayout>
+        <WebView
+            android:id="@+id/webViewTemperature"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_below="@+id/textView1"
+            android:background="@drawable/bg_line_selector" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/webViewTemperature"
+            android:layout_marginTop="20dp"
+            android:background="@color/text_color_light"
+            android:text="Fertilizer" />
+
+        <WebView
+            android:id="@+id/webViewFertilizer"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@drawable/bg_line_selector" />
+    </LinearLayout>
+
+</ScrollView>

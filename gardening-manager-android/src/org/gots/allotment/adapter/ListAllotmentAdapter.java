@@ -244,7 +244,7 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
 
         // SowingAction sow = new SowingAction(mContext);
         ImageView widgetSensor = new ImageView(mContext);
-        widgetSensor.setImageDrawable(mContext.getResources().getDrawable(R.drawable.flowerpower_brown));
+        widgetSensor.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_sensor));
         widgetSensor.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.action_selector));
         widgetSensor.setTag(position);
         widgetSensor.setOnClickListener(new View.OnClickListener() {

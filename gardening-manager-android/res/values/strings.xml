@@ -181,5 +181,7 @@
     <string name="tutorial.d.description">be notified on time and keep history</string>
     <string name="tutorial.e.title">Join a community of gardeners</string>
     <string name="tutorial.e.description">Discover original gardens and share your creations</string>
+    <string name="sensor.buy">Buy a Parrot Flower Power</string>
+    <string name="dashboard.sensor.name">Sensors</string>
 
 </resources>

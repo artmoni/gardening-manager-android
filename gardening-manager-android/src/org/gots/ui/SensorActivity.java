@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.AdapterView;
@@ -30,6 +31,10 @@ public class SensorActivity extends AbstractActivity {
         super.onCreate(savedInstanceState);
         setTitle("Parrot Flower Power");
         setContentView(R.layout.sensor);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         updateLocations();
     }
 
@@ -47,11 +52,24 @@ public class SensorActivity extends AbstractActivity {
 
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 SensorListFragment sensors = new SensorListFragment(result);
-
                 ft.replace(R.id.idFragmentSensor, sensors);
                 ft.commit();
 
             };
         }.execute();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+        case android.R.id.home:
+            updateLocations();
+            break;
+
+        default:
+            break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

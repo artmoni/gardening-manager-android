@@ -18,9 +18,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <!-- REMINDER DOING GARDENG TASK -->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <!-- LOGIN WITH GARDENING MANAGER SERVER USING LOCAL ACCOUNTS -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -147,11 +145,7 @@
         <activity
             android:name=".ui.PreferenceActivity"
             android:theme="@style/Theme.Styled" />
-        <!--
-        <provider
-        android:authorities="org.gots.providers.seeds
-        android:name="org.gots.providers.SeedSQLite" />
-        -->
+
         <provider
             android:name="org.gots.provider.SeedsContentProvider"
             android:authorities="org.gots.providers.seeds"
@@ -171,6 +165,11 @@
             android:name="org.gots.provider.AllotmentContentProvider"
             android:authorities="org.gots.providers.allotment"
             android:label="@string/dashboard.allotments.name"
+            android:syncable="true" />
+        <provider
+            android:name="org.gots.provider.SensorContentProvider"
+            android:authorities="org.gots.providers.sensor"
+            android:label="@string/dashboard.sensor.name"
             android:syncable="true" />
 
         <receiver android:name=".service.BootBroadcastReceiver" >

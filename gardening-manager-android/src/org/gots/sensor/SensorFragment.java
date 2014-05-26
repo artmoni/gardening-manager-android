@@ -1,5 +1,6 @@
 package org.gots.sensor;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.gots.R;
@@ -22,6 +23,16 @@ public class SensorFragment extends Fragment {
     WebView webViewTemperature;
 
     WebView webViewFertilizer;
+
+    private String mLocationIdentifier;
+
+    public SensorFragment() {
+        this.mLocationIdentifier = "";
+    }
+
+    public SensorFragment(String locationIdentifier) {
+        this.mLocationIdentifier = locationIdentifier;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,38 +60,49 @@ public class SensorFragment extends Fragment {
                 ParrotSensorProvider sensorProvider = new ParrotSensorProvider(getActivity());
                 List<ParrotLocation> locations = sensorProvider.getLocations();
                 sensorProvider.getStatus();
-                samplesFertilizer = sensorProvider.getSamples(locations.get(0).getLocation_identifier());
-                samplesTemperature = sensorProvider.getSamples2(locations.get(0).getLocation_identifier());
+                samplesFertilizer = sensorProvider.getSamples(mLocationIdentifier);
+                samplesTemperature = sensorProvider.getSamples2(mLocationIdentifier);
 
                 return locations;
             }
 
             protected void onPostExecute(List<ParrotLocation> result) {
 
-                if (samplesFertilizer != null) {
+                if (samplesFertilizer != null && samplesFertilizer.size() > 0) {
                     String chd = new String();
                     for (ParrotSampleFertilizer fertilizer : samplesFertilizer) {
                         chd = chd.concat(String.valueOf(fertilizer.getFertilizer_level() * 100));
                         chd = chd.concat(",");
                     }
                     chd = chd.substring(0, chd.length() - 1);
-                    String url = "http://chart.apis.google.com/chart?cht=ls&chs=250x100&chd=t:" + chd;
-                    webViewFertilizer.loadUrl(url);
+                    webViewFertilizer.loadUrl(chartURL(chd));
                 }
-                if (samplesTemperature != null) {
+                if (samplesTemperature != null&& samplesTemperature.size() > 0) {
                     String chd = new String();
                     int i = 0;
                     for (ParrotSampleTemperature sampleTemp : samplesTemperature) {
                         chd = chd.concat(String.valueOf(sampleTemp.getAir_temperature_celsius()));
                         chd = chd.concat(",");
+                        
                         if (i++ >= 50)
                             break;
                     }
                     chd = chd.substring(0, chd.length() - 1);
-                    String url = "http://chart.apis.google.com/chart?cht=ls&chs=250x100&chd=t:" + chd;
-                    webViewTemperature.loadUrl(url);
+                    webViewTemperature.loadUrl(chartURL(chd));
                 }
             };
         }.execute();
     }
+
+    private String chartURL(String chd) {
+        // String url = "http://chart.apis.google.com/chart?cht=lc&chs=250x100&chd=t:" + serieTempMin + "|" +
+        // serieTempMax
+        // + "&chxt=x,y&chxr=0," + min.get(Calendar.DAY_OF_MONTH) + "," + max.get(Calendar.DAY_OF_MONTH)
+        // + ",1|1,-50,50&chds=-50,50&chco=009999,B65635";
+        String url = "http://chart.apis.google.com/chart?cht=lc&chs=250x100&chd=t:" + chd;
+        url = url.concat("&chco=432D07");
+        url = url.concat("&chds=a");
+        return url;
+    }
+
 }

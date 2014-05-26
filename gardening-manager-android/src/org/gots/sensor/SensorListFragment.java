@@ -18,6 +18,8 @@ public class SensorListFragment extends ListFragment {
 
     private List<ParrotLocation> parrotLocations;
 
+    private LocationListAdapter sensorListAdapter;
+
     public SensorListFragment() {
         this.parrotLocations = new ArrayList<ParrotLocation>();
     }
@@ -30,7 +32,7 @@ public class SensorListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        LocationListAdapter sensorListAdapter = new LocationListAdapter(getActivity(), parrotLocations);
+        sensorListAdapter = new LocationListAdapter(getActivity(), parrotLocations);
         setListAdapter(sensorListAdapter);
     }
 
@@ -38,7 +40,9 @@ public class SensorListFragment extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.idFragmentSensor, new SensorFragment());
+        ft.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
+        ft.replace(R.id.idFragmentSensor, new SensorFragment(
+                sensorListAdapter.getItem(position).getLocation_identifier()));
         ft.commit();
     }
 }
