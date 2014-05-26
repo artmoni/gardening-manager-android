@@ -27,12 +27,14 @@ import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
 import org.gots.sensor.LocationListAdapter;
+import org.gots.sensor.SensorListFragment;
 import org.gots.sensor.parrot.ParrotLocation;
 import org.gots.sensor.parrot.ParrotSampleFertilizer;
 import org.gots.sensor.parrot.ParrotSampleTemperature;
 import org.gots.sensor.parrot.ParrotSensorProvider;
 import org.gots.ui.HutActivity;
 import org.gots.ui.MyMainGarden;
+import org.gots.ui.SensorActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -42,6 +44,7 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar.LayoutParams;
 import android.util.Log;
 import android.view.Display;
@@ -248,72 +251,78 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
 
             @Override
             public void onClick(View v) {
-                new AsyncTask<Void, Void, List<ParrotLocation>>() {
-                    private LocationListAdapter sensorListAdapter;
-
-                    List<ParrotSampleFertilizer> samples = null;
-                    List<ParrotSampleTemperature> samplesTemp = null;
-
-                    @Override
-                    protected List<ParrotLocation> doInBackground(Void... params) {
-                        ParrotSensorProvider sensorProvider = new ParrotSensorProvider(mContext);
-                        List<ParrotLocation> locations = sensorProvider.getLocations();
-                        sensorProvider.getStatus();
-                        samples = sensorProvider.getSamples(locations.get(0).getLocation_identifier());
-                        samplesTemp = sensorProvider.getSamples2(locations.get(0).getLocation_identifier());
-
-                        return locations;
-                    }
-
-                    protected void onPostExecute(List<ParrotLocation> result) {
-                        // sensorListAdapter = new SensorListAdapter(mContext, result);
-                        sensorListAdapter = new LocationListAdapter(mContext, result);
-                        new AlertDialog.Builder(mContext).setAdapter(sensorListAdapter,
-                                new DialogInterface.OnClickListener() {
-
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Toast.makeText(mContext, sensorListAdapter.getItem(which).getSensor_serial(),
-                                                Toast.LENGTH_SHORT).show();
-                                        ;
-                                    }
-                                }).show();
-
-                        if (samples != null) {
-                            WebView webView = new WebView(mContext);
-                            String chd = new String();
-                            for (ParrotSampleFertilizer fertilizer : samples) {
-                                chd = chd.concat(String.valueOf(fertilizer.getFertilizer_level() * 100));
-                                chd = chd.concat(",");
-                            }
-                            chd = chd.substring(0, chd.length() - 1);
-                            String url = "http://chart.apis.google.com/chart?cht=ls&chs=250x100&chd=t:" + chd;
-                            webView.loadUrl(url);
-                            Log.d(ListAllotmentAdapter.class.getName(), url);
-                            AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
-                            alert.setView(webView);
-                            alert.show();
-                        }
-                        if (samplesTemp != null) {
-                            WebView webView = new WebView(mContext);
-                            String chd = new String();
-                            int i=0;
-                            for (ParrotSampleTemperature sampleTemp : samplesTemp) {
-                                chd = chd.concat(String.valueOf(sampleTemp.getAir_temperature_celsius() ));
-                                chd = chd.concat(",");
-                                if (i++>=50)
-                                    break;
-                            }
-                            chd = chd.substring(0, chd.length() - 1);
-                            String url = "http://chart.apis.google.com/chart?cht=ls&chs=250x100&chd=t:" + chd;
-                            webView.loadUrl(url);
-                            Log.d(ListAllotmentAdapter.class.getName(), url);
-                            AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
-                            alert.setView(webView);
-                            alert.show();
-                        }
-                    };
-                }.execute();
+                Intent sensorIntent = new Intent(mContext, SensorActivity.class);
+                mContext.startActivity(sensorIntent);
+//                new AsyncTask<Void, Void, List<ParrotLocation>>() {
+//                    private LocationListAdapter sensorListAdapter;
+//
+//                    List<ParrotSampleFertilizer> samplesFertilizer = null;
+//
+//                    List<ParrotSampleTemperature> samplesTemp = null;
+//
+//                    @Override
+//                    protected List<ParrotLocation> doInBackground(Void... params) {
+//                        ParrotSensorProvider sensorProvider = new ParrotSensorProvider(mContext);
+//                        List<ParrotLocation> locations = sensorProvider.getLocations();
+//                        sensorProvider.getStatus();
+//                        samplesFertilizer = sensorProvider.getSamples(locations.get(0).getLocation_identifier());
+//                        samplesTemp = sensorProvider.getSamples2(locations.get(0).getLocation_identifier());
+//
+//                        return locations;
+//                    }
+//
+//                    protected void onPostExecute(List<ParrotLocation> result) {
+//                        // sensorListAdapter = new SensorListAdapter(mContext, result);
+//                        sensorListAdapter = new LocationListAdapter(mContext, result);
+//                        // new AlertDialog.Builder(mContext).setAdapter(sensorListAdapter,
+//                        // new DialogInterface.OnClickListener() {
+//                        //
+//                        // @Override
+//                        // public void onClick(DialogInterface dialog, int which) {
+//                        // Toast.makeText(mContext, sensorListAdapter.getItem(which).getSensor_serial(),
+//                        // Toast.LENGTH_SHORT).show();
+//                        // ;
+//                        // }
+//                        // }).show();
+//
+//                        Intent sensorIntent = new Intent(mContext, SensorActivity.class);
+//                        mContext.startActivity(sensorIntent);
+//
+//                        if (samplesFertilizer != null) {
+//                            WebView webView = new WebView(mContext);
+//                            String chd = new String();
+//                            for (ParrotSampleFertilizer fertilizer : samplesFertilizer) {
+//                                chd = chd.concat(String.valueOf(fertilizer.getFertilizer_level() * 100));
+//                                chd = chd.concat(",");
+//                            }
+//                            chd = chd.substring(0, chd.length() - 1);
+//                            String url = "http://chart.apis.google.com/chart?cht=ls&chs=250x100&chd=t:" + chd;
+//                            webView.loadUrl(url);
+//                            Log.d(ListAllotmentAdapter.class.getName(), url);
+//                            AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
+//                            alert.setView(webView);
+//                            alert.show();
+//                        }
+//                        if (samplesTemp != null) {
+//                            WebView webView = new WebView(mContext);
+//                            String chd = new String();
+//                            int i = 0;
+//                            for (ParrotSampleTemperature sampleTemp : samplesTemp) {
+//                                chd = chd.concat(String.valueOf(sampleTemp.getAir_temperature_celsius()));
+//                                chd = chd.concat(",");
+//                                if (i++ >= 50)
+//                                    break;
+//                            }
+//                            chd = chd.substring(0, chd.length() - 1);
+//                            String url = "http://chart.apis.google.com/chart?cht=ls&chs=250x100&chd=t:" + chd;
+//                            webView.loadUrl(url);
+//                            Log.d(ListAllotmentAdapter.class.getName(), url);
+//                            AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
+//                            alert.setView(webView);
+//                            alert.show();
+//                        }
+//                    };
+//                }.execute();
             }
         });
 

@@ -64,6 +64,10 @@
             android:name=".ui.DashboardActivity"
             android:theme="@style/Theme.Styled" >
         </activity>
+        <activity
+            android:name=".ui.SensorActivity"
+            android:theme="@style/Theme.Styled" >
+        </activity>
         <activity android:name=".ui.AllotmentActivity" />
         <activity
             android:name=".ui.SeedActivity"

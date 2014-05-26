@@ -40,7 +40,7 @@ public class SensorListAdapter extends BaseAdapter {
         LayoutInflater vi = (LayoutInflater) mContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 
         if (v == null) {
-            v = vi.inflate(R.layout.sensor, null);
+            v = vi.inflate(R.layout.list_sensor, null);
             h = new SensorHolder();
             h.sensorImg = (ImageView) v.findViewById(R.id.sensorImage);
             h.sensorName = (TextView) v.findViewById(R.id.sensorLocationName);

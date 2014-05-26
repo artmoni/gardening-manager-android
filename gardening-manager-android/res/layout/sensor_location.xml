@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" android:padding="5dp" android:background="@drawable/bg_line_selector">
+    android:background="@drawable/bg_line_selector"
+    android:orientation="vertical"
+    android:padding="5dp" >
 
     <ImageView
         android:id="@+id/sensorImage"
@@ -14,22 +16,22 @@
 
     <TextView
         android:id="@+id/sensorLocationPlantAssignedDate"
+        style="@style/seed_description_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-                style="@style/seed_description_content"
         android:text="PlantAssignedDate" />
 
     <TextView
         android:id="@+id/sensorLocationName"
+        style="@style/seed_description_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"        style="@style/seed_description_title"
-        android:textColor="@color/green_light"
-        
-        android:text="NickName" />
+        android:layout_centerHorizontal="true"
+        android:text="NickName"
+        android:textColor="@color/green_light" />
 
     <TextView
         android:id="@+id/sensorLocationDescription"
