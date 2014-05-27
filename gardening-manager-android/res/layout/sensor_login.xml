@@ -1,75 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/text_color_light"
-    android:orientation="vertical"
-    android:padding="5dp" >
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/text_color_light" >
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/textView1"
-        android:layout_below="@+id/textView1"
-        android:layout_marginTop="20dp"
-        android:text="Password" />
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
 
-    <EditText
-        android:id="@+id/idParrotLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView1"
-        android:layout_alignBottom="@+id/textView1"
-        android:layout_alignLeft="@+id/imageView1"
-        android:ems="10" >
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/textView1"
+            android:layout_below="@+id/textView1"
+            android:layout_marginTop="20dp"
+            android:text="Password" />
 
-        <requestFocus />
-    </EditText>
+        <EditText
+            android:id="@+id/idParrotPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textView2"
+            android:layout_alignBottom="@+id/textView2"
+            android:layout_alignLeft="@+id/idParrotLogin"
+            android:ems="10"
+            android:inputType="textPassword" />
 
-    <EditText
-        android:id="@+id/idParrotPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView2"
-        android:layout_alignBottom="@+id/textView2"
-        android:layout_alignLeft="@+id/idParrotLogin"
-        android:ems="10"
-        android:inputType="textPassword" />
+        <Button
+            android:id="@+id/idButtonParrotLogin"
+            style="@style/buttonRed"
+            android:layout_alignLeft="@+id/buttonCreate"
+            android:layout_below="@+id/idParrotPassword"
+            android:layout_marginTop="20dp"
+            android:text="@string/login.connect" />
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/buttonCreate"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_toLeftOf="@+id/idParrotLogin"
-        android:text="Login" />
+        <EditText
+            android:id="@+id/idParrotLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/idParrotPassword"
+            android:layout_alignLeft="@+id/buttonCreate"
+            android:ems="10"
+            android:singleLine="true" />
 
-    <Button
-        android:id="@+id/idButtonParrotLogin"
-        style="@style/buttonRed"
-        android:layout_alignLeft="@+id/buttonCreate"
-        android:layout_below="@+id/idParrotPassword"
-        android:layout_marginTop="20dp"
-        android:text="@string/login.connect" />
+        <Button
+            android:id="@+id/buttonCreate"
+            style="@style/buttonGreen"
+            android:layout_alignTop="@+id/imageView1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="36dp"
+            android:text="@string/sensor.buy" />
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="21dp"
-        android:src="@drawable/flowerpower_blue" />
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textView2"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="17dp"
+            android:src="@drawable/flowerpower_blue" />
 
-    <Button
-        android:id="@+id/buttonCreate"
-        style="@style/buttonRed"
-        android:layout_below="@+id/imageView1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text="@string/sensor.buy" />
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageView1"
+            android:layout_marginRight="21dp"
+            android:layout_marginTop="20dp"
+            android:layout_toLeftOf="@+id/idParrotPassword"
+            android:text="Login" />
 
-</RelativeLayout>
+    </RelativeLayout>
+
+</ScrollView>

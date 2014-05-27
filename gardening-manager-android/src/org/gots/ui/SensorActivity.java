@@ -5,7 +5,7 @@ import java.util.List;
 import org.gots.R;
 import org.gots.allotment.adapter.ListAllotmentAdapter;
 import org.gots.sensor.LocationListAdapter;
-import org.gots.sensor.SensorFragment;
+import org.gots.sensor.SensorChartFragment;
 import org.gots.sensor.SensorListFragment;
 import org.gots.sensor.SensorLoginFragment;
 import org.gots.sensor.parrot.ParrotLocation;

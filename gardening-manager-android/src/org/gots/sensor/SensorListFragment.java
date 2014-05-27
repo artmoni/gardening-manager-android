@@ -41,7 +41,7 @@ public class SensorListFragment extends ListFragment {
         super.onListItemClick(l, v, position, id);
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
         ft.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
-        ft.replace(R.id.idFragmentSensor, new SensorFragment(
+        ft.replace(R.id.idFragmentSensor, new SensorChartFragment(
                 sensorListAdapter.getItem(position).getLocation_identifier()));
         ft.commit();
     }
