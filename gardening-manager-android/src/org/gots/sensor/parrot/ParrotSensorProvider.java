@@ -28,12 +28,13 @@ public class ParrotSensorProvider extends LocalSeedProvider {
 
     public ParrotSensorProvider(Context context) {
         super(context);
+         authentication = ParrotAuthentication.getInstance(mContext);
 
     }
 
     private void getToken() {
-        authentication = ParrotAuthentication.getInstance(mContext);
-        authentication.getToken();
+        // authentication.getToken();
+        // gotsPrefs.getParrotToken();
     }
 
     public void setSearchCriteria(String filterCriteria) {
@@ -121,6 +122,7 @@ public class ParrotSensorProvider extends LocalSeedProvider {
         }
         return sensorSampleFertilizers;
     }
+
     public List<ParrotSampleTemperature> getSamples2(String locationId) {
         getToken();
         String api_1_03_sample = "/sensor_data/v2/sample/location/" + locationId;

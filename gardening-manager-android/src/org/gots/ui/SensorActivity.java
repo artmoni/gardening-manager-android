@@ -7,6 +7,7 @@ import org.gots.allotment.adapter.ListAllotmentAdapter;
 import org.gots.sensor.LocationListAdapter;
 import org.gots.sensor.SensorFragment;
 import org.gots.sensor.SensorListFragment;
+import org.gots.sensor.SensorLoginFragment;
 import org.gots.sensor.parrot.ParrotLocation;
 import org.gots.sensor.parrot.ParrotSampleFertilizer;
 import org.gots.sensor.parrot.ParrotSampleTemperature;
@@ -51,8 +52,14 @@ public class SensorActivity extends AbstractActivity {
             protected void onPostExecute(List<ParrotLocation> result) {
 
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                SensorListFragment sensors = new SensorListFragment(result);
-                ft.replace(R.id.idFragmentSensor, sensors);
+                if (gotsPrefs.getParrotToken() == null) {
+                    SensorLoginFragment login = new SensorLoginFragment();
+                    ft.replace(R.id.idFragmentSensor, login);
+                } else {
+
+                    SensorListFragment sensors = new SensorListFragment(result);
+                    ft.replace(R.id.idFragmentSensor, sensors);
+                }
                 ft.commit();
 
             };
@@ -64,6 +71,7 @@ public class SensorActivity extends AbstractActivity {
 
         switch (item.getItemId()) {
         case android.R.id.home:
+//            getSupportFragmentManager().findFragmentById(R.id.idFragmentSensor);
             updateLocations();
             break;
 

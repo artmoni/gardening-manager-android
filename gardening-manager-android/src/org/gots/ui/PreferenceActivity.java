@@ -6,6 +6,7 @@ import org.gots.provider.ActionsContentProvider;
 import org.gots.provider.AllotmentContentProvider;
 import org.gots.provider.GardenContentProvider;
 import org.gots.provider.SeedsContentProvider;
+import org.gots.provider.SensorContentProvider;
 import org.nuxeo.android.config.NuxeoServerConfig;
 
 import android.accounts.Account;
@@ -85,6 +86,10 @@ public class PreferenceActivity extends android.preference.PreferenceActivity im
 
             ContentResolver.setSyncAutomatically(mAccount, AllotmentContentProvider.AUTHORITY, true);
             ContentResolver.addPeriodicSync(mAccount, AllotmentContentProvider.AUTHORITY, new Bundle(),
+                    gotsPreferences.getScheduleTimeForNotification() * SYNC_INTERVAL);
+            
+            ContentResolver.setSyncAutomatically(mAccount, SensorContentProvider.AUTHORITY, true);
+            ContentResolver.addPeriodicSync(mAccount, SensorContentProvider.AUTHORITY, new Bundle(),
                     gotsPreferences.getScheduleTimeForNotification() * SYNC_INTERVAL);
 
         }

@@ -27,12 +27,12 @@ public class ParrotSeedProvider extends LocalSeedProvider {
 
     public ParrotSeedProvider(Context context) {
         super(context);
+        authentication = ParrotAuthentication.getInstance(mContext);
 
     }
 
     private void getToken() {
-        authentication = ParrotAuthentication.getInstance(mContext);
-        authentication.getToken();
+//        authentication.getToken();
     }
 
     public void setSearchCriteria(String filterCriteria) {

@@ -77,6 +77,10 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     // public static final String ORG_GOTS_GARDEN_TOKEN = "org.gots.garden.token";
     public static final String ORG_GOTS_GARDEN_TOKEN = NuxeoServerConfig.PREF_SERVER_TOKEN;
 
+    public static final String ORG_GOTS_PARROT_TOKEN = "parrot.auth.token";
+
+    public static final String ORG_GOTS_PARROT_LOGIN = "parrot.login";
+
     // private String ANALYTICS_API_KEY = "UA-916500-18";
 
     // private static final String WEATHER_API_KEY = "";
@@ -387,6 +391,14 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     public void setUserAccount(Account userAccount) {
         this.userAccount = userAccount;
+    }
+
+    public void setParrotToken(String token) {
+        set(ORG_GOTS_PARROT_TOKEN, token);
+    }
+
+    public String getParrotToken() {
+        return get(ORG_GOTS_PARROT_TOKEN, null);
     }
 
 }

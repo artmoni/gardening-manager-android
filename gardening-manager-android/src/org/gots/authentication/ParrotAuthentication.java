@@ -33,6 +33,7 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.gots.R;
+import org.gots.preferences.GotsPreferences;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,21 +46,23 @@ public class ParrotAuthentication {
     // https://apiflowerpower.parrot.com//user/v1/authenticate?Accept-Language=fr&grant_type=password&client_id=sebastien.fleury@gmail.com&client_secret=arfkUnBAcTL99ynPXelq2u7msb7aMkOk2LgVZP7w4CANMFBZ&username=apiflowerpower.demo@parrot.com&password=api_demo
     private String baseName = "https://apiflowerpower.parrot.com";
 
-    private String username = "";
-
-    private String password = "";
+//    private String username = "";
+//
+//    private String password = "";
 
     private String clientId = "";
 
     private String clientSecret = "";
 
-    private String access_token = null;
+//    private String access_token = null;
 
     private String TAG = "ParrotAuthentication";
 
     private Context mContext;
 
     private Properties properties = new Properties();
+
+    private GotsPreferences gotsPref;
 
     private static ParrotAuthentication instance;
 
@@ -71,11 +74,12 @@ public class ParrotAuthentication {
             properties.load(propertiesStream);
             clientId = properties.getProperty("parrot.clientid");
             clientSecret = properties.getProperty("parrot.clientsecret");
-            username = properties.getProperty("parrot.username");
-            password = properties.getProperty("parrot.password");
+//            username = properties.getProperty("parrot.username");
+//            password = properties.getProperty("parrot.password");
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());
         }
+        gotsPref = GotsPreferences.getInstance().initIfNew(mContext);
         enableHttpResponseCache();
 
     }
@@ -196,7 +200,7 @@ public class ParrotAuthentication {
     // return json;
     // }
 
-    public String getToken() {
+    public String getToken(String username, String password) {
         String api_authentication = "/user/v1/authenticate";
         String token = null;
         try {
@@ -208,7 +212,8 @@ public class ParrotAuthentication {
             params.add(new BasicNameValuePair("password", password));
             JSONObject json = new JSONObject(api_json(api_authentication, params, "", null));
             token = json.getString("access_token");
-            access_token = token;
+//            access_token = token;
+            gotsPref.setParrotToken(token);
         } catch (IOException e) {
             Log.w(TAG, e.getMessage(), e);
         } catch (JSONException e) {
@@ -222,7 +227,8 @@ public class ParrotAuthentication {
         // params.add(new BasicNameValuePair("grant_type", "password"));
 
         Map<String, String> headers = new HashMap<String, String>();
-        headers.put("Authorization", "Bearer " + access_token);
+//        headers.put("Authorization", "Bearer " + access_token);
+        headers.put("Authorization", "Bearer " + gotsPref.getParrotToken());
         JSONObject json = new JSONObject(api_json(api_key, params, "", headers));
         return json;
     }

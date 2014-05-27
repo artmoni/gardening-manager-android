@@ -9,7 +9,6 @@
         android:key="nuxeo.serverUrl"
         android:summary="Gardening Manager Cloud ressource"
         android:title="Server" />
-
     <Preference
         android:key="nuxeo.login"
         android:summary="Your login to the server"
@@ -28,6 +27,19 @@
 
     <PreferenceCategory
         android:key="pref_key_category_2"
+        android:title="Parrot Flower Power" />
+
+    <Preference
+        android:key="parrot.login"
+        android:summary="Your Parrot login"
+        android:title="Login" />
+    <Preference
+        android:key="parrot.auth.token"
+        android:summary="Authentication Token"
+        android:title="Token" />
+
+    <PreferenceCategory
+        android:key="pref_key_category_2"
         android:title="Synchronization" />
 
     <ListPreference
@@ -37,7 +49,5 @@
         android:key="sync.schedule"
         android:summary="Notification scheduler"
         android:title="Schedule notification" />
-
-    
 
 </PreferenceScreen>

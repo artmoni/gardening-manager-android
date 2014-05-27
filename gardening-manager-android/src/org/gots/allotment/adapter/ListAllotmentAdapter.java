@@ -164,7 +164,7 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
             display.getSize(size);
             width = size.x;
         }
-        int layoutsize = 50;
+        int layoutsize = 200;
         int nbcolumn = (width - 200) / layoutsize;
         if (nbcolumn < 1)
             nbcolumn = 1;
