@@ -151,7 +151,9 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
             display.getSize(size);
             width = size.x;
         }
-        int layoutsize = 50;
+        int layoutsize = 150;
+        if (width<=480)
+            layoutsize=50;
         int nbcolumn = (width - 200) / layoutsize;
         if (nbcolumn < 1)
             nbcolumn = 1;
@@ -159,17 +161,13 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
 
         listGrowingSeedAdapter = new ListGrowingSeedAdapter(mContext, getItem(position).getSeeds());
         holder.listSeeds.setAdapter(listGrowingSeedAdapter);
-        // holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-        // layoutsize));
-        // if (holder.listSeeds.getCount() % nbcolumn == 0)
-        // holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
-        // (holder.listSeeds.getCount() / nbcolumn + 1) * layoutsize + layoutsize));
+        holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, layoutsize));
         if (listGrowingSeedAdapter.getCount() > 0) {
             holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
-                    LayoutParams.WRAP_CONTENT));
-        } else
-            holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 100));
-
+                    (holder.listSeeds.getCount() / nbcolumn + 1) * layoutsize + layoutsize));
+//            holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+//                    LayoutParams.WRAP_CONTENT));
+        } 
         // else
         // holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
         // ((holder.listSeeds.getCount() / nbcolumn) + 1) * layoutsize));

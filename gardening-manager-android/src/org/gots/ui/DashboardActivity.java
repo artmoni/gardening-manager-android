@@ -93,9 +93,14 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
         checkPremiumAds();
         weatherIntent = new Intent(this, WeatherUpdateService.class);
+        startService(weatherIntent);
 
         registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
         registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
+        registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_EVENT));
+
+        refreshGardenMenu(getSupportActionBar());
+        Log.d(TAG, "onCreate");
 
     }
 
@@ -108,7 +113,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
             startActivity(new Intent(this, HutActivity.class));
     }
 
-    protected void displayGardenMenu(final ActionBar actionBar) {
+    protected void refreshGardenMenu(final ActionBar actionBar) {
 
         new AsyncTask<Void, Void, GardenInterface>() {
 
@@ -186,15 +191,17 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         @Override
         public void onReceive(Context context, Intent intent) {
             if (BroadCastMessages.WEATHER_DISPLAY_EVENT.equals(intent.getAction())) {
-
-                updateWeatherWidget(intent);
+                refreshWeatherWidget(intent);
             } else if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())) {
                 refreshConnectionState();
-
+            } else if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
+                refreshGardenMenu(getSupportActionBar());
             }
         }
 
     };
+
+    private int currentItemPosition = 0;
 
     protected void refreshConnectionState() {
         if (itemConnected == null) {
@@ -206,7 +213,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
             itemConnected.setIcon(getResources().getDrawable(R.drawable.garden_disconnected));
     }
 
-    private void updateWeatherWidget(Intent intent) {
+    private void refreshWeatherWidget(Intent intent) {
         boolean isError = intent.getBooleanExtra("error", true);
 
         handle.removeAllViews();
@@ -275,8 +282,6 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
         GoogleAnalyticsTracker.getInstance().dispatch();
 
-        startService(weatherIntent);
-
         // if (gotsPrefs.getCurrentGardenId() == -1) {
 
         // Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
@@ -284,11 +289,9 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         // } else
         // findViewById(R.id.dashboard_button_profile).clearAnimation();
 
-        displayGardenMenu(getSupportActionBar());
-        refreshConnectionState();
+        // refreshConnectionState();
 
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -344,13 +347,18 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
     @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-        gardenManager.setCurrentGarden(myGardens.get(itemPosition));
-        startService(weatherIntent);
+        if (itemPosition != currentItemPosition) {
+            currentItemPosition = itemPosition;
+            gardenManager.setCurrentGarden(myGardens.get(itemPosition));
+            startService(weatherIntent);
+        }
+        Log.d(TAG, "onNavigationItemSelected");
         return false;
     }
 
     @Override
     protected void onRefresh(String AUTHORITY) {
         startService(weatherIntent);
+        Log.d(TAG, "onRefresh");
     }
 }

@@ -177,6 +177,7 @@ public class GotsBillingDialog extends DialogFragment {
                     textDescription.setText(description);
 
                     butBuyPremium.setText(butBuyPremium.getText() + " " + price);
+                    butBuyPremium.setTextAppearance(getActivity(), R.style.buttonRed);
 
                     purchase = inv.getPurchase(SKU_PREMIUM);
                     /*
@@ -193,7 +194,7 @@ public class GotsBillingDialog extends DialogFragment {
                         textDescriptionFeature.setText(descriptionFeature);
 
                         butBuyFeature.setText(butBuyFeature.getText() + " " + priceFeature);
-
+                        butBuyFeature.setTextAppearance(getActivity(), R.style.buttonRed);
                         purchase = inv.getPurchase(SKU_FEATURE);
                     }
                     if (purchase != null) {

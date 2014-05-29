@@ -183,14 +183,14 @@ public class AuthenticationActivity extends AbstractActivity {
 
                             @Override
                             protected Intent doInBackground(String... params) {
-                                GotsSocialAuthentication authentication = new GoogleAuthentication(
+                                GotsSocialAuthentication googleAuthentication = new GoogleAuthentication(
                                         getApplicationContext());
                                 String googleToken = null;
                                 String nuxeoToken = null;
                                 final Intent res = new Intent();
 
                                 try {
-                                    googleToken = authentication.getToken(params[0]);
+                                    googleToken = googleAuthentication.getToken(params[0]);
                                     if (googleToken != null) {
                                         NuxeoAuthentication nuxeoAuthentication = new NuxeoAuthentication(
                                                 getApplicationContext());
@@ -212,11 +212,11 @@ public class AuthenticationActivity extends AbstractActivity {
                             }
 
                             @Override
-                            protected void onPostExecute(Intent resultToken) {
-                                if (resultToken != null) {
+                            protected void onPostExecute(Intent resultIntent) {
+                                if (resultIntent != null) {
                                     // gotsPrefs.setNuxeoLogin(usableAccounts.get(item).name);
                                     // gotsPrefs.setToken(resultToken);
-                                     gotsPrefs.setConnectedToServer(true);
+                                    gotsPrefs.setConnectedToServer(true);
                                     // Toast.makeText(
                                     // getApplicationContext(),
                                     // getResources().getString(R.string.login_connect_description).replace(
@@ -225,7 +225,7 @@ public class AuthenticationActivity extends AbstractActivity {
                                     // Intent intent = new Intent(FirstLaunchActivity.this, DashboardActivity.class);
                                     // startActivity(intent);
                                     // finish();
-                                    finishLogin(resultToken);
+                                    finishLogin(resultIntent);
                                 } else {
                                     // Toast.makeText(getApplicationContext(),
                                     // "Error requesting GoogleAuthUtil.getToken",
@@ -234,7 +234,7 @@ public class AuthenticationActivity extends AbstractActivity {
                                 }
                                 // setActionRefresh(false);
                                 sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
-                                super.onPostExecute(resultToken);
+                                super.onPostExecute(resultIntent);
                             }
                         }.execute(googleAccounts.get(item).name);
                     }
@@ -248,21 +248,23 @@ public class AuthenticationActivity extends AbstractActivity {
         String accountName = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
         String accountPassword = intent.getStringExtra(PARAM_USER_PASS);
         // final Account account = new Account(accountName, intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
-        final Account account = gotsPreferences.getUserAccount();
 
         if (getIntent().getBooleanExtra(ARG_IS_ADDING_NEW_ACCOUNT, false)) {
+            gotsPreferences.setNuxeoLogin(accountName);
+            final Account account = gotsPreferences.getUserAccount();
             String authtoken = intent.getStringExtra(AccountManager.KEY_AUTHTOKEN);
+            gotsPreferences.setToken(authtoken);
             // Creating the account on the device and setting the auth token we got
             // (Not setting the auth token will cause another call to the server to authenticate the user)
             // Bundle bundle = new Bundle();
             // bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
             // bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-            gotsPreferences.setNuxeoLogin(accountName);
             mAccountManager.addAccountExplicitly(account, accountPassword, null);
             mAccountManager.setAuthToken(account, AUTH_TOKEN_TYPE, authtoken);
-        } else {
-            mAccountManager.setPassword(account, accountPassword);
         }
+        // else {
+        // mAccountManager.setPassword(account, accountPassword);
+        // }
         // setAccountAuthenticatorResult(intent.getExtras());
         setResult(RESULT_OK, intent);
         finish();
