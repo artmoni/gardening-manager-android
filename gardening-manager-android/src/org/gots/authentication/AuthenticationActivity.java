@@ -85,6 +85,7 @@ public class AuthenticationActivity extends AbstractActivity {
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
         mPager.setPageTransformer(true, new DepthPageTransformer());
+        
 
         gotsPreferences = GotsPreferences.getInstance().initIfNew(getApplicationContext());
 
@@ -356,6 +357,11 @@ public class AuthenticationActivity extends AbstractActivity {
         @Override
         public int getCount() {
             return tutorialList.length;
+        }
+        @Override
+        public CharSequence getPageTitle(int position) {
+
+            return "Next";
         }
     }
 
