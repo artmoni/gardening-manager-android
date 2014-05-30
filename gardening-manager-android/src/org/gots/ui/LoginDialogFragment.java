@@ -306,15 +306,17 @@ public class LoginDialogFragment extends AbstractDialogFragment {
                     gotsPrefs.setNuxeoLogin(account.name);
                     gotsPrefs.setToken(resultToken);
                     gotsPrefs.setConnectedToServer(true);
-                    Toast.makeText(
-                            getActivity(),
-                            getResources().getString(R.string.login_connect_description).replace("_ACCOUNT_",
-                                    gotsPrefs.getNuxeoLogin()), Toast.LENGTH_LONG).show();
+                    if (isAdded())
+                        Toast.makeText(
+                                getActivity(),
+                                getResources().getString(R.string.login_connect_description).replace("_ACCOUNT_",
+                                        gotsPrefs.getNuxeoLogin()), Toast.LENGTH_LONG).show();
                     // onResume();
                     getDialog().dismiss();
                 } else {
-                    Toast.makeText(getActivity(), "Please check your internet connection or try later",
-                            Toast.LENGTH_SHORT).show();
+                    if (isAdded())
+                        Toast.makeText(getActivity(), "Please check your internet connection or try later",
+                                Toast.LENGTH_SHORT).show();
                 }
                 super.onPostExecute(resultToken);
             }
