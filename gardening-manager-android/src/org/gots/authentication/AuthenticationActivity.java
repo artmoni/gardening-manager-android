@@ -71,6 +71,9 @@ public class AuthenticationActivity extends AbstractActivity {
     int[] tutorialList = { R.layout.tutorial_a, R.layout.tutorial_b, R.layout.tutorial_c, R.layout.tutorial_d,
             R.layout.tutorial_e };
 
+    int[] tutorialTitle = { R.string.garden_create, R.string.dashboard_hut_name, R.string.dashboard_allotments_name,
+            R.string.dashboard_actions_name, R.string.profile_share_data };
+
     private ViewPager mPager;
 
     private ScreenSlidePagerAdapter mPagerAdapter;
@@ -85,7 +88,6 @@ public class AuthenticationActivity extends AbstractActivity {
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
         mPager.setPageTransformer(true, new DepthPageTransformer());
-        
 
         gotsPreferences = GotsPreferences.getInstance().initIfNew(getApplicationContext());
 
@@ -358,10 +360,11 @@ public class AuthenticationActivity extends AbstractActivity {
         public int getCount() {
             return tutorialList.length;
         }
+
         @Override
         public CharSequence getPageTitle(int position) {
 
-            return "Next";
+            return getResources().getString(tutorialTitle[position]);
         }
     }
 
