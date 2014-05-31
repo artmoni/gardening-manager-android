@@ -53,6 +53,10 @@ public class GotsActionSeedManager implements GotsActionSeedProvider {
         return this;
     }
 
+    public void reset() {
+        initDone = false;
+    }
+
     public void setProvider() {
         ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();

@@ -1,5 +1,5 @@
 /* *********************************************************************** *
- * project: org.gots.*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ * project: org.gots.*
  *                                                                         *
  * *********************************************************************** *
  *                                                                         *
@@ -104,6 +104,7 @@ public abstract class AbstractActivity extends ActionBarActivity {
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
+        registerReceiver(nuxeoManager, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
         registerReceiver(gardenManager, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
         registerReceiver(gardenManager, new IntentFilter(BroadCastMessages.GARDEN_SETTINGS_CHANGED));
         registerReceiver(allotmentManager, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
@@ -136,14 +137,19 @@ public abstract class AbstractActivity extends ActionBarActivity {
         super.onPostCreate(savedInstanceState);
     }
 
+    private int progressCounter = 0;
+
     private BroadcastReceiver progressReceiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (BroadCastMessages.PROGRESS_UPDATE.equals(intent.getAction()))
+            if (BroadCastMessages.PROGRESS_UPDATE.equals(intent.getAction())) {
                 setProgressRefresh(true);
-            else if (BroadCastMessages.PROGRESS_FINISHED.equals(intent.getAction()))
-                setProgressRefresh(false);
+                progressCounter++;
+            } else if (BroadCastMessages.PROGRESS_FINISHED.equals(intent.getAction())) {
+                if (--progressCounter == 0)
+                    setProgressRefresh(false);
+            }
         }
     };
 
@@ -152,6 +158,7 @@ public abstract class AbstractActivity extends ActionBarActivity {
         super.onDestroy();
         activities.remove(this);
 
+        unregisterReceiver(nuxeoManager);
         unregisterReceiver(gardenManager);
         unregisterReceiver(allotmentManager);
         unregisterReceiver(seedManager);

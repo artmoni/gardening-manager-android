@@ -194,6 +194,8 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
                 refreshWeatherWidget(intent);
             } else if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())) {
                 refreshConnectionState();
+                refreshGardenMenu(getSupportActionBar());
+                refreshWeatherWidget(intent);
             } else if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
                 refreshGardenMenu(getSupportActionBar());
             }
