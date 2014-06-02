@@ -164,7 +164,9 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
             display.getSize(size);
             width = size.x;
         }
-        int layoutsize = 200;
+        int layoutsize = 150;
+        if (width <= 480)
+            layoutsize = 50;
         int nbcolumn = (width - 200) / layoutsize;
         if (nbcolumn < 1)
             nbcolumn = 1;
@@ -172,17 +174,13 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
 
         listGrowingSeedAdapter = new ListGrowingSeedAdapter(mContext, getItem(position).getSeeds());
         holder.listSeeds.setAdapter(listGrowingSeedAdapter);
-        // holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-        // layoutsize));
-        // if (holder.listSeeds.getCount() % nbcolumn == 0)
-        // holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
-        // (holder.listSeeds.getCount() / nbcolumn + 1) * layoutsize + layoutsize));
+        holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, layoutsize));
         if (listGrowingSeedAdapter.getCount() > 0) {
             holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
-                    LayoutParams.WRAP_CONTENT));
-        } else
-            holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 100));
-
+                    (holder.listSeeds.getCount() / nbcolumn + 1) * layoutsize + layoutsize));
+            // holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+            // LayoutParams.WRAP_CONTENT));
+        }
         // else
         // holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
         // ((holder.listSeeds.getCount() / nbcolumn) + 1) * layoutsize));
@@ -253,76 +251,76 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
             public void onClick(View v) {
                 Intent sensorIntent = new Intent(mContext, SensorActivity.class);
                 mContext.startActivity(sensorIntent);
-//                new AsyncTask<Void, Void, List<ParrotLocation>>() {
-//                    private LocationListAdapter sensorListAdapter;
-//
-//                    List<ParrotSampleFertilizer> samplesFertilizer = null;
-//
-//                    List<ParrotSampleTemperature> samplesTemp = null;
-//
-//                    @Override
-//                    protected List<ParrotLocation> doInBackground(Void... params) {
-//                        ParrotSensorProvider sensorProvider = new ParrotSensorProvider(mContext);
-//                        List<ParrotLocation> locations = sensorProvider.getLocations();
-//                        sensorProvider.getStatus();
-//                        samplesFertilizer = sensorProvider.getSamples(locations.get(0).getLocation_identifier());
-//                        samplesTemp = sensorProvider.getSamples2(locations.get(0).getLocation_identifier());
-//
-//                        return locations;
-//                    }
-//
-//                    protected void onPostExecute(List<ParrotLocation> result) {
-//                        // sensorListAdapter = new SensorListAdapter(mContext, result);
-//                        sensorListAdapter = new LocationListAdapter(mContext, result);
-//                        // new AlertDialog.Builder(mContext).setAdapter(sensorListAdapter,
-//                        // new DialogInterface.OnClickListener() {
-//                        //
-//                        // @Override
-//                        // public void onClick(DialogInterface dialog, int which) {
-//                        // Toast.makeText(mContext, sensorListAdapter.getItem(which).getSensor_serial(),
-//                        // Toast.LENGTH_SHORT).show();
-//                        // ;
-//                        // }
-//                        // }).show();
-//
-//                        Intent sensorIntent = new Intent(mContext, SensorActivity.class);
-//                        mContext.startActivity(sensorIntent);
-//
-//                        if (samplesFertilizer != null) {
-//                            WebView webView = new WebView(mContext);
-//                            String chd = new String();
-//                            for (ParrotSampleFertilizer fertilizer : samplesFertilizer) {
-//                                chd = chd.concat(String.valueOf(fertilizer.getFertilizer_level() * 100));
-//                                chd = chd.concat(",");
-//                            }
-//                            chd = chd.substring(0, chd.length() - 1);
-//                            String url = "http://chart.apis.google.com/chart?cht=ls&chs=250x100&chd=t:" + chd;
-//                            webView.loadUrl(url);
-//                            Log.d(ListAllotmentAdapter.class.getName(), url);
-//                            AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
-//                            alert.setView(webView);
-//                            alert.show();
-//                        }
-//                        if (samplesTemp != null) {
-//                            WebView webView = new WebView(mContext);
-//                            String chd = new String();
-//                            int i = 0;
-//                            for (ParrotSampleTemperature sampleTemp : samplesTemp) {
-//                                chd = chd.concat(String.valueOf(sampleTemp.getAir_temperature_celsius()));
-//                                chd = chd.concat(",");
-//                                if (i++ >= 50)
-//                                    break;
-//                            }
-//                            chd = chd.substring(0, chd.length() - 1);
-//                            String url = "http://chart.apis.google.com/chart?cht=ls&chs=250x100&chd=t:" + chd;
-//                            webView.loadUrl(url);
-//                            Log.d(ListAllotmentAdapter.class.getName(), url);
-//                            AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
-//                            alert.setView(webView);
-//                            alert.show();
-//                        }
-//                    };
-//                }.execute();
+                // new AsyncTask<Void, Void, List<ParrotLocation>>() {
+                // private LocationListAdapter sensorListAdapter;
+                //
+                // List<ParrotSampleFertilizer> samplesFertilizer = null;
+                //
+                // List<ParrotSampleTemperature> samplesTemp = null;
+                //
+                // @Override
+                // protected List<ParrotLocation> doInBackground(Void... params) {
+                // ParrotSensorProvider sensorProvider = new ParrotSensorProvider(mContext);
+                // List<ParrotLocation> locations = sensorProvider.getLocations();
+                // sensorProvider.getStatus();
+                // samplesFertilizer = sensorProvider.getSamples(locations.get(0).getLocation_identifier());
+                // samplesTemp = sensorProvider.getSamples2(locations.get(0).getLocation_identifier());
+                //
+                // return locations;
+                // }
+                //
+                // protected void onPostExecute(List<ParrotLocation> result) {
+                // // sensorListAdapter = new SensorListAdapter(mContext, result);
+                // sensorListAdapter = new LocationListAdapter(mContext, result);
+                // // new AlertDialog.Builder(mContext).setAdapter(sensorListAdapter,
+                // // new DialogInterface.OnClickListener() {
+                // //
+                // // @Override
+                // // public void onClick(DialogInterface dialog, int which) {
+                // // Toast.makeText(mContext, sensorListAdapter.getItem(which).getSensor_serial(),
+                // // Toast.LENGTH_SHORT).show();
+                // // ;
+                // // }
+                // // }).show();
+                //
+                // Intent sensorIntent = new Intent(mContext, SensorActivity.class);
+                // mContext.startActivity(sensorIntent);
+                //
+                // if (samplesFertilizer != null) {
+                // WebView webView = new WebView(mContext);
+                // String chd = new String();
+                // for (ParrotSampleFertilizer fertilizer : samplesFertilizer) {
+                // chd = chd.concat(String.valueOf(fertilizer.getFertilizer_level() * 100));
+                // chd = chd.concat(",");
+                // }
+                // chd = chd.substring(0, chd.length() - 1);
+                // String url = "http://chart.apis.google.com/chart?cht=ls&chs=250x100&chd=t:" + chd;
+                // webView.loadUrl(url);
+                // Log.d(ListAllotmentAdapter.class.getName(), url);
+                // AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
+                // alert.setView(webView);
+                // alert.show();
+                // }
+                // if (samplesTemp != null) {
+                // WebView webView = new WebView(mContext);
+                // String chd = new String();
+                // int i = 0;
+                // for (ParrotSampleTemperature sampleTemp : samplesTemp) {
+                // chd = chd.concat(String.valueOf(sampleTemp.getAir_temperature_celsius()));
+                // chd = chd.concat(",");
+                // if (i++ >= 50)
+                // break;
+                // }
+                // chd = chd.substring(0, chd.length() - 1);
+                // String url = "http://chart.apis.google.com/chart?cht=ls&chs=250x100&chd=t:" + chd;
+                // webView.loadUrl(url);
+                // Log.d(ListAllotmentAdapter.class.getName(), url);
+                // AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
+                // alert.setView(webView);
+                // alert.show();
+                // }
+                // };
+                // }.execute();
             }
         });
 

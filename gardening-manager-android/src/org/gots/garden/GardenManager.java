@@ -48,6 +48,10 @@ public class GardenManager extends BroadcastReceiver {
         return instance;
     }
 
+    public void reset() {
+        initDone = false;
+    }
+
     /**
      * If it was already called once, the method returns without any change.
      * 
@@ -111,7 +115,6 @@ public class GardenManager extends BroadcastReceiver {
 
     }
 
-
     public GardenInterface getCurrentGarden() {
         GardenInterface garden = gardenProvider.getCurrentGarden();
         return garden;
@@ -121,8 +124,7 @@ public class GardenManager extends BroadcastReceiver {
         gardenProvider.setCurrentGarden(garden);
         mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
 
-        Log.d(TAG, "[" + garden.getId() + "] " + garden.getLocality()
-                + " has been set as current workspace");
+        Log.d(TAG, "[" + garden.getId() + "] " + garden.getLocality() + " has been set as current workspace");
     }
 
     public void removeGarden(GardenInterface garden) {
@@ -152,7 +154,6 @@ public class GardenManager extends BroadcastReceiver {
             };
         }.execute(garden);
     }
-
 
     public List<GardenInterface> getMyGardens(boolean force) {
         return gardenProvider.getMyGardens(force);

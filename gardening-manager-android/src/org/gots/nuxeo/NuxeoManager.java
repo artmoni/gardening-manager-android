@@ -21,6 +21,7 @@
  * *********************************************************************** */
 package org.gots.nuxeo;
 
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.preferences.GotsPreferences;
 import org.gots.utils.NotConfiguredException;
 import org.nuxeo.android.config.NuxeoServerConfig;
@@ -32,14 +33,16 @@ import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.impl.NotAvailableOffline;
 import org.nuxeo.ecm.automation.client.jaxrs.spi.auth.TokenRequestInterceptor;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 /**
  * @author jcarsique
- *
+ * 
  */
-public class NuxeoManager {
+public class NuxeoManager extends BroadcastReceiver {
     private static final String TAG = "NuxeoManager";
 
     private static NuxeoManager instance;
@@ -60,8 +63,7 @@ public class NuxeoManager {
     }
 
     /**
-     * After first call, {@link #initIfNew(Context)} must be called else a
-     * {@link NotConfiguredException} will be thrown
+     * After first call, {@link #initIfNew(Context)} must be called else a {@link NotConfiguredException} will be thrown
      * on the second call attempt.
      */
     public static synchronized NuxeoManager getInstance() {
@@ -92,13 +94,8 @@ public class NuxeoManager {
         nxConfig.setCacheKey(NuxeoServerConfig.PREF_SERVER_TOKEN);
         nuxeoContext = NuxeoContextFactory.getNuxeoContext(context, nxConfig);
         initDone = true;
-        Log.d(TAG, "getSession with: "
-                + nxConfig.getServerBaseUrl()
-                + " login="
-                + nxConfig.getLogin()
-                + " password="
-                + (GotsPreferences.ISDEVELOPMENT ? nxConfig.getPassword()
-                        : "******"));
+        Log.d(TAG, "getSession with: " + nxConfig.getServerBaseUrl() + " login=" + nxConfig.getLogin() + " password="
+                + (GotsPreferences.ISDEVELOPMENT ? nxConfig.getPassword() : "******"));
         return this;
     }
 
@@ -109,8 +106,7 @@ public class NuxeoManager {
             String myLogin = gotsPrefs.getNuxeoLogin();
             String myDeviceId = gotsPrefs.getDeviceId();
             String myApp = gotsPrefs.getGardeningManagerAppname();
-            nuxeoClient.setRequestInterceptor(new TokenRequestInterceptor(
-                    myApp, myToken, myLogin, myDeviceId));
+            nuxeoClient.setRequestInterceptor(new TokenRequestInterceptor(myApp, myToken, myLogin, myDeviceId));
             Log.d(TAG, "Got new nuxeoClient " + nuxeoClient);
         }
         return nuxeoClient;
@@ -130,6 +126,19 @@ public class NuxeoManager {
             nuxeoContext.shutdown();
         } catch (Exception e) {
             Log.e(TAG, "nuxeoContext.shutdown() " + e.getMessage(), e);
+        }
+    }
+
+    public void reset() {
+        initDone = false;
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())) {
+            shutdown();
+            initIfNew(context);
+            context.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
         }
     }
 }

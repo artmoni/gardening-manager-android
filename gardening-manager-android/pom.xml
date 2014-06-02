@@ -10,7 +10,7 @@
   </parent>
   <artifactId>gardening-manager-android</artifactId>
   <packaging>apk</packaging>
-  <version>0.30.2-SNAPSHOT</version>
+  <version>0.31.1-SNAPSHOT</version>
   <name>Gardening Manager Android</name>
   <properties>
     <android.version>4.2</android.version>
@@ -239,7 +239,7 @@
                   <manifest>
                     <versionName>${project.version}</versionName>
                     <versionCodeUpdateFromVersion>true</versionCodeUpdateFromVersion>
-                    <debuggable>true</debuggable>
+                    <debuggable>false</debuggable>
                     <!-- <supports-screens> <anyDensity>true</anyDensity> 
                       <xlargeScreens>false</xlargeScreens> </supports-screens> <compatible-screens> 
                       <compatible-screen> <screenSize>small</screenSize> <screenDensity>ldpi</screenDensity> 

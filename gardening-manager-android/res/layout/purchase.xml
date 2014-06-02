@@ -2,8 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/text_color_light"
     android:orientation="horizontal"
-    tools:context=".MainActivity" android:background="@color/text_color_light">
+    tools:context=".MainActivity" >
 
     <RelativeLayout
         android:id="@+id/idPurchaseFeature"
@@ -37,14 +38,10 @@
 
         <Button
             android:id="@+id/idPurchaseFeatureButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/buttonRed"
             android:layout_below="@+id/idPurchaseFeatureDescription"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/button_red_selector"
-            android:text="@string/inapp.purchase.buy"
-            android:textColor="@color/white" />
-
+            android:text="@string/inapp.purchase.buy" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -80,21 +77,20 @@
 
         <Button
             android:id="@+id/idPurchasePremiumButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/buttonRed"
             android:layout_below="@+id/idPurchasePremiumDescription"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/button_red_selector"
-            android:text="@string/inapp.purchase.buy"
-            android:textColor="@color/white" />
+            android:text="@string/inapp.purchase.buy" />
 
-        <!-- <ImageView
+        <!--
+             <ImageView
             android:id="@+id/imageView1"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/logo_premium" /> -->
+            android:src="@drawable/logo_premium" />
+        -->
 
     </RelativeLayout>
 

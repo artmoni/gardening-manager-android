@@ -156,6 +156,10 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
         return instance;
     }
 
+    public void reset() {
+        initDone = false;
+    }
+
     /**
      * If it was already called once, the method returns without any change.
      */

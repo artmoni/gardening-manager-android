@@ -127,8 +127,8 @@
         <item name="android:layout_marginLeft">0dp</item>
         <item name="android:layout_marginRight">0dp</item>
         <item name="android:layout_marginBottom">0dp</item>
-        <item name="android:layout_width">150dp</item>
-        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:drawablePadding">0dp</item>
@@ -290,7 +290,7 @@
         <item name="android:textAppearance">@style/Custom.TextAppearance.Sherlock.Widget.TextView.SpinnerItem</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textAllCaps">true</item>
-        <item name="android:padding">8dp</item>
+        <item name="android:padding">2dp</item>
         <item name="android:textColor">@color/green_light</item>
         <item name="android:background">@color/text_color_dark</item>
         <item name="background">@color/text_color_dark</item>

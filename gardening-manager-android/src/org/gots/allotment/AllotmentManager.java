@@ -58,6 +58,10 @@ public class AllotmentManager extends BroadcastReceiver implements AllotmentProv
         return this;
     }
 
+    public void reset() {
+        initDone = false;
+    }
+
     public void finalize() {
         // mContext.unregisterReceiver(this);
         initDone = false;

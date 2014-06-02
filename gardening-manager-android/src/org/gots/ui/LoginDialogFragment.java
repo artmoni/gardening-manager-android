@@ -34,10 +34,6 @@ import com.google.android.gms.auth.UserRecoverableAuthException;
 public class LoginDialogFragment extends AbstractDialogFragment {
     protected static final String TAG = "LoginActivity";
 
-    private ActionBar bar;
-
-    private Menu mMenu;
-
     protected int AUTHTOKEN_CODE_RESULT = 1;
 
     Account selectedAccount = null;
@@ -226,7 +222,8 @@ public class LoginDialogFragment extends AbstractDialogFragment {
 
                 GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Login", "Request facebook", 0);
                 Toast.makeText(getActivity(), getResources().getString(R.string.feature_unavalaible),
-                        Toast.LENGTH_SHORT).show();;
+                        Toast.LENGTH_SHORT).show();
+                ;
                 // tokenNuxeoConnect();
 
                 // finish();
@@ -297,7 +294,7 @@ public class LoginDialogFragment extends AbstractDialogFragment {
                     startActivityForResult(e.getIntent(), AUTHTOKEN_CODE_RESULT);
                 } catch (IOException e) {
                     Log.e(TAG, e.getMessage(), e);
-                }catch (GoogleAuthException e) {
+                } catch (GoogleAuthException e) {
                     Log.e(TAG, e.getMessage(), e);
                 }
                 return nuxeoToken;
@@ -309,15 +306,17 @@ public class LoginDialogFragment extends AbstractDialogFragment {
                     gotsPrefs.setNuxeoLogin(account.name);
                     gotsPrefs.setToken(resultToken);
                     gotsPrefs.setConnectedToServer(true);
-                    Toast.makeText(
-                            getActivity(),
-                            getResources().getString(R.string.login_connect_description).replace("_ACCOUNT_",
-                                    gotsPrefs.getNuxeoLogin()), Toast.LENGTH_LONG).show();
+                    if (isAdded())
+                        Toast.makeText(
+                                getActivity(),
+                                getResources().getString(R.string.login_connect_description).replace("_ACCOUNT_",
+                                        gotsPrefs.getNuxeoLogin()), Toast.LENGTH_LONG).show();
                     // onResume();
                     getDialog().dismiss();
                 } else {
-                    Toast.makeText(getActivity(), "Please check your internet connection or try later",
-                            Toast.LENGTH_SHORT).show();
+                    if (isAdded())
+                        Toast.makeText(getActivity(), "Please check your internet connection or try later",
+                                Toast.LENGTH_SHORT).show();
                 }
                 super.onPostExecute(resultToken);
             }

@@ -150,7 +150,7 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider implements W
             remoteCondition.setDate(requestCalendar.getTime());
             remoteCondition.setDayofYear(requestCalendar.get(Calendar.DAY_OF_YEAR));
 
-            if (localCondition != null) {
+            if (localCondition != null && localCondition.getId() > 0) {
                 remoteCondition.setId(localCondition.getId());
                 remoteCondition = super.updateWeather(remoteCondition);
             } else {
