@@ -28,6 +28,7 @@ import org.gots.seed.SeedUtil;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
 import org.gots.sensor.LocationListAdapter;
 import org.gots.sensor.SensorListFragment;
+import org.gots.sensor.SensorLoginDialogFragment;
 import org.gots.sensor.parrot.ParrotLocation;
 import org.gots.sensor.parrot.ParrotSampleFertilizer;
 import org.gots.sensor.parrot.ParrotSampleTemperature;
@@ -249,6 +250,7 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
 
             @Override
             public void onClick(View v) {
+                
                 Intent sensorIntent = new Intent(mContext, SensorActivity.class);
                 mContext.startActivity(sensorIntent);
                 // new AsyncTask<Void, Void, List<ParrotLocation>>() {

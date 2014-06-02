@@ -42,7 +42,7 @@ public class SplashScreenActivity extends AboutActivity {
             // msg.what = STOPSPLASH;
             // getSplashHandler().sendMessageDelayed(msg, SPLASHTIME);
             // Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
-//            gotsPrefs.setParrotToken(null);
+            gotsPrefs.setParrotToken(null);
             Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //            startActivityForResult(intent, 2);

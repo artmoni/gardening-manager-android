@@ -97,7 +97,7 @@ public class AuthenticationActivity extends AbstractActivity {
             mAccountType = extras.getString(ARG_ACCOUNT_TYPE);
         }
 
-        Button buttonCreateProfile = (Button) findViewById(R.id.buttonCreate);
+        Button buttonCreateProfile = (Button) findViewById(R.id.idButtonParrotBuy);
         buttonCreateProfile.setOnClickListener(new View.OnClickListener() {
 
             @Override

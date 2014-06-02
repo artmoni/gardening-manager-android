@@ -7,16 +7,20 @@ import org.gots.allotment.adapter.ListAllotmentAdapter;
 import org.gots.sensor.LocationListAdapter;
 import org.gots.sensor.SensorChartFragment;
 import org.gots.sensor.SensorListFragment;
-import org.gots.sensor.SensorLoginFragment;
+import org.gots.sensor.SensorLoginDialogFragment;
 import org.gots.sensor.parrot.ParrotLocation;
 import org.gots.sensor.parrot.ParrotSampleFertilizer;
 import org.gots.sensor.parrot.ParrotSampleTemperature;
 import org.gots.sensor.parrot.ParrotSensorProvider;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -35,9 +39,16 @@ public class SensorActivity extends AbstractActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        updateLocations();
+        registerReceiver(sensorBroadcast, new IntentFilter(SensorLoginDialogFragment.EVENT_AUTHENTICATE));
     }
+
+    BroadcastReceiver sensorBroadcast = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateLocations();
+        }
+    };
 
     private void updateLocations() {
         new AsyncTask<Void, Void, List<ParrotLocation>>() {
@@ -52,14 +63,8 @@ public class SensorActivity extends AbstractActivity {
             protected void onPostExecute(List<ParrotLocation> result) {
 
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                if (gotsPrefs.getParrotToken() == null) {
-                    SensorLoginFragment login = new SensorLoginFragment();
-                    ft.replace(R.id.idFragmentSensor, login);
-                } else {
-
-                    SensorListFragment sensors = new SensorListFragment(result);
-                    ft.replace(R.id.idFragmentSensor, sensors);
-                }
+                SensorListFragment sensors = new SensorListFragment(result);
+                ft.replace(R.id.idFragmentSensor, sensors);
                 ft.commit();
 
             };
@@ -67,17 +72,35 @@ public class SensorActivity extends AbstractActivity {
     }
 
     @Override
+    protected void onResume() {
+        if (gotsPrefs.getParrotToken() == null) {
+            SensorLoginDialogFragment login = new SensorLoginDialogFragment();
+            login.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.CustomDialog);
+            login.show(getSupportFragmentManager(), "sensor_login");
+        } else
+            updateLocations();
+
+        super.onResume();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
         case android.R.id.home:
-//            getSupportFragmentManager().findFragmentById(R.id.idFragmentSensor);
-            updateLocations();
+            // updateLocations();
+            finish();
             break;
 
         default:
             break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(sensorBroadcast);
+        super.onDestroy();
     }
 }

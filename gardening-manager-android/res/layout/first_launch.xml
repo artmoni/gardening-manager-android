@@ -131,7 +131,7 @@
                     android:text="@string/garden.create.description" />
 
                 <Button
-                    android:id="@+id/buttonCreate"
+                    android:id="@+id/idButtonParrotBuy"
                     style="@style/buttonRed"
                     android:text="@string/garden.create" />
             </LinearLayout>

@@ -37,7 +37,7 @@ public class TutorialActivity extends AbstractActivity {
         mPager.setAdapter(mPagerAdapter);
         mPager.setPageTransformer(true, new DepthPageTransformer());
 
-        Button next = (Button) findViewById(R.id.buttonCreate);
+        Button next = (Button) findViewById(R.id.idButtonParrotBuy);
         next.setOnClickListener(new View.OnClickListener() {
 
             @Override

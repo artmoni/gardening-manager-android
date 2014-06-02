@@ -1,16 +1,14 @@
 package org.gots.sensor;
 
-import java.util.List;
-
 import org.gots.R;
 import org.gots.authentication.ParrotAuthentication;
-import org.gots.sensor.parrot.ParrotLocation;
-import org.gots.sensor.parrot.ParrotSensorProvider;
+import org.gots.ui.AbstractDialogFragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class SensorLoginFragment extends Fragment {
+public class SensorLoginDialogFragment extends AbstractDialogFragment {
 
     private static final String TAG = "SensorLoginFragment";
 
@@ -28,7 +26,11 @@ public class SensorLoginFragment extends Fragment {
 
     private Button buttonLogin;
 
-    public SensorLoginFragment() {
+    private Button buttonBuy;
+
+    public static String EVENT_AUTHENTICATE = "sensor.authenticate.success";
+
+    public SensorLoginDialogFragment() {
     }
 
     @Override
@@ -46,6 +48,19 @@ public class SensorLoginFragment extends Fragment {
                 login();
             }
         });
+
+        buttonBuy = (Button) view.findViewById(R.id.idButtonParrotBuy);
+
+        buttonBuy.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("http://www.parrotshopping.com/fr/p_parrot_listing.aspx?f=3943"));
+                startActivity(browserIntent);
+            }
+        });
+
         return view;
     }
 
@@ -59,6 +74,8 @@ public class SensorLoginFragment extends Fragment {
                         passwordTextView.getText().toString());
                 if (token != null && !"".equals(token)) {
                     Log.i(TAG, token);
+                    getActivity().sendBroadcast(new Intent(EVENT_AUTHENTICATE));
+                    dismiss();
                 }
                 return null;
             }
