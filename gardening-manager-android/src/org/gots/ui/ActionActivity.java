@@ -41,7 +41,7 @@ public class ActionActivity extends AbstractActivity {
 
     private int seedid;
 
-    List<SeedActionInterface> seedActions;
+    List<SeedActionInterface> seedActions = new ArrayList<SeedActionInterface>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +91,7 @@ public class ActionActivity extends AbstractActivity {
 
                 for (GrowingSeedInterface seed : allSeeds) {
 
-                    seedActions = actionseedProvider.getActionsToDoBySeed(seed);
+                    seedActions.addAll(actionseedProvider.getActionsToDoBySeed(seed));
                 }
 
                 listActions = new ListAllActionAdapter(getApplicationContext(), seedActions,
