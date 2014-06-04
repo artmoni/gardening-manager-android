@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.gots.R;
 import org.gots.allotment.adapter.ListAllotmentAdapter;
+import org.gots.inapp.GotsBillingDialog;
+import org.gots.inapp.GotsPurchaseItem;
 import org.gots.sensor.LocationListAdapter;
 import org.gots.sensor.SensorChartFragment;
 import org.gots.sensor.SensorListFragment;
@@ -22,6 +24,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.MenuItem;
@@ -73,7 +76,7 @@ public class SensorActivity extends AbstractActivity {
 
     @Override
     protected void onResume() {
-        if (gotsPrefs.getParrotToken() == null) {
+       if (gotsPrefs.getParrotToken() == null) {
             SensorLoginDialogFragment login = new SensorLoginDialogFragment();
             login.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.CustomDialog);
             login.show(getSupportFragmentManager(), "sensor_login");

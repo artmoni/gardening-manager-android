@@ -22,8 +22,11 @@ public class GotsPurchaseItem {
 
     public static String SKU_PREMIUM = "gots.premium";
 
-     public static String SKU_FEATURE_PDFHISTORY = "gots.feature.pdfhistory";
-//    public static String SKU_FEATURE_PDFHISTORY = SKU_TEST_PURCHASE;
+    public static String SKU_FEATURE_PDFHISTORY = "gots.feature.pdfhistory";
+
+    public static String SKU_FEATURE_PARROT = "gots.feature.parrot";
+
+    // public static String SKU_FEATURE_PDFHISTORY = SKU_TEST_PURCHASE;
 
     private SharedPreferences prefs;
 
@@ -37,6 +40,12 @@ public class GotsPurchaseItem {
     public void setFeatureExportPDF(boolean hasPurchase) {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean(SKU_FEATURE_PDFHISTORY, hasPurchase);
+        editor.commit();
+    }
+
+    public void setFeatureParrot(boolean hasParrot) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(SKU_FEATURE_PARROT, hasParrot);
         editor.commit();
     }
 
@@ -57,7 +66,6 @@ public class GotsPurchaseItem {
 
         for (ApplicationInfo applicationInfo : packages) {
             try {
-
                 PackageInfo packageInfo = pm.getPackageInfo(applicationInfo.packageName, PackageManager.GET_PERMISSIONS);
                 if ("org.gots.premium".equals(packageInfo.packageName)) {
                     unlocked = true;
@@ -72,5 +80,9 @@ public class GotsPurchaseItem {
 
     public boolean getFeatureExportPDF() {
         return prefs.getBoolean(SKU_FEATURE_PDFHISTORY, false);
+    }
+
+    public boolean getFeatureParrot() {
+        return prefs.getBoolean(SKU_FEATURE_PARROT, false);
     }
 }

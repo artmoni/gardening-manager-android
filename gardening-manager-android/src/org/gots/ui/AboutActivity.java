@@ -14,6 +14,7 @@ import org.gots.provider.ActionsContentProvider;
 import org.gots.provider.AllotmentContentProvider;
 import org.gots.provider.GardenContentProvider;
 import org.gots.provider.SeedsContentProvider;
+import org.gots.provider.SensorContentProvider;
 import org.gots.seed.service.SeedUpdateService;
 
 import android.accounts.Account;
@@ -280,8 +281,8 @@ public class AboutActivity extends AbstractActivity {
         ContentResolver.requestSync(newAccount, GardenContentProvider.AUTHORITY, bundle);
         ContentResolver.setSyncAutomatically(newAccount, ActionsContentProvider.AUTHORITY, true);
         ContentResolver.requestSync(newAccount, ActionsContentProvider.AUTHORITY, bundle);
-        // ContentResolver.setSyncAutomatically(newAccount, AllotmentContentProvider.AUTHORITY, true);
-        // ContentResolver.requestSync(newAccount, AllotmentContentProvider.AUTHORITY, bundle);
+        ContentResolver.setSyncAutomatically(newAccount, SensorContentProvider.AUTHORITY, true);
+        ContentResolver.requestSync(newAccount, SensorContentProvider.AUTHORITY, bundle);
 
         /*
          * Synchronize Purchase feature
@@ -289,6 +290,7 @@ public class AboutActivity extends AbstractActivity {
         final ArrayList<String> moreSkus = new ArrayList<String>();
         moreSkus.add(GotsPurchaseItem.SKU_PREMIUM);
         moreSkus.add(GotsPurchaseItem.SKU_FEATURE_PDFHISTORY);
+        moreSkus.add(GotsPurchaseItem.SKU_FEATURE_PARROT);
         buyHelper = new IabHelper(getApplicationContext(), gotsPrefs.getPlayStorePubKey());
 
         Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
@@ -312,6 +314,7 @@ public class AboutActivity extends AbstractActivity {
                                 if (result.isSuccess()) {
                                     gotsPurchase.setPremium(inv.hasPurchase(GotsPurchaseItem.SKU_PREMIUM));
                                     gotsPurchase.setFeatureExportPDF(inv.hasPurchase(GotsPurchaseItem.SKU_FEATURE_PDFHISTORY));
+                                    gotsPurchase.setFeatureParrot(inv.hasPurchase(GotsPurchaseItem.SKU_FEATURE_PARROT));
                                     Log.i(TAG, "Successful got inventory!");
 
                                 } else {
