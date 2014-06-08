@@ -19,12 +19,14 @@ import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.inapp.AppRater;
 import org.gots.inapp.GotsBillingDialog;
+import org.gots.provider.WeatherContentProvider;
 import org.gots.weather.service.WeatherUpdateService;
 import org.gots.weather.view.WeatherView;
 import org.gots.weather.view.WeatherWidget;
 
 import android.accounts.AccountManager;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -62,7 +64,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
     private LinearLayout weatherWidgetLayout;
 
-    private Intent weatherIntent;
+//    private Intent weatherIntent;
 
     private String TAG = "DashboardActivity";
 
@@ -92,8 +94,8 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         weatherWidgetLayout = (LinearLayout) findViewById(R.id.WeatherWidget);
 
         checkPremiumAds();
-        weatherIntent = new Intent(this, WeatherUpdateService.class);
-        startService(weatherIntent);
+//        weatherIntent = new Intent(this, WeatherUpdateService.class);
+//        startService(weatherIntent);
 
         registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
         registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
@@ -216,7 +218,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
     }
 
     private void refreshWeatherWidget(Intent intent) {
-        boolean isError = intent.getBooleanExtra("error", true);
+        boolean isError = intent.getBooleanExtra("error", false);
 
         handle.removeAllViews();
         weatherWidgetLayout.removeAllViews();
@@ -272,7 +274,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(weatherBroadcastReceiver);
-        stopService(weatherIntent);
+//        stopService(weatherIntent);
         // if (buyHelper != null)
         // buyHelper.dispose();
     }
@@ -352,7 +354,12 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         if (itemPosition != currentItemPosition) {
             currentItemPosition = itemPosition;
             gardenManager.setCurrentGarden(myGardens.get(itemPosition));
-            startService(weatherIntent);
+//            startService(weatherIntent);
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+            bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+            ContentResolver.setSyncAutomatically(gotsPrefs.getUserAccount(), WeatherContentProvider.AUTHORITY, true);
+            ContentResolver.requestSync(gotsPrefs.getUserAccount(), WeatherContentProvider.AUTHORITY, bundle);
         }
         Log.d(TAG, "onNavigationItemSelected");
         return false;
@@ -360,7 +367,12 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
     @Override
     protected void onRefresh(String AUTHORITY) {
-        startService(weatherIntent);
+//        startService(weatherIntent);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        ContentResolver.setSyncAutomatically(gotsPrefs.getUserAccount(), WeatherContentProvider.AUTHORITY, true);
+        ContentResolver.requestSync(gotsPrefs.getUserAccount(), WeatherContentProvider.AUTHORITY, bundle);
         Log.d(TAG, "onRefresh");
     }
 }

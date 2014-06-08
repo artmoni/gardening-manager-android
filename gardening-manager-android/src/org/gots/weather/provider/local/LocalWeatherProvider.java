@@ -17,12 +17,13 @@ import org.gots.DatabaseHelper;
 import org.gots.utils.GotsDBHelper;
 import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
+import org.gots.weather.provider.previmeteo.WeatherProvider;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-public class LocalWeatherProvider extends GotsDBHelper {
+public class LocalWeatherProvider extends GotsDBHelper implements WeatherProvider {
 
     public LocalWeatherProvider(Context mContext) {
         super(mContext);
@@ -56,7 +57,7 @@ public class LocalWeatherProvider extends GotsDBHelper {
 
     private ContentValues getWeatherContentValues(WeatherConditionInterface weatherCondition) {
         ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.WEATHER_CONDITION, weatherCondition.getCondition());
+        values.put(DatabaseHelper.WEATHER_CONDITION, weatherCondition.getSummary());
         values.put(DatabaseHelper.WEATHER_WINDCONDITION, weatherCondition.getWindCondition());
         Calendar cal = Calendar.getInstance();
         cal.setTime(weatherCondition.getDate());
@@ -68,30 +69,54 @@ public class LocalWeatherProvider extends GotsDBHelper {
         values.put(DatabaseHelper.WEATHER_TEMPCELCIUSMIN, weatherCondition.getTempCelciusMin());
         values.put(DatabaseHelper.WEATHER_TEMPCELCIUSMAX, weatherCondition.getTempCelciusMax());
         values.put(DatabaseHelper.WEATHER_TEMPFAHRENHEIT, weatherCondition.getTempFahrenheit());
+        values.put(DatabaseHelper.WEATHER_UUID, weatherCondition.getUUID());
         return values;
     }
 
     private WeatherConditionInterface cursorToWeather(Cursor cursor) {
         WeatherConditionInterface condition = new WeatherCondition();
         condition.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.WEATHER_ID)));
-        condition.setCondition(cursor.getString(cursor.getColumnIndex(DatabaseHelper.WEATHER_CONDITION)));
+        condition.setSummary(cursor.getString(cursor.getColumnIndex(DatabaseHelper.WEATHER_CONDITION)));
         condition.setWindCondition(cursor.getString(cursor.getColumnIndex(DatabaseHelper.WEATHER_WINDCONDITION)));
         condition.setDayofYear(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.WEATHER_DAYOFYEAR)));
         condition.setIconURL((cursor.getString(cursor.getColumnIndex(DatabaseHelper.WEATHER_ICONURL))));
-        condition.setHumidity((cursor.getInt(cursor.getColumnIndex(DatabaseHelper.WEATHER_HUMIDITY))));
-        condition.setTempCelciusMin((cursor.getInt(cursor.getColumnIndex(DatabaseHelper.WEATHER_TEMPCELCIUSMIN))));
-        condition.setTempCelciusMax((cursor.getInt(cursor.getColumnIndex(DatabaseHelper.WEATHER_TEMPCELCIUSMAX))));
-        condition.setTempFahrenheit((cursor.getInt(cursor.getColumnIndex(DatabaseHelper.WEATHER_TEMPFAHRENHEIT))));
+        condition.setHumidity((cursor.getFloat(cursor.getColumnIndex(DatabaseHelper.WEATHER_HUMIDITY))));
+        condition.setTempCelciusMin((cursor.getFloat(cursor.getColumnIndex(DatabaseHelper.WEATHER_TEMPCELCIUSMIN))));
+        condition.setTempCelciusMax((cursor.getFloat(cursor.getColumnIndex(DatabaseHelper.WEATHER_TEMPCELCIUSMAX))));
+        condition.setTempFahrenheit((cursor.getFloat(cursor.getColumnIndex(DatabaseHelper.WEATHER_TEMPFAHRENHEIT))));
         condition.setDate(new Date(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.WEATHER_DATE))));
+        condition.setUUID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.WEATHER_UUID)));
         return condition;
     }
 
-    public WeatherConditionInterface getWeatherByDayofyear(int dayofyear) {
+//    public WeatherConditionInterface getWeatherByDayofyear(int dayofyear) {
+//        WeatherConditionInterface weatherCondition = new WeatherCondition();
+//        Cursor cursor = null;
+//        try {
+//            cursor = bdd.query(DatabaseHelper.WEATHER_TABLE_NAME, null, DatabaseHelper.WEATHER_DAYOFYEAR + "="
+//                    + dayofyear, null, null, null, null);
+//
+//            if (cursor.moveToFirst()) {
+//                weatherCondition = cursorToWeather(cursor);
+//            }
+//        } finally {
+//            if (cursor != null)
+//                cursor.close();
+//        }
+//        return weatherCondition;
+//    }
+
+    @Override
+    public WeatherConditionInterface getCondition(Date requestedDay) {
         WeatherConditionInterface weatherCondition = new WeatherCondition();
         Cursor cursor = null;
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(requestedDay);
+        int dayofyear = cal.get(Calendar.DAY_OF_YEAR);
+        int year = cal.get(Calendar.YEAR);
         try {
             cursor = bdd.query(DatabaseHelper.WEATHER_TABLE_NAME, null, DatabaseHelper.WEATHER_DAYOFYEAR + "="
-                    + dayofyear, null, null, null, null);
+                    + dayofyear + " AND " + DatabaseHelper.WEATHER_YEAR + "=" + year, null, null, null, null);
 
             if (cursor.moveToFirst()) {
                 weatherCondition = cursorToWeather(cursor);
@@ -101,6 +126,12 @@ public class LocalWeatherProvider extends GotsDBHelper {
                 cursor.close();
         }
         return weatherCondition;
+    }
+
+    @Override
+    public WeatherConditionInterface updateCondition(WeatherConditionInterface condition, Date day) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

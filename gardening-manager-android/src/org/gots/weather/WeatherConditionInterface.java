@@ -14,44 +14,48 @@ import java.util.Date;
 
 public interface WeatherConditionInterface {
 
-	public abstract int getDayofYear();
+    public abstract int getDayofYear();
 
-	public abstract void setDayofYear(int dayofYear);
+    public abstract void setDayofYear(int dayofYear);
 
-	public abstract Integer getTempCelciusMin();
+    public abstract Float getTempCelciusMin();
 
-	public abstract void setTempCelciusMin(Integer temp);
+    public abstract void setTempCelciusMin(Float temp);
 
-	public abstract Integer getTempCelciusMax();
+    public abstract Float getTempCelciusMax();
 
-	public abstract void setTempCelciusMax(Integer temp);
+    public abstract void setTempCelciusMax(Float temp);
 
-	public abstract Integer getTempFahrenheit();
+    public abstract Float getTempFahrenheit();
 
-	public abstract void setTempFahrenheit(Integer temp);
+    public abstract void setTempFahrenheit(Float temp);
 
-	public abstract String getCondition();
+    public abstract String getSummary();
 
-	public abstract void setCondition(String condition);
+    public abstract void setSummary(String summary);
 
-	public abstract String getWindCondition();
+    public abstract String getWindCondition();
 
-	public abstract void setWindCondition(String windCondition);
+    public abstract void setWindCondition(String windCondition);
 
-	public abstract Integer getHumidity();
+    public abstract Float getHumidity();
 
-	public abstract void setHumidity(Integer humidity);
+    public abstract void setHumidity(Float humidity);
 
-	public abstract String getIconURL();
+    public abstract String getIconURL();
 
-	public abstract void setIconURL(String iconURL);
+    public abstract void setIconURL(String iconURL);
 
-	public abstract void setId(int id);
+    public abstract void setId(int id);
 
-	public abstract int getId();
+    public abstract int getId();
 
-	public abstract void setDate(Date date);
+    public abstract void setDate(Date date);
 
-	public abstract Date getDate();
+    public abstract Date getDate();
+
+    public abstract void setUUID(String id);
+
+    public abstract String getUUID();
 
 }

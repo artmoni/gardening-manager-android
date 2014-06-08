@@ -105,25 +105,25 @@ public class GoogleWeatherHandler extends DefaultHandler {
                 }
             } else if (localName.equals("condition")) {
                 if (this.in_current_conditions) {
-                    this.myWeatherSet.getWeatherCurrentCondition().setCondition(dataAttribute);
+                    this.myWeatherSet.getWeatherCurrentCondition().setSummary(dataAttribute);
                 } else if (this.in_forecast_conditions) {
-                    this.myWeatherSet.getLastWeatherForecastCondition().setCondition(dataAttribute);
+                    this.myWeatherSet.getLastWeatherForecastCondition().setSummary(dataAttribute);
                 }
             }
             // 'Inner' Tags within "<current_conditions>"
             else if (localName.equals("temp_f")) {
-                this.myWeatherSet.getWeatherCurrentCondition().setTempFahrenheit(Integer.parseInt(dataAttribute));
+                this.myWeatherSet.getWeatherCurrentCondition().setTempFahrenheit(Float.parseFloat(dataAttribute));
             } else if (localName.equals("temp_c")) {
-                this.myWeatherSet.getWeatherCurrentCondition().setTempCelciusMin(Integer.parseInt(dataAttribute));
+                this.myWeatherSet.getWeatherCurrentCondition().setTempCelciusMin(Float.parseFloat(dataAttribute));
             } else if (localName.equals("humidity")) {
                 this.myWeatherSet.getWeatherCurrentCondition().setHumidity(
-                        Integer.valueOf((dataAttribute.substring(11, dataAttribute.indexOf('%')).trim())));
+                        Float.parseFloat((dataAttribute.substring(11, dataAttribute.indexOf('%')).trim())));
             } else if (localName.equals("wind_condition")) {
                 this.myWeatherSet.getWeatherCurrentCondition().setWindCondition(dataAttribute);
             }
             // 'Inner' Tags within "<forecast_conditions>"
             else if (localName.equals("low")) {
-                int temp = Integer.parseInt(dataAttribute);
+                float temp = Float.parseFloat(dataAttribute);
                 if (this.usingSITemperature) {
                     this.myWeatherSet.getLastWeatherForecastCondition().setTempCelciusMin(temp);
                 } else {
@@ -131,7 +131,7 @@ public class GoogleWeatherHandler extends DefaultHandler {
                             WeatherUtils.fahrenheitToCelsius(temp));
                 }
             } else if (localName.equals("high")) {
-                int temp = Integer.parseInt(dataAttribute);
+                float temp = Float.parseFloat(dataAttribute);
                 if (this.usingSITemperature) {
                     this.myWeatherSet.getLastWeatherForecastCondition().setTempCelciusMax(temp);
                 } else {

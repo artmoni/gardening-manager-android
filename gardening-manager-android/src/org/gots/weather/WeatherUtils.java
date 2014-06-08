@@ -10,16 +10,14 @@
  ******************************************************************************/
 package org.gots.weather;
 
-     
-    /** Useful Utility in working with temperatures. (conversions). */
-    public class WeatherUtils {
-     
-            public static int fahrenheitToCelsius(int tFahrenheit) {
-                    return (int) ((5.0f / 9.0f) * (tFahrenheit - 32));
-            }
-     
-            public static int celsiusToFahrenheit(int tCelsius) {
-                    return (int) ((9.0f / 5.0f) * tCelsius + 32);
-            }
+/** Useful Utility in working with temperatures. (conversions). */
+public class WeatherUtils {
+
+    public static float fahrenheitToCelsius(float tFahrenheit) {
+        return ((5.0f / 9.0f) * (tFahrenheit - 32));
     }
 
+    public static float celsiusToFahrenheit(float tCelsius) {
+        return ((9.0f / 5.0f) * tCelsius + 32);
+    }
+}
