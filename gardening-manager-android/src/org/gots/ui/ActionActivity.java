@@ -16,7 +16,6 @@ import java.util.List;
 import org.gots.R;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.adapter.ListAllActionAdapter;
-import org.gots.action.service.ActionNotificationService;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.provider.ActionsContentProvider;

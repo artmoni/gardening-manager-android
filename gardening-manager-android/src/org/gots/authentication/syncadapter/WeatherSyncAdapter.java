@@ -1,17 +1,11 @@
 package org.gots.authentication.syncadapter;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import org.gots.action.GotsActionSeedManager;
-import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.authentication.GotsSyncAdapter;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.garden.GardenInterface;
-import org.gots.garden.GardenManager;
 import org.gots.seed.GotsSeedManager;
-import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.provider.local.LocalWeatherProvider;
 import org.gots.weather.provider.nuxeo.NuxeoWeatherProvider;

@@ -7,7 +7,6 @@ import org.gots.authentication.GotsSyncAdapter;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GardenManager;
-import org.gots.seed.GotsSeedManager;
 
 import android.accounts.Account;
 import android.content.ContentProviderClient;

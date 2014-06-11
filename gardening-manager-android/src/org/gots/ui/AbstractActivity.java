@@ -25,7 +25,6 @@ import java.util.ArrayList;
 
 import org.gots.R;
 import org.gots.action.GotsActionSeedManager;
-import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.allotment.AllotmentManager;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.broadcast.BroadCastMessages;

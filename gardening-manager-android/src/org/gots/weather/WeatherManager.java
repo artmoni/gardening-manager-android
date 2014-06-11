@@ -16,7 +16,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.gots.weather.provider.local.LocalWeatherProvider;
-import org.gots.weather.provider.previmeteo.PrevimeteoWeatherProvider;
 import org.gots.weather.provider.previmeteo.WeatherProvider;
 
 import android.content.Context;

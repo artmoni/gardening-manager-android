@@ -21,10 +21,8 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.KeyEvent;
 import android.view.MenuItem;
-import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
 
 public class WebHelpActivity extends AbstractActivity {
 

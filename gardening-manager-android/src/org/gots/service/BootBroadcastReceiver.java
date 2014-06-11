@@ -1,14 +1,5 @@
 package org.gots.service;
 
-import java.util.Calendar;
-
-import org.gots.action.service.ActionTODOBroadcastReceiver;
-import org.gots.preferences.GotsPreferences;
-import org.gots.seed.service.SeedBroadcastReceiver;
-import org.gots.weather.service.WeatherBroadcastReceiver;
-
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
