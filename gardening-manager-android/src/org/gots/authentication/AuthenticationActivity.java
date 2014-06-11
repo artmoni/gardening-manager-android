@@ -16,7 +16,6 @@ import org.gots.ui.fragment.TutorialFragment;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;

@@ -5,9 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.gots.action.provider.nuxeo.NuxeoActionConverter;
 import org.gots.garden.GardenInterface;
-import org.gots.garden.provider.GardenProvider;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;

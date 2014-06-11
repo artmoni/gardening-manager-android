@@ -14,17 +14,14 @@ import java.util.List;
 
 import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
-import org.gots.authentication.AuthenticationActivity;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.inapp.AppRater;
 import org.gots.inapp.GotsBillingDialog;
 import org.gots.provider.WeatherContentProvider;
-import org.gots.weather.service.WeatherUpdateService;
 import org.gots.weather.view.WeatherView;
 import org.gots.weather.view.WeatherWidget;
 
-import android.accounts.AccountManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;

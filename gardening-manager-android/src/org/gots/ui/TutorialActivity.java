@@ -4,17 +4,13 @@ import org.gots.R;
 import org.gots.authentication.AuthenticationActivity;
 import org.gots.ui.fragment.TutorialFragment;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 
 public class TutorialActivity extends AbstractActivity {
