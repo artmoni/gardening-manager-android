@@ -47,7 +47,7 @@ public class NuxeoWeatherProvider extends LocalWeatherProvider {
             gardenFolder = manager.getDocument(new IdRef(currentGarden.getUUID()));
             weatherRootFolder = manager.getChild(gardenFolder, "Weather");
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            Log.e(TAG, "getWeatherRootFolder " + e.getMessage());
             weatherRootFolder = createWeatherRootFolder(manager, currentGarden);
         }
         return weatherRootFolder;
@@ -60,17 +60,17 @@ public class NuxeoWeatherProvider extends LocalWeatherProvider {
             gardenFolder = manager.getDocument(new IdRef(currentGarden.getUUID()));
             weatherRootFolder = manager.createDocument(gardenFolder, "WeatherFolder", "Weather");
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            Log.e(TAG, "createWeatherRootFolder " + e.getMessage());
         }
         return weatherRootFolder;
     }
 
     @Override
-    public WeatherConditionInterface insertWeather(WeatherConditionInterface weatherCondition) {
+    public WeatherConditionInterface insertCondition(WeatherConditionInterface weatherCondition) {
 
         weatherCondition = insertNuxeoWeather(weatherCondition);
 
-        return super.insertWeather(weatherCondition);
+        return super.insertCondition(weatherCondition);
     }
 
     protected WeatherConditionInterface insertNuxeoWeather(WeatherConditionInterface weatherCondition) {
@@ -91,7 +91,7 @@ public class NuxeoWeatherProvider extends LocalWeatherProvider {
                     weatherCondition.getSummary(), properties);
             weatherCondition.setUUID(weatherConditionDoc.getId());
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage(), e);
+            Log.e(TAG, "insertNuxeoWeather " + e.getMessage(), e);
         }
         return weatherCondition;
     }
@@ -156,7 +156,7 @@ public class NuxeoWeatherProvider extends LocalWeatherProvider {
 
             if (docs.size() > 0) {
                 condition = convert(docs.get(0));
-                condition = super.updateWeather(condition);
+                condition = super.updateCondition(condition, weatherDate.getTime());
             }
         } catch (Exception e) {
             Log.e(TAG, "getWeatherByDayofyear (" + requestedDay.toString() + ")" + e.getMessage(), e);
