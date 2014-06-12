@@ -37,7 +37,7 @@ public class WeatherSyncAdapter extends GotsSyncAdapter {
         intent.putExtra("AUTHORITY", authority);
         getContext().sendBroadcast(intent);
 
-        LocalWeatherProvider localProvider = new LocalWeatherProvider(getContext());
+        WeatherProvider localProvider = new LocalWeatherProvider(getContext());
         NuxeoWeatherProvider nuxeoProvider = new NuxeoWeatherProvider(getContext(), gardenManager.getCurrentGarden());
 
         // Get weather history from Gardening Manager Server
@@ -46,11 +46,17 @@ public class WeatherSyncAdapter extends GotsSyncAdapter {
             for (WeatherConditionInterface weatherCondition : allCondition) {
                 WeatherConditionInterface localCondition = localProvider.getCondition(weatherCondition.getDate());
                 if (localCondition.getSummary() == null && weatherCondition.getSummary() != null)
-                    localProvider.insertWeather(weatherCondition);
+                    localProvider.insertCondition(weatherCondition);
             }
         }
 
+        
         // Get forecast weather from previmeteo web service
+        WeatherProvider weatherProvider = null;
+        if (gotsPrefs.isConnectedToServer())
+            weatherProvider=new NuxeoWeatherProvider(getContext(), gardenManager.getCurrentGarden());
+        else
+            weatherProvider = new LocalWeatherProvider(getContext());
         for (int forecastDay = 0; forecastDay < 4; forecastDay++) {
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DAY_OF_YEAR, forecastDay);
@@ -58,22 +64,20 @@ public class WeatherSyncAdapter extends GotsSyncAdapter {
             WeatherProvider previmeteoWeatherProvider = new PrevimeteoWeatherProvider(getContext());
             WeatherConditionInterface previmeteoCondition = previmeteoWeatherProvider.getCondition(cal.getTime());
 
-            WeatherConditionInterface localCondition = localProvider.getCondition(cal.getTime());
-            if (previmeteoCondition.getSummary() != null) {
-
+            WeatherConditionInterface localCondition = weatherProvider.getCondition(cal.getTime());
+            if (previmeteoCondition != null && previmeteoCondition.getSummary() != null) {
                 if (localCondition != null && localCondition.getId() > 0) {
                     previmeteoCondition.setId(localCondition.getId());
-                    previmeteoCondition = localProvider.updateWeather(previmeteoCondition);
+                    previmeteoCondition = weatherProvider.updateCondition(previmeteoCondition,cal.getTime());
                 } else {
-                    previmeteoCondition = localProvider.insertWeather(previmeteoCondition);
+                    previmeteoCondition = weatherProvider.insertCondition(previmeteoCondition);
                 }
-            } else if (localCondition != null && localCondition.getSummary() != null)
-                previmeteoCondition = localCondition;
+            } 
         }
 
-        getContext().sendBroadcast(new Intent(BroadCastMessages.WEATHER_DISPLAY_EVENT));
 
         intent.setAction(BroadCastMessages.PROGRESS_FINISHED);
         getContext().sendBroadcast(intent);
+        getContext().sendBroadcast(new Intent(BroadCastMessages.WEATHER_DISPLAY_EVENT));
     }
 }

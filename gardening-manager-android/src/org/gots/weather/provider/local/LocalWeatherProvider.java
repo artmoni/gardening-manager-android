@@ -29,7 +29,8 @@ public class LocalWeatherProvider extends GotsDBHelper implements WeatherProvide
         super(mContext);
     }
 
-    public WeatherConditionInterface insertWeather(WeatherConditionInterface weatherCondition) {
+    @Override
+    public WeatherConditionInterface insertCondition(WeatherConditionInterface weatherCondition) {
         long rowid;
         ContentValues values = getWeatherContentValues(weatherCondition);
 
@@ -39,21 +40,21 @@ public class LocalWeatherProvider extends GotsDBHelper implements WeatherProvide
         return weatherCondition;
     }
 
-    public WeatherConditionInterface updateWeather(WeatherConditionInterface weatherCondition) {
-        ContentValues values = getWeatherContentValues(weatherCondition);
-
-        bdd.update(DatabaseHelper.WEATHER_TABLE_NAME, values,
-                DatabaseHelper.WEATHER_DAYOFYEAR + "=" + weatherCondition.getDayofYear(), null);
-
-        Cursor cursor = bdd.query(DatabaseHelper.WEATHER_TABLE_NAME, null, DatabaseHelper.WEATHER_DAYOFYEAR + "='"
-                + weatherCondition.getDayofYear() + "'", null, null, null, null);
-
-        if (cursor.moveToFirst()) {
-            int weatherid = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.WEATHER_ID));
-            weatherCondition.setId(weatherid);
-        }
-        return weatherCondition;
-    }
+//    public WeatherConditionInterface updateWeather(WeatherConditionInterface weatherCondition) {
+//        ContentValues values = getWeatherContentValues(weatherCondition);
+//
+//        bdd.update(DatabaseHelper.WEATHER_TABLE_NAME, values,
+//                DatabaseHelper.WEATHER_DAYOFYEAR + "=" + weatherCondition.getDayofYear(), null);
+//
+//        Cursor cursor = bdd.query(DatabaseHelper.WEATHER_TABLE_NAME, null, DatabaseHelper.WEATHER_DAYOFYEAR + "='"
+//                + weatherCondition.getDayofYear() + "'", null, null, null, null);
+//
+//        if (cursor.moveToFirst()) {
+//            int weatherid = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.WEATHER_ID));
+//            weatherCondition.setId(weatherid);
+//        }
+//        return weatherCondition;
+//    }
 
     private ContentValues getWeatherContentValues(WeatherConditionInterface weatherCondition) {
         ContentValues values = new ContentValues();
@@ -129,9 +130,19 @@ public class LocalWeatherProvider extends GotsDBHelper implements WeatherProvide
     }
 
     @Override
-    public WeatherConditionInterface updateCondition(WeatherConditionInterface condition, Date day) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+    public WeatherConditionInterface updateCondition(WeatherConditionInterface weatherCondition, Date day) {
+        ContentValues values = getWeatherContentValues(weatherCondition);
+
+        bdd.update(DatabaseHelper.WEATHER_TABLE_NAME, values,
+                DatabaseHelper.WEATHER_DAYOFYEAR + "=" + weatherCondition.getDayofYear(), null);
+
+        Cursor cursor = bdd.query(DatabaseHelper.WEATHER_TABLE_NAME, null, DatabaseHelper.WEATHER_DAYOFYEAR + "='"
+                + weatherCondition.getDayofYear() + "'", null, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            int weatherid = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.WEATHER_ID));
+            weatherCondition.setId(weatherid);
+        }
+        return weatherCondition;    }
 
 }

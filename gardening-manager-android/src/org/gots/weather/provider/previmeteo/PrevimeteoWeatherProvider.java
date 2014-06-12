@@ -33,7 +33,7 @@ import android.content.Context;
 import android.text.format.DateFormat;
 import android.util.Log;
 
-public class PrevimeteoWeatherProvider extends NuxeoWeatherProvider implements WeatherProvider {
+public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
     private static final String TAG = "PrevimeteoWeatherProvider";
 
     protected URL url;
@@ -49,7 +49,7 @@ public class PrevimeteoWeatherProvider extends NuxeoWeatherProvider implements W
     private GotsPreferences gotsPreferences;
 
     public PrevimeteoWeatherProvider(Context context) {
-        super(context, GardenManager.getInstance().initIfNew(context).getCurrentGarden());
+        super(context);
         gotsPreferences = GotsPreferences.getInstance().initIfNew(context);
 
         try {
@@ -158,7 +158,7 @@ public class PrevimeteoWeatherProvider extends NuxeoWeatherProvider implements W
         // }
         // } else if (localCondition != null && localCondition.getCondition() != null)
         // remoteCondition = localCondition;
-        return remoteCondition;
+            return remoteCondition;
 
     }
 
@@ -174,9 +174,9 @@ public class PrevimeteoWeatherProvider extends NuxeoWeatherProvider implements W
         weatherCondition.setDayofYear(conditionDate.get(Calendar.DAY_OF_YEAR));
 
         if (weatherCondition == null || weatherCondition.getSummary() == null)
-            conditionInterface = super.insertWeather(weatherCondition);
+            conditionInterface = super.insertCondition(weatherCondition);
         else
-            conditionInterface = super.updateWeather(weatherCondition);
+            conditionInterface = super.updateCondition(weatherCondition, day);
         return conditionInterface;
     }
 }

@@ -37,7 +37,7 @@ public class GardenSyncAdapter extends GotsSyncAdapter {
         intent.putExtra("AUTHORITY", authority);
         getContext().sendBroadcast(intent);
 
-        GardenManager gardenManager = GardenManager.getInstance().initIfNew(getContext());
+//        GardenManager gardenManager = GardenManager.getInstance().initIfNew(getContext());
         gardens = gardenManager.getMyGardens(true);
 
         intent.setAction(BroadCastMessages.PROGRESS_FINISHED);
