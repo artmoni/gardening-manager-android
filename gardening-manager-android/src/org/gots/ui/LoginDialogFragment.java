@@ -9,11 +9,16 @@ import org.gots.authentication.GotsSocialAuthentication;
 import org.gots.authentication.provider.google.GoogleAuthentication;
 import org.gots.authentication.provider.nuxeo.NuxeoAuthentication;
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.provider.ActionsContentProvider;
+import org.gots.provider.GardenContentProvider;
+import org.gots.provider.SeedsContentProvider;
+import org.gots.provider.WeatherContentProvider;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -310,6 +315,19 @@ public class LoginDialogFragment extends AbstractDialogFragment {
                                 getResources().getString(R.string.login_connect_description).replace("_ACCOUNT_",
                                         gotsPrefs.getNuxeoLogin()), Toast.LENGTH_LONG).show();
                     // onResume();
+                    Account newAccount = gotsPrefs.getUserAccount();
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+                    bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+
+                    ContentResolver.setSyncAutomatically(newAccount, SeedsContentProvider.AUTHORITY, true);
+                    ContentResolver.requestSync(newAccount, SeedsContentProvider.AUTHORITY, bundle);
+                    ContentResolver.setSyncAutomatically(newAccount, GardenContentProvider.AUTHORITY, true);
+                    ContentResolver.requestSync(newAccount, GardenContentProvider.AUTHORITY, bundle);
+                    ContentResolver.setSyncAutomatically(newAccount, ActionsContentProvider.AUTHORITY, true);
+                    ContentResolver.requestSync(newAccount, ActionsContentProvider.AUTHORITY, bundle);
+                    ContentResolver.setSyncAutomatically(newAccount, WeatherContentProvider.AUTHORITY, true);
+                    ContentResolver.requestSync(newAccount, WeatherContentProvider.AUTHORITY, bundle);
                     getDialog().dismiss();
                 } else {
                     if (isAdded())

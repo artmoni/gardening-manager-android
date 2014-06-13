@@ -132,7 +132,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
             for (Iterator<Document> iterator = gardensWorkspaces.iterator(); iterator.hasNext();) {
                 Document gardenWorkspace = iterator.next();
                 GardenInterface garden = NuxeoGardenConvertor.convert(gardenWorkspace);
-                remoteGardens.add(garden);
+                remoteGardens.add(super.updateGarden(garden));
                 Log.d(TAG, "Document=" + gardenWorkspace.getId() + " / " + garden);
             }
         } catch (Exception e) {
@@ -143,53 +143,11 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
             // return myLocalGardens;
         }
 
-        return synchronize(myLocalGardens, remoteGardens);
+        return remoteGardens;
 
     }
 
-    protected List<GardenInterface> synchronize(List<GardenInterface> myLocalGardens,
-            List<GardenInterface> remoteGardens) {
-        List<GardenInterface> myGardens = new ArrayList<GardenInterface>();
-        // Synchronize remote garden with local gardens
-        for (GardenInterface remoteGarden : remoteGardens) {
-            boolean found = false;
-            for (GardenInterface localGarden : myLocalGardens) {
-                if (remoteGarden.getUUID() != null && remoteGarden.getUUID().equals(localGarden.getUUID())) {
-                    found = true;
-                    break;
-                }
-            }
-            if (found) { // local and remote => update local
-                // TODO check if remote can be out of date
-                // syncGardens(localGarden,remoteGarden);
-                myGardens.add(super.updateGarden(remoteGarden));
-            } else { // remote only => create local
-                myGardens.add(super.createGarden(remoteGarden));
-            }
-        }
-
-        // Create remote garden when not exist remotely and remove local
-        // garden if no more referenced online
-        for (GardenInterface localGarden : myLocalGardens) {
-            if (localGarden.getUUID() == null) { // local only without
-                                                 // UUID => create
-                                                 // remote
-                myGardens.add(createGarden(localGarden));
-            } else {
-                boolean found = false;
-                for (GardenInterface remoteGarden : remoteGardens) {
-                    if (remoteGarden.getUUID() != null && remoteGarden.getUUID().equals(localGarden.getUUID())) {
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) { // local only with UUID -> delete local
-                    super.removeGarden(localGarden);
-                }
-            }
-        }
-        return myGardens;
-    }
+   
 
     @Override
     public GardenInterface createGarden(GardenInterface garden) {
@@ -205,30 +163,6 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
             Document newGarden = documentMgr.createDocument(root, "Garden", garden.getName());
             documentMgr.update(newGarden, properties);
             garden.setUUID(newGarden.getId());
-            //
-            //
-            //
-            // OperationRequest createOperation =
-            // NuxeoManager.getInstance().getSession().newRequest("Document.Create").setHeader(
-            // Constants.HEADER_NX_SCHEMAS, "*").setInput(root).set("type", "Garden").set("properties", properties);
-            //
-            // AsyncCallback<Object> callback = new AsyncCallback<Object>() {
-            // @Override
-            // public void onSuccess(String executionId, Object data) {
-            // Document doc = (Document) data;
-            // currentGarden.setUUID(doc.getId());
-            // currentGarden = NuxeoGardenProvider.super.updateGarden(currentGarden);
-            // Log.d(TAG, "onSuccess " + data);
-            // force_force = true;
-            // }
-            //
-            // @Override
-            // public void onError(String executionId, Throwable e) {
-            // Log.d(TAG, "onError " + e.getMessage());
-            //
-            // }
-            // };
-            // deferredUpdateMgr.execDeferredUpdate(createOperation, callback, OperationType.CREATE, true);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
             if (garden.getId() == 0)
@@ -239,11 +173,6 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 
         return garden;
     }
-
-    // protected GardenInterface createNuxeoGarden(GardenInterface localGarden) {
-    //
-    // return localGarden;
-    // }
 
     @Override
     public GardenInterface updateGarden(GardenInterface garden) {
