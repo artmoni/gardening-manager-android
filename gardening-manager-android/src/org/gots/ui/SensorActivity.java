@@ -85,8 +85,8 @@ public class SensorActivity extends AbstractActivity {
             SensorLoginDialogFragment login = new SensorLoginDialogFragment();
             login.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.CustomDialog);
             login.show(getSupportFragmentManager(), "sensor_login");
-        } else
-            updateLocations();
+        }
+        updateLocations();
 
         super.onResume();
     }
