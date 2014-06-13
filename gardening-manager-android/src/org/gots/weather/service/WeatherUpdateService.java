@@ -70,56 +70,55 @@ public class WeatherUpdateService extends Service {
     public void getWeatherFromWebService() {
 
         try {
-            for (int forecastDay = 0; forecastDay < 4; forecastDay++) {
 
-                // GoogleWeatherTask(garden.getAddress(), cal.getTime());
-                // WeatherTask wt = new PrevimeteoWeatherProvider(this, garden.getAddress(), cal.getTime());
-                // wt.execute();
+            // GoogleWeatherTask(garden.getAddress(), cal.getTime());
+            // WeatherTask wt = new PrevimeteoWeatherProvider(this, garden.getAddress(), cal.getTime());
+            // wt.execute();
 
-                new AsyncTask<Integer, Integer, WeatherConditionInterface>() {
+            new AsyncTask<Void, Integer, WeatherConditionInterface>() {
 
-                    protected void onPreExecute() {
-                        sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
-                    };
+                protected void onPreExecute() {
+                    sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
+                };
 
-                    @Override
-                    protected WeatherConditionInterface doInBackground(Integer... params) {
+                @Override
+                protected WeatherConditionInterface doInBackground(Void... params) {
+                    for (int forecastDay = 0; forecastDay < 4; forecastDay++) {
                         Calendar cal = Calendar.getInstance();
-                        cal.add(Calendar.DAY_OF_YEAR, params[0]);
+                        cal.add(Calendar.DAY_OF_YEAR, forecastDay);
                         WeatherProvider previmeteoWeatherProvider = new PrevimeteoWeatherProvider(
                                 getApplicationContext());
-
-                        return previmeteoWeatherProvider.getCondition(cal.getTime());
-
+                        previmeteoWeatherProvider.getCondition(cal.getTime());
                     }
+                    return null;
 
-                    @Override
-                    protected void onPostExecute(WeatherConditionInterface weatherCondition) {
-                        // if (weatherCondition == null)
-                        // isWeatherError = true;
-                        handler.removeCallbacks(sendUpdatesToUI);
-                        handler.postDelayed(sendUpdatesToUI, 0); // 1 second=1000
-                        sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
-                        super.onPostExecute(weatherCondition);
+                }
 
-                    }
-                }.execute(forecastDay);
-                // if (conditionInterface != null) {
-                // updateCondition(conditionInterface, forecastDay);
-                //
-                // }
-                //
-                // else {
-                // // Toast.makeText(mContext,
-                // // mContext.getResources().getString(R.string.weather_citynotfound),
-                // // 50)
-                // // .show();
-                // Log.d(TAG, garden.getLocality() + " : " + getResources().getString(R.string.weather_citynotfound));
-                // isWeatherError = true;
-                // break;
-                // }
+                @Override
+                protected void onPostExecute(WeatherConditionInterface weatherCondition) {
+                    // if (weatherCondition == null)
+                    // isWeatherError = true;
+                    handler.removeCallbacks(sendUpdatesToUI);
+                    handler.postDelayed(sendUpdatesToUI, 0); // 1 second=1000
+                    sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
+                    super.onPostExecute(weatherCondition);
 
-            }
+                }
+            }.execute();
+            // if (conditionInterface != null) {
+            // updateCondition(conditionInterface, forecastDay);
+            //
+            // }
+            //
+            // else {
+            // // Toast.makeText(mContext,
+            // // mContext.getResources().getString(R.string.weather_citynotfound),
+            // // 50)
+            // // .show();
+            // Log.d(TAG, garden.getLocality() + " : " + getResources().getString(R.string.weather_citynotfound));
+            // isWeatherError = true;
+            // break;
+            // }
 
         } catch (Exception e) {
             if (e.getMessage() != null)
@@ -128,7 +127,6 @@ public class WeatherUpdateService extends Service {
         }
 
     }
-
     // private void updateCondition(WeatherConditionInterface condition, int day) {
     // LocalWeatherProvider helper = new LocalWeatherProvider(this);
     //

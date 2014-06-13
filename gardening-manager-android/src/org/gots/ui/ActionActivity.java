@@ -16,7 +16,6 @@ import java.util.List;
 import org.gots.R;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.adapter.ListAllActionAdapter;
-import org.gots.action.service.ActionNotificationService;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.provider.ActionsContentProvider;
@@ -41,7 +40,7 @@ public class ActionActivity extends AbstractActivity {
 
     private int seedid;
 
-    List<SeedActionInterface> seedActions;
+    List<SeedActionInterface> seedActions = new ArrayList<SeedActionInterface>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +90,7 @@ public class ActionActivity extends AbstractActivity {
 
                 for (GrowingSeedInterface seed : allSeeds) {
 
-                    seedActions = actionseedProvider.getActionsToDoBySeed(seed);
+                    seedActions.addAll(actionseedProvider.getActionsToDoBySeed(seed));
                 }
 
                 listActions = new ListAllActionAdapter(getApplicationContext(), seedActions,

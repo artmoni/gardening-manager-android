@@ -15,6 +15,7 @@ import org.gots.provider.AllotmentContentProvider;
 import org.gots.provider.GardenContentProvider;
 import org.gots.provider.SeedsContentProvider;
 import org.gots.provider.SensorContentProvider;
+import org.gots.provider.WeatherContentProvider;
 import org.gots.seed.service.SeedUpdateService;
 
 import android.accounts.Account;
@@ -152,7 +153,11 @@ public class AboutActivity extends AbstractActivity {
                     textprogressSeed.setText(getResources().getString(R.string.synchro_seeds_checking));
                     textprogressSeed.setTextColor(getResources().getColor(R.color.action_warning_color));
 
-                } else if (AllotmentContentProvider.AUTHORITY.equals(authority)) {
+                } else if (WeatherContentProvider.AUTHORITY.equals(authority)) {
+                    Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
+                    progressWeather.startAnimation(myFadeInAnimation);
+                    textprogressWeather.setText(getResources().getString(R.string.synchro_weather_checking));
+                    textprogressWeather.setTextColor(getResources().getColor(R.color.action_warning_color));
 
                 } else if (GardenContentProvider.AUTHORITY.equals(authority)) {
                     Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
@@ -181,7 +186,10 @@ public class AboutActivity extends AbstractActivity {
                     textprogressSeed.setTextColor(getResources().getColor(R.color.text_color_dark));
 
                 } else if (AllotmentContentProvider.AUTHORITY.equals(authority)) {
-
+                    progressWeather.clearAnimation();
+                    progressWeather.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
+                    textprogressWeather.setText(getResources().getString(R.string.synchro_weather_ok));
+                    textprogressWeather.setTextColor(getResources().getColor(R.color.text_color_dark));
                 } else if (GardenContentProvider.AUTHORITY.equals(authority)) {
                     progressGarden.clearAnimation();
                     progressGarden.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
@@ -283,6 +291,8 @@ public class AboutActivity extends AbstractActivity {
         ContentResolver.requestSync(newAccount, ActionsContentProvider.AUTHORITY, bundle);
         ContentResolver.setSyncAutomatically(newAccount, SensorContentProvider.AUTHORITY, true);
         ContentResolver.requestSync(newAccount, SensorContentProvider.AUTHORITY, bundle);
+        ContentResolver.setSyncAutomatically(newAccount, WeatherContentProvider.AUTHORITY, true);
+        ContentResolver.requestSync(newAccount, WeatherContentProvider.AUTHORITY, bundle);
 
         /*
          * Synchronize Purchase feature

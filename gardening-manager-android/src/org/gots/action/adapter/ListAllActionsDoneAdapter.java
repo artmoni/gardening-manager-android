@@ -13,7 +13,6 @@ package org.gots.action.adapter;
 import java.util.ArrayList;
 
 import org.gots.action.SeedActionInterface;
-import org.gots.seed.GrowingSeedInterface;
 
 import android.content.Context;
 

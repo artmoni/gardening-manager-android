@@ -80,6 +80,7 @@
     <string name="dashboard.allotments.name">Garden</string>
     <string name="dashboard.actions.name">Actions</string>
     <string name="dashboard.profile.name">Profile</string>
+    <string name="dashboard.weather.name">Weather</string>
     <string name="dateSliderTitle">dateSliderTitle string</string>
     <string name="specie.daucuscarota">Carrot</string>
     <string name="specie.brassicaoleracea">Cabbage</string>

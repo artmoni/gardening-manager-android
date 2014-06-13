@@ -24,7 +24,7 @@ import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     // ************************ DATABASE **************
-    private static final int DATABASE_VERSION = 19;
+    private static final int DATABASE_VERSION = 20;
 
     private static String DATABASE_NAME = "gots";
 
@@ -228,6 +228,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String WEATHER_TABLE_NAME = "weather";
 
     public static final String WEATHER_ID = "_id";
+    public static final String WEATHER_UUID = "_uuid";
 
     public static final String WEATHER_DAYOFYEAR = "dayofyear";
 
@@ -254,6 +255,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				+ " (" + WEATHER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
 				+ GardenSQLite.ACTION_NAME + " STRING,"
 				+ WEATHER_CONDITION + " STRING,"
+				+ WEATHER_UUID + " STRING,"
 				+ WEATHER_WINDCONDITION + " STRING,"
 				+ WEATHER_DAYOFYEAR + " INTEGER,"	
 				+ WEATHER_YEAR + " INTEGER,"		
@@ -499,7 +501,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE " + SEEDS_TABLE_NAME + " ADD COLUMN " + SEED_LIKE_COUNT + " INTEGER;");
             db.execSQL("ALTER TABLE " + SEEDS_TABLE_NAME + " ADD COLUMN " + SEED_LIKE_STATUS + " INTEGER;");
 
-        } else {
+        } if (oldVersion < 20) {
+            db.execSQL("ALTER TABLE " + WEATHER_TABLE_NAME + " ADD COLUMN " + WEATHER_UUID + " STRING;");
+
+        }else {
             db.execSQL("DROP TABLE IF EXISTS " + SEEDS_TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + GROWINGSEEDS_TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + ALLOTMENT_TABLE_NAME);

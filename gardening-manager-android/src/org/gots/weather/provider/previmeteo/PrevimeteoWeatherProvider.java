@@ -26,6 +26,7 @@ import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.WeatherSet;
 import org.gots.weather.provider.WeatherCache;
 import org.gots.weather.provider.local.LocalWeatherProvider;
+import org.gots.weather.provider.nuxeo.NuxeoWeatherProvider;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
@@ -33,7 +34,7 @@ import android.content.Context;
 import android.text.format.DateFormat;
 import android.util.Log;
 
-public class PrevimeteoWeatherProvider extends LocalWeatherProvider implements WeatherProvider {
+public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
     private static final String TAG = "PrevimeteoWeatherProvider";
 
     protected URL url;
@@ -56,12 +57,9 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider implements W
             Address address = GardenManager.getInstance().initIfNew(context).getCurrentGarden().getAddress();
             String weatherURL;
 
-            if (GotsPreferences.isDevelopment())
-                weatherURL = "http://www.gardening-manager.com/weather/weather-error.xml";
-            else
-                weatherURL = "http://api.previmeteo.com/" + gotsPreferences.getWeatherApiKey() + "/ig/api?weather="
-                        + address.getLocality() + "," + context.getResources().getConfiguration().locale.getCountry()
-                        + "&hl=fr";
+            weatherURL = "http://api.previmeteo.com/" + gotsPreferences.getWeatherApiKey() + "/ig/api?weather="
+                    + address.getLocality() + "," + context.getResources().getConfiguration().locale.getCountry()
+                    + "&hl=fr";
 
             queryString = weatherURL;
 
@@ -79,7 +77,6 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider implements W
      * (non-Javadoc)
      * @see org.gots.weather.provider.previmeteo.WeatherProvider#getCondition(java.util.Date)
      */
-    @Override
     public WeatherConditionInterface getCondition(Date requestedDay) {
         Calendar requestCalendar = Calendar.getInstance();
         requestCalendar.setTime(requestedDay);
@@ -129,7 +126,7 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider implements W
             } catch (Exception e) {
                 Log.e(TAG, "PrevimeteoErrorHandler has return an error " + e.getMessage());
                 iserror = true;
-                return super.getWeatherByDayofyear(dayRequested);
+                return super.getCondition(requestedDay);
             }
         }
 
@@ -143,26 +140,29 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider implements W
             remoteCondition = weatherSet.getWeatherForecastConditions().get(dayRequested - today);
         else if (dayRequested < today && requestCalendar.get(Calendar.YEAR) > Calendar.getInstance().get(Calendar.YEAR))
             remoteCondition = weatherSet.getWeatherForecastConditions().get(dayRequested + 365 - today);
+
+        remoteCondition.setDate(requestCalendar.getTime());
+        remoteCondition.setDayofYear(requestCalendar.get(Calendar.DAY_OF_YEAR));
+
         // TODO take care of new year
 
-        WeatherConditionInterface localCondition = super.getWeatherByDayofyear(dayRequested);
-        if (remoteCondition.getCondition() != null) {
-            remoteCondition.setDate(requestCalendar.getTime());
-            remoteCondition.setDayofYear(requestCalendar.get(Calendar.DAY_OF_YEAR));
-
-            if (localCondition != null && localCondition.getId() > 0) {
-                remoteCondition.setId(localCondition.getId());
-                remoteCondition = super.updateWeather(remoteCondition);
-            } else {
-                remoteCondition = super.insertWeather(remoteCondition);
-            }
-        } else if (localCondition != null && localCondition.getCondition() != null)
-            remoteCondition = localCondition;
-        return remoteCondition;
+        // WeatherConditionInterface localCondition = super.getWeatherByDayofyear(dayRequested);
+        // if (remoteCondition.getCondition() != null) {
+        // remoteCondition.setDate(requestCalendar.getTime());
+        // remoteCondition.setDayofYear(requestCalendar.get(Calendar.DAY_OF_YEAR));
+        //
+        // if (localCondition != null && localCondition.getId() > 0) {
+        // remoteCondition.setId(localCondition.getId());
+        // remoteCondition = super.updateWeather(remoteCondition);
+        // } else {
+        // remoteCondition = super.insertWeather(remoteCondition);
+        // }
+        // } else if (localCondition != null && localCondition.getCondition() != null)
+        // remoteCondition = localCondition;
+            return remoteCondition;
 
     }
 
-    @Override
     public WeatherConditionInterface updateCondition(WeatherConditionInterface weatherCondition, Date day) {
         WeatherConditionInterface conditionInterface = null;
         Calendar conditionDate = Calendar.getInstance();
@@ -174,10 +174,10 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider implements W
         weatherCondition.setDate(day);
         weatherCondition.setDayofYear(conditionDate.get(Calendar.DAY_OF_YEAR));
 
-        if (weatherCondition == null || weatherCondition.getCondition() == null)
-            conditionInterface = super.insertWeather(weatherCondition);
+        if (weatherCondition == null || weatherCondition.getSummary() == null)
+            conditionInterface = super.insertCondition(weatherCondition);
         else
-            conditionInterface = super.updateWeather(weatherCondition);
+            conditionInterface = super.updateCondition(weatherCondition, day);
         return conditionInterface;
     }
 }

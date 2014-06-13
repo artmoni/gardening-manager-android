@@ -18,21 +18,23 @@ public class WeatherCondition implements WeatherConditionInterface {
 
     private int dayofYear = 0;
 
-    private Integer tempCelciusMin = 0;
+    private Float tempCelciusMin = 0f;
 
-    private Integer tempCelciusMax = 0;
+    private Float tempCelciusMax = 0f;
 
-    private Integer tempFahrenheit = 0;
+    private Float tempFahrenheit = 0f;
 
     private String condition = null;
 
     private String windCondition = null;
 
-    private Integer humidity = null;
+    private Float humidity = null;
 
     private String iconURL = null;
 
     private Date date = null;
+
+    private String uuid;
 
     public WeatherCondition() {
         super();
@@ -47,7 +49,6 @@ public class WeatherCondition implements WeatherConditionInterface {
      * (non-Javadoc)
      * @see org.gots.bean.WeatherConditionInterface#getDayofWeek()
      */
-    @Override
     public int getDayofYear() {
         return this.dayofYear;
     }
@@ -57,7 +58,6 @@ public class WeatherCondition implements WeatherConditionInterface {
      * @see
      * org.gots.bean.WeatherConditionInterface#setDayofWeek(java.lang.String)
      */
-    @Override
     public void setDayofYear(int dayofWeek) {
         this.dayofYear = dayofWeek;
     }
@@ -66,8 +66,7 @@ public class WeatherCondition implements WeatherConditionInterface {
      * (non-Javadoc)
      * @see org.gots.bean.WeatherConditionInterface#getTempCelcius()
      */
-    @Override
-    public Integer getTempCelciusMin() {
+    public Float getTempCelciusMin() {
         return this.tempCelciusMin;
     }
 
@@ -76,8 +75,7 @@ public class WeatherCondition implements WeatherConditionInterface {
      * @see
      * org.gots.bean.WeatherConditionInterface#setTempCelcius(java.lang.Integer)
      */
-    @Override
-    public void setTempCelciusMin(Integer temp) {
+    public void setTempCelciusMin(Float temp) {
         this.tempCelciusMin = temp;
     }
 
@@ -85,8 +83,7 @@ public class WeatherCondition implements WeatherConditionInterface {
      * (non-Javadoc)
      * @see org.gots.bean.WeatherConditionInterface#getTempFahrenheit()
      */
-    @Override
-    public Integer getTempFahrenheit() {
+    public Float getTempFahrenheit() {
         return this.tempFahrenheit;
     }
 
@@ -96,8 +93,7 @@ public class WeatherCondition implements WeatherConditionInterface {
      * org.gots.bean.WeatherConditionInterface#setTempFahrenheit(java.lang.Integer
      * )
      */
-    @Override
-    public void setTempFahrenheit(Integer temp) {
+    public void setTempFahrenheit(Float temp) {
         this.tempFahrenheit = temp;
     }
 
@@ -105,8 +101,7 @@ public class WeatherCondition implements WeatherConditionInterface {
      * (non-Javadoc)
      * @see org.gots.bean.WeatherConditionInterface#getCondition()
      */
-    @Override
-    public String getCondition() {
+    public String getSummary() {
         return this.condition;
     }
 
@@ -115,8 +110,7 @@ public class WeatherCondition implements WeatherConditionInterface {
      * @see
      * org.gots.bean.WeatherConditionInterface#setCondition(java.lang.String)
      */
-    @Override
-    public void setCondition(String condition) {
+    public void setSummary(String condition) {
         this.condition = condition;
     }
 
@@ -124,7 +118,6 @@ public class WeatherCondition implements WeatherConditionInterface {
      * (non-Javadoc)
      * @see org.gots.bean.WeatherConditionInterface#getWindCondition()
      */
-    @Override
     public String getWindCondition() {
         return this.windCondition;
     }
@@ -135,7 +128,6 @@ public class WeatherCondition implements WeatherConditionInterface {
      * org.gots.bean.WeatherConditionInterface#setWindCondition(java.lang.String
      * )
      */
-    @Override
     public void setWindCondition(String windCondition) {
         this.windCondition = windCondition;
     }
@@ -144,8 +136,7 @@ public class WeatherCondition implements WeatherConditionInterface {
      * (non-Javadoc)
      * @see org.gots.bean.WeatherConditionInterface#getHumidity()
      */
-    @Override
-    public Integer getHumidity() {
+    public Float getHumidity() {
         return this.humidity;
     }
 
@@ -154,8 +145,7 @@ public class WeatherCondition implements WeatherConditionInterface {
      * @see
      * org.gots.bean.WeatherConditionInterface#setHumidity(java.lang.Integer)
      */
-    @Override
-    public void setHumidity(Integer humidity) {
+    public void setHumidity(Float humidity) {
         this.humidity = humidity;
     }
 
@@ -163,7 +153,6 @@ public class WeatherCondition implements WeatherConditionInterface {
      * (non-Javadoc)
      * @see org.gots.bean.WeatherConditionInterface#getIconURL()
      */
-    @Override
     public String getIconURL() {
         return this.iconURL;
     }
@@ -172,40 +161,33 @@ public class WeatherCondition implements WeatherConditionInterface {
      * (non-Javadoc)
      * @see org.gots.bean.WeatherConditionInterface#setIconURL(java.lang.String)
      */
-    @Override
     public void setIconURL(String iconURL) {
         this.iconURL = iconURL;
     }
 
-    @Override
     public int getId() {
         return id;
     }
 
-    @Override
     public void setId(int id) {
         this.id = id;
     }
 
-    @Override
     public void setDate(Date date) {
         this.date = date;
 
     }
 
-    @Override
     public Date getDate() {
 
         return this.date;
     }
 
-    @Override
-    public Integer getTempCelciusMax() {
+    public Float getTempCelciusMax() {
         return this.tempCelciusMax;
     }
 
-    @Override
-    public void setTempCelciusMax(Integer temp) {
+    public void setTempCelciusMax(Float temp) {
         this.tempCelciusMax = temp;
     }
 
@@ -213,9 +195,17 @@ public class WeatherCondition implements WeatherConditionInterface {
     public String toString() {
         String txt = new String();
         txt = txt.concat("[" + getDayofYear() + "]");
-        txt = txt.concat(getCondition());
+        txt = txt.concat(getSummary());
         txt = txt.concat(" - ");
         txt = txt.concat(getTempCelciusMin() + "/" + getTempCelciusMax());
         return txt;
+    }
+
+    public void setUUID(String id) {
+        this.uuid = id;
+    }
+
+    public String getUUID() {
+        return this.uuid;
     }
 }

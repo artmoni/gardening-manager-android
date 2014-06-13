@@ -64,26 +64,6 @@ public class GardenLocator implements LocationListener {
         mlocManager.removeUpdates(this);
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-        updateWithNewLocation(location);
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
 
     public Address localizeGarden() {
         mlocManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
@@ -166,5 +146,25 @@ public class GardenLocator implements LocationListener {
             alert2.show();
 
         return address;
+    }
+
+    public void onLocationChanged(Location location) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void onProviderEnabled(String provider) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void onProviderDisabled(String provider) {
+        // TODO Auto-generated method stub
+        
     }
 }

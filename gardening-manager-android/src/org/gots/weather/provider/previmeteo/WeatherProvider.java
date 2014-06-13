@@ -10,4 +10,6 @@ public interface WeatherProvider {
    
     public abstract WeatherConditionInterface updateCondition(WeatherConditionInterface condition, Date day);
 
+    public abstract WeatherConditionInterface insertCondition(WeatherConditionInterface weatherCondition);
+
 }

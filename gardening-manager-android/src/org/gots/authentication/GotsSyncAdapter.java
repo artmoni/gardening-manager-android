@@ -1,12 +1,9 @@
 package org.gots.authentication;
 
-import org.gots.action.GotsActionSeedManager;
-import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.allotment.AllotmentManager;
 import org.gots.garden.GardenManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
-import org.gots.seed.GotsSeedManager;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -28,6 +25,8 @@ public class GotsSyncAdapter extends AbstractThreadedSyncAdapter {
 
     protected GotsGrowingSeedManager growingSeedManager;
 
+    protected GardenManager gardenManager;
+
     public GotsSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
         mAccountManager = AccountManager.get(context);
@@ -37,6 +36,7 @@ public class GotsSyncAdapter extends AbstractThreadedSyncAdapter {
 
         growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(getContext());
         allotmentManager = AllotmentManager.getInstance().initIfNew(getContext());
+        gardenManager =GardenManager.getInstance().initIfNew(getContext());
     }
 
     @Override
