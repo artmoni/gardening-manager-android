@@ -18,6 +18,7 @@ import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.inapp.AppRater;
 import org.gots.inapp.GotsBillingDialog;
+import org.gots.inapp.GotsPurchaseItem;
 import org.gots.provider.WeatherContentProvider;
 import org.gots.weather.view.WeatherView;
 import org.gots.weather.view.WeatherWidget;
@@ -61,7 +62,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
     private LinearLayout weatherWidgetLayout;
 
-//    private Intent weatherIntent;
+    // private Intent weatherIntent;
 
     private String TAG = "DashboardActivity";
 
@@ -85,14 +86,15 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         findViewById(R.id.dashboard_button_allotment).setOnClickListener(this);
         findViewById(R.id.dashboard_button_action).setOnClickListener(this);
         findViewById(R.id.dashboard_button_profile).setOnClickListener(this);
+        findViewById(R.id.dashboard_button_sensor).setOnClickListener(this);
 
         handle = (LinearLayout) findViewById(R.id.handle);
 
         weatherWidgetLayout = (LinearLayout) findViewById(R.id.WeatherWidget);
 
         checkPremiumAds();
-//        weatherIntent = new Intent(this, WeatherUpdateService.class);
-//        startService(weatherIntent);
+        // weatherIntent = new Intent(this, WeatherUpdateService.class);
+        // startService(weatherIntent);
 
         registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
         registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
@@ -259,6 +261,19 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
             i = new Intent(v.getContext(), org.gots.ui.ProfileActivity.class);
             break;
+        case R.id.dashboard_button_sensor:
+            GotsPurchaseItem purchaseItem = new GotsPurchaseItem(this);
+
+            // if (!purchaseItem.getFeatureParrot() ? true : purchaseItem.isPremium()) {
+            if (!purchaseItem.getFeatureParrot() || purchaseItem.isPremium()) {
+                FragmentManager fm = getSupportFragmentManager();
+                GotsBillingDialog editNameDialog = new GotsBillingDialog(GotsPurchaseItem.SKU_FEATURE_PARROT);
+                editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+                editNameDialog.show(fm, "fragment_edit_name");
+            } else {
+                i = new Intent(this, SensorActivity.class);
+            }
+            break;
         default:
             break;
         }
@@ -271,7 +286,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(weatherBroadcastReceiver);
-//        stopService(weatherIntent);
+        // stopService(weatherIntent);
         // if (buyHelper != null)
         // buyHelper.dispose();
     }
@@ -351,7 +366,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         if (itemPosition != currentItemPosition) {
             currentItemPosition = itemPosition;
             gardenManager.setCurrentGarden(myGardens.get(itemPosition));
-//            startService(weatherIntent);
+            // startService(weatherIntent);
             Bundle bundle = new Bundle();
             bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
             bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
@@ -364,7 +379,7 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
 
     @Override
     protected void onRefresh(String AUTHORITY) {
-//        startService(weatherIntent);
+        // startService(weatherIntent);
         Bundle bundle = new Bundle();
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);

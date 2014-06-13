@@ -53,6 +53,11 @@
                 style="@style/DashboardButton"
                 android:drawableTop="@drawable/dashboard_button_profile_selector"
                 android:text="@string/dashboard.profile.name" />
+             <Button
+                android:id="@+id/dashboard_button_sensor"
+                style="@style/DashboardButton"
+                android:drawableTop="@drawable/dashboard_button_sensor_selector"
+                android:text="@string/dashboard.sensor.name" />
         </org.gots.layout.DashboardLayout>
     </LinearLayout>
 
