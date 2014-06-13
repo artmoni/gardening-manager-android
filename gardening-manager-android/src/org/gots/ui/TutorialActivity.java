@@ -16,7 +16,7 @@ import android.widget.Button;
 public class TutorialActivity extends AbstractActivity {
 
     int[] tutorialList = { R.layout.tutorial_a, R.layout.tutorial_b, R.layout.tutorial_c, R.layout.tutorial_d,
-            R.layout.tutorial_e };
+            R.layout.tutorial_f, R.layout.tutorial_e };
 
     private ViewPager mPager;
 

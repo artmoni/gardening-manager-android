@@ -264,14 +264,14 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         case R.id.dashboard_button_sensor:
             GotsPurchaseItem purchaseItem = new GotsPurchaseItem(this);
 
-            // if (!purchaseItem.getFeatureParrot() ? true : purchaseItem.isPremium()) {
-            if (!purchaseItem.getFeatureParrot() || purchaseItem.isPremium()) {
+            if (purchaseItem.getFeatureParrot() ? true : purchaseItem.isPremium()) {
+                i = new Intent(this, SensorActivity.class);
+            } else {
+                // if (!purchaseItem.getFeatureParrot() && !purchaseItem.isPremium()) {
                 FragmentManager fm = getSupportFragmentManager();
                 GotsBillingDialog editNameDialog = new GotsBillingDialog(GotsPurchaseItem.SKU_FEATURE_PARROT);
                 editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
                 editNameDialog.show(fm, "fragment_edit_name");
-            } else {
-                i = new Intent(this, SensorActivity.class);
             }
             break;
         default:
