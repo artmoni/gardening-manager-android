@@ -2,12 +2,15 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/text_color_light" >
+    android:background="@drawable/bg_line_action"
+    android:padding="7dp" >
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:orientation="vertical" >
+        android:background="@color/text_color_light"
+        android:orientation="vertical"
+        android:padding="7dp" >
 
         <ImageView
             android:id="@+id/imageView1"
@@ -53,7 +56,6 @@
             android:layout_below="@+id/idButtonParrotLogin"
             android:layout_centerHorizontal="true"
             android:text="@string/sensor.buy" />
-
     </RelativeLayout>
 
 </ScrollView>

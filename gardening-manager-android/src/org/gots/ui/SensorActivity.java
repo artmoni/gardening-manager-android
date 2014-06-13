@@ -14,6 +14,7 @@ import org.gots.sensor.parrot.ParrotLocation;
 import org.gots.sensor.parrot.ParrotSampleFertilizer;
 import org.gots.sensor.parrot.ParrotSampleTemperature;
 import org.gots.sensor.parrot.ParrotSensorProvider;
+import org.gots.ui.fragment.TutorialFragment;
 
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -66,8 +67,12 @@ public class SensorActivity extends AbstractActivity {
             protected void onPostExecute(List<ParrotLocation> result) {
 
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                SensorListFragment sensors = new SensorListFragment(result);
-                ft.replace(R.id.idFragmentSensor, sensors);
+
+                if (result.size() > 0) {
+                    SensorListFragment sensors = new SensorListFragment(result);
+                    ft.replace(R.id.idFragmentSensor, sensors);
+                } else
+                    ft.replace(R.id.idFragmentSensor, new TutorialFragment(R.layout.tutorial_f));
                 ft.commit();
 
             };
@@ -76,7 +81,7 @@ public class SensorActivity extends AbstractActivity {
 
     @Override
     protected void onResume() {
-       if (gotsPrefs.getParrotToken() == null) {
+        if (gotsPrefs.getParrotToken() == null) {
             SensorLoginDialogFragment login = new SensorLoginDialogFragment();
             login.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.CustomDialog);
             login.show(getSupportFragmentManager(), "sensor_login");
