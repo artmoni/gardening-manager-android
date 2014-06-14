@@ -7,8 +7,13 @@ import org.gots.authentication.GotsSyncAdapter;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.service.SeedNotification;
+import org.gots.sensor.local.LocalSensorSamplesProvider;
 import org.gots.sensor.notification.SensorStatusNotification;
+import org.gots.sensor.parrot.ParrotLocation;
 import org.gots.sensor.parrot.ParrotLocationsStatus;
+import org.gots.sensor.parrot.ParrotSampleFertilizer;
+import org.gots.sensor.parrot.ParrotSampleTemperature;
+import org.gots.sensor.parrot.ParrotSamplesProvider;
 import org.gots.sensor.parrot.ParrotSensorProvider;
 
 import android.accounts.Account;
@@ -56,6 +61,25 @@ public class SensorSyncAdapter extends GotsSyncAdapter {
             }
             notification.show();
         }
+
+        List<ParrotLocation> locations = parrotSensorProvider.getLocations();
+        for (ParrotLocation parrotLocation : locations) {
+            LocalSensorSamplesProvider localSensorProvider = new LocalSensorSamplesProvider(getContext(),
+                    parrotLocation.getLocation_identifier());
+            ParrotSamplesProvider parrotSamplesProvider = new ParrotSamplesProvider(getContext(),
+                    parrotLocation.getLocation_identifier());
+         
+            List<ParrotSampleFertilizer> fertilizers = parrotSamplesProvider.getSamplesFertilizer();
+            for (ParrotSampleFertilizer parrotSampleFertilizer : fertilizers) {
+                localSensorProvider.insertSampleFertilizer(parrotSampleFertilizer);
+            }
+
+            List<ParrotSampleTemperature> temperatures = parrotSamplesProvider.getSamplesTemperature();
+            for (ParrotSampleTemperature parrotSampleTemperature : temperatures) {
+                localSensorProvider.insertSampleTemperature(parrotSampleTemperature);
+            }
+        }
+
         intent.setAction(BroadCastMessages.PROGRESS_FINISHED);
         getContext().sendBroadcast(intent);
 

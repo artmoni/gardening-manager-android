@@ -1,5 +1,6 @@
 package org.gots.sensor.parrot;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.google.gson.annotations.SerializedName;
@@ -54,5 +55,13 @@ public class ParrotSampleTemperature {
     public void setVwc_percent(double vwc_percent) {
         this.vwc_percent = vwc_percent;
     }
-
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(new SimpleDateFormat().format(getCapture_ts()));
+        builder.append("-");
+        builder.append("temperature=");
+        builder.append(getAir_temperature_celsius());
+        return builder.toString();
+    }
 }

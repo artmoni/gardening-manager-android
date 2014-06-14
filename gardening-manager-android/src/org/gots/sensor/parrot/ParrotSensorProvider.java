@@ -9,6 +9,7 @@ import org.gots.authentication.ParrotAuthentication;
 import org.gots.garden.GardenManager;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.provider.local.LocalSeedProvider;
+import org.gots.sensor.GotsSensorProvider;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,7 +19,7 @@ import com.google.gson.Gson;
 import android.content.Context;
 import android.util.Log;
 
-public class ParrotSensorProvider extends LocalSeedProvider {
+public class ParrotSensorProvider implements GotsSensorProvider {
 
     private ParrotAuthentication authentication;
 
@@ -26,10 +27,12 @@ public class ParrotSensorProvider extends LocalSeedProvider {
 
     private String filterCriteria = "";
 
-    public ParrotSensorProvider(Context context) {
-        super(context);
-         authentication = ParrotAuthentication.getInstance(mContext);
+    private String locationId;
 
+    public ParrotSensorProvider(Context context) {
+        // super(context);
+        authentication = ParrotAuthentication.getInstance(context);
+        this.locationId = locationId;
     }
 
     private void getToken() {
@@ -41,6 +44,7 @@ public class ParrotSensorProvider extends LocalSeedProvider {
         this.filterCriteria = filterCriteria;
     }
 
+    @Override
     public List<ParrotSensor> getSensors() {
         getToken();
         String api_1_25_sync = "/sensor_data/v2/sync?include_s3_urls=1";
@@ -61,6 +65,7 @@ public class ParrotSensorProvider extends LocalSeedProvider {
         return sensors;
     }
 
+    @Override
     public List<ParrotLocationsStatus> getStatus() {
         getToken();
         String api_1_28_status = "/sensor_data/v1/garden_locations_status";
@@ -82,6 +87,7 @@ public class ParrotSensorProvider extends LocalSeedProvider {
         return locationsStatuses;
     }
 
+    @Override
     public List<ParrotLocation> getLocations() {
         getToken();
         String api_1_25_status = "/sensor_data/v2/sync?include_s3_urls=1";
@@ -102,45 +108,5 @@ public class ParrotSensorProvider extends LocalSeedProvider {
         return sensorLocations;
     }
 
-    public List<ParrotSampleFertilizer> getSamples(String locationId) {
-        getToken();
-        String api_1_03_sample = "/sensor_data/v2/sample/location/" + locationId;
-        List<ParrotSampleFertilizer> sensorSampleFertilizers = new ArrayList<ParrotSampleFertilizer>();
-        try {
-            JSONObject json = (JSONObject) authentication.getJSON(api_1_03_sample);
-            JSONArray jsonFertilizer = json.getJSONArray("fertilizer");
-            Gson gson = new Gson();
-            for (int i = 0; i < jsonFertilizer.length(); i++) {
-                ParrotSampleFertilizer location = gson.fromJson(jsonFertilizer.getString(i),
-                        ParrotSampleFertilizer.class);
-                sensorSampleFertilizers.add(location);
-            }
-        } catch (JSONException e) {
-            Log.e(TAG, e.getMessage(), e);
-        } catch (IOException e) {
-            Log.e(TAG, e.getMessage(), e);
-        }
-        return sensorSampleFertilizers;
-    }
-
-    public List<ParrotSampleTemperature> getSamples2(String locationId) {
-        getToken();
-        String api_1_03_sample = "/sensor_data/v2/sample/location/" + locationId;
-        List<ParrotSampleTemperature> sensorSampleTemperature = new ArrayList<ParrotSampleTemperature>();
-        try {
-            JSONObject json = (JSONObject) authentication.getJSON(api_1_03_sample);
-            JSONArray jsonFertilizer = json.getJSONArray("samples");
-            Gson gson = new Gson();
-            for (int i = 0; i < jsonFertilizer.length(); i++) {
-                ParrotSampleTemperature location = gson.fromJson(jsonFertilizer.getString(i),
-                        ParrotSampleTemperature.class);
-                sensorSampleTemperature.add(location);
-            }
-        } catch (JSONException e) {
-            Log.e(TAG, e.getMessage(), e);
-        } catch (IOException e) {
-            Log.e(TAG, e.getMessage(), e);
-        }
-        return sensorSampleTemperature;
-    }
+   
 }

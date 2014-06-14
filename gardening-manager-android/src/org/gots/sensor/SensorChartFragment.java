@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.gots.R;
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.sensor.local.LocalSensorSamplesProvider;
 import org.gots.sensor.parrot.ParrotLocation;
 import org.gots.sensor.parrot.ParrotSampleFertilizer;
 import org.gots.sensor.parrot.ParrotSampleTemperature;
@@ -53,7 +54,7 @@ public class SensorChartFragment extends Fragment {
     }
 
     private void update() {
-        new AsyncTask<Void, Void, List<ParrotLocation>>() {
+        new AsyncTask<Void, Void, Void>() {
 
             List<ParrotSampleFertilizer> samplesFertilizer = null;
 
@@ -64,17 +65,17 @@ public class SensorChartFragment extends Fragment {
             };
 
             @Override
-            protected List<ParrotLocation> doInBackground(Void... params) {
-                ParrotSensorProvider sensorProvider = new ParrotSensorProvider(getActivity());
-                List<ParrotLocation> locations = sensorProvider.getLocations();
-                sensorProvider.getStatus();
-                samplesFertilizer = sensorProvider.getSamples(mLocationIdentifier);
-                samplesTemperature = sensorProvider.getSamples2(mLocationIdentifier);
-
-                return locations;
+            protected Void doInBackground(Void... params) {
+                // GotsSensorProvider sensorProvider = new ParrotSensorProvider(getActivity());
+                // GotsSensorProvider sensorProvider = new ParrotSensorProvider(getActivity());
+                // List<ParrotLocation> locations = sensorProvider.getLocations();
+                // sensorProvider.getStatus();
+                GotsSensorSamplesProvider samplesProvider = new LocalSensorSamplesProvider(getActivity(), mLocationIdentifier);
+                samplesFertilizer = samplesProvider.getSamplesFertilizer();
+                samplesTemperature = samplesProvider.getSamplesTemperature();
+                return null;
             }
-
-            protected void onPostExecute(List<ParrotLocation> result) {
+            protected void onPostExecute(Void result) {
                 Calendar cal = Calendar.getInstance();
 
                 if (samplesFertilizer != null && samplesFertilizer.size() > 0) {

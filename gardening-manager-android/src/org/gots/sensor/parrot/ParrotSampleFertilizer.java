@@ -1,5 +1,6 @@
 package org.gots.sensor.parrot;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.google.gson.annotations.SerializedName;
@@ -15,13 +16,13 @@ import com.google.gson.annotations.SerializedName;
 public class ParrotSampleFertilizer {
     @SerializedName("id")
     int id;
-    
+
     @SerializedName("fertilizer_level")
     double fertilizer_level;
-    
+
     @SerializedName("watering_cycle_end_date_time_utc")
     Date watering_cycle_end_date_time_utc;
-    
+
     @SerializedName("watering_cycle_start_date_time_utc")
     Date watering_cycle_start_date_time_utc;
 
@@ -56,5 +57,18 @@ public class ParrotSampleFertilizer {
     public void setWatering_cycle_start_date_time_utc(Date watering_cycle_start_date_time_utc) {
         this.watering_cycle_start_date_time_utc = watering_cycle_start_date_time_utc;
     }
-    
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(getId());
+        builder.append("-");
+        builder.append("fertilizer=");
+        builder.append(getFertilizer_level());
+        builder.append("[");
+        builder.append(new SimpleDateFormat().format(getWatering_cycle_start_date_time_utc()));
+        builder.append("]");
+        return builder.toString();
+    }
+
 }

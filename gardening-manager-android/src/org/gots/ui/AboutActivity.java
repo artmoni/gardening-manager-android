@@ -289,8 +289,8 @@ public class AboutActivity extends AbstractActivity {
         ContentResolver.requestSync(newAccount, GardenContentProvider.AUTHORITY, bundle);
         ContentResolver.setSyncAutomatically(newAccount, ActionsContentProvider.AUTHORITY, true);
         ContentResolver.requestSync(newAccount, ActionsContentProvider.AUTHORITY, bundle);
-        ContentResolver.setSyncAutomatically(newAccount, SensorContentProvider.AUTHORITY, true);
-        ContentResolver.requestSync(newAccount, SensorContentProvider.AUTHORITY, bundle);
+//        ContentResolver.setSyncAutomatically(newAccount, SensorContentProvider.AUTHORITY, true);
+//        ContentResolver.requestSync(newAccount, SensorContentProvider.AUTHORITY, bundle);
         ContentResolver.setSyncAutomatically(newAccount, WeatherContentProvider.AUTHORITY, true);
         ContentResolver.requestSync(newAccount, WeatherContentProvider.AUTHORITY, bundle);
 
