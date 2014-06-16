@@ -39,10 +39,26 @@ public class LocalSensorSamplesProvider implements GotsSensorSamplesProvider {
         dbHelper.close();
     }
 
-    public List<ParrotSampleTemperature> getSamplesTemperature() {
+    public List<ParrotSampleTemperature> getSamplesTemperature(Date from, Date to) {
         open();
         List<ParrotSampleTemperature> temperatures = new ArrayList<ParrotSampleTemperature>();
-        Cursor cursor = database.query(SensorSQLiteHelper.TABLE_TEMPERATURE, null, null, null, null, null, null);
+        String fromStr = new String();
+        String toStr = new String();
+        if (from != null) {
+            fromStr = SensorSQLiteHelper.TEMPERATURE_capture_ts + ">=" + from.getTime();
+        }
+
+        if (to != null) {
+            toStr = SensorSQLiteHelper.TEMPERATURE_capture_ts + "<=" + to.getTime();
+        }
+        String selection = null;
+        if (!"".equals(fromStr) && !"".equals(toStr))
+            selection = fromStr + " AND " + toStr;
+        else if (!"".equals(toStr))
+            selection = toStr;
+        else if (!"".equals(fromStr))
+            selection = fromStr;
+        Cursor cursor = database.query(SensorSQLiteHelper.TABLE_TEMPERATURE, null, selection, null, null, null, null);
         while (cursor.moveToNext()) {
             ParrotSampleTemperature temperature = cursorToTemperature(cursor);
             temperatures.add(temperature);
@@ -53,10 +69,26 @@ public class LocalSensorSamplesProvider implements GotsSensorSamplesProvider {
         return temperatures;
     }
 
-    public List<ParrotSampleFertilizer> getSamplesFertilizer() {
+    public List<ParrotSampleFertilizer> getSamplesFertilizer(Date from, Date to) {
         open();
         List<ParrotSampleFertilizer> fertilizers = new ArrayList<ParrotSampleFertilizer>();
-        Cursor cursor = database.query(SensorSQLiteHelper.TABLE_FERTILIZER, null, null, null, null, null, null);
+        String fromStr = new String();
+        String toStr = new String();
+        if (from != null) {
+            fromStr = SensorSQLiteHelper.FERTILIZER_watering_cycle_start_date_time_utc + ">=" + from.getTime();
+        }
+
+        if (to != null) {
+            toStr = SensorSQLiteHelper.FERTILIZER_watering_cycle_end_date_time_utc + "<=" + to.getTime();
+        }
+        String selection = null;
+        if (!"".equals(fromStr) && !"".equals(toStr))
+            selection = fromStr + " AND " + toStr;
+        else if (!"".equals(toStr))
+            selection = toStr;
+        else if (!"".equals(fromStr))
+            selection = fromStr;
+        Cursor cursor = database.query(SensorSQLiteHelper.TABLE_FERTILIZER, null, selection, null, null, null, null);
         while (cursor.moveToNext()) {
             ParrotSampleFertilizer fertilizer = cursorToFertilizer(cursor);
             fertilizers.add(fertilizer);
@@ -134,9 +166,9 @@ public class LocalSensorSamplesProvider implements GotsSensorSamplesProvider {
         fertilizer.setId(cursor.getInt(cursor.getColumnIndex(SensorSQLiteHelper.FERTILIZER_REMOTE_ID)));
         fertilizer.setFertilizer_level(cursor.getDouble(cursor.getColumnIndex(SensorSQLiteHelper.FERTILIZER_LEVEL)));
         fertilizer.setWatering_cycle_end_date_time_utc(new Date(
-                cursor.getInt(cursor.getColumnIndex(SensorSQLiteHelper.FERTILIZER_watering_cycle_end_date_time_utc))));
+                cursor.getLong(cursor.getColumnIndex(SensorSQLiteHelper.FERTILIZER_watering_cycle_end_date_time_utc))));
         fertilizer.setWatering_cycle_start_date_time_utc(new Date(
-                cursor.getInt(cursor.getColumnIndex(SensorSQLiteHelper.FERTILIZER_watering_cycle_start_date_time_utc))));
+                cursor.getLong(cursor.getColumnIndex(SensorSQLiteHelper.FERTILIZER_watering_cycle_start_date_time_utc))));
         return fertilizer;
     }
 
@@ -154,7 +186,7 @@ public class LocalSensorSamplesProvider implements GotsSensorSamplesProvider {
         ParrotSampleTemperature temperature = new ParrotSampleTemperature();
         temperature.setAir_temperature_celsius(cursor.getDouble(cursor.getColumnIndex(SensorSQLiteHelper.TEMPERATURE_air_temperature_celsius)));
         temperature.setCapture_ts(new Date(
-                cursor.getInt(cursor.getColumnIndex(SensorSQLiteHelper.TEMPERATURE_capture_ts))));
+                cursor.getLong(cursor.getColumnIndex(SensorSQLiteHelper.TEMPERATURE_capture_ts))));
         temperature.setPar_umole_m2s(cursor.getDouble(cursor.getColumnIndex(SensorSQLiteHelper.TEMPERATURE_par_umole_m2s)));
         temperature.setVwc_percent(cursor.getDouble(cursor.getColumnIndex(SensorSQLiteHelper.TEMPERATURE_vwc_percent)));
         return temperature;

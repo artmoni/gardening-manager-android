@@ -9,6 +9,7 @@ import org.gots.sensor.local.LocalSensorSamplesProvider;
 import org.gots.sensor.parrot.ParrotLocation;
 import org.gots.sensor.parrot.ParrotSampleFertilizer;
 import org.gots.sensor.parrot.ParrotSampleTemperature;
+import org.gots.sensor.parrot.ParrotSamplesProvider;
 import org.gots.sensor.parrot.ParrotSensorProvider;
 
 import android.content.Intent;
@@ -31,6 +32,10 @@ public class SensorChartFragment extends Fragment {
 
     private String mLocationIdentifier;
 
+    private WebView webViewLightning;
+
+    private WebView webViewWater;
+
     public SensorChartFragment() {
         this.mLocationIdentifier = "";
     }
@@ -44,6 +49,8 @@ public class SensorChartFragment extends Fragment {
         View view = inflater.inflate(R.layout.sensor_samples, container, false);
         webViewTemperature = (WebView) view.findViewById(R.id.webViewTemperature);
         webViewFertilizer = (WebView) view.findViewById(R.id.webViewFertilizer);
+        webViewLightning = (WebView) view.findViewById(R.id.webViewLightning);
+        webViewWater = (WebView) view.findViewById(R.id.webViewWater);
         return view;
     }
 
@@ -70,11 +77,24 @@ public class SensorChartFragment extends Fragment {
                 // GotsSensorProvider sensorProvider = new ParrotSensorProvider(getActivity());
                 // List<ParrotLocation> locations = sensorProvider.getLocations();
                 // sensorProvider.getStatus();
-                GotsSensorSamplesProvider samplesProvider = new LocalSensorSamplesProvider(getActivity(), mLocationIdentifier);
-                samplesFertilizer = samplesProvider.getSamplesFertilizer();
-                samplesTemperature = samplesProvider.getSamplesTemperature();
+                GotsSensorSamplesProvider samplesProvider = new LocalSensorSamplesProvider(getActivity(),
+                        mLocationIdentifier);
+                Calendar cal = Calendar.getInstance();
+                cal.add(Calendar.DAY_OF_WEEK, -30);
+                samplesFertilizer = samplesProvider.getSamplesFertilizer(cal.getTime(), null);
+                samplesTemperature = samplesProvider.getSamplesTemperature(cal.getTime(), null);
+
+                // GotsSensorSamplesProvider parrotProvider = new ParrotSamplesProvider(getActivity(),
+                // mLocationIdentifier);
+                // List<ParrotSampleFertilizer> samplesFertilizer2 = parrotProvider.getSamplesFertilizer(cal.getTime(),
+                // null);
+                // List<ParrotSampleTemperature> samplesTemperature2 =
+                // parrotProvider.getSamplesTemperature(cal.getTime(),
+                // null);
+
                 return null;
             }
+
             protected void onPostExecute(Void result) {
                 Calendar cal = Calendar.getInstance();
 
@@ -114,18 +134,60 @@ public class SensorChartFragment extends Fragment {
                 if (samplesTemperature != null && samplesTemperature.size() > 0) {
                     String chd = new String();
                     int i = 0;
+                    String chxl = "0:|";
+
+                    double sumTemp = 0;
+                    double sumWater = 0;
+                    double sumLightning = 0;
+                    int nbValue = 0;
+                    Calendar firstDay = Calendar.getInstance();
+                    firstDay.setTime(samplesTemperature.get(0).getCapture_ts());
+                    int currentday = firstDay.get(Calendar.DAY_OF_MONTH);
+
+                    String chdWater = "";
+                    String chdLightning = "";
                     for (ParrotSampleTemperature sampleTemp : samplesTemperature) {
-                        chd = chd.concat(String.valueOf(sampleTemp.getAir_temperature_celsius()));
-                        chd = chd.concat(",");
                         cal.setTime(sampleTemp.getCapture_ts());
-                        if (i++ >= 50)
-                            break;
+
+                        if (cal.get(Calendar.DAY_OF_MONTH) != currentday) {
+                            currentday = cal.get(Calendar.DAY_OF_MONTH);
+                            if (nbValue == 0)
+                                nbValue = 1;
+                            chd = chd.concat(String.valueOf(sumTemp / nbValue));
+                            chd = chd.concat(",");
+                            chdWater = chdWater.concat(String.valueOf(sumWater / nbValue));
+                            chdWater = chdWater.concat(",");
+                            chdLightning = chdLightning.concat(String.valueOf(sumLightning / nbValue));
+                            chdLightning = chdLightning.concat(",");
+                            chxl = chxl.concat(String.valueOf(cal.get(Calendar.DAY_OF_MONTH)));
+                            chxl = chxl.concat("|");
+                            nbValue = 0;
+                            sumTemp = 0;
+                            sumWater = 0;
+                            sumLightning = 0;
+                        } else {
+                            nbValue++;
+                            sumTemp += sampleTemp.getAir_temperature_celsius();
+                            sumWater += sampleTemp.getVwc_percent();
+                            sumLightning += sampleTemp.getPar_umole_m2s();
+                        }
+
                     }
                     chd = chd.substring(0, chd.length() - 1);
+                    chdLightning = chdLightning.substring(0, chd.length() - 1);
+                    chdWater = chdWater.substring(0, chd.length() - 1);
+                    chxl = chxl.substring(0, chxl.length() - 1);
                     webViewTemperature.loadUrl(chartURL(chd, "", "", webViewTemperature.getWidth(),
-                            webViewTemperature.getHeight()));
+                            webViewTemperature.getHeight())
+                            + "&chxl=" + chxl);
+                    webViewWater.loadUrl(chartURL(chdWater, "", "", webViewTemperature.getWidth(),
+                            webViewTemperature.getHeight())
+                            + "&chxl=" + chxl);
+                    webViewLightning.loadUrl(chartURL(chdLightning, "", "", webViewTemperature.getWidth(),
+                            webViewTemperature.getHeight()) + "&chxl=" + chxl);
                 }
-                getActivity().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
+                if (isAdded())
+                    getActivity().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
             };
         }.execute();
     }

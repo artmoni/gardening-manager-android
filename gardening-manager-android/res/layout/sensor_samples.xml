@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical" >
+        <TextView android:id="@+id/TextView01" android:layout_width="match_parent" android:layout_height="wrap_content"/>
 
         <TextView
             android:id="@+id/textView1"
@@ -36,6 +37,34 @@
 
         <WebView
             android:id="@+id/webViewFertilizer"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@drawable/bg_line_selector" />
+        
+         <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@color/text_color_light"
+            android:text="Water quantity" />
+
+        <WebView
+            android:id="@+id/webViewWater"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@drawable/bg_line_selector" />
+        
+         <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@color/text_color_light"
+            android:text="Lightning" />
+
+        <WebView
+            android:id="@+id/webViewLightning"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:background="@drawable/bg_line_selector" />

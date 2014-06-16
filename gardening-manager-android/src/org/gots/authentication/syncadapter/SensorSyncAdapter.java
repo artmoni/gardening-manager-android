@@ -69,12 +69,12 @@ public class SensorSyncAdapter extends GotsSyncAdapter {
             ParrotSamplesProvider parrotSamplesProvider = new ParrotSamplesProvider(getContext(),
                     parrotLocation.getLocation_identifier());
          
-            List<ParrotSampleFertilizer> fertilizers = parrotSamplesProvider.getSamplesFertilizer();
+            List<ParrotSampleFertilizer> fertilizers = parrotSamplesProvider.getSamplesFertilizer(null, null);
             for (ParrotSampleFertilizer parrotSampleFertilizer : fertilizers) {
                 localSensorProvider.insertSampleFertilizer(parrotSampleFertilizer);
             }
 
-            List<ParrotSampleTemperature> temperatures = parrotSamplesProvider.getSamplesTemperature();
+            List<ParrotSampleTemperature> temperatures = parrotSamplesProvider.getSamplesTemperature(null, null);
             for (ParrotSampleTemperature parrotSampleTemperature : temperatures) {
                 localSensorProvider.insertSampleTemperature(parrotSampleTemperature);
             }
