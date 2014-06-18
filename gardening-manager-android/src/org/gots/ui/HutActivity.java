@@ -17,6 +17,7 @@ import org.gots.ads.GotsAdvertisement;
 import org.gots.provider.SeedsContentProvider;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.ui.fragment.TutorialFragment;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -310,12 +311,14 @@ public class HutActivity extends AbstractActivity {
         Bundle args;
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds)),
                 VendorListActivity.class, null);
-//        Bundle parrotArgs = new Bundle();
-//        parrotArgs.putString(VendorListActivity.FILTER_PARROT, ParrotSeedProvider.class.getName());
+        // Bundle parrotArgs = new Bundle();
+        // parrotArgs.putString(VendorListActivity.FILTER_PARROT, ParrotSeedProvider.class.getName());
         args = new Bundle();
         args.putBoolean(VendorListActivity.FILTER_PARROT, true);
-        mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds_plant)),
-                VendorListActivity.class, args);
+        if (gotsPrefs.getParrotToken() != null)
+            mTabsAdapter.addTab(
+                    bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds_plant)),
+                    VendorListActivity.class, args);
 
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
                 MySeedsListActivity.class, null);
@@ -391,10 +394,16 @@ public class HutActivity extends AbstractActivity {
 
         Fragment fragment = (Fragment) getSupportFragmentManager().findFragmentByTag(
                 "android:switcher:" + R.id.pager + ":" + mTabsAdapter.getCurrentItem());
-        if (fragment instanceof ListFragment) {
-            Filterable fragFilter = (Filterable) ((ListFragment) fragment).getListAdapter();
-            fragFilter.getFilter().filter(currentFilter.toString());
-        }
+        if (fragment.getArguments()!=null&&fragment.getArguments().getBoolean(VendorListActivity.FILTER_PARROT))
+        {
+            Intent filterIntent = new Intent(VendorListActivity.BROADCAST_FILTER);
+            filterIntent.putExtra(VendorListActivity.FILTER_VALUE, currentFilter);
+            sendBroadcast(filterIntent);
+        }else
+            if (fragment instanceof ListFragment) {
+                Filterable fragFilter = (Filterable) ((ListFragment) fragment).getListAdapter();
+                fragFilter.getFilter().filter(currentFilter.toString());
+            }
     }
 
     static final class TabInfo {
@@ -503,6 +512,7 @@ public class HutActivity extends AbstractActivity {
             mActionBar.setSelectedNavigationItem(itemId);
         }
     }
+
     @Override
     protected void onRefresh(String AUTHORITY) {
         super.onRefresh(SeedsContentProvider.AUTHORITY);

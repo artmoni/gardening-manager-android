@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,18 +78,38 @@ public class SeedWidget extends RelativeLayout implements OnClickListener {
             v1.setVisibility(View.INVISIBLE);
         }
 
-        ImageView seedView = (ImageView) findViewById(R.id.idSeedImage2);
-        int vegetableImageRessource = getSeedDrawable(getContext(), mSeed);
-        if (vegetableImageRessource != 0 && seedView != null)
-            seedView.setImageResource(vegetableImageRessource);
-        else if (mSeed.getSpecie() != null) {
-            File file = new File(mContext.getCacheDir() + "/" + mSeed.getSpecie().toLowerCase().replaceAll("\\s", ""));
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            // options.inSampleSize = 2;
-            Bitmap image = BitmapFactory.decodeFile(file.getPath(), options);
-            seedView.setImageBitmap(image);
-        }
+        new AsyncTask<Void, Void, Bitmap>() {
+            ImageView seedView;
+
+            private int vegetableImageRessource;
+
+            @Override
+            protected void onPreExecute() {
+                seedView = (ImageView) findViewById(R.id.idSeedImage2);
+                super.onPreExecute();
+            }
+
+            @Override
+            protected Bitmap doInBackground(Void... params) {
+                Bitmap image = null;
+                vegetableImageRessource = getSeedDrawable(getContext(), mSeed);
+                if (vegetableImageRessource == 0 && mSeed.getSpecie() != null) {
+                    File file = new File(mContext.getCacheDir() + "/"
+                            + mSeed.getSpecie().toLowerCase().replaceAll("\\s", ""));
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                    image = BitmapFactory.decodeFile(file.getPath(), options);
+                }
+                return image;
+            }
+
+            protected void onPostExecute(Bitmap image) {
+                if (vegetableImageRessource != 0 && seedView != null)
+                    seedView.setImageResource(vegetableImageRessource);
+                else
+                    seedView.setImageBitmap(image);
+            };
+        }.execute();
 
         setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.action_selector));
 

@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 
 public class ParrotSeedConverter {
     Context mContext;
@@ -53,22 +54,28 @@ public class ParrotSeedConverter {
         return seed;
     }
 
-    private void downloadImage(String plantName, String url) {
-        File file = new File(mContext.getCacheDir() + "/" + plantName.toLowerCase().replaceAll("\\s", ""));
-        if (!file.exists()) {
-            try {
-                URLConnection conn = new URL(url).openConnection();
-                conn.connect();
-                Bitmap image = BitmapFactory.decodeStream(conn.getInputStream());
-                FileOutputStream out = new FileOutputStream(file);
-                image.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                out.flush();
-                out.close();
+    private void downloadImage(final String plantName, final String url) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                File file = new File(mContext.getCacheDir() + "/" + plantName.toLowerCase().replaceAll("\\s", ""));
+                if (!file.exists()) {
+                    try {
+                        URLConnection conn = new URL(url).openConnection();
+                        conn.connect();
+                        Bitmap image = BitmapFactory.decodeStream(conn.getInputStream());
+                        FileOutputStream out = new FileOutputStream(file);
+                        image.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                        out.flush();
+                        out.close();
 
-            } catch (Exception e) {
-                e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                return null;
             }
-        }
-        return;
+        }.execute();
+
     }
 }

@@ -42,6 +42,8 @@ public class VendorListActivity extends AbstractListFragment {
 
     protected static final String FILTER_VALUE = "filter.data";
 
+    protected static final String BROADCAST_FILTER = "broadcast_filter";
+
     public static final String FILTER_PARROT = "filter.parrot";
 
     public Context mContext;
@@ -52,26 +54,32 @@ public class VendorListActivity extends AbstractListFragment {
 
     private ProgressDialog dialog;
 
+    private Bundle args;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        setHasOptionsMenu(true);
+        // setHasOptionsMenu(true);
         mContext = getActivity();
         mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.SEED_DISPLAYLIST));
-//        mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.PROGRESS_FINISHED));
+        mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BROADCAST_FILTER));
+        // mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.PROGRESS_FINISHED));
         listVendorSeedAdapter = new VendorSeedListAdapter(mContext, new ArrayList<BaseSeedInterface>());
         setListAdapter(listVendorSeedAdapter);
+        args = getArguments();
+
         return super.onCreateView(inflater, container, savedInstanceState);
     }
-
-  
 
     public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            
+            if (BROADCAST_FILTER.equals(intent.getAction())) {
+                currentFilter = intent.getExtras().getString(FILTER_VALUE);
+            }
             updateVendorSeeds();
         }
     };
+
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -91,7 +99,7 @@ public class VendorListActivity extends AbstractListFragment {
                 // dialog = ProgressDialog.show(mContext, "", mContext.getResources().getString(R.string.gots_loading),
                 // true);
                 // dialog.setCanceledOnTouchOutside(true);
-//                setActionRefresh(true);
+                // setActionRefresh(true);
                 mContext.sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
                 super.onPreExecute();
             };
@@ -99,7 +107,6 @@ public class VendorListActivity extends AbstractListFragment {
             @Override
             protected List<BaseSeedInterface> doInBackground(Void... params) {
 
-                Bundle args = getArguments();
                 List<BaseSeedInterface> catalogue = new ArrayList<BaseSeedInterface>();
                 if (args == null) {
                     catalogue = seedProvider.getVendorSeeds(false);
@@ -113,10 +120,13 @@ public class VendorListActivity extends AbstractListFragment {
                     catalogue.add(seedProvider.getSeedByBarCode(args.getString(FILTER_VALUE)));
                 } else if (args.getBoolean(FILTER_THISMONTH))
                     // listVendorSeedAdapter.getFilter().filter("THISMONTH");
-                catalogue = seedProvider.getSeedBySowingMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
+                    catalogue = seedProvider.getSeedBySowingMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
                 else if (args.getBoolean(FILTER_PARROT)) {
                     ParrotSeedProvider parrotProvider = new ParrotSeedProvider(mContext);
-                    catalogue = parrotProvider.getVendorSeeds(true);
+                    if ("".equals(currentFilter))
+                        catalogue = parrotProvider.getVendorSeeds(true);
+                    else
+                        catalogue = parrotProvider.getVendorSeedsByName(currentFilter.toString());
 
                 }
 
@@ -133,7 +143,7 @@ public class VendorListActivity extends AbstractListFragment {
                 // if (progressBar != null)
                 //
                 // progressBar.stopAnimatingBackground();
-//                setActionRefresh(false);
+                // setActionRefresh(false);
 
                 mContext.sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
                 super.onPostExecute(vendorSeeds);
