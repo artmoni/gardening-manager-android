@@ -31,6 +31,7 @@ import android.os.AsyncTask;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -151,6 +152,9 @@ public class SeedWidgetLong extends LinearLayout {
                             return manager.like(mSeed, mSeed.getLikeStatus().getUserLikeStatus() == 1);
                         } catch (GotsException e) {
                             exception = e;
+                            return null;
+                        } catch (Exception e) {
+                            Log.e(getClass().getName(), "" + e.getMessage(), e);
                             return null;
                         }
                     }

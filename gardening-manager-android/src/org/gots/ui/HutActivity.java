@@ -394,16 +394,14 @@ public class HutActivity extends AbstractActivity {
 
         Fragment fragment = (Fragment) getSupportFragmentManager().findFragmentByTag(
                 "android:switcher:" + R.id.pager + ":" + mTabsAdapter.getCurrentItem());
-        if (fragment.getArguments()!=null&&fragment.getArguments().getBoolean(VendorListActivity.FILTER_PARROT))
-        {
+        if (fragment.getArguments() != null && fragment.getArguments().getBoolean(VendorListActivity.FILTER_PARROT)) {
             Intent filterIntent = new Intent(VendorListActivity.BROADCAST_FILTER);
             filterIntent.putExtra(VendorListActivity.FILTER_VALUE, currentFilter);
             sendBroadcast(filterIntent);
-        }else
-            if (fragment instanceof ListFragment) {
-                Filterable fragFilter = (Filterable) ((ListFragment) fragment).getListAdapter();
-                fragFilter.getFilter().filter(currentFilter.toString());
-            }
+        } else if (fragment instanceof ListFragment) {
+            Filterable fragFilter = (Filterable) ((ListFragment) fragment).getListAdapter();
+            fragFilter.getFilter().filter(currentFilter.toString());
+        }
     }
 
     static final class TabInfo {

@@ -86,7 +86,7 @@ public class ParrotSeedProvider extends LocalSeedProvider {
             Log.e(TAG, e.getMessage(), e);
         }
 
-        return synchronize(super.getVendorSeedsByName(currentFilter), parrotPlants);
+        return synchronize(super.getVendorSeeds(false), parrotPlants);
     }
 
     @Override
@@ -140,7 +140,6 @@ public class ParrotSeedProvider extends LocalSeedProvider {
             List<BaseSeedInterface> remoteVendorSeeds) {
         getToken();
 
-        newSeeds.clear();
         List<BaseSeedInterface> myVendorSeeds = new ArrayList<BaseSeedInterface>();
 
         for (BaseSeedInterface remoteSeed : remoteVendorSeeds) {
@@ -159,7 +158,7 @@ public class ParrotSeedProvider extends LocalSeedProvider {
                 // myVendorSeeds.add();
             else {
                 remoteSeed = super.createSeed(remoteSeed);
-                newSeeds.add(remoteSeed);
+                myVendorSeeds.add(remoteSeed);
             }
 //            myVendorSeeds.add(remoteSeed);
         }

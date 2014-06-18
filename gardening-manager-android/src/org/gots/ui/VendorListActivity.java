@@ -136,7 +136,7 @@ public class VendorListActivity extends AbstractListFragment {
             protected void onPostExecute(List<BaseSeedInterface> vendorSeeds) {
 
                 listVendorSeedAdapter.setSeeds(vendorSeeds);
-                listVendorSeedAdapter.getFilter().filter(currentFilter);
+//                listVendorSeedAdapter.getFilter().filter(currentFilter);
                 // if (!"".equals(currentFilter) && currentFilter != null)
                 // displaySearchBox();
                 listVendorSeedAdapter.notifyDataSetChanged();
