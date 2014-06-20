@@ -1,5 +1,7 @@
 package org.gots.authentication.syncadapter;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -42,6 +44,7 @@ public class SensorSyncAdapter extends GotsSyncAdapter {
         intent.putExtra("AUTHORITY", authority);
         getContext().sendBroadcast(intent);
 
+        // Get Parrot Notification Alerts
         ParrotSensorProvider parrotSensorProvider = new ParrotSensorProvider(getContext());
         List<ParrotLocationsStatus> status = parrotSensorProvider.getStatus();
 
@@ -68,13 +71,19 @@ public class SensorSyncAdapter extends GotsSyncAdapter {
                     parrotLocation.getLocation_identifier());
             ParrotSamplesProvider parrotSamplesProvider = new ParrotSamplesProvider(getContext(),
                     parrotLocation.getLocation_identifier());
-         
+
             List<ParrotSampleFertilizer> fertilizers = parrotSamplesProvider.getSamplesFertilizer(null, null);
             for (ParrotSampleFertilizer parrotSampleFertilizer : fertilizers) {
                 localSensorProvider.insertSampleFertilizer(parrotSampleFertilizer);
             }
 
-            List<ParrotSampleTemperature> temperatures = parrotSamplesProvider.getSamplesTemperature(null, null);
+            // Get Samples from last sync until now or all if never sync
+            ParrotSampleTemperature lastSync = localSensorProvider.getLastSampleTemperature();
+            Date lastSyncDate = null;
+            if (lastSync != null)
+                lastSyncDate = lastSync.getCapture_ts();
+            List<ParrotSampleTemperature> temperatures = parrotSamplesProvider.getSamplesTemperature(lastSyncDate,
+                    Calendar.getInstance().getTime());
             for (ParrotSampleTemperature parrotSampleTemperature : temperatures) {
                 localSensorProvider.insertSampleTemperature(parrotSampleTemperature);
             }
@@ -84,5 +93,4 @@ public class SensorSyncAdapter extends GotsSyncAdapter {
         getContext().sendBroadcast(intent);
 
     }
-
 }

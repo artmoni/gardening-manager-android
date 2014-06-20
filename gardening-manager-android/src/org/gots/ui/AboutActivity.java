@@ -291,8 +291,8 @@ public class AboutActivity extends AbstractActivity {
         ContentResolver.requestSync(newAccount, ActionsContentProvider.AUTHORITY, bundle);
 //        ContentResolver.setSyncAutomatically(newAccount, SensorContentProvider.AUTHORITY, true);
 //        ContentResolver.requestSync(newAccount, SensorContentProvider.AUTHORITY, bundle);
-        ContentResolver.setSyncAutomatically(newAccount, WeatherContentProvider.AUTHORITY, true);
-        ContentResolver.requestSync(newAccount, WeatherContentProvider.AUTHORITY, bundle);
+//        ContentResolver.setSyncAutomatically(newAccount, WeatherContentProvider.AUTHORITY, true);
+//        ContentResolver.requestSync(newAccount, WeatherContentProvider.AUTHORITY, bundle);
 
         /*
          * Synchronize Purchase feature

@@ -191,4 +191,19 @@ public class LocalSensorSamplesProvider implements GotsSensorSamplesProvider {
         temperature.setVwc_percent(cursor.getDouble(cursor.getColumnIndex(SensorSQLiteHelper.TEMPERATURE_vwc_percent)));
         return temperature;
     }
+
+    public ParrotSampleTemperature getLastSampleTemperature() {
+        open();
+        ParrotSampleTemperature temperature = null;
+        String query = "SELECT * from " + SensorSQLiteHelper.TABLE_TEMPERATURE + " order by "
+                + SensorSQLiteHelper.TEMPERATURE_ID + " DESC limit 1";
+        Cursor cursor = database.rawQuery(query, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            temperature = cursorToTemperature(cursor);
+        }
+
+        cursor.close();
+        close();
+        return temperature;
+    }
 }

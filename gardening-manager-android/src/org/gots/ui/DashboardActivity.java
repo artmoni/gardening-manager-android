@@ -112,6 +112,12 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
             startActivity(new Intent(this, ActionActivity.class));
         } else if (LAUNCHER_CATALOGUE.equals(getIntent().getAction()))
             startActivity(new Intent(this, HutActivity.class));
+
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        ContentResolver.setSyncAutomatically(gotsPrefs.getUserAccount(), WeatherContentProvider.AUTHORITY, true);
+        ContentResolver.requestSync(gotsPrefs.getUserAccount(), WeatherContentProvider.AUTHORITY, bundle);
     }
 
     protected void refreshGardenMenu(final ActionBar actionBar) {
