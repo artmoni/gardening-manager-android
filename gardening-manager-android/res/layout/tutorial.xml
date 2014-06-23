@@ -23,9 +23,10 @@
         android:id="@+id/fragmentPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/idButtonParrotBuy"
+        android:layout_above="@+id/idButtonCreateGarden"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" >
+        android:layout_alignParentTop="true"
+        android:paddingBottom="10dp" >
 
         <android.support.v4.view.PagerTitleStrip
             android:layout_width="wrap_content"
@@ -34,21 +35,22 @@
     </android.support.v4.view.ViewPager>
 
     <Button
-        android:id="@+id/idButtonParrotBuy"
+        android:id="@+id/idButtonCreateGarden"
         style="@style/buttonGreen"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
-        android:text="@string/garden.create" />
+        android:text="@string/skip" 
+        />
 
     <Button
         android:id="@+id/buttonConnect"
         style="@style/buttonRed"
-        android:layout_alignBaseline="@+id/idButtonParrotBuy"
-        android:layout_alignBottom="@+id/idButtonParrotBuy"
+        android:layout_alignBaseline="@+id/idButtonCreateGarden"
+        android:layout_alignBottom="@+id/idButtonCreateGarden"
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
-        android:text="@string/login.connect" />
+        android:text="@string/garden.create" />
 
 </RelativeLayout>

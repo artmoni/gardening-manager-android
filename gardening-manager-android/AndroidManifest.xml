@@ -53,7 +53,6 @@
         <activity android:name=".ui.ActionActivity" android:theme="@style/Theme.Styled"/>
         <activity android:name=".ui.AboutActivity" android:theme="@style/Theme.Styled"/>
         <activity android:name=".ui.WebHelpActivity" android:theme="@style/Theme.Styled"/>
-        <activity android:name=".ui.TutorialActivity" android:theme="@style/Theme.Styled"/>
         <activity android:name=".ui.TabSeedActivity" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow"/>
         <activity android:name=".ui.WebViewActivity"/>
         <activity android:name=".ui.HutActivity" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow" android:windowSoftInputMode="stateHidden|adjustResize"/>

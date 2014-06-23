@@ -113,7 +113,7 @@
 
                 <Button
                     android:id="@+id/buttonValidatePosition"
-                    style="@style/buttonGreen"
+                    style="@style/buttonRed"
                     android:text="@string/profile.location.validate" />
             </LinearLayout>
         </ScrollView>

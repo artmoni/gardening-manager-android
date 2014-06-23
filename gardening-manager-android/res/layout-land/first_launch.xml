@@ -43,7 +43,7 @@
             android:visibility="visible" >
 
             <Button
-                android:id="@+id/idButtonParrotBuy"
+                android:id="@+id/idButtonCreateGarden"
                 style="@style/buttonRed"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"

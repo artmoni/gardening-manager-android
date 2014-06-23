@@ -141,6 +141,7 @@
 
     <style name="buttonGreen" parent="button">
         <item name="android:background">@drawable/button_green_selector</item>
+        <item name="android:textColor">@color/text_color_dark</item>
     </style>
 
     <style name="description_increment">

@@ -156,6 +156,7 @@ public abstract class AbstractActivity extends ActionBarActivity {
     protected void onDestroy() {
         super.onDestroy();
         activities.remove(this);
+        GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
 
         unregisterReceiver(nuxeoManager);
         unregisterReceiver(gardenManager);

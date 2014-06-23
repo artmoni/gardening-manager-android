@@ -53,7 +53,7 @@ public class SensorLoginDialogFragment extends AbstractDialogFragment {
             }
         });
 
-        buttonBuy = (Button) view.findViewById(R.id.idButtonParrotBuy);
+        buttonBuy = (Button) view.findViewById(R.id.idButtonCreateGarden);
 
         buttonBuy.setOnClickListener(new View.OnClickListener() {
 

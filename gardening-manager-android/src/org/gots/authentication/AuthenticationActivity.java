@@ -68,10 +68,10 @@ public class AuthenticationActivity extends AbstractActivity {
     private GotsPreferences gotsPreferences;
 
     int[] tutorialList = { R.layout.tutorial_a, R.layout.tutorial_b, R.layout.tutorial_c, R.layout.tutorial_d,
-            R.layout.tutorial_e };
+            R.layout.tutorial_f ,R.layout.tutorial_e };
 
     int[] tutorialTitle = { R.string.garden_create, R.string.dashboard_hut_name, R.string.dashboard_allotments_name,
-            R.string.dashboard_actions_name, R.string.profile_share_data };
+            R.string.dashboard_actions_name,R.string.dashboard_sensor_name,  R.string.profile_share_data };
 
     private ViewPager mPager;
 
@@ -96,7 +96,7 @@ public class AuthenticationActivity extends AbstractActivity {
             mAccountType = extras.getString(ARG_ACCOUNT_TYPE);
         }
 
-        Button buttonCreateProfile = (Button) findViewById(R.id.idButtonParrotBuy);
+        Button buttonCreateProfile = (Button) findViewById(R.id.idButtonCreateGarden);
         buttonCreateProfile.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -109,23 +109,6 @@ public class AuthenticationActivity extends AbstractActivity {
                 res.putExtra(AccountManager.KEY_ACCOUNT_TYPE, mAccountType);
                 res.putExtra(PARAM_USER_PASS, "");
                 finishLogin(res);
-
-                AccountManager accountManager = AccountManager.get(getApplicationContext());
-
-                Account[] accounts = accountManager.getAccountsByType("com.facebook.auth.login");
-                if (accounts.length > 0)
-                    GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Type", "Facebook",
-                            accounts.length);
-
-                accounts = accountManager.getAccountsByType("com.twitter.android.auth.login");
-                if (accounts.length > 0)
-                    GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Type", "Twitter",
-                            accounts.length);
-
-                accounts = accountManager.getAccountsByType("com.google");
-                if (accounts.length > 0)
-                    GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Type", "Google", accounts.length);
-                finish();
             }
 
         });
@@ -142,20 +125,12 @@ public class AuthenticationActivity extends AbstractActivity {
 
         });
 
-        GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
-        GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
     }
 
     public void onCancelClick(View v) {
         this.finish();
 
-    }
-
-    @Override
-    protected void onDestroy() {
-        GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
-        super.onDestroy();
     }
 
     void launchGoogle() {

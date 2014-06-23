@@ -1,5 +1,5 @@
-/*******************************************************************************
- * Copyright (c) 2012 sfleury.
+/*******************************ù**************************************************
+ * Copyright (c) 2012 sfleury.ù
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
@@ -25,27 +25,13 @@ public class SplashScreenActivity extends AboutActivity {
 
     }
 
-    // private Handler getSplashHandler() {
-    // if (splashHandler == null) {
-    // WeakReference<Activity> that = new WeakReference<Activity>(this);
-    // splashHandler = new SplashHandler(that);
-    // }
-    // return splashHandler;
-    // }
-
     @Override
-
     protected void removeProgress() {
         super.removeProgress();
         if (refreshCounter == 0) {
-            // Message msg = new Message();
-            // msg.what = STOPSPLASH;
-            // getSplashHandler().sendMessageDelayed(msg, SPLASHTIME);
-            // Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
-//            gotsPrefs.setParrotToken(null);
+            // gotsPrefs.setParrotToken(null);
             Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            startActivityForResult(intent, 2);
             startActivity(intent);
             finish();
         }
@@ -69,6 +55,7 @@ public class SplashScreenActivity extends AboutActivity {
             intent.putExtra(AuthenticationActivity.ARG_ACCOUNT_TYPE, "gardening-manager");
             intent.putExtra(AuthenticationActivity.ARG_IS_ADDING_NEW_ACCOUNT, true);
             startActivityForResult(intent, 1);
+            // finish();
         } else
             onRefresh(null);
 

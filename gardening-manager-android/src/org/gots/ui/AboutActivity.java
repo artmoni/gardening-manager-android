@@ -52,7 +52,7 @@ public class AboutActivity extends AbstractActivity {
 
     private View progressSeed;
 
-    private View progressWeather;
+    // private View progressWeather;
 
     private View progressAction;
 
@@ -62,7 +62,7 @@ public class AboutActivity extends AbstractActivity {
 
     protected int refreshCounter;
 
-    private TextView textprogressWeather;
+    // private TextView textprogressWeather;
 
     private TextView textprogressAction;
 
@@ -116,13 +116,13 @@ public class AboutActivity extends AbstractActivity {
         setButtonClickable(R.id.idSocialTwitter, GotsPreferences.URL_TWITTER_GARDENING_MANAGER);
         setButtonClickable(R.id.idTranslateButton, GotsPreferences.URL_TRANSLATE_GARDENING_MANAGER);
 
-        progressWeather = findViewById(R.id.imageProgressWeather);
+        // progressWeather = findViewById(R.id.imageProgressWeather);
         progressSeed = findViewById(R.id.imageProgressSeed);
         progressAction = findViewById(R.id.imageProgressAction);
         progressGarden = findViewById(R.id.imageProgressGarden);
         progressPurchase = findViewById(R.id.imageProgressPurchase);
 
-        textprogressWeather = (TextView) findViewById(R.id.textProgressWeather);
+        // textprogressWeather = (TextView) findViewById(R.id.textProgressWeather);
         textprogressSeed = (TextView) findViewById(R.id.textProgressSeed);
         textprogressAction = (TextView) findViewById(R.id.textProgressAction);
         textprogressGarden = (TextView) findViewById(R.id.textProgressGarden);
@@ -144,6 +144,8 @@ public class AboutActivity extends AbstractActivity {
             String authority = "";
             if (intent.getExtras() != null)
                 authority = intent.getExtras().getString("AUTHORITY");
+            else
+                return;
 
             if (BroadCastMessages.PROGRESS_UPDATE.equals(intent.getAction())) {
                 addProgress();
@@ -153,13 +155,15 @@ public class AboutActivity extends AbstractActivity {
                     textprogressSeed.setText(getResources().getString(R.string.synchro_seeds_checking));
                     textprogressSeed.setTextColor(getResources().getColor(R.color.action_warning_color));
 
-                } else if (WeatherContentProvider.AUTHORITY.equals(authority)) {
-                    Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
-                    progressWeather.startAnimation(myFadeInAnimation);
-                    textprogressWeather.setText(getResources().getString(R.string.synchro_weather_checking));
-                    textprogressWeather.setTextColor(getResources().getColor(R.color.action_warning_color));
-
-                } else if (GardenContentProvider.AUTHORITY.equals(authority)) {
+                }
+                // else if (WeatherContentProvider.AUTHORITY.equals(authority)) {
+                // Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
+                // progressWeather.startAnimation(myFadeInAnimation);
+                // textprogressWeather.setText(getResources().getString(R.string.synchro_weather_checking));
+                // textprogressWeather.setTextColor(getResources().getColor(R.color.action_warning_color));
+                //
+                // }
+                else if (GardenContentProvider.AUTHORITY.equals(authority)) {
                     Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
                     progressGarden.startAnimation(myFadeInAnimation);
                     textprogressGarden.setText(getResources().getString(R.string.synchro_garden_checking));
@@ -185,12 +189,14 @@ public class AboutActivity extends AbstractActivity {
                     textprogressSeed.setText(getResources().getString(R.string.synchro_seeds_ok));
                     textprogressSeed.setTextColor(getResources().getColor(R.color.text_color_dark));
 
-                } else if (AllotmentContentProvider.AUTHORITY.equals(authority)) {
-                    progressWeather.clearAnimation();
-                    progressWeather.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
-                    textprogressWeather.setText(getResources().getString(R.string.synchro_weather_ok));
-                    textprogressWeather.setTextColor(getResources().getColor(R.color.text_color_dark));
-                } else if (GardenContentProvider.AUTHORITY.equals(authority)) {
+                }
+                // else if (AllotmentContentProvider.AUTHORITY.equals(authority)) {
+                // progressWeather.clearAnimation();
+                // progressWeather.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
+                // textprogressWeather.setText(getResources().getString(R.string.synchro_weather_ok));
+                // textprogressWeather.setTextColor(getResources().getColor(R.color.text_color_dark));
+                // }
+                else if (GardenContentProvider.AUTHORITY.equals(authority)) {
                     progressGarden.clearAnimation();
                     progressGarden.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
                     textprogressGarden.setText(getResources().getString(R.string.synchro_garden_ok));
@@ -289,10 +295,10 @@ public class AboutActivity extends AbstractActivity {
         ContentResolver.requestSync(newAccount, GardenContentProvider.AUTHORITY, bundle);
         ContentResolver.setSyncAutomatically(newAccount, ActionsContentProvider.AUTHORITY, true);
         ContentResolver.requestSync(newAccount, ActionsContentProvider.AUTHORITY, bundle);
-//        ContentResolver.setSyncAutomatically(newAccount, SensorContentProvider.AUTHORITY, true);
-//        ContentResolver.requestSync(newAccount, SensorContentProvider.AUTHORITY, bundle);
-//        ContentResolver.setSyncAutomatically(newAccount, WeatherContentProvider.AUTHORITY, true);
-//        ContentResolver.requestSync(newAccount, WeatherContentProvider.AUTHORITY, bundle);
+        // ContentResolver.setSyncAutomatically(newAccount, SensorContentProvider.AUTHORITY, true);
+        // ContentResolver.requestSync(newAccount, SensorContentProvider.AUTHORITY, bundle);
+        // ContentResolver.setSyncAutomatically(newAccount, WeatherContentProvider.AUTHORITY, true);
+        // ContentResolver.requestSync(newAccount, WeatherContentProvider.AUTHORITY, bundle);
 
         /*
          * Synchronize Purchase feature

@@ -51,7 +51,7 @@
             android:text="@string/login.connect" />
 
         <Button
-            android:id="@+id/idButtonParrotBuy"
+            android:id="@+id/idButtonCreateGarden"
             style="@style/buttonGreen"
             android:layout_below="@+id/idButtonParrotLogin"
             android:layout_centerHorizontal="true"
