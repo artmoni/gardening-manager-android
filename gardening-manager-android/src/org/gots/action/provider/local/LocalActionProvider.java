@@ -71,7 +71,7 @@ public class LocalActionProvider extends GotsDBHelper implements GotsActionProvi
     }
 
     @Override
-    public ArrayList<BaseActionInterface> getActions() {
+    public ArrayList<BaseActionInterface> getActions(boolean force) {
         ArrayList<BaseActionInterface> allActions = new ArrayList<BaseActionInterface>();
         Cursor cursor = null;
         try {

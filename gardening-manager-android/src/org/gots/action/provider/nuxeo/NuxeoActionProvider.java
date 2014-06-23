@@ -65,15 +65,14 @@ public class NuxeoActionProvider extends LocalActionProvider {
     }
 
     @Override
-    public ArrayList<BaseActionInterface> getActions() {
+    public ArrayList<BaseActionInterface> getActions(boolean force) {
         remoteActions = new ArrayList<BaseActionInterface>();
-        List<BaseActionInterface> localActions = super.getActions();
+        List<BaseActionInterface> localActions = super.getActions(force);
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager service = session.getAdapter(DocumentManager.class);
 
             byte cacheParam = CacheBehavior.STORE;
-            boolean force = true;
             boolean refresh = force;
             if (refresh) {
                 cacheParam = (byte) (cacheParam | CacheBehavior.FORCE_REFRESH);
@@ -99,7 +98,7 @@ public class NuxeoActionProvider extends LocalActionProvider {
 
         } catch (Exception e) {
             Log.e(TAG, "getAllSeeds " + e.getMessage(), e);
-            remoteActions = super.getActions();
+            remoteActions = super.getActions(force);
         }
         return synchronize(localActions, remoteActions);
     }

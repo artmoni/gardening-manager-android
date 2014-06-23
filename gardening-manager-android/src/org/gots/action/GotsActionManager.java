@@ -26,6 +26,8 @@ public class GotsActionManager implements GotsActionProvider {
 
     private GotsPreferences gotsPrefs;
 
+    private ArrayList<BaseActionInterface> cacheActions;
+
     public static synchronized GotsActionManager getInstance() {
         if (instance == null) {
             instance = new GotsActionManager();
@@ -43,7 +45,7 @@ public class GotsActionManager implements GotsActionProvider {
         }
         this.mContext = context;
         gotsPrefs = GotsPreferences.getInstance().initIfNew(context);
-
+        cacheActions = new ArrayList<BaseActionInterface>();
         setProvider();
         initDone = true;
         return this;
@@ -69,8 +71,10 @@ public class GotsActionManager implements GotsActionProvider {
     }
 
     @Override
-    public ArrayList<BaseActionInterface> getActions() {
-        return provider.getActions();
+    public ArrayList<BaseActionInterface> getActions(boolean force) {
+        if (force)
+            cacheActions = provider.getActions(force);
+        return cacheActions;
     }
 
     @Override

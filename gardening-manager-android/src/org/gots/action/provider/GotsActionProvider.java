@@ -10,7 +10,7 @@ public interface GotsActionProvider {
 
     public abstract BaseActionInterface getActionByName(String name);
 
-    public abstract ArrayList<BaseActionInterface> getActions();
+    public abstract ArrayList<BaseActionInterface> getActions(boolean force);
 
     public abstract BaseActionInterface createAction(BaseActionInterface action);
 

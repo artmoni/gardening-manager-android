@@ -71,7 +71,7 @@ public class NewActionActivity extends DialogFragment implements OnItemClickList
 
             @Override
             protected List<BaseActionInterface> doInBackground(String... params) {
-                List<BaseActionInterface> actions = helper.getActions();
+                List<BaseActionInterface> actions = helper.getActions(false);
 
                 return actions;
             }
