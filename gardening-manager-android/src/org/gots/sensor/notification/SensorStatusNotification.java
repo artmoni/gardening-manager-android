@@ -50,6 +50,7 @@ public class SensorStatusNotification {
         mBuilder.setNumber(++numMessages);
         inboxStyle.addLine(notificationDescription);
         inboxStyle.setBigContentTitle(numMessages + " new alert");
+        mBuilder.setContentText(numMessages + " new alert");
         // .setSummaryText("johndoe@gmail.com")
 
     }

@@ -49,18 +49,28 @@ public class SensorSyncAdapter extends GotsSyncAdapter {
         List<ParrotLocationsStatus> status = parrotSensorProvider.getStatus();
 
         SensorStatusNotification notification = new SensorStatusNotification(getContext());
+        String soilMoistureInstruction;
+        String lightInstruction;
+        String fertilizerInstruction;
+        String airTemperatureInstruction;
         for (ParrotLocationsStatus parrotLocationsStatus : status) {
-            if (parrotLocationsStatus.getSoil_moisture().getInstruction_key() != null) {
-                notification.createNotification(parrotLocationsStatus.getSoil_moisture().getInstruction_key());
+
+            soilMoistureInstruction = parrotLocationsStatus.getSoil_moisture().getInstruction_key();
+            lightInstruction = parrotLocationsStatus.getLight().getInstruction_key();
+            fertilizerInstruction = parrotLocationsStatus.getFertilizer().getInstruction_key();
+            airTemperatureInstruction = parrotLocationsStatus.getAir_temperature().getInstruction_key();
+
+            if (soilMoistureInstruction != null && soilMoistureInstruction.contains("low")) {
+                notification.createNotification(soilMoistureInstruction);
             }
-            if (parrotLocationsStatus.getLight().getInstruction_key() != null) {
-                notification.createNotification(parrotLocationsStatus.getLight().getInstruction_key());
+            if (lightInstruction != null && lightInstruction.contains("low")) {
+                notification.createNotification(lightInstruction);
             }
-            if (parrotLocationsStatus.getFertilizer().getInstruction_key() != null) {
-                notification.createNotification(parrotLocationsStatus.getFertilizer().getInstruction_key());
+            if (fertilizerInstruction != null && fertilizerInstruction.contains("low")) {
+                notification.createNotification(fertilizerInstruction);
             }
-            if (parrotLocationsStatus.getAir_temperature().getInstruction_key() != null) {
-                notification.createNotification(parrotLocationsStatus.getAir_temperature().getInstruction_key());
+            if (airTemperatureInstruction != null && airTemperatureInstruction.contains("low")) {
+                notification.createNotification(airTemperatureInstruction);
             }
             notification.show();
         }
