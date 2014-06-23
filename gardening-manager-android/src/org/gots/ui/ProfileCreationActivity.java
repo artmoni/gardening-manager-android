@@ -178,7 +178,7 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
                 // if ("".equals(editTextLocality.getText().toString()))
                 // editTextLocality.setHint(String.format("%s", address.getLocality()));
                 // else
-                    editTextLocality.setText(String.format("%s", address.getLocality()));
+                editTextLocality.setText(String.format("%s", address.getLocality()));
             } else {
                 // sinon on affiche un message d'erreur
                 ((TextView) findViewById(R.id.editTextLocality)).setHint(getResources().getString(
@@ -259,7 +259,6 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
                 updateProfile();
             else
                 createNewProfile();
-            this.finish();
             break;
 
         default:
@@ -337,9 +336,13 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
 
         String locality = ((TextView) (findViewById(R.id.editTextLocality))).getText().toString();
 
-        if ("".equals(locality))
+        if ("".equals(locality)) {
             locality = ((TextView) (findViewById(R.id.editTextLocality))).getHint().toString();
-
+            Toast.makeText(getApplicationContext(), "Please enter your locality", Toast.LENGTH_LONG).show();
+            findViewById(R.id.editTextLocality).setBackgroundDrawable(
+                    getResources().getDrawable(R.drawable.border_red));
+            return;
+        }
         garden.setLocality(locality);
         if (editTextName.getText() == null || "".equals(editTextName.getText().toString()))
             garden.setName(locality.replace("\'", " "));
@@ -390,6 +393,7 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
                 }
             }
         }
+        finish();
 
     }
 
