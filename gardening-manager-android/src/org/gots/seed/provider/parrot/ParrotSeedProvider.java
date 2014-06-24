@@ -44,7 +44,7 @@ public class ParrotSeedProvider extends LocalSeedProvider {
         String api_4_02_search = "/search/v5/plants/" + searchCriteria + "?generate_index=ASC";
         List<String> listId = new ArrayList<String>();
         try {
-            JSONObject json = (JSONObject) authentication.getJSON(api_4_02_search);
+            JSONObject json = (JSONObject) authentication.getJSON(api_4_02_search, null);
             JSONArray found = json.getJSONArray("found");
             for (int i = 0; i < found.length() && i <= 9; i++) {
                 String plantId = found.getString(i);
@@ -71,7 +71,7 @@ public class ParrotSeedProvider extends LocalSeedProvider {
                 builder.append(",");
             }
             String api_5_06_plants = "/plant_library/v1/plants/" + builder.toString();
-            JSONObject json_plants = (JSONObject) authentication.getJSON(api_5_06_plants);
+            JSONObject json_plants = (JSONObject) authentication.getJSON(api_5_06_plants, null);
             JSONArray plants = json_plants.getJSONArray("plants");
             for (int i = 0; i < plants.length(); i++) {
                 JSONObject plant = plants.getJSONObject(i);
@@ -110,7 +110,7 @@ public class ParrotSeedProvider extends LocalSeedProvider {
             String api_5_06_plants = "/plant_library/v1/plants/" + builder.toString();
             for (String string : plantsId) {
                 String api_5_01_plants = "/plant_library/v1/plant/" + string;
-                JSONObject json_plant = (JSONObject) authentication.getJSON(api_5_01_plants);
+                JSONObject json_plant = (JSONObject) authentication.getJSON(api_5_01_plants, null);
                 JSONObject plant = json_plant.getJSONObject("response");
                 ParrotSeedConverter converter = new ParrotSeedConverter(mContext);
                 BaseSeedInterface seed = converter.convert(plant);

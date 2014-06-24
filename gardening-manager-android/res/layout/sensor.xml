@@ -5,10 +5,25 @@
     android:orientation="vertical"
     android:padding="5dp" >
 
-    <fragment
-        android:id="@+id/idFragmentSensor"
-        android:name="org.gots.sensor.SensorListFragment"
+    <!--
+         <fragment
+        android:id="@+id/idListFragment"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="wrap_content"
+        class="org.gots.sensor.SensorListFragment" />
+    -->
+
+    <Gallery
+        android:id="@+id/idGallerySensor"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/idFragmentSensor"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignLeft="@+id/idListFragment"
+        android:layout_below="@+id/idGallerySensor"
+        android:layout_marginTop="5dp" />
 
 </RelativeLayout>

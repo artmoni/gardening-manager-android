@@ -33,6 +33,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Gallery;
 
 public class SensorActivity extends AbstractActivity {
     @Override
@@ -44,6 +45,11 @@ public class SensorActivity extends AbstractActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         registerReceiver(sensorBroadcast, new IntentFilter(SensorLoginDialogFragment.EVENT_AUTHENTICATE));
+       
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(R.id.idFragmentSensor, new TutorialFragment(R.layout.tutorial_f));
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     BroadcastReceiver sensorBroadcast = new BroadcastReceiver() {
@@ -69,8 +75,21 @@ public class SensorActivity extends AbstractActivity {
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
                 if (result.size() > 0) {
-                    SensorListFragment sensors = new SensorListFragment(result);
-                    ft.replace(R.id.idFragmentSensor, sensors);
+                    // SensorListFragment sensors = new SensorListFragment(result);
+                    // ft.replace(R.id.idListFragment, sensors);
+                    Gallery gallery = (Gallery) findViewById(R.id.idGallerySensor);
+                    final LocationListAdapter locationAdapter = new LocationListAdapter(getApplicationContext(), result);
+                    gallery.setAdapter(locationAdapter);
+                    gallery.setOnItemClickListener(new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                            ft.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
+                            ft.replace(R.id.idFragmentSensor, new SensorChartFragment(
+                                    locationAdapter.getItem(position).getLocation_identifier()));
+                            ft.commit();
+                        }
+                    });
                 } else
                     ft.replace(R.id.idFragmentSensor, new TutorialFragment(R.layout.tutorial_f));
                 ft.commit();

@@ -50,7 +50,7 @@ public class ParrotSensorProvider implements GotsSensorProvider {
         String api_1_25_sync = "/sensor_data/v2/sync?include_s3_urls=1";
         List<ParrotSensor> sensors = new ArrayList<ParrotSensor>();
         try {
-            JSONObject json = (JSONObject) authentication.getJSON(api_1_25_sync);
+            JSONObject json = (JSONObject) authentication.getJSON(api_1_25_sync, null);
             JSONArray jsonSensors = json.getJSONArray("sensors");
             Gson gson = new Gson();
             for (int i = 0; i < jsonSensors.length(); i++) {
@@ -71,7 +71,7 @@ public class ParrotSensorProvider implements GotsSensorProvider {
         String api_1_28_status = "/sensor_data/v1/garden_locations_status";
         List<ParrotLocationsStatus> locationsStatuses = new ArrayList<ParrotLocationsStatus>();
         try {
-            JSONObject json = (JSONObject) authentication.getJSON(api_1_28_status);
+            JSONObject json = (JSONObject) authentication.getJSON(api_1_28_status, null);
             JSONArray jsonlocations = json.getJSONArray("locations");
             Gson gson = new Gson();
             for (int i = 0; i < jsonlocations.length(); i++) {
@@ -93,7 +93,7 @@ public class ParrotSensorProvider implements GotsSensorProvider {
         String api_1_25_status = "/sensor_data/v2/sync?include_s3_urls=1";
         List<ParrotLocation> sensorLocations = new ArrayList<ParrotLocation>();
         try {
-            JSONObject json = (JSONObject) authentication.getJSON(api_1_25_status);
+            JSONObject json = (JSONObject) authentication.getJSON(api_1_25_status, null);
             JSONArray jsonlocations = json.getJSONArray("locations");
             Gson gson = new Gson();
             for (int i = 0; i < jsonlocations.length(); i++) {

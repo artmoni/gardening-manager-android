@@ -7,6 +7,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.gots.R.string;
 import org.gots.authentication.ParrotAuthentication;
 import org.gots.garden.GardenManager;
@@ -45,7 +47,7 @@ public class ParrotSamplesProvider implements GotsSensorSamplesProvider {
         String api_1_03_sample = "/sensor_data/v2/sample/location/" + locationId;
         List<ParrotSampleFertilizer> sensorSampleFertilizers = new ArrayList<ParrotSampleFertilizer>();
         try {
-            JSONObject json = (JSONObject) authentication.getJSON(api_1_03_sample);
+            JSONObject json = (JSONObject) authentication.getJSON(api_1_03_sample, null);
             JSONArray jsonFertilizer = json.getJSONArray("fertilizer");
             Gson gson = new Gson();
             for (int i = 0; i < jsonFertilizer.length(); i++) {
@@ -69,20 +71,20 @@ public class ParrotSamplesProvider implements GotsSensorSamplesProvider {
         // url = '/sensor_data/v2/sample/location/' + location_identifier + '?from_datetime_utc=' + from_datetime_utc +
         // '&to_datetime_utc=' + to_datetime_utc
         String api_1_03_sample = "/sensor_data/v2/sample/location/" + locationId;
-        if (from != null || to != null)
-            api_1_03_sample = api_1_03_sample.concat("?");
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
 
         if (from != null) {
             String fromUTC = new SimpleDateFormat().format(from);
-            api_1_03_sample = api_1_03_sample.concat("from_datetime_utc=" + fromUTC + "+");
+            params.add(new BasicNameValuePair("from_datetime_utc", fromUTC));
         }
         if (to != null) {
             String toUTC = new SimpleDateFormat().format(to);
-            api_1_03_sample = api_1_03_sample.concat("to_datetime_utc=" + toUTC + "+");
+            params.add(new BasicNameValuePair("to_datetime_utc", toUTC));
         }
+        
         List<ParrotSampleTemperature> sensorSampleTemperature = new ArrayList<ParrotSampleTemperature>();
         try {
-            JSONObject json = (JSONObject) authentication.getJSON(api_1_03_sample);
+            JSONObject json = (JSONObject) authentication.getJSON(api_1_03_sample, params);
             JSONArray jsonFertilizer = json.getJSONArray("samples");
             Gson gson = new Gson();
             for (int i = 0; i < jsonFertilizer.length(); i++) {

@@ -43,7 +43,7 @@ public class LocationListAdapter extends BaseAdapter {
 
         TextView sensorPlantAssignedDate;
 
-        TextView sensorDescription;
+//        TextView sensorDescription;
 
     }
 
@@ -59,7 +59,7 @@ public class LocationListAdapter extends BaseAdapter {
             h.sensorImg = (ImageView) v.findViewById(R.id.sensorImage);
             h.sensorName = (TextView) v.findViewById(R.id.sensorLocationName);
             h.sensorPlantAssignedDate = (TextView) v.findViewById(R.id.sensorLocationPlantAssignedDate);
-            h.sensorDescription = (TextView) v.findViewById(R.id.sensorLocationDescription);
+//            h.sensorDescription = (TextView) v.findViewById(R.id.sensorLocationDescription);
 
             v.setTag(h);
         } else {
@@ -98,7 +98,7 @@ public class LocationListAdapter extends BaseAdapter {
                     getItem(position).getPlant_assigned_date()));
         else
             h.sensorPlantAssignedDate.setText("");
-        h.sensorDescription.setText("" + getItem(position).getDescription());
+//        h.sensorDescription.setText("" + getItem(position).getDescription());
         return v;
     }
 

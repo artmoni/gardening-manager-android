@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_line_selector"
     android:orientation="vertical"
@@ -8,38 +8,35 @@
 
     <ImageView
         android:id="@+id/sensorImage"
-        android:layout_width="40dp"
-        android:layout_height="60dp"
-        android:layout_alignParentLeft="true"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
         android:src="@drawable/flowerpower_brown" />
 
-    <TextView
-        android:id="@+id/sensorLocationPlantAssignedDate"
-        style="@style/seed_description_content"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:text="PlantAssignedDate" />
-
-    <TextView
-        android:id="@+id/sensorLocationName"
-        style="@style/seed_description_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_alignBottom="@+id/sensorImage"
         android:layout_centerHorizontal="true"
-        android:text="NickName"
-        android:textColor="@color/green_light" />
+        android:background="#80444444"
+        android:gravity="center"
+        android:orientation="vertical" android:padding="5dp">
 
-    <TextView
-        android:id="@+id/sensorLocationDescription"
-        style="@style/seed_description_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/sensorLocationName"
-        android:layout_centerHorizontal="true"
-        android:text="Description" />
+        <TextView
+            android:id="@+id/sensorLocationName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NickName"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/sensorLocationPlantAssignedDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PlantAssignedDate"
+            android:textSize="8dp" android:textColor="@color/white"/>
+    </LinearLayout>
 
 </RelativeLayout>
