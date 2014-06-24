@@ -26,7 +26,6 @@ import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.WeatherSet;
 import org.gots.weather.provider.WeatherCache;
 import org.gots.weather.provider.local.LocalWeatherProvider;
-import org.gots.weather.provider.nuxeo.NuxeoWeatherProvider;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 

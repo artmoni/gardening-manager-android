@@ -11,11 +11,8 @@ import org.gots.broadcast.BroadCastMessages;
 import org.gots.inapp.GotsPurchaseItem;
 import org.gots.preferences.GotsPreferences;
 import org.gots.provider.ActionsContentProvider;
-import org.gots.provider.AllotmentContentProvider;
 import org.gots.provider.GardenContentProvider;
 import org.gots.provider.SeedsContentProvider;
-import org.gots.provider.SensorContentProvider;
-import org.gots.provider.WeatherContentProvider;
 import org.gots.seed.service.SeedUpdateService;
 
 import android.accounts.Account;

@@ -4,20 +4,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.gots.R.string;
 import org.gots.authentication.ParrotAuthentication;
-import org.gots.garden.GardenManager;
-import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.sensor.GotsSensorProvider;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.gson.Gson;
-
 import android.content.Context;
 import android.util.Log;
+
+import com.google.gson.Gson;
 
 public class ParrotSensorProvider implements GotsSensorProvider {
 

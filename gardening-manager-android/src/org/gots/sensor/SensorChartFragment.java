@@ -6,11 +6,8 @@ import java.util.List;
 import org.gots.R;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.sensor.local.LocalSensorSamplesProvider;
-import org.gots.sensor.parrot.ParrotLocation;
 import org.gots.sensor.parrot.ParrotSampleFertilizer;
 import org.gots.sensor.parrot.ParrotSampleTemperature;
-import org.gots.sensor.parrot.ParrotSamplesProvider;
-import org.gots.sensor.parrot.ParrotSensorProvider;
 
 import android.content.Intent;
 import android.os.AsyncTask;

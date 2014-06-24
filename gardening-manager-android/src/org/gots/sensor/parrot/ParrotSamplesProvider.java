@@ -3,28 +3,21 @@ package org.gots.sensor.parrot;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-import org.gots.R.string;
 import org.gots.authentication.ParrotAuthentication;
-import org.gots.garden.GardenManager;
-import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.provider.local.LocalSeedProvider;
-import org.gots.sensor.GotsSensorProvider;
 import org.gots.sensor.GotsSensorSamplesProvider;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.gson.Gson;
-
 import android.content.Context;
-import android.text.format.DateFormat;
 import android.util.Log;
+
+import com.google.gson.Gson;
 
 public class ParrotSamplesProvider implements GotsSensorSamplesProvider {
 

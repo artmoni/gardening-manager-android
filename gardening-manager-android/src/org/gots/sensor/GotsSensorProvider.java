@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.gots.sensor.parrot.ParrotLocation;
 import org.gots.sensor.parrot.ParrotLocationsStatus;
-import org.gots.sensor.parrot.ParrotSampleFertilizer;
-import org.gots.sensor.parrot.ParrotSampleTemperature;
 import org.gots.sensor.parrot.ParrotSensor;
 
 public interface GotsSensorProvider {

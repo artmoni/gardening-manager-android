@@ -3,11 +3,8 @@ package org.gots.seed.provider.parrot;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-import org.gots.R.string;
 import org.gots.authentication.ParrotAuthentication;
-import org.gots.garden.GardenManager;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.json.JSONArray;

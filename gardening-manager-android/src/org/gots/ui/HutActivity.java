@@ -17,7 +17,6 @@ import org.gots.ads.GotsAdvertisement;
 import org.gots.provider.SeedsContentProvider;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.ui.fragment.TutorialFragment;
 
 import android.app.AlertDialog;
 import android.content.Context;
