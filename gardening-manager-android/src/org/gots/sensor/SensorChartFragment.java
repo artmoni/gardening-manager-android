@@ -130,7 +130,6 @@ public class SensorChartFragment extends Fragment {
 
                 if (samplesTemperature != null && samplesTemperature.size() > 0) {
                     String chd = new String();
-                    int i = 0;
                     String chxl = "0:|";
 
                     double sumTemp = 0;
@@ -170,18 +169,18 @@ public class SensorChartFragment extends Fragment {
                         }
 
                     }
-                    chd = chd.substring(0, chd.length() - 1);
-                    chdLightning = chdLightning.substring(0, chd.length() - 1);
-                    chdWater = chdWater.substring(0, chd.length() - 1);
-                    chxl = chxl.substring(0, chxl.length() - 1);
-                    webViewTemperature.loadUrl(chartURL(chd, "", "", webViewTemperature.getWidth(),
-                            webViewTemperature.getHeight())
-                            + "&chxl=" + chxl);
-                    webViewWater.loadUrl(chartURL(chdWater, "", "", webViewTemperature.getWidth(),
-                            webViewTemperature.getHeight())
-                            + "&chxl=" + chxl);
-                    webViewLightning.loadUrl(chartURL(chdLightning, "", "", webViewTemperature.getWidth(),
-                            webViewTemperature.getHeight()) + "&chxl=" + chxl);
+                    if (chd.length() > 1 && chdLightning.length() > 1 && chdWater.length() > 1 && chxl.length() > 1) {
+                        chd = chd.substring(0, chd.length() - 1);
+                        chdLightning = chdLightning.substring(0, chd.length() - 1);
+                        chdWater = chdWater.substring(0, chdWater.length() - 1);
+                        chxl = chxl.substring(0, chxl.length() - 1);
+                        webViewTemperature.loadUrl(chartURL(chd, "", "", webViewTemperature.getWidth(),
+                                webViewTemperature.getHeight()) + "&chxl=" + chxl);
+                        webViewWater.loadUrl(chartURL(chdWater, "", "", webViewTemperature.getWidth(),
+                                webViewTemperature.getHeight()) + "&chxl=" + chxl);
+                        webViewLightning.loadUrl(chartURL(chdLightning, "", "", webViewTemperature.getWidth(),
+                                webViewTemperature.getHeight()) + "&chxl=" + chxl);
+                    }
                 }
                 if (isAdded())
                     getActivity().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));

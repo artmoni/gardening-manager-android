@@ -1,5 +1,7 @@
 package org.gots.sensor;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.List;
 
@@ -10,6 +12,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.gots.R;
 import org.gots.sensor.parrot.ParrotLocation;
+import org.gots.utils.FileUtilities;
 
 import android.app.Activity;
 import android.content.Context;
@@ -43,7 +46,7 @@ public class LocationListAdapter extends BaseAdapter {
 
         TextView sensorPlantAssignedDate;
 
-//        TextView sensorDescription;
+        // TextView sensorDescription;
 
     }
 
@@ -59,7 +62,7 @@ public class LocationListAdapter extends BaseAdapter {
             h.sensorImg = (ImageView) v.findViewById(R.id.sensorImage);
             h.sensorName = (TextView) v.findViewById(R.id.sensorLocationName);
             h.sensorPlantAssignedDate = (TextView) v.findViewById(R.id.sensorLocationPlantAssignedDate);
-//            h.sensorDescription = (TextView) v.findViewById(R.id.sensorLocationDescription);
+            // h.sensorDescription = (TextView) v.findViewById(R.id.sensorLocationDescription);
 
             v.setTag(h);
         } else {
@@ -67,23 +70,25 @@ public class LocationListAdapter extends BaseAdapter {
         }
         // h.sensorImg.setImageDrawable(mContext.getResources().getDrawable(getItem(position).getResourceDrawable()));
 
-        new AsyncTask<Object, Void, Bitmap>() {
+        new AsyncTask<Object, Void, File>() {
             ImageView imageView;
 
             @Override
-            protected Bitmap doInBackground(Object... params) {
+            protected File doInBackground(Object... params) {
                 if (params[0] instanceof ImageView)
                     imageView = (ImageView) params[0];
                 if (getItem(position).getAvatar_url() != null)
-                    return downloadBitmap(getItem(position).getAvatar_url());
+                    return downloadBitmap(getItem(position).getAvatar_url(), getItem(position).getLocation_identifier());
                 else
                     return null;
             }
 
             @Override
-            protected void onPostExecute(Bitmap result) {
-                if (imageView != null && result != null)
-                    imageView.setImageBitmap(result);
+            protected void onPostExecute(File result) {
+                if (imageView != null && result != null){
+                    Bitmap scaleBitmap = FileUtilities.decodeScaledBitmapFromSdCard(result.getAbsolutePath(), imageView.getWidth(), imageView.getHeight());
+                    imageView.setImageBitmap(scaleBitmap);
+                }
                 super.onPostExecute(result);
             }
         }.execute(h.sensorImg);
@@ -98,7 +103,7 @@ public class LocationListAdapter extends BaseAdapter {
                     getItem(position).getPlant_assigned_date()));
         else
             h.sensorPlantAssignedDate.setText("");
-//        h.sensorDescription.setText("" + getItem(position).getDescription());
+        // h.sensorDescription.setText("" + getItem(position).getDescription());
         return v;
     }
 
@@ -117,9 +122,10 @@ public class LocationListAdapter extends BaseAdapter {
         return position;
     }
 
-    private Bitmap downloadBitmap(String url) {
+    private File downloadBitmap(String url, String bitmapFilename) {
         // initilize the default HTTP client object
         final DefaultHttpClient client = new DefaultHttpClient();
+        final File imageFile = new File(mContext.getCacheDir() + "/" + bitmapFilename);
 
         // forming a HttoGet request
         final HttpGet getRequest = new HttpGet(url);
@@ -145,8 +151,10 @@ public class LocationListAdapter extends BaseAdapter {
 
                     // decoding stream data back into image Bitmap that android understands
                     final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-
-                    return bitmap;
+                    FileOutputStream out = new FileOutputStream(imageFile);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                    out.flush();
+                    out.close();
                 } finally {
                     if (inputStream != null) {
                         inputStream.close();
@@ -160,6 +168,6 @@ public class LocationListAdapter extends BaseAdapter {
             Log.e("ImageDownloader", "Something went wrong while" + " retrieving bitmap from " + url + e.toString());
         }
 
-        return null;
+        return imageFile;
     }
 }
