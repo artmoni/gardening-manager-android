@@ -85,14 +85,22 @@ public class LocationListAdapter extends BaseAdapter {
 
             @Override
             protected void onPostExecute(File result) {
-                if (imageView != null && result != null){
-                    Bitmap scaleBitmap = FileUtilities.decodeScaledBitmapFromSdCard(result.getAbsolutePath(), imageView.getWidth(), imageView.getHeight());
+                if (imageView != null && result != null) {
+                    Bitmap scaleBitmap = FileUtilities.decodeScaledBitmapFromSdCard(result.getAbsolutePath(),
+                            imageView.getWidth(), imageView.getHeight());
                     imageView.setImageBitmap(scaleBitmap);
                 }
                 super.onPostExecute(result);
             }
         }.execute(h.sensorImg);
 
+        File locationImageFile = new File(mContext.getCacheDir() + "/" + getItem(position).getLocation_identifier());
+        if (locationImageFile.exists()) {
+            Bitmap scaleBitmap = FileUtilities.decodeScaledBitmapFromSdCard(locationImageFile.getAbsolutePath(),
+                    h.sensorImg.getDrawable().getIntrinsicWidth(), h.sensorImg.getDrawable().getIntrinsicHeight());
+            h.sensorImg.setImageBitmap(scaleBitmap);
+        }
+        
         if (getItem(position).getLocation_name() != null)
             h.sensorName.setText("" + getItem(position).getLocation_name());
         else
