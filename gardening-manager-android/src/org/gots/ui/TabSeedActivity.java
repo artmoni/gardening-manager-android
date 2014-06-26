@@ -279,7 +279,7 @@ public class TabSeedActivity extends ActionBarActivity {
 
         case R.id.planning:
             FragmentManager fm = getSupportFragmentManager();
-            DialogFragment purchaseDialog = new NewActionActivity();
+            DialogFragment purchaseDialog = new ScheduleActionFragment();
             Bundle data = new Bundle();
             data.putInt("org.gots.seed.id", mSeed.getGrowingSeedId());
             purchaseDialog.setArguments(data);

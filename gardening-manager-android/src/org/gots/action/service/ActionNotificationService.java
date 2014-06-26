@@ -90,7 +90,7 @@ public class ActionNotificationService extends GotsService {
                     GrowingSeedInterface seed = iterator.next();
                     List<SeedActionInterface> seedActions;
 
-                    seedActions = actionseedManager.getActionsToDoBySeed(seed);
+                    seedActions = actionseedManager.getActionsToDoBySeed(seed, false);
                     actions.addAll(seedActions);
                 }
                 if (!actions.isEmpty()) {

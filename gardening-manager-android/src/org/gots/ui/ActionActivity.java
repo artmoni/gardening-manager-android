@@ -90,7 +90,7 @@ public class ActionActivity extends AbstractActivity {
 
                 for (GrowingSeedInterface seed : allSeeds) {
 
-                    seedActions.addAll(actionseedProvider.getActionsToDoBySeed(seed));
+                    seedActions.addAll(actionseedProvider.getActionsToDoBySeed(seed, false));
                 }
 
                 listActions = new ListAllActionAdapter(getApplicationContext(), seedActions,

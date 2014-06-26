@@ -36,7 +36,7 @@ import android.widget.Toast;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class NewActionActivity extends DialogFragment implements OnItemClickListener, OnClickListener {
+public class ScheduleActionFragment extends DialogFragment implements OnItemClickListener, OnClickListener {
 
     Integer[] list = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
 
@@ -97,7 +97,7 @@ public class NewActionActivity extends DialogFragment implements OnItemClickList
                 int nbcolumn = (width - 200) / layoutsize;
                 listActions.setNumColumns(nbcolumn);
                 listActions.setAdapter(new SimpleListActionAdapter(actions));
-                listActions.setOnItemClickListener(NewActionActivity.this);
+                listActions.setOnItemClickListener(ScheduleActionFragment.this);
             };
         }.execute();
 

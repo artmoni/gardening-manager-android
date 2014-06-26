@@ -28,7 +28,7 @@ import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.ui.NewActionActivity;
+import org.gots.ui.ScheduleActionFragment;
 import org.gots.ui.TabSeedActivity;
 
 import android.app.AlertDialog;
@@ -88,7 +88,7 @@ public class QuickSeedActionBuilder {
             protected List<SeedActionInterface> doInBackground(Void... params) {
                 GotsActionSeedProvider helperActions = GotsActionSeedManager.getInstance().initIfNew(mContext);
 
-                return helperActions.getActionsToDoBySeed(seed);
+                return helperActions.getActionsToDoBySeed(seed, false);
             }
 
             protected void onPostExecute(List<SeedActionInterface> actions) {
@@ -126,7 +126,7 @@ public class QuickSeedActionBuilder {
                 //
                 // mContext.startActivity(i);
                 FragmentManager fm = ((FragmentActivity) mContext).getSupportFragmentManager();
-                DialogFragment editNameDialog = new NewActionActivity();
+                DialogFragment editNameDialog = new ScheduleActionFragment();
                 Bundle data = new Bundle();
                 data.putInt("org.gots.seed.id", seed.getGrowingSeedId());
                 editNameDialog.setArguments(data);

@@ -113,7 +113,7 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
     }
 
     @Override
-    public List<SeedActionInterface> getActionsDoneBySeed(GrowingSeedInterface seed) {
+    public List<SeedActionInterface> getActionsDoneBySeed(GrowingSeedInterface seed, boolean force) {
         ArrayList<SeedActionInterface> allActions = new ArrayList<SeedActionInterface>();
         if (seed != null) {
             //@formatter:off
@@ -135,7 +135,7 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
     }
 
     @Override
-    public List<SeedActionInterface> getActionsToDoBySeed(GrowingSeedInterface seed) {
+    public List<SeedActionInterface> getActionsToDoBySeed(GrowingSeedInterface seed, boolean force) {
         List<SeedActionInterface> allActions = new ArrayList<SeedActionInterface>();
         Cursor cursor = null;
         try {
