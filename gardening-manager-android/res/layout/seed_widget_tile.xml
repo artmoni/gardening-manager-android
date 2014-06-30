@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_line_selector"
+    android:orientation="horizontal" >
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="5dp" >
+
+        <ImageView
+            android:id="@+id/ImageSeedLike"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_like" />
+
+        <TextView
+            android:id="@+id/textSeedLike"
+            style="@style/seed_variety_description"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:gravity="center_horizontal"
+            android:text=""
+            android:textColor="@color/green_light"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <org.gots.seed.view.SeedWidget
+        android:id="@+id/idSeedWidget2"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
+        android:src="@drawable/vegetdefault" >
+    </org.gots.seed.view.SeedWidget>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="#80444400"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="2dp" >
+
+        <TextView
+            android:id="@+id/IdSeedSpecie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:paddingRight="5dp"
+            android:text="Specie"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/IdSeedVariety"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Variety"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:textStyle="bold|italic" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/IdSeedLanguage"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="5dp"
+        android:src="@drawable/fr" />
+
+    <LinearLayout
+        android:id="@+id/idSeedStock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/IdSeedLanguage"
+        android:layout_below="@+id/IdSeedLanguage"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal" >
+    </LinearLayout>
+
+</RelativeLayout>

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import org.gots.R;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.adapter.SeedListAdapter;
@@ -31,6 +32,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 
 public class VendorListActivity extends AbstractListFragment {
 
@@ -59,15 +61,19 @@ public class VendorListActivity extends AbstractListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // setHasOptionsMenu(true);
+        // super.onCreateView(inflater, container, savedInstanceState);
         mContext = getActivity();
         mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.SEED_DISPLAYLIST));
         mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BROADCAST_FILTER));
         // mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.PROGRESS_FINISHED));
         listVendorSeedAdapter = new VendorSeedListAdapter(mContext, new ArrayList<BaseSeedInterface>());
-        setListAdapter(listVendorSeedAdapter);
+        View view = inflater.inflate(R.layout.list_seed_grid, container, false);
+        GridView gridView = (GridView) view.findViewById(R.id.seedgridview);
+        gridView.setAdapter(listVendorSeedAdapter);
+        // setListAdapter(listVendorSeedAdapter);
         args = getArguments();
 
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return view;
     }
 
     public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
@@ -79,7 +85,6 @@ public class VendorListActivity extends AbstractListFragment {
             updateVendorSeeds();
         }
     };
-
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -136,7 +141,7 @@ public class VendorListActivity extends AbstractListFragment {
             protected void onPostExecute(List<BaseSeedInterface> vendorSeeds) {
 
                 listVendorSeedAdapter.setSeeds(vendorSeeds);
-//                listVendorSeedAdapter.getFilter().filter(currentFilter);
+                // listVendorSeedAdapter.getFilter().filter(currentFilter);
                 // if (!"".equals(currentFilter) && currentFilter != null)
                 // displaySearchBox();
                 listVendorSeedAdapter.notifyDataSetChanged();

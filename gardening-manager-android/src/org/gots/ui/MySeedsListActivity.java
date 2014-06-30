@@ -13,6 +13,7 @@ package org.gots.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.gots.R;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
@@ -25,6 +26,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.ListAdapter;
 
 public class MySeedsListActivity extends AbstractListFragment {
@@ -43,10 +48,20 @@ public class MySeedsListActivity extends AbstractListFragment {
         }
 
         getActivity().registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.SEED_DISPLAYLIST));
-//        listAdapter = new MySeedsListAdapter(getActivity(), allotment, new ArrayList<BaseSeedInterface>());
+        // listAdapter = new MySeedsListAdapter(getActivity(), allotment, new ArrayList<BaseSeedInterface>());
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // super.onCreateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.list_seed_grid, container, false);
+        GridView gridView = (GridView) view.findViewById(R.id.seedgridview);
         listAdapter = new MySeedsListAdapter(getActivity(), allotment, new ArrayList<BaseSeedInterface>());
-        
-        setListAdapter(listAdapter);
+
+        // setListAdapter(listAdapter);
+        gridView.setAdapter(listAdapter);
+        return view;
     }
 
     public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
@@ -55,11 +70,6 @@ public class MySeedsListActivity extends AbstractListFragment {
             onResume();
         }
     };
-
-    @Override
-    public ListAdapter getListAdapter() {
-        return super.getListAdapter();
-    }
 
     public void update() {
         listAdapter.notifyDataSetChanged();

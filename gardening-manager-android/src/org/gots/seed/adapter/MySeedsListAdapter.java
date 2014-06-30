@@ -55,7 +55,7 @@ public class MySeedsListAdapter extends SeedListAdapter {
         Holder holder = (Holder) vi.getTag();
         final BaseSeedInterface currentSeed = getItem(position);
 
-        holder.seedWidgetLong.setSeed(currentSeed);
+        holder.seedWidgetTile.setSeed(currentSeed);
         BaseActionInterface action = null;
         if (allotment != null) {
             // action = new SowingAction(mContext);

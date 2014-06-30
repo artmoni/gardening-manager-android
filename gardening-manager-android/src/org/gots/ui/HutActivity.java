@@ -474,10 +474,10 @@ public class HutActivity extends AbstractActivity {
         public void onPageSelected(int position) {
             mActionBar.setSelectedNavigationItem(position);
 
-            ListFragment fragment = (ListFragment) getSupportFragmentManager().findFragmentByTag(
-                    "android:switcher:" + R.id.pager + ":" + position);
-            if (fragment != null && fragment.getListAdapter() != null)
-                ((BaseAdapter) fragment.getListAdapter()).notifyDataSetChanged();
+//            Fragment fragment = (Fragment) getSupportFragmentManager().findFragmentByTag(
+//                    "android:switcher:" + R.id.pager + ":" + position);
+//            if (fragment != null && fragment.getAdapter() != null)
+//                ((BaseAdapter) fragment.getAdapter()).notifyDataSetChanged();
 
         }
 

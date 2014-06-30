@@ -10,6 +10,7 @@ import org.gots.action.adapter.comparator.ISeedSpecieComparator;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.view.SeedWidgetLong;
+import org.gots.seed.view.SeedWidgetTile;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -50,7 +51,8 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
     }
 
     public class Holder {
-        public SeedWidgetLong seedWidgetLong;
+        // public SeedWidgetLong seedWidgetLong;
+        public SeedWidgetTile seedWidgetTile;
 
         // public ActionWidget actionWidget;
 
@@ -67,7 +69,7 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
             convertView = inflater.inflate(R.layout.list_seed, null);
             holder = new Holder();
             // holder.actionWidget = (ActionWidget) convertView.findViewById(R.id.IdSeedAction);
-            holder.seedWidgetLong = (SeedWidgetLong) convertView.findViewById(R.id.idSeedWidgetLong);
+            holder.seedWidgetTile = (SeedWidgetTile) convertView.findViewById(R.id.idSeedWidgetLong);
             holder.actionBox = (LinearLayout) convertView.findViewById(R.id.IdActionsLayout);
             holder.imageSelectedState = (ImageView) convertView.findViewById(R.id.idSeedImageSelected);
             convertView.setTag(holder);
@@ -76,9 +78,9 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
 
         holder.actionBox.removeAllViews();
 
-        holder.seedWidgetLong.setSeed(getItem(position));
-        holder.seedWidgetLong.setTag(holder);
-        holder.seedWidgetLong.setOnClickListener(new View.OnClickListener() {
+        holder.seedWidgetTile.setSeed(getItem(position));
+        holder.seedWidgetTile.setTag(holder);
+        holder.seedWidgetTile.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {

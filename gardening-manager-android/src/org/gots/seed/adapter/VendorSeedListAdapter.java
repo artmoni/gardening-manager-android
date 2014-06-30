@@ -105,7 +105,7 @@ public class VendorSeedListAdapter extends SeedListAdapter {
         harvestTime.setTime(sowTime.getTime());
         harvestTime.add(Calendar.DAY_OF_MONTH, currentSeed.getDurationMin());
 
-        holder.seedWidgetLong.setOnLongClickListener(new View.OnLongClickListener() {
+        holder.seedWidgetTile.setOnLongClickListener(new View.OnLongClickListener() {
 
             @Override
             public boolean onLongClick(View v) {

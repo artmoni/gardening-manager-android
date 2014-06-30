@@ -2,16 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="2dp"
     android:background="@drawable/bg_line_action"
     android:orientation="horizontal"
-    android:padding="5dp" 
-    android:layout_margin="2dp">
+    android:padding="5dp" >
 
     <org.gots.seed.view.SeedWidget
         android:id="@+id/idSeedView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" 
-        >
+        android:layout_width="50dp"
+        android:layout_height="50dp" >
     </org.gots.seed.view.SeedWidget>
 
     <TextView
@@ -39,16 +38,18 @@
         android:layout_weight="1" >
     </LinearLayout>
 
-    <ImageView         android:id="@+id/imageviewPhoto"
+    <ImageView
+        android:id="@+id/imageviewPhoto"
         android:layout_width="65dp"
-        android:layout_height="65dp" android:visibility="gone"/>
-    
+        android:layout_height="65dp"
+        android:visibility="gone" />
+
     <org.gots.weather.view.WeatherView
         android:id="@+id/idWeatherView"
         android:layout_width="65dp"
         android:layout_height="65dp" >
     </org.gots.weather.view.WeatherView>
-    
+
     <org.gots.action.view.ActionWidget
         android:id="@+id/idActionView"
         android:layout_width="wrap_content"
