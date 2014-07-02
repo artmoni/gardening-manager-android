@@ -319,9 +319,13 @@ public class HutActivity extends AbstractActivity {
                     bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds_plant)),
                     VendorListActivity.class, args);
 
+//        mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
+//                MySeedsListActivity.class, null);
+        args = new Bundle();
+        args.putBoolean(VendorListActivity.FILTER_STOCK, true);
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
-                MySeedsListActivity.class, null);
-
+                VendorListActivity.class, args);
+        
         if (gotsPrefs.isConnectedToServer()) {
             args = new Bundle();
             args.putBoolean(VendorListActivity.FILTER_FAVORITES, true);

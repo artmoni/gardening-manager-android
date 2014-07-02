@@ -283,6 +283,7 @@
         <item name="android:actionDropDownStyle">@style/DropDownNav</item>
         <item name="actionDropDownStyle">@style/DropDownNav</item>
         <item name="android:textColor">@color/text_color_dark</item>
+<!--          <item name="android:actionModeBackground">@color/action_warning_color</item> -->
     </style>
 
     <style name="SpinnerItem" parent="Widget.AppCompat.DropDownItem.Spinner">
