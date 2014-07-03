@@ -83,7 +83,7 @@ public class MySeedsListAdapter extends SeedListAdapter {
                             GrowingSeedInterface growingSeed = (GrowingSeedInterface) currentSeed;
                             growingSeed.setDateSowing(Calendar.getInstance().getTime());
 
-                            return provider.insertSeed(growingSeed, allotment);
+                            return provider.plantingSeed(growingSeed, allotment);
                         }
 
                         @Override

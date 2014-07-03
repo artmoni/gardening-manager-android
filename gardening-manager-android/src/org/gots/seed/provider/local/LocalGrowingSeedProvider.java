@@ -44,7 +44,7 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
      * java.lang.String)
      */
     @Override
-    public GrowingSeedInterface insertSeed(GrowingSeedInterface growingSeed, BaseAllotmentInterface allotment) {
+    public GrowingSeedInterface plantingSeed(GrowingSeedInterface growingSeed, BaseAllotmentInterface allotment) {
         long rowid;
 
         rowid = bdd.insert(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, seedToValues(growingSeed, allotment));

@@ -8,7 +8,7 @@ import org.gots.seed.GrowingSeedInterface;
 
 public interface GotsGrowingSeedProvider {
 
-    public abstract GrowingSeedInterface insertSeed(GrowingSeedInterface seed, BaseAllotmentInterface allotment);
+    public abstract GrowingSeedInterface plantingSeed(GrowingSeedInterface seed, BaseAllotmentInterface allotment);
 
     public abstract ArrayList<GrowingSeedInterface> getGrowingSeeds();
 

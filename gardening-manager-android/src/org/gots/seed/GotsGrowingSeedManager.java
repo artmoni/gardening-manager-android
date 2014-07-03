@@ -76,8 +76,8 @@ public class GotsGrowingSeedManager implements GotsGrowingSeedProvider {
     }
 
     @Override
-    public GrowingSeedInterface insertSeed(GrowingSeedInterface seed, BaseAllotmentInterface allotment) {
-        return provider.insertSeed(seed, allotment);
+    public GrowingSeedInterface plantingSeed(GrowingSeedInterface seed, BaseAllotmentInterface allotment) {
+        return provider.plantingSeed(seed, allotment);
     }
 
     @Override

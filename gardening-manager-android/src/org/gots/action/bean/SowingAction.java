@@ -71,7 +71,7 @@ public class SowingAction extends AbstractActionGarden implements PermanentActio
 
 		seed.setDateSowing(Calendar.getInstance().getTime());
 		seed.setUUID(null);
-		seed = growingSeedManager.insertSeed(seed, allotment);
+		seed = growingSeedManager.plantingSeed(seed, allotment);
 
 		
 		actionSeedManager.insertAction(seed, this);

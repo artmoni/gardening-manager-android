@@ -295,7 +295,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         try {
             Document documentVendorSeed = service.createDocument(catalog, "VendorSeed", currentSeed.getVariety(),
                     NuxeoSeedConverter.convert(catalog.getPath(), currentSeed).getProperties());
-            currentSeed.setUUID(documentVendorSeed.getPath());
+            currentSeed.setUUID(documentVendorSeed.getId());
             Log.d(TAG, "RemoteSeed UUID " + documentVendorSeed.getId());
             super.updateSeed(currentSeed);
         } catch (Exception e) {

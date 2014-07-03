@@ -313,9 +313,21 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
 
         case R.id.buttonStock:
             if (validateSeed()) {
-                newSeed = seedManager.createSeed(newSeed);
-                seedManager.addToStock(newSeed, gardenManager.getCurrentGarden());
-                finish();
+                new AsyncTask<Void, Integer, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        newSeed = seedManager.createSeed(newSeed);
+                        seedManager.addToStock(newSeed, gardenManager.getCurrentGarden());
+                        return null;
+                    }
+
+                    protected void onPostExecute(Void result) {
+                        getApplicationContext().sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
+                        NewSeedActivity.this.finish();
+
+                    };
+                }.execute();
+
             }
             break;
 

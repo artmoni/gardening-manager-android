@@ -132,23 +132,8 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     @Override
     public BaseSeedInterface createSeed(BaseSeedInterface seed) {
-        AsyncTask<BaseSeedInterface, Integer, BaseSeedInterface> task = new AsyncTask<BaseSeedInterface, Integer, BaseSeedInterface>() {
-            @Override
-            protected BaseSeedInterface doInBackground(BaseSeedInterface... params) {
 
-                return mSeedProvider.createSeed(params[0]);
-            }
-        }.execute(seed);
-        try {
-            return task.get();
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            Log.e(TAG, e.getMessage(), e);
-        } catch (ExecutionException e) {
-            // TODO Auto-generated catch block
-            Log.e(TAG, e.getMessage(), e);
-        }
-        return null;
+        return mSeedProvider.createSeed(seed);
     }
 
     @Override

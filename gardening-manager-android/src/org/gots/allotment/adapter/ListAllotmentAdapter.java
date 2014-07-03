@@ -190,13 +190,13 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
                         @Override
                         protected GrowingSeedInterface doInBackground(Void... params) {
 
-                            GotsGrowingSeedManager provider = GotsGrowingSeedManager.getInstance().initIfNew(mContext);
+                            GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(mContext);
                             GotsSeedManager seedManager = GotsSeedManager.getInstance().initIfNew(mContext);
                             // NuxeoGrowingSeedProvider provider = new NuxeoGrowingSeedProvider(mContext);
                             GrowingSeedInterface growingSeed = (GrowingSeedInterface) seedManager.getSeedById(currentSeedId);
                             growingSeed.setDateSowing(Calendar.getInstance().getTime());
 
-                            return provider.insertSeed(growingSeed, getItem(position));
+                            return growingSeedManager.plantingSeed(growingSeed, getItem(position));
                         }
 
                         @Override
