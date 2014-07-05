@@ -21,6 +21,7 @@ import org.gots.action.BaseActionInterface;
 import org.gots.action.GardeningActionInterface;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.bean.BuyingAction;
+import org.gots.action.bean.DetailAction;
 import org.gots.action.bean.ReduceQuantityAction;
 import org.gots.action.bean.SowingAction;
 import org.gots.action.util.ActionState;
@@ -241,6 +242,12 @@ public class VendorListActivity extends AbstractListFragment {
 
             SeedActionInterface actionDone = null;
             switch (item.getItemId()) {
+            case R.id.action_seed_detail:
+                Intent i = new Intent(mContext, TabSeedActivity.class);
+                i.putExtra("org.gots.seed.vendorid", currentSeed.getSeedId());
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(i);
+                break;
             case R.id.action_stock_add:
                 actionDone = new BuyingAction(mContext);
                 break;

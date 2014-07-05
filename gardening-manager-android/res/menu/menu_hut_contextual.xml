@@ -3,6 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto" >
 
     <item
+        android:id="@+id/action_seed_detail"
+        android:icon="@drawable/action_detail"
+        android:title="Detail"/>
+    <item
         android:id="@+id/action_stock_add"
         android:icon="@drawable/action_buy"
         android:title="Buy"/>
