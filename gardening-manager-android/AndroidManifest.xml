@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="32001" android:versionName="0.32.1" package="org.gots">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="32002" android:versionName="0.32.2-SNAPSHOT" package="org.gots">
 
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="19"/>
 
@@ -8,7 +8,7 @@
 
     <!-- STORE WEATHER CACHE AND VEGETABLE PHOTOS -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:required="false"/>
 
     <!-- REMINDER DOING GARDENG TASK -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
