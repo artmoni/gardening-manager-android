@@ -95,24 +95,12 @@ public class GardenManager extends BroadcastReceiver {
         }
     }
 
-    public void addGarden(GardenInterface garden) {
-
-        new AsyncTask<GardenInterface, Integer, GardenInterface>() {
-            @Override
-            protected GardenInterface doInBackground(GardenInterface... params) {
-                GardenInterface newGarden = gardenProvider.createGarden(params[0]);
-                return newGarden;
-            }
-
-            protected void onPostExecute(GardenInterface result) {
-                gardenProvider.setCurrentGarden(result);
-                mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
-                GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-                tracker.trackEvent("Garden", "location", result.getLocality(), 0);
-
-            };
-        }.execute(garden);
-
+    public GardenInterface addGarden(GardenInterface garden) {
+        GardenInterface newGarden = gardenProvider.createGarden(garden);
+        // gardenProvider.setCurrentGarden(newGarden);
+        // GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+        // tracker.trackEvent("Garden", "location", result.getLocality(), 0);
+        return newGarden;
     }
 
     public GardenInterface getCurrentGarden() {
@@ -124,35 +112,15 @@ public class GardenManager extends BroadcastReceiver {
         gardenProvider.setCurrentGarden(garden);
         mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
 
-        Log.d(TAG, "[" + garden.getId() + "] " + garden.getLocality() + " has been set as current workspace");
+        Log.d(TAG, "[" + garden.getId() + "] " + garden.getLocality() + " has been set as current garden");
     }
 
     public void removeGarden(GardenInterface garden) {
-        new AsyncTask<GardenInterface, Integer, Void>() {
-            @Override
-            protected Void doInBackground(GardenInterface... params) {
-                gardenProvider.removeGarden(params[0]);
-                return null;
-            }
-
-            protected void onPostExecute(Void result) {
-                mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
-            };
-        }.execute(garden);
+        gardenProvider.removeGarden(garden);
     }
 
     public void updateCurrentGarden(GardenInterface garden) {
-        new AsyncTask<GardenInterface, Integer, Void>() {
-            @Override
-            protected Void doInBackground(GardenInterface... params) {
-                gardenProvider.updateGarden(params[0]);
-                return null;
-            }
-
-            protected void onPostExecute(Void result) {
-                mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
-            };
-        }.execute(garden);
+        gardenProvider.updateGarden(garden);
     }
 
     public List<GardenInterface> getMyGardens(boolean force) {

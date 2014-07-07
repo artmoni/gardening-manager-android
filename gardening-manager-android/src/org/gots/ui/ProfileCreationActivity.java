@@ -27,6 +27,7 @@ import org.gots.allotment.provider.local.LocalAllotmentProvider;
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.bean.Garden;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.GotsSeedProvider;
@@ -65,7 +66,7 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
 
     private Address address;
 
-    private String tag = "ProfileActivity";
+    private String TAG = "ProfileActivity";
 
     GardenInterface garden = new Garden();
 
@@ -207,7 +208,7 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
     @Override
     public void onProviderDisabled(String provider) {
         /* this is called if/when the GPS is disabled in settings */
-        Log.v(tag, "Disabled");
+        Log.v(TAG, "Disabled");
 
         /* bring up the GPS settings */
         Intent intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -216,7 +217,7 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
 
     @Override
     public void onProviderEnabled(String provider) {
-        Log.v(tag, "Enabled");
+        Log.v(TAG, "Enabled");
         Toast.makeText(this, "GPS Enabled", Toast.LENGTH_SHORT).show();
 
     }
@@ -225,15 +226,15 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
     public void onStatusChanged(String provider, int status, Bundle extras) {
         switch (status) {
         case LocationProvider.OUT_OF_SERVICE:
-            Log.v(tag, "Status Changed: Out of Service");
+            Log.v(TAG, "Status Changed: Out of Service");
             Toast.makeText(this, "Status Changed: Out of Service", Toast.LENGTH_SHORT).show();
             break;
         case LocationProvider.TEMPORARILY_UNAVAILABLE:
-            Log.v(tag, "Status Changed: Temporarily Unavailable");
+            Log.v(TAG, "Status Changed: Temporarily Unavailable");
             Toast.makeText(this, "Status Changed: Temporarily Unavailable", Toast.LENGTH_SHORT).show();
             break;
         case LocationProvider.AVAILABLE:
-            Log.v(tag, "Status Changed: Available");
+            Log.v(TAG, "Status Changed: Available");
             Toast.makeText(this, "Status Changed: Available", Toast.LENGTH_SHORT).show();
             break;
         }
@@ -266,30 +267,6 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
         }
     }
 
-    private void updateProfile() {
-
-        new AsyncTask<String, Integer, Void>() {
-            @Override
-            protected Void doInBackground(String... params) {
-                garden = gardenManager.getCurrentGarden();
-                String locality = editTextLocality.getText().toString();
-
-                if ("".equals(locality))
-                    locality = editTextLocality.getHint().toString();
-
-                if (editTextName.getText() != null && !"".equals(editTextName.getText()))
-                    garden.setName(editTextName.getText().toString());
-                else
-                    garden.setName(locality.replace("\'", " "));
-
-                buildGarden();
-                gardenManager.updateCurrentGarden(garden);
-                return null;
-            }
-        }.execute();
-
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -318,38 +295,59 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
         }
     }
 
-    private void buildGarden() {
+    private GardenInterface buildGarden(GardenInterface originalGarden) {
+        GardenInterface modifiedGarden = originalGarden;
+
+        String locality = editTextLocality.getText().toString();       
+        modifiedGarden.setLocality(locality);
+
+        if (editTextName.getText() != null && !"".equals(editTextName.getText()))
+            modifiedGarden.setName(editTextName.getText().toString());
+        else
+            modifiedGarden.setName(locality.replace("\'", " "));
+
         if (location != null) {
             Address address = (Address) editTextLocality.getTag();
             if (address != null) {
-                garden.setAdminArea(address.getAdminArea());
-                garden.setCountryName(address.getCountryName());
-                garden.setGpsLatitude(address.getLatitude());
-                garden.setGpsLongitude(address.getLongitude());
-                garden.setGpsAltitude(location.getAltitude());
+                modifiedGarden.setAdminArea(address.getAdminArea());
+                modifiedGarden.setCountryName(address.getCountryName());
+                modifiedGarden.setGpsLatitude(address.getLatitude());
+                modifiedGarden.setGpsLongitude(address.getLongitude());
+                modifiedGarden.setGpsAltitude(location.getAltitude());
             }
         }
+        return modifiedGarden;
+    }
+
+    private boolean verifyForm() {
+        if ("".equals(editTextLocality.getText().toString())) {
+            Toast.makeText(getApplicationContext(), "Please enter your locality", Toast.LENGTH_LONG).show();
+            findViewById(R.id.editTextLocality).setBackgroundDrawable(getResources().getDrawable(R.drawable.border_red));
+            return false;
+        }
+        return true;
     }
 
     private void createNewProfile() {
-        buildGarden();
-
-        String locality = ((TextView) (findViewById(R.id.editTextLocality))).getText().toString();
-
-        if ("".equals(locality)) {
-            locality = ((TextView) (findViewById(R.id.editTextLocality))).getHint().toString();
-            Toast.makeText(getApplicationContext(), "Please enter your locality", Toast.LENGTH_LONG).show();
-            findViewById(R.id.editTextLocality).setBackgroundDrawable(
-                    getResources().getDrawable(R.drawable.border_red));
+        if (!verifyForm())
             return;
-        }
-        garden.setLocality(locality);
-        if (editTextName.getText() == null || "".equals(editTextName.getText().toString()))
-            garden.setName(locality.replace("\'", " "));
-        else
-            garden.setName(editTextName.getText().toString());
+        
+        new AsyncTask<Void, Void, GardenInterface>() {
+            @Override
+            protected GardenInterface doInBackground(Void... params) {
+                garden = buildGarden(new Garden());
+                return gardenManager.addGarden(garden);
+            }
 
-        gardenManager.addGarden(garden);
+            protected void onPostExecute(GardenInterface result) {
+                if (result != null)
+                    gardenManager.setCurrentGarden(result);
+                else
+                    Log.e(TAG, "garden is null, no current garden changement");
+                ProfileCreationActivity.this.finish();
+                sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
+            };
+        }.execute();
 
         // SAMPLE GARDEN
         CheckBox samples = (CheckBox) findViewById(R.id.checkboxSamples);
@@ -397,4 +395,24 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
 
     }
 
+    private void updateProfile() {
+        if (!verifyForm())
+            return;
+        
+        new AsyncTask<String, Integer, Void>() {
+            @Override
+            protected Void doInBackground(String... params) {
+
+                garden = buildGarden(gardenManager.getCurrentGarden());
+                gardenManager.updateCurrentGarden(garden);
+                return null;
+            }
+
+            protected void onPostExecute(Void result) {
+                ProfileCreationActivity.this.finish();
+                sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
+            };
+        }.execute();
+
+    }
 }

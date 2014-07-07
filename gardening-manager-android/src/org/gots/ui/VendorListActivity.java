@@ -44,7 +44,8 @@ import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ActionMode;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -99,7 +100,7 @@ public class VendorListActivity extends AbstractListFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 view.setSelected(!view.isSelected());
-                getActivity().startActionMode(new MyCallBack(position));
+                ((ActionBarActivity)getActivity()).startSupportActionMode(new MyCallBack(position));
             }
         });
         // setListAdapter(listVendorSeedAdapter);

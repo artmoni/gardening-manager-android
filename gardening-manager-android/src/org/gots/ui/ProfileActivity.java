@@ -73,7 +73,7 @@ public class ProfileActivity extends AbstractActivity {
             if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
                 try {
                     GardenSync gardenSync = new GardenSync();
-                    gardenSync.execute(getApplicationContext());
+                    gardenSync.execute(true);
 
                 } catch (Exception e) {
                     Log.e(TAG, e.getMessage());
@@ -82,7 +82,7 @@ public class ProfileActivity extends AbstractActivity {
         }
     };
 
-    class GardenSync extends AsyncTask<Context, Void, List<GardenInterface>> {
+    class GardenSync extends AsyncTask<Boolean, Void, List<GardenInterface>> {
         ProgressDialog dialog;
 
         @Override
@@ -92,8 +92,8 @@ public class ProfileActivity extends AbstractActivity {
         }
 
         @Override
-        protected List<GardenInterface> doInBackground(Context... params) {
-            return gardenManager.getMyGardens(false);
+        protected List<GardenInterface> doInBackground(Boolean... force) {
+            return gardenManager.getMyGardens(force[0]);
         }
 
         @Override
@@ -123,7 +123,7 @@ public class ProfileActivity extends AbstractActivity {
         super.onResume();
         try {
             GardenSync gardenSync = new GardenSync();
-            gardenSync.execute(this);
+            gardenSync.execute(false);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
@@ -176,7 +176,17 @@ public class ProfileActivity extends AbstractActivity {
             builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 
                 public void onClick(DialogInterface dialog, int which) {
-                    gardenManager.removeGarden(gardenManager.getCurrentGarden());
+                    new AsyncTask<Void, Void, GardenInterface>() {
+                        @Override
+                        protected GardenInterface doInBackground(Void... params) {
+                            gardenManager.removeGarden(gardenManager.getCurrentGarden());
+                            return null;
+                        }
+
+                        protected void onPostExecute(GardenInterface result) {
+                            sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
+                        };
+                    }.execute();
 
                     dialog.dismiss();
                 }

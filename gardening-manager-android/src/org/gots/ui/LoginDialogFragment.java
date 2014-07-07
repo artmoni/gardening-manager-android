@@ -124,6 +124,7 @@ public class LoginDialogFragment extends AbstractDialogFragment {
     }
 
     protected void buildLayoutDisconnected() {
+        v.findViewById(R.id.idLayoutOAuthDisconnect).setVisibility(View.GONE);
 
         View buttonLayout = (View) v.findViewById(R.id.idLayoutOAuthGoogle);
         buttonLayout.setOnClickListener(new View.OnClickListener() {
