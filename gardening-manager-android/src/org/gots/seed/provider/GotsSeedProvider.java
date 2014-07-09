@@ -42,4 +42,8 @@ public interface GotsSeedProvider {
     public abstract List<BaseSeedInterface> getMyFavorites();
 
     public abstract List<BaseSeedInterface> getSeedBySowingMonth(int month);
+
+    public abstract String[] getArraySpecies(boolean force);
+
+    public abstract  String getFamilyBySpecie(String specie);
 }

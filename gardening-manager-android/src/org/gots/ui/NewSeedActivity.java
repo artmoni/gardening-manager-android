@@ -418,13 +418,24 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
 	 *
 	 */
     private void initSpecieList() {
-        final LocalSeedProvider helper = new LocalSeedProvider(getApplicationContext());
+        // final LocalSeedProvider helper = new LocalSeedProvider(getApplicationContext());
+        new AsyncTask<Void, Void, String[]>() {
+            @Override
+            protected String[] doInBackground(Void... params) {
+                String[] specieList = seedManager.getArraySpecies(true);
+                return specieList;
+            }
 
-        String[] specieList = helper.getArraySpecie();
+            @Override
+            protected void onPostExecute(String[] specieList) {
+                // TODO Auto-generated method stub
+                ListSpeciesAdapter listSpeciesAdapter = new ListSpeciesAdapter(getApplicationContext(), specieList,
+                        newSeed);
+                gallerySpecies.setAdapter(listSpeciesAdapter);
+                super.onPostExecute(specieList);
+            }
+        }.execute();
 
-        ListSpeciesAdapter listSpeciesAdapter = new ListSpeciesAdapter(this, specieList, newSeed);
-
-        gallerySpecies.setAdapter(listSpeciesAdapter);
         gallerySpecies.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
@@ -444,7 +455,7 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
                 view.setSelected(true);
                 view.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_warning));
                 newSeed.setSpecie((String) view.getTag());
-                String family = helper.getFamilyBySpecie(newSeed.getSpecie());
+                String family = seedManager.getFamilyBySpecie(newSeed.getSpecie());
                 newSeed.setFamily(family);
                 seedWidgetLong.setSeed(newSeed);
                 seedWidgetLong.invalidate();

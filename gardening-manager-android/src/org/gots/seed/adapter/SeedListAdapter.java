@@ -56,7 +56,7 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
 
         // public ActionWidget actionWidget;
 
-        public LinearLayout actionBox;
+//        public LinearLayout actionBox;
 
 //        public ImageView imageSelectedState;
     }
@@ -70,13 +70,13 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
             holder = new Holder();
             // holder.actionWidget = (ActionWidget) convertView.findViewById(R.id.IdSeedAction);
             holder.seedWidgetTile = (SeedWidgetTile) convertView.findViewById(R.id.idSeedWidgetLong);
-            holder.actionBox = (LinearLayout) convertView.findViewById(R.id.IdActionsLayout);
+//            holder.actionBox = (LinearLayout) convertView.findViewById(R.id.IdActionsLayout);
 //            holder.imageSelectedState = (ImageView) convertView.findViewById(R.id.idSeedImageSelected);
             convertView.setTag(holder);
         } else
             holder = (Holder) convertView.getTag();
 
-        holder.actionBox.removeAllViews();
+//        holder.actionBox.removeAllViews();
 
         holder.seedWidgetTile.setSeed(getItem(position));
         holder.seedWidgetTile.setTag(holder);

@@ -11,6 +11,8 @@ import org.gots.nuxeo.NuxeoManager;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.LikeStatus;
 import org.gots.seed.provider.local.LocalSeedProvider;
+import org.json.JSONArray;
+import org.json.JSONStringer;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
 import org.nuxeo.ecm.automation.client.cache.CacheBehavior;
@@ -19,9 +21,12 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.Blob;
 import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
+import org.nuxeo.ecm.automation.client.jaxrs.model.FileBlob;
 import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PathRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
+
+import com.google.api.client.json.JsonString;
 
 import android.content.Context;
 import android.util.Log;
@@ -112,7 +117,8 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             }
             Documents docs = service.query(
                     "SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState != \"deleted\" AND vendorseed:barcode=\""
-                            + Long.parseLong(barecode) + "\"", null, new String[] { "dc:modified DESC" }, "*", 0, 200, cacheParam);
+                            + Long.parseLong(barecode) + "\"", null, new String[] { "dc:modified DESC" }, "*", 0, 200,
+                    cacheParam);
 
             for (Iterator<Document> iterator = docs.iterator(); iterator.hasNext();) {
                 Document document = iterator.next();
@@ -130,7 +136,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
         } catch (Exception e) {
             Log.e(TAG, "getSeedByBarCode " + e.getMessage(), e);
-            scannedSeed=super.getSeedByBarCode(barecode);
+            scannedSeed = super.getSeedByBarCode(barecode);
         }
         return scannedSeed;
     }
@@ -519,4 +525,32 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         return likes;
     }
 
+    @Override
+    public synchronized String[] getArraySpecies(boolean force) {
+        Session session = getNuxeoClient().getSession();
+        DocumentManager service = session.getAdapter(DocumentManager.class);
+        List<String> latinNameSpecies = new ArrayList<String>();
+        try {
+            byte cacheParam = CacheBehavior.STORE;
+            if (force) {
+                cacheParam = (byte) (cacheParam | CacheBehavior.FORCE_REFRESH);
+            }
+            Documents docSpecies = service.query(
+                    "SELECT * FROM Species WHERE ecm:currentLifeCycleState != \"deleted\"", null,
+                    new String[] { "dc:modified DESC" }, "*", 0, 50, cacheParam);
+            for (Document document : docSpecies) {
+                latinNameSpecies.add(document.getTitle());
+            }
+
+            // Blob blob = (Blob) session.newRequest("Directory.Entries").set("directoryName", "topic").setHeader(
+            // "Content-Type", "application/json+nxrequest").setInput(null).execute();
+            //
+            // // Blob blobSpecie = service.getDirectoryEntries("specie", "", true);
+            // Log.i(TAG, blob.toString());
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+        String []arraySpecies = new String[latinNameSpecies.size()];
+        return latinNameSpecies.toArray(arraySpecies);
+    }
 }

@@ -98,7 +98,7 @@ public class MySeedsListAdapter extends SeedListAdapter {
 
                 }
             });
-            holder.actionBox.addView(actionWidget);
+//            holder.actionBox.addView(actionWidget);
 
         } else {
 
@@ -155,8 +155,8 @@ public class MySeedsListAdapter extends SeedListAdapter {
                 }
             });
             
-            holder.actionBox.addView(reduceWidget);
-            holder.actionBox.addView(sowingWidget);
+//            holder.actionBox.addView(reduceWidget);
+//            holder.actionBox.addView(sowingWidget);
         }
 
         try {

@@ -33,7 +33,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
         // myBank = new VendorSeedDBHelper(context);
     }
 
-    public synchronized String[] getArraySpecie() {
+    public String[] getArraySpecies(boolean force) {
         Cursor managedCursor = bdd.query(DatabaseHelper.SPECIE_TABLE_NAME, null, null, null, null, null, null);
 
         String[] arraySpecie = new String[managedCursor.getCount()];
@@ -69,6 +69,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
         return arrayFamily;
     }
 
+    @Override
     public synchronized String getFamilyBySpecie(String specie) {
         // open();
         // Cursor managedCursor = bdd.query(DatabaseHelper.FAMILY_ID, null,

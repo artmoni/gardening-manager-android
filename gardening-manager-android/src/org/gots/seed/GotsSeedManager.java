@@ -43,6 +43,8 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     private GotsPreferences gotsPrefs;
 
+    private String[] listSpecies;
+
     private GotsSeedManager() {
         // mLocalProvider = new LocalSeedProvider(mContext);
         allSeeds = new ArrayList<BaseSeedInterface>();
@@ -106,7 +108,7 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
             allSeeds = provider.getVendorSeeds(force);
             newSeeds = provider.getNewSeeds();
         } else {
-            LocalSeedProvider provider = new LocalSeedProvider(mContext);
+            GotsSeedProvider provider = new LocalSeedProvider(mContext);
             allSeeds = provider.getVendorSeeds(force);
         }
 
@@ -237,5 +239,16 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     @Override
     public List<BaseSeedInterface> getSeedBySowingMonth(int month) {
         return mSeedProvider.getSeedBySowingMonth(month);
+    }
+
+    public synchronized String[] getArraySpecies(boolean force) {
+        if (listSpecies == null || force)
+            listSpecies = mSeedProvider.getArraySpecies(force);
+
+        return listSpecies;
+    }
+
+    public synchronized String getFamilyBySpecie(String specie) {
+        return mSeedProvider.getFamilyBySpecie(specie);
     }
 }
