@@ -1,5 +1,6 @@
 package org.gots.seed.provider.nuxeo;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -10,6 +11,7 @@ import org.gots.garden.GardenManager;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.LikeStatus;
+import org.gots.seed.SeedUtil;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.json.JSONArray;
 import org.json.JSONStringer;
@@ -29,6 +31,7 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 import com.google.api.client.json.JsonString;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 
 public class NuxeoSeedProvider extends LocalSeedProvider {
@@ -537,10 +540,12 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             }
             Documents docSpecies = service.query(
                     "SELECT * FROM Species WHERE ecm:currentLifeCycleState != \"deleted\"", null,
-                    new String[] { "dc:modified DESC" }, "*", 0, 50, cacheParam);
+                    new String[] { "species:family_uuid DESC" }, "*", 0, 50, cacheParam);
             for (Document document : docSpecies) {
                 latinNameSpecies.add(document.getTitle());
+               
             }
+            
 
             // Blob blob = (Blob) session.newRequest("Directory.Entries").set("directoryName", "topic").setHeader(
             // "Content-Type", "application/json+nxrequest").setInput(null).execute();
@@ -553,4 +558,5 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         String []arraySpecies = new String[latinNameSpecies.size()];
         return latinNameSpecies.toArray(arraySpecies);
     }
+    
 }

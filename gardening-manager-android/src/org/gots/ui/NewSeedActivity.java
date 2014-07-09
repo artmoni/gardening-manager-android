@@ -432,6 +432,7 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
                 ListSpeciesAdapter listSpeciesAdapter = new ListSpeciesAdapter(getApplicationContext(), specieList,
                         newSeed);
                 gallerySpecies.setAdapter(listSpeciesAdapter);
+                gallerySpecies.setSpacing(5);
                 super.onPostExecute(specieList);
             }
         }.execute();
