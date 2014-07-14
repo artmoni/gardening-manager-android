@@ -1,6 +1,9 @@
 package org.gots.garden;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.provider.GardenProvider;
@@ -29,6 +32,10 @@ public class GardenManager extends BroadcastReceiver {
     private GardenProvider gardenProvider = null;
 
     private boolean initDone = false;
+
+    private Map<Long, GardenInterface> myGardens;
+
+    private GardenInterface currentGarden;
 
     private GardenManager() {
     }
@@ -104,31 +111,41 @@ public class GardenManager extends BroadcastReceiver {
     }
 
     public GardenInterface getCurrentGarden() {
-        GardenInterface garden = gardenProvider.getCurrentGarden();
-        return garden;
+        if(currentGarden == null)
+            currentGarden = gardenProvider.getCurrentGarden();
+        
+        return currentGarden;
     }
 
     public void setCurrentGarden(GardenInterface garden) {
+        currentGarden = garden;
         gardenProvider.setCurrentGarden(garden);
-        mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
+        // mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
 
         Log.d(TAG, "[" + garden.getId() + "] " + garden.getLocality() + " has been set as current garden");
     }
 
     public void removeGarden(GardenInterface garden) {
         gardenProvider.removeGarden(garden);
+        myGardens.remove(garden.getId());
     }
 
     public void updateCurrentGarden(GardenInterface garden) {
         gardenProvider.updateGarden(garden);
+        myGardens.put(garden.getId(), garden);
+
     }
 
     public List<GardenInterface> getMyGardens(boolean force) {
-        return gardenProvider.getMyGardens(force);
-    }
+        if (myGardens == null || force) {
+            myGardens = new HashMap<Long, GardenInterface>();
+            for (GardenInterface garden : gardenProvider.getMyGardens(force)) {
+                myGardens.put(garden.getId(), garden);
+            }
+        }
 
-    public GardenInterface getGardenById(Integer id) {
-        return new LocalGardenProvider(mContext).getGardenById(id);
+        // myGardens = gardenProvider.getMyGardens(force);
+        return new ArrayList<GardenInterface>(myGardens.values());
     }
 
 }

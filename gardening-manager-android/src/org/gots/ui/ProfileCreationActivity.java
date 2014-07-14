@@ -127,14 +127,6 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
 
     };
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
-        // if (mode != OPTION_EDIT)
-        // getPosition();
-    }
-
     private void getPosition() {
         // setProgressBarIndeterminateVisibility(true);
         setProgressRefresh(true);
@@ -240,16 +232,6 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        // mlocManager.removeUpdates(this);
-        super.onPause();
-    }
 
     @Override
     public void onClick(View v) {
@@ -344,8 +326,8 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
                     gardenManager.setCurrentGarden(result);
                 else
                     Log.e(TAG, "garden is null, no current garden changement");
-                ProfileCreationActivity.this.finish();
                 sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
+                ProfileCreationActivity.this.finish();
             };
         }.execute();
 

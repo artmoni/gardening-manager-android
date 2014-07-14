@@ -58,6 +58,13 @@ public class ProfileActivity extends AbstractActivity {
 
         this.registerReceiver(gardenBroadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_EVENT));
 
+        try {
+            GardenSync gardenSync = new GardenSync();
+            gardenSync.execute(false);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
+        
         if (!gotsPurchase.isPremium()) {
             GotsAdvertisement ads = new GotsAdvertisement(this);
 
@@ -118,16 +125,6 @@ public class ProfileActivity extends AbstractActivity {
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        try {
-            GardenSync gardenSync = new GardenSync();
-            gardenSync.execute(false);
-        } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
-        }
-    }
 
     @Override
     protected void onDestroy() {
