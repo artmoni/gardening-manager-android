@@ -94,6 +94,14 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
 
         garden.setLocality("");
 
+        findViewById(R.id.idButtonLocalize).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                getPosition();
+                buildProfile();
+            }
+        });
         buildProfile();
 
     }
@@ -232,7 +240,6 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
         }
     }
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -280,7 +287,7 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
     private GardenInterface buildGarden(GardenInterface originalGarden) {
         GardenInterface modifiedGarden = originalGarden;
 
-        String locality = editTextLocality.getText().toString();       
+        String locality = editTextLocality.getText().toString();
         modifiedGarden.setLocality(locality);
 
         if (editTextName.getText() != null && !"".equals(editTextName.getText()))
@@ -313,7 +320,7 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
     private void createNewProfile() {
         if (!verifyForm())
             return;
-        
+
         new AsyncTask<Void, Void, GardenInterface>() {
             @Override
             protected GardenInterface doInBackground(Void... params) {
@@ -380,7 +387,7 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
     private void updateProfile() {
         if (!verifyForm())
             return;
-        
+
         new AsyncTask<String, Integer, Void>() {
             @Override
             protected Void doInBackground(String... params) {
