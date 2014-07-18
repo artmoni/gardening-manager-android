@@ -35,20 +35,18 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
     }
 
     @Override
-    public List<GrowingSeedInterface> getGrowingSeedsByAllotment(BaseAllotmentInterface allotment) {
+    public List<GrowingSeedInterface> getGrowingSeedsByAllotment(BaseAllotmentInterface allotment, boolean force) {
         List<GrowingSeedInterface> remoteGrowingSeeds = new ArrayList<GrowingSeedInterface>();
         List<GrowingSeedInterface> myGrowingSeeds = new ArrayList<GrowingSeedInterface>();
-        List<GrowingSeedInterface> localGrowingSeeds = super.getGrowingSeedsByAllotment(allotment);
+        List<GrowingSeedInterface> localGrowingSeeds = super.getGrowingSeedsByAllotment(allotment, force);
 
-        boolean refresh = true;
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager service = session.getAdapter(DocumentManager.class);
 
             byte cacheParam = CacheBehavior.STORE;
-            if (refresh) {
+            if (force) {
                 cacheParam = (byte) (cacheParam | CacheBehavior.FORCE_REFRESH);
-                refresh = false;
             }
 
             Documents growingSeedDocuments = service.query(

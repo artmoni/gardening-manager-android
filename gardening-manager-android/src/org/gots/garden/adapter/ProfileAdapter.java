@@ -262,6 +262,7 @@ public class ProfileAdapter extends BaseAdapter {
                     selectedGarden = getItem(position);
                     gardenManager.setCurrentGarden(selectedGarden);
                     mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
+                    mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_CURRENT_CHANGED));
                     notifyDataSetChanged();
 
                     if (gardenManager.getCurrentGarden() != null) {

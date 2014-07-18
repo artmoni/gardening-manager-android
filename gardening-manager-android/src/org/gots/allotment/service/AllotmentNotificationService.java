@@ -54,7 +54,7 @@ public class AllotmentNotificationService extends GotsService {
 
             @Override
             protected Void doInBackground(Void... params) {
-                allotments = allotmentManager.getMyAllotments();
+                allotments = allotmentManager.getMyAllotments(false);
                 // if (allSeeds.size() > 0)
 
                 // for (Iterator<BaseAllotmentInterface> iterator = allSeeds.iterator(); iterator.hasNext();) {

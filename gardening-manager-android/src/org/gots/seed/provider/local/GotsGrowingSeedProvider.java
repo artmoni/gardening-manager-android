@@ -12,7 +12,7 @@ public interface GotsGrowingSeedProvider {
 
     public abstract ArrayList<GrowingSeedInterface> getGrowingSeeds();
 
-    public abstract List<GrowingSeedInterface> getGrowingSeedsByAllotment(BaseAllotmentInterface allotment);
+    public abstract List<GrowingSeedInterface> getGrowingSeedsByAllotment(BaseAllotmentInterface allotment, boolean force);
 
     public abstract GrowingSeedInterface getGrowingSeedById(int growingSeedId);
 

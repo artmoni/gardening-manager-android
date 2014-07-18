@@ -1,6 +1,9 @@
 package org.gots.allotment;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.gots.allotment.provider.AllotmentProvider;
 import org.gots.allotment.provider.local.LocalAllotmentProvider;
@@ -26,7 +29,10 @@ public class AllotmentManager extends BroadcastReceiver implements AllotmentProv
 
     private boolean initDone = false;
 
+    Map<Integer, BaseAllotmentInterface> allotments;
+
     private AllotmentManager() {
+        
     }
 
     /**
@@ -63,6 +69,7 @@ public class AllotmentManager extends BroadcastReceiver implements AllotmentProv
     }
 
     public void finalize() {
+
         // mContext.unregisterReceiver(this);
         initDone = false;
         mContext = null;
@@ -84,6 +91,9 @@ public class AllotmentManager extends BroadcastReceiver implements AllotmentProv
                 || BroadCastMessages.GARDEN_SETTINGS_CHANGED.equals(intent.getAction())) {
             setAllotmentProvider();
         }
+        if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
+            allotments = null;
+        }
     }
 
     // public void setCurrentGarden(GardenInterface garden) {
@@ -99,22 +109,31 @@ public class AllotmentManager extends BroadcastReceiver implements AllotmentProv
     }
 
     @Override
-    public List<BaseAllotmentInterface> getMyAllotments() {
-        return allotmentProvider.getMyAllotments();
+    public List<BaseAllotmentInterface> getMyAllotments(boolean force) {
+        if (allotments == null || force) {
+            allotments = new HashMap<Integer, BaseAllotmentInterface>();
+            for (BaseAllotmentInterface allotment : allotmentProvider.getMyAllotments(false)) {
+                allotments.put(allotment.getId(), allotment);
+            }
+        }
+        return new ArrayList<BaseAllotmentInterface>(allotments.values());
     }
 
     @Override
     public BaseAllotmentInterface createAllotment(BaseAllotmentInterface allotment) {
+        allotments.put(allotment.getId(), allotment);
         return allotmentProvider.createAllotment(allotment);
     }
 
     @Override
     public int removeAllotment(BaseAllotmentInterface allotment) {
+        allotments.remove(allotment.getId());
         return allotmentProvider.removeAllotment(allotment);
     }
 
     @Override
     public BaseAllotmentInterface updateAllotment(BaseAllotmentInterface allotment) {
+        allotments.put(allotment.getId(), allotment);
         return allotmentProvider.updateAllotment(allotment);
     }
 

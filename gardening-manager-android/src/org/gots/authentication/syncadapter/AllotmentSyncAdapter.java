@@ -40,7 +40,7 @@ public class AllotmentSyncAdapter extends GotsSyncAdapter {
         // SeedNotification notification = new SeedNotification(getContext());
         // notification.createNotification(newSeeds);
         // }
-        allotmentManager.getMyAllotments();
+        allotmentManager.getMyAllotments(true);
         intent.setAction(BroadCastMessages.PROGRESS_FINISHED);
         getContext().sendBroadcast(intent);
 

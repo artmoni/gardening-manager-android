@@ -249,12 +249,12 @@ public class MyMainGarden extends AbstractActivity {
             @Override
             protected List<BaseAllotmentInterface> doInBackground(Void... params) {
 
-                List<BaseAllotmentInterface> allotments = allotmentManager.getMyAllotments();
+                List<BaseAllotmentInterface> allotments = allotmentManager.getMyAllotments(false);
                 GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(
                         MyMainGarden.this);
 
                 for (int i = 0; i < allotments.size(); i++) {
-                    allotments.get(i).setSeeds(growingSeedManager.getGrowingSeedsByAllotment(allotments.get(i)));
+                    allotments.get(i).setSeeds(growingSeedManager.getGrowingSeedsByAllotment(allotments.get(i), false));
                 }
                 return allotments;
             }

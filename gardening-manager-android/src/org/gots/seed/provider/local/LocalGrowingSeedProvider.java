@@ -115,7 +115,7 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
      * @see org.gots.seed.provider.local.GotsGrowingSeedProvider#getSeedsByAllotment(java.lang.String)
      */
     @Override
-    public List<GrowingSeedInterface> getGrowingSeedsByAllotment(BaseAllotmentInterface allotment) {
+    public List<GrowingSeedInterface> getGrowingSeedsByAllotment(BaseAllotmentInterface allotment, boolean force) {
         ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
         GrowingSeedInterface searchedSeed = new GrowingSeed();
 

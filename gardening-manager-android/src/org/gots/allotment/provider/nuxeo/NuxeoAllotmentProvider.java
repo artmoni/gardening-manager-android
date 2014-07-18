@@ -51,7 +51,7 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
     }
 
     @Override
-    public List<BaseAllotmentInterface> getMyAllotments() {
+    public List<BaseAllotmentInterface> getMyAllotments(boolean force) {
         List<BaseAllotmentInterface> remoteAllotments = new ArrayList<BaseAllotmentInterface>();
         List<BaseAllotmentInterface> myAllotments = new ArrayList<BaseAllotmentInterface>();
         try {
@@ -84,11 +84,11 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
                 Log.i(TAG, "Nuxeo Allotment " + allotment.toString());
             }
 
-            List<BaseAllotmentInterface> localAllotments = super.getMyAllotments();
+            List<BaseAllotmentInterface> localAllotments = super.getMyAllotments(force);
             myAllotments = synchronize(remoteAllotments, localAllotments);
         } catch (Exception e) {
             Log.e(TAG, "getMyAllotments " + e.getMessage(), e);
-            return super.getMyAllotments();
+            return super.getMyAllotments(force);
         }
         return myAllotments;
     }

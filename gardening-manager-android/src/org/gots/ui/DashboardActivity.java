@@ -138,9 +138,10 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
             protected void onPostExecute(GardenInterface currentGarden) {
                 if (currentGarden == null)
 
-                    if (myGardens.size() > 0)
+                    if (myGardens.size() > 0) {
                         gardenManager.setCurrentGarden(myGardens.get(0));
-                    else {
+                        sendBroadcast(new Intent(BroadCastMessages.GARDEN_CURRENT_CHANGED));
+                    } else {
                         Intent intent = new Intent(getApplicationContext(), ProfileCreationActivity.class);
                         startActivity(intent);
                         // AccountManager accountManager = AccountManager.get(getApplicationContext()
@@ -372,6 +373,8 @@ public class DashboardActivity extends AbstractActivity implements OnClickListen
         if (itemPosition != currentItemPosition) {
             currentItemPosition = itemPosition;
             gardenManager.setCurrentGarden(myGardens.get(itemPosition));
+            sendBroadcast(new Intent(BroadCastMessages.GARDEN_CURRENT_CHANGED));
+
             // startService(weatherIntent);
             Bundle bundle = new Bundle();
             bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);

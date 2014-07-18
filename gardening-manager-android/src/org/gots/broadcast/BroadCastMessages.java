@@ -21,7 +21,6 @@
  * *********************************************************************** */
 package org.gots.broadcast;
 
-
 /**
  * @author jcarsique
  * 
@@ -42,7 +41,7 @@ public final class BroadCastMessages {
 
     public static final String GARDEN_SETTINGS_CHANGED = "org.gots.settings.garden";
 
-    public static final String GARDEN_EVENT_CREATION = "org.gots.garden.create";
+    public static final String GARDEN_CURRENT_CHANGED = "org.gots.garden.changedcurrent";
 
     public static final String KEY_GARDEN_ID = "org.gots.garden.id";
 

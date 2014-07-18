@@ -334,6 +334,7 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
                 else
                     Log.e(TAG, "garden is null, no current garden changement");
                 sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
+                sendBroadcast(new Intent(BroadCastMessages.GARDEN_CURRENT_CHANGED));
                 ProfileCreationActivity.this.finish();
             };
         }.execute();

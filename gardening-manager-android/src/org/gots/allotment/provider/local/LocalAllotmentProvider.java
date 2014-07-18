@@ -64,7 +64,7 @@ public class LocalAllotmentProvider extends GotsDBHelper implements AllotmentPro
     }
 
     @Override
-    public List<BaseAllotmentInterface> getMyAllotments() {
+    public List<BaseAllotmentInterface> getMyAllotments(boolean force) {
 
         ArrayList<BaseAllotmentInterface> allAllotment = new ArrayList<BaseAllotmentInterface>();
         Cursor cursor = null;

@@ -82,7 +82,7 @@ public class WateringAction extends AbstractActionSeed implements SeedActionInte
         new AsyncTask<BaseAllotmentInterface, Integer, Void>() {
             @Override
             protected Void doInBackground(BaseAllotmentInterface... params) {
-                List<GrowingSeedInterface> listseeds = growingSeedManager.getGrowingSeedsByAllotment(params[0]);
+                List<GrowingSeedInterface> listseeds = growingSeedManager.getGrowingSeedsByAllotment(params[0], false);
                 for (Iterator<GrowingSeedInterface> iterator = listseeds.iterator(); iterator.hasNext();) {
                     GrowingSeedInterface baseSeedInterface = iterator.next();
                     WateringAction.this.execute(baseSeedInterface);

@@ -8,7 +8,7 @@ public interface AllotmentProvider {
 
 	public BaseAllotmentInterface getCurrentAllotment();
 	
-	public List<BaseAllotmentInterface> getMyAllotments();
+	public List<BaseAllotmentInterface> getMyAllotments(boolean force);
 
 	public BaseAllotmentInterface createAllotment(BaseAllotmentInterface allotment);
 

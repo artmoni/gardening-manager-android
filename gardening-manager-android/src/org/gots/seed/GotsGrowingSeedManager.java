@@ -29,6 +29,8 @@ public class GotsGrowingSeedManager implements GotsGrowingSeedProvider {
 
     Map<Integer, GrowingSeedInterface> cacheGrowingSeed = new HashMap<Integer, GrowingSeedInterface>();
 
+    Map<Integer, HashMap<Integer, GrowingSeedInterface>> growingSeeds;
+
     private boolean initDone;
 
     private GotsPreferences gotsPrefs;
@@ -86,8 +88,12 @@ public class GotsGrowingSeedManager implements GotsGrowingSeedProvider {
     }
 
     @Override
-    public List<GrowingSeedInterface> getGrowingSeedsByAllotment(BaseAllotmentInterface allotment) {
-        return provider.getGrowingSeedsByAllotment(allotment);
+    public List<GrowingSeedInterface> getGrowingSeedsByAllotment(BaseAllotmentInterface allotment, boolean force) {
+//        if (force || growingSeeds == null || growingSeeds.get(allotment.getId()) == null) {
+//            growingSeeds = new HashMap<Integer, HashMap<Integer, GrowingSeedInterface>>();
+//            
+//        }
+        return provider.getGrowingSeedsByAllotment(allotment, false);
     }
 
     @Override
@@ -108,7 +114,7 @@ public class GotsGrowingSeedManager implements GotsGrowingSeedProvider {
                 mContext.sendBroadcast(new Intent(BroadCastMessages.GROWINGSEED_DISPLAYLIST));
             };
         }.execute(seed);
-        
+
     }
 
 }
