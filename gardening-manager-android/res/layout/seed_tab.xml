@@ -22,6 +22,62 @@
             android:padding="5dp" >
         </org.gots.seed.view.SeedWidgetLong>
 
+        <RelativeLayout
+            android:id="@+id/idLayoutCulturePeriod"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/text_color_dark" >
+
+            <TextView
+                android:id="@+id/textView1"
+                style="@style/seed_description_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text=">"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/idTextSowingDate"
+                style="@style/seed_description_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
+                android:layout_toLeftOf="@+id/imageView1"
+                android:text="10/12/14" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/textView1"
+                android:src="@drawable/action_harvest" />
+
+            <TextView
+                android:id="@+id/idTextHarvestDate"
+                style="@style/seed_description_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/imageView2"
+                android:text="13/01/15" />
+
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/textView1"
+                android:src="@drawable/action_sow" />
+        </RelativeLayout>
+
         <android.support.v4.view.ViewPager
             android:id="@+id/pager"
             android:layout_width="match_parent"
@@ -32,8 +88,7 @@
             android:id="@+id/idPictureGallery"
             android:layout_width="fill_parent"
             android:layout_height="50dp"
-            android:visibility="visible"
-             />
+            android:visibility="visible" />
 
         <LinearLayout
             android:id="@+id/idAdsTop"

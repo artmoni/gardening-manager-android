@@ -12,7 +12,9 @@ package org.gots.ui;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -64,9 +66,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Gallery;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.vending.billing.util.IabHelper;
@@ -127,7 +132,6 @@ public class TabSeedActivity extends ActionBarActivity {
         } else if (getIntent().getExtras().getInt("org.gots.seed.vendorid") != 0) {
             int seedId = getIntent().getExtras().getInt("org.gots.seed.vendorid");
             GotsSeedProvider helper = new LocalSeedProvider(getApplicationContext());
-
             mSeed = (GrowingSeedInterface) helper.getSeedById(seedId);
         } else
             mSeed = new GrowingSeed(); // DEFAULT SEED
@@ -179,6 +183,23 @@ public class TabSeedActivity extends ActionBarActivity {
 
         SeedWidgetLong seedWidget = (SeedWidgetLong) findViewById(R.id.IdSeedWidgetLong);
         seedWidget.setSeed(mSeed);
+
+        if (mSeed.getDateSowing() != null) {
+            TextView textDateSowing = (TextView) findViewById(R.id.idTextSowingDate);
+            textDateSowing.setText(new SimpleDateFormat().format(mSeed.getDateSowing()));
+
+            TextView textDateHarvest = (TextView) findViewById(R.id.idTextHarvestDate);
+            if (mSeed.getDateHarvest().getTime() > 0)
+                textDateHarvest.setText(new SimpleDateFormat().format(mSeed.getDateHarvest()));
+            else {
+                Calendar plannedHarvest = Calendar.getInstance();
+                plannedHarvest.setTime(mSeed.getDateSowing());
+                plannedHarvest.add(Calendar.DAY_OF_YEAR, mSeed.getDurationMin());
+                textDateHarvest.setText(new SimpleDateFormat().format(plannedHarvest.getTime()));
+                textDateHarvest.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween));
+            }
+        } else
+            findViewById(R.id.idLayoutCulturePeriod).setVisibility(View.GONE);
 
         mViewPager = (ViewPager) findViewById(R.id.pager);
         TabsAdapter mTabsAdapter = new TabsAdapter(this, mViewPager);
@@ -243,11 +264,6 @@ public class TabSeedActivity extends ActionBarActivity {
         } catch (Exception e) {
             Log.e(TAG, "onSaveInstanceState workaround nullpointer exception bug");
         }
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
     }
 
     @Override

@@ -19,6 +19,8 @@ public class GrowingSeed extends BaseSeed implements GrowingSeedInterface {
 
     private Date dateSowing;
 
+    private Date dateHarvest;
+
     private Date dateLastWatering;
 
     public static final int NB_DAY_ALERT = 10;
@@ -62,6 +64,13 @@ public class GrowingSeed extends BaseSeed implements GrowingSeedInterface {
         return growingSeedId;
     }
 
-  
+    @Override
+    public void setDateHarvest(Date dateHarvest) {
+        this.dateHarvest = dateHarvest;
+    }
 
+    @Override
+    public Date getDateHarvest() {
+        return dateHarvest;
+    }
 }

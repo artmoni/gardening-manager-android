@@ -165,6 +165,8 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
         properties.set("dc:title", growingSeed.getSpecie() + " " + growingSeed.getVariety());
         if (growingSeed.getDateSowing() != null)
             properties.set("growingseed:datesowing", growingSeed.getDateSowing());
+        if (growingSeed.getDateHarvest() != null)
+            properties.set("growingseed:dateharvest", growingSeed.getDateHarvest());
 
         return properties;
     }
@@ -180,6 +182,18 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
         } finally {
             super.deleteGrowingSeed(seed);
         }
+    }
+    @Override
+    public GrowingSeedInterface updateGrowingSeed(GrowingSeedInterface seed, BaseAllotmentInterface allotment) {
+        Session session = getNuxeoClient().getSession();
+        DocumentManager service = session.getAdapter(DocumentManager.class);
+
+        try {
+            service.update(new IdRef(seed.getUUID()),getProperties(seed));
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        } 
+        return super.updateGrowingSeed(seed, allotment);
     }
 
 }

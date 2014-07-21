@@ -13,7 +13,6 @@ package org.gots.seed.adapter;
 import java.util.List;
 
 import org.gots.R;
-import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.view.QuickSeedActionBuilder;
 import org.gots.seed.view.SeedWidget;
@@ -59,7 +58,7 @@ public class ListGrowingSeedAdapter extends BaseAdapter implements OnClickListen
 
         SeedWidget seedWidget = (SeedWidget) convertView;
         if (convertView == null) {
-            GrowingSeed currentSeed = (GrowingSeed) getItem(position);
+            GrowingSeedInterface currentSeed = (GrowingSeedInterface) getItem(position);
 
             seedWidget = new SeedWidget(mContext);
             seedWidget.setSeed(currentSeed);

@@ -105,25 +105,9 @@ public class SeedActivity extends Fragment {
                     seedDescriptionCultureHarvest.setVisibility(View.VISIBLE);
             }
         });
+        
 
         return v;
     }
-
-    // @Override
-    // protected void onActivityResult(int requestCode, int resultCode, Intent
-    // data) {
-    //
-    // if (requestCode == resultCameraActivity) {
-    // gallery.refreshDrawableState();
-    // gallery.invalidate();
-    // }
-    // super.onActivityResult(requestCode, resultCode, data);
-    // }
-    //
-    // @Override
-    // protected void onDestroy() {
-    // GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
-    // super.onDestroy();
-    // }
 
 }

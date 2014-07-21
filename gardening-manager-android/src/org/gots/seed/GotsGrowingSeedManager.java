@@ -93,7 +93,7 @@ public class GotsGrowingSeedManager implements GotsGrowingSeedProvider {
 //            growingSeeds = new HashMap<Integer, HashMap<Integer, GrowingSeedInterface>>();
 //            
 //        }
-        return provider.getGrowingSeedsByAllotment(allotment, false);
+        return provider.getGrowingSeedsByAllotment(allotment, force);
     }
 
     @Override

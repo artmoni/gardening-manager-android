@@ -21,6 +21,7 @@ import org.gots.bean.Address;
 import org.gots.bean.Allotment;
 import org.gots.bean.Garden;
 import org.gots.seed.GrowingSeed;
+import org.gots.seed.GrowingSeedInterface;
 
 import android.content.Context;
 import android.util.Log;
@@ -80,7 +81,7 @@ public class GardenFactory {
         allotment.setDescription("en haut du jardin");
 
         // sampleGarden.getAllotments().add(allotment);
-        GrowingSeed mySeed = new GrowingSeed();
+        GrowingSeedInterface mySeed = new GrowingSeed();
         mySeed.setName("tomates");
         mySeed.setUUID("23432LK23");
         mySeed.setDescriptionGrowth("Variété la plus précoce pour culture de plein champ. Croissance indéterminée. Feuillage de pomme de terre. Fruit de taille moyenne (90 à 150 g), rouge brillant par bouquet de 5 à 8 fruits.");

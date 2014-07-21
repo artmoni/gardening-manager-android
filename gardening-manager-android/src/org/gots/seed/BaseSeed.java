@@ -150,7 +150,7 @@ public abstract class BaseSeed implements Serializable, BaseSeedInterface {
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        GrowingSeed newSeed = new GrowingSeed();
+        GrowingSeedInterface newSeed = new GrowingSeed();
         newSeed.setActionDone(new ArrayList<BaseActionInterface>());
         newSeed.getActionDone().addAll(getActionDone());
         newSeed.setActionToDo(new ArrayList<BaseActionInterface>());

@@ -63,6 +63,8 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
             values.put(DatabaseHelper.GROWINGSEED_DATESOWING, seed.getDateSowing().getTime());
         if (seed.getDateLastWatering() != null)
             values.put(DatabaseHelper.GROWINGSEED_DATELASTWATERING, seed.getDateLastWatering().getTime());
+        if (seed.getDateHarvest() != null)
+            values.put(DatabaseHelper.GROWINGSEED_DATEHARVEST, seed.getDateHarvest().getTime());
         return values;
     }
 
@@ -104,6 +106,7 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
         bsi.setUUID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_UUID)));
         bsi.setGrowingSeedId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_ID)));
         bsi.setDateSowing(new Date(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_DATESOWING))));
+        bsi.setDateHarvest(new Date(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_DATEHARVEST))));
         bsi.setDateLastWatering(new Date(
                 cursor.getLong(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_DATELASTWATERING))));
 
