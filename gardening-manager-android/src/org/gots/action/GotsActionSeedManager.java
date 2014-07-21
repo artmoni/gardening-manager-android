@@ -78,12 +78,12 @@ public class GotsActionSeedManager implements GotsActionSeedProvider {
 
     @Override
     public List<SeedActionInterface> getActionsToDoBySeed(GrowingSeedInterface seed, boolean force) {
-        return provider.getActionsToDoBySeed(seed, false);
+        return provider.getActionsToDoBySeed(seed, force);
     }
 
     @Override
     public List<SeedActionInterface> getActionsDoneBySeed(GrowingSeedInterface seed, boolean force) {
-        return provider.getActionsDoneBySeed(seed, false);
+        return provider.getActionsDoneBySeed(seed, force);
     }
 
     @Override
