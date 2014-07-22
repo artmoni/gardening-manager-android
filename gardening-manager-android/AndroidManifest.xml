@@ -45,6 +45,8 @@
         <activity android:name=".ui.MyMainGarden" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow"/>
         <activity android:name=".ui.DashboardActivity" android:theme="@style/Theme.Styled">
         </activity>
+        <activity android:name=".ui.MainActivity" android:theme="@style/Theme.Styled">
+        </activity>
         <activity android:name=".ui.SensorActivity" android:theme="@style/Theme.Styled">
         </activity>
         <activity android:name=".ui.AllotmentActivity"/>

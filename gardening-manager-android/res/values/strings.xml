@@ -187,5 +187,24 @@
     <string name="sensor.buy">Buy a Parrot Flower Power</string>
     <string name="dashboard.sensor.name">Sensors</string>
     <string name="skip">Skip</string>
+    
+    <!-- Nav Drawer Menu Items -->
+    <string-array name="nav_drawer_items">
+        <item>@string/dashboard.hut.name</item>
+        <item>@string/dashboard.allotments.name</item>
+        <item>@string/dashboard.actions.name</item>
+        <item>@string/dashboard.profile.name</item>
+        <item>@string/dashboard.sensor.name</item>
+    </string-array>
+
+    <!-- Nav Drawer List Item Icons -->
+    <!-- Keep them in order as the titles are in -->
+    <array name="nav_drawer_icons">
+        <item>@drawable/bt_dashboard_hut</item>
+        <item>@drawable/bt_dashboard_allotment</item>
+        <item>@drawable/bt_dashboard_action</item>
+        <item>@drawable/bt_dashboard_profile</item>
+        <item>@drawable/bt_dashboard_sensor</item>
+    </array>
 
 </resources>
