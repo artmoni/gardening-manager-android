@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.gots.action.bean;
 
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -39,43 +38,19 @@ public class DeleteAction extends AbstractActionSeed implements PermanentActionI
         // GrowingSeedDBHelper helper = new GrowingSeedDBHelper(getContext());
         // helper.deleteGrowingSeed(seed);
         // seedManager.removeGrowingSeed(seed);
-        growingSeedManager.deleteGrowingSeed(seed);
+        new AsyncTask<GrowingSeedInterface, Integer, Void>() {
+            @Override
+            protected Void doInBackground(GrowingSeedInterface... params) {
+                growingSeedManager.deleteGrowingSeed(params[0]);
+                return null;
+            }
+
+        }.execute(seed);
         return 1;
 
     }
 
-    public void setDateActionDone(Date dateActionDone) {
-        super.setDateActionDone(dateActionDone);
-    }
-
-    public Date getDateActionDone() {
-        return super.getDateActionDone();
-    }
-
-    public void setDuration(int duration) {
-        super.setDuration(duration);
-    }
-
-    public int getDuration() {
-        return super.getDuration();
-    }
-
-    public void setDescription(String description) {
-        super.setDescription(description);
-    }
-
-    public String getDescription() {
-        return super.getDescription();
-    }
-
-    public void setName(String name) {
-        super.setName(name);
-    }
-
-    public String getName() {
-        return super.getName();
-    }
-
+    
     @Override
     public int execute(BaseAllotmentInterface allotment, GrowingSeedInterface seed) {
         new AsyncTask<BaseAllotmentInterface, Integer, Void>() {
