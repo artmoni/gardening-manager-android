@@ -6,7 +6,7 @@
 
     <org.gots.seed.view.SeedWidgetTile
         android:id="@+id/idSeedWidgetLong"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:src="@drawable/vegetdefault" >

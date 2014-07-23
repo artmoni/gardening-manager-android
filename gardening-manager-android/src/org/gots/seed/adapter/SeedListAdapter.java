@@ -13,12 +13,14 @@ import org.gots.seed.view.SeedWidgetLong;
 import org.gots.seed.view.SeedWidgetTile;
 
 import android.content.Context;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -56,9 +58,9 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
 
         // public ActionWidget actionWidget;
 
-//        public LinearLayout actionBox;
+        // public LinearLayout actionBox;
 
-//        public ImageView imageSelectedState;
+        // public ImageView imageSelectedState;
     }
 
     @Override
@@ -70,36 +72,36 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
             holder = new Holder();
             // holder.actionWidget = (ActionWidget) convertView.findViewById(R.id.IdSeedAction);
             holder.seedWidgetTile = (SeedWidgetTile) convertView.findViewById(R.id.idSeedWidgetLong);
-//            holder.actionBox = (LinearLayout) convertView.findViewById(R.id.IdActionsLayout);
-//            holder.imageSelectedState = (ImageView) convertView.findViewById(R.id.idSeedImageSelected);
+            // holder.actionBox = (LinearLayout) convertView.findViewById(R.id.IdActionsLayout);
+            // holder.imageSelectedState = (ImageView) convertView.findViewById(R.id.idSeedImageSelected);
             convertView.setTag(holder);
         } else
             holder = (Holder) convertView.getTag();
 
-//        holder.actionBox.removeAllViews();
+        // holder.actionBox.removeAllViews();
 
         holder.seedWidgetTile.setSeed(getItem(position));
         holder.seedWidgetTile.setTag(holder);
-//        holder.seedWidgetTile.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                Holder holder = (Holder) v.getTag();
-//                if (holder.actionBox == null)
-//                    return;
-////                if (holder.actionBox.getVisibility() == View.VISIBLE) {
-////                    holder.actionBox.setVisibility(View.GONE);
-////                    holder.imageSelectedState.setSelected(false);
-////                    v.setSelected(false);
-////                } else {
-////                    holder.actionBox.setVisibility(View.VISIBLE);
-////                    holder.imageSelectedState.setSelected(true);
-////                    v.setSelected(true);
-////                    
-////
-////                }
-//            }
-//        });
+        // holder.seedWidgetTile.setOnClickListener(new View.OnClickListener() {
+        //
+        // @Override
+        // public void onClick(View v) {
+        // Holder holder = (Holder) v.getTag();
+        // if (holder.actionBox == null)
+        // return;
+        // // if (holder.actionBox.getVisibility() == View.VISIBLE) {
+        // // holder.actionBox.setVisibility(View.GONE);
+        // // holder.imageSelectedState.setSelected(false);
+        // // v.setSelected(false);
+        // // } else {
+        // // holder.actionBox.setVisibility(View.VISIBLE);
+        // // holder.imageSelectedState.setSelected(true);
+        // // v.setSelected(true);
+        // //
+        // //
+        // // }
+        // }
+        // });
         return convertView;
     }
 

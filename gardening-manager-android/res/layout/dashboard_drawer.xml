@@ -44,15 +44,29 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
+                android:scaleType="matrix"
                 android:src="@drawable/bg_action_top" />
+
+            <ImageView
+                android:id="@+id/imageAvatar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/bt_dashboard_profile" />
 
             <Spinner
                 android:id="@+id/spinnerGarden"
+                style="@style/SpinnerGarden"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"  android:alpha="0.9" style="@style/SpinnerItem"/>
-            
+                android:layout_alignBottom="@+id/imageAvatar"
+                android:layout_toRightOf="@+id/imageAvatar"
+                android:alpha="0.9"
+                android:background="@color/text_color_dark" />
+
         </RelativeLayout>
 
         <ListView

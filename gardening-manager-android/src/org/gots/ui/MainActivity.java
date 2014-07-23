@@ -1,20 +1,43 @@
 package org.gots.ui;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.gots.R;
+import org.gots.authentication.GotsSocialAuthentication;
+import org.gots.authentication.provider.google.GoogleAuthentication;
+import org.gots.authentication.provider.google.User;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
+import org.gots.garden.adapter.ProfileAdapter.UserInfo;
+import org.gots.inapp.GotsBillingDialog;
+import org.gots.inapp.GotsPurchaseItem;
+import org.gots.provider.WeatherContentProvider;
+import org.gots.ui.fragment.DashboardResumeFragment;
 import org.gots.ui.slidingmenu.NavDrawerItem;
 import org.gots.ui.slidingmenu.adapter.NavDrawerListAdapter;
 
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.UserRecoverableAuthException;
+
+import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -25,6 +48,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -53,6 +77,10 @@ public class MainActivity extends AbstractActivity {
 
     private RelativeLayout mDrawerLinear;
 
+    private String TAG = "MainActivity";
+
+    private List<GardenInterface> myGardens;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,35 +91,12 @@ public class MainActivity extends AbstractActivity {
         // load slide menu items
         navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
 
-        // nav drawer icons from resources
-        navMenuIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);
-
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLinear = (RelativeLayout) findViewById(R.id.frame_menu);
         mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
+        spinnerGarden = (Spinner) findViewById(R.id.spinnerGarden);
 
-        navDrawerItems = new ArrayList<NavDrawerItem>();
-
-        // adding nav drawer items to array
-        // Home
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
-        // Find People
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
-        // Photos
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
-        // Communities, Will add a counter here
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1), true, "22"));
-        // Pages
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
-        // What's hot, We will add a counter here
-        // navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1), true, "50+"));
-
-        // Recycle the typed array
-        navMenuIcons.recycle();
-
-        // setting the nav drawer list adapter
-        adapter = new NavDrawerListAdapter(getApplicationContext(), navDrawerItems);
-        mDrawerList.setAdapter(adapter);
+        displayDrawerMenu();
 
         // enabling action bar app icon and behaving it as toggle button
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -118,8 +123,147 @@ public class MainActivity extends AbstractActivity {
 
         if (savedInstanceState == null) {
             // on first time display view for first nav item
-            displayView(0);
+            displayView(10);
         }
+
+        spinnerGarden.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int itemPosition, long arg3) {
+                if (myGardens == null || myGardens.size() < itemPosition)
+                    return;
+                gardenManager.setCurrentGarden(myGardens.get(itemPosition));
+                sendBroadcast(new Intent(BroadCastMessages.GARDEN_CURRENT_CHANGED));
+
+                // startService(weatherIntent);
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+                bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+                ContentResolver.setSyncAutomatically(gotsPrefs.getUserAccount(), WeatherContentProvider.AUTHORITY, true);
+                ContentResolver.requestSync(gotsPrefs.getUserAccount(), WeatherContentProvider.AUTHORITY, bundle);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+
+        // registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
+        registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
+        registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_EVENT));
+        registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
+    }
+
+    protected void displayDrawerMenu() {
+        // nav drawer icons from resources
+        navMenuIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);
+        navDrawerItems = new ArrayList<NavDrawerItem>();
+
+        // *************************
+        // Catalogue
+        // *************************
+        NavDrawerItem navDrawerItem = new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1));
+        navDrawerItems.add(navDrawerItem);
+
+        new AsyncTask<NavDrawerItem, Void, Integer>() {
+            NavDrawerItem item;
+
+            @Override
+            protected Integer doInBackground(NavDrawerItem... params) {
+                item = params[0];
+                return seedManager.getVendorSeeds(false).size();
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
+                item.setCounterVisibility(result > 0);
+                item.setCount(result.toString());
+                super.onPostExecute(result);
+            }
+        }.execute(navDrawerItem);
+
+        // *************************
+        // Allotments
+        // *************************
+        navDrawerItem = new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1));
+        navDrawerItems.add(navDrawerItem);
+        new AsyncTask<NavDrawerItem, Void, Integer>() {
+            NavDrawerItem item;
+
+            @Override
+            protected Integer doInBackground(NavDrawerItem... params) {
+                item = params[0];
+                return allotmentManager.getMyAllotments(false).size();
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
+                item.setCounterVisibility(result > 0);
+                item.setCount(result.toString());
+                super.onPostExecute(result);
+            }
+        }.execute(navDrawerItem);
+        // *************************
+        // Actions
+        // *************************
+        navDrawerItem = new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1));
+        navDrawerItems.add(navDrawerItem);
+        new AsyncTask<NavDrawerItem, Void, Integer>() {
+            NavDrawerItem item;
+
+            @Override
+            protected Integer doInBackground(NavDrawerItem... params) {
+                item = params[0];
+                return actionseedProvider.getActionsToDo().size();
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
+                item.setCounterVisibility(result > 0);
+                item.setCount(result.toString());
+                super.onPostExecute(result);
+            }
+        }.execute(navDrawerItem);
+
+        // *************************
+        // Profiles
+        // *************************
+        navDrawerItem = new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1));
+        navDrawerItems.add(navDrawerItem);
+        new AsyncTask<NavDrawerItem, Void, Integer>() {
+            NavDrawerItem item;
+
+            @Override
+            protected Integer doInBackground(NavDrawerItem... params) {
+                item = params[0];
+                return gardenManager.getMyGardens(false).size();
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
+                item.setCounterVisibility(result > 0);
+                item.setCount(result.toString());
+                super.onPostExecute(result);
+            }
+        }.execute(navDrawerItem);
+
+        // *************************
+        // Sensors
+        // *************************
+        navDrawerItem = new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1));
+        navDrawerItems.add(navDrawerItem);
+        
+        // What's hot, We will add a counter here
+        // navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1)));
+
+        // Recycle the typed array
+        navMenuIcons.recycle();
+
+        // setting the nav drawer list adapter
+        adapter = new NavDrawerListAdapter(getApplicationContext(), navDrawerItems);
+        mDrawerList.removeAllViewsInLayout();
+        mDrawerList.setAdapter(adapter);
     }
 
     /**
@@ -145,8 +289,39 @@ public class MainActivity extends AbstractActivity {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        // Handle action bar actions click
+
         switch (item.getItemId()) {
+        case R.id.help:
+            Intent browserIntent = new Intent(this, WebHelpActivity.class);
+            browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
+            startActivity(browserIntent);
+
+            return true;
+        case R.id.about:
+            Intent aboutIntent = new Intent(this, AboutActivity.class);
+            startActivity(aboutIntent);
+
+            return true;
+        case R.id.premium:
+            FragmentManager fm = getSupportFragmentManager();
+            GotsBillingDialog editNameDialog = new GotsBillingDialog();
+            editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+            editNameDialog.show(fm, "fragment_edit_name");
+            return true;
+
+        case R.id.settings:
+            Intent settingsIntent = new Intent(this, PreferenceActivity.class);
+            startActivity(settingsIntent);
+            // FragmentTransaction ft = getFragmentManager().beginTransaction();
+            // ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+            // ft.replace(R.id.idContent, new PreferenceActivity()).addToBackStack("back").commit();
+            return true;
+
+        case R.id.connection:
+            LoginDialogFragment login = new LoginDialogFragment();
+            login.show(getSupportFragmentManager(), TAG);
+            return true;
+
         default:
             return super.onOptionsItemSelected(item);
         }
@@ -160,6 +335,15 @@ public class MainActivity extends AbstractActivity {
         // if nav drawer is opened, hide the action items
         boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerLinear);
         // menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
+
+        MenuItem itemConnected = (MenuItem) menu.findItem(R.id.connection);
+        if (gotsPrefs.isConnectedToServer())
+            itemConnected.setIcon(getResources().getDrawable(R.drawable.garden_connected));
+        else
+            itemConnected.setIcon(getResources().getDrawable(R.drawable.garden_disconnected));
+
+        if (gotsPurchase.isPremium())
+            menu.findItem(R.id.premium).setVisible(false);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -180,6 +364,16 @@ public class MainActivity extends AbstractActivity {
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
         refreshGardenMenu();
+        if (gotsPrefs.isConnectedToServer()) {
+            UserInfo userInfoTask = new UserInfo();
+            userInfoTask.execute((ImageView) findViewById(R.id.imageAvatar));
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(broadcastReceiver);
+        super.onDestroy();
     }
 
     @Override
@@ -194,22 +388,37 @@ public class MainActivity extends AbstractActivity {
      * */
     private void displayView(int position) {
         // update the main content by replacing fragments
-        Fragment fragment = null;
+        Intent i = null;
         switch (position) {
         case 0:
-            fragment = new VendorListActivity();
+            i = new Intent(getApplicationContext(), HutActivity.class);
             break;
         case 1:
-            // fragment = new allo
+            i = new Intent(getApplicationContext(), MyMainGarden.class);
             break;
         case 2:
             // fragment = new ActionActivity();
+            i = new Intent(getApplicationContext(), ActionActivity.class);
+
             break;
         case 3:
             // fragment = new ProfileActivity();
+            i = new Intent(getApplicationContext(), org.gots.ui.ProfileActivity.class);
+
             break;
         case 4:
             // fragment = new PagesFragment();
+            GotsPurchaseItem purchaseItem = new GotsPurchaseItem(this);
+
+            if (purchaseItem.getFeatureParrot() ? true : purchaseItem.isPremium()) {
+                i = new Intent(this, SensorActivity.class);
+            } else {
+                // if (!purchaseItem.getFeatureParrot() && !purchaseItem.isPremium()) {
+                FragmentManager fm = getSupportFragmentManager();
+                GotsBillingDialog editNameDialog = new GotsBillingDialog(GotsPurchaseItem.SKU_FEATURE_PARROT);
+                editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+                editNameDialog.show(fm, "fragment_edit_name");
+            }
             break;
         case 5:
             // fragment = new PreferenceActivity();
@@ -218,27 +427,26 @@ public class MainActivity extends AbstractActivity {
         default:
             break;
         }
+        if (i != null) {
+            startActivity(i);
+        }
 
-        if (fragment != null) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
+        Fragment fragment = new DashboardResumeFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
 
-            // update selected item and title, then close the drawer
+        // update selected item and title, then close the drawer
+        if (position <= navMenuTitles.length) {
             mDrawerList.setItemChecked(position, true);
             mDrawerList.setSelection(position);
             setTitle(navMenuTitles[position]);
-            mDrawerLayout.closeDrawer(mDrawerLinear);
-        } else {
-            // error in creating fragment
-            Log.e("MainActivity", "Error in creating fragment");
+
         }
     }
-    
+
     protected void refreshGardenMenu() {
 
         new AsyncTask<Void, Void, GardenInterface>() {
-
-            private List<GardenInterface> myGardens;
 
             @Override
             protected GardenInterface doInBackground(Void... params) {
@@ -279,8 +487,8 @@ public class MainActivity extends AbstractActivity {
                             android.R.layout.simple_spinner_item, android.R.id.text1, dropdownValues);
 
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-//                    actionBar.setListNavigationCallbacks(adapter, MainActivity.this);
-                    Spinner spinnerGarden = (Spinner)findViewById(R.id.spinnerGarden);
+                    // actionBar.setListNavigationCallbacks(adapter, MainActivity.this);
+
                     spinnerGarden.setAdapter(adapter);
                     spinnerGarden.setSelection(selectedGardenIndex);
                 }
@@ -288,4 +496,78 @@ public class MainActivity extends AbstractActivity {
         }.execute();
 
     }
+
+    private void downloadImage(String userid, String url) {
+        if (userid == null)
+            return;
+        File file = new File(getApplicationContext().getCacheDir() + "/" + userid.toLowerCase().replaceAll("\\s", ""));
+        if (!file.exists()) {
+            try {
+                URLConnection conn = new URL(url).openConnection();
+                conn.connect();
+                Bitmap image = BitmapFactory.decodeStream(conn.getInputStream());
+                FileOutputStream out = new FileOutputStream(file);
+                image.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                out.flush();
+                out.close();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return;
+    }
+
+    public class UserInfo extends AsyncTask<ImageView, Void, Void> {
+        ImageView imageProfile;
+
+        private User user;
+
+        @Override
+        protected Void doInBackground(ImageView... params) {
+            imageProfile = params[0];
+            GotsSocialAuthentication authentication = new GoogleAuthentication(getApplicationContext());
+            try {
+                String token = authentication.getToken(gotsPrefs.getNuxeoLogin());
+                user = authentication.getUser(token);
+                downloadImage(user.getId(), user.getPictureURL());
+            } catch (UserRecoverableAuthException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (GoogleAuthException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        protected void onPostExecute(Void result) {
+            if (user != null && user.getId() != null) {
+                File file = new File(getApplicationContext().getCacheDir() + "/"
+                        + user.getId().toLowerCase().replaceAll("\\s", ""));
+                Bitmap usrLogo = BitmapFactory.decodeFile(file.getAbsolutePath());
+                imageProfile.setImageBitmap(usrLogo);
+            }
+        };
+    }
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (BroadCastMessages.WEATHER_DISPLAY_EVENT.equals(intent.getAction())) {
+                // refreshWeatherWidget(intent);
+            } else if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())) {
+                refreshGardenMenu();
+                invalidateOptionsMenu();
+                // refreshWeatherWidget(intent);
+            } else if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())
+                    || BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
+                refreshGardenMenu();
+                displayDrawerMenu();
+            }
+        }
+
+    };
+
+    private Spinner spinnerGarden;
 }

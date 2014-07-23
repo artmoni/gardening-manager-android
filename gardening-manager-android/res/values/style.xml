@@ -283,7 +283,7 @@
         <item name="android:actionDropDownStyle">@style/DropDownNav</item>
         <item name="actionDropDownStyle">@style/DropDownNav</item>
         <item name="android:textColor">@color/text_color_dark</item>
-<!--          <item name="android:actionModeBackground">@color/action_warning_color</item> -->
+        <!-- <item name="android:actionModeBackground">@color/action_warning_color</item> -->
     </style>
 
     <style name="SpinnerItem" parent="Widget.AppCompat.DropDownItem.Spinner">
@@ -294,6 +294,16 @@
         <item name="android:textColor">@color/green_light</item>
         <item name="android:background">@color/text_color_dark</item>
         <item name="background">@color/text_color_dark</item>
+    </style>
+
+    <style name="SpinnerGarden" parent="Widget.AppCompat.DropDownItem.Spinner">
+        <item name="android:textAppearance">@style/Custom.TextAppearance.Sherlock.Widget.TextView.SpinnerItem</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:padding">2dp</item>
+        <item name="android:textColor">@color/text_color_dark</item>
+        <item name="android:background">@color/green_light</item>
+        <item name="background">@color/green_light</item>
     </style>
 
     <style name="Custom.TextAppearance.Sherlock.Widget.TextView.SpinnerItem" parent="Widget.AppCompat.DropDownItem.Spinner">
