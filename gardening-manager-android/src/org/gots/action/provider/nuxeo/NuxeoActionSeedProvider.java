@@ -19,8 +19,12 @@ import org.gots.action.GotsActionManager;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.exception.GotsServerRestrictedException;
+import org.gots.garden.GardenManager;
 import org.gots.nuxeo.NuxeoManager;
+import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.GotsSeedManager;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.provider.nuxeo.NuxeoSeedProvider;
 import org.nuxeo.android.cache.blob.BlobWithProperties;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.android.upload.FileUploader;
@@ -60,7 +64,33 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
 
     @Override
     public ArrayList<SeedActionInterface> getActionsToDo() {
-        return super.getActionsToDo();
+        Session session = getNuxeoClient().getSession();
+        DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
+        ArrayList<SeedActionInterface> actionsToDo = new ArrayList<SeedActionInterface>();
+        try {
+            // for (Document actionDoc : documentMgr.getChildren(getActionsFolder(seed, documentMgr))) {
+            Document garden = documentMgr.getDocument(new IdRef(
+                    GardenManager.getInstance().getCurrentGarden().getUUID()));
+            Documents actionDocs = documentMgr.query(
+                    "SELECT * FROM Action WHERE ecm:currentLifeCycleState != \"deleted\" AND  ecm:path startswith '"
+                            + garden.getPath() + "' AND action:dateactiondone is null", null,
+                    new String[] { "dc:modified DESC" }, "*", 0, 50, CacheBehavior.FORCE_REFRESH);
+
+            NuxeoSeedProvider gotsSeedManager = new NuxeoSeedProvider(mContext);
+            for (Document actionDoc : actionDocs) {
+                SeedActionInterface action = convert(actionDoc);
+//                Document parentSeed = documentMgr.getDocument(new PathRef(actionDoc.getParentPath()));
+//                GrowingSeedInterface seed = (GrowingSeedInterface)gotsSeedManager.getSeedByUUID(parentSeed.getId());
+//                // action = super.populateState(action, seed);
+//                 action.setGrowingSeedId(seed.getGrowingSeedId());
+                actionsToDo.add(action);
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+            actionsToDo = super.getActionsToDo();
+        }
+        return actionsToDo;
     }
 
     @Override

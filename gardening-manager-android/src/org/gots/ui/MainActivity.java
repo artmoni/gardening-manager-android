@@ -203,7 +203,6 @@ public class MainActivity extends AbstractActivity {
                 item.setCounterVisibility(result > 0);
                 item.setCount(result.toString());
                 adapter.notifyDataSetChanged();
-
                 super.onPostExecute(result);
             }
         }.execute(navDrawerItem);

@@ -20,6 +20,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -60,21 +61,40 @@ public class DashboardResumeFragment extends Fragment {
         }
     };
 
-    protected void displayActions(View view) {
-        ListView galleryActions = (ListView) view.findViewById(R.id.listActions);
-        GotsActionSeedProvider actionSeedManager = GotsActionSeedManager.getInstance().initIfNew(getActivity());
-        List<SeedActionInterface> listActions = actionSeedManager.getActionsToDo();
+    protected void displayActions(final View view) {
 
-        ListAllActionAdapter actionAdapter = new ListAllActionAdapter(getActivity(), listActions.subList(0,
-                listActions.size() >= 5 ? 5 : listActions.size()), ListAllActionAdapter.STATUS_TODO);
-        galleryActions.setAdapter(actionAdapter);
-        view.findViewById(R.id.buttonActions).setOnClickListener(new View.OnClickListener() {
+        new AsyncTask<Void, Void, List<SeedActionInterface>>() {
+            ListView galleryActions;
+
+            GotsActionSeedProvider actionSeedManager = GotsActionSeedManager.getInstance().initIfNew(getActivity());
 
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), ActionActivity.class));
+            protected void onPreExecute() {
+                galleryActions = (ListView) view.findViewById(R.id.listActions);
+                super.onPreExecute();
             }
-        });
+
+            @Override
+            protected List<SeedActionInterface> doInBackground(Void... params) {
+                return actionSeedManager.getActionsToDo();
+            }
+
+            @Override
+            protected void onPostExecute(List<SeedActionInterface> listActions) {
+                ListAllActionAdapter actionAdapter = new ListAllActionAdapter(getActivity(), listActions.subList(0,
+                        listActions.size() >= 5 ? 5 : listActions.size()), ListAllActionAdapter.STATUS_TODO);
+                galleryActions.setAdapter(actionAdapter);
+                view.findViewById(R.id.buttonActions).setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(getActivity(), ActionActivity.class));
+                    }
+                });
+                super.onPostExecute(listActions);
+            }
+        };
+
     }
 
     protected void displaySeeds(View view) {
