@@ -31,8 +31,10 @@ public class AllotmentManager extends BroadcastReceiver implements AllotmentProv
 
     Map<Integer, BaseAllotmentInterface> allotments;
 
+    private boolean haschanged = false;
+
     private AllotmentManager() {
-        
+
     }
 
     /**
@@ -92,7 +94,7 @@ public class AllotmentManager extends BroadcastReceiver implements AllotmentProv
             setAllotmentProvider();
         }
         if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
-            allotments = null;
+            haschanged = true;
         }
     }
 
@@ -110,7 +112,8 @@ public class AllotmentManager extends BroadcastReceiver implements AllotmentProv
 
     @Override
     public List<BaseAllotmentInterface> getMyAllotments(boolean force) {
-        if (allotments == null || force) {
+        if (allotments == null || force || haschanged) {
+            haschanged = false;
             allotments = new HashMap<Integer, BaseAllotmentInterface>();
             for (BaseAllotmentInterface allotment : allotmentProvider.getMyAllotments(false)) {
                 allotments.put(allotment.getId(), allotment);

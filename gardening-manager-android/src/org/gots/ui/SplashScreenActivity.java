@@ -42,7 +42,7 @@ public class SplashScreenActivity extends AboutActivity {
         if (arg1 == 1)
             onRefresh(null);
         if (arg1 == 2)
-            startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
         super.onActivityResult(arg0, arg1, arg2);
     }
 

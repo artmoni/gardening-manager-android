@@ -32,6 +32,7 @@ import org.gots.garden.GardenManager;
 import org.gots.inapp.GotsPurchaseItem;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
+import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GotsSeedManager;
 
 import android.accounts.Account;
@@ -97,6 +98,7 @@ public abstract class AbstractActivity extends ActionBarActivity {
         seedManager.initIfNew(this);
         allotmentManager = AllotmentManager.getInstance();
         allotmentManager.initIfNew(this);
+        gotsGrowingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(this);
         actionseedProvider = GotsActionSeedManager.getInstance();
         actionseedProvider.initIfNew(this);
     }
@@ -109,6 +111,7 @@ public abstract class AbstractActivity extends ActionBarActivity {
         registerReceiver(allotmentManager, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
         registerReceiver(allotmentManager, new IntentFilter(BroadCastMessages.GARDEN_SETTINGS_CHANGED));
         registerReceiver(allotmentManager, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
+        registerReceiver(gotsGrowingSeedManager, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
         registerReceiver(seedManager, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
         registerReceiver(seedManager, new IntentFilter(BroadCastMessages.GARDEN_SETTINGS_CHANGED));
         registerReceiver(progressReceiver, new IntentFilter(BroadCastMessages.PROGRESS_UPDATE));
@@ -153,6 +156,8 @@ public abstract class AbstractActivity extends ActionBarActivity {
         }
     };
 
+    private GotsGrowingSeedManager gotsGrowingSeedManager;
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -164,6 +169,7 @@ public abstract class AbstractActivity extends ActionBarActivity {
         unregisterReceiver(allotmentManager);
         unregisterReceiver(seedManager);
         unregisterReceiver(progressReceiver);
+        unregisterReceiver(gotsGrowingSeedManager);
         if (activities.size() == 0) {
             nuxeoManager.shutdown();
             gardenManager.finalize();

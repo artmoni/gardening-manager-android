@@ -179,6 +179,7 @@ public class MainActivity extends AbstractActivity {
             protected void onPostExecute(Integer result) {
                 item.setCounterVisibility(result > 0);
                 item.setCount(result.toString());
+                adapter.notifyDataSetChanged();
                 super.onPostExecute(result);
             }
         }.execute(navDrawerItem);
@@ -201,6 +202,8 @@ public class MainActivity extends AbstractActivity {
             protected void onPostExecute(Integer result) {
                 item.setCounterVisibility(result > 0);
                 item.setCount(result.toString());
+                adapter.notifyDataSetChanged();
+
                 super.onPostExecute(result);
             }
         }.execute(navDrawerItem);
@@ -222,6 +225,7 @@ public class MainActivity extends AbstractActivity {
             protected void onPostExecute(Integer result) {
                 item.setCounterVisibility(result > 0);
                 item.setCount(result.toString());
+                adapter.notifyDataSetChanged();
                 super.onPostExecute(result);
             }
         }.execute(navDrawerItem);
@@ -244,6 +248,8 @@ public class MainActivity extends AbstractActivity {
             protected void onPostExecute(Integer result) {
                 item.setCounterVisibility(result > 0);
                 item.setCount(result.toString());
+                adapter.notifyDataSetChanged();
+
                 super.onPostExecute(result);
             }
         }.execute(navDrawerItem);
@@ -253,7 +259,7 @@ public class MainActivity extends AbstractActivity {
         // *************************
         navDrawerItem = new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1));
         navDrawerItems.add(navDrawerItem);
-        
+
         // What's hot, We will add a counter here
         // navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1)));
 
@@ -560,9 +566,9 @@ public class MainActivity extends AbstractActivity {
                 refreshGardenMenu();
                 invalidateOptionsMenu();
                 // refreshWeatherWidget(intent);
-            } else if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())
-                    || BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
+            } else if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
                 refreshGardenMenu();
+            } else if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
                 displayDrawerMenu();
             }
         }

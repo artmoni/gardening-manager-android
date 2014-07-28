@@ -6,17 +6,20 @@ import java.util.List;
 import java.util.Map;
 
 import org.gots.bean.BaseAllotmentInterface;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.provider.local.GotsGrowingSeedProvider;
 import org.gots.seed.provider.local.LocalGrowingSeedProvider;
 import org.gots.seed.provider.nuxeo.NuxeoGrowingSeedProvider;
 import org.gots.utils.NotConfiguredException;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-public class GotsGrowingSeedManager implements GotsGrowingSeedProvider {
+public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGrowingSeedProvider {
 
     private static GotsGrowingSeedManager instance;
 
@@ -56,6 +59,13 @@ public class GotsGrowingSeedManager implements GotsGrowingSeedProvider {
             throw new NotConfiguredException(firstCall);
         }
         return instance;
+    }
+
+    @Override
+    public void onReceive(Context arg0, Intent intent) {
+        if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
+            seedsByAllotment = null;
+        }
     }
 
     /**
