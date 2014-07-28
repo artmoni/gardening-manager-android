@@ -115,9 +115,9 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
     protected void downloadWeatherXML() {
         cache = new WeatherCache(mContext);
 
-        InputStream is = cache.getCacheByURL(url);
 
         try {
+            InputStream is = cache.getCacheByURL(url);
             /* Get a SAXParser from the SAXPArserFactory. */
             SAXParserFactory spf = SAXParserFactory.newInstance();
             SAXParser sp;
