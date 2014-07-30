@@ -59,7 +59,6 @@
                 android:layout_margin="10dp"
                 android:text="More" />
 
-
             <TextView
                 android:id="@+id/textViewAction"
                 android:layout_width="wrap_content"
@@ -74,11 +73,10 @@
             <ListView
                 android:id="@+id/listActions"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="200dp"
                 android:layout_below="@+id/buttonActions"
                 android:layout_centerHorizontal="true" >
             </ListView>
-
         </RelativeLayout>
     </LinearLayout>
 

@@ -19,6 +19,7 @@ import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
 import org.nuxeo.ecm.automation.client.cache.CacheBehavior;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
+import org.nuxeo.ecm.automation.client.jaxrs.adapters.DocumentService;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Blob;
 import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
@@ -251,7 +252,8 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);
         try {
-            Document doc = service.getDocument(new IdRef(uuid));
+            Document doc = service.getDocument(new IdRef(uuid), true);
+            doc = service.getDocument(new IdRef(uuid), "*");
             remoteSeed = NuxeoSeedConverter.convert(doc);
             remoteSeed = super.createSeed(remoteSeed);
         } catch (Exception e) {
@@ -543,9 +545,8 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     new String[] { "species:family_uuid DESC" }, "*", 0, 50, cacheParam);
             for (Document document : docSpecies) {
                 latinNameSpecies.add(document.getTitle());
-               
+
             }
-            
 
             // Blob blob = (Blob) session.newRequest("Directory.Entries").set("directoryName", "topic").setHeader(
             // "Content-Type", "application/json+nxrequest").setInput(null).execute();
@@ -555,8 +556,8 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
-        String []arraySpecies = new String[latinNameSpecies.size()];
+        String[] arraySpecies = new String[latinNameSpecies.size()];
         return latinNameSpecies.toArray(arraySpecies);
     }
-    
+
 }

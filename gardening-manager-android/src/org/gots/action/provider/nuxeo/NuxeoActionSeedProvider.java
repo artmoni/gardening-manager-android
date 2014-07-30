@@ -24,6 +24,7 @@ import org.gots.nuxeo.NuxeoManager;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.provider.nuxeo.NuxeoGrowingSeedProvider;
 import org.gots.seed.provider.nuxeo.NuxeoSeedProvider;
 import org.nuxeo.android.cache.blob.BlobWithProperties;
 import org.nuxeo.android.repository.DocumentManager;
@@ -31,6 +32,7 @@ import org.nuxeo.android.upload.FileUploader;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
 import org.nuxeo.ecm.automation.client.cache.CacheBehavior;
 import org.nuxeo.ecm.automation.client.jaxrs.AsyncCallback;
+import org.nuxeo.ecm.automation.client.jaxrs.Constants;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Blob;
 import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
@@ -76,16 +78,17 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
                             + garden.getPath() + "' AND action:dateactiondone is null", null,
                     new String[] { "dc:modified DESC" }, "*", 0, 50, CacheBehavior.FORCE_REFRESH);
 
-            NuxeoSeedProvider gotsSeedManager = new NuxeoSeedProvider(mContext);
+            NuxeoGrowingSeedProvider gotsSeedManager = new NuxeoGrowingSeedProvider(mContext);
             for (Document actionDoc : actionDocs) {
                 SeedActionInterface action = convert(actionDoc);
-//                Document parentSeed = documentMgr.getDocument(new PathRef(actionDoc.getParentPath()));
-//                GrowingSeedInterface seed = (GrowingSeedInterface)gotsSeedManager.getSeedByUUID(parentSeed.getId());
-//                // action = super.populateState(action, seed);
-//                 action.setGrowingSeedId(seed.getGrowingSeedId());
+                Document actionFolder = documentMgr.getDocument(new PathRef(actionDoc.getParentPath()));
+                Document parentSeed = documentMgr.getDocument(new PathRef(actionFolder.getParentPath()), "*");
+
+                GrowingSeedInterface seed = gotsSeedManager.getGrowingSeedsByUUID(parentSeed.getId());
+                action = super.populateState(action, seed);
+                action.setGrowingSeedId(seed.getGrowingSeedId());
                 actionsToDo.add(action);
             }
-
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
             actionsToDo = super.getActionsToDo();

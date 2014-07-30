@@ -1,5 +1,6 @@
 package org.gots.ui.fragment;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.gots.R;
@@ -32,7 +33,8 @@ import android.widget.ListView;
 public class DashboardResumeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getActivity().registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_EVENT));
+        getActivity().registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
+
         return inflater.inflate(R.layout.dashboard_resume, null);
     }
 
@@ -54,7 +56,7 @@ public class DashboardResumeFragment extends Fragment {
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
+            if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
                 displaySeeds(getView());
                 displayActions(getView());
             }
@@ -93,25 +95,45 @@ public class DashboardResumeFragment extends Fragment {
                 });
                 super.onPostExecute(listActions);
             }
-        };
+        }.execute();
 
     }
 
     protected void displaySeeds(View view) {
-        Gallery gallery = (Gallery) view.findViewById(R.id.gallery1);
-        GotsSeedManager gotsSeedManager = GotsSeedManager.getInstance().initIfNew(getActivity());
-        List<BaseSeedInterface> list = gotsSeedManager.getVendorSeeds(false);
 
-        SeedListAdapter adapter = new VendorSeedListAdapter(getActivity(), list.subList(0,
-                list.size() >= 5 ? 5 : list.size()));
-        gallery.setAdapter(adapter);
+        new AsyncTask<Void, Void, List<BaseSeedInterface>>() {
+            Gallery gallery;
 
-        view.findViewById(R.id.buttonHut).setOnClickListener(new View.OnClickListener() {
+            GotsSeedManager gotsSeedManager = GotsSeedManager.getInstance().initIfNew(getActivity());
 
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), HutActivity.class));
+            protected void onPreExecute() {
+                gallery = (Gallery) getView().findViewById(R.id.gallery1);
+                super.onPreExecute();
             }
-        });
+
+            @Override
+            protected List<BaseSeedInterface> doInBackground(Void... params) {
+                return gotsSeedManager.getSeedBySowingMonth(Calendar.getInstance().get(Calendar.MONTH));
+            }
+
+            @Override
+            protected void onPostExecute(List<BaseSeedInterface> list) {
+
+                SeedListAdapter adapter = new VendorSeedListAdapter(getActivity(), list.subList(0,
+                        list.size() >= 5 ? 5 : list.size()));
+                gallery.setAdapter(adapter);
+
+                getView().findViewById(R.id.buttonHut).setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(getActivity(), HutActivity.class));
+                    }
+                });
+                super.onPostExecute(list);
+            }
+        }.execute();
+
     }
 }
