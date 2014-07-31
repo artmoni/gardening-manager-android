@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Gallery;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class DashboardResumeFragment extends Fragment {
     @Override
@@ -119,7 +120,6 @@ public class DashboardResumeFragment extends Fragment {
 
             @Override
             protected void onPostExecute(List<BaseSeedInterface> list) {
-
                 SeedListAdapter adapter = new VendorSeedListAdapter(getActivity(), list.subList(0,
                         list.size() >= 5 ? 5 : list.size()));
                 gallery.setAdapter(adapter);

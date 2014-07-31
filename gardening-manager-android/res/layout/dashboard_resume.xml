@@ -11,72 +11,75 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp" >
+            android:layout_margin="5dp"
+            android:background="@color/brown_light"
+            android:padding="5dp" >
 
             <Button
                 android:id="@+id/buttonHut"
-                style="@style/buttonGreen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/buttonGreenDashboard"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:layout_margin="10dp"
-                android:text="More" />
+                android:text="@string/more" />
 
             <Gallery
                 android:id="@+id/gallery1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/buttonHut"
-                android:background="@color/text_color_light"
+                android:layout_alignLeft="@+id/textViewCatalogDescription"
+                android:layout_below="@+id/textViewCatalogDescription"
                 android:spacing="5dp" />
 
             <TextView
-                android:id="@+id/textView1"
+                android:id="@+id/textViewCatalog"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/buttonHut"
-                android:layout_alignBottom="@+id/buttonHut"
                 android:layout_alignParentLeft="true"
-                android:layout_marginLeft="10dp"
+                android:layout_alignParentTop="true"
                 android:text="@string/dashboard.hut.name"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <TextView
+                android:id="@+id/textViewCatalogDescription"
+                style="@style/seed_family_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/textViewCatalog"
+                android:layout_below="@+id/textViewCatalog"
+                android:text="@string/hut.menu.seedsofthemonth" />
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp" >
-
-            <Button
-                android:id="@+id/buttonActions"
-                style="@style/buttonGreen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_margin="10dp"
-                android:text="More" />
-
-            <TextView
-                android:id="@+id/textViewAction"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/buttonActions"
-                android:layout_alignBottom="@+id/buttonActions"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="10dp"
-                android:text="@string/dashboard.actions.name"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:layout_margin="5dp"
+            android:background="@color/brown_light"
+            android:padding="5dp" >
 
             <ListView
                 android:id="@+id/listActions"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_below="@+id/buttonActions"
-                android:layout_centerHorizontal="true" >
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp" >
             </ListView>
+
+            <Button
+                android:id="@+id/buttonActions"
+                style="@style/buttonGreenDashboard"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:text="@string/more" />
+
+            <TextView
+                android:id="@+id/textViewAction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:text="@string/dashboard.actions.name"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
         </RelativeLayout>
     </LinearLayout>
 
