@@ -27,6 +27,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Gallery;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,6 +36,7 @@ public class DashboardResumeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         getActivity().registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
+        getActivity().registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.ACTION_EVENT));
 
         return inflater.inflate(R.layout.dashboard_resume, null);
     }
@@ -43,8 +45,7 @@ public class DashboardResumeFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
         displaySeeds(view);
-
-        displayActions(view);
+        displayActions();
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -59,21 +60,23 @@ public class DashboardResumeFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
                 displaySeeds(getView());
-                displayActions(getView());
+                displayActions();
+            } else if (BroadCastMessages.ACTION_EVENT.equals(intent.getAction())) {
+                displayActions();
             }
         }
     };
 
-    protected void displayActions(final View view) {
+    protected void displayActions() {
 
         new AsyncTask<Void, Void, List<SeedActionInterface>>() {
-            ListView galleryActions;
+            ListView listViewActions;
 
             GotsActionSeedProvider actionSeedManager = GotsActionSeedManager.getInstance().initIfNew(getActivity());
 
             @Override
             protected void onPreExecute() {
-                galleryActions = (ListView) view.findViewById(R.id.listActions);
+                listViewActions = (ListView) getView().findViewById(R.id.listActions);
                 super.onPreExecute();
             }
 
@@ -86,8 +89,9 @@ public class DashboardResumeFragment extends Fragment {
             protected void onPostExecute(List<SeedActionInterface> listActions) {
                 ListAllActionAdapter actionAdapter = new ListAllActionAdapter(getActivity(), listActions.subList(0,
                         listActions.size() >= 5 ? 5 : listActions.size()), ListAllActionAdapter.STATUS_TODO);
-                galleryActions.setAdapter(actionAdapter);
-                view.findViewById(R.id.buttonActions).setOnClickListener(new View.OnClickListener() {
+                listViewActions.setAdapter(actionAdapter);
+                
+                getView().findViewById(R.id.buttonActions).setOnClickListener(new View.OnClickListener() {
 
                     @Override
                     public void onClick(View v) {

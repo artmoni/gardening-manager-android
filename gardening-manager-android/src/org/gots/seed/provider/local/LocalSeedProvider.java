@@ -181,7 +181,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
 
         // Création d'un ContentValues (fonctionne comme une HashMap)
         ContentValues values = getContentValuesFromSeed(seed);
-//         Cursor cursor;
+        // Cursor cursor;
         bdd.update(DatabaseHelper.SEEDS_TABLE_NAME, values, DatabaseHelper.SEED_ID + "='" + seed.getSeedId() + "'",
                 null);
         // cursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_ID + "='" + seed.getSeedId()
@@ -364,11 +364,23 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
 
     @Override
     public List<BaseSeedInterface> getSeedBySowingMonth(int month) {
-        List<BaseSeedInterface> monthlySeed = new ArrayList<BaseSeedInterface>();
-        for (BaseSeedInterface baseSeedInterface : getVendorSeeds(false)) {
-            if (month >= baseSeedInterface.getDateSowingMin() && month <= baseSeedInterface.getDateSowingMax())
-                monthlySeed.add(baseSeedInterface);
+        ArrayList<BaseSeedInterface> vendorSeeds = new ArrayList<BaseSeedInterface>();
+        try {
+            BaseSeedInterface searchedSeed = new GrowingSeed();
+            Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_DATESOWINGMIN
+                    + "=" + month, null, null, null, null);
+
+            if (managedCursor.moveToFirst()) {
+                do {
+                    searchedSeed = cursorToSeed(managedCursor);
+                    vendorSeeds.add(searchedSeed);
+                } while (managedCursor.moveToNext());
+            }
+            managedCursor.close();
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
         }
-        return monthlySeed;
+        return vendorSeeds;
     }
+
 }

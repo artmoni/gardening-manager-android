@@ -153,6 +153,10 @@ public class MainActivity extends AbstractActivity {
         registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
         registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_EVENT));
         registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
+        registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.SEED_DISPLAYLIST));
+        registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.ACTION_EVENT));
+        registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.ALLOTMENT_EVENT));
+
     }
 
     protected void displayDrawerMenu() {
@@ -165,93 +169,27 @@ public class MainActivity extends AbstractActivity {
         // *************************
         NavDrawerItem navDrawerItem = new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1));
         navDrawerItems.add(navDrawerItem);
-
-        new AsyncTask<NavDrawerItem, Void, Integer>() {
-            NavDrawerItem item;
-
-            @Override
-            protected Integer doInBackground(NavDrawerItem... params) {
-                item = params[0];
-                return seedManager.getVendorSeeds(false).size();
-            }
-
-            @Override
-            protected void onPostExecute(Integer result) {
-                item.setCounterVisibility(result > 0);
-                item.setCount(result.toString());
-                adapter.notifyDataSetChanged();
-                super.onPostExecute(result);
-            }
-        }.execute(navDrawerItem);
+        displayDrawerMenuCatalogCounter();
 
         // *************************
         // Allotments
         // *************************
         navDrawerItem = new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1));
         navDrawerItems.add(navDrawerItem);
-        new AsyncTask<NavDrawerItem, Void, Integer>() {
-            NavDrawerItem item;
-
-            @Override
-            protected Integer doInBackground(NavDrawerItem... params) {
-                item = params[0];
-                return allotmentManager.getMyAllotments(false).size();
-            }
-
-            @Override
-            protected void onPostExecute(Integer result) {
-                item.setCounterVisibility(result > 0);
-                item.setCount(result.toString());
-                adapter.notifyDataSetChanged();
-                super.onPostExecute(result);
-            }
-        }.execute(navDrawerItem);
+        displayDrawerMenuAllotmentCounter();
         // *************************
         // Actions
         // *************************
         navDrawerItem = new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1));
         navDrawerItems.add(navDrawerItem);
-        new AsyncTask<NavDrawerItem, Void, Integer>() {
-            NavDrawerItem item;
-
-            @Override
-            protected Integer doInBackground(NavDrawerItem... params) {
-                item = params[0];
-                return actionseedProvider.getActionsToDo().size();
-            }
-
-            @Override
-            protected void onPostExecute(Integer result) {
-                item.setCounterVisibility(result > 0);
-                item.setCount(result.toString());
-                adapter.notifyDataSetChanged();
-                super.onPostExecute(result);
-            }
-        }.execute(navDrawerItem);
+        displayDrawerMenuActionsCounter();
 
         // *************************
         // Profiles
         // *************************
         navDrawerItem = new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1));
         navDrawerItems.add(navDrawerItem);
-        new AsyncTask<NavDrawerItem, Void, Integer>() {
-            NavDrawerItem item;
-
-            @Override
-            protected Integer doInBackground(NavDrawerItem... params) {
-                item = params[0];
-                return gardenManager.getMyGardens(false).size();
-            }
-
-            @Override
-            protected void onPostExecute(Integer result) {
-                item.setCounterVisibility(result > 0);
-                item.setCount(result.toString());
-                adapter.notifyDataSetChanged();
-
-                super.onPostExecute(result);
-            }
-        }.execute(navDrawerItem);
+        displayDrawerMenuProfileCounter();
 
         // *************************
         // Sensors
@@ -269,6 +207,87 @@ public class MainActivity extends AbstractActivity {
         adapter = new NavDrawerListAdapter(getApplicationContext(), navDrawerItems);
         mDrawerList.removeAllViewsInLayout();
         mDrawerList.setAdapter(adapter);
+    }
+
+    protected void displayDrawerMenuProfileCounter() {
+        new AsyncTask<NavDrawerItem, Void, Integer>() {
+            NavDrawerItem item;
+
+            @Override
+            protected Integer doInBackground(NavDrawerItem... params) {
+                item = params[0];
+                return gardenManager.getMyGardens(false).size();
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
+                item.setCounterVisibility(result > 0);
+                item.setCount(result.toString());
+                adapter.notifyDataSetChanged();
+
+                super.onPostExecute(result);
+            }
+        }.execute(navDrawerItems.get(3));
+    }
+
+    protected void displayDrawerMenuActionsCounter() {
+        new AsyncTask<NavDrawerItem, Void, Integer>() {
+            NavDrawerItem item;
+
+            @Override
+            protected Integer doInBackground(NavDrawerItem... params) {
+                item = params[0];
+                return actionseedProvider.getActionsToDo().size();
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
+                item.setCounterVisibility(result > 0);
+                item.setCount(result.toString());
+                adapter.notifyDataSetChanged();
+                super.onPostExecute(result);
+            }
+        }.execute(navDrawerItems.get(2));
+    }
+
+    protected void displayDrawerMenuAllotmentCounter() {
+        new AsyncTask<NavDrawerItem, Void, Integer>() {
+            NavDrawerItem item;
+
+            @Override
+            protected Integer doInBackground(NavDrawerItem... params) {
+                item = params[0];
+                return allotmentManager.getMyAllotments(false).size();
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
+                item.setCounterVisibility(result > 0);
+                item.setCount(result.toString());
+                adapter.notifyDataSetChanged();
+                super.onPostExecute(result);
+            }
+        }.execute(navDrawerItems.get(1));
+    }
+
+    protected void displayDrawerMenuCatalogCounter() {
+        new AsyncTask<NavDrawerItem, Void, Integer>() {
+            NavDrawerItem item;
+
+            @Override
+            protected Integer doInBackground(NavDrawerItem... params) {
+                item = params[0];
+                return seedManager.getVendorSeeds(false).size();
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
+                item.setCounterVisibility(result > 0);
+                item.setCount(result.toString());
+                adapter.notifyDataSetChanged();
+                super.onPostExecute(result);
+            }
+        }.execute(navDrawerItems.get(0));
     }
 
     /**
@@ -569,6 +588,14 @@ public class MainActivity extends AbstractActivity {
                 refreshGardenMenu();
             } else if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
                 displayDrawerMenu();
+            } else if (BroadCastMessages.SEED_DISPLAYLIST.equals(intent.getAction())) {
+                displayDrawerMenuCatalogCounter();
+            } else if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
+                displayDrawerMenuProfileCounter();
+            } else if (BroadCastMessages.ACTION_EVENT.equals(intent.getAction())) {
+                displayDrawerMenuActionsCounter();
+            } else if (BroadCastMessages.ALLOTMENT_EVENT.equals(intent.getAction())) {
+                displayDrawerMenuAllotmentCounter();
             }
         }
 

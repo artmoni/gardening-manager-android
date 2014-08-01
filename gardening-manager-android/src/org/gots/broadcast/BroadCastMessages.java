@@ -49,6 +49,10 @@ public final class BroadCastMessages {
 
     public static final String PROGRESS_FINISHED = "org.gots.progress.stop";
 
+    public static final String ACTION_EVENT = "org.gots.action.broadcastevent";
+
+    public static final String ALLOTMENT_EVENT = "org.gots.allotment.broadcastevent";
+
     private BroadCastMessages() {
         throw new AssertionError();
     }

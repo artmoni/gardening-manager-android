@@ -9,11 +9,13 @@ import org.gots.action.GotsActionManager;
 import org.gots.action.GotsActionSeedManager;
 import org.gots.action.adapter.SimpleListActionAdapter;
 import org.gots.action.provider.GotsActionSeedProvider;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.view.SeedWidgetLong;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -85,12 +87,11 @@ public class ScheduleActionFragment extends DialogFragment implements OnItemClic
                 int width;
                 int sdk = android.os.Build.VERSION.SDK_INT;
                 if (sdk < android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                    width=display.getWidth();
-                }
-                else{
+                    width = display.getWidth();
+                } else {
                     Point size = new Point();
                     display.getSize(size);
-                    width= size.x;
+                    width = size.x;
                 }
 
                 int layoutsize = 200;
@@ -201,6 +202,7 @@ public class ScheduleActionFragment extends DialogFragment implements OnItemClic
                     GoogleAnalyticsTracker.getInstance().trackEvent(getClass().getSimpleName(), "NewAction",
                             selectedAction.getName(), 0);
                     dismiss();
+                    getActivity().sendBroadcast(new Intent(BroadCastMessages.ACTION_EVENT));
                     super.onPostExecute(result);
                 }
             }.execute();

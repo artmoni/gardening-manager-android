@@ -171,6 +171,7 @@ public class MyMainGarden extends AbstractActivity {
 
                 @Override
                 protected void onPostExecute(BaseAllotmentInterface result) {
+                    sendBroadcast(new Intent(BroadCastMessages.ALLOTMENT_EVENT));
                     onResume();
                     super.onPostExecute(result);
                 }
@@ -221,7 +222,7 @@ public class MyMainGarden extends AbstractActivity {
                                 selectedAllotments.clear();
                                 onResume();
                                 setProgressRefresh(false);
-
+                                sendBroadcast(new Intent(BroadCastMessages.ALLOTMENT_EVENT));
                                 super.onPostExecute(result);
                             }
                         }.execute();
