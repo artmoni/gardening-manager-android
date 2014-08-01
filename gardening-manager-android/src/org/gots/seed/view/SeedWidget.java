@@ -113,7 +113,7 @@ public class SeedWidget extends RelativeLayout {
             };
         }.execute();
 
-        setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.action_selector));
+//        setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_line_selector));
 
         invalidate();
     }
