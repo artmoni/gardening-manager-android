@@ -25,6 +25,7 @@ import org.gots.action.SeedActionInterface;
 import org.gots.action.bean.PhotoAction;
 import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.view.SeedWidget;
@@ -289,23 +290,24 @@ public class ListAllActionAdapter extends BaseAdapter {
         builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int id) {
-                new AsyncTask<BaseActionInterface, Integer, Void>() {
+                new AsyncTask<BaseActionInterface, Integer, BaseActionInterface>() {
                     @Override
-                    protected Void doInBackground(BaseActionInterface... params) {
+                    protected BaseActionInterface doInBackground(BaseActionInterface... params) {
 
                         BaseActionInterface actionItem = params[0];
                         if (SeedActionInterface.class.isInstance(actionItem)) {
                             actionItem.setData(userinput.getText().toString());
                             ((SeedActionInterface) actionItem).execute(seed);
                         }
-                        return null;
+                        return actionItem;
                     }
 
                     @Override
-                    protected void onPostExecute(Void result) {
-                        Toast.makeText(mContext, "action done", Toast.LENGTH_SHORT).show();
+                    protected void onPostExecute(BaseActionInterface result) {
+                        Toast.makeText(mContext, "Action done : " + result.getName(), Toast.LENGTH_SHORT).show();
                         actions.remove(position);
                         notifyDataSetChanged();
+                        mContext.sendBroadcast(new Intent(BroadCastMessages.ACTION_EVENT));
                         super.onPostExecute(result);
                     }
                 }.execute(currentAction);

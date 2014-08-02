@@ -90,7 +90,7 @@ public class DashboardResumeFragment extends Fragment {
                 ListAllActionAdapter actionAdapter = new ListAllActionAdapter(getActivity(), listActions.subList(0,
                         listActions.size() >= 5 ? 5 : listActions.size()), ListAllActionAdapter.STATUS_TODO);
                 listViewActions.setAdapter(actionAdapter);
-                
+
                 getView().findViewById(R.id.buttonActions).setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -124,17 +124,18 @@ public class DashboardResumeFragment extends Fragment {
 
             @Override
             protected void onPostExecute(List<BaseSeedInterface> list) {
-                SeedListAdapter adapter = new VendorSeedListAdapter(getActivity(), list.subList(0,
-                        list.size() >= 5 ? 5 : list.size()));
-                gallery.setAdapter(adapter);
+                if (isAdded()) {
+                    SeedListAdapter adapter = new VendorSeedListAdapter(getActivity(), list.subList(0,
+                            list.size() >= 5 ? 5 : list.size()));
+                    gallery.setAdapter(adapter);
+                    getView().findViewById(R.id.buttonHut).setOnClickListener(new View.OnClickListener() {
 
-                getView().findViewById(R.id.buttonHut).setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        startActivity(new Intent(getActivity(), HutActivity.class));
-                    }
-                });
+                        @Override
+                        public void onClick(View v) {
+                            startActivity(new Intent(getActivity(), HutActivity.class));
+                        }
+                    });
+                }
                 super.onPostExecute(list);
             }
         }.execute();

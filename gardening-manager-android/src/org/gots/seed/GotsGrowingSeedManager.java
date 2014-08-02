@@ -36,6 +36,8 @@ public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGro
 
     private Context mContext;
 
+    private boolean resetAllotments = false;
+
     private GotsGrowingSeedManager() {
         // mLocalProvider = new LocalSeedProvider(mContext);
         // allSeeds = new ArrayList<BaseSeedInterface>();
@@ -64,7 +66,7 @@ public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGro
     @Override
     public void onReceive(Context arg0, Intent intent) {
         if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
-            seedsByAllotment = null;
+            resetAllotments = true;
         }
     }
 
@@ -99,8 +101,10 @@ public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGro
 
     @Override
     public List<GrowingSeedInterface> getGrowingSeedsByAllotment(BaseAllotmentInterface allotment, boolean force) {
-        if (seedsByAllotment == null)
+        if (seedsByAllotment == null || resetAllotments) {
+            resetAllotments = false;
             seedsByAllotment = new HashMap<Integer, HashMap<Integer, GrowingSeedInterface>>();
+        }
 
         if (force || seedsByAllotment.get(allotment.getId()) == null) {
             seedsByAllotment.put(allotment.getId(), new HashMap<Integer, GrowingSeedInterface>());

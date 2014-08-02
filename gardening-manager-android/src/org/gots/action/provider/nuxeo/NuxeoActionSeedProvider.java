@@ -80,7 +80,10 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
 
             NuxeoGrowingSeedProvider gotsSeedManager = new NuxeoGrowingSeedProvider(mContext);
             for (Document actionDoc : actionDocs) {
-                SeedActionInterface action = convert(actionDoc);
+                BaseActionInterface actionConverted = convert(actionDoc);
+                if (!(actionConverted instanceof SeedActionInterface))
+                    continue;
+                SeedActionInterface action = (SeedActionInterface) actionConverted;
                 Document actionFolder = documentMgr.getDocument(new PathRef(actionDoc.getParentPath()));
                 Document parentSeed = documentMgr.getDocument(new PathRef(actionFolder.getParentPath()), "*");
 
@@ -111,9 +114,10 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             properties.set("action:duration", String.valueOf(action.getDuration()));
 
             Document docAction = documentMgr.getDocument(action.getUUID());
-            if (docAction != null) {
 
-                Document doc = documentMgr.copy(docAction, getActionsFolder(seed, documentMgr));
+            if (docAction != null) {
+                Document doc = documentMgr.copy(docAction, getActionsFolder(seed, documentMgr), docAction.getTitle()
+                        + "-" + String.valueOf(action.getDuration()));
                 documentMgr.update(doc, properties);
                 action.setUUID(doc.getId());
             }
@@ -183,7 +187,10 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
                     null, new String[] { "dc:modified DESC" }, "*", 0, 50, cacheParam);
 
             for (Document actionDoc : actionDocs) {
-                SeedActionInterface action = convert(actionDoc);
+                BaseActionInterface actionConverted = convert(actionDoc);
+                if (!(actionConverted instanceof SeedActionInterface))
+                    continue;
+                SeedActionInterface action = (SeedActionInterface) actionConverted;
                 action = super.populateState(action, seed);
                 action.setGrowingSeedId(seed.getGrowingSeedId());
                 actionsToDo.add(action);
@@ -212,8 +219,12 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
                     null, new String[] { "dc:modified DESC" }, "*", 0, 50, cacheParam);
 
             for (Document actionDoc : actionDocs) {
-                SeedActionInterface action = convert(actionDoc);
-                // super.populateState(action, seed);
+                BaseActionInterface actionConverted = convert(actionDoc);
+                if (!(actionConverted instanceof SeedActionInterface))
+                    continue;
+                SeedActionInterface action = (SeedActionInterface) actionConverted;
+                // super.populateState(action,
+                // seed);
                 action.setGrowingSeedId(seed.getGrowingSeedId());
                 actionsDone.add(action);
             }
@@ -225,8 +236,8 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         // return synchronize(seed, super.getActionsDoneBySeed(seed), actionsDone);
     }
 
-    private SeedActionInterface convert(Document actionDoc) {
-        SeedActionInterface action = (SeedActionInterface) ActionFactory.buildAction(mContext, actionDoc.getTitle());
+    private BaseActionInterface convert(Document actionDoc) {
+        BaseActionInterface action = ActionFactory.buildAction(mContext, actionDoc.getTitle());
         action.setDateActionDone(actionDoc.getDate("action:dateactiondone"));
         action.setDescription(actionDoc.getString("action:description"));
         action.setData(actionDoc.getString("action:data"));
