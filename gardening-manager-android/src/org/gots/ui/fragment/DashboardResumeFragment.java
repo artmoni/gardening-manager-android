@@ -10,12 +10,15 @@ import org.gots.action.SeedActionInterface;
 import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.garden.GardenManager;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.adapter.SeedListAdapter;
 import org.gots.seed.adapter.VendorSeedListAdapter;
 import org.gots.ui.ActionActivity;
 import org.gots.ui.HutActivity;
+import org.gots.weather.view.WeatherView;
+import org.gots.weather.view.WeatherWidget;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -24,11 +27,13 @@ import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Gallery;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -46,6 +51,7 @@ public class DashboardResumeFragment extends Fragment {
 
         displaySeeds(view);
         displayActions();
+        displayWeather();
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -141,6 +147,31 @@ public class DashboardResumeFragment extends Fragment {
                 super.onPostExecute(list);
             }
         }.execute();
+
+    }
+
+    protected void displayWeather() {
+        // boolean isError = intent.getBooleanExtra("error", false);
+
+        LinearLayout weatherWidgetLayout = (LinearLayout) getView().findViewById(R.id.WeatherWidget);
+        weatherWidgetLayout.removeAllViews();
+
+        GardenManager gardenManager = GardenManager.getInstance().initIfNew(getActivity());
+        TextView descriptionWeather = (TextView) getView().findViewById(R.id.textViewWeatherDescription);
+        descriptionWeather.setText(gardenManager.getCurrentGarden().getLocality());
+        // if (isError) {
+        // TextView txtError = new TextView(this);
+        // txtError.setText(getResources().getText(R.string.weather_citynotfound));
+        // txtError.setTextColor(getResources().getColor(R.color.text_color_light));
+        // handle.addView(txtError);
+        // Log.d(TAG, "WeatherWidget display error");
+        //
+        // } else {
+        // weatherWidget2 = new WeatherWidget(getActivity(), WeatherView.IMAGE);
+        // handle.addView(weatherWidget2);
+        WeatherWidget weatherWidget = new WeatherWidget(getActivity(), WeatherView.FULL);
+        weatherWidgetLayout.addView(weatherWidget);
+        // }
 
     }
 }
