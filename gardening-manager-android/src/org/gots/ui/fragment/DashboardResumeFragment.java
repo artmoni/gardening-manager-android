@@ -93,19 +93,21 @@ public class DashboardResumeFragment extends Fragment {
 
             @Override
             protected void onPostExecute(List<SeedActionInterface> listActions) {
-                ListAllActionAdapter actionAdapter = new ListAllActionAdapter(getActivity(), listActions.subList(0,
-                        listActions.size() >= 5 ? 5 : listActions.size()), ListAllActionAdapter.STATUS_TODO);
-                listViewActions.setAdapter(actionAdapter);
+                if (isAdded()) {
+                    ListAllActionAdapter actionAdapter = new ListAllActionAdapter(getActivity(), listActions.subList(0,
+                            listActions.size() >= 5 ? 5 : listActions.size()), ListAllActionAdapter.STATUS_TODO);
+                    listViewActions.setAdapter(actionAdapter);
 
-                getView().findViewById(R.id.buttonActions).setOnClickListener(new View.OnClickListener() {
+                    getView().findViewById(R.id.buttonActions).setOnClickListener(new View.OnClickListener() {
 
-                    @Override
-                    public void onClick(View v) {
-                        startActivity(new Intent(getActivity(), ActionActivity.class));
-                    }
-                });
-                if (actionAdapter.getCount() > 0)
-                    getView().findViewById(R.id.layoutDashboardActions).setVisibility(View.VISIBLE);
+                        @Override
+                        public void onClick(View v) {
+                            startActivity(new Intent(getActivity(), ActionActivity.class));
+                        }
+                    });
+                    if (actionAdapter.getCount() > 0)
+                        getView().findViewById(R.id.layoutDashboardActions).setVisibility(View.VISIBLE);
+                }
                 super.onPostExecute(listActions);
             }
         }.execute();

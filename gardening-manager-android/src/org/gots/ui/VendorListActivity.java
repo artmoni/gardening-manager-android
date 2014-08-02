@@ -93,10 +93,10 @@ public class VendorListActivity extends AbstractListFragment {
         // mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.PROGRESS_FINISHED));
         listVendorSeedAdapter = new VendorSeedListAdapter(mContext, new ArrayList<BaseSeedInterface>());
         View view = inflater.inflate(R.layout.list_seed_grid, container, false);
-        GridView gridView = (GridView) view.findViewById(R.id.seedgridview);
-        gridView.setAdapter(listVendorSeedAdapter);
+        gridViewCatalog = (GridView) view.findViewById(R.id.seedgridview);
+        gridViewCatalog.setAdapter(listVendorSeedAdapter);
 
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        gridViewCatalog.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 view.setSelected(!view.isSelected());
@@ -118,6 +118,8 @@ public class VendorListActivity extends AbstractListFragment {
             updateVendorSeeds();
         }
     };
+
+    private GridView gridViewCatalog;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -181,6 +183,7 @@ public class VendorListActivity extends AbstractListFragment {
                 // if (!"".equals(currentFilter) && currentFilter != null)
                 // displaySearchBox();
                 listVendorSeedAdapter.notifyDataSetChanged();
+                
                 // if (progressBar != null)
                 //
                 // progressBar.stopAnimatingBackground();
