@@ -98,6 +98,8 @@ public class DashboardResumeFragment extends Fragment {
                         startActivity(new Intent(getActivity(), ActionActivity.class));
                     }
                 });
+                if (actionAdapter.getCount() > 0)
+                    getView().findViewById(R.id.layoutDashboardActions).setVisibility(View.VISIBLE);
                 super.onPostExecute(listActions);
             }
         }.execute();

@@ -50,11 +50,13 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/layoutDashboardActions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:background="@color/brown_light"
-            android:padding="5dp" >
+            android:padding="5dp"
+            android:visibility="gone" >
 
             <ListView
                 android:id="@+id/listActions"

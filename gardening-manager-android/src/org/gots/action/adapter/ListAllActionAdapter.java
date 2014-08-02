@@ -281,13 +281,10 @@ public class ListAllActionAdapter extends BaseAdapter {
     public void showNoticeDialog(final int position, final GrowingSeedInterface seed,
             final SeedActionInterface currentAction) {
 
-        String inputvalue;
-
-        LayoutInflater inflater = LayoutInflater.from(mContext);
         final EditText userinput = new EditText(mContext);
         final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        builder.setView(userinput).setTitle("Your title");
-        builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+        builder.setView(userinput).setTitle("Add a note about your task");
+        builder.setPositiveButton(currentAction.getName(), new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int id) {
                 new AsyncTask<BaseActionInterface, Integer, BaseActionInterface>() {
@@ -312,12 +309,13 @@ public class ListAllActionAdapter extends BaseAdapter {
                     }
                 }.execute(currentAction);
             }
-        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.cancel();
+        }).setNegativeButton(mContext.getResources().getString(R.string.button_cancel),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
 
-            }
-        });
+                    }
+                });
         AlertDialog dialog = builder.create();
         builder.show();
     }
