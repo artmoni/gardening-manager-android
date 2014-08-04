@@ -42,6 +42,7 @@ public class DashboardResumeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         getActivity().registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
         getActivity().registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.ACTION_EVENT));
+        getActivity().registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
 
         return inflater.inflate(R.layout.dashboard_resume, null);
     }
@@ -67,6 +68,9 @@ public class DashboardResumeFragment extends Fragment {
             if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
                 displaySeeds(getView());
                 displayActions();
+                displayWeather();
+            } else if (BroadCastMessages.WEATHER_DISPLAY_EVENT.equals(intent.getAction())) {
+                displayWeather();
             } else if (BroadCastMessages.ACTION_EVENT.equals(intent.getAction())) {
                 displayActions();
             }
