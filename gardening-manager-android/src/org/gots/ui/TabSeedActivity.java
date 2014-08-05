@@ -165,7 +165,7 @@ public class TabSeedActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 File f = (File) arg0.getItemAtPosition(position);
-                File dest = new File(gotsPreferences.getGARDENING_MANAGER_DIRECTORY(), f.getName());
+                File dest = new File(gotsPreferences.getGotsExternalFileDir(), f.getName());
                 try {
                     FileUtilities.copy(f, dest);
                     Intent intent = new Intent();

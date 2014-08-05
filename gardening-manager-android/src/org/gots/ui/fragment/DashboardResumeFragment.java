@@ -111,6 +111,9 @@ public class DashboardResumeFragment extends Fragment {
                     });
                     if (actionAdapter.getCount() > 0)
                         getView().findViewById(R.id.layoutDashboardActions).setVisibility(View.VISIBLE);
+                    else
+                        getView().findViewById(R.id.layoutDashboardActions).setVisibility(View.GONE);
+
                 }
                 super.onPostExecute(listActions);
             }

@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.Calendar;
 
 import org.gots.R;
+import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.ui.TabSeedActivity;
@@ -24,6 +25,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -83,37 +85,46 @@ public class SeedWidget extends RelativeLayout {
 
             private int vegetableImageRessource;
 
+            private GotsPreferences gotsPref;
+
             @Override
             protected void onPreExecute() {
                 seedView = (ImageView) findViewById(R.id.idSeedImage2);
+                gotsPref = GotsPreferences.getInstance().initIfNew(mContext);
                 super.onPreExecute();
             }
 
             @Override
             protected Bitmap doInBackground(Void... params) {
                 Bitmap image = null;
-                vegetableImageRessource = getSeedDrawable(getContext(), mSeed);
-                if (vegetableImageRessource == 0 && mSeed.getSpecie() != null) {
-                    File file = new File(mContext.getCacheDir() + "/"
-                            + mSeed.getSpecie().toLowerCase().replaceAll("\\s", ""));
-                    
-//                    BitmapFactory.Options options = new BitmapFactory.Options();
-//                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-//                    image = BitmapFactory.decodeFile(file.getPath(), options);
-                    image = FileUtilities.decodeScaledBitmapFromSdCard(file.getAbsolutePath(), seedView.getWidth(), seedView.getHeight());
+                File imageFile = null;
+
+                if (mSeed.getSpecie() != null)
+                    imageFile = new File(gotsPref.getGotsExternalFileDir(), mSeed.getSpecie().toLowerCase().replaceAll(
+                            "\\s", ""));
+
+                if (imageFile != null && imageFile.exists()) {
+                    // BitmapFactory.Options options = new BitmapFactory.Options();
+                    // options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                    // image = BitmapFactory.decodeFile(file.getPath(), options);
+                    image = FileUtilities.decodeScaledBitmapFromSdCard(imageFile.getAbsolutePath(),
+                            seedView.getWidth(), seedView.getHeight());
+                } else {
+
+                    vegetableImageRessource = getSeedDrawable(getContext(), mSeed);
                 }
                 return image;
             }
 
             protected void onPostExecute(Bitmap image) {
-                if (vegetableImageRessource != 0 && seedView != null)
+                if (vegetableImageRessource != 0)
                     seedView.setImageResource(vegetableImageRessource);
                 else
                     seedView.setImageBitmap(image);
             };
         }.execute();
 
-//        setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_line_selector));
+        // setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_line_selector));
 
         invalidate();
     }
@@ -131,15 +142,15 @@ public class SeedWidget extends RelativeLayout {
         return vegetableImageRessource;
     }
 
-//    @Override
-//    public void onClick(View v) {
-//        if (!TabSeedActivity.class.isInstance(mContext) && v.getTag() != null) {
-//            Intent i = new Intent(mContext, TabSeedActivity.class);
-//            i.putExtra("org.gots.seed.vendorid", ((BaseSeedInterface) v.getTag()).getSeedId());
-//            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            mContext.startActivity(i);
-//        }
-//    }
+    // @Override
+    // public void onClick(View v) {
+    // if (!TabSeedActivity.class.isInstance(mContext) && v.getTag() != null) {
+    // Intent i = new Intent(mContext, TabSeedActivity.class);
+    // i.putExtra("org.gots.seed.vendorid", ((BaseSeedInterface) v.getTag()).getSeedId());
+    // i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    // mContext.startActivity(i);
+    // }
+    // }
 
     public void setSeed(BaseSeedInterface seed) {
         this.mSeed = (GrowingSeedInterface) seed;
@@ -147,6 +158,4 @@ public class SeedWidget extends RelativeLayout {
 
     }
 
-    
-   
 }

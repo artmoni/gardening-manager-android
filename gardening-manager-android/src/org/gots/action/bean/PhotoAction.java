@@ -26,7 +26,6 @@ import android.os.Environment;
 
 public class PhotoAction extends AbstractActionSeed implements PermanentActionInterface, SeedActionInterface,
         GardeningActionInterface {
-    private File storageDir;
 
     private static final String JPEG_FILE_PREFIX = "GOTS_";
 
@@ -35,8 +34,6 @@ public class PhotoAction extends AbstractActionSeed implements PermanentActionIn
     public PhotoAction(Context context) {
         super(context);
         setName("photo");
-        storageDir = new File(Environment.getExternalStorageDirectory(), "Gardening-Manager");
-
     }
 
     @Override
@@ -102,7 +99,7 @@ public class PhotoAction extends AbstractActionSeed implements PermanentActionIn
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(date);
         String imageFileName = JPEG_FILE_PREFIX + timeStamp;
 
-        File imageFile = new File(storageDir, imageFileName + JPEG_FILE_SUFFIX);
+        File imageFile = new File(gotsPrefs.getGotsExternalFileDir(), imageFileName + JPEG_FILE_SUFFIX);
         return imageFile;
     }
 

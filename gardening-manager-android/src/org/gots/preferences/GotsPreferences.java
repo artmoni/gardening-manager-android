@@ -370,9 +370,8 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
         return GARDENING_MANAGER_DOCUMENTATION_URL;
     }
 
-    public File getGARDENING_MANAGER_DIRECTORY() {
-
-        return new File(Environment.getExternalStorageDirectory(), GARDENING_MANAGER_DIRECTORY);
+    public File getGotsExternalFileDir() {
+        return mContext.getExternalFilesDir(GARDENING_MANAGER_DIRECTORY);
     }
 
     public String getPlayStorePubKey() {

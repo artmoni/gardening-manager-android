@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
 import org.json.JSONArray;
@@ -15,8 +16,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Log;
 
 public class ParrotSeedConverter {
+    private static final String TAG = "ParrotSeedConverter";
+
     Context mContext;
 
     public ParrotSeedConverter(Context context) {
@@ -35,7 +39,7 @@ public class ParrotSeedConverter {
             if (plant.getString("subspecies_name") != null && !"null".equals(plant.getString("subspecies_name")))
                 seed.setVariety(plant.getString("subspecies_name"));
 
-//            seed.setUUID(plant.getString("id"));
+            // seed.setUUID(plant.getString("id"));
             // JSONArray common_names = (JSONArray)plant.getJSONArray("common_names");
             // for (int i = 0; i < common_names.length(); i++) {
             // JSONObject common_name = common_names.getJSONObject(i);
@@ -48,17 +52,18 @@ public class ParrotSeedConverter {
                 downloadImage(seed.getSpecie(), url);
             }
         } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage());
         }
         return seed;
     }
 
     private void downloadImage(final String plantName, final String url) {
         new AsyncTask<Void, Void, Void>() {
-            @Override
+           
             protected Void doInBackground(Void... params) {
-                File file = new File(mContext.getCacheDir() + "/" + plantName.toLowerCase().replaceAll("\\s", ""));
+                File file = new File(
+                        GotsPreferences.getInstance().initIfNew(mContext).getGotsExternalFileDir().getAbsolutePath(),
+                        plantName.toLowerCase().replaceAll("\\s", ""));
                 if (!file.exists()) {
                     try {
                         URLConnection conn = new URL(url).openConnection();
