@@ -24,7 +24,7 @@ import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     // ************************ DATABASE **************
-    private static final int DATABASE_VERSION = 20;
+    private static final int DATABASE_VERSION = 21;
 
     private static String DATABASE_NAME = "gots";
 
@@ -168,6 +168,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String GROWINGSEED_DATESOWING = "datesowing";
 
+    public static final String GROWINGSEED_DATEHARVEST = "dateharvest";
+
     public static final String GROWINGSEED_DATELASTWATERING = "datelastwatering";
 
     //@formatter:off
@@ -176,6 +178,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ GROWINGSEED_SEED_ID + " INTEGER NOT NULL,"
 			+ GROWINGSEED_ALLOTMENT_ID + " INTEGER NOT NULL," 
 			+ GROWINGSEED_DATESOWING + " INTEGER,"
+			+ GROWINGSEED_DATEHARVEST + " INTEGER,"
 			+ GROWINGSEED_DATELASTWATERING + " DATETIME,"
 			+ GROWINGSEED_UUID+ " STRING"
 
@@ -228,6 +231,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String WEATHER_TABLE_NAME = "weather";
 
     public static final String WEATHER_ID = "_id";
+
     public static final String WEATHER_UUID = "_uuid";
 
     public static final String WEATHER_DAYOFYEAR = "dayofyear";
@@ -289,6 +293,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				+ ALLOTMENT_NAME + " STRING,"
 				+ ALLOTMENT_UUID + " STRING"
 					+ ");";
+
 
 
 //    private static DatabaseHelper helper = null;
@@ -501,10 +506,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE " + SEEDS_TABLE_NAME + " ADD COLUMN " + SEED_LIKE_COUNT + " INTEGER;");
             db.execSQL("ALTER TABLE " + SEEDS_TABLE_NAME + " ADD COLUMN " + SEED_LIKE_STATUS + " INTEGER;");
 
-        } if (oldVersion < 20) {
+        }
+        if (oldVersion < 20) {
             db.execSQL("ALTER TABLE " + WEATHER_TABLE_NAME + " ADD COLUMN " + WEATHER_UUID + " STRING;");
 
-        }else {
+        }
+        if (oldVersion < 21) {
+            db.execSQL("ALTER TABLE " + GROWINGSEEDS_TABLE_NAME + " ADD COLUMN " + GROWINGSEED_DATEHARVEST + " INTEGER;");
+
+        } else {
             db.execSQL("DROP TABLE IF EXISTS " + SEEDS_TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + GROWINGSEEDS_TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + ALLOTMENT_TABLE_NAME);

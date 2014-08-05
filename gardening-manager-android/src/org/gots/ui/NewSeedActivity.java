@@ -313,9 +313,21 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
 
         case R.id.buttonStock:
             if (validateSeed()) {
-                newSeed = seedManager.createSeed(newSeed);
-                seedManager.addToStock(newSeed, gardenManager.getCurrentGarden());
-                finish();
+                new AsyncTask<Void, Integer, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        newSeed = seedManager.createSeed(newSeed);
+                        seedManager.addToStock(newSeed, gardenManager.getCurrentGarden());
+                        return null;
+                    }
+
+                    protected void onPostExecute(Void result) {
+                        getApplicationContext().sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
+                        NewSeedActivity.this.finish();
+
+                    };
+                }.execute();
+
             }
             break;
 
@@ -406,13 +418,25 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
 	 *
 	 */
     private void initSpecieList() {
-        final LocalSeedProvider helper = new LocalSeedProvider(getApplicationContext());
+        // final LocalSeedProvider helper = new LocalSeedProvider(getApplicationContext());
+        new AsyncTask<Void, Void, String[]>() {
+            @Override
+            protected String[] doInBackground(Void... params) {
+                String[] specieList = seedManager.getArraySpecies(true);
+                return specieList;
+            }
 
-        String[] specieList = helper.getArraySpecie();
+            @Override
+            protected void onPostExecute(String[] specieList) {
+                // TODO Auto-generated method stub
+                ListSpeciesAdapter listSpeciesAdapter = new ListSpeciesAdapter(getApplicationContext(), specieList,
+                        newSeed);
+                gallerySpecies.setAdapter(listSpeciesAdapter);
+                gallerySpecies.setSpacing(5);
+                super.onPostExecute(specieList);
+            }
+        }.execute();
 
-        ListSpeciesAdapter listSpeciesAdapter = new ListSpeciesAdapter(this, specieList, newSeed);
-
-        gallerySpecies.setAdapter(listSpeciesAdapter);
         gallerySpecies.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
@@ -432,7 +456,7 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
                 view.setSelected(true);
                 view.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_warning));
                 newSeed.setSpecie((String) view.getTag());
-                String family = helper.getFamilyBySpecie(newSeed.getSpecie());
+                String family = seedManager.getFamilyBySpecie(newSeed.getSpecie());
                 newSeed.setFamily(family);
                 seedWidgetLong.setSeed(newSeed);
                 seedWidgetLong.invalidate();

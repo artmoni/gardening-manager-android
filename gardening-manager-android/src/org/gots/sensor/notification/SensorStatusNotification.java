@@ -1,11 +1,6 @@
 package org.gots.sensor.notification;
 
-import java.util.List;
-
 import org.gots.R;
-import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.SeedUtil;
-import org.gots.seed.view.SeedWidget;
 import org.gots.ui.ActionActivity;
 import org.gots.ui.DashboardActivity;
 

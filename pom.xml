@@ -10,7 +10,7 @@
   <name>Gardening Manager - Parent</name>
   <properties>
     <server_schema>http</server_schema>
-    <compatibility.version>18</compatibility.version>
+    <compatibility.version>19</compatibility.version>
   </properties>
   <scm>
     <developerConnection>scm:git:ssh://git@github.com:artmoni/gardening-manager-android.git</developerConnection>

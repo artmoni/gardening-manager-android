@@ -64,7 +64,7 @@ public class ListActionActivity extends ListFragment implements ListView.OnScrol
                 List<SeedActionInterface> seedActions = new ArrayList<SeedActionInterface>();
                 for (GrowingSeedInterface seed : allSeeds) {
 
-                    seedActions = actionseedProvider.getActionsDoneBySeed(seed);
+                    seedActions = actionseedProvider.getActionsDoneBySeed(seed, true);
                 }
                 listAllActionAdapter = new ListAllActionAdapter(getActivity(), seedActions,
                         ListAllActionAdapter.STATUS_DONE);

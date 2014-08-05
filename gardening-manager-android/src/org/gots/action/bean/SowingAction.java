@@ -26,87 +26,85 @@ import android.content.Context;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class SowingAction extends AbstractActionGarden implements PermanentActionInterface, GardeningActionInterface {
-	Context mContext;
+    Context mContext;
 
-	public SowingAction(Context context) {
-		setName("sow");
-		mContext = context;
-	}
+    public SowingAction(Context context) {
+        super(context);
+        setName("sow");
+        mContext = context;
+    }
 
-	public void setDateActionDone(Date dateActionDone) {
-		super.setDateActionDone(dateActionDone);
-	}
+    public void setDateActionDone(Date dateActionDone) {
+        super.setDateActionDone(dateActionDone);
+    }
 
-	public Date getDateActionDone() {
-		return super.getDateActionDone();
-	}
+    public Date getDateActionDone() {
+        return super.getDateActionDone();
+    }
 
-	public void setDuration(int duration) {
-		super.setDuration(duration);
-	}
+    public void setDuration(int duration) {
+        super.setDuration(duration);
+    }
 
-	public int getDuration() {
-		return super.getDuration();
-	}
+    public int getDuration() {
+        return super.getDuration();
+    }
 
-	public void setDescription(String description) {
-		super.setDescription(description);
-	}
+    public void setDescription(String description) {
+        super.setDescription(description);
+    }
 
-	public String getDescription() {
-		return super.getDescription();
-	}
+    public String getDescription() {
+        return super.getDescription();
+    }
 
-	public void setName(String name) {
-		super.setName(name);
-	}
+    public void setName(String name) {
+        super.setName(name);
+    }
 
-	public String getName() {
-		return super.getName();
-	}
+    public String getName() {
+        return super.getName();
+    }
 
-	@Override
-	public int execute(BaseAllotmentInterface allotment, GrowingSeedInterface seed) {
-		super.execute(allotment, seed);
+    @Override
+    public int execute(BaseAllotmentInterface allotment, GrowingSeedInterface seed) {
+        super.execute(allotment, seed);
 
-		seed.setDateSowing(Calendar.getInstance().getTime());
-		seed.setUUID(null);
-		seed = growingSeedManager.insertSeed(seed, allotment);
+        seed.setDateSowing(Calendar.getInstance().getTime());
+        seed.setUUID(null);
+        seed = growingSeedManager.plantingSeed(seed, allotment);
 
-		
-		actionSeedManager.insertAction(seed, this);
-		//asdh.doAction(this, seed);
+        actionSeedManager.insertAction(seed, this);
+        // asdh.doAction(this, seed);
 
-		for (Iterator<BaseActionInterface> iterator = seed.getActionToDo().iterator(); iterator.hasNext();) {
-			
-			BaseActionInterface type1 = iterator.next();
-			if (type1 != null) {
-				BaseActionInterface type = actionManager.getActionByName(type1.getName());
-				actionSeedManager.insertAction(seed, type);
-			}
-		}
-		GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-		tracker.trackEvent("Seed", getName(), seed.getSpecie(), 0);
-		// tracker.dispatch();
-		return 0;
-	}
+        for (Iterator<BaseActionInterface> iterator = seed.getActionToDo().iterator(); iterator.hasNext();) {
 
-	@Override
-	public void setId(int id) {
-		super.setId(id);
-	}
+            BaseActionInterface type1 = iterator.next();
+            if (type1 != null) {
+                BaseActionInterface type = actionManager.getActionByName(type1.getName());
+                actionSeedManager.insertAction(seed, type);
+            }
+        }
+        GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+        tracker.trackEvent("Seed", getName(), seed.getSpecie(), 0);
+        // tracker.dispatch();
+        return 0;
+    }
 
-	@Override
-	public int getId() {
+    @Override
+    public void setId(int id) {
+        super.setId(id);
+    }
 
-		return super.getId();
-	}
+    @Override
+    public int getId() {
 
-	@Override
-	public int getState() {
-		return super.getState();
-	}
+        return super.getId();
+    }
 
-	
+    @Override
+    public int getState() {
+        return super.getState();
+    }
 
 }

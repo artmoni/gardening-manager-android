@@ -10,6 +10,7 @@
     <color name="action_warning_color">#D7ae68</color>
     <color name="action_error_color">#b65635</color>
     <color name="text_color_dark">#432D07</color>
+    <color name="brown_light">#c8bca4</color>
     <color name="text_color_light">#E5DFC5</color>
     <color name="transparent">#00000000</color>
     <color name="green_dark">#48651C</color>

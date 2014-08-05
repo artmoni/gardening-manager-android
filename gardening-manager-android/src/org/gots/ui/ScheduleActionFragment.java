@@ -9,11 +9,13 @@ import org.gots.action.GotsActionManager;
 import org.gots.action.GotsActionSeedManager;
 import org.gots.action.adapter.SimpleListActionAdapter;
 import org.gots.action.provider.GotsActionSeedProvider;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.view.SeedWidgetLong;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -36,7 +38,7 @@ import android.widget.Toast;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class NewActionActivity extends DialogFragment implements OnItemClickListener, OnClickListener {
+public class ScheduleActionFragment extends DialogFragment implements OnItemClickListener, OnClickListener {
 
     Integer[] list = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
 
@@ -85,19 +87,18 @@ public class NewActionActivity extends DialogFragment implements OnItemClickList
                 int width;
                 int sdk = android.os.Build.VERSION.SDK_INT;
                 if (sdk < android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                    width=display.getWidth();
-                }
-                else{
+                    width = display.getWidth();
+                } else {
                     Point size = new Point();
                     display.getSize(size);
-                    width= size.x;
+                    width = size.x;
                 }
 
                 int layoutsize = 200;
                 int nbcolumn = (width - 200) / layoutsize;
                 listActions.setNumColumns(nbcolumn);
                 listActions.setAdapter(new SimpleListActionAdapter(actions));
-                listActions.setOnItemClickListener(NewActionActivity.this);
+                listActions.setOnItemClickListener(ScheduleActionFragment.this);
             };
         }.execute();
 
@@ -201,6 +202,7 @@ public class NewActionActivity extends DialogFragment implements OnItemClickList
                     GoogleAnalyticsTracker.getInstance().trackEvent(getClass().getSimpleName(), "NewAction",
                             selectedAction.getName(), 0);
                     dismiss();
+                    getActivity().sendBroadcast(new Intent(BroadCastMessages.ACTION_EVENT));
                     super.onPostExecute(result);
                 }
             }.execute();

@@ -84,13 +84,13 @@ public class ActionActivity extends AbstractActivity {
                 if (seedid > 0) {
                     allSeeds.add(growingSeedManager.getGrowingSeedById(seedid));
                 } else {
-                    for (BaseAllotmentInterface allotment : allotmentManager.getMyAllotments())
-                        allSeeds.addAll(growingSeedManager.getGrowingSeedsByAllotment(allotment));
+                    for (BaseAllotmentInterface allotment : allotmentManager.getMyAllotments(false))
+                        allSeeds.addAll(growingSeedManager.getGrowingSeedsByAllotment(allotment, false));
                 }
 
                 for (GrowingSeedInterface seed : allSeeds) {
 
-                    seedActions.addAll(actionseedProvider.getActionsToDoBySeed(seed));
+                    seedActions.addAll(actionseedProvider.getActionsToDoBySeed(seed, false));
                 }
 
                 listActions = new ListAllActionAdapter(getApplicationContext(), seedActions,

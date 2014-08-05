@@ -2,52 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="1dp" >
+    android:orientation="vertical" >
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+    <org.gots.seed.view.SeedWidgetTile
+        android:id="@+id/idSeedWidgetLong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:src="@drawable/vegetdefault" >
+    </org.gots.seed.view.SeedWidgetTile>
 
-        <org.gots.seed.view.SeedWidgetLong
-            android:id="@+id/idSeedWidgetLong"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="5dp"
-            android:paddingRight="55dp"
-            android:src="@drawable/vegetdefault" >
-        </org.gots.seed.view.SeedWidgetLong>
-
-        <ImageView
-            android:id="@+id/idSeedImageSelected"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_alignBottom="@+id/idSeedWidgetLong"
-            android:layout_alignRight="@+id/idSeedWidgetLong"
-            android:src="@drawable/arrow_selector" />
-    </RelativeLayout>
-
-    <LinearLayout
+    <!-- <LinearLayout
         android:id="@+id/IdActionsLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/bg_line_action"
         android:orientation="horizontal"
-        android:padding="5dp"
-        android:visibility="gone" >
-
-       <!--  <org.gots.action.view.ActionWidget
-            android:id="@+id/IdSeedAction"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentRight="true"
-            android:layout_margin="5dp"
-            android:src="@drawable/action_sow" >
-        </org.gots.action.view.ActionWidget> -->
-    </LinearLayout>
+        android:padding="2dp"
+        android:visibility="visible" >
+    </LinearLayout> -->
 
 </LinearLayout>

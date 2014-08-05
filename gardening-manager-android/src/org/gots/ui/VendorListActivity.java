@@ -14,13 +14,28 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.security.auth.callback.Callback;
+
+import org.gots.R;
+import org.gots.action.BaseActionInterface;
+import org.gots.action.GardeningActionInterface;
+import org.gots.action.SeedActionInterface;
+import org.gots.action.bean.BuyingAction;
+import org.gots.action.bean.DetailAction;
+import org.gots.action.bean.ReduceQuantityAction;
+import org.gots.action.bean.SowingAction;
+import org.gots.action.util.ActionState;
+import org.gots.action.view.ActionWidget;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.SeedUtil;
 import org.gots.seed.adapter.SeedListAdapter;
 import org.gots.seed.adapter.VendorSeedListAdapter;
 import org.gots.seed.provider.parrot.ParrotSeedProvider;
 import org.gots.ui.fragment.AbstractListFragment;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -28,9 +43,17 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.GridView;
+import android.widget.Toast;
 
 public class VendorListActivity extends AbstractListFragment {
 
@@ -46,6 +69,10 @@ public class VendorListActivity extends AbstractListFragment {
 
     public static final String FILTER_PARROT = "filter.parrot";
 
+    protected static final String FILTER_STOCK = "filter.stock";
+
+    public static final String TAG = "VendorListActivity";
+
     public Context mContext;
 
     public SeedListAdapter listVendorSeedAdapter;
@@ -59,15 +86,27 @@ public class VendorListActivity extends AbstractListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // setHasOptionsMenu(true);
+        // super.onCreateView(inflater, container, savedInstanceState);
         mContext = getActivity();
         mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.SEED_DISPLAYLIST));
         mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BROADCAST_FILTER));
         // mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.PROGRESS_FINISHED));
         listVendorSeedAdapter = new VendorSeedListAdapter(mContext, new ArrayList<BaseSeedInterface>());
-        setListAdapter(listVendorSeedAdapter);
+        View view = inflater.inflate(R.layout.list_seed_grid, container, false);
+        gridViewCatalog = (GridView) view.findViewById(R.id.seedgridview);
+        gridViewCatalog.setAdapter(listVendorSeedAdapter);
+
+        gridViewCatalog.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                view.setSelected(!view.isSelected());
+                ((ActionBarActivity)getActivity()).startSupportActionMode(new MyCallBack(position));
+            }
+        });
+        // setListAdapter(listVendorSeedAdapter);
         args = getArguments();
 
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return view;
     }
 
     public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
@@ -80,6 +119,7 @@ public class VendorListActivity extends AbstractListFragment {
         }
     };
 
+    private GridView gridViewCatalog;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -112,7 +152,10 @@ public class VendorListActivity extends AbstractListFragment {
                     catalogue = seedProvider.getVendorSeeds(false);
                     if (catalogue.size() == 0)
                         catalogue = seedProvider.getVendorSeeds(true);
-                } else if (args.getBoolean(FILTER_FAVORITES))
+                } else if (args.getBoolean(FILTER_STOCK))
+                    catalogue = seedProvider.getMyStock(gardenManager.getCurrentGarden());
+
+                else if (args.getBoolean(FILTER_FAVORITES))
                     // listVendorSeedAdapter.getFilter().filter("LIKE");
                     catalogue = seedProvider.getMyFavorites();
                 else if (args.getBoolean(FILTER_BARCODE)) {
@@ -136,10 +179,11 @@ public class VendorListActivity extends AbstractListFragment {
             protected void onPostExecute(List<BaseSeedInterface> vendorSeeds) {
 
                 listVendorSeedAdapter.setSeeds(vendorSeeds);
-//                listVendorSeedAdapter.getFilter().filter(currentFilter);
+                // listVendorSeedAdapter.getFilter().filter(currentFilter);
                 // if (!"".equals(currentFilter) && currentFilter != null)
                 // displaySearchBox();
                 listVendorSeedAdapter.notifyDataSetChanged();
+                
                 // if (progressBar != null)
                 //
                 // progressBar.stopAnimatingBackground();
@@ -169,4 +213,90 @@ public class VendorListActivity extends AbstractListFragment {
         super.onDestroy();
     }
 
+    private final class MyCallBack implements ActionMode.Callback {
+        private final int position;
+
+        private BaseSeedInterface currentSeed;
+
+        private MyCallBack(int position) {
+            this.position = position;
+            currentSeed = listVendorSeedAdapter.getItem(position);
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            if (currentSeed.getNbSachet() == 0)
+                menu.findItem(R.id.action_stock_reduce).setVisible(false);
+            return false;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+
+        }
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mode.getMenuInflater().inflate(R.menu.menu_hut_contextual, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+
+            SeedActionInterface actionDone = null;
+            switch (item.getItemId()) {
+            case R.id.action_seed_detail:
+                Intent i = new Intent(mContext, TabSeedActivity.class);
+                i.putExtra("org.gots.seed.vendorid", currentSeed.getSeedId());
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(i);
+                break;
+            case R.id.action_stock_add:
+                actionDone = new BuyingAction(mContext);
+                break;
+            case R.id.action_stock_reduce:
+                actionDone = new ReduceQuantityAction(mContext);
+                break;
+            case R.id.action_sow:
+                Intent intent = new Intent(mContext, MyMainGarden.class);
+                intent.putExtra(MyMainGarden.SELECT_ALLOTMENT, true);
+                intent.putExtra(MyMainGarden.VENDOR_SEED_ID, currentSeed.getSeedId());
+                mContext.startActivity(intent);
+
+                break;
+            default:
+                break;
+            }
+
+            if (actionDone == null) {
+                Log.w(TAG, "onActionItemClicked - unknown selected action");
+                return false;
+            }
+
+            new AsyncTask<SeedActionInterface, Integer, Void>() {
+                SeedActionInterface action;
+
+                @Override
+                protected Void doInBackground(SeedActionInterface... params) {
+                    action = params[0];
+                    action.execute((GrowingSeedInterface) currentSeed);
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void result) {
+                    Toast.makeText(
+                            mContext,
+                            SeedUtil.translateAction(mContext, action) + " - "
+                                    + SeedUtil.translateSpecie(mContext, currentSeed), Toast.LENGTH_LONG).show();
+                    mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
+                    super.onPostExecute(result);
+                }
+            }.execute(actionDone);
+
+            mode.finish();
+            return true;
+        }
+    }
 }

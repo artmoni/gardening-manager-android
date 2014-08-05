@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.gots.R;
-import org.gots.analytics.GotsAnalytics;
 import org.gots.authentication.provider.google.GoogleAuthentication;
 import org.gots.authentication.provider.nuxeo.NuxeoAuthentication;
 import org.gots.broadcast.BroadCastMessages;
@@ -28,7 +27,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 

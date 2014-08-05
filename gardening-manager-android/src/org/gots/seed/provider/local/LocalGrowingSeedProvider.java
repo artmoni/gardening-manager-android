@@ -44,7 +44,7 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
      * java.lang.String)
      */
     @Override
-    public GrowingSeedInterface insertSeed(GrowingSeedInterface growingSeed, BaseAllotmentInterface allotment) {
+    public GrowingSeedInterface plantingSeed(GrowingSeedInterface growingSeed, BaseAllotmentInterface allotment) {
         long rowid;
 
         rowid = bdd.insert(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, seedToValues(growingSeed, allotment));
@@ -63,6 +63,8 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
             values.put(DatabaseHelper.GROWINGSEED_DATESOWING, seed.getDateSowing().getTime());
         if (seed.getDateLastWatering() != null)
             values.put(DatabaseHelper.GROWINGSEED_DATELASTWATERING, seed.getDateLastWatering().getTime());
+        if (seed.getDateHarvest() != null)
+            values.put(DatabaseHelper.GROWINGSEED_DATEHARVEST, seed.getDateHarvest().getTime());
         return values;
     }
 
@@ -104,6 +106,7 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
         bsi.setUUID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_UUID)));
         bsi.setGrowingSeedId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_ID)));
         bsi.setDateSowing(new Date(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_DATESOWING))));
+        bsi.setDateHarvest(new Date(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_DATEHARVEST))));
         bsi.setDateLastWatering(new Date(
                 cursor.getLong(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_DATELASTWATERING))));
 
@@ -115,7 +118,7 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
      * @see org.gots.seed.provider.local.GotsGrowingSeedProvider#getSeedsByAllotment(java.lang.String)
      */
     @Override
-    public List<GrowingSeedInterface> getGrowingSeedsByAllotment(BaseAllotmentInterface allotment) {
+    public List<GrowingSeedInterface> getGrowingSeedsByAllotment(BaseAllotmentInterface allotment, boolean force) {
         ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
         GrowingSeedInterface searchedSeed = new GrowingSeed();
 

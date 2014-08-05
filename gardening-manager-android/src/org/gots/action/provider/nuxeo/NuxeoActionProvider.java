@@ -88,7 +88,7 @@ public class NuxeoActionProvider extends LocalActionProvider {
                 BaseActionInterface action = NuxeoActionConverter.convert(mContext, document);
                 if (action != null) {
 
-                    remoteActions.add(action);
+                    remoteActions.add(super.updateAction(action));
                     Log.i(TAG, "Nuxeo action: " + action);
                 } else {
                     Log.w(TAG, "Nuxeo action conversion problem " + document.getTitle() + "- " + document.getId());
@@ -100,46 +100,7 @@ public class NuxeoActionProvider extends LocalActionProvider {
             Log.e(TAG, "getAllSeeds " + e.getMessage(), e);
             remoteActions = super.getActions(force);
         }
-        return synchronize(localActions, remoteActions);
+        return remoteActions;
     }
 
-    private ArrayList<BaseActionInterface> synchronize(List<BaseActionInterface> localActions,
-            ArrayList<BaseActionInterface> remoteActions2) {
-        ArrayList<BaseActionInterface> myActions = new ArrayList<BaseActionInterface>();
-        // Synchronize remote action with local gardens
-        for (BaseActionInterface remoteAction : remoteActions2) {
-            boolean found = false;
-            for (BaseActionInterface localAction : localActions) {
-                if (remoteAction.getUUID() != null && remoteAction.getUUID().equals(localAction.getUUID())) {
-                    found = true;
-                    break;
-                }
-            }
-            if (found) { // local and remote => update local
-                myActions.add(super.updateAction(remoteAction));
-            } else { // remote only => create local
-                myActions.add(super.createAction(remoteAction));
-            }
-        }
-
-        for (BaseActionInterface localAction : localActions) {
-            if (localAction.getUUID() == null) { // local only without
-                                                 // UUID => create
-                                                 // remote
-                                                 // myActions.add(createNuxeoGarden(localAction));
-            } else {
-                boolean found = false;
-                for (BaseActionInterface remoteAction : remoteActions2) {
-                    if (remoteAction.getUUID() != null && remoteAction.getUUID().equals(localAction.getUUID())) {
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) { // local only with UUID -> delete local
-                    // super.removeGarden(localAction);
-                }
-            }
-        }
-        return myActions;
-    }
 }

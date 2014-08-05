@@ -30,7 +30,7 @@ public class SplashScreenActivity extends AboutActivity {
         super.removeProgress();
         if (refreshCounter == 0) {
             // gotsPrefs.setParrotToken(null);
-            Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
@@ -42,7 +42,7 @@ public class SplashScreenActivity extends AboutActivity {
         if (arg1 == 1)
             onRefresh(null);
         if (arg1 == 2)
-            startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
         super.onActivityResult(arg0, arg1, arg2);
     }
 

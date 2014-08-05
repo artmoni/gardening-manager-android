@@ -63,6 +63,9 @@ public class GardenDBHelper extends GotsDBHelper {
         garden.setCountryName(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_COUNTRYNAME)));
         garden.setLocality(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_LOCALITY)));
         garden.setDateLastSynchro(new Date(cursor.getInt(cursor.getColumnIndex(GardenSQLite.GARDEN_LAST_SYNCHRO))));
+        garden.setGpsAltitude(cursor.getDouble(cursor.getColumnIndex(GardenSQLite.GARDEN_ALTITUDE)));
+        garden.setGpsLongitude(cursor.getDouble(cursor.getColumnIndex(GardenSQLite.GARDEN_LONGITUDE)));
+        garden.setGpsLatitude(cursor.getDouble(cursor.getColumnIndex(GardenSQLite.GARDEN_LATITUDE)));
         return garden;
     }
 

@@ -2,8 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_weather"
-    android:orientation="vertical" >
+    android:background="@color/brown_light"
+    android:orientation="vertical"
+    android:padding="2dp" >
 
     <TextView
         android:id="@+id/idWeatherDay"
@@ -13,14 +14,16 @@
     <LinearLayout
         android:id="@+id/idWeatherImageContainer"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
 
         <ImageView
             android:id="@+id/idMoonImage"
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/moon_third_quarter" android:padding="2dp">
+            android:padding="2dp"
+            android:src="@drawable/moon_third_quarter" >
         </ImageView>
 
         <ImageView

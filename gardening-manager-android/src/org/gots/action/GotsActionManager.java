@@ -72,9 +72,7 @@ public class GotsActionManager implements GotsActionProvider {
 
     @Override
     public ArrayList<BaseActionInterface> getActions(boolean force) {
-        if (force)
-            cacheActions = provider.getActions(force);
-        return cacheActions;
+        return provider.getActions(force);
     }
 
     @Override

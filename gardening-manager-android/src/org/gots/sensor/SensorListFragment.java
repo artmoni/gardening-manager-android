@@ -9,10 +9,10 @@ import org.gots.sensor.parrot.ParrotLocation;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
+import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class SensorListFragment extends ListFragment {
 
@@ -29,12 +29,13 @@ public class SensorListFragment extends ListFragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
         sensorListAdapter = new LocationListAdapter(getActivity(), parrotLocations);
         setListAdapter(sensorListAdapter);
+        return view;
     }
+
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {

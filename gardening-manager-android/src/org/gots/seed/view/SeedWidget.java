@@ -17,6 +17,7 @@ import org.gots.R;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.ui.TabSeedActivity;
+import org.gots.utils.FileUtilities;
 import org.gots.utils.GotsProgressBar;
 
 import android.content.Context;
@@ -31,7 +32,7 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-public class SeedWidget extends RelativeLayout implements OnClickListener {
+public class SeedWidget extends RelativeLayout {
     Context mContext;
 
     private GrowingSeedInterface mSeed;
@@ -60,7 +61,6 @@ public class SeedWidget extends RelativeLayout implements OnClickListener {
     private void initView() {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.seed_widget, this);
-        setOnClickListener(this);
     }
 
     protected void setupView() {
@@ -96,9 +96,11 @@ public class SeedWidget extends RelativeLayout implements OnClickListener {
                 if (vegetableImageRessource == 0 && mSeed.getSpecie() != null) {
                     File file = new File(mContext.getCacheDir() + "/"
                             + mSeed.getSpecie().toLowerCase().replaceAll("\\s", ""));
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                    image = BitmapFactory.decodeFile(file.getPath(), options);
+                    
+//                    BitmapFactory.Options options = new BitmapFactory.Options();
+//                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+//                    image = BitmapFactory.decodeFile(file.getPath(), options);
+                    image = FileUtilities.decodeScaledBitmapFromSdCard(file.getAbsolutePath(), seedView.getWidth(), seedView.getHeight());
                 }
                 return image;
             }
@@ -111,7 +113,7 @@ public class SeedWidget extends RelativeLayout implements OnClickListener {
             };
         }.execute();
 
-        setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.action_selector));
+//        setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_line_selector));
 
         invalidate();
     }
@@ -129,15 +131,15 @@ public class SeedWidget extends RelativeLayout implements OnClickListener {
         return vegetableImageRessource;
     }
 
-    @Override
-    public void onClick(View v) {
-        if (!TabSeedActivity.class.isInstance(mContext) && v.getTag() != null) {
-            Intent i = new Intent(mContext, TabSeedActivity.class);
-            i.putExtra("org.gots.seed.vendorid", ((BaseSeedInterface) v.getTag()).getSeedId());
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            mContext.startActivity(i);
-        }
-    }
+//    @Override
+//    public void onClick(View v) {
+//        if (!TabSeedActivity.class.isInstance(mContext) && v.getTag() != null) {
+//            Intent i = new Intent(mContext, TabSeedActivity.class);
+//            i.putExtra("org.gots.seed.vendorid", ((BaseSeedInterface) v.getTag()).getSeedId());
+//            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            mContext.startActivity(i);
+//        }
+//    }
 
     public void setSeed(BaseSeedInterface seed) {
         this.mSeed = (GrowingSeedInterface) seed;
@@ -145,4 +147,6 @@ public class SeedWidget extends RelativeLayout implements OnClickListener {
 
     }
 
+    
+   
 }

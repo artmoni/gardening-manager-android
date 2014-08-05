@@ -10,9 +10,9 @@
  ******************************************************************************/
 package org.gots.action;
 
+import java.util.Date;
 
 public interface BaseActionInterface {
-
 
     public abstract void setDuration(int duration);
 
@@ -34,6 +34,19 @@ public interface BaseActionInterface {
 
     public abstract String getUUID();
 
-    
-   
+    public abstract Date getDateActionTodo();
+
+    public abstract void setDateActionTodo(Date dateActionTodo);
+
+    public abstract void setDateActionDone(Date dateActionDone);
+
+    public abstract Date getDateActionDone();
+
+    public abstract int getState();
+
+    public abstract void setState(int state);
+
+    public abstract void setData(Object data);
+
+    public abstract Object getData();
 }

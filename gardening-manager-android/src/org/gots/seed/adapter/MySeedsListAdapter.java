@@ -55,7 +55,7 @@ public class MySeedsListAdapter extends SeedListAdapter {
         Holder holder = (Holder) vi.getTag();
         final BaseSeedInterface currentSeed = getItem(position);
 
-        holder.seedWidgetLong.setSeed(currentSeed);
+        holder.seedWidgetTile.setSeed(currentSeed);
         BaseActionInterface action = null;
         if (allotment != null) {
             // action = new SowingAction(mContext);
@@ -83,7 +83,7 @@ public class MySeedsListAdapter extends SeedListAdapter {
                             GrowingSeedInterface growingSeed = (GrowingSeedInterface) currentSeed;
                             growingSeed.setDateSowing(Calendar.getInstance().getTime());
 
-                            return provider.insertSeed(growingSeed, allotment);
+                            return provider.plantingSeed(growingSeed, allotment);
                         }
 
                         @Override
@@ -98,7 +98,7 @@ public class MySeedsListAdapter extends SeedListAdapter {
 
                 }
             });
-            holder.actionBox.addView(actionWidget);
+//            holder.actionBox.addView(actionWidget);
 
         } else {
 
@@ -155,8 +155,8 @@ public class MySeedsListAdapter extends SeedListAdapter {
                 }
             });
             
-            holder.actionBox.addView(reduceWidget);
-            holder.actionBox.addView(sowingWidget);
+//            holder.actionBox.addView(reduceWidget);
+//            holder.actionBox.addView(sowingWidget);
         }
 
         try {

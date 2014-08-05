@@ -19,14 +19,20 @@ import org.gots.action.GotsActionManager;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.exception.GotsServerRestrictedException;
+import org.gots.garden.GardenManager;
 import org.gots.nuxeo.NuxeoManager;
+import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.GotsSeedManager;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.provider.nuxeo.NuxeoGrowingSeedProvider;
+import org.gots.seed.provider.nuxeo.NuxeoSeedProvider;
 import org.nuxeo.android.cache.blob.BlobWithProperties;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.android.upload.FileUploader;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
 import org.nuxeo.ecm.automation.client.cache.CacheBehavior;
 import org.nuxeo.ecm.automation.client.jaxrs.AsyncCallback;
+import org.nuxeo.ecm.automation.client.jaxrs.Constants;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Blob;
 import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
@@ -60,7 +66,37 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
 
     @Override
     public ArrayList<SeedActionInterface> getActionsToDo() {
-        return super.getActionsToDo();
+        Session session = getNuxeoClient().getSession();
+        DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
+        ArrayList<SeedActionInterface> actionsToDo = new ArrayList<SeedActionInterface>();
+        try {
+            // for (Document actionDoc : documentMgr.getChildren(getActionsFolder(seed, documentMgr))) {
+            Document garden = documentMgr.getDocument(new IdRef(
+                    GardenManager.getInstance().getCurrentGarden().getUUID()));
+            Documents actionDocs = documentMgr.query(
+                    "SELECT * FROM Action WHERE ecm:currentLifeCycleState != \"deleted\" AND  ecm:path startswith '"
+                            + garden.getPath() + "' AND action:dateactiondone is null", null,
+                    new String[] { "dc:modified DESC" }, "*", 0, 50, CacheBehavior.FORCE_REFRESH);
+
+            NuxeoGrowingSeedProvider gotsSeedManager = new NuxeoGrowingSeedProvider(mContext);
+            for (Document actionDoc : actionDocs) {
+                BaseActionInterface actionConverted = convert(actionDoc);
+                if (!(actionConverted instanceof SeedActionInterface))
+                    continue;
+                SeedActionInterface action = (SeedActionInterface) actionConverted;
+                Document actionFolder = documentMgr.getDocument(new PathRef(actionDoc.getParentPath()));
+                Document parentSeed = documentMgr.getDocument(new PathRef(actionFolder.getParentPath()), "*");
+
+                GrowingSeedInterface seed = gotsSeedManager.getGrowingSeedsByUUID(parentSeed.getId());
+                action = super.populateState(action, seed);
+                action.setGrowingSeedId(seed.getGrowingSeedId());
+                actionsToDo.add(action);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+            actionsToDo = super.getActionsToDo();
+        }
+        return actionsToDo;
     }
 
     @Override
@@ -69,7 +105,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         return super.insertAction(seed, action);
     }
 
-    protected SeedActionInterface insertNuxeoAction(GrowingSeedInterface seed, BaseActionInterface action) {
+    public SeedActionInterface insertNuxeoAction(GrowingSeedInterface seed, BaseActionInterface action) {
         Session session = getNuxeoClient().getSession();
         DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
         try {
@@ -78,9 +114,10 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             properties.set("action:duration", String.valueOf(action.getDuration()));
 
             Document docAction = documentMgr.getDocument(action.getUUID());
-            if (docAction != null) {
 
-                Document doc = documentMgr.copy(docAction, getActionsFolder(seed, documentMgr));
+            if (docAction != null) {
+                Document doc = documentMgr.copy(docAction, getActionsFolder(seed, documentMgr), docAction.getTitle()
+                        + "-" + String.valueOf(action.getDuration()));
                 documentMgr.update(doc, properties);
                 action.setUUID(doc.getId());
             }
@@ -134,19 +171,26 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
     }
 
     @Override
-    public List<SeedActionInterface> getActionsToDoBySeed(GrowingSeedInterface seed) {
+    public List<SeedActionInterface> getActionsToDoBySeed(GrowingSeedInterface seed, boolean force) {
         Session session = getNuxeoClient().getSession();
         DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
         List<SeedActionInterface> actionsToDo = new ArrayList<SeedActionInterface>();
         try {
+            byte cacheParam = CacheBehavior.STORE;
+            if (force) {
+                cacheParam = (byte) (cacheParam | CacheBehavior.FORCE_REFRESH);
+            }
             // for (Document actionDoc : documentMgr.getChildren(getActionsFolder(seed, documentMgr))) {
             Documents actionDocs = documentMgr.query(
                     "SELECT * FROM Action WHERE ecm:currentLifeCycleState != \"deleted\" AND ecm:parentId=\""
                             + getActionsFolder(seed, documentMgr).getId() + "\" AND action:dateactiondone is null",
-                    null, new String[] { "dc:modified DESC" }, "*", 0, 50, CacheBehavior.FORCE_REFRESH);
+                    null, new String[] { "dc:modified DESC" }, "*", 0, 50, cacheParam);
 
             for (Document actionDoc : actionDocs) {
-                SeedActionInterface action = convert(actionDoc);
+                BaseActionInterface actionConverted = convert(actionDoc);
+                if (!(actionConverted instanceof SeedActionInterface))
+                    continue;
+                SeedActionInterface action = (SeedActionInterface) actionConverted;
                 action = super.populateState(action, seed);
                 action.setGrowingSeedId(seed.getGrowingSeedId());
                 actionsToDo.add(action);
@@ -155,72 +199,32 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
-        return synchronize(seed, super.getActionsToDoBySeed(seed), actionsToDo);
-    }
-
-    protected List<SeedActionInterface> synchronize(GrowingSeedInterface seed,
-            List<SeedActionInterface> myLocalActions, List<SeedActionInterface> remoteActions) {
-        List<SeedActionInterface> myActions = new ArrayList<SeedActionInterface>();
-        // Synchronize remote actions with local gardens
-        for (SeedActionInterface remoteAction : remoteActions) {
-            boolean found = false;
-            for (SeedActionInterface localAction : myLocalActions) {
-                if (remoteAction.getUUID() != null && remoteAction.getUUID().equals(localAction.getUUID())) {
-                    found = true;
-                    break;
-                }
-            }
-            if (found) { // local and remote => update local
-                // TODO check if remote can be out of date
-                // syncGardens(localGarden,remoteGarden);
-                myActions.add(super.update(seed, remoteAction));
-            } else { // remote only => create local
-                // SeedActionInterface newAction = super.insertAction(seed,
-                // GotsActionManager.getInstance().initIfNew(mContext).getActionByName(remoteAction.getName()));
-                // remoteAction.setActionSeedId(newAction.getActionSeedId());
-                myActions.add(super.insertAction(seed, remoteAction));
-            }
-        }
-
-        // Create remote garden when not exist remotely and remove local
-        // garden if no more referenced online
-        for (SeedActionInterface localAction : myLocalActions) {
-            if (localAction.getUUID() == null) { // local only without
-                                                 // UUID => create
-                                                 // remote
-                BaseActionInterface newAction = GotsActionManager.getInstance().initIfNew(mContext).getActionByName(
-                        localAction.getName());
-                newAction.setDuration(localAction.getDuration());
-                myActions.add(insertNuxeoAction(seed, newAction));
-            } else {
-                boolean found = false;
-                for (SeedActionInterface remoteAction : remoteActions) {
-                    if (remoteAction.getUUID() != null && remoteAction.getUUID().equals(localAction.getUUID())) {
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) { // local only with UUID -> delete local
-                }
-            }
-        }
-        return myActions;
+        // return synchronize(seed, super.getActionsToDoBySeed(seed), actionsToDo);
+        return actionsToDo;
     }
 
     @Override
-    public List<SeedActionInterface> getActionsDoneBySeed(GrowingSeedInterface seed) {
+    public List<SeedActionInterface> getActionsDoneBySeed(GrowingSeedInterface seed, boolean force) {
         Session session = getNuxeoClient().getSession();
         DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
         ArrayList<SeedActionInterface> actionsDone = new ArrayList<SeedActionInterface>();
         try {
+            byte cacheParam = CacheBehavior.STORE;
+            if (force) {
+                cacheParam = (byte) (cacheParam | CacheBehavior.FORCE_REFRESH);
+            }
             Documents actionDocs = documentMgr.query(
                     "SELECT * FROM Action WHERE ecm:currentLifeCycleState != \"deleted\" AND ecm:parentId=\""
                             + getActionsFolder(seed, documentMgr).getId() + "\" AND action:dateactiondone is not null",
-                    null, new String[] { "dc:modified DESC" }, "*", 0, 50, CacheBehavior.FORCE_REFRESH);
+                    null, new String[] { "dc:modified DESC" }, "*", 0, 50, cacheParam);
 
             for (Document actionDoc : actionDocs) {
-                SeedActionInterface action = convert(actionDoc);
-                // super.populateState(action, seed);
+                BaseActionInterface actionConverted = convert(actionDoc);
+                if (!(actionConverted instanceof SeedActionInterface))
+                    continue;
+                SeedActionInterface action = (SeedActionInterface) actionConverted;
+                // super.populateState(action,
+                // seed);
                 action.setGrowingSeedId(seed.getGrowingSeedId());
                 actionsDone.add(action);
             }
@@ -228,11 +232,12 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
-        return synchronize(seed, super.getActionsDoneBySeed(seed), actionsDone);
+        return actionsDone;
+        // return synchronize(seed, super.getActionsDoneBySeed(seed), actionsDone);
     }
 
-    private SeedActionInterface convert(Document actionDoc) {
-        SeedActionInterface action = (SeedActionInterface) ActionFactory.buildAction(mContext, actionDoc.getTitle());
+    private BaseActionInterface convert(Document actionDoc) {
+        BaseActionInterface action = ActionFactory.buildAction(mContext, actionDoc.getTitle());
         action.setDateActionDone(actionDoc.getDate("action:dateactiondone"));
         action.setDescription(actionDoc.getString("action:description"));
         action.setData(actionDoc.getString("action:data"));
@@ -289,28 +294,28 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         }
 
     }
-    public static int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
-    // Raw height and width of image
-    final int height = options.outHeight;
-    final int width = options.outWidth;
-    int inSampleSize = 1;
 
-    if (height > reqHeight || width > reqWidth) {
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
 
-        final int halfHeight = height / 2;
-        final int halfWidth = width / 2;
+        if (height > reqHeight || width > reqWidth) {
 
-        // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-        // height and width larger than the requested height and width.
-        while ((halfHeight / inSampleSize) > reqHeight
-                && (halfWidth / inSampleSize) > reqWidth) {
-            inSampleSize *= 2;
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
         }
+
+        return inSampleSize;
     }
 
-    return inSampleSize;
-}
     @Override
     public void uploadPicture(final GrowingSeedInterface seed, File imageFile) {
         Session session = getNuxeoClient().getSession();
@@ -322,20 +327,19 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             final BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
             Bitmap bm = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
-            options.inSampleSize = calculateInSampleSize(options, 200   , 200);
+            options.inSampleSize = calculateInSampleSize(options, 200, 200);
             options.inJustDecodeBounds = false;
             bm = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
 
-//            float scale;
-//            if (bm.getWidth() > bm.getHeight()) {
-//                scale = 800 / (float) bm.getWidth();
-//            } else {
-//                scale = 800 / (float) bm.getHeight();
-//            }
-//            Bitmap scaledBm = Bitmap.createScaledBitmap(bm, (int) (bm.getWidth() * scale),
-//                    (int) (bm.getHeight() * scale), true);
-            Bitmap scaledBm = Bitmap.createScaledBitmap(bm, (int) (bm.getWidth() ),
-                    (int) (bm.getHeight() ), true);
+            // float scale;
+            // if (bm.getWidth() > bm.getHeight()) {
+            // scale = 800 / (float) bm.getWidth();
+            // } else {
+            // scale = 800 / (float) bm.getHeight();
+            // }
+            // Bitmap scaledBm = Bitmap.createScaledBitmap(bm, (int) (bm.getWidth() * scale),
+            // (int) (bm.getHeight() * scale), true);
+            Bitmap scaledBm = Bitmap.createScaledBitmap(bm, (int) (bm.getWidth()), (int) (bm.getHeight()), true);
 
             // ROTATE IMAGE IF NOT LANDSCAPE
             ExifInterface exif = new ExifInterface(imageFile.getAbsolutePath());
@@ -355,7 +359,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
 
             try {
                 FileOutputStream fos = new FileOutputStream(imageFile);
-//                scaledBm.compress(Bitmap.CompressFormat.PNG, 90, fos);
+                // scaledBm.compress(Bitmap.CompressFormat.PNG, 90, fos);
                 bm.compress(Bitmap.CompressFormat.PNG, 90, fos);
                 fos.close();
             } catch (FileNotFoundException e) {

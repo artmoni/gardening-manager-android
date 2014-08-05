@@ -12,6 +12,7 @@ public class NuxeoGrowingSeedConverter {
     public static GrowingSeedInterface populate(GrowingSeedInterface seed, Document document) {
         try {
             seed.setDateSowing(document.getDate("growingseed:datesowing"));
+            seed.setDateHarvest(document.getDate("growingseed:dateharvest"));
             seed.setUUID(document.getId());
             return seed;
         } catch (Exception e) {

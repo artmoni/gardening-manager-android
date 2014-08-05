@@ -13,13 +13,13 @@ import org.gots.seed.provider.local.LocalGrowingSeedProvider;
 import org.gots.seed.provider.nuxeo.NuxeoGrowingSeedProvider;
 import org.gots.utils.NotConfiguredException;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 
-public class GotsGrowingSeedManager implements GotsGrowingSeedProvider {
+public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGrowingSeedProvider {
 
     private static GotsGrowingSeedManager instance;
 
@@ -27,13 +27,16 @@ public class GotsGrowingSeedManager implements GotsGrowingSeedProvider {
 
     GotsGrowingSeedProvider provider;
 
-    Map<Integer, GrowingSeedInterface> cacheGrowingSeed = new HashMap<Integer, GrowingSeedInterface>();
+    Map<Integer, HashMap<Integer, GrowingSeedInterface>> seedsByAllotment; // Map<AllotmentID, HashMap<getGrowingSeedId,
+                                                                           // GrowingSeedInterface>>
 
     private boolean initDone;
 
     private GotsPreferences gotsPrefs;
 
     private Context mContext;
+
+    private boolean resetAllotments = false;
 
     private GotsGrowingSeedManager() {
         // mLocalProvider = new LocalSeedProvider(mContext);
@@ -60,6 +63,13 @@ public class GotsGrowingSeedManager implements GotsGrowingSeedProvider {
         return instance;
     }
 
+    @Override
+    public void onReceive(Context arg0, Intent intent) {
+        if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
+            resetAllotments = true;
+        }
+    }
+
     /**
      * If it was already called once, the method returns without any change.
      */
@@ -76,8 +86,12 @@ public class GotsGrowingSeedManager implements GotsGrowingSeedProvider {
     }
 
     @Override
-    public GrowingSeedInterface insertSeed(GrowingSeedInterface seed, BaseAllotmentInterface allotment) {
-        return provider.insertSeed(seed, allotment);
+    public GrowingSeedInterface plantingSeed(GrowingSeedInterface seed, BaseAllotmentInterface allotment) {
+        if (!seedsByAllotment.containsKey(allotment.getId())) {
+            seedsByAllotment.put(allotment.getId(), new HashMap<Integer, GrowingSeedInterface>());
+        }
+        seedsByAllotment.get(allotment.getId()).put(seed.getGrowingSeedId(), seed);
+        return provider.plantingSeed(seed, allotment);
     }
 
     @Override
@@ -86,8 +100,20 @@ public class GotsGrowingSeedManager implements GotsGrowingSeedProvider {
     }
 
     @Override
-    public List<GrowingSeedInterface> getGrowingSeedsByAllotment(BaseAllotmentInterface allotment) {
-        return provider.getGrowingSeedsByAllotment(allotment);
+    public List<GrowingSeedInterface> getGrowingSeedsByAllotment(BaseAllotmentInterface allotment, boolean force) {
+        if (seedsByAllotment == null || resetAllotments) {
+            resetAllotments = false;
+            seedsByAllotment = new HashMap<Integer, HashMap<Integer, GrowingSeedInterface>>();
+        }
+
+        if (force || seedsByAllotment.get(allotment.getId()) == null) {
+            seedsByAllotment.put(allotment.getId(), new HashMap<Integer, GrowingSeedInterface>());
+            for (GrowingSeedInterface seed : provider.getGrowingSeedsByAllotment(allotment, force)) {
+                seedsByAllotment.get(allotment.getId()).put(seed.getGrowingSeedId(), seed);
+            }
+        }
+        // return provider.getGrowingSeedsByAllotment(allotment, force);
+        return new ArrayList<GrowingSeedInterface>(seedsByAllotment.get(allotment.getId()).values());
     }
 
     @Override
@@ -97,18 +123,13 @@ public class GotsGrowingSeedManager implements GotsGrowingSeedProvider {
 
     @Override
     public void deleteGrowingSeed(GrowingSeedInterface seed) {
-        new AsyncTask<GrowingSeedInterface, Integer, Void>() {
-            @Override
-            protected Void doInBackground(GrowingSeedInterface... params) {
-                provider.deleteGrowingSeed(params[0]);
-                return null;
+        for (HashMap<Integer, GrowingSeedInterface> seedMap : seedsByAllotment.values()) {
+            if (seedMap.containsKey(seed.getGrowingSeedId())) {
+                seedMap.remove(seed.getGrowingSeedId());
+                break;
             }
-
-            protected void onPostExecute(Void result) {
-                mContext.sendBroadcast(new Intent(BroadCastMessages.GROWINGSEED_DISPLAYLIST));
-            };
-        }.execute(seed);
-        
+        }
+        provider.deleteGrowingSeed(seed);
     }
 
 }

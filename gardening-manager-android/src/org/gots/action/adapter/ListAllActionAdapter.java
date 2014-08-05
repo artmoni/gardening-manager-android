@@ -25,14 +25,17 @@ import org.gots.action.SeedActionInterface;
 import org.gots.action.bean.PhotoAction;
 import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.view.SeedWidget;
 import org.gots.weather.WeatherManager;
 import org.gots.weather.view.WeatherView;
 
+import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -45,6 +48,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -142,27 +146,10 @@ public class ListAllActionAdapter extends BaseAdapter {
                 rightNow.add(Calendar.DAY_OF_YEAR, currentAction.getDuration());
                 textviewActionDate.setText(dateFormat.format(rightNow.getTime()));
 
-                actionWidget.setOnClickListener(new View.OnClickListener() {
+                ll.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new AsyncTask<BaseActionInterface, Integer, Void>() {
-                            @Override
-                            protected Void doInBackground(BaseActionInterface... params) {
-
-                                BaseActionInterface actionItem = params[0];
-                                if (SeedActionInterface.class.isInstance(actionItem))
-                                    ((SeedActionInterface) actionItem).execute(seed);
-                                return null;
-                            }
-
-                            @Override
-                            protected void onPostExecute(Void result) {
-                                Toast.makeText(mContext, "action done", Toast.LENGTH_SHORT).show();
-                                actions.remove(position);
-                                notifyDataSetChanged();
-                                super.onPostExecute(result);
-                            }
-                        }.execute(currentAction);
+                        showNoticeDialog(position, seed, currentAction);
                     }
                 });
 
@@ -291,4 +278,45 @@ public class ListAllActionAdapter extends BaseAdapter {
         }
     }
 
+    public void showNoticeDialog(final int position, final GrowingSeedInterface seed,
+            final SeedActionInterface currentAction) {
+
+        final EditText userinput = new EditText(mContext);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setView(userinput).setTitle("Add a note about your task");
+        builder.setPositiveButton(currentAction.getName(), new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int id) {
+                new AsyncTask<BaseActionInterface, Integer, BaseActionInterface>() {
+                    @Override
+                    protected BaseActionInterface doInBackground(BaseActionInterface... params) {
+
+                        BaseActionInterface actionItem = params[0];
+                        if (SeedActionInterface.class.isInstance(actionItem)) {
+                            actionItem.setData(userinput.getText().toString());
+                            ((SeedActionInterface) actionItem).execute(seed);
+                        }
+                        return actionItem;
+                    }
+
+                    @Override
+                    protected void onPostExecute(BaseActionInterface result) {
+                        Toast.makeText(mContext, "Action done : " + result.getName(), Toast.LENGTH_SHORT).show();
+                        actions.remove(position);
+                        notifyDataSetChanged();
+                        mContext.sendBroadcast(new Intent(BroadCastMessages.ACTION_EVENT));
+                        super.onPostExecute(result);
+                    }
+                }.execute(currentAction);
+            }
+        }).setNegativeButton(mContext.getResources().getString(R.string.button_cancel),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        builder.show();
+    }
 }

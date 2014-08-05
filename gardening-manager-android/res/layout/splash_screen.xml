@@ -27,7 +27,7 @@
             android:id="@+id/idTranslateButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_green_selector"
+            android:background="@drawable/button_red_selector"
             android:gravity="right"
             android:orientation="horizontal" >
 

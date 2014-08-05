@@ -24,6 +24,7 @@ import org.gots.R;
 import org.gots.authentication.GotsSocialAuthentication;
 import org.gots.authentication.provider.google.GoogleAuthentication;
 import org.gots.authentication.provider.google.User;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GardenManager;
 import org.gots.preferences.GotsPreferences;
@@ -133,10 +134,8 @@ public class ProfileAdapter extends BaseAdapter {
                 user = authentication.getUser(token);
                 downloadImage(user.getId(), user.getPictureURL());
             } catch (UserRecoverableAuthException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (GoogleAuthException e) {
                 e.printStackTrace();
@@ -262,12 +261,9 @@ public class ProfileAdapter extends BaseAdapter {
 
                     selectedGarden = getItem(position);
                     gardenManager.setCurrentGarden(selectedGarden);
+                    mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
+                    mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_CURRENT_CHANGED));
                     notifyDataSetChanged();
-
-                    // mContext.startService(weatherIntent);
-                    // mContext.registerReceiver(weatherBroadcastReceiver, new
-                    // IntentFilter(
-                    // WeatherUpdateService.BROADCAST_ACTION));
 
                     if (gardenManager.getCurrentGarden() != null) {
                         GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();

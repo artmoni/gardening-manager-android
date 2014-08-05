@@ -20,38 +20,23 @@ import org.gots.allotment.AllotmentManager;
 import org.gots.allotment.view.QuickAllotmentActionBuilder;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.inapp.GotsBillingDialog;
-import org.gots.inapp.GotsPurchaseItem;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
-import org.gots.sensor.LocationListAdapter;
-import org.gots.sensor.SensorListFragment;
-import org.gots.sensor.SensorLoginDialogFragment;
-import org.gots.sensor.parrot.ParrotLocation;
-import org.gots.sensor.parrot.ParrotSampleFertilizer;
-import org.gots.sensor.parrot.ParrotSampleTemperature;
-import org.gots.sensor.parrot.ParrotSensorProvider;
 import org.gots.ui.HutActivity;
 import org.gots.ui.MyMainGarden;
-import org.gots.ui.SensorActivity;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar.LayoutParams;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,10 +45,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.webkit.WebView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -207,13 +190,13 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
                         @Override
                         protected GrowingSeedInterface doInBackground(Void... params) {
 
-                            GotsGrowingSeedManager provider = GotsGrowingSeedManager.getInstance().initIfNew(mContext);
+                            GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(mContext);
                             GotsSeedManager seedManager = GotsSeedManager.getInstance().initIfNew(mContext);
                             // NuxeoGrowingSeedProvider provider = new NuxeoGrowingSeedProvider(mContext);
                             GrowingSeedInterface growingSeed = (GrowingSeedInterface) seedManager.getSeedById(currentSeedId);
                             growingSeed.setDateSowing(Calendar.getInstance().getTime());
 
-                            return provider.insertSeed(growingSeed, getItem(position));
+                            return growingSeedManager.plantingSeed(growingSeed, getItem(position));
                         }
 
                         @Override

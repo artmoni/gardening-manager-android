@@ -1,6 +1,9 @@
 package org.gots.garden;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.provider.GardenProvider;
@@ -29,6 +32,10 @@ public class GardenManager extends BroadcastReceiver {
     private GardenProvider gardenProvider = null;
 
     private boolean initDone = false;
+
+    private Map<Long, GardenInterface> myGardens;
+
+    private GardenInterface currentGarden;
 
     private GardenManager() {
     }
@@ -95,72 +102,50 @@ public class GardenManager extends BroadcastReceiver {
         }
     }
 
-    public void addGarden(GardenInterface garden) {
-
-        new AsyncTask<GardenInterface, Integer, GardenInterface>() {
-            @Override
-            protected GardenInterface doInBackground(GardenInterface... params) {
-                GardenInterface newGarden = gardenProvider.createGarden(params[0]);
-                return newGarden;
-            }
-
-            protected void onPostExecute(GardenInterface result) {
-                gardenProvider.setCurrentGarden(result);
-                mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
-                GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-                tracker.trackEvent("Garden", "location", result.getLocality(), 0);
-
-            };
-        }.execute(garden);
-
+    public GardenInterface addGarden(GardenInterface garden) {
+        GardenInterface newGarden = gardenProvider.createGarden(garden);
+        // gardenProvider.setCurrentGarden(newGarden);
+        // GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+        // tracker.trackEvent("Garden", "location", result.getLocality(), 0);
+        return newGarden;
     }
 
     public GardenInterface getCurrentGarden() {
-        GardenInterface garden = gardenProvider.getCurrentGarden();
-        return garden;
+        if(currentGarden == null)
+            currentGarden = gardenProvider.getCurrentGarden();
+        
+        return currentGarden;
     }
 
     public void setCurrentGarden(GardenInterface garden) {
+        currentGarden = garden;
         gardenProvider.setCurrentGarden(garden);
-        mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
+        // mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
 
-        Log.d(TAG, "[" + garden.getId() + "] " + garden.getLocality() + " has been set as current workspace");
+        Log.d(TAG, "[" + garden.getId() + "] " + garden.getLocality() + " has been set as current garden");
     }
 
     public void removeGarden(GardenInterface garden) {
-        new AsyncTask<GardenInterface, Integer, Void>() {
-            @Override
-            protected Void doInBackground(GardenInterface... params) {
-                gardenProvider.removeGarden(params[0]);
-                return null;
-            }
-
-            protected void onPostExecute(Void result) {
-                mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
-            };
-        }.execute(garden);
+        gardenProvider.removeGarden(garden);
+        myGardens.remove(garden.getId());
     }
 
     public void updateCurrentGarden(GardenInterface garden) {
-        new AsyncTask<GardenInterface, Integer, Void>() {
-            @Override
-            protected Void doInBackground(GardenInterface... params) {
-                gardenProvider.updateGarden(params[0]);
-                return null;
-            }
+        gardenProvider.updateGarden(garden);
+        myGardens.put(garden.getId(), garden);
 
-            protected void onPostExecute(Void result) {
-                mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
-            };
-        }.execute(garden);
     }
 
     public List<GardenInterface> getMyGardens(boolean force) {
-        return gardenProvider.getMyGardens(force);
-    }
+        if (myGardens == null || force) {
+            myGardens = new HashMap<Long, GardenInterface>();
+            for (GardenInterface garden : gardenProvider.getMyGardens(force)) {
+                myGardens.put(garden.getId(), garden);
+            }
+        }
 
-    public GardenInterface getGardenById(Integer id) {
-        return new LocalGardenProvider(mContext).getGardenById(id);
+        // myGardens = gardenProvider.getMyGardens(force);
+        return new ArrayList<GardenInterface>(myGardens.values());
     }
 
 }

@@ -35,7 +35,7 @@ public class ParrotSeedConverter {
             if (plant.getString("subspecies_name") != null && !"null".equals(plant.getString("subspecies_name")))
                 seed.setVariety(plant.getString("subspecies_name"));
 
-            seed.setUUID(plant.getString("id"));
+//            seed.setUUID(plant.getString("id"));
             // JSONArray common_names = (JSONArray)plant.getJSONArray("common_names");
             // for (int i = 0; i < common_names.length(); i++) {
             // JSONObject common_name = common_names.getJSONObject(i);

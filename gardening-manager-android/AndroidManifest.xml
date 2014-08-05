@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="31003" android:versionName="0.31.3-SNAPSHOT" package="org.gots">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="32005" android:versionName="0.32.5-SNAPSHOT" package="org.gots">
 
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="19"/>
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" android:required="false"/>
+
+    <uses-feature android:name="android.hardware.location.gps" android:required="false"/>
+    <uses-feature android:name="android.hardware.location" android:required="false"/>
+
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <!-- STORE WEATHER CACHE AND VEGETABLE PHOTOS -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:required="false"/>
 
     <!-- REMINDER DOING GARDENG TASK -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
@@ -40,6 +44,8 @@
         </activity>
         <activity android:name=".ui.MyMainGarden" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow"/>
         <activity android:name=".ui.DashboardActivity" android:theme="@style/Theme.Styled">
+        </activity>
+        <activity android:name=".ui.MainActivity" android:theme="@style/Theme.Styled">
         </activity>
         <activity android:name=".ui.SensorActivity" android:theme="@style/Theme.Styled">
         </activity>

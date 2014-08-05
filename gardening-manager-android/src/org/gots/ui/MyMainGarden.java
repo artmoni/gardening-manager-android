@@ -171,6 +171,7 @@ public class MyMainGarden extends AbstractActivity {
 
                 @Override
                 protected void onPostExecute(BaseAllotmentInterface result) {
+                    sendBroadcast(new Intent(BroadCastMessages.ALLOTMENT_EVENT));
                     onResume();
                     super.onPostExecute(result);
                 }
@@ -221,7 +222,7 @@ public class MyMainGarden extends AbstractActivity {
                                 selectedAllotments.clear();
                                 onResume();
                                 setProgressRefresh(false);
-
+                                sendBroadcast(new Intent(BroadCastMessages.ALLOTMENT_EVENT));
                                 super.onPostExecute(result);
                             }
                         }.execute();
@@ -249,12 +250,12 @@ public class MyMainGarden extends AbstractActivity {
             @Override
             protected List<BaseAllotmentInterface> doInBackground(Void... params) {
 
-                List<BaseAllotmentInterface> allotments = allotmentManager.getMyAllotments();
+                List<BaseAllotmentInterface> allotments = allotmentManager.getMyAllotments(false);
                 GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(
                         MyMainGarden.this);
 
                 for (int i = 0; i < allotments.size(); i++) {
-                    allotments.get(i).setSeeds(growingSeedManager.getGrowingSeedsByAllotment(allotments.get(i)));
+                    allotments.get(i).setSeeds(growingSeedManager.getGrowingSeedsByAllotment(allotments.get(i), false));
                 }
                 return allotments;
             }

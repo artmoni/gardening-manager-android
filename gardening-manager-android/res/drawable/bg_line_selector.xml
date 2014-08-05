@@ -5,14 +5,14 @@
   
     <item 
     	android:state_pressed="true"
-        android:drawable="@drawable/bg_line_action_pressed"/>
+        android:drawable="@color/green_light"/>
     <item 
     	android:state_focused="true"
-        android:drawable="@drawable/action_item_selected"/>
+        android:drawable="@color/white"/>
      <item 
     	android:state_selected="true"
-        android:drawable="@drawable/action_item_selected"/>
+        android:drawable="@color/green_light"/>
     <item
-        android:drawable="@drawable/bg_line_action"/>
+        android:drawable="@color/white"/>
         
 </selector>

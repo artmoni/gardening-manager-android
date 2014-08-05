@@ -17,7 +17,6 @@ import org.gots.ads.GotsAdvertisement;
 import org.gots.provider.SeedsContentProvider;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.ui.fragment.TutorialFragment;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -320,9 +319,13 @@ public class HutActivity extends AbstractActivity {
                     bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds_plant)),
                     VendorListActivity.class, args);
 
+//        mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
+//                MySeedsListActivity.class, null);
+        args = new Bundle();
+        args.putBoolean(VendorListActivity.FILTER_STOCK, true);
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
-                MySeedsListActivity.class, null);
-
+                VendorListActivity.class, args);
+        
         if (gotsPrefs.isConnectedToServer()) {
             args = new Bundle();
             args.putBoolean(VendorListActivity.FILTER_FAVORITES, true);
@@ -475,10 +478,10 @@ public class HutActivity extends AbstractActivity {
         public void onPageSelected(int position) {
             mActionBar.setSelectedNavigationItem(position);
 
-            ListFragment fragment = (ListFragment) getSupportFragmentManager().findFragmentByTag(
-                    "android:switcher:" + R.id.pager + ":" + position);
-            if (fragment != null && fragment.getListAdapter() != null)
-                ((BaseAdapter) fragment.getListAdapter()).notifyDataSetChanged();
+//            Fragment fragment = (Fragment) getSupportFragmentManager().findFragmentByTag(
+//                    "android:switcher:" + R.id.pager + ":" + position);
+//            if (fragment != null && fragment.getAdapter() != null)
+//                ((BaseAdapter) fragment.getAdapter()).notifyDataSetChanged();
 
         }
 
