@@ -10,13 +10,11 @@
  ******************************************************************************/
 package org.gots.weather.provider.previmeteo;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -29,7 +27,6 @@ import org.gots.weather.WeatherSet;
 import org.gots.weather.provider.WeatherCache;
 import org.gots.weather.provider.local.LocalWeatherProvider;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 import android.content.Context;

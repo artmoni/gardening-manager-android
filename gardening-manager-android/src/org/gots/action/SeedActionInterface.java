@@ -10,8 +10,6 @@
  ******************************************************************************/
 package org.gots.action;
 
-import java.util.Date;
-
 import org.gots.seed.GrowingSeedInterface;
 
 public interface SeedActionInterface extends BaseActionInterface {

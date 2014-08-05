@@ -14,16 +14,12 @@ import org.gots.authentication.provider.google.GoogleAuthentication;
 import org.gots.authentication.provider.google.User;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
-import org.gots.garden.adapter.ProfileAdapter.UserInfo;
 import org.gots.inapp.GotsBillingDialog;
 import org.gots.inapp.GotsPurchaseItem;
 import org.gots.provider.WeatherContentProvider;
 import org.gots.ui.fragment.DashboardResumeFragment;
 import org.gots.ui.slidingmenu.NavDrawerItem;
 import org.gots.ui.slidingmenu.adapter.NavDrawerListAdapter;
-
-import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.UserRecoverableAuthException;
 
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -41,8 +37,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,6 +46,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.UserRecoverableAuthException;
 
 public class MainActivity extends AbstractActivity {
     private DrawerLayout mDrawerLayout;

@@ -9,7 +9,6 @@ import org.gots.garden.GardenManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GotsSeedManager;
-import org.gots.seed.provider.GotsSeedProvider;
 
 import android.content.Context;
 

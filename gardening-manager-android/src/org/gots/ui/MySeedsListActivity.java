@@ -30,7 +30,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
-import android.widget.ListAdapter;
 
 public class MySeedsListActivity extends AbstractListFragment {
     protected static final String TAG = "MySeedsListActivity";

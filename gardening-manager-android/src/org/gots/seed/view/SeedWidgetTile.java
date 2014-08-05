@@ -19,8 +19,6 @@ import org.gots.seed.GotsSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.LikeStatus;
 import org.gots.seed.SeedUtil;
-import org.gots.seed.adapter.PlanningHarvestAdapter;
-import org.gots.seed.adapter.PlanningSowAdapter;
 import org.gots.ui.LoginDialogFragment;
 
 import android.app.AlertDialog;

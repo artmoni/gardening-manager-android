@@ -14,18 +14,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import javax.security.auth.callback.Callback;
-
 import org.gots.R;
-import org.gots.action.BaseActionInterface;
-import org.gots.action.GardeningActionInterface;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.bean.BuyingAction;
-import org.gots.action.bean.DetailAction;
 import org.gots.action.bean.ReduceQuantityAction;
-import org.gots.action.bean.SowingAction;
-import org.gots.action.util.ActionState;
-import org.gots.action.view.ActionWidget;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
@@ -35,7 +27,6 @@ import org.gots.seed.adapter.VendorSeedListAdapter;
 import org.gots.seed.provider.parrot.ParrotSeedProvider;
 import org.gots.ui.fragment.AbstractListFragment;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -43,9 +34,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.view.ActionMode;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;

@@ -2,7 +2,6 @@ package org.gots.seed;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.exception.GotsException;
@@ -19,7 +18,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.util.Log;
 
 public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvider {
 

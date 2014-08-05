@@ -9,20 +9,15 @@ import org.gots.R;
 import org.gots.action.adapter.comparator.ISeedSpecieComparator;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.SeedUtil;
-import org.gots.seed.view.SeedWidgetLong;
 import org.gots.seed.view.SeedWidgetTile;
 
 import android.content.Context;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.Gallery;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 public abstract class SeedListAdapter extends BaseAdapter implements Filterable {
 

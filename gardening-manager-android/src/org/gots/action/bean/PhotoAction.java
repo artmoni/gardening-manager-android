@@ -22,7 +22,6 @@ import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GrowingSeedInterface;
 
 import android.content.Context;
-import android.os.Environment;
 
 public class PhotoAction extends AbstractActionSeed implements PermanentActionInterface, SeedActionInterface,
         GardeningActionInterface {

@@ -15,10 +15,7 @@ import org.gots.utils.NotConfiguredException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.util.Log;
-
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class GardenManager extends BroadcastReceiver {
     private static final String TAG = "GardenManager";
