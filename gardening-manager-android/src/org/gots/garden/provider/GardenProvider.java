@@ -18,6 +18,8 @@ public interface GardenProvider {
 
 	public GardenInterface updateGarden(GardenInterface garden);
 
+    public abstract int share(GardenInterface garden, String user, String permission);
+
 	
 	
 }

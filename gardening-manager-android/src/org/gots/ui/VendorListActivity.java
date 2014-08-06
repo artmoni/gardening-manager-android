@@ -115,11 +115,11 @@ public class VendorListActivity extends AbstractListFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        updateVendorSeeds();
     }
 
     @Override
     public void onResume() {
-        updateVendorSeeds();
         super.onResume();
     }
 
@@ -166,7 +166,6 @@ public class VendorListActivity extends AbstractListFragment {
 
                 return catalogue;
             }
-
             protected void onPostExecute(List<BaseSeedInterface> vendorSeeds) {
 
                 listVendorSeedAdapter.setSeeds(vendorSeeds);

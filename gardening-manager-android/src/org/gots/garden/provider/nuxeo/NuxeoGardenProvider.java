@@ -84,6 +84,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
             // documentsList = gardensWorkspaces.asUpdatableDocumentsList();
             for (Iterator<Document> iterator = gardensWorkspaces.iterator(); iterator.hasNext();) {
                 Document gardenWorkspace = iterator.next();
+
                 GardenInterface garden = NuxeoGardenConvertor.convert(gardenWorkspace);
                 myGardens.add(super.updateGarden(garden));
                 Log.d(TAG, "Document=" + gardenWorkspace.getId() + " / " + garden);
@@ -219,5 +220,23 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
             // cancel(false);
         }
 
+    }
+
+    @Override
+    public int share(GardenInterface garden, String user, String permission) {
+        Session session = getNuxeoClient().getSession();
+        DocumentManager service = session.getAdapter(DocumentManager.class);
+        try {
+            Document doc = service.getDocument(new IdRef(garden.getUUID()));
+            Document docACL = service.setPermission(doc, user, permission);
+            if (docACL == null)
+                return -1;
+            // documentsList.remove(updatedDocument);
+
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+            // cancel(false);
+        }
+        return 0;
     }
 }

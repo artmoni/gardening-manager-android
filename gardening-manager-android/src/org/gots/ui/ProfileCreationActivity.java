@@ -76,6 +76,10 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
 
     private TextView editTextName;
 
+    private TextView editTextLatitude;
+
+    private TextView editTextLongitude;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,6 +113,8 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
     private void buildProfile() {
         editTextLocality = (TextView) findViewById(R.id.editTextLocality);
         editTextName = (TextView) findViewById(R.id.editTextGardenName);
+        editTextLatitude = (TextView) findViewById(R.id.textGardenLatitude);
+        editTextLongitude = (TextView) findViewById(R.id.textGardenLongitude);
 
         findViewById(R.id.buttonValidatePosition).setOnClickListener(this);
 
@@ -120,6 +126,8 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
                 && gardenManager.getCurrentGarden().getLocality() != null) {
             editTextLocality.setText(gardenManager.getCurrentGarden().getLocality());
             editTextName.setText(gardenManager.getCurrentGarden().getName());
+            editTextLatitude.setText(String.valueOf(gardenManager.getCurrentGarden().getGpsLatitude()));
+            editTextLongitude.setText(String.valueOf(gardenManager.getCurrentGarden().getGpsLongitude()));
         }
 
         editTextLocality.setOnClickListener(new View.OnClickListener() {
@@ -180,6 +188,9 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
                 // editTextLocality.setHint(String.format("%s", address.getLocality()));
                 // else
                 editTextLocality.setText(String.format("%s", address.getLocality()));
+                editTextLatitude.setText(String.valueOf(address.getLatitude()));
+                editTextLongitude.setText(String.valueOf(address.getLongitude()));
+
             } else {
                 // sinon on affiche un message d'erreur
                 ((TextView) findViewById(R.id.editTextLocality)).setHint(getResources().getString(
@@ -199,9 +210,7 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
 
         this.location = location;
         displayAddress();
-
         setProgressRefresh(false);
-
         mlocManager.removeUpdates(this);
     }
 
@@ -325,7 +334,10 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
             @Override
             protected GardenInterface doInBackground(Void... params) {
                 garden = buildGarden(new Garden());
-                return gardenManager.addGarden(garden);
+                garden = gardenManager.addGarden(garden);
+                if (((CheckBox) findViewById(R.id.checkPublicGarden)).isChecked())
+                    gardenManager.share(garden, "Everyone", "Write");
+                return garden;
             }
 
             protected void onPostExecute(GardenInterface result) {

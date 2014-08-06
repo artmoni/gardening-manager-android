@@ -20,7 +20,7 @@ public class LocalGardenProvider extends AbstractProvider implements GardenProvi
 
     @Override
     public GardenInterface createGarden(GardenInterface garden) {
-        
+
         GardenInterface newGarden = helper.insertGarden(garden);
         return newGarden;
     }
@@ -54,7 +54,11 @@ public class LocalGardenProvider extends AbstractProvider implements GardenProvi
     @Override
     public void setCurrentGarden(GardenInterface garden) {
         GotsPreferences.getInstance().set(GotsPreferences.ORG_GOTS_CURRENT_GARDENID, (int) garden.getId());
-//        DatabaseHelper.getInstance(mContext).changeDatabase();        
+        // DatabaseHelper.getInstance(mContext).changeDatabase();
+    }
+
+    public int share(GardenInterface garden, String user, String permission) {
+        return -1;
     }
 
 }

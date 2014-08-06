@@ -108,9 +108,9 @@ public class GardenManager extends BroadcastReceiver {
     }
 
     public GardenInterface getCurrentGarden() {
-        if(currentGarden == null)
+        if (currentGarden == null)
             currentGarden = gardenProvider.getCurrentGarden();
-        
+
         return currentGarden;
     }
 
@@ -143,6 +143,13 @@ public class GardenManager extends BroadcastReceiver {
 
         // myGardens = gardenProvider.getMyGardens(force);
         return new ArrayList<GardenInterface>(myGardens.values());
+    }
+
+    public int share(GardenInterface garden, String user, String permission) {
+        if (gardenProvider instanceof NuxeoGardenProvider) {
+            return gardenProvider.share(garden, user, permission);
+        }
+        return -1;
     }
 
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import org.gots.authentication.GotsSyncAdapter;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
+import org.gots.garden.provider.GardenProvider;
 import org.gots.garden.provider.local.LocalGardenProvider;
 import org.gots.garden.provider.nuxeo.NuxeoGardenProvider;
 
@@ -42,7 +43,7 @@ public class GardenSyncAdapter extends GotsSyncAdapter {
         List<GardenInterface> myLocalGardens = localGardenProvider.getMyGardens(true);
 
         if (gotsPrefs.isConnectedToServer()) {
-            NuxeoGardenProvider nuxeoGardenProvider = new NuxeoGardenProvider(getContext());
+            GardenProvider nuxeoGardenProvider = new NuxeoGardenProvider(getContext());
             remoteGardens = nuxeoGardenProvider.getMyGardens(true);
 
             List<GardenInterface> myGardens = new ArrayList<GardenInterface>();

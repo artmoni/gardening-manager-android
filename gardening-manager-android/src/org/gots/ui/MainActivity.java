@@ -204,6 +204,35 @@ public class MainActivity extends AbstractActivity {
         adapter = new NavDrawerListAdapter(getApplicationContext(), navDrawerItems);
         mDrawerList.removeAllViewsInLayout();
         mDrawerList.setAdapter(adapter);
+
+        findViewById(R.id.bt_share).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                new AsyncTask<NavDrawerItem, Void, Integer>() {
+                    private ImageView imageShare;
+
+                    protected void onPreExecute() {
+                        imageShare = (ImageView) findViewById(R.id.bt_share);
+                    };
+
+                    @Override
+                    protected Integer doInBackground(NavDrawerItem... params) {
+                        return gardenManager.share(gardenManager.getCurrentGarden(), "sebastien.fleury@gmail.com",
+                                "Read");
+                    }
+
+                    @Override
+                    protected void onPostExecute(Integer result) {
+                        if (result.intValue() == -1)
+                            imageShare.setImageDrawable(getResources().getDrawable(R.drawable.garden_unshared));
+                        else
+                            imageShare.setImageDrawable(getResources().getDrawable(R.drawable.garden_shared));
+                        super.onPostExecute(result);
+                    }
+                }.execute();
+            }
+        });
     }
 
     protected void displayDrawerMenuProfileCounter() {

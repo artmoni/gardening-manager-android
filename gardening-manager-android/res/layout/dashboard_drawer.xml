@@ -67,6 +67,16 @@
                 android:alpha="0.9"
                 android:background="@color/text_color_dark" />
 
+            <ImageView
+                android:id="@+id/bt_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/garden_unshared" />
+
         </RelativeLayout>
 
         <ListView

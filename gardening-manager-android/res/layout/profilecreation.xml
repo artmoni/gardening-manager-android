@@ -103,6 +103,48 @@
                                 android:src="@drawable/bt_localize_garden" />
                         </RelativeLayout>
                     </TableRow>
+
+                    <TableRow
+                        android:id="@+id/tableRow3"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content" >
+
+                        <TextView
+                            style="@style/description_content"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:editable="false"
+                            android:text="Latitude" />
+
+                        <TextView
+                            android:id="@+id/textGardenLatitude"
+                            style="@style/description_content"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:editable="false"
+                            android:hint="undefined" />
+                    </TableRow>
+
+                    <TableRow
+                        android:id="@+id/tableRow4"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content" >
+
+                        <TextView
+                            style="@style/description_content"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:editable="false"
+                            android:text="Longitude" />
+
+                        <TextView
+                            android:id="@+id/textGardenLongitude"
+                            style="@style/description_content"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:editable="false"
+                            android:hint="undefined" />
+                    </TableRow>
                 </TableLayout>
 
                 <CheckBox
@@ -115,6 +157,15 @@
                     android:text="@string/profile.sample.data"
                     android:visibility="gone" />
 
+                <CheckBox
+                    android:id="@+id/checkPublicGarden"
+                    style="@style/description_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:gravity="center_vertical"
+                    android:text="@string/incredibleedible"
+                    android:visibility="visible" />
                 <!--
                      <CheckBox
                     android:id="@+id/checkboxShare"
