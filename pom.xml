@@ -45,19 +45,40 @@
         <type>apklib</type>
       </dependency>
       <dependency>
+        <groupId>com.android.support</groupId>
+        <artifactId>support-v4</artifactId>
+        <version>19.1.0</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.android.support</groupId>
+        <artifactId>support-v13</artifactId>
+        <version>19.1.0</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.android.support</groupId>
+        <artifactId>appcompat-v7</artifactId>
+        <type>aar</type>
+        <version>19.1.0</version>
+      </dependency>
+      <dependency>
         <groupId>android.support</groupId>
         <artifactId>compatibility-v4</artifactId>
         <version>${compatibility.version}</version>
+        <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>android.support</groupId>
         <artifactId>compatibility-v7</artifactId>
         <version>${compatibility.version}</version>
+        <scope>provided</scope>
         <type>apklib</type>
       </dependency>
       <dependency>
         <groupId>android.support</groupId>
         <artifactId>compatibility-v7</artifactId>
+        <scope>provided</scope>
         <version>${compatibility.version}</version>
         <type>jar</type>
       </dependency>
@@ -65,12 +86,14 @@
         <groupId>android.support</groupId>
         <artifactId>compatibility-v7-appcompat</artifactId>
         <version>${compatibility.version}</version>
+        <scope>provided</scope>
         <type>apklib</type>
       </dependency>
       <dependency>
         <groupId>android.support</groupId>
         <artifactId>compatibility-v7-appcompat</artifactId>
         <version>${compatibility.version}</version>
+        <scope>provided</scope>
         <type>jar</type>
       </dependency>
       <dependency>
@@ -102,7 +125,7 @@
         <plugin>
           <groupId>com.jayway.maven.plugins.android.generation2</groupId>
           <artifactId>android-maven-plugin</artifactId>
-          <version>3.9.0-rc.1</version>
+          <version>3.9.0-rc.3</version>
           <configuration>
             <sdk>
               <platform>16</platform>

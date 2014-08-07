@@ -23,6 +23,7 @@ With android SDK Manager, install those tools:
 	- ARM EABI V7
 	- Google API
 	- Extras (All)
+	- Google Repository (for maven local repository)
 
 ## Linux Android initialization
 http://source.android.com/source/initializing.html

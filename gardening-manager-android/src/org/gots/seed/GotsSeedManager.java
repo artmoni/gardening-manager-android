@@ -101,6 +101,7 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
         ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
+        
         if (force && ni != null && ni.isConnected()) {
             GotsSeedProvider provider = new NuxeoSeedProvider(mContext);
             allSeeds = provider.getVendorSeeds(force);
