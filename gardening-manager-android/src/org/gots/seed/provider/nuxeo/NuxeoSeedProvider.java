@@ -550,5 +550,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         String[] arraySpecies = new String[latinNameSpecies.size()];
         return latinNameSpecies.toArray(arraySpecies);
     }
+    
+    
 
 }

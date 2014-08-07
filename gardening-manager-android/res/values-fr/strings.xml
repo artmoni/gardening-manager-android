@@ -186,6 +186,8 @@
     <string name="tutorial.d.description">soyez alerté lorqu’il est temps et conservez l’historique des tâches effectuées</string>
     <string name="tutorial.e.title">Rejoignez une communauté de jardiniers</string>
     <string name="tutorial.e.description">découvrez des jardins originaux et partagez vos créations</string>
+    <string name="tutorial.f.title">Surveillez vos plantes</string>
+    <string name="tutorial.f.description">Température, engrais, ensoleillement avec votre Parrot Flower Power</string>
     <string name="dashboard.sensor.name">Sondes</string>
     <string name="skip">Passer</string>
     <string name="more">Plus</string>
