@@ -89,25 +89,16 @@
     </dependency>
     <!-- <dependency> <groupId>com.actionbarsherlock</groupId> <artifactId>actionbarsherlock</artifactId> 
       <version>4.4.0</version> <type>apklib</type> </dependency> -->
-      <dependency>
-        <groupId>com.android.support</groupId>
-        <artifactId>support-v4</artifactId>
-      </dependency>
-      <dependency> 
-        <groupId>com.android.support</groupId>
-        <artifactId>support-v13</artifactId>
-      </dependency>
-   <!--  <dependency>
+    <!-- <dependency> <groupId>com.android.support</groupId> <artifactId>support-v4</artifactId> 
+      </dependency> <dependency> <groupId>com.android.support</groupId> <artifactId>support-v13</artifactId> 
+      </dependency> -->
+    <!-- <dependency> <groupId>com.android.support</groupId> <artifactId>appcompat-v7</artifactId> 
+      <type>aar</type> </dependency> -->
+    <dependency>
       <groupId>android.support</groupId>
       <artifactId>compatibility-v4</artifactId>
-    </dependency> -->
-    <dependency> 
-      <groupId>com.android.support</groupId>
-      <artifactId>appcompat-v7</artifactId>
-      <type>aar</type>
-      
     </dependency>
-    <!-- <dependency>
+    <dependency>
       <groupId>android.support</groupId>
       <artifactId>compatibility-v7</artifactId>
       <type>jar</type>
@@ -121,7 +112,7 @@
       <groupId>android.support</groupId>
       <artifactId>compatibility-v7-appcompat</artifactId>
       <type>jar</type>
-    </dependency> -->
+    </dependency>
     <dependency>
       <groupId>com.google.android.analytics</groupId>
       <artifactId>analytics</artifactId>
