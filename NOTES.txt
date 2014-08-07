@@ -1,0 +1,57 @@
+#########################
+
+# SQLITE
+
+    $ cd /data/data/org.gots/databases/
+    $ sqlite3 gots.db
+    .tables
+    .header on
+    .mode column
+
+# PROCESS IMAGE
+
+    $ mogrify -resize 100x100 veget_*.jpg
+
+# NUXEO INTEGRATION
+
+## run nuxeo shell
+
+TODO: update
+
+    $ java -cp /var/lib/nuxeo/server/lib/log4j-1.2.17.jar:/var/lib/nuxeo/server/client/nuxeo-shell-*.jar org.nuxeo.shell.Main
+    $ connect http://localhost:8080/nuxeo/site/automation -u Administrator
+
+# Work in progress
+
+## Authentication
+### USER CREATION
+
+    <- ServerSide: User creation by admin or openid
+    <- org.nuxeo.ecm.platform.oauth2.openid.auth.OpenIDConnectAuthenticator => OAuth2 authentication, user creation
+    <- ++ Generate password, send email with android specific URI (no manual copy of password)
+    <- ++ Generate token and send email with android specific URI (step 2 useless)
+
+### TOKEN REQUEST
+
+    -> ClientSide connect with user/password to request token 
+    -> org.gots.ui.LoginActivity.request_token(boolean)
+    <- org.nuxeo.ecm.platform.ui.web.auth.plugins.BasicAuthenticator => user authenticated with password
+    <- org.nuxeo.ecm.tokenauth.servlet.TokenAuthenticationServlet => send token for user
+    -> token stored on device
+
+### TOKEN USE
+
+    -> client side, connect with token
+    -> org.gots.utils.TokenRequestInterceptor => send request with token and deviceid
+    <- org.nuxeo.ecm.platform.ui.web.auth.token.TokenAuthenticator => check token and log the request
+
+### alternate solution) USER CREATION REQUEST
+
+    -> ++ Client side send a request for a user creation for a given user (email)
+    <- ++ Server creates user, generate token and send email with android specific URI (step 1 useless)
+    org.gots.server.auth.RequestAuthenticationTokenByEmail
+    -> ++ Client side, click email, open Gardening, token request for device
+    <- org.gots.server.auth.TemporaryTokenAuthenticator userPrincipal (replace basic auth)
+    <- org.nuxeo.ecm.tokenauth.servlet.TokenAuthenticationServlet => send token for user
+    -> store token (and connect to validate user creation)
+    <- ++ If created user is not validated within a given delay, the user is deleted

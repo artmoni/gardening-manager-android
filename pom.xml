@@ -10,7 +10,7 @@
   <name>Gardening Manager - Parent</name>
   <properties>
     <server_schema>http</server_schema>
-    <compatibility.version>19</compatibility.version>
+    <compatibility.version>19.1.0</compatibility.version>
   </properties>
   <scm>
     <developerConnection>scm:git:ssh://git@github.com:artmoni/gardening-manager-android.git</developerConnection>
@@ -63,34 +63,23 @@
         <version>19.1.0</version>
       </dependency> -->
       <dependency>
-        <groupId>android.support</groupId>
-        <artifactId>compatibility-v4</artifactId>
+        <groupId>com.android.support</groupId>
+        <artifactId>support-v4</artifactId>
         <version>${compatibility.version}</version>
+        <scope>provided</scope>
       </dependency>
       <dependency>
-        <groupId>android.support</groupId>
-        <artifactId>compatibility-v7</artifactId>
+        <groupId>com.android.support</groupId>
+        <artifactId>support-v13</artifactId>
         <version>${compatibility.version}</version>
-        <type>apklib</type>
+        <scope>provided</scope>
       </dependency>
       <dependency>
-        <groupId>android.support</groupId>
-        <artifactId>compatibility-v7</artifactId>
+        <groupId>com.android.support</groupId>
+        <artifactId>appcompat-v7</artifactId>
+        <type>aar</type>
         <version>${compatibility.version}</version>
-        <type>jar</type>
-      </dependency>
-      <dependency>
-        <groupId>android.support</groupId>
-        <artifactId>compatibility-v7-appcompat</artifactId>
-        <version>${compatibility.version}</version>
-        <type>apklib</type>
-      </dependency>
-      <dependency>
-        <groupId>android.support</groupId>
-        <artifactId>compatibility-v7-appcompat</artifactId>
-        <version>${compatibility.version}</version>
-        <type>jar</type>
-      </dependency>
+      </dependency>      
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
@@ -103,6 +92,58 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+  <repositories>
+    <repository>
+      <id>gardening-manager-maven</id>
+      <url>http://github.com/artmoni/gardening-manager-maven/raw/master</url>
+    </repository>
+    <repository>
+      <id>jakewharton</id>
+      <url>http://r.jakewharton.com/maven/release/</url>
+    </repository>
+    <repository>
+      <id>google-api-services</id>
+      <url>http://mavenrepo.google-api-java-client.googlecode.com/hg</url>
+    </repository>
+    <repository>
+      <id>public-releases</id>
+      <url>https://maven.nuxeo.org/nexus/content/repositories/public-releases/</url>
+    </repository>
+    <repository>
+      <id>public-snapshots</id>
+      <url>https://maven-us.nuxeo.org/nexus/content/repositories/public-snapshots/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>sonatype-oss-public</id>
+      <url>https://oss.sonatype.org/content/groups/public/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </repository>
+    <repository>
+      <id>google-repository</id>
+      <url>file://${env.ANDROID_HOME}/extras/google/m2repository</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>android-repository</id>
+      <url>file://${env.ANDROID_HOME}/extras/android/m2repository</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
   <build>
     <pluginManagement>
       <plugins>

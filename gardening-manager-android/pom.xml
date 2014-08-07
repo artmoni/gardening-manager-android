@@ -18,58 +18,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
-  <repositories>
-    <repository>
-      <id>gardening-manager-maven</id>
-      <url>http://github.com/artmoni/gardening-manager-maven/raw/master</url>
-    </repository>
-    <repository>
-      <id>jakewharton</id>
-      <url>http://r.jakewharton.com/maven/release/</url>
-    </repository>
-    <repository>
-      <id>google-api-services</id>
-      <url>http://mavenrepo.google-api-java-client.googlecode.com/hg</url>
-    </repository>
-    <repository>
-      <id>public-releases</id>
-      <url>https://maven.nuxeo.org/nexus/content/repositories/public-releases/</url>
-    </repository>
-    <repository>
-      <id>public-snapshots</id>
-      <url>https://maven-us.nuxeo.org/nexus/content/repositories/public-snapshots/</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>sonatype-oss-public</id>
-      <url>https://oss.sonatype.org/content/groups/public/</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-    </repository>
-    <repository>
-      <id>google-repository</id>
-      <url>file://${env.ANDROID_HOME}/extras/google/m2repository</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>android-repository</id>
-      <url>file://${env.ANDROID_HOME}/extras/android/m2repository</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
+
   <dependencies>
     <dependency>
       <groupId>com.google.code.gson</groupId>
@@ -95,8 +44,8 @@
     <!-- <dependency> <groupId>com.android.support</groupId> <artifactId>appcompat-v7</artifactId> 
       <type>aar</type> </dependency> -->
     <dependency>
-      <groupId>android.support</groupId>
-      <artifactId>compatibility-v4</artifactId>
+      <groupId>com.android.support</groupId>
+      <artifactId>support-v4</artifactId>
     </dependency>
     <dependency>
       <groupId>android.support</groupId>
@@ -104,14 +53,9 @@
       <type>jar</type>
     </dependency>
     <dependency>
-      <groupId>android.support</groupId>
-      <artifactId>compatibility-v7-appcompat</artifactId>
-      <type>apklib</type>
-    </dependency>
-    <dependency>
-      <groupId>android.support</groupId>
-      <artifactId>compatibility-v7-appcompat</artifactId>
-      <type>jar</type>
+      <groupId>com.android.support</groupId>
+      <artifactId>appcompat-v7</artifactId>
+      <type>aar</type>
     </dependency>
     <dependency>
       <groupId>com.google.android.analytics</groupId>
