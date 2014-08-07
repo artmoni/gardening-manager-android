@@ -10,7 +10,7 @@
   <name>Gardening Manager - Parent</name>
   <properties>
     <server_schema>http</server_schema>
-    <compatibility.version>19.1.0</compatibility.version>
+    <compatibility.version>19</compatibility.version>
   </properties>
   <scm>
     <developerConnection>scm:git:ssh://git@github.com:artmoni/gardening-manager-android.git</developerConnection>
@@ -62,24 +62,36 @@
         <type>aar</type>
         <version>19.1.0</version>
       </dependency> -->
+      
       <dependency>
-        <groupId>com.android.support</groupId>
-        <artifactId>support-v4</artifactId>
+        <groupId>android.support</groupId>
+        <artifactId>compatibility-v4</artifactId>
         <version>${compatibility.version}</version>
-        <scope>provided</scope>
       </dependency>
       <dependency>
-        <groupId>com.android.support</groupId>
-        <artifactId>support-v13</artifactId>
+        <groupId>android.support</groupId>
+        <artifactId>compatibility-v7</artifactId>
         <version>${compatibility.version}</version>
-        <scope>provided</scope>
+        <type>apklib</type>
       </dependency>
       <dependency>
-        <groupId>com.android.support</groupId>
-        <artifactId>appcompat-v7</artifactId>
-        <type>aar</type>
+        <groupId>android.support</groupId>
+        <artifactId>compatibility-v7</artifactId>
         <version>${compatibility.version}</version>
-      </dependency>      
+        <type>jar</type>
+      </dependency>
+      <dependency>
+        <groupId>android.support</groupId>
+        <artifactId>compatibility-v7-appcompat</artifactId>
+        <version>${compatibility.version}</version>
+        <type>apklib</type>
+      </dependency>
+      <dependency>
+        <groupId>android.support</groupId>
+        <artifactId>compatibility-v7-appcompat</artifactId>
+        <version>${compatibility.version}</version>
+        <type>jar</type>
+      </dependency>
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
