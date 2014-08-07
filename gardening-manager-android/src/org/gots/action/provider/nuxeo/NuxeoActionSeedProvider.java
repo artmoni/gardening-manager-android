@@ -65,22 +65,28 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
         ArrayList<SeedActionInterface> actionsToDo = new ArrayList<SeedActionInterface>();
         try {
-            // for (Document actionDoc : documentMgr.getChildren(getActionsFolder(seed, documentMgr))) {
+            // for (Document actionDoc :
+            // documentMgr.getChildren(getActionsFolder(seed, documentMgr))) {
             Document garden = documentMgr.getDocument(new IdRef(
                     GardenManager.getInstance().getCurrentGarden().getUUID()));
             Documents actionDocs = documentMgr.query(
                     "SELECT * FROM Action WHERE ecm:currentLifeCycleState != \"deleted\" AND  ecm:path startswith '"
-                            + garden.getPath() + "' AND action:dateactiondone is null", null,
-                    new String[] { "dc:modified DESC" }, "*", 0, 50, CacheBehavior.FORCE_REFRESH);
+                            + garden.getPath()
+                            + "' AND action:dateactiondone is null", null,
+                    new String[] { "dc:modified DESC" }, "*", 0, 50,
+                    CacheBehavior.FORCE_REFRESH);
 
-            NuxeoGrowingSeedProvider gotsSeedManager = new NuxeoGrowingSeedProvider(mContext);
+            NuxeoGrowingSeedProvider gotsSeedManager = new NuxeoGrowingSeedProvider(
+                    mContext);
             for (Document actionDoc : actionDocs) {
                 BaseActionInterface actionConverted = convert(actionDoc);
                 if (!(actionConverted instanceof SeedActionInterface))
                     continue;
                 SeedActionInterface action = (SeedActionInterface) actionConverted;
-                Document actionFolder = documentMgr.getDocument(new PathRef(actionDoc.getParentPath()));
-                Document parentSeed = documentMgr.getDocument(new PathRef(actionFolder.getParentPath()), "*");
+                Document actionFolder = documentMgr.getDocument(new PathRef(
+                        actionDoc.getParentPath()));
+                Document parentSeed = documentMgr.getDocument(new PathRef(
+                        actionFolder.getParentPath()), "*");
 
                 GrowingSeedInterface seed = gotsSeedManager.getGrowingSeedsByUUID(parentSeed.getId());
                 action = super.populateState(action, seed);
@@ -95,24 +101,30 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
     }
 
     @Override
-    public SeedActionInterface insertAction(GrowingSeedInterface seed, BaseActionInterface action) {
+    public SeedActionInterface insertAction(GrowingSeedInterface seed,
+            BaseActionInterface action) {
         action = insertNuxeoAction(seed, action);
         return super.insertAction(seed, action);
     }
 
-    public SeedActionInterface insertNuxeoAction(GrowingSeedInterface seed, BaseActionInterface action) {
+    public SeedActionInterface insertNuxeoAction(GrowingSeedInterface seed,
+            BaseActionInterface action) {
         Session session = getNuxeoClient().getSession();
         DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
         try {
             PropertyMap properties = new PropertyMap();
             properties.set("dc:title", action.getName());
-            properties.set("action:duration", String.valueOf(action.getDuration()));
+            properties.set("action:duration",
+                    String.valueOf(action.getDuration()));
 
             Document docAction = documentMgr.getDocument(action.getUUID());
 
             if (docAction != null) {
-                Document doc = documentMgr.copy(docAction, getActionsFolder(seed, documentMgr), docAction.getTitle()
-                        + "-" + String.valueOf(action.getDuration()));
+                Document doc = documentMgr.copy(
+                        docAction,
+                        getActionsFolder(seed, documentMgr),
+                        docAction.getTitle() + "-"
+                                + String.valueOf(action.getDuration()));
                 documentMgr.update(doc, properties);
                 action.setUUID(doc.getId());
             }
@@ -122,10 +134,12 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         return (SeedActionInterface) action;
     }
 
-    protected Document getActionsFolder(GrowingSeedInterface seed, DocumentManager documentMgr) throws Exception {
+    protected Document getActionsFolder(GrowingSeedInterface seed,
+            DocumentManager documentMgr) throws Exception {
         boolean subFolderExists = false;
         Document actionFolder = null;
-        for (Document subFolder : documentMgr.getChildren(new IdRef(seed.getUUID()))) {
+        for (Document subFolder : documentMgr.getChildren(new IdRef(
+                seed.getUUID()))) {
 
             if ("Actions".equals(subFolder.getTitle())) {
                 Document currentDoc = documentMgr.getDocument(subFolder);
@@ -139,7 +153,8 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         if (!subFolderExists) {
             PropertyMap properties = new PropertyMap();
             properties.set("dc:title", "Actions");
-            actionFolder = documentMgr.createDocument(new IdRef(seed.getUUID()), "Folder", "Actions", properties);
+            actionFolder = documentMgr.createDocument(
+                    new IdRef(seed.getUUID()), "Folder", "Actions", properties);
         }
         return actionFolder;
     }
@@ -151,12 +166,14 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         try {
 
             PropertyMap properties = new PropertyMap();
-            properties.set("action:dateactiondone", Calendar.getInstance().getTime());
+            properties.set("action:dateactiondone",
+                    Calendar.getInstance().getTime());
             properties.set("action:description", action.getDescription());
             if (action.getData() != null)
                 properties.set("action:data", action.getData().toString());
 
-            // Document newDoc = documentMgr.copy(new DocRef(action.getUUID()), getActionsFolder(seed, documentMgr));
+            // Document newDoc = documentMgr.copy(new DocRef(action.getUUID()),
+            // getActionsFolder(seed, documentMgr));
             documentMgr.update(new DocRef(action.getUUID()), properties);
 
         } catch (Exception e) {
@@ -166,7 +183,8 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
     }
 
     @Override
-    public List<SeedActionInterface> getActionsToDoBySeed(GrowingSeedInterface seed, boolean force) {
+    public List<SeedActionInterface> getActionsToDoBySeed(
+            GrowingSeedInterface seed, boolean force) {
         Session session = getNuxeoClient().getSession();
         DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
         List<SeedActionInterface> actionsToDo = new ArrayList<SeedActionInterface>();
@@ -175,11 +193,13 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             if (force) {
                 cacheParam = (byte) (cacheParam | CacheBehavior.FORCE_REFRESH);
             }
-            // for (Document actionDoc : documentMgr.getChildren(getActionsFolder(seed, documentMgr))) {
+            // for (Document actionDoc :
+            // documentMgr.getChildren(getActionsFolder(seed, documentMgr))) {
             Documents actionDocs = documentMgr.query(
                     "SELECT * FROM Action WHERE ecm:currentLifeCycleState != \"deleted\" AND ecm:parentId=\""
-                            + getActionsFolder(seed, documentMgr).getId() + "\" AND action:dateactiondone is null",
-                    null, new String[] { "dc:modified DESC" }, "*", 0, 50, cacheParam);
+                            + getActionsFolder(seed, documentMgr).getId()
+                            + "\" AND action:dateactiondone is null", null,
+                    new String[] { "dc:modified DESC" }, "*", 0, 50, cacheParam);
 
             for (Document actionDoc : actionDocs) {
                 BaseActionInterface actionConverted = convert(actionDoc);
@@ -194,12 +214,14 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
-        // return synchronize(seed, super.getActionsToDoBySeed(seed), actionsToDo);
+        // return synchronize(seed, super.getActionsToDoBySeed(seed),
+        // actionsToDo);
         return actionsToDo;
     }
 
     @Override
-    public List<SeedActionInterface> getActionsDoneBySeed(GrowingSeedInterface seed, boolean force) {
+    public List<SeedActionInterface> getActionsDoneBySeed(
+            GrowingSeedInterface seed, boolean force) {
         Session session = getNuxeoClient().getSession();
         DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
         ArrayList<SeedActionInterface> actionsDone = new ArrayList<SeedActionInterface>();
@@ -210,8 +232,9 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             }
             Documents actionDocs = documentMgr.query(
                     "SELECT * FROM Action WHERE ecm:currentLifeCycleState != \"deleted\" AND ecm:parentId=\""
-                            + getActionsFolder(seed, documentMgr).getId() + "\" AND action:dateactiondone is not null",
-                    null, new String[] { "dc:modified DESC" }, "*", 0, 50, cacheParam);
+                            + getActionsFolder(seed, documentMgr).getId()
+                            + "\" AND action:dateactiondone is not null", null,
+                    new String[] { "dc:modified DESC" }, "*", 0, 50, cacheParam);
 
             for (Document actionDoc : actionDocs) {
                 BaseActionInterface actionConverted = convert(actionDoc);
@@ -228,11 +251,13 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             Log.e(TAG, e.getMessage(), e);
         }
         return actionsDone;
-        // return synchronize(seed, super.getActionsDoneBySeed(seed), actionsDone);
+        // return synchronize(seed, super.getActionsDoneBySeed(seed),
+        // actionsDone);
     }
 
     private BaseActionInterface convert(Document actionDoc) {
-        BaseActionInterface action = ActionFactory.buildAction(mContext, actionDoc.getTitle());
+        BaseActionInterface action = ActionFactory.buildAction(mContext,
+                actionDoc.getTitle());
         action.setDateActionDone(actionDoc.getDate("action:dateactiondone"));
         action.setDescription(actionDoc.getString("action:description"));
         action.setData(actionDoc.getString("action:data"));
@@ -244,16 +269,16 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         return action;
     }
 
-    PropertyMap blobProp = new PropertyMap();
-
-    protected void attachBlobToDocument(GrowingSeedInterface seed, Blob blob) {
+    protected void attachBlobToDocument(GrowingSeedInterface seed,
+            PropertyMap blobProp) {
         Session session = getNuxeoClient().getSession();
         DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
         Document seedDoc;
         Document pictureBook = null;
         try {
             seedDoc = documentMgr.getDocument(new IdRef(seed.getUUID()), true);
-            pictureBook = documentMgr.getDocument(new PathRef(seedDoc.getPath()) + "/Picture");
+            pictureBook = documentMgr.getDocument(new PathRef(seedDoc.getPath())
+                    + "/Picture");
         } catch (Exception e) {
             Log.i(TAG, e.getMessage());
         }
@@ -263,8 +288,9 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
                 PropertyMap properties = new PropertyMap();
                 properties.set("dc:title", "Picture");
 
-                pictureBook = documentMgr.createDocument(new PathRef(seedDoc.getPath()), "PictureBook", "Picture",
-                        properties);
+                pictureBook = documentMgr.createDocument(
+                        new PathRef(seedDoc.getPath()), "PictureBook",
+                        "Picture", properties);
             } catch (Exception e) {
                 Log.i(TAG, e.getMessage());
             }
@@ -275,22 +301,27 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             StringBuilder toJSON = new StringBuilder("{ ");
             toJSON.append(" \"type\" : \"blob\"");
             toJSON.append(", \"length\" : " + blobProp.get("length"));
-            toJSON.append(", \"mime-type\" : \"" + blobProp.get("mime-type") + "\"");
+            toJSON.append(", \"mime-type\" : \"" + blobProp.get("mime-type")
+                    + "\"");
             toJSON.append(", \"name\" : \"" + blobProp.get("name") + "\"");
-            toJSON.append(", \"upload-batch\" : \"" + blobProp.get("upload-batch") + "\"");
-            toJSON.append(", \"upload-fileId\" : \"" + blobProp.get("upload-fileId") + "\" ");
+            toJSON.append(", \"upload-batch\" : \""
+                    + blobProp.get("upload-batch") + "\"");
+            toJSON.append(", \"upload-fileId\" : \""
+                    + blobProp.get("upload-fileId") + "\" ");
             toJSON.append("}");
             PropertyMap properties = new PropertyMap();
             properties.set("dc:title", blobProp.getString("name"));
             properties.set("file:content", toJSON.toString());
-            documentMgr.createDocument(pictureBook, "Picture", blobProp.getString("name"), properties);
+            documentMgr.createDocument(pictureBook, "Picture",
+                    blobProp.getString("name"), properties);
         } catch (Exception e) {
             Log.i(TAG, e.getMessage());
         }
 
     }
 
-    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+    public static int calculateInSampleSize(BitmapFactory.Options options,
+            int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;
@@ -301,9 +332,11 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             final int halfHeight = height / 2;
             final int halfWidth = width / 2;
 
-            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // Calculate the largest inSampleSize value that is a power of 2 and
+            // keeps both
             // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) > reqHeight && (halfWidth / inSampleSize) > reqWidth) {
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
                 inSampleSize *= 2;
             }
         }
@@ -321,7 +354,8 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             // SCALE IMAGE TO LOWER RESOLUTION
             final BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
-            Bitmap bm = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
+            Bitmap bm = BitmapFactory.decodeFile(imageFile.getAbsolutePath(),
+                    options);
             options.inSampleSize = calculateInSampleSize(options, 200, 200);
             options.inJustDecodeBounds = false;
             bm = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
@@ -332,31 +366,37 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             // } else {
             // scale = 800 / (float) bm.getHeight();
             // }
-            // Bitmap scaledBm = Bitmap.createScaledBitmap(bm, (int) (bm.getWidth() * scale),
+            // Bitmap scaledBm = Bitmap.createScaledBitmap(bm, (int)
+            // (bm.getWidth() * scale),
             // (int) (bm.getHeight() * scale), true);
-            Bitmap scaledBm = Bitmap.createScaledBitmap(bm, (int) (bm.getWidth()), (int) (bm.getHeight()), true);
+            Bitmap scaledBm = Bitmap.createScaledBitmap(bm,
+                    (int) (bm.getWidth()), (int) (bm.getHeight()), true);
 
             // ROTATE IMAGE IF NOT LANDSCAPE
             ExifInterface exif = new ExifInterface(imageFile.getAbsolutePath());
-            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+            int orientation = exif.getAttributeInt(
+                    ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_NORMAL);
 
             Matrix matrix = new Matrix();
             switch (orientation) {
             case ExifInterface.ORIENTATION_ROTATE_90:
                 matrix.postRotate(90);
-                scaledBm = Bitmap.createBitmap(scaledBm, 0, 0, scaledBm.getWidth(), scaledBm.getHeight(), matrix, true);
+                scaledBm = Bitmap.createBitmap(scaledBm, 0, 0,
+                        scaledBm.getWidth(), scaledBm.getHeight(), matrix, true);
                 break;
             case ExifInterface.ORIENTATION_ROTATE_180:
                 matrix.postRotate(180);
-                scaledBm = Bitmap.createBitmap(scaledBm, 0, 0, scaledBm.getWidth(), scaledBm.getHeight(), matrix, true);
+                scaledBm = Bitmap.createBitmap(scaledBm, 0, 0,
+                        scaledBm.getWidth(), scaledBm.getHeight(), matrix, true);
                 break;
             }
 
-            try {
-                FileOutputStream fos = new FileOutputStream(imageFile);
+            try (FileOutputStream fos = new FileOutputStream(imageFile)) {
+
                 // scaledBm.compress(Bitmap.CompressFormat.PNG, 90, fos);
                 bm.compress(Bitmap.CompressFormat.PNG, 90, fos);
-                fos.close();
+
             } catch (FileNotFoundException e) {
                 Log.d(TAG, "File not found: " + e.getMessage());
             } catch (IOException e) {
@@ -373,25 +413,11 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             String batchId = String.valueOf(new Random().nextInt(1000));
             final String fileId = blobToUpload.getFileName();
 
-            BlobWithProperties blobUploading = uploader.storeAndUpload(batchId, fileId, blobToUpload,
-                    new AsyncCallback<Serializable>() {
-
-                        @Override
-                        public void onSuccess(String executionId, Serializable data) {
-                            attachBlobToDocument(seed, blobToUpload);
-                            Log.i(TAG, "success");
-                        }
-
-                        @Override
-                        public void onError(String executionId, Throwable e) {
-                            Log.i(TAG, "errdroior");
-
-                        }
-                    });
-
+            BlobWithProperties blobUploading = uploader.storeFileForUpload(
+                    batchId, fileId, blobToUpload);
             String uploadUUID = blobUploading.getProperty(FileUploader.UPLOAD_UUID);
-
             Log.i(TAG, "Started blob upload UUID " + uploadUUID);
+            final PropertyMap blobProp = new PropertyMap();
             blobProp.set("type", "blob");
             blobProp.set("length", Long.valueOf(blobUploading.getLength()));
             blobProp.set("mime-type", blobUploading.getMimeType());
@@ -403,7 +429,19 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             // dependencies
             blobProp.set("android-require-type", "upload");
             blobProp.set("android-require-uuid", uploadUUID);
+            uploader.startUpload(uploadUUID, new AsyncCallback<Serializable>() {
+                @Override
+                public void onSuccess(String executionId, Serializable data) {
+                    attachBlobToDocument(seed, blobProp);
+                    Log.i(TAG, "success");
+                }
 
+                @Override
+                public void onError(String executionId, Throwable e) {
+                    Log.i(TAG, "errdroior");
+
+                }
+            });
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
@@ -418,10 +456,12 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         List<File> imageFiles = new ArrayList<File>();
         try {
             seedDoc = documentMgr.getDocument(new IdRef(mSeed.getUUID()));
-            Document pictureBook = documentMgr.getDocument(new PathRef(seedDoc.getPath() + "/Picture"), "*");
+            Document pictureBook = documentMgr.getDocument(
+                    new PathRef(seedDoc.getPath() + "/Picture"), "*");
             Documents pictureList = documentMgr.query(
                     "SELECT * FROM Picture WHERE ecm:currentLifeCycleState != \"deleted\" AND ecm:parentId=\""
-                            + pictureBook.getId() + "\"", null, new String[] { "dc:modified DESC" }, "*", 0, 50,
+                            + pictureBook.getId() + "\"", null,
+                    new String[] { "dc:modified DESC" }, "*", 0, 50,
                     CacheBehavior.FORCE_REFRESH);
             for (Document doc : pictureList) {
                 Log.i(TAG, doc.getName());
@@ -441,14 +481,18 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
     }
 
     @Override
-    public File downloadHistory(GrowingSeedInterface mSeed) throws GotsServerRestrictedException {
+    public File downloadHistory(GrowingSeedInterface mSeed)
+            throws GotsServerRestrictedException {
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);
         try {
             Document doc = service.getDocument(new DocRef(mSeed.getUUID()));
-            FileBlob blob = (FileBlob) session.newRequest("seedGrowingActionHistory").setInput(doc).execute();
-            File dir = new File(Environment.getExternalStorageDirectory(), "Gardening-Manager");
-            File pdfFile = new File(dir, blob.getFileName().replaceAll(" ", "-"));
+            FileBlob blob = (FileBlob) session.newRequest(
+                    "seedGrowingActionHistory").setInput(doc).execute();
+            File dir = new File(Environment.getExternalStorageDirectory(),
+                    "Gardening-Manager");
+            File pdfFile = new File(dir,
+                    blob.getFileName().replaceAll(" ", "-"));
             copy(blob.getFile(), pdfFile);
             blob.getFile().delete();
             if (pdfFile.exists())
