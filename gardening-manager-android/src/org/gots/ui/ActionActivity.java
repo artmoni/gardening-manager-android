@@ -93,7 +93,7 @@ public class ActionActivity extends AbstractActivity {
                     seedActions.addAll(actionseedProvider.getActionsToDoBySeed(seed, false));
                 }
 
-                listActions = new ListAllActionAdapter(getApplicationContext(), seedActions,
+                listActions = new ListAllActionAdapter(ActionActivity.this, seedActions,
                         ListAllActionAdapter.STATUS_TODO);
 
                 return allSeeds;

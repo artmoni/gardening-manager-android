@@ -67,14 +67,15 @@ public class ActionsSyncAdapter extends GotsSyncAdapter {
 
         // GotsActionSeedProvider actionseedManager = GotsActionSeedManager.getInstance().initIfNew(getContext());
         // actionseedManager.getActionsToDo();
-
-        for (BaseAllotmentInterface allotmentInterface : allotmentManager.getMyAllotments(true)) {
-            for (GrowingSeedInterface seedInterface : growingSeedManager.getGrowingSeedsByAllotment(allotmentInterface,
-                    true)) {
-                synchronizeActionSeed(seedInterface, localActionSeedProvider.getActionsToDoBySeed(seedInterface, true),
-                        nuxeoActionSeedProvider.getActionsToDoBySeed(seedInterface, true));
+        if (gotsPrefs.isConnectedToServer())
+            for (BaseAllotmentInterface allotmentInterface : allotmentManager.getMyAllotments(true)) {
+                for (GrowingSeedInterface seedInterface : growingSeedManager.getGrowingSeedsByAllotment(
+                        allotmentInterface, true)) {
+                    synchronizeActionSeed(seedInterface,
+                            localActionSeedProvider.getActionsToDoBySeed(seedInterface, true),
+                            nuxeoActionSeedProvider.getActionsToDoBySeed(seedInterface, true));
+                }
             }
-        }
         intent.setAction(BroadCastMessages.PROGRESS_FINISHED);
         getContext().sendBroadcast(intent);
     }

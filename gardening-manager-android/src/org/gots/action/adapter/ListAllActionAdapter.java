@@ -32,6 +32,7 @@ import org.gots.seed.view.SeedWidget;
 import org.gots.weather.WeatherManager;
 import org.gots.weather.view.WeatherView;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -281,7 +282,7 @@ public class ListAllActionAdapter extends BaseAdapter {
     public void showNoticeDialog(final int position, final GrowingSeedInterface seed,
             final SeedActionInterface currentAction) {
 
-        final EditText userinput = new EditText(mContext);
+        final EditText userinput = new EditText(mContext.getApplicationContext());
         final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setView(userinput).setTitle("Add a note about your task");
         builder.setPositiveButton(currentAction.getName(), new DialogInterface.OnClickListener() {
@@ -316,7 +317,9 @@ public class ListAllActionAdapter extends BaseAdapter {
 
                     }
                 });
-        AlertDialog dialog = builder.create();
+        // AlertDialog dialog = builder.create();
+        builder.setCancelable(true);
         builder.show();
+
     }
 }
