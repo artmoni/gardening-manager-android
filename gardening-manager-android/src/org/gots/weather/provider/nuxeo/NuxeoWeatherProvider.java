@@ -25,30 +25,33 @@ import android.util.Log;
 public class NuxeoWeatherProvider extends LocalWeatherProvider {
     private static final String TAG = "NuxeoWeatherProvider";
 
-    Document weatherRootFolder = null;
+    // Document weatherRootFolder = null;
+    GardenInterface currentGarden;
 
     public NuxeoWeatherProvider(Context mContext, GardenInterface currentGarden) {
         super(mContext);
         NuxeoManager.getInstance().initIfNew(mContext);
-
-        Session session = getNuxeoClient().getSession();
-        DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
-        weatherRootFolder = getWeatherRootFolder(documentMgr, currentGarden);
+        this.currentGarden = currentGarden;
+        // Session session = getNuxeoClient().getSession();
+        // DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
+        // weatherRootFolder = getWeatherRootFolder(documentMgr, currentGarden);
     }
 
     protected AndroidAutomationClient getNuxeoClient() {
         return NuxeoManager.getInstance().initIfNew(mContext).getNuxeoClient();
     }
 
-    private Document getWeatherRootFolder(DocumentManager manager, GardenInterface currentGarden) {
+    private Document getWeatherRootFolder(GardenInterface currentGarden) {
+        Session session = getNuxeoClient().getSession();
+        DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
         Document gardenFolder = null;
         Document weatherRootFolder = null;
         try {
-            gardenFolder = manager.getDocument(new IdRef(currentGarden.getUUID()));
-            weatherRootFolder = manager.getChild(gardenFolder, "Weather");
+            gardenFolder = documentMgr.getDocument(new IdRef(currentGarden.getUUID()));
+            weatherRootFolder = documentMgr.getChild(gardenFolder, "Weather");
         } catch (Exception e) {
             Log.e(TAG, "getWeatherRootFolder " + e.getMessage());
-            weatherRootFolder = createWeatherRootFolder(manager, currentGarden);
+            weatherRootFolder = createWeatherRootFolder(documentMgr, currentGarden);
         }
         return weatherRootFolder;
     }
@@ -58,7 +61,9 @@ public class NuxeoWeatherProvider extends LocalWeatherProvider {
         Document weatherRootFolder = null;
         try {
             gardenFolder = manager.getDocument(new IdRef(currentGarden.getUUID()));
-            weatherRootFolder = manager.createDocument(gardenFolder, "WeatherFolder", "Weather");
+            PropertyMap props = new PropertyMap();
+            props.set("dc:title", "Weather");
+            weatherRootFolder = manager.createDocument(gardenFolder, "WeatherFolder", "Weather", props);
         } catch (Exception e) {
             Log.e(TAG, "createWeatherRootFolder " + e.getMessage());
         }
@@ -87,8 +92,8 @@ public class NuxeoWeatherProvider extends LocalWeatherProvider {
             properties.set("weathercondition:time_dayofyear", String.valueOf(weatherCondition.getDayofYear()));
             properties.set("weathercondition:summary", weatherCondition.getSummary());
 
-            Document weatherConditionDoc = documentMgr.createDocument(weatherRootFolder, "WeatherCondition",
-                    weatherCondition.getSummary(), properties);
+            Document weatherConditionDoc = documentMgr.createDocument(getWeatherRootFolder(currentGarden),
+                    "WeatherCondition", weatherCondition.getSummary(), properties);
             weatherCondition.setUUID(weatherConditionDoc.getId());
         } catch (Exception e) {
             Log.e(TAG, "insertNuxeoWeather " + e.getMessage(), e);
@@ -149,10 +154,10 @@ public class NuxeoWeatherProvider extends LocalWeatherProvider {
             // Document actionDoc = service.getchi
             Documents docs = service.query(
                     "SELECT * FROM WeatherCondition WHERE ecm:currentLifeCycleState != \"deleted\" And ecm:parentId = \""
-                            + weatherRootFolder.getId() + "\" AND weathercondition:time_dayofyear = \""
-                            + weatherDate.get(Calendar.DAY_OF_YEAR) + "\" AND weathercondition:time_year = \""
-                            + weatherDate.get(Calendar.YEAR) + "\"", null, new String[] { "dc:modified DESC" }, "*", 0,
-                    50, cacheParam);
+                            + getWeatherRootFolder(currentGarden).getId()
+                            + "\" AND weathercondition:time_dayofyear = \"" + weatherDate.get(Calendar.DAY_OF_YEAR)
+                            + "\" AND weathercondition:time_year = \"" + weatherDate.get(Calendar.YEAR) + "\"", null,
+                    new String[] { "dc:modified DESC" }, "*", 0, 50, cacheParam);
 
             if (docs.size() > 0) {
                 condition = convert(docs.get(0));
@@ -184,8 +189,8 @@ public class NuxeoWeatherProvider extends LocalWeatherProvider {
             // Document actionDoc = service.getchi
             Documents docs = service.query(
                     "SELECT * FROM WeatherCondition WHERE ecm:currentLifeCycleState != \"deleted\" And ecm:parentId = \""
-                            + weatherRootFolder.getId() + "\"", null, new String[] { "dc:modified DESC" }, "*", 0, 50,
-                    cacheParam);
+                            + getWeatherRootFolder(currentGarden).getId() + "\"", null,
+                    new String[] { "dc:modified DESC" }, "*", 0, 50, cacheParam);
             for (Document documentWeather : docs) {
 
                 WeatherConditionInterface condition = convert(documentWeather);

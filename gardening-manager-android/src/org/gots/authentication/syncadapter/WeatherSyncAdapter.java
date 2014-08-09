@@ -38,10 +38,11 @@ public class WeatherSyncAdapter extends GotsSyncAdapter {
         getContext().sendBroadcast(intent);
 
         WeatherProvider localProvider = new LocalWeatherProvider(getContext());
-        NuxeoWeatherProvider nuxeoProvider = new NuxeoWeatherProvider(getContext(), gardenManager.getCurrentGarden());
 
         // Get weather history from Gardening Manager Server
         if (gotsPrefs.isConnectedToServer()) {
+            NuxeoWeatherProvider nuxeoProvider = new NuxeoWeatherProvider(getContext(),
+                    gardenManager.getCurrentGarden());
             List<WeatherConditionInterface> allCondition = nuxeoProvider.getAllWeatherForecast();
             for (WeatherConditionInterface weatherCondition : allCondition) {
                 WeatherConditionInterface localCondition = localProvider.getCondition(weatherCondition.getDate());
