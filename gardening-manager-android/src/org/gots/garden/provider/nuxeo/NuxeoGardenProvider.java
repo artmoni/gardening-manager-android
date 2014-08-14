@@ -229,6 +229,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
         try {
             Document doc = service.getDocument(new IdRef(garden.getUUID()));
             Document docACL = service.setPermission(doc, user, permission);
+
             if (docACL == null)
                 return -1;
             // documentsList.remove(updatedDocument);
@@ -239,4 +240,21 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
         }
         return 0;
     }
+
+    @Override
+    public void getUsersAndGroups(GardenInterface garden) {
+        Session session = getNuxeoClient().getSession();
+        DocumentManager service = session.getAdapter(DocumentManager.class);
+        try {
+            Document doc = service.getDocument(new IdRef(garden.getUUID()));
+            String var = "";
+            Document docUsers = service.getUsersAndGroups(doc, "Write", var);
+            
+            Log.i(TAG, "Var=" + var);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+            // cancel(false);
+        }
+    }
+
 }

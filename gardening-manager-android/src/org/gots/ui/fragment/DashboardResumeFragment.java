@@ -16,6 +16,7 @@ import org.gots.seed.adapter.SeedListAdapter;
 import org.gots.seed.adapter.VendorSeedListAdapter;
 import org.gots.ui.ActionActivity;
 import org.gots.ui.HutActivity;
+import org.gots.ui.ProfileCreationActivity;
 import org.gots.weather.view.WeatherView;
 import org.gots.weather.view.WeatherWidget;
 
@@ -47,9 +48,15 @@ public class DashboardResumeFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        displaySeeds(view);
-        displayActions();
-        displayWeather();
+        if (GardenManager.getInstance().initIfNew(getActivity()).getCurrentGarden() == null) {
+            Intent intent = new Intent(getActivity(), ProfileCreationActivity.class);
+            startActivity(intent);
+
+        } else {
+            displaySeeds(view);
+            displayActions();
+            displayWeather();
+        }
         super.onViewCreated(view, savedInstanceState);
     }
 

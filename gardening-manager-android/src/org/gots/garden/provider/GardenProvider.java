@@ -20,6 +20,8 @@ public interface GardenProvider {
 
     public abstract int share(GardenInterface garden, String user, String permission);
 
+    public abstract void getUsersAndGroups(GardenInterface garden);
+
 	
 	
 }

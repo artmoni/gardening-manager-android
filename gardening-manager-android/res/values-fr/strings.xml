@@ -77,7 +77,6 @@
     <string name="hut.menu.thismonth">Ce mois</string>
     <string name="hut.menu.seedsofthemonth">A semer ou planter ce mois-ci</string>
     <string name="hut.menu.filter">Filtre</string>
-    <string name="garden.cityname.inputtitle">Localisation</string>
     <string name="garden.cityname.inputmessage">Veuillez saisir la ville dans laquelle se trouve votre potager</string>
     <string name="dashboard.hut.name">Catalogue</string>
     <string name="dashboard.allotments.name">Potager</string>
@@ -191,6 +190,7 @@
     <string name="dashboard.sensor.name">Sondes</string>
     <string name="skip">Passer</string>
     <string name="more">Plus</string>
-    <string name="incredibleedible">Les incroyables comestibles</string>
-
+    <string name="garden.type.private">Jardin privé</string>
+    <string name="garden.type.incredibleedible">Les incroyables comestibles: nourriture à partager</string>
+    
 </resources>

@@ -138,6 +138,7 @@ public class GardenManager extends BroadcastReceiver {
             myGardens = new HashMap<Long, GardenInterface>();
             for (GardenInterface garden : gardenProvider.getMyGardens(force)) {
                 myGardens.put(garden.getId(), garden);
+                gardenProvider.getUsersAndGroups(garden);
             }
         }
 

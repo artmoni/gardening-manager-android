@@ -189,7 +189,8 @@
     <string name="dashboard.sensor.name">Sensors</string>
     <string name="skip">Skip</string>
     <string name="more">More</string>
-    <string name="incredibleedible">Incredible edible</string>
+    <string name="garden.type.private">Private garden</string>
+    <string name="garden.type.incredibleedible">Incredible edible: food to share</string>
     
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">

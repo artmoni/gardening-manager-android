@@ -61,4 +61,7 @@ public class LocalGardenProvider extends AbstractProvider implements GardenProvi
         return -1;
     }
 
+    public void getUsersAndGroups(GardenInterface garden) {
+    }
+
 }

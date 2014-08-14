@@ -157,15 +157,6 @@
                     android:text="@string/profile.sample.data"
                     android:visibility="gone" />
 
-                <CheckBox
-                    android:id="@+id/checkPublicGarden"
-                    style="@style/description_content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:gravity="center_vertical"
-                    android:text="@string/incredibleedible"
-                    android:visibility="visible" />
                 <!--
                      <CheckBox
                     android:id="@+id/checkboxShare"
@@ -176,6 +167,29 @@
                     android:gravity="center_vertical"
                     android:text="@string/profile.share.data" />
                 -->
+
+                <RadioGroup
+                    android:id="@+id/radioGardenType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <RadioButton
+                        android:id="@+id/radioGardenPrivate"
+                        style="@style/description_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:gravity="center_vertical"
+                        android:text="@string/garden.type.private" />
+
+                    <RadioButton
+                        android:id="@+id/radioGardenIncredibleEdible"
+                        style="@style/description_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="@string/garden.type.incredibleedible" />
+                </RadioGroup>
 
                 <Button
                     android:id="@+id/buttonValidatePosition"

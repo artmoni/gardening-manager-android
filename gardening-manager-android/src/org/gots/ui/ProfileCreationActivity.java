@@ -52,6 +52,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.CheckBox;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -335,7 +336,8 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
             protected GardenInterface doInBackground(Void... params) {
                 garden = buildGarden(new Garden());
                 garden = gardenManager.addGarden(garden);
-                if (((CheckBox) findViewById(R.id.checkPublicGarden)).isChecked())
+                if (((RadioGroup) findViewById(R.id.radioGardenType)).getCheckedRadioButtonId() == findViewById(
+                        R.id.radioGardenIncredibleEdible).getId())
                     gardenManager.share(garden, "Everyone", "Write");
                 return garden;
             }
