@@ -23,6 +23,8 @@ import android.content.Context;
 import android.util.Log;
 
 public class NuxeoWeatherProvider extends LocalWeatherProvider {
+    private static final String WEATHER_FOLDER = "Weather";
+
     private static final String TAG = "NuxeoWeatherProvider";
 
     // Document weatherRootFolder = null;
@@ -48,7 +50,7 @@ public class NuxeoWeatherProvider extends LocalWeatherProvider {
         Document weatherRootFolder = null;
         try {
             gardenFolder = documentMgr.getDocument(new IdRef(currentGarden.getUUID()));
-            weatherRootFolder = documentMgr.getChild(gardenFolder, "Weather");
+            weatherRootFolder = documentMgr.getChild(gardenFolder, WEATHER_FOLDER);
         } catch (Exception e) {
             Log.e(TAG, "getWeatherRootFolder " + e.getMessage());
             weatherRootFolder = createWeatherRootFolder(documentMgr, currentGarden);
@@ -62,8 +64,8 @@ public class NuxeoWeatherProvider extends LocalWeatherProvider {
         try {
             gardenFolder = manager.getDocument(new IdRef(currentGarden.getUUID()));
             PropertyMap props = new PropertyMap();
-            props.set("dc:title", "Weather");
-            weatherRootFolder = manager.createDocument(gardenFolder, "WeatherFolder", "Weather", props);
+            props.set("dc:title", WEATHER_FOLDER);
+            weatherRootFolder = manager.createDocument(gardenFolder, "WeatherFolder", WEATHER_FOLDER, props);
         } catch (Exception e) {
             Log.e(TAG, "createWeatherRootFolder " + e.getMessage());
         }
