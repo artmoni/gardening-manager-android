@@ -4,9 +4,8 @@ import java.util.List;
 
 import org.gots.authentication.GotsSyncAdapter;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.garden.GardenManager;
+import org.gots.garden.GotsGardenManager;
 import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.GotsSeedManager;
 import org.gots.seed.service.SeedNotification;
 
 import android.accounts.Account;
@@ -18,8 +17,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 public class SeedSyncAdapter extends GotsSyncAdapter {
-    protected GotsSeedManager seedManager;
-
     public SeedSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
 
@@ -35,13 +32,11 @@ public class SeedSyncAdapter extends GotsSyncAdapter {
         intent.putExtra("AUTHORITY", authority);
         getContext().sendBroadcast(intent);
 
-        seedManager = GotsSeedManager.getInstance().initIfNew(getContext());
 
         seedManager.force_refresh(true);
 
         seedManager.getVendorSeeds(true);
 
-        GardenManager gardenManager = GardenManager.getInstance().initIfNew(getContext());
         seedManager.getMyStock(gardenManager.getCurrentGarden());
 
         List<BaseSeedInterface> newSeeds = seedManager.getNewSeeds();

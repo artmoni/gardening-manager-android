@@ -4,8 +4,8 @@ import java.util.Comparator;
 import java.util.Date;
 
 import org.gots.action.provider.GotsActionSeedProvider;
-import org.gots.allotment.AllotmentManager;
-import org.gots.garden.GardenManager;
+import org.gots.allotment.GotsAllotmentManager;
+import org.gots.garden.GotsGardenManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GotsSeedManager;
@@ -34,13 +34,13 @@ public class AbstractAction implements BaseActionInterface, Comparator<AbstractA
 
     protected GotsPreferences gotsPrefs;
 
-    protected AllotmentManager allotmentProvider;
+    protected GotsAllotmentManager allotmentProvider;
 
     protected Context mContext;
 
     protected GotsSeedManager seedManager;
 
-    protected GardenManager gardenManager;
+    protected GotsGardenManager gardenManager;
 
     protected GotsActionSeedProvider actionSeedManager;
 
@@ -54,11 +54,11 @@ public class AbstractAction implements BaseActionInterface, Comparator<AbstractA
     public AbstractAction(Context context) {
         this.mContext = context;
         seedManager = GotsSeedManager.getInstance().initIfNew(mContext);
-        gardenManager = GardenManager.getInstance().initIfNew(mContext);
+        gardenManager = GotsGardenManager.getInstance().initIfNew(mContext);
         actionManager = GotsActionManager.getInstance().initIfNew(mContext);
         actionSeedManager = GotsActionSeedManager.getInstance().initIfNew(mContext);
         growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(mContext);
-        allotmentProvider = AllotmentManager.getInstance().initIfNew(mContext);
+        allotmentProvider = GotsAllotmentManager.getInstance().initIfNew(mContext);
     }
 
     @Override

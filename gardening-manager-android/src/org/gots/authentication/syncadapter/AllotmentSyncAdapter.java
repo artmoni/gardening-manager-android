@@ -2,7 +2,6 @@ package org.gots.authentication.syncadapter;
 
 import org.gots.authentication.GotsSyncAdapter;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.seed.GotsSeedManager;
 
 import android.accounts.Account;
 import android.content.ContentProviderClient;
@@ -13,8 +12,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 public class AllotmentSyncAdapter extends GotsSyncAdapter {
-    protected GotsSeedManager seedManager;
-
     public AllotmentSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
 

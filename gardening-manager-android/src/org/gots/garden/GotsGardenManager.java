@@ -9,6 +9,7 @@ import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.provider.GardenProvider;
 import org.gots.garden.provider.local.LocalGardenProvider;
 import org.gots.garden.provider.nuxeo.NuxeoGardenProvider;
+import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.utils.NotConfiguredException;
 
@@ -17,10 +18,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-public class GardenManager extends BroadcastReceiver {
+public class GotsGardenManager extends BroadcastReceiver {
     private static final String TAG = "GardenManager";
 
-    private static GardenManager instance;
+    private static GotsGardenManager instance;
 
     private static Exception firstCall;
 
@@ -34,16 +35,16 @@ public class GardenManager extends BroadcastReceiver {
 
     private GardenInterface currentGarden;
 
-    private GardenManager() {
+    private GotsGardenManager() {
     }
 
     /**
      * After first call, {@link #initIfNew(Context)} must be called else a {@link NotConfiguredException} will be thrown
      * on the second call attempt.
      */
-    public static synchronized GardenManager getInstance() {
+    public static synchronized GotsGardenManager getInstance() {
         if (instance == null) {
-            instance = new GardenManager();
+            instance = new GotsGardenManager();
             firstCall = new Exception();
 
         } else if (!instance.initDone) {
@@ -61,7 +62,7 @@ public class GardenManager extends BroadcastReceiver {
      * 
      * @return TODO
      */
-    public synchronized GardenManager initIfNew(Context context) {
+    public synchronized GotsGardenManager initIfNew(Context context) {
         if (initDone) {
             return this;
         }
@@ -81,7 +82,8 @@ public class GardenManager extends BroadcastReceiver {
         // new AsyncTask<Void, Integer, Void>() {
         // @Override
         // protected Void doInBackground(Void... params) {
-        if (GotsPreferences.getInstance().isConnectedToServer()) {
+        if (GotsPreferences.getInstance().isConnectedToServer()
+                && !NuxeoManager.getInstance().getNuxeoClient().isOffline()) {
             gardenProvider = new NuxeoGardenProvider(mContext);
         } else {
             // return null;

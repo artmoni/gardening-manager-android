@@ -20,6 +20,7 @@ import org.gots.provider.WeatherContentProvider;
 import org.gots.ui.fragment.DashboardResumeFragment;
 import org.gots.ui.slidingmenu.NavDrawerItem;
 import org.gots.ui.slidingmenu.adapter.NavDrawerListAdapter;
+import org.nuxeo.android.network.NetworkStatusBroadCastReceiver;
 
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -389,7 +390,7 @@ public class MainActivity extends AbstractActivity {
         // menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
 
         MenuItem itemConnected = (MenuItem) menu.findItem(R.id.connection);
-        if (gotsPrefs.isConnectedToServer())
+        if (gotsPrefs.isConnectedToServer() && !nuxeoManager.getNuxeoClient().isOffline())
             itemConnected.setIcon(getResources().getDrawable(R.drawable.garden_connected));
         else
             itemConnected.setIcon(getResources().getDrawable(R.drawable.garden_disconnected));

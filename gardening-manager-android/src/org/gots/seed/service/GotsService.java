@@ -2,8 +2,8 @@ package org.gots.seed.service;
 
 import org.gots.action.GotsActionSeedManager;
 import org.gots.action.provider.GotsActionSeedProvider;
-import org.gots.allotment.AllotmentManager;
-import org.gots.garden.GardenManager;
+import org.gots.allotment.GotsAllotmentManager;
+import org.gots.garden.GotsGardenManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GotsSeedManager;
@@ -17,13 +17,13 @@ public abstract class GotsService extends Service {
 
     protected GotsSeedManager seedManager;
 
-    protected GardenManager gardenManager;
+    protected GotsGardenManager gardenManager;
 
     protected GotsGrowingSeedManager growingSeedManager;
 
     protected GotsActionSeedProvider actionseedManager;
 
-    protected AllotmentManager allotmentManager;
+    protected GotsAllotmentManager allotmentManager;
 
     @Override
     public void onCreate() {
@@ -31,10 +31,10 @@ public abstract class GotsService extends Service {
         gotsPrefs.initIfNew(this);
 
         seedManager = GotsSeedManager.getInstance().initIfNew(getApplicationContext());
-        gardenManager = GardenManager.getInstance().initIfNew(getApplicationContext());
+        gardenManager = GotsGardenManager.getInstance().initIfNew(getApplicationContext());
         growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(getApplicationContext());
         actionseedManager = GotsActionSeedManager.getInstance().initIfNew(getApplicationContext());
-        allotmentManager = AllotmentManager.getInstance().initIfNew(getApplicationContext());
+        allotmentManager = GotsAllotmentManager.getInstance().initIfNew(getApplicationContext());
 
         super.onCreate();
     }

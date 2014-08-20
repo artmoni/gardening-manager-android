@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.gots.action.provider.GotsActionProvider;
 import org.gots.action.provider.local.LocalActionProvider;
 import org.gots.action.provider.nuxeo.NuxeoActionProvider;
+import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.utils.NotConfiguredException;
 
@@ -52,9 +53,7 @@ public class GotsActionManager implements GotsActionProvider {
     }
 
     public void setProvider() {
-        ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo ni = cm.getActiveNetworkInfo();
-        if (gotsPrefs.isConnectedToServer() && ni != null && ni.isConnected()) {
+        if (gotsPrefs.isConnectedToServer() && !NuxeoManager.getInstance().getNuxeoClient().isOffline()) {
             provider = new NuxeoActionProvider(mContext);
         } else
             provider = new LocalActionProvider(mContext);

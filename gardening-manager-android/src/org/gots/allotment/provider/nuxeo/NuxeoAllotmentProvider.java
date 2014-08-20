@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.gots.allotment.provider.local.LocalAllotmentProvider;
 import org.gots.bean.BaseAllotmentInterface;
-import org.gots.garden.GardenManager;
+import org.gots.garden.GotsGardenManager;
 import org.gots.nuxeo.NuxeoManager;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
@@ -22,7 +22,7 @@ import android.content.Context;
 import android.util.Log;
 
 public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
-    protected static final String TAG = "NuxeoSeedProvider";
+    protected static final String TAG = "NuxeoAllotmentProvider";
 
     String myToken;
 
@@ -67,7 +67,7 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
             }
             // TODO Change this when garden UUID manage uuid and not path
             Document gardenFolder = service.getDocument(new IdRef(
-                    GardenManager.getInstance().initIfNew(mContext).getCurrentGarden().getUUID()));
+                    GotsGardenManager.getInstance().initIfNew(mContext).getCurrentGarden().getUUID()));
             Document allotmentsFolder = service.getDocument(new PathRef(gardenFolder.getPath() + "/My Allotment"));
 
             Documents docs = service.query(
@@ -145,13 +145,13 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
 
     private BaseAllotmentInterface createNuxeoAllotment(BaseAllotmentInterface allotment) {
 
-        Session session = getNuxeoClient().getSession();
-        DocumentManager service = session.getAdapter(DocumentManager.class);
 
         try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
             // TODO Change this when garden UUID manage uuid and not path
             Document gardenFolder = service.getDocument(new IdRef(
-                    GardenManager.getInstance().getCurrentGarden().getUUID()));
+                    GotsGardenManager.getInstance().getCurrentGarden().getUUID()));
             Document allotmentsFolder = service.getDocument(new PathRef(gardenFolder.getPath() + "/My Allotment"));
 
             PropertyMap properties = new PropertyMap();
@@ -170,9 +170,9 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
     @Override
     public int removeAllotment(BaseAllotmentInterface allotment) {
         super.removeAllotment(allotment);
-        Session session = getNuxeoClient().getSession();
-        DocumentManager service = session.getAdapter(DocumentManager.class);
         try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
             service.remove(allotment.getUUID());
 
             Log.d(TAG, "Removing document " + allotment.getUUID());

@@ -13,7 +13,6 @@ import org.gots.action.provider.nuxeo.NuxeoActionSeedProvider;
 import org.gots.authentication.GotsSyncAdapter;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.seed.GotsSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 
 import android.accounts.Account;
@@ -25,8 +24,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 public class ActionsSyncAdapter extends GotsSyncAdapter {
-    protected GotsSeedManager seedManager;
-
     private LocalActionProvider localActionProvider;
 
     private NuxeoActionProvider nuxeoActionProvider;

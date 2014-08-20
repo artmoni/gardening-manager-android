@@ -8,6 +8,7 @@ import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.action.provider.nuxeo.NuxeoActionSeedProvider;
 import org.gots.exception.GotsServerRestrictedException;
+import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.utils.NotConfiguredException;
@@ -58,9 +59,7 @@ public class GotsActionSeedManager implements GotsActionSeedProvider {
     }
 
     public void setProvider() {
-        ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo ni = cm.getActiveNetworkInfo();
-        if (gotsPrefs.isConnectedToServer() && ni != null && ni.isConnected()) {
+        if (gotsPrefs.isConnectedToServer() && !NuxeoManager.getInstance().getNuxeoClient().isOffline()) {
             provider = new NuxeoActionSeedProvider(mContext);
         } else
             provider = new LocalActionSeedProvider(mContext);

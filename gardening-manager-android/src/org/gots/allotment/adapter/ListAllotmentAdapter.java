@@ -16,7 +16,7 @@ import java.util.List;
 import org.gots.R;
 import org.gots.action.bean.SowingAction;
 import org.gots.action.view.ActionWidget;
-import org.gots.allotment.AllotmentManager;
+import org.gots.allotment.GotsAllotmentManager;
 import org.gots.allotment.view.QuickAllotmentActionBuilder;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
@@ -215,7 +215,7 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
 
                 @Override
                 public void onClick(View v) {
-                    AllotmentManager.getInstance().setCurrentAllotment(getItem(Integer.valueOf(v.getTag().toString())));
+                    GotsAllotmentManager.getInstance().setCurrentAllotment(getItem(Integer.valueOf(v.getTag().toString())));
 
                     Intent i = new Intent(mContext, HutActivity.class);
                     i.putExtra("org.gots.allotment.reference", getItem(Integer.valueOf(v.getTag().toString())).getId());

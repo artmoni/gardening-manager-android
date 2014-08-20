@@ -6,6 +6,7 @@ import java.util.List;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.exception.GotsException;
 import org.gots.garden.GardenInterface;
+import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
@@ -43,15 +44,17 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     private String[] listSpecies;
 
+    private NuxeoManager nuxeoManager;
+
     private GotsSeedManager() {
         // mLocalProvider = new LocalSeedProvider(mContext);
         allSeeds = new ArrayList<BaseSeedInterface>();
     }
 
     protected void setSeedProvider() {
-        ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo ni = cm.getActiveNetworkInfo();
-        if (gotsPrefs.isConnectedToServer() && ni != null && ni.isConnected()) {
+//        ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+//        NetworkInfo ni = cm.getActiveNetworkInfo();
+        if (gotsPrefs.isConnectedToServer() && !nuxeoManager.getNuxeoClient().isOffline()) {
             mSeedProvider = new NuxeoSeedProvider(mContext);
         } else
             mSeedProvider = new LocalSeedProvider(mContext);
@@ -77,7 +80,8 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
         }
         this.mContext = context;
         gotsPrefs = GotsPreferences.getInstance().initIfNew(context);
-        // mContext.registerReceiver(this, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
+        nuxeoManager = NuxeoManager.getInstance().initIfNew(context);
+
         setSeedProvider();
         initDone = true;
         return this;

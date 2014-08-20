@@ -91,7 +91,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
             }
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
-            super.getMyGardens(force);
+            myGardens = super.getMyGardens(force);
         }
         return myGardens;
 
@@ -101,9 +101,9 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
     public GardenInterface createGarden(GardenInterface garden) {
         Log.i(TAG, "createGarden " + garden);
 
-        Session session = getNuxeoClient().getSession();
-        DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
         try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
             Document root = documentMgr.getUserHome();
 
             PropertyMap properties = NuxeoGardenConvertor.convert(root.getPath(), garden).getProperties();
@@ -132,13 +132,12 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
         Log.i(TAG, "updateRemoteGarden " + garden);
 
         // TODO get document by id
-        Session session = getNuxeoClient().getSession();
-
-        DocumentManager service = session.getAdapter(DocumentManager.class);
         // DeferredUpdateManager deferredUpdateMgr = getNuxeoClient().getDeferredUpdatetManager();
         currentGarden = garden;
         // OperationRequest updateOperation;
         try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
             // PropertyMap props = new PropertyMap();
             // props.set("dc:title", garden.getLocality());
 
@@ -209,9 +208,9 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
     protected void removeNuxeoGarden(final GardenInterface garden) {
         Log.i(TAG, "removeNuxeoGarden " + garden);
 
-        Session session = getNuxeoClient().getSession();
-        DocumentManager service = session.getAdapter(DocumentManager.class);
         try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
             service.remove(new IdRef(garden.getUUID()));
             // documentsList.remove(updatedDocument);
 
@@ -224,9 +223,9 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 
     @Override
     public int share(GardenInterface garden, String user, String permission) {
-        Session session = getNuxeoClient().getSession();
-        DocumentManager service = session.getAdapter(DocumentManager.class);
         try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
             Document doc = service.getDocument(new IdRef(garden.getUUID()));
             Document docACL = service.setPermission(doc, user, permission);
 
@@ -243,13 +242,13 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 
     @Override
     public void getUsersAndGroups(GardenInterface garden) {
-        Session session = getNuxeoClient().getSession();
-        DocumentManager service = session.getAdapter(DocumentManager.class);
         try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
             Document doc = service.getDocument(new IdRef(garden.getUUID()));
             String var = "";
             Document docUsers = service.getUsersAndGroups(doc, "Write", var);
-            
+
             Log.i(TAG, "Var=" + var);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);

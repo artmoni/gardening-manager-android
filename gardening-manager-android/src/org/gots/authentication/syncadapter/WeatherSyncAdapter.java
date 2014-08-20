@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.gots.authentication.GotsSyncAdapter;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.seed.GotsSeedManager;
 import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.provider.local.LocalWeatherProvider;
 import org.gots.weather.provider.nuxeo.NuxeoWeatherProvider;
@@ -21,8 +20,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 public class WeatherSyncAdapter extends GotsSyncAdapter {
-    protected GotsSeedManager seedManager;
-
     public WeatherSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
 

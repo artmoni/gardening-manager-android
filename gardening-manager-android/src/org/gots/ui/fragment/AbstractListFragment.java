@@ -1,28 +1,34 @@
 package org.gots.ui.fragment;
 
-import org.gots.allotment.AllotmentManager;
-import org.gots.garden.GardenManager;
+import org.gots.allotment.GotsAllotmentManager;
+import org.gots.garden.GotsGardenManager;
 import org.gots.seed.GotsSeedManager;
+import org.nuxeo.android.fragments.BaseNuxeoFragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-public class AbstractListFragment extends Fragment {
+public class AbstractListFragment extends BaseNuxeoFragment {
     protected GotsSeedManager seedProvider;
 
-    protected AllotmentManager allotmentManager;
+    protected GotsAllotmentManager allotmentManager;
 
-    protected GardenManager gardenManager;
+    protected GotsGardenManager gardenManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         seedProvider = GotsSeedManager.getInstance();
         seedProvider.initIfNew(getActivity());
-        allotmentManager = AllotmentManager.getInstance();
+        allotmentManager = GotsAllotmentManager.getInstance();
         allotmentManager.initIfNew(getActivity());
-        gardenManager = GardenManager.getInstance();
+        gardenManager = GotsGardenManager.getInstance();
         gardenManager.initIfNew(getActivity());
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected boolean requireAsyncDataRetrieval() {
+        return false;
     }
 
 

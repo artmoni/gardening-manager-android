@@ -26,7 +26,7 @@ import org.gots.authentication.provider.google.GoogleAuthentication;
 import org.gots.authentication.provider.google.User;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
-import org.gots.garden.GardenManager;
+import org.gots.garden.GotsGardenManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.service.SeedUpdateService;
 import org.gots.weather.WeatherCondition;
@@ -65,7 +65,7 @@ public class ProfileAdapter extends BaseAdapter {
     // private Intent weatherIntent;
     private WeatherManager weatherManager;
 
-    private GardenManager gardenManager;
+    private GotsGardenManager gardenManager;
 
     private GardenInterface selectedGarden;
 
@@ -73,7 +73,7 @@ public class ProfileAdapter extends BaseAdapter {
         mContext = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         weatherManager = new WeatherManager(mContext);
-        gardenManager = GardenManager.getInstance();
+        gardenManager = GotsGardenManager.getInstance();
 
         this.myGardens = myGardens;
         selectedGarden = gardenManager.getCurrentGarden();

@@ -25,15 +25,16 @@ import java.util.ArrayList;
 
 import org.gots.R;
 import org.gots.action.GotsActionSeedManager;
-import org.gots.allotment.AllotmentManager;
+import org.gots.allotment.GotsAllotmentManager;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.garden.GardenManager;
+import org.gots.garden.GotsGardenManager;
 import org.gots.inapp.GotsPurchaseItem;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GotsSeedManager;
+import org.nuxeo.android.activities.BaseNuxeoActivity;
 
 import android.accounts.Account;
 import android.content.BroadcastReceiver;
@@ -58,7 +59,7 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
  * @author jcarsique
  * 
  */
-public abstract class AbstractActivity extends ActionBarActivity {
+public abstract class AbstractActivity extends BaseNuxeoActivity {
     private static final String TAG = "AbstractActivity";
 
     // private static final String TAG = AbstractActivity.class.getSimpleName();
@@ -67,13 +68,13 @@ public abstract class AbstractActivity extends ActionBarActivity {
 
     protected GotsPurchaseItem gotsPurchase;
 
-    protected GardenManager gardenManager;
+    protected GotsGardenManager gardenManager;
 
     protected NuxeoManager nuxeoManager;
 
     protected GotsSeedManager seedManager;
 
-    protected AllotmentManager allotmentManager;
+    protected GotsAllotmentManager allotmentManager;
 
     protected GotsActionSeedManager actionseedProvider;
 
@@ -92,11 +93,11 @@ public abstract class AbstractActivity extends ActionBarActivity {
         gotsPurchase = new GotsPurchaseItem(this);
         nuxeoManager = NuxeoManager.getInstance();
         nuxeoManager.initIfNew(this);
-        gardenManager = GardenManager.getInstance();
+        gardenManager = GotsGardenManager.getInstance();
         gardenManager.initIfNew(this);
         seedManager = GotsSeedManager.getInstance();
         seedManager.initIfNew(this);
-        allotmentManager = AllotmentManager.getInstance();
+        allotmentManager = GotsAllotmentManager.getInstance();
         allotmentManager.initIfNew(this);
         gotsGrowingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(this);
         actionseedProvider = GotsActionSeedManager.getInstance();
@@ -240,4 +241,9 @@ public abstract class AbstractActivity extends ActionBarActivity {
         ContentResolver.requestSync(userAccount, AUTHORITY, bundle);
     }
 
+    @Override
+    protected boolean requireAsyncDataRetrieval() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }

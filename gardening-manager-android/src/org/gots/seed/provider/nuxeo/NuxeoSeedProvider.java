@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.gots.garden.GardenInterface;
-import org.gots.garden.GardenManager;
+import org.gots.garden.GotsGardenManager;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.LikeStatus;
@@ -190,7 +190,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
             // TODO update remote stock from local stock
             if (localSeed.getNbSachet() > 0) {
-                updateStock(localSeed, GardenManager.getInstance().initIfNew(mContext).getCurrentGarden());
+                updateStock(localSeed, GotsGardenManager.getInstance().initIfNew(mContext).getCurrentGarden());
             }
         }
 
@@ -264,9 +264,9 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
      * Return new remote seed or null if error
      */
     protected BaseSeedInterface createNuxeoVendorSeed(BaseSeedInterface currentSeed) {
+
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);
-
         Document catalog = null;
         try {
             DocRef wsRef = new PathRef(service.getUserHome().getPath() + "/Catalog");
@@ -313,10 +313,10 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
     @Override
     public void addToStock(BaseSeedInterface vendorSeed, GardenInterface garden) {
-        Session session = getNuxeoClient().getSession();
-        DocumentManager service = session.getAdapter(DocumentManager.class);
 
         try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
             // TODO Change this when garden UUID manage uuid and not path
             Document gardenFolder = service.getDocument(new IdRef(garden.getUUID()));
             Document stockFolder = service.getDocument(new PathRef(gardenFolder.getPath() + "/My Stock"));
@@ -355,10 +355,10 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
     }
 
     public void updateStock(BaseSeedInterface vendorSeed, GardenInterface garden) {
-        Session session = getNuxeoClient().getSession();
-        DocumentManager service = session.getAdapter(DocumentManager.class);
 
         try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
             // TODO Change this when garden UUID manage uuid and not path
             Document gardenFolder = service.getDocument(new IdRef(garden.getUUID()));
             Document stockFolder = service.getDocument(new PathRef(gardenFolder.getPath() + "/My Stock"));
@@ -391,10 +391,10 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
     @Override
     public void removeToStock(BaseSeedInterface vendorSeed, GardenInterface garden) {
-        Session session = getNuxeoClient().getSession();
-        DocumentManager service = session.getAdapter(DocumentManager.class);
 
         try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
             // TODO Change this when garden UUID manage uuid and not path
             Document gardenFolder = service.getDocument(new IdRef(garden.getUUID()));
             Document stockFolder = service.getDocument(new PathRef(gardenFolder.getPath() + "/My Stock"));
@@ -423,10 +423,10 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
     @Override
     public List<BaseSeedInterface> getMyStock(GardenInterface garden) {
-        Session session = getNuxeoClient().getSession();
-        DocumentManager service = session.getAdapter(DocumentManager.class);
         List<BaseSeedInterface> mySeeds = new ArrayList<BaseSeedInterface>();
         try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
             Document gardenFolder = service.getDocument(new IdRef(garden.getUUID()));
             Document stockFolder = service.getDocument(new PathRef(gardenFolder.getPath() + "/My Stock"));
             byte cacheParam = CacheBehavior.STORE;
@@ -470,9 +470,9 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
     @Override
     public BaseSeedInterface updateSeed(BaseSeedInterface seed) {
-        Session session = getNuxeoClient().getSession();
-        DocumentManager service = session.getAdapter(DocumentManager.class);
         try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
             Document seedDoc = service.getDocument(new IdRef(seed.getUUID()));
             service.update(new IdRef(seed.getUUID()),
                     NuxeoSeedConverter.convert(seedDoc.getParentPath(), seed).getProperties());
@@ -484,9 +484,9 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
     @Override
     public void deleteSeed(BaseSeedInterface vendorSeed) {
-        Session session = getNuxeoClient().getSession();
-        DocumentManager service = session.getAdapter(DocumentManager.class);
         try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
             service.remove(new IdRef(vendorSeed.getUUID()));
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
@@ -501,11 +501,11 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
     }
 
     public LikeStatus like(BaseSeedInterface vendorSeed, boolean cancel) {
-        Session session = getNuxeoClient().getSession();
-        DocumentManager service = session.getAdapter(DocumentManager.class);
         Blob likeStatus;
         LikeStatus likes = new LikeStatus();
         try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
             Document doc = service.getDocument(new IdRef(vendorSeed.getUUID()));
             if (!cancel)
                 likeStatus = service.like(doc);
@@ -523,10 +523,10 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
     @Override
     public synchronized String[] getArraySpecies(boolean force) {
-        Session session = getNuxeoClient().getSession();
-        DocumentManager service = session.getAdapter(DocumentManager.class);
         List<String> latinNameSpecies = new ArrayList<String>();
         try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
             byte cacheParam = CacheBehavior.STORE;
             if (force) {
                 cacheParam = (byte) (cacheParam | CacheBehavior.FORCE_REFRESH);

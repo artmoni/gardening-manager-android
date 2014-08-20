@@ -98,6 +98,8 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
 
     private static final String GARDENING_MANAGER_NUXEO_AUTOMATION_TEST = "http://services.gardening-manager.com/test/";
 
+    // private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://192.168.1.17:8080/nuxeo/";
+
     private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://services.gardening-manager.com/nuxeo/";
 
     // private static final String GARDENING_MANAGER_NUXEO_AUTOMATION =
@@ -148,8 +150,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     }
 
     /**
-     * After first call, {@link #initIfNew(Context)} must be called else a
-     * {@link NotConfiguredException} will be thrown
+     * After first call, {@link #initIfNew(Context)} must be called else a {@link NotConfiguredException} will be thrown
      * on the second call attempt.
      */
     public static synchronized GotsPreferences getInstance() {
@@ -175,14 +176,12 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
             setSharedPreferences(PreferenceManager.getDefaultSharedPreferences(context));
             InputStream propertiesStream = null;
             try {
-                propertiesStream = mContext.getResources().openRawResource(
-                        R.raw.config);
+                propertiesStream = mContext.getResources().openRawResource(R.raw.config);
                 properties.load(propertiesStream);
             } catch (IOException e) {
                 Log.e(TAG, e.getMessage());
             }
-            setGardeningManagerServerURI(ISDEVELOPMENT ? GARDENING_MANAGER_NUXEO_AUTOMATION_TEST
-                    : GARDENING_MANAGER_NUXEO_AUTOMATION);
+            setGardeningManagerServerURI(ISDEVELOPMENT ? GARDENING_MANAGER_NUXEO_AUTOMATION_TEST : GARDENING_MANAGER_NUXEO_AUTOMATION);
             initDone = true;
         }
         return this;
@@ -201,12 +200,10 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
         if (ORG_GOTS_GARDEN_SERVERCONNECTED.equals(key)) {
-            mContext.sendBroadcast(new Intent(
-                    BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
+            mContext.sendBroadcast(new Intent(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
             Log.d(TAG, key + " has changed: " + isConnectedToServer());
         } else if (ORG_GOTS_CURRENT_GARDENID.equals(key)) {
-            mContext.sendBroadcast(new Intent(
-                    BroadCastMessages.GARDEN_SETTINGS_CHANGED));
+            mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_SETTINGS_CHANGED));
             Log.d(TAG, key + " has changed: " + getCurrentGardenId());
         }
         // initFromPrefs(prefs);
@@ -316,8 +313,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     }
 
     public boolean isConnectedToServer() {
-        return sharedPreferences.getBoolean(ORG_GOTS_GARDEN_SERVERCONNECTED,
-                false) && !"guest".equals(getNuxeoLogin());
+        return sharedPreferences.getBoolean(ORG_GOTS_GARDEN_SERVERCONNECTED, false) && !"guest".equals(getNuxeoLogin());
     }
 
     public String getToken() {
@@ -358,12 +354,10 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     }
 
     public int getCurrentGardenId() {
-        SharedPreferences preferences = mContext.getSharedPreferences(
-                "org.gots.preference", 0);
+        SharedPreferences preferences = mContext.getSharedPreferences("org.gots.preference", 0);
         int oldGardenId = preferences.getInt("org.gots.preference.gardenid", -1);
         if (oldGardenId > -1) {
-            GotsPreferences.getInstance().set(
-                    GotsPreferences.ORG_GOTS_CURRENT_GARDENID, oldGardenId);
+            GotsPreferences.getInstance().set(GotsPreferences.ORG_GOTS_CURRENT_GARDENID, oldGardenId);
             SharedPreferences.Editor prefedit = preferences.edit();
             prefedit.putInt("org.gots.preference.gardenid", -1);
             prefedit.commit();

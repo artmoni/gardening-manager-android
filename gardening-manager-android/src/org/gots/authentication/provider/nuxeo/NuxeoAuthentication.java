@@ -85,17 +85,17 @@ public class NuxeoAuthentication {
 
     }
 
-    public boolean basicNuxeoConnect(String login, String password) throws IOException {
+    public String basicNuxeoConnect(String login, String password) throws IOException {
         String device_id = getDeviceID();
         gotsPrefs.setDeviceId(device_id);
         String token = request_basicauth_token(login, password, false);
         if (token == null) {
-            return false;
+            return null;
         } else {
             gotsPrefs.setNuxeoLogin(login);
             gotsPrefs.setNuxeoPassword(password);
             gotsPrefs.setToken(token);
-            return true;
+            return token;
         }
     }
 

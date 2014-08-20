@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.gots.authentication.GotsSyncAdapter;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.seed.GotsSeedManager;
 import org.gots.sensor.local.LocalSensorSamplesProvider;
 import org.gots.sensor.notification.SensorStatusNotification;
 import org.gots.sensor.parrot.ParrotLocation;
@@ -25,8 +24,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 public class SensorSyncAdapter extends GotsSyncAdapter {
-    protected GotsSeedManager seedManager;
-
     public SensorSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
 

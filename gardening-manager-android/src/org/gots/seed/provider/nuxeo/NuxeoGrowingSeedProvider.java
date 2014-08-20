@@ -125,20 +125,15 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
 
     protected GrowingSeedInterface insertNuxeoSeed(GrowingSeedInterface growingSeed,
             final BaseAllotmentInterface allotment) {
-        Session session = getNuxeoClient().getSession();
-        final DocumentManager service = session.getAdapter(DocumentManager.class);
 
         Document allotmentDoc = null;
         try {
+            Session session = getNuxeoClient().getSession();
+            final DocumentManager service = session.getAdapter(DocumentManager.class);
             allotmentDoc = service.getDocument(allotment.getUUID());
-        } catch (Exception e) {
-            Log.e(TAG, "Fetching folder allotment " + e.getMessage(), e);
-        }
 
-        if (allotmentDoc == null)
-            return null;
-
-        try {
+            if (allotmentDoc == null)
+                return null;
 
             PropertyMap properties = getProperties(growingSeed);
 
@@ -173,9 +168,9 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
 
     @Override
     public void deleteGrowingSeed(GrowingSeedInterface seed) {
-        Session session = getNuxeoClient().getSession();
-        DocumentManager service = session.getAdapter(DocumentManager.class);
         try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
             service.remove(new IdRef(seed.getUUID()));
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
@@ -183,16 +178,17 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
             super.deleteGrowingSeed(seed);
         }
     }
+
     @Override
     public GrowingSeedInterface updateGrowingSeed(GrowingSeedInterface seed, BaseAllotmentInterface allotment) {
-        Session session = getNuxeoClient().getSession();
-        DocumentManager service = session.getAdapter(DocumentManager.class);
 
         try {
-            service.update(new IdRef(seed.getUUID()),getProperties(seed));
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
+            service.update(new IdRef(seed.getUUID()), getProperties(seed));
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
-        } 
+        }
         return super.updateGrowingSeed(seed, allotment);
     }
 

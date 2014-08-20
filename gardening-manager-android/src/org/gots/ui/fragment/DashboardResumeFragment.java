@@ -9,7 +9,7 @@ import org.gots.action.SeedActionInterface;
 import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.garden.GardenManager;
+import org.gots.garden.GotsGardenManager;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.adapter.SeedListAdapter;
@@ -19,6 +19,7 @@ import org.gots.ui.HutActivity;
 import org.gots.ui.ProfileCreationActivity;
 import org.gots.weather.view.WeatherView;
 import org.gots.weather.view.WeatherWidget;
+import org.nuxeo.android.fragments.BaseNuxeoFragment;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -35,7 +36,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class DashboardResumeFragment extends Fragment {
+public class DashboardResumeFragment extends BaseNuxeoFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         getActivity().registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
@@ -48,7 +49,7 @@ public class DashboardResumeFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        if (GardenManager.getInstance().initIfNew(getActivity()).getCurrentGarden() == null) {
+        if (GotsGardenManager.getInstance().initIfNew(getActivity()).getCurrentGarden() == null) {
             Intent intent = new Intent(getActivity(), ProfileCreationActivity.class);
             startActivity(intent);
 
@@ -169,7 +170,7 @@ public class DashboardResumeFragment extends Fragment {
         LinearLayout weatherWidgetLayout = (LinearLayout) getView().findViewById(R.id.WeatherWidget);
         weatherWidgetLayout.removeAllViews();
 
-        GardenManager gardenManager = GardenManager.getInstance().initIfNew(getActivity());
+        GotsGardenManager gardenManager = GotsGardenManager.getInstance().initIfNew(getActivity());
         TextView descriptionWeather = (TextView) getView().findViewById(R.id.textViewWeatherDescription);
         descriptionWeather.setText(gardenManager.getCurrentGarden().getLocality());
         // if (isError) {
@@ -186,5 +187,10 @@ public class DashboardResumeFragment extends Fragment {
         weatherWidgetLayout.addView(weatherWidget);
         // }
 
+    }
+
+    @Override
+    protected boolean requireAsyncDataRetrieval() {
+        return false;
     }
 }

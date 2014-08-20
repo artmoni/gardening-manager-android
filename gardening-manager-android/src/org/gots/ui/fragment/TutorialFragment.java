@@ -1,6 +1,7 @@
 package org.gots.ui.fragment;
 
 import org.gots.R;
+import org.nuxeo.android.fragments.BaseNuxeoFragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class TutorialFragment extends Fragment {
+public class TutorialFragment extends BaseNuxeoFragment {
 
     private int mCurrentTutorialRessource;
 
@@ -26,5 +27,10 @@ public class TutorialFragment extends Fragment {
             mCurrentTutorialRessource = R.layout.tutorial_a;
         view = inflater.inflate(mCurrentTutorialRessource, container, false);
         return view;
+    }
+
+    @Override
+    protected boolean requireAsyncDataRetrieval() {
+        return false;
     }
 }

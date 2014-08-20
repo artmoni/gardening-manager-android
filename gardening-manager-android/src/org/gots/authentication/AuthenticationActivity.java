@@ -66,10 +66,10 @@ public class AuthenticationActivity extends AbstractActivity {
     private GotsPreferences gotsPreferences;
 
     int[] tutorialList = { R.layout.tutorial_a, R.layout.tutorial_b, R.layout.tutorial_c, R.layout.tutorial_d,
-            R.layout.tutorial_f ,R.layout.tutorial_e };
+            R.layout.tutorial_f, R.layout.tutorial_e };
 
     int[] tutorialTitle = { R.string.garden_create, R.string.dashboard_hut_name, R.string.dashboard_allotments_name,
-            R.string.dashboard_actions_name,R.string.dashboard_sensor_name,  R.string.profile_share_data };
+            R.string.dashboard_actions_name, R.string.dashboard_sensor_name, R.string.profile_share_data };
 
     private ViewPager mPager;
 
@@ -123,7 +123,6 @@ public class AuthenticationActivity extends AbstractActivity {
 
         });
 
-
     }
 
     public void onCancelClick(View v) {
@@ -143,8 +142,8 @@ public class AuthenticationActivity extends AbstractActivity {
             }
         }
 
-        new AlertDialog.Builder(this).setTitle("Action").setItems(items.toArray(new String[items.size()]),
-                new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.login_connect)).setItems(
+                items.toArray(new String[items.size()]), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, final int item) {
 
@@ -164,25 +163,41 @@ public class AuthenticationActivity extends AbstractActivity {
                                 String nuxeoToken = null;
                                 final Intent res = new Intent();
 
-                                try {
-                                    googleToken = googleAuthentication.getToken(params[0]);
-                                    if (googleToken != null) {
-                                        NuxeoAuthentication nuxeoAuthentication = new NuxeoAuthentication(
-                                                getApplicationContext());
-                                        nuxeoToken = nuxeoAuthentication.request_oauth2_token(googleToken);
+                                // try {
+                                // googleToken = googleAuthentication.getToken(params[0]);
+                                // if (googleToken != null) {
+                                // NuxeoAuthentication nuxeoAuthentication = new NuxeoAuthentication(
+                                // getApplicationContext());
+                                // nuxeoToken = nuxeoAuthentication.request_oauth2_token(googleToken);
+                                //
+                                // res.putExtra(AccountManager.KEY_ACCOUNT_NAME, googleAccounts.get(item).name);
+                                // res.putExtra(AccountManager.KEY_ACCOUNT_TYPE, mAccountType);
+                                // res.putExtra(AccountManager.KEY_AUTHTOKEN, nuxeoToken);
+                                // res.putExtra(PARAM_USER_PASS, "");
+                                // }
+                                //
+                                // } catch (UserRecoverableAuthException e) {
+                                // startActivityForResult(e.getIntent(), 0);
+                                // } catch (IOException e) {
+                                // Log.e(TAG, e.getMessage(), e);
+                                // } catch (GoogleAuthException e) {
+                                // Log.e(TAG, e.getMessage(), e);
+                                // }
 
-                                        res.putExtra(AccountManager.KEY_ACCOUNT_NAME, googleAccounts.get(item).name);
-                                        res.putExtra(AccountManager.KEY_ACCOUNT_TYPE, mAccountType);
-                                        res.putExtra(AccountManager.KEY_AUTHTOKEN, nuxeoToken);
-                                        res.putExtra(PARAM_USER_PASS, "");
-                                    }
-                                } catch (UserRecoverableAuthException e) {
-                                    startActivityForResult(e.getIntent(), 0);
+                                NuxeoAuthentication nuxeoAuthentication = new NuxeoAuthentication(
+                                        getApplicationContext());
+                                try {
+                                    nuxeoToken = nuxeoAuthentication.basicNuxeoConnect("gardening.manager@gmail.com",
+                                            "123");
+                                    res.putExtra(AccountManager.KEY_ACCOUNT_NAME, "gardening.manager@gmail.com");
+                                    res.putExtra(AccountManager.KEY_ACCOUNT_TYPE, mAccountType);
+                                    res.putExtra(AccountManager.KEY_AUTHTOKEN, nuxeoToken);
+                                    res.putExtra(PARAM_USER_PASS, "123");
                                 } catch (IOException e) {
-                                    Log.e(TAG, e.getMessage(), e);
-                                } catch (GoogleAuthException e) {
-                                    Log.e(TAG, e.getMessage(), e);
+                                    // TODO Auto-generated catch block
+                                    e.printStackTrace();
                                 }
+
                                 return res;
                             }
 

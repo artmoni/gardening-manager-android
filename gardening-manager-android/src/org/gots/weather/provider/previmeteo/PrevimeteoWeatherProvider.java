@@ -19,7 +19,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.gots.bean.Address;
-import org.gots.garden.GardenManager;
+import org.gots.garden.GotsGardenManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
@@ -53,7 +53,7 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
         gotsPreferences = GotsPreferences.getInstance().initIfNew(context);
 
         try {
-            Address address = GardenManager.getInstance().initIfNew(context).getCurrentGarden().getAddress();
+            Address address = GotsGardenManager.getInstance().initIfNew(context).getCurrentGarden().getAddress();
             String weatherURL;
 
             weatherURL = "http://api.previmeteo.com/" + gotsPreferences.getWeatherApiKey() + "/ig/api?weather="

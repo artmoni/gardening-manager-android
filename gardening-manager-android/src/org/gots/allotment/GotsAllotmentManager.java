@@ -10,16 +10,20 @@ import org.gots.allotment.provider.local.LocalAllotmentProvider;
 import org.gots.allotment.provider.nuxeo.NuxeoAllotmentProvider;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.utils.NotConfiguredException;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
-public class AllotmentManager extends BroadcastReceiver implements AllotmentProvider {
+public class GotsAllotmentManager extends BroadcastReceiver implements AllotmentProvider {
 
-    private static AllotmentManager instance;
+    private static final String TAG = "GotsAllotmentManager";
+
+    private static GotsAllotmentManager instance;
 
     private static Exception firstCall;
 
@@ -33,7 +37,7 @@ public class AllotmentManager extends BroadcastReceiver implements AllotmentProv
 
     private boolean haschanged = false;
 
-    private AllotmentManager() {
+    private GotsAllotmentManager() {
 
     }
 
@@ -41,9 +45,9 @@ public class AllotmentManager extends BroadcastReceiver implements AllotmentProv
      * After first call, {@link #initIfNew(Context)} must be called else a {@link NotConfiguredException} will be thrown
      * on the second call attempt.
      */
-    public static synchronized AllotmentManager getInstance() {
+    public static synchronized GotsAllotmentManager getInstance() {
         if (instance == null) {
-            instance = new AllotmentManager();
+            instance = new GotsAllotmentManager();
             firstCall = new Exception();
 
         } else if (!instance.initDone) {
@@ -55,7 +59,7 @@ public class AllotmentManager extends BroadcastReceiver implements AllotmentProv
     /**
      * If it was already called once, the method returns without any change.
      */
-    public synchronized AllotmentManager initIfNew(Context context) {
+    public synchronized GotsAllotmentManager initIfNew(Context context) {
         if (initDone) {
             return this;
         }
@@ -79,8 +83,13 @@ public class AllotmentManager extends BroadcastReceiver implements AllotmentProv
     }
 
     private void setAllotmentProvider() {
+        if (NuxeoManager.getInstance().getNuxeoClient().isOffline())
+            Log.i(TAG, "isOffline");
+        else
+            Log.i(TAG, "isOnline");
 
-        if (GotsPreferences.getInstance().isConnectedToServer()) {
+        if (GotsPreferences.getInstance().isConnectedToServer()
+                && !NuxeoManager.getInstance().getNuxeoClient().isOffline()) {
             allotmentProvider = new NuxeoAllotmentProvider(mContext);
         } else {
             allotmentProvider = new LocalAllotmentProvider(mContext);
