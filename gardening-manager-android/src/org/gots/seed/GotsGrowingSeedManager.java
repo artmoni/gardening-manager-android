@@ -13,6 +13,7 @@ import org.gots.seed.provider.local.GotsGrowingSeedProvider;
 import org.gots.seed.provider.local.LocalGrowingSeedProvider;
 import org.gots.seed.provider.nuxeo.NuxeoGrowingSeedProvider;
 import org.gots.utils.NotConfiguredException;
+import org.nuxeo.android.broadcast.NuxeoBroadcastMessages;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -39,15 +40,16 @@ public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGro
 
     private boolean resetAllotments = false;
 
+    private NuxeoManager nuxeoManager;
+
     private GotsGrowingSeedManager() {
         // mLocalProvider = new LocalSeedProvider(mContext);
         // allSeeds = new ArrayList<BaseSeedInterface>();
     }
 
     protected void setGrowingSeedProvider() {
-        // ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        // NetworkInfo ni = cm.getActiveNetworkInfo();
-        if (gotsPrefs.isConnectedToServer() && !NuxeoManager.getInstance().getNuxeoClient().isOffline()) {
+        
+        if (gotsPrefs.isConnectedToServer() && !nuxeoManager.getNuxeoClient().isOffline()) {
             provider = new NuxeoGrowingSeedProvider(mContext);
         } else
             provider = new LocalGrowingSeedProvider(mContext);
@@ -69,6 +71,9 @@ public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGro
         if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
             resetAllotments = true;
         }
+        if (NuxeoBroadcastMessages.NUXEO_SERVER_CONNECTIVITY_CHANGED.equals(intent.getAction())
+                || BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction()))
+            setGrowingSeedProvider();
     }
 
     /**
@@ -80,6 +85,7 @@ public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGro
         }
         this.mContext = context;
         gotsPrefs = GotsPreferences.getInstance().initIfNew(context);
+        nuxeoManager = NuxeoManager.getInstance().initIfNew(context);
         // mContext.registerReceiver(this, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
         setGrowingSeedProvider();
         initDone = true;

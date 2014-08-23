@@ -79,9 +79,9 @@
     <string name="hut.menu.filter">Filtre</string>
     <string name="garden.cityname.inputmessage">Veuillez saisir la ville dans laquelle se trouve votre potager</string>
     <string name="dashboard.hut.name">Catalogue</string>
-    <string name="dashboard.allotments.name">Potager</string>
+    <string name="dashboard.allotments.name">Parcelles</string>
     <string name="dashboard.actions.name">Actions</string>
-    <string name="dashboard.profile.name">Profil</string>
+    <string name="dashboard.profile.name">Jardins</string>
     <string name="dashboard.sensor.name">Capteurs</string>
     <string name="dashboard.weather.name">Météo</string>
     <string name="dateSliderTitle">dateSliderTitle strings</string>

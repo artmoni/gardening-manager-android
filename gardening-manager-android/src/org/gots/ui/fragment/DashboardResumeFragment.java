@@ -141,7 +141,7 @@ public class DashboardResumeFragment extends BaseNuxeoFragment {
 
             @Override
             protected List<BaseSeedInterface> doInBackground(Void... params) {
-                return gotsSeedManager.getSeedBySowingMonth(Calendar.getInstance().get(Calendar.MONTH));
+                return gotsSeedManager.getSeedBySowingMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
             }
 
             @Override

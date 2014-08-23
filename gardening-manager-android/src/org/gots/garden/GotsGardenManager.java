@@ -12,6 +12,7 @@ import org.gots.garden.provider.nuxeo.NuxeoGardenProvider;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.utils.NotConfiguredException;
+import org.nuxeo.android.broadcast.NuxeoBroadcastMessages;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -34,6 +35,8 @@ public class GotsGardenManager extends BroadcastReceiver {
     private Map<Long, GardenInterface> myGardens;
 
     private GardenInterface currentGarden;
+
+    private NuxeoManager nuxeoManager;
 
     private GotsGardenManager() {
     }
@@ -67,6 +70,7 @@ public class GotsGardenManager extends BroadcastReceiver {
             return this;
         }
         this.mContext = context;
+        nuxeoManager = NuxeoManager.getInstance().initIfNew(context);
         setGardenProvider();
         initDone = true;
         return instance;
@@ -79,11 +83,9 @@ public class GotsGardenManager extends BroadcastReceiver {
     }
 
     private void setGardenProvider() {
-        // new AsyncTask<Void, Integer, Void>() {
-        // @Override
-        // protected Void doInBackground(Void... params) {
+        
         if (GotsPreferences.getInstance().isConnectedToServer()
-                && !NuxeoManager.getInstance().getNuxeoClient().isOffline()) {
+                && !nuxeoManager.getNuxeoClient().isOffline()) {
             gardenProvider = new NuxeoGardenProvider(mContext);
         } else {
             // return null;
@@ -96,7 +98,7 @@ public class GotsGardenManager extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())
-                || BroadCastMessages.GARDEN_SETTINGS_CHANGED.equals(intent.getAction())) {
+                || NuxeoBroadcastMessages.NUXEO_SERVER_CONNECTIVITY_CHANGED.equals(intent.getAction())) {
             setGardenProvider();
         }
     }

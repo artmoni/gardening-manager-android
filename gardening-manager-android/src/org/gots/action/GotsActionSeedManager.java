@@ -7,17 +7,21 @@ import java.util.List;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.action.provider.nuxeo.NuxeoActionSeedProvider;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.exception.GotsServerRestrictedException;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.utils.NotConfiguredException;
+import org.nuxeo.android.broadcast.NuxeoBroadcastMessages;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-public class GotsActionSeedManager implements GotsActionSeedProvider {
+public class GotsActionSeedManager extends BroadcastReceiver implements GotsActionSeedProvider {
 
     private static GotsActionSeedManager instance;
 
@@ -109,6 +113,13 @@ public class GotsActionSeedManager implements GotsActionSeedProvider {
             return provider.getPicture(mSeed);
         else
             throw new GotsServerRestrictedException(mContext);
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        if (NuxeoBroadcastMessages.NUXEO_SERVER_CONNECTIVITY_CHANGED.equals(intent.getAction())
+                || BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction()))
+            setProvider();        
     }
 
 }

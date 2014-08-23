@@ -78,6 +78,10 @@ public class MainActivity extends AbstractActivity {
     private String TAG = "MainActivity";
 
     private List<GardenInterface> myGardens;
+    
+    public static final String LAUNCHER_ACTION = "org.gots.dashboard.action";
+
+    public static final String LAUNCHER_CATALOGUE = "org.gots.dashboard.catalogue";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -421,6 +425,12 @@ public class MainActivity extends AbstractActivity {
             UserInfo userInfoTask = new UserInfo();
             userInfoTask.execute((ImageView) findViewById(R.id.imageAvatar));
         }
+        
+        if (LAUNCHER_ACTION.equals(getIntent().getAction())) {
+            startActivity(new Intent(this, ActionActivity.class));
+        } else if (LAUNCHER_CATALOGUE.equals(getIntent().getAction()))
+            startActivity(new Intent(this, HutActivity.class));
+
     }
 
     @Override

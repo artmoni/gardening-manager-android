@@ -12,6 +12,7 @@ import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.seed.provider.nuxeo.NuxeoSeedProvider;
 import org.gots.utils.NotConfiguredException;
+import org.nuxeo.android.broadcast.NuxeoBroadcastMessages;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -191,7 +192,7 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     @Override
     public void onReceive(Context context, Intent intent) {
         if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())
-                || BroadCastMessages.GARDEN_SETTINGS_CHANGED.equals(intent.getAction())) {
+                || NuxeoBroadcastMessages.NUXEO_SERVER_CONNECTIVITY_CHANGED.equals(intent.getAction())) {
             setSeedProvider();
         }
     }

@@ -5,15 +5,19 @@ import java.util.ArrayList;
 import org.gots.action.provider.GotsActionProvider;
 import org.gots.action.provider.local.LocalActionProvider;
 import org.gots.action.provider.nuxeo.NuxeoActionProvider;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.utils.NotConfiguredException;
+import org.nuxeo.android.broadcast.NuxeoBroadcastMessages;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-public class GotsActionManager implements GotsActionProvider {
+public class GotsActionManager extends BroadcastReceiver implements GotsActionProvider {
 
     private static GotsActionManager instance;
 
@@ -28,6 +32,8 @@ public class GotsActionManager implements GotsActionProvider {
     private GotsPreferences gotsPrefs;
 
     private ArrayList<BaseActionInterface> cacheActions;
+
+    private NuxeoManager nuxeoManager;
 
     public static synchronized GotsActionManager getInstance() {
         if (instance == null) {
@@ -46,6 +52,7 @@ public class GotsActionManager implements GotsActionProvider {
         }
         this.mContext = context;
         gotsPrefs = GotsPreferences.getInstance().initIfNew(context);
+        nuxeoManager = NuxeoManager.getInstance().initIfNew(context);
         cacheActions = new ArrayList<BaseActionInterface>();
         setProvider();
         initDone = true;
@@ -53,7 +60,8 @@ public class GotsActionManager implements GotsActionProvider {
     }
 
     public void setProvider() {
-        if (gotsPrefs.isConnectedToServer() && !NuxeoManager.getInstance().getNuxeoClient().isOffline()) {
+
+        if (gotsPrefs.isConnectedToServer() && !nuxeoManager.getNuxeoClient().isOffline()) {
             provider = new NuxeoActionProvider(mContext);
         } else
             provider = new LocalActionProvider(mContext);
@@ -82,5 +90,13 @@ public class GotsActionManager implements GotsActionProvider {
     @Override
     public BaseActionInterface updateAction(BaseActionInterface action) {
         return provider.updateAction(action);
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        if (NuxeoBroadcastMessages.NUXEO_SERVER_CONNECTIVITY_CHANGED.equals(intent.getAction())
+                || BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction()))
+            setProvider();
+
     }
 }

@@ -18,6 +18,7 @@ import org.gots.seed.service.GotsService;
 import org.gots.seed.view.SeedWidget;
 import org.gots.ui.ActionActivity;
 import org.gots.ui.DashboardActivity;
+import org.gots.ui.MainActivity;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -149,7 +150,7 @@ public class ActionNotificationService extends GotsService {
         // notification
         // PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, ActionActivity.class), 0);
 
-        Intent resultIntent = new Intent(this, DashboardActivity.class);
+        Intent resultIntent = new Intent(this, MainActivity.class);
         resultIntent.setAction(DashboardActivity.LAUNCHER_ACTION);
 
         // The stack builder object will contain an artificial back stack for the

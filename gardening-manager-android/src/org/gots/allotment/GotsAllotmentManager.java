@@ -13,6 +13,7 @@ import org.gots.broadcast.BroadCastMessages;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.utils.NotConfiguredException;
+import org.nuxeo.android.broadcast.NuxeoBroadcastMessages;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -36,6 +37,8 @@ public class GotsAllotmentManager extends BroadcastReceiver implements Allotment
     Map<Integer, BaseAllotmentInterface> allotments;
 
     private boolean haschanged = false;
+
+    private NuxeoManager nuxeoManager;
 
     private GotsAllotmentManager() {
 
@@ -65,6 +68,7 @@ public class GotsAllotmentManager extends BroadcastReceiver implements Allotment
         }
         this.mContext = context;
         // mContext.registerReceiver(this, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
+        nuxeoManager = NuxeoManager.getInstance().initIfNew(context);
         setAllotmentProvider();
         initDone = true;
         return this;
@@ -88,8 +92,7 @@ public class GotsAllotmentManager extends BroadcastReceiver implements Allotment
         else
             Log.i(TAG, "isOnline");
 
-        if (GotsPreferences.getInstance().isConnectedToServer()
-                && !NuxeoManager.getInstance().getNuxeoClient().isOffline()) {
+        if (GotsPreferences.getInstance().isConnectedToServer() && !nuxeoManager.getNuxeoClient().isOffline()) {
             allotmentProvider = new NuxeoAllotmentProvider(mContext);
         } else {
             allotmentProvider = new LocalAllotmentProvider(mContext);
@@ -99,7 +102,7 @@ public class GotsAllotmentManager extends BroadcastReceiver implements Allotment
     @Override
     public void onReceive(Context context, Intent intent) {
         if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())
-                || BroadCastMessages.GARDEN_SETTINGS_CHANGED.equals(intent.getAction())) {
+                || NuxeoBroadcastMessages.NUXEO_SERVER_CONNECTIVITY_CHANGED.equals(intent.getAction())) {
             setAllotmentProvider();
         }
         if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {

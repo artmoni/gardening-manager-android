@@ -44,28 +44,30 @@ public class NuxeoWeatherProvider extends LocalWeatherProvider {
     }
 
     private Document getWeatherRootFolder(GardenInterface currentGarden) {
-        Session session = getNuxeoClient().getSession();
-        DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
         Document gardenFolder = null;
         Document weatherRootFolder = null;
         try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
             gardenFolder = documentMgr.getDocument(new IdRef(currentGarden.getUUID()));
             weatherRootFolder = documentMgr.getChild(gardenFolder, WEATHER_FOLDER);
         } catch (Exception e) {
             Log.e(TAG, "getWeatherRootFolder " + e.getMessage());
-            weatherRootFolder = createWeatherRootFolder(documentMgr, currentGarden);
+            weatherRootFolder = createWeatherRootFolder(currentGarden);
         }
         return weatherRootFolder;
     }
 
-    private Document createWeatherRootFolder(DocumentManager manager, GardenInterface currentGarden) {
+    private Document createWeatherRootFolder(GardenInterface currentGarden) {
         Document gardenFolder = null;
         Document weatherRootFolder = null;
         try {
-            gardenFolder = manager.getDocument(new IdRef(currentGarden.getUUID()));
+            Session session = getNuxeoClient().getSession();
+            DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
+            gardenFolder = documentMgr.getDocument(new IdRef(currentGarden.getUUID()));
             PropertyMap props = new PropertyMap();
             props.set("dc:title", WEATHER_FOLDER);
-            weatherRootFolder = manager.createDocument(gardenFolder, "WeatherFolder", WEATHER_FOLDER, props);
+            weatherRootFolder = documentMgr.createDocument(gardenFolder, "WeatherFolder", WEATHER_FOLDER, props);
         } catch (Exception e) {
             Log.e(TAG, "createWeatherRootFolder " + e.getMessage());
         }
@@ -81,9 +83,9 @@ public class NuxeoWeatherProvider extends LocalWeatherProvider {
     }
 
     protected WeatherConditionInterface insertNuxeoWeather(WeatherConditionInterface weatherCondition) {
-        Session session = getNuxeoClient().getSession();
-        DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
         try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
             PropertyMap properties = new PropertyMap();
             properties.set("dc:title", weatherCondition.getSummary());
             properties.set("weathercondition:temperature_min", String.valueOf(weatherCondition.getTempCelciusMin()));
