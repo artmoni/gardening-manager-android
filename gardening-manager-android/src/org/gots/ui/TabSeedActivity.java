@@ -77,6 +77,10 @@ import com.android.vending.billing.util.IabHelper;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class TabSeedActivity extends ActionBarActivity {
+    public static final String GOTS_VENDORSEED_ID = "org.gots.seed.vendorid";
+
+    public static final String GOTS_GROWINGSEED_ID = "org.gots.seed.id";
+
     private static final int PICK_IMAGE = 0;
 
     protected static final String TAG = "TabSeedActivity";
@@ -125,11 +129,11 @@ public class TabSeedActivity extends ActionBarActivity {
             finish();
             return;
         }
-        if (getIntent().getExtras().getInt("org.gots.seed.id") != 0) {
-            int seedId = getIntent().getExtras().getInt("org.gots.seed.id");
+        if (getIntent().getExtras().getInt(GOTS_GROWINGSEED_ID) != 0) {
+            int seedId = getIntent().getExtras().getInt(GOTS_GROWINGSEED_ID);
             mSeed = GotsGrowingSeedManager.getInstance().initIfNew(this).getGrowingSeedById(seedId);
-        } else if (getIntent().getExtras().getInt("org.gots.seed.vendorid") != 0) {
-            int seedId = getIntent().getExtras().getInt("org.gots.seed.vendorid");
+        } else if (getIntent().getExtras().getInt(GOTS_VENDORSEED_ID) != 0) {
+            int seedId = getIntent().getExtras().getInt(GOTS_VENDORSEED_ID);
             GotsSeedProvider helper = new LocalSeedProvider(getApplicationContext());
             mSeed = (GrowingSeedInterface) helper.getSeedById(seedId);
         } else
@@ -296,7 +300,7 @@ public class TabSeedActivity extends ActionBarActivity {
             FragmentManager fm = getSupportFragmentManager();
             DialogFragment purchaseDialog = new ScheduleActionFragment();
             Bundle data = new Bundle();
-            data.putInt("org.gots.seed.id", mSeed.getGrowingSeedId());
+            data.putInt(GOTS_GROWINGSEED_ID, mSeed.getGrowingSeedId());
             purchaseDialog.setArguments(data);
             purchaseDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
             purchaseDialog.show(fm, "fragment_planning");
@@ -481,7 +485,7 @@ public class TabSeedActivity extends ActionBarActivity {
         public Fragment getItem(int position) {
             TabInfo info = mTabs.get(position);
             Bundle bundle = new Bundle();
-            bundle.putInt("org.gots.seed.id", mSeed.getSeedId());
+            bundle.putInt(GOTS_GROWINGSEED_ID, mSeed.getSeedId());
             bundle.putInt("org.gots.growingseed.id", mSeed.getGrowingSeedId());
             bundle.putString("org.gots.seed.url", urlDescription);
             Fragment fragment = Fragment.instantiate(mContext, info.clss.getName(), info.args);

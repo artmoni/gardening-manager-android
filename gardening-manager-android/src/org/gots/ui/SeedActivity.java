@@ -25,6 +25,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class SeedActivity extends Fragment {
+    public static final String GOTS_SEED_ID = "org.gots.seed.id";
+
     private int seedId;
 
     protected BaseSeedInterface mSeed;
@@ -44,7 +46,7 @@ public class SeedActivity extends Fragment {
         View v = inflater.inflate(R.layout.seed, container, false);
 
         Bundle bundle = this.getArguments();
-        seedId = bundle.getInt("org.gots.seed.id");
+        seedId = bundle.getInt(GOTS_SEED_ID);
 
         if (seedId <= 0) {
             Log.e("SeedActivity", "You must provide a org.gots.seed.id as an Extra Int");

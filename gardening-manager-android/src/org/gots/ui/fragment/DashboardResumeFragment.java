@@ -17,6 +17,8 @@ import org.gots.seed.adapter.VendorSeedListAdapter;
 import org.gots.ui.ActionActivity;
 import org.gots.ui.HutActivity;
 import org.gots.ui.ProfileCreationActivity;
+import org.gots.ui.SeedActivity;
+import org.gots.ui.TabSeedActivity;
 import org.gots.weather.view.WeatherView;
 import org.gots.weather.view.WeatherWidget;
 import org.nuxeo.android.fragments.BaseNuxeoFragment;
@@ -31,6 +33,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Gallery;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -150,6 +153,15 @@ public class DashboardResumeFragment extends BaseNuxeoFragment {
                     SeedListAdapter adapter = new VendorSeedListAdapter(getActivity(), list.subList(0,
                             list.size() >= 5 ? 5 : list.size()));
                     gallery.setAdapter(adapter);
+                    gallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                            BaseSeedInterface baseSeedInterface = (BaseSeedInterface) arg0.getItemAtPosition(arg2);
+                            Intent i = new Intent(getActivity(), TabSeedActivity.class);
+                            i.putExtra(TabSeedActivity.GOTS_VENDORSEED_ID, baseSeedInterface.getSeedId());
+                            startActivity(i);
+                        }
+                    });
                     getView().findViewById(R.id.buttonHut).setOnClickListener(new View.OnClickListener() {
 
                         @Override
