@@ -78,7 +78,7 @@
     <string name="hut.menu.seedsofthemonth">A semer ou planter ce mois-ci</string>
     <string name="hut.menu.filter">Filtre</string>
     <string name="garden.cityname.inputmessage">Veuillez saisir la ville dans laquelle se trouve votre potager</string>
-    <string name="dashboard.exit">Veuillez cliquer sur RETOUR une seconde fois pour quitter l'application</string>
+    <string name="dashboard.exit">Veuillez cliquer sur RETOUR une seconde fois pour quitter l\'application</string>
     <string name="dashboard.hut.name">Catalogue</string>
     <string name="dashboard.allotments.name">Parcelles</string>
     <string name="dashboard.actions.name">Actions</string>

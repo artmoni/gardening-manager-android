@@ -151,7 +151,7 @@ public class ActionNotificationService extends GotsService {
         // PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, ActionActivity.class), 0);
 
         Intent resultIntent = new Intent(this, MainActivity.class);
-        resultIntent.setAction(DashboardActivity.LAUNCHER_ACTION);
+        resultIntent.setAction(MainActivity.LAUNCHER_ACTION);
 
         // The stack builder object will contain an artificial back stack for the
         // started Activity.

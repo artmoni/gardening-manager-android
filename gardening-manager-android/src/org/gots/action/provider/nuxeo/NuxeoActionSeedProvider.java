@@ -84,6 +84,8 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
                 Document parentSeed = documentMgr.getDocument(new PathRef(actionFolder.getParentPath()), "*");
 
                 GrowingSeedInterface seed = gotsSeedManager.getGrowingSeedsByUUID(parentSeed.getId());
+                if (seed == null)
+                    continue;
                 action = super.populateState(action, seed);
                 action.setGrowingSeedId(seed.getGrowingSeedId());
                 actionsToDo.add(action);

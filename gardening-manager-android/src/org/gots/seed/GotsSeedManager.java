@@ -53,8 +53,8 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     }
 
     protected void setSeedProvider() {
-//        ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-//        NetworkInfo ni = cm.getActiveNetworkInfo();
+        // ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        // NetworkInfo ni = cm.getActiveNetworkInfo();
         if (gotsPrefs.isConnectedToServer() && !nuxeoManager.getNuxeoClient().isOffline()) {
             mSeedProvider = new NuxeoSeedProvider(mContext);
         } else
@@ -104,10 +104,7 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
         if (!force && allSeeds.size() > 0)
             return allSeeds;
 
-        ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo ni = cm.getActiveNetworkInfo();
-        
-        if (force && ni != null && ni.isConnected()) {
+        if (force && !nuxeoManager.getNuxeoClient().isOffline()) {
             GotsSeedProvider provider = new NuxeoSeedProvider(mContext);
             allSeeds = provider.getVendorSeeds(force);
             newSeeds = provider.getNewSeeds();
