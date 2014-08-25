@@ -33,6 +33,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -47,6 +48,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
@@ -74,6 +76,8 @@ public class MainActivity extends AbstractActivity {
     private NavDrawerListAdapter adapter;
 
     private RelativeLayout mDrawerLinear;
+
+    private Spinner spinnerGarden;
 
     private String TAG = "MainActivity";
 
@@ -644,5 +648,24 @@ public class MainActivity extends AbstractActivity {
 
     };
 
-    private Spinner spinnerGarden;
+    private boolean doubleBackToExitPressedOnce;
+    
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, getResources().getString(R.string.dashboard_exit), Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;                       
+            }
+        }, 2000);
+    } 
 }
