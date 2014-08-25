@@ -67,7 +67,6 @@ public class NuxeoActionProvider extends LocalActionProvider {
     @Override
     public ArrayList<BaseActionInterface> getActions(boolean force) {
         remoteActions = new ArrayList<BaseActionInterface>();
-        List<BaseActionInterface> localActions = super.getActions(force);
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager service = session.getAdapter(DocumentManager.class);

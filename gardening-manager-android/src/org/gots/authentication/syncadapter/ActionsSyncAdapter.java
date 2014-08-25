@@ -96,24 +96,24 @@ public class ActionsSyncAdapter extends GotsSyncAdapter {
             }
         }
 
-        for (BaseActionInterface localAction : localActions) {
-            if (localAction.getUUID() == null) { // local only without
-                                                 // UUID => create
-                                                 // remote
-                                                 // myActions.add(createNuxeoGarden(localAction));
-            } else {
-                boolean found = false;
-                for (BaseActionInterface remoteAction : remoteActions2) {
-                    if (remoteAction.getUUID() != null && remoteAction.getUUID().equals(localAction.getUUID())) {
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) { // local only with UUID -> delete local
-                    // super.removeGarden(localAction);
-                }
-            }
-        }
+//        for (BaseActionInterface localAction : localActions) {
+//            if (localAction.getUUID() == null) { // local only without
+//                                                 // UUID => create
+//                                                 // remote
+//                                                 // myActions.add(createNuxeoGarden(localAction));
+//            } else {
+//                boolean found = false;
+//                for (BaseActionInterface remoteAction : remoteActions2) {
+//                    if (remoteAction.getUUID() != null && remoteAction.getUUID().equals(localAction.getUUID())) {
+//                        found = true;
+//                        break;
+//                    }
+//                }
+//                if (!found) { // local only with UUID -> delete local
+//                    // super.removeGarden(localAction);
+//                }
+//            }
+//        }
         return myActions;
     }
 

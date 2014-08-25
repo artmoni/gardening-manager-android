@@ -20,8 +20,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
-public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider {
 
+public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider {
     private static final String TAG = "LocalSeedProvider";
 
     // VendorSeedDBHelper myBank;

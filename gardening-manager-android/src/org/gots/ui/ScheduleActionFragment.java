@@ -80,7 +80,8 @@ public class ScheduleActionFragment extends DialogFragment implements OnItemClic
 
             @SuppressWarnings("deprecation")
             protected void onPostExecute(List<BaseActionInterface> actions) {
-
+                if (!isAdded())
+                    return;
                 WindowManager wm = (WindowManager) getActivity().getApplicationContext().getSystemService(
                         Context.WINDOW_SERVICE);
                 Display display = wm.getDefaultDisplay();
