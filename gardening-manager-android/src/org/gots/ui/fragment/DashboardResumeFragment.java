@@ -8,8 +8,10 @@ import org.gots.action.GotsActionSeedManager;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.action.provider.GotsActionSeedProvider;
+import org.gots.ads.GotsAdvertisement;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GotsGardenManager;
+import org.gots.inapp.GotsPurchaseItem;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.adapter.SeedListAdapter;
@@ -60,6 +62,14 @@ public class DashboardResumeFragment extends BaseNuxeoFragment {
             displaySeeds(view);
             displayActions();
             displayWeather();
+
+            GotsPurchaseItem gotsPurchase = new GotsPurchaseItem(getActivity());
+            if (!gotsPurchase.isPremium()) {
+                GotsAdvertisement ads = new GotsAdvertisement(getActivity());
+
+                LinearLayout layout = (LinearLayout) getView().findViewById(R.id.idAdsTop);
+                layout.addView(ads.getAdsLayout());
+            }
         }
         super.onViewCreated(view, savedInstanceState);
     }
