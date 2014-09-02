@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 import org.gots.R;
@@ -313,6 +314,9 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
                 modifiedGarden.setGpsLatitude(address.getLatitude());
                 modifiedGarden.setGpsLongitude(address.getLongitude());
                 modifiedGarden.setGpsAltitude(location.getAltitude());
+                modifiedGarden.setCountryCode(address.getCountryCode());
+            } else {
+                modifiedGarden.setCountryCode(Locale.getDefault().getCountry().toLowerCase());
             }
         }
         return modifiedGarden;
@@ -335,9 +339,12 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
             @Override
             protected GardenInterface doInBackground(Void... params) {
                 garden = buildGarden(new Garden());
-                garden = gardenManager.addGarden(garden);
                 if (((RadioGroup) findViewById(R.id.radioGardenType)).getCheckedRadioButtonId() == findViewById(
-                        R.id.radioGardenIncredibleEdible).getId())
+                        R.id.radioGardenIncredibleEdible).getId()) {
+                    garden.setIncredibleEdible(true);
+                }
+                garden = gardenManager.addGarden(garden);
+                if (garden.isIncredibleEdible())
                     gardenManager.share(garden, "Everyone", "Write");
                 return garden;
             }

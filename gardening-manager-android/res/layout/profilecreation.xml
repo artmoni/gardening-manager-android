@@ -170,8 +170,9 @@
 
                 <RadioGroup
                     android:id="@+id/radioGardenType"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
 
                     <RadioButton
                         android:id="@+id/radioGardenPrivate"
@@ -179,6 +180,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="true"
+                        android:drawableLeft="@drawable/garden_private"
                         android:gravity="center_vertical"
                         android:text="@string/garden.type.private" />
 
@@ -187,6 +189,7 @@
                         style="@style/description_content"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_incredibleedible"
                         android:gravity="center_vertical"
                         android:text="@string/garden.type.incredibleedible" />
                 </RadioGroup>

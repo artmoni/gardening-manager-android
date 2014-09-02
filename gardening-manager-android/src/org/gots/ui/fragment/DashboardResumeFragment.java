@@ -35,10 +35,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.Gallery;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class DashboardResumeFragment extends BaseNuxeoFragment {
@@ -127,8 +129,12 @@ public class DashboardResumeFragment extends BaseNuxeoFragment {
                             startActivity(new Intent(getActivity(), ActionActivity.class));
                         }
                     });
-                    if (actionAdapter.getCount() > 0)
+                    if (actionAdapter.getCount() > 0){
                         getView().findViewById(R.id.layoutDashboardActions).setVisibility(View.VISIBLE);
+                        getView().findViewById(R.id.layoutDashboardActions).setLayoutParams(new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT));
+                    }
                     else
                         getView().findViewById(R.id.layoutDashboardActions).setVisibility(View.GONE);
 

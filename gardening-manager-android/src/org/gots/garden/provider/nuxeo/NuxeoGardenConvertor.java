@@ -37,10 +37,11 @@ public class NuxeoGardenConvertor {
         garden.setLocality(gardenWorkspace.getString("garden:city"));
         if ("null".equals(garden.getLocality()))
             garden.setLocality(gardenWorkspace.getTitle());
-        garden.setCountryName(gardenWorkspace.getString("garden:country"));
         garden.setAdminArea(gardenWorkspace.getString("garden:region"));
         garden.setName(gardenWorkspace.getTitle());
-
+        garden.setCountryName(gardenWorkspace.getString("location:country"));
+        garden.setCountryCode(gardenWorkspace.getString("location:countrycode"));
+        garden.setIncredibleEdible(gardenWorkspace.getProperties().getBoolean("garden:incredibleedible"));
         // garden.setName(garden.getLocality() + " (" + gardenWorkspace.getString("dc:creator") + ")");
         return garden;
     }
@@ -53,8 +54,9 @@ public class NuxeoGardenConvertor {
         doc.set("garden:longitude", garden.getGpsLongitude());
         doc.set("garden:city", garden.getLocality());
         doc.set("garden:region", garden.getAdminArea());
-        doc.set("garden:country", garden.getCountryName());
-
+        doc.set("location:country", garden.getCountryName());
+        doc.set("location:countrycode", garden.getCountryCode());
+        doc.set("garden:incredibleedible", String.valueOf(garden.isIncredibleEdible()));
         return doc;
     }
 }

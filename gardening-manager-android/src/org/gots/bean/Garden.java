@@ -33,6 +33,10 @@ public class Garden implements GardenInterface {
 
     private String uuid;
 
+    private String countrycode;
+
+    private Boolean incredibleedible;
+
     @Override
     public double getGpsLatitude() {
         return gpsLatitude;
@@ -160,5 +164,22 @@ public class Garden implements GardenInterface {
     public String toString() {
         String gardenString = "#" + getId() + " --" + getLocality() + " -- " + "UUID[" + getUUID() + "]\n";
         return gardenString;
+    }
+
+    @Override
+    public String getCountryCode() {
+        return this.countrycode;
+    }
+
+    @Override
+    public void setCountryCode(String countryCode) {
+        this.countrycode = countryCode;
+    }
+    @Override
+    public Boolean isIncredibleEdible() {
+        return this.incredibleedible;
+    }@Override
+    public void setIncredibleEdible(Boolean isPublicGarden) {
+        this.incredibleedible=isPublicGarden;        
     }
 }

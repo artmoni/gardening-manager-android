@@ -68,4 +68,12 @@ public interface GardenInterface {
 
 	public abstract String getUUID();
 
+    public abstract void setCountryCode(String countryCode);
+
+    public abstract String getCountryCode();
+
+    public abstract void setIncredibleEdible(Boolean boolean1);
+
+    public abstract Boolean isIncredibleEdible();
+
 }
