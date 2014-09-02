@@ -69,10 +69,14 @@ public class CuttingAction extends AbstractActionSeed implements SeedActionInter
         return super.getName();
     }
 
-    public void setData(Object data) {
+
+    @Override
+    public Object getData() {
+        return super.getData();
     }
 
-    public Object getData() {
-        return null;
+    @Override
+    public void setData(Object data) {
+        super.setData(data);
     }
 }

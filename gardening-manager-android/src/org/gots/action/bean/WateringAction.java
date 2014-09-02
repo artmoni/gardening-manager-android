@@ -110,11 +110,13 @@ public class WateringAction extends AbstractActionSeed implements SeedActionInte
         return super.getId();
     }
 
-    public void setData(Object data) {
-    }
-
+    @Override
     public Object getData() {
-        return null;
+        return super.getData();
     }
 
+    @Override
+    public void setData(Object data) {
+        super.setData(data);
+    }
 }

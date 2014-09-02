@@ -53,6 +53,7 @@ public class AbstractAction implements BaseActionInterface, Comparator<AbstractA
 
     public AbstractAction(Context context) {
         this.mContext = context;
+        gotsPrefs = GotsPreferences.getInstance().initIfNew(mContext);
         seedManager = GotsSeedManager.getInstance().initIfNew(mContext);
         gardenManager = GotsGardenManager.getInstance().initIfNew(mContext);
         actionManager = GotsActionManager.getInstance().initIfNew(mContext);

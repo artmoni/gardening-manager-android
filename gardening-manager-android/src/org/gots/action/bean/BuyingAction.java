@@ -89,11 +89,14 @@ public class BuyingAction extends AbstractActionSeed implements PermanentActionI
         return 0;
     }
 
-    public void setData(Object data) {
+    @Override
+    public Object getData() {
+        return super.getData();
     }
 
-    public Object getData() {
-        return null;
+    @Override
+    public void setData(Object data) {
+        super.setData(data);
     }
 
 }

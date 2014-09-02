@@ -136,6 +136,7 @@ public class ListAllActionAdapter extends BaseAdapter {
 
             TextView textviewActionStatus = (TextView) ll.findViewById(R.id.IdSeedActionStatus);
             TextView textviewActionDate = (TextView) ll.findViewById(R.id.IdSeedActionDate);
+            TextView textviewActionDescription = (TextView) ll.findViewById(R.id.IdSeedActionDescription);
 
             SimpleDateFormat dateFormat = new SimpleDateFormat(" dd/MM/yyyy", Locale.FRANCE);
 
@@ -156,6 +157,7 @@ public class ListAllActionAdapter extends BaseAdapter {
 
                 WeatherView weatherView = (WeatherView) ll.findViewById(R.id.idWeatherView);
                 weatherView.setVisibility(View.GONE);
+                textviewActionDescription.setVisibility(View.GONE);
 
             } else {
                 textviewActionStatus.setText(mContext.getResources().getString(R.string.seed_action_done));
@@ -164,6 +166,14 @@ public class ListAllActionAdapter extends BaseAdapter {
                 if (currentAction.getDateActionDone() != null) {
                     rightNow.setTime(currentAction.getDateActionDone());
                     textviewActionDate.setText(dateFormat.format(rightNow.getTime()));
+
+                    if (currentAction.getData() != null) {
+                        String data = (String) currentAction.getData();
+                        String description = data.length() < 30 ? data : data.substring(0, 29).concat("...");
+                        textviewActionDescription.setText(description);
+                    } else
+                        textviewActionDescription.setVisibility(View.GONE);
+
                     WeatherView weatherView = (WeatherView) ll.findViewById(R.id.idWeatherView);
                     weatherView.setWeather(manager.getCondition(rightNow.getTime()));
 

@@ -102,4 +102,13 @@ public class PhotoAction extends AbstractActionSeed implements PermanentActionIn
         return imageFile;
     }
 
+    @Override
+    public Object getData() {
+        return super.getData();
+    }
+
+    @Override
+    public void setData(Object data) {
+        super.setData(data);
+    }
 }

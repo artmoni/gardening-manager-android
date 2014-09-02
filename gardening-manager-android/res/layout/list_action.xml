@@ -13,24 +13,41 @@
         android:layout_height="50dp" >
     </org.gots.seed.view.SeedWidget>
 
-    <TextView
-        android:id="@+id/IdSeedActionStatus"
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:gravity="center_vertical"
-        android:text="Action Name"
-        android:textColor="@color/text_color_dark"
-        android:textSize="12dp" />
+        android:layout_height="fill_parent" >
 
-    <TextView
-        android:id="@+id/IdSeedActionDate"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:gravity="center_vertical"
-        android:text="Date to do"
-        android:textColor="@color/text_color_dark"
-        android:textSize="12dp"
-        android:textStyle="bold" />
+        <TextView
+            android:id="@+id/IdSeedActionStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:text="Action Name"
+            android:textColor="@color/text_color_dark"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/IdSeedActionDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/IdSeedActionStatus"
+            android:layout_alignBottom="@+id/IdSeedActionStatus"
+            android:layout_toRightOf="@+id/IdSeedActionStatus"
+            android:paddingLeft="5dp"
+            android:text="Date to do"
+            android:textColor="@color/text_color_dark"
+            android:textSize="12dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/IdSeedActionDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/IdSeedActionStatus"
+            android:text="Describe the action in few words" />
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -40,14 +57,14 @@
 
     <ImageView
         android:id="@+id/imageviewPhoto"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:visibility="gone" />
 
     <org.gots.weather.view.WeatherView
         android:id="@+id/idWeatherView"
-        android:layout_width="65dp"
-        android:layout_height="65dp" >
+        android:layout_width="50dp"
+        android:layout_height="50dp" >
     </org.gots.weather.view.WeatherView>
 
     <org.gots.action.view.ActionWidget

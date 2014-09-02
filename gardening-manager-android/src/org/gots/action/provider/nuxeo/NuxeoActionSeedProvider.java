@@ -243,8 +243,10 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
     private BaseActionInterface convert(Document actionDoc) {
         BaseActionInterface action = ActionFactory.buildAction(mContext, actionDoc.getTitle());
         action.setDateActionDone(actionDoc.getDate("action:dateactiondone"));
-        action.setDescription(actionDoc.getString("action:description"));
-        action.setData(actionDoc.getString("action:data"));
+        if (!"null".equals(actionDoc.getString("action:description")))
+            action.setDescription(actionDoc.getString("action:description"));
+        if (!"null".equals(actionDoc.getString("action:data")))
+            action.setData(actionDoc.getString("action:data"));
         action.setUUID(actionDoc.getId());
 
         if (actionDoc.getString("action:duration") != null)
