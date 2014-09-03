@@ -162,9 +162,9 @@ public class MainActivity extends AbstractActivity {
 
         // registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
         registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
-        registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_EVENT));
         registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
         registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.SEED_DISPLAYLIST));
+        registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_EVENT));
         registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.ACTION_EVENT));
         registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.ALLOTMENT_EVENT));
 
@@ -439,6 +439,10 @@ public class MainActivity extends AbstractActivity {
         } else if (LAUNCHER_CATALOGUE.equals(getIntent().getAction()))
             startActivity(new Intent(this, HutActivity.class));
 
+        if (gardenManager.getCurrentGarden() == null || (myGardens != null && myGardens.size() == 0)) {
+            Intent intent = new Intent(getApplicationContext(), ProfileCreationActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -537,8 +541,8 @@ public class MainActivity extends AbstractActivity {
                         gardenManager.setCurrentGarden(myGardens.get(0));
                         sendBroadcast(new Intent(BroadCastMessages.GARDEN_CURRENT_CHANGED));
                     } else {
-                        Intent intent = new Intent(getApplicationContext(), ProfileCreationActivity.class);
-                        startActivity(intent);
+                        // Intent intent = new Intent(getApplicationContext(), ProfileCreationActivity.class);
+                        // startActivity(intent);
                         // AccountManager accountManager = AccountManager.get(getApplicationContext()
                         // );
                         // accountManager.addAccount(accountType, authTokenType, requiredFeatures, addAccountOptions,
@@ -631,14 +635,13 @@ public class MainActivity extends AbstractActivity {
                 refreshGardenMenu();
                 invalidateOptionsMenu();
                 // refreshWeatherWidget(intent);
-            } else if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
-                refreshGardenMenu();
             } else if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
                 displayDrawerMenu();
             } else if (BroadCastMessages.SEED_DISPLAYLIST.equals(intent.getAction())) {
                 displayDrawerMenuCatalogCounter();
             } else if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
                 displayDrawerMenuProfileCounter();
+                refreshGardenMenu();
             } else if (BroadCastMessages.ACTION_EVENT.equals(intent.getAction())) {
                 displayDrawerMenuActionsCounter();
             } else if (BroadCastMessages.ALLOTMENT_EVENT.equals(intent.getAction())) {
@@ -649,7 +652,7 @@ public class MainActivity extends AbstractActivity {
     };
 
     private boolean doubleBackToExitPressedOnce;
-    
+
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
@@ -664,8 +667,8 @@ public class MainActivity extends AbstractActivity {
 
             @Override
             public void run() {
-                doubleBackToExitPressedOnce=false;                       
+                doubleBackToExitPressedOnce = false;
             }
         }, 2000);
-    } 
+    }
 }

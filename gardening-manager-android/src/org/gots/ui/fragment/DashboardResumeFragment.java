@@ -57,9 +57,8 @@ public class DashboardResumeFragment extends BaseNuxeoFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
         if (GotsGardenManager.getInstance().initIfNew(getActivity()).getCurrentGarden() == null) {
-            Intent intent = new Intent(getActivity(), ProfileCreationActivity.class);
-            startActivity(intent);
-
+//            Intent intent = new Intent(getActivity(), ProfileCreationActivity.class);
+//            startActivity(intent);
         } else {
             displaySeeds();
             displayActions();
