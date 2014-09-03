@@ -346,17 +346,20 @@ public class ProfileCreationActivity extends AbstractActivity implements Locatio
                 garden = gardenManager.addGarden(garden);
                 if (garden.isIncredibleEdible())
                     gardenManager.share(garden, "Everyone", "Write");
+                gardenManager.setCurrentGarden(garden);
                 return garden;
             }
 
             protected void onPostExecute(GardenInterface result) {
-                if (result != null)
-                    gardenManager.setCurrentGarden(result);
-                else
-                    Log.e(TAG, "garden is null, no current garden changement");
-                sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
-                sendBroadcast(new Intent(BroadCastMessages.GARDEN_CURRENT_CHANGED));
-                ProfileCreationActivity.this.finish();
+                if (result == null)
+                    Toast.makeText(getApplicationContext(),
+                            "Error creating new garden, please verify your connection.", Toast.LENGTH_SHORT).show();
+                else {
+                    sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
+                    sendBroadcast(new Intent(BroadCastMessages.GARDEN_CURRENT_CHANGED));
+                    ProfileCreationActivity.this.finish();
+                }
+
             };
         }.execute();
 

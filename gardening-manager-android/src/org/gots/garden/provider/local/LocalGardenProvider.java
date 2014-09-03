@@ -53,7 +53,8 @@ public class LocalGardenProvider extends AbstractProvider implements GardenProvi
 
     @Override
     public void setCurrentGarden(GardenInterface garden) {
-        GotsPreferences.getInstance().set(GotsPreferences.ORG_GOTS_CURRENT_GARDENID, (int) garden.getId());
+        gotsPrefs.set(GotsPreferences.ORG_GOTS_CURRENT_GARDENID, (int) garden.getId());
+        
         // DatabaseHelper.getInstance(mContext).changeDatabase();
     }
 

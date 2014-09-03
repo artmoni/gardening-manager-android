@@ -61,7 +61,7 @@ public class DashboardResumeFragment extends BaseNuxeoFragment {
             startActivity(intent);
 
         } else {
-            displaySeeds(view);
+            displaySeeds();
             displayActions();
             displayWeather();
 
@@ -86,7 +86,7 @@ public class DashboardResumeFragment extends BaseNuxeoFragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
-                displaySeeds(getView());
+                displaySeeds();
                 displayActions();
                 displayWeather();
             } else if (BroadCastMessages.WEATHER_DISPLAY_EVENT.equals(intent.getAction())) {
@@ -145,7 +145,7 @@ public class DashboardResumeFragment extends BaseNuxeoFragment {
 
     }
 
-    protected void displaySeeds(View view) {
+    protected void displaySeeds() {
 
         new AsyncTask<Void, Void, List<BaseSeedInterface>>() {
             Gallery gallery;

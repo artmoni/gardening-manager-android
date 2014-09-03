@@ -83,9 +83,8 @@ public class GotsGardenManager extends BroadcastReceiver {
     }
 
     private void setGardenProvider() {
-        
-        if (GotsPreferences.getInstance().isConnectedToServer()
-                && !nuxeoManager.getNuxeoClient().isOffline()) {
+
+        if (GotsPreferences.getInstance().isConnectedToServer() && !nuxeoManager.getNuxeoClient().isOffline()) {
             gardenProvider = new NuxeoGardenProvider(mContext);
         } else {
             // return null;
@@ -105,6 +104,7 @@ public class GotsGardenManager extends BroadcastReceiver {
 
     public GardenInterface addGarden(GardenInterface garden) {
         GardenInterface newGarden = gardenProvider.createGarden(garden);
+        myGardens.put(newGarden.getId(), newGarden);
         // gardenProvider.setCurrentGarden(newGarden);
         // GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
         // tracker.trackEvent("Garden", "location", result.getLocality(), 0);

@@ -35,7 +35,7 @@ public class Garden implements GardenInterface {
 
     private String countrycode;
 
-    private Boolean incredibleedible;
+    private Boolean incredibleedible = false;
 
     @Override
     public double getGpsLatitude() {
@@ -175,11 +175,14 @@ public class Garden implements GardenInterface {
     public void setCountryCode(String countryCode) {
         this.countrycode = countryCode;
     }
+
     @Override
     public Boolean isIncredibleEdible() {
         return this.incredibleedible;
-    }@Override
+    }
+
+    @Override
     public void setIncredibleEdible(Boolean isPublicGarden) {
-        this.incredibleedible=isPublicGarden;        
+        this.incredibleedible = isPublicGarden;
     }
 }

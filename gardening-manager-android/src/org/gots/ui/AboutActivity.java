@@ -11,6 +11,7 @@ import org.gots.broadcast.BroadCastMessages;
 import org.gots.inapp.GotsPurchaseItem;
 import org.gots.preferences.GotsPreferences;
 import org.gots.provider.ActionsContentProvider;
+import org.gots.provider.AllotmentContentProvider;
 import org.gots.provider.GardenContentProvider;
 import org.gots.provider.SeedsContentProvider;
 import org.gots.seed.service.SeedUpdateService;
@@ -292,6 +293,8 @@ public class AboutActivity extends AbstractActivity {
         ContentResolver.requestSync(newAccount, GardenContentProvider.AUTHORITY, bundle);
         ContentResolver.setSyncAutomatically(newAccount, ActionsContentProvider.AUTHORITY, true);
         ContentResolver.requestSync(newAccount, ActionsContentProvider.AUTHORITY, bundle);
+        ContentResolver.setSyncAutomatically(newAccount, AllotmentContentProvider.AUTHORITY, true);
+        ContentResolver.requestSync(newAccount, AllotmentContentProvider.AUTHORITY, bundle);
         // ContentResolver.setSyncAutomatically(newAccount, SensorContentProvider.AUTHORITY, true);
         // ContentResolver.requestSync(newAccount, SensorContentProvider.AUTHORITY, bundle);
         // ContentResolver.setSyncAutomatically(newAccount, WeatherContentProvider.AUTHORITY, true);
