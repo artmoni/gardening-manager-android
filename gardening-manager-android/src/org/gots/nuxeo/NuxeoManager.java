@@ -88,12 +88,10 @@ public class NuxeoManager extends BroadcastReceiver {
         gotsPrefs.initIfNew(context);
 
         nxConfig = new NuxeoServerConfig(context);
-//        nxConfig.setLogin("gardening.manager@gmail.com");
-//        nxConfig.setPassword("123");
         nxConfig.setLogin("");
         nxConfig.setPassword("");
         nxConfig.setSharedPrefs(gotsPrefs.getSharedPrefs());
-//        nxConfig.setCacheKey(NuxeoServerConfig.PREF_SERVER_TOKEN);
+        nxConfig.setCacheKey(NuxeoServerConfig.PREF_SERVER_TOKEN);
         nuxeoContext = NuxeoContextFactory.getNuxeoContext(context, nxConfig);
         initDone = true;
         Log.d(TAG, "getSession with: " + nxConfig.getServerBaseUrl() + " login=" + nxConfig.getLogin() + " password="

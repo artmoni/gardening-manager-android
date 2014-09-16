@@ -163,41 +163,25 @@ public class AuthenticationActivity extends AbstractActivity {
                                 String nuxeoToken = null;
                                 final Intent res = new Intent();
 
-                                // try {
-                                // googleToken = googleAuthentication.getToken(params[0]);
-                                // if (googleToken != null) {
-                                // NuxeoAuthentication nuxeoAuthentication = new NuxeoAuthentication(
-                                // getApplicationContext());
-                                // nuxeoToken = nuxeoAuthentication.request_oauth2_token(googleToken);
-                                //
-                                // res.putExtra(AccountManager.KEY_ACCOUNT_NAME, googleAccounts.get(item).name);
-                                // res.putExtra(AccountManager.KEY_ACCOUNT_TYPE, mAccountType);
-                                // res.putExtra(AccountManager.KEY_AUTHTOKEN, nuxeoToken);
-                                // res.putExtra(PARAM_USER_PASS, "");
-                                // }
-                                //
-                                // } catch (UserRecoverableAuthException e) {
-                                // startActivityForResult(e.getIntent(), 0);
-                                // } catch (IOException e) {
-                                // Log.e(TAG, e.getMessage(), e);
-                                // } catch (GoogleAuthException e) {
-                                // Log.e(TAG, e.getMessage(), e);
-                                // }
-
-                                NuxeoAuthentication nuxeoAuthentication = new NuxeoAuthentication(
-                                        getApplicationContext());
                                 try {
-                                    nuxeoToken = nuxeoAuthentication.basicNuxeoConnect("gardening.manager@gmail.com",
-                                            "123");
-                                    res.putExtra(AccountManager.KEY_ACCOUNT_NAME, "gardening.manager@gmail.com");
-                                    res.putExtra(AccountManager.KEY_ACCOUNT_TYPE, mAccountType);
-                                    res.putExtra(AccountManager.KEY_AUTHTOKEN, nuxeoToken);
-                                    res.putExtra(PARAM_USER_PASS, "123");
-                                } catch (IOException e) {
-                                    // TODO Auto-generated catch block
-                                    e.printStackTrace();
-                                }
+                                    googleToken = googleAuthentication.getToken(params[0]);
+                                    if (googleToken != null) {
+                                        NuxeoAuthentication nuxeoAuthentication = new NuxeoAuthentication(
+                                                getApplicationContext());
+                                        nuxeoToken = nuxeoAuthentication.request_oauth2_token(googleToken);
 
+                                        res.putExtra(AccountManager.KEY_ACCOUNT_NAME, googleAccounts.get(item).name);
+                                        res.putExtra(AccountManager.KEY_ACCOUNT_TYPE, mAccountType);
+                                        res.putExtra(AccountManager.KEY_AUTHTOKEN, nuxeoToken);
+                                        res.putExtra(PARAM_USER_PASS, "");
+                                    }
+                                } catch (UserRecoverableAuthException e) {
+                                    startActivityForResult(e.getIntent(), 0);
+                                } catch (IOException e) {
+                                    Log.e(TAG, e.getMessage(), e);
+                                } catch (GoogleAuthException e) {
+                                    Log.e(TAG, e.getMessage(), e);
+                                }
                                 return res;
                             }
 
