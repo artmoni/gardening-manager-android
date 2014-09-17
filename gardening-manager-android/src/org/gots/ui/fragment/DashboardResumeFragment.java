@@ -57,12 +57,13 @@ public class DashboardResumeFragment extends BaseNuxeoFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
         if (GotsGardenManager.getInstance().initIfNew(getActivity()).getCurrentGarden() == null) {
-//            Intent intent = new Intent(getActivity(), ProfileCreationActivity.class);
-//            startActivity(intent);
+            // Intent intent = new Intent(getActivity(), ProfileCreationActivity.class);
+            // startActivity(intent);
         } else {
             displaySeeds();
             displayActions();
             displayWeather();
+            displayIncredible();
 
             GotsPurchaseItem gotsPurchase = new GotsPurchaseItem(getActivity());
             if (!gotsPurchase.isPremium()) {
@@ -73,6 +74,15 @@ public class DashboardResumeFragment extends BaseNuxeoFragment {
             }
         }
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    protected void displayIncredible() {
+        GotsGardenManager gardenManager = GotsGardenManager.getInstance().initIfNew(getActivity());
+        if (gardenManager.getCurrentGarden().isIncredibleEdible()) {
+            getView().findViewById(R.id.layoutIncredibleDescription).setVisibility(View.VISIBLE);
+        }else
+            getView().findViewById(R.id.layoutIncredibleDescription).setVisibility(View.GONE);
+            
     }
 
     @Override
@@ -88,6 +98,8 @@ public class DashboardResumeFragment extends BaseNuxeoFragment {
                 displaySeeds();
                 displayActions();
                 displayWeather();
+                displayIncredible();
+
             } else if (BroadCastMessages.WEATHER_DISPLAY_EVENT.equals(intent.getAction())) {
                 displayWeather();
             } else if (BroadCastMessages.ACTION_EVENT.equals(intent.getAction())) {
@@ -128,13 +140,12 @@ public class DashboardResumeFragment extends BaseNuxeoFragment {
                             startActivity(new Intent(getActivity(), ActionActivity.class));
                         }
                     });
-                    if (actionAdapter.getCount() > 0){
+                    if (actionAdapter.getCount() > 0) {
                         getView().findViewById(R.id.layoutDashboardActions).setVisibility(View.VISIBLE);
-                        getView().findViewById(R.id.layoutDashboardActions).setLayoutParams(new LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.MATCH_PARENT,
-                                LinearLayout.LayoutParams.WRAP_CONTENT));
-                    }
-                    else
+                        getView().findViewById(R.id.layoutDashboardActions).setLayoutParams(
+                                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                                        LinearLayout.LayoutParams.WRAP_CONTENT));
+                    } else
                         getView().findViewById(R.id.layoutDashboardActions).setVisibility(View.GONE);
 
                 }

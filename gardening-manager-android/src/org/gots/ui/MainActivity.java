@@ -429,10 +429,7 @@ public class MainActivity extends AbstractActivity {
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
         refreshGardenMenu();
-        if (gotsPrefs.isConnectedToServer()) {
-            UserInfo userInfoTask = new UserInfo();
-            userInfoTask.execute((ImageView) findViewById(R.id.imageAvatar));
-        }
+        displayOwnerIcon();
 
         if (LAUNCHER_ACTION.equals(getIntent().getAction())) {
             startActivity(new Intent(this, ActionActivity.class));
@@ -442,6 +439,18 @@ public class MainActivity extends AbstractActivity {
         if (gardenManager.getCurrentGarden() == null || (myGardens != null && myGardens.size() == 0)) {
             Intent intent = new Intent(getApplicationContext(), ProfileCreationActivity.class);
             startActivity(intent);
+        }
+    }
+
+    protected void displayOwnerIcon() {
+        if (gotsPrefs.isConnectedToServer()) {
+            if (gardenManager.getCurrentGarden().isIncredibleEdible())
+                ((ImageView) findViewById(R.id.imageAvatar)).setImageDrawable(getResources().getDrawable(
+                        R.drawable.ic_incredibleedible));
+            else {
+                UserInfo userInfoTask = new UserInfo();
+                userInfoTask.execute((ImageView) findViewById(R.id.imageAvatar));
+            }
         }
     }
 
@@ -637,6 +646,7 @@ public class MainActivity extends AbstractActivity {
                 // refreshWeatherWidget(intent);
             } else if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
                 displayDrawerMenu();
+                displayOwnerIcon();
             } else if (BroadCastMessages.SEED_DISPLAYLIST.equals(intent.getAction())) {
                 displayDrawerMenuCatalogCounter();
             } else if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
