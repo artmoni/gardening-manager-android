@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_line_selector"
-    android:orientation="vertical" >
+    android:orientation="vertical" android:layout_margin="2dp">
 
 
         <!--
@@ -70,7 +70,7 @@
         android:id="@+id/idWeatherChart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/idGardenName"
+        android:layout_below="@+id/textGardenDescription"
         android:layout_toRightOf="@+id/imageProfile"
         android:clickable="false"
         android:focusable="false"
@@ -78,17 +78,36 @@
         android:src="@drawable/weather_updating" />
 
     <TextView
+        android:id="@+id/textCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/idGardenName"
+        android:layout_alignBottom="@+id/idGardenName"
+        android:layout_toRightOf="@+id/idGardenName"
+        android:textSize="10dp"
+        android:text="Sample town" />
+
+    <TextView
+        android:id="@+id/textGardenDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/idWeatherChart"
+        android:layout_below="@+id/idGardenName"
+        android:text="This is my garden" />
+
+    <TextView
         android:id="@+id/idGardenName"
         style="@style/seed_family"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/imageProfile"
-        android:layout_centerHorizontal="true"
+        android:layout_alignLeft="@+id/textGardenDescription"
+        android:layout_alignParentTop="true"
         android:capitalize="words"
         android:clickable="false"
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:text="my city"
-        android:visibility="visible" android:textAllCaps="true"/>
+        android:textAllCaps="true"
+        android:visibility="visible" />
 
 </RelativeLayout>

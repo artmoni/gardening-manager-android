@@ -69,19 +69,6 @@ public class ProfileAdapter extends BaseAdapter {
 
     private GardenInterface selectedGarden;
 
-    public ProfileAdapter(Context context, List<GardenInterface> myGardens) {
-        mContext = context;
-        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        weatherManager = new WeatherManager(mContext);
-        gardenManager = GotsGardenManager.getInstance();
-
-        this.myGardens = myGardens;
-        selectedGarden = gardenManager.getCurrentGarden();
-
-        gotsPreferences = GotsPreferences.getInstance().initIfNew(mContext);
-
-    }
-
     @Override
     public int getCount() {
         return myGardens.size();
@@ -161,9 +148,12 @@ public class ProfileAdapter extends BaseAdapter {
             vi = inflater.inflate(R.layout.list_garden, null);
 
         TextView gardenName = (TextView) vi.findViewById(R.id.idGardenName);
+        TextView gardenLocality = (TextView) vi.findViewById(R.id.textCity);
+        TextView gardenDescription = (TextView) vi.findViewById(R.id.textGardenDescription);
         ImageView imageProfile = (ImageView) vi.findViewById(R.id.imageProfile);
         weatherHistory = (LinearLayout) vi.findViewById(R.id.layoutWeatherHistory);
         View weatherChart = vi.findViewById(R.id.idWeatherChart);
+
         // final HorizontalScrollView weatherHistoryContainer = (HorizontalScrollView)
         // vi.findViewById(R.id.scrollWeatherHistory);
 
@@ -199,13 +189,15 @@ public class ProfileAdapter extends BaseAdapter {
         if (GotsPreferences.DEBUG)
             gardenName.setText(currentGarden.toString());
         else if (currentGarden.getName() != null) {
-            String title = currentGarden.getName();
-            title = title.concat(" (" + currentGarden.getAddress().getLocality() + ")");
-            gardenName.setText(title);
-
+            gardenName.setText(currentGarden.getName());
+            gardenLocality.setText(currentGarden.getAddress().getLocality());
         } else
             gardenName.setText(currentGarden.getAddress().getLocality());
 
+        if (currentGarden.getDescription() != null) {
+            gardenDescription.setText(currentGarden.getDescription());
+        } else
+            gardenDescription.setVisibility(View.GONE);
         // weatherState.setOnClickListener(new View.OnClickListener() {
         //
         // @Override
