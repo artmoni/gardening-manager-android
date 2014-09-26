@@ -11,7 +11,9 @@
 package org.gots.action.provider.local;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -25,6 +27,7 @@ import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.util.ActionState;
 import org.gots.exception.GotsServerRestrictedException;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.utils.FileUtilities;
 import org.gots.utils.GotsDBHelper;
 
 import android.content.ContentValues;
@@ -215,16 +218,27 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
 
     @Override
     public void uploadPicture(GrowingSeedInterface seed, File f) {
-        Log.d(TAG, "uploadPicture not implemented");
+        File seedDir = new File(gotsPrefs.getGotsExternalFileDir(), String.valueOf(seed.getGrowingSeedId()));
+        if (!seedDir.exists())
+            seedDir.mkdir();
+        try {
+            FileUtilities.copy(f, new File(seedDir, f.getName()));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Override
     public File downloadHistory(GrowingSeedInterface mSeed) throws GotsServerRestrictedException {
-        return null;
+        throw new GotsServerRestrictedException(mContext);
     }
 
     public List<File> getPicture(GrowingSeedInterface mSeed) throws GotsServerRestrictedException {
-        return null;
+        File seedDir = new File(gotsPrefs.getGotsExternalFileDir(), String.valueOf(mSeed.getGrowingSeedId()));
+        File[] files = seedDir.listFiles();
+        List<File> myPictures = new ArrayList<File>(Arrays.asList(files));       
+        return myPictures;
     }
 
 }

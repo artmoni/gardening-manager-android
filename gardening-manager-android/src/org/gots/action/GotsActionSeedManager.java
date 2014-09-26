@@ -109,17 +109,14 @@ public class GotsActionSeedManager extends BroadcastReceiver implements GotsActi
 
     @Override
     public List<File> getPicture(GrowingSeedInterface mSeed) throws GotsServerRestrictedException {
-        if (provider instanceof NuxeoActionSeedProvider)
-            return provider.getPicture(mSeed);
-        else
-            throw new GotsServerRestrictedException(mContext);
+        return provider.getPicture(mSeed);
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
         if (NuxeoBroadcastMessages.NUXEO_SERVER_CONNECTIVITY_CHANGED.equals(intent.getAction())
                 || BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction()))
-            setProvider();        
+            setProvider();
     }
 
 }

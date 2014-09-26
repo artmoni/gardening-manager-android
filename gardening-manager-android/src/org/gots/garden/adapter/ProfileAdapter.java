@@ -69,6 +69,19 @@ public class ProfileAdapter extends BaseAdapter {
 
     private GardenInterface selectedGarden;
 
+    public ProfileAdapter(Context context, List<GardenInterface> myGardens) {
+        mContext = context;
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        weatherManager = new WeatherManager(mContext);
+        gardenManager = GotsGardenManager.getInstance();
+
+        this.myGardens = myGardens;
+        selectedGarden = gardenManager.getCurrentGarden();
+
+        gotsPreferences = GotsPreferences.getInstance().initIfNew(mContext);
+
+    }
+
     @Override
     public int getCount() {
         return myGardens.size();
