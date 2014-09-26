@@ -91,7 +91,7 @@ public class VendorListActivity extends AbstractListFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 view.setSelected(!view.isSelected());
-                ((ActionBarActivity)getActivity()).startSupportActionMode(new MyCallBack(position));
+                ((ActionBarActivity) getActivity()).startSupportActionMode(new MyCallBack(position));
             }
         });
         // setListAdapter(listVendorSeedAdapter);
@@ -166,6 +166,7 @@ public class VendorListActivity extends AbstractListFragment {
 
                 return catalogue;
             }
+
             protected void onPostExecute(List<BaseSeedInterface> vendorSeeds) {
 
                 listVendorSeedAdapter.setSeeds(vendorSeeds);
@@ -173,7 +174,7 @@ public class VendorListActivity extends AbstractListFragment {
                 // if (!"".equals(currentFilter) && currentFilter != null)
                 // displaySearchBox();
                 listVendorSeedAdapter.notifyDataSetChanged();
-                
+
                 // if (progressBar != null)
                 //
                 // progressBar.stopAnimatingBackground();

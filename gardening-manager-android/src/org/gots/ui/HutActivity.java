@@ -336,8 +336,8 @@ public class HutActivity extends AbstractActivity {
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_thismonth)),
                 VendorListActivity.class, args);
         // an allotment is selected
-        if (currentAllotment >= 0)
-            bar.setSelectedNavigationItem(1);
+//        if (currentAllotment >= 0)
+//            bar.setSelectedNavigationItem(1);
     }
 
     @Override
