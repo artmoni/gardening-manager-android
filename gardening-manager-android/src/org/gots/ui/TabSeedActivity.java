@@ -141,28 +141,7 @@ public class TabSeedActivity extends ActionBarActivity {
 
         pictureGallery = (Gallery) findViewById(R.id.idPictureGallery);
 
-        new AsyncTask<Void, Void, List<File>>() {
-            @Override
-            protected List<File> doInBackground(Void... params) {
-                try {
-                    GotsActionSeedProvider provider = GotsActionSeedManager.getInstance().initIfNew(
-                            getApplicationContext());
-                    List<File> imageFile = provider.getPicture(mSeed);
-                    return imageFile;
-                } catch (GotsServerRestrictedException e) {
-                    Log.w(TAG, e.getMessage());
-                    return null;
-                }
-            }
-
-            protected void onPostExecute(List<File> result) {
-                if (result != null && result.size() > 0) {
-                    pictureGallery.setSpacing(10);
-                    pictureGallery.setAdapter(new GalleryImageAdapter(getApplicationContext(), result));
-                } else
-                    pictureGallery.setVisibility(View.GONE);
-            };
-        }.execute();
+        displayPictureGallery();
 
         pictureGallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -239,6 +218,31 @@ public class TabSeedActivity extends ActionBarActivity {
 
     }
 
+    protected void displayPictureGallery() {
+        new AsyncTask<Void, Void, List<File>>() {
+            @Override
+            protected List<File> doInBackground(Void... params) {
+                try {
+                    GotsActionSeedProvider provider = GotsActionSeedManager.getInstance().initIfNew(
+                            getApplicationContext());
+                    List<File> imageFile = provider.getPicture(mSeed);
+                    return imageFile;
+                } catch (GotsServerRestrictedException e) {
+                    Log.w(TAG, e.getMessage());
+                    return null;
+                }
+            }
+
+            protected void onPostExecute(List<File> result) {
+                if (result != null && result.size() > 0) {
+                    pictureGallery.setSpacing(10);
+                    pictureGallery.setAdapter(new GalleryImageAdapter(getApplicationContext(), result));
+                } else
+                    pictureGallery.setVisibility(View.GONE);
+            };
+        }.execute();
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         if (resultCode != Activity.RESULT_CANCELED)
@@ -251,6 +255,10 @@ public class TabSeedActivity extends ActionBarActivity {
                         // photoAction.execute(mSeed);
                         return null;
                     }
+
+                    protected void onPostExecute(Void result) {
+                        displayPictureGallery();
+                    };
                 }.execute();
 
             }

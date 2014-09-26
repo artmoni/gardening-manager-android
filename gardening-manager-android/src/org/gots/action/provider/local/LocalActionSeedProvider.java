@@ -237,7 +237,11 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
     public List<File> getPicture(GrowingSeedInterface mSeed) throws GotsServerRestrictedException {
         File seedDir = new File(gotsPrefs.getGotsExternalFileDir(), String.valueOf(mSeed.getGrowingSeedId()));
         File[] files = seedDir.listFiles();
-        List<File> myPictures = new ArrayList<File>(Arrays.asList(files));       
+
+        List<File> myPictures = new ArrayList<File>();
+        if (files != null) {
+            myPictures = Arrays.asList(files);
+        }
         return myPictures;
     }
 
