@@ -95,8 +95,8 @@ public class GotsActionSeedManager extends BroadcastReceiver implements GotsActi
     }
 
     @Override
-    public void uploadPicture(GrowingSeedInterface seed, File f) {
-        provider.uploadPicture(seed, f);
+    public File uploadPicture(GrowingSeedInterface seed, File localPictureFile) {
+       return provider.uploadPicture(seed, localPictureFile);
     }
 
     @Override

@@ -21,7 +21,7 @@ public interface GotsActionSeedProvider {
 
     public abstract SeedActionInterface insertAction(GrowingSeedInterface seed, BaseActionInterface action);
 
-    public abstract void uploadPicture(GrowingSeedInterface seed, File imageFile);
+    public abstract File uploadPicture(GrowingSeedInterface seed, File imageFile);
 
     public abstract File downloadHistory(GrowingSeedInterface mSeed) throws GotsServerRestrictedException;
 

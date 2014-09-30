@@ -217,16 +217,18 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
     }
 
     @Override
-    public void uploadPicture(GrowingSeedInterface seed, File f) {
+    public File uploadPicture(GrowingSeedInterface seed, File f) {
         File seedDir = new File(gotsPrefs.getGotsExternalFileDir(), String.valueOf(seed.getGrowingSeedId()));
         if (!seedDir.exists())
             seedDir.mkdir();
+        File newfile = new File(seedDir, f.getName());
         try {
-            FileUtilities.copy(f, new File(seedDir, f.getName()));
+            FileUtilities.copy(f, newfile);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        return newfile;
     }
 
     @Override

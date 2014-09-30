@@ -322,9 +322,11 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
     }
 
     @Override
-    public void uploadPicture(final GrowingSeedInterface seed, File imageFile) {
+    public File uploadPicture(final GrowingSeedInterface seed, File imageFile) {
         Session session = getNuxeoClient().getSession();
         FileUploader uploader = session.getAdapter(FileUploader.class);
+        
+        imageFile=super.uploadPicture(seed, imageFile);
 
         try {
 
@@ -416,6 +418,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             Log.e(TAG, e.getMessage(), e);
         }
         // super.uploadPicture(seed);
+        return imageFile;
     }
 
     @Override
