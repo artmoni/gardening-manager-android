@@ -16,12 +16,17 @@ import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.inapp.GotsBillingDialog;
 import org.gots.inapp.GotsPurchaseItem;
+import org.gots.provider.ActionsContentProvider;
+import org.gots.provider.AllotmentContentProvider;
+import org.gots.provider.GardenContentProvider;
+import org.gots.provider.SeedsContentProvider;
 import org.gots.provider.WeatherContentProvider;
 import org.gots.ui.fragment.DashboardResumeFragment;
 import org.gots.ui.slidingmenu.NavDrawerItem;
 import org.gots.ui.slidingmenu.adapter.NavDrawerListAdapter;
 import org.nuxeo.android.network.NetworkStatusBroadCastReceiver;
 
+import android.accounts.Account;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -168,6 +173,19 @@ public class MainActivity extends AbstractActivity {
         registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.ACTION_EVENT));
         registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.ALLOTMENT_EVENT));
 
+        Account newAccount = gotsPrefs.getUserAccount();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+
+        ContentResolver.setSyncAutomatically(newAccount, SeedsContentProvider.AUTHORITY, true);
+        ContentResolver.requestSync(newAccount, SeedsContentProvider.AUTHORITY, bundle);
+        ContentResolver.setSyncAutomatically(newAccount, GardenContentProvider.AUTHORITY, true);
+        ContentResolver.requestSync(newAccount, GardenContentProvider.AUTHORITY, bundle);
+        ContentResolver.setSyncAutomatically(newAccount, ActionsContentProvider.AUTHORITY, true);
+        ContentResolver.requestSync(newAccount, ActionsContentProvider.AUTHORITY, bundle);
+        ContentResolver.setSyncAutomatically(newAccount, AllotmentContentProvider.AUTHORITY, true);
+        ContentResolver.requestSync(newAccount, AllotmentContentProvider.AUTHORITY, bundle);
     }
 
     protected void displayDrawerMenu() {

@@ -282,19 +282,19 @@ public class AboutActivity extends AbstractActivity {
          * Synchronize Seeds
          */
 
-        Account newAccount = gotsPrefs.getUserAccount();
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-
-        ContentResolver.setSyncAutomatically(newAccount, SeedsContentProvider.AUTHORITY, true);
-        ContentResolver.requestSync(newAccount, SeedsContentProvider.AUTHORITY, bundle);
-        ContentResolver.setSyncAutomatically(newAccount, GardenContentProvider.AUTHORITY, true);
-        ContentResolver.requestSync(newAccount, GardenContentProvider.AUTHORITY, bundle);
-        ContentResolver.setSyncAutomatically(newAccount, ActionsContentProvider.AUTHORITY, true);
-        ContentResolver.requestSync(newAccount, ActionsContentProvider.AUTHORITY, bundle);
-        ContentResolver.setSyncAutomatically(newAccount, AllotmentContentProvider.AUTHORITY, true);
-        ContentResolver.requestSync(newAccount, AllotmentContentProvider.AUTHORITY, bundle);
+//        Account newAccount = gotsPrefs.getUserAccount();
+//        Bundle bundle = new Bundle();
+//        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+//        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+//
+//        ContentResolver.setSyncAutomatically(newAccount, SeedsContentProvider.AUTHORITY, true);
+//        ContentResolver.requestSync(newAccount, SeedsContentProvider.AUTHORITY, bundle);
+//        ContentResolver.setSyncAutomatically(newAccount, GardenContentProvider.AUTHORITY, true);
+//        ContentResolver.requestSync(newAccount, GardenContentProvider.AUTHORITY, bundle);
+//        ContentResolver.setSyncAutomatically(newAccount, ActionsContentProvider.AUTHORITY, true);
+//        ContentResolver.requestSync(newAccount, ActionsContentProvider.AUTHORITY, bundle);
+//        ContentResolver.setSyncAutomatically(newAccount, AllotmentContentProvider.AUTHORITY, true);
+//        ContentResolver.requestSync(newAccount, AllotmentContentProvider.AUTHORITY, bundle);
         // ContentResolver.setSyncAutomatically(newAccount, SensorContentProvider.AUTHORITY, true);
         // ContentResolver.requestSync(newAccount, SensorContentProvider.AUTHORITY, bundle);
         // ContentResolver.setSyncAutomatically(newAccount, WeatherContentProvider.AUTHORITY, true);
