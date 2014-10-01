@@ -208,6 +208,15 @@ public class MainActivity extends AbstractActivity {
         navDrawerItem = new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1));
         navDrawerItems.add(navDrawerItem);
 
+        // *************************
+        // Premium
+        // *************************
+        if (!gotsPurchase.isPremium()) {
+            navDrawerItem = new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1));
+            navDrawerItem.setCounterVisibility(false);
+            navDrawerItems.add(navDrawerItem);
+        }
+
         // What's hot, We will add a counter here
         // navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1)));
 
@@ -368,10 +377,7 @@ public class MainActivity extends AbstractActivity {
 
             return true;
         case R.id.premium:
-            FragmentManager fm = getSupportFragmentManager();
-            GotsBillingDialog editNameDialog = new GotsBillingDialog();
-            editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
-            editNameDialog.show(fm, "fragment_edit_name");
+            displayPremiumDialog();
             return true;
 
         case R.id.settings:
@@ -505,7 +511,7 @@ public class MainActivity extends AbstractActivity {
             }
             break;
         case 5:
-            // fragment = new PreferenceActivity();
+            displayPremiumDialog();
             break;
 
         default:
@@ -526,6 +532,13 @@ public class MainActivity extends AbstractActivity {
             setTitle(navMenuTitles[position]);
 
         }
+    }
+
+    protected void displayPremiumDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        GotsBillingDialog editNameDialog = new GotsBillingDialog();
+        editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+        editNameDialog.show(fm, "fragment_edit_name");
     }
 
     protected void refreshGardenMenu() {
