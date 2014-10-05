@@ -73,7 +73,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             Documents docs = service.query(
                     "SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState != \"deleted\" AND vendorseed:language=\""
                             + Locale.getDefault().getCountry().toLowerCase() + "\"", null,
-                    new String[] { "dc:modified DESC" }, "*", 0, 200, cacheParam);
+                    new String[] { "dc:modified DESC" }, "*", 0, 50, cacheParam);
             for (Document document : docs) {
                 BaseSeedInterface seed = NuxeoSeedConverter.convert(document);
                 Blob likeStatus = service.getLikeStatus(document);

@@ -26,11 +26,12 @@
         android:layout_above="@+id/idButtonCreateGarden"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:paddingBottom="10dp" >
+        android:paddingBottom="20dp" >
 
         <android.support.v4.view.PagerTitleStrip
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/TutorialTitle"
             android:layout_gravity="bottom" />
     </android.support.v4.view.ViewPager>
 
