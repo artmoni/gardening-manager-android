@@ -119,7 +119,7 @@
     <string name="location.notfound">Location not found</string>
     <string name="notification.action.title">Your _SPECIE_ needs you</string>
     <string name="notification.action.content">and _NBACTIONS_ more tasks</string>
-    <string name="notification.seed.title">New species to catalog:_SPECIE_</string>
+    <string name="notification.seed.title">New variety on catalog:_SPECIE_</string>
     <string name="notification.seed.content">and _NBSEEDS_ more</string>
     <string name="notification.seedsow.content">Ready to sow</string>
     <string name="action.sow">Sow</string>

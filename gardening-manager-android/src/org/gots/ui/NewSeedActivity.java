@@ -399,7 +399,7 @@ public class NewSeedActivity extends AbstractActivity implements OnClickListener
     // }
 
     private boolean validateSeed() {
-        if (newSeed.getFamily() == null || "".equals(newSeed.getFamily())) {
+        if (newSeed.getSpecie() == null || "".equals(newSeed.getSpecie())) {
             Toast.makeText(this, getResources().getString(R.string.fillfields_specie), Toast.LENGTH_SHORT).show();
             return false;
         }

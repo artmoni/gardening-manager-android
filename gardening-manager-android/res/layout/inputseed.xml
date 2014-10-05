@@ -2,30 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_simple"
-    android:orientation="vertical"
-    android:padding="10dp" >
+    android:background="@color/text_color_dark"
+    android:orientation="vertical" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <org.gots.seed.view.SeedWidgetLong
+        android:id="@+id/idSeedWidgetLong"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_line_action"
-        android:orientation="vertical" >
-
-        <org.gots.seed.view.SeedWidgetLong
-            android:id="@+id/idSeedWidgetLong"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:paddingRight="55dp"
-            android:src="@drawable/vegetdefault" >
-        </org.gots.seed.view.SeedWidgetLong>
-    </LinearLayout>
+        android:layout_margin="5dp"
+        android:padding="5dp"
+        android:paddingRight="55dp"
+        android:src="@drawable/vegetdefault" >
+    </org.gots.seed.view.SeedWidgetLong>
 
     <ScrollView
         android:id="@+id/layout_seed"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@color/brown_light"
         android:orientation="vertical"
         android:scrollbars="vertical" >
 

@@ -121,7 +121,7 @@
     <string name="location.notfound">Adresse non trouvée</string>
     <string name="notification.action.title">Les _SPECIE_ ont besoin de vous</string>
     <string name="notification.action.content">et _NBACTIONS_ autre(s) action(s)</string>
-    <string name="notification.seed.title">Nouvelle espèce au catalogue: _SPECIE_</string>
+    <string name="notification.seed.title">Nouvelle variété au catalogue: _SPECIE_</string>
     <string name="notification.seed.content">ainsi que _NBSEEDS_ autre légumes</string>
     <string name="notification.seedsow.content">Prêt à être semé</string>
     <string name="action.sow">Semer</string>
