@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/background_simple"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/bg_line_action"
+        android:gravity="center_vertical"
+        android:padding="5dp" >
+
+        <ImageView
+            style="@style/logo"
+            android:src="@drawable/ic_opensource" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:id="@+id/idTranslateButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_red_selector"
+            android:gravity="right"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingRight="10dp"
+                android:text="@string/translate.button"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:id="@+id/imageTranslateFlag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:background="@drawable/ca"
+                android:contentDescription="@string/login.signin" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/bg_line_action"
+        android:gravity="left"
+        android:orientation="vertical"
+        android:padding="5dp" >
+
+        <!-- <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/imageProgressWeather"
+                style="@style/logo_synchro"
+                android:background="@drawable/bg_state_ok"
+                android:src="@drawable/weather_mostlysunny" />
+
+            <TextView
+                android:id="@+id/textProgressWeather"
+                style="@style/description_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/synchro.weather.ok" />
+        </LinearLayout> -->
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/imageProgressSeed"
+                style="@style/logo_synchro"
+                android:background="@drawable/bg_state_ok"
+                android:src="@drawable/specie_solanumtuberosum" />
+
+            <TextView
+                android:id="@+id/textProgressSeed"
+                style="@style/description_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/synchro.seeds.ok" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/imageProgressAction"
+                style="@style/logo_synchro"
+                android:background="@drawable/bg_state_ok"
+                android:src="@drawable/action_cut" />
+
+            <TextView
+                android:id="@+id/textProgressAction"
+                style="@style/description_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/synchro.actions.ok" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutProgressGarden"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/imageProgressGarden"
+                style="@style/logo_synchro"
+                android:background="@drawable/bg_state_ok"
+                android:src="@drawable/garden_disconnected_white" />
+
+            <TextView
+                android:id="@+id/textProgressGarden"
+                style="@style/description_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/synchro.garden.ok" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutProgressPurchase"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/imageProgressPurchase"
+                style="@style/logo_synchro"
+                android:background="@drawable/bg_state_ok"
+                android:src="@drawable/action_buy_online" />
+
+            <TextView
+                android:id="@+id/textProgressPurchase"
+                style="@style/description_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/synchro.purchase.ok" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:src="@drawable/logosplah" />
+
+    <TextView
+        android:id="@+id/textVersion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="right"
+        android:text="version"
+        android:textColor="#432D07"
+        android:textSize="15dip" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_line_action"
+        android:gravity="center_horizontal"
+        android:padding="5dp" >
+
+        <ImageView
+            android:id="@+id/webArtmoni"
+            style="@style/logo"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/logo_artmoni" />
+
+        <ImageView
+            android:id="@+id/webSauterDansLesFlaques"
+            style="@style/logo"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/logosdlf" />
+
+        <ImageView
+            android:id="@+id/idSocialGoogle"
+            style="@style/logo"
+            android:src="@drawable/social_google" />
+
+        <ImageView
+            android:id="@+id/idSocialFacebook"
+            style="@style/logo"
+            android:src="@drawable/social_facebook" />
+
+        <ImageView
+            android:id="@+id/idSocialTwitter"
+            style="@style/logo"
+            android:src="@drawable/social_twitter" />
+        <!--
+             <ImageView
+            android:id="@+id/idPrevimeteo"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/logo_previmeteo" />
+        -->
+    </LinearLayout>
+
+</LinearLayout>

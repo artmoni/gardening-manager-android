@@ -75,7 +75,7 @@ public class AboutActivity extends AbstractActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.splash_screen);
+        setContentView(R.layout.about);
 
         new AsyncTask<Void, Integer, String>() {
             private TextView name;

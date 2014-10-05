@@ -10,32 +10,51 @@
  ******************************************************************************/
 package org.gots.ui;
 
+import java.util.ArrayList;
+
+import org.gots.R;
 import org.gots.authentication.AuthenticationActivity;
+import org.gots.inapp.GotsPurchaseItem;
+
+import com.android.vending.billing.util.IabHelper;
+import com.android.vending.billing.util.IabResult;
+import com.android.vending.billing.util.Inventory;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
-public class SplashScreenActivity extends AboutActivity {
+public class SplashScreenActivity extends AbstractActivity {
+
+    protected static final String TAG = "SplashScreenActivity";
+
+    IabHelper buyHelper;
+
+    private ImageView imageRefresh;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.splash_screen);
 
     }
 
-    @Override
-    protected void removeProgress() {
-        super.removeProgress();
-        if (refreshCounter == 0) {
-            // gotsPrefs.setParrotToken(null);
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-            finish();
-        }
-    };
+    // @Override
+    // protected void removeProgress() {
+    // super.removeProgress();
+    // if (refreshCounter == 0) {
+    // // gotsPrefs.setParrotToken(null);
+    // Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+    // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    // startActivity(intent);
+    // finish();
+    // }
+    // };
 
     @Override
     protected void onActivityResult(int arg0, int arg1, Intent arg2) {
@@ -56,8 +75,54 @@ public class SplashScreenActivity extends AboutActivity {
             intent.putExtra(AuthenticationActivity.ARG_IS_ADDING_NEW_ACCOUNT, true);
             startActivityForResult(intent, 1);
             // finish();
-        } else
-            onRefresh(null);
+        } else {
+            /*
+             * Synchronize Purchase feature
+             */
+            final ArrayList<String> moreSkus = new ArrayList<String>();
+            moreSkus.add(GotsPurchaseItem.SKU_PREMIUM);
+            moreSkus.add(GotsPurchaseItem.SKU_FEATURE_PDFHISTORY);
+            moreSkus.add(GotsPurchaseItem.SKU_FEATURE_PARROT);
+            buyHelper = new IabHelper(getApplicationContext(), gotsPrefs.getPlayStorePubKey());
+
+            Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
+            imageRefresh = (ImageView) findViewById(R.id.imageRefresh);
+            imageRefresh.startAnimation(myFadeInAnimation);
+
+            try {
+                buyHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+
+                    @Override
+                    public void onIabSetupFinished(IabResult result) {
+                        // Toast.makeText(getApplicationContext(), "Set up finished!", Toast.LENGTH_SHORT).show();
+                        Log.i(TAG, "Set up finished!");
+
+                        if (result.isSuccess())
+                            buyHelper.queryInventoryAsync(true, moreSkus,
+                                    new IabHelper.QueryInventoryFinishedListener() {
+                                        @Override
+                                        public void onQueryInventoryFinished(IabResult result, Inventory inv) {
+                                            if (result.isSuccess()) {
+                                                gotsPurchase.setPremium(inv.hasPurchase(GotsPurchaseItem.SKU_PREMIUM));
+                                                gotsPurchase.setFeatureExportPDF(inv.hasPurchase(GotsPurchaseItem.SKU_FEATURE_PDFHISTORY));
+                                                gotsPurchase.setFeatureParrot(inv.hasPurchase(GotsPurchaseItem.SKU_FEATURE_PARROT));
+                                                Log.i(TAG, "Successful got inventory!");
+
+                                            } else {
+                                                Log.i(TAG, "Error getting inventory!");
+                                            }
+                                            imageRefresh.clearAnimation();
+                                        }
+                                    });
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        SplashScreenActivity.this.finish();
+                    }
+                });
+            } catch (Exception e) {
+                Log.e(TAG, "IabHelper can not be initialized" + e.getMessage());
+
+            }
+        }
 
         super.onResume();
     }
