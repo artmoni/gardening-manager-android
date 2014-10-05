@@ -18,82 +18,90 @@ import org.gots.action.bean.SowingAction;
 import org.gots.action.bean.WateringAction;
 import org.gots.action.view.ActionWidget;
 import org.gots.bean.Allotment;
+import org.gots.ui.HutActivity;
 import org.gots.ui.MySeedsListActivity;
 
 import android.content.Intent;
 import android.view.View;
 
 public class QuickAllotmentActionBuilder {
-	final QuickAction quickAction;
-	private View parentView;
+    final QuickAction quickAction;
 
-	public QuickAllotmentActionBuilder(final View v) {
-		parentView = v;
+    private View parentView;
 
-		quickAction = new QuickAction(v.getContext(), QuickAction.HORIZONTAL);
+    private Integer currentAllotmentId;
 
-		GotsActionManager helper = GotsActionManager.getInstance().initIfNew(v.getContext());
+    public QuickAllotmentActionBuilder(final View v) {
+        parentView = v;
+        currentAllotmentId = Integer.valueOf(v.getTag().toString());
+        quickAction = new QuickAction(v.getContext(), QuickAction.HORIZONTAL);
 
-		SowingAction sowing = (SowingAction) helper.getActionByName("sow");
-		ActionWidget sowingWidget = new ActionWidget(v.getContext(), sowing);
-		quickAction.addPermanentActionItem(sowingWidget);
-		sowingWidget.setOnClickListener(new View.OnClickListener() {
+        GotsActionManager helper = GotsActionManager.getInstance().initIfNew(v.getContext());
 
-			@Override
-			public void onClick(View v) {
-				Intent i = new Intent(v.getContext(), MySeedsListActivity.class);
-				 i.putExtra("org.gots.allotment.reference", ((Allotment)
-				 v.getTag()).getName());
-				 v.getContext().startActivity(i);
-				 quickAction.dismiss();
-			}
-		});
-		// sowingWidget.setOnActionItemClickListener(new
-		// ActionWidget.OnActionItemClickListener() {
-		// @Override
-		// public void onItemClick(ActionWidget source, BaseActionInterface
-		// action) {
-		// Intent i = new Intent(v.getContext(), MySeedsListActivity.class);
-		// i.putExtra("org.gots.allotment.reference", ((Allotment)
-		// v.getTag()).getName());
-		// v.getContext().startActivity(i);
-		// quickAction.dismiss();
-		// }
-		//
-		// });
-		final WateringAction watering = (WateringAction) helper.getActionByName("water");
-		ActionWidget wateringWidget = new ActionWidget(v.getContext(), watering);
-		quickAction.addPermanentActionItem(wateringWidget);
-		wateringWidget.setOnClickListener(new View.OnClickListener() {
+        SowingAction sowing = (SowingAction) helper.getActionByName("sow");
+        ActionWidget sowingWidget = new ActionWidget(v.getContext(), sowing);
+        quickAction.addPermanentActionItem(sowingWidget);
+        sowingWidget.setOnClickListener(new View.OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				GardeningActionInterface actionItem = watering;
+            @Override
+            public void onClick(View v) {
+                // Intent i = new Intent(v.getContext(), MySeedsListActivity.class);
+                // i.putExtra("org.gots.allotment.reference", ((Allotment)
+                // v.getTag()).getName());
+                // v.getContext().startActivity(i);
+                // quickAction.dismiss();
+                Intent i = new Intent(v.getContext(), HutActivity.class);
+                i.putExtra("org.gots.allotment.reference", currentAllotmentId);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                v.getContext().startActivity(i);
+            }
+        });
+        // sowingWidget.setOnActionItemClickListener(new
+        // ActionWidget.OnActionItemClickListener() {
+        // @Override
+        // public void onItemClick(ActionWidget source, BaseActionInterface
+        // action) {
+        // Intent i = new Intent(v.getContext(), MySeedsListActivity.class);
+        // i.putExtra("org.gots.allotment.reference", ((Allotment)
+        // v.getTag()).getName());
+        // v.getContext().startActivity(i);
+        // quickAction.dismiss();
+        // }
+        //
+        // });
+//        final WateringAction watering = (WateringAction) helper.getActionByName("water");
+//        ActionWidget wateringWidget = new ActionWidget(v.getContext(), watering);
+//        quickAction.addPermanentActionItem(wateringWidget);
+//        wateringWidget.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                GardeningActionInterface actionItem = watering;
+//
+//                actionItem.execute((Allotment) v.getTag(), null);
+//
+//                quickAction.dismiss();
+//            }
+//        });
+        // wateringWidget.setOnActionItemClickListener(new
+        // ActionWidget.OnActionItemClickListener() {
 
-				actionItem.execute((Allotment) v.getTag(), null);
+        // @Override
+        // public void onItemClick(ActionWidget source, BaseActionInterface
+        // action) {
+        // GardeningActionInterface actionItem = (GardeningActionInterface)
+        // action;
+        //
+        // actionItem.execute((Allotment) v.getTag(), null);
+        //
+        // quickAction.dismiss();
+        // }
+        //
+        // });
+    }
 
-				quickAction.dismiss();
-			}
-		});
-		// wateringWidget.setOnActionItemClickListener(new
-		// ActionWidget.OnActionItemClickListener() {
-
-		// @Override
-		// public void onItemClick(ActionWidget source, BaseActionInterface
-		// action) {
-		// GardeningActionInterface actionItem = (GardeningActionInterface)
-		// action;
-		//
-		// actionItem.execute((Allotment) v.getTag(), null);
-		//
-		// quickAction.dismiss();
-		// }
-		//
-		// });
-	}
-
-	public void show() {
-		quickAction.show(parentView);
-	}
+    public void show() {
+        quickAction.show(parentView);
+    }
 
 }
