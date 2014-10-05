@@ -467,6 +467,10 @@ public class MainActivity extends AbstractActivity {
     }
 
     protected void displayOwnerIcon() {
+        if (gardenManager.getCurrentGarden() == null) {
+            return;
+        }
+        
         if (gotsPrefs.isConnectedToServer()) {
             if (gardenManager.getCurrentGarden().isIncredibleEdible())
                 ((ImageView) findViewById(R.id.imageAvatar)).setImageDrawable(getResources().getDrawable(
