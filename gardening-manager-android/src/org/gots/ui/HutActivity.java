@@ -307,24 +307,28 @@ public class HutActivity extends AbstractActivity {
         bar.removeAllTabs();
         // // ********************** Tab description **********************
         Bundle args;
+
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds)),
                 VendorListActivity.class, null);
         // Bundle parrotArgs = new Bundle();
         // parrotArgs.putString(VendorListActivity.FILTER_PARROT, ParrotSeedProvider.class.getName());
         args = new Bundle();
+        if (currentAllotment != -1) {
+            args.putBoolean(VendorListActivity.IS_SELECTABLE, true);
+        }
         args.putBoolean(VendorListActivity.FILTER_PARROT, true);
         if (gotsPrefs.getParrotToken() != null)
             mTabsAdapter.addTab(
                     bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds_plant)),
                     VendorListActivity.class, args);
 
-//        mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
-//                MySeedsListActivity.class, null);
+        // mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
+        // MySeedsListActivity.class, null);
         args = new Bundle();
         args.putBoolean(VendorListActivity.FILTER_STOCK, true);
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
                 VendorListActivity.class, args);
-        
+
         if (gotsPrefs.isConnectedToServer()) {
             args = new Bundle();
             args.putBoolean(VendorListActivity.FILTER_FAVORITES, true);
@@ -336,8 +340,8 @@ public class HutActivity extends AbstractActivity {
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_thismonth)),
                 VendorListActivity.class, args);
         // an allotment is selected
-//        if (currentAllotment >= 0)
-//            bar.setSelectedNavigationItem(1);
+        // if (currentAllotment >= 0)
+        // bar.setSelectedNavigationItem(1);
     }
 
     @Override
@@ -477,10 +481,10 @@ public class HutActivity extends AbstractActivity {
         public void onPageSelected(int position) {
             mActionBar.setSelectedNavigationItem(position);
 
-//            Fragment fragment = (Fragment) getSupportFragmentManager().findFragmentByTag(
-//                    "android:switcher:" + R.id.pager + ":" + position);
-//            if (fragment != null && fragment.getAdapter() != null)
-//                ((BaseAdapter) fragment.getAdapter()).notifyDataSetChanged();
+            // Fragment fragment = (Fragment) getSupportFragmentManager().findFragmentByTag(
+            // "android:switcher:" + R.id.pager + ":" + position);
+            // if (fragment != null && fragment.getAdapter() != null)
+            // ((BaseAdapter) fragment.getAdapter()).notifyDataSetChanged();
 
         }
 

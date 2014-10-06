@@ -12,6 +12,7 @@ import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
 import org.nuxeo.ecm.automation.client.cache.CacheBehavior;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
+import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
@@ -145,7 +146,6 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
 
     private BaseAllotmentInterface createNuxeoAllotment(BaseAllotmentInterface allotment) {
 
-
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager service = session.getAdapter(DocumentManager.class);
@@ -185,7 +185,20 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
 
     @Override
     public BaseAllotmentInterface updateAllotment(BaseAllotmentInterface allotment) {
-        // TODO Auto-generated method stub
+        try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
+            PropertyMap properties = new PropertyMap();
+            properties.set("dc:title", allotment.getName());
+            properties.set("allotment:name", allotment.getName());
+            
+            service.update(new DocRef(allotment.getUUID()), properties);
+            Log.d(TAG, "Updating document " + allotment.getUUID());
+
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+
         return super.updateAllotment(allotment);
     }
 

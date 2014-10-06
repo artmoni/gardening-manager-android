@@ -18,6 +18,7 @@ import org.gots.R;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.bean.BuyingAction;
 import org.gots.action.bean.ReduceQuantityAction;
+import org.gots.allotment.view.QuickAllotmentActionBuilder;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
@@ -62,6 +63,8 @@ public class VendorListActivity extends AbstractListFragment {
 
     protected static final String FILTER_STOCK = "filter.stock";
 
+    protected static final String IS_SELECTABLE = "seed.selectable";
+
     public static final String TAG = "VendorListActivity";
 
     public Context mContext;
@@ -79,6 +82,8 @@ public class VendorListActivity extends AbstractListFragment {
         // setHasOptionsMenu(true);
         // super.onCreateView(inflater, container, savedInstanceState);
         mContext = getActivity();
+        args = getArguments();
+
         mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.SEED_DISPLAYLIST));
         mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BROADCAST_FILTER));
         // mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.PROGRESS_FINISHED));
@@ -90,12 +95,16 @@ public class VendorListActivity extends AbstractListFragment {
         gridViewCatalog.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                view.setSelected(!view.isSelected());
-                ((ActionBarActivity) getActivity()).startSupportActionMode(new MyCallBack(position));
+                if (args != null && args.getBoolean(IS_SELECTABLE)) {
+
+                    getActivity().finish();
+                } else {
+                    view.setSelected(!view.isSelected());
+                    ((ActionBarActivity) getActivity()).startSupportActionMode(new MyCallBack(position));
+                }
             }
         });
         // setListAdapter(listVendorSeedAdapter);
-        args = getArguments();
 
         return view;
     }

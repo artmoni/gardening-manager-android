@@ -16,23 +16,30 @@ import java.util.List;
 import net.londatiga.android.QuickAction;
 
 import org.gots.R;
+import org.gots.action.BaseActionInterface;
+import org.gots.action.SeedActionInterface;
 import org.gots.action.bean.SowingAction;
 import org.gots.action.view.ActionWidget;
 import org.gots.allotment.GotsAllotmentManager;
+import org.gots.allotment.provider.AllotmentProvider;
 import org.gots.allotment.view.QuickAllotmentActionBuilder;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.garden.provider.GardenProvider;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
+import org.gots.ui.AbstractDialogFragment;
 import org.gots.ui.HutActivity;
 import org.gots.ui.MyMainGarden;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
 import android.graphics.drawable.AnimationDrawable;
@@ -40,6 +47,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBar.LayoutParams;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,12 +57,15 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener {
+    protected static final String TAG = "ListAllotmentAdapter";
+
     FragmentActivity mContext;
 
     private ListGrowingSeedAdapter listGrowingSeedAdapter;
@@ -66,12 +77,6 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
     private boolean isSelectable;
 
     private int currentSeedId;
-
-    @Override
-    public void notifyDataSetChanged() {
-
-        super.notifyDataSetChanged();
-    }
 
     public ListAllotmentAdapter(FragmentActivity mContext, List<BaseAllotmentInterface> allotments, Bundle bundle) {
         this.mContext = mContext;
@@ -105,6 +110,8 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
     public class Holder {
         public GridView listSeeds;
 
+        public TextView allotmentName;
+
         public LinearLayout menu;
     }
 
@@ -124,26 +131,11 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
 
             holder.listSeeds = (GridView) ll.findViewById(R.id.IdGrowingSeedList);
             holder.menu = (LinearLayout) ll.findViewById(R.id.idMenuAllotment);
+            holder.allotmentName = (TextView) ll.findViewById(R.id.textAllotmentName);
             ll.setTag(holder);
             ll.setDescendantFocusability(LinearLayout.FOCUS_BLOCK_DESCENDANTS);
         } else
             holder = (Holder) ll.getTag();
-
-        //
-        // new AsyncTask<LinearLayout, Integer, List<GrowingSeedInterface>>() {
-        // Holder holder;
-        //
-        // @Override
-        // protected List<GrowingSeedInterface> doInBackground(LinearLayout... params) {
-        // holder = (Holder) params[0].getTag();
-        // return growingSeedManager.getGrowingSeedsByAllotment(myAllotments.get(position));
-        //
-        // }
-        //
-        // protected void onPostExecute(List<GrowingSeedInterface> mySeeds) {
-        //
-        // };
-        // }.execute(ll);
 
         WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -176,6 +168,15 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
         // else
         // holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
         // ((holder.listSeeds.getCount() / nbcolumn) + 1) * layoutsize));
+
+        holder.allotmentName.setText(getItem(position).getName());
+        holder.allotmentName.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View allotmentLabelView) {
+                showDialogRenameAllotment(getItem(position), (TextView) allotmentLabelView);
+            }
+        });
 
         holder.menu.removeAllViews();
 
@@ -337,6 +338,47 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
     public void onClick(View v) {
         QuickAllotmentActionBuilder actionsBuilder = new QuickAllotmentActionBuilder(v);
         actionsBuilder.show();
+
+    }
+
+    public void showDialogRenameAllotment(final BaseAllotmentInterface allotmentInterface, final TextView v) {
+
+        final EditText userinput = new EditText(mContext.getApplicationContext());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setView(userinput).setTitle("Allotment's name");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+            public void onClick(final DialogInterface dialog, int id) {
+                Log.i(TAG, v.getText().toString());
+                new AsyncTask<Void, Integer, Void>() {
+                    protected void onPreExecute() {
+                        allotmentInterface.setName(userinput.getText().toString());
+                    };
+
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        AllotmentProvider provider = GotsAllotmentManager.getInstance().initIfNew(mContext);
+                        provider.updateAllotment(allotmentInterface);
+                        return null;
+                    }
+
+                    protected void onPostExecute(Void result) {
+                        v.setText(allotmentInterface.getName());
+                        dialog.cancel();
+                    };
+
+                }.execute();
+            }
+        }).setNegativeButton(mContext.getResources().getString(R.string.button_cancel),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+
+                    }
+                });
+        // AlertDialog dialog = builder.create();
+        builder.setCancelable(true);
+        builder.show();
 
     }
 }
