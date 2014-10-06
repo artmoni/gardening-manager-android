@@ -112,6 +112,10 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
 
         public TextView allotmentName;
 
+        public LinearLayout titlebar;
+
+        public BaseAllotmentInterface allotment;
+
         public LinearLayout menu;
     }
 
@@ -130,10 +134,15 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
             }
 
             holder.listSeeds = (GridView) ll.findViewById(R.id.IdGrowingSeedList);
-            holder.menu = (LinearLayout) ll.findViewById(R.id.idMenuAllotment);
+            holder.titlebar = (LinearLayout) ll.findViewById(R.id.idAllotmentTitlebar);
             holder.allotmentName = (TextView) ll.findViewById(R.id.textAllotmentName);
+            holder.menu =(LinearLayout) ll.findViewById(R.id.idAllotmentMenu);
+
+            holder.allotment = getItem(position);
             ll.setTag(holder);
             ll.setDescendantFocusability(LinearLayout.FOCUS_BLOCK_DESCENDANTS);
+            ll.setOnClickListener(this);
+
         } else
             holder = (Holder) ll.getTag();
 
@@ -170,38 +179,22 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
         // ((holder.listSeeds.getCount() / nbcolumn) + 1) * layoutsize));
 
         holder.allotmentName.setText(getItem(position).getName());
-        holder.allotmentName.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View allotmentLabelView) {
-                showDialogRenameAllotment(getItem(position), (TextView) allotmentLabelView);
-            }
-        });
+        holder.titlebar.removeAllViews();
 
-        holder.menu.removeAllViews();
-
-        View menu = ll.findViewById(R.id.idAllotmentMenu);
-        menu.setTag(getItemId(position));
-        menu.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                QuickAllotmentActionBuilder actionBuilder = new QuickAllotmentActionBuilder(v);
-                actionBuilder.show();
-            }
-        });
-
+        holder.menu.setTag(holder);
+        holder.menu.setOnClickListener(this);
         // SowingAction sow = new SowingAction(mContext);
         // ActionWidget widget = new ActionWidget(mContext, sow);
         // widget.setTag(position);
 
         if (isSelectable) {
-            menu.setBackgroundResource(R.anim.rotate_alerte);
+            holder.menu.setBackgroundResource(R.anim.rotate_alerte);
             // Animation myFadeInAnimation = AnimationUtils.loadAnimation(mContext, R.anim.rotate_alerte);
             // menu.startAnimation(myFadeInAnimation);
-            AnimationDrawable frameAnimation = (AnimationDrawable) menu.getBackground();
+            AnimationDrawable frameAnimation = (AnimationDrawable) holder.menu.getBackground();
             frameAnimation.start();
-            menu.setOnClickListener(new View.OnClickListener() {
+            holder.menu.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
@@ -336,49 +329,11 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
 
     @Override
     public void onClick(View v) {
-        QuickAllotmentActionBuilder actionsBuilder = new QuickAllotmentActionBuilder(v);
+        Holder holder = (Holder) v.getTag();
+        QuickAllotmentActionBuilder actionsBuilder = new QuickAllotmentActionBuilder(v,holder.allotment.getId());
         actionsBuilder.show();
+        v.setSelected(!v.isSelected());
 
     }
 
-    public void showDialogRenameAllotment(final BaseAllotmentInterface allotmentInterface, final TextView v) {
-
-        final EditText userinput = new EditText(mContext.getApplicationContext());
-        final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        builder.setView(userinput).setTitle("Allotment's name");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-            public void onClick(final DialogInterface dialog, int id) {
-                Log.i(TAG, v.getText().toString());
-                new AsyncTask<Void, Integer, Void>() {
-                    protected void onPreExecute() {
-                        allotmentInterface.setName(userinput.getText().toString());
-                    };
-
-                    @Override
-                    protected Void doInBackground(Void... params) {
-                        AllotmentProvider provider = GotsAllotmentManager.getInstance().initIfNew(mContext);
-                        provider.updateAllotment(allotmentInterface);
-                        return null;
-                    }
-
-                    protected void onPostExecute(Void result) {
-                        v.setText(allotmentInterface.getName());
-                        dialog.cancel();
-                    };
-
-                }.execute();
-            }
-        }).setNegativeButton(mContext.getResources().getString(R.string.button_cancel),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-
-                    }
-                });
-        // AlertDialog dialog = builder.create();
-        builder.setCancelable(true);
-        builder.show();
-
-    }
 }

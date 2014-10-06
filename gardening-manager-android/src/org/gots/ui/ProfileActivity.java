@@ -164,7 +164,7 @@ public class ProfileActivity extends AbstractActivity {
             startActivity(intent);
 
             return true;
-        case R.id.delete_garden:
+        case R.id.delete_allotment:
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
             builder.setTitle("Delete");

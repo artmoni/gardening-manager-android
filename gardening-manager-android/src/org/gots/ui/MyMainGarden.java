@@ -19,7 +19,9 @@ import org.gots.R;
 import org.gots.action.GardeningActionInterface;
 import org.gots.action.bean.DeleteAction;
 import org.gots.ads.GotsAdvertisement;
+import org.gots.allotment.GotsAllotmentManager;
 import org.gots.allotment.adapter.ListAllotmentAdapter;
+import org.gots.allotment.provider.AllotmentProvider;
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
@@ -36,19 +38,24 @@ import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class MyMainGarden extends AbstractActivity {
 
     public static final String SELECT_ALLOTMENT = "allotment.select";
 
     public static final String VENDOR_SEED_ID = "allotment.vendorseedid";
+
+    protected static final String TAG = "MyMainGarden";
 
     private ListAllotmentAdapter lsa;
 
@@ -82,7 +89,7 @@ public class MyMainGarden extends AbstractActivity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                LinearLayout menuSelectable = (LinearLayout) view.findViewById(R.id.idMenuAllotment);
+                LinearLayout menuSelectable = (LinearLayout) view.findViewById(R.id.idAllotmentTitlebar);
                 BaseAllotmentInterface selectAllotment = (BaseAllotmentInterface) listAllotments.getItemAtPosition(position);
                 if (menuSelectable.isSelected()) {
                     menuSelectable.setSelected(false);
@@ -93,12 +100,12 @@ public class MyMainGarden extends AbstractActivity {
                 }
 
                 if (menu != null) {
-                    MenuItem item = menu.findItem(R.id.delete_garden);
-                    if (selectedAllotments.size() > 0)
-                        item.setVisible(true);
-                    else
-                        item.setVisible(false);
-
+                    MenuItem item = menu.findItem(R.id.delete_allotment);
+                    item.setVisible(selectedAllotments.size() > 0);
+                    if (selectedAllotments.size() == 1) {
+                        MenuItem itemUpdate = menu.findItem(R.id.update_allotment);
+                        itemUpdate.setVisible(selectedAllotments.size() > 0);
+                    }
                 }
             }
 
@@ -179,6 +186,10 @@ public class MyMainGarden extends AbstractActivity {
 
             // listAllotments.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_simple));
             return true;
+
+        case R.id.update_allotment:
+            showDialogRenameAllotment(selectedAllotments.get(0));
+            return true;
         case R.id.help:
             Intent browserIntent = new Intent(this, WebHelpActivity.class);
             browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
@@ -186,12 +197,51 @@ public class MyMainGarden extends AbstractActivity {
 
             return true;
 
-        case R.id.delete_garden:
+        case R.id.delete_allotment:
             removeSelectedAllotment();
             return true;
         default:
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void showDialogRenameAllotment(final BaseAllotmentInterface allotmentInterface) {
+
+        final EditText userinput = new EditText(this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(userinput).setTitle("Allotment's name");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+            public void onClick(final DialogInterface dialog, int id) {
+                new AsyncTask<Void, Integer, Void>() {
+                    protected void onPreExecute() {
+                        allotmentInterface.setName(userinput.getText().toString());
+                    };
+
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        allotmentManager.updateAllotment(allotmentInterface);
+                        return null;
+                    }
+
+                    protected void onPostExecute(Void result) {
+                        lsa.notifyDataSetChanged();
+                        dialog.cancel();
+                    };
+
+                }.execute();
+            }
+        }).setNegativeButton(this.getResources().getString(R.string.button_cancel),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+
+                    }
+                });
+        // AlertDialog dialog = builder.create();
+        builder.setCancelable(true);
+        builder.show();
+
     }
 
     private void removeSelectedAllotment() {

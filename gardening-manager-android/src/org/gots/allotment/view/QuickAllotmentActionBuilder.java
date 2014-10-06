@@ -31,9 +31,9 @@ public class QuickAllotmentActionBuilder {
 
     private Integer currentAllotmentId;
 
-    public QuickAllotmentActionBuilder(final View v) {
+    public QuickAllotmentActionBuilder(final View v, Integer allotmentId) {
         parentView = v;
-        currentAllotmentId = Integer.valueOf(v.getTag().toString());
+        currentAllotmentId = allotmentId;
         quickAction = new QuickAction(v.getContext(), QuickAction.HORIZONTAL);
 
         GotsActionManager helper = GotsActionManager.getInstance().initIfNew(v.getContext());
