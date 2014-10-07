@@ -141,7 +141,7 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
             holder.allotment = getItem(position);
             ll.setTag(holder);
             ll.setDescendantFocusability(LinearLayout.FOCUS_BLOCK_DESCENDANTS);
-            ll.setOnClickListener(this);
+//            ll.setOnClickListener(this);
 
         } else
             holder = (Holder) ll.getTag();
@@ -180,7 +180,7 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
 
         holder.allotmentName.setText(getItem(position).getName());
 
-        holder.titlebar.removeAllViews();
+//        holder.titlebar.removeAllViews();
 
         holder.menu.setTag(holder);
         holder.menu.setOnClickListener(this);
@@ -332,8 +332,6 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
         Holder holder = (Holder) v.getTag();
         QuickAllotmentActionBuilder actionsBuilder = new QuickAllotmentActionBuilder(v,holder.allotment.getId());
         actionsBuilder.show();
-        v.setSelected(!v.isSelected());
-
     }
 
 }

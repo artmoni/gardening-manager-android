@@ -23,11 +23,15 @@ import com.android.vending.billing.util.Inventory;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class SplashScreenActivity extends AbstractActivity {
 
@@ -43,18 +47,6 @@ public class SplashScreenActivity extends AbstractActivity {
         setContentView(R.layout.splash_screen);
 
     }
-
-    // @Override
-    // protected void removeProgress() {
-    // super.removeProgress();
-    // if (refreshCounter == 0) {
-    // // gotsPrefs.setParrotToken(null);
-    // Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-    // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-    // startActivity(intent);
-    // finish();
-    // }
-    // };
 
     @Override
     protected void onActivityResult(int arg0, int arg1, Intent arg2) {
@@ -76,54 +68,117 @@ public class SplashScreenActivity extends AbstractActivity {
             startActivityForResult(intent, 1);
             // finish();
         } else {
-            /*
-             * Synchronize Purchase feature
-             */
-            final ArrayList<String> moreSkus = new ArrayList<String>();
-            moreSkus.add(GotsPurchaseItem.SKU_PREMIUM);
-            moreSkus.add(GotsPurchaseItem.SKU_FEATURE_PDFHISTORY);
-            moreSkus.add(GotsPurchaseItem.SKU_FEATURE_PARROT);
-            buyHelper = new IabHelper(getApplicationContext(), gotsPrefs.getPlayStorePubKey());
+            checkPurchaseFeature();
+            displayVersionName();
+        }
+        super.onResume();
+    }
 
-            Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
-            imageRefresh = (ImageView) findViewById(R.id.imageRefresh);
-            imageRefresh.startAnimation(myFadeInAnimation);
+    private void checkPurchaseFeature() {
+        final ArrayList<String> moreSkus = new ArrayList<String>();
+        /*
+         * Synchronize Purchase feature
+         */
+        moreSkus.add(GotsPurchaseItem.SKU_PREMIUM);
+        moreSkus.add(GotsPurchaseItem.SKU_FEATURE_PDFHISTORY);
+        moreSkus.add(GotsPurchaseItem.SKU_FEATURE_PARROT);
+        buyHelper = new IabHelper(getApplicationContext(), gotsPrefs.getPlayStorePubKey());
 
-            try {
-                buyHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+        buyHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
 
-                    @Override
-                    public void onIabSetupFinished(IabResult result) {
-                        // Toast.makeText(getApplicationContext(), "Set up finished!", Toast.LENGTH_SHORT).show();
-                        Log.i(TAG, "Set up finished!");
+            @Override
+            public void onIabSetupFinished(IabResult result) {
+                // Toast.makeText(getApplicationContext(), "Set up finished!", Toast.LENGTH_SHORT).show();
+                Log.i(TAG, "Set up finished!");
 
-                        if (result.isSuccess())
-                            buyHelper.queryInventoryAsync(true, moreSkus,
-                                    new IabHelper.QueryInventoryFinishedListener() {
-                                        @Override
-                                        public void onQueryInventoryFinished(IabResult result, Inventory inv) {
-                                            if (result.isSuccess()) {
-                                                gotsPurchase.setPremium(inv.hasPurchase(GotsPurchaseItem.SKU_PREMIUM));
-                                                gotsPurchase.setFeatureExportPDF(inv.hasPurchase(GotsPurchaseItem.SKU_FEATURE_PDFHISTORY));
-                                                gotsPurchase.setFeatureParrot(inv.hasPurchase(GotsPurchaseItem.SKU_FEATURE_PARROT));
-                                                Log.i(TAG, "Successful got inventory!");
+                if (result.isSuccess())
+                    buyHelper.queryInventoryAsync(true, moreSkus, new IabHelper.QueryInventoryFinishedListener() {
+                        @Override
+                        public void onQueryInventoryFinished(IabResult result, Inventory inv) {
+                            if (result.isSuccess()) {
+                                gotsPurchase.setPremium(inv.hasPurchase(GotsPurchaseItem.SKU_PREMIUM));
+                                gotsPurchase.setFeatureExportPDF(inv.hasPurchase(GotsPurchaseItem.SKU_FEATURE_PDFHISTORY));
+                                gotsPurchase.setFeatureParrot(inv.hasPurchase(GotsPurchaseItem.SKU_FEATURE_PARROT));
+                                Log.i(TAG, "Successful got inventory!");
 
-                                            } else {
-                                                Log.i(TAG, "Error getting inventory!");
-                                            }
-                                            imageRefresh.clearAnimation();
-                                        }
-                                    });
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        SplashScreenActivity.this.finish();
-                    }
-                });
-            } catch (Exception e) {
-                Log.e(TAG, "IabHelper can not be initialized" + e.getMessage());
+                            } else {
+                                Log.i(TAG, "Error getting inventory!");
+                            }
+
+                            // Thread.currentThread();
+                            // try {
+                            // Thread.sleep(3000);
+                            // imageRefresh.clearAnimation();
+                            // startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            // SplashScreenActivity.this.finish();
+                            // } catch (Exception e) {
+                            // Log.e(TAG, e.getMessage());
+                            // }
+                        }
+                    });
 
             }
-        }
+        });
 
-        super.onResume();
+    }
+
+    private void displayVersionName() {
+        new AsyncTask<Void, Integer, String>() {
+            private TextView name;
+
+            @Override
+            protected void onPreExecute() {
+                name = (TextView) findViewById(R.id.textVersion);
+                super.onPreExecute();
+            }
+
+            @Override
+            protected String doInBackground(Void... params) {
+                PackageInfo pInfo;
+                String version = "";
+                try {
+                    pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                    version = pInfo.versionName;
+
+                } catch (NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                return version;
+            }
+
+            protected void onPostExecute(String version) {
+                name.setText("Version " + version);
+            };
+        }.execute();
+    }
+
+    @Override
+    protected boolean requireAsyncDataRetrieval() {
+        AccountManager accountManager = AccountManager.get(this);
+        Account[] accounts = accountManager.getAccountsByType("gardening-manager");
+        return accounts.length != 0;
+    }
+
+    @Override
+    protected void onNuxeoDataRetrievalStarted() {
+        Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
+        myFadeInAnimation.setRepeatCount(Animation.INFINITE);
+        imageRefresh = (ImageView) findViewById(R.id.imageRefresh);
+        imageRefresh.startAnimation(myFadeInAnimation);
+        super.onNuxeoDataRetrievalStarted();
+    }
+
+    @Override
+    protected Object retrieveNuxeoData() throws Exception {
+        return gardenManager.getMyGardens(true);
+    }
+
+    @Override
+    protected void onNuxeoDataRetrieved(Object data) {
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
+        imageRefresh.clearAnimation();
+        super.onNuxeoDataRetrieved(data);
     }
 }

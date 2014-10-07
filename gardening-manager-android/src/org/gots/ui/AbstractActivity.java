@@ -243,7 +243,7 @@ public abstract class AbstractActivity extends BaseNuxeoActivity {
 
     @Override
     protected boolean requireAsyncDataRetrieval() {
-        // TODO Auto-generated method stub
         return false;
     }
+    
 }

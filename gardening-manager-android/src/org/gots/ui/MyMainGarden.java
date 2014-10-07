@@ -85,11 +85,12 @@ public class MyMainGarden extends AbstractActivity {
         listAllotments.setAdapter(lsa);
         listAllotments.setDivider(null);
         listAllotments.setDividerHeight(0);
+        listAllotments.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         listAllotments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                LinearLayout menuSelectable = (LinearLayout) view.findViewById(R.id.idAllotmentTitlebar);
+                LinearLayout menuSelectable = (LinearLayout) view.findViewById(R.id.idAllotmentMenu);
                 BaseAllotmentInterface selectAllotment = (BaseAllotmentInterface) listAllotments.getItemAtPosition(position);
                 if (menuSelectable.isSelected()) {
                     menuSelectable.setSelected(false);
@@ -102,7 +103,7 @@ public class MyMainGarden extends AbstractActivity {
                 if (menu != null) {
                     MenuItem item = menu.findItem(R.id.delete_allotment);
                     item.setVisible(selectedAllotments.size() > 0);
-                    if (selectedAllotments.size() == 1) {
+                    if (selectedAllotments.size() <= 1) {
                         MenuItem itemUpdate = menu.findItem(R.id.update_allotment);
                         itemUpdate.setVisible(selectedAllotments.size() > 0);
                     }
