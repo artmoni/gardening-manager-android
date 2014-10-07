@@ -115,7 +115,7 @@ public class VendorListActivity extends AbstractListFragment {
             if (BROADCAST_FILTER.equals(intent.getAction())) {
                 currentFilter = intent.getExtras().getString(FILTER_VALUE);
             }
-            updateVendorSeeds();
+            runAsyncDataRetrieval();
         }
     };
 
@@ -124,7 +124,6 @@ public class VendorListActivity extends AbstractListFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        updateVendorSeeds();
     }
 
     @Override
@@ -132,68 +131,64 @@ public class VendorListActivity extends AbstractListFragment {
         super.onResume();
     }
 
-    protected synchronized void updateVendorSeeds() {
-        new AsyncTask<Void, Integer, List<BaseSeedInterface>>() {
-
-            protected void onPreExecute() {
-                // dialog = ProgressDialog.show(mContext, "", mContext.getResources().getString(R.string.gots_loading),
-                // true);
-                // dialog.setCanceledOnTouchOutside(true);
-                // setActionRefresh(true);
-                mContext.sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
-                super.onPreExecute();
-            };
-
-            @Override
-            protected List<BaseSeedInterface> doInBackground(Void... params) {
-
-                List<BaseSeedInterface> catalogue = new ArrayList<BaseSeedInterface>();
-                if (args == null) {
-                    catalogue = seedProvider.getVendorSeeds(false);
-                    if (catalogue.size() == 0)
-                        catalogue = seedProvider.getVendorSeeds(true);
-                } else if (args.getBoolean(FILTER_STOCK))
-                    catalogue = seedProvider.getMyStock(gardenManager.getCurrentGarden());
-
-                else if (args.getBoolean(FILTER_FAVORITES))
-                    // listVendorSeedAdapter.getFilter().filter("LIKE");
-                    catalogue = seedProvider.getMyFavorites();
-                else if (args.getBoolean(FILTER_BARCODE)) {
-                    // listVendorSeedAdapter.getFilter().filter("LIKE");
-                    catalogue.add(seedProvider.getSeedByBarCode(args.getString(FILTER_VALUE)));
-                } else if (args.getBoolean(FILTER_THISMONTH))
-                    // listVendorSeedAdapter.getFilter().filter("THISMONTH");
-                    catalogue = seedProvider.getSeedBySowingMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
-                else if (args.getBoolean(FILTER_PARROT)) {
-                    ParrotSeedProvider parrotProvider = new ParrotSeedProvider(mContext);
-                    if ("".equals(currentFilter))
-                        catalogue = parrotProvider.getVendorSeeds(true);
-                    else
-                        catalogue = parrotProvider.getVendorSeedsByName(currentFilter.toString());
-
-                }
-
-                return catalogue;
-            }
-
-            protected void onPostExecute(List<BaseSeedInterface> vendorSeeds) {
-
-                listVendorSeedAdapter.setSeeds(vendorSeeds);
-                // listVendorSeedAdapter.getFilter().filter(currentFilter);
-                // if (!"".equals(currentFilter) && currentFilter != null)
-                // displaySearchBox();
-                listVendorSeedAdapter.notifyDataSetChanged();
-
-                // if (progressBar != null)
-                //
-                // progressBar.stopAnimatingBackground();
-                // setActionRefresh(false);
-
-                mContext.sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
-                super.onPostExecute(vendorSeeds);
-            };
-        }.execute();
+    @Override
+    protected boolean requireAsyncDataRetrieval() {
+        return true;
     }
+
+    @Override
+    protected void onNuxeoDataRetrievalStarted() {
+        super.onNuxeoDataRetrievalStarted();
+    }
+
+    @Override
+    protected Object retrieveNuxeoData() throws Exception {
+
+        List<BaseSeedInterface> catalogue = new ArrayList<BaseSeedInterface>();
+        if (args == null) {
+            catalogue = seedProvider.getVendorSeeds(false);
+            if (catalogue.size() == 0)
+                catalogue = seedProvider.getVendorSeeds(true);
+        } else if (args.getBoolean(FILTER_STOCK))
+            catalogue = seedProvider.getMyStock(gardenManager.getCurrentGarden());
+
+        else if (args.getBoolean(FILTER_FAVORITES))
+            // listVendorSeedAdapter.getFilter().filter("LIKE");
+            catalogue = seedProvider.getMyFavorites();
+        else if (args.getBoolean(FILTER_BARCODE)) {
+            // listVendorSeedAdapter.getFilter().filter("LIKE");
+            catalogue.add(seedProvider.getSeedByBarCode(args.getString(FILTER_VALUE)));
+        } else if (args.getBoolean(FILTER_THISMONTH))
+            // listVendorSeedAdapter.getFilter().filter("THISMONTH");
+            catalogue = seedProvider.getSeedBySowingMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
+        else if (args.getBoolean(FILTER_PARROT)) {
+            ParrotSeedProvider parrotProvider = new ParrotSeedProvider(mContext);
+            if ("".equals(currentFilter))
+                catalogue = parrotProvider.getVendorSeeds(true);
+            else
+                catalogue = parrotProvider.getVendorSeedsByName(currentFilter.toString());
+
+        }
+        return catalogue;
+    }
+
+    @Override
+    protected void onNuxeoDataRetrieved(Object data) {
+        List<BaseSeedInterface> vendorSeeds = (List<BaseSeedInterface>) data;
+        listVendorSeedAdapter.setSeeds(vendorSeeds);
+        // listVendorSeedAdapter.getFilter().filter(currentFilter);
+        // if (!"".equals(currentFilter) && currentFilter != null)
+        // displaySearchBox();
+        listVendorSeedAdapter.notifyDataSetChanged();
+
+        // if (progressBar != null)
+        //
+        // progressBar.stopAnimatingBackground();
+        // setActionRefresh(false);
+
+        super.onNuxeoDataRetrieved(data);
+    }
+
 
     @Override
     public void onPause() {
