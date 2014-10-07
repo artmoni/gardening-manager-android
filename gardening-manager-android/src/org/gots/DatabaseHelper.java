@@ -512,7 +512,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         }
         if (oldVersion < 21) {
-            db.execSQL("ALTER TABLE " + GROWINGSEEDS_TABLE_NAME + " ADD COLUMN " + GROWINGSEED_DATEHARVEST + " INTEGER;");
+            db.execSQL("ALTER TABLE " + GROWINGSEEDS_TABLE_NAME + " ADD COLUMN " + GROWINGSEED_DATEHARVEST
+                    + " INTEGER;");
 
         } else {
             db.execSQL("DROP TABLE IF EXISTS " + SEEDS_TABLE_NAME);

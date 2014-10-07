@@ -245,5 +245,17 @@ public abstract class AbstractActivity extends BaseNuxeoActivity {
     protected boolean requireAsyncDataRetrieval() {
         return false;
     }
-    
+
+    @Override
+    protected void onNuxeoDataRetrievalStarted() {
+        setProgressRefresh(true);
+        super.onNuxeoDataRetrievalStarted();
+    }
+
+    @Override
+    protected void onNuxeoDataRetrieved(Object data) {
+        super.onNuxeoDataRetrieved(data);
+        setProgressRefresh(false);
+    }
+
 }

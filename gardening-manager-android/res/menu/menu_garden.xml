@@ -12,17 +12,5 @@
         android:icon="@drawable/help"
         android:title="@string/menu.help"
         app:showAsAction="ifRoom"/>
-    <item
-        android:id="@+id/delete_allotment"
-        android:icon="@drawable/action_delete"
-        android:title="@string/action.delete"
-        android:visible="false"
-        app:showAsAction="ifRoom"/>
-    <item
-        android:id="@+id/update_allotment"
-        android:icon="@drawable/action_detail"
-        android:title="@string/menu.edit"
-        android:visible="false"
-        app:showAsAction="ifRoom"/>
 
 </menu>

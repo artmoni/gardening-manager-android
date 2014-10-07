@@ -291,7 +291,8 @@
         <item name="android:actionDropDownStyle">@style/DropDownNav</item>
         <item name="actionDropDownStyle">@style/DropDownNav</item>
         <item name="android:textColor">@color/text_color_dark</item>
-        <!-- <item name="android:actionModeBackground">@color/action_warning_color</item> -->
+        <item name="android:actionModeBackground">@drawable/contextual_bar_top</item> 
+        <item name="android:actionModeSplitBackground">@drawable/contextual_bar_bottom</item> 
     </style>
 
     <style name="SpinnerItem" parent="Widget.AppCompat.DropDownItem.Spinner">

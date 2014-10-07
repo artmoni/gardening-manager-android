@@ -99,7 +99,7 @@ public class VendorListActivity extends AbstractListFragment {
 
                     getActivity().finish();
                 } else {
-                    view.setSelected(!view.isSelected());
+//                    view.setSelected(!view.isSelected());
                     ((ActionBarActivity) getActivity()).startSupportActionMode(new MyCallBack(position));
                 }
             }

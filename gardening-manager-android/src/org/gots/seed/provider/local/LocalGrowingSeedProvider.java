@@ -58,7 +58,7 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
         values.put(DatabaseHelper.GROWINGSEED_SEED_ID, seed.getSeedId());
         values.put(DatabaseHelper.GROWINGSEED_UUID, seed.getUUID());
 
-        values.put(DatabaseHelper.GROWINGSEED_ALLOTMENT_ID, allotment.getName());
+        values.put(DatabaseHelper.GROWINGSEED_ALLOTMENT_ID, allotment.getId());
         if (seed.getDateSowing() != null)
             values.put(DatabaseHelper.GROWINGSEED_DATESOWING, seed.getDateSowing().getTime());
         if (seed.getDateLastWatering() != null)
@@ -124,6 +124,13 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
 
         Cursor cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, DatabaseHelper.GROWINGSEED_ALLOTMENT_ID
                 + "='" + allotment.getName() + "'", null, null, null, null);
+
+        // TODO change this and remove code above when version 1.0.2 will be removed from users
+        if (cursor.getCount() == 0) {
+            cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, DatabaseHelper.GROWINGSEED_ALLOTMENT_ID
+                    + "='" + allotment.getId() + "'", null, null, null, null);
+
+        }
 
         if (cursor.moveToFirst()) {
             do {
