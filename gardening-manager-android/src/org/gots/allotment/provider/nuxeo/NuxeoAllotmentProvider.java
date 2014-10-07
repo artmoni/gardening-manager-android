@@ -154,11 +154,8 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
                     GotsGardenManager.getInstance().getCurrentGarden().getUUID()));
             Document allotmentsFolder = service.getDocument(new PathRef(gardenFolder.getPath() + "/My Allotment"));
 
-            PropertyMap properties = new PropertyMap();
-            properties.set("dc:title", allotment.getName());
-
             Document newAllotment = service.createDocument(allotmentsFolder, "Allotment", allotment.getName(),
-                    properties);
+                    NuxeoAllotmentConverter.convertToProperties(allotment));
             allotment.setUUID(newAllotment.getId());
             allotment = super.updateAllotment(allotment);
         } catch (Exception e) {
@@ -188,11 +185,7 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager service = session.getAdapter(DocumentManager.class);
-            PropertyMap properties = new PropertyMap();
-            properties.set("dc:title", allotment.getName());
-            properties.set("allotment:name", allotment.getName());
-            
-            service.update(new DocRef(allotment.getUUID()), properties);
+            service.update(new DocRef(allotment.getUUID()), NuxeoAllotmentConverter.convertToProperties(allotment));
             Log.d(TAG, "Updating document " + allotment.getUUID());
 
         } catch (Exception e) {
