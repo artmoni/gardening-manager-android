@@ -19,8 +19,8 @@ public class NuxeoAllotmentConverter {
     public static BaseAllotmentInterface convert(Document document) {
         try {
             BaseAllotmentInterface allotment = new Allotment();
-            allotment.setName("null".equals(document.getString(ALLOTMENT_NAME)) ? document.getString(ALLOTMENT_NAME) : document.getName());
-            allotment.setDescription("null".equals(document.getString(ALLOTMENT_DESCRIPTION)) ? document.getString(ALLOTMENT_DESCRIPTION) : document.getName());
+            allotment.setName(!"null".equals(document.getString(ALLOTMENT_NAME)) ? document.getString(ALLOTMENT_NAME) : document.getName());
+            allotment.setDescription(!"null".equals(document.getString(ALLOTMENT_DESCRIPTION)) ? document.getString(ALLOTMENT_DESCRIPTION) : "");
             allotment.setUUID(document.getId());
             return allotment;
         } catch (Exception e) {

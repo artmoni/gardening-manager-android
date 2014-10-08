@@ -61,10 +61,10 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
 
             byte cacheParam = CacheBehavior.STORE;
             // TODO refresh depending on call
-            boolean refresh = true;
-            if (refresh) {
+
+            if (force) {
                 cacheParam = (byte) (cacheParam | CacheBehavior.FORCE_REFRESH);
-                refresh = false;
+
             }
             // TODO Change this when garden UUID manage uuid and not path
             Document gardenFolder = service.getDocument(new IdRef(
