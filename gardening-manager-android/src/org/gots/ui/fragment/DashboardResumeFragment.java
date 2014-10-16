@@ -9,7 +9,6 @@ import org.gots.action.SeedActionInterface;
 import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.ads.GotsAdvertisement;
-import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GotsGardenManager;
 import org.gots.inapp.GotsPurchaseItem;
 import org.gots.seed.BaseSeedInterface;
@@ -18,37 +17,25 @@ import org.gots.seed.adapter.SeedListAdapter;
 import org.gots.seed.adapter.VendorSeedListAdapter;
 import org.gots.ui.ActionActivity;
 import org.gots.ui.HutActivity;
-import org.gots.ui.ProfileCreationActivity;
-import org.gots.ui.SeedActivity;
 import org.gots.ui.TabSeedActivity;
 import org.gots.weather.view.WeatherView;
 import org.gots.weather.view.WeatherWidget;
-import org.nuxeo.android.fragments.BaseNuxeoFragment;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.Gallery;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class DashboardResumeFragment extends BaseNuxeoFragment {
+public class DashboardResumeFragment extends BaseGotsFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getActivity().registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
-        getActivity().registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.ACTION_EVENT));
-        getActivity().registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
 
         return inflater.inflate(R.layout.dashboard_resume, null);
     }
@@ -80,33 +67,30 @@ public class DashboardResumeFragment extends BaseNuxeoFragment {
         GotsGardenManager gardenManager = GotsGardenManager.getInstance().initIfNew(getActivity());
         if (gardenManager.getCurrentGarden().isIncredibleEdible()) {
             getView().findViewById(R.id.layoutIncredibleDescription).setVisibility(View.VISIBLE);
-        }else
+        } else
             getView().findViewById(R.id.layoutIncredibleDescription).setVisibility(View.GONE);
-            
+
     }
 
     @Override
-    public void onDestroy() {
-        getActivity().unregisterReceiver(broadcastReceiver);
-        super.onDestroy();
+    protected void onCurrentGardenChanged() {
+        displaySeeds();
+        displayActions();
+        displayWeather();
+        displayIncredible();
     }
 
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
-                displaySeeds();
-                displayActions();
-                displayWeather();
-                displayIncredible();
+    @Override
+    protected void onWeatherChanged() {
+        displayWeather();
 
-            } else if (BroadCastMessages.WEATHER_DISPLAY_EVENT.equals(intent.getAction())) {
-                displayWeather();
-            } else if (BroadCastMessages.ACTION_EVENT.equals(intent.getAction())) {
-                displayActions();
-            }
-        }
-    };
+    }
+
+    @Override
+    protected void onActionChanged() {
+        displayActions();
+
+    }
 
     protected void displayActions() {
 

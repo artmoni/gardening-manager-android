@@ -41,7 +41,8 @@ public class AbstractListFragment extends BaseNuxeoFragment {
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
-        getActivity().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
+        if (isAdded())
+            getActivity().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
         super.onNuxeoDataRetrieved(data);
     }
 }
