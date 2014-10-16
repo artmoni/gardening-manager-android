@@ -53,7 +53,7 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-public class HutActivity extends AbstractActivity {
+public class HutActivity extends BaseGotsActivity {
 
     // private ListVendorSeedAdapter lvsea;
     ListView listSeeds;

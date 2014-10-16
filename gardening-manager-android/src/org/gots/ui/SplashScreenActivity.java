@@ -33,7 +33,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class SplashScreenActivity extends AbstractActivity {
+public class SplashScreenActivity extends BaseGotsActivity {
 
     protected static final String TAG = "SplashScreenActivity";
 

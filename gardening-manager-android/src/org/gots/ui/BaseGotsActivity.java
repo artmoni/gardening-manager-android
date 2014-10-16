@@ -59,7 +59,7 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
  * @author jcarsique
  * 
  */
-public abstract class AbstractActivity extends BaseNuxeoActivity {
+public abstract class BaseGotsActivity extends BaseNuxeoActivity {
     private static final String TAG = "AbstractActivity";
 
     // private static final String TAG = AbstractActivity.class.getSimpleName();
@@ -82,7 +82,7 @@ public abstract class AbstractActivity extends BaseNuxeoActivity {
 
     private Menu menu;
 
-    private static ArrayList<AbstractActivity> activities = new ArrayList<AbstractActivity>();
+    private static ArrayList<BaseGotsActivity> activities = new ArrayList<BaseGotsActivity>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

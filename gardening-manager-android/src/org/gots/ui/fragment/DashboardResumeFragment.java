@@ -83,7 +83,6 @@ public class DashboardResumeFragment extends BaseGotsFragment {
     @Override
     protected void onWeatherChanged() {
         displayWeather();
-
     }
 
     @Override

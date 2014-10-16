@@ -32,7 +32,7 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-public class ActionActivity extends AbstractActivity {
+public class ActionActivity extends BaseGotsActivity {
 
     ListView listAllotments;
 

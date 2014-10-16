@@ -59,7 +59,7 @@ import android.widget.Toast;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class ProfileCreationActivity extends AbstractActivity implements LocationListener, OnClickListener {
+public class ProfileCreationActivity extends BaseGotsActivity implements LocationListener, OnClickListener {
     public static final int OPTION_EDIT = 1;
 
     private LocationManager mlocManager;

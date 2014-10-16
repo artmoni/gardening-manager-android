@@ -24,7 +24,7 @@ import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-public class WebHelpActivity extends AbstractActivity {
+public class WebHelpActivity extends BaseGotsActivity {
 
     public static final String URL = "org.gots.doc.classsimplename";
 

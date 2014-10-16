@@ -36,7 +36,7 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-public class ProfileActivity extends AbstractActivity {
+public class ProfileActivity extends BaseGotsActivity {
 
     private static final String TAG = "ProfileActivity";
 

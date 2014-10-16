@@ -9,7 +9,7 @@ import org.gots.authentication.provider.google.GoogleAuthentication;
 import org.gots.authentication.provider.nuxeo.NuxeoAuthentication;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.preferences.GotsPreferences;
-import org.gots.ui.AbstractActivity;
+import org.gots.ui.BaseGotsActivity;
 import org.gots.ui.fragment.TutorialFragment;
 
 import android.accounts.Account;
@@ -30,7 +30,7 @@ import android.widget.Button;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 
-public class AuthenticationActivity extends AbstractActivity {
+public class AuthenticationActivity extends BaseGotsActivity {
     public static final String PARAM_AUTHTOKEN_TYPE = "auth.token";
 
     public static final String PARAM_USER_PASS = "user.pass";

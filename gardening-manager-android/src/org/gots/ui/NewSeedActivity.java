@@ -50,7 +50,7 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-public class NewSeedActivity extends AbstractActivity implements OnClickListener {
+public class NewSeedActivity extends BaseGotsActivity implements OnClickListener {
     private static final String SELECTED_SPECIE = "selectedSpecie";
 
     private DatePicker planningSowMin;

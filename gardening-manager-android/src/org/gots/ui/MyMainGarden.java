@@ -45,7 +45,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-public class MyMainGarden extends AbstractActivity {
+public class MyMainGarden extends BaseGotsActivity {
 
     public static final String SELECT_ALLOTMENT = "allotment.select";
 

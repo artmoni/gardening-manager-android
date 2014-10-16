@@ -58,7 +58,7 @@ import android.widget.Toast;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 
-public class MainActivity extends AbstractActivity {
+public class MainActivity extends BaseGotsActivity {
     private DrawerLayout mDrawerLayout;
 
     private ListView mDrawerList;

@@ -46,7 +46,7 @@ import android.widget.TextView;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class DashboardActivity extends AbstractActivity implements OnClickListener, ActionBar.OnNavigationListener {
+public class DashboardActivity extends BaseGotsActivity implements OnClickListener, ActionBar.OnNavigationListener {
     public static final String LAUNCHER_ACTION = "org.gots.dashboard.action";
 
     public static final String LAUNCHER_CATALOGUE = "org.gots.dashboard.catalogue";
