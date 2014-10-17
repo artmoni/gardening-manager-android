@@ -63,7 +63,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener {
+public class ListAllotmentAdapter extends BaseAdapter implements
+        OnClickListener {
     protected static final String TAG = "ListAllotmentAdapter";
 
     FragmentActivity mContext;
@@ -78,7 +79,8 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
 
     private int currentSeedId;
 
-    public ListAllotmentAdapter(FragmentActivity mContext, List<BaseAllotmentInterface> allotments, Bundle bundle) {
+    public ListAllotmentAdapter(FragmentActivity mContext,
+            List<BaseAllotmentInterface> allotments, Bundle bundle) {
         this.mContext = mContext;
         myAllotments = allotments;
         if (bundle != null) {
@@ -126,22 +128,24 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
         Holder holder;
         if (ll == null) {
             holder = new Holder();
-            ll = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.list_allotments, parent, false);
+            ll = (LinearLayout) LayoutInflater.from(mContext).inflate(
+                    R.layout.list_allotments, parent, false);
             if (GotsPreferences.DEBUG) {
                 TextView textView = new TextView(mContext);
-                textView.setText("(" + getItem(position).getId() + ")" + getItem(position).getUUID());
+                textView.setText("(" + getItem(position).getId() + ")"
+                        + getItem(position).getUUID());
                 ll.addView(textView);
             }
 
             holder.listSeeds = (GridView) ll.findViewById(R.id.IdGrowingSeedList);
             holder.titlebar = (LinearLayout) ll.findViewById(R.id.idAllotmentTitlebar);
             holder.allotmentName = (TextView) ll.findViewById(R.id.textAllotmentName);
-            holder.menu =(LinearLayout) ll.findViewById(R.id.idAllotmentMenu);
+            holder.menu = (LinearLayout) ll.findViewById(R.id.idAllotmentMenu);
 
             holder.allotment = getItem(position);
             ll.setTag(holder);
             ll.setDescendantFocusability(LinearLayout.FOCUS_BLOCK_DESCENDANTS);
-//            ll.setOnClickListener(this);
+            // ll.setOnClickListener(this);
 
         } else
             holder = (Holder) ll.getTag();
@@ -165,22 +169,28 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
             nbcolumn = 1;
         holder.listSeeds.setNumColumns(nbcolumn);
 
-        listGrowingSeedAdapter = new ListGrowingSeedAdapter(mContext, getItem(position).getSeeds());
+        listGrowingSeedAdapter = new ListGrowingSeedAdapter(mContext, getItem(
+                position).getSeeds());
         holder.listSeeds.setAdapter(listGrowingSeedAdapter);
-        holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, layoutsize));
+        holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(
+                LayoutParams.WRAP_CONTENT, layoutsize));
         if (listGrowingSeedAdapter.getCount() > 0) {
-            holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
-                    (holder.listSeeds.getCount() / nbcolumn + 1) * layoutsize + layoutsize));
-            // holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+            holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(
+                    LayoutParams.MATCH_PARENT, (holder.listSeeds.getCount()
+                            / nbcolumn + 1)
+                            * layoutsize + layoutsize));
+            // holder.listSeeds.setLayoutParams(new
+            // LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
             // LayoutParams.WRAP_CONTENT));
         }
         // else
-        // holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+        // holder.listSeeds.setLayoutParams(new
+        // LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
         // ((holder.listSeeds.getCount() / nbcolumn) + 1) * layoutsize));
 
         holder.allotmentName.setText(getItem(position).getName());
 
-//        holder.titlebar.removeAllViews();
+        // holder.titlebar.removeAllViews();
 
         holder.menu.setTag(holder);
         holder.menu.setOnClickListener(this);
@@ -190,7 +200,8 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
 
         if (isSelectable) {
             holder.menu.setBackgroundResource(R.anim.rotate_alerte);
-            // Animation myFadeInAnimation = AnimationUtils.loadAnimation(mContext, R.anim.rotate_alerte);
+            // Animation myFadeInAnimation =
+            // AnimationUtils.loadAnimation(mContext, R.anim.rotate_alerte);
             // menu.startAnimation(myFadeInAnimation);
             AnimationDrawable frameAnimation = (AnimationDrawable) holder.menu.getBackground();
             frameAnimation.start();
@@ -200,24 +211,34 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
                 public void onClick(View v) {
                     new AsyncTask<Void, Integer, GrowingSeedInterface>() {
                         @Override
-                        protected GrowingSeedInterface doInBackground(Void... params) {
+                        protected GrowingSeedInterface doInBackground(
+                                Void... params) {
 
                             GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(
                                     mContext);
-                            GotsSeedManager seedManager = GotsSeedManager.getInstance().initIfNew(mContext);
-                            // NuxeoGrowingSeedProvider provider = new NuxeoGrowingSeedProvider(mContext);
+                            GotsSeedManager seedManager = GotsSeedManager.getInstance().initIfNew(
+                                    mContext);
+                            // NuxeoGrowingSeedProvider provider = new
+                            // NuxeoGrowingSeedProvider(mContext);
                             GrowingSeedInterface growingSeed = (GrowingSeedInterface) seedManager.getSeedById(currentSeedId);
                             growingSeed.setDateSowing(Calendar.getInstance().getTime());
 
-                            return growingSeedManager.plantingSeed(growingSeed, getItem(position));
+                            return growingSeedManager.plantingSeed(growingSeed,
+                                    getItem(position));
                         }
 
                         @Override
                         protected void onPostExecute(GrowingSeedInterface seed) {
                             // notifyDataSetChanged();
-                            Toast.makeText(mContext, "Sowing" + " " + SeedUtil.translateSpecie(mContext, seed),
+                            Toast.makeText(
+                                    mContext,
+                                    "Sowing"
+                                            + " "
+                                            + SeedUtil.translateSpecie(
+                                                    mContext, seed),
                                     Toast.LENGTH_LONG).show();
-                            mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
+                            mContext.sendBroadcast(new Intent(
+                                    BroadCastMessages.SEED_DISPLAYLIST));
                             ((Activity) mContext).finish();
                         }
                     }.execute();
@@ -240,11 +261,14 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
         //
         // GotsPurchaseItem purchaseItem = new GotsPurchaseItem(mContext);
         //
-        // // if (!purchaseItem.getFeatureParrot() ? true : purchaseItem.isPremium()) {
+        // // if (!purchaseItem.getFeatureParrot() ? true :
+        // purchaseItem.isPremium()) {
         // if (!purchaseItem.getFeatureParrot() || purchaseItem.isPremium()) {
         // FragmentManager fm = mContext.getSupportFragmentManager();
-        // GotsBillingDialog editNameDialog = new GotsBillingDialog(GotsPurchaseItem.SKU_FEATURE_PARROT);
-        // editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+        // GotsBillingDialog editNameDialog = new
+        // GotsBillingDialog(GotsPurchaseItem.SKU_FEATURE_PARROT);
+        // editNameDialog.setStyle(DialogFragment.STYLE_NORMAL,
+        // R.style.CustomDialog);
         // editNameDialog.show(fm, "fragment_edit_name");
         // } else {
         // Intent sensorIntent = new Intent(mContext, SensorActivity.class);
@@ -258,11 +282,14 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
         // //
         // // @Override
         // // protected List<ParrotLocation> doInBackground(Void... params) {
-        // // ParrotSensorProvider sensorProvider = new ParrotSensorProvider(mContext);
+        // // ParrotSensorProvider sensorProvider = new
+        // ParrotSensorProvider(mContext);
         // // List<ParrotLocation> locations = sensorProvider.getLocations();
         // // sensorProvider.getStatus();
-        // // samplesFertilizer = sensorProvider.getSamples(locations.get(0).getLocation_identifier());
-        // // samplesTemp = sensorProvider.getSamples2(locations.get(0).getLocation_identifier());
+        // // samplesFertilizer =
+        // sensorProvider.getSamples(locations.get(0).getLocation_identifier());
+        // // samplesTemp =
+        // sensorProvider.getSamples2(locations.get(0).getLocation_identifier());
         // //
         // // return locations;
         // // }
@@ -275,7 +302,8 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
         // // //
         // // // @Override
         // // // public void onClick(DialogInterface dialog, int which) {
-        // // // Toast.makeText(mContext, sensorListAdapter.getItem(which).getSensor_serial(),
+        // // // Toast.makeText(mContext,
+        // sensorListAdapter.getItem(which).getSensor_serial(),
         // // // Toast.LENGTH_SHORT).show();
         // // // ;
         // // // }
@@ -288,11 +316,13 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
         // // WebView webView = new WebView(mContext);
         // // String chd = new String();
         // // for (ParrotSampleFertilizer fertilizer : samplesFertilizer) {
-        // // chd = chd.concat(String.valueOf(fertilizer.getFertilizer_level() * 100));
+        // // chd = chd.concat(String.valueOf(fertilizer.getFertilizer_level() *
+        // 100));
         // // chd = chd.concat(",");
         // // }
         // // chd = chd.substring(0, chd.length() - 1);
-        // // String url = "http://chart.apis.google.com/chart?cht=ls&chs=250x100&chd=t:" + chd;
+        // // String url =
+        // "http://chart.apis.google.com/chart?cht=ls&chs=250x100&chd=t:" + chd;
         // // webView.loadUrl(url);
         // // Log.d(ListAllotmentAdapter.class.getName(), url);
         // // AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
@@ -304,13 +334,15 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
         // // String chd = new String();
         // // int i = 0;
         // // for (ParrotSampleTemperature sampleTemp : samplesTemp) {
-        // // chd = chd.concat(String.valueOf(sampleTemp.getAir_temperature_celsius()));
+        // // chd =
+        // chd.concat(String.valueOf(sampleTemp.getAir_temperature_celsius()));
         // // chd = chd.concat(",");
         // // if (i++ >= 50)
         // // break;
         // // }
         // // chd = chd.substring(0, chd.length() - 1);
-        // // String url = "http://chart.apis.google.com/chart?cht=ls&chs=250x100&chd=t:" + chd;
+        // // String url =
+        // "http://chart.apis.google.com/chart?cht=ls&chs=250x100&chd=t:" + chd;
         // // webView.loadUrl(url);
         // // Log.d(ListAllotmentAdapter.class.getName(), url);
         // // AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
@@ -330,7 +362,8 @@ public class ListAllotmentAdapter extends BaseAdapter implements OnClickListener
     @Override
     public void onClick(View v) {
         Holder holder = (Holder) v.getTag();
-        QuickAllotmentActionBuilder actionsBuilder = new QuickAllotmentActionBuilder(v,holder.allotment.getId());
+        QuickAllotmentActionBuilder actionsBuilder = new QuickAllotmentActionBuilder(
+                v, holder.allotment.getId());
         actionsBuilder.show();
     }
 

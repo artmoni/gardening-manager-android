@@ -306,7 +306,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static synchronized DatabaseHelper getInstance(Context context, int currentGardenId) {
         if (helper == null || currentGardenId != currentDatabaseId) {
-            GotsPreferences.getInstance().initIfNew(context);
             helper = new DatabaseHelper(context, currentGardenId);
             currentDatabaseId = currentGardenId;
         }

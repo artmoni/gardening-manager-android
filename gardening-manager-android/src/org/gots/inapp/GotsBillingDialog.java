@@ -3,6 +3,7 @@ package org.gots.inapp;
 import java.util.ArrayList;
 
 import org.gots.R;
+import org.gots.context.GotsContext;
 import org.gots.preferences.GotsPreferences;
 
 import android.content.Intent;
@@ -76,6 +77,10 @@ public class GotsBillingDialog extends DialogFragment {
 
     boolean billingServiceAvailable = false;
 
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(getActivity());
+    }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.purchase, container, false);
         textDescription = (TextView) v.findViewById(R.id.idPurchasePremiumDescription);
@@ -91,7 +96,7 @@ public class GotsBillingDialog extends DialogFragment {
         // // getDialog().getWindow().setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.launcher);
         // getDialog().setFeatureDrawable(Window.FEATURE_LEFT_ICON, getResources().getDrawable(R.drawable.launcher));
 
-        String PUBKEY = GotsPreferences.getInstance().initIfNew(getActivity()).getPlayStorePubKey();
+        String PUBKEY = getGotsContext().getServerConfig().getPlayStorePubKey();
         buyHelper = new IabHelper(getActivity(), PUBKEY);
 
         buyHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {

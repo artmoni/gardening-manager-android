@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-import org.gots.authentication.ParrotAuthentication;
+import org.gots.authentication.provider.parrot.ParrotAuthentication;
 import org.gots.sensor.GotsSensorSamplesProvider;
 import org.json.JSONArray;
 import org.json.JSONException;

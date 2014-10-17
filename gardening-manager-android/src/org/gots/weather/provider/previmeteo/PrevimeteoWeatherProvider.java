@@ -19,6 +19,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.gots.bean.Address;
+import org.gots.context.GotsContext;
 import org.gots.garden.GotsGardenManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.weather.WeatherCondition;
@@ -47,10 +48,12 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
     private WeatherCache cache;
 
     private GotsPreferences gotsPreferences;
-
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(mContext);
+    }
     public PrevimeteoWeatherProvider(Context context) {
         super(context);
-        gotsPreferences = GotsPreferences.getInstance().initIfNew(context);
+        gotsPreferences = getGotsContext().getServerConfig();
 
         try {
             Address address = GotsGardenManager.getInstance().initIfNew(context).getCurrentGarden().getAddress();

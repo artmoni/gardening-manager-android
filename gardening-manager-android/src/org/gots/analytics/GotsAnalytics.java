@@ -1,5 +1,6 @@
 package org.gots.analytics;
 
+import org.gots.context.GotsContext;
 import org.gots.preferences.GotsPreferences;
 
 import android.app.Application;
@@ -27,7 +28,9 @@ public class GotsAnalytics {
     protected GotsAnalytics(Application context) {
         this.context = context;
     }
-
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(context);
+    }
     /**
      * NOTE: you should use your Application context, not your Activity context,
      * in order to avoid memory leaks.
@@ -45,7 +48,7 @@ public class GotsAnalytics {
      * synchronize them yourself.
      */
     public void incrementActivityCount() {
-        gotsPreferences = GotsPreferences.getInstance().initIfNew(context);
+        gotsPreferences = getGotsContext().getServerConfig();
 
         if (activityCount == 0) {
             if (dispatchIntervalSecs == null) {

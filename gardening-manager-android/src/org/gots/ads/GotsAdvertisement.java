@@ -1,6 +1,7 @@
 package org.gots.ads;
 
 import org.gots.R;
+import org.gots.context.GotsContext;
 import org.gots.preferences.GotsPreferences;
 
 import android.app.Activity;
@@ -24,10 +25,12 @@ public class GotsAdvertisement {
     protected String appPackageName = "org.gots.premium";
 
     GotsPreferences gotsPreferences;
-
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(mContext);
+    }
     public GotsAdvertisement(Context mContext) {
         this.mContext = mContext;
-        gotsPreferences = GotsPreferences.getInstance().initIfNew(mContext);
+        gotsPreferences = getGotsContext().getServerConfig();
     }
 
     @SuppressWarnings("deprecation")

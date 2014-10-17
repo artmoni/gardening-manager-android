@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.context.GotsContext;
 import org.gots.garden.provider.GardenProvider;
 import org.gots.garden.provider.local.LocalGardenProvider;
 import org.gots.garden.provider.nuxeo.NuxeoGardenProvider;
@@ -81,10 +82,12 @@ public class GotsGardenManager extends BroadcastReceiver {
         mContext = null;
         instance = null;
     }
-
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(mContext);
+    }
     private void setGardenProvider() {
 
-        if (GotsPreferences.getInstance().isConnectedToServer() && !nuxeoManager.getNuxeoClient().isOffline()) {
+        if (getGotsContext().getServerConfig().isConnectedToServer() && !nuxeoManager.getNuxeoClient().isOffline()) {
             gardenProvider = new NuxeoGardenProvider(mContext);
         } else {
             // return null;

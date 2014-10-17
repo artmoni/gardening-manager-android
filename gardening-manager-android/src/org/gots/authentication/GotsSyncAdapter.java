@@ -1,6 +1,7 @@
 package org.gots.authentication;
 
 import org.gots.allotment.GotsAllotmentManager;
+import org.gots.context.GotsContext;
 import org.gots.garden.GotsGardenManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
@@ -27,12 +28,15 @@ public class GotsSyncAdapter extends NuxeoSyncAdapater {
 
     protected GotsSeedManager seedManager;
 
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(getContext());
+    }
+
     public GotsSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
         mAccountManager = AccountManager.get(context);
 
-        gotsPrefs = GotsPreferences.getInstance();
-        gotsPrefs.initIfNew(getContext());
+        gotsPrefs = getGotsContext().getServerConfig();
 
         growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(getContext());
         allotmentManager = GotsAllotmentManager.getInstance().initIfNew(getContext());

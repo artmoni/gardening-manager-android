@@ -14,6 +14,7 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
+import org.gots.context.GotsContext;
 import org.gots.preferences.GotsPreferences;
 
 import android.content.Context;
@@ -31,10 +32,12 @@ public class NuxeoAuthentication {
     GotsPreferences gotsPrefs;
 
     private Context mContext;
-
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(mContext);
+    }
     public NuxeoAuthentication(Context context) {
         this.mContext = context;
-        gotsPrefs = GotsPreferences.getInstance().initIfNew(mContext);
+        gotsPrefs = getGotsContext().getServerConfig();
     }
 
     public String request_basicauth_token(String login, String password, boolean revoke) throws IOException {

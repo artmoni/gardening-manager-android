@@ -45,16 +45,16 @@ public class WebHelpActivity extends BaseGotsActivity {
 
         // mWebView.getSettings().setJavaScriptEnabled(true);
 
-        mWebView.loadUrl(Uri.parse(HelpUriBuilder.getUri(helpClass)).toString());
+        mWebView.loadUrl(Uri.parse(HelpUriBuilder.getUri(this, helpClass)).toString());
 
-//        Button close = (Button) findViewById(R.id.buttonClose);
-//        close.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                finish();
-//            }
-//        });
+        // Button close = (Button) findViewById(R.id.buttonClose);
+        // close.setOnClickListener(new View.OnClickListener() {
+        //
+        // @Override
+        // public void onClick(View v) {
+        // finish();
+        // }
+        // });
 
     }
 
@@ -84,6 +84,7 @@ public class WebHelpActivity extends BaseGotsActivity {
             super.onPageFinished(view, url);
             sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
         }
+
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));

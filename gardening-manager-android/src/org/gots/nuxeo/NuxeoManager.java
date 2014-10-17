@@ -22,6 +22,7 @@
 package org.gots.nuxeo;
 
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.context.GotsContext;
 import org.gots.preferences.GotsPreferences;
 import org.gots.utils.NotConfiguredException;
 import org.nuxeo.android.config.NuxeoServerConfig;
@@ -84,8 +85,7 @@ public class NuxeoManager extends BroadcastReceiver {
             return this;
         }
 
-        gotsPrefs = GotsPreferences.getInstance();
-        gotsPrefs.initIfNew(context);
+        gotsPrefs = GotsContext.get(context).getServerConfig();
 
         nxConfig = new NuxeoServerConfig(context);
         nxConfig.setLogin("");
@@ -138,7 +138,7 @@ public class NuxeoManager extends BroadcastReceiver {
         if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())) {
             shutdown();
             initIfNew(context);
-//            context.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
+            // context.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
         }
     }
 }

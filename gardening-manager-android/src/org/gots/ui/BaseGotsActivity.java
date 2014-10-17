@@ -64,8 +64,8 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
  * @author jcarsique
  * 
  */
-public abstract class BaseGotsActivity extends BaseNuxeoActivity implements NuxeoContextProvider {
-    private static final String TAG = "AbstractActivity";
+public abstract class BaseGotsActivity extends BaseNuxeoActivity implements GotsContextProvider {
+    private static final String TAG = BaseGotsActivity.class.getSimpleName();
 
     // private static final String TAG = AbstractActivity.class.getSimpleName();
 
@@ -89,16 +89,15 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Nuxe
 
     private static ArrayList<BaseGotsActivity> activities = new ArrayList<BaseGotsActivity>();
 
-    protected GotsContext getGotsContext(){
+    public GotsContext getGotsContext() {
         return GotsContext.get(getApplicationContext());
     }
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO All this should be part of the application/service/...
-        gotsPrefs = GotsPreferences.getInstance();
-        gotsPrefs.initIfNew(this);
+        gotsPrefs = getGotsContext().getServerConfig();
         gotsPurchase = new GotsPurchaseItem(this);
         nuxeoManager = NuxeoManager.getInstance();
         nuxeoManager.initIfNew(this);

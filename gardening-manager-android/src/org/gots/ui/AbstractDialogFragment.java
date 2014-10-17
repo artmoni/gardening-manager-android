@@ -1,19 +1,22 @@
 package org.gots.ui;
 
+import org.gots.context.GotsContext;
 import org.gots.preferences.GotsPreferences;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 
-
 public class AbstractDialogFragment extends DialogFragment {
 
     protected GotsPreferences gotsPrefs;
 
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(getActivity());
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        gotsPrefs = GotsPreferences.getInstance();
-        gotsPrefs.initIfNew(getActivity());
+        gotsPrefs = getGotsContext().getServerConfig();
         super.onCreate(savedInstanceState);
     }
 }

@@ -8,6 +8,7 @@ import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.action.provider.nuxeo.NuxeoActionSeedProvider;
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.context.GotsContext;
 import org.gots.exception.GotsServerRestrictedException;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
@@ -45,14 +46,16 @@ public class GotsActionSeedManager extends BroadcastReceiver implements GotsActi
         }
         return instance;
     }
-
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(mContext);
+    }
     public synchronized GotsActionSeedProvider initIfNew(Context context) {
         if (initDone) {
             return this;
         }
         this.mContext = context;
         // mContext.registerReceiver(this, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
-        gotsPrefs = GotsPreferences.getInstance().initIfNew(context);
+        gotsPrefs = getGotsContext().getServerConfig();
         setProvider();
         initDone = true;
         return this;

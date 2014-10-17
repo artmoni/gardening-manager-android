@@ -28,6 +28,7 @@ import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.context.GotsContext;
 import org.gots.exception.GotsServerRestrictedException;
 import org.gots.inapp.GotsBillingDialog;
 import org.gots.inapp.GotsPurchaseItem;
@@ -76,7 +77,7 @@ import android.widget.Toast;
 import com.android.vending.billing.util.IabHelper;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class TabSeedActivity extends ActionBarActivity {
+public class TabSeedActivity extends BaseGotsActivity {
     public static final String GOTS_VENDORSEED_ID = "org.gots.seed.vendorid";
 
     public static final String GOTS_GROWINGSEED_ID = "org.gots.seed.id";
@@ -97,8 +98,6 @@ public class TabSeedActivity extends ActionBarActivity {
 
     private Gallery pictureGallery;
 
-    GotsPreferences gotsPreferences;
-
     private GotsPurchaseItem gotsPurchase;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -110,7 +109,6 @@ public class TabSeedActivity extends ActionBarActivity {
                 cameraPicture = new File(cameraFilename);
         }
 
-        gotsPreferences = GotsPreferences.getInstance().initIfNew(getApplicationContext());
         gotsPurchase = new GotsPurchaseItem(this);
         GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
         GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
@@ -147,7 +145,7 @@ public class TabSeedActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 File f = (File) arg0.getItemAtPosition(position);
-                File dest = new File(gotsPreferences.getGotsExternalFileDir(), f.getName());
+                File dest = new File(gotsPrefs.getGotsExternalFileDir(), f.getName());
                 try {
                     FileUtilities.copy(f, dest);
                     Intent intent = new Intent();
@@ -352,7 +350,7 @@ public class TabSeedActivity extends ActionBarActivity {
                     } catch (Exception e) {
                         // nothing
                     }
-                    if (!gotsPreferences.isConnectedToServer()) {
+                    if (!gotsPrefs.isConnectedToServer()) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(TabSeedActivity.this);
                         builder.setMessage(getResources().getString(R.string.login_connect_restricted)).setCancelable(
                                 false).setPositiveButton(getResources().getString(R.string.login_connect),

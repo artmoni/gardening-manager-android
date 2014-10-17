@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.Calendar;
 
 import org.gots.R;
+import org.gots.context.GotsContext;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
@@ -39,6 +40,10 @@ public class SeedWidget extends RelativeLayout {
         this.mContext = context;
         initView();
 
+    }
+
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(mContext);
     }
 
     public SeedWidget(Context context, AttributeSet attrs) {
@@ -85,7 +90,7 @@ public class SeedWidget extends RelativeLayout {
             @Override
             protected void onPreExecute() {
                 seedView = (ImageView) findViewById(R.id.idSeedImage2);
-                gotsPref = GotsPreferences.getInstance().initIfNew(mContext);
+                gotsPref = getGotsContext().getServerConfig();
                 super.onPreExecute();
             }
 

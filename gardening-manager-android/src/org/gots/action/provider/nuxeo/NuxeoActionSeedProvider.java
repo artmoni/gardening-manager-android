@@ -372,7 +372,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
 
             } catch (FileNotFoundException e) {
                 Log.d(TAG, "File not found: " + e.getMessage());
-            } catch (IOException e) {
+            } catch (IOException e) { 
                 Log.d(TAG, "Error accessing file: " + e.getMessage());
             }
 

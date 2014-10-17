@@ -25,6 +25,7 @@ import org.gots.authentication.GotsSocialAuthentication;
 import org.gots.authentication.provider.google.GoogleAuthentication;
 import org.gots.authentication.provider.google.User;
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.context.GotsContext;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GotsGardenManager;
 import org.gots.preferences.GotsPreferences;
@@ -69,6 +70,10 @@ public class ProfileAdapter extends BaseAdapter {
 
     private GardenInterface selectedGarden;
 
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(mContext);
+    }
+
     public ProfileAdapter(Context context, List<GardenInterface> myGardens) {
         mContext = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -78,7 +83,7 @@ public class ProfileAdapter extends BaseAdapter {
         this.myGardens = myGardens;
         selectedGarden = gardenManager.getCurrentGarden();
 
-        gotsPreferences = GotsPreferences.getInstance().initIfNew(mContext);
+        gotsPreferences = getGotsContext().getServerConfig();
 
     }
 

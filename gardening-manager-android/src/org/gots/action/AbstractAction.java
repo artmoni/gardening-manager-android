@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.allotment.GotsAllotmentManager;
+import org.gots.context.GotsContext;
 import org.gots.garden.GotsGardenManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
@@ -51,9 +52,13 @@ public class AbstractAction implements BaseActionInterface, Comparator<AbstractA
     public AbstractAction() {
     }
 
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(mContext);
+    }
+
     public AbstractAction(Context context) {
         this.mContext = context;
-        gotsPrefs = GotsPreferences.getInstance().initIfNew(mContext);
+        gotsPrefs = getGotsContext().getServerConfig();
         seedManager = GotsSeedManager.getInstance().initIfNew(mContext);
         gardenManager = GotsGardenManager.getInstance().initIfNew(mContext);
         actionManager = GotsActionManager.getInstance().initIfNew(mContext);

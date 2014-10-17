@@ -1,7 +1,7 @@
 package org.gots.sensor;
 
 import org.gots.R;
-import org.gots.authentication.ParrotAuthentication;
+import org.gots.authentication.provider.parrot.ParrotAuthentication;
 import org.gots.ui.AbstractDialogFragment;
 
 import android.content.Intent;

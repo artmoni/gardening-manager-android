@@ -85,7 +85,6 @@ public class GardenSQLite extends SQLiteOpenHelper {
 	}
 	 public static synchronized GardenSQLite getInstance(Context context) {
 	        if (helper == null ) {
-	            GotsPreferences.getInstance().initIfNew(context);
 	            helper = new GardenSQLite(context);
 	        }
 

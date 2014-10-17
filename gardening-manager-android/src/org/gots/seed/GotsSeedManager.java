@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.context.GotsContext;
 import org.gots.exception.GotsException;
 import org.gots.garden.GardenInterface;
 import org.gots.nuxeo.NuxeoManager;
@@ -52,6 +53,10 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
         allSeeds = new ArrayList<BaseSeedInterface>();
     }
 
+    private GotsContext getGotsContext() {
+        return GotsContext.get(mContext);
+    }
+
     protected void setSeedProvider() {
         // ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         // NetworkInfo ni = cm.getActiveNetworkInfo();
@@ -80,7 +85,7 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
             return this;
         }
         this.mContext = context;
-        gotsPrefs = GotsPreferences.getInstance().initIfNew(context);
+        gotsPrefs = (GotsPreferences)getGotsContext().getServerConfig();
         nuxeoManager = NuxeoManager.getInstance().initIfNew(context);
 
         setSeedProvider();

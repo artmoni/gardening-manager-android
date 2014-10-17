@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.gots.context.GotsContext;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
@@ -21,10 +22,13 @@ import android.util.Log;
 public class ParrotSeedConverter {
     private static final String TAG = "ParrotSeedConverter";
 
+    private GotsPreferences gotsPref;
+
     Context mContext;
 
     public ParrotSeedConverter(Context context) {
         mContext = context;
+        gotsPref = GotsContext.get(mContext).getServerConfig();
     }
 
     public BaseSeedInterface convert(JSONObject plant) {
@@ -59,10 +63,9 @@ public class ParrotSeedConverter {
 
     private void downloadImage(final String plantName, final String url) {
         new AsyncTask<Void, Void, Void>() {
-           
+
             protected Void doInBackground(Void... params) {
-                File file = new File(
-                        GotsPreferences.getInstance().initIfNew(mContext).getGotsExternalFileDir().getAbsolutePath(),
+                File file = new File(gotsPref.getGotsExternalFileDir().getAbsolutePath(),
                         plantName.toLowerCase().replaceAll("\\s", ""));
                 if (!file.exists()) {
                     try {

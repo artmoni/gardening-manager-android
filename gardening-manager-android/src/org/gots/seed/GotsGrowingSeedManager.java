@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.context.GotsContext;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.provider.local.GotsGrowingSeedProvider;
@@ -46,6 +47,9 @@ public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGro
         // mLocalProvider = new LocalSeedProvider(mContext);
         // allSeeds = new ArrayList<BaseSeedInterface>();
     }
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(mContext);
+    }
 
     protected void setGrowingSeedProvider() {
         
@@ -84,7 +88,7 @@ public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGro
             return this;
         }
         this.mContext = context;
-        gotsPrefs = GotsPreferences.getInstance().initIfNew(context);
+        gotsPrefs = getGotsContext().getServerConfig();
         nuxeoManager = NuxeoManager.getInstance().initIfNew(context);
         // mContext.registerReceiver(this, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
         setGrowingSeedProvider();

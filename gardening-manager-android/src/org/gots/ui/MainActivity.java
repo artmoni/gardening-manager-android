@@ -697,6 +697,7 @@ public class MainActivity extends BaseGotsActivity {
 
     };
 
+
     private boolean doubleBackToExitPressedOnce;
 
     @Override

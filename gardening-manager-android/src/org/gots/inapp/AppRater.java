@@ -1,6 +1,7 @@
 package org.gots.inapp;
 
 import org.gots.R;
+import org.gots.context.GotsContext;
 import org.gots.preferences.GotsPreferences;
 
 import android.app.Dialog;
@@ -57,16 +58,17 @@ public class AppRater {
 
     public static void showRateDialog(final Context mContext, final SharedPreferences.Editor editor) {
         final Dialog dialog = new Dialog(mContext);
-//        final Dialog dialog = new Dialog(mContext, R.style.CustomDialog);
+        // final Dialog dialog = new Dialog(mContext, R.style.CustomDialog);
         dialog.setTitle(mContext.getResources().getString(R.string.inapp_rating_title) + " " + APP_TITLE);
-        
+
         LinearLayout ll = new LinearLayout(mContext);
         ll.setOrientation(LinearLayout.VERTICAL);
         ll.setBackgroundColor(mContext.getResources().getColor(R.color.white));
 
         TextView tv = new TextView(mContext);
 
-        GotsPreferences gotsPrefs = GotsPreferences.getInstance().initIfNew(mContext);
+        GotsPreferences gotsPrefs = GotsContext.get(mContext).getServerConfig();
+
         tv.setText(mContext.getResources().getString(R.string.inapp_rating_descrition).replace("_APP_TITLE_",
                 gotsPrefs.getGardeningManagerAppname()));
         tv.setWidth(240);
@@ -79,7 +81,8 @@ public class AppRater {
             public void onClick(View v) {
                 mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + APP_PNAME)));
                 dialog.dismiss();
-                GoogleAnalyticsTracker.getInstance().trackEvent("Button", "AppRater", "rate",launch_count);;        
+                GoogleAnalyticsTracker.getInstance().trackEvent("Button", "AppRater", "rate", launch_count);
+                ;
 
             }
         });
@@ -91,10 +94,11 @@ public class AppRater {
         b3.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 if (editor != null) {
-                    
+
                     editor.putBoolean("dontshowagain", true);
                     editor.commit();
-                    GoogleAnalyticsTracker.getInstance().trackEvent("Button", "AppRater", "dontshowagain", launch_count);;        
+                    GoogleAnalyticsTracker.getInstance().trackEvent("Button", "AppRater", "dontshowagain", launch_count);
+                    ;
 
                 }
                 dialog.dismiss();
@@ -106,7 +110,8 @@ public class AppRater {
         b2.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 dialog.dismiss();
-                GoogleAnalyticsTracker.getInstance().trackEvent("Button", "AppRater", "showlater", launch_count);;        
+                GoogleAnalyticsTracker.getInstance().trackEvent("Button", "AppRater", "showlater", launch_count);
+                ;
 
             }
         });

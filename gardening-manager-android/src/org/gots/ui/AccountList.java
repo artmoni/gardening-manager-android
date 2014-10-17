@@ -1,5 +1,6 @@
 package org.gots.ui;
 
+import org.gots.context.GotsContext;
 import org.gots.preferences.GotsPreferences;
 
 import android.accounts.Account;
@@ -20,6 +21,10 @@ public class AccountList extends ListActivity {
     protected AccountManager accountManager;
 
     protected Intent intent;
+
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(getApplicationContext());
+    }
 
     /** Called when the activity is first created. */
     @Override
@@ -99,7 +104,7 @@ public class AccountList extends ListActivity {
                 }
 
                 openid_connect(bundle.getString(AccountManager.KEY_AUTHTOKEN));
-                GotsPreferences.getInstance().setToken(bundle.getString(AccountManager.KEY_AUTHTOKEN));
+                getGotsContext().getServerConfig().setToken(bundle.getString(AccountManager.KEY_AUTHTOKEN));
                 // accountManager.invalidateAuthToken(bundle.getString(AccountManager.KEY_ACCOUNT_TYPE),
                 // bundle.getString(AccountManager.KEY_AUTHTOKEN));
 
@@ -118,73 +123,73 @@ public class AccountList extends ListActivity {
         }
 
         // --- placing the authentication request ---
-//        public String authRequest(String userSuppliedString, HttpRequest httpReq, HttpResponse httpResp)
-//                throws IOException {
-//            // try {
-//            // // configure the return_to URL where your application will
-//            // // receive
-//            // // the authentication responses from the OpenID provider
-//            // String returnToUrl =
-//            // "http://srv2.gardening-manager.com:8090/nuxeo/nxstartup.faces?provider%3DGoogleOpenIDConnect";
-//            //
-//            //
-//            // // --- Forward proxy setup (only if needed) ---
-//            // // ProxyProperties proxyProps = new ProxyProperties();
-//            // // proxyProps.setProxyName("proxy.example.com");
-//            // // proxyProps.setProxyPort(8080);
-//            // // HttpClientFactory.setProxyProperties(proxyProps);
-//            //
-//            // // perform discovery on the user-supplied identifier
-//            // List discoveries = manager.discover(userSuppliedString);
-//            //
-//            // // attempt to associate with the OpenID provider
-//            // // and retrieve one service endpoint for authentication
-//            // DiscoveryInformation discovered = manager.associate(discoveries);
-//            //
-//            // // store the discovery information in the user's session
-//            // // httpReq.getSession().setAttribute("openid-disc", discovered);
-//            //
-//            // // obtain a AuthRequest message to be sent to the OpenID
-//            // // provider
-//            // AuthRequest authReq = manager.authenticate(discovered,
-//            // returnToUrl);
-//            //
-//            // // Attribute Exchange example: fetching the 'email' attribute
-//            // FetchRequest fetch = FetchRequest.createFetchRequest();
-//            // fetch.addAttribute("email",
-//            // // attribute alias
-//            // "http://schema.openid.net/contact/email", // type URI
-//            // true); // required
-//            //
-//            // // attach the extension to the authentication request
-//            // authReq.addExtension(fetch);
-//            //
-//            // if (!discovered.isVersion2()) {
-//            // // Option 1: GET HTTP-redirect to the OpenID Provider
-//            // // endpoint
-//            // // The only method supported in OpenID 1.x
-//            // // redirect-URL usually limited ~2048 bytes
-//            // httpResp.sendRedirect(authReq.getDestinationUrl(true));
-//            // HttpParams params = cliauthReqent.getParams();
-//            // HttpClientParams.setRedirecting(params, false);
-//            // return null;
-//            // } else {
-//            // // Option 2: HTML FORM Redirection (Allows payloads >2048
-//            // // bytes)
-//            //
-//            // RequestDispatcher dispatcher =
-//            // getServletContext().getRequestDispatcher("formredirection.jsp");
-//            // httpReq.setAttribute("parameterMap", authReq.getParameterMap());
-//            // httpReq.setAttribute("destinationUrl",
-//            // authReq.getDestinationUrl(false));
-//            // dispatcher.forward(httpReq, httpResp);
-//            // }
-//            // } catch (OpenIDException e) {
-//            // // present error to the user
-//            // }
-//
-//            return null;
-//        }
+        // public String authRequest(String userSuppliedString, HttpRequest httpReq, HttpResponse httpResp)
+        // throws IOException {
+        // // try {
+        // // // configure the return_to URL where your application will
+        // // // receive
+        // // // the authentication responses from the OpenID provider
+        // // String returnToUrl =
+        // // "http://srv2.gardening-manager.com:8090/nuxeo/nxstartup.faces?provider%3DGoogleOpenIDConnect";
+        // //
+        // //
+        // // // --- Forward proxy setup (only if needed) ---
+        // // // ProxyProperties proxyProps = new ProxyProperties();
+        // // // proxyProps.setProxyName("proxy.example.com");
+        // // // proxyProps.setProxyPort(8080);
+        // // // HttpClientFactory.setProxyProperties(proxyProps);
+        // //
+        // // // perform discovery on the user-supplied identifier
+        // // List discoveries = manager.discover(userSuppliedString);
+        // //
+        // // // attempt to associate with the OpenID provider
+        // // // and retrieve one service endpoint for authentication
+        // // DiscoveryInformation discovered = manager.associate(discoveries);
+        // //
+        // // // store the discovery information in the user's session
+        // // // httpReq.getSession().setAttribute("openid-disc", discovered);
+        // //
+        // // // obtain a AuthRequest message to be sent to the OpenID
+        // // // provider
+        // // AuthRequest authReq = manager.authenticate(discovered,
+        // // returnToUrl);
+        // //
+        // // // Attribute Exchange example: fetching the 'email' attribute
+        // // FetchRequest fetch = FetchRequest.createFetchRequest();
+        // // fetch.addAttribute("email",
+        // // // attribute alias
+        // // "http://schema.openid.net/contact/email", // type URI
+        // // true); // required
+        // //
+        // // // attach the extension to the authentication request
+        // // authReq.addExtension(fetch);
+        // //
+        // // if (!discovered.isVersion2()) {
+        // // // Option 1: GET HTTP-redirect to the OpenID Provider
+        // // // endpoint
+        // // // The only method supported in OpenID 1.x
+        // // // redirect-URL usually limited ~2048 bytes
+        // // httpResp.sendRedirect(authReq.getDestinationUrl(true));
+        // // HttpParams params = cliauthReqent.getParams();
+        // // HttpClientParams.setRedirecting(params, false);
+        // // return null;
+        // // } else {
+        // // // Option 2: HTML FORM Redirection (Allows payloads >2048
+        // // // bytes)
+        // //
+        // // RequestDispatcher dispatcher =
+        // // getServletContext().getRequestDispatcher("formredirection.jsp");
+        // // httpReq.setAttribute("parameterMap", authReq.getParameterMap());
+        // // httpReq.setAttribute("destinationUrl",
+        // // authReq.getDestinationUrl(false));
+        // // dispatcher.forward(httpReq, httpResp);
+        // // }
+        // // } catch (OpenIDException e) {
+        // // // present error to the user
+        // // }
+        //
+        // return null;
+        // }
 
     }
 }

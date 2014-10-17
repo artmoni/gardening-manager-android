@@ -63,7 +63,6 @@ public class AuthenticationActivity extends BaseGotsActivity {
 
     public static final String AUTH_TOKEN_TYPE = "token.nuxeo";
 
-    private GotsPreferences gotsPreferences;
 
     int[] tutorialList = { R.layout.tutorial_a, R.layout.tutorial_b, R.layout.tutorial_c, R.layout.tutorial_d,
             R.layout.tutorial_f, R.layout.tutorial_e };
@@ -86,7 +85,6 @@ public class AuthenticationActivity extends BaseGotsActivity {
         mPager.setAdapter(mPagerAdapter);
         mPager.setPageTransformer(true, new DepthPageTransformer());
 
-        gotsPreferences = GotsPreferences.getInstance().initIfNew(getApplicationContext());
 
         if (getIntent().getExtras() != null) {
             Bundle extras = getIntent().getExtras();
@@ -224,10 +222,10 @@ public class AuthenticationActivity extends BaseGotsActivity {
         // final Account account = new Account(accountName, intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
 
         if (getIntent().getBooleanExtra(ARG_IS_ADDING_NEW_ACCOUNT, false)) {
-            gotsPreferences.setNuxeoLogin(accountName);
-            final Account account = gotsPreferences.getUserAccount();
+            gotsPrefs.setNuxeoLogin(accountName);
+            final Account account = gotsPrefs.getUserAccount();
             String authtoken = intent.getStringExtra(AccountManager.KEY_AUTHTOKEN);
-            gotsPreferences.setToken(authtoken);
+            gotsPrefs.setToken(authtoken);
             // Creating the account on the device and setting the auth token we got
             // (Not setting the auth token will cause another call to the server to authenticate the user)
             // Bundle bundle = new Bundle();

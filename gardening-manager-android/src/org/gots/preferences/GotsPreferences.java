@@ -39,7 +39,12 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-public class GotsPreferences implements OnSharedPreferenceChangeListener {
+public class GotsPreferences extends NuxeoServerConfig {
+
+    public GotsPreferences(Context androidContext) {
+        super(androidContext);
+        initIfNew(androidContext);
+    }
 
     private static final String TAG = "GotsPreferences";
 
@@ -146,22 +151,22 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
     // private static final String PUBKEY =
     // "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtAFVYGad4FaKIZ9A0W2JfMh+B1PQMU+tal9B0XYbEJdZy6UCwqoH42/YLDn0GTjKA+ozAZJtaQqoU/ew95tYKEYszj067HfVehpRtKxLlySFMnqdai0SuGyl5EI4QQovsw3wFU1ihELWBaCg2CcTJqk1jXcWaxsqPPPWty5tAcMwQDWZ0cw6uw8QddztiKlw5IB1XTWdhZTuPL/RcR0Ns+lbEB2kdosozekXr+dRqZ4+PKyHn+j8/407hb76gqn9CmrGhOsJ3E7aOVRCZWZ9nf6aJfFYJP5JY/QHsa+9OsiSj8QXS2vic3ay+MazF09bteN7Wnb15Y9CBK/sM2RAqQIDAQAB";
 
-    private GotsPreferences() {
-    }
+//    private GotsPreferences() {
+//    }
 
-    /**
-     * After first call, {@link #initIfNew(Context)} must be called else a {@link NotConfiguredException} will be thrown
-     * on the second call attempt.
-     */
-    public static synchronized GotsPreferences getInstance() {
-        if (instance == null) {
-            instance = new GotsPreferences();
-            firstCall = new Exception();
-        } else if (!instance.initDone) {
-            throw new NotConfiguredException(firstCall);
-        }
-        return instance;
-    }
+//    /**
+//     * After first call, {@link #initIfNew(Context)} must be called else a {@link NotConfiguredException} will be thrown
+//     * on the second call attempt.
+//     */
+//    public static synchronized GotsPreferences getInstance() {
+//        if (instance == null) {
+//            instance = new GotsPreferences();
+//            firstCall = new Exception();
+//        } else if (!instance.initDone) {
+//            throw new NotConfiguredException(firstCall);
+//        }
+//        return instance;
+//    }
 
     public void reset() {
         initDone = false;
@@ -357,7 +362,7 @@ public class GotsPreferences implements OnSharedPreferenceChangeListener {
         SharedPreferences preferences = mContext.getSharedPreferences("org.gots.preference", 0);
         int oldGardenId = preferences.getInt("org.gots.preference.gardenid", -1);
         if (oldGardenId > -1) {
-            GotsPreferences.getInstance().set(GotsPreferences.ORG_GOTS_CURRENT_GARDENID, oldGardenId);
+            set(GotsPreferences.ORG_GOTS_CURRENT_GARDENID, oldGardenId);
             SharedPreferences.Editor prefedit = preferences.edit();
             prefedit.putInt("org.gots.preference.gardenid", -1);
             prefedit.commit();

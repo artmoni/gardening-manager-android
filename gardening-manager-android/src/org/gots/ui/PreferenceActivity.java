@@ -1,6 +1,7 @@
 package org.gots.ui;
 
 import org.gots.R;
+import org.gots.context.GotsContext;
 import org.gots.preferences.GotsPreferences;
 import org.gots.provider.ActionsContentProvider;
 import org.gots.provider.AllotmentContentProvider;
@@ -35,11 +36,15 @@ public class PreferenceActivity extends android.preference.PreferenceActivity im
 
     private Account mAccount;
 
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(getApplicationContext());
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
-        gotsPreferences = GotsPreferences.getInstance().initIfNew(getApplicationContext());
+        gotsPreferences = getGotsContext().getServerConfig();
 
         displayPreference(NuxeoServerConfig.PREF_SERVER_LOGIN, gotsPreferences.getNuxeoLogin());
         displayPreference(NuxeoServerConfig.PREF_SERVER_URL, gotsPreferences.getGardeningManagerServerURI());
@@ -87,7 +92,7 @@ public class PreferenceActivity extends android.preference.PreferenceActivity im
             ContentResolver.setSyncAutomatically(mAccount, AllotmentContentProvider.AUTHORITY, true);
             ContentResolver.addPeriodicSync(mAccount, AllotmentContentProvider.AUTHORITY, new Bundle(),
                     gotsPreferences.getScheduleTimeForNotification() * SYNC_INTERVAL);
-            
+
             ContentResolver.setSyncAutomatically(mAccount, SensorContentProvider.AUTHORITY, true);
             ContentResolver.addPeriodicSync(mAccount, SensorContentProvider.AUTHORITY, new Bundle(),
                     gotsPreferences.getScheduleTimeForNotification() * SYNC_INTERVAL);

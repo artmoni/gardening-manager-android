@@ -3,6 +3,7 @@ package org.gots.seed.service;
 import org.gots.action.GotsActionSeedManager;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.allotment.GotsAllotmentManager;
+import org.gots.context.GotsContext;
 import org.gots.garden.GotsGardenManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
@@ -25,10 +26,12 @@ public abstract class GotsService extends Service {
 
     protected GotsAllotmentManager allotmentManager;
 
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(getApplicationContext());
+    }    
     @Override
     public void onCreate() {
-        gotsPrefs = GotsPreferences.getInstance();
-        gotsPrefs.initIfNew(this);
+        gotsPrefs = getGotsContext().getServerConfig();
 
         seedManager = GotsSeedManager.getInstance().initIfNew(getApplicationContext());
         gardenManager = GotsGardenManager.getInstance().initIfNew(getApplicationContext());

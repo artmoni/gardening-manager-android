@@ -6,6 +6,7 @@ import org.gots.action.provider.GotsActionProvider;
 import org.gots.action.provider.local.LocalActionProvider;
 import org.gots.action.provider.nuxeo.NuxeoActionProvider;
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.context.GotsContext;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.utils.NotConfiguredException;
@@ -45,13 +46,15 @@ public class GotsActionManager extends BroadcastReceiver implements GotsActionPr
         }
         return instance;
     }
-
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(mContext);
+    }
     public synchronized GotsActionManager initIfNew(Context context) {
         if (initDone) {
             return this;
         }
         this.mContext = context;
-        gotsPrefs = GotsPreferences.getInstance().initIfNew(context);
+        gotsPrefs = getGotsContext().getServerConfig();
         nuxeoManager = NuxeoManager.getInstance().initIfNew(context);
         cacheActions = new ArrayList<BaseActionInterface>();
         setProvider();

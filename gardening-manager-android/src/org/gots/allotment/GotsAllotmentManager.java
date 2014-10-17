@@ -10,6 +10,7 @@ import org.gots.allotment.provider.local.LocalAllotmentProvider;
 import org.gots.allotment.provider.nuxeo.NuxeoAllotmentProvider;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.context.GotsContext;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.utils.NotConfiguredException;
@@ -43,7 +44,9 @@ public class GotsAllotmentManager extends BroadcastReceiver implements Allotment
     private GotsAllotmentManager() {
 
     }
-
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(mContext);
+    }
     /**
      * After first call, {@link #initIfNew(Context)} must be called else a {@link NotConfiguredException} will be thrown
      * on the second call attempt.
@@ -92,7 +95,7 @@ public class GotsAllotmentManager extends BroadcastReceiver implements Allotment
         else
             Log.i(TAG, "isOnline");
 
-        if (GotsPreferences.getInstance().isConnectedToServer() && !nuxeoManager.getNuxeoClient().isOffline()) {
+        if (getGotsContext().getServerConfig().isConnectedToServer() && !nuxeoManager.getNuxeoClient().isOffline()) {
             allotmentProvider = new NuxeoAllotmentProvider(mContext);
         } else {
             allotmentProvider = new LocalAllotmentProvider(mContext);

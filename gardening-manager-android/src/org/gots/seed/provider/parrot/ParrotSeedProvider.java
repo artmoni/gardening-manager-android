@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.gots.authentication.ParrotAuthentication;
+import org.gots.authentication.provider.parrot.ParrotAuthentication;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.json.JSONArray;
