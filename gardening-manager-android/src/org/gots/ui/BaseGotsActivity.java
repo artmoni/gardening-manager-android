@@ -28,6 +28,8 @@ import org.gots.action.GotsActionSeedManager;
 import org.gots.allotment.GotsAllotmentManager;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.context.GotsContext;
+import org.gots.context.GotsContextProvider;
 import org.gots.garden.GotsGardenManager;
 import org.gots.inapp.GotsPurchaseItem;
 import org.gots.nuxeo.NuxeoManager;
@@ -35,6 +37,9 @@ import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GotsSeedManager;
 import org.nuxeo.android.activities.BaseNuxeoActivity;
+import org.nuxeo.android.context.NuxeoContext;
+import org.nuxeo.android.context.NuxeoContextProvider;
+import org.nuxeo.android.context.SimpleNuxeoApplication;
 
 import android.accounts.Account;
 import android.content.BroadcastReceiver;
@@ -59,7 +64,7 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
  * @author jcarsique
  * 
  */
-public abstract class BaseGotsActivity extends BaseNuxeoActivity {
+public abstract class BaseGotsActivity extends BaseNuxeoActivity implements NuxeoContextProvider {
     private static final String TAG = "AbstractActivity";
 
     // private static final String TAG = AbstractActivity.class.getSimpleName();
@@ -84,6 +89,10 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity {
 
     private static ArrayList<BaseGotsActivity> activities = new ArrayList<BaseGotsActivity>();
 
+    protected GotsContext getGotsContext(){
+        return GotsContext.get(getApplicationContext());
+    }
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -256,6 +265,11 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity {
     protected void onNuxeoDataRetrieved(Object data) {
         super.onNuxeoDataRetrieved(data);
         setProgressRefresh(false);
+    }
+
+    @Override
+    public NuxeoContext getNuxeoContext() {
+        return super.getNuxeoContext();
     }
 
 }

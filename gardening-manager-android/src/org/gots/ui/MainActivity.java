@@ -13,6 +13,7 @@ import org.gots.authentication.GotsSocialAuthentication;
 import org.gots.authentication.provider.google.GoogleAuthentication;
 import org.gots.authentication.provider.google.User;
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.context.GotsContext;
 import org.gots.garden.GardenInterface;
 import org.gots.inapp.GotsBillingDialog;
 import org.gots.inapp.GotsPurchaseItem;
@@ -716,4 +717,6 @@ public class MainActivity extends BaseGotsActivity {
             }
         }, 2000);
     }
+
+   
 }
