@@ -1,5 +1,6 @@
-Gardening Manager development plateform is processed maven
-This short documentation explain how to configure the developer environment with Eclipse, Android ADT and Maven
+Gardening Manager development plateform is processed by maven
+
+This short documentation explains how to configure the developer environment with Eclipse, Android ADT and Maven
 
 # Quick step installation guide
 1. git clone https://github.com/artmoni/gardening-manager-android
