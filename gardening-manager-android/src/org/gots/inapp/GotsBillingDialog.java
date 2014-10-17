@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.gots.R;
 import org.gots.context.GotsContext;
-import org.gots.preferences.GotsPreferences;
 
 import android.content.Intent;
 import android.os.Bundle;

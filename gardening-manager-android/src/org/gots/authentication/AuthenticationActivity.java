@@ -8,7 +8,6 @@ import org.gots.R;
 import org.gots.authentication.provider.google.GoogleAuthentication;
 import org.gots.authentication.provider.nuxeo.NuxeoAuthentication;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.preferences.GotsPreferences;
 import org.gots.ui.BaseGotsActivity;
 import org.gots.ui.fragment.TutorialFragment;
 

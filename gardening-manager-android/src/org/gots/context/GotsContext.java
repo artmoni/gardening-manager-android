@@ -1,7 +1,6 @@
 package org.gots.context;
 
 import org.gots.preferences.GotsPreferences;
-import org.nuxeo.android.config.NuxeoServerConfig;
 import org.nuxeo.android.context.NuxeoContext;
 
 import android.content.Context;

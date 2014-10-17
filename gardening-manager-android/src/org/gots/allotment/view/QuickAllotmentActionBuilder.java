@@ -12,14 +12,10 @@ package org.gots.allotment.view;
 
 import net.londatiga.android.QuickAction;
 
-import org.gots.action.GardeningActionInterface;
 import org.gots.action.GotsActionManager;
 import org.gots.action.bean.SowingAction;
-import org.gots.action.bean.WateringAction;
 import org.gots.action.view.ActionWidget;
-import org.gots.bean.Allotment;
 import org.gots.ui.HutActivity;
-import org.gots.ui.MySeedsListActivity;
 
 import android.content.Intent;
 import android.view.View;

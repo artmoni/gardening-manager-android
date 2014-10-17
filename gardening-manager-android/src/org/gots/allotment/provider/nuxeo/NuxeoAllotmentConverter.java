@@ -5,7 +5,6 @@ import org.gots.bean.BaseAllotmentInterface;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
-import android.R.string;
 import android.util.Log;
 
 public class NuxeoAllotmentConverter {

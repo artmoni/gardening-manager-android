@@ -13,7 +13,6 @@ import org.gots.authentication.GotsSocialAuthentication;
 import org.gots.authentication.provider.google.GoogleAuthentication;
 import org.gots.authentication.provider.google.User;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.context.GotsContext;
 import org.gots.garden.GardenInterface;
 import org.gots.inapp.GotsBillingDialog;
 import org.gots.inapp.GotsPurchaseItem;
@@ -25,7 +24,6 @@ import org.gots.provider.WeatherContentProvider;
 import org.gots.ui.fragment.DashboardResumeFragment;
 import org.gots.ui.slidingmenu.NavDrawerItem;
 import org.gots.ui.slidingmenu.adapter.NavDrawerListAdapter;
-import org.nuxeo.android.network.NetworkStatusBroadCastReceiver;
 
 import android.accounts.Account;
 import android.content.BroadcastReceiver;

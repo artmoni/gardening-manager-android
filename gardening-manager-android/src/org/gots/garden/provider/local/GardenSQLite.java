@@ -10,8 +10,6 @@
  ******************************************************************************/
 package org.gots.garden.provider.local;
 
-import org.gots.preferences.GotsPreferences;
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;

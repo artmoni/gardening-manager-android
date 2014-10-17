@@ -27,7 +27,6 @@ import java.util.Properties;
 
 import org.gots.R;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.utils.NotConfiguredException;
 import org.nuxeo.android.config.NuxeoServerConfig;
 
 import android.accounts.Account;
@@ -35,7 +34,6 @@ import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.PreferenceManager;
 import android.util.Log;
 

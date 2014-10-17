@@ -11,7 +11,6 @@ import org.gots.garden.provider.GardenProvider;
 import org.gots.garden.provider.local.LocalGardenProvider;
 import org.gots.garden.provider.nuxeo.NuxeoGardenProvider;
 import org.gots.nuxeo.NuxeoManager;
-import org.gots.preferences.GotsPreferences;
 import org.gots.utils.NotConfiguredException;
 import org.nuxeo.android.broadcast.NuxeoBroadcastMessages;
 

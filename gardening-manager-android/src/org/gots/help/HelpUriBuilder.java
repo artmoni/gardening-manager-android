@@ -3,7 +3,6 @@ package org.gots.help;
 import java.util.Locale;
 
 import org.gots.context.GotsContext;
-import org.gots.preferences.GotsPreferences;
 
 import android.content.Context;
 import android.util.Log;

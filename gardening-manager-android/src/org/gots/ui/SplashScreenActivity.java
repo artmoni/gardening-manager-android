@@ -16,10 +16,6 @@ import org.gots.R;
 import org.gots.authentication.AuthenticationActivity;
 import org.gots.inapp.GotsPurchaseItem;
 
-import com.android.vending.billing.util.IabHelper;
-import com.android.vending.billing.util.IabResult;
-import com.android.vending.billing.util.Inventory;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Intent;
@@ -32,6 +28,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.android.vending.billing.util.IabHelper;
+import com.android.vending.billing.util.IabResult;
+import com.android.vending.billing.util.Inventory;
 
 public class SplashScreenActivity extends BaseGotsActivity {
 

@@ -15,8 +15,6 @@ import org.nuxeo.android.broadcast.NuxeoBroadcastMessages;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 
 public class GotsActionManager extends BroadcastReceiver implements GotsActionProvider {
 

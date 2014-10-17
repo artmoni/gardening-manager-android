@@ -7,7 +7,6 @@ import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.view.SeedWidget;
 import org.gots.ui.ActionActivity;
-import org.gots.ui.DashboardActivity;
 import org.gots.ui.MainActivity;
 
 import android.app.NotificationManager;

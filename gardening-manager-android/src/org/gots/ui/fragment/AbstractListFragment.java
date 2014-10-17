@@ -8,7 +8,6 @@ import org.nuxeo.android.fragments.BaseNuxeoFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 
 public class AbstractListFragment extends BaseNuxeoFragment {
     protected GotsSeedManager seedProvider;

@@ -1,7 +1,6 @@
 package org.gots.ui;
 
 import org.gots.context.GotsContext;
-import org.gots.preferences.GotsPreferences;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;

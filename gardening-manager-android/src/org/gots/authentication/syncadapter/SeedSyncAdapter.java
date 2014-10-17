@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.gots.authentication.GotsSyncAdapter;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.garden.GotsGardenManager;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.service.SeedNotification;
 

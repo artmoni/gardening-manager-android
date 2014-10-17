@@ -7,12 +7,8 @@ import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GotsSeedManager;
 
-import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.content.ContentProviderClient;
 import android.content.Context;
-import android.content.SyncResult;
-import android.os.Bundle;
 
 public class GotsSyncAdapter extends NuxeoSyncAdapater {
 

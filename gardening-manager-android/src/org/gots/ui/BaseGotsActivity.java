@@ -38,8 +38,6 @@ import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GotsSeedManager;
 import org.nuxeo.android.activities.BaseNuxeoActivity;
 import org.nuxeo.android.context.NuxeoContext;
-import org.nuxeo.android.context.NuxeoContextProvider;
-import org.nuxeo.android.context.SimpleNuxeoApplication;
 
 import android.accounts.Account;
 import android.content.BroadcastReceiver;
@@ -50,7 +48,6 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;

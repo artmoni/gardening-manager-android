@@ -4,7 +4,6 @@ import org.gots.R;
 import org.nuxeo.android.fragments.BaseNuxeoFragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

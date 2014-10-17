@@ -2,7 +2,6 @@ package org.gots.action.provider.nuxeo;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import org.gots.action.BaseActionInterface;
 import org.gots.action.provider.local.LocalActionProvider;
