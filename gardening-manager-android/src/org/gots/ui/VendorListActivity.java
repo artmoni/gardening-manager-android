@@ -42,11 +42,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-public class VendorListActivity extends AbstractListFragment {
+public class VendorListActivity extends AbstractListFragment implements OnScrollListener {
 
     protected static final String FILTER_FAVORITES = "filter.favorites";
 
@@ -90,7 +92,6 @@ public class VendorListActivity extends AbstractListFragment {
         View view = inflater.inflate(R.layout.list_seed_grid, container, false);
         gridViewCatalog = (GridView) view.findViewById(R.id.seedgridview);
         gridViewCatalog.setAdapter(listVendorSeedAdapter);
-
         gridViewCatalog.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
@@ -98,11 +99,12 @@ public class VendorListActivity extends AbstractListFragment {
 
                     getActivity().finish();
                 } else {
-//                    view.setSelected(!view.isSelected());
+                    // view.setSelected(!view.isSelected());
                     ((ActionBarActivity) getActivity()).startSupportActionMode(new MyCallBack(position));
                 }
             }
         });
+        gridViewCatalog.setOnScrollListener(this);
         // setListAdapter(listVendorSeedAdapter);
 
         return view;
@@ -119,6 +121,14 @@ public class VendorListActivity extends AbstractListFragment {
     };
 
     private GridView gridViewCatalog;
+
+    private boolean flag_loading = false;
+
+    private int pageSize = 25;
+
+    private int page = 0;
+
+    private int paddingPage = 10;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -145,9 +155,9 @@ public class VendorListActivity extends AbstractListFragment {
 
         List<BaseSeedInterface> catalogue = new ArrayList<BaseSeedInterface>();
         if (args == null) {
-            catalogue = seedProvider.getVendorSeeds(false);
+            catalogue = seedProvider.getVendorSeeds(true, page, pageSize);
             if (catalogue.size() == 0)
-                catalogue = seedProvider.getVendorSeeds(true);
+                catalogue = seedProvider.getVendorSeeds(true, page, pageSize);
         } else if (args.getBoolean(FILTER_STOCK))
             catalogue = seedProvider.getMyStock(gardenManager.getCurrentGarden());
 
@@ -163,7 +173,7 @@ public class VendorListActivity extends AbstractListFragment {
         else if (args.getBoolean(FILTER_PARROT)) {
             ParrotSeedProvider parrotProvider = new ParrotSeedProvider(mContext);
             if ("".equals(currentFilter))
-                catalogue = parrotProvider.getVendorSeeds(true);
+                catalogue.addAll(parrotProvider.getVendorSeeds(true, page, pageSize));
             else
                 catalogue = parrotProvider.getVendorSeedsByName(currentFilter.toString());
 
@@ -175,6 +185,7 @@ public class VendorListActivity extends AbstractListFragment {
     protected void onNuxeoDataRetrieved(Object data) {
         List<BaseSeedInterface> vendorSeeds = (List<BaseSeedInterface>) data;
         listVendorSeedAdapter.setSeeds(vendorSeeds);
+        // listVendorSeedAdapter.refill(vendorSeeds);
         // listVendorSeedAdapter.getFilter().filter(currentFilter);
         // if (!"".equals(currentFilter) && currentFilter != null)
         // displaySearchBox();
@@ -187,7 +198,6 @@ public class VendorListActivity extends AbstractListFragment {
 
         super.onNuxeoDataRetrieved(data);
     }
-
 
     @Override
     public void onPause() {
@@ -208,12 +218,10 @@ public class VendorListActivity extends AbstractListFragment {
     }
 
     private final class MyCallBack implements ActionMode.Callback {
-        private final int position;
 
         private BaseSeedInterface currentSeed;
 
         private MyCallBack(int position) {
-            this.position = position;
             currentSeed = listVendorSeedAdapter.getItem(position);
         }
 
@@ -292,5 +300,31 @@ public class VendorListActivity extends AbstractListFragment {
             mode.finish();
             return true;
         }
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        Log.d(TAG, "firstVisibleItem=" + firstVisibleItem + " + visibleItemCount=" + visibleItemCount
+                + " ?= totalItemCount=" + totalItemCount);
+
+        if (firstVisibleItem + visibleItemCount >= totalItemCount && firstVisibleItem != 0) {
+            if (flag_loading == false) {
+                flag_loading = true;
+                additems();
+            }
+        }
+    }
+
+    private void additems() {
+        page = page + paddingPage;
+        pageSize = pageSize + paddingPage;
+        Log.d(TAG, "page=" + page + " - paddingPage=" + pageSize);
+//        runAsyncDataRetrieval();
+        flag_loading = false;
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+
     }
 }

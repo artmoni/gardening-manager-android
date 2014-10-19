@@ -110,8 +110,7 @@ public class HutActivity extends BaseGotsActivity {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                findViewById(R.id.clearSearchFilter).setBackgroundDrawable(
-                        getResources().getDrawable(R.drawable.ic_search));
+                findViewById(R.id.clearSearchFilter).setBackground(getResources().getDrawable(R.drawable.ic_search));
                 clearFilter = false;
             }
 
@@ -390,11 +389,11 @@ public class HutActivity extends BaseGotsActivity {
             currentFilter = "";
             filter.setText(currentFilter);
             clearFilter = false;
-            findViewById(R.id.clearSearchFilter).setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_search));
+            findViewById(R.id.clearSearchFilter).setBackground(getResources().getDrawable(R.drawable.ic_search));
         } else {
             currentFilter = filter.getText().toString();
             clearFilter = true;
-            findViewById(R.id.clearSearchFilter).setBackgroundDrawable(
+            findViewById(R.id.clearSearchFilter).setBackground(
                     getResources().getDrawable(R.drawable.ic_menu_close_clear_cancel));
         }
 

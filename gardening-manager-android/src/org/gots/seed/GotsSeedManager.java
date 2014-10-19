@@ -103,17 +103,17 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     }
 
     @Override
-    public List<BaseSeedInterface> getVendorSeeds(boolean force) {
+    public List<BaseSeedInterface> getVendorSeeds(boolean force, int page, int pageSize) {
         if (!force && allSeeds.size() > 0)
             return allSeeds;
 
         if (force && !nuxeoManager.getNuxeoClient().isOffline()) {
             GotsSeedProvider provider = new NuxeoSeedProvider(mContext);
-            allSeeds = provider.getVendorSeeds(force);
+            allSeeds = provider.getVendorSeeds(force, page, pageSize);
             newSeeds = provider.getNewSeeds();
         } else {
             GotsSeedProvider provider = new LocalSeedProvider(mContext);
-            allSeeds = provider.getVendorSeeds(force);
+            allSeeds = provider.getVendorSeeds(force, page, pageSize);
         }
 
         return allSeeds;

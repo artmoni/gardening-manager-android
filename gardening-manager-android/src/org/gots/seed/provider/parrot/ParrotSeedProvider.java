@@ -83,11 +83,11 @@ public class ParrotSeedProvider extends LocalSeedProvider {
             Log.e(TAG, e.getMessage(), e);
         }
 
-        return synchronize(super.getVendorSeeds(false), parrotPlants);
+        return synchronize(super.getVendorSeeds(false, 0, 25), parrotPlants);
     }
 
     @Override
-    public List<BaseSeedInterface> getVendorSeeds(boolean force) {
+    public List<BaseSeedInterface> getVendorSeeds(boolean force, int page, int pageSize) {
         getToken();
         List<BaseSeedInterface> parrotPlants = new ArrayList<BaseSeedInterface>();
 //        if ("".equals(filterCriteria)) {
@@ -130,7 +130,7 @@ public class ParrotSeedProvider extends LocalSeedProvider {
             Log.e(TAG, e.getMessage(), e);
         }
 
-        return synchronize(super.getVendorSeeds(false), parrotPlants);
+        return synchronize(super.getVendorSeeds(false, page, pageSize), parrotPlants);
     }
 
     protected List<BaseSeedInterface> synchronize(List<BaseSeedInterface> localVendorSeeds,

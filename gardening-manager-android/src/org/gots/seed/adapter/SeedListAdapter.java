@@ -100,13 +100,6 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
         return convertView;
     }
 
-    @Override
-    public void notifyDataSetChanged() {
-        // VendorSeedDBHelper myBank = new VendorSeedDBHelper(mContext);
-        // vendorSeeds = myBank.getVendorSeeds();
-
-        super.notifyDataSetChanged();
-    }
 
     @Override
     public Filter getFilter() {
@@ -195,5 +188,7 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
             }
         }
     }
+    
+  
 
 }

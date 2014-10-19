@@ -613,4 +613,6 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
             updatePlanning();
         }
     }
+    
+    
 }

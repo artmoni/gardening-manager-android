@@ -379,7 +379,7 @@ public class ProfileCreationActivity extends BaseGotsActivity implements Locatio
             // Seed
             GotsSeedProvider seedHelper = new LocalSeedProvider(getApplicationContext());
 
-            int nbSeed = seedHelper.getVendorSeeds(false).size();
+            int nbSeed = seedHelper.getVendorSeeds(false, 0, 25).size();
             Random random = new Random();
             for (int i = 1; i <= 5 && i < nbSeed; i++) {
                 int alea = random.nextInt(nbSeed);

@@ -4,12 +4,13 @@ import org.gots.allotment.GotsAllotmentManager;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GotsGardenManager;
 import org.gots.seed.GotsSeedManager;
+import org.nuxeo.android.fragments.BaseListFragment;
 import org.nuxeo.android.fragments.BaseNuxeoFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
 
-public class AbstractListFragment extends BaseNuxeoFragment {
+public class AbstractListFragment extends BaseListFragment {
     protected GotsSeedManager seedProvider;
 
     protected GotsAllotmentManager allotmentManager;
@@ -43,5 +44,17 @@ public class AbstractListFragment extends BaseNuxeoFragment {
         if (isAdded())
             getActivity().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
         super.onNuxeoDataRetrieved(data);
+    }
+
+    @Override
+    protected void onListItemClicked(int listItemPosition) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    protected void doRefresh() {
+        // TODO Auto-generated method stub
+        
     }
 }

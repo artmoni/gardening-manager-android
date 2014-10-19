@@ -52,11 +52,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
     }
 
     @Override
-    public List<BaseSeedInterface> getVendorSeeds(boolean force) {
-        return getNuxeoVendorSeeds(super.getVendorSeeds(force), force);
-    }
-
-    protected List<BaseSeedInterface> getNuxeoVendorSeeds(List<BaseSeedInterface> localVendorSeeds, boolean force) {
+    public List<BaseSeedInterface> getVendorSeeds(boolean force, int page, int pageSize) {
         List<BaseSeedInterface> remoteVendorSeeds = new ArrayList<BaseSeedInterface>();
         List<BaseSeedInterface> myVendorSeeds = new ArrayList<BaseSeedInterface>();
 
@@ -73,7 +69,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             Documents docs = service.query(
                     "SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState != \"deleted\" AND vendorseed:language=\""
                             + Locale.getDefault().getCountry().toLowerCase() + "\"", null,
-                    new String[] { "dc:modified DESC" }, "*", 0, 25, cacheParam);
+                    new String[] { "dc:modified DESC" }, "*", page, pageSize, cacheParam);
             for (Document document : docs) {
                 BaseSeedInterface seed = NuxeoSeedConverter.convert(document);
                 Blob likeStatus = service.getLikeStatus(document);
@@ -87,11 +83,11 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 }
             }
             // getNuxeoClient().shutdown();
-            myVendorSeeds = synchronize(localVendorSeeds, remoteVendorSeeds);
+            myVendorSeeds = synchronize(super.getVendorSeeds(force, page, pageSize), remoteVendorSeeds);
             // myVendorSeeds = remoteVendorSeeds;
         } catch (Exception e) {
             Log.e(TAG, "getAllSeeds " + e.getMessage(), e);
-            myVendorSeeds = super.getVendorSeeds(force);
+            myVendorSeeds = super.getVendorSeeds(force, 0, 25);
         }
         return myVendorSeeds;
     }
@@ -550,7 +546,5 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         String[] arraySpecies = new String[latinNameSpecies.size()];
         return latinNameSpecies.toArray(arraySpecies);
     }
-    
-    
 
 }

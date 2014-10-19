@@ -344,7 +344,7 @@ public class MainActivity extends BaseGotsActivity {
             @Override
             protected Integer doInBackground(NavDrawerItem... params) {
                 item = params[0];
-                return seedManager.getVendorSeeds(false).size();
+                return seedManager.getVendorSeeds(false, 0, 25).size();
             }
 
             @Override

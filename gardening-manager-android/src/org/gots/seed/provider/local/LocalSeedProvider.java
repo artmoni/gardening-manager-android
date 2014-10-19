@@ -145,7 +145,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
     }
 
     @Override
-    public List<BaseSeedInterface> getVendorSeeds(boolean force) {
+    public List<BaseSeedInterface> getVendorSeeds(boolean force, int page, int pageSize) {
         ArrayList<BaseSeedInterface> vendorSeeds = new ArrayList<BaseSeedInterface>();
         try {
             BaseSeedInterface searchedSeed = new GrowingSeed();
@@ -355,7 +355,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
     @Override
     public List<BaseSeedInterface> getMyFavorites() {
         List<BaseSeedInterface> favorites = new ArrayList<BaseSeedInterface>();
-        for (BaseSeedInterface baseSeedInterface : getVendorSeeds(false)) {
+        for (BaseSeedInterface baseSeedInterface : getVendorSeeds(false, 0, 25)) {
             if (baseSeedInterface.getLikeStatus().getUserLikeStatus() > 0)
                 favorites.add(baseSeedInterface);
         }

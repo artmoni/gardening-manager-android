@@ -9,7 +9,7 @@ import org.gots.seed.LikeStatus;
 
 public interface GotsSeedProvider {
 
-    public List<BaseSeedInterface> getVendorSeeds(boolean force);
+    public List<BaseSeedInterface> getVendorSeeds(boolean force, int page, int pageSize);
 
     public BaseSeedInterface getSeedById(int seedId);
 

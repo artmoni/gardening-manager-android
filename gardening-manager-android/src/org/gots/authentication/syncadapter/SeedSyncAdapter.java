@@ -34,7 +34,7 @@ public class SeedSyncAdapter extends GotsSyncAdapter {
 
         seedManager.force_refresh(true);
 
-        seedManager.getVendorSeeds(true);
+        seedManager.getVendorSeeds(true, 0, 25);
 
         seedManager.getMyStock(gardenManager.getCurrentGarden());
 
