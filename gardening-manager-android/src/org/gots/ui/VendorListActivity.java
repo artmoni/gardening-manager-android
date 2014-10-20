@@ -46,6 +46,7 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 public class VendorListActivity extends AbstractListFragment implements OnScrollListener {
@@ -77,6 +78,14 @@ public class VendorListActivity extends AbstractListFragment implements OnScroll
     private ProgressDialog dialog;
 
     private Bundle args;
+
+    private GridView gridViewCatalog;
+
+    private int pageSize = 25;
+
+    private int page = 0;
+
+    private int paddingPage = 10;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -119,16 +128,6 @@ public class VendorListActivity extends AbstractListFragment implements OnScroll
             runAsyncDataRetrieval();
         }
     };
-
-    private GridView gridViewCatalog;
-
-    private boolean flag_loading = false;
-
-    private int pageSize = 25;
-
-    private int page = 0;
-
-    private int paddingPage = 10;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -189,6 +188,7 @@ public class VendorListActivity extends AbstractListFragment implements OnScroll
         // listVendorSeedAdapter.getFilter().filter(currentFilter);
         // if (!"".equals(currentFilter) && currentFilter != null)
         // displaySearchBox();
+        mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
         listVendorSeedAdapter.notifyDataSetChanged();
 
         // if (progressBar != null)
@@ -197,6 +197,7 @@ public class VendorListActivity extends AbstractListFragment implements OnScroll
         // setActionRefresh(false);
 
         super.onNuxeoDataRetrieved(data);
+
     }
 
     @Override
@@ -308,8 +309,7 @@ public class VendorListActivity extends AbstractListFragment implements OnScroll
                 + " ?= totalItemCount=" + totalItemCount);
 
         if (firstVisibleItem + visibleItemCount >= totalItemCount && firstVisibleItem != 0) {
-            if (flag_loading == false) {
-                flag_loading = true;
+            if (isReady()) {
                 additems();
             }
         }
@@ -318,9 +318,8 @@ public class VendorListActivity extends AbstractListFragment implements OnScroll
     private void additems() {
         page = page + paddingPage;
         pageSize = pageSize + paddingPage;
-        Log.d(TAG, "page=" + page + " - paddingPage=" + pageSize);
-//        runAsyncDataRetrieval();
-        flag_loading = false;
+        Log.d(TAG, "page=" + page + " - pageSize=" + pageSize);
+        runAsyncDataRetrieval();
     }
 
     @Override
