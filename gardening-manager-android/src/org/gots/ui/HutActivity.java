@@ -406,8 +406,8 @@ public class HutActivity extends BaseGotsActivity {
             Intent filterIntent = new Intent(VendorListActivity.BROADCAST_FILTER);
             filterIntent.putExtra(VendorListActivity.FILTER_VALUE, currentFilter);
             sendBroadcast(filterIntent);
-        } else if (fragment instanceof ListFragment) {
-            Filterable fragFilter = (Filterable) ((ListFragment) fragment).getListAdapter();
+        } else if (fragment instanceof VendorListActivity) {
+            Filterable fragFilter = (Filterable) ((VendorListActivity) fragment).getListAdapter();
             fragFilter.getFilter().filter(currentFilter.toString());
         }
     }

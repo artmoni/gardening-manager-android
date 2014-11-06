@@ -297,4 +297,8 @@ public class VendorListActivity extends AbstractListFragment implements OnScroll
     public void onScrollStateChanged(AbsListView view, int scrollState) {
 
     }
+    
+    SeedListAdapter getListAdapter(){
+        return listVendorSeedAdapter;
+    }
 }
