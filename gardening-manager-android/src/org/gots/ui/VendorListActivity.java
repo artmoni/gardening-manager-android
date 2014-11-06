@@ -75,8 +75,6 @@ public class VendorListActivity extends AbstractListFragment implements OnScroll
 
     protected CharSequence currentFilter = "";
 
-    private ProgressDialog dialog;
-
     private Bundle args;
 
     private GridView gridViewCatalog;
@@ -89,14 +87,10 @@ public class VendorListActivity extends AbstractListFragment implements OnScroll
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // setHasOptionsMenu(true);
-        // super.onCreateView(inflater, container, savedInstanceState);
         mContext = getActivity();
         args = getArguments();
 
-        mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.SEED_DISPLAYLIST));
         mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BROADCAST_FILTER));
-        // mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.PROGRESS_FINISHED));
         listVendorSeedAdapter = new VendorSeedListAdapter(mContext, new ArrayList<BaseSeedInterface>());
         View view = inflater.inflate(R.layout.list_seed_grid, container, false);
         gridViewCatalog = (GridView) view.findViewById(R.id.seedgridview);
@@ -114,7 +108,6 @@ public class VendorListActivity extends AbstractListFragment implements OnScroll
             }
         });
         gridViewCatalog.setOnScrollListener(this);
-        // setListAdapter(listVendorSeedAdapter);
 
         return view;
     }
@@ -184,31 +177,9 @@ public class VendorListActivity extends AbstractListFragment implements OnScroll
     protected void onNuxeoDataRetrieved(Object data) {
         List<BaseSeedInterface> vendorSeeds = (List<BaseSeedInterface>) data;
         listVendorSeedAdapter.setSeeds(vendorSeeds);
-        // listVendorSeedAdapter.refill(vendorSeeds);
-        // listVendorSeedAdapter.getFilter().filter(currentFilter);
-        // if (!"".equals(currentFilter) && currentFilter != null)
-        // displaySearchBox();
-        mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
         listVendorSeedAdapter.notifyDataSetChanged();
-
-        // if (progressBar != null)
-        //
-        // progressBar.stopAnimatingBackground();
-        // setActionRefresh(false);
-
+        mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
         super.onNuxeoDataRetrieved(data);
-
-    }
-
-    @Override
-    public void onPause() {
-        try {
-            dialog.dismiss();
-            dialog = null;
-        } catch (Exception e) {
-            // nothing
-        }
-        super.onPause();
     }
 
     @Override

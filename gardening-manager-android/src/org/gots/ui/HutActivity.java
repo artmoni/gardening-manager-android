@@ -320,6 +320,9 @@ public class HutActivity extends BaseGotsActivity {
             mTabsAdapter.addTab(
                     bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds_plant)),
                     VendorListActivity.class, args);
+        
+//        mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText("species"),
+//                FamilyListActivity.class, args);
 
         // mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
         // MySeedsListActivity.class, null);

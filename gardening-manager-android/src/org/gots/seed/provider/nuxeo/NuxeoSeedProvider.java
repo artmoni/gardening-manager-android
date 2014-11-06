@@ -5,11 +5,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import org.gots.exception.NotImplementedException;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GotsGardenManager;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.LikeStatus;
+import org.gots.seed.SpeciesDocument;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
@@ -545,6 +547,27 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         }
         String[] arraySpecies = new String[latinNameSpecies.size()];
         return latinNameSpecies.toArray(arraySpecies);
+    }
+
+    @Override
+    public SpeciesDocument getSpecies(boolean force) throws NotImplementedException {
+        SpeciesDocument doc = null;
+        try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
+            byte cacheParam = CacheBehavior.STORE;
+            if (force) {
+                cacheParam = (byte) (cacheParam | CacheBehavior.FORCE_REFRESH);
+            }
+            Documents docSpecies = service.query(
+                    "SELECT * FROM Species WHERE ecm:currentLifeCycleState != \"deleted\"", null,
+                    new String[] { "species:family_uuid DESC" }, "*", 0, 50, cacheParam);
+            if (docSpecies.size() > 0)
+                doc = (SpeciesDocument) docSpecies.get(0);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+        return doc;
     }
 
 }

@@ -8,10 +8,12 @@ import org.gots.action.ActionFactory;
 import org.gots.action.BaseActionInterface;
 import org.gots.exception.GotsException;
 import org.gots.exception.GotsUserNotConnectedException;
+import org.gots.exception.NotImplementedException;
 import org.gots.garden.GardenInterface;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.LikeStatus;
+import org.gots.seed.SpeciesDocument;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.utils.GotsDBHelper;
 
@@ -19,7 +21,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
-
 
 public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider {
     private static final String TAG = "LocalSeedProvider";
@@ -383,4 +384,8 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
         return vendorSeeds;
     }
 
+    @Override
+    public SpeciesDocument getSpecies(boolean force) throws NotImplementedException {
+        throw new NotImplementedException();
+    }
 }

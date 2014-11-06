@@ -6,6 +6,7 @@ import java.util.List;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.context.GotsContext;
 import org.gots.exception.GotsException;
+import org.gots.exception.NotImplementedException;
 import org.gots.garden.GardenInterface;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
@@ -259,5 +260,10 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     public synchronized String getFamilyBySpecie(String specie) {
         return mSeedProvider.getFamilyBySpecie(specie);
+    }
+
+    @Override
+    public SpeciesDocument getSpecies(boolean force) throws NotImplementedException {
+        return mSeedProvider.getSpecies(force);
     }
 }
