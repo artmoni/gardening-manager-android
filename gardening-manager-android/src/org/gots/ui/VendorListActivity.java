@@ -146,7 +146,7 @@ public class VendorListActivity extends AbstractListFragment implements OnScroll
     protected Object retrieveNuxeoData() throws Exception {
 
         List<BaseSeedInterface> catalogue = new ArrayList<BaseSeedInterface>();
-        if (args == null) {
+        if (args == null||args.size()==0) {
             catalogue = seedProvider.getVendorSeeds(true, page, pageSize);
             if (catalogue.size() == 0)
                 catalogue = seedProvider.getVendorSeeds(true, page, pageSize);
@@ -154,13 +154,10 @@ public class VendorListActivity extends AbstractListFragment implements OnScroll
             catalogue = seedProvider.getMyStock(gardenManager.getCurrentGarden());
 
         else if (args.getBoolean(FILTER_FAVORITES))
-            // listVendorSeedAdapter.getFilter().filter("LIKE");
             catalogue = seedProvider.getMyFavorites();
         else if (args.getBoolean(FILTER_BARCODE)) {
-            // listVendorSeedAdapter.getFilter().filter("LIKE");
             catalogue.add(seedProvider.getSeedByBarCode(args.getString(FILTER_VALUE)));
         } else if (args.getBoolean(FILTER_THISMONTH))
-            // listVendorSeedAdapter.getFilter().filter("THISMONTH");
             catalogue = seedProvider.getSeedBySowingMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
         else if (args.getBoolean(FILTER_PARROT)) {
             ParrotSeedProvider parrotProvider = new ParrotSeedProvider(mContext);
@@ -169,7 +166,11 @@ public class VendorListActivity extends AbstractListFragment implements OnScroll
             else
                 catalogue = parrotProvider.getVendorSeedsByName(currentFilter.toString());
 
+        } else if (args.getString(FILTER_VALUE) != null) {
+            catalogue = seedProvider.getVendorSeedsByName(args.getString(FILTER_VALUE));
+
         }
+
         return catalogue;
     }
 
@@ -297,8 +298,8 @@ public class VendorListActivity extends AbstractListFragment implements OnScroll
     public void onScrollStateChanged(AbsListView view, int scrollState) {
 
     }
-    
-    SeedListAdapter getListAdapter(){
+
+    SeedListAdapter getListAdapter() {
         return listVendorSeedAdapter;
     }
 }

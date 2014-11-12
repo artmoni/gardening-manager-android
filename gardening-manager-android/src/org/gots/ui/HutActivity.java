@@ -47,6 +47,7 @@ import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,6 +66,8 @@ public class HutActivity extends BaseGotsActivity {
     private int currentAllotment = -1;
 
     private TabsAdapter mTabsAdapter;
+
+    private static final short FRAGMENT_ID_CATALOG = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -306,11 +309,10 @@ public class HutActivity extends BaseGotsActivity {
         bar.removeAllTabs();
         // // ********************** Tab description **********************
         Bundle args;
-
+        args = new Bundle();
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds)),
-                VendorListActivity.class, null);
-        // Bundle parrotArgs = new Bundle();
-        // parrotArgs.putString(VendorListActivity.FILTER_PARROT, ParrotSeedProvider.class.getName());
+                VendorListActivity.class, args); // FRAGMENT_ID_CATALOG=0 -> see above
+
         args = new Bundle();
         if (currentAllotment != -1) {
             args.putBoolean(VendorListActivity.IS_SELECTABLE, true);
@@ -320,9 +322,9 @@ public class HutActivity extends BaseGotsActivity {
             mTabsAdapter.addTab(
                     bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds_plant)),
                     VendorListActivity.class, args);
-        
-//        mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText("species"),
-//                FamilyListActivity.class, args);
+
+        // mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText("species"),
+        // FamilyListActivity.class, args);
 
         // mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
         // MySeedsListActivity.class, null);
@@ -341,9 +343,6 @@ public class HutActivity extends BaseGotsActivity {
         args.putBoolean(VendorListActivity.FILTER_THISMONTH, true);
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_thismonth)),
                 VendorListActivity.class, args);
-        // an allotment is selected
-        // if (currentAllotment >= 0)
-        // bar.setSelectedNavigationItem(1);
     }
 
     @Override
@@ -407,8 +406,17 @@ public class HutActivity extends BaseGotsActivity {
             filterIntent.putExtra(VendorListActivity.FILTER_VALUE, currentFilter);
             sendBroadcast(filterIntent);
         } else if (fragment instanceof VendorListActivity) {
-            Filterable fragFilter = (Filterable) ((VendorListActivity) fragment).getListAdapter();
-            fragFilter.getFilter().filter(currentFilter.toString());
+            if (false) {
+                Filterable fragFilter = (Filterable) ((VendorListActivity) fragment).getListAdapter();
+                fragFilter.getFilter().filter(currentFilter.toString());
+            } else {
+                Fragment searchFragment = (Fragment) getSupportFragmentManager().findFragmentByTag(
+                        "android:switcher:" + R.id.pager + ":" + (FRAGMENT_ID_CATALOG));
+                searchFragment.getArguments().clear();
+                searchFragment.getArguments().putString(VendorListActivity.FILTER_VALUE, currentFilter);
+                searchFragment.onResume();
+                mTabsAdapter.setCurrentItem(FRAGMENT_ID_CATALOG);
+            }
         }
     }
 
