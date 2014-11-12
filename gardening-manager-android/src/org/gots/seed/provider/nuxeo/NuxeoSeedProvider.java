@@ -570,4 +570,26 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         return doc;
     }
 
+    @Override
+    public List<BaseSeedInterface> getSeedBySowingMonth(int month) {
+        List<BaseSeedInterface> seedsBySowingMonth = new ArrayList<>();
+
+        try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
+            byte cacheParam = CacheBehavior.STORE;
+            Documents docSpecies = service.query(
+                    "SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState != \"deleted\" AND vendorseed:datesowingmax >= "
+                            + month + " AND vendorseed:datesowingmin<=" + month + "", null, null, "*", 0, 50,
+                    cacheParam);
+            for (Document seedDoc : docSpecies) {
+                BaseSeedInterface seed = NuxeoSeedConverter.convert(seedDoc);
+                seedsBySowingMonth.add(seed);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+        return seedsBySowingMonth;
+    }
+
 }

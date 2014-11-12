@@ -243,12 +243,7 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     @Override
     public List<BaseSeedInterface> getSeedBySowingMonth(int month) {
-        List<BaseSeedInterface> monthlySeed = new ArrayList<BaseSeedInterface>();
-        for (BaseSeedInterface baseSeedInterface : allSeeds) {
-            if (month >= baseSeedInterface.getDateSowingMin() && month <= baseSeedInterface.getDateSowingMax())
-                monthlySeed.add(baseSeedInterface);
-        }
-        return monthlySeed;
+        return mSeedProvider.getSeedBySowingMonth(month);
     }
 
     public synchronized String[] getArraySpecies(boolean force) {
