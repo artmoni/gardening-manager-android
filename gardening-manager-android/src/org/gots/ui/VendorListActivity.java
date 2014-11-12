@@ -59,11 +59,11 @@ public class VendorListActivity extends AbstractListFragment implements OnScroll
 
     protected static final String FILTER_VALUE = "filter.data";
 
-    protected static final String BROADCAST_FILTER = "broadcast_filter";
-
     public static final String FILTER_PARROT = "filter.parrot";
 
     protected static final String FILTER_STOCK = "filter.stock";
+
+    protected static final String BROADCAST_FILTER = "broadcast_filter";
 
     protected static final String IS_SELECTABLE = "seed.selectable";
 
@@ -146,7 +146,7 @@ public class VendorListActivity extends AbstractListFragment implements OnScroll
     protected Object retrieveNuxeoData() throws Exception {
 
         List<BaseSeedInterface> catalogue = new ArrayList<BaseSeedInterface>();
-        if (args == null||args.size()==0) {
+        if (args == null || args.size() == 0) {
             catalogue = seedProvider.getVendorSeeds(true, page, pageSize);
             if (catalogue.size() == 0)
                 catalogue = seedProvider.getVendorSeeds(true, page, pageSize);
@@ -185,7 +185,7 @@ public class VendorListActivity extends AbstractListFragment implements OnScroll
 
     @Override
     public void onDestroy() {
-        if (seedBroadcastReceiver != null)
+        if (seedBroadcastReceiver != null && isAdded())
             mContext.unregisterReceiver(seedBroadcastReceiver);
         super.onDestroy();
     }

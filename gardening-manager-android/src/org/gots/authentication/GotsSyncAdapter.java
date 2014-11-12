@@ -10,7 +10,7 @@ import org.gots.seed.GotsSeedManager;
 import android.accounts.AccountManager;
 import android.content.Context;
 
-public class GotsSyncAdapter extends NuxeoSyncAdapater {
+public class GotsSyncAdapter extends NuxeoSyncAdapter {
 
     protected AccountManager mAccountManager;
 

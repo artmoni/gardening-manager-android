@@ -11,7 +11,7 @@ import android.content.Context;
 import android.content.SyncResult;
 import android.os.Bundle;
 
-public abstract class NuxeoSyncAdapater extends AbstractThreadedSyncAdapter {
+public abstract class NuxeoSyncAdapter extends AbstractThreadedSyncAdapter {
 
     protected NuxeoContext getNuxeoContext() {
         return NuxeoContext.get(getContext());
@@ -25,11 +25,11 @@ public abstract class NuxeoSyncAdapater extends AbstractThreadedSyncAdapter {
         return getNuxeoContext().getNuxeoClient();
     }
 
-    public NuxeoSyncAdapater(Context context, boolean autoInitialize) {
+    public NuxeoSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
     }
 
-    public NuxeoSyncAdapater(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
+    public NuxeoSyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
         super(context, autoInitialize, allowParallelSyncs);
     }
 

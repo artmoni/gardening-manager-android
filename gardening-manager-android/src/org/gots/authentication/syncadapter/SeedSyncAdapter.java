@@ -31,7 +31,6 @@ public class SeedSyncAdapter extends GotsSyncAdapter {
         intent.putExtra("AUTHORITY", authority);
         getContext().sendBroadcast(intent);
 
-
         seedManager.force_refresh(true);
 
         seedManager.getVendorSeeds(true, 0, 25);
@@ -43,7 +42,7 @@ public class SeedSyncAdapter extends GotsSyncAdapter {
             SeedNotification notification = new SeedNotification(getContext());
             notification.createNotification(newSeeds);
         }
-        
+
         intent.setAction(BroadCastMessages.PROGRESS_FINISHED);
         getContext().sendBroadcast(intent);
 
