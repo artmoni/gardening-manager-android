@@ -1,26 +1,34 @@
 package org.gots.seed.provider.nuxeo;
 
+import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import org.gots.exception.NotImplementedException;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GotsGardenManager;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.LikeStatus;
 import org.gots.seed.SpeciesDocument;
 import org.gots.seed.provider.local.LocalSeedProvider;
+import org.nuxeo.android.cache.blob.BlobWithProperties;
 import org.nuxeo.android.repository.DocumentManager;
+import org.nuxeo.android.upload.FileUploader;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
 import org.nuxeo.ecm.automation.client.cache.CacheBehavior;
+import org.nuxeo.ecm.automation.client.jaxrs.AsyncCallback;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Blob;
 import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
+import org.nuxeo.ecm.automation.client.jaxrs.model.FileBlob;
 import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PathRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
@@ -161,7 +169,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 // myVendorSeeds.add();
                 ;
             else {
-                BaseSeedInterface seed = super.createSeed(remoteSeed);
+                BaseSeedInterface seed = super.createSeed(remoteSeed, null);
                 myVendorSeeds.add(seed);
                 newSeeds.add(seed);
             }
@@ -171,7 +179,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
             if (localSeed.getUUID() == null) {
                 myVendorSeeds.add(localSeed);
-                localSeed = createNuxeoVendorSeed(localSeed);
+                localSeed = createNuxeoVendorSeed(localSeed,null);
             } else {
                 boolean found = false;
                 for (BaseSeedInterface remoteSeed : remoteVendorSeeds) {
@@ -244,7 +252,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             Document doc = service.getDocument(new IdRef(uuid), true);
             doc = service.getDocument(new IdRef(uuid), "*");
             remoteSeed = NuxeoSeedConverter.convert(doc);
-            remoteSeed = super.createSeed(remoteSeed);
+            remoteSeed = super.createSeed(remoteSeed, null);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
@@ -253,15 +261,15 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
     }
 
     @Override
-    public BaseSeedInterface createSeed(BaseSeedInterface seed) {
-        super.createSeed(seed);
-        return createNuxeoVendorSeed(seed);
+    public BaseSeedInterface createSeed(BaseSeedInterface seed, File file) {
+        super.createSeed(seed, file);
+        return createNuxeoVendorSeed(seed,file);
     }
 
     /*
      * Return new remote seed or null if error
      */
-    protected BaseSeedInterface createNuxeoVendorSeed(BaseSeedInterface currentSeed) {
+    protected BaseSeedInterface createNuxeoVendorSeed(BaseSeedInterface currentSeed, File file) {
 
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);
@@ -293,8 +301,45 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             return null;
 
         try {
-            Document documentVendorSeed = service.createDocument(catalog, "VendorSeed", currentSeed.getVariety(),
+           final Document documentVendorSeed = service.createDocument(catalog, "VendorSeed", currentSeed.getVariety(),
                     NuxeoSeedConverter.convert(catalog.getPath(), currentSeed).getProperties());
+            //****************** FILE UPLOAD ***************
+            if (file!=null){
+                final FileBlob blobToUpload = new FileBlob(file);
+                blobToUpload.setMimeType("image/jpeg");
+
+                String batchId = String.valueOf(new Random().nextInt(1000));
+                final String fileId = blobToUpload.getFileName();
+
+                FileUploader uploader = session.getAdapter(FileUploader.class);
+                BlobWithProperties blobUploading = uploader.storeFileForUpload(batchId, fileId, blobToUpload);
+                String uploadUUID = blobUploading.getProperty(FileUploader.UPLOAD_UUID);
+                Log.i(TAG, "Started blob upload UUID " + uploadUUID);
+                final PropertyMap blobProp = new PropertyMap();
+                blobProp.set("type", "blob");
+                blobProp.set("length", Long.valueOf(blobUploading.getLength()));
+                blobProp.set("mime-type", blobUploading.getMimeType());
+                blobProp.set("name", blobToUpload.getFileName());
+                // set information for server side Blob mapping
+                blobProp.set("upload-batch", batchId);
+                blobProp.set("upload-fileId", fileId);
+                // set information for the update query to know it's
+                // dependencies
+                blobProp.set("android-require-type", "upload");
+                blobProp.set("android-require-uuid", uploadUUID);
+                uploader.startUpload(uploadUUID, new AsyncCallback<Serializable>() {
+                    @Override
+                    public void onSuccess(String executionId, Serializable data) {
+                        attachBlobToDocument(documentVendorSeed, blobProp);
+                        Log.i(TAG, "success");
+                    }
+
+                    @Override
+                    public void onError(String executionId, Throwable e) {
+                        Log.i(TAG, "errdroior");
+
+                    }
+                });            }
             currentSeed.setUUID(documentVendorSeed.getId());
             Log.d(TAG, "RemoteSeed UUID " + documentVendorSeed.getId());
             super.updateSeed(currentSeed);
@@ -305,6 +350,31 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         return currentSeed;
     }
 
+    protected void attachBlobToDocument(Document seed, PropertyMap blobProp) {
+        Session session = getNuxeoClient().getSession();
+        DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
+       
+       
+
+        try {
+            StringBuilder toJSON = new StringBuilder("{ ");
+            toJSON.append(" \"type\" : \"blob\"");
+            toJSON.append(", \"length\" : " + blobProp.get("length"));
+            toJSON.append(", \"mime-type\" : \"" + blobProp.get("mime-type") + "\"");
+            toJSON.append(", \"name\" : \"" + blobProp.get("name") + "\"");
+            toJSON.append(", \"upload-batch\" : \"" + blobProp.get("upload-batch") + "\"");
+            toJSON.append(", \"upload-fileId\" : \"" + blobProp.get("upload-fileId") + "\" ");
+            toJSON.append("}");
+            PropertyMap properties = new PropertyMap();
+            properties.set("dc:title", blobProp.getString("name"));
+            properties.set("file:content", toJSON.toString());
+            documentMgr.update(seed, properties);
+        } catch (Exception e) {
+            Log.i(TAG, e.getMessage());
+        }
+
+    }
+    
     protected AndroidAutomationClient getNuxeoClient() {
         return NuxeoManager.getInstance().getNuxeoClient();
     }
@@ -324,7 +394,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             try {
                 Document seedDoc = service.getDocument(new IdRef(vendorSeed.getUUID()));
             } catch (Exception e) {
-                createNuxeoVendorSeed(vendorSeed);
+                createNuxeoVendorSeed(vendorSeed,null);
             }
             try {
                 stockitem = service.getDocument(new PathRef(stockFolder.getPath() + "/" + vendorSeed.getSpecie() + " "

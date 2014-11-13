@@ -1,5 +1,6 @@
 package org.gots.seed;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -138,9 +139,9 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     }
 
     @Override
-    public BaseSeedInterface createSeed(BaseSeedInterface seed) {
+    public BaseSeedInterface createSeed(BaseSeedInterface seed, File file) {
 
-        return mSeedProvider.createSeed(seed);
+        return mSeedProvider.createSeed(seed, file);
     }
 
     @Override

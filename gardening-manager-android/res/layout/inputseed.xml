@@ -53,6 +53,9 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true" />
 
+                <ImageView android:id="@+id/imageNewVariety" android:layout_width="50dp"
+                    android:layout_height="50dp" android:src="@drawable/no_picture"/>
+
                 <TextView
                     style="@style/description_content"
                     android:layout_width="wrap_content"

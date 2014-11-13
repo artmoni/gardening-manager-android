@@ -154,7 +154,7 @@ public class ParrotSeedProvider extends LocalSeedProvider {
             }
                 // myVendorSeeds.add();
             else {
-                remoteSeed = super.createSeed(remoteSeed);
+                remoteSeed = super.createSeed(remoteSeed, null);
                 myVendorSeeds.add(remoteSeed);
             }
 //            myVendorSeeds.add(remoteSeed);

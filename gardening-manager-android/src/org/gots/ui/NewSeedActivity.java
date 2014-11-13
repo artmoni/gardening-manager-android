@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.gots.ui;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,8 +25,11 @@ import org.gots.seed.view.SeedWidgetLong;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.ActionBar;
 import android.text.Editable;
@@ -44,6 +48,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Gallery;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -90,6 +95,22 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
 
     private View descriptionEnvironmentVoice;
 
+    private ImageView pictureSelectorView;
+
+    public static final int REQUEST_SCAN = 0;
+
+    public static final int REQUEST_HARVEST = 1;
+
+    public static final int REQUEST_DISEASES = 2;
+
+    public static final int REQUEST_GROWTH = 3;
+
+    public static final int REQUEST_ENVIRONMENT = 4;
+
+    protected static final int REQUEST_LOAD_IMAGE = 5;
+
+    private String picturePath;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,6 +134,15 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
         descriptionEnvironmentVoice = (View) findViewById(R.id.IdSeedDescriptionEnvironmentVoice);
         descriptionHarvestVoice = (View) findViewById(R.id.IdSeedDescriptionHarvestVoice);
 
+        pictureSelectorView = (ImageView) findViewById(R.id.imageNewVariety);
+        pictureSelectorView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, REQUEST_LOAD_IMAGE);
+            }
+        });
         textViewBarCode = (TextView) findViewById(R.id.textViewBarCode);
 
         if (getIntent().getIntExtra("org.gots.seedid", -1) != -1) {
@@ -316,7 +346,11 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
                 new AsyncTask<Void, Integer, Void>() {
                     @Override
                     protected Void doInBackground(Void... params) {
-                        newSeed = seedManager.createSeed(newSeed);
+                        if (picturePath != null)
+                            newSeed = seedManager.createSeed(newSeed, new File(picturePath));
+                        else
+                            newSeed = seedManager.createSeed(newSeed, null);
+                        // seedManager.attach
                         seedManager.addToStock(newSeed, gardenManager.getCurrentGarden());
                         return null;
                     }
@@ -520,46 +554,50 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
         integrator.initiateScan();
     }
 
-    public static final int REQUEST_SCAN = 0;
-
-    public static final int REQUEST_HARVEST = 1;
-
-    public static final int REQUEST_DISEASES = 2;
-
-    public static final int REQUEST_GROWTH = 3;
-
-    public static final int REQUEST_ENVIRONMENT = 4;
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (scanResult != null && scanResult.getContents() != "") {
-            Log.i("Scan result", scanResult.toString());
-            textViewBarCode.setText(scanResult.getContents());
-            newSeed.setBareCode(textViewBarCode.getText().toString());
+        if (requestCode == REQUEST_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            picturePath = cursor.getString(columnIndex);
+            cursor.close();
+
+            // String picturePath contains the path of selected Image
         } else {
-            ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            if (matches.size() > 0)
-                switch (requestCode) {
-                case REQUEST_GROWTH:
-                    descriptionGrowth.setText(matches.get(0));
-                    newSeed.setDescriptionGrowth(matches.toArray().toString());
-                    break;
-                case REQUEST_DISEASES:
-                    descriptionDiseases.setText(matches.get(0));
-                    newSeed.setDescriptionDiseases(matches.toArray().toString());
-                    break;
-                case REQUEST_ENVIRONMENT:
-                    descriptionEnvironment.setText(matches.get(0));
-                    newSeed.setDescriptionCultivation(matches.toArray().toString());
-                    break;
-                case REQUEST_HARVEST:
-                    descriptionHarvest.setText(matches.get(0));
-                    newSeed.setDescriptionHarvest(matches.toArray().toString());
-                    break;
-                default:
-                    break;
-                }
+            IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+            if (scanResult != null && scanResult.getContents() != "") {
+                Log.i("Scan result", scanResult.toString());
+                textViewBarCode.setText(scanResult.getContents());
+                newSeed.setBareCode(textViewBarCode.getText().toString());
+            } else {
+                ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                if (matches.size() > 0)
+                    switch (requestCode) {
+                    case REQUEST_GROWTH:
+                        descriptionGrowth.setText(matches.get(0));
+                        newSeed.setDescriptionGrowth(matches.toArray().toString());
+                        break;
+                    case REQUEST_DISEASES:
+                        descriptionDiseases.setText(matches.get(0));
+                        newSeed.setDescriptionDiseases(matches.toArray().toString());
+                        break;
+                    case REQUEST_ENVIRONMENT:
+                        descriptionEnvironment.setText(matches.get(0));
+                        newSeed.setDescriptionCultivation(matches.toArray().toString());
+                        break;
+                    case REQUEST_HARVEST:
+                        descriptionHarvest.setText(matches.get(0));
+                        newSeed.setDescriptionHarvest(matches.toArray().toString());
+                        break;
+                    default:
+                        break;
+                    }
+            }
         }
     }
 
@@ -613,6 +651,5 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
             updatePlanning();
         }
     }
-    
-    
+
 }

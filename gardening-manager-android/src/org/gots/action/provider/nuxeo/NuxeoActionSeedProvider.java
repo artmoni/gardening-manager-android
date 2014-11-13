@@ -271,6 +271,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
                 PropertyMap properties = new PropertyMap();
                 properties.set("dc:title", "Picture");
 
+        
                 pictureBook = documentMgr.createDocument(new PathRef(seedDoc.getPath()), "PictureBook", "Picture",
                         properties);
             } catch (Exception e) {
@@ -482,5 +483,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         in.close();
         out.close();
     }
+    
+    
 
 }

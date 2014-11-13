@@ -140,7 +140,7 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
             final GotsSeedManager VendorSeedManager = GotsSeedManager.getInstance().initIfNew(mContext);
             BaseSeedInterface vendorSeed = VendorSeedManager.getSeedById(growingSeed.getSeedId());
             if (vendorSeed == null || vendorSeed.getUUID() == null)
-                vendorSeed = VendorSeedManager.createSeed(vendorSeed);
+                vendorSeed = VendorSeedManager.createSeed(vendorSeed, null);
 
             properties.set("growingseed:vendorseedid", vendorSeed.getUUID());
 

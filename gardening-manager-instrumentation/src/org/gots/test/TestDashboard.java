@@ -2,8 +2,8 @@ package org.gots.test;
 
 import org.gots.R;
 import org.gots.ui.ActionActivity;
-import org.gots.ui.DashboardActivity;
 import org.gots.ui.HutActivity;
+import org.gots.ui.MainActivity;
 import org.gots.ui.MyMainGarden;
 import org.gots.ui.ProfileActivity;
 import org.gots.ui.SplashScreenActivity;
@@ -15,16 +15,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
-import android.widget.Spinner;
 
-import com.google.api.client.util.Lists;
 import com.jayway.android.robotium.solo.Solo;
 
-public class TestDashboard extends ActivityInstrumentationTestCase2<DashboardActivity> {
+public class TestDashboard extends ActivityInstrumentationTestCase2<MainActivity> {
     private Solo solo;
 
     public TestDashboard() {
-        super(DashboardActivity.class);
+        super(MainActivity.class);
     }
 
     @Override
@@ -35,7 +33,7 @@ public class TestDashboard extends ActivityInstrumentationTestCase2<DashboardAct
     }
 
     public void testSimpleNavigation() {
-        DashboardActivity activity = getActivity();
+        MainActivity activity = getActivity();
         assertNotNull(activity);
         
         // Hut Activity
@@ -47,7 +45,7 @@ public class TestDashboard extends ActivityInstrumentationTestCase2<DashboardAct
         // Return dashboard
         View btHome = (View) solo.getView(android.R.id.home);
         solo.clickOnView(btHome);
-        solo.assertCurrentActivity("Wrong activity Dashboard", DashboardActivity.class);
+        solo.assertCurrentActivity("Wrong activity Dashboard", MainActivity.class);
 
         // Allotment Activity
         View btGarden = (View) solo.getView(R.id.dashboard_button_allotment);
@@ -71,7 +69,7 @@ public class TestDashboard extends ActivityInstrumentationTestCase2<DashboardAct
         btHome = (View) solo.getView(android.R.id.home);
         solo.clickOnView(btHome);
 
-        solo.assertCurrentActivity("Wrong activity Dashboard", DashboardActivity.class);
+        solo.assertCurrentActivity("Wrong activity Dashboard", MainActivity.class);
 
         // Action Activity
         View btAction = (View) solo.getView(R.id.dashboard_button_action);
@@ -82,7 +80,7 @@ public class TestDashboard extends ActivityInstrumentationTestCase2<DashboardAct
         // Return dashboard
         btHome = (View) solo.getView(android.R.id.home);
         solo.clickOnView(btHome);
-        solo.assertCurrentActivity("Wrong activity Dashboard", DashboardActivity.class);
+        solo.assertCurrentActivity("Wrong activity Dashboard", MainActivity.class);
 
         // Profile Activity
         View btProfile = (View) solo.getView(R.id.dashboard_button_profile);
@@ -93,7 +91,7 @@ public class TestDashboard extends ActivityInstrumentationTestCase2<DashboardAct
         // Return dashboard
         btHome = (View) solo.getView(android.R.id.home);
         solo.clickOnView(btHome);
-        solo.assertCurrentActivity("Wrong activity Dashboard", DashboardActivity.class);
+        solo.assertCurrentActivity("Wrong activity Dashboard", MainActivity.class);
 
     }
 
@@ -106,7 +104,7 @@ public class TestDashboard extends ActivityInstrumentationTestCase2<DashboardAct
 
     public void testChangeGarden() {
 
-        Spinner gardenSelector = (Spinner)solo.getView(R.id.gard)
+      //  Spinner gardenSelector = (Spinner)solo.getView(R.id.gard)
     }
     
     // public void testDisplayBlackBox() {

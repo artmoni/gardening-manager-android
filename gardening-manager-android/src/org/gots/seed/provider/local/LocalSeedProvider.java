@@ -1,5 +1,6 @@
 package org.gots.seed.provider.local;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -166,7 +167,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
     }
 
     @Override
-    public BaseSeedInterface createSeed(BaseSeedInterface seed) {
+    public BaseSeedInterface createSeed(BaseSeedInterface seed, File file) {
         long rowid;
         ContentValues values = getContentValuesFromSeed(seed);
 

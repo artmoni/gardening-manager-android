@@ -1,5 +1,6 @@
 package org.gots.seed.provider;
 
+import java.io.File;
 import java.util.List;
 
 import org.gots.exception.GotsException;
@@ -15,7 +16,7 @@ public interface GotsSeedProvider {
 
     public BaseSeedInterface getSeedById(int seedId);
 
-    public BaseSeedInterface createSeed(BaseSeedInterface newSeed);
+    public BaseSeedInterface createSeed(BaseSeedInterface newSeed, File file);
 
     public BaseSeedInterface updateSeed(BaseSeedInterface currentSeed);
 

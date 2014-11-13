@@ -22,14 +22,14 @@
     <dependency>
       <groupId>org.gots</groupId>
       <artifactId>gardening-manager-android</artifactId>
-      <version>0.30-SNAPSHOT</version>
+      <version>1.0.4-SNAPSHOT</version>
       <type>jar</type>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.gots</groupId>
       <artifactId>gardening-manager-android</artifactId>
-      <version>0.30-SNAPSHOT</version>
+      <version>1.0.4-SNAPSHOT</version>
       <type>apk</type>
       <scope>provided</scope>
     </dependency>
