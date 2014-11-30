@@ -18,6 +18,8 @@ public class GotsPurchaseItem {
 
     private static final String TAG = "GotsPurchaseItem";
 
+    private static final boolean AMAZON_PREMIUM = false;
+
     public static String SKU_TEST_PURCHASE = "android.test.purchased";
 
     public static String SKU_PREMIUM = "gots.premium";
@@ -61,6 +63,8 @@ public class GotsPurchaseItem {
 
     private boolean unlockPremium() {
         boolean unlocked = false;
+
+        // Premium Licence is installed as app
         PackageManager pm = mContext.getPackageManager();
         List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
 
@@ -74,6 +78,10 @@ public class GotsPurchaseItem {
                 Log.e(TAG, e.getMessage(), e);
             }
         }
+
+        // AMAZON Publication
+        if (AMAZON_PREMIUM)
+            unlocked = true;
         return unlocked;
 
     }

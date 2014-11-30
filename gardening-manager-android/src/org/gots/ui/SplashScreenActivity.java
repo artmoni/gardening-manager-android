@@ -68,7 +68,8 @@ public class SplashScreenActivity extends BaseGotsActivity {
             startActivityForResult(intent, 1);
             // finish();
         } else {
-            checkPurchaseFeature();
+            if (!gotsPurchase.isPremium())
+                checkPurchaseFeature();
             displayVersionName();
         }
         super.onResume();

@@ -318,8 +318,7 @@ public class TabSeedActivity extends BaseGotsActivity {
                 private ProgressDialog dialog;
 
                 protected void onPreExecute() {
-                    GotsPurchaseItem purchaseItem = new GotsPurchaseItem(getApplicationContext());
-                    licenceAvailable = purchaseItem.getFeatureExportPDF() ? true : purchaseItem.isPremium();
+                    licenceAvailable = gotsPurchase.getFeatureExportPDF() ? true : gotsPurchase.isPremium();
                     dialog = ProgressDialog.show(TabSeedActivity.this, "",
                             getResources().getString(R.string.gots_loading), true);
                     dialog.setCanceledOnTouchOutside(true);
