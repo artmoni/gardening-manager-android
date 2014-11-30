@@ -167,7 +167,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
     }
 
     @Override
-    public BaseSeedInterface createSeed(BaseSeedInterface seed, File file) {
+    public BaseSeedInterface createSeed(BaseSeedInterface seed, File imageFile) {
         long rowid;
         ContentValues values = getContentValuesFromSeed(seed);
 

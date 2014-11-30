@@ -16,7 +16,7 @@ public interface GotsSeedProvider {
 
     public BaseSeedInterface getSeedById(int seedId);
 
-    public BaseSeedInterface createSeed(BaseSeedInterface newSeed, File file);
+    public BaseSeedInterface createSeed(BaseSeedInterface newSeed, File imageFile);
 
     public BaseSeedInterface updateSeed(BaseSeedInterface currentSeed);
 

@@ -179,7 +179,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
             if (localSeed.getUUID() == null) {
                 myVendorSeeds.add(localSeed);
-                localSeed = createNuxeoVendorSeed(localSeed,null);
+                localSeed = createNuxeoVendorSeed(localSeed, null);
             } else {
                 boolean found = false;
                 for (BaseSeedInterface remoteSeed : remoteVendorSeeds) {
@@ -261,9 +261,9 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
     }
 
     @Override
-    public BaseSeedInterface createSeed(BaseSeedInterface seed, File file) {
-        super.createSeed(seed, file);
-        return createNuxeoVendorSeed(seed,file);
+    public BaseSeedInterface createSeed(BaseSeedInterface seed, File imageFile) {
+        super.createSeed(seed, imageFile);
+        return createNuxeoVendorSeed(seed, imageFile);
     }
 
     /*
@@ -301,10 +301,10 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             return null;
 
         try {
-           final Document documentVendorSeed = service.createDocument(catalog, "VendorSeed", currentSeed.getVariety(),
+            final Document documentVendorSeed = service.createDocument(catalog, "VendorSeed", currentSeed.getVariety(),
                     NuxeoSeedConverter.convert(catalog.getPath(), currentSeed).getProperties());
-            //****************** FILE UPLOAD ***************
-            if (file!=null){
+            // ****************** FILE UPLOAD ***************
+            if (file != null) {
                 final FileBlob blobToUpload = new FileBlob(file);
                 blobToUpload.setMimeType("image/jpeg");
 
@@ -339,7 +339,8 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                         Log.i(TAG, "errdroior");
 
                     }
-                });            }
+                });
+            }
             currentSeed.setUUID(documentVendorSeed.getId());
             Log.d(TAG, "RemoteSeed UUID " + documentVendorSeed.getId());
             super.updateSeed(currentSeed);
@@ -353,8 +354,6 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
     protected void attachBlobToDocument(Document seed, PropertyMap blobProp) {
         Session session = getNuxeoClient().getSession();
         DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
-       
-       
 
         try {
             StringBuilder toJSON = new StringBuilder("{ ");
@@ -374,7 +373,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         }
 
     }
-    
+
     protected AndroidAutomationClient getNuxeoClient() {
         return NuxeoManager.getInstance().getNuxeoClient();
     }
@@ -394,7 +393,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             try {
                 Document seedDoc = service.getDocument(new IdRef(vendorSeed.getUUID()));
             } catch (Exception e) {
-                createNuxeoVendorSeed(vendorSeed,null);
+                createNuxeoVendorSeed(vendorSeed, null);
             }
             try {
                 stockitem = service.getDocument(new PathRef(stockFolder.getPath() + "/" + vendorSeed.getSpecie() + " "
@@ -654,6 +653,11 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     cacheParam);
             for (Document seedDoc : docSpecies) {
                 BaseSeedInterface seed = NuxeoSeedConverter.convert(seedDoc);
+                if (super.getSeedByUUID(seedDoc.getId()) == null)
+                    seed = super.createSeed(seed, null);
+                else
+                    seed = super.getSeedByUUID(seedDoc.getId());
+
                 seedsBySowingMonth.add(seed);
             }
         } catch (Exception e) {
