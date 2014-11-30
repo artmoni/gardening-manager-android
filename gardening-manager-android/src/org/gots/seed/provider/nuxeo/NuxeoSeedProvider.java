@@ -82,10 +82,10 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     new String[] { "dc:modified DESC" }, "*", page, pageSize, cacheParam);
             for (Document document : docs) {
                 BaseSeedInterface seed = NuxeoSeedConverter.convert(document);
-//                Blob likeStatus = service.getLikeStatus(document);
-//                LikeStatus likes = NuxeoSeedConverter.getLikeStatus(likeStatus);
+                Blob likeStatus = service.getLikeStatus(document);
+                LikeStatus likes = NuxeoSeedConverter.getLikeStatus(likeStatus);
                 if (seed != null) {
-//                    seed.setLikeStatus(likes);
+                    seed.setLikeStatus(likes);
                     remoteVendorSeeds.add(seed);
                     Log.i(TAG, seed.toString());
                 } else {
