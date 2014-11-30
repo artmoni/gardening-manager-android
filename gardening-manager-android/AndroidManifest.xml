@@ -1,287 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.gots"
-    android:versionCode="1000003"
-    android:versionName="1.0.4-SNAPSHOT" >
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1000004" android:versionName="1.0.4-SNAPSHOT" package="org.gots">
 
-    <uses-sdk
-        android:minSdkVersion="8"
-        android:targetSdkVersion="19" />
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="19"/>
 
-    <uses-permission
-        android:name="android.permission.ACCESS_FINE_LOCATION"
-        android:required="false" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" android:required="false"/>
 
-    <uses-feature
-        android:name="android.hardware.location.gps"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.location"
-        android:required="false" />
+    <uses-feature android:name="android.hardware.location.gps" android:required="false"/>
+    <uses-feature android:name="android.hardware.location" android:required="false"/>
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <!-- STORE WEATHER CACHE AND VEGETABLE PHOTOS -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:required="false" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:required="false"/>
 
     <!-- REMINDER DOING GARDENG TASK -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <!-- LOGIN WITH GARDENING MANAGER SERVER USING LOCAL ACCOUNTS -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
-    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
-    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
-    <uses-permission android:name="android.permission.READ_SYNC_STATS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.READ_SYNC_STATS"/>
 
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
+    <uses-feature android:name="android.hardware.camera" android:required="false"/>
 
-    <uses-permission android:name="com.android.vending.BILLING" />
+    <uses-permission android:name="com.android.vending.BILLING"/>
     <!--
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
            android:debuggable="true"
     -->
 
-    <application
-        android:name="org.gots.context.SimpleGotsApplication"
-        android:debuggable="true"
-        android:icon="@drawable/launcher"
-        android:label="@string/app_name"
-        android:theme="@style/Theme.Styled" >
-        <activity
-            android:name=".ui.SplashScreenActivity"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.Styled" >
+    <application android:debuggable="true" android:icon="@drawable/launcher" android:label="@string/app_name" android:name="org.gots.context.SimpleGotsApplication" android:theme="@style/Theme.Styled">
+        <activity android:label="@string/app_name" android:name=".ui.SplashScreenActivity" android:theme="@style/Theme.Styled">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.MyMainGarden"
-            android:theme="@style/Theme.Styled"
-            android:uiOptions="splitActionBarWhenNarrow" />
-        <activity
-            android:name=".ui.DashboardActivity"
-            android:theme="@style/Theme.Styled" >
+        <activity android:name=".ui.MyMainGarden" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow"/>
+        <activity android:name=".ui.DashboardActivity" android:theme="@style/Theme.Styled">
         </activity>
-        <activity
-            android:name=".ui.MainActivity"
-            android:theme="@style/Theme.Styled" >
+        <activity android:name=".ui.MainActivity" android:theme="@style/Theme.Styled">
         </activity>
-        <activity
-            android:name=".ui.SensorActivity"
-            android:theme="@style/Theme.Styled" >
+        <activity android:name=".ui.SensorActivity" android:theme="@style/Theme.Styled">
         </activity>
-        <activity android:name=".ui.AllotmentActivity" />
-        <activity
-            android:name=".ui.SeedActivity"
-            android:theme="@style/Theme.Styled" />
-        <activity android:name=".ui.VendorListActivity" />
-        <activity
-            android:name=".ui.ProfileActivity"
-            android:theme="@style/Theme.Styled"
-            android:uiOptions="splitActionBarWhenNarrow" >
+        <activity android:name=".ui.AllotmentActivity"/>
+        <activity android:name=".ui.SeedActivity" android:theme="@style/Theme.Styled"/>
+        <activity android:name=".ui.VendorListActivity"/>
+        <activity android:name=".ui.ProfileActivity" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow">
         </activity>
-        <activity
-            android:name=".ui.ProfileCreationActivity"
-            android:theme="@style/Theme.Styled"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity
-            android:name=".ui.ListActionActivity"
-            android:theme="@style/Theme.Styled" />
-        <activity
-            android:name=".ui.ActionActivity"
-            android:theme="@style/Theme.Styled" />
-        <activity
-            android:name=".ui.AboutActivity"
-            android:theme="@style/Theme.Styled" />
-        <activity
-            android:name=".ui.WebHelpActivity"
-            android:theme="@style/Theme.Styled" />
-        <activity
-            android:name=".ui.TabSeedActivity"
-            android:theme="@style/Theme.Styled"
-            android:uiOptions="splitActionBarWhenNarrow" />
-        <activity android:name=".ui.WebViewActivity" />
-        <activity
-            android:name=".ui.HutActivity"
-            android:theme="@style/Theme.Styled"
-            android:uiOptions="splitActionBarWhenNarrow"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity
-            android:name=".inapp.BuyPremiumActivity"
-            android:theme="@style/Theme.Styled"
-            android:uiOptions="splitActionBarWhenNarrow" />
-        <activity android:name=".ui.MySeedsListActivity" />
-        <activity android:name=".ui.MySeedsListFirstTimeActivity" />
-        <activity
-            android:name=".ui.NewSeedActivity"
-            android:theme="@style/Theme.Styled"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity
-            android:name=".ui.AccountList"
-            android:theme="@style/Theme.Styled" />
-        <activity
-            android:name=".authentication.AuthenticationActivity"
-            android:theme="@style/Theme.Styled" />
-        <activity
-            android:name=".ui.LoginActivity"
-            android:theme="@style/Theme.Styled" >
+        <activity android:name=".ui.ProfileCreationActivity" android:theme="@style/Theme.Styled" android:windowSoftInputMode="stateHidden|adjustResize"/>
+        <activity android:name=".ui.ListActionActivity" android:theme="@style/Theme.Styled"/>
+        <activity android:name=".ui.ActionActivity" android:theme="@style/Theme.Styled"/>
+        <activity android:name=".ui.AboutActivity" android:theme="@style/Theme.Styled"/>
+        <activity android:name=".ui.WebHelpActivity" android:theme="@style/Theme.Styled"/>
+        <activity android:name=".ui.TabSeedActivity" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow"/>
+        <activity android:name=".ui.WebViewActivity"/>
+        <activity android:name=".ui.HutActivity" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow" android:windowSoftInputMode="stateHidden|adjustResize"/>
+        <activity android:name=".inapp.BuyPremiumActivity" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow"/>
+        <activity android:name=".ui.MySeedsListActivity"/>
+        <activity android:name=".ui.MySeedsListFirstTimeActivity"/>
+        <activity android:name=".ui.NewSeedActivity" android:theme="@style/Theme.Styled" android:windowSoftInputMode="stateHidden|adjustResize"/>
+        <activity android:name=".ui.AccountList" android:theme="@style/Theme.Styled"/>
+        <activity android:name=".authentication.AuthenticationActivity" android:theme="@style/Theme.Styled"/>
+        <activity android:name=".ui.LoginActivity" android:theme="@style/Theme.Styled">
             <intent-filter>
-                <data
-                    android:host="my.gardening-manager.com"
-                    android:path="/login"
-                    android:scheme="http" />
+                <data android:host="my.gardening-manager.com" android:path="/login" android:scheme="http"/>
 
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.FirstLaunchActivity"
-            android:theme="@style/Theme.Styled" />
-        <activity
-            android:name="com.google.ads.AdActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
-        <activity
-            android:name=".ui.PreferenceActivity"
-            android:theme="@style/Theme.Styled" />
+        <activity android:name=".ui.FirstLaunchActivity" android:theme="@style/Theme.Styled"/>
+        <activity android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" android:name="com.google.ads.AdActivity"/>
+        <activity android:name=".ui.PreferenceActivity" android:theme="@style/Theme.Styled"/>
 
-        <provider
-            android:name="org.gots.provider.SensorContentProvider"
-            android:authorities="org.gots.providers.sensor"
-            android:label="@string/dashboard.sensor.name" />
-        <provider
-            android:name="org.gots.provider.SeedsContentProvider"
-            android:authorities="org.gots.providers.seeds"
-            android:label="@string/dashboard.hut.name"
-            android:syncable="true" />
-        <provider
-            android:name="org.gots.provider.GardenContentProvider"
-            android:authorities="org.gots.providers.garden"
-            android:label="@string/dashboard.profile.name"
-            android:syncable="true" />
-        <provider
-            android:name="org.gots.provider.ActionsContentProvider"
-            android:authorities="org.gots.providers.actions"
-            android:label="@string/dashboard.actions.name"
-            android:syncable="true" />
-        <provider
-            android:name="org.gots.provider.AllotmentContentProvider"
-            android:authorities="org.gots.providers.allotment"
-            android:label="@string/dashboard.allotments.name"
-            android:syncable="true" />
-        <provider
-            android:name="org.gots.provider.WeatherContentProvider"
-            android:authorities="org.gots.providers.weather"
-            android:label="@string/dashboard.weather.name"
-            android:syncable="true" />
+        <provider android:authorities="org.gots.providers.sensor" android:label="@string/dashboard.sensor.name" android:name="org.gots.provider.SensorContentProvider"/>
+        <provider android:authorities="org.gots.providers.seeds" android:label="@string/dashboard.hut.name" android:name="org.gots.provider.SeedsContentProvider" android:syncable="true"/>
+        <provider android:authorities="org.gots.providers.garden" android:label="@string/dashboard.profile.name" android:name="org.gots.provider.GardenContentProvider" android:syncable="true"/>
+        <provider android:authorities="org.gots.providers.actions" android:label="@string/dashboard.actions.name" android:name="org.gots.provider.ActionsContentProvider" android:syncable="true"/>
+        <provider android:authorities="org.gots.providers.allotment" android:label="@string/dashboard.allotments.name" android:name="org.gots.provider.AllotmentContentProvider" android:syncable="true"/>
+        <provider android:authorities="org.gots.providers.weather" android:label="@string/dashboard.weather.name" android:name="org.gots.provider.WeatherContentProvider" android:syncable="true"/>
 
-        <receiver android:name=".service.BootBroadcastReceiver" >
+        <receiver android:name=".service.BootBroadcastReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
-        <receiver android:name=".action.service.ActionTODOBroadcastReceiver" >
+        <receiver android:name=".action.service.ActionTODOBroadcastReceiver">
         </receiver>
-        <receiver android:name=".seed.service.SeedBroadcastReceiver" >
+        <receiver android:name=".seed.service.SeedBroadcastReceiver">
         </receiver>
-        <receiver android:name=".garden.GardenManager" >
-            <intent-filter android:priority="100" >
-                <action android:name="org.gots.broadcast.BroadCastMessages.CONNECTION_SETTINGS_CHANGED" />
+        <receiver android:name=".garden.GardenManager">
+            <intent-filter android:priority="100">
+                <action android:name="org.gots.broadcast.BroadCastMessages.CONNECTION_SETTINGS_CHANGED"/>
             </intent-filter>
         </receiver>
 
-        <service android:name=".action.service.ActionNotificationService" />
-        <service android:name=".weather.service.WeatherUpdateService" />
-        <service android:name=".seed.service.SeedUpdateService" />
-        <service
-            android:name=".seed.service.SeedSyncService"
-            android:exported="true" >
+        <service android:name=".action.service.ActionNotificationService"/>
+        <service android:name=".weather.service.WeatherUpdateService"/>
+        <service android:name=".seed.service.SeedUpdateService"/>
+        <service android:exported="true" android:name=".seed.service.SeedSyncService">
             <intent-filter>
-                <action android:name="android.content.SyncAdapter" />
+                <action android:name="android.content.SyncAdapter"/>
             </intent-filter>
 
-            <meta-data
-                android:name="android.content.SyncAdapter"
-                android:resource="@xml/sync_adapter_seed" />
+            <meta-data android:name="android.content.SyncAdapter" android:resource="@xml/sync_adapter_seed"/>
         </service>
-        <service
-            android:name=".garden.service.GardenSyncService"
-            android:exported="true" >
+        <service android:exported="true" android:name=".garden.service.GardenSyncService">
             <intent-filter>
-                <action android:name="android.content.SyncAdapter" />
+                <action android:name="android.content.SyncAdapter"/>
             </intent-filter>
 
-            <meta-data
-                android:name="android.content.SyncAdapter"
-                android:resource="@xml/sync_adapter_garden" />
+            <meta-data android:name="android.content.SyncAdapter" android:resource="@xml/sync_adapter_garden"/>
         </service>
-        <service
-            android:name=".allotment.service.AllotmentSyncService"
-            android:exported="true" >
+        <service android:exported="true" android:name=".allotment.service.AllotmentSyncService">
             <intent-filter>
-                <action android:name="android.content.SyncAdapter" />
+                <action android:name="android.content.SyncAdapter"/>
             </intent-filter>
 
-            <meta-data
-                android:name="android.content.SyncAdapter"
-                android:resource="@xml/sync_adapter_allotment" />
+            <meta-data android:name="android.content.SyncAdapter" android:resource="@xml/sync_adapter_allotment"/>
         </service>
-        <service
-            android:name=".sensor.service.SensorSyncService"
-            android:exported="true" >
+        <service android:exported="true" android:name=".sensor.service.SensorSyncService">
             <intent-filter>
-                <action android:name="android.content.SyncAdapter" />
+                <action android:name="android.content.SyncAdapter"/>
             </intent-filter>
 
-            <meta-data
-                android:name="android.content.SyncAdapter"
-                android:resource="@xml/sync_adapter_sensor" />
+            <meta-data android:name="android.content.SyncAdapter" android:resource="@xml/sync_adapter_sensor"/>
         </service>
-        <service
-            android:name=".action.service.ActionsSyncService"
-            android:exported="true" >
+        <service android:exported="true" android:name=".action.service.ActionsSyncService">
             <intent-filter>
-                <action android:name="android.content.SyncAdapter" />
+                <action android:name="android.content.SyncAdapter"/>
             </intent-filter>
 
-            <meta-data
-                android:name="android.content.SyncAdapter"
-                android:resource="@xml/sync_adapter_actions" />
+            <meta-data android:name="android.content.SyncAdapter" android:resource="@xml/sync_adapter_actions"/>
         </service>
-        <service
-            android:name=".weather.service.WeatherSyncService"
-            android:exported="true" >
+        <service android:exported="true" android:name=".weather.service.WeatherSyncService">
             <intent-filter>
-                <action android:name="android.content.SyncAdapter" />
+                <action android:name="android.content.SyncAdapter"/>
             </intent-filter>
 
-            <meta-data
-                android:name="android.content.SyncAdapter"
-                android:resource="@xml/sync_adapter_weather" />
+            <meta-data android:name="android.content.SyncAdapter" android:resource="@xml/sync_adapter_weather"/>
         </service>
-        <service android:name=".allotment.service.AllotmentNotificationService" />
-        <service android:name=".allotment.service.ProfilNotificationService" />
-        <service android:name=".authentication.GotsAuthenticatorService" >
+        <service android:name=".allotment.service.AllotmentNotificationService"/>
+        <service android:name=".allotment.service.ProfilNotificationService"/>
+        <service android:name=".authentication.GotsAuthenticatorService">
             <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator" />
+                <action android:name="android.accounts.AccountAuthenticator"/>
             </intent-filter>
 
-            <meta-data
-                android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/authenticator" />
+            <meta-data android:name="android.accounts.AccountAuthenticator" android:resource="@xml/authenticator"/>
         </service>
     </application>
 

@@ -101,18 +101,7 @@ public class GotsPreferences extends NuxeoServerConfig {
 
     private static final String GARDENING_MANAGER_NUXEO_AUTOMATION_TEST = "http://services.gardening-manager.com/test/";
 
-    // private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://192.168.1.17:8080/nuxeo/";
-
     private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://services.gardening-manager.com/nuxeo/";
-
-    // private static final String GARDENING_MANAGER_NUXEO_AUTOMATION =
-    // "http://srv2.gardening-manager.com:8090/nuxeo/";
-
-    // private static final String DEFAULT_LOCAL_URL =
-    // "http://10.0.2.2:8080/nuxeo/";
-
-    // private static final String GARDENING_MANAGER_NUXEO_AUTHENTICATION =
-    // "http://srv2.gardening-manager.com:8090/nuxeo/authentication/temptoken?";
 
     public static final String ORG_GOTS_CURRENT_GARDENID = "org.gots.preference.gardenid";
 
