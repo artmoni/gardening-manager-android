@@ -40,6 +40,9 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
     protected static final String TAG = "NuxeoSeedProvider";
 
+    private static final String queryDefaultFilter = " AND vendorseed:language=\""
+            + Locale.getDefault().getCountry().toLowerCase() + "\"";
+
     String myToken;
 
     String myLogin;
@@ -76,10 +79,8 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 cacheParam = (byte) (cacheParam | CacheBehavior.FORCE_REFRESH);
                 refresh = false;
             }
-            Documents docs = service.query(
-                    "SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState != \"deleted\" AND vendorseed:language=\""
-                            + Locale.getDefault().getCountry().toLowerCase() + "\"", null,
-                    new String[] { "dc:modified DESC" }, "*", page, pageSize, cacheParam);
+            Documents docs = service.query("SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState != \"deleted\""
+                    + queryDefaultFilter, null, new String[] { "dc:modified DESC" }, "*", page, pageSize, cacheParam);
             for (Document document : docs) {
                 BaseSeedInterface seed = NuxeoSeedConverter.convert(document);
                 Blob likeStatus = service.getLikeStatus(document);
@@ -649,8 +650,8 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             byte cacheParam = CacheBehavior.STORE;
             Documents docSpecies = service.query(
                     "SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState != \"deleted\" AND vendorseed:datesowingmax >= "
-                            + month + " AND vendorseed:datesowingmin<=" + month + "", null, null, "*", 0, 50,
-                    cacheParam);
+                            + month + " AND vendorseed:datesowingmin<=" + month + "" + queryDefaultFilter, null, null,
+                    "*", 0, 50, cacheParam);
             for (Document seedDoc : docSpecies) {
                 BaseSeedInterface seed = NuxeoSeedConverter.convert(seedDoc);
                 if (super.getSeedByUUID(seedDoc.getId()) == null)
