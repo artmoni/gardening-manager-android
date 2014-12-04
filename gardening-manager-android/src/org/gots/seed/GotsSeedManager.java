@@ -85,7 +85,7 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
             return this;
         }
         this.mContext = context;
-        gotsPrefs = (GotsPreferences)getGotsContext().getServerConfig();
+        gotsPrefs = (GotsPreferences) getGotsContext().getServerConfig();
         nuxeoManager = NuxeoManager.getInstance().initIfNew(context);
 
         setSeedProvider();
@@ -106,7 +106,7 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     @Override
     public List<BaseSeedInterface> getVendorSeeds(boolean force, int page, int pageSize) {
-        if (!force && allSeeds.size() > 0)
+        if (!force && allSeeds.size() > 0 || mContext == null)
             return allSeeds;
 
         if (force && !nuxeoManager.getNuxeoClient().isOffline()) {

@@ -24,8 +24,9 @@ public class GotsSyncAdapter extends NuxeoSyncAdapter {
 
     protected GotsSeedManager seedManager;
 
-    protected GotsContext getGotsContext() {
-        return GotsContext.get(getContext());
+
+    public GotsContext getGotsContext() {
+      return GotsContext.get(getContext());
     }
 
     public GotsSyncAdapter(Context context, boolean autoInitialize) {
