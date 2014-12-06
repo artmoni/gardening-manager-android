@@ -345,7 +345,7 @@ public class ProfileCreationActivity extends BaseGotsActivity implements Locatio
                 }
                 garden = gardenManager.addGarden(garden);
                 if (garden.isIncredibleEdible())
-                    gardenManager.share(garden, "Everyone", "Write");
+                    gardenManager.share(garden, "members", "ReadWrite");
                 gardenManager.setCurrentGarden(garden);
                 return garden;
             }

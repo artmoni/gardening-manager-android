@@ -102,6 +102,7 @@ public class GotsPreferences extends NuxeoServerConfig {
     private static final String GARDENING_MANAGER_NUXEO_AUTOMATION_TEST = "http://services.gardening-manager.com/test/";
 
     private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://services.gardening-manager.com/nuxeo/";
+   // private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://192.168.43.143:8080/nuxeo/";
 
     public static final String ORG_GOTS_CURRENT_GARDENID = "org.gots.preference.gardenid";
 
