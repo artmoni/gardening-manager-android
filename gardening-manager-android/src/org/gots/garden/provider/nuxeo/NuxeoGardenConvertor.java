@@ -14,21 +14,21 @@ public class NuxeoGardenConvertor {
         garden.setUUID(gardenWorkspace.getId());
 
         try {
-            Long altitude = gardenWorkspace.getLong("garden:altitude");
+            Double altitude = gardenWorkspace.getDouble("garden:altitude");
             if (altitude != null)
                 garden.setGpsAltitude(altitude);
         } catch (NumberFormatException exception) {
             Log.w("NuxeoGarden", garden + " has not a correct altitude");
         }
         try {
-            Long latitude = gardenWorkspace.getLong("garden:latitude");
+            Double latitude = gardenWorkspace.getDouble("garden:latitude");
             if (latitude != null)
                 garden.setGpsLatitude(latitude);
         } catch (NumberFormatException exception) {
             Log.w("NuxeoGarden", garden + " has not a correct latitude");
         }
         try {
-            Long longitude = gardenWorkspace.getLong("garden:longitude");
+            Double longitude = gardenWorkspace.getDouble("garden:longitude");
             if (longitude != null)
                 garden.setGpsLongitude(longitude);
         } catch (NumberFormatException exception) {

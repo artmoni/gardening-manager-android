@@ -14,6 +14,7 @@ import org.gots.authentication.provider.google.GoogleAuthentication;
 import org.gots.authentication.provider.google.User;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
+import org.gots.inapp.AppRater;
 import org.gots.inapp.GotsBillingDialog;
 import org.gots.inapp.GotsPurchaseItem;
 import org.gots.provider.ActionsContentProvider;
@@ -95,7 +96,8 @@ public class MainActivity extends BaseGotsActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboard_drawer);
-
+//        AppRater.app_launched(getApplicationContext());
+        
         mTitle = mDrawerTitle = getTitle();
 
         // load slide menu items
@@ -469,7 +471,7 @@ public class MainActivity extends BaseGotsActivity {
         if (gardenManager.getCurrentGarden() == null) {
             return;
         }
-        
+
         if (gotsPrefs.isConnectedToServer()) {
             if (gardenManager.getCurrentGarden().isIncredibleEdible())
                 ((ImageView) findViewById(R.id.imageAvatar)).setImageDrawable(getResources().getDrawable(
@@ -695,7 +697,6 @@ public class MainActivity extends BaseGotsActivity {
 
     };
 
-
     private boolean doubleBackToExitPressedOnce;
 
     @Override
@@ -717,5 +718,4 @@ public class MainActivity extends BaseGotsActivity {
         }, 2000);
     }
 
-   
 }

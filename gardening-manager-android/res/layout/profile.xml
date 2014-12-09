@@ -5,15 +5,17 @@
     android:background="@drawable/background_simple"
     android:orientation="vertical" >
 
+    
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical" >
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="60dp"
-            android:background="@drawable/bg_profile_top" />
+<fragment
+        android:id="@+id/map"
+        android:layout_width="fill_parent"
+            android:layout_height="100dp"
+        class="com.google.android.gms.maps.SupportMapFragment" />
 
         <ListView
             android:id="@+id/IdGardenProfileList"
@@ -37,7 +39,7 @@
     <LinearLayout
         android:id="@+id/btReturn"
         android:layout_width="fill_parent"
-        android:layout_height="70dp"
+        android:layout_height="110dp"
         android:background="@drawable/bt_logo"
         android:orientation="horizontal" >
     </LinearLayout>

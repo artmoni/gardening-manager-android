@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.gots.ui;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.gots.R;
@@ -18,6 +19,15 @@ import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.adapter.ProfileAdapter;
 import org.gots.provider.GardenContentProvider;
+
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -44,6 +54,8 @@ public class ProfileActivity extends BaseGotsActivity {
 
     private ListView profileList;
 
+    private GoogleMap map;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,14 +69,17 @@ public class ProfileActivity extends BaseGotsActivity {
         profileList = (ListView) findViewById(R.id.IdGardenProfileList);
 
         this.registerReceiver(gardenBroadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_EVENT));
+        this.registerReceiver(gardenBroadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
 
         try {
-            GardenSync gardenSync = new GardenSync();
-            gardenSync.execute(false);
+            // GardenSync gardenSync = new GardenSync();
+            // gardenSync.execute(false);
+            runAsyncDataRetrieval();
+
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
-        
+
         if (!gotsPurchase.isPremium()) {
             GotsAdvertisement ads = new GotsAdvertisement(this);
 
@@ -72,6 +87,46 @@ public class ProfileActivity extends BaseGotsActivity {
             layout.addView(ads.getAdsLayout());
         }
 
+        // ******** MAP
+        map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+        map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+
+            @Override
+            public void onMapLongClick(LatLng arg0) {
+                gardenManager.getCurrentGarden().setGpsLatitude(arg0.latitude);
+                gardenManager.getCurrentGarden().setGpsLongitude(arg0.longitude);
+              
+                Intent intent = new Intent(getApplicationContext(), ProfileCreationActivity.class);
+                intent.putExtra("option", ProfileCreationActivity.OPTION_EDIT);
+                startActivity(intent);
+            }
+        });
+        try {
+            MapsInitializer.initialize(getApplicationContext());
+            displayGardensOnMap();
+            focusGardenOnMap(gardenManager.getCurrentGarden());
+        } catch (GooglePlayServicesNotAvailableException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+
+    private void focusGardenOnMap(GardenInterface garden) {
+        LatLng gardenPOI = new LatLng(garden.getGpsLatitude(), garden.getGpsLongitude());
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(gardenPOI, 13));
+    }
+
+    protected void displayGardensOnMap() {
+        // map.setMyLocationEnabled(true);
+
+        map.clear();
+        for (GardenInterface garden : gardenManager.getMyGardens(false)) {
+            LatLng gardenPOI = new LatLng(garden.getGpsLatitude(), garden.getGpsLongitude());
+            map.addMarker(new MarkerOptions().title(garden.getName()).snippet(garden.getDescription()).position(
+                    gardenPOI));
+
+        }
     }
 
     public BroadcastReceiver gardenBroadcastReceiver = new BroadcastReceiver() {
@@ -79,52 +134,44 @@ public class ProfileActivity extends BaseGotsActivity {
         public void onReceive(Context context, Intent intent) {
             if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
                 try {
-                    GardenSync gardenSync = new GardenSync();
-                    gardenSync.execute(true);
-
+                    runAsyncDataRetrieval();
+                    displayGardensOnMap();
                 } catch (Exception e) {
                     Log.e(TAG, e.getMessage());
                 }
             }
+            if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
+                focusGardenOnMap(gardenManager.getCurrentGarden());
+            }
         }
     };
 
-    class GardenSync extends AsyncTask<Boolean, Void, List<GardenInterface>> {
-        ProgressDialog dialog;
+    protected boolean requireAsyncDataRetrieval() {
+        return true;
+    };
 
-        @Override
-        protected void onPreExecute() {
-            setProgressRefresh(true);
-            super.onPreExecute();
-        }
-
-        @Override
-        protected List<GardenInterface> doInBackground(Boolean... force) {
-            return gardenManager.getMyGardens(force[0]);
-        }
-
-        @Override
-        protected void onPostExecute(List<GardenInterface> myGardens) {
-
-            profileAdapter = new ProfileAdapter(ProfileActivity.this, myGardens);
-            profileList.setAdapter(profileAdapter);
-            profileAdapter.notifyDataSetChanged();
-            if (profileAdapter != null && profileAdapter.getCount() == 0) {
-                Intent intentCreation = new Intent(getApplicationContext(), ProfileCreationActivity.class);
-                startActivity(intentCreation);
-            } else {
-                // Select default current garden
-                if (gardenManager.getCurrentGarden() == null || gardenManager.getCurrentGarden() != null
-                        && gardenManager.getCurrentGarden().getId() == -1) {
-                    gardenManager.setCurrentGarden(profileAdapter.getItem(0));
-                }
-            }
-            setProgressRefresh(false);
-            super.onPostExecute(myGardens);
-        }
-
+    @Override
+    protected Object retrieveNuxeoData() throws Exception {
+        return gardenManager.getMyGardens(true);
     }
 
+    @Override
+    protected void onNuxeoDataRetrieved(Object myGardens) {
+        profileAdapter = new ProfileAdapter(ProfileActivity.this, (List<GardenInterface>) myGardens);
+        profileList.setAdapter(profileAdapter);
+        profileAdapter.notifyDataSetChanged();
+        if (profileAdapter != null && profileAdapter.getCount() == 0) {
+            Intent intentCreation = new Intent(getApplicationContext(), ProfileCreationActivity.class);
+            startActivity(intentCreation);
+        } else {
+            // Select default current garden
+            if (gardenManager.getCurrentGarden() == null || gardenManager.getCurrentGarden() != null
+                    && gardenManager.getCurrentGarden().getId() == -1) {
+                gardenManager.setCurrentGarden(profileAdapter.getItem(0));
+            }
+        }
+        super.onNuxeoDataRetrieved(myGardens);
+    }
 
     @Override
     protected void onDestroy() {
