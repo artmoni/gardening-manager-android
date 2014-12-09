@@ -29,13 +29,13 @@
                 android:orientation="vertical"
                 android:padding="10dp" >
 
-                <ImageView
+                <!-- <ImageView
                     android:id="@+id/imageView2"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:contentDescription="@drawable/dashboard_button_profile_selector"
                     android:padding="10dp"
-                    android:src="@drawable/dashboard_button_profile_selector" />
+                    android:src="@drawable/dashboard_button_profile_selector" /> -->
 
                 <TableLayout
                     android:id="@+id/tableLayout1"
@@ -60,13 +60,38 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:hint="My garden at home"
+                            android:hint="My vegetable garden"
                             android:singleLine="true" >
 
                             <requestFocus />
                         </EditText>
                     </TableRow>
+<RadioGroup
+                    android:id="@+id/radioGardenType"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
 
+                    <RadioButton
+                        android:id="@+id/radioGardenPrivate"
+                        style="@style/description_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:drawableLeft="@drawable/garden_private"
+                        android:gravity="center_vertical"
+                        android:text="@string/garden.type.private" />
+
+                    <RadioButton
+                        android:id="@+id/radioGardenIncredibleEdible"
+                        style="@style/description_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_incredibleedible"
+                        android:gravity="center_vertical"
+                        android:text="@string/garden.type.incredibleedible" />
+                </RadioGroup>
+                    <!--
                     <TableRow
                         android:id="@+id/tableRow2"
                         android:layout_width="fill_parent"
@@ -145,7 +170,14 @@
                             android:editable="false"
                             android:hint="undefined" />
                     </TableRow>
+                    -->
                 </TableLayout>
+
+                <fragment
+                    android:id="@+id/map"
+                    android:layout_width="fill_parent"
+                    android:layout_height="200dp"
+                    class="com.google.android.gms.maps.SupportMapFragment" />
 
                 <CheckBox
                     android:id="@+id/checkboxSamples"
@@ -168,36 +200,13 @@
                     android:text="@string/profile.share.data" />
                 -->
 
-                <RadioGroup
-                    android:id="@+id/radioGardenType"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <RadioButton
-                        android:id="@+id/radioGardenPrivate"
-                        style="@style/description_content"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:drawableLeft="@drawable/garden_private"
-                        android:gravity="center_vertical"
-                        android:text="@string/garden.type.private" />
-
-                    <RadioButton
-                        android:id="@+id/radioGardenIncredibleEdible"
-                        style="@style/description_content"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_incredibleedible"
-                        android:gravity="center_vertical"
-                        android:text="@string/garden.type.incredibleedible" />
-                </RadioGroup>
-
                 <Button
                     android:id="@+id/buttonValidatePosition"
                     style="@style/buttonRed"
+                    android:layout_width="fill_parent"
+                    android:layout_margin="10dp"
                     android:text="@string/profile.location.validate" />
+
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

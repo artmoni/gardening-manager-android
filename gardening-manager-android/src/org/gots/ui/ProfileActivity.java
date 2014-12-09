@@ -27,6 +27,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.app.AlertDialog;
@@ -89,16 +90,24 @@ public class ProfileActivity extends BaseGotsActivity {
 
         // ******** MAP
         map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+        map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
 
             @Override
             public void onMapLongClick(LatLng arg0) {
                 gardenManager.getCurrentGarden().setGpsLatitude(arg0.latitude);
                 gardenManager.getCurrentGarden().setGpsLongitude(arg0.longitude);
-              
+
                 Intent intent = new Intent(getApplicationContext(), ProfileCreationActivity.class);
                 intent.putExtra("option", ProfileCreationActivity.OPTION_EDIT);
                 startActivity(intent);
+            }
+        });
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener(){
+            @Override
+            public boolean onMarkerClick(Marker arg0) {
+                
+                return false;
             }
         });
         try {
@@ -106,15 +115,14 @@ public class ProfileActivity extends BaseGotsActivity {
             displayGardensOnMap();
             focusGardenOnMap(gardenManager.getCurrentGarden());
         } catch (GooglePlayServicesNotAvailableException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage());
         }
 
     }
 
     private void focusGardenOnMap(GardenInterface garden) {
         LatLng gardenPOI = new LatLng(garden.getGpsLatitude(), garden.getGpsLongitude());
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(gardenPOI, 13));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(gardenPOI, 17));
     }
 
     protected void displayGardensOnMap() {

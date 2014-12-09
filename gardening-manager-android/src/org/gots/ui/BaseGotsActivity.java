@@ -62,9 +62,7 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
  * 
  */
 public abstract class BaseGotsActivity extends BaseNuxeoActivity implements GotsContextProvider {
-    private static final String TAG = BaseGotsActivity.class.getSimpleName();
-
-    // private static final String TAG = AbstractActivity.class.getSimpleName();
+    protected static final String TAG = BaseGotsActivity.class.getSimpleName();
 
     protected GotsPreferences gotsPrefs;
 
