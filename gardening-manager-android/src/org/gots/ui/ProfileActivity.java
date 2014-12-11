@@ -10,10 +10,12 @@
  ******************************************************************************/
 package org.gots.ui;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 import org.gots.R;
+import org.gots.action.GardeningActionInterface;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
@@ -26,6 +28,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -56,6 +59,8 @@ public class ProfileActivity extends BaseGotsActivity {
     private ListView profileList;
 
     private GoogleMap map;
+
+    HashMap<Marker, GardenInterface> markerGarden = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,11 +108,13 @@ public class ProfileActivity extends BaseGotsActivity {
                 startActivity(intent);
             }
         });
-        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener(){
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker arg0) {
-                
-                return false;
+                GardenInterface selectedGarden = markerGarden.get(arg0);
+                gardenManager.setCurrentGarden(selectedGarden);
+                sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
+                return true;
             }
         });
         try {
@@ -128,12 +135,19 @@ public class ProfileActivity extends BaseGotsActivity {
     protected void displayGardensOnMap() {
         // map.setMyLocationEnabled(true);
 
-        map.clear();
+//        map.clear();
         for (GardenInterface garden : gardenManager.getMyGardens(false)) {
             LatLng gardenPOI = new LatLng(garden.getGpsLatitude(), garden.getGpsLongitude());
-            map.addMarker(new MarkerOptions().title(garden.getName()).snippet(garden.getDescription()).position(
-                    gardenPOI));
 
+            MarkerOptions markerOption = new MarkerOptions().title(garden.getName()).snippet(garden.getDescription()).position(
+                    gardenPOI);
+            if (garden.isIncredibleEdible())
+            markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.bt_dashboard_incredible));
+            else
+                markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.bt_dashboard_profile));
+
+            Marker marker = map.addMarker(markerOption);
+            markerGarden.put(marker, garden);
         }
     }
 
