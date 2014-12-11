@@ -169,6 +169,8 @@ public class ProfileAdapter extends BaseAdapter {
         TextView gardenLocality = (TextView) vi.findViewById(R.id.textCity);
         TextView gardenDescription = (TextView) vi.findViewById(R.id.textGardenDescription);
         ImageView imageProfile = (ImageView) vi.findViewById(R.id.imageProfile);
+        ImageView imageGardenType = (ImageView) vi.findViewById(R.id.imageViewGardenType);
+
         weatherHistory = (LinearLayout) vi.findViewById(R.id.layoutWeatherHistory);
         View weatherChart = vi.findViewById(R.id.idWeatherChart);
 
@@ -203,6 +205,11 @@ public class ProfileAdapter extends BaseAdapter {
             // weatherHistoryContainer.setVisibility(View.GONE);
 
         }
+        if (currentGarden.isIncredibleEdible()){
+            imageGardenType.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_incredibleedible));
+        }else
+            imageGardenType.setImageDrawable(mContext.getResources().getDrawable(R.drawable.garden_private));
+            
 
         if (GotsPreferences.DEBUG)
             gardenName.setText(currentGarden.toString());
