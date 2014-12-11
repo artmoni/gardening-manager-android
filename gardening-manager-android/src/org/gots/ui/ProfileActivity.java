@@ -10,10 +10,12 @@
  ******************************************************************************/
 package org.gots.ui;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 import org.gots.R;
+import org.gots.action.GardeningActionInterface;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
@@ -26,6 +28,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -57,6 +60,8 @@ public class ProfileActivity extends BaseGotsActivity {
 
     private GoogleMap map;
 
+    HashMap<Marker, GardenInterface> markerGarden = new HashMap<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,20 +78,12 @@ public class ProfileActivity extends BaseGotsActivity {
         this.registerReceiver(gardenBroadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
 
         try {
-            // GardenSync gardenSync = new GardenSync();
-            // gardenSync.execute(false);
             runAsyncDataRetrieval();
-
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
 
-        if (!gotsPurchase.isPremium()) {
-            GotsAdvertisement ads = new GotsAdvertisement(this);
-
-            LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
-            layout.addView(ads.getAdsLayout());
-        }
+      
 
         // ******** MAP
         map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
@@ -103,21 +100,22 @@ public class ProfileActivity extends BaseGotsActivity {
                 startActivity(intent);
             }
         });
-        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener(){
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker arg0) {
-                
-                return false;
+                GardenInterface selectedGarden = markerGarden.get(arg0);
+                gardenManager.setCurrentGarden(selectedGarden);
+                sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
+                return true;
             }
         });
-        try {
-            MapsInitializer.initialize(getApplicationContext());
-            displayGardensOnMap();
-            focusGardenOnMap(gardenManager.getCurrentGarden());
-        } catch (GooglePlayServicesNotAvailableException e) {
-            Log.e(TAG, e.getMessage());
-        }
-
+        // try {
+        // MapsInitializer.initialize(getApplicationContext());
+        // displayGardensOnMap();
+        // focusGardenOnMap(gardenManager.getCurrentGarden());
+        // } catch (GooglePlayServicesNotAvailableException e) {
+        // Log.e(TAG, e.getMessage());
+        // }
     }
 
     private void focusGardenOnMap(GardenInterface garden) {
@@ -131,9 +129,16 @@ public class ProfileActivity extends BaseGotsActivity {
         map.clear();
         for (GardenInterface garden : gardenManager.getMyGardens(false)) {
             LatLng gardenPOI = new LatLng(garden.getGpsLatitude(), garden.getGpsLongitude());
-            map.addMarker(new MarkerOptions().title(garden.getName()).snippet(garden.getDescription()).position(
-                    gardenPOI));
 
+            MarkerOptions markerOption = new MarkerOptions().title(garden.getName()).snippet(garden.getDescription()).position(
+                    gardenPOI);
+            if (garden.isIncredibleEdible())
+                markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.bt_dashboard_incredible));
+            else
+                markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.bt_dashboard_profile));
+
+            Marker marker = map.addMarker(markerOption);
+            markerGarden.put(marker, garden);
         }
     }
 
@@ -143,7 +148,6 @@ public class ProfileActivity extends BaseGotsActivity {
             if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
                 try {
                     runAsyncDataRetrieval();
-                    displayGardensOnMap();
                 } catch (Exception e) {
                     Log.e(TAG, e.getMessage());
                 }
@@ -178,6 +182,8 @@ public class ProfileActivity extends BaseGotsActivity {
                 gardenManager.setCurrentGarden(profileAdapter.getItem(0));
             }
         }
+        displayGardensOnMap();
+        focusGardenOnMap(gardenManager.getCurrentGarden());
         super.onNuxeoDataRetrieved(myGardens);
     }
 

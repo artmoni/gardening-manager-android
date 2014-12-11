@@ -25,6 +25,7 @@ import java.util.ArrayList;
 
 import org.gots.R;
 import org.gots.action.GotsActionSeedManager;
+import org.gots.ads.GotsAdvertisement;
 import org.gots.allotment.GotsAllotmentManager;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.broadcast.BroadCastMessages;
@@ -54,6 +55,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
@@ -105,6 +107,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         gotsGrowingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(this);
         actionseedProvider = GotsActionSeedManager.getInstance();
         actionseedProvider.initIfNew(this);
+
     }
 
     @Override
@@ -140,6 +143,14 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
             GoogleAnalyticsTracker.getInstance().setCustomVar(2, "Member Connected", "Connected", 1);
         } else
             GoogleAnalyticsTracker.getInstance().setCustomVar(2, "Member Connected", "Guest", 1);
+
+        if (!gotsPurchase.isPremium()) {
+            GotsAdvertisement ads = new GotsAdvertisement(this);
+
+            LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
+            if (layout != null)
+                layout.addView(ads.getAdsLayout());
+        }
 
         super.onPostCreate(savedInstanceState);
     }
