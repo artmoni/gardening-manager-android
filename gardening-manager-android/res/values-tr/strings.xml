@@ -74,14 +74,16 @@
   <string name="garden.cityname.inputtitle">Bölge</string>
   <string name="hut.menu.favorites">Favorilerim</string>
   <string name="hut.menu.thismonth">Bu Ay</string>
+  <string name="hut.menu.seedsofthemonth">Bu ay ne ekelim</string>
   <string name="hut.menu.filter">Filtre</string>
   <string name="garden.cityname.inputtitle">Bölge</string>
   <string name="garden.cityname.inputmessage">Bahçe yerinizi belirtiniz</string>
+  <string name="dashboard.exit">Lütfen yeniden çıkmak için GERİ\'yi tıklatın</string>
   <string name="dashboard.hut.name">Katalog</string>
   <string name="dashboard.allotments.name">Bahçe</string>
   <string name="dashboard.actions.name">Eylemler</string>
   <string name="dashboard.profile.name">Profili</string>
-  <string name="dashboard.sensor.name">Sensörler</string>
+  <string name="dashboard.weather.name">Hava</string>
   <string name="dateSliderTitle">dateSliderTitle string</string>
   <string name="specie.daucuscarota">Havuç</string>
   <string name="specie.brassicaoleracea">Lahana</string>
@@ -118,7 +120,7 @@
   <string name="location.notfound">Konum bulunamadı</string>
   <string name="notification.action.title">Senin _SPECIE_ sana ihtiyacı var</string>
   <string name="notification.action.content">ve daha _NBACTIONS_ görevleri</string>
-  <string name="notification.seed.title">Yeni bir tür için katalog: _SPECIE_</string>
+  <string name="notification.seed.title">Katalogda yeni çeşit:_SPECIE_</string>
   <string name="notification.seed.content">ve _NBSEEDS_ daha fazla</string>
   <string name="notification.seedsow.content">Ekime hazır</string>
   <string name="action.sow">Ekim</string>
@@ -183,4 +185,30 @@
   <string name="tutorial.d.description">zamanında bildirilmesi ve geçmişini tutma</string>
   <string name="tutorial.e.title">Bahçıvanlar topluluğuna katılmak</string>
   <string name="tutorial.e.description">Orijinal bahçeleri keşfedin ve paylaşın</string>
+  <string name="tutorial.f.title">Bitkileri gözlemle</string>
+  <string name="tutorial.f.description">Parrot Flower Power ile gübreleme, güneş ışığı, sıcaklık ve toprak nemini</string>
+  <string name="sensor.buy">Parrot Flower Power satın alın</string>
+  <string name="dashboard.sensor.name">Sensörler</string>
+  <string name="skip">Atla</string>
+  <string name="more">Daha fazla</string>
+  <string name="premium">Premium</string>
+  <string name="garden.type.private">Özel Bahçe</string>
+  <string name="garden.type.incredibleedible">İnanılmaz yenilebilir: paylaşmak için gıda</string>
+  <string name="garden.type.incredibleedible.description">İnanılmaz Yenilebilir projesi,yerel yiyecekler konusundaki etkinlikler etrafında   insanları biraraya getirerek çevre konusundaki davranışların müzakere edildiği ve daha yaşanılabilir bir dünya oluşturmayı amaçlayan şehir bahçeciliği projesidir.</string>
+  <string-array name="nav_drawer_items">
+    <item>@string/dashboard.hut.name</item>
+    <item>@string/dashboard.allotments.name</item>
+    <item>@string/dashboard.actions.name</item>
+    <item>@string/dashboard.profile.name</item>
+    <item>@string/dashboard.sensor.name</item>
+    <item>@string/premium</item>
+  </string-array>
+  <array name="nav_drawer_icons">
+    <item>@drawable/bt_dashboard_hut</item>
+    <item>@drawable/bt_dashboard_allotment</item>
+    <item>@drawable/bt_dashboard_action</item>
+    <item>@drawable/bt_dashboard_profile</item>
+    <item>@drawable/bt_dashboard_sensor</item>
+    <item>@drawable/action_buy_online</item>
+  </array>
 </resources>
