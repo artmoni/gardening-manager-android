@@ -35,29 +35,20 @@ public class SeedWidget extends RelativeLayout {
 
     private GrowingSeedInterface mSeed;
 
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(mContext);
+    }
+
     public SeedWidget(Context context) {
         super(context);
         this.mContext = context;
         initView();
-
-    }
-
-    protected GotsContext getGotsContext() {
-        return GotsContext.get(mContext);
     }
 
     public SeedWidget(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.mContext = context;
-
         initView();
-
-    }
-
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-        setupView();
     }
 
     private void initView() {
@@ -96,24 +87,26 @@ public class SeedWidget extends RelativeLayout {
 
             @Override
             protected Bitmap doInBackground(Void... params) {
-                Bitmap image = null;
                 File imageFile = null;
 
-                if (mSeed.getSpecie() != null)
+                /* Check custom image for this variety */
+                if (mSeed.getVariety() != null)
+                    imageFile = new File(gotsPref.getGotsExternalFileDir(),
+                            mSeed.getVariety().toLowerCase().replaceAll("\\s", ""));
+                if (imageFile != null && imageFile.exists()) {
+                    return FileUtilities.decodeScaledBitmapFromSdCard(imageFile.getAbsolutePath(), 100, 100);
+                }
+                /* Check custom image for this species */
+                else if (mSeed.getSpecie() != null) {
                     imageFile = new File(gotsPref.getGotsExternalFileDir(), mSeed.getSpecie().toLowerCase().replaceAll(
                             "\\s", ""));
-
-                if (imageFile != null && imageFile.exists()) {
-                    // BitmapFactory.Options options = new BitmapFactory.Options();
-                    // options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                    // image = BitmapFactory.decodeFile(file.getPath(), options);
-                    image = FileUtilities.decodeScaledBitmapFromSdCard(imageFile.getAbsolutePath(),
-                            seedView.getWidth(), seedView.getHeight());
-                } else {
-
-                    vegetableImageRessource = getSeedDrawable(getContext(), mSeed);
+                    if (imageFile != null && imageFile.exists()) {
+                        return FileUtilities.decodeScaledBitmapFromSdCard(imageFile.getAbsolutePath(), 100, 100);
+                    }
                 }
-                return image;
+
+                vegetableImageRessource = getSeedDrawable(getContext(), mSeed);
+                return null;
             }
 
             protected void onPostExecute(Bitmap image) {

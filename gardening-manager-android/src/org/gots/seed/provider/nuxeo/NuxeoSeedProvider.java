@@ -17,7 +17,9 @@ import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.LikeStatus;
 import org.gots.seed.SpeciesDocument;
 import org.gots.seed.provider.local.LocalSeedProvider;
+import org.gots.utils.FileUtilities;
 import org.nuxeo.android.cache.blob.BlobWithProperties;
+import org.nuxeo.android.download.FileDownloader;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.android.upload.FileUploader;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
@@ -91,6 +93,15 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     Log.i(TAG, seed.toString());
                 } else {
                     Log.w(TAG, "Nuxeo Seed conversion problem " + document.getTitle() + "- " + document.getId());
+                }
+
+                // download custom image
+                File imageFile = new File(gotsPrefs.getGotsExternalFileDir(),
+                        seed.getVariety().toLowerCase().replaceAll("\\s", ""));
+                if (imageFile != null && !imageFile.exists()) {
+                    FileBlob image = service.getBlob(document);
+                    if (image != null && image.getLength() > 0)
+                        FileUtilities.copy(image.getFile(), imageFile);
                 }
             }
             // getNuxeoClient().shutdown();

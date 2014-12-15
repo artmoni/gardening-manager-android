@@ -10,7 +10,10 @@
  ******************************************************************************/
 package org.gots.ui;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -22,10 +25,13 @@ import org.gots.seed.GrowingSeed;
 import org.gots.seed.adapter.ListSpeciesAdapter;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
+import org.gots.utils.FileUtilities;
 
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -121,30 +127,6 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setTitle(R.string.seed_register_title);
 
-        findViewById(R.id.imageBarCode).setOnClickListener(this);
-        findViewById(R.id.buttonStock).setOnClickListener(this);
-        // findViewById(R.id.buttonCatalogue).setOnClickListener(this);
-        findViewById(R.id.buttonModify).setOnClickListener(this);
-        descriptionGrowth = (EditText) findViewById(R.id.IdSeedDescriptionCulture);
-        descriptionDiseases = (EditText) findViewById(R.id.IdSeedDescriptionEnnemi);
-        descriptionEnvironment = (EditText) findViewById(R.id.IdSeedDescriptionEnvironment);
-        descriptionHarvest = (EditText) findViewById(R.id.IdSeedDescriptionHarvest);
-        descriptionGrowthVoice = (View) findViewById(R.id.IdSeedDescriptionCultureVoice);
-        descriptionDiseasesVoice = (View) findViewById(R.id.IdSeedDescriptionEnnemiVoice);
-        descriptionEnvironmentVoice = (View) findViewById(R.id.IdSeedDescriptionEnvironmentVoice);
-        descriptionHarvestVoice = (View) findViewById(R.id.IdSeedDescriptionHarvestVoice);
-
-        pictureSelectorView = (ImageView) findViewById(R.id.imageNewVariety);
-        pictureSelectorView.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i, REQUEST_LOAD_IMAGE);
-            }
-        });
-        textViewBarCode = (TextView) findViewById(R.id.textViewBarCode);
-
         if (getIntent().getIntExtra("org.gots.seedid", -1) != -1) {
             newSeed = seedManager.getSeedById(getIntent().getIntExtra("org.gots.seedid", -1));
             isNewSeed = false;
@@ -152,6 +134,8 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
         } else {
             newSeed = new GrowingSeed();
         }
+
+        initview();
 
         if (getIntent().getStringExtra("org.gots.seed.barcode") != null)
             newSeed.setBareCode(getIntent().getStringExtra("org.gots.seed.barcode"));
@@ -163,7 +147,14 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
         //
         // }
         // });
-        initview();
+        seedWidgetLong.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, REQUEST_LOAD_IMAGE);
+            }
+        });
     }
 
     @Override
@@ -299,11 +290,21 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
         /*
          * BARCODE
          */
+        textViewBarCode = (TextView) findViewById(R.id.textViewBarCode);
         textViewBarCode.setText(newSeed.getBareCode());
 
         /*
          * DESCRIPTION
          */
+        descriptionGrowth = (EditText) findViewById(R.id.IdSeedDescriptionCulture);
+        descriptionDiseases = (EditText) findViewById(R.id.IdSeedDescriptionEnnemi);
+        descriptionEnvironment = (EditText) findViewById(R.id.IdSeedDescriptionEnvironment);
+        descriptionHarvest = (EditText) findViewById(R.id.IdSeedDescriptionHarvest);
+        descriptionGrowthVoice = (View) findViewById(R.id.IdSeedDescriptionCultureVoice);
+        descriptionDiseasesVoice = (View) findViewById(R.id.IdSeedDescriptionEnnemiVoice);
+        descriptionEnvironmentVoice = (View) findViewById(R.id.IdSeedDescriptionEnvironmentVoice);
+        descriptionHarvestVoice = (View) findViewById(R.id.IdSeedDescriptionHarvestVoice);
+
         descriptionGrowth.setText(newSeed.getDescriptionGrowth());
         descriptionDiseases.setText(newSeed.getDescriptionDiseases());
         descriptionHarvest.setText(newSeed.getDescriptionHarvest());
@@ -313,9 +314,10 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
         descriptionEnvironmentVoice.setOnClickListener(this);
         descriptionGrowthVoice.setOnClickListener(this);
         descriptionHarvestVoice.setOnClickListener(this);
-        // if (savedInstanceState != null &&
-        // savedInstanceState.getInt(SELECTED_SPECIE) != 0)
-        // gallerySpecies.setSelection(savedInstanceState.getInt(SELECTED_SPECIE));
+
+        findViewById(R.id.imageBarCode).setOnClickListener(this);
+        findViewById(R.id.buttonStock).setOnClickListener(this);
+        findViewById(R.id.buttonModify).setOnClickListener(this);
 
         if (!isNewSeed) {
             // findViewById(R.id.buttonCatalogue).setVisibility(View.GONE);
@@ -433,12 +435,19 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
     // }
 
     private boolean validateSeed() {
+        findViewById(R.id.layoutSpecieGallery).setBackground(null);
+        findViewById(R.id.autoCompleteTextViewVariety).setBackground(null);
+        
         if (newSeed.getSpecie() == null || "".equals(newSeed.getSpecie())) {
             Toast.makeText(this, getResources().getString(R.string.fillfields_specie), Toast.LENGTH_SHORT).show();
+            findViewById(R.id.layoutSpecieGallery).setBackground(getResources().getDrawable(R.drawable.border_red));
             return false;
         }
         if (newSeed.getVariety() == null || "".equals(newSeed.getVariety())) {
             Toast.makeText(this, getResources().getString(R.string.fillfields_variety), Toast.LENGTH_SHORT).show();
+            findViewById(R.id.autoCompleteTextViewVariety).setBackground(
+                    getResources().getDrawable(R.drawable.border_red));
+
             return false;
         }
         if (newSeed.getDateSowingMin() == -1 || newSeed.getDateSowingMax() == -1) {
@@ -557,6 +566,12 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+
+            if (!validateSeed()) {
+                Toast.makeText(getApplicationContext(), "Seed must be validable to execute this action",
+                        Toast.LENGTH_LONG).show();
+                return;
+            }
             Uri selectedImage = data.getData();
             String[] filePathColumn = { MediaStore.Images.Media.DATA };
 
@@ -565,9 +580,51 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
 
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             picturePath = cursor.getString(columnIndex);
+
+            try {
+                Bitmap bitmap = FileUtilities.decodeScaledBitmapFromSdCard(picturePath, 100, 100);
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                bitmap.compress(CompressFormat.PNG, 0 /* ignored for PNG */, bos);
+                byte[] bitmapdata = bos.toByteArray();
+
+                // write the bytes in file
+                FileOutputStream fos = new FileOutputStream(new File(gotsPrefs.getGotsExternalFileDir(),
+                        newSeed.getSpecie().toLowerCase().replaceAll("\\s", "")));
+                fos.write(bitmapdata);
+                seedWidgetLong.invalidate();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "copy error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+
             cursor.close();
 
             // String picturePath contains the path of selected Image
+        } else if (requestCode == REQUEST_DISEASES || requestCode == REQUEST_ENVIRONMENT
+                || requestCode == REQUEST_GROWTH || requestCode == REQUEST_HARVEST) {
+            ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            if (matches.size() > 0)
+                switch (requestCode) {
+                case REQUEST_GROWTH:
+                    descriptionGrowth.setText(matches.get(0));
+                    newSeed.setDescriptionGrowth(matches.toArray().toString());
+                    break;
+                case REQUEST_DISEASES:
+                    descriptionDiseases.setText(matches.get(0));
+                    newSeed.setDescriptionDiseases(matches.toArray().toString());
+                    break;
+                case REQUEST_ENVIRONMENT:
+                    descriptionEnvironment.setText(matches.get(0));
+                    newSeed.setDescriptionCultivation(matches.toArray().toString());
+                    break;
+                case REQUEST_HARVEST:
+                    descriptionHarvest.setText(matches.get(0));
+                    newSeed.setDescriptionHarvest(matches.toArray().toString());
+                    break;
+                default:
+                    break;
+                }
+
         } else {
             IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
             if (scanResult != null && scanResult.getContents() != "") {
@@ -575,28 +632,7 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
                 textViewBarCode.setText(scanResult.getContents());
                 newSeed.setBareCode(textViewBarCode.getText().toString());
             } else {
-                ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                if (matches.size() > 0)
-                    switch (requestCode) {
-                    case REQUEST_GROWTH:
-                        descriptionGrowth.setText(matches.get(0));
-                        newSeed.setDescriptionGrowth(matches.toArray().toString());
-                        break;
-                    case REQUEST_DISEASES:
-                        descriptionDiseases.setText(matches.get(0));
-                        newSeed.setDescriptionDiseases(matches.toArray().toString());
-                        break;
-                    case REQUEST_ENVIRONMENT:
-                        descriptionEnvironment.setText(matches.get(0));
-                        newSeed.setDescriptionCultivation(matches.toArray().toString());
-                        break;
-                    case REQUEST_HARVEST:
-                        descriptionHarvest.setText(matches.get(0));
-                        newSeed.setDescriptionHarvest(matches.toArray().toString());
-                        break;
-                    default:
-                        break;
-                    }
+
             }
         }
     }
@@ -632,16 +668,6 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
 
         super.onConfigurationChanged(newConfig);
         setContentView(R.layout.inputseed);
-        //
-        // seedWidgetLong.setSeed(newSeed);
-        // seedWidgetLong.invalidate();
-    }
-
-    @Override
-    protected void onResume() {
-        // initview();
-
-        super.onResume();
     }
 
     public class PlanningUpdater implements DatePicker.OnDateChangedListener {
