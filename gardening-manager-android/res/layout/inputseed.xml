@@ -22,6 +22,7 @@
         android:layout_margin="5dp"
         android:background="@color/brown_light"
         android:orientation="vertical"
+        android:padding="5dp"
         android:scrollbars="vertical" >
 
         <LinearLayout
@@ -77,12 +78,6 @@
 
                         <requestFocus />
                     </AutoCompleteTextView>
-
-                    <ImageView
-                        android:id="@+id/imageNewVariety"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:src="@drawable/no_picture" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -94,6 +89,7 @@
                 android:text="@string/seed.action.sowing.period" />
 
             <LinearLayout
+                android:id="@+id/layoutInputSowing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_line_action"
@@ -143,6 +139,7 @@
                 android:text="@string/seed.action.picking.period" />
 
             <LinearLayout
+                android:id="@+id/layoutInputHarvesting"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_line_action"
@@ -189,38 +186,68 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_line_action"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="5dp"
                 android:visibility="visible" >
 
-                <TextView
-                    style="@style/description_content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="@string/seed.description.barecode"
-                    android:visibility="visible" />
-
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:orientation="vertical" >
-
-                    <ImageView
-                        android:id="@+id/imageBarCode"
-                        android:layout_width="100dp"
-                        android:layout_height="58dp"
-                        android:contentDescription="barcode scanner"
-                        android:src="@drawable/codebarre" />
+                    android:orientation="horizontal"
+                    android:visibility="visible" >
 
                     <TextView
-                        android:id="@+id/textViewBarCode"
+                        style="@style/description_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="@string/seed.description.barecode"
+                        android:visibility="visible" />
+
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:text="0283878732" >
-                    </TextView>
+                        android:layout_gravity="right"
+                        android:orientation="vertical" >
+
+                        <ImageView
+                            android:id="@+id/imageBarCode"
+                            android:layout_width="100dp"
+                            android:layout_height="58dp"
+                            android:contentDescription="barcode scanner"
+                            android:src="@drawable/codebarre" />
+
+                        <TextView
+                            android:id="@+id/textViewBarCode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:text="0283878732" >
+                        </TextView>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="visible" >
+
+                    <TextView
+                        style="@style/description_content"
+                        android:layout_width="fill_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="@string/action.photo"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/imageNewVariety"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/no_picture" />
                 </LinearLayout>
             </LinearLayout>
 

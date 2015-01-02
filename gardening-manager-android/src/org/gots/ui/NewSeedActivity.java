@@ -12,6 +12,7 @@ package org.gots.ui;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -45,11 +46,13 @@ import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AbsListView.SelectionBoundsAdjuster;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -133,6 +136,16 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
         ActionBar bar = getSupportActionBar();
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setTitle(R.string.seed_register_title);
+
+        // bar.setDisplayOptions(
+        // ActionBar.DISPLAY_SHOW_CUSTOM,
+        // ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
+        // | ActionBar.DISPLAY_SHOW_TITLE);
+        // LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext().getSystemService(
+        // LAYOUT_INFLATER_SERVICE);
+        // View customActionBarView = inflater.inflate(R.layout.inputseed_actionbar, null);
+        // bar.setCustomView(customActionBarView, new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        // ViewGroup.LayoutParams.MATCH_PARENT));
 
         if (getIntent().getIntExtra("org.gots.seedid", -1) != -1) {
             newSeed = seedManager.getSeedById(getIntent().getIntExtra("org.gots.seedid", -1));
@@ -357,8 +370,25 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
                 new AsyncTask<Void, Integer, Void>() {
                     @Override
                     protected Void doInBackground(Void... params) {
-                        if (picturePath != null)
+                        if (picturePath != null){
+                            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                            Bitmap bitmap = FileUtilities.decodeScaledBitmapFromSdCard(picturePath, 100, 100);
+                            bitmap.compress(CompressFormat.PNG, 0 /* ignored for PNG */, bos);
+                            byte[] bitmapdata = bos.toByteArray();
+
+                            // write the bytes in file
+                            FileOutputStream fos;
+                            try {
+                                fos = new FileOutputStream(new File(gotsPrefs.getGotsExternalFileDir(),
+                                        newSeed.getVariety().toLowerCase().replaceAll("\\s", "")));
+                                fos.write(bitmapdata);                            
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                             newSeed = seedManager.createSeed(newSeed, new File(picturePath));
+                        }
                         else
                             newSeed = seedManager.createSeed(newSeed, null);
                         // seedManager.attach
@@ -446,6 +476,7 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
     private boolean validateSeed() {
         findViewById(R.id.layoutSpecieGallery).setBackground(null);
         findViewById(R.id.autoCompleteTextViewVariety).setBackground(null);
+        // findViewById(R.id.layoutInputSowing).setBackground(null);
 
         if (newSeed.getSpecie() == null || "".equals(newSeed.getSpecie())) {
             Toast.makeText(this, getResources().getString(R.string.fillfields_specie), Toast.LENGTH_SHORT).show();
@@ -461,8 +492,10 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
         }
         if (newSeed.getDateSowingMin() == -1 || newSeed.getDateSowingMax() == -1) {
             Toast.makeText(this, getResources().getString(R.string.fillfields_dates), Toast.LENGTH_SHORT).show();
+            findViewById(R.id.layoutInputSowing).setBackground(getResources().getDrawable(R.drawable.border_red));
             return false;
         }
+
         return true;
     }
 
@@ -591,22 +624,10 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             picturePath = cursor.getString(columnIndex);
 
-            try {
-                Bitmap bitmap = FileUtilities.decodeScaledBitmapFromSdCard(picturePath, 100, 100);
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                bitmap.compress(CompressFormat.PNG, 0 /* ignored for PNG */, bos);
-                byte[] bitmapdata = bos.toByteArray();
+            Bitmap bitmap = FileUtilities.decodeScaledBitmapFromSdCard(picturePath, 100, 100);
 
-                // write the bytes in file
-                FileOutputStream fos = new FileOutputStream(new File(gotsPrefs.getGotsExternalFileDir(),
-                        newSeed.getVariety().toLowerCase().replaceAll("\\s", "")));
-                fos.write(bitmapdata);
-                ImageView image = (ImageView) findViewById(R.id.imageNewVariety);
-                image.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "copy error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            }
+            ImageView image = (ImageView) findViewById(R.id.imageNewVariety);
+            image.setImageBitmap(bitmap);
 
             cursor.close();
 
