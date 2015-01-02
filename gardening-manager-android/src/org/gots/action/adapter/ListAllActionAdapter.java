@@ -82,7 +82,6 @@ public class ListAllActionAdapter extends BaseAdapter {
 
     private static final String TAG = "ListAllActionAdapter";
 
-
     public ListAllActionAdapter(Context context, List<SeedActionInterface> allActions, int status) {
         this.mContext = context;
         current_status = status;
@@ -138,13 +137,13 @@ public class ListAllActionAdapter extends BaseAdapter {
             SeedWidget seedView = (SeedWidget) ll.findViewById(R.id.idSeedView);
             seedView.setSeed(seed);
 
-           final Switch switchActionStatus = (Switch) ll.findViewById(R.id.switchSeedActionStatus);
+            Switch switchActionStatus = (Switch) ll.findViewById(R.id.switchSeedActionStatus);
             TextView textviewActionDate = (TextView) ll.findViewById(R.id.IdSeedActionDate);
             TextView textviewActionDescription = (TextView) ll.findViewById(R.id.IdSeedActionDescription);
 
             SimpleDateFormat dateFormat = new SimpleDateFormat(" dd/MM/yyyy", Locale.FRANCE);
 
-            if (currentAction.getDateActionDone()==null) {
+            if (currentAction.getDateActionDone() == null) {
                 // textviewActionStatus.setText(mContext.getResources().getString(R.string.seed_action_todo));
 
                 Calendar rightNow = Calendar.getInstance();
@@ -155,7 +154,7 @@ public class ListAllActionAdapter extends BaseAdapter {
                 ll.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showNoticeDialog(position, seed, currentAction,switchActionStatus);
+                        showNoticeDialog(position, seed, currentAction, switchActionStatus);
                     }
                 });
                 switchActionStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -163,7 +162,7 @@ public class ListAllActionAdapter extends BaseAdapter {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if (isChecked)
-                            showNoticeDialog(position, seed, currentAction,switchActionStatus);
+                            showNoticeDialog(position, seed, currentAction, switchActionStatus);
 
                     }
                 });
