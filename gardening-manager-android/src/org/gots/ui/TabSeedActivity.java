@@ -302,12 +302,12 @@ public class TabSeedActivity extends BaseGotsActivity {
 
         case R.id.planning:
             FragmentManager fm = getSupportFragmentManager();
-            DialogFragment purchaseDialog = new ScheduleActionFragment();
+            DialogFragment scheduleDialog = new ScheduleActionFragment();
             Bundle data = new Bundle();
             data.putInt(GOTS_GROWINGSEED_ID, mSeed.getGrowingSeedId());
-            purchaseDialog.setArguments(data);
-            purchaseDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
-            purchaseDialog.show(fm, "fragment_planning");
+            scheduleDialog.setArguments(data);
+            scheduleDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+            scheduleDialog.show(fm, "fragment_planning");
             return true;
         case R.id.download:
             new AsyncTask<Void, Integer, File>() {

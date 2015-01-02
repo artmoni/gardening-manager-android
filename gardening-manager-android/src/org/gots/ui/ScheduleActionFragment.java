@@ -14,6 +14,7 @@ import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.view.SeedWidgetLong;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
@@ -54,6 +55,12 @@ public class ScheduleActionFragment extends DialogFragment implements OnItemClic
 
     private String TAG = "NewActionActivity";
 
+    @Override
+    public void onAttach(Activity activity) {
+        
+        super.onAttach(activity);
+    }
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
