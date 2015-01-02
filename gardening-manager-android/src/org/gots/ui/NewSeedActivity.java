@@ -26,17 +26,21 @@ import org.gots.seed.adapter.ListSpeciesAdapter;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
 import org.gots.utils.FileUtilities;
+import org.gots.utils.SelectOrTakePictureDialogFragment;
+import org.gots.utils.SelectOrTakePictureDialogFragment.PictureSelectorListener;
 
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -46,6 +50,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AbsListView.SelectionBoundsAdjuster;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -61,7 +66,7 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-public class NewSeedActivity extends BaseGotsActivity implements OnClickListener {
+public class NewSeedActivity extends BaseGotsActivity implements OnClickListener, PictureSelectorListener {
     private static final String SELECTED_SPECIE = "selectedSpecie";
 
     private DatePicker planningSowMin;
@@ -113,7 +118,9 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
 
     public static final int REQUEST_ENVIRONMENT = 4;
 
-    protected static final int REQUEST_LOAD_IMAGE = 5;
+    public static final int REQUEST_LOAD_IMAGE = 5000;
+
+    public static final int REQUEST_TAKE_PHOTO = 6000;
 
     private String picturePath;
 
@@ -147,12 +154,14 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
         //
         // }
         // });
-        seedWidgetLong.setOnClickListener(new View.OnClickListener() {
+
+        findViewById(R.id.imageNewVariety).setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i, REQUEST_LOAD_IMAGE);
+                SelectOrTakePictureDialogFragment dialogFragment = new SelectOrTakePictureDialogFragment();
+                dialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+                dialogFragment.show(getSupportFragmentManager(), "picture");
             }
         });
     }
@@ -272,14 +281,14 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
             }
         });
 
-        ImageButton clearVariety = (ImageButton) findViewById(R.id.buttonClearVariety);
-        clearVariety.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                autoCompleteVariety.setText("");
-            }
-        });
+        // ImageButton clearVariety = (ImageButton) findViewById(R.id.buttonClearVariety);
+        // clearVariety.setOnClickListener(new View.OnClickListener() {
+        //
+        // @Override
+        // public void onClick(View v) {
+        // autoCompleteVariety.setText("");
+        // }
+        // });
 
         /*
          * SPECIES
@@ -437,7 +446,7 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
     private boolean validateSeed() {
         findViewById(R.id.layoutSpecieGallery).setBackground(null);
         findViewById(R.id.autoCompleteTextViewVariety).setBackground(null);
-        
+
         if (newSeed.getSpecie() == null || "".equals(newSeed.getSpecie())) {
             Toast.makeText(this, getResources().getString(R.string.fillfields_specie), Toast.LENGTH_SHORT).show();
             findViewById(R.id.layoutSpecieGallery).setBackground(getResources().getDrawable(R.drawable.border_red));
@@ -565,7 +574,8 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+        if ((requestCode == REQUEST_LOAD_IMAGE || requestCode == REQUEST_TAKE_PHOTO) && resultCode == RESULT_OK
+                && null != data) {
 
             if (!validateSeed()) {
                 Toast.makeText(getApplicationContext(), "Seed must be validable to execute this action",
@@ -589,9 +599,10 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
 
                 // write the bytes in file
                 FileOutputStream fos = new FileOutputStream(new File(gotsPrefs.getGotsExternalFileDir(),
-                        newSeed.getSpecie().toLowerCase().replaceAll("\\s", "")));
+                        newSeed.getVariety().toLowerCase().replaceAll("\\s", "")));
                 fos.write(bitmapdata);
-                seedWidgetLong.invalidate();
+                ImageView image = (ImageView) findViewById(R.id.imageNewVariety);
+                image.setImageBitmap(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
                 Toast.makeText(getApplicationContext(), "copy error: " + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -599,7 +610,6 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
 
             cursor.close();
 
-            // String picturePath contains the path of selected Image
         } else if (requestCode == REQUEST_DISEASES || requestCode == REQUEST_ENVIRONMENT
                 || requestCode == REQUEST_GROWTH || requestCode == REQUEST_HARVEST) {
             ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
@@ -676,6 +686,20 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
         public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             updatePlanning();
         }
+    }
+
+    @Override
+    public void onSelectInGallery(DialogFragment fragment) {
+        Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(i, REQUEST_LOAD_IMAGE);
+    }
+
+    @Override
+    public void onTakePicture(DialogFragment fragment) {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, getCacheDir() + "_tmp");
+
+        startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
     }
 
 }

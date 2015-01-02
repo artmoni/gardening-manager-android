@@ -90,7 +90,7 @@ public class SeedWidget extends RelativeLayout {
                 File imageFile = null;
 
                 /* Check custom image for this variety */
-                if (mSeed.getVariety() != null)
+                if (mSeed.getVariety() != null && !"".equals(mSeed.getVariety()))
                     imageFile = new File(gotsPref.getGotsExternalFileDir(),
                             mSeed.getVariety().toLowerCase().replaceAll("\\s", ""));
                 if (imageFile != null && imageFile.exists()) {
@@ -148,7 +148,6 @@ public class SeedWidget extends RelativeLayout {
     public void setSeed(BaseSeedInterface seed) {
         this.mSeed = (GrowingSeedInterface) seed;
         setupView();
-
     }
 
 }
