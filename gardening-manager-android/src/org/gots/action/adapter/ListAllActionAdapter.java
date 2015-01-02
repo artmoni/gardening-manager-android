@@ -47,9 +47,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -77,6 +81,7 @@ public class ListAllActionAdapter extends BaseAdapter {
     public static final int THUMBNAIL_WIDTH = 66;
 
     private static final String TAG = "ListAllActionAdapter";
+
 
     public ListAllActionAdapter(Context context, List<SeedActionInterface> allActions, int status) {
         this.mContext = context;
@@ -133,14 +138,14 @@ public class ListAllActionAdapter extends BaseAdapter {
             SeedWidget seedView = (SeedWidget) ll.findViewById(R.id.idSeedView);
             seedView.setSeed(seed);
 
-            TextView textviewActionStatus = (TextView) ll.findViewById(R.id.IdSeedActionStatus);
+           final Switch switchActionStatus = (Switch) ll.findViewById(R.id.switchSeedActionStatus);
             TextView textviewActionDate = (TextView) ll.findViewById(R.id.IdSeedActionDate);
             TextView textviewActionDescription = (TextView) ll.findViewById(R.id.IdSeedActionDescription);
 
             SimpleDateFormat dateFormat = new SimpleDateFormat(" dd/MM/yyyy", Locale.FRANCE);
 
-            if (current_status == STATUS_TODO) {
-                textviewActionStatus.setText(mContext.getResources().getString(R.string.seed_action_todo));
+            if (currentAction.getDateActionDone()==null) {
+                // textviewActionStatus.setText(mContext.getResources().getString(R.string.seed_action_todo));
 
                 Calendar rightNow = Calendar.getInstance();
                 rightNow.setTime(seed.getDateSowing());
@@ -150,7 +155,16 @@ public class ListAllActionAdapter extends BaseAdapter {
                 ll.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showNoticeDialog(position, seed, currentAction);
+                        showNoticeDialog(position, seed, currentAction,switchActionStatus);
+                    }
+                });
+                switchActionStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (isChecked)
+                            showNoticeDialog(position, seed, currentAction,switchActionStatus);
+
                     }
                 });
 
@@ -159,8 +173,9 @@ public class ListAllActionAdapter extends BaseAdapter {
                 textviewActionDescription.setVisibility(View.GONE);
 
             } else {
-                textviewActionStatus.setText(mContext.getResources().getString(R.string.seed_action_done));
-
+                // textviewActionStatus.setText(mContext.getResources().getString(R.string.seed_action_done));
+                switchActionStatus.setEnabled(false);
+                switchActionStatus.setChecked(true);
                 Calendar rightNow = Calendar.getInstance();
                 if (currentAction.getDateActionDone() != null) {
                     rightNow.setTime(currentAction.getDateActionDone());
@@ -288,8 +303,8 @@ public class ListAllActionAdapter extends BaseAdapter {
         }
     }
 
-    public void showNoticeDialog(final int position, final GrowingSeedInterface seed,
-            final SeedActionInterface currentAction) {
+    private void showNoticeDialog(final int position, final GrowingSeedInterface seed,
+            final SeedActionInterface currentAction, final Switch mSwitch) {
 
         final EditText userinput = new EditText(mContext.getApplicationContext());
         final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
@@ -312,6 +327,7 @@ public class ListAllActionAdapter extends BaseAdapter {
                     @Override
                     protected void onPostExecute(BaseActionInterface result) {
                         Toast.makeText(mContext, "Action done : " + result.getName(), Toast.LENGTH_SHORT).show();
+
                         actions.remove(position);
                         notifyDataSetChanged();
                         mContext.sendBroadcast(new Intent(BroadCastMessages.ACTION_EVENT));
@@ -322,6 +338,7 @@ public class ListAllActionAdapter extends BaseAdapter {
         }).setNegativeButton(mContext.getResources().getString(R.string.button_cancel),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        mSwitch.setChecked(false);
                         dialog.cancel();
 
                     }

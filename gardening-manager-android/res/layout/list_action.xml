@@ -17,7 +17,16 @@
         android:layout_width="wrap_content"
         android:layout_height="fill_parent" >
 
-        <TextView
+        <Switch
+            android:id="@+id/switchSeedActionStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:textOff="@string/seed.action.todo"
+            android:textOn="@string/seed.action.done" />
+
+        <!--
+             <TextView
             android:id="@+id/IdSeedActionStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -26,14 +35,15 @@
             android:text="Action Name"
             android:textColor="@color/text_color_dark"
             android:textSize="12dp" />
+        -->
 
         <TextView
             android:id="@+id/IdSeedActionDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/IdSeedActionStatus"
-            android:layout_alignBottom="@+id/IdSeedActionStatus"
-            android:layout_toRightOf="@+id/IdSeedActionStatus"
+            android:layout_alignBaseline="@+id/switchSeedActionStatus"
+            android:layout_alignBottom="@+id/switchSeedActionStatus"
+            android:layout_toRightOf="@+id/switchSeedActionStatus"
             android:paddingLeft="5dp"
             android:text="Date to do"
             android:textColor="@color/text_color_dark"
@@ -45,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@+id/IdSeedActionStatus"
+            android:layout_below="@+id/switchSeedActionStatus"
             android:text="Describe the action in few words" />
     </RelativeLayout>
 
