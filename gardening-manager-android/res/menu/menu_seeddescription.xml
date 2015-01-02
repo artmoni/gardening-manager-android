@@ -7,6 +7,11 @@
         android:icon="@drawable/action_download"
         app:showAsAction="always"
         android:title="@string/action.download"/>
+     <item
+        android:id="@+id/sow"
+        android:icon="@drawable/action_sow"
+        app:showAsAction="always"
+        android:title="@string/action.sow"/>
     <item
         android:id="@+id/planning"
         android:icon="@drawable/action_schedule"

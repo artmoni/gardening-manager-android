@@ -281,7 +281,8 @@ public class TabSeedActivity extends BaseGotsActivity {
             menu.findItem(R.id.planning).setVisible(false);
             menu.findItem(R.id.photo).setVisible(false);
             menu.findItem(R.id.delete).setVisible(false);
-        }
+        }else
+            menu.findItem(R.id.sow).setVisible(false);
 
         return true;
     }
@@ -300,6 +301,12 @@ public class TabSeedActivity extends BaseGotsActivity {
             startActivity(browserIntent);
             return true;
 
+        case R.id.sow:
+            Intent intent = new Intent(this, MyMainGarden.class);
+            intent.putExtra(MyMainGarden.SELECT_ALLOTMENT, true);
+            intent.putExtra(MyMainGarden.VENDOR_SEED_ID, mSeed.getSeedId());
+            startActivity(intent);
+            return true;
         case R.id.planning:
             FragmentManager fm = getSupportFragmentManager();
             DialogFragment scheduleDialog = new ScheduleActionFragment();
