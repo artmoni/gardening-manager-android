@@ -137,7 +137,7 @@ public class ListAllActionAdapter extends BaseAdapter {
             SeedWidget seedView = (SeedWidget) ll.findViewById(R.id.idSeedView);
             seedView.setSeed(seed);
 
-            Switch switchActionStatus = (Switch) ll.findViewById(R.id.switchSeedActionStatus);
+            final Switch switchActionStatus = (Switch) ll.findViewById(R.id.switchSeedActionStatus);
             TextView textviewActionDate = (TextView) ll.findViewById(R.id.IdSeedActionDate);
             TextView textviewActionDescription = (TextView) ll.findViewById(R.id.IdSeedActionDescription);
 
