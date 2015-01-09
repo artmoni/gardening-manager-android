@@ -23,6 +23,32 @@
         </org.gots.seed.view.SeedWidgetLong>
 
         <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/text_color_light"
+            android:padding="5dp" >
+
+            <Button
+                android:id="@+id/buttonRefused"
+                style="@style/buttonRed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:text="Refuse" />
+
+            <Button
+                android:id="@+id/buttonApproved"
+                style="@style/buttonGreen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:text="Approve" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/idLayoutCulturePeriod"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

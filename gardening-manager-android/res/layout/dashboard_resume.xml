@@ -1,172 +1,174 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/text_color_light" >
+    android:background="@color/text_color_light"
+    android:orientation="vertical" >
 
-    <LinearLayout
+
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:orientation="vertical" >
-
-        <RelativeLayout
-            android:id="@+id/layoutIncredibleDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="@color/brown_light"
-            android:padding="5dp"
-            android:visibility="gone" >
-
-            <TextView
-                android:id="@+id/TextView01"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:text="@string/garden.type.incredibleedible"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/TextView01"
-                android:text="@string/garden.type.incredibleedible.description" />
-
-            <ImageView
-                android:id="@+id/imageView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignRight="@+id/TextView01"
-                android:layout_alignTop="@+id/TextView01"
-                android:src="@drawable/ic_incredibleedible" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="@color/brown_light"
-            android:padding="5dp" >
-
-            <LinearLayout
-                android:id="@+id/WeatherWidget"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textViewWeatherDescription"
-                android:layout_centerHorizontal="true"
-                android:orientation="horizontal" >
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/textViewWeather"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:text="@string/dashboard.weather.name"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:id="@+id/textViewWeatherDescription"
-                style="@style/seed_family_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/textViewCatalog"
-                android:layout_below="@+id/textViewWeather"
-                android:text="City" />
-        </RelativeLayout>
+        android:layout_weight="1" >
 
         <LinearLayout
-            android:id="@+id/idAdsTop"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
-        </LinearLayout>
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="@color/brown_light"
-            android:padding="5dp" >
-
-            <Button
-                android:id="@+id/buttonHut"
-                style="@style/buttonGreenDashboard"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:text="@string/more" />
-
-            <Gallery
-                android:id="@+id/gallery1"
+            <RelativeLayout
+                android:id="@+id/layoutIncredibleDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/textViewCatalogDescription"
-                android:layout_below="@+id/textViewCatalogDescription"
-                android:spacing="5dp" />
+                android:layout_margin="5dp"
+                android:background="@color/brown_light"
+                android:padding="5dp"
+                android:visibility="gone" >
 
-            <TextView
-                android:id="@+id/textViewCatalog"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:text="@string/dashboard.hut.name"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                <TextView
+                    android:id="@+id/TextView01"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:text="@string/garden.type.incredibleedible"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
 
-            <TextView
-                android:id="@+id/textViewCatalogDescription"
-                style="@style/seed_family_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/textViewCatalog"
-                android:layout_below="@+id/textViewCatalog"
-                android:text="@string/hut.menu.seedsofthemonth" />
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/TextView01"
+                    android:text="@string/garden.type.incredibleedible.description" />
 
-        <RelativeLayout
-            android:id="@+id/layoutDashboardActions"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="@color/brown_light"
-            android:padding="5dp"
-            android:visibility="gone" >
+                <ImageView
+                    android:id="@+id/imageView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignRight="@+id/TextView01"
+                    android:layout_alignTop="@+id/TextView01"
+                    android:src="@drawable/ic_incredibleedible" />
+            </RelativeLayout>
 
-            <ListView
-                android:id="@+id/listActions"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_below="@+id/buttonActions"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:dividerHeight="5dp" >
-            </ListView>
-
-            <Button
-                android:id="@+id/buttonActions"
-                style="@style/buttonGreenDashboard"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:text="@string/more" />
-
-            <TextView
-                android:id="@+id/textViewAction"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:text="@string/dashboard.actions.name"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-        </RelativeLayout>
+                android:layout_margin="5dp"
+                android:background="@color/brown_light"
+                android:padding="5dp" >
 
-        <LinearLayout
-            android:id="@+id/idAdsTop"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center" >
+                <LinearLayout
+                    android:id="@+id/WeatherWidget"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textViewWeatherDescription"
+                    android:layout_centerHorizontal="true"
+                    android:orientation="horizontal" >
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/textViewWeather"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:text="@string/dashboard.weather.name"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                <TextView
+                    android:id="@+id/textViewWeatherDescription"
+                    style="@style/seed_family_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/textViewCatalog"
+                    android:layout_below="@+id/textViewWeather"
+                    android:text="City" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@color/brown_light"
+                android:padding="5dp" >
+
+                <Button
+                    android:id="@+id/buttonHut"
+                    style="@style/buttonGreenDashboard"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:text="@string/more" />
+
+                <Gallery
+                    android:id="@+id/gallery1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/textViewCatalogDescription"
+                    android:layout_below="@+id/textViewCatalogDescription"
+                    android:spacing="5dp" />
+
+                <TextView
+                    android:id="@+id/textViewCatalog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:text="@string/dashboard.hut.name"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                <TextView
+                    android:id="@+id/textViewCatalogDescription"
+                    style="@style/seed_family_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/textViewCatalog"
+                    android:layout_below="@+id/textViewCatalog"
+                    android:text="@string/hut.menu.seedsofthemonth" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layoutDashboardActions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@color/brown_light"
+                android:padding="5dp"
+                android:visibility="gone" >
+
+                <ListView
+                    android:id="@+id/listActions"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_below="@+id/buttonActions"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:dividerHeight="5dp" >
+                </ListView>
+
+                <Button
+                    android:id="@+id/buttonActions"
+                    style="@style/buttonGreenDashboard"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:text="@string/more" />
+
+                <TextView
+                    android:id="@+id/textViewAction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:text="@string/dashboard.actions.name"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+            </RelativeLayout>
         </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/idAdsTop"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
     </LinearLayout>
 
-</ScrollView>
+</LinearLayout>

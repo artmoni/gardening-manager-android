@@ -31,6 +31,8 @@ import org.gots.broadcast.BroadCastMessages;
 import org.gots.exception.GotsServerRestrictedException;
 import org.gots.inapp.GotsBillingDialog;
 import org.gots.inapp.GotsPurchaseItem;
+import org.gots.nuxeo.NuxeoWorkflowProvider;
+import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedInterface;
@@ -67,6 +69,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.Gallery;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -212,6 +215,38 @@ public class TabSeedActivity extends BaseGotsActivity {
             layout.addView(ads.getAdsLayout());
         }
 
+        Button buttonRefuse = (Button) findViewById(R.id.buttonRefused);
+        buttonRefuse.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(getApplicationContext());
+                        nuxeoWorkflowProvider.completeTaskRefuse(mSeed);
+                        return null;
+                    }
+                }.execute();
+
+            }
+        });
+        Button buttonApprove = (Button) findViewById(R.id.buttonApproved);
+        buttonApprove.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(getApplicationContext());
+                        nuxeoWorkflowProvider.completeTaskValidate(mSeed);
+                        return null;
+                    }
+                }.execute();
+
+            }
+        });
     }
 
     protected void displayPictureGallery() {
@@ -281,7 +316,7 @@ public class TabSeedActivity extends BaseGotsActivity {
             menu.findItem(R.id.planning).setVisible(false);
             menu.findItem(R.id.photo).setVisible(false);
             menu.findItem(R.id.delete).setVisible(false);
-        }else
+        } else
             menu.findItem(R.id.sow).setVisible(false);
 
         return true;

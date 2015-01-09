@@ -548,6 +548,9 @@ public class MainActivity extends BaseGotsActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
 
+        Fragment workflowResumeFragment = new WorkflowResumeFragment();
+        fragmentManager.beginTransaction().replace(R.id.idFragmentWorkflow, workflowResumeFragment).commit();
+        
         // update selected item and title, then close the drawer
         if (position <= navMenuTitles.length) {
             mDrawerList.setItemChecked(position, true);

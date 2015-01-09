@@ -11,6 +11,7 @@ import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.garden.GotsGardenManager;
 import org.gots.inapp.GotsPurchaseItem;
+import org.gots.nuxeo.NuxeoWorkflowProvider;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.adapter.SeedListAdapter;
@@ -125,9 +126,9 @@ public class DashboardResumeFragment extends BaseGotsFragment {
                     });
                     if (actionAdapter.getCount() > 0) {
                         getView().findViewById(R.id.layoutDashboardActions).setVisibility(View.VISIBLE);
-                        getView().findViewById(R.id.layoutDashboardActions).setLayoutParams(
-                                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                                        LinearLayout.LayoutParams.WRAP_CONTENT));
+                        // getView().findViewById(R.id.layoutDashboardActions).setLayoutParams(
+                        // new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                        // LinearLayout.LayoutParams.WRAP_CONTENT));
                     } else
                         getView().findViewById(R.id.layoutDashboardActions).setVisibility(View.GONE);
 
@@ -169,6 +170,23 @@ public class DashboardResumeFragment extends BaseGotsFragment {
                             Intent i = new Intent(getActivity(), TabSeedActivity.class);
                             i.putExtra(TabSeedActivity.GOTS_VENDORSEED_ID, baseSeedInterface.getSeedId());
                             startActivity(i);
+                        }
+                    });
+
+                    gallery.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                        @Override
+                        public boolean onItemLongClick(final AdapterView<?> arg0, View arg1, final int arg2, long arg3) {
+                            new AsyncTask<Void, Void, Void>() {
+                                @Override
+                                protected Void doInBackground(Void... params) {
+                                    NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(
+                                            getActivity());
+                                    BaseSeedInterface baseSeedInterface = (BaseSeedInterface) arg0.getItemAtPosition(arg2);
+                                    nuxeoWorkflowProvider.startWorkflowValidation(baseSeedInterface);
+                                    return null;
+                                }
+                            }.execute();
+                            return false;
                         }
                     });
                     getView().findViewById(R.id.buttonHut).setOnClickListener(new View.OnClickListener() {
