@@ -3,7 +3,9 @@ package org.gots.ui;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.gots.R;
 import org.gots.bean.TaskInfo;
@@ -21,22 +23,27 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 
 import com.google.gson.Gson;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.webkit.WebView.FindListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Gallery;
 import android.widget.TextView;
 
-public class WorkflowResumeFragment extends BaseGotsFragment {
+public class WorkflowResumeFragment extends BaseGotsFragment implements OnItemClickListener {
 
     private Blob tasks;
 
     TextView workflowTasksTextView;
 
     private Gallery gallery;
+    Map<Integer, TaskInfo>map = new HashMap<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -98,6 +105,7 @@ public class WorkflowResumeFragment extends BaseGotsFragment {
                 BaseSeedInterface seed = nuxeoSeedProvider.getSeedByUUID(task.getDocref());
                 if (seed != null)
                     seeds.add(seed);
+                map.put(seed.getSeedId(), task);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -111,6 +119,7 @@ public class WorkflowResumeFragment extends BaseGotsFragment {
 
         SeedListAdapter adapter = new VendorSeedListAdapter(getActivity(), seeds);
         gallery.setAdapter(adapter);
+        gallery.setOnItemClickListener(this);
         // workflowTasksTextView = (TextView) getView().findViewById(R.id.textViewWorkflowDescription);
         // workflowTasksTextView.setText("" + tasksEntries.length());
         super.onNuxeoDataRetrieved(data);
@@ -119,6 +128,15 @@ public class WorkflowResumeFragment extends BaseGotsFragment {
     @Override
     protected boolean requireAsyncDataRetrieval() {
         return true;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+        BaseSeedInterface baseSeedInterface = (BaseSeedInterface) arg0.getItemAtPosition(arg2);
+        Intent i = new Intent(getActivity(), TabSeedActivity.class);
+        i.putExtra(TabSeedActivity.GOTS_TASKWORKFLOW_ID, map.get(baseSeedInterface.getSeedId()));
+        i.putExtra(TabSeedActivity.GOTS_VENDORSEED_ID, baseSeedInterface.getSeedId());
+        startActivity(i);
     }
 
 }

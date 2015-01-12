@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import javax.swing.text.StyledEditorKit.BoldAction;
 
+import org.gots.bean.TaskInfo;
 import org.gots.seed.BaseSeedInterface;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
@@ -77,34 +78,34 @@ public class NuxeoWorkflowProvider {
         Blob tasks = null;
         try {
             tasks = service.getUserTaskPageProvider();
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
         return tasks;
     }
 
-    public void completeTaskValidate(BaseSeedInterface seed) {
+    public void completeTaskValidate(TaskInfo task) {
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);
         try {
-            PropertyMap nodeVar = new PropertyMap();
-            nodeVar.set("button", "validate");
-            Document doc = service.completeTaskOperation(new IdRef(seed.getUUID()), "Un commentaire car c'est bon",
-                    nodeVar, null, null);
+            // PropertyMap nodeVar = new PropertyMap();
+            // nodeVar.set("button", "validate");
+            Document doc = service.completeTaskOperation(new IdRef(task.getId()), "Un commentaire car c'est bon",
+                    null, "validate", null);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void completeTaskRefuse(BaseSeedInterface seed) {
+    public void completeTaskRefuse( TaskInfo task) {
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);
         try {
-            PropertyMap nodeVar = new PropertyMap();
-            nodeVar.set("button", "reject");
-            Document doc = service.completeTaskOperation(new IdRef(seed.getUUID()), "Un commentaire de refus", nodeVar,
-                    null, null);
+            // PropertyMap nodeVar = new PropertyMap();
+            // nodeVar.set("button", "reject");
+            Document doc = service.completeTaskOperation(new IdRef(task.getId()), "Un commentaire de refus", null,
+                    "reject", null);
         } catch (Exception e) {
             e.printStackTrace();
         }

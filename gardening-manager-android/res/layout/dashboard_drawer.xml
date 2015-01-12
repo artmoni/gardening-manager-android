@@ -5,22 +5,26 @@
 
     <!-- Framelayout to display Fragments -->
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical" >
+        android:layout_height="fill_parent" >
 
-        <FrameLayout
-            android:id="@+id/idFragmentWorkflow"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
 
-        <FrameLayout
-            android:id="@+id/frame_container"
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent" />
-    </LinearLayout>
+            <FrameLayout
+                android:id="@+id/idFragmentWorkflow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
+            <FrameLayout
+                android:id="@+id/frame_container"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent" />
+        </LinearLayout>
+    </ScrollView>
     <!-- Listview to display slider menu -->
     <!--
          <ListView

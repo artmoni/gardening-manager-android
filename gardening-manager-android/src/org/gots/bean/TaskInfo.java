@@ -1,5 +1,6 @@
 package org.gots.bean;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
@@ -13,7 +14,7 @@ import com.google.gson.annotations.SerializedName;
  * ,"documentTitle":"l","documentLink":"nxpath/default/default-domain/sections/Catalog/l@view_documents"
  * ,"startDate":"2015-01-07T13:28:54.14Z","expired":false}
  */
-public class TaskInfo {
+public class TaskInfo implements Serializable {
     @SerializedName("id")
     String id;
 

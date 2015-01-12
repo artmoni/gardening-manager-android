@@ -27,6 +27,7 @@ import org.gots.action.bean.PhotoAction;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.analytics.GotsAnalytics;
+import org.gots.bean.TaskInfo;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.exception.GotsServerRestrictedException;
 import org.gots.inapp.GotsBillingDialog;
@@ -52,6 +53,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -83,6 +85,8 @@ public class TabSeedActivity extends BaseGotsActivity {
 
     public static final String GOTS_GROWINGSEED_ID = "org.gots.seed.id";
 
+    public static final String GOTS_TASKWORKFLOW_ID = "org.gots.task.id";
+
     private static final int PICK_IMAGE = 0;
 
     protected static final String TAG = "TabSeedActivity";
@@ -100,6 +104,8 @@ public class TabSeedActivity extends BaseGotsActivity {
     private Gallery pictureGallery;
 
     private GotsPurchaseItem gotsPurchase;
+
+    private TaskInfo taskWorkflow;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,6 +144,8 @@ public class TabSeedActivity extends BaseGotsActivity {
         } else
             mSeed = new GrowingSeed(); // DEFAULT SEED
 
+        if (getIntent().getSerializableExtra(GOTS_TASKWORKFLOW_ID) != null)
+            taskWorkflow = (TaskInfo) getIntent().getSerializableExtra(GOTS_TASKWORKFLOW_ID);
         pictureGallery = (Gallery) findViewById(R.id.idPictureGallery);
 
         displayPictureGallery();
@@ -224,7 +232,7 @@ public class TabSeedActivity extends BaseGotsActivity {
                     @Override
                     protected Void doInBackground(Void... params) {
                         NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(getApplicationContext());
-                        nuxeoWorkflowProvider.completeTaskRefuse(mSeed);
+                        nuxeoWorkflowProvider.completeTaskRefuse(taskWorkflow);
                         return null;
                     }
                 }.execute();
@@ -240,7 +248,7 @@ public class TabSeedActivity extends BaseGotsActivity {
                     @Override
                     protected Void doInBackground(Void... params) {
                         NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(getApplicationContext());
-                        nuxeoWorkflowProvider.completeTaskValidate(mSeed);
+                        nuxeoWorkflowProvider.completeTaskValidate(taskWorkflow);
                         return null;
                     }
                 }.execute();
