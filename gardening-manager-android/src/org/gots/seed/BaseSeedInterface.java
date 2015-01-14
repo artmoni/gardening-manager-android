@@ -133,4 +133,8 @@ public interface BaseSeedInterface {
 
     public abstract LikeStatus getLikeStatus();
 
+    public abstract String getState();
+
+    public abstract void setState(String state);
+
 }

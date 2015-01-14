@@ -65,6 +65,8 @@ public abstract class BaseSeed implements Serializable, BaseSeedInterface {
 
     private LikeStatus likeStatus;
 
+    private String state;
+
     public BaseSeed() {
         super();
     }
@@ -143,8 +145,8 @@ public abstract class BaseSeed implements Serializable, BaseSeedInterface {
     public String toString() {
         String seed = new String();
         seed = seed.concat("[Id: " + getSeedId() + "] ");
-        seed = seed.concat("[UUID: " + getUUID()+"]");
-        seed = seed.concat("<" + getFamily() + " " + getSpecie() + " " + getVariety())+">";
+        seed = seed.concat("[UUID: " + getUUID() + "]");
+        seed = seed.concat("<" + getFamily() + " " + getSpecie() + " " + getVariety()) + ">";
         return seed;
     }
 
@@ -334,4 +336,13 @@ public abstract class BaseSeed implements Serializable, BaseSeedInterface {
         this.likeStatus = likeStatus;
     }
 
+    @Override
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    @Override
+    public String getState() {
+        return this.state;
+    }
 }

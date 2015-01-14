@@ -47,6 +47,8 @@ public class SeedWidgetTile extends LinearLayout {
 
     private ImageView like;
 
+    private ImageView state;
+
     public SeedWidgetTile(Context context) {
         super(context);
         this.mContext = context;
@@ -77,21 +79,21 @@ public class SeedWidgetTile extends LinearLayout {
         if (mSeed == null)
             return;
 
-//        int familyImageRessource = 0;
-//        if (mSeed.getFamily() != null)
-//            familyImageRessource = getResources().getIdentifier(
-//                    "org.gots:drawable/family_" + mSeed.getFamily().toLowerCase(), null, null);
-//
-//        if (familyImageRessource != 0)
-//            setBackgroundResource(familyImageRessource);
-//        else {
-//            int sdk = android.os.Build.VERSION.SDK_INT;
-//            if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-//                setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.family_unknown));
-//            } else {
-//                setBackground(mContext.getResources().getDrawable(R.drawable.family_unknown));
-//            }
-//        }
+        // int familyImageRessource = 0;
+        // if (mSeed.getFamily() != null)
+        // familyImageRessource = getResources().getIdentifier(
+        // "org.gots:drawable/family_" + mSeed.getFamily().toLowerCase(), null, null);
+        //
+        // if (familyImageRessource != 0)
+        // setBackgroundResource(familyImageRessource);
+        // else {
+        // int sdk = android.os.Build.VERSION.SDK_INT;
+        // if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+        // setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.family_unknown));
+        // } else {
+        // setBackground(mContext.getResources().getDrawable(R.drawable.family_unknown));
+        // }
+        // }
 
         SeedWidget seedWidget = (SeedWidget) findViewById(R.id.idSeedWidget2);
         seedWidget.setSeed(mSeed);
@@ -104,11 +106,17 @@ public class SeedWidgetTile extends LinearLayout {
         TextView seedVariety = (TextView) findViewById(R.id.IdSeedVariety);
         seedVariety.setText(mSeed.getVariety());
 
-//        PlanningWidget planningSow = (PlanningWidget) findViewById(R.id.IdSeedSowingPlanning);
-//        planningSow.setAdapter(new PlanningSowAdapter(mSeed));
-//        //
-//        PlanningWidget planningHarvest = (PlanningWidget) findViewById(R.id.IdSeedHarvestPlanning);
-//        planningHarvest.setAdapter(new PlanningHarvestAdapter(mSeed));
+        state = (ImageView) findViewById(R.id.imageStateValidation);
+        if ("approved".equals(mSeed.getState()))
+            state.setVisibility(View.VISIBLE);
+        else
+            state.setVisibility(View.GONE);
+
+        // PlanningWidget planningSow = (PlanningWidget) fidindViewById(R.id.IdSeedSowingPlanning);
+        // planningSow.setAdapter(new PlanningSowAdapter(mSeed));
+        // //
+        // PlanningWidget planningHarvest = (PlanningWidget) findViewById(R.id.IdSeedHarvestPlanning);
+        // planningHarvest.setAdapter(new PlanningHarvestAdapter(mSeed));
 
         LinearLayout stock = (LinearLayout) findViewById(R.id.idSeedStock);
         stock.removeAllViews();
