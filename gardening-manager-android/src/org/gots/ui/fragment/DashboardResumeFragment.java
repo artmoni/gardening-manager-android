@@ -182,7 +182,8 @@ public class DashboardResumeFragment extends BaseGotsFragment {
                                     NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(
                                             getActivity());
                                     BaseSeedInterface baseSeedInterface = (BaseSeedInterface) arg0.getItemAtPosition(arg2);
-                                    nuxeoWorkflowProvider.startWorkflowValidation(baseSeedInterface);
+                                    // nuxeoWorkflowProvider.startWorkflowValidation(baseSeedInterface);
+                                    nuxeoWorkflowProvider.getDocumentsRoute(baseSeedInterface);
                                     return null;
                                 }
                             }.execute();

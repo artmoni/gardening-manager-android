@@ -1,20 +1,15 @@
 package org.gots.nuxeo;
 
-import java.util.Iterator;
-
-import javax.swing.text.StyledEditorKit.BoldAction;
-
 import org.gots.bean.TaskInfo;
 import org.gots.seed.BaseSeedInterface;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
+import org.nuxeo.ecm.automation.client.cache.CacheBehavior;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Blob;
-import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
-import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
 import android.content.Context;
 import android.util.Log;
@@ -30,33 +25,59 @@ public class NuxeoWorkflowProvider {
         return NuxeoManager.getInstance().getNuxeoClient();
     }
 
-    private void setLifeCycle(BaseSeedInterface seed, String state) {
+    public Documents getDocumentsRoute(BaseSeedInterface seed) {
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);
+        Documents documentsRoute = null;
         try {
-            Log.d(TAG, seed.getUUID());
-            service.setState(new IdRef(seed.getUUID()), state);
+            documentsRoute = service.query(
+                    "Select * from DocumentRoute where docri:participatingDocuments = ? AND ecm:currentLifeCycleState = 'running'",
+                    new String[] { seed.getUUID() }, null, "*", 0, 50, CacheBehavior.STORE);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return documentsRoute;
     }
 
-    public void setLifeCycleApproved(BaseSeedInterface seed) {
-        setLifeCycle(seed, "approve");
-    }
-
-    public void setLifeCycleRefused(BaseSeedInterface seed) {
-        setLifeCycle(seed, "backToProject");
-    }
-
-    public void startWorkflowValidation(BaseSeedInterface seed) {
+    public Documents getTasksDoc(String docId) {
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);
+        Documents tasksDoc = null;
         try {
-            service.startWorkflow(new IdRef(seed.getUUID()), "validation");
+            tasksDoc = service.query(
+                    "Select * from TaskDoc where ecm:currentLifeCycleState = 'opened' AND nt:targetDocumentId=?",
+                    new String[] { docId }, null, "*", 0, 50, CacheBehavior.STORE);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return tasksDoc;
+    }
+    
+    public Documents getRouteNode(String docId) {
+        Session session = getNuxeoClient().getSession();
+        DocumentManager service = session.getAdapter(DocumentManager.class);
+        
+        Documents tasksDoc = null;
+        try {
+            tasksDoc = service.query(
+                    "Select * from RouteNode  where rnode:nodeId = ? and ecm:currentLifeCycleState = 'suspended'",
+                    new String[] { "Task7a0" }, null, "*", 0, 50, CacheBehavior.STORE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return tasksDoc;
+    }
+
+    public Document startWorkflowValidation(BaseSeedInterface seed) {
+        Session session = getNuxeoClient().getSession();
+        DocumentManager service = session.getAdapter(DocumentManager.class);
+        Document workflowDoc = null;
+        try {
+            workflowDoc = service.startWorkflow(new IdRef(seed.getUUID()), "validation");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return workflowDoc;
     }
 
     public void getWorkflowOpenTasks(BaseSeedInterface seed) {
@@ -85,30 +106,28 @@ public class NuxeoWorkflowProvider {
         return tasks;
     }
 
-    public void completeTaskValidate(TaskInfo task) {
+    public Document completeTaskValidate(TaskInfo task, String comment) {
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);
+        Document doc = null;
         try {
-            // PropertyMap nodeVar = new PropertyMap();
-            // nodeVar.set("button", "validate");
-            Document doc = service.completeTaskOperation(new IdRef(task.getId()), "Un commentaire car c'est bon",
-                    null, "validate", null);
+            doc = service.completeTaskOperation(new IdRef(task.getId()), comment, null, "validate", null);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return doc;
     }
 
-    public void completeTaskRefuse( TaskInfo task) {
+    public Document completeTaskRefuse(TaskInfo task, String comment) {
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);
+        Document doc = null;
         try {
-            // PropertyMap nodeVar = new PropertyMap();
-            // nodeVar.set("button", "reject");
-            Document doc = service.completeTaskOperation(new IdRef(task.getId()), "Un commentaire de refus", null,
-                    "reject", null);
+            doc = service.completeTaskOperation(new IdRef(task.getId()), comment, null, "reject", null);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return doc;
     }
 
 }

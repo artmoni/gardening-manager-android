@@ -134,7 +134,8 @@ public class WorkflowResumeFragment extends BaseGotsFragment implements OnItemCl
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
         BaseSeedInterface baseSeedInterface = (BaseSeedInterface) arg0.getItemAtPosition(arg2);
         Intent i = new Intent(getActivity(), TabSeedActivity.class);
-        i.putExtra(TabSeedActivity.GOTS_TASKWORKFLOW_ID, map.get(baseSeedInterface.getSeedId()));
+//        i.putExtra(WorkflowTaskFragment.GOTS_TASKWORKFLOW_ID, map.get(baseSeedInterface.getSeedId()));
+        i.putExtra(WorkflowTaskFragment.GOTS_DOC_ID, baseSeedInterface.getUUID());
         i.putExtra(TabSeedActivity.GOTS_VENDORSEED_ID, baseSeedInterface.getSeedId());
         startActivity(i);
     }

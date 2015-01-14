@@ -40,6 +40,7 @@ import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
+import org.gots.ui.fragment.DashboardResumeFragment;
 import org.gots.utils.FileUtilities;
 
 import android.app.Activity;
@@ -84,8 +85,6 @@ public class TabSeedActivity extends BaseGotsActivity {
     public static final String GOTS_VENDORSEED_ID = "org.gots.seed.vendorid";
 
     public static final String GOTS_GROWINGSEED_ID = "org.gots.seed.id";
-
-    public static final String GOTS_TASKWORKFLOW_ID = "org.gots.task.id";
 
     private static final int PICK_IMAGE = 0;
 
@@ -144,8 +143,8 @@ public class TabSeedActivity extends BaseGotsActivity {
         } else
             mSeed = new GrowingSeed(); // DEFAULT SEED
 
-        if (getIntent().getSerializableExtra(GOTS_TASKWORKFLOW_ID) != null)
-            taskWorkflow = (TaskInfo) getIntent().getSerializableExtra(GOTS_TASKWORKFLOW_ID);
+//        if (getIntent().getSerializableExtra(GOTS_TASKWORKFLOW_ID) != null)
+//            taskWorkflow = (TaskInfo) getIntent().getSerializableExtra(GOTS_TASKWORKFLOW_ID);
         pictureGallery = (Gallery) findViewById(R.id.idPictureGallery);
 
         displayPictureGallery();
@@ -223,38 +222,11 @@ public class TabSeedActivity extends BaseGotsActivity {
             layout.addView(ads.getAdsLayout());
         }
 
-        Button buttonRefuse = (Button) findViewById(R.id.buttonRefused);
-        buttonRefuse.setOnClickListener(new View.OnClickListener() {
+        Fragment fragment = new WorkflowTaskFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.frame_workflow, fragment).commit();
 
-            @Override
-            public void onClick(View v) {
-                new AsyncTask<Void, Void, Void>() {
-                    @Override
-                    protected Void doInBackground(Void... params) {
-                        NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(getApplicationContext());
-                        nuxeoWorkflowProvider.completeTaskRefuse(taskWorkflow);
-                        return null;
-                    }
-                }.execute();
-
-            }
-        });
-        Button buttonApprove = (Button) findViewById(R.id.buttonApproved);
-        buttonApprove.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                new AsyncTask<Void, Void, Void>() {
-                    @Override
-                    protected Void doInBackground(Void... params) {
-                        NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(getApplicationContext());
-                        nuxeoWorkflowProvider.completeTaskValidate(taskWorkflow);
-                        return null;
-                    }
-                }.execute();
-
-            }
-        });
+       
     }
 
     protected void displayPictureGallery() {
@@ -473,7 +445,18 @@ public class TabSeedActivity extends BaseGotsActivity {
             });
             builder.show();
             return true;
-
+        case R.id.workflow:
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(
+                            getApplicationContext());
+//                    BaseSeedInterface baseSeedInterface = (BaseSeedInterface) arg0.getItemAtPosition(arg2);
+                    nuxeoWorkflowProvider.startWorkflowValidation(mSeed);
+                    return null;
+                }
+            }.execute();
+            return true;
         default:
             return super.onOptionsItemSelected(item);
         }

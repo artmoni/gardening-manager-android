@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/text_color_light"
+    android:padding="5dp" >
+
+    <TextView
+        android:id="@+id/textWorkflowTaskTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="Task Name"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <LinearLayout
+        android:id="@+id/linearWorkflowButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textWorkflowTaskDirective"
+        android:layout_below="@+id/textWorkflowTaskDirective"
+        android:gravity="center" >
+
+        <Button
+            android:id="@+id/buttonRefused"
+            style="@style/buttonRed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Refuse" />
+
+        <Button
+            android:id="@+id/buttonApproved"
+            style="@style/buttonGreen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Approve" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:paddingLeft="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textWorkflowTaskTitle"
+        android:layout_alignBottom="@+id/textWorkflowTaskTitle"
+        android:layout_toRightOf="@+id/textWorkflowTaskTitle"
+        android:text="Small Text"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/textWorkflowTaskDirective"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textWorkflowTaskTitle"
+        android:layout_below="@+id/textView1"
+        android:text="Task Description" />
+
+</RelativeLayout>

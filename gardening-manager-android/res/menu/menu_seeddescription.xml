@@ -32,5 +32,9 @@
         android:icon="@drawable/action_delete"
         app:showAsAction="never"
         android:title="@string/action.delete"/>
-
+<item
+        android:id="@+id/workflow"
+        android:icon="@drawable/workflow_validation"
+        app:showAsAction="never"
+        android:title="workflow"/>
 </menu>
