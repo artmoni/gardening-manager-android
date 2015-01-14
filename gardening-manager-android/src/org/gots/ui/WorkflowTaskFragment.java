@@ -1,7 +1,6 @@
 package org.gots.ui;
 
 import org.gots.R;
-import org.gots.bean.TaskInfo;
 import org.gots.nuxeo.NuxeoWorkflowProvider;
 import org.gots.ui.fragment.BaseGotsFragment;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
@@ -28,16 +27,19 @@ public class WorkflowTaskFragment extends BaseGotsFragment implements OnClickLis
     TextView workflowTaskName;
 
     TextView workflowTaskDirective;
+
     TextView workflowTaskInitiator;
 
     String docId;
+
+    private String taskId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.workflow_task, null);
         workflowTaskDirective = (TextView) view.findViewById(R.id.textWorkflowTaskDirective);
         workflowTaskName = (TextView) view.findViewById(R.id.textWorkflowTaskTitle);
-        workflowTaskInitiator= (TextView) view.findViewById(R.id.textView1);
+        workflowTaskInitiator = (TextView) view.findViewById(R.id.textView1);
         return view;
     }
 
@@ -52,7 +54,6 @@ public class WorkflowTaskFragment extends BaseGotsFragment implements OnClickLis
         buttonRefuse.setOnClickListener(this);
         Button buttonApprove = (Button) view.findViewById(R.id.buttonApproved);
         buttonApprove.setOnClickListener(this);
-       
 
         super.onViewCreated(view, savedInstanceState);
     }
@@ -70,7 +71,7 @@ public class WorkflowTaskFragment extends BaseGotsFragment implements OnClickLis
                 @Override
                 protected Void doInBackground(Void... params) {
                     NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(getActivity());
-                    // nuxeoWorkflowProvider.completeTaskRefuse(taskWorkflow, comment);
+                    nuxeoWorkflowProvider.completeTaskRefuse(taskId, comment);
                     return null;
                 }
             }.execute();
@@ -82,7 +83,7 @@ public class WorkflowTaskFragment extends BaseGotsFragment implements OnClickLis
                 @Override
                 protected Void doInBackground(Void... params) {
                     NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(getActivity());
-                    // nuxeoWorkflowProvider.completeTaskValidate(taskWorkflow, comment);
+                    nuxeoWorkflowProvider.completeTaskValidate(taskId, comment);
                     return null;
                 }
             }.execute();
@@ -92,11 +93,7 @@ public class WorkflowTaskFragment extends BaseGotsFragment implements OnClickLis
             break;
         }
 
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        getFragmentManager().popBackStack();
-        transaction.remove(this);
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        transaction.commit();
+        closeFragment();
     }
 
     @Override
@@ -121,32 +118,45 @@ public class WorkflowTaskFragment extends BaseGotsFragment implements OnClickLis
     protected void onNuxeoDataRetrievalStarted() {
         super.onNuxeoDataRetrievalStarted();
     }
+
     @Override
     protected Object retrieveNuxeoData() throws Exception {
         NuxeoWorkflowProvider workflowProvider = new NuxeoWorkflowProvider(getActivity());
-        Documents taskDocs = workflowProvider.getTasksDoc(docId);
-//        Documents node = workflowProvider.getRouteNode("");
-        // workflowProvider.getTasksDoc(seed);
-        return taskDocs;
+        Documents taskDocs = workflowProvider.getWorkflowOpenTasks(docId);
+        Document currentTask = null;
+        if (taskDocs != null && taskDocs.size() > 0)
+            currentTask = workflowProvider.getTaskDoc(taskDocs.get(0).getId());
+        return currentTask;
     }
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
-        Document doc;
-        if (data == null) {
-            return;
-        }
-        doc = ((Documents) data).get(0);
-        PropertyMap propertyMap = doc.getProperties();
-        workflowTaskDirective.setText(propertyMap.getString("nt:directive"));
-        workflowTaskName.setText(propertyMap.getString("nt:name"));
-        workflowTaskInitiator.setText(propertyMap.getString("nt:initiator"));
+        Document doc = (Document) data;
+        PropertyMap map = doc.getProperties();
+        workflowTaskDirective.setText(map.getString("nt:directive"));
+        workflowTaskName.setText(map.getString("nt:name"));
+        workflowTaskInitiator.setText(map.getString("nt:initiator"));
+        taskId = doc.getId();
         super.onNuxeoDataRetrieved(data);
+    }
+
+    @Override
+    protected void onNuxeoDataRetrieveFailed() {
+        closeFragment();
+        super.onNuxeoDataRetrieveFailed();
     }
 
     @Override
     protected boolean requireAsyncDataRetrieval() {
         return true;
+    }
+
+    private void closeFragment() {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        getFragmentManager().popBackStack();
+        transaction.remove(this);
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        transaction.commit();
     }
 
 }

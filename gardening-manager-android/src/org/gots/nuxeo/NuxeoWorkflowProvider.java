@@ -39,24 +39,24 @@ public class NuxeoWorkflowProvider {
         return documentsRoute;
     }
 
-    public Documents getTasksDoc(String docId) {
-        Session session = getNuxeoClient().getSession();
-        DocumentManager service = session.getAdapter(DocumentManager.class);
-        Documents tasksDoc = null;
-        try {
-            tasksDoc = service.query(
-                    "Select * from TaskDoc where ecm:currentLifeCycleState = 'opened' AND nt:targetDocumentId=?",
-                    new String[] { docId }, null, "*", 0, 50, CacheBehavior.STORE);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return tasksDoc;
-    }
-    
+    // public Documents getTasksDoc(String docId) {
+    // Session session = getNuxeoClient().getSession();
+    // DocumentManager service = session.getAdapter(DocumentManager.class);
+    // Documents tasksDoc = null;
+    // try {
+    // tasksDoc = service.query(
+    // "Select * from TaskDoc where ecm:currentLifeCycleState = 'opened' AND nt:targetDocumentId=?",
+    // new String[] { docId }, null, "*", 0, 50, CacheBehavior.STORE);
+    // } catch (Exception e) {
+    // e.printStackTrace();
+    // }
+    // return tasksDoc;
+    // }
+
     public Documents getRouteNode(String docId) {
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);
-        
+
         Documents tasksDoc = null;
         try {
             tasksDoc = service.query(
@@ -66,6 +66,19 @@ public class NuxeoWorkflowProvider {
             e.printStackTrace();
         }
         return tasksDoc;
+    }
+
+    public Document getTaskDoc(String taskDocId) {
+        Session session = getNuxeoClient().getSession();
+        DocumentManager service = session.getAdapter(DocumentManager.class);
+        Document doc = null;
+        try {
+            service.getDocument(new IdRef(taskDocId), true);
+            doc = service.getDocument(new IdRef(taskDocId), "*");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return doc;
     }
 
     public Document startWorkflowValidation(BaseSeedInterface seed) {
@@ -80,17 +93,16 @@ public class NuxeoWorkflowProvider {
         return workflowDoc;
     }
 
-    public void getWorkflowOpenTasks(BaseSeedInterface seed) {
+    public Documents getWorkflowOpenTasks(String docId) {
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);
+        Documents workflowTaskDoc = null;
         try {
-            Documents tasks = service.getOpenTasks(new IdRef(seed.getUUID()));
-            for (Document doc : tasks) {
-                Log.i(TAG, doc.getName());
-            }
+            workflowTaskDoc = service.getOpenTasks(new IdRef(docId));
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return workflowTaskDoc;
     }
 
     public Blob getWorkflowTask() {
@@ -106,24 +118,24 @@ public class NuxeoWorkflowProvider {
         return tasks;
     }
 
-    public Document completeTaskValidate(TaskInfo task, String comment) {
+    public Document completeTaskValidate(String taskId, String comment) {
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);
         Document doc = null;
         try {
-            doc = service.completeTaskOperation(new IdRef(task.getId()), comment, null, "validate", null);
+            doc = service.completeTaskOperation(new IdRef(taskId), comment, null, "validate", null);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return doc;
     }
 
-    public Document completeTaskRefuse(TaskInfo task, String comment) {
+    public Document completeTaskRefuse(String taskId, String comment) {
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);
         Document doc = null;
         try {
-            doc = service.completeTaskOperation(new IdRef(task.getId()), comment, null, "reject", null);
+            doc = service.completeTaskOperation(new IdRef(taskId), comment, null, "reject", null);
         } catch (Exception e) {
             e.printStackTrace();
         }
