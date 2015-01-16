@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.gots.R;
+import org.gots.ads.GotsAdvertisement;
 import org.gots.authentication.GotsSocialAuthentication;
 import org.gots.authentication.provider.google.GoogleAuthentication;
 import org.gots.authentication.provider.google.User;
@@ -22,7 +23,7 @@ import org.gots.provider.AllotmentContentProvider;
 import org.gots.provider.GardenContentProvider;
 import org.gots.provider.SeedsContentProvider;
 import org.gots.provider.WeatherContentProvider;
-import org.gots.ui.fragment.DashboardResumeFragment;
+import org.gots.ui.fragment.ActionsResumeFragment;
 import org.gots.ui.slidingmenu.NavDrawerItem;
 import org.gots.ui.slidingmenu.adapter.NavDrawerListAdapter;
 
@@ -43,6 +44,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,6 +52,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -96,8 +99,8 @@ public class MainActivity extends BaseGotsActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboard_drawer);
-//        AppRater.app_launched(getApplicationContext());
-        
+        // AppRater.app_launched(getApplicationContext());
+
         mTitle = mDrawerTitle = getTitle();
 
         // load slide menu items
@@ -187,6 +190,14 @@ public class MainActivity extends BaseGotsActivity {
         ContentResolver.requestSync(newAccount, ActionsContentProvider.AUTHORITY, bundle);
         ContentResolver.setSyncAutomatically(newAccount, AllotmentContentProvider.AUTHORITY, true);
         ContentResolver.requestSync(newAccount, AllotmentContentProvider.AUTHORITY, bundle);
+
+        GotsPurchaseItem gotsPurchase = new GotsPurchaseItem(this);
+        if (!gotsPurchase.isPremium()) {
+            GotsAdvertisement ads = new GotsAdvertisement(this);
+
+            LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
+            layout.addView(ads.getAdsLayout());
+        }
     }
 
     protected void displayDrawerMenu() {
@@ -544,13 +555,26 @@ public class MainActivity extends BaseGotsActivity {
             startActivity(i);
         }
 
-        Fragment fragment = new DashboardResumeFragment();
+        Fragment fragment = new ActionsResumeFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
 
         Fragment workflowResumeFragment = new WorkflowResumeFragment();
-        fragmentManager.beginTransaction().replace(R.id.idFragmentWorkflow, workflowResumeFragment).commit();
-        
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        // transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        transaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
+        transaction.replace(R.id.idFragmentWorkflow, workflowResumeFragment).commit();
+
+        final Fragment weatherResumeFragment = new WeatherResumeFragment();
+        FragmentTransaction transactionWeather = fragmentManager.beginTransaction();
+        transactionWeather.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
+        transactionWeather.replace(R.id.idFragmentWeather, weatherResumeFragment).commit();
+
+        Fragment catalogueResumeFragment = new CatalogResumeFragment();
+        FragmentTransaction transactionCatalogue = fragmentManager.beginTransaction();
+        transactionCatalogue.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
+        transactionCatalogue.replace(R.id.idFragmentCatalog, catalogueResumeFragment).commit();
+
         // update selected item and title, then close the drawer
         if (position <= navMenuTitles.length) {
             mDrawerList.setItemChecked(position, true);
