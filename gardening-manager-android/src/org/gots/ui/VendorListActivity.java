@@ -102,9 +102,19 @@ public class VendorListActivity extends AbstractListFragment implements OnScroll
 
                     getActivity().finish();
                 } else {
-                    // view.setSelected(!view.isSelected());
-                    ((ActionBarActivity) getActivity()).startSupportActionMode(new MyCallBack(position));
+                    Intent i = new Intent(mContext, TabSeedActivity.class);
+                    i.putExtra("org.gots.seed.vendorid", listVendorSeedAdapter.getItem(position).getSeedId());
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivity(i);
                 }
+            }
+        });
+        gridViewCatalog.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                ((ActionBarActivity) getActivity()).startSupportActionMode(new MyCallBack(position));
+
+                return false;
             }
         });
         gridViewCatalog.setOnScrollListener(this);
