@@ -88,33 +88,34 @@ public class SeedWidget extends RelativeLayout {
             @Override
             protected Bitmap doInBackground(Void... params) {
                 File imageFile = null;
-
+                Bitmap image = null;
                 /* Check custom image for this variety */
                 if (mSeed.getVariety() != null && !"".equals(mSeed.getVariety()))
                     imageFile = new File(gotsPref.getGotsExternalFileDir(),
                             mSeed.getVariety().toLowerCase().replaceAll("\\s", ""));
                 if (imageFile != null && imageFile.exists()) {
-                    return FileUtilities.decodeScaledBitmapFromSdCard(imageFile.getAbsolutePath(), 100, 100);
+                    image = FileUtilities.decodeScaledBitmapFromSdCard(imageFile.getAbsolutePath(), 100, 100);
                 }
                 /* Check custom image for this species */
                 else if (mSeed.getSpecie() != null) {
                     imageFile = new File(gotsPref.getGotsExternalFileDir(), mSeed.getSpecie().toLowerCase().replaceAll(
                             "\\s", ""));
                     if (imageFile != null && imageFile.exists()) {
-                        return FileUtilities.decodeScaledBitmapFromSdCard(imageFile.getAbsolutePath(), 100, 100);
+                        image = FileUtilities.decodeScaledBitmapFromSdCard(imageFile.getAbsolutePath(), 100, 100);
                     }
                 }
 
-                vegetableImageRessource = getSeedDrawable(getContext(), mSeed);
-                return null;
+                return image;
             }
 
             protected void onPostExecute(Bitmap image) {
-                if (vegetableImageRessource != 0)
-                    seedView.setImageResource(vegetableImageRessource);
-                else
+                if (image != null)
                     seedView.setImageBitmap(image);
-            };
+                else {
+                    vegetableImageRessource = getSeedDrawable(getContext(), mSeed);
+                    seedView.setImageResource(vegetableImageRessource);
+                }
+            }
         }.execute();
 
         // setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_line_selector));
@@ -132,6 +133,8 @@ public class SeedWidget extends RelativeLayout {
         if (vegetableImageRessource == 0 && seed.getSpecie() != null)
             vegetableImageRessource = context.getResources().getIdentifier(
                     "org.gots:drawable/specie_" + seed.getSpecie().toLowerCase().replaceAll("\\s", ""), null, null);
+        else
+            vegetableImageRessource = R.drawable.no_picture;
         return vegetableImageRessource;
     }
 
