@@ -10,6 +10,10 @@
  ******************************************************************************/
 package org.gots.weather.view;
 
+import java.util.List;
+
+import org.gots.weather.WeatherCondition;
+import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.WeatherManager;
 import org.gots.weather.adapter.WeatherWidgetAdapter;
 
@@ -21,60 +25,66 @@ import android.widget.GridView;
 
 public class WeatherWidget extends GridView {
 
-	// today
+    // today
 
-	private int mType = WeatherView.FULL;
-	private WeatherWidgetAdapter weatherWidgetAdapter;
-	private int nbDays = 2;
-	private WeatherManager wm;
+    private int mType = WeatherView.FULL;
 
-	public WeatherWidget(Context context, int type) {
-		super(context);
-		mType = type;
+    private WeatherWidgetAdapter weatherWidgetAdapter;
 
-	}
+    private int nbDays = 2;
 
-	public WeatherWidget(Context context, AttributeSet attr) {
-		super(context, attr);
-		mType = WeatherView.FULL;
+    List<WeatherConditionInterface> weatherConditions;
 
-	}
+    // private WeatherManager wm;
 
-	private void initView() {
-		wm = new WeatherManager(getContext());
-		weatherWidgetAdapter = new WeatherWidgetAdapter(getContext(), mType, wm.getConditionSet(nbDays));
-		setAdapter(weatherWidgetAdapter);
-		setFocusable(false);
-		setNumColumns(getAdapter().getCount());
+    public WeatherWidget(Context context, int type, List<WeatherConditionInterface> weatherConditions) {
+        super(context);
+        mType = type;
+        this.weatherConditions = weatherConditions;
+    }
 
-	}
+    public WeatherWidget(Context context, AttributeSet attr) {
+        super(context, attr);
+        mType = WeatherView.FULL;
 
-	@Override
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
 
-		Display display = ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+    private void initView() {
+        // wm = new WeatherManager(getContext());
+        if (weatherConditions != null)
+            weatherWidgetAdapter = new WeatherWidgetAdapter(getContext(), mType, weatherConditions);
+        setAdapter(weatherWidgetAdapter);
+        setFocusable(false);
+        setNumColumns(getAdapter().getCount());
 
-		int width = display.getWidth();
-		int height = display.getHeight();
+    }
 
-		if (width < height)
-			nbDays = 2;
-		else
-			nbDays = 3;
-		initView();
-	}
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-	@Override
-	protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-		super.onLayout(changed, left, top, right, bottom);
-	}
+        Display display = ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 
-	public void update() {
+        int width = display.getWidth();
+        int height = display.getHeight();
 
-		weatherWidgetAdapter.setConditions(wm.getConditionSet(nbDays));
-		weatherWidgetAdapter.notifyDataSetChanged();
-		invalidateViews();
-	}
+        if (width < height)
+            nbDays = 2;
+        else
+            nbDays = 3;
+        initView();
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+    }
+
+//    public void update() {
+//
+//        weatherWidgetAdapter.setConditions(wm.getConditionSet(nbDays));
+//        weatherWidgetAdapter.notifyDataSetChanged();
+//        invalidateViews();
+//    }
 
 }

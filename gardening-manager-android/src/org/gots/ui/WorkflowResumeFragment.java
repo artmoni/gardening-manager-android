@@ -43,7 +43,8 @@ public class WorkflowResumeFragment extends BaseGotsFragment implements OnItemCl
     TextView workflowTasksTextView;
 
     private Gallery gallery;
-    Map<Integer, TaskInfo>map = new HashMap<>();
+
+    Map<Integer, TaskInfo> map = new HashMap<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -122,6 +123,7 @@ public class WorkflowResumeFragment extends BaseGotsFragment implements OnItemCl
         gallery.setOnItemClickListener(this);
         // workflowTasksTextView = (TextView) getView().findViewById(R.id.textViewWorkflowDescription);
         // workflowTasksTextView.setText("" + tasksEntries.length());
+
         super.onNuxeoDataRetrieved(data);
     }
 
@@ -134,7 +136,6 @@ public class WorkflowResumeFragment extends BaseGotsFragment implements OnItemCl
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
         BaseSeedInterface baseSeedInterface = (BaseSeedInterface) arg0.getItemAtPosition(arg2);
         Intent i = new Intent(getActivity(), TabSeedActivity.class);
-//        i.putExtra(WorkflowTaskFragment.GOTS_TASKWORKFLOW_ID, map.get(baseSeedInterface.getSeedId()));
         i.putExtra(WorkflowTaskFragment.GOTS_DOC_ID, baseSeedInterface.getUUID());
         i.putExtra(TabSeedActivity.GOTS_VENDORSEED_ID, baseSeedInterface.getSeedId());
         startActivity(i);

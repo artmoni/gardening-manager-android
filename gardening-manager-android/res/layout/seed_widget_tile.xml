@@ -84,6 +84,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="2dp"
         android:src="@drawable/fr" />
+
     <LinearLayout
         android:id="@+id/idSeedStock"
         android:layout_width="wrap_content"
@@ -99,7 +100,8 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_alignParentTop="true"
+        android:layout_margin="2dp"
         android:layout_toRightOf="@+id/IdSeedLanguage"
-        android:src="@drawable/workflow_validation" android:layout_margin="2dp"/>
+        android:src="@drawable/workflow_validation" />
 
 </RelativeLayout>

@@ -1,6 +1,10 @@
 package org.gots.seed.provider.nuxeo;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -8,6 +12,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.gots.exception.NotImplementedException;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GotsGardenManager;
@@ -25,7 +33,10 @@ import org.nuxeo.android.upload.FileUploader;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
 import org.nuxeo.ecm.automation.client.cache.CacheBehavior;
 import org.nuxeo.ecm.automation.client.jaxrs.AsyncCallback;
+import org.nuxeo.ecm.automation.client.jaxrs.AutomationClient;
+import org.nuxeo.ecm.automation.client.jaxrs.OperationRequest;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
+import org.nuxeo.ecm.automation.client.jaxrs.impl.HttpAutomationClient;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Blob;
 import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
@@ -34,6 +45,8 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.FileBlob;
 import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PathRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
+import org.nuxeo.ecm.automation.client.jaxrs.spi.AbstractAutomationClient;
+import org.nuxeo.ecm.automation.client.jaxrs.spi.DefaultOperationRequest;
 
 import android.content.Context;
 import android.util.Log;
@@ -171,15 +184,17 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     // 2: TODO sync with remote instead
                     // syncGardens(localGarden,remoteGarden);
                     found = true;
-                    myVendorSeeds.add(localSeed);
+                    remoteSeed.setId(localSeed.getSeedId());
+                    // myVendorSeeds.add(localSeed);
 
                     break;
                 }
             }
-            if (found)
-                // myVendorSeeds.add(super.updateSeed(remoteSeed));
-                // myVendorSeeds.add();
-                ;
+            if (found) {
+                myVendorSeeds.add(super.updateSeed(remoteSeed));
+            }
+            // myVendorSeeds.add();}
+
             else {
                 BaseSeedInterface seed = super.createSeed(remoteSeed, null);
                 myVendorSeeds.add(seed);

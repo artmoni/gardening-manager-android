@@ -71,6 +71,7 @@ public class WorkflowTaskFragment extends BaseGotsFragment implements OnClickLis
                 @Override
                 protected Void doInBackground(Void... params) {
                     NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(getActivity());
+                    nuxeoWorkflowProvider.setWorkflowNodeVar("assignees", "gardening.manager@gmail.com");
                     nuxeoWorkflowProvider.completeTaskRefuse(taskId, comment);
                     return null;
                 }
@@ -154,7 +155,7 @@ public class WorkflowTaskFragment extends BaseGotsFragment implements OnClickLis
     private void closeFragment() {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         getFragmentManager().popBackStack();
-        transaction.remove(this);
+        transaction.hide(this);
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         transaction.commit();
     }

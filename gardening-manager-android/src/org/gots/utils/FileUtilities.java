@@ -71,9 +71,8 @@ public class FileUtilities {
         inStream.close();
         outStream.close();
     }
-    
-    public static Bitmap decodeScaledBitmapFromSdCard(String filePath,
-            int reqWidth, int reqHeight) {
+
+    public static Bitmap decodeScaledBitmapFromSdCard(String filePath, int reqWidth, int reqHeight) {
 
         // First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
@@ -85,24 +84,25 @@ public class FileUtilities {
 
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
-        
-        Bitmap imageBitmap=BitmapFactory.decodeFile(filePath, options);
-        int rotate = getImageOrientation(filePath);
-        Matrix matrix = new Matrix();
-        matrix.postRotate(rotate);
-        imageBitmap = Bitmap.createBitmap(imageBitmap , 0, 0, imageBitmap.getWidth(), imageBitmap.getHeight(), matrix, true);
+
+        Bitmap imageBitmap = BitmapFactory.decodeFile(filePath, options);
+        if (imageBitmap != null) {
+            int rotate = getImageOrientation(filePath);
+            Matrix matrix = new Matrix();
+            matrix.postRotate(rotate);
+
+            imageBitmap = Bitmap.createBitmap(imageBitmap, 0, 0, imageBitmap.getWidth(), imageBitmap.getHeight(),
+                    matrix, true);
+        }
         return imageBitmap;
     }
 
-    public static  int getImageOrientation(String sourcepath){
+    public static int getImageOrientation(String sourcepath) {
         int rotate = 0;
         try {
             File imageFile = new File(sourcepath);
-            ExifInterface exif = new ExifInterface(
-                    imageFile.getAbsolutePath());
-            int orientation = exif.getAttributeInt(
-                    ExifInterface.TAG_ORIENTATION,
-                    ExifInterface.ORIENTATION_NORMAL);
+            ExifInterface exif = new ExifInterface(imageFile.getAbsolutePath());
+            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
 
             switch (orientation) {
             case ExifInterface.ORIENTATION_ROTATE_270:
@@ -120,8 +120,8 @@ public class FileUtilities {
         }
         return rotate;
     }
-    public static int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;

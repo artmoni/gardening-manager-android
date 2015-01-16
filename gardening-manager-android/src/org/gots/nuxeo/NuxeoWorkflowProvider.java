@@ -1,15 +1,21 @@
 package org.gots.nuxeo;
 
+import java.util.ArrayList;
+import java.util.Properties;
+
 import org.gots.bean.TaskInfo;
 import org.gots.seed.BaseSeedInterface;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
 import org.nuxeo.ecm.automation.client.cache.CacheBehavior;
+import org.nuxeo.ecm.automation.client.jaxrs.Constants;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Blob;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
+import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyList;
+import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
 import android.content.Context;
 import android.util.Log;
@@ -135,11 +141,28 @@ public class NuxeoWorkflowProvider {
         DocumentManager service = session.getAdapter(DocumentManager.class);
         Document doc = null;
         try {
-            doc = service.completeTaskOperation(new IdRef(taskId), comment, null, "reject", null);
+            Properties properties =new Properties();
+            ArrayList<String> array = new ArrayList<>();
+            array.add("gardening.manager@gmail.com");
+            properties.setProperty("assignees", array.toArray().toString());
+            doc = service.completeTaskOperation(new IdRef(taskId), comment, properties, "reject", null);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return doc;
     }
 
+    public void setWorkflowNodeVar(String key, String value) {
+        Session session = getNuxeoClient().getSession();
+        DocumentManager service = session.getAdapter(DocumentManager.class);
+        Document doc = null;
+        try {
+            service.setWorkflowNodeVar(key, value);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setWorkflowVar(String key, String value) {
+    }
 }

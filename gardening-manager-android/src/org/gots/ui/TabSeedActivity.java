@@ -40,7 +40,7 @@ import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
-import org.gots.ui.fragment.DashboardResumeFragment;
+import org.gots.ui.fragment.ActionsResumeFragment;
 import org.gots.utils.FileUtilities;
 
 import android.app.Activity;
