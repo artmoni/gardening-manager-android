@@ -1,0 +1,41 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:background="@color/brown_light"
+    android:padding="5dp" >
+
+    <Button
+        android:id="@+id/buttonHut"
+        style="@style/buttonGreenDashboard"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/more" />
+
+    <Gallery
+        android:id="@+id/gallery1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textViewCatalogDescription"
+        android:layout_below="@+id/textViewCatalogDescription"
+        android:spacing="5dp" />
+
+    <TextView
+        android:id="@+id/textViewCatalog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/dashboard.hut.name"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/textViewCatalogDescription"
+        style="@style/seed_family_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textViewCatalog"
+        android:layout_below="@+id/textViewCatalog"
+        android:text="@string/hut.menu.seedsofthemonth" />
+
+</RelativeLayout>

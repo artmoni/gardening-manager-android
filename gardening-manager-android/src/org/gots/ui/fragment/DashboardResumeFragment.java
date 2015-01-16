@@ -48,9 +48,9 @@ public class DashboardResumeFragment extends BaseGotsFragment {
             // Intent intent = new Intent(getActivity(), ProfileCreationActivity.class);
             // startActivity(intent);
         } else {
-            displaySeeds();
+//            displaySeeds();
             displayActions();
-            displayWeather();
+//            displayWeather();
             displayIncredible();
 
             GotsPurchaseItem gotsPurchase = new GotsPurchaseItem(getActivity());
@@ -75,15 +75,15 @@ public class DashboardResumeFragment extends BaseGotsFragment {
 
     @Override
     protected void onCurrentGardenChanged() {
-        displaySeeds();
+//        displaySeeds();
         displayActions();
-        displayWeather();
+//        displayWeather();
         displayIncredible();
     }
 
     @Override
     protected void onWeatherChanged() {
-        displayWeather();
+//        displayWeather();
     }
 
     @Override
@@ -139,95 +139,95 @@ public class DashboardResumeFragment extends BaseGotsFragment {
 
     }
 
-    protected void displaySeeds() {
+//    protected void displaySeeds() {
+//
+//        new AsyncTask<Void, Void, List<BaseSeedInterface>>() {
+//            Gallery gallery;
+//
+//            GotsSeedManager gotsSeedManager = GotsSeedManager.getInstance().initIfNew(getActivity());
+//
+//            @Override
+//            protected void onPreExecute() {
+//                gallery = (Gallery) getView().findViewById(R.id.gallery1);
+//                super.onPreExecute();
+//            }
+//
+//            @Override
+//            protected List<BaseSeedInterface> doInBackground(Void... params) {
+//                return gotsSeedManager.getSeedBySowingMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
+//            }
+//
+//            @Override
+//            protected void onPostExecute(List<BaseSeedInterface> list) {
+//                if (isAdded()) {
+//                    SeedListAdapter adapter = new VendorSeedListAdapter(getActivity(), list.subList(0,
+//                            list.size() >= 5 ? 5 : list.size()));
+//                    gallery.setAdapter(adapter);
+//                    gallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                        @Override
+//                        public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+//                            BaseSeedInterface baseSeedInterface = (BaseSeedInterface) arg0.getItemAtPosition(arg2);
+//                            Intent i = new Intent(getActivity(), TabSeedActivity.class);
+//                            i.putExtra(TabSeedActivity.GOTS_VENDORSEED_ID, baseSeedInterface.getSeedId());
+//                            startActivity(i);
+//                        }
+//                    });
+//
+//                    gallery.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//                        @Override
+//                        public boolean onItemLongClick(final AdapterView<?> arg0, View arg1, final int arg2, long arg3) {
+//                            new AsyncTask<Void, Void, Void>() {
+//                                @Override
+//                                protected Void doInBackground(Void... params) {
+//                                    NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(
+//                                            getActivity());
+//                                    BaseSeedInterface baseSeedInterface = (BaseSeedInterface) arg0.getItemAtPosition(arg2);
+//                                    // nuxeoWorkflowProvider.startWorkflowValidation(baseSeedInterface);
+//                                    nuxeoWorkflowProvider.getDocumentsRoute(baseSeedInterface);
+//                                    return null;
+//                                }
+//                            }.execute();
+//                            return false;
+//                        }
+//                    });
+//                    getView().findViewById(R.id.buttonHut).setOnClickListener(new View.OnClickListener() {
+//
+//                        @Override
+//                        public void onClick(View v) {
+//                            startActivity(new Intent(getActivity(), HutActivity.class));
+//                        }
+//                    });
+//                }
+//                super.onPostExecute(list);
+//            }
+//        }.execute();
+//
+//    }
 
-        new AsyncTask<Void, Void, List<BaseSeedInterface>>() {
-            Gallery gallery;
-
-            GotsSeedManager gotsSeedManager = GotsSeedManager.getInstance().initIfNew(getActivity());
-
-            @Override
-            protected void onPreExecute() {
-                gallery = (Gallery) getView().findViewById(R.id.gallery1);
-                super.onPreExecute();
-            }
-
-            @Override
-            protected List<BaseSeedInterface> doInBackground(Void... params) {
-                return gotsSeedManager.getSeedBySowingMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
-            }
-
-            @Override
-            protected void onPostExecute(List<BaseSeedInterface> list) {
-                if (isAdded()) {
-                    SeedListAdapter adapter = new VendorSeedListAdapter(getActivity(), list.subList(0,
-                            list.size() >= 5 ? 5 : list.size()));
-                    gallery.setAdapter(adapter);
-                    gallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                            BaseSeedInterface baseSeedInterface = (BaseSeedInterface) arg0.getItemAtPosition(arg2);
-                            Intent i = new Intent(getActivity(), TabSeedActivity.class);
-                            i.putExtra(TabSeedActivity.GOTS_VENDORSEED_ID, baseSeedInterface.getSeedId());
-                            startActivity(i);
-                        }
-                    });
-
-                    gallery.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                        @Override
-                        public boolean onItemLongClick(final AdapterView<?> arg0, View arg1, final int arg2, long arg3) {
-                            new AsyncTask<Void, Void, Void>() {
-                                @Override
-                                protected Void doInBackground(Void... params) {
-                                    NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(
-                                            getActivity());
-                                    BaseSeedInterface baseSeedInterface = (BaseSeedInterface) arg0.getItemAtPosition(arg2);
-                                    // nuxeoWorkflowProvider.startWorkflowValidation(baseSeedInterface);
-                                    nuxeoWorkflowProvider.getDocumentsRoute(baseSeedInterface);
-                                    return null;
-                                }
-                            }.execute();
-                            return false;
-                        }
-                    });
-                    getView().findViewById(R.id.buttonHut).setOnClickListener(new View.OnClickListener() {
-
-                        @Override
-                        public void onClick(View v) {
-                            startActivity(new Intent(getActivity(), HutActivity.class));
-                        }
-                    });
-                }
-                super.onPostExecute(list);
-            }
-        }.execute();
-
-    }
-
-    protected void displayWeather() {
-        // boolean isError = intent.getBooleanExtra("error", false);
-
-        LinearLayout weatherWidgetLayout = (LinearLayout) getView().findViewById(R.id.WeatherWidget);
-        weatherWidgetLayout.removeAllViews();
-
-        GotsGardenManager gardenManager = GotsGardenManager.getInstance().initIfNew(getActivity());
-        TextView descriptionWeather = (TextView) getView().findViewById(R.id.textViewWeatherDescription);
-        descriptionWeather.setText(gardenManager.getCurrentGarden().getLocality());
-        // if (isError) {
-        // TextView txtError = new TextView(this);
-        // txtError.setText(getResources().getText(R.string.weather_citynotfound));
-        // txtError.setTextColor(getResources().getColor(R.color.text_color_light));
-        // handle.addView(txtError);
-        // Log.d(TAG, "WeatherWidget display error");
-        //
-        // } else {
-        // weatherWidget2 = new WeatherWidget(getActivity(), WeatherView.IMAGE);
-        // handle.addView(weatherWidget2);
-        WeatherWidget weatherWidget = new WeatherWidget(getActivity(), WeatherView.FULL);
-        weatherWidgetLayout.addView(weatherWidget);
-        // }
-
-    }
+//    protected void displayWeather() {
+//        // boolean isError = intent.getBooleanExtra("error", false);
+//
+//        LinearLayout weatherWidgetLayout = (LinearLayout) getView().findViewById(R.id.WeatherWidget);
+//        weatherWidgetLayout.removeAllViews();
+//
+//        GotsGardenManager gardenManager = GotsGardenManager.getInstance().initIfNew(getActivity());
+//        TextView descriptionWeather = (TextView) getView().findViewById(R.id.textViewWeatherDescription);
+//        descriptionWeather.setText(gardenManager.getCurrentGarden().getLocality());
+//        // if (isError) {
+//        // TextView txtError = new TextView(this);
+//        // txtError.setText(getResources().getText(R.string.weather_citynotfound));
+//        // txtError.setTextColor(getResources().getColor(R.color.text_color_light));
+//        // handle.addView(txtError);
+//        // Log.d(TAG, "WeatherWidget display error");
+//        //
+//        // } else {
+//        // weatherWidget2 = new WeatherWidget(getActivity(), WeatherView.IMAGE);
+//        // handle.addView(weatherWidget2);
+//        WeatherWidget weatherWidget = new WeatherWidget(getActivity(), WeatherView.FULL);
+//        weatherWidgetLayout.addView(weatherWidget);
+//        // }
+//
+//    }
 
     @Override
     protected boolean requireAsyncDataRetrieval() {

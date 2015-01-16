@@ -1,0 +1,102 @@
+package org.gots.ui;
+
+import java.util.Calendar;
+import java.util.List;
+
+import org.gots.R;
+import org.gots.nuxeo.NuxeoWorkflowProvider;
+import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.GotsSeedManager;
+import org.gots.seed.adapter.SeedListAdapter;
+import org.gots.seed.adapter.VendorSeedListAdapter;
+import org.gots.ui.fragment.BaseGotsFragment;
+
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.Gallery;
+
+public class CatalogResumeFragment extends BaseGotsFragment implements OnItemClickListener {
+    Gallery gallery;
+
+    GotsSeedManager gotsSeedManager;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.catalog_resume, null);
+    }
+
+    @Override
+    protected void onCurrentGardenChanged() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    protected void onWeatherChanged() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    protected void onActionChanged() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    protected boolean requireAsyncDataRetrieval() {
+        return true;
+    }
+
+    @Override
+    protected void onNuxeoDataRetrievalStarted() {
+        gotsSeedManager = GotsSeedManager.getInstance().initIfNew(getActivity());
+        gallery = (Gallery) getView().findViewById(R.id.gallery1);
+        super.onNuxeoDataRetrievalStarted();
+    }
+
+    @Override
+    protected void onNuxeoDataRetrieved(Object data) {
+        if (!(data instanceof List<?>))
+            return;
+        List<BaseSeedInterface> list = (List<BaseSeedInterface>) data;
+
+        if (isAdded()) {
+            SeedListAdapter adapter = new VendorSeedListAdapter(getActivity(), list.subList(0,
+                    list.size() >= 5 ? 5 : list.size()));
+            gallery.setAdapter(adapter);
+            gallery.setOnItemClickListener(this);
+
+            getView().findViewById(R.id.buttonHut).setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(getActivity(), HutActivity.class));
+                }
+            });
+        }
+        super.onNuxeoDataRetrieved(data);
+    }
+
+    @Override
+    protected Object retrieveNuxeoData() throws Exception {
+        List<BaseSeedInterface> seeds = gotsSeedManager.getSeedBySowingMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
+        return seeds;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+        BaseSeedInterface baseSeedInterface = (BaseSeedInterface) arg0.getItemAtPosition(arg2);
+        Intent i = new Intent(getActivity(), TabSeedActivity.class);
+        i.putExtra(TabSeedActivity.GOTS_VENDORSEED_ID, baseSeedInterface.getSeedId());
+        startActivity(i);
+    }
+}
