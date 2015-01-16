@@ -83,8 +83,6 @@ public class ProfileActivity extends BaseGotsActivity {
             Log.e(TAG, e.getMessage());
         }
 
-      
-
         // ******** MAP
         map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
         map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
@@ -126,7 +124,7 @@ public class ProfileActivity extends BaseGotsActivity {
     protected void displayGardensOnMap() {
         // map.setMyLocationEnabled(true);
 
-        map.clear();
+        // map.clear();
         for (GardenInterface garden : gardenManager.getMyGardens(false)) {
             LatLng gardenPOI = new LatLng(garden.getGpsLatitude(), garden.getGpsLongitude());
 
