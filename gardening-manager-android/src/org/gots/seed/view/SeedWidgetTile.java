@@ -19,7 +19,7 @@ import org.gots.seed.GotsSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.LikeStatus;
 import org.gots.seed.SeedUtil;
-import org.gots.ui.LoginDialogFragment;
+import org.gots.ui.fragment.LoginDialogFragment;
 
 import android.app.AlertDialog;
 import android.content.Context;

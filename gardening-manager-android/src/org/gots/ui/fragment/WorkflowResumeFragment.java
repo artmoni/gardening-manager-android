@@ -1,4 +1,4 @@
-package org.gots.ui;
+package org.gots.ui.fragment;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -14,7 +14,7 @@ import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.adapter.SeedListAdapter;
 import org.gots.seed.adapter.VendorSeedListAdapter;
 import org.gots.seed.provider.nuxeo.NuxeoSeedProvider;
-import org.gots.ui.fragment.BaseGotsFragment;
+import org.gots.ui.TabSeedActivity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

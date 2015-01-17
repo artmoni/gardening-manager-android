@@ -1,4 +1,4 @@
-package org.gots.ui;
+package org.gots.ui.fragment;
 
 import java.util.Calendar;
 import java.util.List;
@@ -9,7 +9,8 @@ import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.adapter.SeedListAdapter;
 import org.gots.seed.adapter.VendorSeedListAdapter;
-import org.gots.ui.fragment.BaseGotsFragment;
+import org.gots.ui.HutActivity;
+import org.gots.ui.TabSeedActivity;
 
 import android.content.Intent;
 import android.os.AsyncTask;

@@ -28,8 +28,8 @@ import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.GrowingSeedInterface;
-import org.gots.ui.ScheduleActionFragment;
 import org.gots.ui.TabSeedActivity;
+import org.gots.ui.fragment.ScheduleActionFragment;
 
 import android.app.AlertDialog;
 import android.content.Context;

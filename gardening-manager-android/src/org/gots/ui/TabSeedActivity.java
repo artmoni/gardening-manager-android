@@ -41,6 +41,9 @@ import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
 import org.gots.ui.fragment.ActionsResumeFragment;
+import org.gots.ui.fragment.LoginDialogFragment;
+import org.gots.ui.fragment.ScheduleActionFragment;
+import org.gots.ui.fragment.WorkflowTaskFragment;
 import org.gots.utils.FileUtilities;
 
 import android.app.Activity;

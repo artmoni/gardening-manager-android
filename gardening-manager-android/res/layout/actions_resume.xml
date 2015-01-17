@@ -1,92 +1,36 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/text_color_light"
-    android:orientation="vertical" >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutDashboardActions"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:background="@color/brown_light"
+    android:padding="5dp"
+    android:visibility="gone" >
 
+    <ListView
+        android:id="@+id/listActions"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@+id/buttonActions"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:dividerHeight="5dp" >
+    </ListView>
 
-    
+    <Button
+        android:id="@+id/buttonActions"
+        style="@style/buttonGreenDashboard"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/more" />
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical" >
+    <TextView
+        android:id="@+id/textViewAction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/dashboard.actions.name"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
-            <RelativeLayout
-                android:id="@+id/layoutIncredibleDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@color/brown_light"
-                android:padding="5dp"
-                android:visibility="gone" >
-
-                <TextView
-                    android:id="@+id/TextView01"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentTop="true"
-                    android:text="@string/garden.type.incredibleedible"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
-
-                <TextView
-                    android:id="@+id/textView1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/TextView01"
-                    android:text="@string/garden.type.incredibleedible.description" />
-
-                <ImageView
-                    android:id="@+id/imageView1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignRight="@+id/TextView01"
-                    android:layout_alignTop="@+id/TextView01"
-                    android:src="@drawable/ic_incredibleedible" />
-            </RelativeLayout>
-            
-
-            
-
-            <RelativeLayout
-                android:id="@+id/layoutDashboardActions"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@color/brown_light"
-                android:padding="5dp"
-                android:visibility="gone" >
-
-                <ListView
-                    android:id="@+id/listActions"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_below="@+id/buttonActions"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
-                    android:dividerHeight="5dp" >
-                </ListView>
-
-                <Button
-                    android:id="@+id/buttonActions"
-                    style="@style/buttonGreenDashboard"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentTop="true"
-                    android:text="@string/more" />
-
-                <TextView
-                    android:id="@+id/textViewAction"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentTop="true"
-                    android:text="@string/dashboard.actions.name"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
-            </RelativeLayout>
-        </LinearLayout>
-
-   
-
-</LinearLayout>
+</RelativeLayout>

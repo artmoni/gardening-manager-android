@@ -24,6 +24,11 @@ import org.gots.provider.GardenContentProvider;
 import org.gots.provider.SeedsContentProvider;
 import org.gots.provider.WeatherContentProvider;
 import org.gots.ui.fragment.ActionsResumeFragment;
+import org.gots.ui.fragment.CatalogResumeFragment;
+import org.gots.ui.fragment.IncredibleResumeFragment;
+import org.gots.ui.fragment.LoginDialogFragment;
+import org.gots.ui.fragment.WeatherResumeFragment;
+import org.gots.ui.fragment.WorkflowResumeFragment;
 import org.gots.ui.slidingmenu.NavDrawerItem;
 import org.gots.ui.slidingmenu.adapter.NavDrawerListAdapter;
 
@@ -574,6 +579,11 @@ public class MainActivity extends BaseGotsActivity {
         FragmentTransaction transactionCatalogue = fragmentManager.beginTransaction();
         transactionCatalogue.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
         transactionCatalogue.replace(R.id.idFragmentCatalog, catalogueResumeFragment).commit();
+        
+        Fragment incredibleResumeFragment = new IncredibleResumeFragment();
+        FragmentTransaction incredibleCatalogue = fragmentManager.beginTransaction();
+        incredibleCatalogue.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
+        incredibleCatalogue.replace(R.id.idFragmentIncredible, incredibleResumeFragment).commit();
 
         // update selected item and title, then close the drawer
         if (position <= navMenuTitles.length) {

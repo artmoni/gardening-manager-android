@@ -1,8 +1,7 @@
-package org.gots.ui;
+package org.gots.ui.fragment;
 
 import org.gots.R;
 import org.gots.nuxeo.NuxeoWorkflowProvider;
-import org.gots.ui.fragment.BaseGotsFragment;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;

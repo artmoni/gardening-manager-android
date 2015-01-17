@@ -1,4 +1,4 @@
-package org.gots.ui;
+package org.gots.ui.fragment;
 
 import org.gots.context.GotsContext;
 import org.gots.preferences.GotsPreferences;

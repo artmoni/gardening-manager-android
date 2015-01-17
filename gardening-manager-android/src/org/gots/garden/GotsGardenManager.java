@@ -5,8 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.gots.bean.Garden;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.context.GotsContext;
+import org.gots.exception.GardenNotFoundException;
 import org.gots.garden.provider.GardenProvider;
 import org.gots.garden.provider.local.LocalGardenProvider;
 import org.gots.garden.provider.nuxeo.NuxeoGardenProvider;
@@ -81,9 +83,11 @@ public class GotsGardenManager extends BroadcastReceiver {
         mContext = null;
         instance = null;
     }
+
     protected GotsContext getGotsContext() {
         return GotsContext.get(mContext);
     }
+
     private void setGardenProvider() {
 
         if (getGotsContext().getServerConfig().isConnectedToServer() && !nuxeoManager.getNuxeoClient().isOffline()) {
@@ -116,7 +120,9 @@ public class GotsGardenManager extends BroadcastReceiver {
     public GardenInterface getCurrentGarden() {
         if (currentGarden == null)
             currentGarden = gardenProvider.getCurrentGarden();
-
+        if (currentGarden == null)
+            // throw new GardenNotFoundException();
+            currentGarden = new Garden();
         return currentGarden;
     }
 

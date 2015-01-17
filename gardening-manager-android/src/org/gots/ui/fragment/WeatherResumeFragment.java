@@ -1,11 +1,10 @@
-package org.gots.ui;
+package org.gots.ui.fragment;
 
 import java.util.List;
 
 import org.gots.R;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GotsGardenManager;
-import org.gots.ui.fragment.BaseGotsFragment;
 import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.WeatherManager;
 import org.gots.weather.provider.local.LocalWeatherProvider;

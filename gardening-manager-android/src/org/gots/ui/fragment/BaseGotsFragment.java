@@ -1,6 +1,8 @@
 package org.gots.ui.fragment;
 
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.garden.GardenInterface;
+import org.gots.garden.GotsGardenManager;
 import org.nuxeo.android.fragments.BaseNuxeoFragment;
 
 import android.content.BroadcastReceiver;
@@ -14,6 +16,11 @@ public abstract class BaseGotsFragment extends BaseNuxeoFragment {
 
     public BaseGotsFragment() {
         super();
+    }
+
+    protected GardenInterface getCurrentGarden() {
+        GotsGardenManager gardenManager = GotsGardenManager.getInstance().initIfNew(getActivity());
+        return gardenManager.getCurrentGarden();
     }
 
     @Override

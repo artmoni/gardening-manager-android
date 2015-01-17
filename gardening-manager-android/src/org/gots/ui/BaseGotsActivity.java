@@ -268,10 +268,14 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
-        super.onNuxeoDataRetrieved(data);
         setProgressRefresh(false);
+        super.onNuxeoDataRetrieved(data);
     }
-
+@Override
+protected void onNuxeoDataRetrieveFailed() {
+    setProgressRefresh(false);
+    super.onNuxeoDataRetrieveFailed();
+}
     @Override
     public NuxeoContext getNuxeoContext() {
         return super.getNuxeoContext();
