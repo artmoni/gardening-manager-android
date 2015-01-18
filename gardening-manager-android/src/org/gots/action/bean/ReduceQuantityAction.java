@@ -14,6 +14,7 @@ import java.util.Date;
 
 import org.gots.action.AbstractActionSeed;
 import org.gots.action.SeedActionInterface;
+import org.gots.exception.GardenNotFoundException;
 import org.gots.seed.GrowingSeedInterface;
 
 import android.content.Context;
@@ -36,7 +37,12 @@ public class ReduceQuantityAction extends AbstractActionSeed implements SeedActi
 //        VendorSeedDBHelper helper = new VendorSeedDBHelper(getContext());
 //        helper.updateSeed(seed);
         
-        seedManager.removeToStock(seed, gardenManager.getCurrentGarden());
+        try {
+            seedManager.removeToStock(seed, gardenManager.getCurrentGarden());
+        } catch (GardenNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         return 0;
     }
 

@@ -117,21 +117,19 @@ public class GotsGardenManager extends BroadcastReceiver {
         return newGarden;
     }
 
-    public GardenInterface getCurrentGarden() {
+    public GardenInterface getCurrentGarden() throws GardenNotFoundException {
         if (currentGarden == null)
             currentGarden = gardenProvider.getCurrentGarden();
         if (currentGarden == null)
-            // throw new GardenNotFoundException();
-            currentGarden = new Garden();
+            throw new GardenNotFoundException();
         return currentGarden;
     }
 
     public void setCurrentGarden(GardenInterface garden) {
         currentGarden = garden;
         gardenProvider.setCurrentGarden(garden);
-        // mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
-
-        Log.d(TAG, "[" + garden.getId() + "] " + garden.getLocality() + " has been set as current garden");
+        mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_CURRENT_CHANGED));
+        Log.d(TAG, "Current Garden is now "+currentGarden);
     }
 
     public void removeGarden(GardenInterface garden) {

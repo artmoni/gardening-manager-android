@@ -16,6 +16,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.gots.exception.GardenNotFoundException;
 import org.gots.exception.NotImplementedException;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GotsGardenManager;
@@ -223,7 +224,11 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
             // TODO update remote stock from local stock
             if (localSeed.getNbSachet() > 0) {
-                updateStock(localSeed, GotsGardenManager.getInstance().initIfNew(mContext).getCurrentGarden());
+                try {
+                    updateStock(localSeed, GotsGardenManager.getInstance().initIfNew(mContext).getCurrentGarden());
+                } catch (GardenNotFoundException e) {
+                    Log.e(myApp, e.getMessage());
+                }
             }
         }
 

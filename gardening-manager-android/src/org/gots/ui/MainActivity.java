@@ -13,6 +13,7 @@ import org.gots.ads.GotsAdvertisement;
 import org.gots.authentication.GotsSocialAuthentication;
 import org.gots.authentication.provider.google.GoogleAuthentication;
 import org.gots.authentication.provider.google.User;
+import org.gots.bean.DefaultGarden;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.inapp.AppRater;
@@ -27,6 +28,7 @@ import org.gots.ui.fragment.ActionsResumeFragment;
 import org.gots.ui.fragment.CatalogResumeFragment;
 import org.gots.ui.fragment.IncredibleResumeFragment;
 import org.gots.ui.fragment.LoginDialogFragment;
+import org.gots.ui.fragment.TutorialResumeFragment;
 import org.gots.ui.fragment.WeatherResumeFragment;
 import org.gots.ui.fragment.WorkflowResumeFragment;
 import org.gots.ui.slidingmenu.NavDrawerItem;
@@ -129,8 +131,8 @@ public class MainActivity extends BaseGotsActivity {
                                   // accessibility
         ) {
             public void onDrawerClosed(View view) {
-                if (gardenManager.getCurrentGarden() != null)
-                    getSupportActionBar().setTitle(gardenManager.getCurrentGarden().getName());
+                if (getCurrentGarden() != null)
+                    getSupportActionBar().setTitle(getCurrentGarden().getName());
                 else
                     getSupportActionBar().setTitle(getResources().getString(R.string.garden_create));
                 // calling onPrepareOptionsMenu() to show action bar icons
@@ -157,7 +159,7 @@ public class MainActivity extends BaseGotsActivity {
                 if (myGardens == null || myGardens.size() < itemPosition)
                     return;
                 gardenManager.setCurrentGarden(myGardens.get(itemPosition));
-                sendBroadcast(new Intent(BroadCastMessages.GARDEN_CURRENT_CHANGED));
+                // sendBroadcast(new Intent(BroadCastMessages.GARDEN_CURRENT_CHANGED));
 
                 // startService(weatherIntent);
                 Bundle bundle = new Bundle();
@@ -477,19 +479,19 @@ public class MainActivity extends BaseGotsActivity {
         } else if (LAUNCHER_CATALOGUE.equals(getIntent().getAction()))
             startActivity(new Intent(this, HutActivity.class));
 
-        if (gardenManager.getCurrentGarden() == null || (myGardens != null && myGardens.size() == 0)) {
-            Intent intent = new Intent(getApplicationContext(), ProfileCreationActivity.class);
-            startActivity(intent);
-        }
+        // if (getCurrentGarden() == null || (myGardens != null && myGardens.size() == 0)) {
+        // Intent intent = new Intent(getApplicationContext(), ProfileCreationActivity.class);
+        // startActivity(intent);
+        // }
     }
 
     protected void displayOwnerIcon() {
-        if (gardenManager.getCurrentGarden() == null) {
+        if (getCurrentGarden() == null) {
             return;
         }
 
         if (gotsPrefs.isConnectedToServer()) {
-            if (gardenManager.getCurrentGarden().isIncredibleEdible())
+            if (getCurrentGarden().isIncredibleEdible())
                 ((ImageView) findViewById(R.id.imageAvatar)).setImageDrawable(getResources().getDrawable(
                         R.drawable.ic_incredibleedible));
             else {
@@ -579,7 +581,7 @@ public class MainActivity extends BaseGotsActivity {
         FragmentTransaction transactionCatalogue = fragmentManager.beginTransaction();
         transactionCatalogue.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
         transactionCatalogue.replace(R.id.idFragmentCatalog, catalogueResumeFragment).commit();
-        
+
         Fragment incredibleResumeFragment = new IncredibleResumeFragment();
         FragmentTransaction incredibleCatalogue = fragmentManager.beginTransaction();
         incredibleCatalogue.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
@@ -608,7 +610,7 @@ public class MainActivity extends BaseGotsActivity {
             @Override
             protected GardenInterface doInBackground(Void... params) {
                 myGardens = gardenManager.getMyGardens(false);
-                GardenInterface currentGarden = gardenManager.getCurrentGarden();
+                GardenInterface currentGarden = getCurrentGarden();
 
                 if (currentGarden == null)
                     myGardens = gardenManager.getMyGardens(true);
@@ -621,7 +623,7 @@ public class MainActivity extends BaseGotsActivity {
 
                     if (myGardens.size() > 0) {
                         gardenManager.setCurrentGarden(myGardens.get(0));
-                        sendBroadcast(new Intent(BroadCastMessages.GARDEN_CURRENT_CHANGED));
+                        // sendBroadcast(new Intent(BroadCastMessages.GARDEN_CURRENT_CHANGED));
                     } else {
                         // Intent intent = new Intent(getApplicationContext(), ProfileCreationActivity.class);
                         // startActivity(intent);
@@ -720,6 +722,8 @@ public class MainActivity extends BaseGotsActivity {
             } else if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
                 displayDrawerMenu();
                 displayOwnerIcon();
+                refreshGardenMenu();
+
             } else if (BroadCastMessages.SEED_DISPLAYLIST.equals(intent.getAction())) {
                 displayDrawerMenuCatalogCounter();
             } else if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
@@ -755,4 +759,17 @@ public class MainActivity extends BaseGotsActivity {
         }, 2000);
     }
 
+    @Override
+    protected void onResume() {
+
+        if (getCurrentGarden() instanceof DefaultGarden) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            Fragment tutorialResumeFragment = new TutorialResumeFragment();
+            FragmentTransaction transactionTutorial = fragmentManager.beginTransaction();
+            // transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
+            transactionTutorial.replace(R.id.idFragmentTutorial, tutorialResumeFragment).commit();
+        }
+        super.onResume();
+    }
 }

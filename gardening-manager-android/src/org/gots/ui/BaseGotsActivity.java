@@ -1,5 +1,5 @@
 /* *********************************************************************** *
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ * project: org.gots.*
+ * project: org.gots.*
  *                                                                         *
  * *********************************************************************** *
  *                                                                         *
@@ -21,16 +21,22 @@
  * *********************************************************************** */
 package org.gots.ui;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import org.gots.R;
 import org.gots.action.GotsActionSeedManager;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.allotment.GotsAllotmentManager;
 import org.gots.analytics.GotsAnalytics;
+import org.gots.bean.DefaultGarden;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.context.GotsContext;
 import org.gots.context.GotsContextProvider;
+import org.gots.exception.GardenNotFoundException;
+import org.gots.garden.GardenInterface;
 import org.gots.garden.GotsGardenManager;
 import org.gots.inapp.GotsPurchaseItem;
 import org.gots.nuxeo.NuxeoManager;
@@ -47,6 +53,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.location.Address;
+import android.location.Criteria;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.util.Log;
@@ -84,10 +95,18 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
 
     private Menu menu;
 
+    private GardenInterface currentGarden;
+
     private static ArrayList<BaseGotsActivity> activities = new ArrayList<BaseGotsActivity>();
+
+    private GotsGrowingSeedManager gotsGrowingSeedManager;
 
     public GotsContext getGotsContext() {
         return GotsContext.get(getApplicationContext());
+    }
+
+    protected GardenInterface getCurrentGarden() {
+        return currentGarden;
     }
 
     @Override
@@ -155,6 +174,29 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         super.onPostCreate(savedInstanceState);
     }
 
+    @Override
+    protected void onResume() {
+        try {
+            currentGarden = gardenManager.getCurrentGarden();
+        } catch (GardenNotFoundException e) {
+            LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            Criteria criteria = new Criteria();
+            criteria.setAccuracy(Criteria.ACCURACY_LOW);
+            String bestprovider = manager.getBestProvider(criteria, true);
+            Location loc = manager.getLastKnownLocation(bestprovider);
+            Geocoder geoCoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+            List<Address> addresses;
+            try {
+                addresses = geoCoder.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
+                currentGarden = new DefaultGarden(addresses.get(0));
+            } catch (IOException e1) {
+                currentGarden = new DefaultGarden(new Address(Locale.getDefault()));
+                e1.printStackTrace();
+            }
+        }
+        super.onResume();
+    }
+
     private int progressCounter = 0;
 
     private BroadcastReceiver progressReceiver = new BroadcastReceiver() {
@@ -170,8 +212,6 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
             }
         }
     };
-
-    private GotsGrowingSeedManager gotsGrowingSeedManager;
 
     @Override
     protected void onDestroy() {
@@ -271,11 +311,13 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         setProgressRefresh(false);
         super.onNuxeoDataRetrieved(data);
     }
-@Override
-protected void onNuxeoDataRetrieveFailed() {
-    setProgressRefresh(false);
-    super.onNuxeoDataRetrieveFailed();
-}
+
+    @Override
+    protected void onNuxeoDataRetrieveFailed() {
+        setProgressRefresh(false);
+        super.onNuxeoDataRetrieveFailed();
+    }
+
     @Override
     public NuxeoContext getNuxeoContext() {
         return super.getNuxeoContext();

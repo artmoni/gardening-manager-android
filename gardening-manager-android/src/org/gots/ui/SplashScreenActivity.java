@@ -163,11 +163,11 @@ public class SplashScreenActivity extends BaseGotsActivity {
 
     @Override
     protected void onNuxeoDataRetrievalStarted() {
+        super.onNuxeoDataRetrievalStarted();
         Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
         myFadeInAnimation.setRepeatCount(Animation.INFINITE);
         imageRefresh = (ImageView) findViewById(R.id.imageRefresh);
         imageRefresh.startAnimation(myFadeInAnimation);
-        super.onNuxeoDataRetrievalStarted();
     }
 
     @Override
@@ -177,9 +177,12 @@ public class SplashScreenActivity extends BaseGotsActivity {
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
-        startActivity(new Intent(this, MainActivity.class));
-        finish();
-        imageRefresh.clearAnimation();
         super.onNuxeoDataRetrieved(data);
+        imageRefresh.clearAnimation();
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+
     }
 }

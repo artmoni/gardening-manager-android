@@ -13,7 +13,6 @@ import org.gots.preferences.GotsPreferences;
 import org.gots.provider.ActionsContentProvider;
 import org.gots.provider.GardenContentProvider;
 import org.gots.provider.SeedsContentProvider;
-import org.gots.seed.service.SeedUpdateService;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -467,17 +466,17 @@ public class AboutActivity extends BaseGotsActivity {
                     AlarmManager.INTERVAL_DAY, actionTODOIntent);
         }
 
-        Intent seedBroadcastReceiver = new Intent(context, SeedUpdateService.class);
-        PendingIntent seedIntent = PendingIntent.getBroadcast(context, 0, seedBroadcastReceiver,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-
-        if (GotsPreferences.isDevelopment())
-            alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(), 120000, seedIntent);
-        else {
-            updateTime.set(Calendar.HOUR_OF_DAY, 12);
-            alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
-                    AlarmManager.INTERVAL_DAY, seedIntent);
-        }
+//        Intent seedBroadcastReceiver = new Intent(context, SeedUpdateService.class);
+//        PendingIntent seedIntent = PendingIntent.getBroadcast(context, 0, seedBroadcastReceiver,
+//                PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//        if (GotsPreferences.isDevelopment())
+//            alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(), 120000, seedIntent);
+//        else {
+//            updateTime.set(Calendar.HOUR_OF_DAY, 12);
+//            alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
+//                    AlarmManager.INTERVAL_DAY, seedIntent);
+//        }
     }
 
     @Override

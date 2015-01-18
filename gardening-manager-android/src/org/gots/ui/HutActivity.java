@@ -229,7 +229,7 @@ public class HutActivity extends BaseGotsActivity {
                 protected BaseSeedInterface doInBackground(Void... params) {
                     BaseSeedInterface scanSeed = seedManager.getSeedByBarCode(scanResult.getContents());
                     if (scanSeed != null) {
-                        seedManager.addToStock(scanSeed, gardenManager.getCurrentGarden());
+                        seedManager.addToStock(scanSeed, getCurrentGarden());
                     }
 
                     return scanSeed;

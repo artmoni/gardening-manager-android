@@ -1,26 +1,39 @@
 package org.gots.ui.fragment;
 
+import java.util.Locale;
+
+import org.gots.bean.DefaultGarden;
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.exception.GardenNotFoundException;
+import org.gots.garden.GardenFactory;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GotsGardenManager;
+import org.gots.ui.ProfileCreationActivity;
 import org.nuxeo.android.fragments.BaseNuxeoFragment;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.Address;
 import android.os.Bundle;
 import android.view.View;
 
 public abstract class BaseGotsFragment extends BaseNuxeoFragment {
+
+    private GardenInterface currentGarden;
 
     public BaseGotsFragment() {
         super();
     }
 
     protected GardenInterface getCurrentGarden() {
-        GotsGardenManager gardenManager = GotsGardenManager.getInstance().initIfNew(getActivity());
-        return gardenManager.getCurrentGarden();
+        try {
+            currentGarden = GotsGardenManager.getInstance().initIfNew(getActivity()).getCurrentGarden();
+        } catch (GardenNotFoundException e) {
+            currentGarden = new DefaultGarden(new Address(Locale.getDefault()));
+        }
+        return currentGarden;
     }
 
     @Override
@@ -48,6 +61,7 @@ public abstract class BaseGotsFragment extends BaseNuxeoFragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
+                getCurrentGarden();
                 onCurrentGardenChanged();
             } else if (BroadCastMessages.WEATHER_DISPLAY_EVENT.equals(intent.getAction())) {
                 onWeatherChanged();

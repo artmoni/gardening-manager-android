@@ -16,7 +16,6 @@ public class IncredibleResumeFragment extends BaseGotsFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        displayIncredibleInformation();
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -35,6 +34,12 @@ public class IncredibleResumeFragment extends BaseGotsFragment {
     protected void onActionChanged() {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public void onResume() {
+        displayIncredibleInformation();
+        super.onResume();
     }
 
     @Override

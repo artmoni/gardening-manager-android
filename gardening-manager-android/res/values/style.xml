@@ -345,7 +345,7 @@
         <item name="android:backgroundSplit">@drawable/tab_divider</item>
     </style>
 
-    <style name="Widget.Styled.TitleTextStyle" parent="TextAppearance.AppCompat.Widget.Base.ActionBar.Title">
+    <style name="Widget.Styled.TitleTextStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/green_light</item>
     </style>

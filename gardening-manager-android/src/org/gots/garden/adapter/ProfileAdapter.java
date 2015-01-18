@@ -24,19 +24,16 @@ import org.gots.R;
 import org.gots.authentication.GotsSocialAuthentication;
 import org.gots.authentication.provider.google.GoogleAuthentication;
 import org.gots.authentication.provider.google.User;
-import org.gots.broadcast.BroadCastMessages;
 import org.gots.context.GotsContext;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GotsGardenManager;
 import org.gots.preferences.GotsPreferences;
-import org.gots.seed.service.SeedUpdateService;
 import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.WeatherManager;
 import org.gots.weather.view.WeatherView;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -51,7 +48,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 
@@ -68,20 +64,20 @@ public class ProfileAdapter extends BaseAdapter {
 
     private GotsGardenManager gardenManager;
 
-    private GardenInterface selectedGarden;
+    private GardenInterface currentGarden;
 
     protected GotsContext getGotsContext() {
         return GotsContext.get(mContext);
     }
 
-    public ProfileAdapter(Context context, List<GardenInterface> myGardens) {
+    public ProfileAdapter(Context context, List<GardenInterface> myGardens, GardenInterface currentGarden) {
         mContext = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         weatherManager = new WeatherManager(mContext);
         gardenManager = GotsGardenManager.getInstance();
 
         this.myGardens = myGardens;
-        selectedGarden = gardenManager.getCurrentGarden();
+        this.currentGarden = currentGarden;
 
         gotsPreferences = getGotsContext().getServerConfig();
 
@@ -177,10 +173,10 @@ public class ProfileAdapter extends BaseAdapter {
         // final HorizontalScrollView weatherHistoryContainer = (HorizontalScrollView)
         // vi.findViewById(R.id.scrollWeatherHistory);
 
-        final GardenInterface currentGarden = getItem(position);
+        final GardenInterface itemGarden = getItem(position);
         // weatherIntent = new Intent(mContext, WeatherUpdateService.class);
 
-        if (selectedGarden != null && currentGarden != null && selectedGarden.getId() == currentGarden.getId()) {
+        if (currentGarden != null && itemGarden != null && currentGarden.getId() == itemGarden.getId()) {
             vi.setSelected(true);
             imageProfile.setVisibility(View.VISIBLE);
             weatherChart.setVisibility(View.VISIBLE);
@@ -205,22 +201,22 @@ public class ProfileAdapter extends BaseAdapter {
             // weatherHistoryContainer.setVisibility(View.GONE);
 
         }
-        if (currentGarden.isIncredibleEdible()){
+        if (itemGarden.isIncredibleEdible()){
             imageGardenType.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_incredibleedible));
         }else
             imageGardenType.setImageDrawable(mContext.getResources().getDrawable(R.drawable.garden_private));
             
 
         if (GotsPreferences.DEBUG)
-            gardenName.setText(currentGarden.toString());
-        else if (currentGarden.getName() != null) {
-            gardenName.setText(currentGarden.getName());
-            gardenLocality.setText(currentGarden.getAddress().getLocality());
+            gardenName.setText(itemGarden.toString());
+        else if (itemGarden.getName() != null) {
+            gardenName.setText(itemGarden.getName());
+            gardenLocality.setText(itemGarden.getAddress().getLocality());
         } else
-            gardenName.setText(currentGarden.getAddress().getLocality());
+            gardenName.setText(itemGarden.getAddress().getLocality());
 
-        if (currentGarden.getDescription() != null) {
-            gardenDescription.setText(currentGarden.getDescription());
+        if (itemGarden.getDescription() != null) {
+            gardenDescription.setText(itemGarden.getDescription());
         } else
             gardenDescription.setVisibility(View.GONE);
         // weatherState.setOnClickListener(new View.OnClickListener() {
@@ -276,19 +272,18 @@ public class ProfileAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
 
-                    selectedGarden = getItem(position);
-                    gardenManager.setCurrentGarden(selectedGarden);
-                    mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
-                    mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_CURRENT_CHANGED));
+                    currentGarden = getItem(position);
+                    gardenManager.setCurrentGarden(currentGarden);
+                    
                     notifyDataSetChanged();
 
-                    if (gardenManager.getCurrentGarden() != null) {
-                        GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-                        tracker.trackEvent("Garden", "Select", gardenManager.getCurrentGarden().getLocality(),
-                                position + 1);
-                        Intent seedIntent = new Intent(mContext, SeedUpdateService.class);
-                        mContext.startService(seedIntent);
-                    }
+//                    if (gardenManager.getCurrentGarden() != null) {
+//                        GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+//                        tracker.trackEvent("Garden", "Select", gardenManager.getCurrentGarden().getLocality(),
+//                                position + 1);
+//                        Intent seedIntent = new Intent(mContext, SeedUpdateService.class);
+//                        mContext.startService(seedIntent);
+//                    }
                 }
             });
 

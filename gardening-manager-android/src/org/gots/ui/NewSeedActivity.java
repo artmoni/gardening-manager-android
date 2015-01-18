@@ -392,7 +392,7 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
                         else
                             newSeed = seedManager.createSeed(newSeed, null);
                         // seedManager.attach
-                        seedManager.addToStock(newSeed, gardenManager.getCurrentGarden());
+                        seedManager.addToStock(newSeed, getCurrentGarden());
                         return null;
                     }
 

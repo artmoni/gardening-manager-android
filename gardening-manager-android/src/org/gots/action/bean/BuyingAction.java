@@ -14,6 +14,7 @@ import java.util.Date;
 
 import org.gots.action.AbstractActionSeed;
 import org.gots.action.PermanentActionInterface;
+import org.gots.exception.GardenNotFoundException;
 import org.gots.seed.GrowingSeedInterface;
 
 import android.content.Context;
@@ -77,7 +78,12 @@ public class BuyingAction extends AbstractActionSeed implements PermanentActionI
     @Override
     public int execute(GrowingSeedInterface seed) {
         // super.execute(seed);
-        seedManager.addToStock(seed, gardenManager.getCurrentGarden());
+        try {
+            seedManager.addToStock(seed, gardenManager.getCurrentGarden());
+        } catch (GardenNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         // if (GotsPreferences.getInstance().isConnectedToServer()) {
         // GotsSeedProvider provider = new NuxeoSeedProvider(mContext);
         // provider.addToStock(seed, GardenManager.getInstance().getCurrentGarden());

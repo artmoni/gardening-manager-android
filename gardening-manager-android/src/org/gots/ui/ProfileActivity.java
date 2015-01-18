@@ -60,6 +60,8 @@ public class ProfileActivity extends BaseGotsActivity {
 
     private GoogleMap map;
 
+    private GardenInterface currentGarden;
+
     HashMap<Marker, GardenInterface> markerGarden = new HashMap<>();
 
     @Override
@@ -90,8 +92,8 @@ public class ProfileActivity extends BaseGotsActivity {
 
             @Override
             public void onMapLongClick(LatLng arg0) {
-                gardenManager.getCurrentGarden().setGpsLatitude(arg0.latitude);
-                gardenManager.getCurrentGarden().setGpsLongitude(arg0.longitude);
+                getCurrentGarden().setGpsLatitude(arg0.latitude);
+                getCurrentGarden().setGpsLongitude(arg0.longitude);
 
                 Intent intent = new Intent(getApplicationContext(), ProfileCreationActivity.class);
                 intent.putExtra("option", ProfileCreationActivity.OPTION_EDIT);
@@ -103,7 +105,7 @@ public class ProfileActivity extends BaseGotsActivity {
             public boolean onMarkerClick(Marker arg0) {
                 GardenInterface selectedGarden = markerGarden.get(arg0);
                 gardenManager.setCurrentGarden(selectedGarden);
-                sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
+                // sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
                 return true;
             }
         });
@@ -144,14 +146,10 @@ public class ProfileActivity extends BaseGotsActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
-                try {
-                    runAsyncDataRetrieval();
-                } catch (Exception e) {
-                    Log.e(TAG, e.getMessage());
-                }
+                runAsyncDataRetrieval();
             }
             if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
-                focusGardenOnMap(gardenManager.getCurrentGarden());
+                focusGardenOnMap(getCurrentGarden());
             }
         }
     };
@@ -162,12 +160,13 @@ public class ProfileActivity extends BaseGotsActivity {
 
     @Override
     protected Object retrieveNuxeoData() throws Exception {
+        currentGarden = getCurrentGarden();
         return gardenManager.getMyGardens(true);
     }
 
     @Override
     protected void onNuxeoDataRetrieved(Object myGardens) {
-        profileAdapter = new ProfileAdapter(ProfileActivity.this, (List<GardenInterface>) myGardens);
+        profileAdapter = new ProfileAdapter(ProfileActivity.this, (List<GardenInterface>) myGardens, currentGarden);
         profileList.setAdapter(profileAdapter);
         profileAdapter.notifyDataSetChanged();
         if (profileAdapter != null && profileAdapter.getCount() == 0) {
@@ -175,13 +174,12 @@ public class ProfileActivity extends BaseGotsActivity {
             startActivity(intentCreation);
         } else {
             // Select default current garden
-            if (gardenManager.getCurrentGarden() == null || gardenManager.getCurrentGarden() != null
-                    && gardenManager.getCurrentGarden().getId() == -1) {
+            if (currentGarden == null || currentGarden != null && currentGarden.getId() == -1) {
                 gardenManager.setCurrentGarden(profileAdapter.getItem(0));
             }
         }
         displayGardensOnMap();
-        focusGardenOnMap(gardenManager.getCurrentGarden());
+        focusGardenOnMap(currentGarden);
         super.onNuxeoDataRetrieved(myGardens);
     }
 
@@ -235,7 +233,7 @@ public class ProfileActivity extends BaseGotsActivity {
                     new AsyncTask<Void, Void, GardenInterface>() {
                         @Override
                         protected GardenInterface doInBackground(Void... params) {
-                            gardenManager.removeGarden(gardenManager.getCurrentGarden());
+                            gardenManager.removeGarden(getCurrentGarden());
                             return null;
                         }
 

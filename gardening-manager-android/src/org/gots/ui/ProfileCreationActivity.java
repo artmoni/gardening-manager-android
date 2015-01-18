@@ -87,7 +87,7 @@ public class ProfileCreationActivity extends BaseGotsActivity implements Locatio
         if (getIntent().getExtras() != null)
             mode = getIntent().getExtras().getInt("option");
         if (mode == OPTION_EDIT) {
-            garden = gardenManager.getCurrentGarden();
+            garden = getCurrentGarden();
         } else {
             garden = new Garden();
         }
@@ -140,12 +140,12 @@ public class ProfileCreationActivity extends BaseGotsActivity implements Locatio
         findViewById(R.id.buttonValidatePosition).setOnClickListener(this);
 
         // findViewById(R.id.buttonAddGarden).setOnClickListener(this);
-        if (gardenManager.getCurrentGarden() != null)
+        if (getCurrentGarden() != null)
             ((CheckBox) findViewById(R.id.checkboxSamples)).setChecked(false);
 
-        if (mode == OPTION_EDIT && gardenManager.getCurrentGarden() != null
-                && gardenManager.getCurrentGarden().getLocality() != null) {
-            editTextName.setText(gardenManager.getCurrentGarden().getName());
+        if (mode == OPTION_EDIT && getCurrentGarden() != null
+                && getCurrentGarden().getLocality() != null) {
+            editTextName.setText(getCurrentGarden().getName());
         }
 
     };
@@ -333,8 +333,8 @@ public class ProfileCreationActivity extends BaseGotsActivity implements Locatio
                     Toast.makeText(getApplicationContext(),
                             "Error creating new garden, please verify your connection.", Toast.LENGTH_SHORT).show();
                 else {
-                    sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
-                    sendBroadcast(new Intent(BroadCastMessages.GARDEN_CURRENT_CHANGED));
+//                    sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
+//                    sendBroadcast(new Intent(BroadCastMessages.GARDEN_CURRENT_CHANGED));
                     ProfileCreationActivity.this.finish();
                 }
 
