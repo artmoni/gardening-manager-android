@@ -67,6 +67,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
@@ -101,11 +102,46 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
 
     private GotsGrowingSeedManager gotsGrowingSeedManager;
 
+    private BroadcastReceiver gardenBroadcastReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
+                try {
+                    currentGarden = gardenManager.getCurrentGarden();
+                } catch (GardenNotFoundException e) {
+                    Toast.makeText(getApplicationContext(), "A problem occure during garden selection",
+                            Toast.LENGTH_LONG).show();
+                }
+
+            }
+        }
+    };
+
     public GotsContext getGotsContext() {
         return GotsContext.get(getApplicationContext());
     }
 
     protected GardenInterface getCurrentGarden() {
+        try {
+            currentGarden = gardenManager.getCurrentGarden();
+        } catch (GardenNotFoundException e) {
+            LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            Criteria criteria = new Criteria();
+            criteria.setAccuracy(Criteria.ACCURACY_LOW);
+            String bestprovider = manager.getBestProvider(criteria, true);
+            Location loc = manager.getLastKnownLocation(bestprovider);
+            Geocoder geoCoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+            List<Address> addresses;
+            try {
+                addresses = geoCoder.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
+                currentGarden = new DefaultGarden(addresses.get(0));
+                gardenManager.setCurrentGarden(currentGarden);
+            } catch (IOException e1) {
+                currentGarden = new DefaultGarden(new Address(Locale.getDefault()));
+                e1.printStackTrace();
+            }
+        }
         return currentGarden;
     }
 
@@ -142,6 +178,8 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         registerReceiver(seedManager, new IntentFilter(BroadCastMessages.GARDEN_SETTINGS_CHANGED));
         registerReceiver(progressReceiver, new IntentFilter(BroadCastMessages.PROGRESS_UPDATE));
         registerReceiver(progressReceiver, new IntentFilter(BroadCastMessages.PROGRESS_FINISHED));
+        registerReceiver(gardenBroadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
+
         activities.add(this);
 
         GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
@@ -176,24 +214,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
 
     @Override
     protected void onResume() {
-        try {
-            currentGarden = gardenManager.getCurrentGarden();
-        } catch (GardenNotFoundException e) {
-            LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            Criteria criteria = new Criteria();
-            criteria.setAccuracy(Criteria.ACCURACY_LOW);
-            String bestprovider = manager.getBestProvider(criteria, true);
-            Location loc = manager.getLastKnownLocation(bestprovider);
-            Geocoder geoCoder = new Geocoder(getApplicationContext(), Locale.getDefault());
-            List<Address> addresses;
-            try {
-                addresses = geoCoder.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
-                currentGarden = new DefaultGarden(addresses.get(0));
-            } catch (IOException e1) {
-                currentGarden = new DefaultGarden(new Address(Locale.getDefault()));
-                e1.printStackTrace();
-            }
-        }
+
         super.onResume();
     }
 

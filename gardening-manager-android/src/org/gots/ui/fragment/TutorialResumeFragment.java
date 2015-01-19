@@ -2,7 +2,8 @@ package org.gots.ui.fragment;
 
 import org.gots.R;
 import org.gots.bean.DefaultGarden;
-import org.gots.ui.ProfileCreationActivity;
+import org.gots.ui.ProfileActivity;
+import org.gots.ui.ProfileCreationFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -89,7 +90,7 @@ public class TutorialResumeFragment extends BaseGotsFragment implements OnClickL
     public void onClick(View view) {
         switch (tutorialLevel) {
         case COMPLETE_LOCATION:
-            Intent i = new Intent(getActivity(), ProfileCreationActivity.class);
+            Intent i = new Intent(getActivity(), ProfileActivity.class);
             startActivity(i);
             break;
 

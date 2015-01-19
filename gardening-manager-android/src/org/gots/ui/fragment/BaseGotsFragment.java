@@ -8,7 +8,7 @@ import org.gots.exception.GardenNotFoundException;
 import org.gots.garden.GardenFactory;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GotsGardenManager;
-import org.gots.ui.ProfileCreationActivity;
+import org.gots.ui.ProfileCreationFragment;
 import org.nuxeo.android.fragments.BaseNuxeoFragment;
 
 import android.content.BroadcastReceiver;

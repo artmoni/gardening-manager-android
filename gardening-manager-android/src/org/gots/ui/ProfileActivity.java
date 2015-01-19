@@ -20,7 +20,10 @@ import org.gots.ads.GotsAdvertisement;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.adapter.ProfileAdapter;
+import org.gots.garden.view.OnProfileEventListener;
 import org.gots.provider.GardenContentProvider;
+import org.gots.ui.fragment.CatalogResumeFragment;
+import org.gots.ui.fragment.ProfileListFragment;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -42,6 +45,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.Menu;
@@ -50,13 +56,9 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-public class ProfileActivity extends BaseGotsActivity {
+public class ProfileActivity extends BaseGotsActivity implements OnProfileEventListener {
 
     private static final String TAG = "ProfileActivity";
-
-    private ProfileAdapter profileAdapter;
-
-    private ListView profileList;
 
     private GoogleMap map;
 
@@ -73,8 +75,6 @@ public class ProfileActivity extends BaseGotsActivity {
         ActionBar bar = getSupportActionBar();
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setTitle(R.string.dashboard_profile_name);
-
-        profileList = (ListView) findViewById(R.id.IdGardenProfileList);
 
         this.registerReceiver(gardenBroadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_EVENT));
         this.registerReceiver(gardenBroadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
@@ -94,10 +94,7 @@ public class ProfileActivity extends BaseGotsActivity {
             public void onMapLongClick(LatLng arg0) {
                 getCurrentGarden().setGpsLatitude(arg0.latitude);
                 getCurrentGarden().setGpsLongitude(arg0.longitude);
-
-                Intent intent = new Intent(getApplicationContext(), ProfileCreationActivity.class);
-                intent.putExtra("option", ProfileCreationActivity.OPTION_EDIT);
-                startActivity(intent);
+                onProfileEdited();
             }
         });
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -109,13 +106,7 @@ public class ProfileActivity extends BaseGotsActivity {
                 return true;
             }
         });
-        // try {
-        // MapsInitializer.initialize(getApplicationContext());
-        // displayGardensOnMap();
-        // focusGardenOnMap(gardenManager.getCurrentGarden());
-        // } catch (GooglePlayServicesNotAvailableException e) {
-        // Log.e(TAG, e.getMessage());
-        // }
+
     }
 
     private void focusGardenOnMap(GardenInterface garden) {
@@ -123,11 +114,11 @@ public class ProfileActivity extends BaseGotsActivity {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(gardenPOI, 17));
     }
 
-    protected void displayGardensOnMap() {
+    protected void displayGardensOnMap(List<GardenInterface> allGardens) {
         // map.setMyLocationEnabled(true);
 
-        // map.clear();
-        for (GardenInterface garden : gardenManager.getMyGardens(false)) {
+        map.clear();
+        for (GardenInterface garden : allGardens) {
             LatLng gardenPOI = new LatLng(garden.getGpsLatitude(), garden.getGpsLongitude());
 
             MarkerOptions markerOption = new MarkerOptions().title(garden.getName()).snippet(garden.getDescription()).position(
@@ -149,7 +140,8 @@ public class ProfileActivity extends BaseGotsActivity {
                 runAsyncDataRetrieval();
             }
             if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
-                focusGardenOnMap(getCurrentGarden());
+                 focusGardenOnMap(getCurrentGarden());
+//                runAsyncDataRetrieval();
             }
         }
     };
@@ -166,20 +158,34 @@ public class ProfileActivity extends BaseGotsActivity {
 
     @Override
     protected void onNuxeoDataRetrieved(Object myGardens) {
-        profileAdapter = new ProfileAdapter(ProfileActivity.this, (List<GardenInterface>) myGardens, currentGarden);
-        profileList.setAdapter(profileAdapter);
-        profileAdapter.notifyDataSetChanged();
-        if (profileAdapter != null && profileAdapter.getCount() == 0) {
-            Intent intentCreation = new Intent(getApplicationContext(), ProfileCreationActivity.class);
-            startActivity(intentCreation);
-        } else {
-            // Select default current garden
-            if (currentGarden == null || currentGarden != null && currentGarden.getId() == -1) {
-                gardenManager.setCurrentGarden(profileAdapter.getItem(0));
-            }
-        }
-        displayGardensOnMap();
+        // profileAdapter = new ProfileAdapter(ProfileActivity.this, (List<GardenInterface>) myGardens, currentGarden);
+        // profileList.setAdapter(profileAdapter);
+        // profileAdapter.notifyDataSetChanged();
+        // if (profileAdapter != null && profileAdapter.getCount() == 0) {
+        // Intent intentCreation = new Intent(getApplicationContext(), ProfileCreationFragment.class);
+        // startActivity(intentCreation);
+        // } else {
+        // // Select default current garden
+        // if (currentGarden == null || currentGarden != null && currentGarden.getId() == -1) {
+        // gardenManager.setCurrentGarden(profileAdapter.getItem(0));
+        // }
+        // }
+        displayGardensOnMap((List<GardenInterface>) myGardens);
         focusGardenOnMap(currentGarden);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (currentGarden != null) {
+            Fragment profilesFragment = new ProfileListFragment();
+            FragmentTransaction transactionCatalogue = fragmentManager.beginTransaction();
+            transactionCatalogue.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
+            transactionCatalogue.replace(R.id.IdGardenProfileList, profilesFragment).commit();
+        } else {
+            Fragment fragment = new ProfileCreationFragment();
+            FragmentTransaction transactionCatalogue = fragmentManager.beginTransaction();
+            transactionCatalogue.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
+            transactionCatalogue.replace(R.id.IdGardenProfileList, fragment).commit();
+        }
+
         super.onNuxeoDataRetrieved(myGardens);
     }
 
@@ -212,12 +218,16 @@ public class ProfileActivity extends BaseGotsActivity {
             return true;
 
         case R.id.new_garden:
-            Intent i = new Intent(this, ProfileCreationActivity.class);
-            startActivity(i);
+            // Intent i = new Intent(this, ProfileCreationFragment.class);
+            // startActivity(i);
+            Fragment fragment = new ProfileCreationFragment();
+            FragmentTransaction transactionCatalogue = getSupportFragmentManager().beginTransaction();
+            transactionCatalogue.setCustomAnimations(R.anim.grow_from_bottom, R.anim.grow_from_top);
+            transactionCatalogue.replace(R.id.IdGardenProfileList, fragment).commit();
             return true;
         case R.id.edit_garden:
-            Intent intent = new Intent(this, ProfileCreationActivity.class);
-            intent.putExtra("option", ProfileCreationActivity.OPTION_EDIT);
+            Intent intent = new Intent(this, ProfileCreationFragment.class);
+            intent.putExtra("option", ProfileCreationFragment.OPTION_EDIT);
             startActivity(intent);
 
             return true;
@@ -269,6 +279,25 @@ public class ProfileActivity extends BaseGotsActivity {
     @Override
     protected void onRefresh(String AUTHORITY) {
         super.onRefresh(GardenContentProvider.AUTHORITY);
+    }
+
+    @Override
+    public void onProfileSelected() {
+        runAsyncDataRetrieval();
+    }
+
+    @Override
+    public void onProfileEdited() {
+        gardenManager.setCurrentGarden(getCurrentGarden());
+        ProfileCreationFragment fragment = new ProfileCreationFragment();
+        fragment.setCurrentGarden(getCurrentGarden());
+        Bundle options = new Bundle();
+        options.putInt("option", ProfileCreationFragment.OPTION_EDIT);
+        fragment.setArguments(options);
+        FragmentTransaction transactionCatalogue = getSupportFragmentManager().beginTransaction();
+        transactionCatalogue.setCustomAnimations(R.anim.grow_from_bottom, R.anim.grow_from_top);
+        transactionCatalogue.replace(R.id.IdGardenProfileList, fragment).commit();
+
     }
 
 }

@@ -57,7 +57,6 @@
         <activity android:name=".ui.VendorListActivity"/>
         <activity android:name=".ui.ProfileActivity" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow">
         </activity>
-        <activity android:name=".ui.ProfileCreationActivity" android:theme="@style/Theme.Styled" android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity android:name=".ui.ListActionActivity" android:theme="@style/Theme.Styled"/>
         <activity android:name=".ui.ActionActivity" android:theme="@style/Theme.Styled"/>
         <activity android:name=".ui.AboutActivity" android:theme="@style/Theme.Styled"/>

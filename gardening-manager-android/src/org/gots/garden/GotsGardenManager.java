@@ -129,7 +129,7 @@ public class GotsGardenManager extends BroadcastReceiver {
         currentGarden = garden;
         gardenProvider.setCurrentGarden(garden);
         mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_CURRENT_CHANGED));
-        Log.d(TAG, "Current Garden is now "+currentGarden);
+        Log.d(TAG, "Current Garden is now " + currentGarden);
     }
 
     public void removeGarden(GardenInterface garden) {
@@ -140,7 +140,7 @@ public class GotsGardenManager extends BroadcastReceiver {
     public void updateCurrentGarden(GardenInterface garden) {
         gardenProvider.updateGarden(garden);
         myGardens.put(garden.getId(), garden);
-
+        mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
     }
 
     public List<GardenInterface> getMyGardens(boolean force) {

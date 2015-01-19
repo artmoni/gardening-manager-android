@@ -158,7 +158,9 @@ public class MainActivity extends BaseGotsActivity {
             public void onItemSelected(AdapterView<?> arg0, View arg1, int itemPosition, long arg3) {
                 if (myGardens == null || myGardens.size() < itemPosition)
                     return;
-                gardenManager.setCurrentGarden(myGardens.get(itemPosition));
+
+                if (spinnerGarden.getSelectedItemPosition() != itemPosition)
+                    gardenManager.setCurrentGarden(myGardens.get(itemPosition));
                 // sendBroadcast(new Intent(BroadCastMessages.GARDEN_CURRENT_CHANGED));
 
                 // startService(weatherIntent);
