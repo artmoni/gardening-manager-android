@@ -58,6 +58,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -99,7 +101,7 @@ public class ProfileCreationFragment extends BaseGotsFragment implements Locatio
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.profilecreation, null);
+        return inflater.inflate(R.layout.profilecreation, container, false);
     }
 
     @Override
@@ -115,48 +117,14 @@ public class ProfileCreationFragment extends BaseGotsFragment implements Locatio
         } else {
             garden = new Garden();
         }
-        // requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        // setContentView(R.layout.profilecreation);
 
-        // ActionBar bar = getSupportActionBar();
-        // bar.setDisplayHomeAsUpEnabled(false);
-        // bar.setTitle(R.string.profile_menu_localize);
+        editTextName = (TextView) view.findViewById(R.id.editTextGardenName);
+        editTextLocality = (TextView) view.findViewById(R.id.editTextGardenLocality);
+        buttonLocalize = (ImageView) view.findViewById(R.id.imageViewLocalize);
+        buttonLocalize.setOnClickListener(this);
 
-        // garden.setLocality("");
+        initProfileView();
 
-        buildProfile();
-
-        // map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-        // map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-        // map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-        //
-        // @Override
-        // public void onMapLongClick(LatLng arg0) {
-        // setAddressFromLocation(arg0.latitude, arg0.longitude);
-        // focusGardenOnMap(garden.getGpsLatitude(), garden.getGpsLongitude());
-        // }
-        // });
-        // map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-        //
-        // @Override
-        // public void onMapClick(LatLng arg0) {
-        // Toast.makeText(getActivity(), "Long click to set location", Toast.LENGTH_SHORT).show();
-        //
-        // }
-        // });
-        if (garden.getGpsLatitude() == 0 || garden.getGpsLongitude() == 0) {
-            String locationProvider = LocationManager.NETWORK_PROVIDER;
-            Location lastKnownLocation = mlocManager.getLastKnownLocation(locationProvider);
-            if (lastKnownLocation != null) {
-                setAddressFromLocation(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-                // focusGardenOnMap(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-            } else
-                mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 60000, 0, this);
-
-        } else {
-            // focusGardenOnMap(garden.getGpsLatitude(), garden.getGpsLongitude());
-            setAddressFromLocation(garden.getGpsLatitude(), garden.getGpsLongitude());
-        }
     }
 
     @Override
@@ -169,14 +137,10 @@ public class ProfileCreationFragment extends BaseGotsFragment implements Locatio
         super.onAttach(activity);
     }
 
-    private void buildProfile() {
-        editTextName = (TextView) getView().findViewById(R.id.editTextGardenName);
-        editTextLocality = (TextView) getView().findViewById(R.id.editTextGardenLocality);
-        buttonLocalize = (ImageView) getView().findViewById(R.id.imageViewLocalize);
-        buttonLocalize.setOnClickListener(this);
+    private void initProfileView() {
+
         getView().findViewById(R.id.buttonValidatePosition).setOnClickListener(this);
 
-        // findViewById(R.id.buttonAddGarden).setOnClickListener(this);
         if (getCurrentGarden() != null)
             ((CheckBox) getView().findViewById(R.id.checkboxSamples)).setChecked(false);
 
@@ -184,10 +148,41 @@ public class ProfileCreationFragment extends BaseGotsFragment implements Locatio
             editTextName.setText(getCurrentGarden().getName());
         }
 
+        if (garden.getGpsLatitude() == 0 || garden.getGpsLongitude() == 0) {
+            String locationProvider = LocationManager.NETWORK_PROVIDER;
+            // Location lastKnownLocation = mlocManager.getLastKnownLocation(locationProvider);
+            List<String> providers = mlocManager.getAllProviders();
+            Location lastKnownLocation = null;
+
+            for (int i = 0; i < providers.size(); i++) {
+
+                lastKnownLocation = mlocManager.getLastKnownLocation(providers.get(i));
+                if (lastKnownLocation != null) {
+                    lastKnownLocation.getTime();
+                    Log.d(TAG, "Provider: " + providers.get(i) + ", time=" + lastKnownLocation.getTime());
+                }
+                /*
+                 * put your code here
+                 * compare loc from providers to get the most
+                 * recent location
+                 */
+            }
+
+            if (lastKnownLocation != null) {
+                setAddressFromLocation(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+            }
+            // else if (mlocManager.isProviderEnabled(locationProvider))
+            // ;
+            // mlocManager.requestLocationUpdates(locationProvider, 60000, 0, this);
+            if ("".equals(garden.getLocality()))
+                editTextLocality.setEnabled(false);
+        } else {
+            setAddressFromLocation(garden.getGpsLatitude(), garden.getGpsLongitude());
+        }
+
     };
 
     private void getPosition(boolean force) {
-        // setProgressRefresh(true);
 
         Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_FINE);
@@ -198,11 +193,10 @@ public class ProfileCreationFragment extends BaseGotsFragment implements Locatio
             mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 60000, 0, this);
             if (force) {
                 String bestProvider = mlocManager.getBestProvider(criteria, true);
-                if ("gpgardenManagers".equals(bestProvider))
-                    mlocManager.requestLocationUpdates(bestProvider, 60000, 0, this);
+                mlocManager.requestLocationUpdates(bestProvider, 60000, 0, this);
             }
         } catch (Exception e) {
-            Log.e(ProfileCreationFragment.class.getName(), e.getMessage());
+            Log.e(TAG, e.getMessage());
         }
 
     }
@@ -221,6 +215,7 @@ public class ProfileCreationFragment extends BaseGotsFragment implements Locatio
                 garden.setCountryName(address.getCountryName());
                 garden.setCountryCode(address.getCountryCode());
                 editTextLocality.setText(garden.getLocality());
+                editTextLocality.setEnabled(true);
             } else {
                 // sinon on affiche un message d'erreur
                 // ((TextView) findViewById(R.id.editTextLocality)).setHint(getResources().getString(
@@ -236,19 +231,8 @@ public class ProfileCreationFragment extends BaseGotsFragment implements Locatio
 
         // this.location = location;
         setAddressFromLocation(location.getLatitude(), location.getLongitude());
-        // setProgressRefresh(false);
         mlocManager.removeUpdates(this);
-        // focusGardenOnMap(location.getLatitude(), location.getLongitude());
     }
-
-    // private void focusGardenOnMap(double latitude, double longitude) {
-    // LatLng gardenPOI = new LatLng(latitude, longitude);
-    // map.clear();
-    // MarkerOptions marker = new MarkerOptions().position(gardenPOI).title(garden.getName());
-    // marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.bt_dashboard_profile));
-    // map.addMarker(marker);
-    // map.moveCamera(CameraUpdateFactory.newLatLngZoom(gardenPOI, 17));
-    // }
 
     @Override
     public void onProviderDisabled(String provider) {
@@ -263,8 +247,6 @@ public class ProfileCreationFragment extends BaseGotsFragment implements Locatio
     @Override
     public void onProviderEnabled(String provider) {
         Log.v(TAG, "Enabled");
-        Toast.makeText(getActivity(), "GPS Enabled", Toast.LENGTH_SHORT).show();
-
     }
 
     @Override
@@ -333,15 +315,13 @@ public class ProfileCreationFragment extends BaseGotsFragment implements Locatio
     private boolean verifyForm() {
         garden.setName(editTextName.getText().toString());
         if (garden.getLocality() == null || "".equals(garden.getLocality())) {
-            Toast.makeText(getActivity(), "Please locate your garden on the map", Toast.LENGTH_LONG).show();
-            getView().findViewById(R.id.map).setBackground(getResources().getDrawable(R.drawable.border_red));
-
+            Toast.makeText(getActivity(), "Please localize your garden", Toast.LENGTH_LONG).show();
+            buttonLocalize.setAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.shrink_from_bottom));
             return false;
         }
         if ("".equals(garden.getName())) {
             Toast.makeText(getActivity(), "Please name your garden", Toast.LENGTH_LONG).show();
-            getView().findViewById(R.id.editTextGardenName).setBackground(
-                    getResources().getDrawable(R.drawable.border_red));
+            editTextName.setBackground(getResources().getDrawable(R.drawable.border_red));
 
             return false;
         }
@@ -365,6 +345,7 @@ public class ProfileCreationFragment extends BaseGotsFragment implements Locatio
                 if (garden.isIncredibleEdible())
                     gardenManager.share(garden, "members", "ReadWrite");
                 gardenManager.setCurrentGarden(garden);
+
                 return garden;
             }
 
@@ -373,11 +354,9 @@ public class ProfileCreationFragment extends BaseGotsFragment implements Locatio
                     Toast.makeText(getActivity(), "Error creating new garden, please verify your connection.",
                             Toast.LENGTH_SHORT).show();
                 else {
-                    // sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
-                    // sendBroadcast(new Intent(BroadCastMessages.GARDEN_CURRENT_CHANGED));
                     // TODO ProfileCreationFragment.this.finish();
+                    mCallback.onProfileCreated(garden);
                 }
-                mCallback.onProfileSelected();
 
             };
         }.execute();
@@ -472,8 +451,8 @@ public class ProfileCreationFragment extends BaseGotsFragment implements Locatio
         return false;
     }
 
-    public void setCurrentGarden(GardenInterface currentGarden) {
-        // TODO Auto-generated method stub
-
+    public void updateGarden(GardenInterface garden) {
+        this.garden = garden;
+        initProfileView();
     }
 }

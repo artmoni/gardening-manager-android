@@ -24,6 +24,7 @@ import org.gots.provider.AllotmentContentProvider;
 import org.gots.provider.GardenContentProvider;
 import org.gots.provider.SeedsContentProvider;
 import org.gots.provider.WeatherContentProvider;
+import org.gots.ui.BaseGotsActivity.GardenListener;
 import org.gots.ui.fragment.ActionsResumeFragment;
 import org.gots.ui.fragment.CatalogResumeFragment;
 import org.gots.ui.fragment.IncredibleResumeFragment;
@@ -44,6 +45,7 @@ import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -68,7 +70,7 @@ import android.widget.Toast;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 
-public class MainActivity extends BaseGotsActivity {
+public class MainActivity extends BaseGotsActivity implements GardenListener {
     private DrawerLayout mDrawerLayout;
 
     private ListView mDrawerList;
@@ -158,10 +160,8 @@ public class MainActivity extends BaseGotsActivity {
             public void onItemSelected(AdapterView<?> arg0, View arg1, int itemPosition, long arg3) {
                 if (myGardens == null || myGardens.size() < itemPosition)
                     return;
-
-                if (spinnerGarden.getSelectedItemPosition() != itemPosition)
+                if (getCurrentGarden() != null && getCurrentGarden().getId() != myGardens.get(itemPosition).getId())
                     gardenManager.setCurrentGarden(myGardens.get(itemPosition));
-                // sendBroadcast(new Intent(BroadCastMessages.GARDEN_CURRENT_CHANGED));
 
                 // startService(weatherIntent);
                 Bundle bundle = new Bundle();
@@ -180,7 +180,6 @@ public class MainActivity extends BaseGotsActivity {
 
         // registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
         registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
-        registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
         registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.SEED_DISPLAYLIST));
         registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_EVENT));
         registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.ACTION_EVENT));
@@ -442,9 +441,6 @@ public class MainActivity extends BaseGotsActivity {
      */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        // if nav drawer is opened, hide the action items
-        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerLinear);
-        // menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
 
         MenuItem itemConnected = (MenuItem) menu.findItem(R.id.connection);
         if (gotsPrefs.isConnectedToServer() && !nuxeoManager.getNuxeoClient().isOffline())
@@ -706,8 +702,15 @@ public class MainActivity extends BaseGotsActivity {
             if (user != null && user.getId() != null) {
                 File file = new File(getApplicationContext().getCacheDir() + "/"
                         + user.getId().toLowerCase().replaceAll("\\s", ""));
-                Bitmap usrLogo = BitmapFactory.decodeFile(file.getAbsolutePath());
-                imageProfile.setImageBitmap(usrLogo);
+                try {
+                    Drawable d = Drawable.createFromStream(getAssets().open(file.getAbsolutePath()), null);
+                    // Bitmap usrLogo = BitmapFactory.decodeFile(file.getAbsolutePath());
+                    // imageProfile.setImageBitmap(usrLogo);
+                    imageProfile.setImageDrawable(d);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
         };
     }
@@ -721,11 +724,6 @@ public class MainActivity extends BaseGotsActivity {
                 refreshGardenMenu();
                 invalidateOptionsMenu();
                 // refreshWeatherWidget(intent);
-            } else if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
-                displayDrawerMenu();
-                displayOwnerIcon();
-                refreshGardenMenu();
-
             } else if (BroadCastMessages.SEED_DISPLAYLIST.equals(intent.getAction())) {
                 displayDrawerMenuCatalogCounter();
             } else if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
@@ -773,5 +771,12 @@ public class MainActivity extends BaseGotsActivity {
             transactionTutorial.replace(R.id.idFragmentTutorial, tutorialResumeFragment).commit();
         }
         super.onResume();
+    }
+
+    @Override
+    public void onCurrentGardenChanged(GardenInterface garden) {
+        displayDrawerMenu();
+        displayOwnerIcon();
+        refreshGardenMenu();
     }
 }

@@ -21,7 +21,7 @@ public class IncredibleResumeFragment extends BaseGotsFragment {
 
     @Override
     protected void onCurrentGardenChanged() {
-        displayIncredibleInformation();
+//        displayIncredibleInformation();
     }
 
     @Override

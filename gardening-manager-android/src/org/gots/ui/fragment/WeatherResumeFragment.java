@@ -33,6 +33,8 @@ public class WeatherResumeFragment extends BaseGotsFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        weatherWidgetLayout = (LinearLayout) view.findViewById(R.id.WeatherWidget);
+        descriptionWeather = (TextView) view.findViewById(R.id.textViewWeatherDescription);
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -59,9 +61,6 @@ public class WeatherResumeFragment extends BaseGotsFragment {
 
     @Override
     protected void onNuxeoDataRetrievalStarted() {
-        weatherWidgetLayout = (LinearLayout) getView().findViewById(R.id.WeatherWidget);
-        weatherWidgetLayout.removeAllViews();
-        descriptionWeather = (TextView) getView().findViewById(R.id.textViewWeatherDescription);
         super.onNuxeoDataRetrievalStarted();
     }
 
@@ -70,6 +69,7 @@ public class WeatherResumeFragment extends BaseGotsFragment {
         descriptionWeather.setText(currentGarden.getLocality());
         WeatherWidget weatherWidget = new WeatherWidget(getActivity(), WeatherView.FULL,
                 (List<WeatherConditionInterface>) data);
+        weatherWidgetLayout.removeAllViews();
         weatherWidgetLayout.addView(weatherWidget);
         super.onNuxeoDataRetrieved(data);
     }

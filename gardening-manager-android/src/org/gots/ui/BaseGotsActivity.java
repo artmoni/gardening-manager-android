@@ -102,18 +102,18 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
 
     private GotsGrowingSeedManager gotsGrowingSeedManager;
 
+    public interface GardenListener {
+        public void onCurrentGardenChanged(GardenInterface garden);
+    }
+
     private BroadcastReceiver gardenBroadcastReceiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
             if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
-                try {
-                    currentGarden = gardenManager.getCurrentGarden();
-                } catch (GardenNotFoundException e) {
-                    Toast.makeText(getApplicationContext(), "A problem occure during garden selection",
-                            Toast.LENGTH_LONG).show();
-                }
-
+                getCurrentGarden();
+                if (context instanceof GardenListener)
+                    ((GardenListener) context).onCurrentGardenChanged(getCurrentGarden());
             }
         }
     };
@@ -137,8 +137,9 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
                 addresses = geoCoder.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
                 currentGarden = new DefaultGarden(addresses.get(0));
                 gardenManager.setCurrentGarden(currentGarden);
-            } catch (IOException e1) {
+            } catch (Exception e1) {
                 currentGarden = new DefaultGarden(new Address(Locale.getDefault()));
+                gardenManager.setCurrentGarden(currentGarden);
                 e1.printStackTrace();
             }
         }
@@ -214,7 +215,6 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
 
     @Override
     protected void onResume() {
-
         super.onResume();
     }
 
@@ -246,6 +246,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         unregisterReceiver(seedManager);
         unregisterReceiver(progressReceiver);
         unregisterReceiver(gotsGrowingSeedManager);
+        unregisterReceiver(gardenBroadcastReceiver);
         if (activities.size() == 0) {
             nuxeoManager.shutdown();
             gardenManager.finalize();
