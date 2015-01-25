@@ -18,7 +18,7 @@ public class GotsPurchaseItem {
 
     private static final String TAG = "GotsPurchaseItem";
 
-    private static final boolean AMAZON_PREMIUM = false;
+    private static final boolean FORCE_PREMIUM = false;
 
     public static String SKU_TEST_PURCHASE = "android.test.purchased";
 
@@ -58,7 +58,7 @@ public class GotsPurchaseItem {
     }
 
     public boolean isPremium() {
-        return prefs.getBoolean(SKU_PREMIUM, false) ? true : unlockPremium();
+        return prefs.getBoolean(SKU_PREMIUM, false) ? true : FORCE_PREMIUM;
     }
 
     private boolean unlockPremium() {
@@ -80,7 +80,7 @@ public class GotsPurchaseItem {
         }
 
         // AMAZON Publication
-        if (AMAZON_PREMIUM)
+        if (FORCE_PREMIUM)
             unlocked = true;
         return unlocked;
 

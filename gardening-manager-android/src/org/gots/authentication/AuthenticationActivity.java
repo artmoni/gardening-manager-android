@@ -58,7 +58,7 @@ public class AuthenticationActivity extends BaseGotsActivity {
 
     public static final String ARG_AUTH_TYPE = "type.auth";
 
-    public static final String ARG_IS_ADDING_NEW_ACCOUNT = "new";
+    public static final String ARG_ADD_ACCOUNT = "new";
 
     public static final String AUTH_TOKEN_TYPE = "token.nuxeo";
 
@@ -220,7 +220,7 @@ public class AuthenticationActivity extends BaseGotsActivity {
         String accountPassword = intent.getStringExtra(PARAM_USER_PASS);
         // final Account account = new Account(accountName, intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
 
-        if (getIntent().getBooleanExtra(ARG_IS_ADDING_NEW_ACCOUNT, false)) {
+        if (getIntent().getBooleanExtra(ARG_ADD_ACCOUNT, false)) {
             gotsPrefs.setNuxeoLogin(accountName);
             final Account account = gotsPrefs.getUserAccount();
             String authtoken = intent.getStringExtra(AccountManager.KEY_AUTHTOKEN);

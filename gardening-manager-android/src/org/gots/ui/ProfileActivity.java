@@ -107,11 +107,12 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
         this.allGardens = (List<GardenInterface>) myGardens;
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        if (currentGarden == null) {
-            Fragment fragment = new ProfileCreationFragment();
-            FragmentTransaction transactionCatalogue = fragmentManager.beginTransaction();
-            transactionCatalogue.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
-            transactionCatalogue.replace(R.id.IdGardenProfileList, fragment).commit();
+        if (currentGarden.getGpsLatitude() == 0 || currentGarden.getGpsLongitude() == 0) {
+            // Fragment fragment = new ProfileCreationFragment();
+            // FragmentTransaction transactionCatalogue = fragmentManager.beginTransaction();
+            // transactionCatalogue.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
+            // transactionCatalogue.replace(R.id.IdGardenProfileList, fragment).commit();
+            Toast.makeText(getApplicationContext(), "Long press to localize your garden", Toast.LENGTH_LONG).show();
         } else {
             // ProfileCreationFragment creationFragment = (ProfileCreationFragment)
             // getSupportFragmentManager().findFragmentById(

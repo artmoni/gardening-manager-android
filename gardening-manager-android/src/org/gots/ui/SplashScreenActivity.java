@@ -41,10 +41,16 @@ public class SplashScreenActivity extends BaseGotsActivity {
 
     private ImageView imageRefresh;
 
+    private TextView versionTextView;
+
+    private String version;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
+        versionTextView = (TextView) findViewById(R.id.textVersion);
+        imageRefresh = (ImageView) findViewById(R.id.imageRefresh);
 
     }
 
@@ -52,26 +58,14 @@ public class SplashScreenActivity extends BaseGotsActivity {
     protected void onActivityResult(int arg0, int arg1, Intent arg2) {
         if (arg1 == 1)
             onRefresh(null);
-        if (arg1 == 2)
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        // if (arg1 == 2)
+        // startActivity(new Intent(getApplicationContext(), MainActivity.class));
         super.onActivityResult(arg0, arg1, arg2);
     }
 
     @Override
     protected void onResume() {
-        AccountManager accountManager = AccountManager.get(this);
-        Account[] accounts = accountManager.getAccountsByType("gardening-manager");
-        if (accounts.length == 0) {
-            Intent intent = new Intent(this, AuthenticationActivity.class);
-            intent.putExtra(AuthenticationActivity.ARG_ACCOUNT_TYPE, "gardening-manager");
-            intent.putExtra(AuthenticationActivity.ARG_IS_ADDING_NEW_ACCOUNT, true);
-            startActivityForResult(intent, 1);
-            // finish();
-        } else {
-            if (!gotsPurchase.isPremium())
-                checkPurchaseFeature();
-            displayVersionName();
-        }
+
         super.onResume();
     }
 
@@ -123,55 +117,45 @@ public class SplashScreenActivity extends BaseGotsActivity {
 
     }
 
-    private void displayVersionName() {
-        new AsyncTask<Void, Integer, String>() {
-            private TextView name;
-
-            @Override
-            protected void onPreExecute() {
-                name = (TextView) findViewById(R.id.textVersion);
-                super.onPreExecute();
-            }
-
-            @Override
-            protected String doInBackground(Void... params) {
-                PackageInfo pInfo;
-                String version = "";
-                try {
-                    pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-                    version = pInfo.versionName;
-
-                } catch (NameNotFoundException e) {
-                    e.printStackTrace();
-                }
-
-                return version;
-            }
-
-            protected void onPostExecute(String version) {
-                name.setText("Version " + version);
-            };
-        }.execute();
+    private String getVersionName() {
+        PackageInfo pInfo;
+        String version = "";
+        try {
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            version = pInfo.versionName;
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return version;
     }
 
     @Override
     protected boolean requireAsyncDataRetrieval() {
-        AccountManager accountManager = AccountManager.get(this);
-        Account[] accounts = accountManager.getAccountsByType("gardening-manager");
-        return accounts.length != 0;
+        // AccountManager accountManager = AccountManager.get(this);
+        // Account[] accounts = accountManager.getAccountsByType("gardening-manager");
+        return true;
     }
 
     @Override
     protected void onNuxeoDataRetrievalStarted() {
         super.onNuxeoDataRetrievalStarted();
-        Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
-        myFadeInAnimation.setRepeatCount(Animation.INFINITE);
-        imageRefresh = (ImageView) findViewById(R.id.imageRefresh);
-        imageRefresh.startAnimation(myFadeInAnimation);
+        Animation myRotateAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
+        myRotateAnimation.setRepeatCount(Animation.INFINITE);
+        imageRefresh.startAnimation(myRotateAnimation);
     }
 
     @Override
     protected Object retrieveNuxeoData() throws Exception {
+        AccountManager accountManager = AccountManager.get(this);
+        Account[] accounts = accountManager.getAccountsByType("gardening-manager");
+        if (accounts.length == 0) {
+            return null;
+        } else {
+            if (!gotsPurchase.isPremium())
+                checkPurchaseFeature();
+        }
+
+        version = getVersionName();
         return gardenManager.getMyGardens(true);
     }
 
@@ -179,10 +163,20 @@ public class SplashScreenActivity extends BaseGotsActivity {
     protected void onNuxeoDataRetrieved(Object data) {
         super.onNuxeoDataRetrieved(data);
         imageRefresh.clearAnimation();
+        versionTextView.setText("Version " + version);
+
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
+    }
 
+    @Override
+    protected void onNuxeoDataRetrieveFailed() {
+        Intent intent = new Intent(this, AuthenticationActivity.class);
+        intent.putExtra(AuthenticationActivity.ARG_ACCOUNT_TYPE, "gardening-manager");
+        intent.putExtra(AuthenticationActivity.ARG_ADD_ACCOUNT, true);
+        startActivityForResult(intent, 1);
+        super.onNuxeoDataRetrieveFailed();
     }
 }

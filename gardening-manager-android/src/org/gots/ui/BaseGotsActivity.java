@@ -111,9 +111,13 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         @Override
         public void onReceive(Context context, Intent intent) {
             if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
-                getCurrentGarden();
-                if (context instanceof GardenListener)
-                    ((GardenListener) context).onCurrentGardenChanged(getCurrentGarden());
+                try {
+                    currentGarden = gardenManager.getCurrentGarden();
+                    if (context instanceof GardenListener)
+                        ((GardenListener) context).onCurrentGardenChanged(currentGarden);
+                } catch (GardenNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         }
     };
@@ -123,26 +127,29 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
     }
 
     protected GardenInterface getCurrentGarden() {
-        try {
-            currentGarden = gardenManager.getCurrentGarden();
-        } catch (GardenNotFoundException e) {
-            LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            Criteria criteria = new Criteria();
-            criteria.setAccuracy(Criteria.ACCURACY_LOW);
-            String bestprovider = manager.getBestProvider(criteria, true);
-            Location loc = manager.getLastKnownLocation(bestprovider);
-            Geocoder geoCoder = new Geocoder(getApplicationContext(), Locale.getDefault());
-            List<Address> addresses;
+        if (currentGarden == null)
             try {
-                addresses = geoCoder.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
-                currentGarden = new DefaultGarden(addresses.get(0));
-                gardenManager.setCurrentGarden(currentGarden);
-            } catch (Exception e1) {
-                currentGarden = new DefaultGarden(new Address(Locale.getDefault()));
-                gardenManager.setCurrentGarden(currentGarden);
-                e1.printStackTrace();
+                currentGarden = gardenManager.getCurrentGarden();
+            } catch (GardenNotFoundException e) {
+                LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                Criteria criteria = new Criteria();
+                criteria.setAccuracy(Criteria.ACCURACY_LOW);
+                String bestprovider = manager.getBestProvider(criteria, true);
+                Location loc = manager.getLastKnownLocation(bestprovider);
+                Geocoder geoCoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+                List<Address> addresses;
+                try {
+                    addresses = geoCoder.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
+                    currentGarden = new DefaultGarden(addresses.get(0));
+                    gardenManager.addGarden(currentGarden);
+                    gardenManager.setCurrentGarden(currentGarden);
+                } catch (Exception e1) {
+                    currentGarden = new DefaultGarden(new Address(Locale.getDefault()));
+                    gardenManager.addGarden(currentGarden);
+                    gardenManager.setCurrentGarden(currentGarden);
+                    e1.printStackTrace();
+                }
             }
-        }
         return currentGarden;
     }
 
@@ -280,6 +287,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
     }
 
     protected void setProgressRefresh(boolean refresh) {
+
         if (menu == null)
             return;
         MenuItem itemRefresh = menu.findItem(R.id.refresh_seed);

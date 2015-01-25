@@ -109,7 +109,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboard_drawer);
         // AppRater.app_launched(getApplicationContext());
-
+        currentGarden = getCurrentGarden();
         mTitle = mDrawerTitle = getTitle();
 
         // load slide menu items
@@ -133,8 +133,8 @@ public class MainActivity extends BaseGotsActivity implements GardenListener {
                                   // accessibility
         ) {
             public void onDrawerClosed(View view) {
-                if (getCurrentGarden() != null)
-                    getSupportActionBar().setTitle(getCurrentGarden().getName());
+                if (currentGarden != null)
+                    getSupportActionBar().setTitle(currentGarden.getName());
                 else
                     getSupportActionBar().setTitle(getResources().getString(R.string.garden_create));
                 // calling onPrepareOptionsMenu() to show action bar icons
@@ -160,7 +160,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener {
             public void onItemSelected(AdapterView<?> arg0, View arg1, int itemPosition, long arg3) {
                 if (myGardens == null || myGardens.size() < itemPosition)
                     return;
-                if (getCurrentGarden() != null && getCurrentGarden().getId() != myGardens.get(itemPosition).getId())
+                if (currentGarden!= null && currentGarden.getId() != myGardens.get(itemPosition).getId())
                     gardenManager.setCurrentGarden(myGardens.get(itemPosition));
 
                 // startService(weatherIntent);
@@ -206,6 +206,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener {
             LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
             layout.addView(ads.getAdsLayout());
         }
+
     }
 
     protected void displayDrawerMenu() {
@@ -484,12 +485,12 @@ public class MainActivity extends BaseGotsActivity implements GardenListener {
     }
 
     protected void displayOwnerIcon() {
-        if (getCurrentGarden() == null) {
+        if (currentGarden == null) {
             return;
         }
 
         if (gotsPrefs.isConnectedToServer()) {
-            if (getCurrentGarden().isIncredibleEdible())
+            if (currentGarden.isIncredibleEdible())
                 ((ImageView) findViewById(R.id.imageAvatar)).setImageDrawable(getResources().getDrawable(
                         R.drawable.ic_incredibleedible));
             else {
@@ -608,7 +609,6 @@ public class MainActivity extends BaseGotsActivity implements GardenListener {
             @Override
             protected GardenInterface doInBackground(Void... params) {
                 myGardens = gardenManager.getMyGardens(false);
-                GardenInterface currentGarden = getCurrentGarden();
 
                 if (currentGarden == null)
                     myGardens = gardenManager.getMyGardens(true);
@@ -740,6 +740,8 @@ public class MainActivity extends BaseGotsActivity implements GardenListener {
 
     private boolean doubleBackToExitPressedOnce;
 
+    private GardenInterface currentGarden;
+
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
@@ -762,19 +764,23 @@ public class MainActivity extends BaseGotsActivity implements GardenListener {
     @Override
     protected void onResume() {
 
-        if (getCurrentGarden() instanceof DefaultGarden) {
+        if (currentGarden != null
+                && (currentGarden.getGpsLatitude() == 0 || currentGarden.getGpsLongitude() == 0)) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             Fragment tutorialResumeFragment = new TutorialResumeFragment();
             FragmentTransaction transactionTutorial = fragmentManager.beginTransaction();
             // transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
             transactionTutorial.replace(R.id.idFragmentTutorial, tutorialResumeFragment).commit();
-        }
+        } else if (currentGarden != null && currentGarden.isIncredibleEdible() == false)
+            findViewById(R.id.idFragmentIncredible).setVisibility(View.GONE);
+
         super.onResume();
     }
 
     @Override
     public void onCurrentGardenChanged(GardenInterface garden) {
+        currentGarden = garden;
         displayDrawerMenu();
         displayOwnerIcon();
         refreshGardenMenu();

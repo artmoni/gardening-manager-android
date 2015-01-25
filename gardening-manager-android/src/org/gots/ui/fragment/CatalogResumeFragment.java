@@ -90,6 +90,8 @@ public class CatalogResumeFragment extends BaseGotsFragment implements OnItemCli
     @Override
     protected Object retrieveNuxeoData() throws Exception {
         List<BaseSeedInterface> seeds = gotsSeedManager.getSeedBySowingMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
+        if (seeds.size()==0)
+            seeds = gotsSeedManager.getVendorSeeds(true, 1, 5);
         return seeds;
     }
 

@@ -33,7 +33,7 @@ public class GotsAccountAuthenticator extends AbstractAccountAuthenticator {
         intent.putExtra(AuthenticationActivity.ARG_ACCOUNT_TYPE, accountType);
         intent.putExtra(AuthenticationActivity.ARG_AUTH_TYPE, authTokenType);
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
-        intent.putExtra(AuthenticationActivity.ARG_IS_ADDING_NEW_ACCOUNT, true);
+        intent.putExtra(AuthenticationActivity.ARG_ADD_ACCOUNT, true);
         final Bundle bundle = new Bundle();
         bundle.putParcelable(AccountManager.KEY_INTENT, intent);
         return bundle;
