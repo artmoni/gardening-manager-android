@@ -45,6 +45,7 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -97,11 +98,11 @@
 
     <ImageView
         android:id="@+id/imageStateValidation"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_alignParentTop="true"
-        android:layout_margin="2dp"
-        android:layout_toRightOf="@+id/IdSeedLanguage"
-        android:src="@drawable/workflow_validation" />
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/linearLayout1"
+        android:layout_marginRight="-8dp"
+        android:src="@drawable/workflow_validation_green" />
 
 </RelativeLayout>
