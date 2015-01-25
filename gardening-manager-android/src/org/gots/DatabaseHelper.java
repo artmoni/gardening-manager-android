@@ -23,7 +23,7 @@ import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     // ************************ DATABASE **************
-    private static final int DATABASE_VERSION = 21;
+    private static final int DATABASE_VERSION = 22;
 
     private static String DATABASE_NAME = "gots";
 
@@ -120,6 +120,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String SEED_LIKE_STATUS = "likestatus";
 
+    public static final String SEED_STATE = "state";
+
     //@formatter:off
 
 	public static final String CREATE_TABLE_SEEDS = "CREATE TABLE " + SEEDS_TABLE_NAME 
@@ -145,7 +147,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ SEED_LANGUAGE + " STRING,"
 			+ SEED_NBSACHET + " INTEGER,"
 			+ SEED_LIKE_COUNT + " INTEGER,"
-			+ SEED_LIKE_STATUS + " INTEGER"
+			+ SEED_LIKE_STATUS + " INTEGER,"
+			+ SEED_STATE + " VARCHAR(255)"
 			+ ");";
 	//@formatter:on
 
@@ -512,6 +515,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (oldVersion < 21) {
             db.execSQL("ALTER TABLE " + GROWINGSEEDS_TABLE_NAME + " ADD COLUMN " + GROWINGSEED_DATEHARVEST
                     + " INTEGER;");
+
+        }
+        if (oldVersion < 22) {
+            db.execSQL("ALTER TABLE " + SEEDS_TABLE_NAME + " ADD COLUMN " + SEED_STATE + " STRING;");
 
         } else {
             db.execSQL("DROP TABLE IF EXISTS " + SEEDS_TABLE_NAME);

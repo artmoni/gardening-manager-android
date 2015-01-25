@@ -262,6 +262,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
         values.put(DatabaseHelper.SEED_URLDESCRIPTION, seed.getUrlDescription());
         values.put(DatabaseHelper.SEED_NBSACHET, seed.getNbSachet());
         values.put(DatabaseHelper.SEED_LANGUAGE, seed.getLanguage());
+        values.put(DatabaseHelper.SEED_STATE, seed.getState());
 
         if (seed.getLikeStatus() != null) {
             values.put(DatabaseHelper.SEED_LIKE_COUNT, seed.getLikeStatus().getLikesCount());
@@ -295,6 +296,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
         bsi.setUrlDescription(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_URLDESCRIPTION)));
         bsi.setNbSachet(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.SEED_NBSACHET)));
         bsi.setLanguage(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_LANGUAGE)));
+        bsi.setState(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_STATE)));
 
         LikeStatus like = new LikeStatus();
         like.setLikesCount(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.SEED_LIKE_COUNT)));
