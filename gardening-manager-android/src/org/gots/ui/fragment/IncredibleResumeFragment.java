@@ -20,20 +20,9 @@ public class IncredibleResumeFragment extends BaseGotsFragment {
     }
 
     @Override
-    protected void onCurrentGardenChanged() {
-//        displayIncredibleInformation();
-    }
-
-    @Override
-    protected void onWeatherChanged() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    protected void onActionChanged() {
-        // TODO Auto-generated method stub
-
+    public void update() {
+        runAsyncDataRetrieval();
+        
     }
 
     @Override

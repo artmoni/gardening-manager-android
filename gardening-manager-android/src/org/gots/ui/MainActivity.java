@@ -160,7 +160,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener {
             public void onItemSelected(AdapterView<?> arg0, View arg1, int itemPosition, long arg3) {
                 if (myGardens == null || myGardens.size() < itemPosition)
                     return;
-                if (currentGarden!= null && currentGarden.getId() != myGardens.get(itemPosition).getId())
+                if (currentGarden != null && currentGarden.getId() != myGardens.get(itemPosition).getId())
                     gardenManager.setCurrentGarden(myGardens.get(itemPosition));
 
                 // startService(weatherIntent);
@@ -764,18 +764,18 @@ public class MainActivity extends BaseGotsActivity implements GardenListener {
     @Override
     protected void onResume() {
 
-        if (currentGarden != null
-                && (currentGarden.getGpsLatitude() == 0 || currentGarden.getGpsLongitude() == 0)) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            Fragment tutorialResumeFragment = new TutorialResumeFragment();
-            FragmentTransaction transactionTutorial = fragmentManager.beginTransaction();
-            // transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
-            transactionTutorial.replace(R.id.idFragmentTutorial, tutorialResumeFragment).commit();
-        } else if (currentGarden != null && currentGarden.isIncredibleEdible() == false)
-            findViewById(R.id.idFragmentIncredible).setVisibility(View.GONE);
-
+        displayTutorialFragment();
+        displayIncredibleFragment();
+        displayWeatherFragment();
         super.onResume();
+    }
+
+    protected void displayWeatherFragment() {
+        if (getSupportFragmentManager().findFragmentById(R.id.idFragmentWeather) != null) {
+            WeatherResumeFragment fragment = (WeatherResumeFragment) getSupportFragmentManager().findFragmentById(
+                    R.id.idFragmentWeather);
+            fragment.update();
+        }
     }
 
     @Override
@@ -784,5 +784,31 @@ public class MainActivity extends BaseGotsActivity implements GardenListener {
         displayDrawerMenu();
         displayOwnerIcon();
         refreshGardenMenu();
+        displayTutorialFragment();
+        displayIncredibleFragment();
+        displayWeatherFragment();
+
+    }
+
+    private void displayTutorialFragment() {
+        if (findViewById(R.id.idFragmentTutorial) != null) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            Fragment tutorialResumeFragment = new TutorialResumeFragment();
+            FragmentTransaction transactionTutorial = fragmentManager.beginTransaction();
+            // transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
+            transactionTutorial.replace(R.id.idFragmentTutorial, tutorialResumeFragment).commit();
+        } else
+            findViewById(R.id.idFragmentTutorial).setVisibility(View.GONE);
+    }
+
+    private void displayIncredibleFragment() {
+        if (currentGarden == null)
+            return;
+
+        if (currentGarden.isIncredibleEdible() == false)
+            findViewById(R.id.idFragmentIncredible).setVisibility(View.GONE);
+        else
+            findViewById(R.id.idFragmentIncredible).setVisibility(View.VISIBLE);
     }
 }

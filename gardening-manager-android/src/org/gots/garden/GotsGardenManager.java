@@ -140,6 +140,8 @@ public class GotsGardenManager extends BroadcastReceiver {
     public void updateCurrentGarden(GardenInterface garden) {
         gardenProvider.updateGarden(garden);
         myGardens.put(garden.getId(), garden);
+        if (currentGarden.getId() == garden.getId())
+            currentGarden = garden;
         mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
     }
 

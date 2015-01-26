@@ -101,22 +101,11 @@ public class ProfileMapFragment extends BaseGotsFragment implements OnMapLongCli
         super.onViewCreated(view, savedInstanceState);
     }
 
-    @Override
-    protected void onCurrentGardenChanged() {
-        focusGardenOnMap(getCurrentGarden());
-    }
-
-    @Override
-    protected void onWeatherChanged() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    protected void onActionChanged() {
-        // TODO Auto-generated method stub
-
-    }
+  @Override
+public void update() {
+    // TODO Auto-generated method stub
+    
+}
 
     @Override
     protected boolean requireAsyncDataRetrieval() {

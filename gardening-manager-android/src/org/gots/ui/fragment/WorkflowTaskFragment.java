@@ -97,20 +97,7 @@ public class WorkflowTaskFragment extends BaseGotsFragment implements OnClickLis
     }
 
     @Override
-    protected void onCurrentGardenChanged() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    protected void onWeatherChanged() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    protected void onActionChanged() {
-        // TODO Auto-generated method stub
+    public void update() {
 
     }
 

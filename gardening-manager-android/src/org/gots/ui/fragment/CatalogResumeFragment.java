@@ -34,20 +34,25 @@ public class CatalogResumeFragment extends BaseGotsFragment implements OnItemCli
         return inflater.inflate(R.layout.catalog_resume, null);
     }
 
+    // @Override
+    // protected void onCurrentGardenChanged() {
+    // // TODO Auto-generated method stub
+    //
+    // }
+    //
+    // @Override
+    // protected void onWeatherChanged() {
+    // // TODO Auto-generated method stub
+    //
+    // }
+    //
+    // @Override
+    // protected void onActionChanged() {
+    // // TODO Auto-generated method stub
+    //
+    // }
     @Override
-    protected void onCurrentGardenChanged() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    protected void onWeatherChanged() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    protected void onActionChanged() {
+    public void update() {
         // TODO Auto-generated method stub
 
     }
@@ -90,7 +95,7 @@ public class CatalogResumeFragment extends BaseGotsFragment implements OnItemCli
     @Override
     protected Object retrieveNuxeoData() throws Exception {
         List<BaseSeedInterface> seeds = gotsSeedManager.getSeedBySowingMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
-        if (seeds.size()==0)
+        if (seeds.size() == 0)
             seeds = gotsSeedManager.getVendorSeeds(true, 1, 5);
         return seeds;
     }

@@ -26,8 +26,12 @@ public class WeatherResumeFragment extends BaseGotsFragment {
 
     private GardenInterface currentGarden;
 
+    private WeatherManager weatherManager;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        weatherManager = new WeatherManager(getActivity());
+
         return inflater.inflate(R.layout.weather_resume, null);
     }
 
@@ -39,19 +43,8 @@ public class WeatherResumeFragment extends BaseGotsFragment {
     }
 
     @Override
-    protected void onCurrentGardenChanged() {
+    public void update() {
         runAsyncDataRetrieval();
-    }
-
-    @Override
-    protected void onWeatherChanged() {
-        runAsyncDataRetrieval();
-    }
-
-    @Override
-    protected void onActionChanged() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -77,8 +70,7 @@ public class WeatherResumeFragment extends BaseGotsFragment {
     @Override
     protected Object retrieveNuxeoData() throws Exception {
         currentGarden = getCurrentGarden();
-        WeatherManager wm = new WeatherManager(getActivity());
-        List<WeatherConditionInterface> conditions = (List<WeatherConditionInterface>) wm.getConditionSet(2);
+        List<WeatherConditionInterface> conditions = (List<WeatherConditionInterface>) weatherManager.getConditionSet(2);
         return conditions;
     }
 

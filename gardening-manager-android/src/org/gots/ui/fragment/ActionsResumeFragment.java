@@ -33,20 +33,24 @@ public class ActionsResumeFragment extends BaseGotsFragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    @Override
-    protected void onCurrentGardenChanged() {
-        runAsyncDataRetrieval();
-    }
-
-    @Override
-    protected void onWeatherChanged() {
-    }
-
-    @Override
-    protected void onActionChanged() {
-        runAsyncDataRetrieval();
-    }
-
+//    @Override
+//    protected void onCurrentGardenChanged() {
+//        runAsyncDataRetrieval();
+//    }
+//
+//    @Override
+//    protected void onWeatherChanged() {
+//    }
+//
+//    @Override
+//    protected void onActionChanged() {
+//        runAsyncDataRetrieval();
+//    }
+@Override
+public void update() {
+    runAsyncDataRetrieval();
+    
+}
     @Override
     protected void onNuxeoDataRetrievalStarted() {
         listViewActions = (ListView) getView().findViewById(R.id.listActions);

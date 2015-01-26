@@ -162,7 +162,7 @@ public class SplashScreenActivity extends BaseGotsActivity {
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
         super.onNuxeoDataRetrieved(data);
-        imageRefresh.clearAnimation();
+
         versionTextView.setText("Version " + version);
 
         Intent intent = new Intent(this, MainActivity.class);
@@ -178,5 +178,11 @@ public class SplashScreenActivity extends BaseGotsActivity {
         intent.putExtra(AuthenticationActivity.ARG_ADD_ACCOUNT, true);
         startActivityForResult(intent, 1);
         super.onNuxeoDataRetrieveFailed();
+    }
+
+    @Override
+    protected void onPause() {
+        imageRefresh.clearAnimation();
+        super.onPause();
     }
 }

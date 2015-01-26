@@ -68,22 +68,11 @@ public class ProfileListFragment extends BaseGotsFragment implements OnItemClick
         super.onNuxeoDataRetrieved(data);
     }
 
-    @Override
-    protected void onCurrentGardenChanged() {
-        runAsyncDataRetrieval();
-    }
-
-    @Override
-    protected void onWeatherChanged() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    protected void onActionChanged() {
-        // TODO Auto-generated method stub
-
-    }
+@Override
+public void update() {
+    // TODO Auto-generated method stub
+    
+}
 
     @Override
     protected boolean requireAsyncDataRetrieval() {

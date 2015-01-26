@@ -204,7 +204,7 @@ public class TabSeedActivity extends BaseGotsActivity {
         // // ********************** Tab description **********************
         mTabsAdapter.addTab(
                 bar.newTab().setTag("event_list").setText(getString(R.string.seed_description_tabmenu_detail)),
-                SeedActivity.class, null);
+                SeedDescriptionFragment.class, null);
 
         // ********************** Tab Wikipedia**********************
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

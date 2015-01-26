@@ -59,20 +59,8 @@ public class WorkflowResumeFragment extends BaseGotsFragment implements OnItemCl
     }
 
     @Override
-    protected void onCurrentGardenChanged() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    protected void onWeatherChanged() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    protected void onActionChanged() {
-        // TODO Auto-generated method stub
+    public void update() {
+        runAsyncDataRetrieval();
 
     }
 

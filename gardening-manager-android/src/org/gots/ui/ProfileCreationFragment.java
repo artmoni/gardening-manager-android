@@ -428,19 +428,7 @@ public class ProfileCreationFragment extends BaseGotsFragment implements Locatio
     }
 
     @Override
-    protected void onCurrentGardenChanged() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    protected void onWeatherChanged() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    protected void onActionChanged() {
+    public void update() {
         // TODO Auto-generated method stub
 
     }

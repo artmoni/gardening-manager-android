@@ -14,6 +14,7 @@ import org.gots.R;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.provider.GotsSeedProvider;
+import org.gots.ui.fragment.BaseGotsFragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,16 +25,32 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class SeedActivity extends Fragment {
+public class SeedDescriptionFragment extends BaseGotsFragment {
     public static final String GOTS_SEED_ID = "org.gots.seed.id";
 
     private int seedId;
 
-    protected BaseSeedInterface mSeed;
+    // protected BaseSeedInterface mSeed;
 
     protected int resultCameraActivity = 1;
 
     private GotsSeedProvider seedManager;
+
+    private TextView seedDescriptionEnvironnement;
+
+    private TextView seedDescriptionTitle;
+
+    private TextView seedDescriptionCulture;
+
+    private TextView seedDescriptionCultureTitle;
+
+    private TextView seedDescriptionEnnemi;
+
+    private TextView seedDescriptionEnnemiTitle;
+
+    private TextView seedDescriptionCultureHarvest;
+
+    private TextView seedDescriptionHarvest;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,12 +70,38 @@ public class SeedActivity extends Fragment {
             return v;
         }
 
-        mSeed = seedManager.getSeedById(seedId);
+        seedDescriptionEnvironnement = (TextView) v.findViewById(R.id.IdSeedDescriptionEnvironment);
+        seedDescriptionTitle = (TextView) v.findViewById(R.id.IdSeedDescriptionEnvironmentTitle);
+        seedDescriptionCulture = (TextView) v.findViewById(R.id.IdSeedDescriptionCulture);
+        seedDescriptionCultureTitle = (TextView) v.findViewById(R.id.IdSeedDescriptionCultureTitle);
+        seedDescriptionEnnemi = (TextView) v.findViewById(R.id.IdSeedDescriptionEnnemi);
+        seedDescriptionEnnemiTitle = (TextView) v.findViewById(R.id.IdSeedDescriptionEnnemiTitle);
+        seedDescriptionCultureHarvest = (TextView) v.findViewById(R.id.IdSeedDescriptionHarvest);
+        seedDescriptionHarvest = (TextView) v.findViewById(R.id.IdSeedDescriptionHarvestTitle);
 
-        final TextView seedDescriptionEnvironnement = (TextView) v.findViewById(R.id.IdSeedDescriptionEnvironment);
+        return v;
+    }
+
+    @Override
+    protected boolean requireAsyncDataRetrieval() {
+        return true;
+    }
+
+    @Override
+    protected void onNuxeoDataRetrievalStarted() {
+        super.onNuxeoDataRetrievalStarted();
+    }
+
+    @Override
+    protected Object retrieveNuxeoData() throws Exception {
+        return seedManager.getSeedById(seedId);
+    }
+
+    @Override
+    protected void onNuxeoDataRetrieved(Object data) {
+        BaseSeedInterface mSeed = (BaseSeedInterface) data;
         seedDescriptionEnvironnement.setText(Html.fromHtml(mSeed.getDescriptionGrowth()));
 
-        TextView seedDescriptionTitle = (TextView) v.findViewById(R.id.IdSeedDescriptionEnvironmentTitle);
         seedDescriptionTitle.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -69,9 +112,7 @@ public class SeedActivity extends Fragment {
             }
         });
 
-        final TextView seedDescriptionCulture = (TextView) v.findViewById(R.id.IdSeedDescriptionCulture);
         seedDescriptionCulture.setText(Html.fromHtml(mSeed.getDescriptionCultivation()));
-        TextView seedDescriptionCultureTitle = (TextView) v.findViewById(R.id.IdSeedDescriptionCultureTitle);
         seedDescriptionCultureTitle.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -82,9 +123,7 @@ public class SeedActivity extends Fragment {
             }
         });
 
-        final TextView seedDescriptionEnnemi = (TextView) v.findViewById(R.id.IdSeedDescriptionEnnemi);
         seedDescriptionEnnemi.setText(Html.fromHtml(mSeed.getDescriptionDiseases()));
-        TextView seedDescriptionEnnemiTitle = (TextView) v.findViewById(R.id.IdSeedDescriptionEnnemiTitle);
         seedDescriptionEnnemiTitle.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -95,9 +134,7 @@ public class SeedActivity extends Fragment {
             }
         });
 
-        final TextView seedDescriptionCultureHarvest = (TextView) v.findViewById(R.id.IdSeedDescriptionHarvest);
         seedDescriptionCultureHarvest.setText(Html.fromHtml(mSeed.getDescriptionHarvest()));
-        TextView seedDescriptionHarvest = (TextView) v.findViewById(R.id.IdSeedDescriptionHarvestTitle);
         seedDescriptionHarvest.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -107,9 +144,11 @@ public class SeedActivity extends Fragment {
                     seedDescriptionCultureHarvest.setVisibility(View.VISIBLE);
             }
         });
-        
-
-        return v;
+        super.onNuxeoDataRetrieved(data);
     }
 
+    @Override
+    public void update() {
+
+    }
 }

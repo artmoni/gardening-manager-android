@@ -110,7 +110,8 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
+            if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())
+                    || BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
                 try {
                     currentGarden = gardenManager.getCurrentGarden();
                     if (context instanceof GardenListener)
@@ -175,19 +176,6 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
-        registerReceiver(nuxeoManager, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
-        registerReceiver(gardenManager, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
-        registerReceiver(gardenManager, new IntentFilter(BroadCastMessages.GARDEN_SETTINGS_CHANGED));
-        registerReceiver(allotmentManager, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
-        registerReceiver(allotmentManager, new IntentFilter(BroadCastMessages.GARDEN_SETTINGS_CHANGED));
-        registerReceiver(allotmentManager, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
-        registerReceiver(gotsGrowingSeedManager, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
-        registerReceiver(seedManager, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
-        registerReceiver(seedManager, new IntentFilter(BroadCastMessages.GARDEN_SETTINGS_CHANGED));
-        registerReceiver(progressReceiver, new IntentFilter(BroadCastMessages.PROGRESS_UPDATE));
-        registerReceiver(progressReceiver, new IntentFilter(BroadCastMessages.PROGRESS_FINISHED));
-        registerReceiver(gardenBroadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
-
         activities.add(this);
 
         GotsAnalytics.getInstance(getApplication()).incrementActivityCount();
@@ -222,6 +210,19 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
 
     @Override
     protected void onResume() {
+        registerReceiver(nuxeoManager, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
+        registerReceiver(gardenManager, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
+        registerReceiver(gardenManager, new IntentFilter(BroadCastMessages.GARDEN_SETTINGS_CHANGED));
+        registerReceiver(allotmentManager, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
+        registerReceiver(allotmentManager, new IntentFilter(BroadCastMessages.GARDEN_SETTINGS_CHANGED));
+        registerReceiver(allotmentManager, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
+        registerReceiver(gotsGrowingSeedManager, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
+        registerReceiver(seedManager, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
+        registerReceiver(seedManager, new IntentFilter(BroadCastMessages.GARDEN_SETTINGS_CHANGED));
+        registerReceiver(progressReceiver, new IntentFilter(BroadCastMessages.PROGRESS_UPDATE));
+        registerReceiver(progressReceiver, new IntentFilter(BroadCastMessages.PROGRESS_FINISHED));
+        registerReceiver(gardenBroadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
+        registerReceiver(gardenBroadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_EVENT));
         super.onResume();
     }
 
@@ -247,13 +248,6 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         activities.remove(this);
         GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
 
-        unregisterReceiver(nuxeoManager);
-        unregisterReceiver(gardenManager);
-        unregisterReceiver(allotmentManager);
-        unregisterReceiver(seedManager);
-        unregisterReceiver(progressReceiver);
-        unregisterReceiver(gotsGrowingSeedManager);
-        unregisterReceiver(gardenBroadcastReceiver);
         if (activities.size() == 0) {
             nuxeoManager.shutdown();
             gardenManager.finalize();
@@ -351,6 +345,17 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
     @Override
     public NuxeoContext getNuxeoContext() {
         return super.getNuxeoContext();
+    }
+    @Override
+    protected void onPause() {
+        unregisterReceiver(nuxeoManager);
+        unregisterReceiver(gardenManager);
+        unregisterReceiver(allotmentManager);
+        unregisterReceiver(seedManager);
+        unregisterReceiver(progressReceiver);
+        unregisterReceiver(gotsGrowingSeedManager);
+        unregisterReceiver(gardenBroadcastReceiver);
+        super.onPause();
     }
 
 }

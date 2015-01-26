@@ -27,6 +27,8 @@ public abstract class BaseGotsFragment extends BaseNuxeoFragment {
         super();
     }
 
+    public abstract void update();
+
     protected GardenInterface getCurrentGarden() {
         try {
             currentGarden = GotsGardenManager.getInstance().initIfNew(getActivity()).getCurrentGarden();
@@ -39,36 +41,37 @@ public abstract class BaseGotsFragment extends BaseNuxeoFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
-        getActivity().registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.ACTION_EVENT));
-        getActivity().registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
+        // getActivity().registerReceiver(broadcastReceiver, new
+        // IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
+        // getActivity().registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.ACTION_EVENT));
+        // getActivity().registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
 
     }
 
-    protected abstract void onCurrentGardenChanged();
-
-    protected abstract void onWeatherChanged();
-
-    protected abstract void onActionChanged();
+    // protected abstract void onCurrentGardenChanged();
+    //
+    // protected abstract void onWeatherChanged();
+    //
+    // protected abstract void onActionChanged();
 
     @Override
     public void onDestroy() {
-        getActivity().unregisterReceiver(broadcastReceiver);
+        // getActivity().unregisterReceiver(broadcastReceiver);
         super.onDestroy();
     }
 
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
-                getCurrentGarden();
-                onCurrentGardenChanged();
-            } else if (BroadCastMessages.WEATHER_DISPLAY_EVENT.equals(intent.getAction())) {
-                onWeatherChanged();
-            } else if (BroadCastMessages.ACTION_EVENT.equals(intent.getAction())) {
-                onActionChanged();
-            }
-        }
-    };
+    // private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+    // @Override
+    // public void onReceive(Context context, Intent intent) {
+    // if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
+    // getCurrentGarden();
+    // onCurrentGardenChanged();
+    // } else if (BroadCastMessages.WEATHER_DISPLAY_EVENT.equals(intent.getAction())) {
+    // onWeatherChanged();
+    // } else if (BroadCastMessages.ACTION_EVENT.equals(intent.getAction())) {
+    // onActionChanged();
+    // }
+    // }
+    // };
 
 }
