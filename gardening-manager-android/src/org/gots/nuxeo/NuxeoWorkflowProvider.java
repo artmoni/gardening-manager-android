@@ -99,19 +99,22 @@ public class NuxeoWorkflowProvider {
         return workflowDoc;
     }
 
+    /*
+     * return open tasks for a user on the document 
+     */
     public Documents getWorkflowOpenTasks(String docId) {
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);
         Documents workflowTaskDoc = null;
         try {
-            workflowTaskDoc = service.getOpenTasks(new IdRef(docId));
+            workflowTaskDoc = service.getOpenTasks(new IdRef(docId), null, null, session.getLogin().getUsername());
         } catch (Exception e) {
             e.printStackTrace();
         }
         return workflowTaskDoc;
     }
 
-    public Blob getWorkflowTask() {
+    public Blob getUserTaskPageProvider() {
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);
         Blob tasks = null;
@@ -141,7 +144,7 @@ public class NuxeoWorkflowProvider {
         DocumentManager service = session.getAdapter(DocumentManager.class);
         Document doc = null;
         try {
-            Properties properties =new Properties();
+            Properties properties = new Properties();
             ArrayList<String> array = new ArrayList<>();
             array.add("gardening.manager@gmail.com");
             properties.setProperty("assignees", array.toArray().toString());

@@ -73,7 +73,7 @@ public class WorkflowResumeFragment extends BaseGotsFragment implements OnItemCl
     @Override
     protected Object retrieveNuxeoData() throws Exception {
         NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(getActivity());
-        tasks = nuxeoWorkflowProvider.getWorkflowTask();
+        tasks = nuxeoWorkflowProvider.getUserTaskPageProvider();
 
         BufferedReader r = new BufferedReader(new InputStreamReader(tasks.getStream()));
         StringBuilder total = new StringBuilder();

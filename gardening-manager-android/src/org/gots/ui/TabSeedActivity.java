@@ -45,6 +45,8 @@ import org.gots.ui.fragment.LoginDialogFragment;
 import org.gots.ui.fragment.ScheduleActionFragment;
 import org.gots.ui.fragment.WorkflowTaskFragment;
 import org.gots.utils.FileUtilities;
+import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
+import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -146,8 +148,8 @@ public class TabSeedActivity extends BaseGotsActivity {
         } else
             mSeed = new GrowingSeed(); // DEFAULT SEED
 
-//        if (getIntent().getSerializableExtra(GOTS_TASKWORKFLOW_ID) != null)
-//            taskWorkflow = (TaskInfo) getIntent().getSerializableExtra(GOTS_TASKWORKFLOW_ID);
+        // if (getIntent().getSerializableExtra(GOTS_TASKWORKFLOW_ID) != null)
+        // taskWorkflow = (TaskInfo) getIntent().getSerializableExtra(GOTS_TASKWORKFLOW_ID);
         pictureGallery = (Gallery) findViewById(R.id.idPictureGallery);
 
         displayPictureGallery();
@@ -225,11 +227,6 @@ public class TabSeedActivity extends BaseGotsActivity {
             layout.addView(ads.getAdsLayout());
         }
 
-        Fragment fragment = new WorkflowTaskFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.frame_workflow, fragment).commit();
-
-       
     }
 
     protected void displayPictureGallery() {
@@ -452,9 +449,8 @@ public class TabSeedActivity extends BaseGotsActivity {
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
-                    NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(
-                            getApplicationContext());
-//                    BaseSeedInterface baseSeedInterface = (BaseSeedInterface) arg0.getItemAtPosition(arg2);
+                    NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(getApplicationContext());
+                    // BaseSeedInterface baseSeedInterface = (BaseSeedInterface) arg0.getItemAtPosition(arg2);
                     nuxeoWorkflowProvider.startWorkflowValidation(mSeed);
                     return null;
                 }
@@ -558,4 +554,26 @@ public class TabSeedActivity extends BaseGotsActivity {
         }
     }
 
+    @Override
+    protected boolean requireAsyncDataRetrieval() {
+        return true;
+    }
+
+    @Override
+    protected Object retrieveNuxeoData() throws Exception {
+        NuxeoWorkflowProvider workflowProvider = new NuxeoWorkflowProvider(getApplicationContext());
+        Documents taskDocs = workflowProvider.getWorkflowOpenTasks(mSeed.getUUID());
+        if (taskDocs != null && taskDocs.size() == 0)
+            return null;
+        return taskDocs;
+    }
+
+    @Override
+    protected void onNuxeoDataRetrieved(Object data) {
+        Fragment fragment = new WorkflowTaskFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        getIntent().putExtra(WorkflowTaskFragment.GOTS_DOC_ID, mSeed.getUUID());
+        fragmentManager.beginTransaction().replace(R.id.frame_workflow, fragment).commit();
+        super.onNuxeoDataRetrieved(data);
+    }
 }

@@ -1,8 +1,10 @@
 package org.gots.ui;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -14,16 +16,19 @@ import org.gots.authentication.GotsSocialAuthentication;
 import org.gots.authentication.provider.google.GoogleAuthentication;
 import org.gots.authentication.provider.google.User;
 import org.gots.bean.DefaultGarden;
+import org.gots.bean.TaskInfo;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.inapp.AppRater;
 import org.gots.inapp.GotsBillingDialog;
 import org.gots.inapp.GotsPurchaseItem;
+import org.gots.nuxeo.NuxeoWorkflowProvider;
 import org.gots.provider.ActionsContentProvider;
 import org.gots.provider.AllotmentContentProvider;
 import org.gots.provider.GardenContentProvider;
 import org.gots.provider.SeedsContentProvider;
 import org.gots.provider.WeatherContentProvider;
+import org.gots.seed.BaseSeedInterface;
 import org.gots.ui.BaseGotsActivity.GardenListener;
 import org.gots.ui.fragment.ActionsResumeFragment;
 import org.gots.ui.fragment.CatalogResumeFragment;
@@ -34,6 +39,9 @@ import org.gots.ui.fragment.WeatherResumeFragment;
 import org.gots.ui.fragment.WorkflowResumeFragment;
 import org.gots.ui.slidingmenu.NavDrawerItem;
 import org.gots.ui.slidingmenu.adapter.NavDrawerListAdapter;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.nuxeo.ecm.automation.client.jaxrs.model.Blob;
 
 import android.accounts.Account;
 import android.content.BroadcastReceiver;
@@ -471,7 +479,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener {
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
         refreshGardenMenu();
-        displayOwnerIcon();
+        displayUserAvatar();
 
         if (LAUNCHER_ACTION.equals(getIntent().getAction())) {
             startActivity(new Intent(this, ActionActivity.class));
@@ -484,7 +492,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener {
         // }
     }
 
-    protected void displayOwnerIcon() {
+    protected void displayUserAvatar() {
         if (currentGarden == null) {
             return;
         }
@@ -564,12 +572,6 @@ public class MainActivity extends BaseGotsActivity implements GardenListener {
         Fragment fragment = new ActionsResumeFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
-
-        Fragment workflowResumeFragment = new WorkflowResumeFragment();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        // transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        transaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
-        transaction.replace(R.id.idFragmentWorkflow, workflowResumeFragment).commit();
 
         final Fragment weatherResumeFragment = new WeatherResumeFragment();
         FragmentTransaction transactionWeather = fragmentManager.beginTransaction();
@@ -767,7 +769,47 @@ public class MainActivity extends BaseGotsActivity implements GardenListener {
         displayTutorialFragment();
         displayIncredibleFragment();
         displayWeatherFragment();
+        displayWorkflowFragment();
         super.onResume();
+    }
+
+    private void displayWorkflowFragment() {
+        new AsyncTask<Void, Void, JSONArray>() {
+            JSONArray tasksEntries = null;
+
+            @Override
+            protected JSONArray doInBackground(Void... params) {
+                NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(getApplicationContext());
+                Blob tasks = nuxeoWorkflowProvider.getUserTaskPageProvider();
+                try {
+                    BufferedReader r = new BufferedReader(new InputStreamReader(tasks.getStream()));
+                    StringBuilder total = new StringBuilder();
+                    String line;
+                    while ((line = r.readLine()) != null) {
+                        total.append(line);
+                    }
+
+                    JSONObject json;
+                    List<BaseSeedInterface> seeds = new ArrayList<>();
+
+                    json = new JSONObject(String.valueOf(total.toString()));
+                    tasksEntries = json.getJSONArray("entries");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return tasksEntries;
+            }
+
+            protected void onPostExecute(JSONArray result) {
+                if (result != null && result.length() > 0) {
+                    Fragment workflowResumeFragment = new WorkflowResumeFragment();
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
+                    transaction.replace(R.id.idFragmentWorkflow, workflowResumeFragment).commit();
+                }
+            };
+        }.execute();
+
     }
 
     protected void displayWeatherFragment() {
@@ -782,7 +824,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener {
     public void onCurrentGardenChanged(GardenInterface garden) {
         currentGarden = garden;
         displayDrawerMenu();
-        displayOwnerIcon();
+        displayUserAvatar();
         refreshGardenMenu();
         displayTutorialFragment();
         displayIncredibleFragment();

@@ -92,8 +92,6 @@ public class WorkflowTaskFragment extends BaseGotsFragment implements OnClickLis
         default:
             break;
         }
-
-        closeFragment();
     }
 
     @Override
@@ -129,7 +127,6 @@ public class WorkflowTaskFragment extends BaseGotsFragment implements OnClickLis
 
     @Override
     protected void onNuxeoDataRetrieveFailed() {
-        closeFragment();
         super.onNuxeoDataRetrieveFailed();
     }
 
@@ -138,12 +135,12 @@ public class WorkflowTaskFragment extends BaseGotsFragment implements OnClickLis
         return true;
     }
 
-    private void closeFragment() {
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        getFragmentManager().popBackStack();
-        transaction.hide(this);
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        transaction.commit();
-    }
+//    private void closeFragment() {
+//        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//        getFragmentManager().popBackStack();
+//        transaction.hide(this);
+//        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+//        transaction.commit();
+//    }
 
 }
