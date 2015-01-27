@@ -74,4 +74,23 @@ public abstract class BaseGotsFragment extends BaseNuxeoFragment {
     // }
     // };
 
+    @Override
+    protected void onNuxeoDataRetrievalStarted() {
+        getActivity().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
+        super.onNuxeoDataRetrievalStarted();
+    }
+
+    @Override
+    protected void onNuxeoDataRetrieved(Object data) {
+        if (isAdded())
+            getActivity().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
+        super.onNuxeoDataRetrieved(data);
+    }
+
+    @Override
+    protected void onNuxeoDataRetrieveFailed() {
+        if (isAdded())
+            getActivity().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
+        super.onNuxeoDataRetrieveFailed();
+    }
 }

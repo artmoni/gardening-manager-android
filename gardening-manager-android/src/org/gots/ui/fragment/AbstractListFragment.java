@@ -5,12 +5,11 @@ import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GotsGardenManager;
 import org.gots.seed.GotsSeedManager;
 import org.nuxeo.android.fragments.BaseListFragment;
-import org.nuxeo.android.fragments.BaseNuxeoFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
 
-public class AbstractListFragment extends BaseListFragment {
+public abstract class AbstractListFragment extends BaseListFragment {
     protected GotsSeedManager seedProvider;
 
     protected GotsAllotmentManager allotmentManager;
