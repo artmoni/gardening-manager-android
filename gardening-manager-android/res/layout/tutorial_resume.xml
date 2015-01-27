@@ -23,7 +23,10 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:text="@string/tutorial.title"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textColor="@color/text_color_light"
+        android:textStyle="bold"
+        android:textSize="25dp"
+        android:textAppearance="?android:attr/textAppearanceLarge" android:background="@drawable/bg_allotment_top" android:padding="20dp"/>
 
     <TextView
         android:id="@+id/textViewTutorialDescription"
@@ -32,12 +35,12 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/textViewTutorial"
         android:layout_below="@+id/textViewTutorial"
-        android:text="@string/tutorial.a.description" >
+        android:text="@string/tutorial.a.description" android:paddingTop="10dp" android:paddingBottom="10dp">
     </TextView>
 
     <Button
         android:id="@+id/buttonTutorial"
-        style="@style/buttonGreenDashboard"
+        style="@style/buttonRed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textViewTutorialDescription"

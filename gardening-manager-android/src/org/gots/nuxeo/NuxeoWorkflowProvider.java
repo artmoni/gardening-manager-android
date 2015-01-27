@@ -32,10 +32,10 @@ public class NuxeoWorkflowProvider {
     }
 
     public Documents getDocumentsRoute(BaseSeedInterface seed) {
-        Session session = getNuxeoClient().getSession();
-        DocumentManager service = session.getAdapter(DocumentManager.class);
         Documents documentsRoute = null;
         try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
             documentsRoute = service.query(
                     "Select * from DocumentRoute where docri:participatingDocuments = ? AND ecm:currentLifeCycleState = 'running'",
                     new String[] { seed.getUUID() }, null, "*", 0, 50, CacheBehavior.STORE);
@@ -60,11 +60,11 @@ public class NuxeoWorkflowProvider {
     // }
 
     public Documents getRouteNode(String docId) {
-        Session session = getNuxeoClient().getSession();
-        DocumentManager service = session.getAdapter(DocumentManager.class);
 
         Documents tasksDoc = null;
         try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
             tasksDoc = service.query(
                     "Select * from RouteNode  where rnode:nodeId = ? and ecm:currentLifeCycleState = 'suspended'",
                     new String[] { "Task7a0" }, null, "*", 0, 50, CacheBehavior.STORE);
@@ -75,10 +75,10 @@ public class NuxeoWorkflowProvider {
     }
 
     public Document getTaskDoc(String taskDocId) {
-        Session session = getNuxeoClient().getSession();
-        DocumentManager service = session.getAdapter(DocumentManager.class);
         Document doc = null;
         try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
             service.getDocument(new IdRef(taskDocId), true);
             doc = service.getDocument(new IdRef(taskDocId), "*");
         } catch (Exception e) {
@@ -88,10 +88,10 @@ public class NuxeoWorkflowProvider {
     }
 
     public Document startWorkflowValidation(BaseSeedInterface seed) {
-        Session session = getNuxeoClient().getSession();
-        DocumentManager service = session.getAdapter(DocumentManager.class);
         Document workflowDoc = null;
         try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
             workflowDoc = service.startWorkflow(new IdRef(seed.getUUID()), "validation");
         } catch (Exception e) {
             e.printStackTrace();
@@ -103,10 +103,10 @@ public class NuxeoWorkflowProvider {
      * return open tasks for a user on the document 
      */
     public Documents getWorkflowOpenTasks(String docId) {
-        Session session = getNuxeoClient().getSession();
-        DocumentManager service = session.getAdapter(DocumentManager.class);
         Documents workflowTaskDoc = null;
         try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
             workflowTaskDoc = service.getOpenTasks(new IdRef(docId), null, null, session.getLogin().getUsername());
         } catch (Exception e) {
             e.printStackTrace();
@@ -115,10 +115,10 @@ public class NuxeoWorkflowProvider {
     }
 
     public Blob getUserTaskPageProvider() {
-        Session session = getNuxeoClient().getSession();
-        DocumentManager service = session.getAdapter(DocumentManager.class);
         Blob tasks = null;
         try {
+        Session session = getNuxeoClient().getSession();
+        DocumentManager service = session.getAdapter(DocumentManager.class);
             tasks = service.getUserTaskPageProvider();
 
         } catch (Exception e) {
@@ -128,10 +128,10 @@ public class NuxeoWorkflowProvider {
     }
 
     public Document completeTaskValidate(String taskId, String comment) {
-        Session session = getNuxeoClient().getSession();
-        DocumentManager service = session.getAdapter(DocumentManager.class);
         Document doc = null;
         try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
             doc = service.completeTaskOperation(new IdRef(taskId), comment, null, "validate", null);
         } catch (Exception e) {
             e.printStackTrace();
@@ -140,10 +140,10 @@ public class NuxeoWorkflowProvider {
     }
 
     public Document completeTaskRefuse(String taskId, String comment) {
-        Session session = getNuxeoClient().getSession();
-        DocumentManager service = session.getAdapter(DocumentManager.class);
         Document doc = null;
         try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
             Properties properties = new Properties();
             ArrayList<String> array = new ArrayList<>();
             array.add("gardening.manager@gmail.com");
@@ -156,10 +156,10 @@ public class NuxeoWorkflowProvider {
     }
 
     public void setWorkflowNodeVar(String key, String value) {
-        Session session = getNuxeoClient().getSession();
-        DocumentManager service = session.getAdapter(DocumentManager.class);
         Document doc = null;
         try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
             service.setWorkflowNodeVar(key, value);
         } catch (Exception e) {
             e.printStackTrace();

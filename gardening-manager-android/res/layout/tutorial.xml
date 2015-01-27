@@ -29,10 +29,11 @@
         android:paddingBottom="20dp" >
 
         <android.support.v4.view.PagerTitleStrip
+            style="@style/TutorialTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/TutorialTitle"
-            android:layout_gravity="bottom" />
+            android:layout_gravity="bottom"
+            android:padding="10dp"/>
     </android.support.v4.view.ViewPager>
 
     <Button
@@ -42,8 +43,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
-        android:text="@string/skip" 
-        />
+        android:text="@string/skip" />
 
     <Button
         android:id="@+id/buttonConnect"
