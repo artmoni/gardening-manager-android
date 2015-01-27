@@ -18,11 +18,11 @@
 
     <TextView
         android:id="@+id/textViewTutorial"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="@string/tutorial.a.title"
+        android:text="@string/tutorial.title"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
@@ -37,11 +37,11 @@
 
     <Button
         android:id="@+id/buttonTutorial"
+        style="@style/buttonGreenDashboard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textViewTutorialDescription"
         android:layout_centerHorizontal="true"
-        style="@style/buttonGreenDashboard"
-        android:text="Paramétrer" />
+        android:text="@string/tutorial.a.title" />
 
 </RelativeLayout>
