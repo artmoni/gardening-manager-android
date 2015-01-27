@@ -19,6 +19,7 @@ import org.gots.action.SeedActionInterface;
 import org.gots.action.bean.BuyingAction;
 import org.gots.action.bean.ReduceQuantityAction;
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.garden.view.OnProfileEventListener;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.SeedUtil;
@@ -27,7 +28,7 @@ import org.gots.seed.adapter.VendorSeedListAdapter;
 import org.gots.seed.provider.parrot.ParrotSeedProvider;
 import org.gots.ui.fragment.AbstractListFragment;
 
-import android.app.ProgressDialog;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -46,10 +47,10 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ListView;
 import android.widget.Toast;
 
-public class VendorListActivity extends AbstractListFragment implements OnScrollListener {
+public class VendorListFragment extends AbstractListFragment implements OnScrollListener,
+        AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     protected static final String FILTER_FAVORITES = "filter.favorites";
 
@@ -85,38 +86,33 @@ public class VendorListActivity extends AbstractListFragment implements OnScroll
 
     private int paddingPage = 10;
 
+    private OnSeedSelected mCallback;
+
+    public interface OnSeedSelected {
+        public abstract void onSeedSelected(BaseSeedInterface seed);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        try {
+            mCallback = (OnSeedSelected) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement OnSeedSelected");
+        }
+        super.onAttach(activity);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mContext = getActivity();
         args = getArguments();
 
-        mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BROADCAST_FILTER));
         listVendorSeedAdapter = new VendorSeedListAdapter(mContext, new ArrayList<BaseSeedInterface>());
         View view = inflater.inflate(R.layout.list_seed_grid, container, false);
         gridViewCatalog = (GridView) view.findViewById(R.id.seedgridview);
         gridViewCatalog.setAdapter(listVendorSeedAdapter);
-        gridViewCatalog.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                if (args != null && args.getBoolean(IS_SELECTABLE)) {
-
-                    getActivity().finish();
-                } else {
-                    Intent i = new Intent(mContext, TabSeedActivity.class);
-                    i.putExtra("org.gots.seed.vendorid", listVendorSeedAdapter.getItem(position).getSeedId());
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    mContext.startActivity(i);
-                }
-            }
-        });
-        gridViewCatalog.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                ((ActionBarActivity) getActivity()).startSupportActionMode(new MyCallBack(position));
-
-                return false;
-            }
-        });
+        gridViewCatalog.setOnItemClickListener(this);
+        gridViewCatalog.setOnItemLongClickListener(this);
         gridViewCatalog.setOnScrollListener(this);
 
         return view;
@@ -139,6 +135,7 @@ public class VendorListActivity extends AbstractListFragment implements OnScroll
 
     @Override
     public void onResume() {
+        mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BROADCAST_FILTER));
         super.onResume();
     }
 
@@ -194,11 +191,20 @@ public class VendorListActivity extends AbstractListFragment implements OnScroll
     }
 
     @Override
-    public void onDestroy() {
+    public void onPause() {
         if (seedBroadcastReceiver != null && isAdded())
             mContext.unregisterReceiver(seedBroadcastReceiver);
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
         super.onDestroy();
     }
+
+    /*
+     * CallBACK on long press
+     */
 
     private final class MyCallBack implements ActionMode.Callback {
 
@@ -217,12 +223,13 @@ public class VendorListActivity extends AbstractListFragment implements OnScroll
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-
+            gridViewCatalog.setChoiceMode(GridView.CHOICE_MODE_SINGLE);
         }
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.menu_hut_contextual, menu);
+            gridViewCatalog.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
             return true;
         }
 
@@ -287,9 +294,6 @@ public class VendorListActivity extends AbstractListFragment implements OnScroll
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        Log.d(TAG, "firstVisibleItem=" + firstVisibleItem + " + visibleItemCount=" + visibleItemCount
-                + " ?= totalItemCount=" + totalItemCount);
-
         if (firstVisibleItem + visibleItemCount >= totalItemCount && firstVisibleItem != 0) {
             if (isReady()) {
                 additems();
@@ -311,5 +315,18 @@ public class VendorListActivity extends AbstractListFragment implements OnScroll
 
     SeedListAdapter getListAdapter() {
         return listVendorSeedAdapter;
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        ((ActionBarActivity) getActivity()).startSupportActionMode(new MyCallBack(position));
+        gridViewCatalog.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
+        return true;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> list, View container, int position, long id) {
+
+        mCallback.onSeedSelected(listVendorSeedAdapter.getItem(position));
     }
 }

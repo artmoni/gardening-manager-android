@@ -17,6 +17,7 @@ import org.gots.ads.GotsAdvertisement;
 import org.gots.provider.SeedsContentProvider;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.ui.VendorListFragment.OnSeedSelected;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -54,7 +55,7 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-public class HutActivity extends BaseGotsActivity {
+public class HutActivity extends BaseGotsActivity implements OnSeedSelected {
 
     // private ListVendorSeedAdapter lvsea;
     ListView listSeeds;
@@ -311,17 +312,17 @@ public class HutActivity extends BaseGotsActivity {
         Bundle args;
         args = new Bundle();
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds)),
-                VendorListActivity.class, args); // FRAGMENT_ID_CATALOG=0 -> see above
+                VendorListFragment.class, args); // FRAGMENT_ID_CATALOG=0 -> see above
 
         args = new Bundle();
         if (currentAllotment != -1) {
-            args.putBoolean(VendorListActivity.IS_SELECTABLE, true);
+            args.putBoolean(VendorListFragment.IS_SELECTABLE, true);
         }
-        args.putBoolean(VendorListActivity.FILTER_PARROT, true);
+        args.putBoolean(VendorListFragment.FILTER_PARROT, true);
         if (gotsPrefs.getParrotToken() != null)
             mTabsAdapter.addTab(
                     bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds_plant)),
-                    VendorListActivity.class, args);
+                    VendorListFragment.class, args);
 
         // mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText("species"),
         // FamilyListActivity.class, args);
@@ -329,20 +330,20 @@ public class HutActivity extends BaseGotsActivity {
         // mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
         // MySeedsListActivity.class, null);
         args = new Bundle();
-        args.putBoolean(VendorListActivity.FILTER_STOCK, true);
+        args.putBoolean(VendorListFragment.FILTER_STOCK, true);
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
-                VendorListActivity.class, args);
+                VendorListFragment.class, args);
 
         if (gotsPrefs.isConnectedToServer()) {
             args = new Bundle();
-            args.putBoolean(VendorListActivity.FILTER_FAVORITES, true);
+            args.putBoolean(VendorListFragment.FILTER_FAVORITES, true);
             mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_favorites)),
-                    VendorListActivity.class, args);
+                    VendorListFragment.class, args);
         }
         args = new Bundle();
-        args.putBoolean(VendorListActivity.FILTER_THISMONTH, true);
+        args.putBoolean(VendorListFragment.FILTER_THISMONTH, true);
         mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_thismonth)),
-                VendorListActivity.class, args);
+                VendorListFragment.class, args);
     }
 
     @Override
@@ -401,19 +402,19 @@ public class HutActivity extends BaseGotsActivity {
 
         Fragment fragment = (Fragment) getSupportFragmentManager().findFragmentByTag(
                 "android:switcher:" + R.id.pager + ":" + mTabsAdapter.getCurrentItem());
-        if (fragment.getArguments() != null && fragment.getArguments().getBoolean(VendorListActivity.FILTER_PARROT)) {
-            Intent filterIntent = new Intent(VendorListActivity.BROADCAST_FILTER);
-            filterIntent.putExtra(VendorListActivity.FILTER_VALUE, currentFilter);
+        if (fragment.getArguments() != null && fragment.getArguments().getBoolean(VendorListFragment.FILTER_PARROT)) {
+            Intent filterIntent = new Intent(VendorListFragment.BROADCAST_FILTER);
+            filterIntent.putExtra(VendorListFragment.FILTER_VALUE, currentFilter);
             sendBroadcast(filterIntent);
-        } else if (fragment instanceof VendorListActivity) {
+        } else if (fragment instanceof VendorListFragment) {
             if (false) {
-                Filterable fragFilter = (Filterable) ((VendorListActivity) fragment).getListAdapter();
+                Filterable fragFilter = (Filterable) ((VendorListFragment) fragment).getListAdapter();
                 fragFilter.getFilter().filter(currentFilter.toString());
             } else {
                 Fragment searchFragment = (Fragment) getSupportFragmentManager().findFragmentByTag(
                         "android:switcher:" + R.id.pager + ":" + (FRAGMENT_ID_CATALOG));
                 searchFragment.getArguments().clear();
-                searchFragment.getArguments().putString(VendorListActivity.FILTER_VALUE, currentFilter);
+                searchFragment.getArguments().putString(VendorListFragment.FILTER_VALUE, currentFilter);
                 searchFragment.onResume();
                 mTabsAdapter.setCurrentItem(FRAGMENT_ID_CATALOG);
             }
@@ -530,5 +531,13 @@ public class HutActivity extends BaseGotsActivity {
     @Override
     protected void onRefresh(String AUTHORITY) {
         super.onRefresh(SeedsContentProvider.AUTHORITY);
+    }
+
+    @Override
+    public void onSeedSelected(BaseSeedInterface seed) {
+        Intent i = new Intent(getApplicationContext(), TabSeedActivity.class);
+        i.putExtra("org.gots.seed.vendorid", seed.getSeedId());
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
     }
 }
