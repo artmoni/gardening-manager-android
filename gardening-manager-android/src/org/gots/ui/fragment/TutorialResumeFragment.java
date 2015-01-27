@@ -36,6 +36,8 @@ public class TutorialResumeFragment extends BaseGotsFragment implements OnClickL
 
     private TextView textViewDescription;
 
+    private Button button;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.tutorial_resume, null);
@@ -45,7 +47,7 @@ public class TutorialResumeFragment extends BaseGotsFragment implements OnClickL
     public void onViewCreated(View view, Bundle savedInstanceState) {
         textViewTitle = (TextView) view.findViewById(R.id.textViewTutorial);
         textViewDescription = (TextView) view.findViewById(R.id.textViewTutorialDescription);
-        Button button = (Button) view.findViewById(R.id.buttonTutorial);
+        button = (Button) view.findViewById(R.id.buttonTutorial);
         button.setOnClickListener(this);
         super.onViewCreated(view, savedInstanceState);
     }
@@ -83,15 +85,15 @@ public class TutorialResumeFragment extends BaseGotsFragment implements OnClickL
             return;
         switch (tutorialLevel) {
         case COMPLETE_LOCATION:
-            textViewTitle.setText(getResources().getString(R.string.tutorial_a_title));
+            button.setText(getResources().getString(R.string.tutorial_a_title));
             textViewDescription.setText(getResources().getString(R.string.tutorial_a_description));
             break;
         case COMPLETE_ALLOTMENT:
-            textViewTitle.setText(getResources().getString(R.string.tutorial_c_title));
+            button.setText(getResources().getString(R.string.tutorial_c_title));
             textViewDescription.setText(getResources().getString(R.string.tutorial_c_description));
             break;
         case COMPLETE_SEED:
-            textViewTitle.setText(getResources().getString(R.string.tutorial_b_title));
+            button.setText(getResources().getString(R.string.tutorial_b_title));
             textViewDescription.setText(getResources().getString(R.string.tutorial_b_description));
             break;
         default:
