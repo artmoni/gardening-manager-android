@@ -3,9 +3,12 @@ package org.gots.ui.fragment;
 import org.gots.R;
 import org.gots.allotment.GotsAllotmentManager;
 import org.gots.bean.DefaultGarden;
+import org.gots.context.GotsContext;
+import org.gots.context.SimpleGotsApplication;
 import org.gots.garden.GardenInterface;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsSeedManager;
+import org.gots.ui.BaseGotsActivity;
 import org.gots.ui.HutActivity;
 import org.gots.ui.MyMainGarden;
 import org.gots.ui.ProfileActivity;
@@ -32,6 +35,8 @@ public class TutorialResumeFragment extends BaseGotsFragment implements OnClickL
 
     private static final int COMPLETE_ACTION = 15;
 
+    private static final int COMPLETE_SOCIAL = 20;
+
     private int tutorialLevel;
 
     private TextView textViewTitle;
@@ -41,6 +46,8 @@ public class TutorialResumeFragment extends BaseGotsFragment implements OnClickL
     private Button button;
 
     private OnTutorialFinishedListener mCallback;
+
+    private GotsPreferences gotsPrefs;
 
     public interface OnTutorialFinishedListener {
         public abstract void onTutorialFinished();
@@ -53,6 +60,13 @@ public class TutorialResumeFragment extends BaseGotsFragment implements OnClickL
             mCallback = (OnTutorialFinishedListener) activity;
         } catch (ClassCastException castException) {
             throw new ClassCastException(activity.toString() + " must implements OnTutorialFinished");
+        }
+        try {
+
+            BaseGotsActivity mContext = (BaseGotsActivity) activity;
+            gotsPrefs = mContext.getGotsContext().getServerConfig();
+        } catch (ClassCastException castException) {
+            throw new ClassCastException(activity.toString() + " must implements BaseGotsActivity");
         }
         super.onAttach(activity);
     }
@@ -95,6 +109,8 @@ public class TutorialResumeFragment extends BaseGotsFragment implements OnClickL
             tutorialLevel = COMPLETE_ALLOTMENT;
         else if (GotsSeedManager.getInstance().initIfNew(getActivity()).getMyStock(garden).size() == 0)
             tutorialLevel = COMPLETE_SEED;
+        else if (!gotsPrefs.isConnectedToServer())
+            tutorialLevel = COMPLETE_SOCIAL;
         else
             mCallback.onTutorialFinished();
         return "";
@@ -117,6 +133,10 @@ public class TutorialResumeFragment extends BaseGotsFragment implements OnClickL
             button.setText(getResources().getString(R.string.tutorial_b_title));
             textViewDescription.setText(getResources().getString(R.string.tutorial_b_description));
             break;
+        case COMPLETE_SOCIAL:
+            button.setText(getResources().getString(R.string.tutorial_e_title));
+            textViewDescription.setText(getResources().getString(R.string.tutorial_e_description));
+            break;
         default:
             break;
         }
@@ -137,6 +157,10 @@ public class TutorialResumeFragment extends BaseGotsFragment implements OnClickL
         case COMPLETE_ALLOTMENT:
             Intent i3 = new Intent(getActivity(), MyMainGarden.class);
             startActivity(i3);
+            break;
+        case COMPLETE_SOCIAL:
+            LoginDialogFragment login = new LoginDialogFragment();
+            login.show(getFragmentManager(), "");
             break;
         default:
             break;

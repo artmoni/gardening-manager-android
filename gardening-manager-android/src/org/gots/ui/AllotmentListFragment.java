@@ -1,0 +1,104 @@
+package org.gots.ui;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.gots.R;
+import org.gots.allotment.adapter.ListAllotmentAdapter;
+import org.gots.bean.BaseAllotmentInterface;
+import org.gots.seed.GotsGrowingSeedManager;
+import org.gots.ui.fragment.AbstractListFragment;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+
+public class AllotmentListFragment extends AbstractListFragment {
+    private ListAllotmentAdapter lsa;
+
+    ListView listAllotments;
+
+    private OnAllotmentSelected mCallback;
+
+    public interface OnAllotmentSelected {
+        public abstract void onAllotmentClick(BaseAllotmentInterface allotment);
+
+        public abstract void onAllotmentLongClick(BaseAllotmentInterface item);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        try {
+            mCallback = (OnAllotmentSelected) activity;
+        } catch (ClassCastException castException) {
+            throw new ClassCastException(activity.toString() + " must implement OnAllotmentSelected");
+        }
+        super.onAttach(activity);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.allotment_list_fragment, null);
+    }
+
+    @Override
+    public void onViewCreated(View v, Bundle savedInstanceState) {
+        listAllotments = (ListView) v.findViewById(R.id.IdGardenAllotmentsList);
+        lsa = new ListAllotmentAdapter(getActivity(), new ArrayList<BaseAllotmentInterface>(), getArguments());
+        listAllotments.setAdapter(lsa);
+        listAllotments.setDivider(null);
+        listAllotments.setDividerHeight(0);
+        listAllotments.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        listAllotments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mCallback.onAllotmentClick(lsa.getItem(position));
+                view.setSelected(true);
+            }
+
+        });
+        listAllotments.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                mCallback.onAllotmentLongClick(lsa.getItem(position));
+                view.setSelected(true);
+                return true;
+            }
+        });
+        super.onViewCreated(v, savedInstanceState);
+    }
+
+    @Override
+    protected boolean requireAsyncDataRetrieval() {
+        return true;
+    }
+
+    @Override
+    protected Object retrieveNuxeoData() throws Exception {
+
+        List<BaseAllotmentInterface> allotments = allotmentManager.getMyAllotments(false);
+        GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(getActivity());
+
+        for (int i = 0; i < allotments.size(); i++) {
+            allotments.get(i).setSeeds(growingSeedManager.getGrowingSeedsByAllotment(allotments.get(i), false));
+        }
+        return allotments;
+    }
+
+    @Override
+    protected void onNuxeoDataRetrieved(Object data) {
+        List<BaseAllotmentInterface> result = (List<BaseAllotmentInterface>) data;
+        lsa.setAllotments(result);
+        super.onNuxeoDataRetrieved(data);
+    }
+
+    public void update() {
+        runAsyncDataRetrieval();
+    }
+
+}

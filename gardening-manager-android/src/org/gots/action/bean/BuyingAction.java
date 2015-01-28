@@ -77,7 +77,7 @@ public class BuyingAction extends AbstractActionSeed implements PermanentActionI
 
     @Override
     public int execute(GrowingSeedInterface seed) {
-        // super.execute(seed);
+        super.execute(seed);
         try {
             seedManager.addToStock(seed, gardenManager.getCurrentGarden());
         } catch (GardenNotFoundException e) {

@@ -73,7 +73,6 @@ public class ActionActivity extends BaseGotsActivity {
             private ListAllActionAdapter listActions;
 
             protected void onPreExecute() {
-                setProgressRefresh(true);
             };
 
             @Override
@@ -105,7 +104,6 @@ public class ActionActivity extends BaseGotsActivity {
                 listAllotments.setAdapter(listActions);
                 listAllotments.setDivider(null);
                 listAllotments.setDividerHeight(0);
-                setProgressRefresh(false);
             };
         }.execute(seedid);
         super.onPostCreate(savedInstanceState);

@@ -53,6 +53,7 @@ public class DeleteAction extends AbstractActionSeed implements PermanentActionI
     
     @Override
     public int execute(BaseAllotmentInterface allotment, GrowingSeedInterface seed) {
+        super.execute(seed);
         new AsyncTask<BaseAllotmentInterface, Integer, Void>() {
             @Override
             protected Void doInBackground(BaseAllotmentInterface... params) {

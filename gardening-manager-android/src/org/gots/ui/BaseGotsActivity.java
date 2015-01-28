@@ -280,7 +280,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         return super.onOptionsItemSelected(item);
     }
 
-    protected void setProgressRefresh(boolean refresh) {
+    private void setProgressRefresh(boolean refresh) {
 
         if (menu == null)
             return;

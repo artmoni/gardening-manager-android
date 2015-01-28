@@ -16,6 +16,8 @@ import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.GrowingSeedInterface;
 
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+
 import android.content.Context;
 import android.content.Intent;
 
@@ -29,7 +31,8 @@ public abstract class AbstractActionGarden extends AbstractAction implements Gar
     public int execute(BaseAllotmentInterface allotment, GrowingSeedInterface seed) {
         setDateActionDone(Calendar.getInstance().getTime());
         mContext.sendBroadcast(new Intent(BroadCastMessages.ACTION_EVENT));
-
+        GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+        tracker.trackEvent("Seed", getName(), seed.getSpecie(), 0);
         return 1;
     }
 

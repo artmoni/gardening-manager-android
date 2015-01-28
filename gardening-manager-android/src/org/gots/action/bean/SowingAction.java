@@ -74,19 +74,18 @@ public class SowingAction extends AbstractActionGarden implements PermanentActio
         seed.setUUID(null);
         seed = growingSeedManager.plantingSeed(seed, allotment);
 
-        actionSeedManager.insertAction(seed, this);
+//        actionSeedManager.insertAction(seed, this);
         // asdh.doAction(this, seed);
 
         for (Iterator<BaseActionInterface> iterator = seed.getActionToDo().iterator(); iterator.hasNext();) {
 
             BaseActionInterface type1 = iterator.next();
             if (type1 != null) {
-                BaseActionInterface type = actionManager.getActionByName(type1.getName());
-                actionSeedManager.insertAction(seed, type);
+                BaseActionInterface action = actionManager.getActionByName(type1.getName());
+                actionSeedManager.insertAction(seed, action);
             }
         }
-        GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-        tracker.trackEvent("Seed", getName(), seed.getSpecie(), 0);
+        
         // tracker.dispatch();
         return 0;
     }

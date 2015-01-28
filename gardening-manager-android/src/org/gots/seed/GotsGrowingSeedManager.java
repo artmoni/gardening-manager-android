@@ -99,8 +99,9 @@ public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGro
         if (!seedsByAllotment.containsKey(allotment.getId())) {
             seedsByAllotment.put(allotment.getId(), new HashMap<Integer, GrowingSeedInterface>());
         }
+        seed = provider.plantingSeed(seed, allotment);
         seedsByAllotment.get(allotment.getId()).put(seed.getGrowingSeedId(), seed);
-        return provider.plantingSeed(seed, allotment);
+        return seed;
     }
 
     @Override

@@ -138,8 +138,9 @@ public class GotsAllotmentManager extends BroadcastReceiver implements Allotment
 
     @Override
     public BaseAllotmentInterface createAllotment(BaseAllotmentInterface allotment) {
+        allotment = allotmentProvider.createAllotment(allotment);
         allotments.put(allotment.getId(), allotment);
-        return allotmentProvider.createAllotment(allotment);
+        return allotment ;
     }
 
     @Override

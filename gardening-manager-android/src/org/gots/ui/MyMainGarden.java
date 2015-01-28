@@ -15,12 +15,14 @@ import java.util.Random;
 import org.gots.R;
 import org.gots.action.GardeningActionInterface;
 import org.gots.action.bean.DeleteAction;
+import org.gots.action.bean.SowingAction;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.provider.AllotmentContentProvider;
 import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.GrowingSeedInterface;
 import org.gots.ui.AllotmentListFragment.OnAllotmentSelected;
 import org.gots.ui.VendorListFragment.OnSeedSelected;
 
@@ -94,6 +96,7 @@ public class MyMainGarden extends BaseGotsActivity implements OnAllotmentSelecte
     @Override
     protected void onResume() {
         registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.GROWINGSEED_DISPLAYLIST));
+        registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.ALLOTMENT_EVENT));
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transactionTutorial = fragmentManager.beginTransaction();
         transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
@@ -118,11 +121,10 @@ public class MyMainGarden extends BaseGotsActivity implements OnAllotmentSelecte
     public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
+            if (BroadCastMessages.ALLOTMENT_EVENT.equals(intent.getAction())) {
                 if (allotmentListFragment != null) {
                     allotmentListFragment.update();
                 }
-                setProgressRefresh(false);
             }
         }
     };
@@ -148,7 +150,7 @@ public class MyMainGarden extends BaseGotsActivity implements OnAllotmentSelecte
                 @Override
                 protected BaseAllotmentInterface doInBackground(Void... params) {
                     BaseAllotmentInterface newAllotment = new Allotment();
-                    newAllotment.setName("" + new Random().nextInt());
+                    newAllotment.setName("Name of my allotment");
                     return allotmentManager.createAllotment(newAllotment);
                 }
 
@@ -221,8 +223,6 @@ public class MyMainGarden extends BaseGotsActivity implements OnAllotmentSelecte
                         new AsyncTask<BaseAllotmentInterface, Integer, Void>() {
                             @Override
                             protected void onPreExecute() {
-                                setProgressRefresh(true);
-
                                 super.onPreExecute();
                             }
 
@@ -236,7 +236,6 @@ public class MyMainGarden extends BaseGotsActivity implements OnAllotmentSelecte
                             @Override
                             protected void onPostExecute(Void result) {
                                 onResume();
-                                setProgressRefresh(false);
                                 sendBroadcast(new Intent(BroadCastMessages.ALLOTMENT_EVENT));
                                 super.onPostExecute(result);
                             }
@@ -301,7 +300,13 @@ public class MyMainGarden extends BaseGotsActivity implements OnAllotmentSelecte
             transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
             transactionTutorial.remove(vendorListFragment).commit();
         }
-        Toast.makeText(getApplicationContext(), seed.toString(), Toast.LENGTH_LONG).show();
+        
+        if (seed !=null){
+            SowingAction action = new SowingAction(getApplicationContext());
+            action.execute(currentAllotment, (GrowingSeedInterface)seed);
+            sendBroadcast(new Intent(BroadCastMessages.ALLOTMENT_EVENT));
+        }
+        
     }
 
     @Override

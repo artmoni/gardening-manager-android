@@ -192,8 +192,7 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
 
     @Override
     public void onPause() {
-        if (seedBroadcastReceiver != null && isAdded())
-            mContext.unregisterReceiver(seedBroadcastReceiver);
+        mContext.unregisterReceiver(seedBroadcastReceiver);
         super.onPause();
     }
 

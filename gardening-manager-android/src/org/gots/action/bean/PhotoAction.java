@@ -81,7 +81,7 @@ public class PhotoAction extends AbstractActionSeed implements PermanentActionIn
     @Override
     public int execute(BaseAllotmentInterface allotment, GrowingSeedInterface seed) {
 
-        return 0;
+        return super.execute(seed);
     }
 
     @Override

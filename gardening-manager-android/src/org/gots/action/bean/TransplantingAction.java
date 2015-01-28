@@ -29,7 +29,6 @@ public class TransplantingAction extends AbstractActionSeed implements SeedActio
 
     @Override
     public int execute(GrowingSeedInterface seed) {
-        setDateActionDone(Calendar.getInstance().getTime());
         seed.getActionToDo().remove(this);
         seed.getActionDone().add(this);
         actionSeedManager.doAction(this, seed);
