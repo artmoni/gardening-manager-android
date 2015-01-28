@@ -27,7 +27,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class ListGrowingSeedAdapter extends BaseAdapter implements OnClickListener, OnLongClickListener {
+public class ListGrowingSeedAdapter extends BaseAdapter {
     Context mContext;
 
     List<GrowingSeedInterface> mySeeds;
@@ -65,8 +65,8 @@ public class ListGrowingSeedAdapter extends BaseAdapter implements OnClickListen
 
             seedWidget = new SeedWidget(mContext);
             seedWidget.setSeed(currentSeed);
-            seedWidget.setOnClickListener(this);
-            seedWidget.setOnLongClickListener(this);
+            // seedWidget.setOnClickListener(this);
+            // seedWidget.setOnLongClickListener(this);
             seedWidget.setTag(currentSeed);
             int sdk = android.os.Build.VERSION.SDK_INT;
             if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
@@ -99,22 +99,6 @@ public class ListGrowingSeedAdapter extends BaseAdapter implements OnClickListen
         TextView seedHarvestPeriod;
 
         TextView seedSowingPeriod;
-    }
-
-    @Override
-    public void onClick(View v) {
-        final Intent i = new Intent(mContext, TabSeedActivity.class);
-        i.putExtra("org.gots.seed.id", ((GrowingSeedInterface) v.getTag()).getGrowingSeedId());
-        i.putExtra("org.gots.seed.url", ((GrowingSeedInterface) v.getTag()).getUrlDescription());
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        mContext.startActivity(i);
-    }
-
-    @Override
-    public boolean onLongClick(View v) {
-        QuickSeedActionBuilder actionBuilder = new QuickSeedActionBuilder(mContext, (SeedWidget) v);
-        actionBuilder.show();
-        return false;
     }
 
 }

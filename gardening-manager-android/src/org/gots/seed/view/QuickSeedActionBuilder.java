@@ -27,6 +27,7 @@ import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.ui.TabSeedActivity;
 import org.gots.ui.fragment.ScheduleActionFragment;
@@ -42,7 +43,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.Toast;
-
 
 public class QuickSeedActionBuilder {
 
@@ -74,10 +74,10 @@ public class QuickSeedActionBuilder {
         }
     }
 
-    public QuickSeedActionBuilder(Context context, final SeedWidget v) {
-        parentView = v;
+    public QuickSeedActionBuilder(Context context, final SeedWidget parent, GrowingSeedInterface growingSeed) {
+        parentView = parent;
         mContext = context;
-        seed = (GrowingSeedInterface) v.getTag();
+        this.seed = growingSeed;
         quickAction = new QuickAction(mContext, QuickAction.HORIZONTAL);
         actionManager = GotsActionManager.getInstance().initIfNew(mContext);
         actionSeedManager = GotsActionSeedManager.getInstance().initIfNew(mContext);

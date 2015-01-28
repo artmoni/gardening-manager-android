@@ -47,17 +47,13 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.MyMainGarden" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow"/>
+        <activity android:name=".ui.GardenActivity" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow"/>
         <activity android:name=".ui.MainActivity" android:theme="@style/Theme.Styled">
         </activity>
         <activity android:name=".ui.SensorActivity" android:theme="@style/Theme.Styled">
         </activity>
-        <activity android:name=".ui.AllotmentActivity"/>
-        <activity android:name=".ui.SeedActivity" android:theme="@style/Theme.Styled"/>
-        <activity android:name=".ui.VendorListActivity"/>
         <activity android:name=".ui.ProfileActivity" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow">
         </activity>
-        <activity android:name=".ui.ListActionActivity" android:theme="@style/Theme.Styled"/>
         <activity android:name=".ui.ActionActivity" android:theme="@style/Theme.Styled"/>
         <activity android:name=".ui.AboutActivity" android:theme="@style/Theme.Styled"/>
         <activity android:name=".ui.WebHelpActivity" android:theme="@style/Theme.Styled"/>

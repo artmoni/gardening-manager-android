@@ -23,6 +23,7 @@ import org.gots.seed.GotsSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
+import org.gots.seed.view.SeedWidget;
 import org.gots.ui.GardenActivity;
 
 import android.app.Activity;
@@ -40,14 +41,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ListAllotmentAdapter extends BaseAdapter implements
-        OnClickListener {
+public class ListAllotmentAdapter extends BaseAdapter {
     protected static final String TAG = "ListAllotmentAdapter";
 
     FragmentActivity mContext;
@@ -62,8 +63,18 @@ public class ListAllotmentAdapter extends BaseAdapter implements
 
     private int currentSeedId;
 
-    public ListAllotmentAdapter(FragmentActivity mContext,
-            List<BaseAllotmentInterface> allotments, Bundle bundle) {
+    OnGrowingSeedClickListener clickListener;
+
+    public interface OnGrowingSeedClickListener {
+        public void onGrowingSeedClick(View view, GrowingSeedInterface seedInterface);
+
+        public void onGrowingSeedLongClick(View view, GrowingSeedInterface seedInterface);
+
+        public void onAllotmentMenuClick(View view, BaseAllotmentInterface allotmentInterface);
+
+    }
+
+    public ListAllotmentAdapter(FragmentActivity mContext, List<BaseAllotmentInterface> allotments, Bundle bundle) {
         this.mContext = mContext;
         myAllotments = allotments;
         if (bundle != null) {
@@ -76,6 +87,10 @@ public class ListAllotmentAdapter extends BaseAdapter implements
         myAllotments = allotments;
         notifyDataSetChanged();
     };
+
+    public void setOnGrowingSeedClickListener(OnGrowingSeedClickListener listener) {
+        this.clickListener = listener;
+    }
 
     @Override
     public int getCount() {
@@ -93,7 +108,7 @@ public class ListAllotmentAdapter extends BaseAdapter implements
     }
 
     public class Holder {
-        public GridView listSeeds;
+        public GridView seedGridView;
 
         public TextView allotmentName;
 
@@ -111,16 +126,14 @@ public class ListAllotmentAdapter extends BaseAdapter implements
         Holder holder;
         if (ll == null) {
             holder = new Holder();
-            ll = (LinearLayout) LayoutInflater.from(mContext).inflate(
-                    R.layout.list_allotments, parent, false);
+            ll = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.list_allotments, parent, false);
             if (GotsPreferences.DEBUG) {
                 TextView textView = new TextView(mContext);
-                textView.setText("(" + getItem(position).getId() + ")"
-                        + getItem(position).getUUID());
+                textView.setText("(" + getItem(position).getId() + ")" + getItem(position).getUUID());
                 ll.addView(textView);
             }
 
-            holder.listSeeds = (GridView) ll.findViewById(R.id.IdGrowingSeedList);
+            holder.seedGridView = (GridView) ll.findViewById(R.id.IdGrowingSeedList);
             holder.titlebar = (LinearLayout) ll.findViewById(R.id.idAllotmentTitlebar);
             holder.allotmentName = (TextView) ll.findViewById(R.id.textAllotmentName);
             holder.menu = (LinearLayout) ll.findViewById(R.id.idAllotmentMenu);
@@ -150,22 +163,34 @@ public class ListAllotmentAdapter extends BaseAdapter implements
         int nbcolumn = (width - 200) / layoutsize;
         if (nbcolumn < 1)
             nbcolumn = 1;
-        holder.listSeeds.setNumColumns(nbcolumn);
+        holder.seedGridView.setNumColumns(nbcolumn);
 
-        listGrowingSeedAdapter = new ListGrowingSeedAdapter(mContext, getItem(
-                position).getSeeds());
-        holder.listSeeds.setAdapter(listGrowingSeedAdapter);
-        holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(
-                LayoutParams.WRAP_CONTENT, layoutsize));
+        listGrowingSeedAdapter = new ListGrowingSeedAdapter(mContext, getItem(position).getSeeds());
+        holder.seedGridView.setAdapter(listGrowingSeedAdapter);
+        holder.seedGridView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, layoutsize));
         if (listGrowingSeedAdapter.getCount() > 0) {
-            holder.listSeeds.setLayoutParams(new LinearLayout.LayoutParams(
-                    LayoutParams.MATCH_PARENT, (holder.listSeeds.getCount()
-                            / nbcolumn + 1)
-                            * layoutsize + layoutsize));
+            holder.seedGridView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+                    (holder.seedGridView.getCount() / nbcolumn + 1) * layoutsize + layoutsize));
             // holder.listSeeds.setLayoutParams(new
             // LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
             // LayoutParams.WRAP_CONTENT));
         }
+        holder.seedGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                clickListener.onGrowingSeedClick(view,
+                        ((ListGrowingSeedAdapter) ((GridView) parent).getAdapter()).getItem(position));
+
+            }
+        });
+        holder.seedGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                clickListener.onGrowingSeedLongClick(view,
+                        ((ListGrowingSeedAdapter) ((GridView) parent).getAdapter()).getItem(position));
+                return true;
+            }
+        });
         // else
         // holder.listSeeds.setLayoutParams(new
         // LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
@@ -176,7 +201,13 @@ public class ListAllotmentAdapter extends BaseAdapter implements
         // holder.titlebar.removeAllViews();
 
         holder.menu.setTag(holder);
-        holder.menu.setOnClickListener(this);
+        holder.menu.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                clickListener.onAllotmentMenuClick(v, getItem(position));
+            }
+        });
         // SowingAction sow = new SowingAction(mContext);
         // ActionWidget widget = new ActionWidget(mContext, sow);
         // widget.setTag(position);
@@ -192,39 +223,9 @@ public class ListAllotmentAdapter extends BaseAdapter implements
 
                 @Override
                 public void onClick(View v) {
-                    new AsyncTask<Void, Integer, GrowingSeedInterface>() {
-                        @Override
-                        protected GrowingSeedInterface doInBackground(
-                                Void... params) {
-
-                            GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(
-                                    mContext);
-                            GotsSeedManager seedManager = GotsSeedManager.getInstance().initIfNew(
-                                    mContext);
-                            // NuxeoGrowingSeedProvider provider = new
-                            // NuxeoGrowingSeedProvider(mContext);
-                            GrowingSeedInterface growingSeed = (GrowingSeedInterface) seedManager.getSeedById(currentSeedId);
-                            growingSeed.setDateSowing(Calendar.getInstance().getTime());
-
-                            return growingSeedManager.plantingSeed(growingSeed,
-                                    getItem(position));
-                        }
-
-                        @Override
-                        protected void onPostExecute(GrowingSeedInterface seed) {
-                            // notifyDataSetChanged();
-                            Toast.makeText(
-                                    mContext,
-                                    "Sowing"
-                                            + " "
-                                            + SeedUtil.translateSpecie(
-                                                    mContext, seed),
-                                    Toast.LENGTH_LONG).show();
-                            mContext.sendBroadcast(new Intent(
-                                    BroadCastMessages.SEED_DISPLAYLIST));
-                            ((Activity) mContext).finish();
-                        }
-                    }.execute();
+                    if (clickListener != null) {
+                        clickListener.onAllotmentMenuClick(v, getItem(position));
+                    }
                 }
             });
         }
@@ -340,14 +341,6 @@ public class ListAllotmentAdapter extends BaseAdapter implements
         // widgetSensor.setPadding(4, 4, 4, 8);
         // holder.menu.addView(widgetSensor);
         return ll;
-    }
-
-    @Override
-    public void onClick(View v) {
-        Holder holder = (Holder) v.getTag();
-        QuickAllotmentActionBuilder actionsBuilder = new QuickAllotmentActionBuilder(
-                v, holder.allotment.getId());
-        actionsBuilder.show();
     }
 
 }

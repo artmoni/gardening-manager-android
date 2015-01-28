@@ -17,12 +17,16 @@ import org.gots.action.GardeningActionInterface;
 import org.gots.action.bean.DeleteAction;
 import org.gots.action.bean.SowingAction;
 import org.gots.ads.GotsAdvertisement;
+import org.gots.allotment.adapter.ListAllotmentAdapter.Holder;
+import org.gots.allotment.view.QuickAllotmentActionBuilder;
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.provider.AllotmentContentProvider;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.view.QuickSeedActionBuilder;
+import org.gots.seed.view.SeedWidget;
 import org.gots.ui.AllotmentListFragment.OnAllotmentSelected;
 import org.gots.ui.VendorListFragment.OnSeedSelected;
 
@@ -42,6 +46,7 @@ import android.support.v7.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -280,10 +285,10 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
             switch (item.getItemId()) {
             case R.id.update_allotment:
                 showDialogRenameAllotment(currentAllotment);
-                return true;
+                break;
             case R.id.delete_allotment:
                 removeAllotment(currentAllotment);
-                return true;
+                break;
             default:
                 break;
             }
@@ -300,13 +305,13 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
             transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
             transactionTutorial.remove(vendorListFragment).commit();
         }
-        
-        if (seed !=null){
+
+        if (seed != null) {
             SowingAction action = new SowingAction(getApplicationContext());
-            action.execute(currentAllotment, (GrowingSeedInterface)seed);
+            action.execute(currentAllotment, (GrowingSeedInterface) seed);
             sendBroadcast(new Intent(BroadCastMessages.ALLOTMENT_EVENT));
         }
-        
+
     }
 
     @Override
@@ -326,5 +331,26 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
         // Start the CAB using the ActionMode.Callback defined above
         startSupportActionMode(mActionModeCallback);
 
+    }
+
+    @Override
+    public void onGrowingSeedClick(View v, GrowingSeedInterface growingSeedInterface) {
+        final Intent i = new Intent(this, TabSeedActivity.class);
+        i.putExtra("org.gots.seed.id", growingSeedInterface.getGrowingSeedId());
+        i.putExtra("org.gots.seed.url", growingSeedInterface.getUrlDescription());
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
+    }
+
+    @Override
+    public void onGrowingSeedLongClick(View v, GrowingSeedInterface growingSeedInterface) {
+        QuickSeedActionBuilder actionBuilder = new QuickSeedActionBuilder(this, (SeedWidget) v, growingSeedInterface);
+        actionBuilder.show();
+    }
+
+    @Override
+    public void onAllotmentMenuClick(View v, BaseAllotmentInterface allotmentInterface) {
+        QuickAllotmentActionBuilder actionsBuilder = new QuickAllotmentActionBuilder(v, allotmentInterface);
+        actionsBuilder.show();
     }
 }

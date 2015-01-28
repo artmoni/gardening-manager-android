@@ -28,7 +28,7 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class ListActionActivity extends ListFragment implements ListView.OnScrollListener {
+public class ListActionFragment extends ListFragment implements ListView.OnScrollListener {
 
     Handler mHandler = new Handler();
 
@@ -80,7 +80,7 @@ public class ListActionActivity extends ListFragment implements ListView.OnScrol
             };
         }.execute(seedid);
 
-        getListView().setOnScrollListener(ListActionActivity.this);
+        getListView().setOnScrollListener(ListActionFragment.this);
 
     }
 

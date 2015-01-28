@@ -7,6 +7,7 @@ import org.gots.R;
 import org.gots.allotment.adapter.ListAllotmentAdapter;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GotsGrowingSeedManager;
+import org.gots.seed.GrowingSeedInterface;
 import org.gots.ui.fragment.AbstractListFragment;
 
 import android.app.Activity;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class AllotmentListFragment extends AbstractListFragment {
     private ListAllotmentAdapter lsa;
@@ -25,9 +27,16 @@ public class AllotmentListFragment extends AbstractListFragment {
     private OnAllotmentSelected mCallback;
 
     public interface OnAllotmentSelected {
-        public abstract void onAllotmentClick(BaseAllotmentInterface allotment);
+        public abstract void onAllotmentClick(BaseAllotmentInterface allotmentInterface);
 
-        public abstract void onAllotmentLongClick(BaseAllotmentInterface item);
+        public abstract void onAllotmentLongClick(BaseAllotmentInterface allotmentInterface);
+
+        public abstract void onGrowingSeedClick(View v, GrowingSeedInterface growingSeedInterface);
+
+        public abstract void onGrowingSeedLongClick(View v, GrowingSeedInterface growingSeedInterface);
+
+        public abstract void onAllotmentMenuClick(View v, BaseAllotmentInterface allotmentInterface);
+
     }
 
     @Override
@@ -68,6 +77,23 @@ public class AllotmentListFragment extends AbstractListFragment {
                 mCallback.onAllotmentLongClick(lsa.getItem(position));
                 view.setSelected(true);
                 return true;
+            }
+        });
+        lsa.setOnGrowingSeedClickListener(new ListAllotmentAdapter.OnGrowingSeedClickListener() {
+
+            @Override
+            public void onGrowingSeedLongClick(View v, GrowingSeedInterface seedInterface) {
+                mCallback.onGrowingSeedLongClick(v,seedInterface);
+            }
+
+            @Override
+            public void onGrowingSeedClick(View v, GrowingSeedInterface seedInterface) {
+                mCallback.onGrowingSeedClick(v,seedInterface);
+            }
+
+            @Override
+            public void onAllotmentMenuClick(View v, BaseAllotmentInterface allotmentInterface) {
+                mCallback.onAllotmentMenuClick(v, allotmentInterface);
             }
         });
         super.onViewCreated(v, savedInstanceState);

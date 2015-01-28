@@ -15,6 +15,7 @@ import net.londatiga.android.QuickAction;
 import org.gots.action.GotsActionManager;
 import org.gots.action.bean.SowingAction;
 import org.gots.action.view.ActionWidget;
+import org.gots.bean.BaseAllotmentInterface;
 import org.gots.ui.HutActivity;
 
 import android.content.Intent;
@@ -25,11 +26,11 @@ public class QuickAllotmentActionBuilder {
 
     private View parentView;
 
-    private Integer currentAllotmentId;
+    private BaseAllotmentInterface currentAllotment;
 
-    public QuickAllotmentActionBuilder(final View v, Integer allotmentId) {
+    public QuickAllotmentActionBuilder(final View v, BaseAllotmentInterface allotment) {
         parentView = v;
-        currentAllotmentId = allotmentId;
+        currentAllotment = allotment;
         quickAction = new QuickAction(v.getContext(), QuickAction.HORIZONTAL);
 
         GotsActionManager helper = GotsActionManager.getInstance().initIfNew(v.getContext());
@@ -47,7 +48,7 @@ public class QuickAllotmentActionBuilder {
                 // v.getContext().startActivity(i);
                 // quickAction.dismiss();
                 Intent i = new Intent(v.getContext(), HutActivity.class);
-                i.putExtra("org.gots.allotment.reference", currentAllotmentId);
+                i.putExtra("org.gots.allotment.reference", currentAllotment.getId());
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 v.getContext().startActivity(i);
             }

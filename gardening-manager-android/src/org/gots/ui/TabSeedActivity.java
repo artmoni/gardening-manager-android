@@ -201,7 +201,7 @@ public class TabSeedActivity extends BaseGotsActivity {
         if (mSeed.getGrowingSeedId() > 0) {
             mTabsAdapter.addTab(
                     bar.newTab().setTag("event_list").setText(getString(R.string.seed_description_tabmenu_actions)),
-                    ListActionActivity.class, null);
+                    ListActionFragment.class, null);
         }
         // // ********************** Tab description **********************
         mTabsAdapter.addTab(
