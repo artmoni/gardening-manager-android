@@ -10,21 +10,19 @@
  ******************************************************************************/
 package org.gots.ui;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import org.gots.R;
 import org.gots.action.GardeningActionInterface;
 import org.gots.action.bean.DeleteAction;
 import org.gots.ads.GotsAdvertisement;
-import org.gots.allotment.adapter.ListAllotmentAdapter;
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.provider.AllotmentContentProvider;
-import org.gots.seed.GotsGrowingSeedManager;
-import org.gots.weather.view.WeatherWidget;
+import org.gots.seed.BaseSeedInterface;
+import org.gots.ui.AllotmentListFragment.OnAllotmentSelected;
+import org.gots.ui.VendorListFragment.OnSeedSelected;
 
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -34,30 +32,25 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
+import android.widget.Toast;
 
-public class MyMainGarden extends BaseGotsActivity {
+public class MyMainGarden extends BaseGotsActivity implements OnAllotmentSelected, OnSeedSelected {
 
     public static final String SELECT_ALLOTMENT = "allotment.select";
 
     public static final String VENDOR_SEED_ID = "allotment.vendorseedid";
 
     protected static final String TAG = "MyMainGarden";
-
-    private ListAllotmentAdapter lsa;
-
-    ListView listAllotments;
-
-    WeatherWidget weatherWidget;
 
     Menu menu;
 
@@ -70,26 +63,9 @@ public class MyMainGarden extends BaseGotsActivity {
         bar.setTitle(R.string.dashboard_allotments_name);
 
         // GardenManager gm =GardenManager.getInstance();
-        registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.GROWINGSEED_DISPLAYLIST));
 
         setContentView(R.layout.garden);
-        listAllotments = (ListView) findViewById(R.id.IdGardenAllotmentsList);
-        lsa = new ListAllotmentAdapter(MyMainGarden.this, new ArrayList<BaseAllotmentInterface>(),
-                getIntent().getExtras());
-        listAllotments.setAdapter(lsa);
-        listAllotments.setDivider(null);
-        listAllotments.setDividerHeight(0);
-        listAllotments.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        listAllotments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                
-                view.setSelected(true);
-                startSupportActionMode(new MyCallBack(position));
-            }
-
-        });
         // listAllotments.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
         // listAllotments.setBackgroundDrawable(getResources().getDrawable(R.drawable.help_hut_2));
@@ -101,6 +77,8 @@ public class MyMainGarden extends BaseGotsActivity {
         }
 
         // setProgressAction(new Intent(this, AllotmentNotificationService.class));
+        vendorListFragment = new VendorListFragment();
+        allotmentListFragment = new AllotmentListFragment();
     }
 
     @Override
@@ -110,12 +88,22 @@ public class MyMainGarden extends BaseGotsActivity {
 
     @Override
     protected void onDestroy() {
-        unregisterReceiver(seedBroadcastReceiver);
         super.onDestroy();
     }
 
     @Override
+    protected void onResume() {
+        registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.GROWINGSEED_DISPLAYLIST));
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transactionTutorial = fragmentManager.beginTransaction();
+        transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
+        transactionTutorial.replace(R.id.idFragmentAllotmentList, allotmentListFragment).commit();
+        super.onResume();
+    }
+
+    @Override
     protected void onPause() {
+        unregisterReceiver(seedBroadcastReceiver);
         super.onPause();
     }
 
@@ -130,12 +118,20 @@ public class MyMainGarden extends BaseGotsActivity {
     public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            // onResume();
             if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
+                if (allotmentListFragment != null) {
+                    allotmentListFragment.update();
+                }
                 setProgressRefresh(false);
             }
         }
     };
+
+    private BaseAllotmentInterface currentAllotment;
+
+    private AllotmentListFragment allotmentListFragment;
+
+    private VendorListFragment vendorListFragment;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -159,7 +155,6 @@ public class MyMainGarden extends BaseGotsActivity {
                 @Override
                 protected void onPostExecute(BaseAllotmentInterface result) {
                     sendBroadcast(new Intent(BroadCastMessages.ALLOTMENT_EVENT));
-                    onResume();
                     super.onPostExecute(result);
                 }
             }.execute();
@@ -199,7 +194,7 @@ public class MyMainGarden extends BaseGotsActivity {
                     }
 
                     protected void onPostExecute(Void result) {
-                        lsa.notifyDataSetChanged();
+                        // lsa.notifyDataSetChanged();
                         dialog.cancel();
                     };
 
@@ -258,42 +253,11 @@ public class MyMainGarden extends BaseGotsActivity {
     }
 
     @Override
-    protected boolean requireAsyncDataRetrieval() {
-        return true;
-    }
-
-    @Override
-    protected Object retrieveNuxeoData() throws Exception {
-
-        List<BaseAllotmentInterface> allotments = allotmentManager.getMyAllotments(false);
-        GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(MyMainGarden.this);
-
-        for (int i = 0; i < allotments.size(); i++) {
-            allotments.get(i).setSeeds(growingSeedManager.getGrowingSeedsByAllotment(allotments.get(i), false));
-        }
-        return allotments;
-    }
-
-    @Override
-    protected void onNuxeoDataRetrieved(Object data) {
-        List<BaseAllotmentInterface> result = (List<BaseAllotmentInterface>) data;
-        if (result != null)
-            lsa.setAllotments(result);
-        super.onNuxeoDataRetrieved(data);
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private final class MyCallBack implements ActionMode.Callback {
-
-        private BaseAllotmentInterface allotment;
-
-        private MyCallBack(int position) {
-            allotment = lsa.getItem(position);
-        }
+    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -302,7 +266,7 @@ public class MyMainGarden extends BaseGotsActivity {
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            
+
         }
 
         @Override
@@ -316,17 +280,46 @@ public class MyMainGarden extends BaseGotsActivity {
 
             switch (item.getItemId()) {
             case R.id.update_allotment:
-                showDialogRenameAllotment(allotment);
+                showDialogRenameAllotment(currentAllotment);
                 return true;
             case R.id.delete_allotment:
-                removeAllotment(allotment);
+                removeAllotment(currentAllotment);
                 return true;
             default:
                 break;
             }
-            listAllotments.setItemChecked(-1, true);//clear selection in listview
+            // listAllotments.setItemChecked(-1, true);// clear selection in listview
             mode.finish();
             return true;
         }
+    };
+
+    @Override
+    public void onSeedClick(BaseSeedInterface seed) {
+        if (vendorListFragment != null) {
+            FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
+            transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
+            transactionTutorial.remove(vendorListFragment).commit();
+        }
+        Toast.makeText(getApplicationContext(), seed.toString(), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onAllotmentClick(BaseAllotmentInterface allotment) {
+        currentAllotment = allotment;
+
+        FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
+        transactionTutorial.setCustomAnimations(R.anim.push_right_in, R.anim.push_right_out);
+        transactionTutorial.addToBackStack(null);
+        transactionTutorial.add(R.id.idFragmentAllotmentList, vendorListFragment).commit();
+    }
+
+    @Override
+    public void onAllotmentLongClick(BaseAllotmentInterface allotment) {
+        currentAllotment = allotment;
+
+        // Start the CAB using the ActionMode.Callback defined above
+        startSupportActionMode(mActionModeCallback);
+
     }
 }

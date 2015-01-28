@@ -80,11 +80,16 @@ public class WeatherWidget extends GridView {
         super.onLayout(changed, left, top, right, bottom);
     }
 
-//    public void update() {
-//
-//        weatherWidgetAdapter.setConditions(wm.getConditionSet(nbDays));
-//        weatherWidgetAdapter.notifyDataSetChanged();
-//        invalidateViews();
-//    }
+    // public void update() {
+    //
+    // weatherWidgetAdapter.setConditions(wm.getConditionSet(nbDays));
+    // weatherWidgetAdapter.notifyDataSetChanged();
+    // invalidateViews();
+    // }
+
+    public void setWeatherConditions(List<WeatherConditionInterface> weatherConditions) {
+        this.weatherConditions = weatherConditions;
+        invalidate();
+    }
 
 }

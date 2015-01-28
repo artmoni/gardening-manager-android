@@ -23,6 +23,7 @@ import org.gots.inapp.AppRater;
 import org.gots.inapp.GotsBillingDialog;
 import org.gots.inapp.GotsPurchaseItem;
 import org.gots.nuxeo.NuxeoWorkflowProvider;
+import org.gots.preferences.GotsPreferences;
 import org.gots.provider.ActionsContentProvider;
 import org.gots.provider.AllotmentContentProvider;
 import org.gots.provider.GardenContentProvider;
@@ -37,6 +38,7 @@ import org.gots.ui.fragment.LoginDialogFragment;
 import org.gots.ui.fragment.TutorialResumeFragment;
 import org.gots.ui.fragment.WeatherResumeFragment;
 import org.gots.ui.fragment.WorkflowResumeFragment;
+import org.gots.ui.fragment.TutorialResumeFragment.OnTutorialFinishedListener;
 import org.gots.ui.slidingmenu.NavDrawerItem;
 import org.gots.ui.slidingmenu.adapter.NavDrawerListAdapter;
 import org.json.JSONArray;
@@ -78,7 +80,7 @@ import android.widget.Toast;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 
-public class MainActivity extends BaseGotsActivity implements GardenListener {
+public class MainActivity extends BaseGotsActivity implements GardenListener, OnTutorialFinishedListener {
     private DrawerLayout mDrawerLayout;
 
     private ListView mDrawerList;
@@ -833,7 +835,8 @@ public class MainActivity extends BaseGotsActivity implements GardenListener {
     }
 
     private void displayTutorialFragment() {
-        if (findViewById(R.id.idFragmentTutorial) != null) {
+        if (findViewById(R.id.idFragmentTutorial) != null
+                && gotsPrefs.get(GotsPreferences.ORG_GOTS_TUTORIAL_FINISHED, false)) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             Fragment tutorialResumeFragment = new TutorialResumeFragment();
             FragmentTransaction transactionTutorial = fragmentManager.beginTransaction();
@@ -852,5 +855,10 @@ public class MainActivity extends BaseGotsActivity implements GardenListener {
             findViewById(R.id.idFragmentIncredible).setVisibility(View.GONE);
         else
             findViewById(R.id.idFragmentIncredible).setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onTutorialFinished() {
+        gotsPrefs.set(GotsPreferences.ORG_GOTS_TUTORIAL_FINISHED, true);
     }
 }

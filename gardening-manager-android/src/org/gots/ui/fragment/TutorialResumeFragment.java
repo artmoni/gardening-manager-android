@@ -4,6 +4,7 @@ import org.gots.R;
 import org.gots.allotment.GotsAllotmentManager;
 import org.gots.bean.DefaultGarden;
 import org.gots.garden.GardenInterface;
+import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsSeedManager;
 import org.gots.ui.HutActivity;
 import org.gots.ui.MyMainGarden;
@@ -12,6 +13,7 @@ import org.gots.ui.ProfileCreationFragment;
 
 import com.google.ads.t;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -37,6 +39,23 @@ public class TutorialResumeFragment extends BaseGotsFragment implements OnClickL
     private TextView textViewDescription;
 
     private Button button;
+
+    private OnTutorialFinishedListener mCallback;
+
+    public interface OnTutorialFinishedListener {
+        public abstract void onTutorialFinished();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        try {
+
+            mCallback = (OnTutorialFinishedListener) activity;
+        } catch (ClassCastException castException) {
+            throw new ClassCastException(activity.toString() + " must implements OnTutorialFinished");
+        }
+        super.onAttach(activity);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -76,6 +95,8 @@ public class TutorialResumeFragment extends BaseGotsFragment implements OnClickL
             tutorialLevel = COMPLETE_ALLOTMENT;
         else if (GotsSeedManager.getInstance().initIfNew(getActivity()).getMyStock(garden).size() == 0)
             tutorialLevel = COMPLETE_SEED;
+        else
+            mCallback.onTutorialFinished();
         return "";
     }
 

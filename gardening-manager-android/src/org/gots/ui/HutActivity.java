@@ -534,7 +534,7 @@ public class HutActivity extends BaseGotsActivity implements OnSeedSelected {
     }
 
     @Override
-    public void onSeedSelected(BaseSeedInterface seed) {
+    public void onSeedClick(BaseSeedInterface seed) {
         Intent i = new Intent(getApplicationContext(), TabSeedActivity.class);
         i.putExtra("org.gots.seed.vendorid", seed.getSeedId());
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
