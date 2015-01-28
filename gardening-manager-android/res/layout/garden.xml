@@ -16,6 +16,7 @@
             android:background="@drawable/bg_allotment_top" >
         </LinearLayout>
 
+        <!--
         <ListView
             android:id="@+id/IdGardenAllotmentsList"
             android:layout_width="wrap_content"
@@ -25,6 +26,13 @@
             android:cacheColorHint="#00000000"
             android:focusable="false" >
         </ListView>
+        -->
+
+        <FrameLayout
+            android:id="@+id/idFragmentAllotmentList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="5dp" />
 
         <LinearLayout
             android:id="@+id/idAdsTop"

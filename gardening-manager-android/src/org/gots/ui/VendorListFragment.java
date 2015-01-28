@@ -89,7 +89,7 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
     private OnSeedSelected mCallback;
 
     public interface OnSeedSelected {
-        public abstract void onSeedSelected(BaseSeedInterface seed);
+        public abstract void onSeedClick(BaseSeedInterface seed);
     }
 
     @Override
@@ -327,6 +327,6 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
     @Override
     public void onItemClick(AdapterView<?> list, View container, int position, long id) {
 
-        mCallback.onSeedSelected(listVendorSeedAdapter.getItem(position));
+        mCallback.onSeedClick(listVendorSeedAdapter.getItem(position));
     }
 }

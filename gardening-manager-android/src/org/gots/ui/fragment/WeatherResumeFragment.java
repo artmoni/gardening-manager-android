@@ -28,10 +28,12 @@ public class WeatherResumeFragment extends BaseGotsFragment {
 
     private WeatherManager weatherManager;
 
+    private WeatherWidget weatherWidget;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         weatherManager = new WeatherManager(getActivity());
-
+        weatherWidget = new WeatherWidget(getActivity(), WeatherView.FULL, null);
         return inflater.inflate(R.layout.weather_resume, null);
     }
 
@@ -60,8 +62,7 @@ public class WeatherResumeFragment extends BaseGotsFragment {
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
         descriptionWeather.setText(currentGarden.getLocality());
-        WeatherWidget weatherWidget = new WeatherWidget(getActivity(), WeatherView.FULL,
-                (List<WeatherConditionInterface>) data);
+        weatherWidget.setWeatherConditions((List<WeatherConditionInterface>) data);
         weatherWidgetLayout.removeAllViews();
         weatherWidgetLayout.addView(weatherWidget);
         super.onNuxeoDataRetrieved(data);
