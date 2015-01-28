@@ -317,9 +317,9 @@ public class TabSeedActivity extends BaseGotsActivity {
             return true;
 
         case R.id.sow:
-            Intent intent = new Intent(this, MyMainGarden.class);
-            intent.putExtra(MyMainGarden.SELECT_ALLOTMENT, true);
-            intent.putExtra(MyMainGarden.VENDOR_SEED_ID, mSeed.getSeedId());
+            Intent intent = new Intent(this, GardenActivity.class);
+            intent.putExtra(GardenActivity.SELECT_ALLOTMENT, true);
+            intent.putExtra(GardenActivity.VENDOR_SEED_ID, mSeed.getSeedId());
             startActivity(intent);
             return true;
         case R.id.planning:

@@ -46,7 +46,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-public class MyMainGarden extends BaseGotsActivity implements OnAllotmentSelected, OnSeedSelected {
+public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelected, OnSeedSelected {
 
     public static final String SELECT_ALLOTMENT = "allotment.select";
 
@@ -228,7 +228,7 @@ public class MyMainGarden extends BaseGotsActivity implements OnAllotmentSelecte
 
                             @Override
                             protected Void doInBackground(BaseAllotmentInterface... params) {
-                                GardeningActionInterface actionItem = new DeleteAction(MyMainGarden.this);
+                                GardeningActionInterface actionItem = new DeleteAction(GardenActivity.this);
                                 actionItem.execute(selectedAllotment2, null);
                                 return null;
                             }

@@ -250,9 +250,9 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
                 actionDone = new ReduceQuantityAction(mContext);
                 break;
             case R.id.action_sow:
-                Intent intent = new Intent(mContext, MyMainGarden.class);
-                intent.putExtra(MyMainGarden.SELECT_ALLOTMENT, true);
-                intent.putExtra(MyMainGarden.VENDOR_SEED_ID, currentSeed.getSeedId());
+                Intent intent = new Intent(mContext, GardenActivity.class);
+                intent.putExtra(GardenActivity.SELECT_ALLOTMENT, true);
+                intent.putExtra(GardenActivity.VENDOR_SEED_ID, currentSeed.getSeedId());
                 mContext.startActivity(intent);
 
                 break;

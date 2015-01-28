@@ -28,7 +28,7 @@ import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.SeedUtil;
-import org.gots.ui.MyMainGarden;
+import org.gots.ui.GardenActivity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -147,9 +147,9 @@ public class MySeedsListAdapter extends SeedListAdapter {
 
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, MyMainGarden.class);
-                    intent.putExtra(MyMainGarden.SELECT_ALLOTMENT, true);
-                    intent.putExtra(MyMainGarden.VENDOR_SEED_ID, currentSeed.getSeedId());
+                    Intent intent = new Intent(mContext, GardenActivity.class);
+                    intent.putExtra(GardenActivity.SELECT_ALLOTMENT, true);
+                    intent.putExtra(GardenActivity.VENDOR_SEED_ID, currentSeed.getSeedId());
                     mContext.startActivity(intent);
 
                 }

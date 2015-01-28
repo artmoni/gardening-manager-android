@@ -23,7 +23,7 @@ import org.gots.seed.GotsSeedManager;
 import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
-import org.gots.ui.MyMainGarden;
+import org.gots.ui.GardenActivity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -67,8 +67,8 @@ public class ListAllotmentAdapter extends BaseAdapter implements
         this.mContext = mContext;
         myAllotments = allotments;
         if (bundle != null) {
-            isSelectable = bundle.getBoolean(MyMainGarden.SELECT_ALLOTMENT);
-            currentSeedId = bundle.getInt(MyMainGarden.VENDOR_SEED_ID);
+            isSelectable = bundle.getBoolean(GardenActivity.SELECT_ALLOTMENT);
+            currentSeedId = bundle.getInt(GardenActivity.VENDOR_SEED_ID);
         }
     }
 
