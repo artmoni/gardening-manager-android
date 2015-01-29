@@ -296,9 +296,12 @@ public class TabSeedActivity extends BaseGotsActivity {
             menu.findItem(R.id.planning).setVisible(false);
             menu.findItem(R.id.photo).setVisible(false);
             menu.findItem(R.id.delete).setVisible(false);
-        } else
+            menu.findItem(R.id.workflow).setVisible(false);
+        } else {
             menu.findItem(R.id.sow).setVisible(false);
-
+            if (!"project".equals(mSeed.getState()))
+                menu.findItem(R.id.workflow).setVisible(false);
+        }
         return true;
     }
 
@@ -574,6 +577,7 @@ public class TabSeedActivity extends BaseGotsActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         getIntent().putExtra(WorkflowTaskFragment.GOTS_DOC_ID, mSeed.getUUID());
         fragmentManager.beginTransaction().replace(R.id.frame_workflow, fragment).commit();
+
         super.onNuxeoDataRetrieved(data);
     }
 }

@@ -7,6 +7,15 @@
     android:background="@color/brown_light"
     android:padding="5dp" >
 
+    <ImageView
+        android:id="@+id/imageViewTop"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_allotment_top" />
+
     <LinearLayout
         android:id="@+id/WeatherWidget"
         android:layout_width="match_parent"
@@ -18,32 +27,28 @@
 
     <TextView
         android:id="@+id/textViewTutorial"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        style="@style/TitleResumeFragment"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="@string/tutorial.title"
-        android:textColor="@color/text_color_light"
-        android:textStyle="bold"
-        android:textSize="25dp"
-        android:textAppearance="?android:attr/textAppearanceLarge" android:background="@drawable/bg_allotment_top" android:padding="20dp"/>
+        android:text="@string/tutorial.title" />
 
     <TextView
         android:id="@+id/textViewTutorialDescription"
         style="@style/seed_family_description"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textViewTutorial"
-        android:layout_below="@+id/textViewTutorial"
-        android:text="@string/tutorial.a.description" android:paddingTop="10dp" android:paddingBottom="10dp">
-    </TextView>
+        android:layout_alignLeft="@+id/WeatherWidget"
+        android:layout_below="@+id/imageViewTop"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/tutorial.a.description" />
 
     <Button
         android:id="@+id/buttonTutorial"
         style="@style/buttonRed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewTutorialDescription"
+        android:layout_alignTop="@+id/WeatherWidget"
         android:layout_centerHorizontal="true"
         android:text="@string/tutorial.a.title" />
 

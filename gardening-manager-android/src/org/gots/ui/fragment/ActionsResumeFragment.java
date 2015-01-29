@@ -3,12 +3,14 @@ package org.gots.ui.fragment;
 import java.util.List;
 
 import org.gots.R;
+import org.gots.action.BaseActionInterface;
 import org.gots.action.GotsActionSeedManager;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.ui.ActionActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -22,6 +24,8 @@ public class ActionsResumeFragment extends BaseGotsFragment {
 
     GotsActionSeedProvider actionSeedManager;
 
+    OnActionsClickListener mCallback;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.actions_resume, null);
@@ -33,24 +37,42 @@ public class ActionsResumeFragment extends BaseGotsFragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
-//    @Override
-//    protected void onCurrentGardenChanged() {
-//        runAsyncDataRetrieval();
-//    }
-//
-//    @Override
-//    protected void onWeatherChanged() {
-//    }
-//
-//    @Override
-//    protected void onActionChanged() {
-//        runAsyncDataRetrieval();
-//    }
-@Override
-public void update() {
-    runAsyncDataRetrieval();
-    
-}
+    public interface OnActionsClickListener {
+        public void onActionClick(View v, BaseActionInterface actionInterface);
+
+        public void onMenuClick(View v);
+    }
+
+    // @Override
+    // protected void onCurrentGardenChanged() {
+    // runAsyncDataRetrieval();
+    // }
+    //
+    // @Override
+    // protected void onWeatherChanged() {
+    // }
+    //
+    // @Override
+    // protected void onActionChanged() {
+    // runAsyncDataRetrieval();
+    // }
+    @Override
+    public void update() {
+        runAsyncDataRetrieval();
+
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        try {
+            mCallback = (OnActionsClickListener) activity;
+        } catch (ClassCastException castException) {
+            throw new ClassCastException(ActionsResumeFragment.class.getSimpleName() + " must implements ");
+
+        }
+        super.onAttach(activity);
+    }
+
     @Override
     protected void onNuxeoDataRetrievalStarted() {
         listViewActions = (ListView) getView().findViewById(R.id.listActions);
@@ -69,7 +91,7 @@ public void update() {
 
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(getActivity(), ActionActivity.class));
+                    mCallback.onMenuClick(v);
                 }
             });
             if (actionAdapter.getCount() > 0) {

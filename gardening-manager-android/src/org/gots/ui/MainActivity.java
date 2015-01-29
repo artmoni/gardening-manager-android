@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.gots.R;
+import org.gots.action.BaseActionInterface;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.authentication.GotsSocialAuthentication;
 import org.gots.authentication.provider.google.GoogleAuthentication;
@@ -38,6 +39,7 @@ import org.gots.ui.fragment.LoginDialogFragment;
 import org.gots.ui.fragment.TutorialResumeFragment;
 import org.gots.ui.fragment.WeatherResumeFragment;
 import org.gots.ui.fragment.WorkflowResumeFragment;
+import org.gots.ui.fragment.ActionsResumeFragment.OnActionsClickListener;
 import org.gots.ui.fragment.TutorialResumeFragment.OnTutorialFinishedListener;
 import org.gots.ui.slidingmenu.NavDrawerItem;
 import org.gots.ui.slidingmenu.adapter.NavDrawerListAdapter;
@@ -80,7 +82,8 @@ import android.widget.Toast;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 
-public class MainActivity extends BaseGotsActivity implements GardenListener, OnTutorialFinishedListener {
+public class MainActivity extends BaseGotsActivity implements GardenListener, OnTutorialFinishedListener,
+        OnActionsClickListener {
     private DrawerLayout mDrawerLayout;
 
     private ListView mDrawerList;
@@ -860,5 +863,16 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
     @Override
     public void onTutorialFinished() {
         gotsPrefs.set(GotsPreferences.ORG_GOTS_TUTORIAL_FINISHED, true);
+    }
+
+    @Override
+    public void onActionClick(View v, BaseActionInterface actionInterface) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onMenuClick(View v) {
+        startActivity(new Intent(this, ActionActivity.class));
     }
 }

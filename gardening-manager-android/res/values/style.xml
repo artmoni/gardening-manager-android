@@ -291,8 +291,8 @@
         <item name="android:actionDropDownStyle">@style/DropDownNav</item>
         <item name="actionDropDownStyle">@style/DropDownNav</item>
         <item name="android:textColor">@color/text_color_dark</item>
-        <item name="android:actionModeBackground">@drawable/contextual_bar_top</item> 
-        <item name="android:actionModeSplitBackground">@drawable/contextual_bar_bottom</item> 
+        <item name="android:actionModeBackground">@drawable/contextual_bar_top</item>
+        <item name="android:actionModeSplitBackground">@drawable/contextual_bar_bottom</item>
     </style>
 
     <style name="SpinnerItem" parent="Widget.AppCompat.DropDownItem.Spinner">
@@ -381,6 +381,18 @@
         <item name="android:textColor">@color/text_color_dark</item>
         <item name="android:textSize">20dp</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TitleResumeFragment">
+        <item name="android:textColor">@color/text_color_dark</item>
+        <item name="android:textSize">25dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:background">@color/text_color_light_transparent</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
 </resources>
