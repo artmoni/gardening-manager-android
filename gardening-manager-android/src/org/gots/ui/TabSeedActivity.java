@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.gots.R;
+import org.gots.action.BaseActionInterface;
 import org.gots.action.GotsActionSeedManager;
 import org.gots.action.SeedActionInterface;
 import org.gots.action.bean.DeleteAction;
@@ -40,7 +41,10 @@ import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
+import org.gots.ui.fragment.ActionsChoiceFragment;
+import org.gots.ui.fragment.ActionsChoiceFragment.OnActionSelectedListener;
 import org.gots.ui.fragment.ActionsResumeFragment;
+import org.gots.ui.fragment.CatalogResumeFragment;
 import org.gots.ui.fragment.LoginDialogFragment;
 import org.gots.ui.fragment.ScheduleActionFragment;
 import org.gots.ui.fragment.WorkflowTaskFragment;
@@ -86,7 +90,7 @@ import android.widget.Toast;
 import com.android.vending.billing.util.IabHelper;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class TabSeedActivity extends BaseGotsActivity {
+public class TabSeedActivity extends BaseGotsActivity implements OnActionSelectedListener {
     public static final String GOTS_VENDORSEED_ID = "org.gots.seed.vendorid";
 
     public static final String GOTS_GROWINGSEED_ID = "org.gots.seed.id";
@@ -226,7 +230,10 @@ public class TabSeedActivity extends BaseGotsActivity {
             LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
             layout.addView(ads.getAdsLayout());
         }
-
+        Fragment actionsListFragment = new ActionsChoiceFragment();
+        FragmentTransaction transactionCatalogue = getSupportFragmentManager().beginTransaction();
+        transactionCatalogue.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
+        transactionCatalogue.replace(R.id.layoutActionsFragment, actionsListFragment).commit();
     }
 
     protected void displayPictureGallery() {
@@ -579,5 +586,10 @@ public class TabSeedActivity extends BaseGotsActivity {
         fragmentManager.beginTransaction().replace(R.id.frame_workflow, fragment).commit();
 
         super.onNuxeoDataRetrieved(data);
+    }
+
+    @Override
+    public void onActionSelected(BaseActionInterface actionInterface) {
+        Toast.makeText(getApplicationContext(), ">" + actionInterface.getName(), Toast.LENGTH_LONG).show();
     }
 }

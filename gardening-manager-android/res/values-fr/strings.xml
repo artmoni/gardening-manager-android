@@ -176,7 +176,7 @@
     <string name="inapp.purchase.noaccount">Un compte Google est nécessaire pour l\'achat de fonctionnalités</string>
     <string name="inapp.purchase.buy">Acheter</string>
     <string name="inapp.purchase.title">Fonctionnalités supplémentaires</string>
-    <string name="tutorial.title">Découvrir Gardening Manager</string>
+    <string name="tutorial.title">Découvrir</string>
     <string name="tutorial.a.title">Geolocaliser mon jardin </string>
     <string name="tutorial.a.description">Historique météo et cycles lunaires</string>
     <string name="tutorial.b.title">Accéder au catalogue de graines</string>

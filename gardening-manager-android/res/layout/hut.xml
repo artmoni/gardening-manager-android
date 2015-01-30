@@ -4,7 +4,8 @@
     android:layout_height="fill_parent"
     android:background="@color/text_color_light"
     android:orientation="vertical" >
-<!--     android:background="@drawable/background_simple" -->
+
+    <!-- android:background="@drawable/background_simple" -->
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -14,7 +15,8 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="60dp"
-            android:background="@drawable/bg_hut_top" >
+            android:background="@drawable/bg_hut_top"
+            android:scaleType="centerCrop" >
         </LinearLayout>
 
         <android.support.v4.view.ViewPager

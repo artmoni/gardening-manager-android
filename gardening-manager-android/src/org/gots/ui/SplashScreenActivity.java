@@ -51,6 +51,9 @@ public class SplashScreenActivity extends BaseGotsActivity {
         setContentView(R.layout.splash_screen);
         versionTextView = (TextView) findViewById(R.id.textVersion);
         imageRefresh = (ImageView) findViewById(R.id.imageRefresh);
+        Animation myRotateAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
+        myRotateAnimation.setRepeatCount(Animation.INFINITE);
+        imageRefresh.startAnimation(myRotateAnimation);
 
     }
 
@@ -63,11 +66,7 @@ public class SplashScreenActivity extends BaseGotsActivity {
         super.onActivityResult(arg0, arg1, arg2);
     }
 
-    @Override
-    protected void onResume() {
-
-        super.onResume();
-    }
+   
 
     private void checkPurchaseFeature() {
         final ArrayList<String> moreSkus = new ArrayList<String>();
@@ -139,9 +138,6 @@ public class SplashScreenActivity extends BaseGotsActivity {
     @Override
     protected void onNuxeoDataRetrievalStarted() {
         super.onNuxeoDataRetrievalStarted();
-        Animation myRotateAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
-        myRotateAnimation.setRepeatCount(Animation.INFINITE);
-        imageRefresh.startAnimation(myRotateAnimation);
     }
 
     @Override

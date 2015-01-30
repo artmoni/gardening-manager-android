@@ -385,7 +385,7 @@
 
     <style name="TitleResumeFragment">
         <item name="android:textColor">@color/text_color_dark</item>
-        <item name="android:textSize">25dp</item>
+        <item name="android:textSize">20dp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:padding">5dp</item>
         <item name="android:layout_marginTop">10dp</item>

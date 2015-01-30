@@ -12,7 +12,8 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="60dp"
-            android:background="@drawable/bg_action_top" >
+            android:background="@drawable/bg_action_top"
+            android:scaleType="centerCrop" >
         </LinearLayout>
 
         <FrameLayout
@@ -83,6 +84,13 @@
                 android:layout_toLeftOf="@+id/textView1"
                 android:src="@drawable/action_sow" />
         </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/layoutActionsFragment"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp" >
+        </FrameLayout>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/pager"

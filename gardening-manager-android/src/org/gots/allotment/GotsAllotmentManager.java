@@ -18,6 +18,7 @@ import org.nuxeo.android.broadcast.NuxeoBroadcastMessages;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.util.Log;
 
 public class GotsAllotmentManager extends BroadcastReceiver implements AllotmentProvider {
@@ -43,9 +44,11 @@ public class GotsAllotmentManager extends BroadcastReceiver implements Allotment
     private GotsAllotmentManager() {
 
     }
+
     protected GotsContext getGotsContext() {
         return GotsContext.get(mContext);
     }
+
     /**
      * After first call, {@link #initIfNew(Context)} must be called else a {@link NotConfiguredException} will be thrown
      * on the second call attempt.
@@ -69,7 +72,6 @@ public class GotsAllotmentManager extends BroadcastReceiver implements Allotment
             return this;
         }
         this.mContext = context;
-        // mContext.registerReceiver(this, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
         nuxeoManager = NuxeoManager.getInstance().initIfNew(context);
         setAllotmentProvider();
         initDone = true;
@@ -82,7 +84,6 @@ public class GotsAllotmentManager extends BroadcastReceiver implements Allotment
 
     public void finalize() {
 
-        // mContext.unregisterReceiver(this);
         initDone = false;
         mContext = null;
         instance = null;
@@ -112,18 +113,6 @@ public class GotsAllotmentManager extends BroadcastReceiver implements Allotment
         }
     }
 
-    // public void setCurrentGarden(GardenInterface garden) {
-    // GotsPreferences.getInstance().set(GotsPreferences.ORG_GOTS_CURRENT_GARDENID, (int) garden.getId());
-    // Log.d("setCurrentGarden", "[" + garden.getId() + "] " + garden.getLocality()
-    // + " has been set as current workspace");
-    // changeDatabase((int) garden.getId());
-    // }
-
-    @Override
-    public BaseAllotmentInterface getCurrentAllotment() {
-        return allotmentProvider.getCurrentAllotment();
-    }
-
     @Override
     public List<BaseAllotmentInterface> getMyAllotments(boolean force) {
         if (allotments == null || force || haschanged) {
@@ -140,24 +129,34 @@ public class GotsAllotmentManager extends BroadcastReceiver implements Allotment
     public BaseAllotmentInterface createAllotment(BaseAllotmentInterface allotment) {
         allotment = allotmentProvider.createAllotment(allotment);
         allotments.put(allotment.getId(), allotment);
-        return allotment ;
+        mContext.sendBroadcast(new Intent(BroadCastMessages.ALLOTMENT_EVENT));
+        return allotment;
     }
 
     @Override
     public int removeAllotment(BaseAllotmentInterface allotment) {
         allotments.remove(allotment.getId());
-        return allotmentProvider.removeAllotment(allotment);
+        allotmentProvider.removeAllotment(allotment);
+        mContext.sendBroadcast(new Intent(BroadCastMessages.ALLOTMENT_EVENT));
+        return 0;
     }
 
     @Override
     public BaseAllotmentInterface updateAllotment(BaseAllotmentInterface allotment) {
         allotments.put(allotment.getId(), allotment);
-        return allotmentProvider.updateAllotment(allotment);
+        allotment = allotmentProvider.updateAllotment(allotment);
+        mContext.sendBroadcast(new Intent(BroadCastMessages.ALLOTMENT_EVENT));
+        return allotment;
     }
 
     @Override
     public void setCurrentAllotment(BaseAllotmentInterface allotmentInterface) {
 
         allotmentProvider.setCurrentAllotment(allotmentInterface);
+    }
+
+    @Override
+    public BaseAllotmentInterface getCurrentAllotment() {
+        return allotmentProvider.getCurrentAllotment();
     }
 }

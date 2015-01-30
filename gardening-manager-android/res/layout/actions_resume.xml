@@ -5,7 +5,7 @@
     android:layout_margin="5dp"
     android:background="@color/brown_light"
     android:padding="5dp"
-    android:visibility="visible" >
+    android:visibility="gone" >
 
     <ImageView
         android:id="@+id/imageViewTop"

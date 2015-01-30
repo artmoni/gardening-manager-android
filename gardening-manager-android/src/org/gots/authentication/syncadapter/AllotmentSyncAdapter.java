@@ -39,6 +39,7 @@ public class AllotmentSyncAdapter extends GotsSyncAdapter {
         // }
         allotmentManager.getMyAllotments(true);
         intent.setAction(BroadCastMessages.PROGRESS_FINISHED);
+        intent.setAction(BroadCastMessages.ALLOTMENT_EVENT);
         getContext().sendBroadcast(intent);
 
     }

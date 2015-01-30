@@ -44,9 +44,11 @@ public class GotsActionManager extends BroadcastReceiver implements GotsActionPr
         }
         return instance;
     }
+
     protected GotsContext getGotsContext() {
         return GotsContext.get(mContext);
     }
+
     public synchronized GotsActionManager initIfNew(Context context) {
         if (initDone) {
             return this;
@@ -80,12 +82,16 @@ public class GotsActionManager extends BroadcastReceiver implements GotsActionPr
 
     @Override
     public ArrayList<BaseActionInterface> getActions(boolean force) {
+        if (force == false && cacheActions.size() > 0)
+            return cacheActions;
         return provider.getActions(force);
     }
 
     @Override
     public BaseActionInterface createAction(BaseActionInterface action) {
-        return provider.createAction(action);
+        final BaseActionInterface createAction = provider.createAction(action);
+        cacheActions.add(createAction);
+        return createAction;
     }
 
     @Override
