@@ -11,10 +11,10 @@
 package org.gots.action;
 
 import org.gots.bean.BaseAllotmentInterface;
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.GrowingSeed;
 
-public interface GardeningActionInterface extends BaseActionInterface {
+public interface GardeningActionInterface extends BaseAction {
 
-    public int execute(BaseAllotmentInterface allotment, GrowingSeedInterface seed);
+    public int execute(BaseAllotmentInterface allotment, GrowingSeed seed);
 
 }

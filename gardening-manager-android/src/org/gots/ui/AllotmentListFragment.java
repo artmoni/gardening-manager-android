@@ -7,7 +7,7 @@ import org.gots.R;
 import org.gots.allotment.adapter.ListAllotmentAdapter;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GotsGrowingSeedManager;
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.GrowingSeed;
 import org.gots.ui.fragment.AbstractListFragment;
 
 import android.app.Activity;
@@ -31,9 +31,9 @@ public class AllotmentListFragment extends AbstractListFragment {
 
         public abstract void onAllotmentLongClick(BaseAllotmentInterface allotmentInterface);
 
-        public abstract void onGrowingSeedClick(View v, GrowingSeedInterface growingSeedInterface);
+        public abstract void onGrowingSeedClick(View v, GrowingSeed growingSeedInterface);
 
-        public abstract void onGrowingSeedLongClick(View v, GrowingSeedInterface growingSeedInterface);
+        public abstract void onGrowingSeedLongClick(View v, GrowingSeed growingSeedInterface);
 
         public abstract void onAllotmentMenuClick(View v, BaseAllotmentInterface allotmentInterface);
 
@@ -82,12 +82,12 @@ public class AllotmentListFragment extends AbstractListFragment {
         lsa.setOnGrowingSeedClickListener(new ListAllotmentAdapter.OnGrowingSeedClickListener() {
 
             @Override
-            public void onGrowingSeedLongClick(View v, GrowingSeedInterface seedInterface) {
+            public void onGrowingSeedLongClick(View v, GrowingSeed seedInterface) {
                 mCallback.onGrowingSeedLongClick(v,seedInterface);
             }
 
             @Override
-            public void onGrowingSeedClick(View v, GrowingSeedInterface seedInterface) {
+            public void onGrowingSeedClick(View v, GrowingSeed seedInterface) {
                 mCallback.onGrowingSeedClick(v,seedInterface);
             }
 

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.gots.R;
-import org.gots.action.BaseActionInterface;
+import org.gots.action.BaseAction;
 import org.gots.action.view.ActionWidget;
 
 import android.content.Context;
@@ -43,7 +43,7 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 
     private OnDismissListener mDismissListener;
 
-    private List<BaseActionInterface> actionItems = new ArrayList<BaseActionInterface>();
+    private List<BaseAction> actionItems = new ArrayList<BaseAction>();
 
     private boolean mDidAction;
 
@@ -114,7 +114,7 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
      * 
      * @return Action Item at the position
      */
-    public BaseActionInterface getAction(int index) {
+    public BaseAction getAction(int index) {
         return actionItems.get(index);
     }
 

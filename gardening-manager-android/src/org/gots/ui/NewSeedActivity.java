@@ -22,7 +22,7 @@ import java.util.Calendar;
 import org.gots.R;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.GrowingSeed;
+import org.gots.seed.GrowingSeedImpl;
 import org.gots.seed.adapter.ListSpeciesAdapter;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
@@ -152,7 +152,7 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
             isNewSeed = false;
 
         } else {
-            newSeed = new GrowingSeed();
+            newSeed = new GrowingSeedImpl();
         }
 
         initview();

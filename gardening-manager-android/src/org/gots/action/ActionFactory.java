@@ -25,8 +25,8 @@ public class ActionFactory {
     public ActionFactory() {
     }
 
-    public static BaseActionInterface buildAction(Context context, String name) {
-        BaseActionInterface seedAction;
+    public static BaseAction buildAction(Context context, String name) {
+        BaseAction seedAction;
         if ("beak".equals(name))
             seedAction = new BeakeringAction(context);
         else if ("cut".equals(name))

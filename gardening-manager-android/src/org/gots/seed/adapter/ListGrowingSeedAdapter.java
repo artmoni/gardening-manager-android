@@ -13,7 +13,7 @@ package org.gots.seed.adapter;
 import java.util.List;
 
 import org.gots.R;
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.GrowingSeed;
 import org.gots.seed.view.QuickSeedActionBuilder;
 import org.gots.seed.view.SeedWidget;
 import org.gots.ui.TabSeedActivity;
@@ -30,11 +30,11 @@ import android.widget.TextView;
 public class ListGrowingSeedAdapter extends BaseAdapter {
     Context mContext;
 
-    List<GrowingSeedInterface> mySeeds;
+    List<GrowingSeed> mySeeds;
 
     // String currentAllotmentReference;
 
-    public ListGrowingSeedAdapter(Context mContext, List<GrowingSeedInterface> seeds) {
+    public ListGrowingSeedAdapter(Context mContext, List<GrowingSeed> seeds) {
         this.mContext = mContext;
         mySeeds = seeds;
 
@@ -46,7 +46,7 @@ public class ListGrowingSeedAdapter extends BaseAdapter {
     }
 
     @Override
-    public GrowingSeedInterface getItem(int position) {
+    public GrowingSeed getItem(int position) {
         return mySeeds.get(position);
     }
 
@@ -61,7 +61,7 @@ public class ListGrowingSeedAdapter extends BaseAdapter {
 
         SeedWidget seedWidget = (SeedWidget) convertView;
         if (convertView == null) {
-            GrowingSeedInterface currentSeed = (GrowingSeedInterface) getItem(position);
+            GrowingSeed currentSeed = (GrowingSeed) getItem(position);
 
             seedWidget = new SeedWidget(mContext);
             seedWidget.setSeed(currentSeed);

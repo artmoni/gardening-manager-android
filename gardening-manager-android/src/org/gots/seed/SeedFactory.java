@@ -15,7 +15,7 @@ public class SeedFactory {
 	// private static SeedFactory instance = null;
 
 	public static BaseSeedInterface createSeed(String family) {
-		BaseSeedInterface productedSeed = new GrowingSeed();
+		BaseSeedInterface productedSeed = new GrowingSeedImpl();
 		family = family.toLowerCase();
 		if ("cucurbitacae".equals(family))
 			productedSeed = new CucurbitacaeSeed();

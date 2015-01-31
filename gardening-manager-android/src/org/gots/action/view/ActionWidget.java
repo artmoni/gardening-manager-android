@@ -11,7 +11,7 @@
 package org.gots.action.view;
 
 import org.gots.R;
-import org.gots.action.BaseActionInterface;
+import org.gots.action.BaseAction;
 import org.gots.action.util.ActionState;
 
 import android.content.Context;
@@ -22,7 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 public class ActionWidget extends LinearLayout {
-    private BaseActionInterface mAction;
+    private BaseAction mAction;
 
     private Context mContext;
 
@@ -38,7 +38,7 @@ public class ActionWidget extends LinearLayout {
 
     private static final int[] STATE_UNDEFINED = { R.attr.state_undefined };
 
-    public ActionWidget(Context context, BaseActionInterface action) {
+    public ActionWidget(Context context, BaseAction action) {
         super(context);
         mContext = context;
         initView();
@@ -113,7 +113,7 @@ public class ActionWidget extends LinearLayout {
         // invalidate();
     }
 
-    public void setAction(BaseActionInterface action) {
+    public void setAction(BaseAction action) {
         this.mAction = action;
         // requestLayout();
         // invalidate();

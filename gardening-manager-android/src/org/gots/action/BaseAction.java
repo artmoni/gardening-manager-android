@@ -12,7 +12,7 @@ package org.gots.action;
 
 import java.util.Date;
 
-public interface BaseActionInterface {
+public interface BaseAction {
 
     public abstract void setDuration(int duration);
 

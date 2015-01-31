@@ -20,7 +20,7 @@ import org.gots.broadcast.BroadCastMessages;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GotsSeedManager;
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.GrowingSeed;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
 import org.gots.seed.view.SeedWidget;
@@ -66,9 +66,9 @@ public class ListAllotmentAdapter extends BaseAdapter {
     OnGrowingSeedClickListener clickListener;
 
     public interface OnGrowingSeedClickListener {
-        public void onGrowingSeedClick(View view, GrowingSeedInterface seedInterface);
+        public void onGrowingSeedClick(View view, GrowingSeed seedInterface);
 
-        public void onGrowingSeedLongClick(View view, GrowingSeedInterface seedInterface);
+        public void onGrowingSeedLongClick(View view, GrowingSeed seedInterface);
 
         public void onAllotmentMenuClick(View view, BaseAllotmentInterface allotmentInterface);
 

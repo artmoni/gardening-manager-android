@@ -14,13 +14,13 @@ import java.util.List;
 import java.util.Random;
 
 import org.gots.action.ActionFactory;
-import org.gots.action.BaseActionInterface;
-import org.gots.action.SeedActionInterface;
+import org.gots.action.BaseAction;
+import org.gots.action.ActionOnSeed;
 import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.exception.GotsServerRestrictedException;
 import org.gots.garden.GotsGardenManager;
 import org.gots.nuxeo.NuxeoManager;
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.GrowingSeed;
 import org.gots.seed.provider.nuxeo.NuxeoGrowingSeedProvider;
 import org.nuxeo.android.cache.blob.BlobWithProperties;
 import org.nuxeo.android.repository.DocumentManager;
@@ -59,8 +59,8 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
     }
 
     @Override
-    public ArrayList<SeedActionInterface> getActionsToDo() {
-        ArrayList<SeedActionInterface> actionsToDo = new ArrayList<SeedActionInterface>();
+    public ArrayList<ActionOnSeed> getActionsToDo() {
+        ArrayList<ActionOnSeed> actionsToDo = new ArrayList<ActionOnSeed>();
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
@@ -75,14 +75,14 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
 
             NuxeoGrowingSeedProvider gotsSeedManager = new NuxeoGrowingSeedProvider(mContext);
             for (Document actionDoc : actionDocs) {
-                BaseActionInterface actionConverted = convert(actionDoc);
-                if (!(actionConverted instanceof SeedActionInterface))
+                BaseAction actionConverted = convert(actionDoc);
+                if (!(actionConverted instanceof ActionOnSeed))
                     continue;
-                SeedActionInterface action = (SeedActionInterface) actionConverted;
+                ActionOnSeed action = (ActionOnSeed) actionConverted;
                 Document actionFolder = documentMgr.getDocument(new PathRef(actionDoc.getParentPath()));
                 Document parentSeed = documentMgr.getDocument(new PathRef(actionFolder.getParentPath()), "*");
 
-                GrowingSeedInterface seed = gotsSeedManager.getGrowingSeedsByUUID(parentSeed.getId());
+                GrowingSeed seed = gotsSeedManager.getGrowingSeedsByUUID(parentSeed.getId());
                 if (seed == null)
                     continue;
                 action = super.populateState(action, seed);
@@ -97,12 +97,12 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
     }
 
     @Override
-    public SeedActionInterface insertAction(GrowingSeedInterface seed, BaseActionInterface action) {
+    public ActionOnSeed insertAction(GrowingSeed seed, ActionOnSeed action) {
         action = insertNuxeoAction(seed, action);
         return super.insertAction(seed, action);
     }
 
-    public SeedActionInterface insertNuxeoAction(GrowingSeedInterface seed, BaseActionInterface action) {
+    public ActionOnSeed insertNuxeoAction(GrowingSeed seed, BaseAction action) {
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
@@ -121,10 +121,10 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
-        return (SeedActionInterface) action;
+        return (ActionOnSeed) action;
     }
 
-    protected Document getActionsFolder(GrowingSeedInterface seed, DocumentManager documentMgr) throws Exception {
+    protected Document getActionsFolder(GrowingSeed seed, DocumentManager documentMgr) throws Exception {
         boolean subFolderExists = false;
         Document actionFolder = null;
         for (Document subFolder : documentMgr.getChildren(new IdRef(seed.getUUID()))) {
@@ -147,7 +147,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
     }
 
     @Override
-    public long doAction(SeedActionInterface action, GrowingSeedInterface seed) {
+    public ActionOnSeed doAction(ActionOnSeed action, GrowingSeed seed) {
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
@@ -169,8 +169,8 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
     }
 
     @Override
-    public List<SeedActionInterface> getActionsToDoBySeed(GrowingSeedInterface seed, boolean force) {
-        List<SeedActionInterface> actionsToDo = new ArrayList<SeedActionInterface>();
+    public List<ActionOnSeed> getActionsToDoBySeed(GrowingSeed seed, boolean force) {
+        List<ActionOnSeed> actionsToDo = new ArrayList<ActionOnSeed>();
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
@@ -186,10 +186,10 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
                     null, new String[] { "dc:modified DESC" }, "*", 0, 50, cacheParam);
 
             for (Document actionDoc : actionDocs) {
-                BaseActionInterface actionConverted = convert(actionDoc);
-                if (!(actionConverted instanceof SeedActionInterface))
+                BaseAction actionConverted = convert(actionDoc);
+                if (!(actionConverted instanceof ActionOnSeed))
                     continue;
-                SeedActionInterface action = (SeedActionInterface) actionConverted;
+                ActionOnSeed action = (ActionOnSeed) actionConverted;
                 action = super.populateState(action, seed);
                 action.setGrowingSeedId(seed.getGrowingSeedId());
                 actionsToDo.add(action);
@@ -205,8 +205,8 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
     }
 
     @Override
-    public List<SeedActionInterface> getActionsDoneBySeed(GrowingSeedInterface seed, boolean force) {
-        ArrayList<SeedActionInterface> actionsDone = new ArrayList<SeedActionInterface>();
+    public List<ActionOnSeed> getActionsDoneBySeed(GrowingSeed seed, boolean force) {
+        ArrayList<ActionOnSeed> actionsDone = new ArrayList<ActionOnSeed>();
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
@@ -220,10 +220,10 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
                     null, new String[] { "dc:modified DESC" }, "*", 0, 50, cacheParam);
 
             for (Document actionDoc : actionDocs) {
-                BaseActionInterface actionConverted = convert(actionDoc);
-                if (!(actionConverted instanceof SeedActionInterface))
+                BaseAction actionConverted = convert(actionDoc);
+                if (!(actionConverted instanceof ActionOnSeed))
                     continue;
-                SeedActionInterface action = (SeedActionInterface) actionConverted;
+                ActionOnSeed action = (ActionOnSeed) actionConverted;
                 // super.populateState(action,
                 // seed);
                 action.setGrowingSeedId(seed.getGrowingSeedId());
@@ -239,8 +239,8 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         // actionsDone);
     }
 
-    private BaseActionInterface convert(Document actionDoc) {
-        BaseActionInterface action = ActionFactory.buildAction(mContext, actionDoc.getTitle());
+    private BaseAction convert(Document actionDoc) {
+        BaseAction action = ActionFactory.buildAction(mContext, actionDoc.getTitle());
         action.setDateActionDone(actionDoc.getDate("action:dateactiondone"));
         if (!"null".equals(actionDoc.getString("action:description")))
             action.setDescription(actionDoc.getString("action:description"));
@@ -254,7 +254,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         return action;
     }
 
-    protected void attachBlobToDocument(GrowingSeedInterface seed, PropertyMap blobProp) {
+    protected void attachBlobToDocument(GrowingSeed seed, PropertyMap blobProp) {
         Session session = getNuxeoClient().getSession();
         DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
         Document seedDoc;
@@ -322,7 +322,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
     }
 
     @Override
-    public File uploadPicture(final GrowingSeedInterface seed, File imageFile) {
+    public File uploadPicture(final GrowingSeed seed, File imageFile) {
         Session session = getNuxeoClient().getSession();
         FileUploader uploader = session.getAdapter(FileUploader.class);
         
@@ -422,7 +422,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
     }
 
     @Override
-    public List<File> getPicture(GrowingSeedInterface mSeed) {
+    public List<File> getPicture(GrowingSeed mSeed) {
         Document seedDoc;
         List<File> imageFiles = new ArrayList<File>();
         try {
@@ -452,7 +452,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
     }
 
     @Override
-    public File downloadHistory(GrowingSeedInterface mSeed) throws GotsServerRestrictedException {
+    public File downloadHistory(GrowingSeed mSeed) throws GotsServerRestrictedException {
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager service = session.getAdapter(DocumentManager.class);

@@ -12,13 +12,13 @@ package org.gots.bean;
 
 import java.util.List;
 
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.GrowingSeed;
 
 public interface BaseAllotmentInterface {
 
-	public abstract List<GrowingSeedInterface> getSeeds();
+	public abstract List<GrowingSeed> getSeeds();
 
-	public abstract void setSeeds(List<GrowingSeedInterface> seeds);
+	public abstract void setSeeds(List<GrowingSeed> seeds);
 
 	public abstract String getName();
 

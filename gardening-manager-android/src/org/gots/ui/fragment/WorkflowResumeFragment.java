@@ -104,11 +104,12 @@ public class WorkflowResumeFragment extends BaseGotsFragment implements OnItemCl
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
-        List<BaseSeedInterface> seeds = (List<BaseSeedInterface>) data;
-
-        SeedListAdapter adapter = new VendorSeedListAdapter(getActivity(), seeds);
-        gallery.setAdapter(adapter);
-        gallery.setOnItemClickListener(this);
+        if (isAdded()) {
+            List<BaseSeedInterface> seeds = (List<BaseSeedInterface>) data;
+            SeedListAdapter adapter = new VendorSeedListAdapter(getActivity(), seeds);
+            gallery.setAdapter(adapter);
+            gallery.setOnItemClickListener(this);
+        }
         // workflowTasksTextView = (TextView) getView().findViewById(R.id.textViewWorkflowDescription);
         // workflowTasksTextView.setText("" + tasksEntries.length());
 

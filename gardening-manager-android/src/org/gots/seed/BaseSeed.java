@@ -13,7 +13,7 @@ package org.gots.seed;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import org.gots.action.BaseActionInterface;
+import org.gots.action.BaseAction;
 
 public abstract class BaseSeed implements Serializable, BaseSeedInterface {
 
@@ -41,9 +41,9 @@ public abstract class BaseSeed implements Serializable, BaseSeedInterface {
 
     private String variety;
 
-    private ArrayList<BaseActionInterface> actionToDo = new ArrayList<BaseActionInterface>();
+    private ArrayList<BaseAction> actionToDo = new ArrayList<BaseAction>();
 
-    private ArrayList<BaseActionInterface> actionDone = new ArrayList<BaseActionInterface>();
+    private ArrayList<BaseAction> actionDone = new ArrayList<BaseAction>();
 
     private String reference;
 
@@ -152,10 +152,10 @@ public abstract class BaseSeed implements Serializable, BaseSeedInterface {
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        GrowingSeedInterface newSeed = new GrowingSeed();
-        newSeed.setActionDone(new ArrayList<BaseActionInterface>());
+        GrowingSeed newSeed = new GrowingSeedImpl();
+        newSeed.setActionDone(new ArrayList<BaseAction>());
         newSeed.getActionDone().addAll(getActionDone());
-        newSeed.setActionToDo(new ArrayList<BaseActionInterface>());
+        newSeed.setActionToDo(new ArrayList<BaseAction>());
         newSeed.getActionToDo().addAll(getActionToDo());
         newSeed.setDateSowingMax(dateSowingMax);
         newSeed.setDateSowingMin(dateSowingMin);
@@ -246,22 +246,22 @@ public abstract class BaseSeed implements Serializable, BaseSeedInterface {
     }
 
     @Override
-    public ArrayList<BaseActionInterface> getActionToDo() {
+    public ArrayList<BaseAction> getActionToDo() {
         return actionToDo;
     }
 
     @Override
-    public void setActionToDo(ArrayList<BaseActionInterface> actionToDo) {
+    public void setActionToDo(ArrayList<BaseAction> actionToDo) {
         this.actionToDo = actionToDo;
     }
 
     @Override
-    public ArrayList<BaseActionInterface> getActionDone() {
+    public ArrayList<BaseAction> getActionDone() {
         return actionDone;
     }
 
     @Override
-    public void setActionDone(ArrayList<BaseActionInterface> actionDone) {
+    public void setActionDone(ArrayList<BaseAction> actionDone) {
         this.actionDone = actionDone;
     }
 

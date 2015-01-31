@@ -16,8 +16,8 @@ import java.util.List;
 
 import org.gots.DatabaseHelper;
 import org.gots.bean.BaseAllotmentInterface;
+import org.gots.seed.GrowingSeedImpl;
 import org.gots.seed.GrowingSeed;
-import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.utils.GotsDBHelper;
 
@@ -44,7 +44,7 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
      * java.lang.String)
      */
     @Override
-    public GrowingSeedInterface plantingSeed(GrowingSeedInterface growingSeed, BaseAllotmentInterface allotment) {
+    public GrowingSeed plantingSeed(GrowingSeed growingSeed, BaseAllotmentInterface allotment) {
         long rowid;
 
         rowid = bdd.insert(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, seedToValues(growingSeed, allotment));
@@ -53,7 +53,7 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
         return growingSeed;
     }
 
-    protected ContentValues seedToValues(GrowingSeedInterface seed, BaseAllotmentInterface allotment) {
+    protected ContentValues seedToValues(GrowingSeed seed, BaseAllotmentInterface allotment) {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.GROWINGSEED_SEED_ID, seed.getSeedId());
         values.put(DatabaseHelper.GROWINGSEED_UUID, seed.getUUID());
@@ -73,9 +73,9 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
      * @see org.gots.seed.provider.local.GotsGrowingSeedProvider#getGrowingSeeds()
      */
     @Override
-    public ArrayList<GrowingSeedInterface> getGrowingSeeds() {
-        ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
-        GrowingSeedInterface searchedSeed = new GrowingSeed();
+    public ArrayList<GrowingSeed> getGrowingSeeds() {
+        ArrayList<GrowingSeed> allSeeds = new ArrayList<GrowingSeed>();
+        GrowingSeed searchedSeed = new GrowingSeedImpl();
         // open();
 
         try {
@@ -95,12 +95,12 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
         return allSeeds;
     }
 
-    private GrowingSeedInterface cursorToSeed(Cursor cursor) {
-        GrowingSeedInterface bsi = null;
+    private GrowingSeed cursorToSeed(Cursor cursor) {
+        GrowingSeed bsi = null;
         GotsSeedProvider localSeedProvider = new LocalSeedProvider(mContext);
-        bsi = (GrowingSeedInterface) localSeedProvider.getSeedById(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_SEED_ID)));
+        bsi = (GrowingSeed) localSeedProvider.getSeedById(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_SEED_ID)));
         if (bsi == null) {
-            bsi = new GrowingSeed();
+            bsi = new GrowingSeedImpl();
             bsi.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_SEED_ID)));
         }
         bsi.setUUID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_UUID)));
@@ -118,9 +118,9 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
      * @see org.gots.seed.provider.local.GotsGrowingSeedProvider#getSeedsByAllotment(java.lang.String)
      */
     @Override
-    public List<GrowingSeedInterface> getGrowingSeedsByAllotment(BaseAllotmentInterface allotment, boolean force) {
-        ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
-        GrowingSeedInterface searchedSeed = new GrowingSeed();
+    public List<GrowingSeed> getGrowingSeedsByAllotment(BaseAllotmentInterface allotment, boolean force) {
+        ArrayList<GrowingSeed> allSeeds = new ArrayList<GrowingSeed>();
+        GrowingSeed searchedSeed = new GrowingSeedImpl();
 
         Cursor cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, DatabaseHelper.GROWINGSEED_ALLOTMENT_ID
                 + "='" + allotment.getName() + "'", null, null, null, null);
@@ -147,8 +147,8 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
      * @see org.gots.seed.provider.local.GotsGrowingSeedProvider#getSeedById(int)
      */
     @Override
-    public GrowingSeedInterface getGrowingSeedById(int growingSeedId) {
-        GrowingSeedInterface searchedSeed = null;
+    public GrowingSeed getGrowingSeedById(int growingSeedId) {
+        GrowingSeed searchedSeed = null;
 
         Cursor cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, DatabaseHelper.GROWINGSEED_ID + "='"
                 + growingSeedId + "'", null, null, null, null);
@@ -167,13 +167,13 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
      * @see org.gots.seed.provider.local.GotsGrowingSeedProvider#deleteGrowingSeed(org.gots.seed.GrowingSeedInterface)
      */
     @Override
-    public void deleteGrowingSeed(GrowingSeedInterface seed) {
+    public void deleteGrowingSeed(GrowingSeed seed) {
 
         bdd.delete(DatabaseHelper.GROWINGSEEDS_TABLE_NAME,
                 DatabaseHelper.GROWINGSEED_ID + "='" + seed.getGrowingSeedId() + "'", null);
     }
 
-    public GrowingSeedInterface updateGrowingSeed(GrowingSeedInterface seed, BaseAllotmentInterface allotment) {
+    public GrowingSeed updateGrowingSeed(GrowingSeed seed, BaseAllotmentInterface allotment) {
 
         // Création d'un ContentValues (fonctionne comme une HashMap)
         ContentValues values = seedToValues(seed, allotment);
@@ -184,8 +184,8 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
         return seed;
     }
 
-    public GrowingSeedInterface getGrowingSeedsByUUID(String uuid) {
-        GrowingSeedInterface searchedSeed = null;
+    public GrowingSeed getGrowingSeedsByUUID(String uuid) {
+        GrowingSeed searchedSeed = null;
 
         Cursor cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, DatabaseHelper.GROWINGSEED_UUID + "='"
                 + uuid + "'", null, null, null, null);

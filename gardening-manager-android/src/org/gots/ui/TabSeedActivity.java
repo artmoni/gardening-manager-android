@@ -20,9 +20,9 @@ import java.util.List;
 import java.util.Locale;
 
 import org.gots.R;
-import org.gots.action.BaseActionInterface;
+import org.gots.action.BaseAction;
 import org.gots.action.GotsActionSeedManager;
-import org.gots.action.SeedActionInterface;
+import org.gots.action.ActionOnSeed;
 import org.gots.action.bean.DeleteAction;
 import org.gots.action.bean.PhotoAction;
 import org.gots.action.provider.GotsActionSeedProvider;
@@ -36,8 +36,8 @@ import org.gots.inapp.GotsPurchaseItem;
 import org.gots.nuxeo.NuxeoWorkflowProvider;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsGrowingSeedManager;
+import org.gots.seed.GrowingSeedImpl;
 import org.gots.seed.GrowingSeed;
-import org.gots.seed.GrowingSeedInterface;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
@@ -101,7 +101,7 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
 
     ViewPager mViewPager;
 
-    GrowingSeedInterface mSeed = null;
+    GrowingSeed mSeed = null;
 
     private String urlDescription;
 
@@ -114,6 +114,14 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
     private GotsPurchaseItem gotsPurchase;
 
     private TaskInfo taskWorkflow;
+
+    private Fragment fragmentListAction;
+
+    private Fragment fragmentWebView;
+
+    private Fragment fragmentDescription;
+
+    // private TabsAdapter mTabsAdapter;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,15 +156,17 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
         } else if (getIntent().getExtras().getInt(GOTS_VENDORSEED_ID) != 0) {
             int seedId = getIntent().getExtras().getInt(GOTS_VENDORSEED_ID);
             GotsSeedProvider helper = new LocalSeedProvider(getApplicationContext());
-            mSeed = (GrowingSeedInterface) helper.getSeedById(seedId);
+            mSeed = (GrowingSeed) helper.getSeedById(seedId);
         } else
-            mSeed = new GrowingSeed(); // DEFAULT SEED
+            mSeed = new GrowingSeedImpl(); // DEFAULT SEED
 
         // if (getIntent().getSerializableExtra(GOTS_TASKWORKFLOW_ID) != null)
         // taskWorkflow = (TaskInfo) getIntent().getSerializableExtra(GOTS_TASKWORKFLOW_ID);
         pictureGallery = (Gallery) findViewById(R.id.idPictureGallery);
-
-        displayPictureGallery();
+        if (mSeed.getGrowingSeedId() >= 0)
+            displayPictureGallery();
+        else
+            pictureGallery.setVisibility(View.GONE);
 
         pictureGallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -199,30 +209,37 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
             findViewById(R.id.idLayoutCulturePeriod).setVisibility(View.GONE);
 
         mViewPager = (ViewPager) findViewById(R.id.pager);
-        TabsAdapter mTabsAdapter = new TabsAdapter(this, mViewPager);
+        // mTabsAdapter = new TabsAdapter(this, mViewPager);
+
+        List<Fragment> fragments = new ArrayList<>();
+        Bundle bundle = new Bundle();
+        bundle.putInt(GOTS_GROWINGSEED_ID, mSeed.getSeedId());
+        bundle.putInt("org.gots.growingseed.id", mSeed.getGrowingSeedId());
 
         // ********************** Tab actions **********************
         if (mSeed.getGrowingSeedId() > 0) {
-            mTabsAdapter.addTab(
-                    bar.newTab().setTag("event_list").setText(getString(R.string.seed_description_tabmenu_actions)),
-                    ListActionFragment.class, null);
+            fragmentListAction = Fragment.instantiate(getApplicationContext(), ListActionFragment.class.getName(),
+                    bundle);
+            fragments.add(fragmentListAction);
+
         }
-        // // ********************** Tab description **********************
-        mTabsAdapter.addTab(
-                bar.newTab().setTag("event_list").setText(getString(R.string.seed_description_tabmenu_detail)),
-                SeedDescriptionFragment.class, null);
+        fragmentDescription = Fragment.instantiate(getApplicationContext(), SeedDescriptionFragment.class.getName(),
+                bundle);
+        fragments.add(fragmentDescription);
 
         // ********************** Tab Wikipedia**********************
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-            mTabsAdapter.addTab(
-                    bar.newTab().setTag("event_list").setText(getString(R.string.seed_description_tabmenu_wikipedia)),
-                    WebViewActivity.class, null);
-
             urlDescription = "http://" + Locale.getDefault().getLanguage() + ".wikipedia.org/wiki/" + mSeed.getSpecie();
+            bundle.putString("org.gots.seed.url", urlDescription);
+
+            fragmentWebView = Fragment.instantiate(getApplicationContext(), WebViewActivity.class.getName(), bundle);
+            fragments.add(fragmentWebView);
 
         }
+        MyPagerAdapter mFragmentAdapter = new MyPagerAdapter(getSupportFragmentManager(), fragments);
+        mViewPager.setAdapter(mFragmentAdapter);
 
         if (!gotsPurchase.isPremium()) {
             GotsAdvertisement ads = new GotsAdvertisement(this);
@@ -300,7 +317,7 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_seeddescription, menu);
         if (mSeed.getGrowingSeedId() == 0) {
-            menu.findItem(R.id.planning).setVisible(false);
+            // menu.findItem(R.id.planning).setVisible(false);
             menu.findItem(R.id.photo).setVisible(false);
             menu.findItem(R.id.delete).setVisible(false);
             menu.findItem(R.id.workflow).setVisible(false);
@@ -331,15 +348,6 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
             intent.putExtra(GardenActivity.SELECT_ALLOTMENT, true);
             intent.putExtra(GardenActivity.VENDOR_SEED_ID, mSeed.getSeedId());
             startActivity(intent);
-            return true;
-        case R.id.planning:
-            FragmentManager fm = getSupportFragmentManager();
-            DialogFragment scheduleDialog = new ScheduleActionFragment();
-            Bundle data = new Bundle();
-            data.putInt(GOTS_GROWINGSEED_ID, mSeed.getGrowingSeedId());
-            scheduleDialog.setArguments(data);
-            scheduleDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
-            scheduleDialog.show(fm, "fragment_planning");
             return true;
         case R.id.download:
             new AsyncTask<Void, Integer, File>() {
@@ -430,10 +438,10 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
             builder.setMessage(this.getResources().getString(R.string.action_delete_seed)).setCancelable(false).setPositiveButton(
                     "OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            new AsyncTask<SeedActionInterface, Integer, Void>() {
+                            new AsyncTask<ActionOnSeed, Integer, Void>() {
                                 @Override
-                                protected Void doInBackground(SeedActionInterface... params) {
-                                    SeedActionInterface actionItem = params[0];
+                                protected Void doInBackground(ActionOnSeed... params) {
+                                    ActionOnSeed actionItem = params[0];
                                     actionItem.execute(mSeed);
                                     return null;
                                 }
@@ -482,6 +490,27 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
         }
     }
 
+    public class MyPagerAdapter extends FragmentPagerAdapter {
+
+        private final List<Fragment> fragments;
+
+        // On fournit à l'adapter la liste des fragments à afficher
+        public MyPagerAdapter(FragmentManager fm, List fragments) {
+            super(fm);
+            this.fragments = fragments;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return this.fragments.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return this.fragments.size();
+        }
+    }
+
     /**
      * This is a helper class that implements the management of tabs and all
      * details of connecting a ViewPager with associated TabHost. It relies on a
@@ -493,76 +522,72 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
      * switch to the correct paged in the ViewPager whenever the selected tab
      * changes.
      */
-    public class TabsAdapter extends FragmentPagerAdapter implements ActionBar.TabListener,
-            ViewPager.OnPageChangeListener {
-        private final Context mContext;
-
-        private final ActionBar mActionBar;
-
-        private final ViewPager mViewPager;
-
-        private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
-
-        public TabsAdapter(ActionBarActivity activity, ViewPager pager) {
-            super(activity.getSupportFragmentManager());
-            mContext = activity;
-            mActionBar = activity.getSupportActionBar();
-            mViewPager = pager;
-            mViewPager.setAdapter(this);
-            mViewPager.setOnPageChangeListener(this);
-        }
-
-        public void addTab(ActionBar.Tab tab, Class<?> clss, Bundle args) {
-            TabInfo info = new TabInfo(clss, args);
-            tab.setTag(info);
-            tab.setTabListener(this);
-            mTabs.add(info);
-            mActionBar.addTab(tab);
-            notifyDataSetChanged();
-        }
-
-        @Override
-        public int getCount() {
-            return mTabs.size();
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            TabInfo info = mTabs.get(position);
-            Bundle bundle = new Bundle();
-            bundle.putInt(GOTS_GROWINGSEED_ID, mSeed.getSeedId());
-            bundle.putInt("org.gots.growingseed.id", mSeed.getGrowingSeedId());
-            bundle.putString("org.gots.seed.url", urlDescription);
-            Fragment fragment = Fragment.instantiate(mContext, info.clss.getName(), info.args);
-            fragment.setArguments(bundle);
-            return fragment;
-        }
-
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        }
-
-        public void onPageSelected(int position) {
-            mActionBar.setSelectedNavigationItem(position);
-        }
-
-        public void onPageScrollStateChanged(int state) {
-        }
-
-        public void onTabSelected(Tab tab, FragmentTransaction ft) {
-            Object tag = tab.getTag();
-            for (int i = 0; i < mTabs.size(); i++) {
-                if (mTabs.get(i) == tag) {
-                    mViewPager.setCurrentItem(i);
-                }
-            }
-        }
-
-        public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-        }
-
-        public void onTabReselected(Tab tab, FragmentTransaction ft) {
-        }
-    }
+    // public class TabsAdapter extends FragmentPagerAdapter implements ActionBar.TabListener,
+    // ViewPager.OnPageChangeListener {
+    // private final Context mContext;
+    //
+    // private final ActionBar mActionBar;
+    //
+    // private final ViewPager mViewPager;
+    //
+    // private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
+    //
+    // public TabsAdapter(ActionBarActivity activity, ViewPager pager) {
+    // super(activity.getSupportFragmentManager());
+    // mContext = activity;
+    // mActionBar = activity.getSupportActionBar();
+    // mViewPager = pager;
+    // mViewPager.setAdapter(this);
+    // mViewPager.setOnPageChangeListener(this);
+    // }
+    //
+    // public void addTab(ActionBar.Tab tab, Class<?> clss, Bundle args) {
+    // TabInfo info = new TabInfo(clss, args);
+    // tab.setTag(info);
+    // tab.setTabListener(this);
+    // mTabs.add(info);
+    // mActionBar.addTab(tab);
+    // notifyDataSetChanged();
+    // }
+    //
+    // @Override
+    // public int getCount() {
+    // return mTabs.size();
+    // }
+    //
+    // @Override
+    // public Fragment getItem(int position) {
+    // TabInfo info = mTabs.get(position);
+    // Fragment fragment = Fragment.instantiate(mContext, info.clss.getName(), info.args);
+    // fragment.setArguments(bundle);
+    // return fragment;
+    // }
+    //
+    // public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    // }
+    //
+    // public void onPageSelected(int position) {
+    // mActionBar.setSelectedNavigationItem(position);
+    // }
+    //
+    // public void onPageScrollStateChanged(int state) {
+    // }
+    //
+    // public void onTabSelected(Tab tab, FragmentTransaction ft) {
+    // Object tag = tab.getTag();
+    // for (int i = 0; i < mTabs.size(); i++) {
+    // if (mTabs.get(i) == tag) {
+    // mViewPager.setCurrentItem(i);
+    // }
+    // }
+    // }
+    //
+    // public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+    // }
+    //
+    // public void onTabReselected(Tab tab, FragmentTransaction ft) {
+    // }
+    // }
 
     @Override
     protected boolean requireAsyncDataRetrieval() {
@@ -589,7 +614,49 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
     }
 
     @Override
-    public void onActionSelected(BaseActionInterface actionInterface) {
+    public void onActionClick(final BaseAction actionInterface) {
         Toast.makeText(getApplicationContext(), ">" + actionInterface.getName(), Toast.LENGTH_LONG).show();
+        if (actionInterface instanceof ActionOnSeed) {
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    ((ActionOnSeed) actionInterface).execute(mSeed);
+                    return null;
+                }
+
+                protected void onPostExecute(Void result) {
+                    if (fragmentListAction != null) {
+                        ((ListActionFragment) fragmentListAction).update();
+                    }
+                };
+            }.execute();
+        }
+    }
+
+    @Override
+    public void onActionLongClick(final BaseAction actionInterface) {
+        // FragmentManager fm = getSupportFragmentManager();
+        // DialogFragment scheduleDialog = new ScheduleActionFragment();
+        // Bundle data = new Bundle();
+        // data.putInt(GOTS_GROWINGSEED_ID, mSeed.getGrowingSeedId());
+        // scheduleDialog.setArguments(data);
+        // scheduleDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+        // scheduleDialog.show(fm, "fragment_planning");
+        if (actionInterface instanceof ActionOnSeed) {
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    actionInterface.setDuration(7);
+                    actionseedProvider.insertAction(mSeed, (ActionOnSeed) actionInterface);
+                    return null;
+                }
+
+                protected void onPostExecute(Void result) {
+                    if (fragmentListAction != null) {
+                        ((ListActionFragment) fragmentListAction).update();
+                    }
+                };
+            }.execute();
+        }
     }
 }

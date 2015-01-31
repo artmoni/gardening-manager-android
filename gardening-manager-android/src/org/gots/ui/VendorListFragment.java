@@ -15,13 +15,13 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.gots.R;
-import org.gots.action.SeedActionInterface;
+import org.gots.action.ActionOnSeed;
 import org.gots.action.bean.BuyingAction;
 import org.gots.action.bean.ReduceQuantityAction;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.view.OnProfileEventListener;
 import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.GrowingSeed;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.adapter.SeedListAdapter;
 import org.gots.seed.adapter.VendorSeedListAdapter;
@@ -235,7 +235,7 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 
-            SeedActionInterface actionDone = null;
+            ActionOnSeed actionDone = null;
             switch (item.getItemId()) {
             case R.id.action_seed_detail:
                 Intent i = new Intent(mContext, TabSeedActivity.class);
@@ -265,13 +265,13 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
                 return false;
             }
 
-            new AsyncTask<SeedActionInterface, Integer, Void>() {
-                SeedActionInterface action;
+            new AsyncTask<ActionOnSeed, Integer, Void>() {
+                ActionOnSeed action;
 
                 @Override
-                protected Void doInBackground(SeedActionInterface... params) {
+                protected Void doInBackground(ActionOnSeed... params) {
                     action = params[0];
-                    action.execute((GrowingSeedInterface) currentSeed);
+                    action.execute((GrowingSeed) currentSeed);
                     return null;
                 }
 

@@ -10,11 +10,11 @@
  ******************************************************************************/
 package org.gots.action;
 
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.GrowingSeed;
 
-public interface SeedActionInterface extends BaseActionInterface {
+public interface ActionOnSeed extends BaseAction {
 
-    public abstract void setActionSeedId(int id);
+    public abstract void setId(int id);
 
     public abstract int getActionSeedId();
 
@@ -22,5 +22,7 @@ public interface SeedActionInterface extends BaseActionInterface {
 
     public abstract int getGrowingSeedId();
 
-    public int execute(GrowingSeedInterface seed);
+    public int execute(GrowingSeed seed);
+
+    public abstract void setActionSeedId(int actionId);
 }

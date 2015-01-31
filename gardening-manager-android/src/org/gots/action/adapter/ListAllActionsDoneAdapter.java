@@ -12,13 +12,13 @@ package org.gots.action.adapter;
 
 import java.util.ArrayList;
 
-import org.gots.action.SeedActionInterface;
+import org.gots.action.ActionOnSeed;
 
 import android.content.Context;
 
 public class ListAllActionsDoneAdapter extends ListAllActionAdapter {
 
-	public ListAllActionsDoneAdapter(Context context, ArrayList<SeedActionInterface> allActions, int status) {
+	public ListAllActionsDoneAdapter(Context context, ArrayList<ActionOnSeed> allActions, int status) {
 		super(context, allActions, status);
 	}
 

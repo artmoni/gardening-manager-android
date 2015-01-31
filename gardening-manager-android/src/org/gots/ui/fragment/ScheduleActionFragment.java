@@ -4,14 +4,15 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.gots.R;
-import org.gots.action.BaseActionInterface;
+import org.gots.action.BaseAction;
 import org.gots.action.GotsActionManager;
 import org.gots.action.GotsActionSeedManager;
+import org.gots.action.ActionOnSeed;
 import org.gots.action.adapter.SimpleListActionAdapter;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.GotsGrowingSeedManager;
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.GrowingSeed;
 import org.gots.seed.view.SeedWidgetLong;
 
 import android.app.Activity;
@@ -45,9 +46,9 @@ public class ScheduleActionFragment extends DialogFragment implements OnItemClic
 
     private GridView listActions;
 
-    private GrowingSeedInterface mySeed;
+    private GrowingSeed mySeed;
 
-    BaseActionInterface selectedAction;
+    BaseAction selectedAction;
 
     private Spinner spinner;
 
@@ -70,7 +71,7 @@ public class ScheduleActionFragment extends DialogFragment implements OnItemClic
         // bar.setDisplayHomeAsUpEnabled(true);
         listActions = (GridView) v.findViewById(R.id.idListAction);
 
-        new AsyncTask<String, Void, List<BaseActionInterface>>() {
+        new AsyncTask<String, Void, List<BaseAction>>() {
             private GotsActionManager helper;
 
             protected void onPreExecute() {
@@ -79,14 +80,14 @@ public class ScheduleActionFragment extends DialogFragment implements OnItemClic
             };
 
             @Override
-            protected List<BaseActionInterface> doInBackground(String... params) {
-                List<BaseActionInterface> actions = helper.getActions(false);
+            protected List<BaseAction> doInBackground(String... params) {
+                List<BaseAction> actions = helper.getActions(false);
 
                 return actions;
             }
 
             @SuppressWarnings("deprecation")
-            protected void onPostExecute(List<BaseActionInterface> actions) {
+            protected void onPostExecute(List<BaseAction> actions) {
                 if (!isAdded())
                     return;
                 WindowManager wm = (WindowManager) getActivity().getApplicationContext().getSystemService(
@@ -200,7 +201,7 @@ public class ScheduleActionFragment extends DialogFragment implements OnItemClic
                 @Override
                 protected Void doInBackground(Void... params) {
                     GotsActionSeedProvider actionHelper = GotsActionSeedManager.getInstance().initIfNew(getActivity());
-                    actionHelper.insertAction(mySeed, selectedAction);
+                    actionHelper.insertAction(mySeed, (ActionOnSeed)selectedAction);
                     return null;
                 }
 
@@ -220,7 +221,7 @@ public class ScheduleActionFragment extends DialogFragment implements OnItemClic
 
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-        selectedAction = (BaseActionInterface) listActions.getItemAtPosition(arg2);
+        selectedAction = (BaseAction) listActions.getItemAtPosition(arg2);
         // listActions.setSelection(arg2);
         arg1.setSelected(!arg0.isSelected());
     }

@@ -14,7 +14,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.GrowingSeed;
 
 public class BaseAllotment implements Serializable, BaseAllotmentInterface {
 
@@ -26,7 +26,7 @@ public class BaseAllotment implements Serializable, BaseAllotmentInterface {
 
     private String description;
 
-    private List<GrowingSeedInterface> seeds = new ArrayList<GrowingSeedInterface>();
+    private List<GrowingSeed> seeds = new ArrayList<GrowingSeed>();
 
     private String uuid;
 
@@ -35,12 +35,12 @@ public class BaseAllotment implements Serializable, BaseAllotmentInterface {
     }
 
     @Override
-    public List<GrowingSeedInterface> getSeeds() {
+    public List<GrowingSeed> getSeeds() {
         return seeds;
     }
 
     @Override
-    public void setSeeds(List<GrowingSeedInterface> seeds) {
+    public void setSeeds(List<GrowingSeed> seeds) {
         this.seeds = seeds;
     }
 

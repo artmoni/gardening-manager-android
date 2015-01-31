@@ -15,11 +15,12 @@ import java.util.Date;
 import java.util.Iterator;
 
 import org.gots.action.AbstractActionGarden;
-import org.gots.action.BaseActionInterface;
+import org.gots.action.BaseAction;
 import org.gots.action.GardeningActionInterface;
 import org.gots.action.PermanentActionInterface;
+import org.gots.action.ActionOnSeed;
 import org.gots.bean.BaseAllotmentInterface;
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.GrowingSeed;
 
 import android.content.Context;
 
@@ -34,40 +35,9 @@ public class SowingAction extends AbstractActionGarden implements PermanentActio
         mContext = context;
     }
 
-    public void setDateActionDone(Date dateActionDone) {
-        super.setDateActionDone(dateActionDone);
-    }
-
-    public Date getDateActionDone() {
-        return super.getDateActionDone();
-    }
-
-    public void setDuration(int duration) {
-        super.setDuration(duration);
-    }
-
-    public int getDuration() {
-        return super.getDuration();
-    }
-
-    public void setDescription(String description) {
-        super.setDescription(description);
-    }
-
-    public String getDescription() {
-        return super.getDescription();
-    }
-
-    public void setName(String name) {
-        super.setName(name);
-    }
-
-    public String getName() {
-        return super.getName();
-    }
 
     @Override
-    public int execute(BaseAllotmentInterface allotment, GrowingSeedInterface seed) {
+    public int execute(BaseAllotmentInterface allotment, GrowingSeed seed) {
         super.execute(allotment, seed);
 
         seed.setDateSowing(Calendar.getInstance().getTime());
@@ -77,12 +47,12 @@ public class SowingAction extends AbstractActionGarden implements PermanentActio
 //        actionSeedManager.insertAction(seed, this);
         // asdh.doAction(this, seed);
 
-        for (Iterator<BaseActionInterface> iterator = seed.getActionToDo().iterator(); iterator.hasNext();) {
+        for (Iterator<BaseAction> iterator = seed.getActionToDo().iterator(); iterator.hasNext();) {
 
-            BaseActionInterface type1 = iterator.next();
+            BaseAction type1 = iterator.next();
             if (type1 != null) {
-                BaseActionInterface action = actionManager.getActionByName(type1.getName());
-                actionSeedManager.insertAction(seed, action);
+                BaseAction action = actionManager.getActionByName(type1.getName());
+                actionSeedManager.insertAction(seed, (ActionOnSeed)action);
             }
         }
         
@@ -90,20 +60,5 @@ public class SowingAction extends AbstractActionGarden implements PermanentActio
         return 0;
     }
 
-    @Override
-    public void setId(int id) {
-        super.setId(id);
-    }
-
-    @Override
-    public int getId() {
-
-        return super.getId();
-    }
-
-    @Override
-    public int getState() {
-        return super.getState();
-    }
 
 }

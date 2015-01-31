@@ -4,27 +4,26 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.gots.action.BaseActionInterface;
-import org.gots.action.SeedActionInterface;
+import org.gots.action.ActionOnSeed;
 import org.gots.exception.GotsServerRestrictedException;
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.GrowingSeed;
 
 public interface GotsActionSeedProvider {
 
-    public abstract long doAction(SeedActionInterface action, GrowingSeedInterface seed);
+    public abstract ActionOnSeed doAction(ActionOnSeed action, GrowingSeed seed);
 
-    public abstract ArrayList<SeedActionInterface> getActionsToDo();
+    public abstract ArrayList<ActionOnSeed> getActionsToDo();
 
-    public abstract List<SeedActionInterface> getActionsToDoBySeed(GrowingSeedInterface seed, boolean force);
+    public abstract List<ActionOnSeed> getActionsToDoBySeed(GrowingSeed seed, boolean force);
 
-    public abstract List<SeedActionInterface> getActionsDoneBySeed(GrowingSeedInterface seed, boolean force);
+    public abstract List<ActionOnSeed> getActionsDoneBySeed(GrowingSeed seed, boolean force);
 
-    public abstract SeedActionInterface insertAction(GrowingSeedInterface seed, BaseActionInterface action);
+    public abstract ActionOnSeed insertAction(GrowingSeed seed, ActionOnSeed action);
 
-    public abstract File uploadPicture(GrowingSeedInterface seed, File imageFile);
+    public abstract File uploadPicture(GrowingSeed seed, File imageFile);
 
-    public abstract File downloadHistory(GrowingSeedInterface mSeed) throws GotsServerRestrictedException;
+    public abstract File downloadHistory(GrowingSeed mSeed) throws GotsServerRestrictedException;
 
-    public abstract List<File> getPicture(GrowingSeedInterface mSeed) throws GotsServerRestrictedException;
+    public abstract List<File> getPicture(GrowingSeed mSeed) throws GotsServerRestrictedException;
 
 }

@@ -13,7 +13,7 @@ package org.gots.action.provider.local;
 import java.util.ArrayList;
 
 import org.gots.action.ActionFactory;
-import org.gots.action.BaseActionInterface;
+import org.gots.action.BaseAction;
 import org.gots.action.PermanentActionInterface;
 import org.gots.action.provider.GotsActionProvider;
 import org.gots.garden.provider.local.GardenSQLite;
@@ -33,7 +33,7 @@ public class LocalActionProvider extends GotsDBHelper implements GotsActionProvi
     }
 
     @Override
-    public BaseActionInterface createAction(BaseActionInterface action) {
+    public BaseAction createAction(BaseAction action) {
         long rowid;
         ContentValues values = getActionContentValues(action);
 
@@ -43,11 +43,11 @@ public class LocalActionProvider extends GotsDBHelper implements GotsActionProvi
     }
 
     @Override
-    public BaseActionInterface updateAction(BaseActionInterface action) {
+    public BaseAction updateAction(BaseAction action) {
         ContentValues values = getActionContentValues(action);
         int nbRows;
         Cursor cursor;
-        if (action.getId() > 0) {
+        if (action.getId() >= 0) {
             nbRows = bdd.update(GardenSQLite.ACTION_TABLE_NAME, values, GardenSQLite.ACTION_ID + "='" + action.getId()
                     + "'", null);
             cursor = bdd.query(GardenSQLite.ACTION_TABLE_NAME, null, GardenSQLite.ACTION_ID + "='" + action.getId()
@@ -71,15 +71,15 @@ public class LocalActionProvider extends GotsDBHelper implements GotsActionProvi
     }
 
     @Override
-    public ArrayList<BaseActionInterface> getActions(boolean force) {
-        ArrayList<BaseActionInterface> allActions = new ArrayList<BaseActionInterface>();
+    public ArrayList<BaseAction> getActions(boolean force) {
+        ArrayList<BaseAction> allActions = new ArrayList<BaseAction>();
         Cursor cursor = null;
         try {
             cursor = bdd.query(GardenSQLite.ACTION_TABLE_NAME, null, null, null, null, null, null);
 
             if (cursor.moveToFirst()) {
                 do {
-                    BaseActionInterface action = cursorToAction(cursor);
+                    BaseAction action = cursorToAction(cursor);
                     if (!PermanentActionInterface.class.isInstance(action))
                         allActions.add(action);
                 } while (cursor.moveToNext());
@@ -91,7 +91,7 @@ public class LocalActionProvider extends GotsDBHelper implements GotsActionProvi
         return allActions;
     }
 
-    public boolean isExist(BaseActionInterface action) {
+    public boolean isExist(BaseAction action) {
         boolean exists = false;
         Cursor cursor = null;
 
@@ -112,8 +112,8 @@ public class LocalActionProvider extends GotsDBHelper implements GotsActionProvi
     }
 
     @Override
-    public BaseActionInterface getActionByName(String name) {
-        BaseActionInterface action = null;
+    public BaseAction getActionByName(String name) {
+        BaseAction action = null;
         Cursor cursor = null;
         try {
             cursor = bdd.query(GardenSQLite.ACTION_TABLE_NAME, null, GardenSQLite.ACTION_NAME + "='" + name + "'",
@@ -131,8 +131,8 @@ public class LocalActionProvider extends GotsDBHelper implements GotsActionProvi
     }
 
     @Override
-    public BaseActionInterface getActionById(int id) {
-        BaseActionInterface action = null;
+    public BaseAction getActionById(int id) {
+        BaseAction action = null;
         Cursor cursor = null;
 
         try {
@@ -149,8 +149,8 @@ public class LocalActionProvider extends GotsDBHelper implements GotsActionProvi
         return action;
     }
 
-    protected BaseActionInterface cursorToAction(Cursor cursor) {
-        BaseActionInterface bsi;
+    protected BaseAction cursorToAction(Cursor cursor) {
+        BaseAction bsi;
         bsi = ActionFactory.buildAction(mContext, cursor.getString(cursor.getColumnIndex(GardenSQLite.ACTION_NAME)));
         bsi.setDescription(cursor.getString(cursor.getColumnIndex(GardenSQLite.ACTION_DESCRIPTION)));
         bsi.setDuration(cursor.getInt(cursor.getColumnIndex(GardenSQLite.ACTION_DURATION)));
@@ -159,7 +159,7 @@ public class LocalActionProvider extends GotsDBHelper implements GotsActionProvi
         return bsi;
     }
 
-    protected ContentValues getActionContentValues(BaseActionInterface action) {
+    protected ContentValues getActionContentValues(BaseAction action) {
         ContentValues values = new ContentValues();
         values.put(GardenSQLite.ACTION_NAME, action.getName());
         values.put(GardenSQLite.ACTION_DESCRIPTION, action.getDescription());

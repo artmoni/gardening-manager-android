@@ -12,7 +12,7 @@ import org.gots.context.GotsContext;
 import org.gots.exception.GotsServerRestrictedException;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.GrowingSeed;
 import org.gots.utils.NotConfiguredException;
 import org.nuxeo.android.broadcast.NuxeoBroadcastMessages;
 
@@ -71,37 +71,37 @@ public class GotsActionSeedManager extends BroadcastReceiver implements GotsActi
     }
 
     @Override
-    public long doAction(SeedActionInterface action, GrowingSeedInterface seed) {
+    public ActionOnSeed doAction(ActionOnSeed action, GrowingSeed seed) {
         return provider.doAction(action, seed);
     }
 
     @Override
-    public ArrayList<SeedActionInterface> getActionsToDo() {
+    public ArrayList<ActionOnSeed> getActionsToDo() {
         return provider.getActionsToDo();
     }
 
     @Override
-    public List<SeedActionInterface> getActionsToDoBySeed(GrowingSeedInterface seed, boolean force) {
+    public List<ActionOnSeed> getActionsToDoBySeed(GrowingSeed seed, boolean force) {
         return provider.getActionsToDoBySeed(seed, force);
     }
 
     @Override
-    public List<SeedActionInterface> getActionsDoneBySeed(GrowingSeedInterface seed, boolean force) {
+    public List<ActionOnSeed> getActionsDoneBySeed(GrowingSeed seed, boolean force) {
         return provider.getActionsDoneBySeed(seed, force);
     }
 
     @Override
-    public SeedActionInterface insertAction(GrowingSeedInterface seed, BaseActionInterface action) {
+    public ActionOnSeed insertAction(GrowingSeed seed, ActionOnSeed action) {
         return provider.insertAction(seed, action);
     }
 
     @Override
-    public File uploadPicture(GrowingSeedInterface seed, File localPictureFile) {
+    public File uploadPicture(GrowingSeed seed, File localPictureFile) {
        return provider.uploadPicture(seed, localPictureFile);
     }
 
     @Override
-    public File downloadHistory(GrowingSeedInterface mSeed) throws GotsServerRestrictedException {
+    public File downloadHistory(GrowingSeed mSeed) throws GotsServerRestrictedException {
         if (provider instanceof NuxeoActionSeedProvider)
             return provider.downloadHistory(mSeed);
         else
@@ -109,7 +109,7 @@ public class GotsActionSeedManager extends BroadcastReceiver implements GotsActi
     }
 
     @Override
-    public List<File> getPicture(GrowingSeedInterface mSeed) throws GotsServerRestrictedException {
+    public List<File> getPicture(GrowingSeed mSeed) throws GotsServerRestrictedException {
         return provider.getPicture(mSeed);
     }
 

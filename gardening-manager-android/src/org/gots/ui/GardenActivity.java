@@ -23,7 +23,7 @@ import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.provider.AllotmentContentProvider;
 import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.GrowingSeed;
 import org.gots.seed.view.QuickSeedActionBuilder;
 import org.gots.seed.view.SeedWidget;
 import org.gots.ui.AllotmentListFragment.OnAllotmentSelected;
@@ -252,8 +252,9 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
 
         if (seed != null) {
             SowingAction action = new SowingAction(getApplicationContext());
-            action.execute(currentAllotment, (GrowingSeedInterface) seed);
-            sendBroadcast(new Intent(BroadCastMessages.ALLOTMENT_EVENT));
+            action.execute(currentAllotment, (GrowingSeed) seed);
+            allotmentListFragment.update();
+//            sendBroadcast(new Intent(BroadCastMessages.ALLOTMENT_EVENT));
         }
 
     }
@@ -278,7 +279,7 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
     }
 
     @Override
-    public void onGrowingSeedClick(View v, GrowingSeedInterface growingSeedInterface) {
+    public void onGrowingSeedClick(View v, GrowingSeed growingSeedInterface) {
         final Intent i = new Intent(this, TabSeedActivity.class);
         i.putExtra("org.gots.seed.id", growingSeedInterface.getGrowingSeedId());
         i.putExtra("org.gots.seed.url", growingSeedInterface.getUrlDescription());
@@ -287,7 +288,7 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
     }
 
     @Override
-    public void onGrowingSeedLongClick(View v, GrowingSeedInterface growingSeedInterface) {
+    public void onGrowingSeedLongClick(View v, GrowingSeed growingSeedInterface) {
         QuickSeedActionBuilder actionBuilder = new QuickSeedActionBuilder(this, (SeedWidget) v, growingSeedInterface);
         actionBuilder.show();
     }

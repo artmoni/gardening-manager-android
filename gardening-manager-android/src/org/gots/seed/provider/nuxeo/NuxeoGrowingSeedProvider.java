@@ -7,7 +7,7 @@ import org.gots.bean.BaseAllotmentInterface;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsSeedManager;
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.GrowingSeed;
 import org.gots.seed.provider.local.LocalGrowingSeedProvider;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
@@ -35,10 +35,10 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
     }
 
     @Override
-    public List<GrowingSeedInterface> getGrowingSeedsByAllotment(BaseAllotmentInterface allotment, boolean force) {
-        List<GrowingSeedInterface> remoteGrowingSeeds = new ArrayList<GrowingSeedInterface>();
-        List<GrowingSeedInterface> myGrowingSeeds = new ArrayList<GrowingSeedInterface>();
-        List<GrowingSeedInterface> localGrowingSeeds = super.getGrowingSeedsByAllotment(allotment, force);
+    public List<GrowingSeed> getGrowingSeedsByAllotment(BaseAllotmentInterface allotment, boolean force) {
+        List<GrowingSeed> remoteGrowingSeeds = new ArrayList<GrowingSeed>();
+        List<GrowingSeed> myGrowingSeeds = new ArrayList<GrowingSeed>();
+        List<GrowingSeed> localGrowingSeeds = super.getGrowingSeedsByAllotment(allotment, force);
 
         try {
             Session session = getNuxeoClient().getSession();
@@ -59,11 +59,11 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
 
                 Documents relations = service.getRelations(growingSeedDocument, "http://purl.org/dc/terms/isFormatOf");
                 if (relations.size() >= 1) {
-                    GrowingSeedInterface growingSeed;
+                    GrowingSeed growingSeed;
                     Document originalSeed = service.getDocument(relations.get(0), "*");
 
                     // growingSeed = (GrowingSeedInterface) NuxeoSeedConverter.convert(originalSeed);
-                    growingSeed = (GrowingSeedInterface) provider.getSeedByUUID(originalSeed.getId());
+                    growingSeed = (GrowingSeed) provider.getSeedByUUID(originalSeed.getId());
                     growingSeed = NuxeoGrowingSeedConverter.populate(growingSeed, growingSeedDocument);
                     // growingSeed = super.updateGrowingSeed(growingSeed, allotment);
                     remoteGrowingSeeds.add(growingSeed);
@@ -77,13 +77,13 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
         return myGrowingSeeds;
     }
 
-    private List<GrowingSeedInterface> synchronize(List<GrowingSeedInterface> localGrowingSeeds,
-            List<GrowingSeedInterface> remoteGrowingSeeds, BaseAllotmentInterface allotment) {
-        List<GrowingSeedInterface> myGrowingSeeds = new ArrayList<GrowingSeedInterface>();
+    private List<GrowingSeed> synchronize(List<GrowingSeed> localGrowingSeeds,
+            List<GrowingSeed> remoteGrowingSeeds, BaseAllotmentInterface allotment) {
+        List<GrowingSeed> myGrowingSeeds = new ArrayList<GrowingSeed>();
 
-        for (GrowingSeedInterface remoteGrowingSeed : remoteGrowingSeeds) {
+        for (GrowingSeed remoteGrowingSeed : remoteGrowingSeeds) {
             boolean found = false;
-            for (GrowingSeedInterface localGrowingSeed : localGrowingSeeds) {
+            for (GrowingSeed localGrowingSeed : localGrowingSeeds) {
                 if (remoteGrowingSeed.getUUID().equals(localGrowingSeed.getUUID())) {
                     found = true;
                     break;
@@ -93,18 +93,18 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
             if (!found)
                 myGrowingSeeds.add(super.plantingSeed(remoteGrowingSeed, allotment));
             else {
-                GrowingSeedInterface updatableSeed = super.getGrowingSeedsByUUID(remoteGrowingSeed.getUUID());
+                GrowingSeed updatableSeed = super.getGrowingSeedsByUUID(remoteGrowingSeed.getUUID());
                 remoteGrowingSeed.setGrowingSeedId(updatableSeed.getGrowingSeedId());
                 myGrowingSeeds.add(super.updateGrowingSeed(updatableSeed, allotment));
             }
         }
 
-        for (GrowingSeedInterface localGrowingSeed : localGrowingSeeds) {
+        for (GrowingSeed localGrowingSeed : localGrowingSeeds) {
             if (localGrowingSeed.getUUID() == null)
                 myGrowingSeeds.add(insertNuxeoSeed(localGrowingSeed, allotment));
             else {
                 boolean found = false;
-                for (GrowingSeedInterface remoteGrowingSeed : remoteGrowingSeeds) {
+                for (GrowingSeed remoteGrowingSeed : remoteGrowingSeeds) {
                     if (localGrowingSeed.getUUID().equals(remoteGrowingSeed.getUUID())) {
                         found = true;
                         break;
@@ -118,12 +118,12 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
     }
 
     @Override
-    public GrowingSeedInterface plantingSeed(GrowingSeedInterface growingSeed, BaseAllotmentInterface allotment) {
+    public GrowingSeed plantingSeed(GrowingSeed growingSeed, BaseAllotmentInterface allotment) {
         growingSeed.setUUID(null);
         return insertNuxeoSeed(super.plantingSeed(growingSeed, allotment), allotment);
     }
 
-    protected GrowingSeedInterface insertNuxeoSeed(GrowingSeedInterface growingSeed,
+    protected GrowingSeed insertNuxeoSeed(GrowingSeed growingSeed,
             final BaseAllotmentInterface allotment) {
 
         Document allotmentDoc = null;
@@ -155,7 +155,7 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
         return growingSeed;
     }
 
-    protected PropertyMap getProperties(GrowingSeedInterface growingSeed) {
+    protected PropertyMap getProperties(GrowingSeed growingSeed) {
         PropertyMap properties = new PropertyMap();
         properties.set("dc:title", growingSeed.getSpecie() + " " + growingSeed.getVariety());
         if (growingSeed.getDateSowing() != null)
@@ -167,7 +167,7 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
     }
 
     @Override
-    public void deleteGrowingSeed(GrowingSeedInterface seed) {
+    public void deleteGrowingSeed(GrowingSeed seed) {
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager service = session.getAdapter(DocumentManager.class);
@@ -180,7 +180,7 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
     }
 
     @Override
-    public GrowingSeedInterface updateGrowingSeed(GrowingSeedInterface seed, BaseAllotmentInterface allotment) {
+    public GrowingSeed updateGrowingSeed(GrowingSeed seed, BaseAllotmentInterface allotment) {
 
         try {
             Session session = getNuxeoClient().getSession();

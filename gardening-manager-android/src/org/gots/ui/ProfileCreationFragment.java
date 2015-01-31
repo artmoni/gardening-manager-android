@@ -18,10 +18,11 @@ import java.util.Locale;
 import java.util.Random;
 
 import org.gots.R;
-import org.gots.action.BaseActionInterface;
+import org.gots.action.BaseAction;
 import org.gots.action.GardeningActionInterface;
 import org.gots.action.GotsActionManager;
 import org.gots.action.GotsActionSeedManager;
+import org.gots.action.ActionOnSeed;
 import org.gots.action.provider.GotsActionProvider;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.allotment.provider.local.LocalAllotmentProvider;
@@ -32,7 +33,7 @@ import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GotsGardenManager;
 import org.gots.garden.view.OnProfileEventListener;
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.GrowingSeed;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.ui.fragment.BaseGotsFragment;
@@ -382,13 +383,13 @@ public class ProfileCreationFragment extends BaseGotsFragment implements Locatio
             for (int i = 1; i <= 5 && i < nbSeed; i++) {
                 int alea = random.nextInt(nbSeed);
 
-                GrowingSeedInterface seed = (GrowingSeedInterface) seedHelper.getSeedById(alea % nbSeed + 1);
+                GrowingSeed seed = (GrowingSeed) seedHelper.getSeedById(alea % nbSeed + 1);
                 if (seed != null) {
                     seed.setNbSachet(alea % 3 + 1);
                     seedHelper.updateSeed(seed);
 
                     GotsActionProvider actionHelper = GotsActionManager.getInstance().initIfNew(getActivity());
-                    BaseActionInterface bakering = actionHelper.getActionByName("beak");
+                    BaseAction bakering = actionHelper.getActionByName("beak");
                     GardeningActionInterface sowing = (GardeningActionInterface) actionHelper.getActionByName("sow");
 
                     sowing.execute(newAllotment, seed);
@@ -399,7 +400,7 @@ public class ProfileCreationFragment extends BaseGotsFragment implements Locatio
                     seed.setDateSowing(cal.getTime());
 
                     GotsActionSeedProvider actionsHelper = GotsActionSeedManager.getInstance().initIfNew(getActivity());
-                    actionsHelper.insertAction(seed, bakering);
+                    actionsHelper.insertAction(seed, (ActionOnSeed)bakering);
                 }
             }
         }

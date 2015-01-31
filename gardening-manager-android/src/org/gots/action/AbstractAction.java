@@ -13,7 +13,7 @@ import org.gots.seed.GotsSeedManager;
 
 import android.content.Context;
 
-public class AbstractAction implements BaseActionInterface, Comparator<AbstractActionSeed> {
+public class AbstractAction implements BaseAction, Comparator<AbstractActionSeed> {
 
     protected String name;
 
@@ -173,11 +173,11 @@ public class AbstractAction implements BaseActionInterface, Comparator<AbstractA
     public String toString() {
         String txt = new String();
         txt = txt.concat("[" + getId() + "]" + getName());
-        txt = txt.concat(getUUID());
-        txt = txt.concat("\n");
+        txt = txt.concat("" + getUUID());
+        txt = txt.concat(" / ");
         txt = txt.concat("Duration=" + getDuration());
         if (getDateActionDone() != null)
-            txt = txt.concat("\nDone on " + getDateActionDone());
+            txt = txt.concat(" / Done on " + getDateActionDone());
         return super.toString();
     }
 

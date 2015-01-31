@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.gots.R;
-import org.gots.action.BaseActionInterface;
+import org.gots.action.BaseAction;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.authentication.GotsSocialAuthentication;
 import org.gots.authentication.provider.google.GoogleAuthentication;
@@ -866,7 +866,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
     }
 
     @Override
-    public void onActionClick(View v, BaseActionInterface actionInterface) {
+    public void onActionClick(View v, BaseAction actionInterface) {
         // TODO Auto-generated method stub
 
     }

@@ -17,7 +17,7 @@ import org.gots.R;
 import org.gots.context.GotsContext;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.GrowingSeed;
 import org.gots.utils.FileUtilities;
 import org.gots.utils.GotsProgressBar;
 
@@ -33,7 +33,7 @@ import android.widget.RelativeLayout;
 public class SeedWidget extends RelativeLayout {
     Context mContext;
 
-    private GrowingSeedInterface mSeed;
+    private GrowingSeed mSeed;
 
     protected GotsContext getGotsContext() {
         return GotsContext.get(mContext);
@@ -149,7 +149,7 @@ public class SeedWidget extends RelativeLayout {
     // }
 
     public void setSeed(BaseSeedInterface seed) {
-        this.mSeed = (GrowingSeedInterface) seed;
+        this.mSeed = (GrowingSeed) seed;
         setupView();
     }
 

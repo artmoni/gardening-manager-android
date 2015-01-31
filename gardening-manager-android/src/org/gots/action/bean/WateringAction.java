@@ -17,14 +17,14 @@ import java.util.List;
 
 import org.gots.action.AbstractActionSeed;
 import org.gots.action.GardeningActionInterface;
-import org.gots.action.SeedActionInterface;
+import org.gots.action.ActionOnSeed;
 import org.gots.bean.BaseAllotmentInterface;
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.GrowingSeed;
 
 import android.content.Context;
 import android.os.AsyncTask;
 
-public class WateringAction extends AbstractActionSeed implements SeedActionInterface, GardeningActionInterface {
+public class WateringAction extends AbstractActionSeed implements ActionOnSeed, GardeningActionInterface {
 
     public WateringAction(Context context) {
         super(context);
@@ -32,59 +32,21 @@ public class WateringAction extends AbstractActionSeed implements SeedActionInte
     }
 
     @Override
-    public int execute(GrowingSeedInterface seed) {
-        super.execute(seed);
-
+    public int execute(GrowingSeed seed) {
         seed.setDateLastWatering(Calendar.getInstance().getTime());
-
-        seed.getActionToDo().remove(this);
-        seed.getActionDone().add(this);
-
-        actionSeedManager.doAction(this, seed);
-
-        return 0;
+        
+        return super.execute(seed);
     }
 
-    public void setDateActionDone(Date dateActionDone) {
-        super.setDateActionDone(dateActionDone);
-    }
-
-    public Date getDateActionDone() {
-        return super.getDateActionDone();
-    }
-
-    public void setDuration(int duration) {
-        super.setDuration(duration);
-    }
-
-    public int getDuration() {
-        return super.getDuration();
-    }
-
-    public void setDescription(String description) {
-        super.setDescription(description);
-    }
-
-    public String getDescription() {
-        return super.getDescription();
-    }
-
-    public void setName(String name) {
-        super.setName(name);
-    }
-
-    public String getName() {
-        return super.getName();
-    }
 
     @Override
-    public int execute(BaseAllotmentInterface allotment, GrowingSeedInterface seed) {
+    public int execute(BaseAllotmentInterface allotment, GrowingSeed seed) {
         new AsyncTask<BaseAllotmentInterface, Integer, Void>() {
             @Override
             protected Void doInBackground(BaseAllotmentInterface... params) {
-                List<GrowingSeedInterface> listseeds = growingSeedManager.getGrowingSeedsByAllotment(params[0], false);
-                for (Iterator<GrowingSeedInterface> iterator = listseeds.iterator(); iterator.hasNext();) {
-                    GrowingSeedInterface baseSeedInterface = iterator.next();
+                List<GrowingSeed> listseeds = growingSeedManager.getGrowingSeedsByAllotment(params[0], false);
+                for (Iterator<GrowingSeed> iterator = listseeds.iterator(); iterator.hasNext();) {
+                    GrowingSeed baseSeedInterface = iterator.next();
                     WateringAction.this.execute(baseSeedInterface);
 
                 }
@@ -100,23 +62,4 @@ public class WateringAction extends AbstractActionSeed implements SeedActionInte
         return 0;
     }
 
-    @Override
-    public void setId(int id) {
-        super.setId(id);
-    }
-
-    @Override
-    public int getId() {
-        return super.getId();
-    }
-
-    @Override
-    public Object getData() {
-        return super.getData();
-    }
-
-    @Override
-    public void setData(Object data) {
-        super.setData(data);
-    }
 }

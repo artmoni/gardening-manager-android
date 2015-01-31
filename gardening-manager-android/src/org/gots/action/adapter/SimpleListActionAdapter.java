@@ -3,7 +3,7 @@ package org.gots.action.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.gots.action.BaseActionInterface;
+import org.gots.action.BaseAction;
 import org.gots.action.view.ActionWidget;
 
 import android.view.View;
@@ -12,9 +12,9 @@ import android.widget.BaseAdapter;
 
 public class SimpleListActionAdapter extends BaseAdapter {
 
-    List<BaseActionInterface> mActions = new ArrayList<BaseActionInterface>();
+    List<BaseAction> mActions = new ArrayList<BaseAction>();
 
-    public SimpleListActionAdapter(List<BaseActionInterface> actions) {
+    public SimpleListActionAdapter(List<BaseAction> actions) {
         this.mActions.addAll(actions);
     }
 
@@ -24,7 +24,7 @@ public class SimpleListActionAdapter extends BaseAdapter {
     }
 
     @Override
-    public BaseActionInterface getItem(int arg0) {
+    public BaseAction getItem(int arg0) {
         return mActions.get(arg0);
     }
 

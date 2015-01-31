@@ -28,7 +28,7 @@ public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGro
 
     GotsGrowingSeedProvider provider;
 
-    Map<Integer, HashMap<Integer, GrowingSeedInterface>> seedsByAllotment; // Map<AllotmentID, HashMap<getGrowingSeedId,
+    Map<Integer, HashMap<Integer, GrowingSeed>> seedsByAllotment; // Map<AllotmentID, HashMap<getGrowingSeedId,
                                                                            // GrowingSeedInterface>>
 
     private boolean initDone;
@@ -95,9 +95,9 @@ public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGro
     }
 
     @Override
-    public GrowingSeedInterface plantingSeed(GrowingSeedInterface seed, BaseAllotmentInterface allotment) {
+    public GrowingSeed plantingSeed(GrowingSeed seed, BaseAllotmentInterface allotment) {
         if (!seedsByAllotment.containsKey(allotment.getId())) {
-            seedsByAllotment.put(allotment.getId(), new HashMap<Integer, GrowingSeedInterface>());
+            seedsByAllotment.put(allotment.getId(), new HashMap<Integer, GrowingSeed>());
         }
         seed = provider.plantingSeed(seed, allotment);
         seedsByAllotment.get(allotment.getId()).put(seed.getGrowingSeedId(), seed);
@@ -105,35 +105,35 @@ public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGro
     }
 
     @Override
-    public ArrayList<GrowingSeedInterface> getGrowingSeeds() {
+    public ArrayList<GrowingSeed> getGrowingSeeds() {
         return provider.getGrowingSeeds();
     }
 
     @Override
-    public List<GrowingSeedInterface> getGrowingSeedsByAllotment(BaseAllotmentInterface allotment, boolean force) {
+    public List<GrowingSeed> getGrowingSeedsByAllotment(BaseAllotmentInterface allotment, boolean force) {
         if (seedsByAllotment == null || resetAllotments) {
             resetAllotments = false;
-            seedsByAllotment = new HashMap<Integer, HashMap<Integer, GrowingSeedInterface>>();
+            seedsByAllotment = new HashMap<Integer, HashMap<Integer, GrowingSeed>>();
         }
 
         if (force || seedsByAllotment.get(allotment.getId()) == null) {
-            seedsByAllotment.put(allotment.getId(), new HashMap<Integer, GrowingSeedInterface>());
-            for (GrowingSeedInterface seed : provider.getGrowingSeedsByAllotment(allotment, force)) {
+            seedsByAllotment.put(allotment.getId(), new HashMap<Integer, GrowingSeed>());
+            for (GrowingSeed seed : provider.getGrowingSeedsByAllotment(allotment, force)) {
                 seedsByAllotment.get(allotment.getId()).put(seed.getGrowingSeedId(), seed);
             }
         }
         // return provider.getGrowingSeedsByAllotment(allotment, force);
-        return new ArrayList<GrowingSeedInterface>(seedsByAllotment.get(allotment.getId()).values());
+        return new ArrayList<GrowingSeed>(seedsByAllotment.get(allotment.getId()).values());
     }
 
     @Override
-    public GrowingSeedInterface getGrowingSeedById(int growingSeedId) {
+    public GrowingSeed getGrowingSeedById(int growingSeedId) {
         return provider.getGrowingSeedById(growingSeedId);
     }
 
     @Override
-    public void deleteGrowingSeed(GrowingSeedInterface seed) {
-        for (HashMap<Integer, GrowingSeedInterface> seedMap : seedsByAllotment.values()) {
+    public void deleteGrowingSeed(GrowingSeed seed) {
+        for (HashMap<Integer, GrowingSeed> seedMap : seedsByAllotment.values()) {
             if (seedMap.containsKey(seed.getGrowingSeedId())) {
                 seedMap.remove(seed.getGrowingSeedId());
                 break;

@@ -15,10 +15,10 @@ import java.util.List;
 import net.londatiga.android.QuickAction;
 
 import org.gots.R;
-import org.gots.action.BaseActionInterface;
+import org.gots.action.BaseAction;
 import org.gots.action.GotsActionManager;
 import org.gots.action.GotsActionSeedManager;
-import org.gots.action.SeedActionInterface;
+import org.gots.action.ActionOnSeed;
 import org.gots.action.bean.DeleteAction;
 import org.gots.action.bean.DetailAction;
 import org.gots.action.bean.ScheduleAction;
@@ -28,7 +28,7 @@ import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.GrowingSeed;
 import org.gots.ui.TabSeedActivity;
 import org.gots.ui.fragment.ScheduleActionFragment;
 
@@ -52,16 +52,16 @@ public class QuickSeedActionBuilder {
 
     private Context mContext;
 
-    private GrowingSeedInterface seed;
+    private GrowingSeed seed;
 
     GotsActionSeedProvider actionSeedManager;
 
     private GotsActionManager actionManager;
 
-    private class ActionTask extends AsyncTask<SeedActionInterface, Integer, Void> {
+    private class ActionTask extends AsyncTask<ActionOnSeed, Integer, Void> {
         @Override
-        protected Void doInBackground(SeedActionInterface... params) {
-            SeedActionInterface actionItem = params[0];
+        protected Void doInBackground(ActionOnSeed... params) {
+            ActionOnSeed actionItem = params[0];
             actionItem.execute(seed);
             return null;
         }
@@ -74,7 +74,7 @@ public class QuickSeedActionBuilder {
         }
     }
 
-    public QuickSeedActionBuilder(Context context, final SeedWidget parent, GrowingSeedInterface growingSeed) {
+    public QuickSeedActionBuilder(Context context, final SeedWidget parent, GrowingSeed growingSeed) {
         parentView = parent;
         mContext = context;
         this.seed = growingSeed;
@@ -82,20 +82,20 @@ public class QuickSeedActionBuilder {
         actionManager = GotsActionManager.getInstance().initIfNew(mContext);
         actionSeedManager = GotsActionSeedManager.getInstance().initIfNew(mContext);
 
-        new AsyncTask<Void, Void, List<SeedActionInterface>>() {
+        new AsyncTask<Void, Void, List<ActionOnSeed>>() {
 
             @Override
-            protected List<SeedActionInterface> doInBackground(Void... params) {
+            protected List<ActionOnSeed> doInBackground(Void... params) {
                 GotsActionSeedProvider helperActions = GotsActionSeedManager.getInstance().initIfNew(mContext);
 
                 return helperActions.getActionsToDoBySeed(seed, false);
             }
 
-            protected void onPostExecute(List<SeedActionInterface> actions) {
-                for (BaseActionInterface baseActionInterface : actions) {
-                    if (!SeedActionInterface.class.isInstance(baseActionInterface))
+            protected void onPostExecute(List<ActionOnSeed> actions) {
+                for (BaseAction baseActionInterface : actions) {
+                    if (!ActionOnSeed.class.isInstance(baseActionInterface))
                         continue;
-                    final SeedActionInterface currentAction = (SeedActionInterface) baseActionInterface;
+                    final ActionOnSeed currentAction = (ActionOnSeed) baseActionInterface;
 
                     ActionWidget actionWidget = new ActionWidget(mContext, currentAction);
                     actionWidget.setState(currentAction.getState());
@@ -148,12 +148,12 @@ public class QuickSeedActionBuilder {
 
             @Override
             public void onClick(View v) {
-                SeedActionInterface actionItem = detail;
+                ActionOnSeed actionItem = detail;
                 if (DetailAction.class.isInstance(actionItem)) {
                     // alert.show();
                     final Intent i = new Intent(mContext, TabSeedActivity.class);
-                    i.putExtra("org.gots.seed.id", ((GrowingSeedInterface) parentView.getTag()).getGrowingSeedId());
-                    i.putExtra("org.gots.seed.url", ((GrowingSeedInterface) parentView.getTag()).getUrlDescription());
+                    i.putExtra("org.gots.seed.id", ((GrowingSeed) parentView.getTag()).getGrowingSeedId());
+                    i.putExtra("org.gots.seed.url", ((GrowingSeed) parentView.getTag()).getUrlDescription());
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContext.startActivity(i);
                 } else {
@@ -168,28 +168,28 @@ public class QuickSeedActionBuilder {
         /*
          * ACTION WATERING
          */
-        new AsyncTask<Void, Integer, SeedActionInterface>() {
+        new AsyncTask<Void, Integer, ActionOnSeed>() {
 
             @Override
-            protected SeedActionInterface doInBackground(Void... params) {
+            protected ActionOnSeed doInBackground(Void... params) {
                 WateringAction wateringAction = (WateringAction) actionManager.getActionByName("water");
 
                 return wateringAction;
             }
 
-            protected void onPostExecute(final SeedActionInterface action) {
+            protected void onPostExecute(final ActionOnSeed action) {
                 ActionWidget watering = new ActionWidget(mContext, action);
                 watering.setState(ActionState.UNDEFINED);
                 watering.setOnClickListener(new View.OnClickListener() {
 
                     @Override
                     public void onClick(View v) {
-                        new AsyncTask<SeedActionInterface, Integer, Void>() {
+                        new AsyncTask<ActionOnSeed, Integer, Void>() {
                             @Override
-                            protected Void doInBackground(SeedActionInterface... params) {
-                                SeedActionInterface actionItem = params[0];
+                            protected Void doInBackground(ActionOnSeed... params) {
+                                ActionOnSeed actionItem = params[0];
                                 actionItem.setDuration(0);
-                                actionItem = actionSeedManager.insertAction(seed, (BaseActionInterface) actionItem);
+                                actionItem = actionSeedManager.insertAction(seed, (ActionOnSeed) actionItem);
                                 actionSeedManager.doAction(actionItem, seed);
                                 return null;
                             }

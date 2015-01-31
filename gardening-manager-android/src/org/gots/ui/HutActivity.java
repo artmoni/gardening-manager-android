@@ -16,7 +16,7 @@ import org.gots.R;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.provider.SeedsContentProvider;
 import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.GrowingSeed;
 import org.gots.ui.VendorListFragment.OnSeedSelected;
 
 import android.app.AlertDialog;
@@ -60,7 +60,7 @@ public class HutActivity extends BaseGotsActivity implements OnSeedSelected {
     // private ListVendorSeedAdapter lvsea;
     ListView listSeeds;
 
-    ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
+    ArrayList<GrowingSeed> allSeeds = new ArrayList<GrowingSeed>();
 
     private ViewPager mViewPager;
 

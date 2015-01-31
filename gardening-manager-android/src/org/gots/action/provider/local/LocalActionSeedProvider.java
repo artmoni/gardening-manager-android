@@ -19,14 +19,16 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.crypto.Mac;
+
 import org.gots.DatabaseHelper;
-import org.gots.action.BaseActionInterface;
-import org.gots.action.SeedActionInterface;
+import org.gots.action.BaseAction;
+import org.gots.action.ActionOnSeed;
 import org.gots.action.provider.GotsActionProvider;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.util.ActionState;
 import org.gots.exception.GotsServerRestrictedException;
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.GrowingSeed;
 import org.gots.utils.FileUtilities;
 import org.gots.utils.GotsDBHelper;
 
@@ -44,20 +46,21 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
     }
 
     @Override
-    public SeedActionInterface insertAction(GrowingSeedInterface seed, BaseActionInterface action) {
+    public ActionOnSeed insertAction(GrowingSeed seed, ActionOnSeed action) {
         long rowid;
         ContentValues values = getContentValues(action, seed);
-
+        values.remove(DatabaseHelper.ACTIONSEED_ID);
         rowid = bdd.insert(DatabaseHelper.ACTIONSEEDS_TABLE_NAME, null, values);
-        action.setId((int) rowid);
-        return (SeedActionInterface) action;
+        action.setActionSeedId((int) rowid);
+        return (ActionOnSeed) action;
     }
 
-    protected ContentValues getContentValues(BaseActionInterface action, GrowingSeedInterface seed) {
+    protected ContentValues getContentValues(ActionOnSeed action, GrowingSeed seed) {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.ACTIONSEED_GROWINGSEED_ID, seed.getGrowingSeedId());
         values.put(DatabaseHelper.ACTIONSEED_DURATION, action.getDuration());
         values.put(DatabaseHelper.ACTIONSEED_ACTION_ID, action.getId());
+        values.put(DatabaseHelper.ACTIONSEED_ID, action.getActionSeedId());
         values.put(DatabaseHelper.ACTIONSEED_UUID, action.getUUID());
 
         if (action.getData() != null)
@@ -69,34 +72,35 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
         return values;
     }
 
-    private SeedActionInterface cursorToAction(Cursor cursor) {
-        SeedActionInterface seedAction = null;
+    private ActionOnSeed cursorToAction(Cursor cursor) {
+        ActionOnSeed seedAction = null;
         GotsActionProvider actionDBHelper = new LocalActionProvider(mContext);
-        BaseActionInterface baseAction = actionDBHelper.getActionById(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_ACTION_ID)));
-        if (baseAction instanceof SeedActionInterface)
-            seedAction = (SeedActionInterface) baseAction;
+        BaseAction baseAction = actionDBHelper.getActionById(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_ACTION_ID)));
+        if (baseAction instanceof ActionOnSeed)
+            seedAction = (ActionOnSeed) baseAction;
         if (seedAction != null) {
-            seedAction.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_ACTION_ID)));
+            seedAction.setActionSeedId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_ID)));
             seedAction.setGrowingSeedId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_GROWINGSEED_ID)));
             seedAction.setDuration(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_DURATION)));
-            seedAction.setDateActionDone(new Date(
-                    cursor.getLong(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_DATEACTIONDONE))));
-            seedAction.setActionSeedId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_ID)));
+            if (cursor.getLong(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_DATEACTIONDONE)) != 0)
+                seedAction.setDateActionDone(new Date(
+                        cursor.getLong(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_DATEACTIONDONE))));
+            seedAction.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_ACTION_ID)));
             seedAction.setData(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_DATA)));
             seedAction.setUUID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_UUID)));
         }
         return seedAction;
     }
 
-    public synchronized SeedActionInterface update(GrowingSeedInterface seed, SeedActionInterface actionSeed) {
+    public synchronized ActionOnSeed update(GrowingSeed seed, ActionOnSeed actionSeed) {
         ContentValues values = getContentValues(actionSeed, seed);
         int nbRows;
         Cursor cursor;
-        if (actionSeed.getId() > 0) {
+        if (actionSeed.getActionSeedId() >= 0) {
             nbRows = bdd.update(DatabaseHelper.ACTIONSEEDS_TABLE_NAME, values, DatabaseHelper.ACTIONSEED_ID + "='"
-                    + actionSeed.getId() + "'", null);
+                    + actionSeed.getActionSeedId() + "'", null);
             cursor = bdd.query(DatabaseHelper.ACTIONSEEDS_TABLE_NAME, null, DatabaseHelper.ACTIONSEED_ID + "='"
-                    + actionSeed.getId() + "'", null, null, null, null);
+                    + actionSeed.getActionSeedId() + "'", null, null, null, null);
         } else {
 
             nbRows = bdd.update(DatabaseHelper.ACTIONSEEDS_TABLE_NAME, values, DatabaseHelper.ACTIONSEED_UUID + "='"
@@ -107,7 +111,7 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
 
             if (cursor.moveToFirst()) {
                 int rowid = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_ID));
-                actionSeed.setId(rowid);
+                actionSeed.setActionSeedId(rowid);
             }
             cursor.close();
         }
@@ -116,8 +120,8 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
     }
 
     @Override
-    public List<SeedActionInterface> getActionsDoneBySeed(GrowingSeedInterface seed, boolean force) {
-        ArrayList<SeedActionInterface> allActions = new ArrayList<SeedActionInterface>();
+    public List<ActionOnSeed> getActionsDoneBySeed(GrowingSeed seed, boolean force) {
+        ArrayList<ActionOnSeed> allActions = new ArrayList<ActionOnSeed>();
         if (seed != null) {
             //@formatter:off
 		Cursor cursor = bdd.rawQuery("select * from " + DatabaseHelper.ACTIONSEEDS_TABLE_NAME + " actionseed"
@@ -127,7 +131,7 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
 		//@formatter:on
             if (cursor.moveToFirst()) {
                 do {
-                    SeedActionInterface action = cursorToAction(cursor);
+                    ActionOnSeed action = cursorToAction(cursor);
                     if (action != null)
                         allActions.add(action);
                 } while (cursor.moveToNext());
@@ -138,8 +142,8 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
     }
 
     @Override
-    public List<SeedActionInterface> getActionsToDoBySeed(GrowingSeedInterface seed, boolean force) {
-        List<SeedActionInterface> allActions = new ArrayList<SeedActionInterface>();
+    public List<ActionOnSeed> getActionsToDoBySeed(GrowingSeed seed, boolean force) {
+        List<ActionOnSeed> allActions = new ArrayList<ActionOnSeed>();
         Cursor cursor = null;
         try {
             cursor = bdd.rawQuery("select * from " + DatabaseHelper.ACTIONSEEDS_TABLE_NAME + " actionseed"
@@ -148,7 +152,7 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
 
             if (cursor.moveToFirst()) {
                 do {
-                    SeedActionInterface action = cursorToAction(cursor);
+                    ActionOnSeed action = cursorToAction(cursor);
                     if (action != null) {
                         populateState(action, seed);
                         allActions.add(action);
@@ -163,7 +167,7 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
         return allActions;
     }
 
-    protected SeedActionInterface populateState(SeedActionInterface action, GrowingSeedInterface seed) {
+    protected ActionOnSeed populateState(ActionOnSeed action, GrowingSeed seed) {
         int state = ActionState.UNDEFINED;
 
         if (seed != null && seed.getDateSowing() != null) {
@@ -187,14 +191,14 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
     }
 
     @Override
-    public ArrayList<SeedActionInterface> getActionsToDo() {
-        ArrayList<SeedActionInterface> allActions = new ArrayList<SeedActionInterface>();
+    public ArrayList<ActionOnSeed> getActionsToDo() {
+        ArrayList<ActionOnSeed> allActions = new ArrayList<ActionOnSeed>();
         Cursor cursor = bdd.rawQuery("select * from " + DatabaseHelper.ACTIONSEEDS_TABLE_NAME + " actionseed"
                 + " WHERE actionseed." + DatabaseHelper.ACTIONSEED_DATEACTIONDONE + " IS NULL", null);
 
         if (cursor.moveToFirst()) {
             do {
-                SeedActionInterface action = cursorToAction(cursor);
+                ActionOnSeed action = cursorToAction(cursor);
                 if (action != null)
                     allActions.add(action);
             } while (cursor.moveToNext());
@@ -205,19 +209,21 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
     }
 
     @Override
-    public long doAction(SeedActionInterface action, GrowingSeedInterface seed) {
-        long rowid;
-        ContentValues values = getContentValues(action, seed);
-
-        rowid = bdd.update(DatabaseHelper.ACTIONSEEDS_TABLE_NAME, values,
-                DatabaseHelper.ACTIONSEED_ID + "=" + action.getId(), null);
-        if (rowid == 0)
-            rowid = bdd.insert(DatabaseHelper.ACTIONSEEDS_TABLE_NAME, null, values);
-        return rowid;
+    public ActionOnSeed doAction(ActionOnSeed action, GrowingSeed seed) {
+        ActionOnSeed mAction;
+        // ContentValues values = getContentValues(action, seed);
+        if (action.getActionSeedId() >= 0)
+            // rowid = bdd.update(DatabaseHelper.ACTIONSEEDS_TABLE_NAME, values, DatabaseHelper.ACTIONSEED_ID + "="
+            // + action.getActionSeedId(), null);
+            mAction = update(seed, action);
+        else
+            mAction = insertAction(seed, action);
+        // rowid = bdd.insert(DatabaseHelper.ACTIONSEEDS_TABLE_NAME, null, values);
+        return mAction;
     }
 
     @Override
-    public File uploadPicture(GrowingSeedInterface seed, File f) {
+    public File uploadPicture(GrowingSeed seed, File f) {
         File seedDir = new File(gotsPrefs.getGotsExternalFileDir(), String.valueOf(seed.getGrowingSeedId()));
         if (!seedDir.exists())
             seedDir.mkdir();
@@ -232,11 +238,11 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
     }
 
     @Override
-    public File downloadHistory(GrowingSeedInterface mSeed) throws GotsServerRestrictedException {
+    public File downloadHistory(GrowingSeed mSeed) throws GotsServerRestrictedException {
         throw new GotsServerRestrictedException(mContext);
     }
 
-    public List<File> getPicture(GrowingSeedInterface mSeed) throws GotsServerRestrictedException {
+    public List<File> getPicture(GrowingSeed mSeed) throws GotsServerRestrictedException {
         File seedDir = new File(gotsPrefs.getGotsExternalFileDir(), String.valueOf(mSeed.getGrowingSeedId()));
         File[] files = seedDir.listFiles();
 

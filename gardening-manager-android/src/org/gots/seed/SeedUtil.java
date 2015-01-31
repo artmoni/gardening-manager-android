@@ -12,14 +12,14 @@ package org.gots.seed;
 
 import java.util.ArrayList;
 
-import org.gots.action.BaseActionInterface;
+import org.gots.action.BaseAction;
 
 import android.content.Context;
 
 public class SeedUtil {
     @SuppressWarnings("unchecked")
     public BaseSeedInterface copy(BaseSeedInterface originalSeed) {
-        BaseSeedInterface copy = new GrowingSeed();
+        BaseSeedInterface copy = new GrowingSeedImpl();
         copy.setName(originalSeed.getName());
         copy.setDescriptionGrowth(originalSeed.getDescriptionGrowth());
         copy.setDurationMin(originalSeed.getDurationMin());
@@ -28,9 +28,9 @@ public class SeedUtil {
         copy.setDateSowingMax(originalSeed.getDateSowingMax());
         copy.setUrlDescription(originalSeed.getUrlDescription());
         copy.setUUID(originalSeed.getUUID());
-        copy.setActionToDo((ArrayList<BaseActionInterface>) originalSeed.getActionToDo().clone());
+        copy.setActionToDo((ArrayList<BaseAction>) originalSeed.getActionToDo().clone());
         // copy.getActionToDo().addAll((ArrayList<Action>)originalSeed.getActionToDo().clone());
-        copy.setActionDone((ArrayList<BaseActionInterface>) originalSeed.getActionDone().clone());
+        copy.setActionDone((ArrayList<BaseAction>) originalSeed.getActionDone().clone());
         copy.setFamily(originalSeed.getFamily());
         copy.setSpecie(originalSeed.getSpecie());
         copy.setVariety(originalSeed.getVariety());
@@ -52,7 +52,7 @@ public class SeedUtil {
         return translateSpecie;
     }
 
-    public static String translateAction(Context context, BaseActionInterface action) {
+    public static String translateAction(Context context, BaseAction action) {
         String translateAction = action.getName();
         if (translateAction == null||"null".equals(translateAction))
             return "";

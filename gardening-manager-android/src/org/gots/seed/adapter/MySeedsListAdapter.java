@@ -14,10 +14,10 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import org.gots.action.BaseActionInterface;
+import org.gots.action.BaseAction;
 import org.gots.action.GardeningActionInterface;
 import org.gots.action.GotsActionManager;
-import org.gots.action.SeedActionInterface;
+import org.gots.action.ActionOnSeed;
 import org.gots.action.bean.ReduceQuantityAction;
 import org.gots.action.bean.SowingAction;
 import org.gots.action.util.ActionState;
@@ -26,7 +26,7 @@ import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsGrowingSeedManager;
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.GrowingSeed;
 import org.gots.seed.SeedUtil;
 import org.gots.ui.GardenActivity;
 
@@ -56,7 +56,7 @@ public class MySeedsListAdapter extends SeedListAdapter {
         final BaseSeedInterface currentSeed = getItem(position);
 
         holder.seedWidgetTile.setSeed(currentSeed);
-        BaseActionInterface action = null;
+        BaseAction action = null;
         if (allotment != null) {
             // action = new SowingAction(mContext);
             GotsActionManager helper = GotsActionManager.getInstance().initIfNew(mContext);
@@ -75,19 +75,19 @@ public class MySeedsListAdapter extends SeedListAdapter {
 
                 @Override
                 public void onClick(View v) {
-                    new AsyncTask<Void, Integer, GrowingSeedInterface>() {
+                    new AsyncTask<Void, Integer, GrowingSeed>() {
                         @Override
-                        protected GrowingSeedInterface doInBackground(Void... params) {
+                        protected GrowingSeed doInBackground(Void... params) {
                             GotsGrowingSeedManager provider = GotsGrowingSeedManager.getInstance().initIfNew(mContext);
                             // NuxeoGrowingSeedProvider provider = new NuxeoGrowingSeedProvider(mContext);
-                            GrowingSeedInterface growingSeed = (GrowingSeedInterface) currentSeed;
+                            GrowingSeed growingSeed = (GrowingSeed) currentSeed;
                             growingSeed.setDateSowing(Calendar.getInstance().getTime());
 
                             return provider.plantingSeed(growingSeed, allotment);
                         }
 
                         @Override
-                        protected void onPostExecute(GrowingSeedInterface seed) {
+                        protected void onPostExecute(GrowingSeed seed) {
                             // notifyDataSetChanged();
                             Toast.makeText(mContext, "Sowing" + " " + SeedUtil.translateSpecie(mContext, seed),
                                     Toast.LENGTH_LONG).show();
@@ -106,7 +106,7 @@ public class MySeedsListAdapter extends SeedListAdapter {
             // action.setState(ActionState.NORMAL);
             ActionWidget reduceWidget = new ActionWidget(mContext, action);
             reduceWidget.setAction(action);
-            final BaseActionInterface baseActionInterface = action;
+            final BaseAction baseActionInterface = action;
             reduceWidget.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -116,11 +116,11 @@ public class MySeedsListAdapter extends SeedListAdapter {
                         protected Void doInBackground(Void... params) {
                             if (allotment != null) {
                                 GardeningActionInterface action = (GardeningActionInterface) baseActionInterface;
-                                action.execute(allotment, (GrowingSeedInterface) currentSeed);
+                                action.execute(allotment, (GrowingSeed) currentSeed);
                                 ((Activity) mContext).finish();
                             } else {
-                                SeedActionInterface action = (SeedActionInterface) baseActionInterface;
-                                action.execute((GrowingSeedInterface) currentSeed);
+                                ActionOnSeed action = (ActionOnSeed) baseActionInterface;
+                                action.execute((GrowingSeed) currentSeed);
                             }
                             return null;
                         }

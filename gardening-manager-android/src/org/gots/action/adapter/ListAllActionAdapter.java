@@ -20,14 +20,14 @@ import java.util.List;
 import java.util.Locale;
 
 import org.gots.R;
-import org.gots.action.BaseActionInterface;
-import org.gots.action.SeedActionInterface;
+import org.gots.action.BaseAction;
+import org.gots.action.ActionOnSeed;
 import org.gots.action.bean.PhotoAction;
 import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.GotsGrowingSeedManager;
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.GrowingSeed;
 import org.gots.seed.view.SeedWidget;
 import org.gots.weather.WeatherManager;
 import org.gots.weather.view.WeatherView;
@@ -61,7 +61,7 @@ public class ListAllActionAdapter extends BaseAdapter {
 
     private Context mContext;
 
-    private ArrayList<SeedActionInterface> actions = new ArrayList<SeedActionInterface>();
+    private ArrayList<ActionOnSeed> actions = new ArrayList<ActionOnSeed>();
 
     // private ArrayList<GrowingSeedInterface> seeds = new
     // ArrayList<GrowingSeedInterface>();
@@ -82,7 +82,7 @@ public class ListAllActionAdapter extends BaseAdapter {
 
     private static final String TAG = "ListAllActionAdapter";
 
-    public ListAllActionAdapter(Context context, List<SeedActionInterface> allActions, int status) {
+    public ListAllActionAdapter(Context context, List<ActionOnSeed> allActions, int status) {
         this.mContext = context;
         current_status = status;
         if (allActions != null) {
@@ -108,7 +108,7 @@ public class ListAllActionAdapter extends BaseAdapter {
     }
 
     @Override
-    public SeedActionInterface getItem(int position) {
+    public ActionOnSeed getItem(int position) {
         return actions.get(position);
     }
 
@@ -126,12 +126,12 @@ public class ListAllActionAdapter extends BaseAdapter {
         if (convertView == null)
             ll = LayoutInflater.from(mContext).inflate(R.layout.list_action, parent, false);
 
-        final SeedActionInterface currentAction = getItem(position);
+        final ActionOnSeed currentAction = getItem(position);
 
-        final GrowingSeedInterface seed = GotsGrowingSeedManager.getInstance().initIfNew(mContext).getGrowingSeedById(
+        final GrowingSeed seed = GotsGrowingSeedManager.getInstance().initIfNew(mContext).getGrowingSeedById(
                 currentAction.getGrowingSeedId());
 
-        if (seed != null && BaseActionInterface.class.isInstance(currentAction)) {
+        if (seed != null && BaseAction.class.isInstance(currentAction)) {
             ActionWidget actionWidget = (ActionWidget) ll.findViewById(R.id.idActionView);
 
             SeedWidget seedView = (SeedWidget) ll.findViewById(R.id.idSeedView);
@@ -278,9 +278,9 @@ public class ListAllActionAdapter extends BaseAdapter {
 
     }
 
-    class IActionAscendantComparator implements Comparator<BaseActionInterface> {
+    class IActionAscendantComparator implements Comparator<BaseAction> {
         @Override
-        public int compare(BaseActionInterface obj1, BaseActionInterface obj2) {
+        public int compare(BaseAction obj1, BaseAction obj2) {
             int result = 0;
             if (obj1.getDuration() >= 0 && obj2.getDuration() >= 0) {
                 result = obj1.getDuration() < obj2.getDuration() ? -1 : 0;
@@ -290,9 +290,9 @@ public class ListAllActionAdapter extends BaseAdapter {
         }
     }
 
-    class IActionDescendantComparator implements Comparator<SeedActionInterface> {
+    class IActionDescendantComparator implements Comparator<ActionOnSeed> {
         @Override
-        public int compare(SeedActionInterface obj1, SeedActionInterface obj2) {
+        public int compare(ActionOnSeed obj1, ActionOnSeed obj2) {
             int result = 0;
             if (obj1.getDateActionDone() != null && obj2.getDateActionDone() != null) {
                 result = obj1.getDateActionDone().getTime() > obj2.getDateActionDone().getTime() ? -1 : 0;
@@ -302,8 +302,8 @@ public class ListAllActionAdapter extends BaseAdapter {
         }
     }
 
-    private void showNoticeDialog(final int position, final GrowingSeedInterface seed,
-            final SeedActionInterface currentAction, final Switch mSwitch) {
+    private void showNoticeDialog(final int position, final GrowingSeed seed,
+            final ActionOnSeed currentAction, final Switch mSwitch) {
 
         final EditText userinput = new EditText(mContext.getApplicationContext());
         final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
@@ -311,20 +311,20 @@ public class ListAllActionAdapter extends BaseAdapter {
         builder.setPositiveButton(currentAction.getName(), new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int id) {
-                new AsyncTask<BaseActionInterface, Integer, BaseActionInterface>() {
+                new AsyncTask<BaseAction, Integer, BaseAction>() {
                     @Override
-                    protected BaseActionInterface doInBackground(BaseActionInterface... params) {
+                    protected BaseAction doInBackground(BaseAction... params) {
 
-                        BaseActionInterface actionItem = params[0];
-                        if (SeedActionInterface.class.isInstance(actionItem)) {
+                        BaseAction actionItem = params[0];
+                        if (ActionOnSeed.class.isInstance(actionItem)) {
                             actionItem.setData(userinput.getText().toString());
-                            ((SeedActionInterface) actionItem).execute(seed);
+                            ((ActionOnSeed) actionItem).execute(seed);
                         }
                         return actionItem;
                     }
 
                     @Override
-                    protected void onPostExecute(BaseActionInterface result) {
+                    protected void onPostExecute(BaseAction result) {
                         Toast.makeText(mContext, "Action done : " + result.getName(), Toast.LENGTH_SHORT).show();
 
                         actions.remove(position);

@@ -12,11 +12,11 @@
         android:icon="@drawable/action_sow"
         app:showAsAction="always"
         android:title="@string/action.sow"/>
-    <item
+   <!--  <item
         android:id="@+id/planning"
         android:icon="@drawable/action_schedule"
         app:showAsAction="always"
-        android:title="@string/action.planning"/>
+        android:title="@string/action.planning"/> -->
     <item
         android:id="@+id/photo"
         android:icon="@drawable/action_photo"

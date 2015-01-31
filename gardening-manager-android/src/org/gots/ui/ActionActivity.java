@@ -14,13 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.gots.R;
-import org.gots.action.SeedActionInterface;
+import org.gots.action.ActionOnSeed;
 import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.provider.ActionsContentProvider;
 import org.gots.seed.GotsGrowingSeedManager;
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.GrowingSeed;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -36,11 +36,11 @@ public class ActionActivity extends BaseGotsActivity {
 
     ListView listAllotments;
 
-    ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
+    ArrayList<GrowingSeed> allSeeds = new ArrayList<GrowingSeed>();
 
     private int seedid;
 
-    List<SeedActionInterface> seedActions = new ArrayList<SeedActionInterface>();
+    List<ActionOnSeed> seedActions = new ArrayList<ActionOnSeed>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +67,8 @@ public class ActionActivity extends BaseGotsActivity {
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
-        new AsyncTask<Integer, Void, ArrayList<GrowingSeedInterface>>() {
-            private ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
+        new AsyncTask<Integer, Void, ArrayList<GrowingSeed>>() {
+            private ArrayList<GrowingSeed> allSeeds = new ArrayList<GrowingSeed>();
 
             private ListAllActionAdapter listActions;
 
@@ -76,7 +76,7 @@ public class ActionActivity extends BaseGotsActivity {
             };
 
             @Override
-            protected ArrayList<GrowingSeedInterface> doInBackground(Integer... params) {
+            protected ArrayList<GrowingSeed> doInBackground(Integer... params) {
                 GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(
                         getApplicationContext());
                 int seedid = params[0].intValue();
@@ -87,7 +87,7 @@ public class ActionActivity extends BaseGotsActivity {
                         allSeeds.addAll(growingSeedManager.getGrowingSeedsByAllotment(allotment, false));
                 }
 
-                for (GrowingSeedInterface seed : allSeeds) {
+                for (GrowingSeed seed : allSeeds) {
 
                     seedActions.addAll(actionseedProvider.getActionsToDoBySeed(seed, false));
                 }
@@ -98,7 +98,7 @@ public class ActionActivity extends BaseGotsActivity {
                 return allSeeds;
             }
 
-            protected void onPostExecute(ArrayList<GrowingSeedInterface> allSeeds) {
+            protected void onPostExecute(ArrayList<GrowingSeed> allSeeds) {
 
                 listAllotments = (ListView) findViewById(R.id.IdGardenActionsList);
                 listAllotments.setAdapter(listActions);

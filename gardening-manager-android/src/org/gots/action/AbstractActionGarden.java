@@ -14,7 +14,7 @@ import java.util.Calendar;
 
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.GrowingSeed;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
@@ -28,7 +28,7 @@ public abstract class AbstractActionGarden extends AbstractAction implements Gar
     }
 
     @Override
-    public int execute(BaseAllotmentInterface allotment, GrowingSeedInterface seed) {
+    public int execute(BaseAllotmentInterface allotment, GrowingSeed seed) {
         setDateActionDone(Calendar.getInstance().getTime());
         mContext.sendBroadcast(new Intent(BroadCastMessages.ACTION_EVENT));
         GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();

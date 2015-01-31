@@ -31,7 +31,7 @@ package org.gots.seed;
 import java.util.ArrayList;
 import java.util.Date;
 
-import org.gots.action.BaseActionInterface;
+import org.gots.action.BaseAction;
 
 /**
  *
@@ -109,13 +109,13 @@ public interface BaseSeedInterface {
 
     public abstract void setVariety(String variety);
 
-    public abstract ArrayList<BaseActionInterface> getActionToDo();
+    public abstract ArrayList<BaseAction> getActionToDo();
 
-    public abstract void setActionToDo(ArrayList<BaseActionInterface> actionToDo);
+    public abstract void setActionToDo(ArrayList<BaseAction> actionToDo);
 
-    public abstract ArrayList<BaseActionInterface> getActionDone();
+    public abstract ArrayList<BaseAction> getActionDone();
 
-    public abstract void setActionDone(ArrayList<BaseActionInterface> actionDone);
+    public abstract void setActionDone(ArrayList<BaseAction> actionDone);
 
     public abstract void setBareCode(String bare_code);
 

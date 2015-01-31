@@ -14,69 +14,18 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.gots.action.AbstractActionSeed;
-import org.gots.action.SeedActionInterface;
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.action.ActionOnSeed;
+import org.gots.seed.GrowingSeed;
 
 import android.content.Context;
 
-public class HoeAction extends AbstractActionSeed implements SeedActionInterface {
+public class HoeAction extends AbstractActionSeed implements ActionOnSeed {
 
     public HoeAction(Context mContext) {
         super(mContext);
         setName("hoe");
     }
 
-    @Override
-    public int execute(GrowingSeedInterface seed) {
-        super.execute(seed);
-        setDateActionDone(Calendar.getInstance().getTime());
-        seed.getActionToDo().remove(this);
-        seed.getActionDone().add(this);
-        actionSeedManager.doAction(this, seed);
-        return 1;
-    }
 
-    public void setDateActionDone(Date dateActionDone) {
-        super.setDateActionDone(dateActionDone);
-    }
-
-    public Date getDateActionDone() {
-        return super.getDateActionDone();
-    }
-
-    public void setDuration(int duration) {
-        super.setDuration(duration);
-    }
-
-    public int getDuration() {
-        return super.getDuration();
-    }
-
-    public void setDescription(String description) {
-        super.setDescription(description);
-    }
-
-    public String getDescription() {
-        return super.getDescription();
-    }
-
-    public void setName(String name) {
-        super.setName(name);
-    }
-
-    public String getName() {
-        return super.getName();
-    }
-
-
-    @Override
-    public Object getData() {
-        return super.getData();
-    }
-
-    @Override
-    public void setData(Object data) {
-        super.setData(data);
-    }
 
 }

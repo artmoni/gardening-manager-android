@@ -14,21 +14,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.gots.action.GotsActionSeedManager;
-import org.gots.action.SeedActionInterface;
+import org.gots.action.ActionOnSeed;
 import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.seed.GotsGrowingSeedManager;
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.GrowingSeed;
+import org.gots.ui.fragment.AbstractListFragment;
+import org.gots.ui.fragment.BaseGotsFragment;
+import org.nuxeo.android.fragments.BaseListFragment;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ListFragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class ListActionFragment extends ListFragment implements ListView.OnScrollListener {
+public class ListActionFragment extends AbstractListFragment implements ListView.OnScrollListener {
 
     Handler mHandler = new Handler();
 
@@ -36,51 +42,68 @@ public class ListActionFragment extends ListFragment implements ListView.OnScrol
 
     protected boolean mShowing;
 
+    private ArrayList<GrowingSeed> allSeeds = new ArrayList<GrowingSeed>();
+
+    private ListAllActionAdapter listAllActionAdapter;
+
+    int seedid = 0;
+
+    private GotsGrowingSeedManager growingSeedManager;
+
+    private GotsActionSeedProvider actionseedProvider;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        listView = new ListView(getActivity());
+        return listView;
+    }
+
+    @Override
+    public void onViewCreated(View v, Bundle savedInstanceState) {
+        Bundle bundle = this.getArguments();
+        seedid = bundle.getInt("org.gots.growingseed.id");
+        growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(getActivity());
+        actionseedProvider = GotsActionSeedManager.getInstance().initIfNew(getActivity());
+        super.onViewCreated(v, savedInstanceState);
+    }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        int seedid = 0;
 
-        Bundle bundle = this.getArguments();
-        seedid = bundle.getInt("org.gots.growingseed.id");
+        // new AsyncTask<Integer, Void, ArrayList<GrowingSeed>>() {
+        //
+        // @Override
+        // protected ArrayList<GrowingSeed> doInBackground(Integer... params) {
+        // GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(
+        // getActivity());
+        //
+        // int seedid = params[0].intValue();
+        // if (seedid > 0) {
+        // allSeeds.add(growingSeedManager.getGrowingSeedById(seedid));
+        // } else
+        // allSeeds = growingSeedManager.getGrowingSeeds();
+        // GotsActionSeedProvider actionseedProvider = GotsActionSeedManager.getInstance().initIfNew(getActivity());
+        //
+        // List<ActionOnSeed> seedActions = new ArrayList<ActionOnSeed>();
+        // for (GrowingSeed seed : allSeeds) {
+        //
+        // seedActions = actionseedProvider.getActionsDoneBySeed(seed, true);
+        // seedActions.addAll(actionseedProvider.getActionsToDoBySeed(seed, true));
+        //
+        // }
+        // listAllActionAdapter = new ListAllActionAdapter(getActivity(), seedActions,
+        // ListAllActionAdapter.STATUS_DONE);
+        // return allSeeds;
+        // }
+        //
+        // protected void onPostExecute(ArrayList<GrowingSeed> allSeeds) {
+        // listView.setAdapter(listAllActionAdapter);
+        //
+        // };
+        // }.execute(seedid);
 
-        new AsyncTask<Integer, Void, ArrayList<GrowingSeedInterface>>() {
-            private ArrayList<GrowingSeedInterface> allSeeds = new ArrayList<GrowingSeedInterface>();
-
-            private ListAllActionAdapter listAllActionAdapter;
-
-            @Override
-            protected ArrayList<GrowingSeedInterface> doInBackground(Integer... params) {
-                GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(
-                        getActivity());
-
-                int seedid = params[0].intValue();
-                if (seedid > 0) {
-                    allSeeds.add(growingSeedManager.getGrowingSeedById(seedid));
-                } else
-                    allSeeds = growingSeedManager.getGrowingSeeds();
-                GotsActionSeedProvider actionseedProvider = GotsActionSeedManager.getInstance().initIfNew(getActivity());
-
-                List<SeedActionInterface> seedActions = new ArrayList<SeedActionInterface>();
-                for (GrowingSeedInterface seed : allSeeds) {
-
-                    seedActions = actionseedProvider.getActionsDoneBySeed(seed, true);
-                    seedActions.addAll(actionseedProvider.getActionsToDoBySeed(seed, true));
-                    
-                }
-                listAllActionAdapter = new ListAllActionAdapter(getActivity(), seedActions,
-                        ListAllActionAdapter.STATUS_DONE);
-                return allSeeds;
-            }
-
-            protected void onPostExecute(ArrayList<GrowingSeedInterface> allSeeds) {
-                setListAdapter(listAllActionAdapter);
-                
-
-            };
-        }.execute(seedid);
-
-        getListView().setOnScrollListener(ListActionFragment.this);
+        listView.setOnScrollListener(ListActionFragment.this);
 
     }
 
@@ -105,4 +128,44 @@ public class ListActionFragment extends ListFragment implements ListView.OnScrol
     public void onScrollStateChanged(AbsListView view, int scrollState) {
     }
 
+    @Override
+    protected boolean requireAsyncDataRetrieval() {
+        return true;
+    }
+
+    @Override
+    protected void onNuxeoDataRetrievalStarted() {
+        allSeeds.clear();
+        super.onNuxeoDataRetrievalStarted();
+    }
+
+    @Override
+    protected Object retrieveNuxeoData() throws Exception {
+
+        if (seedid > 0) {
+            allSeeds.add(growingSeedManager.getGrowingSeedById(seedid));
+        } else
+            allSeeds = growingSeedManager.getGrowingSeeds();
+        
+
+        List<ActionOnSeed> seedActions = new ArrayList<ActionOnSeed>();
+        for (GrowingSeed seed : allSeeds) {
+
+            seedActions = actionseedProvider.getActionsDoneBySeed(seed, false);
+            seedActions.addAll(actionseedProvider.getActionsToDoBySeed(seed, false));
+
+        }
+        return seedActions;
+    }
+
+    @Override
+    protected void onNuxeoDataRetrieved(Object data) {
+        listAllActionAdapter = new ListAllActionAdapter(getActivity(), (List<ActionOnSeed>)data, ListAllActionAdapter.STATUS_DONE);
+        listView.setAdapter(listAllActionAdapter);
+        super.onNuxeoDataRetrieved(data);
+    }
+
+    public void update() {
+        runAsyncDataRetrieval();
+    }
 }

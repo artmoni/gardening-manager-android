@@ -3,7 +3,7 @@ package org.gots.action.provider.nuxeo;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.gots.action.BaseActionInterface;
+import org.gots.action.BaseAction;
 import org.gots.action.provider.local.LocalActionProvider;
 import org.gots.nuxeo.NuxeoManager;
 import org.nuxeo.android.repository.DocumentManager;
@@ -20,7 +20,7 @@ public class NuxeoActionProvider extends LocalActionProvider {
 
     protected static final String TAG = "NuxeoActionProvider";
 
-    private ArrayList<BaseActionInterface> remoteActions;
+    private ArrayList<BaseAction> remoteActions;
 
     public NuxeoActionProvider(Context mContext) {
         super(mContext);
@@ -28,8 +28,8 @@ public class NuxeoActionProvider extends LocalActionProvider {
     }
 
     @Override
-    public BaseActionInterface getActionByName(String name) {
-        BaseActionInterface action = null;
+    public BaseAction getActionByName(String name) {
+        BaseAction action = null;
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager service = session.getAdapter(DocumentManager.class);
@@ -64,8 +64,8 @@ public class NuxeoActionProvider extends LocalActionProvider {
     }
 
     @Override
-    public ArrayList<BaseActionInterface> getActions(boolean force) {
-        remoteActions = new ArrayList<BaseActionInterface>();
+    public ArrayList<BaseAction> getActions(boolean force) {
+        remoteActions = new ArrayList<BaseAction>();
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager service = session.getAdapter(DocumentManager.class);
@@ -83,7 +83,7 @@ public class NuxeoActionProvider extends LocalActionProvider {
 
             for (Iterator<Document> iterator = docs.iterator(); iterator.hasNext();) {
                 Document document = iterator.next();
-                BaseActionInterface action = NuxeoActionConverter.convert(mContext, document);
+                BaseAction action = NuxeoActionConverter.convert(mContext, document);
                 if (action != null) {
 
                     remoteActions.add(super.updateAction(action));

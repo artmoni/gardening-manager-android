@@ -1,9 +1,9 @@
 package net.londatiga.android;
 
 import org.gots.action.GardeningActionInterface;
-import org.gots.action.SeedActionInterface;
+import org.gots.action.ActionOnSeed;
 import org.gots.bean.Allotment;
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.GrowingSeed;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -23,7 +23,7 @@ public class ActionItem {
 	private int actionId = -1;
 	private boolean selected;
 	private boolean sticky;
-	SeedActionInterface seedAction;
+	ActionOnSeed seedAction;
 	GardeningActionInterface gardenAction;
 	int state;
 
@@ -37,7 +37,7 @@ public class ActionItem {
 	 * @param icon
 	 *            Icon to use
 	 */
-	public ActionItem(int actionId, SeedActionInterface seedAction, Drawable icon, int state) {
+	public ActionItem(int actionId, ActionOnSeed seedAction, Drawable icon, int state) {
 		this.actionId = actionId;
 		this.seedAction = seedAction;
 		if (seedAction != null) {
@@ -165,11 +165,11 @@ public class ActionItem {
 		return this.thumb;
 	}
 
-	public void execute(GrowingSeedInterface seed) {
+	public void execute(GrowingSeed seed) {
 		seedAction.execute(seed);
 	}
 
-	public void execute(Allotment allotment, GrowingSeedInterface seed) {
+	public void execute(Allotment allotment, GrowingSeed seed) {
 		gardenAction.execute(allotment, seed);
 	}
 

@@ -5,14 +5,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.gots.R;
-import org.gots.action.BaseActionInterface;
+import org.gots.action.BaseAction;
 import org.gots.action.GotsActionSeedManager;
-import org.gots.action.SeedActionInterface;
+import org.gots.action.ActionOnSeed;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsGrowingSeedManager;
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.GrowingSeed;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.service.GotsService;
 import org.gots.seed.view.SeedWidget;
@@ -33,7 +33,7 @@ public class ActionNotificationService extends GotsService {
 
     // NotificationManager mNM;
 
-    private ArrayList<SeedActionInterface> actions = new ArrayList<SeedActionInterface>();
+    private ArrayList<ActionOnSeed> actions = new ArrayList<ActionOnSeed>();
 
     private static final String TAG = "ActionNotificationService";
 
@@ -83,20 +83,20 @@ public class ActionNotificationService extends GotsService {
 
             @Override
             protected Void doInBackground(Void... params) {
-                ArrayList<GrowingSeedInterface> allSeeds = growingSeedManager.getGrowingSeeds();
+                ArrayList<GrowingSeed> allSeeds = growingSeedManager.getGrowingSeeds();
                 // if (allSeeds.size() > 0)
 
-                for (Iterator<GrowingSeedInterface> iterator = allSeeds.iterator(); iterator.hasNext();) {
-                    GrowingSeedInterface seed = iterator.next();
-                    List<SeedActionInterface> seedActions;
+                for (Iterator<GrowingSeed> iterator = allSeeds.iterator(); iterator.hasNext();) {
+                    GrowingSeed seed = iterator.next();
+                    List<ActionOnSeed> seedActions;
 
                     seedActions = actionseedManager.getActionsToDoBySeed(seed, false);
                     actions.addAll(seedActions);
                 }
                 if (!actions.isEmpty()) {
-                    SeedActionInterface action = actions.iterator().next();
+                    ActionOnSeed action = actions.iterator().next();
 
-                    GrowingSeedInterface seed = growingSeedManager.getGrowingSeedById(action.getGrowingSeedId());
+                    GrowingSeed seed = growingSeedManager.getGrowingSeedById(action.getGrowingSeedId());
                     if (seed != null)
                         createNotification(action, seed);
 
@@ -123,7 +123,7 @@ public class ActionNotificationService extends GotsService {
 
     }
 
-    private final void createNotification(BaseActionInterface action, BaseSeedInterface seed) {
+    private final void createNotification(BaseAction action, BaseSeedInterface seed) {
         // In this sample, we'll use the same text for the ticker and the
         // expanded notification
         String content = "";

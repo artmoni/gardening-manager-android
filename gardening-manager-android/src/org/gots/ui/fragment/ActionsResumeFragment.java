@@ -3,9 +3,9 @@ package org.gots.ui.fragment;
 import java.util.List;
 
 import org.gots.R;
-import org.gots.action.BaseActionInterface;
+import org.gots.action.BaseAction;
 import org.gots.action.GotsActionSeedManager;
-import org.gots.action.SeedActionInterface;
+import org.gots.action.ActionOnSeed;
 import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.ui.ActionActivity;
@@ -38,7 +38,7 @@ public class ActionsResumeFragment extends BaseGotsFragment {
     }
 
     public interface OnActionsClickListener {
-        public void onActionClick(View v, BaseActionInterface actionInterface);
+        public void onActionClick(View v, BaseAction actionInterface);
 
         public void onMenuClick(View v);
     }
@@ -81,7 +81,7 @@ public class ActionsResumeFragment extends BaseGotsFragment {
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
-        List<SeedActionInterface> listActions = (List<SeedActionInterface>) data;
+        List<ActionOnSeed> listActions = (List<ActionOnSeed>) data;
         if (isAdded()) {
             ListAllActionAdapter actionAdapter = new ListAllActionAdapter(getActivity(), listActions.subList(0,
                     listActions.size() >= 5 ? 5 : listActions.size()), ListAllActionAdapter.STATUS_TODO);

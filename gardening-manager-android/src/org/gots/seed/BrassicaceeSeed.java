@@ -11,7 +11,7 @@
 package org.gots.seed;
 
 
-public class BrassicaceeSeed extends GrowingSeed {
+public class BrassicaceeSeed extends GrowingSeedImpl {
 
     private static final long serialVersionUID = 1L;
 

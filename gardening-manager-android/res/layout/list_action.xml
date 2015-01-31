@@ -2,20 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="2dp"
     android:background="@drawable/bg_line_selector"
     android:orientation="horizontal"
     android:padding="5dp" >
 
-    <org.gots.seed.view.SeedWidget
-        android:id="@+id/idSeedView"
+    <org.gots.action.view.ActionWidget
+        android:id="@+id/idActionView"
         android:layout_width="50dp"
         android:layout_height="50dp" >
-    </org.gots.seed.view.SeedWidget>
+    </org.gots.action.view.ActionWidget>
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent" >
+        android:layout_height="wrap_content" >
 
         <Switch
             android:id="@+id/switchSeedActionStatus"
@@ -41,10 +40,8 @@
             android:id="@+id/IdSeedActionDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/switchSeedActionStatus"
-            android:layout_alignBottom="@+id/switchSeedActionStatus"
-            android:layout_toRightOf="@+id/switchSeedActionStatus"
-            android:paddingLeft="5dp"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/switchSeedActionStatus"
             android:text="Date to do"
             android:textColor="@color/text_color_dark"
             android:textSize="12dp"
@@ -55,32 +52,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@+id/switchSeedActionStatus"
+            android:layout_below="@+id/IdSeedActionDate"
             android:text="Describe the action in few words" />
+
+        <ImageView
+            android:id="@+id/imageviewPhoto"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/idWeatherView"
+            android:visibility="gone" />
+
+        <org.gots.seed.view.SeedWidget
+            android:id="@+id/idSeedView"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/imageviewPhoto" >
+        </org.gots.seed.view.SeedWidget>
+
+        <org.gots.weather.view.WeatherView
+            android:id="@+id/idWeatherView"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/switchSeedActionStatus" >
+        </org.gots.weather.view.WeatherView>
     </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" >
-    </LinearLayout>
-
-    <ImageView
-        android:id="@+id/imageviewPhoto"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:visibility="gone" />
-
-    <org.gots.weather.view.WeatherView
-        android:id="@+id/idWeatherView"
-        android:layout_width="50dp"
-        android:layout_height="50dp" >
-    </org.gots.weather.view.WeatherView>
-
-    <org.gots.action.view.ActionWidget
-        android:id="@+id/idActionView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
-    </org.gots.action.view.ActionWidget>
 
 </LinearLayout>

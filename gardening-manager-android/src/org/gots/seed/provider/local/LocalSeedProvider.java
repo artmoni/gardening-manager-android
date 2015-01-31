@@ -6,13 +6,13 @@ import java.util.List;
 
 import org.gots.DatabaseHelper;
 import org.gots.action.ActionFactory;
-import org.gots.action.BaseActionInterface;
+import org.gots.action.BaseAction;
 import org.gots.exception.GotsException;
 import org.gots.exception.GotsUserNotConnectedException;
 import org.gots.exception.NotImplementedException;
 import org.gots.garden.GardenInterface;
 import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.GrowingSeed;
+import org.gots.seed.GrowingSeedImpl;
 import org.gots.seed.LikeStatus;
 import org.gots.seed.SpeciesDocument;
 import org.gots.seed.provider.GotsSeedProvider;
@@ -135,7 +135,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
 
     @Override
     public BaseSeedInterface getSeedByBarCode(String barecode) {
-        BaseSeedInterface searchedSeed = new GrowingSeed();
+        BaseSeedInterface searchedSeed = new GrowingSeedImpl();
         if (bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_BARECODE + "=\"" + barecode + "\"",
                 null, null, null, null).moveToFirst()) {
             searchedSeed = cursorToSeed(bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_BARECODE
@@ -150,7 +150,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
     public List<BaseSeedInterface> getVendorSeeds(boolean force, int page, int pageSize) {
         ArrayList<BaseSeedInterface> vendorSeeds = new ArrayList<BaseSeedInterface>();
         try {
-            BaseSeedInterface searchedSeed = new GrowingSeed();
+            BaseSeedInterface searchedSeed = new GrowingSeedImpl();
             Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, null, null, null, null, null);
 
             if (managedCursor.moveToFirst()) {
@@ -214,7 +214,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
     @Override
     public List<BaseSeedInterface> getMyStock(GardenInterface garden) {
         ArrayList<BaseSeedInterface> mySeeds = new ArrayList<BaseSeedInterface>();
-        BaseSeedInterface searchedSeed = new GrowingSeed();
+        BaseSeedInterface searchedSeed = new GrowingSeedImpl();
         Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_NBSACHET + ">0",
                 null, null, null, null);
 
@@ -275,7 +275,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
     }
 
     private BaseSeedInterface cursorToSeed(Cursor cursor) {
-        BaseSeedInterface bsi = new GrowingSeed();
+        BaseSeedInterface bsi = new GrowingSeedImpl();
         bsi.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.SEED_ID)));
         bsi.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_NAME)));
         bsi.setUUID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_UUID)));
@@ -303,7 +303,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
         like.setUserLikeStatus(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.SEED_LIKE_STATUS)));
         bsi.setLikeStatus(like);
 
-        BaseActionInterface baseAction = ActionFactory.buildAction(mContext,
+        BaseAction baseAction = ActionFactory.buildAction(mContext,
                 cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_ACTION1)));
         if (baseAction != null)
             bsi.getActionToDo().add(baseAction);
@@ -335,7 +335,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
     public List<BaseSeedInterface> getVendorSeedsByName(String currentFilter) {
         ArrayList<BaseSeedInterface> vendorSeeds = new ArrayList<BaseSeedInterface>();
         try {
-            BaseSeedInterface searchedSeed = new GrowingSeed();
+            BaseSeedInterface searchedSeed = new GrowingSeedImpl();
             Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_VARIETY
                     + " LIKE \"%" + currentFilter + "%\"", null, null, null, null);
 
@@ -370,7 +370,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
     public List<BaseSeedInterface> getSeedBySowingMonth(int month) {
         ArrayList<BaseSeedInterface> vendorSeeds = new ArrayList<BaseSeedInterface>();
         try {
-            BaseSeedInterface searchedSeed = new GrowingSeed();
+            BaseSeedInterface searchedSeed = new GrowingSeedImpl();
             Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_DATESOWINGMIN
                     + "=" + month, null, null, null, null);
 

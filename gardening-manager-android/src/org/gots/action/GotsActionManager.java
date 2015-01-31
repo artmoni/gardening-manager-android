@@ -30,7 +30,7 @@ public class GotsActionManager extends BroadcastReceiver implements GotsActionPr
 
     private GotsPreferences gotsPrefs;
 
-    private ArrayList<BaseActionInterface> cacheActions;
+    private ArrayList<BaseAction> cacheActions;
 
     private NuxeoManager nuxeoManager;
 
@@ -56,7 +56,7 @@ public class GotsActionManager extends BroadcastReceiver implements GotsActionPr
         this.mContext = context;
         gotsPrefs = getGotsContext().getServerConfig();
         nuxeoManager = NuxeoManager.getInstance().initIfNew(context);
-        cacheActions = new ArrayList<BaseActionInterface>();
+        cacheActions = new ArrayList<BaseAction>();
         setProvider();
         initDone = true;
         return this;
@@ -71,31 +71,31 @@ public class GotsActionManager extends BroadcastReceiver implements GotsActionPr
     }
 
     @Override
-    public BaseActionInterface getActionById(int id) {
+    public BaseAction getActionById(int id) {
         return provider.getActionById(id);
     }
 
     @Override
-    public BaseActionInterface getActionByName(String name) {
+    public BaseAction getActionByName(String name) {
         return provider.getActionByName(name);
     }
 
     @Override
-    public ArrayList<BaseActionInterface> getActions(boolean force) {
+    public ArrayList<BaseAction> getActions(boolean force) {
         if (force == false && cacheActions.size() > 0)
             return cacheActions;
         return provider.getActions(force);
     }
 
     @Override
-    public BaseActionInterface createAction(BaseActionInterface action) {
-        final BaseActionInterface createAction = provider.createAction(action);
+    public BaseAction createAction(BaseAction action) {
+        final BaseAction createAction = provider.createAction(action);
         cacheActions.add(createAction);
         return createAction;
     }
 
     @Override
-    public BaseActionInterface updateAction(BaseActionInterface action) {
+    public BaseAction updateAction(BaseAction action) {
         return provider.updateAction(action);
     }
 

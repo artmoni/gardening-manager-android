@@ -2,18 +2,18 @@ package org.gots.action.provider;
 
 import java.util.ArrayList;
 
-import org.gots.action.BaseActionInterface;
+import org.gots.action.BaseAction;
 
 public interface GotsActionProvider {
 
-    public abstract BaseActionInterface getActionById(int id);
+    public abstract BaseAction getActionById(int id);
 
-    public abstract BaseActionInterface getActionByName(String name);
+    public abstract BaseAction getActionByName(String name);
 
-    public abstract ArrayList<BaseActionInterface> getActions(boolean force);
+    public abstract ArrayList<BaseAction> getActions(boolean force);
 
-    public abstract BaseActionInterface createAction(BaseActionInterface action);
+    public abstract BaseAction createAction(BaseAction action);
 
-    public abstract BaseActionInterface updateAction(BaseActionInterface action);
+    public abstract BaseAction updateAction(BaseAction action);
 
 }

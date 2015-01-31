@@ -3,7 +3,7 @@ package org.gots.seed.provider.nuxeo;
 import java.util.Locale;
 
 import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.GrowingSeed;
+import org.gots.seed.GrowingSeedImpl;
 import org.gots.seed.LikeStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,7 +18,7 @@ public class NuxeoSeedConverter {
 
     public static BaseSeedInterface convert(Document document) {
         try {
-            BaseSeedInterface seed = new GrowingSeed();
+            BaseSeedInterface seed = new GrowingSeedImpl();
             seed.setVariety(document.getTitle());
             seed.setFamily(document.getString("vendorseed:family"));
             seed.setSpecie(document.getString("vendorseed:specie"));

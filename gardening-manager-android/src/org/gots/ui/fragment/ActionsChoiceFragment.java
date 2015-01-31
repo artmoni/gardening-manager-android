@@ -3,7 +3,8 @@ package org.gots.ui.fragment;
 import java.util.List;
 
 import org.gots.R;
-import org.gots.action.BaseActionInterface;
+import org.gots.action.ActionFactory;
+import org.gots.action.BaseAction;
 import org.gots.action.GotsActionManager;
 import org.gots.action.view.ActionWidget;
 import org.gots.action.view.ListActionAdapter;
@@ -22,7 +23,9 @@ import android.widget.LinearLayout;
 public class ActionsChoiceFragment extends BaseGotsFragment {
 
     public interface OnActionSelectedListener {
-        public void onActionSelected(BaseActionInterface actionInterface);
+        public void onActionClick(BaseAction actionInterface);
+
+        public void onActionLongClick(BaseAction actionInterface);
     }
 
     private OnActionSelectedListener mCallback;
@@ -81,16 +84,27 @@ public class ActionsChoiceFragment extends BaseGotsFragment {
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
-        List<BaseActionInterface> actionInterfaces = (List<BaseActionInterface>) data;
-        for (final BaseActionInterface baseActionInterface : actionInterfaces) {
+        List<BaseAction> actionInterfaces = (List<BaseAction>) data;
+        for (final BaseAction baseActionInterface : actionInterfaces) {
             ActionWidget actionWidget = new ActionWidget(getActivity(), baseActionInterface);
             layout.addView(actionWidget);
             actionWidget.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
-                    mCallback.onActionSelected(baseActionInterface);
+                    
+                    final BaseAction newAction = ActionFactory.buildAction(getActivity(), baseActionInterface.getName());
+                    newAction.setId(baseActionInterface.getId());
+                    mCallback.onActionClick(newAction);
 
+                }
+            });
+            actionWidget.setOnLongClickListener(new View.OnLongClickListener() {
+
+                @Override
+                public boolean onLongClick(View v) {
+                    mCallback.onActionLongClick(baseActionInterface);
+                    return true;
                 }
             });
         }

@@ -8,7 +8,7 @@ import java.net.URLConnection;
 import org.gots.context.GotsContext;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.GrowingSeed;
+import org.gots.seed.GrowingSeedImpl;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,7 +32,7 @@ public class ParrotSeedConverter {
     }
 
     public BaseSeedInterface convert(JSONObject plant) {
-        BaseSeedInterface seed = new GrowingSeed();
+        BaseSeedInterface seed = new GrowingSeedImpl();
         try {
             seed.setName(plant.getString("preferred_common_name"));
             seed.setDescriptionCultivation(plant.getString("description"));

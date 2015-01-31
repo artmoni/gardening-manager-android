@@ -3,7 +3,7 @@ package org.gots.action.view;
 import java.util.List;
 
 import org.gots.R;
-import org.gots.action.BaseActionInterface;
+import org.gots.action.BaseAction;
 import org.gots.seed.view.SeedWidget;
 
 import android.content.Context;
@@ -14,11 +14,11 @@ import android.widget.BaseAdapter;
 
 public class ListActionAdapter extends BaseAdapter {
 
-    private List<BaseActionInterface> actions;
+    private List<BaseAction> actions;
 
     private Context mContext;
 
-    public ListActionAdapter(Context context, List<BaseActionInterface> actions) {
+    public ListActionAdapter(Context context, List<BaseAction> actions) {
         this.actions = actions;
         this.mContext = context;
     }
@@ -29,7 +29,7 @@ public class ListActionAdapter extends BaseAdapter {
     }
 
     @Override
-    public BaseActionInterface getItem(int position) {
+    public BaseAction getItem(int position) {
         return actions.get(position);
     }
 

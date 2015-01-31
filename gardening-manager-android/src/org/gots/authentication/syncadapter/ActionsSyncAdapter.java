@@ -3,9 +3,9 @@ package org.gots.authentication.syncadapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.gots.action.BaseActionInterface;
+import org.gots.action.BaseAction;
 import org.gots.action.GotsActionManager;
-import org.gots.action.SeedActionInterface;
+import org.gots.action.ActionOnSeed;
 import org.gots.action.provider.local.LocalActionProvider;
 import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.action.provider.nuxeo.NuxeoActionProvider;
@@ -13,7 +13,7 @@ import org.gots.action.provider.nuxeo.NuxeoActionSeedProvider;
 import org.gots.authentication.GotsSyncAdapter;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.seed.GrowingSeedInterface;
+import org.gots.seed.GrowingSeed;
 
 import android.accounts.Account;
 import android.content.ContentProviderClient;
@@ -66,7 +66,7 @@ public class ActionsSyncAdapter extends GotsSyncAdapter {
         // actionseedManager.getActionsToDo();
         if (gotsPrefs.isConnectedToServer())
             for (BaseAllotmentInterface allotmentInterface : allotmentManager.getMyAllotments(true)) {
-                for (GrowingSeedInterface seedInterface : growingSeedManager.getGrowingSeedsByAllotment(
+                for (GrowingSeed seedInterface : growingSeedManager.getGrowingSeedsByAllotment(
                         allotmentInterface, true)) {
                     synchronizeActionSeed(seedInterface,
                             localActionSeedProvider.getActionsToDoBySeed(seedInterface, true),
@@ -77,13 +77,13 @@ public class ActionsSyncAdapter extends GotsSyncAdapter {
         getContext().sendBroadcast(intent);
     }
 
-    private ArrayList<BaseActionInterface> synchronizeActions(List<BaseActionInterface> localActions,
-            ArrayList<BaseActionInterface> remoteActions2) {
-        ArrayList<BaseActionInterface> myActions = new ArrayList<BaseActionInterface>();
+    private ArrayList<BaseAction> synchronizeActions(List<BaseAction> localActions,
+            ArrayList<BaseAction> remoteActions2) {
+        ArrayList<BaseAction> myActions = new ArrayList<BaseAction>();
         // Synchronize remote action with local gardens
-        for (BaseActionInterface remoteAction : remoteActions2) {
+        for (BaseAction remoteAction : remoteActions2) {
             boolean found = false;
-            for (BaseActionInterface localAction : localActions) {
+            for (BaseAction localAction : localActions) {
                 if (remoteAction.getUUID() != null && remoteAction.getUUID().equals(localAction.getUUID())) {
                     found = true;
                     break;
@@ -117,13 +117,13 @@ public class ActionsSyncAdapter extends GotsSyncAdapter {
         return myActions;
     }
 
-    protected List<SeedActionInterface> synchronizeActionSeed(GrowingSeedInterface seed,
-            List<SeedActionInterface> myLocalActions, List<SeedActionInterface> remoteActions) {
-        List<SeedActionInterface> myActions = new ArrayList<SeedActionInterface>();
+    protected List<ActionOnSeed> synchronizeActionSeed(GrowingSeed seed,
+            List<ActionOnSeed> myLocalActions, List<ActionOnSeed> remoteActions) {
+        List<ActionOnSeed> myActions = new ArrayList<ActionOnSeed>();
         // Synchronize remote actions with local gardens
-        for (SeedActionInterface remoteAction : remoteActions) {
+        for (ActionOnSeed remoteAction : remoteActions) {
             boolean found = false;
-            for (SeedActionInterface localAction : myLocalActions) {
+            for (ActionOnSeed localAction : myLocalActions) {
                 if (remoteAction.getUUID() != null && remoteAction.getUUID().equals(localAction.getUUID())) {
                     found = true;
                     break;
@@ -143,17 +143,17 @@ public class ActionsSyncAdapter extends GotsSyncAdapter {
 
         // Create remote garden when not exist remotely and remove local
         // garden if no more referenced online
-        for (SeedActionInterface localAction : myLocalActions) {
+        for (ActionOnSeed localAction : myLocalActions) {
             if (localAction.getUUID() == null) { // local only without
                                                  // UUID => create
                                                  // remote
-                BaseActionInterface newAction = GotsActionManager.getInstance().initIfNew(getContext()).getActionByName(
+                BaseAction newAction = GotsActionManager.getInstance().initIfNew(getContext()).getActionByName(
                         localAction.getName());
                 newAction.setDuration(localAction.getDuration());
                 myActions.add(nuxeoActionSeedProvider.insertNuxeoAction(seed, newAction));
             } else {
                 boolean found = false;
-                for (SeedActionInterface remoteAction : remoteActions) {
+                for (ActionOnSeed remoteAction : remoteActions) {
                     if (remoteAction.getUUID() != null && remoteAction.getUUID().equals(localAction.getUUID())) {
                         found = true;
                         break;

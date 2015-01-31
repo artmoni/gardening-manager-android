@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- *
+ * 
  * Contributors:
  *     sfleury - initial API and implementation
  ******************************************************************************/
@@ -12,65 +12,23 @@ package org.gots.seed;
 
 import java.util.Date;
 
-public class GrowingSeed extends BaseSeed implements GrowingSeedInterface {
-    private int growingSeedId;
+public interface GrowingSeed extends BaseSeedInterface {
 
-    private static final long serialVersionUID = 1L;
+	public abstract void setGrowingSeedId(int id);
 
-    private Date dateSowing;
+	public abstract int getGrowingSeedId();
 
-    private Date dateHarvest;
+	public abstract Date getDateSowing();
 
-    private Date dateLastWatering;
+	public abstract void setDateSowing(Date dateSowing);
 
-    public static final int NB_DAY_ALERT = 10;
+	public abstract Date getDateLastWatering();
 
-    public static final int NB_DAY_WARNING = 5;
+	public abstract void setDateLastWatering(Date dateLastWatering);
 
-    @Override
-    public Date getDateLastWatering() {
-        return dateLastWatering;
-    }
+    public abstract Date getDateHarvest();
 
-    @Override
-    public String toString() {
+    public abstract void setDateHarvest(Date dateHarvest);
 
-        return super.toString() + "\n" + "Semé le " + getDateSowing();
-    }
 
-    @Override
-    public void setDateLastWatering(Date dateLastWatering) {
-        this.dateLastWatering = dateLastWatering;
-    }
-
-    @Override
-    public Date getDateSowing() {
-        return dateSowing;
-    }
-
-    @Override
-    public void setDateSowing(Date dateSowing) {
-        this.dateSowing = dateSowing;
-    }
-
-    @Override
-    public void setGrowingSeedId(int id) {
-        this.growingSeedId = id;
-    }
-
-    @Override
-    public int getGrowingSeedId() {
-
-        return growingSeedId;
-    }
-
-    @Override
-    public void setDateHarvest(Date dateHarvest) {
-        this.dateHarvest = dateHarvest;
-    }
-
-    @Override
-    public Date getDateHarvest() {
-        return dateHarvest;
-    }
 }
