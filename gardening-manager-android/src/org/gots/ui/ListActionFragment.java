@@ -13,20 +13,16 @@ package org.gots.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.gots.action.GotsActionSeedManager;
 import org.gots.action.ActionOnSeed;
+import org.gots.action.GotsActionSeedManager;
 import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
 import org.gots.ui.fragment.AbstractListFragment;
-import org.gots.ui.fragment.BaseGotsFragment;
-import org.nuxeo.android.fragments.BaseListFragment;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

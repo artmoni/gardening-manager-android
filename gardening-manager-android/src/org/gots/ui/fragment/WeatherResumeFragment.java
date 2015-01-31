@@ -4,10 +4,8 @@ import java.util.List;
 
 import org.gots.R;
 import org.gots.garden.GardenInterface;
-import org.gots.garden.GotsGardenManager;
 import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.WeatherManager;
-import org.gots.weather.provider.local.LocalWeatherProvider;
 import org.gots.weather.view.WeatherView;
 import org.gots.weather.view.WeatherWidget;
 

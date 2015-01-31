@@ -7,16 +7,12 @@ import org.gots.action.ActionFactory;
 import org.gots.action.BaseAction;
 import org.gots.action.GotsActionManager;
 import org.gots.action.view.ActionWidget;
-import org.gots.action.view.ListActionAdapter;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Gallery;
-import android.widget.GridView;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 

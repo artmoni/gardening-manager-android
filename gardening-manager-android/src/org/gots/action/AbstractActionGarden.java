@@ -16,10 +16,10 @@ import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.GrowingSeed;
 
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
-
 import android.content.Context;
 import android.content.Intent;
+
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public abstract class AbstractActionGarden extends AbstractAction implements GardeningActionInterface {
 

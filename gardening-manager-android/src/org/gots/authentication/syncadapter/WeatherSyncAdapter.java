@@ -15,7 +15,6 @@ import org.gots.weather.provider.previmeteo.WeatherProvider;
 
 import android.accounts.Account;
 import android.content.ContentProviderClient;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SyncResult;

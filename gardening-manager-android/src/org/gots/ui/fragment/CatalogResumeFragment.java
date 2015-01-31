@@ -4,7 +4,6 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.gots.R;
-import org.gots.nuxeo.NuxeoWorkflowProvider;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.adapter.SeedListAdapter;
@@ -13,15 +12,12 @@ import org.gots.ui.HutActivity;
 import org.gots.ui.TabSeedActivity;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Gallery;
 
 public class CatalogResumeFragment extends BaseGotsFragment implements OnItemClickListener {

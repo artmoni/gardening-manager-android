@@ -20,8 +20,8 @@ import java.util.List;
 import java.util.Locale;
 
 import org.gots.R;
-import org.gots.action.BaseAction;
 import org.gots.action.ActionOnSeed;
+import org.gots.action.BaseAction;
 import org.gots.action.bean.PhotoAction;
 import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
@@ -47,8 +47,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;

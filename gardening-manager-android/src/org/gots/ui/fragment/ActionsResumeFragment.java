@@ -3,15 +3,13 @@ package org.gots.ui.fragment;
 import java.util.List;
 
 import org.gots.R;
+import org.gots.action.ActionOnSeed;
 import org.gots.action.BaseAction;
 import org.gots.action.GotsActionSeedManager;
-import org.gots.action.ActionOnSeed;
 import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.action.provider.GotsActionSeedProvider;
-import org.gots.ui.ActionActivity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;

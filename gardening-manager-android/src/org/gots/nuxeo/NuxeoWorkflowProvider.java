@@ -3,22 +3,17 @@ package org.gots.nuxeo;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import org.gots.bean.TaskInfo;
 import org.gots.seed.BaseSeedInterface;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
 import org.nuxeo.ecm.automation.client.cache.CacheBehavior;
-import org.nuxeo.ecm.automation.client.jaxrs.Constants;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Blob;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
-import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyList;
-import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
 import android.content.Context;
-import android.util.Log;
 
 public class NuxeoWorkflowProvider {
     private String TAG = NuxeoWorkflowProvider.class.getSimpleName();

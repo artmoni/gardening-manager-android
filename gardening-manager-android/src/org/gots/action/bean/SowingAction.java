@@ -11,20 +11,17 @@
 package org.gots.action.bean;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Iterator;
 
 import org.gots.action.AbstractActionGarden;
+import org.gots.action.ActionOnSeed;
 import org.gots.action.BaseAction;
 import org.gots.action.GardeningActionInterface;
 import org.gots.action.PermanentActionInterface;
-import org.gots.action.ActionOnSeed;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GrowingSeed;
 
 import android.content.Context;
-
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class SowingAction extends AbstractActionGarden implements PermanentActionInterface, GardeningActionInterface {
     Context mContext;

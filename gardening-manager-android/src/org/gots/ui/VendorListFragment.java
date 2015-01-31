@@ -19,7 +19,6 @@ import org.gots.action.ActionOnSeed;
 import org.gots.action.bean.BuyingAction;
 import org.gots.action.bean.ReduceQuantityAction;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.garden.view.OnProfileEventListener;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.SeedUtil;

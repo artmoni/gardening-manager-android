@@ -1,12 +1,10 @@
 package org.gots.ui.fragment;
 
 import org.gots.allotment.GotsAllotmentManager;
-import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GotsGardenManager;
 import org.gots.seed.GotsSeedManager;
 import org.nuxeo.android.fragments.BaseListFragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 public abstract class AbstractListFragment extends BaseListFragment {

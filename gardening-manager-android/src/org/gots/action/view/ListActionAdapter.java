@@ -2,12 +2,9 @@ package org.gots.action.view;
 
 import java.util.List;
 
-import org.gots.R;
 import org.gots.action.BaseAction;
-import org.gots.seed.view.SeedWidget;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;

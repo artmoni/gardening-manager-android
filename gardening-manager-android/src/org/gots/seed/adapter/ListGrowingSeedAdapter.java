@@ -14,15 +14,10 @@ import java.util.List;
 
 import org.gots.R;
 import org.gots.seed.GrowingSeed;
-import org.gots.seed.view.QuickSeedActionBuilder;
 import org.gots.seed.view.SeedWidget;
-import org.gots.ui.TabSeedActivity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;

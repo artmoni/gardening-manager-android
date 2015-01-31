@@ -3,9 +3,9 @@ package org.gots.authentication.syncadapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.gots.action.ActionOnSeed;
 import org.gots.action.BaseAction;
 import org.gots.action.GotsActionManager;
-import org.gots.action.ActionOnSeed;
 import org.gots.action.provider.local.LocalActionProvider;
 import org.gots.action.provider.local.LocalActionSeedProvider;
 import org.gots.action.provider.nuxeo.NuxeoActionProvider;

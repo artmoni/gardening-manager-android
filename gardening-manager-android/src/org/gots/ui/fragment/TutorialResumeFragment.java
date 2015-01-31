@@ -3,18 +3,13 @@ package org.gots.ui.fragment;
 import org.gots.R;
 import org.gots.allotment.GotsAllotmentManager;
 import org.gots.bean.DefaultGarden;
-import org.gots.context.GotsContext;
-import org.gots.context.SimpleGotsApplication;
 import org.gots.garden.GardenInterface;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsSeedManager;
 import org.gots.ui.BaseGotsActivity;
-import org.gots.ui.HutActivity;
 import org.gots.ui.GardenActivity;
+import org.gots.ui.HutActivity;
 import org.gots.ui.ProfileActivity;
-import org.gots.ui.ProfileCreationFragment;
-
-import com.google.ads.t;
 
 import android.app.Activity;
 import android.content.Intent;

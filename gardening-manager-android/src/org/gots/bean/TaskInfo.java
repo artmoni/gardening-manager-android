@@ -1,9 +1,6 @@
 package org.gots.bean;
 
 import java.io.Serializable;
-import java.util.Date;
-
-import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
 
 import com.google.gson.annotations.SerializedName;
 

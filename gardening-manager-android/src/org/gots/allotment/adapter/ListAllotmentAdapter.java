@@ -10,35 +10,24 @@
  ******************************************************************************/
 package org.gots.allotment.adapter;
 
-import java.util.Calendar;
 import java.util.List;
 
 import org.gots.R;
-import org.gots.allotment.view.QuickAllotmentActionBuilder;
 import org.gots.bean.BaseAllotmentInterface;
-import org.gots.broadcast.BroadCastMessages;
 import org.gots.preferences.GotsPreferences;
-import org.gots.seed.GotsGrowingSeedManager;
-import org.gots.seed.GotsSeedManager;
 import org.gots.seed.GrowingSeed;
-import org.gots.seed.SeedUtil;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
-import org.gots.seed.view.SeedWidget;
 import org.gots.ui.GardenActivity;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Point;
 import android.graphics.drawable.AnimationDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBar.LayoutParams;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -46,7 +35,6 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class ListAllotmentAdapter extends BaseAdapter {
     protected static final String TAG = "ListAllotmentAdapter";

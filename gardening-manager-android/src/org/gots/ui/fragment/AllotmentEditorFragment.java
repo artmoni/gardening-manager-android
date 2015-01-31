@@ -1,9 +1,6 @@
 package org.gots.ui.fragment;
 
 import org.gots.R;
-import org.gots.action.BaseAction;
-import org.gots.action.GotsActionManager;
-import org.gots.action.view.ListActionAdapter;
 import org.gots.allotment.GotsAllotmentManager;
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;

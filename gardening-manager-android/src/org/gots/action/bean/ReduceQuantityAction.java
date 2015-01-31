@@ -10,8 +10,6 @@
  ******************************************************************************/
 package org.gots.action.bean;
 
-import java.util.Date;
-
 import org.gots.action.AbstractActionSeed;
 import org.gots.action.ActionOnSeed;
 import org.gots.exception.GardenNotFoundException;

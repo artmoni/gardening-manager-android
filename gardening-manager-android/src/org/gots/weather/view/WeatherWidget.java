@@ -12,9 +12,7 @@ package org.gots.weather.view;
 
 import java.util.List;
 
-import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
-import org.gots.weather.WeatherManager;
 import org.gots.weather.adapter.WeatherWidgetAdapter;
 
 import android.content.Context;
