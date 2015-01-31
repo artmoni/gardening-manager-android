@@ -576,7 +576,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
 
         Fragment fragment = new ActionsResumeFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.idFragmentActions, fragment).commit();
 
         final Fragment weatherResumeFragment = new WeatherResumeFragment();
         FragmentTransaction transactionWeather = fragmentManager.beginTransaction();

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/text_color_light"
+    android:background="@color/brown_light"
     android:padding="5dp" >
 
     <TextView
@@ -10,49 +10,49 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:text="Task Name"
+        android:text="Task Name"        style="@style/TitleResumeFragment"
+        
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <LinearLayout
-        android:id="@+id/linearWorkflowButton"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textWorkflowTaskDirective"
-        android:layout_below="@+id/textWorkflowTaskDirective"
-        android:gravity="center" >
-
-        <Button
-            android:id="@+id/buttonRefused"
-            style="@style/buttonRed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Refuse" />
-
-        <Button
-            android:id="@+id/buttonApproved"
-            style="@style/buttonGreen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Approve" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/textView1"
-        android:paddingLeft="10dp"
+    <Button
+        android:id="@+id/buttonRefused"
+        style="@style/buttonRed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textWorkflowTaskTitle"
-        android:layout_alignBottom="@+id/textWorkflowTaskTitle"
-        android:layout_toRightOf="@+id/textWorkflowTaskTitle"
-        android:text="Small Text"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:layout_below="@+id/textView1"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="10dp"
+        android:text="Refuse" />
+
+    <Button
+        android:id="@+id/buttonApproved"
+        style="@style/buttonGreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/buttonRefused"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="50dp"
+        android:text="Approve" />
 
     <TextView
         android:id="@+id/textWorkflowTaskDirective"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/textWorkflowTaskTitle"
-        android:layout_below="@+id/textView1"
+        android:layout_below="@+id/textWorkflowTaskTitle"
+        android:layout_marginTop="10dp"
         android:text="Task Description" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/textWorkflowTaskDirective"
+        android:layout_below="@+id/textWorkflowTaskDirective"
+        android:layout_marginTop="5dp"
+        android:paddingLeft="10dp"
+        android:text="Small Text"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="italic" />
 
 </RelativeLayout>
