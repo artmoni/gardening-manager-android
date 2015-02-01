@@ -143,17 +143,17 @@ public class MySeedsListAdapter extends SeedListAdapter {
             SowingAction sowing = new SowingAction(mContext);
             sowing.setState(ActionState.NORMAL);
             ActionWidget sowingWidget = new ActionWidget(mContext, sowing);
-            sowingWidget.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, GardenActivity.class);
-                    intent.putExtra(GardenActivity.SELECT_ALLOTMENT, true);
-                    intent.putExtra(GardenActivity.VENDOR_SEED_ID, currentSeed.getSeedId());
-                    mContext.startActivity(intent);
-
-                }
-            });
+//            sowingWidget.setOnClickListener(new View.OnClickListener() {
+//
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent(mContext, GardenActivity.class);
+//                    intent.putExtra(GardenActivity.SELECT_ALLOTMENT, true);
+//                    intent.putExtra(GardenActivity.VENDOR_SEED_ID, currentSeed.getSeedId());
+//                    mContext.startActivity(intent);
+//
+//                }
+//            });
             
 //            holder.actionBox.addView(reduceWidget);
 //            holder.actionBox.addView(sowingWidget);

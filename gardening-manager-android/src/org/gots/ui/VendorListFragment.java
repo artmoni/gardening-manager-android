@@ -19,6 +19,7 @@ import org.gots.action.ActionOnSeed;
 import org.gots.action.bean.BuyingAction;
 import org.gots.action.bean.ReduceQuantityAction;
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.garden.view.OnProfileEventListener;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.SeedUtil;
@@ -195,6 +196,8 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
     @Override
     public void onPause() {
         mContext.unregisterReceiver(seedBroadcastReceiver);
+        if (seedBroadcastReceiver != null && isAdded())
+            mContext.unregisterReceiver(seedBroadcastReceiver);
         super.onPause();
     }
 
@@ -320,17 +323,13 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-        gridViewCatalog.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
-        mCallback.onSeedLongClick(listVendorSeedAdapter.getItem(position));
         ((ActionBarActivity) getActivity()).startSupportActionMode(new MyCallBack(position));
+        gridViewCatalog.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
         return true;
-
     }
 
     @Override
     public void onItemClick(AdapterView<?> list, View container, int position, long id) {
-        container.setSelected(true);
         mCallback.onSeedClick(listVendorSeedAdapter.getItem(position));
     }
 }

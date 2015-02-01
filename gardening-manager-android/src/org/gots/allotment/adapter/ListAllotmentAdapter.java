@@ -47,9 +47,9 @@ public class ListAllotmentAdapter extends BaseAdapter {
 
     private List<BaseAllotmentInterface> myAllotments;
 
-    private boolean isSelectable;
-
-    private int currentSeedId;
+    // private boolean isSelectable;
+    //
+    // private int currentSeedId;
 
     OnGrowingSeedClickListener clickListener;
 
@@ -65,10 +65,10 @@ public class ListAllotmentAdapter extends BaseAdapter {
     public ListAllotmentAdapter(FragmentActivity mContext, List<BaseAllotmentInterface> allotments, Bundle bundle) {
         this.mContext = mContext;
         myAllotments = allotments;
-        if (bundle != null) {
-            isSelectable = bundle.getBoolean(GardenActivity.SELECT_ALLOTMENT);
-            currentSeedId = bundle.getInt(GardenActivity.VENDOR_SEED_ID);
-        }
+        // if (bundle != null) {
+        // isSelectable = bundle.getBoolean(GardenActivity.SELECT_ALLOTMENT);
+        // currentSeedId = bundle.getInt(GardenActivity.VENDOR_SEED_ID);
+        // }
     }
 
     public void setAllotments(List<BaseAllotmentInterface> allotments) {
@@ -200,23 +200,23 @@ public class ListAllotmentAdapter extends BaseAdapter {
         // ActionWidget widget = new ActionWidget(mContext, sow);
         // widget.setTag(position);
 
-        if (isSelectable) {
-            holder.menu.setBackgroundResource(R.anim.rotate_alerte);
-            // Animation myFadeInAnimation =
-            // AnimationUtils.loadAnimation(mContext, R.anim.rotate_alerte);
-            // menu.startAnimation(myFadeInAnimation);
-            AnimationDrawable frameAnimation = (AnimationDrawable) holder.menu.getBackground();
-            frameAnimation.start();
-            holder.menu.setOnClickListener(new View.OnClickListener() {
+        // if (isSelectable) {
+//        holder.menu.setBackgroundResource(R.anim.rotate_alerte);
+        // Animation myFadeInAnimation =
+        // AnimationUtils.loadAnimation(mContext, R.anim.rotate_alerte);
+        // menu.startAnimation(myFadeInAnimation);
+//        AnimationDrawable frameAnimation = (AnimationDrawable) holder.menu.getBackground();
+//        frameAnimation.start();
+        holder.menu.setOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
-                    if (clickListener != null) {
-                        clickListener.onAllotmentMenuClick(v, getItem(position));
-                    }
+            @Override
+            public void onClick(View v) {
+                if (clickListener != null) {
+                    clickListener.onAllotmentMenuClick(v, getItem(position));
                 }
-            });
-        }
+            }
+        });
+        // }
 
         // widget.setPadding(4, 4, 4, 8);
         // holder.menu.addView(widget);

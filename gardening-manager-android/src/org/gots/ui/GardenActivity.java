@@ -44,13 +44,6 @@ import android.widget.Toast;
 
 public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelected, OnSeedSelected,
         OnAllotmentListener {
-
-    public static final String SELECT_ALLOTMENT = "allotment.select";
-
-    public static final String VENDOR_SEED_ID = "allotment.vendorseedid";
-
-    protected static final String TAG = "MyMainGarden";
-
     private BaseAllotmentInterface currentAllotment;
 
     private AllotmentListFragment allotmentListFragment;
@@ -94,7 +87,6 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
         super.onRefresh(AllotmentContentProvider.AUTHORITY);
     }
 
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_garden, menu);

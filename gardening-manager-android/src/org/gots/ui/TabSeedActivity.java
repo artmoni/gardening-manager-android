@@ -57,6 +57,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -70,6 +71,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.Tab;
+import android.support.v7.app.ActionBar.TabListener;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -207,6 +211,8 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
             findViewById(R.id.idLayoutCulturePeriod).setVisibility(View.GONE);
 
         mViewPager = (ViewPager) findViewById(R.id.pager);
+        TabsAdapter mFragmentAdapter = new TabsAdapter(this, mViewPager);
+
         // mTabsAdapter = new TabsAdapter(this, mViewPager);
 
         List<Fragment> fragments = new ArrayList<>();
@@ -219,12 +225,17 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
             fragmentListAction = Fragment.instantiate(getApplicationContext(), ActionsListFragment.class.getName(),
                     bundle);
             fragments.add(fragmentListAction);
+            mFragmentAdapter.addTab(
+                    bar.newTab().setText(getResources().getString(R.string.seed_description_tabmenu_actions)),
+                    fragmentListAction, getIntent().getExtras());
 
         }
         fragmentDescription = Fragment.instantiate(getApplicationContext(), SeedDescriptionFragment.class.getName(),
                 bundle);
         fragments.add(fragmentDescription);
-
+        mFragmentAdapter.addTab(
+                bar.newTab().setText(getResources().getString(R.string.seed_description_tabmenu_detail)),
+                fragmentDescription, getIntent().getExtras());
         // ********************** Tab Wikipedia**********************
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
@@ -234,9 +245,11 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
 
             fragmentWebView = Fragment.instantiate(getApplicationContext(), WebViewActivity.class.getName(), bundle);
             fragments.add(fragmentWebView);
+            mFragmentAdapter.addTab(
+                    bar.newTab().setText(getResources().getString(R.string.seed_description_tabmenu_wikipedia)),
+                    fragmentWebView, getIntent().getExtras());
 
         }
-        MyPagerAdapter mFragmentAdapter = new MyPagerAdapter(getSupportFragmentManager(), fragments);
         mViewPager.setAdapter(mFragmentAdapter);
 
         if (!gotsPurchase.isPremium()) {
@@ -371,12 +384,12 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
             startActivity(browserIntent);
             return true;
 
-//        case R.id.sow:
-//            Intent intent = new Intent(this, GardenActivity.class);
-//            intent.putExtra(GardenActivity.SELECT_ALLOTMENT, true);
-//            intent.putExtra(GardenActivity.VENDOR_SEED_ID, mSeed.getSeedId());
-//            startActivity(intent);
-//            return true;
+            // case R.id.sow:
+            // Intent intent = new Intent(this, GardenActivity.class);
+            // intent.putExtra(GardenActivity.SELECT_ALLOTMENT, true);
+            // intent.putExtra(GardenActivity.VENDOR_SEED_ID, mSeed.getSeedId());
+            // startActivity(intent);
+            // return true;
         case R.id.download:
             new AsyncTask<Void, Integer, File>() {
                 boolean licenceAvailable = false;
@@ -508,36 +521,36 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
     }
 
     static final class TabInfo {
-        private final Class<?> clss;
+        private final Fragment fragment;
 
         private final Bundle args;
 
-        TabInfo(Class<?> _class, Bundle _args) {
-            clss = _class;
+        TabInfo(Fragment f, Bundle _args) {
+            fragment = f;
             args = _args;
         }
     }
 
-    public class MyPagerAdapter extends FragmentPagerAdapter {
-
-        private final List<Fragment> fragments;
-
-        // On fournit à l'adapter la liste des fragments à afficher
-        public MyPagerAdapter(FragmentManager fm, List fragments) {
-            super(fm);
-            this.fragments = fragments;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return this.fragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return this.fragments.size();
-        }
-    }
+    // public class MyPagerAdapter extends FragmentPagerAdapter {
+    //
+    // private final List<Fragment> fragments;
+    //
+    // // On fournit à l'adapter la liste des fragments à afficher
+    // public MyPagerAdapter(FragmentManager fm, List fragments) {
+    // super(fm);
+    // this.fragments = fragments;
+    // }
+    //
+    // @Override
+    // public Fragment getItem(int position) {
+    // return this.fragments.get(position);
+    // }
+    //
+    // @Override
+    // public int getCount() {
+    // return this.fragments.size();
+    // }
+    // }
 
     /**
      * This is a helper class that implements the management of tabs and all
@@ -550,72 +563,77 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
      * switch to the correct paged in the ViewPager whenever the selected tab
      * changes.
      */
-    // public class TabsAdapter extends FragmentPagerAdapter implements ActionBar.TabListener,
-    // ViewPager.OnPageChangeListener {
-    // private final Context mContext;
-    //
-    // private final ActionBar mActionBar;
-    //
-    // private final ViewPager mViewPager;
-    //
-    // private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
-    //
-    // public TabsAdapter(ActionBarActivity activity, ViewPager pager) {
-    // super(activity.getSupportFragmentManager());
-    // mContext = activity;
-    // mActionBar = activity.getSupportActionBar();
-    // mViewPager = pager;
-    // mViewPager.setAdapter(this);
-    // mViewPager.setOnPageChangeListener(this);
-    // }
-    //
-    // public void addTab(ActionBar.Tab tab, Class<?> clss, Bundle args) {
-    // TabInfo info = new TabInfo(clss, args);
-    // tab.setTag(info);
-    // tab.setTabListener(this);
-    // mTabs.add(info);
-    // mActionBar.addTab(tab);
-    // notifyDataSetChanged();
-    // }
-    //
-    // @Override
-    // public int getCount() {
-    // return mTabs.size();
-    // }
-    //
-    // @Override
-    // public Fragment getItem(int position) {
-    // TabInfo info = mTabs.get(position);
-    // Fragment fragment = Fragment.instantiate(mContext, info.clss.getName(), info.args);
-    // fragment.setArguments(bundle);
-    // return fragment;
-    // }
-    //
-    // public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-    // }
-    //
-    // public void onPageSelected(int position) {
-    // mActionBar.setSelectedNavigationItem(position);
-    // }
-    //
-    // public void onPageScrollStateChanged(int state) {
-    // }
-    //
-    // public void onTabSelected(Tab tab, FragmentTransaction ft) {
-    // Object tag = tab.getTag();
-    // for (int i = 0; i < mTabs.size(); i++) {
-    // if (mTabs.get(i) == tag) {
-    // mViewPager.setCurrentItem(i);
-    // }
-    // }
-    // }
-    //
-    // public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-    // }
-    //
-    // public void onTabReselected(Tab tab, FragmentTransaction ft) {
-    // }
-    // }
+    public class TabsAdapter extends FragmentPagerAdapter implements ActionBar.TabListener,
+            ViewPager.OnPageChangeListener {
+        private final Context mContext;
+
+        private final ActionBar mActionBar;
+
+        private final ViewPager mViewPager;
+
+        private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
+
+        private List<Fragment> fragments = new ArrayList<>();
+
+        public TabsAdapter(ActionBarActivity activity, ViewPager pager) {
+            super(activity.getSupportFragmentManager());
+            mContext = activity;
+            mActionBar = activity.getSupportActionBar();
+            mViewPager = pager;
+            mViewPager.setAdapter(this);
+            this.fragments = fragments;
+            mViewPager.setOnPageChangeListener(this);
+        }
+
+        public void addTab(ActionBar.Tab tab, Fragment fragment, Bundle args) {
+            TabInfo info = new TabInfo(fragment, args);
+            tab.setTag(info);
+            tab.setTabListener(this);
+            mTabs.add(info);
+            mActionBar.addTab(tab);
+            fragments.add(fragment);
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public int getCount() {
+            return mTabs.size();
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            // TabInfo info = mTabs.get(position);
+            // // Fragment fragment = Fragment.instantiate(mContext, info.fragment.getName(), info.args);
+            // fragments.get(position);
+            // fragment.setArguments(bundle);
+            return fragments.get(position);
+        }
+
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        }
+
+        public void onPageSelected(int position) {
+            mActionBar.setSelectedNavigationItem(position);
+        }
+
+        public void onPageScrollStateChanged(int state) {
+        }
+
+        public void onTabSelected(Tab tab, FragmentTransaction ft) {
+            Object tag = tab.getTag();
+            for (int i = 0; i < mTabs.size(); i++) {
+                if (mTabs.get(i) == tag) {
+                    mViewPager.setCurrentItem(i);
+                }
+            }
+        }
+
+        public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+        }
+
+        public void onTabReselected(Tab tab, FragmentTransaction ft) {
+        }
+    }
 
     @Override
     protected boolean requireAsyncDataRetrieval() {
