@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 public class ActionsChoiceFragment extends BaseGotsFragment {
 
@@ -28,7 +29,7 @@ public class ActionsChoiceFragment extends BaseGotsFragment {
 
     private GotsActionManager actionManager;
 
-    private HorizontalScrollView parent;
+    private ScrollView parent;
 
     private LinearLayout layout;
 
@@ -52,7 +53,7 @@ public class ActionsChoiceFragment extends BaseGotsFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        parent = (HorizontalScrollView) view.findViewById(R.id.horizontalscrollviewActions);
+        parent = (ScrollView) view.findViewById(R.id.scrollviewActions);
         layout = (LinearLayout) parent.getChildAt(0);
 
         super.onViewCreated(view, savedInstanceState);
@@ -83,12 +84,16 @@ public class ActionsChoiceFragment extends BaseGotsFragment {
         List<BaseAction> actionInterfaces = (List<BaseAction>) data;
         for (final BaseAction baseActionInterface : actionInterfaces) {
             ActionWidget actionWidget = new ActionWidget(getActivity(), baseActionInterface);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            lp.setMargins(5, 5, 5, 5);
+            actionWidget.setLayoutParams(lp);
             layout.addView(actionWidget);
             actionWidget.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
-                    
+
                     final BaseAction newAction = ActionFactory.buildAction(getActivity(), baseActionInterface.getName());
                     newAction.setId(baseActionInterface.getId());
                     mCallback.onActionClick(newAction);

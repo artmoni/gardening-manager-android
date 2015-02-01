@@ -89,8 +89,9 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
 
     public interface OnSeedSelected {
         public abstract void onSeedClick(BaseSeedInterface seed);
+
         public abstract void onSeedLongClick(BaseSeedInterface seed);
-        
+
     }
 
     @Override
@@ -155,7 +156,7 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
 
         List<BaseSeedInterface> catalogue = new ArrayList<BaseSeedInterface>();
         if (args == null || args.size() == 0) {
-            catalogue = seedProvider.getVendorSeeds(true, page, pageSize);
+            catalogue = seedProvider.getVendorSeeds(false, page, pageSize);
             if (catalogue.size() == 0)
                 catalogue = seedProvider.getVendorSeeds(true, page, pageSize);
         } else if (args.getBoolean(FILTER_STOCK))
@@ -250,13 +251,13 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
             case R.id.action_stock_reduce:
                 actionDone = new ReduceQuantityAction(mContext);
                 break;
-            case R.id.action_sow:
-                Intent intent = new Intent(mContext, GardenActivity.class);
-                intent.putExtra(GardenActivity.SELECT_ALLOTMENT, true);
-                intent.putExtra(GardenActivity.VENDOR_SEED_ID, currentSeed.getSeedId());
-                mContext.startActivity(intent);
-
-                break;
+//            case R.id.action_sow:
+//                Intent intent = new Intent(mContext, GardenActivity.class);
+//                intent.putExtra(GardenActivity.SELECT_ALLOTMENT, true);
+//                intent.putExtra(GardenActivity.VENDOR_SEED_ID, currentSeed.getSeedId());
+//                mContext.startActivity(intent);
+//
+//                break;
             default:
                 break;
             }
@@ -319,10 +320,12 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        
+
         gridViewCatalog.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
         mCallback.onSeedLongClick(listVendorSeedAdapter.getItem(position));
+        ((ActionBarActivity) getActivity()).startSupportActionMode(new MyCallBack(position));
         return true;
+
     }
 
     @Override

@@ -22,6 +22,9 @@ public class SeedUtil {
         BaseSeedInterface copy = new GrowingSeedImpl();
         copy.setName(originalSeed.getName());
         copy.setDescriptionGrowth(originalSeed.getDescriptionGrowth());
+        copy.setDescriptionDiseases(originalSeed.getDescriptionDiseases());
+        copy.setDescriptionCultivation(originalSeed.getDescriptionCultivation());
+        copy.setDescriptionHarvest(originalSeed.getDescriptionHarvest());
         copy.setDurationMin(originalSeed.getDurationMin());
         copy.setDurationMax(originalSeed.getDurationMax());
         copy.setDateSowingMin(originalSeed.getDateSowingMin());
@@ -35,6 +38,8 @@ public class SeedUtil {
         copy.setSpecie(originalSeed.getSpecie());
         copy.setVariety(originalSeed.getVariety());
         copy.setBareCode(originalSeed.getBareCode());
+        copy.setLanguage(originalSeed.getLanguage());
+        copy.setState(originalSeed.getState());
         return copy;
 
     }

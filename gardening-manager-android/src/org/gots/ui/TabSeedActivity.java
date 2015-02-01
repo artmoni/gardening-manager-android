@@ -25,9 +25,11 @@ import org.gots.action.BaseAction;
 import org.gots.action.GotsActionSeedManager;
 import org.gots.action.bean.DeleteAction;
 import org.gots.action.bean.PhotoAction;
+import org.gots.action.bean.SowingAction;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.analytics.GotsAnalytics;
+import org.gots.bean.BaseAllotmentInterface;
 import org.gots.bean.TaskInfo;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.exception.GotsServerRestrictedException;
@@ -40,8 +42,10 @@ import org.gots.seed.GrowingSeedImpl;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
+import org.gots.ui.AllotmentListFragment.OnAllotmentSelected;
 import org.gots.ui.fragment.ActionsChoiceFragment;
 import org.gots.ui.fragment.ActionsChoiceFragment.OnActionSelectedListener;
+import org.gots.ui.fragment.ActionsListFragment;
 import org.gots.ui.fragment.LoginDialogFragment;
 import org.gots.ui.fragment.WorkflowTaskFragment;
 import org.gots.utils.FileUtilities;
@@ -74,6 +78,7 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Gallery;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -81,7 +86,7 @@ import android.widget.Toast;
 import com.android.vending.billing.util.IabHelper;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class TabSeedActivity extends BaseGotsActivity implements OnActionSelectedListener {
+public class TabSeedActivity extends BaseGotsActivity implements OnActionSelectedListener, OnAllotmentSelected {
     public static final String GOTS_VENDORSEED_ID = "org.gots.seed.vendorid";
 
     public static final String GOTS_GROWINGSEED_ID = "org.gots.seed.id";
@@ -111,6 +116,8 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
     private Fragment fragmentWebView;
 
     private Fragment fragmentDescription;
+
+    private ImageView buttonActions;
 
     // private TabsAdapter mTabsAdapter;
 
@@ -209,7 +216,7 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
 
         // ********************** Tab actions **********************
         if (mSeed.getGrowingSeedId() > 0) {
-            fragmentListAction = Fragment.instantiate(getApplicationContext(), ListActionFragment.class.getName(),
+            fragmentListAction = Fragment.instantiate(getApplicationContext(), ActionsListFragment.class.getName(),
                     bundle);
             fragments.add(fragmentListAction);
 
@@ -238,10 +245,42 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
             LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
             layout.addView(ads.getAdsLayout());
         }
-        Fragment actionsListFragment = new ActionsChoiceFragment();
+
+        buttonActions = (ImageView) findViewById(R.id.imageViewOverlyAction);
+        if (mSeed.getDateSowing() == null)
+            buttonActions.setImageDrawable(getResources().getDrawable(R.drawable.action_sow));
+        buttonActions.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (mSeed.getDateSowing() != null)
+                    showOverlayFragment(new ActionsChoiceFragment());
+                else {
+                    showOverlayFragment(new AllotmentListFragment());
+                }
+            }
+
+        });
+
+    }
+
+    protected void showOverlayFragment(Fragment actionsListFragment) {
         FragmentTransaction transactionCatalogue = getSupportFragmentManager().beginTransaction();
-        transactionCatalogue.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
-        transactionCatalogue.replace(R.id.layoutActionsFragment, actionsListFragment).commit();
+        transactionCatalogue.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
+        transactionCatalogue.addToBackStack(null);
+        transactionCatalogue.add(R.id.idFragmentOverlay, actionsListFragment).commit();
+        findViewById(R.id.idFragmentOverlay).setVisibility(View.VISIBLE);
+    }
+
+    protected void hideOverlayFragment() {
+
+        findViewById(R.id.idFragmentOverlay).setVisibility(View.GONE);
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.idFragmentOverlay);
+        if (f != null && f.isAdded()) {
+            FragmentTransaction transactionCatalogue = getSupportFragmentManager().beginTransaction();
+            transactionCatalogue.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
+            transactionCatalogue.remove(f).commit();
+        }
     }
 
     protected void displayPictureGallery() {
@@ -308,12 +347,10 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_seeddescription, menu);
         if (mSeed.getGrowingSeedId() == 0) {
-            // menu.findItem(R.id.planning).setVisible(false);
             menu.findItem(R.id.photo).setVisible(false);
             menu.findItem(R.id.delete).setVisible(false);
             menu.findItem(R.id.workflow).setVisible(false);
         } else {
-            menu.findItem(R.id.sow).setVisible(false);
             if (!"project".equals(mSeed.getState()))
                 menu.findItem(R.id.workflow).setVisible(false);
         }
@@ -334,12 +371,12 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
             startActivity(browserIntent);
             return true;
 
-        case R.id.sow:
-            Intent intent = new Intent(this, GardenActivity.class);
-            intent.putExtra(GardenActivity.SELECT_ALLOTMENT, true);
-            intent.putExtra(GardenActivity.VENDOR_SEED_ID, mSeed.getSeedId());
-            startActivity(intent);
-            return true;
+//        case R.id.sow:
+//            Intent intent = new Intent(this, GardenActivity.class);
+//            intent.putExtra(GardenActivity.SELECT_ALLOTMENT, true);
+//            intent.putExtra(GardenActivity.VENDOR_SEED_ID, mSeed.getSeedId());
+//            startActivity(intent);
+//            return true;
         case R.id.download:
             new AsyncTask<Void, Integer, File>() {
                 boolean licenceAvailable = false;
@@ -606,7 +643,6 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
 
     @Override
     public void onActionClick(final BaseAction actionInterface) {
-        Toast.makeText(getApplicationContext(), ">" + actionInterface.getName(), Toast.LENGTH_LONG).show();
         if (actionInterface instanceof ActionOnSeed) {
             new AsyncTask<Void, Void, Void>() {
                 @Override
@@ -617,11 +653,12 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
 
                 protected void onPostExecute(Void result) {
                     if (fragmentListAction != null) {
-                        ((ListActionFragment) fragmentListAction).update();
+                        ((ActionsListFragment) fragmentListAction).update();
                     }
                 };
             }.execute();
         }
+        hideOverlayFragment();
     }
 
     @Override
@@ -644,10 +681,41 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
 
                 protected void onPostExecute(Void result) {
                     if (fragmentListAction != null) {
-                        ((ListActionFragment) fragmentListAction).update();
+                        ((ActionsListFragment) fragmentListAction).update();
                     }
                 };
             }.execute();
         }
+    }
+
+    @Override
+    public void onAllotmentClick(BaseAllotmentInterface allotmentInterface) {
+        SowingAction action = new SowingAction(getApplicationContext());
+        action.execute(allotmentInterface, (GrowingSeed) mSeed);
+        hideOverlayFragment();
+    }
+
+    @Override
+    public void onAllotmentLongClick(BaseAllotmentInterface allotmentInterface) {
+        Toast.makeText(getApplicationContext(), "This feature is not currently supported in this case",
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onGrowingSeedClick(View v, GrowingSeed growingSeedInterface) {
+        Toast.makeText(getApplicationContext(), "This feature is not currently supported in this case",
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onGrowingSeedLongClick(View v, GrowingSeed growingSeedInterface) {
+        Toast.makeText(getApplicationContext(), "This feature is not currently supported in this case",
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onAllotmentMenuClick(View v, BaseAllotmentInterface allotmentInterface) {
+        Toast.makeText(getApplicationContext(), "This feature is not currently supported in this case",
+                Toast.LENGTH_SHORT).show();
     }
 }

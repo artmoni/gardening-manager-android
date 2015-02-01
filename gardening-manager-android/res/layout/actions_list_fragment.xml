@@ -3,21 +3,24 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
+    android:background="@color/text_color_light_transparent"
     android:padding="2dp"
     android:visibility="visible" >
 
-    <HorizontalScrollView
-        android:id="@+id/horizontalscrollviewActions"
+    <ScrollView
+        android:id="@+id/scrollviewActions"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_alignParentLeft="true"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:spacing="10dp" >
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="vertical" >
         </LinearLayout>
-    </HorizontalScrollView>
+    </ScrollView>
 
 </RelativeLayout>

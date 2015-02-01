@@ -574,15 +574,15 @@ public class HutActivity extends BaseGotsActivity implements OnSeedSelected, OnA
 
     @Override
     public void onSeedLongClick(BaseSeedInterface seed) {
-        listAllotmentfragment = new AllotmentListFragment();
-
-        FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
-        transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
-        transactionTutorial.addToBackStack(null);
-        transactionTutorial.replace(R.id.contentFragment, listAllotmentfragment).commit();
-        findViewById(R.id.contentFragment).setVisibility(View.VISIBLE);
-        currentSeed = seed;
-        // startSupportActionMode(new MyCallBack(position));
+//        listAllotmentfragment = new AllotmentListFragment();
+//
+//        FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
+//        transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
+//        transactionTutorial.addToBackStack(null);
+//        transactionTutorial.replace(R.id.contentFragment, listAllotmentfragment).commit();
+//        findViewById(R.id.contentFragment).setVisibility(View.VISIBLE);
+//        currentSeed = seed;
+//         startSupportActionMode(new MyCallBack(position));
     }
 
     @Override

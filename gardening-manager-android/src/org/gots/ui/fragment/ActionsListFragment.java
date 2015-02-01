@@ -8,7 +8,7 @@
  * Contributors:
  *     sfleury - initial API and implementation
  ******************************************************************************/
-package org.gots.ui;
+package org.gots.ui.fragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,6 @@ import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
-import org.gots.ui.fragment.AbstractListFragment;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,7 +29,7 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class ListActionFragment extends AbstractListFragment implements ListView.OnScrollListener {
+public class ActionsListFragment extends AbstractListFragment implements ListView.OnScrollListener {
 
     Handler mHandler = new Handler();
 
@@ -99,7 +98,7 @@ public class ListActionFragment extends AbstractListFragment implements ListView
         // };
         // }.execute(seedid);
 
-        listView.setOnScrollListener(ListActionFragment.this);
+        listView.setOnScrollListener(ActionsListFragment.this);
 
     }
 
