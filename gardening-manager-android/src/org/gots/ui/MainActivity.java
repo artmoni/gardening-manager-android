@@ -837,7 +837,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
 
     private void displayTutorialFragment() {
         if (findViewById(R.id.idFragmentTutorial) != null
-                && gotsPrefs.get(GotsPreferences.ORG_GOTS_TUTORIAL_FINISHED, false)) {
+                && !gotsPrefs.get(GotsPreferences.ORG_GOTS_TUTORIAL_FINISHED, false)) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             Fragment tutorialResumeFragment = new TutorialResumeFragment();
             FragmentTransaction transactionTutorial = fragmentManager.beginTransaction();

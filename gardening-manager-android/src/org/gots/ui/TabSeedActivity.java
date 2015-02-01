@@ -293,6 +293,7 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
             FragmentTransaction transactionCatalogue = getSupportFragmentManager().beginTransaction();
             transactionCatalogue.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
             transactionCatalogue.remove(f).commit();
+            getSupportFragmentManager().popBackStack();
         }
     }
 
@@ -301,9 +302,7 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
             @Override
             protected List<File> doInBackground(Void... params) {
                 try {
-                    GotsActionSeedProvider provider = GotsActionSeedManager.getInstance().initIfNew(
-                            getApplicationContext());
-                    List<File> imageFile = provider.getPicture(mSeed);
+                    List<File> imageFile = actionseedProvider.getPicture(mSeed);
                     return imageFile;
                 } catch (GotsServerRestrictedException e) {
                     Log.w(TAG, e.getMessage());
@@ -328,8 +327,9 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
                 new AsyncTask<Void, Void, Void>() {
                     @Override
                     protected Void doInBackground(Void... params) {
-                        GotsActionSeedManager.getInstance().initIfNew(getApplicationContext()).uploadPicture(mSeed,
-                                cameraPicture);
+                        // GotsActionSeedManager.getInstance().initIfNew(getApplicationContext()).uploadPicture(mSeed,
+                        // cameraPicture);
+                        actionseedProvider.uploadPicture(mSeed, cameraPicture);
                         // photoAction.execute(mSeed);
                         return null;
                     }
@@ -362,10 +362,14 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
         if (mSeed.getGrowingSeedId() == 0) {
             menu.findItem(R.id.photo).setVisible(false);
             menu.findItem(R.id.delete).setVisible(false);
-            menu.findItem(R.id.workflow).setVisible(false);
-        } else {
             if (!"project".equals(mSeed.getState()))
                 menu.findItem(R.id.workflow).setVisible(false);
+        } else {
+            if ("project".equals(mSeed.getState()))
+                menu.findItem(R.id.workflow).setVisible(true);
+            else
+                menu.findItem(R.id.workflow).setVisible(false);
+
         }
         return true;
     }
@@ -704,6 +708,8 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
                 };
             }.execute();
         }
+        hideOverlayFragment();
+
     }
 
     @Override

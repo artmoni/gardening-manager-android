@@ -195,7 +195,6 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
 
     @Override
     public void onPause() {
-        mContext.unregisterReceiver(seedBroadcastReceiver);
         if (seedBroadcastReceiver != null && isAdded())
             mContext.unregisterReceiver(seedBroadcastReceiver);
         super.onPause();
@@ -324,6 +323,7 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         ((ActionBarActivity) getActivity()).startSupportActionMode(new MyCallBack(position));
+        gridViewCatalog.setSelection(position);;
         gridViewCatalog.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
         return true;
     }

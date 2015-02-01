@@ -302,6 +302,7 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
             FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
             transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
             transactionTutorial.replace(R.id.idFragmentAllotmentList, allotmentListFragment).commit();
+            
         } else {
             displayEditorFragment(null);
 
@@ -325,8 +326,8 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
         if (editorFragment.isAdded()) {
             FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
             transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
-            transactionTutorial.addToBackStack(null);
             transactionTutorial.remove(editorFragment).commit();
+            getSupportFragmentManager().popBackStack();
         }
         allotmentListFragment.update();
     }

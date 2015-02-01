@@ -365,7 +365,7 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
                 new AsyncTask<Void, Integer, Void>() {
                     @Override
                     protected Void doInBackground(Void... params) {
-                        if (picturePath != null){
+                        if (picturePath != null) {
                             ByteArrayOutputStream bos = new ByteArrayOutputStream();
                             Bitmap bitmap = FileUtilities.decodeScaledBitmapFromSdCard(picturePath, 100, 100);
                             bitmap.compress(CompressFormat.PNG, 0 /* ignored for PNG */, bos);
@@ -376,15 +376,14 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
                             try {
                                 fos = new FileOutputStream(new File(gotsPrefs.getGotsExternalFileDir(),
                                         newSeed.getVariety().toLowerCase().replaceAll("\\s", "")));
-                                fos.write(bitmapdata);                            
+                                fos.write(bitmapdata);
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
                             newSeed = seedManager.createSeed(newSeed, new File(picturePath));
-                        }
-                        else
+                        } else
                             newSeed = seedManager.createSeed(newSeed, null);
                         // seedManager.attach
                         seedManager.addToStock(newSeed, getCurrentGarden());
@@ -424,25 +423,25 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
         case R.id.IdSeedDescriptionCultureVoice:
             intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speech recognition demo");
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Command me");
             startActivityForResult(intent, REQUEST_GROWTH);
             break;
         case R.id.IdSeedDescriptionEnnemiVoice:
             intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speech recognition demo");
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Command me");
             startActivityForResult(intent, REQUEST_DISEASES);
             break;
         case R.id.IdSeedDescriptionEnvironmentVoice:
             intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speech recognition demo");
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Command me");
             startActivityForResult(intent, REQUEST_ENVIRONMENT);
             break;
         case R.id.IdSeedDescriptionHarvestVoice:
             intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speech recognition demo");
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Command me");
             startActivityForResult(intent, REQUEST_HARVEST);
             break;
 
@@ -602,6 +601,8 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != RESULT_OK)
+            return;
         if ((requestCode == REQUEST_LOAD_IMAGE || requestCode == REQUEST_TAKE_PHOTO) && resultCode == RESULT_OK
                 && null != data) {
 
