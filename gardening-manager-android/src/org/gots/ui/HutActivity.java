@@ -13,13 +13,17 @@ package org.gots.ui;
 import java.util.ArrayList;
 
 import org.gots.R;
+import org.gots.action.bean.SowingAction;
 import org.gots.ads.GotsAdvertisement;
+import org.gots.bean.BaseAllotmentInterface;
 import org.gots.provider.SeedsContentProvider;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
+import org.gots.ui.AllotmentListFragment.OnAllotmentSelected;
 import org.gots.ui.VendorListFragment.OnSeedSelected;
 
 import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -35,11 +39,13 @@ import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -53,7 +59,7 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-public class HutActivity extends BaseGotsActivity implements OnSeedSelected {
+public class HutActivity extends BaseGotsActivity implements OnSeedSelected, OnAllotmentSelected {
 
     // private ListVendorSeedAdapter lvsea;
     ListView listSeeds;
@@ -100,6 +106,12 @@ public class HutActivity extends BaseGotsActivity implements OnSeedSelected {
     String currentFilter = "";
 
     boolean clearFilter = true;
+
+    private Fragment listAllotmentfragment;
+
+    private BaseSeedInterface currentSeed;
+
+    private Tab lastTabSelected;
 
     private void displaySearchBox() {
         final EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
@@ -451,6 +463,8 @@ public class HutActivity extends BaseGotsActivity implements OnSeedSelected {
 
         private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
 
+        SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
+
         public TabsAdapter(ActionBarActivity activity, ViewPager pager) {
             super(activity.getSupportFragmentManager());
             mContext = activity;
@@ -469,6 +483,13 @@ public class HutActivity extends BaseGotsActivity implements OnSeedSelected {
             notifyDataSetChanged();
         }
 
+        public void removeTablisp(int index) {
+            mTabs.remove(index);
+            mActionBar.removeTab(mActionBar.getTabAt(index));
+
+            notifyDataSetChanged();
+        }
+
         @Override
         public int getCount() {
             return mTabs.size();
@@ -481,7 +502,19 @@ public class HutActivity extends BaseGotsActivity implements OnSeedSelected {
             Fragment fragment = Fragment.instantiate(mContext, info.clss.getName(), info.args);
             if (info.args != null)
                 fragment.setArguments(info.args);
+            registeredFragments.put(position, fragment);
+
             return fragment;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            registeredFragments.remove(position);
+            super.destroyItem(container, position, object);
+        }
+
+        public Fragment getRegisteredFragment(int position) {
+            return registeredFragments.get(position);
         }
 
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -537,5 +570,59 @@ public class HutActivity extends BaseGotsActivity implements OnSeedSelected {
         i.putExtra("org.gots.seed.vendorid", seed.getSeedId());
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
+    }
+
+    @Override
+    public void onSeedLongClick(BaseSeedInterface seed) {
+        listAllotmentfragment = new AllotmentListFragment();
+
+        FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
+        transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
+        transactionTutorial.addToBackStack(null);
+        transactionTutorial.replace(R.id.contentFragment, listAllotmentfragment).commit();
+        findViewById(R.id.contentFragment).setVisibility(View.VISIBLE);
+        currentSeed = seed;
+        // startSupportActionMode(new MyCallBack(position));
+    }
+
+    @Override
+    public void onAllotmentClick(BaseAllotmentInterface allotmentInterface) {
+
+        if (listAllotmentfragment != null && listAllotmentfragment.isAdded()) {
+            FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
+            transactionTutorial.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_up);
+            transactionTutorial.addToBackStack(null);
+            transactionTutorial.remove(listAllotmentfragment).commit();
+            findViewById(R.id.contentFragment).setVisibility(View.GONE);
+
+        }
+        if (currentSeed != null) {
+            SowingAction action = new SowingAction(getApplicationContext());
+            action.execute(allotmentInterface, (GrowingSeed) currentSeed);
+        }
+    }
+
+    @Override
+    public void onAllotmentLongClick(BaseAllotmentInterface allotmentInterface) {
+        Toast.makeText(getApplicationContext(), "This feature is not currently supported in this case",
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onAllotmentMenuClick(View v, BaseAllotmentInterface allotmentInterface) {
+        Toast.makeText(getApplicationContext(), "This feature is not currently supported in this case",
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onGrowingSeedClick(View v, GrowingSeed growingSeedInterface) {
+        Toast.makeText(getApplicationContext(), "This feature is not currently supported in this case",
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onGrowingSeedLongClick(View v, GrowingSeed growingSeedInterface) {
+        Toast.makeText(getApplicationContext(), "This feature is not currently supported in this case",
+                Toast.LENGTH_SHORT).show();
     }
 }

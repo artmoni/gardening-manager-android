@@ -245,7 +245,7 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
             SowingAction action = new SowingAction(getApplicationContext());
             action.execute(currentAllotment, (GrowingSeed) seed);
             allotmentListFragment.update();
-//            sendBroadcast(new Intent(BroadCastMessages.ALLOTMENT_EVENT));
+            // sendBroadcast(new Intent(BroadCastMessages.ALLOTMENT_EVENT));
         }
 
     }
@@ -286,8 +286,8 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
 
     @Override
     public void onAllotmentMenuClick(View v, BaseAllotmentInterface allotmentInterface) {
-//        QuickAllotmentActionBuilder actionsBuilder = new QuickAllotmentActionBuilder(v, allotmentInterface);
-//        actionsBuilder.show();
+        // QuickAllotmentActionBuilder actionsBuilder = new QuickAllotmentActionBuilder(v, allotmentInterface);
+        // actionsBuilder.show();
         displayEditorFragment(allotmentInterface);
     }
 
@@ -337,5 +337,11 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
             transactionTutorial.remove(editorFragment).commit();
         }
         allotmentListFragment.update();
+    }
+
+    @Override
+    public void onSeedLongClick(BaseSeedInterface seed) {
+        Toast.makeText(getApplicationContext(), "This feature is not currently supported in this case",
+                Toast.LENGTH_SHORT).show();
     }
 }

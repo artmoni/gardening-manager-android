@@ -89,6 +89,8 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
 
     public interface OnSeedSelected {
         public abstract void onSeedClick(BaseSeedInterface seed);
+        public abstract void onSeedLongClick(BaseSeedInterface seed);
+        
     }
 
     @Override
@@ -317,14 +319,15 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        ((ActionBarActivity) getActivity()).startSupportActionMode(new MyCallBack(position));
+        
         gridViewCatalog.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
+        mCallback.onSeedLongClick(listVendorSeedAdapter.getItem(position));
         return true;
     }
 
     @Override
     public void onItemClick(AdapterView<?> list, View container, int position, long id) {
-
+        container.setSelected(true);
         mCallback.onSeedClick(listVendorSeedAdapter.getItem(position));
     }
 }
