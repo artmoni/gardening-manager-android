@@ -58,7 +58,7 @@ public class GotsPurchaseItem {
     }
 
     public boolean isPremium() {
-        return prefs.getBoolean(SKU_PREMIUM, false) ? true : FORCE_PREMIUM;
+        return prefs.getBoolean(SKU_PREMIUM, false) ? true : unlockPremium() ? true : FORCE_PREMIUM;
     }
 
     private boolean unlockPremium() {
