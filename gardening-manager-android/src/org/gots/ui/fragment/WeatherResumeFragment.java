@@ -4,21 +4,25 @@ import java.util.List;
 
 import org.gots.R;
 import org.gots.garden.GardenInterface;
+import org.gots.ui.HutActivity;
+import org.gots.ui.ProfileActivity;
 import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.WeatherManager;
 import org.gots.weather.view.WeatherView;
 import org.gots.weather.view.WeatherWidget;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class WeatherResumeFragment extends BaseGotsFragment {
 
-    private TextView descriptionWeather;
+    private Button buttonWeatherLocality;
 
     private LinearLayout weatherWidgetLayout;
 
@@ -38,7 +42,15 @@ public class WeatherResumeFragment extends BaseGotsFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         weatherWidgetLayout = (LinearLayout) view.findViewById(R.id.WeatherWidget);
-        descriptionWeather = (TextView) view.findViewById(R.id.textViewWeatherDescription);
+        buttonWeatherLocality = (Button) view.findViewById(R.id.buttonWeatherLocality);
+        buttonWeatherLocality.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), ProfileActivity.class));
+
+            }
+        });
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -59,7 +71,7 @@ public class WeatherResumeFragment extends BaseGotsFragment {
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
-        descriptionWeather.setText(currentGarden.getLocality());
+        buttonWeatherLocality.setText(currentGarden.getLocality());
         weatherWidget.setWeatherConditions((List<WeatherConditionInterface>) data);
         weatherWidgetLayout.removeAllViews();
         weatherWidgetLayout.addView(weatherWidget);
