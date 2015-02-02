@@ -44,10 +44,7 @@ public class ActionsSyncAdapter extends GotsSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider,
             SyncResult syncResult) {
         Log.d("ActionsSyncAdapter", "onPerformSync for account[" + account.name + "]");
-        final Intent intent = new Intent();
-        intent.setAction(BroadCastMessages.PROGRESS_UPDATE);
-        intent.putExtra("AUTHORITY", authority);
-        getContext().sendBroadcast(intent);
+        getContext().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
         //
         //
         // seedManager.force_refresh(true);
@@ -66,19 +63,16 @@ public class ActionsSyncAdapter extends GotsSyncAdapter {
         // actionseedManager.getActionsToDo();
         if (gotsPrefs.isConnectedToServer())
             for (BaseAllotmentInterface allotmentInterface : allotmentManager.getMyAllotments(true)) {
-                for (GrowingSeed seedInterface : growingSeedManager.getGrowingSeedsByAllotment(
-                        allotmentInterface, true)) {
+                for (GrowingSeed seedInterface : growingSeedManager.getGrowingSeedsByAllotment(allotmentInterface, true)) {
                     synchronizeActionSeed(seedInterface,
                             localActionSeedProvider.getActionsToDoBySeed(seedInterface, true),
                             nuxeoActionSeedProvider.getActionsToDoBySeed(seedInterface, true));
                 }
             }
-        intent.setAction(BroadCastMessages.PROGRESS_FINISHED);
-        getContext().sendBroadcast(intent);
+        getContext().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
     }
 
-    private ArrayList<BaseAction> synchronizeActions(List<BaseAction> localActions,
-            ArrayList<BaseAction> remoteActions2) {
+    private ArrayList<BaseAction> synchronizeActions(List<BaseAction> localActions, ArrayList<BaseAction> remoteActions2) {
         ArrayList<BaseAction> myActions = new ArrayList<BaseAction>();
         // Synchronize remote action with local gardens
         for (BaseAction remoteAction : remoteActions2) {
@@ -96,29 +90,29 @@ public class ActionsSyncAdapter extends GotsSyncAdapter {
             }
         }
 
-//        for (BaseActionInterface localAction : localActions) {
-//            if (localAction.getUUID() == null) { // local only without
-//                                                 // UUID => create
-//                                                 // remote
-//                                                 // myActions.add(createNuxeoGarden(localAction));
-//            } else {
-//                boolean found = false;
-//                for (BaseActionInterface remoteAction : remoteActions2) {
-//                    if (remoteAction.getUUID() != null && remoteAction.getUUID().equals(localAction.getUUID())) {
-//                        found = true;
-//                        break;
-//                    }
-//                }
-//                if (!found) { // local only with UUID -> delete local
-//                    // super.removeGarden(localAction);
-//                }
-//            }
-//        }
+        // for (BaseActionInterface localAction : localActions) {
+        // if (localAction.getUUID() == null) { // local only without
+        // // UUID => create
+        // // remote
+        // // myActions.add(createNuxeoGarden(localAction));
+        // } else {
+        // boolean found = false;
+        // for (BaseActionInterface remoteAction : remoteActions2) {
+        // if (remoteAction.getUUID() != null && remoteAction.getUUID().equals(localAction.getUUID())) {
+        // found = true;
+        // break;
+        // }
+        // }
+        // if (!found) { // local only with UUID -> delete local
+        // // super.removeGarden(localAction);
+        // }
+        // }
+        // }
         return myActions;
     }
 
-    protected List<ActionOnSeed> synchronizeActionSeed(GrowingSeed seed,
-            List<ActionOnSeed> myLocalActions, List<ActionOnSeed> remoteActions) {
+    protected List<ActionOnSeed> synchronizeActionSeed(GrowingSeed seed, List<ActionOnSeed> myLocalActions,
+            List<ActionOnSeed> remoteActions) {
         List<ActionOnSeed> myActions = new ArrayList<ActionOnSeed>();
         // Synchronize remote actions with local gardens
         for (ActionOnSeed remoteAction : remoteActions) {
@@ -163,6 +157,7 @@ public class ActionsSyncAdapter extends GotsSyncAdapter {
                 }
             }
         }
+
         return myActions;
     }
 }

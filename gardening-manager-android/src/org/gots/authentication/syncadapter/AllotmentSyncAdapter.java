@@ -22,10 +22,7 @@ public class AllotmentSyncAdapter extends GotsSyncAdapter {
             SyncResult syncResult) {
         Log.d("AllotmentSyncAdapter", "onPerformSync for account[" + account.name + "]");
 
-        final Intent intent = new Intent();
-        intent.setAction(BroadCastMessages.PROGRESS_UPDATE);
-        intent.putExtra("AUTHORITY", authority);
-        getContext().sendBroadcast(intent);
+        getContext().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
 
         // seedManager.force_refresh(true);
         // seedManager.getVendorSeeds(true);
@@ -38,9 +35,9 @@ public class AllotmentSyncAdapter extends GotsSyncAdapter {
         // notification.createNotification(newSeeds);
         // }
         allotmentManager.getMyAllotments(true);
-        intent.setAction(BroadCastMessages.PROGRESS_FINISHED);
-        intent.setAction(BroadCastMessages.ALLOTMENT_EVENT);
-        getContext().sendBroadcast(intent);
+
+        getContext().sendBroadcast(new Intent(BroadCastMessages.ALLOTMENT_EVENT));
+        getContext().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
 
     }
 }

@@ -33,10 +33,7 @@ public class GardenSyncAdapter extends GotsSyncAdapter {
             SyncResult syncResult) {
         Log.d("GardenSyncAdapter", "onPerformSync for account[" + account.name + "]");
 
-        final Intent intent = new Intent();
-        intent.setAction(BroadCastMessages.PROGRESS_UPDATE);
-        intent.putExtra("AUTHORITY", authority);
-        getContext().sendBroadcast(intent);
+        getContext().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
 
         // GardenManager gardenManager = GardenManager.getInstance().initIfNew(getContext());
         LocalGardenProvider localGardenProvider = new LocalGardenProvider(getContext());
@@ -86,8 +83,7 @@ public class GardenSyncAdapter extends GotsSyncAdapter {
                 }
             }
         }
-        intent.setAction(BroadCastMessages.PROGRESS_FINISHED);
-        getContext().sendBroadcast(intent);
+        getContext().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
         getContext().sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
 
     }

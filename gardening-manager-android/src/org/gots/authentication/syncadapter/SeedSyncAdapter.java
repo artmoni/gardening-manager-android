@@ -53,8 +53,7 @@ public class SeedSyncAdapter extends GotsSyncAdapter {
             notification.createNotification(newSeeds);
         }
 
-        intent.setAction(BroadCastMessages.PROGRESS_FINISHED);
-        getContext().sendBroadcast(intent);
-
+        getContext().sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
+        getContext().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
     }
 }

@@ -41,5 +41,6 @@ public class GotsSyncAdapter extends NuxeoSyncAdapter {
         seedManager = GotsSeedManager.getInstance().initIfNew(getContext());
 
     }
+    
 
 }
