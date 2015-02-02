@@ -21,6 +21,7 @@ import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.animation.Animation;
@@ -41,8 +42,6 @@ public class SplashScreenActivity extends BaseGotsActivity {
     private ImageView imageRefresh;
 
     private TextView versionTextView;
-
-    private String version;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,7 +64,23 @@ public class SplashScreenActivity extends BaseGotsActivity {
         super.onActivityResult(arg0, arg1, arg2);
     }
 
-   
+    @Override
+    protected void onResume() {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                return getVersionName();
+            }
+
+            @Override
+            protected void onPostExecute(String version) {
+                versionTextView.setText("Version " + version);
+                super.onPostExecute(version);
+            }
+        }.execute();
+
+        super.onResume();
+    }
 
     private void checkPurchaseFeature() {
         final ArrayList<String> moreSkus = new ArrayList<String>();
@@ -150,16 +165,12 @@ public class SplashScreenActivity extends BaseGotsActivity {
                 checkPurchaseFeature();
         }
 
-        version = getVersionName();
         return gardenManager.getMyGardens(true);
     }
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
         super.onNuxeoDataRetrieved(data);
-
-        versionTextView.setText("Version " + version);
-
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
