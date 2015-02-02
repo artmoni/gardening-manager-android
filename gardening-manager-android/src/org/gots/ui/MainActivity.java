@@ -810,6 +810,8 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                     transaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
                     transaction.replace(R.id.idFragmentWorkflow, workflowResumeFragment).commit();
                 }
+                else
+                    findViewById(R.id.idFragmentWorkflow).setVisibility(View.GONE);
             };
         }.execute();
 
