@@ -13,12 +13,17 @@ package org.gots.ui;
 import java.util.ArrayList;
 
 import org.gots.R;
+import org.gots.action.ActionOnSeed;
+import org.gots.action.bean.BuyingAction;
+import org.gots.action.bean.ReduceQuantityAction;
 import org.gots.action.bean.SowingAction;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.bean.BaseAllotmentInterface;
+import org.gots.broadcast.BroadCastMessages;
 import org.gots.provider.SeedsContentProvider;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
+import org.gots.seed.SeedUtil;
 import org.gots.ui.AllotmentListFragment.OnAllotmentSelected;
 import org.gots.ui.VendorListFragment.OnSeedSelected;
 
@@ -36,7 +41,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.view.ActionMode;
 import android.text.Editable;
+import android.text.GetChars;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.SparseArray;
@@ -50,6 +57,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Filterable;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -59,7 +67,7 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-public class HutActivity extends BaseGotsActivity implements OnSeedSelected, OnAllotmentSelected {
+public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotmentSelected {
 
     // private ListVendorSeedAdapter lvsea;
     ListView listSeeds;
@@ -70,7 +78,7 @@ public class HutActivity extends BaseGotsActivity implements OnSeedSelected, OnA
 
     private int currentAllotment = -1;
 
-    private TabsAdapter mTabsAdapter;
+    TabsAdapter mTabsAdapter;
 
     private static final short FRAGMENT_ID_CATALOG = 0;
 
@@ -315,45 +323,49 @@ public class HutActivity extends BaseGotsActivity implements OnSeedSelected, OnA
 
         // tabHost = getTabHost(); // The activity TabHost
 
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        mTabsAdapter = new TabsAdapter(this, mViewPager);
+        // mViewPager = (ViewPager) findViewById(R.id.pager);
+        // mTabsAdapter = new TabsAdapter(this, mViewPager);
         bar.removeAllTabs();
         // // ********************** Tab description **********************
         Bundle args;
         args = new Bundle();
-        mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds)),
-                VendorListFragment.class, args); // FRAGMENT_ID_CATALOG=0 -> see above
-
+        // mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds)),
+        // VendorListFragment.class, args); // FRAGMENT_ID_CATALOG=0 -> see above
+        addTab(new VendorListFragment(), getString(R.string.hut_menu_vendorseeds));
         args = new Bundle();
         if (currentAllotment != -1) {
             args.putBoolean(VendorListFragment.IS_SELECTABLE, true);
         }
-        args.putBoolean(VendorListFragment.FILTER_PARROT, true);
+        // args.putBoolean(VendorListFragment.FILTER_PARROT, true);
         if (gotsPrefs.getParrotToken() != null)
-            mTabsAdapter.addTab(
-                    bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds_plant)),
-                    VendorListFragment.class, args);
+            // mTabsAdapter.addTab(
+            // bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds_plant)),
+            // VendorListFragment.class, args);
+            addTab(new VendorListFragment(VendorListFragment.FILTER_PARROT), getString(R.string.hut_menu_vendorseeds));
 
         // mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText("species"),
         // FamilyListActivity.class, args);
 
         // mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
         // MySeedsListActivity.class, null);
-        args = new Bundle();
-        args.putBoolean(VendorListFragment.FILTER_STOCK, true);
-        mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
-                VendorListFragment.class, args);
+        // args = new Bundle();
+        // args.putBoolean(VendorListFragment.FILTER_STOCK, true);
+        // mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
+        // VendorListFragment.class, args);
+        addTab(new VendorListFragment(VendorListFragment.FILTER_STOCK), getString(R.string.hut_menu_myseeds));
 
         if (gotsPrefs.isConnectedToServer()) {
-            args = new Bundle();
-            args.putBoolean(VendorListFragment.FILTER_FAVORITES, true);
-            mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_favorites)),
-                    VendorListFragment.class, args);
+            // args = new Bundle();
+            // args.putBoolean(VendorListFragment.FILTER_FAVORITES, true);
+            // mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_favorites)),
+            // VendorListFragment.class, args);
+            addTab(new VendorListFragment(VendorListFragment.FILTER_FAVORITES), getString(R.string.hut_menu_favorites));
         }
-        args = new Bundle();
-        args.putBoolean(VendorListFragment.FILTER_THISMONTH, true);
-        mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_thismonth)),
-                VendorListFragment.class, args);
+        // args = new Bundle();
+        // args.putBoolean(VendorListFragment.FILTER_THISMONTH, true);
+        // mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_thismonth)),
+        // VendorListFragment.class, args);
+        addTab(new VendorListFragment(VendorListFragment.FILTER_THISMONTH), getString(R.string.hut_menu_thismonth));
     }
 
     @Override
@@ -411,7 +423,7 @@ public class HutActivity extends BaseGotsActivity implements OnSeedSelected, OnA
         }
 
         Fragment fragment = (Fragment) getSupportFragmentManager().findFragmentByTag(
-                "android:switcher:" + R.id.pager + ":" + mTabsAdapter.getCurrentItem());
+                "android:switcher:" + R.id.pager + ":" + getSelectedTab());
         if (fragment.getArguments() != null && fragment.getArguments().getBoolean(VendorListFragment.FILTER_PARROT)) {
             Intent filterIntent = new Intent(VendorListFragment.BROADCAST_FILTER);
             filterIntent.putExtra(VendorListFragment.FILTER_VALUE, currentFilter);
@@ -426,138 +438,138 @@ public class HutActivity extends BaseGotsActivity implements OnSeedSelected, OnA
                 searchFragment.getArguments().clear();
                 searchFragment.getArguments().putString(VendorListFragment.FILTER_VALUE, currentFilter);
                 searchFragment.onResume();
-                mTabsAdapter.setCurrentItem(FRAGMENT_ID_CATALOG);
+                // mTabsAdapter.setCurrentItem(FRAGMENT_ID_CATALOG);
             }
         }
     }
 
-    static final class TabInfo {
-        private final Class<?> clss;
+    // static final class TabInfo {
+    // private final Class<?> clss;
+    //
+    // private final Bundle args;
+    //
+    // TabInfo(Class<?> _class, Bundle _args) {
+    // clss = _class;
+    // args = _args;
+    // }
+    // }
 
-        private final Bundle args;
-
-        TabInfo(Class<?> _class, Bundle _args) {
-            clss = _class;
-            args = _args;
-        }
-    }
-
-    /**
-     * This is a helper class that implements the management of tabs and all
-     * details of connecting a ViewPager with associated TabHost. It relies on a
-     * trick. Normally a tab host has a simple API for supplying a View or
-     * Intent that each tab will show. This is not sufficient for switching
-     * between pages. So instead we make the content part of the tab host 0dp
-     * high (it is not shown) and the TabsAdapter supplies its own dummy view to
-     * show as the tab content. It listens to changes in tabs, and takes care of
-     * switch to the correct paged in the ViewPager whenever the selected tab
-     * changes.
-     */
-    public class TabsAdapter extends FragmentPagerAdapter implements ActionBar.TabListener,
-            ViewPager.OnPageChangeListener {
-        private final Context mContext;
-
-        private final ActionBar mActionBar;
-
-        private final ViewPager mViewPager;
-
-        private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
-
-        SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
-
-        public TabsAdapter(ActionBarActivity activity, ViewPager pager) {
-            super(activity.getSupportFragmentManager());
-            mContext = activity;
-            mActionBar = activity.getSupportActionBar();
-            mViewPager = pager;
-            mViewPager.setAdapter(this);
-            mViewPager.setOnPageChangeListener(this);
-        }
-
-        public void addTab(ActionBar.Tab tab, Class<?> clss, Bundle args) {
-            TabInfo info = new TabInfo(clss, args);
-            tab.setTag(info);
-            tab.setTabListener(this);
-            mTabs.add(info);
-            mActionBar.addTab(tab);
-            notifyDataSetChanged();
-        }
-
-        public void removeTablisp(int index) {
-            mTabs.remove(index);
-            mActionBar.removeTab(mActionBar.getTabAt(index));
-
-            notifyDataSetChanged();
-        }
-
-        @Override
-        public int getCount() {
-            return mTabs.size();
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            TabInfo info = mTabs.get(position);
-
-            Fragment fragment = Fragment.instantiate(mContext, info.clss.getName(), info.args);
-            if (info.args != null)
-                fragment.setArguments(info.args);
-            registeredFragments.put(position, fragment);
-
-            return fragment;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            registeredFragments.remove(position);
-            super.destroyItem(container, position, object);
-        }
-
-        public Fragment getRegisteredFragment(int position) {
-            return registeredFragments.get(position);
-        }
-
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        }
-
-        public void onPageSelected(int position) {
-            mActionBar.setSelectedNavigationItem(position);
-
-            // Fragment fragment = (Fragment) getSupportFragmentManager().findFragmentByTag(
-            // "android:switcher:" + R.id.pager + ":" + position);
-            // if (fragment != null && fragment.getAdapter() != null)
-            // ((BaseAdapter) fragment.getAdapter()).notifyDataSetChanged();
-
-        }
-
-        public void onPageScrollStateChanged(int state) {
-        }
-
-        public void onTabSelected(Tab tab, FragmentTransaction ft) {
-            Object tag = tab.getTag();
-            for (int i = 0; i < mTabs.size(); i++) {
-                if (mTabs.get(i) == tag) {
-                    mViewPager.setCurrentItem(i);
-
-                }
-            }
-        }
-
-        public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-        }
-
-        public void onTabReselected(Tab tab, FragmentTransaction ft) {
-        }
-
-        public int getCurrentItem() {
-            return mViewPager.getCurrentItem();
-        }
-
-        public void setCurrentItem(int itemId) {
-            // mViewPager.setCurrentItem(itemId);
-            mActionBar.setSelectedNavigationItem(itemId);
-        }
-    }
+    // /**
+    // * This is a helper class that implements the management of tabs and all
+    // * details of connecting a ViewPager with associated TabHost. It relies on a
+    // * trick. Normally a tab host has a simple API for supplying a View or
+    // * Intent that each tab will show. This is not sufficient for switching
+    // * between pages. So instead we make the content part of the tab host 0dp
+    // * high (it is not shown) and the TabsAdapter supplies its own dummy view to
+    // * show as the tab content. It listens to changes in tabs, and takes care of
+    // * switch to the correct paged in the ViewPager whenever the selected tab
+    // * changes.
+    // */
+    // public class TabsAdapter extends TabActivity implements ActionBar.TabListener,
+    // ViewPager.OnPageChangeListener {
+    // private final Context mContext;
+    //
+    // private final ActionBar mActionBar;
+    //
+    // private final ViewPager mViewPager;
+    //
+    // private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
+    //
+    // SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
+    //
+    // public TabsAdapter(ActionBarActivity activity, ViewPager pager) {
+    // super(activity.getSupportFragmentManager());
+    // mContext = activity;
+    // mActionBar = activity.getSupportActionBar();
+    // mViewPager = pager;
+    // mViewPager.setAdapter(this);
+    // mViewPager.setOnPageChangeListener(this);
+    // }
+    //
+    // public void addTab(ActionBar.Tab tab, Class<?> clss, Bundle args) {
+    // TabInfo info = new TabInfo(clss, args);
+    // tab.setTag(info);
+    // tab.setTabListener(this);
+    // mTabs.add(info);
+    // mActionBar.addTab(tab);
+    // notifyDataSetChanged();
+    // }
+    //
+    // public void removeTablisp(int index) {
+    // mTabs.remove(index);
+    // mActionBar.removeTab(mActionBar.getTabAt(index));
+    //
+    // notifyDataSetChanged();
+    // }
+    //
+    // @Override
+    // public int getCount() {
+    // return mTabs.size();
+    // }
+    //
+    // @Override
+    // public Fragment getItem(int position) {
+    // TabInfo info = mTabs.get(position);
+    //
+    // Fragment fragment = Fragment.instantiate(mContext, info.clss.getName(), info.args);
+    // if (info.args != null)
+    // fragment.setArguments(info.args);
+    // registeredFragments.put(position, fragment);
+    //
+    // return fragment;
+    // }
+    //
+    // @Override
+    // public void destroyItem(ViewGroup container, int position, Object object) {
+    // registeredFragments.remove(position);
+    // super.destroyItem(container, position, object);
+    // }
+    //
+    // public Fragment getRegisteredFragment(int position) {
+    // return registeredFragments.get(position);
+    // }
+    //
+    // public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    // }
+    //
+    // public void onPageSelected(int position) {
+    // mActionBar.setSelectedNavigationItem(position);
+    //
+    // // Fragment fragment = (Fragment) getSupportFragmentManager().findFragmentByTag(
+    // // "android:switcher:" + R.id.pager + ":" + position);
+    // // if (fragment != null && fragment.getAdapter() != null)
+    // // ((BaseAdapter) fragment.getAdapter()).notifyDataSetChanged();
+    //
+    // }
+    //
+    // public void onPageScrollStateChanged(int state) {
+    // }
+    //
+    // public void onTabSelected(Tab tab, FragmentTransaction ft) {
+    // Object tag = tab.getTag();
+    // for (int i = 0; i < mTabs.size(); i++) {
+    // if (mTabs.get(i) == tag) {
+    // mViewPager.setCurrentItem(i);
+    //
+    // }
+    // }
+    // }
+    //
+    // public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+    // }
+    //
+    // public void onTabReselected(Tab tab, FragmentTransaction ft) {
+    // }
+    //
+    // public int getCurrentItem() {
+    // return mViewPager.getCurrentItem();
+    // }
+    //
+    // public void setCurrentItem(int itemId) {
+    // // mViewPager.setCurrentItem(itemId);
+    // mActionBar.setSelectedNavigationItem(itemId);
+    // }
+    // }
 
     @Override
     protected void onRefresh(String AUTHORITY) {
@@ -573,16 +585,16 @@ public class HutActivity extends BaseGotsActivity implements OnSeedSelected, OnA
     }
 
     @Override
-    public void onSeedLongClick(BaseSeedInterface seed) {
-//        listAllotmentfragment = new AllotmentListFragment();
-//
-//        FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
-//        transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
-//        transactionTutorial.addToBackStack(null);
-//        transactionTutorial.replace(R.id.contentFragment, listAllotmentfragment).commit();
-//        findViewById(R.id.contentFragment).setVisibility(View.VISIBLE);
-//        currentSeed = seed;
-//         startSupportActionMode(new MyCallBack(position));
+    public void onSeedLongClick(VendorListFragment fragment, BaseSeedInterface seed) {
+        // listAllotmentfragment = new AllotmentListFragment();
+        //
+        // FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
+        // transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
+        // transactionTutorial.addToBackStack(null);
+        // transactionTutorial.replace(R.id.contentFragment, listAllotmentfragment).commit();
+        // findViewById(R.id.contentFragment).setVisibility(View.VISIBLE);
+        // currentSeed = seed;
+        startSupportActionMode(new MyCallBack(seed));
     }
 
     @Override
@@ -624,5 +636,100 @@ public class HutActivity extends BaseGotsActivity implements OnSeedSelected, OnA
     public void onGrowingSeedLongClick(View v, GrowingSeed growingSeedInterface) {
         Toast.makeText(getApplicationContext(), "This feature is not currently supported in this case",
                 Toast.LENGTH_SHORT).show();
+    }
+
+    /*
+     * CallBACK on long press
+     */
+
+    private final class MyCallBack implements ActionMode.Callback {
+
+        private BaseSeedInterface currentSeed;
+
+        private MyCallBack(BaseSeedInterface seedInterface) {
+            currentSeed = seedInterface;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            if (currentSeed.getNbSachet() == 0)
+                menu.findItem(R.id.action_stock_reduce).setVisible(false);
+            return false;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+        }
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mode.getMenuInflater().inflate(R.menu.menu_hut_contextual, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+
+            ActionOnSeed actionDone = null;
+            switch (item.getItemId()) {
+            case R.id.action_seed_detail:
+                Intent i = new Intent(getApplicationContext(), TabSeedActivity.class);
+                i.putExtra("org.gots.seed.vendorid", currentSeed.getSeedId());
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+                break;
+            case R.id.action_stock_add:
+                actionDone = new BuyingAction(getApplicationContext());
+                break;
+            case R.id.action_stock_reduce:
+                actionDone = new ReduceQuantityAction(getApplicationContext());
+                break;
+            // case R.id.action_sow:
+            // Intent intent = new Intent(mContext, GardenActivity.class);
+            // intent.putExtra(GardenActivity.SELECT_ALLOTMENT, true);
+            // intent.putExtra(GardenActivity.VENDOR_SEED_ID, currentSeed.getSeedId());
+            // mContext.startActivity(intent);
+            //
+            // break;
+            default:
+                break;
+            }
+
+            if (actionDone == null) {
+                Log.w(TAG, "onActionItemClicked - unknown selected action");
+                return false;
+            }
+
+            new AsyncTask<ActionOnSeed, Integer, Void>() {
+                ActionOnSeed action;
+
+                @Override
+                protected Void doInBackground(ActionOnSeed... params) {
+                    action = params[0];
+                    action.execute((GrowingSeed) currentSeed);
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void result) {
+                    Toast.makeText(
+                            getApplicationContext(),
+                            SeedUtil.translateAction(getApplicationContext(), action) + " - "
+                                    + SeedUtil.translateSpecie(getApplicationContext(), currentSeed), Toast.LENGTH_LONG).show();
+
+                    if (getCurrentFragment() instanceof VendorListFragment)
+                        ((VendorListFragment) getCurrentFragment()).update();
+                    super.onPostExecute(result);
+                }
+            }.execute(actionDone);
+
+            mode.finish();
+            return true;
+        }
+    }
+
+    @Override
+    protected ViewPager getViewPager() {
+        return (ViewPager) findViewById(R.id.pager);
     }
 }

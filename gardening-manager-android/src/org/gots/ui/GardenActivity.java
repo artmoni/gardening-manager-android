@@ -31,6 +31,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.view.ActionMode;
@@ -302,7 +303,7 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
             FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
             transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
             transactionTutorial.replace(R.id.idFragmentAllotmentList, allotmentListFragment).commit();
-            
+
         } else {
             displayEditorFragment(null);
 
@@ -333,7 +334,7 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
     }
 
     @Override
-    public void onSeedLongClick(BaseSeedInterface seed) {
+    public void onSeedLongClick(VendorListFragment fragment, BaseSeedInterface seed) {
         Toast.makeText(getApplicationContext(), "This feature is not currently supported in this case",
                 Toast.LENGTH_SHORT).show();
     }

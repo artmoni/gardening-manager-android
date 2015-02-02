@@ -4,15 +4,6 @@
     android:layout_height="fill_parent"
     android:background="@color/text_color_light" >
 
-    <LinearLayout
-        android:id="@+id/idAdsTop"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:orientation="horizontal" >
-    </LinearLayout>
-
     <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="fill_parent"
@@ -117,10 +108,11 @@
         android:id="@+id/pager"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/idAdsTop"
         android:layout_below="@+id/scrollView1"
         android:layout_centerHorizontal="true"
         android:layout_margin="5dp" >
+
     </android.support.v4.view.ViewPager>
 
     <ImageView
@@ -144,5 +136,14 @@
         android:layout_margin="10dp"
         android:visibility="gone" >
     </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/idAdsTop"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:orientation="horizontal" >
+    </LinearLayout>
 
 </RelativeLayout>

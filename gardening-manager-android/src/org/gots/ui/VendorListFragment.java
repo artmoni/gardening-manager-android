@@ -74,9 +74,9 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
 
     public SeedListAdapter listVendorSeedAdapter;
 
-    protected CharSequence currentFilter = "";
+    // protected CharSequence currentFilter = "";
 
-    private Bundle args;
+    private String filter;
 
     private GridView gridViewCatalog;
 
@@ -91,8 +91,15 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
     public interface OnSeedSelected {
         public abstract void onSeedClick(BaseSeedInterface seed);
 
-        public abstract void onSeedLongClick(BaseSeedInterface seed);
+        public abstract void onSeedLongClick(VendorListFragment vendorListFragment, BaseSeedInterface seed);
 
+    }
+
+    public VendorListFragment() {
+    }
+
+    public VendorListFragment(String filter) {
+        this.filter = filter;
     }
 
     @Override
@@ -108,7 +115,7 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mContext = getActivity();
-        args = getArguments();
+        // args = getArguments();
 
         listVendorSeedAdapter = new VendorSeedListAdapter(mContext, new ArrayList<BaseSeedInterface>());
         View view = inflater.inflate(R.layout.list_seed_grid, container, false);
@@ -125,11 +132,13 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
         @Override
         public void onReceive(Context context, Intent intent) {
             if (BROADCAST_FILTER.equals(intent.getAction())) {
-                currentFilter = intent.getExtras().getString(FILTER_VALUE);
+                filterValue = intent.getExtras().getString(FILTER_VALUE);
             }
             runAsyncDataRetrieval();
         }
     };
+
+    private String filterValue;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -156,32 +165,37 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
     protected Object retrieveNuxeoData() throws Exception {
 
         List<BaseSeedInterface> catalogue = new ArrayList<BaseSeedInterface>();
-        if (args == null || args.size() == 0) {
+        if (filter == null) {
             catalogue = seedProvider.getVendorSeeds(false, page, pageSize);
             if (catalogue.size() == 0)
                 catalogue = seedProvider.getVendorSeeds(true, page, pageSize);
-        } else if (args.getBoolean(FILTER_STOCK))
+        } else if (filter.equals(FILTER_STOCK))
             catalogue = seedProvider.getMyStock(gardenManager.getCurrentGarden());
 
-        else if (args.getBoolean(FILTER_FAVORITES))
+        else if (filter.equals(FILTER_FAVORITES))
             catalogue = seedProvider.getMyFavorites();
-        else if (args.getBoolean(FILTER_BARCODE)) {
-            catalogue.add(seedProvider.getSeedByBarCode(args.getString(FILTER_VALUE)));
-        } else if (args.getBoolean(FILTER_THISMONTH))
+        else if (filter.equals(FILTER_BARCODE)) {
+            catalogue.add(seedProvider.getSeedByBarCode(filterValue));
+        } else if (filter.equals(FILTER_THISMONTH))
             catalogue = seedProvider.getSeedBySowingMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
-        else if (args.getBoolean(FILTER_PARROT)) {
+        else if (filter.equals(FILTER_PARROT)) {
             ParrotSeedProvider parrotProvider = new ParrotSeedProvider(mContext);
-            if ("".equals(currentFilter))
+            if (filterValue == null)
                 catalogue.addAll(parrotProvider.getVendorSeeds(true, page, pageSize));
             else
-                catalogue = parrotProvider.getVendorSeedsByName(currentFilter.toString());
+                catalogue = parrotProvider.getVendorSeedsByName(filterValue.toString());
 
-        } else if (args.getString(FILTER_VALUE) != null) {
-            catalogue = seedProvider.getVendorSeedsByName(args.getString(FILTER_VALUE));
+        } else if (filterValue != null) {
+            catalogue = seedProvider.getVendorSeedsByName(filterValue);
 
         }
 
         return catalogue;
+    }
+
+    public void setFilterValue(String filterValue) {
+        this.filterValue = filterValue;
+        runAsyncDataRetrieval();
     }
 
     @Override
@@ -203,96 +217,6 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
     @Override
     public void onDestroy() {
         super.onDestroy();
-    }
-
-    /*
-     * CallBACK on long press
-     */
-
-    private final class MyCallBack implements ActionMode.Callback {
-
-        private BaseSeedInterface currentSeed;
-
-        private MyCallBack(int position) {
-            currentSeed = listVendorSeedAdapter.getItem(position);
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            if (currentSeed.getNbSachet() == 0)
-                menu.findItem(R.id.action_stock_reduce).setVisible(false);
-            return false;
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            gridViewCatalog.setChoiceMode(GridView.CHOICE_MODE_SINGLE);
-        }
-
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.getMenuInflater().inflate(R.menu.menu_hut_contextual, menu);
-            gridViewCatalog.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
-            return true;
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-
-            ActionOnSeed actionDone = null;
-            switch (item.getItemId()) {
-            case R.id.action_seed_detail:
-                Intent i = new Intent(mContext, TabSeedActivity.class);
-                i.putExtra("org.gots.seed.vendorid", currentSeed.getSeedId());
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mContext.startActivity(i);
-                break;
-            case R.id.action_stock_add:
-                actionDone = new BuyingAction(mContext);
-                break;
-            case R.id.action_stock_reduce:
-                actionDone = new ReduceQuantityAction(mContext);
-                break;
-//            case R.id.action_sow:
-//                Intent intent = new Intent(mContext, GardenActivity.class);
-//                intent.putExtra(GardenActivity.SELECT_ALLOTMENT, true);
-//                intent.putExtra(GardenActivity.VENDOR_SEED_ID, currentSeed.getSeedId());
-//                mContext.startActivity(intent);
-//
-//                break;
-            default:
-                break;
-            }
-
-            if (actionDone == null) {
-                Log.w(TAG, "onActionItemClicked - unknown selected action");
-                return false;
-            }
-
-            new AsyncTask<ActionOnSeed, Integer, Void>() {
-                ActionOnSeed action;
-
-                @Override
-                protected Void doInBackground(ActionOnSeed... params) {
-                    action = params[0];
-                    action.execute((GrowingSeed) currentSeed);
-                    return null;
-                }
-
-                @Override
-                protected void onPostExecute(Void result) {
-                    Toast.makeText(
-                            mContext,
-                            SeedUtil.translateAction(mContext, action) + " - "
-                                    + SeedUtil.translateSpecie(mContext, currentSeed), Toast.LENGTH_LONG).show();
-                    mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
-                    super.onPostExecute(result);
-                }
-            }.execute(actionDone);
-
-            mode.finish();
-            return true;
-        }
     }
 
     @Override
@@ -322,14 +246,19 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        ((ActionBarActivity) getActivity()).startSupportActionMode(new MyCallBack(position));
-        gridViewCatalog.setSelection(position);;
+        gridViewCatalog.setSelection(position);
+        ;
         gridViewCatalog.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
+        mCallback.onSeedLongClick(this, listVendorSeedAdapter.getItem(position));
         return true;
     }
 
     @Override
     public void onItemClick(AdapterView<?> list, View container, int position, long id) {
         mCallback.onSeedClick(listVendorSeedAdapter.getItem(position));
+    }
+
+    public void update() {
+        runAsyncDataRetrieval();
     }
 }

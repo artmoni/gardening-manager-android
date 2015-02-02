@@ -90,7 +90,7 @@ import android.widget.Toast;
 import com.android.vending.billing.util.IabHelper;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class TabSeedActivity extends BaseGotsActivity implements OnActionSelectedListener, OnAllotmentSelected {
+public class TabSeedActivity extends TabActivity implements OnActionSelectedListener, OnAllotmentSelected {
     public static final String GOTS_VENDORSEED_ID = "org.gots.seed.vendorid";
 
     public static final String GOTS_GROWINGSEED_ID = "org.gots.seed.id";
@@ -98,8 +98,6 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
     private static final int PICK_IMAGE = 0;
 
     protected static final String TAG = "TabSeedActivity";
-
-    ViewPager mViewPager;
 
     GrowingSeed mSeed = null;
 
@@ -125,8 +123,10 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
 
     // private TabsAdapter mTabsAdapter;
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (savedInstanceState != null) {
 
             String cameraFilename = savedInstanceState.getString("CAMERA_FILENAME");
@@ -210,47 +210,7 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
         } else
             findViewById(R.id.idLayoutCulturePeriod).setVisibility(View.GONE);
 
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        TabsAdapter mFragmentAdapter = new TabsAdapter(this, mViewPager);
-
         // mTabsAdapter = new TabsAdapter(this, mViewPager);
-
-        List<Fragment> fragments = new ArrayList<>();
-        Bundle bundle = new Bundle();
-        bundle.putInt(GOTS_GROWINGSEED_ID, mSeed.getSeedId());
-        bundle.putInt("org.gots.growingseed.id", mSeed.getGrowingSeedId());
-
-        // ********************** Tab actions **********************
-        if (mSeed.getGrowingSeedId() > 0) {
-            fragmentListAction = Fragment.instantiate(getApplicationContext(), ActionsListFragment.class.getName(),
-                    bundle);
-            fragments.add(fragmentListAction);
-            mFragmentAdapter.addTab(
-                    bar.newTab().setText(getResources().getString(R.string.seed_description_tabmenu_actions)),
-                    fragmentListAction, getIntent().getExtras());
-
-        }
-        fragmentDescription = Fragment.instantiate(getApplicationContext(), SeedDescriptionFragment.class.getName(),
-                bundle);
-        fragments.add(fragmentDescription);
-        mFragmentAdapter.addTab(
-                bar.newTab().setText(getResources().getString(R.string.seed_description_tabmenu_detail)),
-                fragmentDescription, getIntent().getExtras());
-        // ********************** Tab Wikipedia**********************
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-            urlDescription = "http://" + Locale.getDefault().getLanguage() + ".wikipedia.org/wiki/" + mSeed.getSpecie();
-            bundle.putString("org.gots.seed.url", urlDescription);
-
-            fragmentWebView = Fragment.instantiate(getApplicationContext(), WebViewActivity.class.getName(), bundle);
-            fragments.add(fragmentWebView);
-            mFragmentAdapter.addTab(
-                    bar.newTab().setText(getResources().getString(R.string.seed_description_tabmenu_wikipedia)),
-                    fragmentWebView, getIntent().getExtras());
-
-        }
-        mViewPager.setAdapter(mFragmentAdapter);
 
         if (!gotsPurchase.isPremium()) {
             GotsAdvertisement ads = new GotsAdvertisement(this);
@@ -275,6 +235,50 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
 
         });
 
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        List<Fragment> fragments = new ArrayList<>();
+        Bundle bundle = new Bundle();
+        bundle.putInt(GOTS_GROWINGSEED_ID, mSeed.getSeedId());
+        bundle.putInt("org.gots.growingseed.id", mSeed.getGrowingSeedId());
+
+        // ********************** Tab actions **********************
+        if (mSeed.getGrowingSeedId() > 0) {
+            fragmentListAction = Fragment.instantiate(getApplicationContext(), ActionsListFragment.class.getName(),
+                    bundle);
+            fragments.add(fragmentListAction);
+            addTab(fragmentListAction, getResources().getString(R.string.seed_description_tabmenu_actions));
+            // mFragmentAdapter.addTab(
+            // bar.newTab().setText(getResources().getString(R.string.seed_description_tabmenu_actions)),
+            // fragmentListAction, getIntent().getExtras());
+
+        }
+        fragmentDescription = Fragment.instantiate(getApplicationContext(), SeedDescriptionFragment.class.getName(),
+                bundle);
+        fragments.add(fragmentDescription);
+        // mFragmentAdapter.addTab(
+        // bar.newTab().setText(getResources().getString(R.string.seed_description_tabmenu_detail)),
+        // fragmentDescription, getIntent().getExtras());
+        addTab(fragmentDescription, getResources().getString(R.string.seed_description_tabmenu_detail));
+        // ********************** Tab Wikipedia**********************
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            urlDescription = "http://" + Locale.getDefault().getLanguage() + ".wikipedia.org/wiki/" + mSeed.getSpecie();
+            bundle.putString("org.gots.seed.url", urlDescription);
+
+            fragmentWebView = Fragment.instantiate(getApplicationContext(), WebViewActivity.class.getName(), bundle);
+            fragments.add(fragmentWebView);
+            addTab(fragmentWebView, getResources().getString(R.string.seed_description_tabmenu_wikipedia));
+            // mFragmentAdapter.addTab(
+            // bar.newTab().setText(getResources().getString(R.string.seed_description_tabmenu_wikipedia)),
+            // fragmentWebView, getIntent().getExtras());
+
+        }
     }
 
     protected void showOverlayFragment(Fragment actionsListFragment) {
@@ -524,17 +528,6 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
         }
     }
 
-    static final class TabInfo {
-        private final Fragment fragment;
-
-        private final Bundle args;
-
-        TabInfo(Fragment f, Bundle _args) {
-            fragment = f;
-            args = _args;
-        }
-    }
-
     // public class MyPagerAdapter extends FragmentPagerAdapter {
     //
     // private final List<Fragment> fragments;
@@ -555,89 +548,6 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
     // return this.fragments.size();
     // }
     // }
-
-    /**
-     * This is a helper class that implements the management of tabs and all
-     * details of connecting a ViewPager with associated TabHost. It relies on a
-     * trick. Normally a tab host has a simple API for supplying a View or
-     * Intent that each tab will show. This is not sufficient for switching
-     * between pages. So instead we make the content part of the tab host 0dp
-     * high (it is not shown) and the TabsAdapter supplies its own dummy view to
-     * show as the tab content. It listens to changes in tabs, and takes care of
-     * switch to the correct paged in the ViewPager whenever the selected tab
-     * changes.
-     */
-    public class TabsAdapter extends FragmentPagerAdapter implements ActionBar.TabListener,
-            ViewPager.OnPageChangeListener {
-        private final Context mContext;
-
-        private final ActionBar mActionBar;
-
-        private final ViewPager mViewPager;
-
-        private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
-
-        private List<Fragment> fragments = new ArrayList<>();
-
-        public TabsAdapter(ActionBarActivity activity, ViewPager pager) {
-            super(activity.getSupportFragmentManager());
-            mContext = activity;
-            mActionBar = activity.getSupportActionBar();
-            mViewPager = pager;
-            mViewPager.setAdapter(this);
-            this.fragments = fragments;
-            mViewPager.setOnPageChangeListener(this);
-        }
-
-        public void addTab(ActionBar.Tab tab, Fragment fragment, Bundle args) {
-            TabInfo info = new TabInfo(fragment, args);
-            tab.setTag(info);
-            tab.setTabListener(this);
-            mTabs.add(info);
-            mActionBar.addTab(tab);
-            fragments.add(fragment);
-            notifyDataSetChanged();
-        }
-
-        @Override
-        public int getCount() {
-            return mTabs.size();
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            // TabInfo info = mTabs.get(position);
-            // // Fragment fragment = Fragment.instantiate(mContext, info.fragment.getName(), info.args);
-            // fragments.get(position);
-            // fragment.setArguments(bundle);
-            return fragments.get(position);
-        }
-
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        }
-
-        public void onPageSelected(int position) {
-            mActionBar.setSelectedNavigationItem(position);
-        }
-
-        public void onPageScrollStateChanged(int state) {
-        }
-
-        public void onTabSelected(Tab tab, FragmentTransaction ft) {
-            Object tag = tab.getTag();
-            for (int i = 0; i < mTabs.size(); i++) {
-                if (mTabs.get(i) == tag) {
-                    mViewPager.setCurrentItem(i);
-                }
-            }
-        }
-
-        public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-        }
-
-        public void onTabReselected(Tab tab, FragmentTransaction ft) {
-        }
-    }
 
     @Override
     protected boolean requireAsyncDataRetrieval() {
@@ -741,5 +651,10 @@ public class TabSeedActivity extends BaseGotsActivity implements OnActionSelecte
     public void onAllotmentMenuClick(View v, BaseAllotmentInterface allotmentInterface) {
         Toast.makeText(getApplicationContext(), "This feature is not currently supported in this case",
                 Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected ViewPager getViewPager() {
+        return (ViewPager) findViewById(R.id.pager);
     }
 }
