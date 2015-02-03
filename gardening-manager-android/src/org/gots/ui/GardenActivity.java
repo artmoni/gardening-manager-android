@@ -300,15 +300,19 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
         List<BaseAllotmentInterface> allotments = (List<BaseAllotmentInterface>) data;
         if (allotments.size() > 0) {
 
-            FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
-            transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
-            transactionTutorial.replace(R.id.idFragmentAllotmentList, allotmentListFragment).commit();
+            displayAllotmentsFragment();
 
         } else {
             displayEditorFragment(null);
 
         }
         super.onNuxeoDataRetrieved(data);
+    }
+
+    protected void displayAllotmentsFragment() {
+        FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
+        transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
+        transactionTutorial.replace(R.id.idFragmentAllotmentList, allotmentListFragment).commit();
     }
 
     protected void displayEditorFragment(BaseAllotmentInterface allotment) {
@@ -330,7 +334,7 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
             transactionTutorial.remove(editorFragment).commit();
             getSupportFragmentManager().popBackStack();
         }
-        allotmentListFragment.update();
+        runAsyncDataRetrieval();
     }
 
     @Override

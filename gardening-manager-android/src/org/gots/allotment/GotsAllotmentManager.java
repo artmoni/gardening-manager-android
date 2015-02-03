@@ -108,6 +108,7 @@ public class GotsAllotmentManager extends BroadcastReceiver implements Allotment
             setAllotmentProvider();
         }
         if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
+            setAllotmentProvider();
             haschanged = true;
         }
     }

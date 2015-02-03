@@ -105,6 +105,9 @@ public class GotsGardenManager extends BroadcastReceiver {
                 || NuxeoBroadcastMessages.NUXEO_SERVER_CONNECTIVITY_CHANGED.equals(intent.getAction())) {
             setGardenProvider();
         }
+        if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
+            setGardenProvider();
+        }
     }
 
     public GardenInterface addGarden(GardenInterface garden) {
@@ -113,6 +116,8 @@ public class GotsGardenManager extends BroadcastReceiver {
         // gardenProvider.setCurrentGarden(newGarden);
         // GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
         // tracker.trackEvent("Garden", "location", result.getLocality(), 0);
+        mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
+
         return newGarden;
     }
 
@@ -134,6 +139,7 @@ public class GotsGardenManager extends BroadcastReceiver {
     public void removeGarden(GardenInterface garden) {
         gardenProvider.removeGarden(garden);
         myGardens.remove(garden.getId());
+        mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
     }
 
     public void updateCurrentGarden(GardenInterface garden) {

@@ -100,11 +100,10 @@ public class ProfileMapFragment extends BaseGotsFragment implements OnMapLongCli
         super.onViewCreated(view, savedInstanceState);
     }
 
-  @Override
-public void update() {
-    // TODO Auto-generated method stub
-    
-}
+    @Override
+    public void update() {
+        runAsyncDataRetrieval();
+    }
 
     @Override
     protected boolean requireAsyncDataRetrieval() {
@@ -213,7 +212,4 @@ public void update() {
         mCallback.onProfileEdited(getCurrentGarden());
     }
 
-    public void refreshGardenMap() {
-        runAsyncDataRetrieval();
-    }
 }

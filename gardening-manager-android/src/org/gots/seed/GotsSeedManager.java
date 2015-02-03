@@ -197,6 +197,9 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
                 || NuxeoBroadcastMessages.NUXEO_SERVER_CONNECTIVITY_CHANGED.equals(intent.getAction())) {
             setSeedProvider();
         }
+        if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
+            setSeedProvider();
+        }
     }
 
     @Override

@@ -196,7 +196,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
                         protected void onPostExecute(GardenInterface result) {
                             if (result != null) {
                                 closeContentFragment();
-                                mapFragment.refreshGardenMap();
+                                mapFragment.update();
                             }
                             // sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
                             else
@@ -276,7 +276,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
     @Override
     public void onProfileCreated(GardenInterface garden) {
         closeContentFragment();
-        mapFragment.refreshGardenMap();
+        mapFragment.update();
     }
 
     protected void closeContentFragment() {

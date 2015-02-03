@@ -211,6 +211,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         registerReceiver(nuxeoManager, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
         registerReceiver(gardenManager, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
         registerReceiver(gardenManager, new IntentFilter(BroadCastMessages.GARDEN_SETTINGS_CHANGED));
+        registerReceiver(gardenManager, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
         registerReceiver(allotmentManager, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
         registerReceiver(allotmentManager, new IntentFilter(BroadCastMessages.GARDEN_SETTINGS_CHANGED));
         registerReceiver(allotmentManager, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
@@ -221,6 +222,8 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         registerReceiver(progressReceiver, new IntentFilter(BroadCastMessages.PROGRESS_FINISHED));
         registerReceiver(gardenBroadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
         registerReceiver(gardenBroadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_EVENT));
+        registerReceiver(actionseedProvider, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
+        registerReceiver(actionseedProvider, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
         super.onResume();
     }
 
@@ -353,6 +356,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         unregisterReceiver(progressReceiver);
         unregisterReceiver(gotsGrowingSeedManager);
         unregisterReceiver(gardenBroadcastReceiver);
+        unregisterReceiver(actionseedProvider);
         super.onPause();
     }
 

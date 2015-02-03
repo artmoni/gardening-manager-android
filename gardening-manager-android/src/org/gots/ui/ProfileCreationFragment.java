@@ -385,7 +385,7 @@ public class ProfileCreationFragment extends BaseGotsFragment implements Locatio
                     seed.setDateSowing(cal.getTime());
 
                     GotsActionSeedProvider actionsHelper = GotsActionSeedManager.getInstance().initIfNew(getActivity());
-                    actionsHelper.insertAction(seed, (ActionOnSeed)bakering);
+                    actionsHelper.insertAction(seed, (ActionOnSeed) bakering);
                 }
             }
         }

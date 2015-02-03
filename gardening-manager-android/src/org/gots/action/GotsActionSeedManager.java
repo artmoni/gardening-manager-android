@@ -118,6 +118,9 @@ public class GotsActionSeedManager extends BroadcastReceiver implements GotsActi
         if (NuxeoBroadcastMessages.NUXEO_SERVER_CONNECTIVITY_CHANGED.equals(intent.getAction())
                 || BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction()))
             setProvider();
+        if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())) {
+            setProvider();
+        }
     }
 
 }

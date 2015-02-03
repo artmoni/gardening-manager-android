@@ -195,6 +195,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_EVENT));
         registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.ACTION_EVENT));
         registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.ALLOTMENT_EVENT));
+        registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
 
         Account newAccount = gotsPrefs.getUserAccount();
         Bundle bundle = new Bundle();
@@ -481,7 +482,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
-        refreshGardenMenu();
+        displayGardenMenu();
         displayUserAvatar();
 
         if (LAUNCHER_ACTION.equals(getIntent().getAction())) {
@@ -607,7 +608,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         editNameDialog.show(fm, "fragment_edit_name");
     }
 
-    protected void refreshGardenMenu() {
+    protected void displayGardenMenu() {
 
         new AsyncTask<Void, Void, GardenInterface>() {
 
@@ -723,17 +724,14 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (BroadCastMessages.WEATHER_DISPLAY_EVENT.equals(intent.getAction())) {
-                // refreshWeatherWidget(intent);
-            } else if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())) {
-                refreshGardenMenu();
+            if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())) {
+                displayGardenMenu();
                 invalidateOptionsMenu();
-                // refreshWeatherWidget(intent);
             } else if (BroadCastMessages.SEED_DISPLAYLIST.equals(intent.getAction())) {
                 displayDrawerMenuCatalogCounter();
             } else if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
                 displayDrawerMenuProfileCounter();
-                refreshGardenMenu();
+                displayGardenMenu();
             } else if (BroadCastMessages.ACTION_EVENT.equals(intent.getAction())) {
                 displayDrawerMenuActionsCounter();
             } else if (BroadCastMessages.ALLOTMENT_EVENT.equals(intent.getAction())) {
@@ -809,8 +807,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                     transaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
                     transaction.replace(R.id.idFragmentWorkflow, workflowResumeFragment).commit();
-                }
-                else
+                } else
                     findViewById(R.id.idFragmentWorkflow).setVisibility(View.GONE);
             };
         }.execute();
@@ -830,10 +827,14 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         currentGarden = garden;
         displayDrawerMenu();
         displayUserAvatar();
-        refreshGardenMenu();
+        displayGardenMenu();
         displayTutorialFragment();
         displayIncredibleFragment();
         displayWeatherFragment();
+        displayDrawerMenuAllotmentCounter();
+        displayDrawerMenuActionsCounter();
+        displayDrawerMenuCatalogCounter();
+        displayDrawerMenuProfileCounter();
 
     }
 
