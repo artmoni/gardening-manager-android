@@ -435,9 +435,11 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
             } else {
                 Fragment searchFragment = (Fragment) getSupportFragmentManager().findFragmentByTag(
                         "android:switcher:" + R.id.pager + ":" + (FRAGMENT_ID_CATALOG));
-                searchFragment.getArguments().clear();
-                searchFragment.getArguments().putString(VendorListFragment.FILTER_VALUE, currentFilter);
-                searchFragment.onResume();
+                if (searchFragment instanceof VendorListFragment)
+                    ((VendorListFragment)searchFragment).setFilterValue(currentFilter);
+//                searchFragment.getArguments().clear();
+//                searchFragment.getArguments().putString(VendorListFragment.FILTER_VALUE, currentFilter);
+//                searchFragment.onResume();
                 // mTabsAdapter.setCurrentItem(FRAGMENT_ID_CATALOG);
             }
         }
