@@ -2,14 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto" >
 
-   <!--  <item
-        android:id="@+id/idSeedFilter"
-        android:icon="@drawable/ic_search"
-<<<<<<< HEAD:res/menu/menu_hut.xml
-        android:showAsAction="always"
-        android:title="@string/seed.menu.search"/> 
-        android:title="@string/seed.menu.search"
-        app:showAsAction="always"/>-->
     <item
         android:id="@+id/new_seed"
         android:icon="@drawable/bt_add_seed"

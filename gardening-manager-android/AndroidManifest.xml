@@ -54,7 +54,7 @@
         </activity>
         <activity android:name=".ui.ProfileActivity" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow">
         </activity>
-        <activity android:name=".ui.ActionActivity" android:theme="@style/Theme.Styled"/>
+        <activity android:name=".ui.ActionActivity" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow"/>
         <activity android:name=".ui.AboutActivity" android:theme="@style/Theme.Styled"/>
         <activity android:name=".ui.WebHelpActivity" android:theme="@style/Theme.Styled"/>
         <activity android:name=".ui.TabSeedActivity" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow"/>

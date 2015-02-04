@@ -99,7 +99,7 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
 
         // GardenManager gm =GardenManager.getInstance();
         setContentView(R.layout.hut);
-        final ActionBar actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
 
         actionBar.setCustomView(R.layout.actionbar_catalog);
         actionBar.setDisplayShowTitleEnabled(false);

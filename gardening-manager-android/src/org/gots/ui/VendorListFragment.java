@@ -74,9 +74,11 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
 
     public SeedListAdapter listVendorSeedAdapter;
 
-    // protected CharSequence currentFilter = "";
-
     private String filter;
+
+    private String filterValue;
+
+    private boolean force = false;
 
     private GridView gridViewCatalog;
 
@@ -138,10 +140,6 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
         }
     };
 
-    private String filterValue;
-
-    private boolean force=false;
-
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -159,16 +157,13 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
     }
 
     @Override
-    protected void onNuxeoDataRetrievalStarted() {
-        super.onNuxeoDataRetrievalStarted();
-    }
-
-    @Override
     protected Object retrieveNuxeoData() throws Exception {
 
         List<BaseSeedInterface> catalogue = new ArrayList<BaseSeedInterface>();
-        if (filter == null) {
-            catalogue = seedProvider.getVendorSeeds(false, page, pageSize);
+        if (filterValue != null)
+            catalogue = seedProvider.getVendorSeedsByName(filterValue);
+        else if (filter == null) {
+            catalogue = seedProvider.getVendorSeeds(force, page, pageSize);
             if (catalogue.size() == 0)
                 catalogue = seedProvider.getVendorSeeds(true, page, pageSize);
         } else if (filter.equals(FILTER_STOCK))
@@ -187,13 +182,10 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
             else
                 catalogue = parrotProvider.getVendorSeedsByName(filterValue.toString());
 
-        } else if (filterValue != null) {
-            catalogue = seedProvider.getVendorSeedsByName(filterValue);
-
         }
-        
+
         if (force)
-            force=false;
+            force = false;
 
         return catalogue;
     }
@@ -220,11 +212,6 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if (firstVisibleItem + visibleItemCount >= totalItemCount && firstVisibleItem != 0) {
             if (isReady()) {
@@ -237,7 +224,7 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
         page = page + paddingPage;
         pageSize = pageSize + paddingPage;
         Log.d(TAG, "page=" + page + " - pageSize=" + pageSize);
-        force=true;
+        force = true;
         runAsyncDataRetrieval();
     }
 

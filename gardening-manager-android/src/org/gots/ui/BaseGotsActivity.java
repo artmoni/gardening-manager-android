@@ -273,7 +273,6 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         switch (item.getItemId()) {
         case R.id.refresh_seed:
             onRefresh(requireRefreshSyncAuthority());
-            Log.d(TAG, getClass().getName());
             break;
 
         default:
