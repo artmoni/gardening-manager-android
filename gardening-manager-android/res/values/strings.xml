@@ -177,9 +177,9 @@
     <string name="tutorial.title">Discover</string>
     <string name="tutorial.a.title">Geolocalize my garden</string>
     <string name="tutorial.a.description">keep weather history and grow with the moon</string>
-    <string name="tutorial.b.title">Access a large catalogue of seeds</string>
-    <string name="tutorial.b.description">search by filter: my favorite plants, what to sow this month and create new records</string>
-    <string name="tutorial.c.title">Organize my garden</string>
+    <string name="tutorial.b.title">Access a large plant catalogue</string>
+    <string name="tutorial.b.description">Search plants, add new one, share with the community, manage your stock</string>
+    <string name="tutorial.c.title">Organize my allotments</string>
     <string name="tutorial.c.description">Define allotments, sow plants and follow cultures evolution</string>
     <string name="tutorial.d.title">Schedule the actions to do</string>
     <string name="tutorial.d.description">be notified on time and keep history</string>
