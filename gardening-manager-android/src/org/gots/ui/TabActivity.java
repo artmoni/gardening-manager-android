@@ -54,7 +54,6 @@ public abstract class TabActivity extends BaseGotsActivity {
         mViewPager = getViewPager();
 
         mFragmentAdapter = new TabsAdapter(this, mViewPager);
-        mViewPager.setAdapter(mFragmentAdapter);
         super.onPostCreate(savedInstanceState);
     }
 
@@ -63,8 +62,8 @@ public abstract class TabActivity extends BaseGotsActivity {
     protected int getSelectedTab() {
         return mViewPager.getCurrentItem();
     }
-    
-    protected Fragment getCurrentFragment(){
+
+    protected Fragment getCurrentFragment() {
         return mFragmentAdapter.getItem(mViewPager.getCurrentItem());
     }
 
@@ -103,8 +102,8 @@ public abstract class TabActivity extends BaseGotsActivity {
             tab.setTag(info);
             tab.setTabListener(this);
             mTabs.add(info);
-            mActionBar.addTab(tab);
             fragments.add(fragment);
+            mActionBar.addTab(tab);
             notifyDataSetChanged();
         }
 

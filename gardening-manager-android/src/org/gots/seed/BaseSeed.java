@@ -51,15 +51,15 @@ public abstract class BaseSeed implements Serializable, BaseSeedInterface {
 
     private int dateSowingMax = -1;
 
-    private int durationMin;
+    private int durationMin = 0;
 
-    private int durationMax;
+    private int durationMax = 0;
 
     private String urlDescription;
 
     private String bare_code;
 
-    private int nb_sachet;
+    private int nb_sachet = 0;
 
     private String language;
 

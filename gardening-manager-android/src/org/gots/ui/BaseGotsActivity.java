@@ -261,6 +261,8 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_common, menu);
         this.menu = menu;
+        if (requireRefreshSyncAuthority()==null)
+            menu.findItem(R.id.refresh_seed).setVisible(false);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -270,7 +272,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
 
         switch (item.getItemId()) {
         case R.id.refresh_seed:
-            onRefresh(null);
+            onRefresh(requireRefreshSyncAuthority());
             Log.d(TAG, getClass().getName());
             break;
 
@@ -307,7 +309,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
 
     }
 
-    protected void onRefresh(String AUTHORITY) {
+    private void onRefresh(String AUTHORITY) {
         if (AUTHORITY == null || "".equals(AUTHORITY)) {
             Log.d(TAG, "You call onRefresh without Content Resolver Authority");
             return;
@@ -318,6 +320,10 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         ContentResolver.requestSync(userAccount, AUTHORITY, bundle);
+    }
+
+    protected String requireRefreshSyncAuthority() {
+        return null;
     }
 
     @Override
@@ -347,6 +353,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
     public NuxeoContext getNuxeoContext() {
         return super.getNuxeoContext();
     }
+
     @Override
     protected void onPause() {
         unregisterReceiver(nuxeoManager);

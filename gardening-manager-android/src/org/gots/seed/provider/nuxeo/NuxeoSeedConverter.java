@@ -36,7 +36,8 @@ public class NuxeoSeedConverter {
             seed.setUUID(document.getId());
             return seed;
         } catch (Exception e) {
-            Log.e(TAG, "Your document schema is not correct", e);
+            Log.e(TAG, "Your document schema is not correct (" + document.getTitle() + " - " + document.getId() + ")",
+                    e);
             return null;
         }
     }
@@ -57,7 +58,6 @@ public class NuxeoSeedConverter {
         doc.set("vendorseed:description_diseases", seed.getDescriptionDiseases());
         doc.set("vendorseed:description_growth", seed.getDescriptionGrowth());
         doc.set("vendorseed:description_harvest", seed.getDescriptionHarvest());
-
 
         return doc;
     }

@@ -229,10 +229,10 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
         }
     }
 
-    @Override
-    protected void onRefresh(String AUTHORITY) {
-        super.onRefresh(GardenContentProvider.AUTHORITY);
-    }
+ @Override
+protected String requireRefreshSyncAuthority() {
+    return GardenContentProvider.AUTHORITY;
+}
 
     @Override
     public void onProfileSelected(GardenInterface garden) {

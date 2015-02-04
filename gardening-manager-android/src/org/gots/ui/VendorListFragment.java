@@ -140,6 +140,8 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
 
     private String filterValue;
 
+    private boolean force=false;
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -189,6 +191,9 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
             catalogue = seedProvider.getVendorSeedsByName(filterValue);
 
         }
+        
+        if (force)
+            force=false;
 
         return catalogue;
     }
@@ -232,6 +237,7 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
         page = page + paddingPage;
         pageSize = pageSize + paddingPage;
         Log.d(TAG, "page=" + page + " - pageSize=" + pageSize);
+        force=true;
         runAsyncDataRetrieval();
     }
 

@@ -82,6 +82,14 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
 
     private static final short FRAGMENT_ID_CATALOG = 0;
 
+    String currentFilter = "";
+
+    boolean clearFilter = true;
+
+    private Fragment listAllotmentfragment;
+
+    private BaseSeedInterface currentSeed;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,18 +116,13 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
             LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
             layout.addView(ads.getAdsLayout());
         }
-
     }
 
-    String currentFilter = "";
-
-    boolean clearFilter = true;
-
-    private Fragment listAllotmentfragment;
-
-    private BaseSeedInterface currentSeed;
-
-    private Tab lastTabSelected;
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        buildMyTabHost();
+    }
 
     private void displaySearchBox() {
         final EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
@@ -310,7 +313,6 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
             }.execute();
 
         }
-        // buildMyTabHost();
 
     }
 
@@ -371,7 +373,6 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
     @Override
     protected void onResume() {
         super.onResume();
-        buildMyTabHost();
 
     }
 
@@ -436,10 +437,10 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
                 Fragment searchFragment = (Fragment) getSupportFragmentManager().findFragmentByTag(
                         "android:switcher:" + R.id.pager + ":" + (FRAGMENT_ID_CATALOG));
                 if (searchFragment instanceof VendorListFragment)
-                    ((VendorListFragment)searchFragment).setFilterValue(currentFilter);
-//                searchFragment.getArguments().clear();
-//                searchFragment.getArguments().putString(VendorListFragment.FILTER_VALUE, currentFilter);
-//                searchFragment.onResume();
+                    ((VendorListFragment) searchFragment).setFilterValue(currentFilter);
+                // searchFragment.getArguments().clear();
+                // searchFragment.getArguments().putString(VendorListFragment.FILTER_VALUE, currentFilter);
+                // searchFragment.onResume();
                 // mTabsAdapter.setCurrentItem(FRAGMENT_ID_CATALOG);
             }
         }
@@ -574,8 +575,8 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
     // }
 
     @Override
-    protected void onRefresh(String AUTHORITY) {
-        super.onRefresh(SeedsContentProvider.AUTHORITY);
+    protected String requireRefreshSyncAuthority() {
+        return SeedsContentProvider.AUTHORITY;
     }
 
     @Override

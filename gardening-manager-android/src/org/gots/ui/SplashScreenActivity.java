@@ -57,8 +57,8 @@ public class SplashScreenActivity extends BaseGotsActivity {
 
     @Override
     protected void onActivityResult(int arg0, int arg1, Intent arg2) {
-        if (arg1 == 1)
-            onRefresh(null);
+//        if (arg1 == 1)
+//            onRefresh(null);
         // if (arg1 == 2)
         // startActivity(new Intent(getApplicationContext(), MainActivity.class));
         super.onActivityResult(arg0, arg1, arg2);

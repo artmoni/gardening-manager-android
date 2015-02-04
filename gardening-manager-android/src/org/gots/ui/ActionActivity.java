@@ -135,7 +135,7 @@ public class ActionActivity extends BaseGotsActivity {
     }
 
     @Override
-    protected void onRefresh(String AUTHORITY) {
-        super.onRefresh(ActionsContentProvider.AUTHORITY);
+    protected String requireRefreshSyncAuthority() {
+        return ActionsContentProvider.AUTHORITY;
     }
 }

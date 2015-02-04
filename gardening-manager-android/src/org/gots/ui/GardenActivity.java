@@ -83,10 +83,10 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
         editorFragment = new AllotmentEditorFragment();
     }
 
-    @Override
-    protected void onRefresh(String AUTHORITY) {
-        super.onRefresh(AllotmentContentProvider.AUTHORITY);
-    }
+   @Override
+protected String requireRefreshSyncAuthority() {
+    return AllotmentContentProvider.AUTHORITY;
+}
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

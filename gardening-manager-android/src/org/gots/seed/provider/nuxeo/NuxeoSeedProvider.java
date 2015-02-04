@@ -271,7 +271,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             remoteSeed = NuxeoSeedConverter.convert(doc);
             remoteSeed = super.createSeed(remoteSeed, null);
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            Log.e(TAG, "" + e.getMessage());
         }
 
         return remoteSeed;
