@@ -391,6 +391,21 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
             browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
             startActivity(browserIntent);
             return true;
+        case R.id.action_stock_add:
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    seedManager.addToStock(mSeed, getCurrentGarden());
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void result) {
+                    runAsyncDataRetrieval();
+                    super.onPostExecute(result);
+                }
+            }.execute();
+            return true;
 
             // case R.id.sow:
             // Intent intent = new Intent(this, GardenActivity.class);

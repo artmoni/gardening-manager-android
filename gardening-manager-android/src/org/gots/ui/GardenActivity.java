@@ -171,6 +171,9 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
                                 return null;
                             }
 
+                            protected void onPostExecute(Void result) {
+                                allotmentListFragment.update();
+                            };
                         }.execute();
                         dialog.dismiss();
                     }

@@ -94,6 +94,12 @@ public class AllotmentListFragment extends AbstractListFragment {
             public void onAllotmentMenuClick(View v, BaseAllotmentInterface allotmentInterface) {
                 mCallback.onAllotmentMenuClick(v, allotmentInterface);
             }
+
+            @Override
+            public void onAllotmentClick(View v, BaseAllotmentInterface allotmentInterface) {
+                mCallback.onAllotmentClick(allotmentInterface);
+
+            }
         });
         super.onViewCreated(v, savedInstanceState);
     }

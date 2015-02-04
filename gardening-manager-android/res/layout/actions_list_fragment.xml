@@ -9,7 +9,7 @@
 
     <ScrollView
         android:id="@+id/scrollviewActions"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
@@ -22,5 +22,23 @@
             android:orientation="vertical" >
         </LinearLayout>
     </ScrollView>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/scrollviewActions"
+        android:layout_alignParentLeft="true"
+        android:text="Simple click to do the action now" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_alignRight="@+id/textView1"
+        android:layout_below="@+id/textView1"
+        android:layout_marginTop="10dp"
+        android:text="Long click to plan the action in one week" />
 
 </RelativeLayout>

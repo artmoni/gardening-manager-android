@@ -18,6 +18,12 @@
         app:showAsAction="always"
         android:title="@string/action.photo"/>
     <item
+        android:id="@+id/action_stock_add"
+        android:icon="@drawable/action_buy"
+        android:title="Add to stock"
+        app:showAsAction="always"/>
+
+    <item
         android:id="@+id/help"
         android:icon="@drawable/help"
         app:showAsAction="never"

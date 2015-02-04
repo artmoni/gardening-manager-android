@@ -60,6 +60,8 @@ public class ListAllotmentAdapter extends BaseAdapter {
 
         public void onAllotmentMenuClick(View view, BaseAllotmentInterface allotmentInterface);
 
+        public void onAllotmentClick(View v, BaseAllotmentInterface item);
+
     }
 
     public ListAllotmentAdapter(FragmentActivity mContext, List<BaseAllotmentInterface> allotments, Bundle bundle) {
@@ -163,6 +165,13 @@ public class ListAllotmentAdapter extends BaseAdapter {
             // LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
             // LayoutParams.WRAP_CONTENT));
         }
+        holder.seedGridView.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                clickListener.onAllotmentClick(v, getItem(position));
+            }
+        });
         holder.seedGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
