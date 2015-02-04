@@ -107,6 +107,8 @@ public class ListAllotmentAdapter extends BaseAdapter {
         public BaseAllotmentInterface allotment;
 
         public LinearLayout menu;
+
+        public LinearLayout allotmentBox;
     }
 
     @SuppressWarnings("deprecation")
@@ -127,6 +129,7 @@ public class ListAllotmentAdapter extends BaseAdapter {
             holder.titlebar = (LinearLayout) ll.findViewById(R.id.idAllotmentTitlebar);
             holder.allotmentName = (TextView) ll.findViewById(R.id.textAllotmentName);
             holder.menu = (LinearLayout) ll.findViewById(R.id.idAllotmentMenu);
+            holder.allotmentBox = (LinearLayout) ll.findViewById(R.id.idAllotmentBoxLayout);
 
             holder.allotment = getItem(position);
             ll.setTag(holder);
@@ -165,8 +168,8 @@ public class ListAllotmentAdapter extends BaseAdapter {
             // LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
             // LayoutParams.WRAP_CONTENT));
         }
-        holder.seedGridView.setOnClickListener(new View.OnClickListener() {
-            
+        holder.allotmentBox.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 clickListener.onAllotmentClick(v, getItem(position));
@@ -210,12 +213,12 @@ public class ListAllotmentAdapter extends BaseAdapter {
         // widget.setTag(position);
 
         // if (isSelectable) {
-//        holder.menu.setBackgroundResource(R.anim.rotate_alerte);
+        // holder.menu.setBackgroundResource(R.anim.rotate_alerte);
         // Animation myFadeInAnimation =
         // AnimationUtils.loadAnimation(mContext, R.anim.rotate_alerte);
         // menu.startAnimation(myFadeInAnimation);
-//        AnimationDrawable frameAnimation = (AnimationDrawable) holder.menu.getBackground();
-//        frameAnimation.start();
+        // AnimationDrawable frameAnimation = (AnimationDrawable) holder.menu.getBackground();
+        // frameAnimation.start();
         holder.menu.setOnClickListener(new View.OnClickListener() {
 
             @Override

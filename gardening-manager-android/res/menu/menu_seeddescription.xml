@@ -5,37 +5,40 @@
     <item
         android:id="@+id/download"
         android:icon="@drawable/action_download"
-        app:showAsAction="always"
-        android:title="@string/action.download"/>
-   <!--  <item
+        android:title="@string/action.download"
+        app:showAsAction="always"/>
+    <!--
+         <item
         android:id="@+id/planning"
         android:icon="@drawable/action_schedule"
         app:showAsAction="always"
-        android:title="@string/action.planning"/> -->
+        android:title="@string/action.planning"/>
+    -->
     <item
         android:id="@+id/photo"
         android:icon="@drawable/action_photo"
-        app:showAsAction="always"
-        android:title="@string/action.photo"/>
+        android:title="@string/action.photo"
+        app:showAsAction="always"/>
     <item
         android:id="@+id/action_stock_add"
         android:icon="@drawable/action_buy"
         android:title="Add to stock"
         app:showAsAction="always"/>
-
     <item
         android:id="@+id/help"
         android:icon="@drawable/help"
-        app:showAsAction="never"
-        android:title="@string/menu.help"/>
+        android:title="@string/menu.help"
+        app:showAsAction="never"/>
     <item
         android:id="@+id/delete"
         android:icon="@drawable/action_delete"
-        app:showAsAction="never"
-        android:title="@string/action.delete"/>
-<item
+        android:title="@string/action.delete"
+        app:showAsAction="never"/>
+    <item
         android:id="@+id/workflow"
         android:icon="@drawable/ic_workflow_validation"
-        app:showAsAction="always"
-        android:title="workflow"/>
+        android:title="workflow"
+        android:visible="false"
+        app:showAsAction="always"/>
+
 </menu>

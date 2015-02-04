@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.gots.R;
 import org.gots.action.ActionFactory;
+import org.gots.action.ActionOnSeed;
 import org.gots.action.BaseAction;
 import org.gots.action.GotsActionManager;
 import org.gots.action.view.ActionWidget;
@@ -21,7 +22,6 @@ import android.widget.ScrollView;
 public class ActionsChoiceFragment extends BaseGotsFragment {
 
     public interface OnActionSelectedListener {
-
 
         public void onActionClick(BaseAction actionInterface);
 
@@ -87,6 +87,8 @@ public class ActionsChoiceFragment extends BaseGotsFragment {
     protected void onNuxeoDataRetrieved(Object data) {
         List<BaseAction> actionInterfaces = (List<BaseAction>) data;
         for (final BaseAction baseActionInterface : actionInterfaces) {
+            if (!(baseActionInterface instanceof ActionOnSeed))
+                continue;
             ActionWidget actionWidget = new ActionWidget(getActivity(), baseActionInterface);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -115,5 +117,4 @@ public class ActionsChoiceFragment extends BaseGotsFragment {
         }
         super.onNuxeoDataRetrieved(data);
     }
-
 }
