@@ -26,6 +26,7 @@ import org.gots.provider.ActionsContentProvider;
 import org.gots.provider.AllotmentContentProvider;
 import org.gots.provider.GardenContentProvider;
 import org.gots.provider.SeedsContentProvider;
+import org.gots.provider.SensorContentProvider;
 import org.gots.provider.WeatherContentProvider;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.ui.BaseGotsActivity.GardenListener;
@@ -197,20 +198,23 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.ALLOTMENT_EVENT));
         registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
 
-        Account newAccount = gotsPrefs.getUserAccount();
+        Account userAccount = gotsPrefs.getUserAccount();
         Bundle bundle = new Bundle();
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
 
-        ContentResolver.setSyncAutomatically(newAccount, SeedsContentProvider.AUTHORITY, true);
-        ContentResolver.requestSync(newAccount, SeedsContentProvider.AUTHORITY, bundle);
-        ContentResolver.setSyncAutomatically(newAccount, GardenContentProvider.AUTHORITY, true);
-        ContentResolver.requestSync(newAccount, GardenContentProvider.AUTHORITY, bundle);
-        ContentResolver.setSyncAutomatically(newAccount, ActionsContentProvider.AUTHORITY, true);
-        ContentResolver.requestSync(newAccount, ActionsContentProvider.AUTHORITY, bundle);
-        ContentResolver.setSyncAutomatically(newAccount, AllotmentContentProvider.AUTHORITY, true);
-        ContentResolver.requestSync(newAccount, AllotmentContentProvider.AUTHORITY, bundle);
-
+        ContentResolver.setSyncAutomatically(userAccount, SeedsContentProvider.AUTHORITY, true);
+        ContentResolver.requestSync(userAccount, SeedsContentProvider.AUTHORITY, bundle);
+        ContentResolver.setSyncAutomatically(userAccount, GardenContentProvider.AUTHORITY, true);
+        ContentResolver.requestSync(userAccount, GardenContentProvider.AUTHORITY, bundle);
+        ContentResolver.setSyncAutomatically(userAccount, ActionsContentProvider.AUTHORITY, true);
+        ContentResolver.requestSync(userAccount, ActionsContentProvider.AUTHORITY, bundle);
+        ContentResolver.setSyncAutomatically(userAccount, AllotmentContentProvider.AUTHORITY, true);
+        ContentResolver.requestSync(userAccount, AllotmentContentProvider.AUTHORITY, bundle);
+        if (gotsPrefs.getParrotToken() != null) {
+            ContentResolver.setSyncAutomatically(userAccount, SensorContentProvider.AUTHORITY, true);
+            ContentResolver.requestSync(userAccount, SensorContentProvider.AUTHORITY, bundle);
+        }
         GotsPurchaseItem gotsPurchase = new GotsPurchaseItem(this);
         if (!gotsPurchase.isPremium()) {
             GotsAdvertisement ads = new GotsAdvertisement(this);
@@ -587,11 +591,6 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         transactionCatalogue.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
         transactionCatalogue.replace(R.id.idFragmentCatalog, catalogueResumeFragment).commit();
 
-        Fragment incredibleResumeFragment = new IncredibleResumeFragment();
-        FragmentTransaction incredibleCatalogue = fragmentManager.beginTransaction();
-        incredibleCatalogue.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
-        incredibleCatalogue.replace(R.id.idFragmentIncredible, incredibleResumeFragment).commit();
-
         // update selected item and title, then close the drawer
         if (position <= navMenuTitles.length) {
             mDrawerList.setItemChecked(position, true);
@@ -852,13 +851,16 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
     }
 
     private void displayIncredibleFragment() {
-        if (currentGarden == null)
-            return;
 
-        if (currentGarden.isIncredibleEdible() == false)
+        if (currentGarden == null || currentGarden.isIncredibleEdible() == false)
             findViewById(R.id.idFragmentIncredible).setVisibility(View.GONE);
-        else
+        else {
             findViewById(R.id.idFragmentIncredible).setVisibility(View.VISIBLE);
+            Fragment incredibleResumeFragment = new IncredibleResumeFragment();
+            FragmentTransaction incredibleCatalogue = getSupportFragmentManager().beginTransaction();
+            incredibleCatalogue.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
+            incredibleCatalogue.replace(R.id.idFragmentIncredible, incredibleResumeFragment).commit();
+        }
     }
 
     @Override

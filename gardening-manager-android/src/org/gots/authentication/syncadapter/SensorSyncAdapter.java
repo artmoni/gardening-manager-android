@@ -77,7 +77,11 @@ public class SensorSyncAdapter extends GotsSyncAdapter {
             ParrotSamplesProvider parrotSamplesProvider = new ParrotSamplesProvider(getContext(),
                     parrotLocation.getLocation_identifier());
 
-            List<ParrotSampleFertilizer> fertilizers = parrotSamplesProvider.getSamplesFertilizer(null, null);
+            Calendar dateTo = Calendar.getInstance();
+            Calendar datefrom = Calendar.getInstance();
+            datefrom.add(Calendar.DAY_OF_YEAR, -7);
+            List<ParrotSampleFertilizer> fertilizers = parrotSamplesProvider.getSamplesFertilizer(datefrom.getTime(),
+                    dateTo.getTime());
             for (ParrotSampleFertilizer parrotSampleFertilizer : fertilizers) {
                 localSensorProvider.insertSampleFertilizer(parrotSampleFertilizer);
             }
@@ -87,6 +91,8 @@ public class SensorSyncAdapter extends GotsSyncAdapter {
             Date lastSyncDate = null;
             if (lastSync != null)
                 lastSyncDate = lastSync.getCapture_ts();
+            if (datefrom.after(lastSyncDate))
+                lastSyncDate = datefrom.getTime();
             List<ParrotSampleTemperature> temperatures = parrotSamplesProvider.getSamplesTemperature(lastSyncDate,
                     Calendar.getInstance().getTime());
             for (ParrotSampleTemperature parrotSampleTemperature : temperatures) {

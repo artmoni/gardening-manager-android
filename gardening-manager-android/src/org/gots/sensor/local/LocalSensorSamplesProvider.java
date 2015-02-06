@@ -29,18 +29,26 @@ public class LocalSensorSamplesProvider implements GotsSensorSamplesProvider {
 
     public LocalSensorSamplesProvider(Context context, String locationId) {
         dbHelper = new SensorSQLiteHelper(context, locationId);
-    }
-
-    public void open() throws SQLException {
         database = dbHelper.getWritableDatabase();
     }
+
+    @Override
+    protected void finalize() throws Throwable {
+        if (database != null && database.isOpen())
+            dbHelper.close();
+        super.finalize();
+    }
+
+    // public void open() throws SQLException {
+    // database = dbHelper.getWritableDatabase();
+    // }
 
     public void close() {
         dbHelper.close();
     }
 
     public List<ParrotSampleTemperature> getSamplesTemperature(Date from, Date to) {
-        open();
+
         List<ParrotSampleTemperature> temperatures = new ArrayList<ParrotSampleTemperature>();
         String fromStr = new String();
         String toStr = new String();
@@ -70,7 +78,7 @@ public class LocalSensorSamplesProvider implements GotsSensorSamplesProvider {
     }
 
     public List<ParrotSampleFertilizer> getSamplesFertilizer(Date from, Date to) {
-        open();
+        // open();
         List<ParrotSampleFertilizer> fertilizers = new ArrayList<ParrotSampleFertilizer>();
         String fromStr = new String();
         String toStr = new String();
@@ -95,7 +103,7 @@ public class LocalSensorSamplesProvider implements GotsSensorSamplesProvider {
         }
 
         cursor.close();
-        close();
+        // close();
         return fertilizers;
     }
 
@@ -114,7 +122,7 @@ public class LocalSensorSamplesProvider implements GotsSensorSamplesProvider {
     @Override
     public void insertSampleTemperature(ParrotSampleTemperature parrotSampleTemperature) {
         ContentValues values = temperatureToValues(parrotSampleTemperature);
-        open();
+        // open();
         Cursor cursor = database.query(SensorSQLiteHelper.TABLE_TEMPERATURE, null,
                 SensorSQLiteHelper.TEMPERATURE_capture_ts + "=" + parrotSampleTemperature.getCapture_ts().getTime(),
                 null, null, null, null);
@@ -125,13 +133,13 @@ public class LocalSensorSamplesProvider implements GotsSensorSamplesProvider {
             Log.i(TAG, parrotSampleTemperature + " is already inserted in database");
         }
         cursor.close();
-        close();
+        // close();
     }
 
     @Override
     public void insertSampleFertilizer(ParrotSampleFertilizer parrotSampleFertilizer) {
         ContentValues values = fertilizerToValues(parrotSampleFertilizer);
-        open();
+        // open();
         Cursor cursor = database.query(SensorSQLiteHelper.TABLE_FERTILIZER, null,
                 SensorSQLiteHelper.FERTILIZER_REMOTE_ID + "=" + parrotSampleFertilizer.getId(), null, null, null, null);
         if (cursor.getCount() == 0) {
@@ -141,8 +149,9 @@ public class LocalSensorSamplesProvider implements GotsSensorSamplesProvider {
             Log.i(TAG, parrotSampleFertilizer + " is already inserted in database");
         }
         cursor.close();
-        close(); // Cursor cursor = database.query(MySQLiteHelper.TABLE_COMMENTS, allColumns, MySQLiteHelper.COLUMN_ID +
-                 // " = "
+        // close();
+        // Cursor cursor = database.query(MySQLiteHelper.TABLE_COMMENTS, allColumns, MySQLiteHelper.COLUMN_ID +
+        // " = "
         // + insertId, null, null, null, null);
         // cursor.moveToFirst();
         // Comment newComment = cursorToComment(cursor);
@@ -193,7 +202,7 @@ public class LocalSensorSamplesProvider implements GotsSensorSamplesProvider {
     }
 
     public ParrotSampleTemperature getLastSampleTemperature() {
-        open();
+        // open();
         ParrotSampleTemperature temperature = null;
         String query = "SELECT * from " + SensorSQLiteHelper.TABLE_TEMPERATURE + " order by "
                 + SensorSQLiteHelper.TEMPERATURE_ID + " DESC limit 1";
@@ -203,7 +212,7 @@ public class LocalSensorSamplesProvider implements GotsSensorSamplesProvider {
         }
 
         cursor.close();
-        close();
+        // close();
         return temperature;
     }
 }
