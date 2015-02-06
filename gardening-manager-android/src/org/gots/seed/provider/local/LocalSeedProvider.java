@@ -199,20 +199,21 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
     }
 
     @Override
-    public void addToStock(BaseSeedInterface vendorSeed, GardenInterface garden) {
+    public BaseSeedInterface addToStock(BaseSeedInterface vendorSeed, GardenInterface garden) {
         vendorSeed.setNbSachet(vendorSeed.getNbSachet() + 1);
-        updateSeed(vendorSeed);
+        vendorSeed = updateSeed(vendorSeed);
+        return vendorSeed;
     }
 
     @Override
-    public void removeToStock(BaseSeedInterface vendorSeed, GardenInterface garden) {
+    public BaseSeedInterface removeToStock(BaseSeedInterface vendorSeed, GardenInterface garden) {
         vendorSeed.setNbSachet(vendorSeed.getNbSachet() - 1);
-        updateSeed(vendorSeed);
-
+        vendorSeed = updateSeed(vendorSeed);
+        return vendorSeed;
     }
 
     @Override
-    public List<BaseSeedInterface> getMyStock(GardenInterface garden) {
+    public List<BaseSeedInterface> getMyStock(GardenInterface garden, boolean force) {
         ArrayList<BaseSeedInterface> mySeeds = new ArrayList<BaseSeedInterface>();
         BaseSeedInterface searchedSeed = new GrowingSeedImpl();
         Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_NBSACHET + ">0",
@@ -311,6 +312,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
         return bsi;
     }
 
+    @Override
     public BaseSeedInterface getSeedByUUID(String uuid) {
         Cursor cursor;
         BaseSeedInterface searchedSeed = null;
@@ -327,9 +329,6 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
         return searchedSeed;
     }
 
-    @Override
-    public void force_refresh(boolean refresh) {
-    }
 
     @Override
     public List<BaseSeedInterface> getVendorSeedsByName(String currentFilter) {

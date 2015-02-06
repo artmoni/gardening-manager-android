@@ -22,11 +22,11 @@ public interface GotsSeedProvider {
 
     public void deleteSeed(BaseSeedInterface currentSeed);
 
-    public void addToStock(BaseSeedInterface vendorSeed, GardenInterface garden);
+    public BaseSeedInterface addToStock(BaseSeedInterface vendorSeed, GardenInterface garden);
 
-    public void removeToStock(BaseSeedInterface vendorSeed, GardenInterface garden);
+    public BaseSeedInterface removeToStock(BaseSeedInterface vendorSeed, GardenInterface garden);
 
-    public List<BaseSeedInterface> getMyStock(GardenInterface garden);
+    public List<BaseSeedInterface> getMyStock(GardenInterface garden, boolean force);
 
     public abstract List<BaseSeedInterface> getNewSeeds();
 
@@ -34,7 +34,6 @@ public interface GotsSeedProvider {
 
     public void getFamilyById(int id);
 
-    public abstract void force_refresh(boolean refresh);
 
     public abstract BaseSeedInterface getSeedByBarCode(String barecode);
 
@@ -51,4 +50,6 @@ public interface GotsSeedProvider {
     public abstract  String getFamilyBySpecie(String specie);
     
     public abstract SpeciesDocument getSpecies(boolean force) throws NotImplementedException;
+
+    public abstract BaseSeedInterface getSeedByUUID(String uuid);
 }

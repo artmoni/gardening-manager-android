@@ -11,8 +11,10 @@ import org.gots.R;
 import org.gots.bean.TaskInfo;
 import org.gots.nuxeo.NuxeoWorkflowProvider;
 import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.GotsSeedManager;
 import org.gots.seed.adapter.SeedListAdapter;
 import org.gots.seed.adapter.VendorSeedListAdapter;
+import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.nuxeo.NuxeoSeedProvider;
 import org.gots.ui.TabSeedActivity;
 import org.json.JSONArray;
@@ -86,11 +88,12 @@ public class WorkflowResumeFragment extends BaseGotsFragment implements OnItemCl
             Gson gson = new Gson();
             for (int i = 0; i < tasksEntries.length(); i++) {
                 TaskInfo task = gson.fromJson(tasksEntries.getString(i), TaskInfo.class);
-                NuxeoSeedProvider nuxeoSeedProvider = new NuxeoSeedProvider(getActivity());
-                BaseSeedInterface seed = nuxeoSeedProvider.getSeedByUUID(task.getDocref());
-                if (seed != null)
+                GotsSeedProvider gotsSeedProvider = GotsSeedManager.getInstance().initIfNew(getActivity());
+                BaseSeedInterface seed = gotsSeedProvider.getSeedByUUID(task.getDocref());
+                if (seed != null){
                     seeds.add(seed);
-                map.put(seed.getSeedId(), task);
+                    map.put(seed.getSeedId(), task);
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();

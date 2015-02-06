@@ -32,7 +32,6 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
     protected LayoutInflater inflater;
 
     public SeedListAdapter(Context context, List<BaseSeedInterface> vendorSeeds) {
-        // super(context);
         this.vendorSeeds = vendorSeeds;
         vendorSeedsFilter = new ArrayList<BaseSeedInterface>();
         vendorSeedsFilter.addAll(vendorSeeds);
@@ -48,14 +47,7 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
     }
 
     public class Holder {
-        // public SeedWidgetLong seedWidgetLong;
         public SeedWidgetTile seedWidgetTile;
-
-        // public ActionWidget actionWidget;
-
-        // public LinearLayout actionBox;
-
-        // public ImageView imageSelectedState;
     }
 
     @Override
@@ -65,41 +57,15 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.list_seed, null);
             holder = new Holder();
-            // holder.actionWidget = (ActionWidget) convertView.findViewById(R.id.IdSeedAction);
             holder.seedWidgetTile = (SeedWidgetTile) convertView.findViewById(R.id.idSeedWidgetLong);
-            // holder.actionBox = (LinearLayout) convertView.findViewById(R.id.IdActionsLayout);
-            // holder.imageSelectedState = (ImageView) convertView.findViewById(R.id.idSeedImageSelected);
             convertView.setTag(holder);
         } else
             holder = (Holder) convertView.getTag();
 
-        // holder.actionBox.removeAllViews();
-
         holder.seedWidgetTile.setSeed(getItem(position));
         holder.seedWidgetTile.setTag(holder);
-        // holder.seedWidgetTile.setOnClickListener(new View.OnClickListener() {
-        //
-        // @Override
-        // public void onClick(View v) {
-        // Holder holder = (Holder) v.getTag();
-        // if (holder.actionBox == null)
-        // return;
-        // // if (holder.actionBox.getVisibility() == View.VISIBLE) {
-        // // holder.actionBox.setVisibility(View.GONE);
-        // // holder.imageSelectedState.setSelected(false);
-        // // v.setSelected(false);
-        // // } else {
-        // // holder.actionBox.setVisibility(View.VISIBLE);
-        // // holder.imageSelectedState.setSelected(true);
-        // // v.setSelected(true);
-        // //
-        // //
-        // // }
-        // }
-        // });
         return convertView;
     }
-
 
     @Override
     public Filter getFilter() {
@@ -188,7 +154,5 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
             }
         }
     }
-    
-  
 
 }

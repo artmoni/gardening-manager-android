@@ -190,7 +190,7 @@ public class SeedWidgetLong extends LinearLayout {
                         }
                         mSeed.setLikeStatus(result);
                         displayLikeStatus(result);
-                        mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
+                       
 
                     };
                 }.execute();

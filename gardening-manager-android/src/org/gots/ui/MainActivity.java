@@ -864,6 +864,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
     @Override
     public void onTutorialFinished() {
         gotsPrefs.set(GotsPreferences.ORG_GOTS_TUTORIAL_FINISHED, true);
+        displayTutorialFragment();
     }
 
     @Override
@@ -876,4 +877,5 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
     public void onMenuClick(View v) {
         startActivity(new Intent(this, ActionActivity.class));
     }
+
 }

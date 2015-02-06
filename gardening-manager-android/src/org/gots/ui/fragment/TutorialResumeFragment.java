@@ -102,7 +102,7 @@ public class TutorialResumeFragment extends BaseGotsFragment implements OnClickL
             tutorialLevel = COMPLETE_LOCATION;
         else if (GotsAllotmentManager.getInstance().initIfNew(getActivity()).getMyAllotments(false).size() == 0)
             tutorialLevel = COMPLETE_ALLOTMENT;
-        else if (GotsSeedManager.getInstance().initIfNew(getActivity()).getMyStock(garden).size() == 0)
+        else if (GotsSeedManager.getInstance().initIfNew(getActivity()).getMyStock(garden, false).size() == 0)
             tutorialLevel = COMPLETE_SEED;
         else if (!gotsPrefs.isConnectedToServer())
             tutorialLevel = COMPLETE_SOCIAL;

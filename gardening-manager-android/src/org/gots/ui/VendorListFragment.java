@@ -136,7 +136,8 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
             if (BROADCAST_FILTER.equals(intent.getAction())) {
                 filterValue = intent.getExtras().getString(FILTER_VALUE);
             }
-            runAsyncDataRetrieval();
+            if (isReady())
+                runAsyncDataRetrieval();
         }
     };
 
@@ -148,6 +149,7 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
     @Override
     public void onResume() {
         mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BROADCAST_FILTER));
+        mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.SEED_DISPLAYLIST));
         super.onResume();
     }
 
@@ -167,7 +169,7 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
             if (catalogue.size() == 0)
                 catalogue = seedProvider.getVendorSeeds(true, page, pageSize);
         } else if (filter.equals(FILTER_STOCK))
-            catalogue = seedProvider.getMyStock(gardenManager.getCurrentGarden());
+            catalogue = seedProvider.getMyStock(gardenManager.getCurrentGarden(), force);
 
         else if (filter.equals(FILTER_FAVORITES))
             catalogue = seedProvider.getMyFavorites();
@@ -200,7 +202,6 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
         List<BaseSeedInterface> vendorSeeds = (List<BaseSeedInterface>) data;
         listVendorSeedAdapter.setSeeds(vendorSeeds);
         listVendorSeedAdapter.notifyDataSetChanged();
-        mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
         super.onNuxeoDataRetrieved(data);
     }
 

@@ -391,7 +391,6 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
                     }
 
                     protected void onPostExecute(Void result) {
-                        getApplicationContext().sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
                         NewSeedActivity.this.finish();
 
                     };
@@ -411,7 +410,6 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
                     }
 
                     protected void onPostExecute(Void result) {
-                        getApplicationContext().sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
                         NewSeedActivity.this.finish();
 
                     };

@@ -168,78 +168,11 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
                 EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(filter.getWindowToken(), 0);
-
-                // EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
-                // InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                // imm.hideSoftInputFromWindow(filter.getWindowToken(), 0);
             }
 
         });
 
     }
-
-    @Override
-    protected void onPostResume() {
-        // final EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
-        // InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        // imm.hideSoftInputFromWindow(filter.getWindowToken(), 0);
-        // imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-        super.onPostResume();
-    }
-
-    // protected void displaySpinnerFilter() {
-    // Spinner searchFilter = (Spinner) findViewById(R.id.idSpinnerSearch);
-    // List<String> list = new ArrayList<String>();
-    // list.add(getResources().getString(R.string.hut_menu_filter));
-    // list.add(getResources().getString(R.string.hut_menu_vendorseeds));
-    // list.add(getResources().getString(R.string.hut_menu_myseeds));
-    // list.add(getResources().getString(R.string.hut_menu_favorites));
-    // list.add(getResources().getString(R.string.hut_menu_thismonth));
-    // ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
-    // searchFilter.setAdapter(dataAdapter);
-    // searchFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-    // @Override
-    // public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-    // if (position == 0) {
-    //
-    // }
-    // Bundle args = new Bundle();
-    // switch (position) {
-    // case 1:
-    // mTabsAdapter.addTab(
-    // getSupportActionBar().newTab().setTag("event_list").setText(
-    // getString(R.string.hut_menu_vendorseeds)), VendorListActivity.class, null);
-    // break;
-    // case 2:
-    // mTabsAdapter.addTab(
-    // getSupportActionBar().newTab().setTag("event_list").setText(
-    // getString(R.string.hut_menu_myseeds)), MySeedsListActivity.class, null);
-    // break;
-    // case 3:
-    // args.putBoolean(VendorListActivity.FILTER_FAVORITES, true);
-    // mTabsAdapter.addTab(
-    // getSupportActionBar().newTab().setTag("event_list").setText(
-    // getString(R.string.hut_menu_favorites)), VendorListActivity.class, args);
-    // break;
-    // case 4:
-    // args.putBoolean(VendorListActivity.FILTER_THISMONTH, true);
-    // mTabsAdapter.addTab(
-    // getSupportActionBar().newTab().setTag("event_list").setText(
-    // getString(R.string.hut_menu_thismonth)), VendorListActivity.class, args);
-    // break;
-    //
-    // default:
-    // break;
-    // }
-    // }
-    //
-    // @Override
-    // public void onNothingSelected(AdapterView<?> parent) {
-    // // TODO Auto-generated method stub
-    //
-    // }
-    // });
-    // }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         final IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
@@ -259,28 +192,9 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
 
                 protected void onPostExecute(BaseSeedInterface scanSeed) {
                     if (scanSeed != null) {
-                        // seedProv�ider.addToStock(scanSeed, gardenProvider.getCurrentGarden());
-                        // updateVendorSeeds();
-                        // listVendorSeedAdapter.notifyDataSetChanged();
                         currentFilter = scanSeed.getBareCode();
                         Toast.makeText(getApplicationContext(), scanSeed.getSpecie() + " Added to stock",
                                 Toast.LENGTH_LONG).show();
-
-                        // Bundle args = new Bundle();
-                        // args.putString(VendorListActivity.FILTER_DATA, scanSeed.getBareCode());
-                        // args.putBoolean(VendorListActivity.FILTER_BARCODE, true);
-
-                        // ListFragment fragment = (ListFragment) getSupportFragmentManager().findFragmentByTag(
-                        // "android:switcher:" + R.id.pager + ":" + 1);
-                        // if (fragment == null
-                        // || (fragment.getArguments() != null && !fragment.getArguments().getBoolean(
-                        // VendorListActivity.FILTER_BARCODE))) {
-                        // mTabsAdapter.addTab(getSupportActionBar().newTab().setTag("result").setText("Result"),
-                        // VendorListActivity.class, args);
-                        // mTabsAdapter.setCurrentItem(mTabsAdapter.getCount() - 1);
-                        // }else
-                        // {
-                        // }
 
                     } else {
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HutActivity.this);
@@ -323,58 +237,26 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
 
         bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        // tabHost = getTabHost(); // The activity TabHost
-
-        // mViewPager = (ViewPager) findViewById(R.id.pager);
-        // mTabsAdapter = new TabsAdapter(this, mViewPager);
         bar.removeAllTabs();
         // // ********************** Tab description **********************
         Bundle args;
         args = new Bundle();
-        // mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds)),
-        // VendorListFragment.class, args); // FRAGMENT_ID_CATALOG=0 -> see above
         addTab(new VendorListFragment(), getString(R.string.hut_menu_vendorseeds));
         args = new Bundle();
         if (currentAllotment != -1) {
             args.putBoolean(VendorListFragment.IS_SELECTABLE, true);
         }
-        // args.putBoolean(VendorListFragment.FILTER_PARROT, true);
         if (gotsPrefs.getParrotToken() != null)
-            // mTabsAdapter.addTab(
-            // bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_vendorseeds_plant)),
-            // VendorListFragment.class, args);
             addTab(new VendorListFragment(VendorListFragment.FILTER_PARROT), getString(R.string.hut_menu_vendorseeds));
 
-        // mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText("species"),
-        // FamilyListActivity.class, args);
-
-        // mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
-        // MySeedsListActivity.class, null);
-        // args = new Bundle();
-        // args.putBoolean(VendorListFragment.FILTER_STOCK, true);
-        // mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_myseeds)),
-        // VendorListFragment.class, args);
         addTab(new VendorListFragment(VendorListFragment.FILTER_STOCK), getString(R.string.hut_menu_myseeds));
 
         if (gotsPrefs.isConnectedToServer()) {
-            // args = new Bundle();
-            // args.putBoolean(VendorListFragment.FILTER_FAVORITES, true);
-            // mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_favorites)),
-            // VendorListFragment.class, args);
             addTab(new VendorListFragment(VendorListFragment.FILTER_FAVORITES), getString(R.string.hut_menu_favorites));
         }
-        // args = new Bundle();
-        // args.putBoolean(VendorListFragment.FILTER_THISMONTH, true);
-        // mTabsAdapter.addTab(bar.newTab().setTag("event_list").setText(getString(R.string.hut_menu_thismonth)),
-        // VendorListFragment.class, args);
         addTab(new VendorListFragment(VendorListFragment.FILTER_THISMONTH), getString(R.string.hut_menu_thismonth));
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -398,7 +280,6 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
         case R.id.new_seed_barcode:
             IntentIntegrator integrator = new IntentIntegrator(this);
             integrator.initiateScan();
-            // tracker.trackEvent("Catalog", "menu", "scanBarCode", 0);
             return true;
         case R.id.help:
             Intent browserIntent = new Intent(this, WebHelpActivity.class);
@@ -438,141 +319,9 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
                         "android:switcher:" + R.id.pager + ":" + (FRAGMENT_ID_CATALOG));
                 if (searchFragment instanceof VendorListFragment)
                     ((VendorListFragment) searchFragment).setFilterValue(currentFilter);
-                // searchFragment.getArguments().clear();
-                // searchFragment.getArguments().putString(VendorListFragment.FILTER_VALUE, currentFilter);
-                // searchFragment.onResume();
-                // mTabsAdapter.setCurrentItem(FRAGMENT_ID_CATALOG);
             }
         }
     }
-
-    // static final class TabInfo {
-    // private final Class<?> clss;
-    //
-    // private final Bundle args;
-    //
-    // TabInfo(Class<?> _class, Bundle _args) {
-    // clss = _class;
-    // args = _args;
-    // }
-    // }
-
-    // /**
-    // * This is a helper class that implements the management of tabs and all
-    // * details of connecting a ViewPager with associated TabHost. It relies on a
-    // * trick. Normally a tab host has a simple API for supplying a View or
-    // * Intent that each tab will show. This is not sufficient for switching
-    // * between pages. So instead we make the content part of the tab host 0dp
-    // * high (it is not shown) and the TabsAdapter supplies its own dummy view to
-    // * show as the tab content. It listens to changes in tabs, and takes care of
-    // * switch to the correct paged in the ViewPager whenever the selected tab
-    // * changes.
-    // */
-    // public class TabsAdapter extends TabActivity implements ActionBar.TabListener,
-    // ViewPager.OnPageChangeListener {
-    // private final Context mContext;
-    //
-    // private final ActionBar mActionBar;
-    //
-    // private final ViewPager mViewPager;
-    //
-    // private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
-    //
-    // SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
-    //
-    // public TabsAdapter(ActionBarActivity activity, ViewPager pager) {
-    // super(activity.getSupportFragmentManager());
-    // mContext = activity;
-    // mActionBar = activity.getSupportActionBar();
-    // mViewPager = pager;
-    // mViewPager.setAdapter(this);
-    // mViewPager.setOnPageChangeListener(this);
-    // }
-    //
-    // public void addTab(ActionBar.Tab tab, Class<?> clss, Bundle args) {
-    // TabInfo info = new TabInfo(clss, args);
-    // tab.setTag(info);
-    // tab.setTabListener(this);
-    // mTabs.add(info);
-    // mActionBar.addTab(tab);
-    // notifyDataSetChanged();
-    // }
-    //
-    // public void removeTablisp(int index) {
-    // mTabs.remove(index);
-    // mActionBar.removeTab(mActionBar.getTabAt(index));
-    //
-    // notifyDataSetChanged();
-    // }
-    //
-    // @Override
-    // public int getCount() {
-    // return mTabs.size();
-    // }
-    //
-    // @Override
-    // public Fragment getItem(int position) {
-    // TabInfo info = mTabs.get(position);
-    //
-    // Fragment fragment = Fragment.instantiate(mContext, info.clss.getName(), info.args);
-    // if (info.args != null)
-    // fragment.setArguments(info.args);
-    // registeredFragments.put(position, fragment);
-    //
-    // return fragment;
-    // }
-    //
-    // @Override
-    // public void destroyItem(ViewGroup container, int position, Object object) {
-    // registeredFragments.remove(position);
-    // super.destroyItem(container, position, object);
-    // }
-    //
-    // public Fragment getRegisteredFragment(int position) {
-    // return registeredFragments.get(position);
-    // }
-    //
-    // public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-    // }
-    //
-    // public void onPageSelected(int position) {
-    // mActionBar.setSelectedNavigationItem(position);
-    //
-    // // Fragment fragment = (Fragment) getSupportFragmentManager().findFragmentByTag(
-    // // "android:switcher:" + R.id.pager + ":" + position);
-    // // if (fragment != null && fragment.getAdapter() != null)
-    // // ((BaseAdapter) fragment.getAdapter()).notifyDataSetChanged();
-    //
-    // }
-    //
-    // public void onPageScrollStateChanged(int state) {
-    // }
-    //
-    // public void onTabSelected(Tab tab, FragmentTransaction ft) {
-    // Object tag = tab.getTag();
-    // for (int i = 0; i < mTabs.size(); i++) {
-    // if (mTabs.get(i) == tag) {
-    // mViewPager.setCurrentItem(i);
-    //
-    // }
-    // }
-    // }
-    //
-    // public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-    // }
-    //
-    // public void onTabReselected(Tab tab, FragmentTransaction ft) {
-    // }
-    //
-    // public int getCurrentItem() {
-    // return mViewPager.getCurrentItem();
-    // }
-    //
-    // public void setCurrentItem(int itemId) {
-    // // mViewPager.setCurrentItem(itemId);
-    // mActionBar.setSelectedNavigationItem(itemId);
-    // }
-    // }
 
     @Override
     protected String requireRefreshSyncAuthority() {
@@ -589,14 +338,6 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
 
     @Override
     public void onSeedLongClick(VendorListFragment fragment, BaseSeedInterface seed) {
-        // listAllotmentfragment = new AllotmentListFragment();
-        //
-        // FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
-        // transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
-        // transactionTutorial.addToBackStack(null);
-        // transactionTutorial.replace(R.id.contentFragment, listAllotmentfragment).commit();
-        // findViewById(R.id.contentFragment).setVisibility(View.VISIBLE);
-        // currentSeed = seed;
         startSupportActionMode(new MyCallBack(seed));
     }
 
@@ -687,13 +428,6 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
             case R.id.action_stock_reduce:
                 actionDone = new ReduceQuantityAction(getApplicationContext());
                 break;
-            // case R.id.action_sow:
-            // Intent intent = new Intent(mContext, GardenActivity.class);
-            // intent.putExtra(GardenActivity.SELECT_ALLOTMENT, true);
-            // intent.putExtra(GardenActivity.VENDOR_SEED_ID, currentSeed.getSeedId());
-            // mContext.startActivity(intent);
-            //
-            // break;
             default:
                 break;
             }

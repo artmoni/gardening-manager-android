@@ -106,7 +106,7 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     @Override
     public List<BaseSeedInterface> getVendorSeeds(boolean force, int page, int pageSize) {
-        if (!force && allSeeds.size() > 0 || mContext == null)
+        if (!force && allSeeds.size() > 10 || mContext == null)
             return allSeeds;
 
         if (force && !nuxeoManager.getNuxeoClient().isOffline()) {
@@ -140,54 +140,36 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     @Override
     public BaseSeedInterface createSeed(BaseSeedInterface seed, File file) {
-
-        return mSeedProvider.createSeed(seed, file);
+        final BaseSeedInterface createSeed = mSeedProvider.createSeed(seed, file);
+        mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
+        return createSeed;
     }
 
     @Override
     public BaseSeedInterface updateSeed(BaseSeedInterface newSeed) {
-        return mSeedProvider.updateSeed(newSeed);
+        final BaseSeedInterface updateSeed = mSeedProvider.updateSeed(newSeed);
+        mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
+        return updateSeed;
     }
 
     @Override
-    public void addToStock(final BaseSeedInterface vendorSeed, final GardenInterface garden) {
-        new AsyncTask<GardenInterface, Integer, Void>() {
-            @Override
-            protected Void doInBackground(GardenInterface... params) {
-                mSeedProvider.addToStock(vendorSeed, garden);
-                return null;
-            }
-
-            protected void onPostExecute(Void result) {
-                force_refresh(true);
-                mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
-
-            };
-        }.execute(garden);
-
+    public BaseSeedInterface addToStock(BaseSeedInterface vendorSeed, final GardenInterface garden) {
+        vendorSeed = mSeedProvider.addToStock(vendorSeed, garden);
+        mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
+        return vendorSeed;
     }
 
     @Override
-    public void removeToStock(final BaseSeedInterface vendorSeed, final GardenInterface garden) {
-        new AsyncTask<GardenInterface, Integer, Void>() {
-            @Override
-            protected Void doInBackground(GardenInterface... params) {
-                mSeedProvider.removeToStock(vendorSeed, garden);
-                return null;
-            }
-
-            protected void onPostExecute(Void result) {
-                force_refresh(true);
-                mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
-            };
-        }.execute(garden);
-
+    public BaseSeedInterface removeToStock(BaseSeedInterface vendorSeed, final GardenInterface garden) {
+        vendorSeed = mSeedProvider.removeToStock(vendorSeed, garden);
+        mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
+        return vendorSeed;
     }
 
     @Override
-    public List<BaseSeedInterface> getMyStock(GardenInterface garden) {
+    public List<BaseSeedInterface> getMyStock(GardenInterface garden, boolean force) {
         // if (stockChanged || myStock == null)
-        myStock = mSeedProvider.getMyStock(garden);
+        myStock = mSeedProvider.getMyStock(garden, force);
         return myStock;
     }
 
@@ -204,26 +186,13 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     @Override
     public void deleteSeed(BaseSeedInterface vendorSeed) {
-        new AsyncTask<BaseSeedInterface, Integer, Void>() {
-            @Override
-            protected Void doInBackground(BaseSeedInterface... params) {
-                mSeedProvider.deleteSeed(params[0]);
-                return null;
-            }
-
-            protected void onPostExecute(Void result) {
-                mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
-            };
-        }.execute(vendorSeed);
+        mSeedProvider.deleteSeed(vendorSeed);
+        mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
     }
 
     @Override
     public List<BaseSeedInterface> getNewSeeds() {
         return newSeeds;
-    }
-
-    public void force_refresh(boolean refresh) {
-        mSeedProvider.force_refresh(refresh);
     }
 
     @Override
@@ -237,7 +206,9 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     }
 
     public LikeStatus like(BaseSeedInterface mSeed, boolean cancelLike) throws GotsException {
-        return mSeedProvider.like(mSeed, cancelLike);
+        final LikeStatus like = mSeedProvider.like(mSeed, cancelLike);
+        mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
+        return like;
     }
 
     @Override
@@ -264,5 +235,22 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     @Override
     public SpeciesDocument getSpecies(boolean force) throws NotImplementedException {
         return mSeedProvider.getSpecies(force);
+    }
+
+    @Override
+    public BaseSeedInterface getSeedByUUID(String uuid) {
+        BaseSeedInterface searchedSeed = null;
+        for (BaseSeedInterface seed : allSeeds) {
+            if (uuid != null && uuid.equals(seed.getUUID())) {
+                searchedSeed = seed;
+                return seed;
+            }
+
+        }
+
+        searchedSeed = mSeedProvider.getSeedByUUID(uuid);
+        if (searchedSeed != null)
+            allSeeds.add(searchedSeed);
+        return searchedSeed;
     }
 }

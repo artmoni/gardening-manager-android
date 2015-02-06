@@ -22,9 +22,6 @@ import android.view.ViewGroup;
 
 public class VendorSeedListAdapter extends SeedListAdapter {
 
-//    private BuyingAction buying;
-//
-//    private SowingAction sowing;
 
     public VendorSeedListAdapter(Context context, List<BaseSeedInterface> vendorSeeds) {
         super(context, vendorSeeds);
@@ -34,57 +31,8 @@ public class VendorSeedListAdapter extends SeedListAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         View vi = super.getView(position, convertView, parent);
-        Holder holder = (Holder) vi.getTag();
 
         final BaseSeedInterface currentSeed = getItem(position);
-
-//        buying = new BuyingAction(mContext);
-//        buying.setState(ActionState.NORMAL);
-//        ActionWidget actionWidget = new ActionWidget(mContext, buying);
-//        actionWidget.setAction(buying);
-//        actionWidget.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                new AsyncTask<Void, Integer, Void>() {
-//                    @Override
-//                    protected Void doInBackground(Void... params) {
-//                        SeedActionInterface action = buying;
-//                        action.execute((GrowingSeedInterface) currentSeed);
-//                        return null;
-//                    }
-//
-//                    @Override
-//                    protected void onPostExecute(Void result) {
-//                        // notifyDataSetChanged();
-//                        mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
-//
-//                        super.onPostExecute(result);
-//                    }
-//                }.execute();
-//
-//                // Toast.makeText(getContext(),
-//                // action.getName() + " " + currentSeed.getSpecie() + " " +
-//                // currentSeed.getVariety(), 30).show();
-//            }
-//        });
-//        holder.actionBox.addView(actionWidget);
-
-        // actionWidget.setOnActionItemClickListener(new
-        // ActionWidget.OnActionItemClickListener() {
-        //
-        // @Override
-        // public void onItemClick(ActionWidget source, BaseActionInterface
-        // baseActionInterface) {
-        // SeedActionInterface action = (SeedActionInterface)
-        // baseActionInterface;
-        // action.execute((GrowingSeedInterface) currentSeed);
-        // Toast.makeText(getContext(),
-        // action.getName() + " " + currentSeed.getSpecie() + " " +
-        // currentSeed.getVariety(), 30).show();
-        // notifyDataSetChanged();
-        // }
-        // });
 
         Calendar sowTime = Calendar.getInstance();
         if (sowTime.get(Calendar.MONTH) > currentSeed.getDateSowingMin())
@@ -94,17 +42,6 @@ public class VendorSeedListAdapter extends SeedListAdapter {
         Calendar harvestTime = new GregorianCalendar();
         harvestTime.setTime(sowTime.getTime());
         harvestTime.add(Calendar.DAY_OF_MONTH, currentSeed.getDurationMin());
-
-//        holder.seedWidgetTile.setOnLongClickListener(new View.OnLongClickListener() {
-//
-//            @Override
-//            public boolean onLongClick(View v) {
-//                Intent i = new Intent(mContext, NewSeedActivity.class);
-//                i.putExtra("org.gots.seedid", currentSeed.getSeedId());
-//                mContext.startActivity(i);
-//                return false;
-//            }
-//        });
 
         return vi;
 
