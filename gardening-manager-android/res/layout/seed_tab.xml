@@ -119,10 +119,10 @@
         android:id="@+id/imageViewOverlyAction"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="23dp"
         android:layout_marginRight="23dp"
+        android:layout_above="@+id/idAdsTop"
         android:background="@drawable/action_selector"
         android:padding="5dp"
         android:src="@drawable/action_detail" />
