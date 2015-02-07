@@ -37,7 +37,7 @@ public interface GotsSeedProvider {
 
     public abstract BaseSeedInterface getSeedByBarCode(String barecode);
 
-    public List<BaseSeedInterface> getVendorSeedsByName(String currentFilter);
+    public List<BaseSeedInterface> getVendorSeedsByName(String currentFilter, boolean force);
 
     public abstract LikeStatus like(BaseSeedInterface mSeed, boolean cancelLike) throws GotsException;
 

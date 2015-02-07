@@ -56,7 +56,7 @@ public class ParrotSeedProvider extends LocalSeedProvider {
     }
 
     @Override
-    public List<BaseSeedInterface> getVendorSeedsByName(String currentFilter) {
+    public List<BaseSeedInterface> getVendorSeedsByName(String currentFilter, boolean force) {
         getToken();
         List<BaseSeedInterface> parrotPlants = new ArrayList<BaseSeedInterface>();
         List<String> plantsId = getVendorSeeds(currentFilter);

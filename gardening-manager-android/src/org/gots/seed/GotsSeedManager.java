@@ -201,8 +201,8 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     }
 
     @Override
-    public List<BaseSeedInterface> getVendorSeedsByName(String currentFilter) {
-        return mSeedProvider.getVendorSeedsByName(currentFilter);
+    public List<BaseSeedInterface> getVendorSeedsByName(String currentFilter, boolean force) {
+        return mSeedProvider.getVendorSeedsByName(currentFilter, false);
     }
 
     public LikeStatus like(BaseSeedInterface mSeed, boolean cancelLike) throws GotsException {

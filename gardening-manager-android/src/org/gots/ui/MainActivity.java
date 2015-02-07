@@ -867,6 +867,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
     public void onTutorialFinished() {
         gotsPrefs.set(GotsPreferences.ORG_GOTS_TUTORIAL_FINISHED, true);
         displayTutorialFragment();
+        Toast.makeText(getApplicationContext(), getResources().getString(R.string.tutorial_finished), Toast.LENGTH_LONG).show();
     }
 
     @Override

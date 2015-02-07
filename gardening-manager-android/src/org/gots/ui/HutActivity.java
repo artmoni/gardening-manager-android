@@ -11,6 +11,7 @@
 package org.gots.ui;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.gots.R;
 import org.gots.action.ActionOnSeed;
@@ -20,10 +21,12 @@ import org.gots.action.bean.SowingAction;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.garden.provider.nuxeo.NuxeoGardenProvider;
 import org.gots.provider.SeedsContentProvider;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.SeedUtil;
+import org.gots.seed.provider.nuxeo.NuxeoSeedProvider;
 import org.gots.ui.AllotmentListFragment.OnAllotmentSelected;
 import org.gots.ui.VendorListFragment.OnSeedSelected;
 
@@ -257,7 +260,6 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
         addTab(new VendorListFragment(VendorListFragment.FILTER_THISMONTH), getString(R.string.hut_menu_thismonth));
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -292,35 +294,50 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
     }
 
     protected void performSearch(final EditText filter) {
-        if (clearFilter) {
-            currentFilter = "";
-            filter.setText(currentFilter);
-            clearFilter = false;
-            findViewById(R.id.clearSearchFilter).setBackground(getResources().getDrawable(R.drawable.ic_search));
-        } else {
-            currentFilter = filter.getText().toString();
-            clearFilter = true;
-            findViewById(R.id.clearSearchFilter).setBackground(
-                    getResources().getDrawable(R.drawable.ic_menu_close_clear_cancel));
-        }
-
-        Fragment fragment = (Fragment) getSupportFragmentManager().findFragmentByTag(
-                "android:switcher:" + R.id.pager + ":" + getSelectedTab());
-        if (fragment.getArguments() != null && fragment.getArguments().getBoolean(VendorListFragment.FILTER_PARROT)) {
-            Intent filterIntent = new Intent(VendorListFragment.BROADCAST_FILTER);
-            filterIntent.putExtra(VendorListFragment.FILTER_VALUE, currentFilter);
-            sendBroadcast(filterIntent);
-        } else if (fragment instanceof VendorListFragment) {
-            if (false) {
-                Filterable fragFilter = (Filterable) ((VendorListFragment) fragment).getListAdapter();
-                fragFilter.getFilter().filter(currentFilter.toString());
-            } else {
-                Fragment searchFragment = (Fragment) getSupportFragmentManager().findFragmentByTag(
-                        "android:switcher:" + R.id.pager + ":" + (FRAGMENT_ID_CATALOG));
-                if (searchFragment instanceof VendorListFragment)
-                    ((VendorListFragment) searchFragment).setFilterValue(currentFilter);
+        new AsyncTask<Void, Void, List<BaseSeedInterface>>() {
+            @Override
+            protected List<BaseSeedInterface> doInBackground(Void... params) {
+                NuxeoSeedProvider nuxeoSeedProvider = new NuxeoSeedProvider(getApplicationContext());
+                return nuxeoSeedProvider.getVendorSeedsByName(filter.getText().toString(), true);
             }
-        }
+
+            protected void onPostExecute(List<BaseSeedInterface> result) {
+                if (result != null) {
+                    if (clearFilter) {
+                        currentFilter = "";
+                        filter.setText(currentFilter);
+                        clearFilter = false;
+                        findViewById(R.id.clearSearchFilter).setBackground(
+                                getResources().getDrawable(R.drawable.ic_search));
+                    } else {
+                        currentFilter = filter.getText().toString();
+                        clearFilter = true;
+                        findViewById(R.id.clearSearchFilter).setBackground(
+                                getResources().getDrawable(R.drawable.ic_menu_close_clear_cancel));
+                    }
+
+                    Fragment fragment = (Fragment) getSupportFragmentManager().findFragmentByTag(
+                            "android:switcher:" + R.id.pager + ":" + getSelectedTab());
+                    if (fragment.getArguments() != null
+                            && fragment.getArguments().getBoolean(VendorListFragment.FILTER_PARROT)) {
+                        Intent filterIntent = new Intent(VendorListFragment.BROADCAST_FILTER);
+                        filterIntent.putExtra(VendorListFragment.FILTER_VALUE, currentFilter);
+                        sendBroadcast(filterIntent);
+                    } else if (fragment instanceof VendorListFragment) {
+                        if (false) {
+                            Filterable fragFilter = (Filterable) ((VendorListFragment) fragment).getListAdapter();
+                            fragFilter.getFilter().filter(currentFilter.toString());
+                        } else {
+                            Fragment searchFragment = (Fragment) getSupportFragmentManager().findFragmentByTag(
+                                    "android:switcher:" + R.id.pager + ":" + (FRAGMENT_ID_CATALOG));
+                            if (searchFragment instanceof VendorListFragment)
+                                ((VendorListFragment) searchFragment).setFilterValue(currentFilter);
+                        }
+                    }
+                }
+            };
+        }.execute();
+
     }
 
     @Override

@@ -369,12 +369,12 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
             if (!"project".equals(mSeed.getState()))
                 menu.findItem(R.id.workflow).setVisible(false);
         } else {
-            if ("project".equals(mSeed.getState()))
-                menu.findItem(R.id.workflow).setVisible(true);
-            else
-                menu.findItem(R.id.workflow).setVisible(false);
+//            if ("project".equals(mSeed.getState()))
+//                menu.findItem(R.id.workflow).setVisible(true);
+//            else
 
         }
+        menu.findItem(R.id.workflow).setVisible(false);
         return true;
     }
 

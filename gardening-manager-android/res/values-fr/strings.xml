@@ -189,6 +189,7 @@
     <string name="tutorial.e.description">Des jardins originaux, des créations et des idées à partager</string>
     <string name="tutorial.f.title">Je surveille mes plantes</string>
     <string name="tutorial.f.description">Parrot Flower Power est une sonde compatible qui vous permet de suivre plus précisément: température, engrais, ensoleillement et hydrométrie</string>
+    <string name="tutorial.finished">Bravo! vous avez terminé le tutorial, prenez plaisir à jardiner et partagez votre expérience.</string>
     <string name="dashboard.sensor.name">Sondes</string>
     <string name="skip">Passer</string>
     <string name="more">Plus</string>

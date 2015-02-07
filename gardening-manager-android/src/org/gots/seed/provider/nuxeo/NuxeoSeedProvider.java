@@ -52,7 +52,6 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
     protected String myApp;
 
-
     // protected LazyUpdatableDocumentsList documentsList;
 
     public NuxeoSeedProvider(Context context) {
@@ -252,7 +251,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         try {
             Document doc = service.getDocument(new IdRef(uuid), true);
             remoteSeed = NuxeoSeedConverter.convert(doc);
-//            remoteSeed = super.createSeed(remoteSeed, null);
+            // remoteSeed = super.createSeed(remoteSeed, null);
         } catch (Exception e) {
             remoteSeed = super.getSeedByUUID(uuid);
             Log.e(TAG, "" + e.getMessage());
@@ -562,7 +561,6 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
     }
 
-
     public LikeStatus like(BaseSeedInterface vendorSeed, boolean cancel) {
         Blob likeStatus;
         LikeStatus likes = new LikeStatus();
@@ -662,4 +660,51 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         return seedsBySowingMonth;
     }
 
+    @Override
+    public List<BaseSeedInterface> getVendorSeedsByName(String currentFilter, boolean force) {
+        List<BaseSeedInterface> remoteVendorSeeds = new ArrayList<BaseSeedInterface>();
+        List<BaseSeedInterface> myVendorSeeds = new ArrayList<BaseSeedInterface>();
+
+        try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
+
+            byte cacheParam = CacheBehavior.STORE;
+            boolean refresh = force;
+            if (refresh) {
+                cacheParam = (byte) (cacheParam | CacheBehavior.FORCE_REFRESH);
+                refresh = false;
+            }
+            Documents docs = service.query("SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState != \"deleted\""
+                    + queryDefaultFilter+ "AND vendorseed:variety STARTSWITH "+currentFilter, null, new String[] { "dc:modified DESC" }, "*", 0, 25, cacheParam);
+            for (Document document : docs) {
+                BaseSeedInterface seed = NuxeoSeedConverter.convert(document);
+                Blob likeStatus = service.getLikeStatus(document);
+                LikeStatus likes = NuxeoSeedConverter.getLikeStatus(likeStatus);
+                if (seed != null) {
+                    seed.setLikeStatus(likes);
+                    remoteVendorSeeds.add(seed);
+                    Log.i(TAG, seed.toString());
+                } else {
+                    Log.w(TAG, "Nuxeo Seed conversion problem " + document.getTitle() + "- " + document.getId());
+                }
+
+                // download custom image
+                File imageFile = new File(gotsPrefs.getGotsExternalFileDir(),
+                        seed.getVariety().toLowerCase().replaceAll("\\s", ""));
+                if (imageFile != null && !imageFile.exists()) {
+                    FileBlob image = service.getBlob(document);
+                    if (image != null && image.getLength() > 0)
+                        FileUtilities.copy(image.getFile(), imageFile);
+                }
+            }
+            // getNuxeoClient().shutdown();
+            myVendorSeeds = synchronize(super.getVendorSeedsByName(currentFilter,force), remoteVendorSeeds);
+            // myVendorSeeds = remoteVendorSeeds;
+        } catch (Exception e) {
+            Log.e(TAG, "getVendorSeedsByName " + e.getMessage(), e);
+            myVendorSeeds = super.getVendorSeedsByName(currentFilter, force);
+        }
+        return myVendorSeeds;
+    }
 }

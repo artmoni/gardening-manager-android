@@ -331,7 +331,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
 
 
     @Override
-    public List<BaseSeedInterface> getVendorSeedsByName(String currentFilter) {
+    public List<BaseSeedInterface> getVendorSeedsByName(String currentFilter, boolean force) {
         ArrayList<BaseSeedInterface> vendorSeeds = new ArrayList<BaseSeedInterface>();
         try {
             BaseSeedInterface searchedSeed = new GrowingSeedImpl();

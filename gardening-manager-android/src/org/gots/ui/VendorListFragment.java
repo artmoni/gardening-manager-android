@@ -169,7 +169,7 @@ getActivity().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
 
         List<BaseSeedInterface> catalogue = new ArrayList<BaseSeedInterface>();
         if (filterValue != null)
-            catalogue = seedProvider.getVendorSeedsByName(filterValue);
+            catalogue = seedProvider.getVendorSeedsByName(filterValue, false);
         else if (filter == null) {
             catalogue = seedProvider.getVendorSeeds(force, page, pageSize);
             if (catalogue.size() == 0)
@@ -188,7 +188,7 @@ getActivity().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
             if (filterValue == null)
                 catalogue.addAll(parrotProvider.getVendorSeeds(true, page, pageSize));
             else
-                catalogue = parrotProvider.getVendorSeedsByName(filterValue.toString());
+                catalogue = parrotProvider.getVendorSeedsByName(filterValue.toString(), false);
 
         }
 
