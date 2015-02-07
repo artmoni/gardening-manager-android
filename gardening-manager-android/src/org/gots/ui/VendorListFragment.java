@@ -159,6 +159,12 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
     }
 
     @Override
+    protected void onNuxeoDataRetrievalStarted() {
+getActivity().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
+        
+        super.onNuxeoDataRetrievalStarted();
+    }
+    @Override
     protected Object retrieveNuxeoData() throws Exception {
 
         List<BaseSeedInterface> catalogue = new ArrayList<BaseSeedInterface>();
@@ -202,6 +208,8 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
         List<BaseSeedInterface> vendorSeeds = (List<BaseSeedInterface>) data;
         listVendorSeedAdapter.setSeeds(vendorSeeds);
         listVendorSeedAdapter.notifyDataSetChanged();
+        getActivity().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
+
         super.onNuxeoDataRetrieved(data);
     }
 
