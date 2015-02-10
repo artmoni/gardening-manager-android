@@ -1,6 +1,8 @@
 package org.gots.ui.fragment;
 
 import org.gots.R;
+import org.gots.bean.RouteNode;
+import org.gots.bean.TaskButton;
 import org.gots.nuxeo.NuxeoWorkflowProvider;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
@@ -8,14 +10,17 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
-public class WorkflowTaskFragment extends BaseGotsFragment implements OnClickListener {
+public class WorkflowTaskFragment extends BaseGotsFragment {
     public static final String GOTS_TASKWORKFLOW_ID = "org.gots.task.id";
 
     public static final String GOTS_DOC_ID = "org.gots.doc.id";
@@ -28,9 +33,15 @@ public class WorkflowTaskFragment extends BaseGotsFragment implements OnClickLis
 
     TextView workflowTaskInitiator;
 
+    LinearLayout buttonLayout;
+
     String docId;
 
     private String taskId;
+
+    private RouteNode node;
+
+    private String TAG = WorkflowTaskFragment.class.getSimpleName();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,6 +49,8 @@ public class WorkflowTaskFragment extends BaseGotsFragment implements OnClickLis
         workflowTaskDirective = (TextView) view.findViewById(R.id.textWorkflowTaskDirective);
         workflowTaskName = (TextView) view.findViewById(R.id.textWorkflowTaskTitle);
         workflowTaskInitiator = (TextView) view.findViewById(R.id.textView1);
+        buttonLayout = (LinearLayout) view.findViewById(R.id.buttonWorkflowLayout);
+
         return view;
     }
 
@@ -48,50 +61,49 @@ public class WorkflowTaskFragment extends BaseGotsFragment implements OnClickLis
         if (getActivity().getIntent() != null)
             docId = getActivity().getIntent().getExtras().getString(GOTS_DOC_ID);
 
-        Button buttonRefuse = (Button) view.findViewById(R.id.buttonRefused);
-        buttonRefuse.setOnClickListener(this);
-        Button buttonApprove = (Button) view.findViewById(R.id.buttonApproved);
-        buttonApprove.setOnClickListener(this);
+        // Button buttonRefuse = (Button) view.findViewById(R.id.buttonRefused);
+        // buttonRefuse.setOnClickListener(this);
+        // Button buttonApprove = (Button) view.findViewById(R.id.buttonApproved);
+        // buttonApprove.setOnClickListener(this);
 
         super.onViewCreated(view, savedInstanceState);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-        case R.id.buttonRefused:
-            new AsyncTask<Void, Void, Void>() {
-                String comment = "";
-
-                protected void onPreExecute() {
-                };
-
-                @Override
-                protected Void doInBackground(Void... params) {
-                    NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(getActivity());
-                    nuxeoWorkflowProvider.setWorkflowNodeVar("assignees", "gardening.manager@gmail.com");
-                    nuxeoWorkflowProvider.completeTaskRefuse(taskId, comment);
-                    return null;
-                }
-            }.execute();
-            break;
-        case R.id.buttonApproved:
-            new AsyncTask<Void, Void, Void>() {
-                String comment = "";
-
-                @Override
-                protected Void doInBackground(Void... params) {
-                    NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(getActivity());
-                    nuxeoWorkflowProvider.completeTaskValidate(taskId, comment);
-                    return null;
-                }
-            }.execute();
-            break;
-
-        default:
-            break;
-        }
-    }
+    // @Override
+    // public void onClick(View v) {
+    // switch (v.getId()) {
+    // case R.id.buttonRefused:
+    // new AsyncTask<Void, Void, Void>() {
+    // String comment = "";
+    //
+    // protected void onPreExecute() {
+    // };
+    //
+    // @Override
+    // protected Void doInBackground(Void... params) {
+    // NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(getActivity());
+    // nuxeoWorkflowProvider.completeTaskRefuse(taskId, comment);
+    // return null;
+    // }
+    // }.execute();
+    // break;
+    // case R.id.buttonApproved:
+    // new AsyncTask<Void, Void, Void>() {
+    // String comment = "";
+    //
+    // @Override
+    // protected Void doInBackground(Void... params) {
+    // NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(getActivity());
+    // nuxeoWorkflowProvider.completeTaskValidate(taskId, comment);
+    // return null;
+    // }
+    // }.execute();
+    // break;
+    //
+    // default:
+    // break;
+    // }
+    // }
 
     @Override
     public void update() {
@@ -106,10 +118,13 @@ public class WorkflowTaskFragment extends BaseGotsFragment implements OnClickLis
     @Override
     protected Object retrieveNuxeoData() throws Exception {
         NuxeoWorkflowProvider workflowProvider = new NuxeoWorkflowProvider(getActivity());
-        Documents taskDocs = workflowProvider.getWorkflowOpenTasks(docId);
+        Documents taskDocs = workflowProvider.getWorkflowOpenTasks(docId, true);
         Document currentTask = null;
-        if (taskDocs != null && taskDocs.size() > 0)
+        if (taskDocs != null && taskDocs.size() > 0) {
             currentTask = workflowProvider.getTaskDoc(taskDocs.get(0).getId());
+            node = workflowProvider.getRouteNode(currentTask.getId());
+        }
+
         return currentTask;
     }
 
@@ -121,6 +136,44 @@ public class WorkflowTaskFragment extends BaseGotsFragment implements OnClickLis
         workflowTaskName.setText(map.getString("nt:name"));
         workflowTaskInitiator.setText(map.getString("nt:initiator"));
         taskId = doc.getId();
+        if (node != null) {
+            for (final TaskButton taskButton : node.getTaskButtons()) {
+                Button b = new Button(getActivity());
+                b.setText(taskButton.getLabel());
+                b.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        new AsyncTask<Void, Void, Document>() {
+
+                            @Override
+                            protected Document doInBackground(Void... params) {
+                                NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(getActivity());
+                                Document doc = nuxeoWorkflowProvider.completeTask(taskId, taskButton.getName(),
+                                        "un commentaire");
+                                return doc;
+                            }
+
+                            protected void onPostExecute(Document result) {
+                                if (result == null) {
+                                    Log.w(TAG, "Error processing workflow " + taskButton.getName());
+
+                                } else {
+                                    Log.i(TAG, result.getId() + " follow workflow with task : " + taskButton.getName());
+
+                                }
+                                runAsyncDataRetrieval();
+                            };
+
+                        }.execute();
+                    }
+                });
+                b.setPadding(5, 5, 5, 5);
+                b.set
+                buttonLayout.addView(b);
+                
+            }
+        }
         super.onNuxeoDataRetrieved(data);
     }
 
@@ -134,12 +187,20 @@ public class WorkflowTaskFragment extends BaseGotsFragment implements OnClickLis
         return true;
     }
 
-//    private void closeFragment() {
-//        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//        getFragmentManager().popBackStack();
-//        transaction.hide(this);
-//        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-//        transaction.commit();
-//    }
+    // private class AsyncWorkflow extends AsyncTask<Void, Void, Void>{
+    //
+    // @Override
+    // protected Void doInBackground(Void... params) {
+    // return null;
+    // }
+    //
+    // }
+    // private void closeFragment() {
+    // FragmentTransaction transaction = getFragmentManager().beginTransaction();
+    // getFragmentManager().popBackStack();
+    // transaction.hide(this);
+    // transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+    // transaction.commit();
+    // }
 
 }

@@ -572,7 +572,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
     @Override
     protected Object retrieveNuxeoData() throws Exception {
         NuxeoWorkflowProvider workflowProvider = new NuxeoWorkflowProvider(getApplicationContext());
-        Documents taskDocs = workflowProvider.getWorkflowOpenTasks(mSeed.getUUID());
+        Documents taskDocs = workflowProvider.getWorkflowOpenTasks(mSeed.getUUID(), false);
         if (taskDocs != null && taskDocs.size() == 0)
             return null;
         return taskDocs;

@@ -7,24 +7,24 @@
 
     <TextView
         android:id="@+id/textWorkflowTaskTitle"
+        style="@style/TitleResumeFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:text="Task Name"        style="@style/TitleResumeFragment"
-        
+        android:text="Task Name"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <Button
-        android:id="@+id/buttonRefused"
-        style="@style/buttonRed"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/buttonWorkflowLayout"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textWorkflowTaskDirective"
         android:layout_below="@+id/textView1"
-        android:layout_marginLeft="50dp"
         android:layout_marginTop="10dp"
-        android:text="Refuse" />
+        android:gravity="center" />
 
-    <Button
+    <!--
+         <Button
         android:id="@+id/buttonApproved"
         style="@style/buttonGreen"
         android:layout_width="wrap_content"
@@ -33,6 +33,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="50dp"
         android:text="Approve" />
+    -->
 
     <TextView
         android:id="@+id/textWorkflowTaskDirective"
