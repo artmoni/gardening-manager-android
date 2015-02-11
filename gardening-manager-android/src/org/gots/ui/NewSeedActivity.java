@@ -37,6 +37,7 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
@@ -465,9 +466,15 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
     //
     // }
 
+    @SuppressWarnings("deprecation")
     private boolean validateSeed() {
-        findViewById(R.id.layoutSpecieGallery).setBackground(null);
-        findViewById(R.id.autoCompleteTextViewVariety).setBackground(null);
+        if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            findViewById(R.id.layoutSpecieGallery).setBackground(null);
+            findViewById(R.id.autoCompleteTextViewVariety).setBackground(null);
+        } else {
+            findViewById(R.id.layoutSpecieGallery).setBackgroundDrawable(null);
+            findViewById(R.id.autoCompleteTextViewVariety).setBackgroundDrawable(null);
+        }
         // findViewById(R.id.layoutInputSowing).setBackground(null);
 
         if (newSeed.getSpecie() == null || "".equals(newSeed.getSpecie())) {
