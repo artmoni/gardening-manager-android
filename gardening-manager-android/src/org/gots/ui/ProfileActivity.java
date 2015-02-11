@@ -165,10 +165,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
             openContentFragment(getCurrentGarden(), false);
             return true;
         case R.id.edit_garden:
-            Intent intent = new Intent(this, ProfileCreationFragment.class);
-            intent.putExtra("option", ProfileCreationFragment.OPTION_EDIT);
-            startActivity(intent);
-
+            openContentFragment(getCurrentGarden(), true);
             return true;
         case R.id.delete_allotment:
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -229,10 +226,10 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
         }
     }
 
- @Override
-protected String requireRefreshSyncAuthority() {
-    return GardenContentProvider.AUTHORITY;
-}
+    @Override
+    protected String requireRefreshSyncAuthority() {
+        return GardenContentProvider.AUTHORITY;
+    }
 
     @Override
     public void onProfileSelected(GardenInterface garden) {
