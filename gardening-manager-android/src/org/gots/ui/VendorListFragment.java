@@ -160,10 +160,11 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
 
     @Override
     protected void onNuxeoDataRetrievalStarted() {
-getActivity().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
-        
+        getActivity().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
+
         super.onNuxeoDataRetrievalStarted();
     }
+
     @Override
     protected Object retrieveNuxeoData() throws Exception {
 
@@ -208,7 +209,8 @@ getActivity().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
         List<BaseSeedInterface> vendorSeeds = (List<BaseSeedInterface>) data;
         listVendorSeedAdapter.setSeeds(vendorSeeds);
         listVendorSeedAdapter.notifyDataSetChanged();
-        getActivity().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
+        if (getActivity() != null)
+            getActivity().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
 
         super.onNuxeoDataRetrieved(data);
     }
