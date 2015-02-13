@@ -8,7 +8,7 @@
   </parent>
   <artifactId>gardening-manager-android</artifactId>
   <packaging>apk</packaging>
-  <version>1.2.2-SNAPSHOT</version>
+  <version>1.2.4-SNAPSHOT</version>
   <name>Gardening Manager Android</name>
   <properties>
     <android.version>4.2</android.version>
@@ -240,6 +240,6 @@
     <connection>scm:git:https://github.com/artmoni/gardening-manager-android</connection>
     <developerConnection>scm:git:https://github.com/artmoni/gardening-manager-android</developerConnection>
     <url>https://github.com/artmoni/gardening-manager-android</url>
-    <tag>v1_2_1</tag>
+    <tag>v1_2_3</tag>
   </scm>
 </project>
