@@ -692,7 +692,9 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
             try {
                 String token = authentication.getToken(gotsPrefs.getNuxeoLogin());
                 user = authentication.getUser(token);
-                downloadImage(user.getId(), user.getPictureURL());
+                if (user != null) {
+                    downloadImage(user.getId(), user.getPictureURL());
+                }
             } catch (UserRecoverableAuthException e) {
                 e.printStackTrace();
             } catch (IOException e) {

@@ -36,6 +36,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -138,7 +139,11 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                findViewById(R.id.clearSearchFilter).setBackground(getResources().getDrawable(R.drawable.ic_search));
+                if (Build.VERSION.SDK_INT >= 16) {
+                    findViewById(R.id.clearSearchFilter).setBackground(getResources().getDrawable(R.drawable.ic_search));
+                } else {
+                    findViewById(R.id.clearSearchFilter).setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_search));
+                }
                 clearFilter = false;
             }
 
@@ -293,6 +298,7 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
         }
     }
 
+    @SuppressWarnings("deprecation")
     protected void performSearch(final EditText filter) {
         new AsyncTask<Void, Void, List<BaseSeedInterface>>() {
             @Override
@@ -307,13 +313,25 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
                         currentFilter = "";
                         filter.setText(currentFilter);
                         clearFilter = false;
-                        findViewById(R.id.clearSearchFilter).setBackground(
-                                getResources().getDrawable(R.drawable.ic_search));
+                        if (Build.VERSION.SDK_INT >= 16) {
+                            findViewById(R.id.clearSearchFilter).setBackground(
+                                    getResources().getDrawable(R.drawable.ic_search));
+                        } else {
+                            findViewById(R.id.clearSearchFilter).setBackgroundDrawable(
+                                    getResources().getDrawable(R.drawable.ic_search));
+                        }
                     } else {
                         currentFilter = filter.getText().toString();
                         clearFilter = true;
-                        findViewById(R.id.clearSearchFilter).setBackground(
-                                getResources().getDrawable(R.drawable.ic_menu_close_clear_cancel));
+                        clearFilter = false;
+                        if (Build.VERSION.SDK_INT >= 16) {
+                            findViewById(R.id.clearSearchFilter).setBackground(
+                                    getResources().getDrawable(R.drawable.ic_menu_close_clear_cancel));
+                        } else {
+                            findViewById(R.id.clearSearchFilter).setBackgroundDrawable(
+                                    getResources().getDrawable(R.drawable.ic_menu_close_clear_cancel));
+                        }
+                        
                     }
 
                     Fragment fragment = (Fragment) getSupportFragmentManager().findFragmentByTag(

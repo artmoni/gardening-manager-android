@@ -47,6 +47,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -307,7 +308,11 @@ public class ProfileCreationFragment extends BaseGotsFragment implements Locatio
         }
         if ("".equals(garden.getName())) {
             Toast.makeText(getActivity(), "Please name your garden", Toast.LENGTH_LONG).show();
-            editTextName.setBackground(getResources().getDrawable(R.drawable.border_red));
+            if (Build.VERSION.SDK_INT >= 16) {
+                editTextName.setBackground(getResources().getDrawable(R.drawable.border_red));
+            } else {
+                editTextName.setBackgroundDrawable(getResources().getDrawable(R.drawable.border_red));
+            }
 
             return false;
         }

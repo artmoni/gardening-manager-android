@@ -162,6 +162,9 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
         } else
             mSeed = new GrowingSeedImpl(); // DEFAULT SEED
 
+        if (mSeed == null )
+            mSeed = new GrowingSeedImpl(); // DEFAULT SEED
+
         // if (getIntent().getSerializableExtra(GOTS_TASKWORKFLOW_ID) != null)
         // taskWorkflow = (TaskInfo) getIntent().getSerializableExtra(GOTS_TASKWORKFLOW_ID);
         pictureGallery = (Gallery) findViewById(R.id.idPictureGallery);
