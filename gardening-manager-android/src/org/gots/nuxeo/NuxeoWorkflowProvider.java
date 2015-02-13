@@ -102,7 +102,7 @@ public class NuxeoWorkflowProvider {
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager service = session.getAdapter(DocumentManager.class);
-            workflowTaskDoc = service.getOpenTasks(new IdRef(docId), null, null, session.getLogin().getUsername());
+            workflowTaskDoc = service.getOpenTasks(new IdRef(docId), null, null, session.getLogin().getUsername(),false);
         } catch (Exception e) {
             e.printStackTrace();
         }
