@@ -101,8 +101,8 @@ public class NuxeoWorkflowProvider {
                             session);
                     JSONObject routeNodeJson = new JSONObject(routeNodeString);
                     JSONObject nodeProperties = routeNodeJson.getJSONObject("properties");
-//                    Gson gson = new GsonBuilder().setDateFormat(DateFormat.FULL, DateFormat.FULL).create();
-//                    Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssz").create();
+                    // Gson gson = new GsonBuilder().setDateFormat(DateFormat.FULL, DateFormat.FULL).create();
+                    // Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssz").create();
                     Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").create();
                     node = gson.fromJson(nodeProperties.toString(), RouteNode.class);
 
@@ -127,8 +127,7 @@ public class NuxeoWorkflowProvider {
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager service = session.getAdapter(DocumentManager.class);
-            service.getDocument(new IdRef(taskDocId), true);
-            doc = service.getDocument(new IdRef(taskDocId), "*");
+            doc = service.getDocument(new IdRef(taskDocId), true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -168,14 +167,15 @@ public class NuxeoWorkflowProvider {
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager service = session.getAdapter(DocumentManager.class);
-            tasks = service.getUserTaskPageProvider();
+            tasks = service.getUserTaskPageProvider(true);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         return tasks;
     }
-    public Document completeTask(String taskId, String action,  String comment) {
+
+    public Document completeTask(String taskId, String action, String comment) {
         Document doc = null;
         try {
             Session session = getNuxeoClient().getSession();
@@ -186,6 +186,7 @@ public class NuxeoWorkflowProvider {
         }
         return doc;
     }
+
     public Document completeTaskValidate(String taskId, String comment) {
         Document doc = null;
         try {

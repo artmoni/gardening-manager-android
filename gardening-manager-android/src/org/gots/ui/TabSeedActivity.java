@@ -111,8 +111,6 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 
     private GotsPurchaseItem gotsPurchase;
 
-    private TaskInfo taskWorkflow;
-
     private Fragment fragmentListAction;
 
     private Fragment fragmentWebView;
@@ -120,6 +118,8 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
     private Fragment fragmentDescription;
 
     private ImageView buttonActions;
+
+    private Fragment fragmentWorkflow;
 
     // private TabsAdapter mTabsAdapter;
 
@@ -162,7 +162,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
         } else
             mSeed = new GrowingSeedImpl(); // DEFAULT SEED
 
-        if (mSeed == null )
+        if (mSeed == null)
             mSeed = new GrowingSeedImpl(); // DEFAULT SEED
 
         // if (getIntent().getSerializableExtra(GOTS_TASKWORKFLOW_ID) != null)
@@ -255,18 +255,15 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
                     bundle);
             fragments.add(fragmentListAction);
             addTab(fragmentListAction, getResources().getString(R.string.seed_description_tabmenu_actions));
-            // mFragmentAdapter.addTab(
-            // bar.newTab().setText(getResources().getString(R.string.seed_description_tabmenu_actions)),
-            // fragmentListAction, getIntent().getExtras());
 
         }
+
+        // ********************** Seed description **********************
         fragmentDescription = Fragment.instantiate(getApplicationContext(), SeedDescriptionFragment.class.getName(),
                 bundle);
         fragments.add(fragmentDescription);
-        // mFragmentAdapter.addTab(
-        // bar.newTab().setText(getResources().getString(R.string.seed_description_tabmenu_detail)),
-        // fragmentDescription, getIntent().getExtras());
         addTab(fragmentDescription, getResources().getString(R.string.seed_description_tabmenu_detail));
+
         // ********************** Tab Wikipedia**********************
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
@@ -277,10 +274,6 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
             fragmentWebView = Fragment.instantiate(getApplicationContext(), WebViewActivity.class.getName(), bundle);
             fragments.add(fragmentWebView);
             addTab(fragmentWebView, getResources().getString(R.string.seed_description_tabmenu_wikipedia));
-            // mFragmentAdapter.addTab(
-            // bar.newTab().setText(getResources().getString(R.string.seed_description_tabmenu_wikipedia)),
-            // fragmentWebView, getIntent().getExtras());
-
         }
     }
 
@@ -369,15 +362,16 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
         if (mSeed.getGrowingSeedId() == 0) {
             menu.findItem(R.id.photo).setVisible(false);
             menu.findItem(R.id.delete).setVisible(false);
-            if (!"project".equals(mSeed.getState()))
+            if ("project".equals(mSeed.getState()))
+                menu.findItem(R.id.workflow).setVisible(true);
+            else
                 menu.findItem(R.id.workflow).setVisible(false);
         } else {
-//            if ("project".equals(mSeed.getState()))
-//                menu.findItem(R.id.workflow).setVisible(true);
-//            else
+            // if ("project".equals(mSeed.getState()))
+            // else
 
         }
-        menu.findItem(R.id.workflow).setVisible(false);
+        // menu.findItem(R.id.workflow).setVisible(false);
         return true;
     }
 
@@ -531,41 +525,34 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
             builder.show();
             return true;
         case R.id.workflow:
-            new AsyncTask<Void, Void, Void>() {
-                @Override
-                protected Void doInBackground(Void... params) {
-                    NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(getApplicationContext());
-                    // BaseSeedInterface baseSeedInterface = (BaseSeedInterface) arg0.getItemAtPosition(arg2);
-                    nuxeoWorkflowProvider.startWorkflowValidation(mSeed);
-                    return null;
+            AlertDialog.Builder builderWorkflow = new AlertDialog.Builder(this);
+            builderWorkflow.setMessage(this.getResources().getString(R.string.workflow_launch_description)).setCancelable(
+                    false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    new AsyncTask<Void, Void, Void>() {
+                        @Override
+                        protected Void doInBackground(Void... params) {
+                            NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(
+                                    getApplicationContext());
+                            // BaseSeedInterface baseSeedInterface = (BaseSeedInterface) arg0.getItemAtPosition(arg2);
+                            nuxeoWorkflowProvider.startWorkflowValidation(mSeed);
+                            return null;
+                        }
+                    }.execute();
+                    dialog.dismiss();
                 }
-            }.execute();
+            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.cancel();
+                }
+            });
+            builderWorkflow.show();
+
             return true;
         default:
             return super.onOptionsItemSelected(item);
         }
     }
-
-    // public class MyPagerAdapter extends FragmentPagerAdapter {
-    //
-    // private final List<Fragment> fragments;
-    //
-    // // On fournit à l'adapter la liste des fragments à afficher
-    // public MyPagerAdapter(FragmentManager fm, List fragments) {
-    // super(fm);
-    // this.fragments = fragments;
-    // }
-    //
-    // @Override
-    // public Fragment getItem(int position) {
-    // return this.fragments.get(position);
-    // }
-    //
-    // @Override
-    // public int getCount() {
-    // return this.fragments.size();
-    // }
-    // }
 
     @Override
     protected boolean requireAsyncDataRetrieval() {
@@ -583,11 +570,13 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
-        Fragment fragment = new WorkflowTaskFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
         getIntent().putExtra(WorkflowTaskFragment.GOTS_DOC_ID, mSeed.getUUID());
-        fragmentManager.beginTransaction().replace(R.id.frame_workflow, fragment).commit();
-
+        if (fragmentWorkflow == null) {
+            fragmentWorkflow = new WorkflowTaskFragment();
+            // FragmentManager fragmentManager = getSupportFragmentManager();
+            // fragmentManager.beginTransaction().replace(R.id.frame_workflow, fragmentWorkflow).commit();
+            addTab(fragmentWorkflow, "Validation");
+        }
         super.onNuxeoDataRetrieved(data);
     }
 

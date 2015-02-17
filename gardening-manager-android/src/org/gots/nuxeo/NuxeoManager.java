@@ -72,7 +72,8 @@ public class NuxeoManager extends BroadcastReceiver {
             instance = new NuxeoManager();
             firstCall = new Exception();
         } else if (!instance.initDone) {
-            throw new NotConfiguredException(firstCall);
+            Log.d(TAG, "Instance not configured on first call", new NotConfiguredException(firstCall));
+            firstCall = new Exception(firstCall);
         }
         return instance;
     }
@@ -93,6 +94,7 @@ public class NuxeoManager extends BroadcastReceiver {
         nxConfig.setSharedPrefs(gotsPrefs.getSharedPrefs());
         nxConfig.setCacheKey(NuxeoServerConfig.PREF_SERVER_TOKEN);
         nuxeoContext = NuxeoContextFactory.getNuxeoContext(context, nxConfig);
+       
         initDone = true;
         Log.d(TAG, "getSession with: " + nxConfig.getServerBaseUrl() + " login=" + nxConfig.getLogin() + " password="
                 + (GotsPreferences.ISDEVELOPMENT ? nxConfig.getPassword() : "******"));
@@ -111,6 +113,9 @@ public class NuxeoManager extends BroadcastReceiver {
         }
         return nuxeoClient;
     }
+    public NuxeoContext getNuxeoContext() {
+        return nuxeoContext;
+    }
 
     /**
      * Android 11+: raises a {@link android.os.NetworkOnMainThreadException} if
@@ -124,13 +129,11 @@ public class NuxeoManager extends BroadcastReceiver {
     public void shutdown() {
         try {
             nuxeoContext.shutdown();
+            initDone = false;
+            instance = null;
         } catch (Exception e) {
             Log.e(TAG, "nuxeoContext.shutdown() " + e.getMessage(), e);
         }
-    }
-
-    public void reset() {
-        initDone = false;
     }
 
     @Override
@@ -138,6 +141,7 @@ public class NuxeoManager extends BroadcastReceiver {
         if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())) {
             shutdown();
             initIfNew(context);
+            Log.w(TAG, "Connection settings changed, shutdown nuxeocontext, initIfNew");
             // context.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
         }
     }

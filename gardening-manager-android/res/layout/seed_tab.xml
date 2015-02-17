@@ -80,12 +80,12 @@
                     android:src="@drawable/action_sow" />
             </RelativeLayout>
 
-            <FrameLayout
+            <!-- <FrameLayout
                 android:id="@+id/frame_workflow"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp" >
-            </FrameLayout>
+            </FrameLayout> -->
 
             <!--
             <FrameLayout

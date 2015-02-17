@@ -8,6 +8,8 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +18,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
@@ -24,8 +27,6 @@ public class WorkflowTaskFragment extends BaseGotsFragment {
     public static final String GOTS_TASKWORKFLOW_ID = "org.gots.task.id";
 
     public static final String GOTS_DOC_ID = "org.gots.doc.id";
-
-    // private TaskInfo taskWorkflow;
 
     TextView workflowTaskName;
 
@@ -48,7 +49,7 @@ public class WorkflowTaskFragment extends BaseGotsFragment {
         View view = inflater.inflate(R.layout.workflow_task, null);
         workflowTaskDirective = (TextView) view.findViewById(R.id.textWorkflowTaskDirective);
         workflowTaskName = (TextView) view.findViewById(R.id.textWorkflowTaskTitle);
-        workflowTaskInitiator = (TextView) view.findViewById(R.id.textView1);
+        workflowTaskInitiator = (TextView) view.findViewById(R.id.textWorkflowTaskInitiator);
         buttonLayout = (LinearLayout) view.findViewById(R.id.buttonWorkflowLayout);
 
         return view;
@@ -56,54 +57,11 @@ public class WorkflowTaskFragment extends BaseGotsFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        // if (getActivity().getIntent().getSerializableExtra(GOTS_TASKWORKFLOW_ID) != null)
-        // taskWorkflow = (TaskInfo) getActivity().getIntent().getSerializableExtra(GOTS_TASKWORKFLOW_ID);
         if (getActivity().getIntent() != null)
             docId = getActivity().getIntent().getExtras().getString(GOTS_DOC_ID);
 
-        // Button buttonRefuse = (Button) view.findViewById(R.id.buttonRefused);
-        // buttonRefuse.setOnClickListener(this);
-        // Button buttonApprove = (Button) view.findViewById(R.id.buttonApproved);
-        // buttonApprove.setOnClickListener(this);
-
         super.onViewCreated(view, savedInstanceState);
     }
-
-    // @Override
-    // public void onClick(View v) {
-    // switch (v.getId()) {
-    // case R.id.buttonRefused:
-    // new AsyncTask<Void, Void, Void>() {
-    // String comment = "";
-    //
-    // protected void onPreExecute() {
-    // };
-    //
-    // @Override
-    // protected Void doInBackground(Void... params) {
-    // NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(getActivity());
-    // nuxeoWorkflowProvider.completeTaskRefuse(taskId, comment);
-    // return null;
-    // }
-    // }.execute();
-    // break;
-    // case R.id.buttonApproved:
-    // new AsyncTask<Void, Void, Void>() {
-    // String comment = "";
-    //
-    // @Override
-    // protected Void doInBackground(Void... params) {
-    // NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(getActivity());
-    // nuxeoWorkflowProvider.completeTaskValidate(taskId, comment);
-    // return null;
-    // }
-    // }.execute();
-    // break;
-    //
-    // default:
-    // break;
-    // }
-    // }
 
     @Override
     public void update() {
@@ -130,6 +88,8 @@ public class WorkflowTaskFragment extends BaseGotsFragment {
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
+        if (getActivity() == null)
+            return;
         Document doc = (Document) data;
         PropertyMap map = doc.getProperties();
         workflowTaskDirective.setText(map.getString("nt:directive"));
@@ -137,6 +97,7 @@ public class WorkflowTaskFragment extends BaseGotsFragment {
         workflowTaskInitiator.setText(map.getString("nt:initiator"));
         taskId = doc.getId();
         if (node != null) {
+            buttonLayout.removeAllViews();
             for (final TaskButton taskButton : node.getTaskButtons()) {
                 Button b = new Button(getActivity());
                 b.setText(taskButton.getLabel());
@@ -144,34 +105,63 @@ public class WorkflowTaskFragment extends BaseGotsFragment {
 
                     @Override
                     public void onClick(View v) {
-                        new AsyncTask<Void, Void, Document>() {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                        alert.setTitle("Please comment your decision");
+                        alert.setMessage("Enter Pin :");
 
-                            @Override
-                            protected Document doInBackground(Void... params) {
-                                NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(getActivity());
-                                Document doc = nuxeoWorkflowProvider.completeTask(taskId, taskButton.getName(),
-                                        "un commentaire");
-                                return doc;
+                        // Set an EditText view to get user input
+                        final EditText input = new EditText(getActivity());
+                        alert.setView(input);
+
+                        alert.setPositiveButton(getResources().getString(R.string.button_ok), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+//                                String value = input.getText().toString();
+                                new AsyncTask<Void, Void, Document>() {
+
+                                    @Override
+                                    protected Document doInBackground(Void... params) {
+                                        NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(
+                                                getActivity());
+                                        Document doc = nuxeoWorkflowProvider.completeTask(taskId, taskButton.getName(),
+                                                input.getText().toString());
+                                        return doc;
+                                    }
+
+                                    protected void onPostExecute(Document result) {
+                                        if (result == null) {
+                                            Log.w(TAG, "Error processing workflow " + taskButton.getName());
+
+                                        } else {
+                                            Log.i(TAG,
+                                                    result.getId() + " follow workflow with task : "
+                                                            + taskButton.getName());
+
+                                        }
+                                        runAsyncDataRetrieval();
+                                    };
+
+                                }.execute();
+                                return;
                             }
+                        });
 
-                            protected void onPostExecute(Document result) {
-                                if (result == null) {
-                                    Log.w(TAG, "Error processing workflow " + taskButton.getName());
+                        alert.setNegativeButton(getResources().getString(R.string.button_cancel), new DialogInterface.OnClickListener() {
 
-                                } else {
-                                    Log.i(TAG, result.getId() + " follow workflow with task : " + taskButton.getName());
+                            public void onClick(DialogInterface dialog, int which) {
+                                return;
+                            }
+                        });
+                        alert.show();
 
-                                }
-                                runAsyncDataRetrieval();
-                            };
-
-                        }.execute();
                     }
                 });
                 b.setPadding(5, 5, 5, 5);
-                b.set
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
+                lp.setMargins(5, 2, 5, 2);
+                b.setLayoutParams(lp);
                 buttonLayout.addView(b);
-                
+
             }
         }
         super.onNuxeoDataRetrieved(data);
@@ -186,21 +176,5 @@ public class WorkflowTaskFragment extends BaseGotsFragment {
     protected boolean requireAsyncDataRetrieval() {
         return true;
     }
-
-    // private class AsyncWorkflow extends AsyncTask<Void, Void, Void>{
-    //
-    // @Override
-    // protected Void doInBackground(Void... params) {
-    // return null;
-    // }
-    //
-    // }
-    // private void closeFragment() {
-    // FragmentTransaction transaction = getFragmentManager().beginTransaction();
-    // getFragmentManager().popBackStack();
-    // transaction.hide(this);
-    // transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-    // transaction.commit();
-    // }
 
 }

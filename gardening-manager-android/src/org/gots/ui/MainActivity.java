@@ -792,8 +792,6 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                     }
 
                     JSONObject json;
-                    List<BaseSeedInterface> seeds = new ArrayList<>();
-
                     json = new JSONObject(String.valueOf(total.toString()));
                     tasksEntries = json.getJSONArray("entries");
                 } catch (Exception e) {
