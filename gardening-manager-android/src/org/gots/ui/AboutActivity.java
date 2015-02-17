@@ -127,6 +127,7 @@ public class AboutActivity extends BaseGotsActivity {
                 "org.gots:drawable/" + Locale.getDefault().getCountry().toLowerCase(), null, null);
         flag.setImageResource(flagRessource);
 
+        updateReceiver.setDebugUnregister(true);
         registerReceiver(updateReceiver, new IntentFilter(BroadCastMessages.PROGRESS_UPDATE));
         registerReceiver(updateReceiver, new IntentFilter(BroadCastMessages.PROGRESS_FINISHED));
     }
@@ -238,215 +239,215 @@ public class AboutActivity extends BaseGotsActivity {
         refreshCounter--;
     };
 
-//    @Override
-//    protected void onRefresh(String AUTHORITY) {
-//        refreshCounter = 0;
-//
-//        // weatherServiceIntent = new Intent(getApplicationContext(), WeatherUpdateService.class);
-//
-//        // getApplicationContext().startService(weatherServiceIntent);
-//
-//        /*
-//         * Synchronize Weather
-//         */
-//        // new AsyncTask<Void, Integer, Void>() {
-//        //
-//        // protected void onPreExecute() {
-//        // addProgress();
-//
-//        //
-//        // };
-//        //
-//        // @Override
-//        // protected Void doInBackground(Void... params) {
-//        // WeatherManager manager = new WeatherManager(getApplicationContext());
-//        // manager.getConditionSet(2);
-//        // return null;
-//        // }
-//        //
-//        // @Override
-//        // protected void onPostExecute(Void result) {
-//
-//        //
-//        // removeProgress();
-//        // super.onPostExecute(result);
-//        //
-//        // }
-//        // }.execute();
-//
-//        /*
-//         * Synchronize Seeds
-//         */
-//
-////        Account newAccount = gotsPrefs.getUserAccount();
-////        Bundle bundle = new Bundle();
-////        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-////        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-////
-////        ContentResolver.setSyncAutomatically(newAccount, SeedsContentProvider.AUTHORITY, true);
-////        ContentResolver.requestSync(newAccount, SeedsContentProvider.AUTHORITY, bundle);
-////        ContentResolver.setSyncAutomatically(newAccount, GardenContentProvider.AUTHORITY, true);
-////        ContentResolver.requestSync(newAccount, GardenContentProvider.AUTHORITY, bundle);
-////        ContentResolver.setSyncAutomatically(newAccount, ActionsContentProvider.AUTHORITY, true);
-////        ContentResolver.requestSync(newAccount, ActionsContentProvider.AUTHORITY, bundle);
-////        ContentResolver.setSyncAutomatically(newAccount, AllotmentContentProvider.AUTHORITY, true);
-////        ContentResolver.requestSync(newAccount, AllotmentContentProvider.AUTHORITY, bundle);
-//        // ContentResolver.setSyncAutomatically(newAccount, SensorContentProvider.AUTHORITY, true);
-//        // ContentResolver.requestSync(newAccount, SensorContentProvider.AUTHORITY, bundle);
-//        // ContentResolver.setSyncAutomatically(newAccount, WeatherContentProvider.AUTHORITY, true);
-//        // ContentResolver.requestSync(newAccount, WeatherContentProvider.AUTHORITY, bundle);
-//
-//        /*
-//         * Synchronize Purchase feature
-//         */
-//        final ArrayList<String> moreSkus = new ArrayList<String>();
-//        moreSkus.add(GotsPurchaseItem.SKU_PREMIUM);
-//        moreSkus.add(GotsPurchaseItem.SKU_FEATURE_PDFHISTORY);
-//        moreSkus.add(GotsPurchaseItem.SKU_FEATURE_PARROT);
-//        buyHelper = new IabHelper(getApplicationContext(), gotsPrefs.getPlayStorePubKey());
-//
-//        Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
-//        progressPurchase.startAnimation(myFadeInAnimation);
-//        textprogressPurchase.setText(getResources().getString(R.string.synchro_purchase_checking));
-//        textprogressPurchase.setTextColor(getResources().getColor(R.color.action_warning_color));
-//
-//        try {
-//            addProgress();
-//            buyHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
-//
-//                @Override
-//                public void onIabSetupFinished(IabResult result) {
-//                    // Toast.makeText(getApplicationContext(), "Set up finished!", Toast.LENGTH_SHORT).show();
-//                    Log.i(TAG, "Set up finished!");
-//
-//                    if (result.isSuccess())
-//                        buyHelper.queryInventoryAsync(true, moreSkus, new IabHelper.QueryInventoryFinishedListener() {
-//                            @Override
-//                            public void onQueryInventoryFinished(IabResult result, Inventory inv) {
-//                                if (result.isSuccess()) {
-//                                    gotsPurchase.setPremium(inv.hasPurchase(GotsPurchaseItem.SKU_PREMIUM));
-//                                    gotsPurchase.setFeatureExportPDF(inv.hasPurchase(GotsPurchaseItem.SKU_FEATURE_PDFHISTORY));
-//                                    gotsPurchase.setFeatureParrot(inv.hasPurchase(GotsPurchaseItem.SKU_FEATURE_PARROT));
-//                                    Log.i(TAG, "Successful got inventory!");
-//
-//                                } else {
-//                                    Log.i(TAG, "Error getting inventory!");
-//                                }
-//                                progressPurchase.clearAnimation();
-//                                progressPurchase.setBackgroundDrawable(getResources().getDrawable(
-//                                        R.drawable.bg_state_ok));
-//                                textprogressPurchase.setText(getResources().getString(R.string.synchro_purchase_ok));
-//                                textprogressPurchase.setTextColor(getResources().getColor(R.color.text_color_dark));
-//
-//                                // getApplicationContext().stopService(startServiceIntent4);
-//                                removeProgress();
-//                            }
-//                        });
-//                    else {
-//                        removeProgress();
-//                    }
-//
-//                }
-//            });
-//        } catch (Exception e) {
-//            Log.e(TAG, "IabHelper can not be initialized" + e.getMessage());
-//            removeProgress();
-//
-//        }
-//        // new AsyncTask<Void, Integer, Void>() {
-//        // // Intent startServiceIntent4 = new Intent(getApplicationContext(), GotsBillingService.class);
-//        //
-//        //
-//        // protected void onPreExecute() {
-//        // Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
-//        // progressPurchase.startAnimation(myFadeInAnimation);
-//        // textprogressAction.setText(getResources().getString(R.string.synchro_purchase_checking));
-//        //
-//        // addProgress();
-//        // };
-//        //
-//        // @Override
-//        // protected Void doInBackground(Void... params) {
-//        // // getApplicationContext().startService(startServiceIntent4);
-//        // final ArrayList<String> moreSkus = new ArrayList<String>();
-//        // moreSkus.add(GotsPurchaseItem.SKU_PREMIUM);
-//        // buyHelper = new IabHelper(getApplicationContext(), gotsPrefs.getPlayStorePubKey());
-//        //
-//        // buyHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
-//        //
-//        // @Override
-//        // public void onIabSetupFinished(IabResult result) {
-//        // // Toast.makeText(getApplicationContext(), "Set up finished!", Toast.LENGTH_SHORT).show();
-//        // Log.i(TAG, "Set up finished!");
-//        //
-//        // if (result.isSuccess())
-//        // buyHelper.queryInventoryAsync(true, moreSkus,
-//        // new IabHelper.QueryInventoryFinishedListener() {
-//        // @Override
-//        // public void onQueryInventoryFinished(IabResult result, Inventory inv) {
-//        // if (result.isSuccess()) {
-//        // boolean isPremium = inv.hasPurchase(GotsPurchaseItem.SKU_PREMIUM);
-//        // gotsPrefs.setPremium(isPremium);
-//        // Log.i(TAG, "Successful got inventory!");
-//        //
-//        // } else {
-//        // Log.i(TAG, "Error getting inventory!");
-//        // }
-//        // }
-//        // });
-//        // }
-//        // });
-//        // return null;
-//        // }
-//        //
-//        // @Override
-//        // protected void onPostExecute(Void result) {
-//        // progressPurchase.clearAnimation();
-//        // progressPurchase.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
-//        // textprogressAction.setText(getResources().getString(R.string.synchro_purchase_ok));
-//        // // getApplicationContext().stopService(startServiceIntent4);
-//        // removeProgress();
-//        // super.onPostExecute(result);
-//        // }
-//        // }.execute();
-//        /*
-//         * Synchronize Server
-//         */
-//        // if (gotsPrefs.isConnectedToServer()) {
-//        // findViewById(R.id.layoutProgressGarden).setVisibility(View.VISIBLE);
-//        //
-//        // new AsyncTask<Context, Void, List<GardenInterface>>() {
-//        //
-//        // private List<GardenInterface> myGardens;
-//        //
-//        // @Override
-//        // protected void onPreExecute() {
-//        // Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
-//        // progressGarden.startAnimation(myFadeInAnimation);
-//        // textprogressGarden.setText(getResources().getString(R.string.synchro_garden_checking));
-//        // textprogressGarden.setTextColor(getResources().getColor(R.color.action_warning_color));
-//        //
-//        // super.onPreExecute();
-//        // }
-//        //
-//        // @Override
-//        // protected List<GardenInterface> doInBackground(Context... params) {
-//        //
-//        // myGardens = gardenManager.getMyGardens(true);
-//        // return myGardens;
-//        // }
-//        //
-//        // @Override
-//        // protected void onPostExecute(List<GardenInterface> result) {
-//
-//        // super.onPostExecute(result);
-//        // }
-//        //
-//        // }.execute();
-//        // } else {
-//        // findViewById(R.id.layoutProgressGarden).setVisibility(View.GONE);
-//        // }
-//    }
+    // @Override
+    // protected void onRefresh(String AUTHORITY) {
+    // refreshCounter = 0;
+    //
+    // // weatherServiceIntent = new Intent(getApplicationContext(), WeatherUpdateService.class);
+    //
+    // // getApplicationContext().startService(weatherServiceIntent);
+    //
+    // /*
+    // * Synchronize Weather
+    // */
+    // // new AsyncTask<Void, Integer, Void>() {
+    // //
+    // // protected void onPreExecute() {
+    // // addProgress();
+    //
+    // //
+    // // };
+    // //
+    // // @Override
+    // // protected Void doInBackground(Void... params) {
+    // // WeatherManager manager = new WeatherManager(getApplicationContext());
+    // // manager.getConditionSet(2);
+    // // return null;
+    // // }
+    // //
+    // // @Override
+    // // protected void onPostExecute(Void result) {
+    //
+    // //
+    // // removeProgress();
+    // // super.onPostExecute(result);
+    // //
+    // // }
+    // // }.execute();
+    //
+    // /*
+    // * Synchronize Seeds
+    // */
+    //
+    // // Account newAccount = gotsPrefs.getUserAccount();
+    // // Bundle bundle = new Bundle();
+    // // bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+    // // bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+    // //
+    // // ContentResolver.setSyncAutomatically(newAccount, SeedsContentProvider.AUTHORITY, true);
+    // // ContentResolver.requestSync(newAccount, SeedsContentProvider.AUTHORITY, bundle);
+    // // ContentResolver.setSyncAutomatically(newAccount, GardenContentProvider.AUTHORITY, true);
+    // // ContentResolver.requestSync(newAccount, GardenContentProvider.AUTHORITY, bundle);
+    // // ContentResolver.setSyncAutomatically(newAccount, ActionsContentProvider.AUTHORITY, true);
+    // // ContentResolver.requestSync(newAccount, ActionsContentProvider.AUTHORITY, bundle);
+    // // ContentResolver.setSyncAutomatically(newAccount, AllotmentContentProvider.AUTHORITY, true);
+    // // ContentResolver.requestSync(newAccount, AllotmentContentProvider.AUTHORITY, bundle);
+    // // ContentResolver.setSyncAutomatically(newAccount, SensorContentProvider.AUTHORITY, true);
+    // // ContentResolver.requestSync(newAccount, SensorContentProvider.AUTHORITY, bundle);
+    // // ContentResolver.setSyncAutomatically(newAccount, WeatherContentProvider.AUTHORITY, true);
+    // // ContentResolver.requestSync(newAccount, WeatherContentProvider.AUTHORITY, bundle);
+    //
+    // /*
+    // * Synchronize Purchase feature
+    // */
+    // final ArrayList<String> moreSkus = new ArrayList<String>();
+    // moreSkus.add(GotsPurchaseItem.SKU_PREMIUM);
+    // moreSkus.add(GotsPurchaseItem.SKU_FEATURE_PDFHISTORY);
+    // moreSkus.add(GotsPurchaseItem.SKU_FEATURE_PARROT);
+    // buyHelper = new IabHelper(getApplicationContext(), gotsPrefs.getPlayStorePubKey());
+    //
+    // Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
+    // progressPurchase.startAnimation(myFadeInAnimation);
+    // textprogressPurchase.setText(getResources().getString(R.string.synchro_purchase_checking));
+    // textprogressPurchase.setTextColor(getResources().getColor(R.color.action_warning_color));
+    //
+    // try {
+    // addProgress();
+    // buyHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+    //
+    // @Override
+    // public void onIabSetupFinished(IabResult result) {
+    // // Toast.makeText(getApplicationContext(), "Set up finished!", Toast.LENGTH_SHORT).show();
+    // Log.i(TAG, "Set up finished!");
+    //
+    // if (result.isSuccess())
+    // buyHelper.queryInventoryAsync(true, moreSkus, new IabHelper.QueryInventoryFinishedListener() {
+    // @Override
+    // public void onQueryInventoryFinished(IabResult result, Inventory inv) {
+    // if (result.isSuccess()) {
+    // gotsPurchase.setPremium(inv.hasPurchase(GotsPurchaseItem.SKU_PREMIUM));
+    // gotsPurchase.setFeatureExportPDF(inv.hasPurchase(GotsPurchaseItem.SKU_FEATURE_PDFHISTORY));
+    // gotsPurchase.setFeatureParrot(inv.hasPurchase(GotsPurchaseItem.SKU_FEATURE_PARROT));
+    // Log.i(TAG, "Successful got inventory!");
+    //
+    // } else {
+    // Log.i(TAG, "Error getting inventory!");
+    // }
+    // progressPurchase.clearAnimation();
+    // progressPurchase.setBackgroundDrawable(getResources().getDrawable(
+    // R.drawable.bg_state_ok));
+    // textprogressPurchase.setText(getResources().getString(R.string.synchro_purchase_ok));
+    // textprogressPurchase.setTextColor(getResources().getColor(R.color.text_color_dark));
+    //
+    // // getApplicationContext().stopService(startServiceIntent4);
+    // removeProgress();
+    // }
+    // });
+    // else {
+    // removeProgress();
+    // }
+    //
+    // }
+    // });
+    // } catch (Exception e) {
+    // Log.e(TAG, "IabHelper can not be initialized" + e.getMessage());
+    // removeProgress();
+    //
+    // }
+    // // new AsyncTask<Void, Integer, Void>() {
+    // // // Intent startServiceIntent4 = new Intent(getApplicationContext(), GotsBillingService.class);
+    // //
+    // //
+    // // protected void onPreExecute() {
+    // // Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
+    // // progressPurchase.startAnimation(myFadeInAnimation);
+    // // textprogressAction.setText(getResources().getString(R.string.synchro_purchase_checking));
+    // //
+    // // addProgress();
+    // // };
+    // //
+    // // @Override
+    // // protected Void doInBackground(Void... params) {
+    // // // getApplicationContext().startService(startServiceIntent4);
+    // // final ArrayList<String> moreSkus = new ArrayList<String>();
+    // // moreSkus.add(GotsPurchaseItem.SKU_PREMIUM);
+    // // buyHelper = new IabHelper(getApplicationContext(), gotsPrefs.getPlayStorePubKey());
+    // //
+    // // buyHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+    // //
+    // // @Override
+    // // public void onIabSetupFinished(IabResult result) {
+    // // // Toast.makeText(getApplicationContext(), "Set up finished!", Toast.LENGTH_SHORT).show();
+    // // Log.i(TAG, "Set up finished!");
+    // //
+    // // if (result.isSuccess())
+    // // buyHelper.queryInventoryAsync(true, moreSkus,
+    // // new IabHelper.QueryInventoryFinishedListener() {
+    // // @Override
+    // // public void onQueryInventoryFinished(IabResult result, Inventory inv) {
+    // // if (result.isSuccess()) {
+    // // boolean isPremium = inv.hasPurchase(GotsPurchaseItem.SKU_PREMIUM);
+    // // gotsPrefs.setPremium(isPremium);
+    // // Log.i(TAG, "Successful got inventory!");
+    // //
+    // // } else {
+    // // Log.i(TAG, "Error getting inventory!");
+    // // }
+    // // }
+    // // });
+    // // }
+    // // });
+    // // return null;
+    // // }
+    // //
+    // // @Override
+    // // protected void onPostExecute(Void result) {
+    // // progressPurchase.clearAnimation();
+    // // progressPurchase.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_state_ok));
+    // // textprogressAction.setText(getResources().getString(R.string.synchro_purchase_ok));
+    // // // getApplicationContext().stopService(startServiceIntent4);
+    // // removeProgress();
+    // // super.onPostExecute(result);
+    // // }
+    // // }.execute();
+    // /*
+    // * Synchronize Server
+    // */
+    // // if (gotsPrefs.isConnectedToServer()) {
+    // // findViewById(R.id.layoutProgressGarden).setVisibility(View.VISIBLE);
+    // //
+    // // new AsyncTask<Context, Void, List<GardenInterface>>() {
+    // //
+    // // private List<GardenInterface> myGardens;
+    // //
+    // // @Override
+    // // protected void onPreExecute() {
+    // // Animation myFadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween);
+    // // progressGarden.startAnimation(myFadeInAnimation);
+    // // textprogressGarden.setText(getResources().getString(R.string.synchro_garden_checking));
+    // // textprogressGarden.setTextColor(getResources().getColor(R.color.action_warning_color));
+    // //
+    // // super.onPreExecute();
+    // // }
+    // //
+    // // @Override
+    // // protected List<GardenInterface> doInBackground(Context... params) {
+    // //
+    // // myGardens = gardenManager.getMyGardens(true);
+    // // return myGardens;
+    // // }
+    // //
+    // // @Override
+    // // protected void onPostExecute(List<GardenInterface> result) {
+    //
+    // // super.onPostExecute(result);
+    // // }
+    // //
+    // // }.execute();
+    // // } else {
+    // // findViewById(R.id.layoutProgressGarden).setVisibility(View.GONE);
+    // // }
+    // }
 
     private void setRecurringAlarm(Context context) {
         // we know mobiletuts updates at right around 1130 GMT.
@@ -466,17 +467,17 @@ public class AboutActivity extends BaseGotsActivity {
                     AlarmManager.INTERVAL_DAY, actionTODOIntent);
         }
 
-//        Intent seedBroadcastReceiver = new Intent(context, SeedUpdateService.class);
-//        PendingIntent seedIntent = PendingIntent.getBroadcast(context, 0, seedBroadcastReceiver,
-//                PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//        if (GotsPreferences.isDevelopment())
-//            alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(), 120000, seedIntent);
-//        else {
-//            updateTime.set(Calendar.HOUR_OF_DAY, 12);
-//            alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
-//                    AlarmManager.INTERVAL_DAY, seedIntent);
-//        }
+        // Intent seedBroadcastReceiver = new Intent(context, SeedUpdateService.class);
+        // PendingIntent seedIntent = PendingIntent.getBroadcast(context, 0, seedBroadcastReceiver,
+        // PendingIntent.FLAG_UPDATE_CURRENT);
+        //
+        // if (GotsPreferences.isDevelopment())
+        // alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(), 120000, seedIntent);
+        // else {
+        // updateTime.set(Calendar.HOUR_OF_DAY, 12);
+        // alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(),
+        // AlarmManager.INTERVAL_DAY, seedIntent);
+        // }
     }
 
     @Override

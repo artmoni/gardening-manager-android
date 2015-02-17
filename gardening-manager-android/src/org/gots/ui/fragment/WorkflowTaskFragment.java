@@ -48,7 +48,7 @@ public class WorkflowTaskFragment extends BaseGotsFragment {
         View view = inflater.inflate(R.layout.workflow_task, null);
         workflowTaskDirective = (TextView) view.findViewById(R.id.textWorkflowTaskDirective);
         workflowTaskName = (TextView) view.findViewById(R.id.textWorkflowTaskTitle);
-        workflowTaskInitiator = (TextView) view.findViewById(R.id.textView1);
+        workflowTaskInitiator = (TextView) view.findViewById(R.id.textWorkflowTaskInitiator);
         buttonLayout = (LinearLayout) view.findViewById(R.id.buttonWorkflowLayout);
 
         return view;
@@ -130,6 +130,8 @@ public class WorkflowTaskFragment extends BaseGotsFragment {
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
+        if (getActivity() == null)
+            return;
         Document doc = (Document) data;
         PropertyMap map = doc.getProperties();
         workflowTaskDirective.setText(map.getString("nt:directive"));
@@ -137,6 +139,7 @@ public class WorkflowTaskFragment extends BaseGotsFragment {
         workflowTaskInitiator.setText(map.getString("nt:initiator"));
         taskId = doc.getId();
         if (node != null) {
+            buttonLayout.removeAllViews();
             for (final TaskButton taskButton : node.getTaskButtons()) {
                 Button b = new Button(getActivity());
                 b.setText(taskButton.getLabel());
@@ -169,9 +172,12 @@ public class WorkflowTaskFragment extends BaseGotsFragment {
                     }
                 });
                 b.setPadding(5, 5, 5, 5);
-                b.set
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
+                lp.setMargins(5, 2, 5, 2);
+                b.setLayoutParams(lp);
                 buttonLayout.addView(b);
-                
+
             }
         }
         super.onNuxeoDataRetrieved(data);

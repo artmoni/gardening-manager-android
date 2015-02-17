@@ -5,23 +5,23 @@
     android:background="@color/brown_light"
     android:padding="5dp" >
 
+    <ImageView
+        android:id="@+id/imageViewTop"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_workflow_topa" />
+
     <TextView
         android:id="@+id/textWorkflowTaskTitle"
         style="@style/TitleResumeFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:text="Task Name"
+        android:text="Task"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <LinearLayout
-        android:id="@+id/buttonWorkflowLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textWorkflowTaskDirective"
-        android:layout_below="@+id/textView1"
-        android:layout_marginTop="10dp"
-        android:gravity="center" />
 
     <!--
          <Button
@@ -36,24 +36,33 @@
     -->
 
     <TextView
-        android:id="@+id/textWorkflowTaskDirective"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textWorkflowTaskTitle"
-        android:layout_below="@+id/textWorkflowTaskTitle"
-        android:layout_marginTop="10dp"
-        android:text="Task Description" />
-
-    <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/textWorkflowTaskInitiator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/textWorkflowTaskDirective"
         android:layout_below="@+id/textWorkflowTaskDirective"
         android:layout_marginTop="5dp"
         android:paddingLeft="10dp"
-        android:text="Small Text"
+        android:text="Task initiator"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/textWorkflowTaskDirective"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/imageViewTop"
+        android:layout_below="@+id/imageViewTop"
+        android:text="Task directive" />
+
+    <LinearLayout
+        android:id="@+id/buttonWorkflowLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textWorkflowTaskInitiator"
+        android:layout_marginTop="10dp"
+        android:gravity="center" >
+    </LinearLayout>
 
 </RelativeLayout>

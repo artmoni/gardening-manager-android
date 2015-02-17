@@ -43,7 +43,9 @@ import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GotsSeedManager;
 import org.nuxeo.android.activities.BaseNuxeoActivity;
+import org.nuxeo.android.broadcast.NuxeoBroadcastMessages;
 import org.nuxeo.android.context.NuxeoContext;
+import org.nuxeo.android.context.NuxeoContextFactory;
 
 import android.accounts.Account;
 import android.content.BroadcastReceiver;
@@ -224,6 +226,13 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         registerReceiver(gardenBroadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_EVENT));
         registerReceiver(actionseedProvider, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
         registerReceiver(actionseedProvider, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
+        
+//        registerReceiver(nuxeoManager.getNuxeoContext(), new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
+//        registerReceiver(nuxeoManager.getNuxeoContext(), new IntentFilter(NuxeoBroadcastMessages.NUXEO_SETTINGS_CHANGED));
+        
+//        NuxeoContextFactory.registerReceiver(this);
+        
+        
         super.onResume();
     }
 
@@ -245,23 +254,26 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         activities.remove(this);
         GotsAnalytics.getInstance(getApplication()).decrementActivityCount();
+        nuxeoManager.shutdown();
 
         if (activities.size() == 0) {
-            nuxeoManager.shutdown();
+            Log.d(TAG, "Shutdown ");
             gardenManager.finalize();
             seedManager.finalize();
             allotmentManager.finalize();
+        } else {
+            Log.d(TAG, "No shutdown, remaining activities: " + activities);
         }
+        super.onDestroy();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_common, menu);
         this.menu = menu;
-        if (requireRefreshSyncAuthority()==null)
+        if (requireRefreshSyncAuthority() == null)
             menu.findItem(R.id.refresh_seed).setVisible(false);
 
         return super.onCreateOptionsMenu(menu);
@@ -363,7 +375,10 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         unregisterReceiver(gotsGrowingSeedManager);
         unregisterReceiver(gardenBroadcastReceiver);
         unregisterReceiver(actionseedProvider);
+//        unregisterReceiver(nuxeoManager.getNuxeoContext());
+//        NuxeoContextFactory.unregisterReceiver();
         super.onPause();
     }
+    
 
 }
