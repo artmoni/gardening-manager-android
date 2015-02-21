@@ -10,8 +10,14 @@
  ******************************************************************************/
 package org.gots.ui;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 
+import net.minidev.json.JSONObject;
+ 
+import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.gots.R;
 import org.gots.authentication.AuthenticationActivity;
 import org.gots.inapp.GotsPurchaseItem;
@@ -23,6 +29,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -32,6 +39,12 @@ import android.widget.TextView;
 import com.android.vending.billing.util.IabHelper;
 import com.android.vending.billing.util.IabResult;
 import com.android.vending.billing.util.Inventory;
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.JWSHeader;
+import com.nimbusds.jose.JWSObject;
+import com.nimbusds.jose.Payload;
+import com.nimbusds.jose.crypto.MACSigner;
 
 public class SplashScreenActivity extends BaseGotsActivity {
 
@@ -53,12 +66,78 @@ public class SplashScreenActivity extends BaseGotsActivity {
         myRotateAnimation.setRepeatCount(Animation.INFINITE);
         imageRefresh.startAnimation(myRotateAnimation);
 
+        /*
+         * BADGETKIT
+         */
+        try {
+
+            // Create an HMAC-protected JWS object with some payload
+            // final String body =
+            // "{\"slug\": \"some-system\", \"name\": \"Some System\", \"url\":\"http://srv3.gardening-manager.com:3000\"}";
+            // String payload =
+            // "{     key: \"master\",exp: 1393436029, method: \"POST\",path: \"/systems\",  body: { alg: \"sha256\",  hash: "
+            // + bodySHA256 + "  }";
+            JSONObject jsonbody = new JSONObject();
+            jsonbody.put("slug", "some-system");
+            jsonbody.put("name", "Some System");
+            jsonbody.put("url", "http://srv3.gardening-manager.com:8280");
+            String bodySHA256 = SHA256(jsonbody.toString());
+
+            JSONObject body = new JSONObject();
+            body.put("alg", "sha256");
+            body.put("hash", bodySHA256);
+            
+            JSONObject jsonHeader = new JSONObject();
+            jsonHeader.put("typ", "JWT");
+            jsonHeader.put("alg", "HS256");
+            
+            JSONObject jsonPayload = new JSONObject();
+            jsonPayload.put("key", "master");
+            jsonPayload.put("exp", "1393436029");
+            jsonPayload.put("method", "POST");
+            jsonPayload.put("path", "/systems");
+            jsonPayload.put("body", body.toString());
+
+            JSONObject json= new JSONObject();
+            json.put("secret", "artmonimobile");
+            json.put("header", jsonHeader.toString());
+            json.put("payload", jsonPayload.toString());
+            
+            JWSObject jwsObject = new JWSObject(new JWSHeader(JWSAlgorithm.HS256), new Payload(json));
+            // We need a 256-bit key for HS256 which must be pre-shared
+            byte[] sharedKey = new byte[32];
+            new SecureRandom().nextBytes(sharedKey);
+
+            // Apply the HMAC to the JWS object
+            jwsObject.sign(new MACSigner(sharedKey));
+            String token = jwsObject.serialize();
+            Log.i(TAG, json.toString());
+            Log.i(TAG, "JWT token=" + token);
+        } catch (JOSEException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        // Serialise to URL-safe format
+    }
+
+    public static String SHA256(String text) throws NoSuchAlgorithmException {
+
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+        md.update(text.getBytes());
+        byte[] digest = md.digest();
+
+        return Base64.encodeToString(digest, Base64.DEFAULT);
     }
 
     @Override
     protected void onActivityResult(int arg0, int arg1, Intent arg2) {
-//        if (arg1 == 1)
-//            onRefresh(null);
+        // if (arg1 == 1)
+        // onRefresh(null);
         // if (arg1 == 2)
         // startActivity(new Intent(getApplicationContext(), MainActivity.class));
         super.onActivityResult(arg0, arg1, arg2);
