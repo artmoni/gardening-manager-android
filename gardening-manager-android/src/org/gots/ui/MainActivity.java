@@ -28,7 +28,6 @@ import org.gots.provider.GardenContentProvider;
 import org.gots.provider.SeedsContentProvider;
 import org.gots.provider.SensorContentProvider;
 import org.gots.provider.WeatherContentProvider;
-import org.gots.seed.BaseSeedInterface;
 import org.gots.ui.BaseGotsActivity.GardenListener;
 import org.gots.ui.fragment.ActionsResumeFragment;
 import org.gots.ui.fragment.ActionsResumeFragment.OnActionsClickListener;
@@ -39,7 +38,6 @@ import org.gots.ui.fragment.TutorialResumeFragment;
 import org.gots.ui.fragment.TutorialResumeFragment.OnTutorialFinishedListener;
 import org.gots.ui.fragment.WeatherResumeFragment;
 import org.gots.ui.fragment.WorkflowResumeFragment;
-import org.gots.ui.fragment.TutorialResumeFragment.OnTutorialFinishedListener;
 import org.gots.ui.slidingmenu.NavDrawerItem;
 import org.gots.ui.slidingmenu.adapter.NavDrawerListAdapter;
 import org.json.JSONArray;
@@ -313,6 +311,26 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         // }
         // });
     }
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())) {
+                displayGardenMenu();
+                invalidateOptionsMenu();
+            } else if (BroadCastMessages.SEED_DISPLAYLIST.equals(intent.getAction())) {
+                displayDrawerMenuCatalogCounter();
+            } else if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
+                displayDrawerMenuProfileCounter();
+                displayGardenMenu();
+            } else if (BroadCastMessages.ACTION_EVENT.equals(intent.getAction())) {
+                displayDrawerMenuActionsCounter();
+            } else if (BroadCastMessages.ALLOTMENT_EVENT.equals(intent.getAction())) {
+                displayDrawerMenuAllotmentCounter();
+            }
+        }
+    
+    };
 
     protected void displayDrawerMenuProfileCounter() {
         new AsyncTask<NavDrawerItem, Void, Integer>() {
@@ -722,26 +740,6 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         };
     }
 
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())) {
-                displayGardenMenu();
-                invalidateOptionsMenu();
-            } else if (BroadCastMessages.SEED_DISPLAYLIST.equals(intent.getAction())) {
-                displayDrawerMenuCatalogCounter();
-            } else if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
-                displayDrawerMenuProfileCounter();
-                displayGardenMenu();
-            } else if (BroadCastMessages.ACTION_EVENT.equals(intent.getAction())) {
-                displayDrawerMenuActionsCounter();
-            } else if (BroadCastMessages.ALLOTMENT_EVENT.equals(intent.getAction())) {
-                displayDrawerMenuAllotmentCounter();
-            }
-        }
-
-    };
-
     private boolean doubleBackToExitPressedOnce;
 
     private GardenInterface currentGarden;
@@ -877,7 +875,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
     }
 
     @Override
-    public void onMenuClick(View v) {
+    public void onActionMenuClick(View v) {
         startActivity(new Intent(this, ActionActivity.class));
     }
 

@@ -38,26 +38,12 @@ public class ActionsResumeFragment extends BaseGotsFragment {
     public interface OnActionsClickListener {
         public void onActionClick(View v, BaseAction actionInterface);
 
-        public void onMenuClick(View v);
+        public void onActionMenuClick(View v);
     }
 
-    // @Override
-    // protected void onCurrentGardenChanged() {
-    // runAsyncDataRetrieval();
-    // }
-    //
-    // @Override
-    // protected void onWeatherChanged() {
-    // }
-    //
-    // @Override
-    // protected void onActionChanged() {
-    // runAsyncDataRetrieval();
-    // }
     @Override
     public void update() {
         runAsyncDataRetrieval();
-
     }
 
     @Override
@@ -89,7 +75,7 @@ public class ActionsResumeFragment extends BaseGotsFragment {
 
                 @Override
                 public void onClick(View v) {
-                    mCallback.onMenuClick(v);
+                    mCallback.onActionMenuClick(v);
                 }
             });
             if (actionAdapter.getCount() > 0) {
