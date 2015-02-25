@@ -182,8 +182,11 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         GoogleAnalyticsTracker.getInstance().trackPageView(getClass().getSimpleName());
 
         try {
-            GoogleAnalyticsTracker.getInstance().setCustomVar(1, "App Version",
-                    getPackageManager().getPackageInfo(getPackageName(), 0).versionName, 1);
+            final String versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+            GoogleAnalyticsTracker.getInstance().setCustomVar(1, "App Version", versionName, 1);
+            if (versionName != null && versionName.contains("SNAPSHOT")) {
+                GoogleAnalyticsTracker.getInstance().setDryRun(true);
+            }
         } catch (NameNotFoundException e) {
         }
 
