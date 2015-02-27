@@ -89,11 +89,6 @@ public class GotsAllotmentManager extends BroadcastReceiver implements Allotment
     }
 
     private void setAllotmentProvider() {
-        if (NuxeoManager.getInstance().getNuxeoClient().isOffline())
-            Log.i(TAG, "isOffline");
-        else
-            Log.i(TAG, "isOnline");
-
         if (getGotsContext().getServerConfig().isConnectedToServer() && !nuxeoManager.getNuxeoClient().isOffline()) {
             allotmentProvider = new NuxeoAllotmentProvider(mContext);
         } else {
