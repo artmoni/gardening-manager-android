@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/ic_sensor" />
+        android:src="@drawable/flowerpower_brown"/>
 
     <TextView
         android:id="@+id/textView1"

@@ -182,7 +182,7 @@
     <string name="tutorial.b.title">Accéder au catalogue de plantes</string>
     <string name="tutorial.b.description">Recherche de plantes, ajout de nouvelles références, partage avec la communauté, gestion des stocks</string>
     <string name="tutorial.c.title">Organiser mes parcelles </string>
-    <string name="tutorial.c.description">Je définie les parcelles, renseigne les plantes semées et suit la progression des cultures</string>
+    <string name="tutorial.c.description">Je défini les parcelles, renseigne les plantes semées et suis la progression des cultures</string>
     <string name="tutorial.d.title">Planifier mes actions</string>
     <string name="tutorial.d.description">Une alerte est émise à chaque échéance, les taches sont conservées dans l\'historique de la plante</string>
     <string name="tutorial.e.title">Rejoindre la communauté des jardiniers</string>

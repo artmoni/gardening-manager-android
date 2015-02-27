@@ -63,10 +63,13 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -195,6 +198,8 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.ACTION_EVENT));
         registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.ALLOTMENT_EVENT));
         registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
+        registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.AUTHENTIFICATION_BEGIN));
+        registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.AUTHENTIFICATION_END));
 
         Account userAccount = gotsPrefs.getUserAccount();
         Bundle bundle = new Bundle();
@@ -313,8 +318,30 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
     }
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        private ImageView connectionView;
+
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (BroadCastMessages.AUTHENTIFICATION_BEGIN.equals(intent.getAction())) {
+                if (menu != null && menu.findItem(R.id.connection) != null) {
+                    MenuItem itemConnection = menu.findItem(R.id.connection);
+                    if (connectionView == null)
+                        connectionView = new ImageView(getApplicationContext());
+                    connectionView.setImageDrawable(getResources().getDrawable(R.drawable.garden_disconnected));
+                    Animation rotation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
+                    rotation.setRepeatCount(Animation.INFINITE);
+                    connectionView.startAnimation(rotation);
+                    itemConnection = MenuItemCompat.setActionView(itemConnection, connectionView);
+                }
+
+            } else if (BroadCastMessages.AUTHENTIFICATION_END.equals(intent.getAction())) {
+                if (menu != null && menu.findItem(R.id.connection) != null) {
+                    if (connectionView != null)
+                        connectionView.clearAnimation();
+                    MenuItem itemConnection = menu.findItem(R.id.connection);
+                    itemConnection = MenuItemCompat.setActionView(itemConnection, null);
+                }
+            }
             if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())) {
                 displayGardenMenu();
                 invalidateOptionsMenu();
@@ -329,8 +356,10 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                 displayDrawerMenuAllotmentCounter();
             }
         }
-    
+
     };
+
+    private Menu menu;
 
     protected void displayDrawerMenuProfileCounter() {
         new AsyncTask<NavDrawerItem, Void, Integer>() {
@@ -427,6 +456,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_dashboard, menu);
+        this.menu = menu;
         return true;
     }
 

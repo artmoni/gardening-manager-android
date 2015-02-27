@@ -187,6 +187,9 @@
     <string name="tutorial.e.description">Discover original gardens and share your creations</string>
     <string name="tutorial.f.title">Monitor my plants</string>
     <string name="tutorial.f.description">Fertilizer, sunlight, temperature and soil moisture with your Parrot Flower Power</string>
+    <string name="tutorial.button.try">Demo</string>
+    <string name="tutorial.button.begin">Begin</string>
+    
     <string name="tutorial.finished">Great! you have finished the tutorial, take pleasure to grow your real garden and share your experience :)</string>
     
     <string name="sensor.buy">Buy a Parrot Flower Power</string>
@@ -197,8 +200,8 @@
     <string name="garden.type.private">Private garden</string>
     <string name="garden.type.incredibleedible">Incredible edible: food to share</string>
     <string name="garden.type.incredibleedible.description">The Incredible Edible project is an urban gardening project which bring people together and through actions around local food, help change behaviour toward the environment and build a kinder and more resilient world.</string>
-    <string name="workflow.process.title">Seed sheet approbation process</string>
-    <string name="workflow.launch.description">Submit this plant description to the validation process</string>
+    <string name="workflow.process.title">Validation process</string>
+    <string name="workflow.launch.description">Submit this plant description to the moderator team to be shared with the community</string>
 
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">

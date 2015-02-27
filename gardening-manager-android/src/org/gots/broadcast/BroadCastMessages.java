@@ -21,6 +21,8 @@
  * *********************************************************************** */
 package org.gots.broadcast;
 
+import android.content.Intent;
+
 /**
  * @author jcarsique
  * 
@@ -52,6 +54,10 @@ public final class BroadCastMessages {
     public static final String ACTION_EVENT = "org.gots.action.broadcastevent";
 
     public static final String ALLOTMENT_EVENT = "org.gots.allotment.broadcastevent";
+
+    public static String AUTHENTIFICATION_BEGIN = "org.gots.login.begin";
+
+    public static String AUTHENTIFICATION_END = "org.gots.login.end";
 
     private BroadCastMessages() {
         throw new AssertionError();

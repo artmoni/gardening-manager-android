@@ -330,6 +330,8 @@ public class LoginDialogFragment extends AbstractDialogFragment {
                     ContentResolver.setSyncAutomatically(newAccount, WeatherContentProvider.AUTHORITY, true);
                     ContentResolver.requestSync(newAccount, WeatherContentProvider.AUTHORITY, bundle);
                     getDialog().dismiss();
+                    getActivity().sendBroadcast(new Intent(BroadCastMessages.AUTHENTIFICATION_END));
+
                 } else {
                     if (isAdded())
                         Toast.makeText(getActivity(), "Please check your internet connection or try later",
@@ -356,6 +358,7 @@ public class LoginDialogFragment extends AbstractDialogFragment {
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int item) {
+                            getActivity().sendBroadcast(new Intent(BroadCastMessages.AUTHENTIFICATION_BEGIN));
                             selectedAccount = usableAccounts.get(item);
                             requestOAuth2Token(selectedAccount);
                         }

@@ -170,8 +170,8 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
         case R.id.delete_allotment:
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-            builder.setTitle("Delete");
-            builder.setMessage("Are you sure?");
+            builder.setTitle("Delete a garden");
+            builder.setMessage("Are you sure to delete the garden "+currentGarden.getName());
 
             builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 
