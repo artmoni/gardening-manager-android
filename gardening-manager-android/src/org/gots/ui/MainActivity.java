@@ -155,7 +155,8 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
             }
 
             public void onDrawerOpened(View drawerView) {
-                getSupportActionBar().setTitle(mDrawerTitle);
+                if (currentGarden != null)
+                    getSupportActionBar().setTitle(currentGarden.getName());
                 // calling onPrepareOptionsMenu() to hide action bar icons
                 supportInvalidateOptionsMenu();
             }
@@ -328,7 +329,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                     if (connectionView == null)
                         connectionView = new ImageView(getApplicationContext());
                     connectionView.setImageDrawable(getResources().getDrawable(R.drawable.garden_disconnected));
-                    Animation rotation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
+                    Animation rotation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.disappear);
                     rotation.setRepeatCount(Animation.INFINITE);
                     connectionView.startAnimation(rotation);
                     itemConnection = MenuItemCompat.setActionView(itemConnection, connectionView);
