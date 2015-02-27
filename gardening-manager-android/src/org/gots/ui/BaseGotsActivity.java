@@ -43,9 +43,7 @@ import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GotsSeedManager;
 import org.nuxeo.android.activities.BaseNuxeoActivity;
-import org.nuxeo.android.broadcast.NuxeoBroadcastMessages;
 import org.nuxeo.android.context.NuxeoContext;
-import org.nuxeo.android.context.NuxeoContextFactory;
 
 import android.accounts.Account;
 import android.content.BroadcastReceiver;

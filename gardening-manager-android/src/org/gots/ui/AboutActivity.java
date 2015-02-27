@@ -1,6 +1,5 @@
 package org.gots.ui;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -8,7 +7,6 @@ import org.gots.R;
 import org.gots.action.service.ActionTODOBroadcastReceiver;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.inapp.GotsPurchaseItem;
 import org.gots.preferences.GotsPreferences;
 import org.gots.provider.ActionsContentProvider;
 import org.gots.provider.GardenContentProvider;
@@ -26,7 +24,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -35,8 +32,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.vending.billing.util.IabHelper;
-import com.android.vending.billing.util.IabResult;
-import com.android.vending.billing.util.Inventory;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class AboutActivity extends BaseGotsActivity {

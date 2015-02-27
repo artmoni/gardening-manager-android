@@ -2,7 +2,6 @@ package org.gots.bean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.gots.R;
 import org.gots.garden.GardenInterface;
-import org.gots.ui.HutActivity;
 import org.gots.ui.ProfileActivity;
 import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.WeatherManager;
@@ -18,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 public class WeatherResumeFragment extends BaseGotsFragment {
 

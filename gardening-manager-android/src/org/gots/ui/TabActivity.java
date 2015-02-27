@@ -3,20 +3,14 @@ package org.gots.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.gots.R;
-import org.gots.exception.GotsException;
-import org.gots.ui.AllotmentListFragment.OnAllotmentSelected;
-import org.gots.ui.fragment.ActionsChoiceFragment.OnActionSelectedListener;
-
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar.Tab;
+import android.support.v7.app.ActionBarActivity;
 
 public abstract class TabActivity extends BaseGotsActivity {
 

@@ -15,7 +15,6 @@ import org.gots.seed.GotsSeedManager;
 import org.gots.seed.adapter.SeedListAdapter;
 import org.gots.seed.adapter.VendorSeedListAdapter;
 import org.gots.seed.provider.GotsSeedProvider;
-import org.gots.seed.provider.nuxeo.NuxeoSeedProvider;
 import org.gots.ui.TabSeedActivity;
 import org.json.JSONArray;
 import org.json.JSONException;

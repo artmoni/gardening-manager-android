@@ -1,10 +1,8 @@
 package org.gots.context;
 
 import org.nuxeo.android.broadcast.NuxeoBroadcastMessages;
-import org.nuxeo.android.context.NuxeoContextFactory;
 import org.nuxeo.android.context.SimpleNuxeoApplication;
 
-import android.app.Application;
 import android.content.IntentFilter;
 import android.util.Log;
 

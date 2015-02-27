@@ -17,11 +17,9 @@ import org.gots.bean.BaseAllotmentInterface;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
-import org.gots.ui.GardenActivity;
 
 import android.content.Context;
 import android.graphics.Point;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBar.LayoutParams;

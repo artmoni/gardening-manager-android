@@ -4,9 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Properties;
 
 import org.apache.http.HttpResponse;
@@ -14,15 +12,12 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.gots.bean.RouteNode;
-import org.gots.bean.TaskButton;
 import org.gots.seed.BaseSeedInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
 import org.nuxeo.ecm.automation.client.cache.CacheBehavior;
-import org.nuxeo.ecm.automation.client.jaxrs.AsyncCallback;
-import org.nuxeo.ecm.automation.client.jaxrs.OperationRequest;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Blob;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
@@ -30,12 +25,11 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
 import org.nuxeo.ecm.automation.client.jaxrs.spi.DefaultSession;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-
 import android.content.Context;
 import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class NuxeoWorkflowProvider {
     private String TAG = NuxeoWorkflowProvider.class.getSimpleName();

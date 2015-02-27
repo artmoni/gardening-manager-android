@@ -11,7 +11,6 @@
 package org.gots.seed.view;
 
 import org.gots.R;
-import org.gots.broadcast.BroadCastMessages;
 import org.gots.exception.GotsException;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeedInterface;
@@ -26,7 +25,6 @@ import org.gots.ui.fragment.LoginDialogFragment;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
