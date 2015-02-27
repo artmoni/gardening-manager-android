@@ -78,7 +78,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 cacheParam = (byte) (cacheParam | CacheBehavior.FORCE_REFRESH);
                 refresh = false;
             }
-            Documents docs = service.query("SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState != \"deleted\""
+            Documents docs = service.query("SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState = \"approved\""
                     + queryDefaultFilter, null, new String[] { "dc:modified DESC" }, "*", page, pageSize, cacheParam);
             for (Document document : docs) {
                 BaseSeedInterface seed = NuxeoSeedConverter.convert(document);
@@ -248,12 +248,18 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
         Session session = getNuxeoClient().getSession();
         DocumentManager service = session.getAdapter(DocumentManager.class);
+        final BaseSeedInterface localSeed = super.getSeedByUUID(uuid);
         try {
             Document doc = service.getDocument(new IdRef(uuid), true);
             remoteSeed = NuxeoSeedConverter.convert(doc);
-            // remoteSeed = super.createSeed(remoteSeed, null);
+            if (localSeed == null) {
+                remoteSeed = super.createSeed(remoteSeed, null);
+            } else {
+                remoteSeed.setId(localSeed.getSeedId());
+                remoteSeed = super.updateSeed(remoteSeed);
+            }
         } catch (Exception e) {
-            remoteSeed = super.getSeedByUUID(uuid);
+            remoteSeed = localSeed;
             Log.e(TAG, "" + e.getMessage());
         }
 
@@ -676,7 +682,8 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 refresh = false;
             }
             Documents docs = service.query("SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState != \"deleted\""
-                    + queryDefaultFilter+ "AND vendorseed:variety STARTSWITH "+currentFilter, null, new String[] { "dc:modified DESC" }, "*", 0, 25, cacheParam);
+                    + queryDefaultFilter + "AND vendorseed:variety STARTSWITH " + currentFilter, null,
+                    new String[] { "dc:modified DESC" }, "*", 0, 25, cacheParam);
             for (Document document : docs) {
                 BaseSeedInterface seed = NuxeoSeedConverter.convert(document);
                 Blob likeStatus = service.getLikeStatus(document);
@@ -699,7 +706,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 }
             }
             // getNuxeoClient().shutdown();
-            myVendorSeeds = synchronize(super.getVendorSeedsByName(currentFilter,force), remoteVendorSeeds);
+            myVendorSeeds = synchronize(super.getVendorSeedsByName(currentFilter, force), remoteVendorSeeds);
             // myVendorSeeds = remoteVendorSeeds;
         } catch (Exception e) {
             Log.e(TAG, "getVendorSeedsByName " + e.getMessage(), e);
