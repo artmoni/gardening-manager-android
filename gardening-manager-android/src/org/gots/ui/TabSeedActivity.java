@@ -255,8 +255,8 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
         }
 
         // ********************** Seed description **********************
-        fragmentDescription = (SeedDescriptionFragment) Fragment.instantiate(getApplicationContext(), SeedDescriptionFragment.class.getName(),
-                bundle);
+        fragmentDescription = (SeedDescriptionFragment) Fragment.instantiate(getApplicationContext(),
+                SeedDescriptionFragment.class.getName(), bundle);
         fragments.add(fragmentDescription);
         addTab(fragmentDescription, getResources().getString(R.string.seed_description_tabmenu_detail));
 
@@ -587,7 +587,8 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
             // FragmentManager fragmentManager = getSupportFragmentManager();
             // fragmentManager.beginTransaction().replace(R.id.frame_workflow, fragmentWorkflow).commit();
             addTab(fragmentWorkflow, "Validation");
-            workflowMenuItem.setVisible(false);
+            if (workflowMenuItem != null)
+                workflowMenuItem.setVisible(false);
         }
         super.onNuxeoDataRetrieved(data);
     }
