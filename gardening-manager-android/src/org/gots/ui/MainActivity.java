@@ -775,6 +775,8 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
 
     private GardenInterface currentGarden;
 
+    private WorkflowResumeFragment workflowResumeFragment;
+
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
@@ -831,10 +833,13 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
 
             protected void onPostExecute(JSONArray result) {
                 if (result != null && result.length() > 0) {
-                    Fragment workflowResumeFragment = new WorkflowResumeFragment();
-                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                    transaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
-                    transaction.replace(R.id.idFragmentWorkflow, workflowResumeFragment).commit();
+                    if (workflowResumeFragment == null) {
+                        workflowResumeFragment = new WorkflowResumeFragment();
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        transaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
+                        transaction.replace(R.id.idFragmentWorkflow, workflowResumeFragment).commit();
+                    } else
+                        workflowResumeFragment.update();
                 } else
                     findViewById(R.id.idFragmentWorkflow).setVisibility(View.GONE);
             };
