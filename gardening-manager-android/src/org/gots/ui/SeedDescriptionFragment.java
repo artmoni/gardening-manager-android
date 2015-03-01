@@ -148,6 +148,6 @@ public class SeedDescriptionFragment extends BaseGotsFragment {
 
     @Override
     public void update() {
-
+        runAsyncDataRetrieval();
     }
 }

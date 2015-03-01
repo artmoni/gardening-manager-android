@@ -65,6 +65,10 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 public class NewSeedActivity extends BaseGotsActivity implements OnClickListener, PictureSelectorListener {
+    public static final String ORG_GOTS_SEED_BARCODE = "org.gots.seed.barcode";
+
+    public static final String ORG_GOTS_SEEDID = "org.gots.seedid";
+
     private static final String SELECTED_SPECIE = "selectedSpecie";
 
     private DatePicker planningSowMin;
@@ -142,8 +146,8 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
         // bar.setCustomView(customActionBarView, new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
         // ViewGroup.LayoutParams.MATCH_PARENT));
 
-        if (getIntent().getIntExtra("org.gots.seedid", -1) != -1) {
-            newSeed = seedManager.getSeedById(getIntent().getIntExtra("org.gots.seedid", -1));
+        if (getIntent().getIntExtra(ORG_GOTS_SEEDID, -1) != -1) {
+            newSeed = seedManager.getSeedById(getIntent().getIntExtra(ORG_GOTS_SEEDID, -1));
             isNewSeed = false;
 
         } else {
@@ -152,8 +156,8 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
 
         initview();
 
-        if (getIntent().getStringExtra("org.gots.seed.barcode") != null)
-            newSeed.setBareCode(getIntent().getStringExtra("org.gots.seed.barcode"));
+        if (getIntent().getStringExtra(ORG_GOTS_SEED_BARCODE) != null)
+            newSeed.setBareCode(getIntent().getStringExtra(ORG_GOTS_SEED_BARCODE));
 
         // autoCompleteVariety.clearFocus();
         // gallerySpecies.post(new Runnable() {

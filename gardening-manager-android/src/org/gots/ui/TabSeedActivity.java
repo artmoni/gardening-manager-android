@@ -109,11 +109,13 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 
     private Fragment fragmentWebView;
 
-    private Fragment fragmentDescription;
+    private SeedDescriptionFragment fragmentDescription;
 
     private ImageView buttonActions;
 
     private Fragment fragmentWorkflow;
+
+    private MenuItem workflowMenuItem;
 
     // private TabsAdapter mTabsAdapter;
 
@@ -253,7 +255,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
         }
 
         // ********************** Seed description **********************
-        fragmentDescription = Fragment.instantiate(getApplicationContext(), SeedDescriptionFragment.class.getName(),
+        fragmentDescription = (SeedDescriptionFragment) Fragment.instantiate(getApplicationContext(), SeedDescriptionFragment.class.getName(),
                 bundle);
         fragments.add(fragmentDescription);
         addTab(fragmentDescription, getResources().getString(R.string.seed_description_tabmenu_detail));
@@ -334,6 +336,8 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
                 }.execute();
 
             }
+        if (fragmentDescription != null)
+            fragmentDescription.update();
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -353,13 +357,15 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_seeddescription, menu);
+
         if (mSeed.getGrowingSeedId() == 0) {
             menu.findItem(R.id.photo).setVisible(false);
             menu.findItem(R.id.delete).setVisible(false);
+            workflowMenuItem = menu.findItem(R.id.workflow);
             if ("project".equals(mSeed.getState()))
-                menu.findItem(R.id.workflow).setVisible(true);
+                workflowMenuItem.setVisible(true);
             else
-                menu.findItem(R.id.workflow).setVisible(false);
+                workflowMenuItem.setVisible(false);
         } else {
             // if ("project".equals(mSeed.getState()))
             // else
@@ -381,6 +387,11 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
             Intent browserIntent = new Intent(this, WebHelpActivity.class);
             browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
             startActivity(browserIntent);
+            return true;
+        case R.id.edit:
+            Intent editIntent = new Intent(this, NewSeedActivity.class);
+            editIntent.putExtra(NewSeedActivity.ORG_GOTS_SEEDID, mSeed.getSeedId());
+            startActivity(editIntent);
             return true;
         case R.id.action_stock_add:
             new AsyncTask<Void, Void, Void>() {
@@ -532,6 +543,12 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
                             nuxeoWorkflowProvider.startWorkflowValidation(mSeed);
                             return null;
                         }
+
+                        protected void onPostExecute(Void result) {
+                            Toast.makeText(getApplicationContext(),
+                                    "Your plant sheet has been sent to the moderator team", Toast.LENGTH_LONG).show();
+                            runAsyncDataRetrieval();
+                        };
                     }.execute();
                     dialog.dismiss();
                 }
@@ -570,6 +587,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
             // FragmentManager fragmentManager = getSupportFragmentManager();
             // fragmentManager.beginTransaction().replace(R.id.frame_workflow, fragmentWorkflow).commit();
             addTab(fragmentWorkflow, "Validation");
+            workflowMenuItem.setVisible(false);
         }
         super.onNuxeoDataRetrieved(data);
     }
