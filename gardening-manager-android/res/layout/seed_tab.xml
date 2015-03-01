@@ -7,7 +7,7 @@
     <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true" >
 
@@ -15,14 +15,6 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical" >
-
-            <org.gots.seed.view.SeedWidgetLong
-                android:id="@+id/IdSeedWidgetLong"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:padding="5dp" >
-            </org.gots.seed.view.SeedWidgetLong>
 
             <RelativeLayout
                 android:id="@+id/idLayoutCulturePeriod"
@@ -80,12 +72,15 @@
                     android:src="@drawable/action_sow" />
             </RelativeLayout>
 
-            <!-- <FrameLayout
+            <!--
+            <FrameLayout
                 android:id="@+id/frame_workflow"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp" >
-            </FrameLayout> -->
+            </FrameLayout>
+            -->
+
 
             <!--
             <FrameLayout
@@ -100,29 +95,26 @@
                 android:id="@+id/idPictureGallery"
                 android:layout_width="fill_parent"
                 android:layout_height="50dp"
-                android:visibility="visible" android:layout_weight="1" />
+                android:visibility="visible" />
         </LinearLayout>
     </ScrollView>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/idAdsTop"
-        android:layout_below="@+id/scrollView1"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="5dp" >
-
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        android:layout_weight="1" >
     </android.support.v4.view.ViewPager>
 
     <ImageView
         android:id="@+id/imageViewOverlyAction"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_above="@+id/idAdsTop"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="23dp"
         android:layout_marginRight="23dp"
-        android:layout_above="@+id/idAdsTop"
         android:background="@drawable/action_selector"
         android:padding="5dp"
         android:src="@drawable/action_detail" />

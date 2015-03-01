@@ -271,7 +271,6 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
                 PropertyMap properties = new PropertyMap();
                 properties.set("dc:title", "Picture");
 
-        
                 pictureBook = documentMgr.createDocument(new PathRef(seedDoc.getPath()), "PictureBook", "Picture",
                         properties);
             } catch (Exception e) {
@@ -325,8 +324,8 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
     public File uploadPicture(final GrowingSeed seed, File imageFile) {
         Session session = getNuxeoClient().getSession();
         FileUploader uploader = session.getAdapter(FileUploader.class);
-        
-        imageFile=super.uploadPicture(seed, imageFile);
+
+        imageFile = super.uploadPicture(seed, imageFile);
 
         try {
 
@@ -372,7 +371,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
 
             } catch (FileNotFoundException e) {
                 Log.d(TAG, "File not found: " + e.getMessage());
-            } catch (IOException e) { 
+            } catch (IOException e) {
                 Log.d(TAG, "Error accessing file: " + e.getMessage());
             }
 
@@ -428,14 +427,13 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
-            seedDoc = documentMgr.getDocument(new IdRef(mSeed.getUUID()));
-            Document pictureBook = documentMgr.getDocument(new PathRef(seedDoc.getPath() + "/Picture"), "*");
+//            seedDoc = documentMgr.getDocument(new IdRef(mSeed.getUUID()));
+            Document pictureBook = documentMgr.getChild(new IdRef(mSeed.getUUID()), "Picture");
             Documents pictureList = documentMgr.query(
                     "SELECT * FROM Picture WHERE ecm:currentLifeCycleState != \"deleted\" AND ecm:parentId=\""
                             + pictureBook.getId() + "\"", null, new String[] { "dc:modified DESC" }, "*", 0, 50,
                     CacheBehavior.FORCE_REFRESH);
             for (Document doc : pictureList) {
-                Log.i(TAG, doc.getName());
 
                 doc = documentMgr.getDocument(doc, "*");
                 // get the file content property
@@ -443,10 +441,11 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
                 // get the data URL
                 String path = map.getString("data");
                 FileBlob blob = (FileBlob) session.getFile(path);
+                Log.i(TAG, "Picture "+blob.getFileName());
                 imageFiles.add(blob.getFile());
             }
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage(), e);
+            Log.w(TAG, "No picture folder found ", e);
         }
         return imageFiles;
     }
@@ -483,7 +482,5 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         in.close();
         out.close();
     }
-    
-    
 
 }

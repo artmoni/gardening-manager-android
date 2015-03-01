@@ -15,7 +15,13 @@
 
         <!-- seed.description.environment -->
 
-        
+        <org.gots.seed.view.SeedWidgetLong
+            android:id="@+id/IdSeedWidgetLong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:padding="5dp" >
+        </org.gots.seed.view.SeedWidgetLong>
 
         <TextView
             android:id="@+id/IdSeedDescriptionEnvironmentTitle"

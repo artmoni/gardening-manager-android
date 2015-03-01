@@ -189,8 +189,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 
         bar.setTitle(mSeed.getSpecie());
 
-        SeedWidgetLong seedWidget = (SeedWidgetLong) findViewById(R.id.IdSeedWidgetLong);
-        seedWidget.setSeed(mSeed);
+        
 
         if (mSeed.getDateSowing() != null) {
             TextView textDateSowing = (TextView) findViewById(R.id.idTextSowingDate);

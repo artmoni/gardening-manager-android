@@ -14,6 +14,7 @@ import org.gots.R;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.provider.GotsSeedProvider;
+import org.gots.seed.view.SeedWidgetLong;
 import org.gots.ui.fragment.BaseGotsFragment;
 
 import android.os.Bundle;
@@ -51,6 +52,8 @@ public class SeedDescriptionFragment extends BaseGotsFragment {
 
     private TextView seedDescriptionHarvest;
 
+    private SeedWidgetLong seedWidgetLong;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +80,7 @@ public class SeedDescriptionFragment extends BaseGotsFragment {
         seedDescriptionEnnemiTitle = (TextView) v.findViewById(R.id.IdSeedDescriptionEnnemiTitle);
         seedDescriptionCultureHarvest = (TextView) v.findViewById(R.id.IdSeedDescriptionHarvest);
         seedDescriptionHarvest = (TextView) v.findViewById(R.id.IdSeedDescriptionHarvestTitle);
+        seedWidgetLong = (SeedWidgetLong) v.findViewById(R.id.IdSeedWidgetLong);
 
         return v;
     }
@@ -99,6 +103,9 @@ public class SeedDescriptionFragment extends BaseGotsFragment {
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
         BaseSeedInterface mSeed = (BaseSeedInterface) data;
+        
+        seedWidgetLong.setSeed(mSeed);
+        
         seedDescriptionEnvironnement.setText(Html.fromHtml(mSeed.getDescriptionGrowth()));
 
         seedDescriptionTitle.setOnClickListener(new View.OnClickListener() {
