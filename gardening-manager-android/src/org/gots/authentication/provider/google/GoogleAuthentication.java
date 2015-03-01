@@ -132,11 +132,11 @@ public class GoogleAuthentication implements GotsSocialAuthentication {
                     jsonArray = new JSONObject(convertStreamToString(is));
 
                     user.setId((String) jsonArray.get("id"));
-                    user.setFamily_name((String) jsonArray.get("family_name"));
+                    user.setLastname((String) jsonArray.get("family_name"));
                     user.setGiven_name((String) jsonArray.get("given_name"));
                     user.setPictureURL((String) jsonArray.get("picture"));
                     user.setLocale((String) jsonArray.get("locale"));
-                    user.setName((String) jsonArray.get("name"));
+                    user.setFirstName((String) jsonArray.get("name"));
                     user.setGender((String) jsonArray.get("gender"));
                     // user.setEmail(getEmail(accessToken, "me"));
                     Log.d(TAG, "Google User = " + user.getName());

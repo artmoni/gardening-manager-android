@@ -8,6 +8,7 @@ import org.gots.provider.AllotmentContentProvider;
 import org.gots.provider.GardenContentProvider;
 import org.gots.provider.SeedsContentProvider;
 import org.gots.provider.SensorContentProvider;
+import org.gots.ui.fragment.LoginDialogFragment;
 import org.nuxeo.android.config.NuxeoServerConfig;
 
 import android.accounts.Account;
@@ -66,6 +67,17 @@ public class PreferenceActivity extends android.preference.PreferenceActivity im
         Preference pref = findPreference(key);
         if (pref != null && value != null)
             pref.setSummary(value);
+        if (NuxeoServerConfig.PREF_SERVER_LOGIN.equals(key)) {
+            pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+//                    LoginDialogFragment login = new LoginDialogFragment();
+//                    login.show(getFragmentManager(), TAG);
+                    return true;
+                }
+            });
+        }
 
     }
 

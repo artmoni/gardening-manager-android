@@ -48,15 +48,15 @@ public class User {
         return name;
     }
 
-    public void setName(String name) {
+    public void setFirstName(String name) {
         this.name = name;
     }
 
-    public String getFamily_name() {
+    public String getLastname() {
         return family_name;
     }
 
-    public void setFamily_name(String family_name) {
+    public void setLastname(String family_name) {
         this.family_name = family_name;
     }
 
@@ -82,5 +82,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(getName());
+        builder.append(" ");
+        builder.append(getLastname());
+        return builder.toString();
     }
 }

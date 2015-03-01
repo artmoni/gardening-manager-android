@@ -11,7 +11,9 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.gots.authentication.provider.google.User;
 import org.gots.bean.RouteNode;
+import org.gots.garden.GardenInterface;
 import org.gots.seed.BaseSeedInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -20,6 +22,7 @@ import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
 import org.nuxeo.ecm.automation.client.cache.CacheBehavior;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Blob;
+import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
@@ -116,6 +119,36 @@ public class NuxeoWorkflowProvider {
         return node;
     }
 
+    public User getPrincipal(String username) {
+        User user = null;
+        try {
+            DefaultSession session = (DefaultSession) getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
+            String jsonPrincipal = GET("http://my.gardening-manager.com/nuxeo/site/api/v1/user/" + username, session);
+
+            JSONObject x = new JSONObject(jsonPrincipal);
+            try {
+                JSONObject properties = x.getJSONObject("properties");
+                user = new User();
+                user.setFirstName(properties.getString("firstName"));
+                user.setLastname(properties.getString("lastName"));
+                user.setEmail(properties.getString("email"));
+                Log.d(TAG, "firstName" + user);
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
+            }
+            ;
+            // node = service.getDocument(new IdRef("1bb85fc1-904c-4d0d-9753-e7a0a2653e80"), "*");
+            // tasksDoc = service.query(
+            // "Select * from RouteNode  where rnode:nodeId = ? and ecm:currentLifeCycleState = 'suspended'",
+            // new String[] { "Task7a0" }, null, "*", 0, 50, CacheBehavior.STORE);
+            // node = service.getDocument(new IdRef(docId), "*");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
     public Document getTaskDoc(String taskDocId) {
         Document doc = null;
         try {
@@ -126,6 +159,33 @@ public class NuxeoWorkflowProvider {
             e.printStackTrace();
         }
         return doc;
+    }
+
+    public void getUsersAndGroups(String username) {
+        try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
+            Document doc = service.getDocument(username);
+            String var = "";
+            Document docUsers = service.getUsersAndGroups(doc, "Write", var);
+
+            Log.i(TAG, "Var=" + var);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+            // cancel(false);
+        }
+    }
+
+    public Documents getTaskHistory(DocRef docRef) {
+        Documents docs = null;
+        try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
+            docs = service.query("Select * from TaskDoc where nt:targetDocumentId='" + docRef + "'");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return docs;
     }
 
     public Document startWorkflowValidation(BaseSeedInterface seed) {
