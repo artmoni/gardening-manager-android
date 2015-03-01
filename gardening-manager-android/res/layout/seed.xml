@@ -28,7 +28,7 @@
             android:id="@+id/IdSeedDescriptionEnvironment"
             style="@style/seed_description_content"
             android:text="seedDescription"
-            android:visibility="gone" >
+            android:visibility="visible" >
         </TextView>
         <!-- seed.description.culture -->
 
@@ -43,7 +43,7 @@
             android:id="@+id/IdSeedDescriptionCulture"
             style="@style/seed_description_content"
             android:text="Récolte"
-            android:visibility="gone" >
+            android:visibility="visible" >
         </TextView>
 
         <!-- seed.description.harvest -->
@@ -59,7 +59,7 @@
             android:id="@+id/IdSeedDescriptionHarvest"
             style="@style/seed_description_content"
             android:text="seedDescription"
-            android:visibility="gone" >
+            android:visibility="visible" >
         </TextView>
 
         <!-- seed.description.ennemi -->
@@ -75,7 +75,7 @@
             android:id="@+id/IdSeedDescriptionEnnemi"
             style="@style/seed_description_content"
             android:text="seedDescription"
-            android:visibility="gone" >
+            android:visibility="visible" >
         </TextView>
     </LinearLayout>
 
