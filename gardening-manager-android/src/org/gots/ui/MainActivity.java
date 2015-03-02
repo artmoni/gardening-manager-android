@@ -34,6 +34,7 @@ import org.gots.ui.fragment.ActionsResumeFragment.OnActionsClickListener;
 import org.gots.ui.fragment.CatalogResumeFragment;
 import org.gots.ui.fragment.IncredibleResumeFragment;
 import org.gots.ui.fragment.LoginDialogFragment;
+import org.gots.ui.fragment.SensorResumeFragment;
 import org.gots.ui.fragment.TutorialResumeFragment;
 import org.gots.ui.fragment.TutorialResumeFragment.OnTutorialFinishedListener;
 import org.gots.ui.fragment.WeatherResumeFragment;
@@ -803,6 +804,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         displayIncredibleFragment();
         displayWeatherFragment();
         displayWorkflowFragment();
+        displaySensorFragment();
         super.onResume();
     }
 
@@ -894,6 +896,15 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
             FragmentTransaction incredibleCatalogue = getSupportFragmentManager().beginTransaction();
             incredibleCatalogue.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
             incredibleCatalogue.replace(R.id.idFragmentIncredible, incredibleResumeFragment).commit();
+        }
+    }
+
+    private void displaySensorFragment() {
+        if (gotsPrefs.getParrotToken() != null) {
+            Fragment sensorResumeFragment = new SensorResumeFragment();
+            FragmentTransaction sensorTransaction = getSupportFragmentManager().beginTransaction();
+            sensorTransaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
+            sensorTransaction.replace(R.id.idFragmentSensor, sensorResumeFragment).commit();
         }
     }
 

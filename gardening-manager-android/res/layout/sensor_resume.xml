@@ -13,32 +13,33 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/bg_workflow_topa" />
+        android:src="@drawable/bg_sensor_top" />
 
     <TextView
-        android:id="@+id/textViewWorkflowTitle"
+        android:id="@+id/textViewSensor"
         style="@style/TitleResumeFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="@string/workflow.process.title"
+        android:text="My alerts"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Gallery
-        android:id="@+id/galleryWorkflow"
+        android:id="@+id/SensorList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/WeatherWidget"
-        android:layout_below="@+id/imageViewTop"
-        android:spacing="5dp" />
-
-   <!--  <TextView
-        android:id="@+id/textViewWorkflowDirective"
-        style="@style/seed_family_description"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/imageViewTop"
-        android:text="workflow description" /> -->
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal" >
+    </Gallery>
+
+    <Button
+        android:id="@+id/buttonSensor"
+        style="@style/buttonGreenDashboard"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="All my sensors" android:layout_marginTop="5dp"/>
 
 </RelativeLayout>

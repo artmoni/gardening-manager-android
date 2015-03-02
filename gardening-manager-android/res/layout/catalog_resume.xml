@@ -19,7 +19,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/textViewCatalogDescription"
-        android:layout_below="@+id/textViewCatalogDescription"
+        android:layout_below="@+id/imageViewTop"
+        android:paddingTop="5dp"
         android:spacing="5dp" />
 
     <TextView
@@ -29,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="@string/dashboard.hut.name"
+        android:text="@string/hut.menu.thismonth"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Button
@@ -37,9 +38,11 @@
         style="@style/buttonGreenDashboard"
         android:layout_alignRight="@+id/imageViewTop"
         android:layout_alignTop="@+id/imageViewTop"
-        android:text="@string/more" android:layout_marginTop="5dp"/>
+        android:layout_marginTop="5dp"
+        android:text="@string/dashboard.hut.name" />
 
-    <TextView
+    <!--
+         <TextView
         android:id="@+id/textViewCatalogDescription"
         style="@style/seed_family_description"
         android:layout_width="wrap_content"
@@ -47,5 +50,6 @@
         android:layout_alignLeft="@+id/imageViewTop"
         android:layout_below="@+id/imageViewTop"
         android:text="@string/hut.menu.seedsofthemonth" />
+    -->
 
 </RelativeLayout>

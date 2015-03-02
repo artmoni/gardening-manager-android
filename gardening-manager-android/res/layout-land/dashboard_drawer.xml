@@ -40,6 +40,12 @@
                     android:padding="5dp" />
 
                 <FrameLayout
+                    android:id="@+id/idFragmentSensor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp" />
+
+                <FrameLayout
                     android:id="@+id/idFragmentWorkflow"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -84,8 +90,8 @@
     <RelativeLayout
         android:id="@+id/frame_menu"
         android:layout_width="240dp"
-        android:layout_height="fill_parent" 
-        android:layout_gravity="start">
+        android:layout_height="fill_parent"
+        android:layout_gravity="start" >
 
         <RelativeLayout
             android:id="@+id/relativeLayout1"

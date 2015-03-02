@@ -45,47 +45,11 @@ public class SensorActivity extends BaseGotsActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            updateLocations();
+            if (SensorLoginDialogFragment.EVENT_AUTHENTICATE.equals(intent.getAction())) {
+                runAsyncDataRetrieval();
+            }
         }
     };
-
-    private void updateLocations() {
-        new AsyncTask<Void, Void, List<ParrotLocation>>() {
-
-            @Override
-            protected List<ParrotLocation> doInBackground(Void... params) {
-                ParrotSensorProvider sensorProvider = new ParrotSensorProvider(getApplicationContext());
-                List<ParrotLocation> locations = sensorProvider.getLocations();
-                return locations;
-            }
-
-            protected void onPostExecute(List<ParrotLocation> result) {
-
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-
-                if (result.size() > 0) {
-                    // SensorListFragment sensors = new SensorListFragment(result);
-                    // ft.replace(R.id.idListFragment, sensors);
-                    Gallery gallery = (Gallery) findViewById(R.id.idGallerySensor);
-                    final LocationListAdapter locationAdapter = new LocationListAdapter(getApplicationContext(), result);
-                    gallery.setAdapter(locationAdapter);
-                    gallery.setOnItemClickListener(new OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                            ft.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
-                            ft.replace(R.id.idFragmentSensor, new SensorChartFragment(
-                                    locationAdapter.getItem(position).getLocation_identifier()));
-                            ft.commit();
-                        }
-                    });
-                } else
-                    ft.replace(R.id.idFragmentSensor, new TutorialFragment(R.layout.tutorial_f));
-                ft.commit();
-
-            };
-        }.execute();
-    }
 
     @Override
     protected void onResume() {
@@ -94,7 +58,6 @@ public class SensorActivity extends BaseGotsActivity {
             login.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.CustomDialog);
             login.show(getSupportFragmentManager(), "sensor_login");
         }
-        updateLocations();
 
         super.onResume();
     }
@@ -104,7 +67,6 @@ public class SensorActivity extends BaseGotsActivity {
 
         switch (item.getItemId()) {
         case android.R.id.home:
-            // updateLocations();
             finish();
             break;
 
@@ -148,15 +110,17 @@ public class SensorActivity extends BaseGotsActivity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                     ft.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
+                    if (getSupportFragmentManager().getFragments().size() > 0)
+                        ft.addToBackStack(null);
                     ft.replace(R.id.idFragmentSensor, new SensorChartFragment(
                             locationAdapter.getItem(position).getLocation_identifier()));
                     ft.commit();
                 }
             });
-        } else
+        } else {
             ft.replace(R.id.idFragmentSensor, new TutorialFragment(R.layout.tutorial_f));
-        ft.commit();
+            ft.commit();
+        }
         super.onNuxeoDataRetrieved(data);
     }
-
 }
