@@ -28,6 +28,7 @@ import org.gots.provider.GardenContentProvider;
 import org.gots.provider.SeedsContentProvider;
 import org.gots.provider.SensorContentProvider;
 import org.gots.provider.WeatherContentProvider;
+import org.gots.sensor.parrot.ParrotSensorProvider;
 import org.gots.ui.BaseGotsActivity.GardenListener;
 import org.gots.ui.fragment.ActionsResumeFragment;
 import org.gots.ui.fragment.ActionsResumeFragment.OnActionsClickListener;
@@ -443,7 +444,26 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
             }
         }.execute(navDrawerItems.get(0));
     }
+    protected void displayDrawerMenuSensorCounter() {
+        new AsyncTask<NavDrawerItem, Void, Integer>() {
+            NavDrawerItem item;
 
+            @Override
+            protected Integer doInBackground(NavDrawerItem... params) {
+                item = params[0];
+                ParrotSensorProvider parrotSensorProvider = new ParrotSensorProvider(getApplicationContext());
+                return parrotSensorProvider.getSensors().size();
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
+                item.setCounterVisibility(result > 0);
+                item.setCount(result.toString());
+                adapter.notifyDataSetChanged();
+                super.onPostExecute(result);
+            }
+        }.execute(navDrawerItems.get(4));
+    }
     /**
      * Slide menu item click listener
      * */
