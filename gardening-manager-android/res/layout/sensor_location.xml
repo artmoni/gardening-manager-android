@@ -12,7 +12,7 @@
         android:layout_height="100dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:src="@drawable/flowerpower_brown" />
 
     <LinearLayout
@@ -22,7 +22,8 @@
         android:layout_centerHorizontal="true"
         android:background="#80444444"
         android:gravity="center"
-        android:orientation="vertical" android:padding="5dp">
+        android:orientation="vertical"
+        android:padding="5dp" >
 
         <TextView
             android:id="@+id/sensorLocationName"
@@ -36,7 +37,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="PlantAssignedDate"
-            android:textSize="8dp" android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            android:textSize="8dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sensorLayoutStatus"
+        android:layout_width="100dp"
+        android:layout_height="5dp"
+        android:layout_centerHorizontal="true"
+        android:background="@color/action_error_color"
+        android:orientation="vertical" >
     </LinearLayout>
 
 </RelativeLayout>

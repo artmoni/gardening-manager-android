@@ -25,21 +25,27 @@
         android:text="My alerts"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <Gallery
-        android:id="@+id/SensorList"
+    <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/imageViewTop"
         android:layout_marginTop="10dp"
         android:orientation="horizontal" >
-    </Gallery>
+
+        <LinearLayout
+            android:id="@+id/SensorListContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        </LinearLayout>
+    </HorizontalScrollView>
 
     <Button
         android:id="@+id/buttonSensor"
         style="@style/buttonGreenDashboard"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:text="All my sensors" android:layout_marginTop="5dp"/>
+        android:layout_marginTop="5dp"
+        android:text="All my sensors" />
 
 </RelativeLayout>

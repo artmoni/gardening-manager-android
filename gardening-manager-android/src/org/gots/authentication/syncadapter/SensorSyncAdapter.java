@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.gots.R;
 import org.gots.authentication.GotsSyncAdapter;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.sensor.local.LocalSensorSamplesProvider;
@@ -56,16 +57,18 @@ public class SensorSyncAdapter extends GotsSyncAdapter {
             airTemperatureInstruction = parrotLocationsStatus.getAir_temperature().getInstruction_key();
 
             if (soilMoistureInstruction != null && soilMoistureInstruction.contains("low")) {
-                notification.createNotification(soilMoistureInstruction);
+                notification.createNotification(getContext().getResources().getString(R.string.sensor_moisture_too_low));
             }
             if (lightInstruction != null && lightInstruction.contains("low")) {
-                notification.createNotification(lightInstruction);
+                notification.createNotification(getContext().getResources().getString(R.string.sensor_light_too_low));
             }
             if (fertilizerInstruction != null && fertilizerInstruction.contains("low")) {
-                notification.createNotification(fertilizerInstruction);
+                notification.createNotification(getContext().getResources().getString(
+                        R.string.sensor_fertilizer_too_low));
             }
             if (airTemperatureInstruction != null && airTemperatureInstruction.contains("low")) {
-                notification.createNotification(airTemperatureInstruction);
+                notification.createNotification(getContext().getResources().getString(
+                        R.string.sensor_airtemperature_too_low));
             }
             notification.show();
         }

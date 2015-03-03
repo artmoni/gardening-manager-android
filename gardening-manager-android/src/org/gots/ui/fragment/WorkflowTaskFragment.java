@@ -46,7 +46,7 @@ public class WorkflowTaskFragment extends BaseGotsFragment {
 
     private Documents historyTaskDocuments;
 
-//    private TextView textviewTaskLogs;
+    // private TextView textviewTaskLogs;
 
     private User lastactor;
 
@@ -56,7 +56,7 @@ public class WorkflowTaskFragment extends BaseGotsFragment {
         textviewTaskDirective = (TextView) view.findViewById(R.id.textWorkflowTaskDirective);
         textviewTaskName = (TextView) view.findViewById(R.id.textWorkflowTaskTitle);
         textviewTaskInitiator = (TextView) view.findViewById(R.id.textWorkflowTaskInitiator);
-//        textviewTaskLogs = (TextView) view.findViewById(R.id.textWorkflowLogs);
+        // textviewTaskLogs = (TextView) view.findViewById(R.id.textWorkflowLogs);
         buttonContainer = (LinearLayout) view.findViewById(R.id.buttonWorkflowLayout);
 
         return view;
@@ -110,7 +110,8 @@ public class WorkflowTaskFragment extends BaseGotsFragment {
         PropertyMap map = doc.getProperties();
         textviewTaskDirective.setText(map.getString("nt:directive"));
         textviewTaskName.setText(map.getString("nt:name"));
-        textviewTaskInitiator.setText(lastactor.getName() + " " + lastactor.getLastname());
+        if (lastactor != null)
+            textviewTaskInitiator.setText(lastactor.getName() + " " + lastactor.getLastname());
         // if (historyTaskDocuments != null) {
         // StringBuilder builder = new StringBuilder();
         // for (Document logDoc : historyTaskDocuments) {

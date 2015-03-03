@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.gots.R;
 import org.gots.sensor.LocationListAdapter;
+import org.gots.sensor.SensorLocationWidget;
 import org.gots.sensor.parrot.ParrotLocation;
 import org.gots.sensor.parrot.ParrotLocationsStatus;
+import org.gots.sensor.parrot.ParrotSensor;
 import org.gots.sensor.parrot.ParrotSensorProvider;
 import org.gots.ui.ProfileActivity;
 import org.gots.ui.SensorActivity;
@@ -18,15 +20,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Gallery;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 
 public class SensorResumeFragment extends BaseGotsFragment {
 
-    private Gallery sensorGallery;
+    private LinearLayout sensorListview;
 
     private Button button;
 
-    private List<ParrotLocationsStatus> status;
+    private List<ParrotLocation> mySensorLocations;
+
+    // private List<ParrotSensor> mySensors;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,7 +40,7 @@ public class SensorResumeFragment extends BaseGotsFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        sensorGallery = (Gallery) view.findViewById(R.id.SensorList);
+        sensorListview = (LinearLayout) view.findViewById(R.id.SensorListContainer);
         button = (Button) view.findViewById(R.id.buttonSensor);
         button.setOnClickListener(new View.OnClickListener() {
 
@@ -61,38 +66,83 @@ public class SensorResumeFragment extends BaseGotsFragment {
     @Override
     protected Object retrieveNuxeoData() throws Exception {
         ParrotSensorProvider sensorProvider = new ParrotSensorProvider(getActivity());
-        status = sensorProvider.getStatus();
-        return sensorProvider.getLocations();
+        mySensorLocations = sensorProvider.getLocations();
+        // mySensors = sensorProvider.getSensors();
+        return sensorProvider.getStatus();
     }
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
-        List<ParrotLocation> locations = (List<ParrotLocation>) data;
-        final LocationListAdapter locationAdapter = new LocationListAdapter(getActivity(), locations);
+        List<ParrotLocationsStatus> status = (List<ParrotLocationsStatus>) data;
+        sensorListview.removeAllViews();
+        for (ParrotLocationsStatus parrotLocationsStatus : status) {
+            ParrotLocation location_for_status = null;
 
-        sensorGallery.setAdapter(locationAdapter);
-        if (status != null) {
-            for (ParrotLocationsStatus locationsStatus : status) {
-                if (locationsStatus.getSoil_moisture().getInstruction_key() != null
-                        && locationsStatus.getSoil_moisture().getInstruction_key().contains("low")
-                        || locationsStatus.getFertilizer().getInstruction_key() != null
-                        && locationsStatus.getFertilizer().getInstruction_key().contains("low"))
-                    for (int i = 0; i < locations.size(); i++) {
-                        if (locations.get(i).getLocation_identifier().equals(locationsStatus.getLocation_identifier())) {
-                            if (sensorGallery.getChildAt(i) != null) {
-                                sensorGallery.getChildAt(i).setBackgroundColor(
-                                        getResources().getColor(R.color.action_error_color));
-                            }
-                            break;
-                        }
-                    }
-                Log.d(getTag(), locationsStatus.getLocation_identifier() + "> getSoil_moisture="
-                        + locationsStatus.getSoil_moisture().getInstruction_key() + " getFertilizer="
-                        + locationsStatus.getFertilizer().getInstruction_key() + " getLight="
-                        + locationsStatus.getLight().getInstruction_key() + " getAir_temperature="
-                        + locationsStatus.getAir_temperature().getInstruction_key());
+            for (ParrotLocation location : mySensorLocations) {
+                if (location.getLocation_identifier().equals(parrotLocationsStatus.getLocation_identifier())) {
+                    location_for_status = location;
+                    break;
+                    // sensorWidget.setSensor(location.get);
+                }
             }
+
+            if (location_for_status == null)
+                continue;
+
+            if ("status_warning".equals(parrotLocationsStatus.getSoil_moisture().getStatus_key())
+                    || "status_warning".equals(parrotLocationsStatus.getFertilizer().getStatus_key())
+                    || "status_warning".equals(parrotLocationsStatus.getAir_temperature().getStatus_key())
+                    || "status_warning".equals(parrotLocationsStatus.getLight().getStatus_key())
+                    || "status_critical".equals(parrotLocationsStatus.getSoil_moisture().getStatus_key())
+                    || "status_critical".equals(parrotLocationsStatus.getFertilizer().getStatus_key())
+                    || "status_critical".equals(parrotLocationsStatus.getAir_temperature().getStatus_key())
+                    || "status_critical".equals(parrotLocationsStatus.getLight().getStatus_key())) {
+                SensorLocationWidget sensorWidget = new SensorLocationWidget(getActivity());
+                sensorWidget.setSensor(location_for_status, parrotLocationsStatus.getSoil_moisture().getStatus_key(),
+                        parrotLocationsStatus.getFertilizer().getStatus_key(),
+                        parrotLocationsStatus.getAir_temperature().getStatus_key(),
+                        parrotLocationsStatus.getLight().getStatus_key());
+
+                // if (parrotLocationsStatus.getSoil_moisture().getInstruction_key() != null
+                // && parrotLocationsStatus.getSoil_moisture().getInstruction_key().contains("low"))
+                // sensorListview.setBackgroundColor(getResources().getColor(R.color.action_ok_color));
+                // if (parrotLocationsStatus.getFertilizer().getInstruction_key() != null
+                // && parrotLocationsStatus.getFertilizer().getInstruction_key().contains("low"))
+                // sensorListview.setBackgroundColor(getResources().getColor(R.color.action_warning_color));
+                sensorListview.addView(sensorWidget);
+            }
+            // for (ParrotSensor sensor : mySensors) {
+            // if (sensor.getSensor_serial().equals(location.getSensor_serial())) {
+            // break;
+            // }
+            // }
         }
+
+        // final LocationListAdapter locationAdapter = new LocationListAdapter(getActivity(), locations);
+
+        // sensorGallery.setAdapter(locationAdapter);
+        // if (status != null) {
+        // for (ParrotLocationsStatus locationsStatus : status) {
+        // if (locationsStatus.getSoil_moisture().getInstruction_key() != null
+        // && locationsStatus.getSoil_moisture().getInstruction_key().contains("low")
+        // || locationsStatus.getFertilizer().getInstruction_key() != null
+        // && locationsStatus.getFertilizer().getInstruction_key().contains("low"))
+        // for (int i = 0; i < locations.size(); i++) {
+        // if (locations.get(i).getLocation_identifier().equals(locationsStatus.getLocation_identifier())) {
+        // if (sensorGallery.getChildAt(i) != null) {
+        // sensorGallery.getChildAt(i).setBackgroundColor(
+        // getResources().getColor(R.color.action_error_color));
+        // }
+        // break;
+        // }
+        // }
+        // Log.d(getTag(), locationsStatus.getLocation_identifier() + "> getSoil_moisture="
+        // + locationsStatus.getSoil_moisture().getInstruction_key() + " getFertilizer="
+        // + locationsStatus.getFertilizer().getInstruction_key() + " getLight="
+        // + locationsStatus.getLight().getInstruction_key() + " getAir_temperature="
+        // + locationsStatus.getAir_temperature().getInstruction_key());
+        // }
+        // }
 
         super.onNuxeoDataRetrieved(data);
     }
