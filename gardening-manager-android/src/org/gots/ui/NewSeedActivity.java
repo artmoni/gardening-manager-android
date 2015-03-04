@@ -20,15 +20,20 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import org.gots.R;
+import org.gots.nuxeo.NuxeoWorkflowProvider;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedImpl;
 import org.gots.seed.adapter.ListSpeciesAdapter;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
+import org.gots.ui.fragment.WorkflowTaskFragment.OnWorkflowClickListener;
 import org.gots.utils.FileUtilities;
 import org.gots.utils.SelectOrTakePictureDialogFragment;
 import org.gots.utils.SelectOrTakePictureDialogFragment.PictureSelectorListener;
+import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -64,7 +69,7 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-public class NewSeedActivity extends BaseGotsActivity implements OnClickListener, PictureSelectorListener {
+public class NewSeedActivity extends BaseGotsActivity implements OnClickListener, PictureSelectorListener,OnWorkflowClickListener {
     public static final String ORG_GOTS_SEED_BARCODE = "org.gots.seed.barcode";
 
     public static final String ORG_GOTS_SEEDID = "org.gots.seedid";
@@ -183,6 +188,44 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
         super.onSaveInstanceState(outState);
         if (gallerySpecies != null)
             outState.putInt(SELECTED_SPECIE, gallerySpecies.getSelectedItemPosition());
+    }
+
+    // AsyncTask<Void, Integer, Void> createSeedTask = new AsyncTask<Void, Integer, Void>() {
+    // @Override
+    // protected Void doInBackground(Void... params) {
+    // createSeed();
+    // return null;
+    // }
+    //
+    //
+    // protected void onPostExecute(Void result) {
+    // NewSeedActivity.this.finish();
+    //
+    // };
+    // };
+    protected BaseSeedInterface createSeed() {
+        if (picturePath != null) {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            Bitmap bitmap = FileUtilities.decodeScaledBitmapFromSdCard(picturePath, 100, 100);
+            bitmap.compress(CompressFormat.PNG, 0 /* ignored for PNG */, bos);
+            byte[] bitmapdata = bos.toByteArray();
+
+            // write the bytes in file
+            FileOutputStream fos;
+            try {
+                fos = new FileOutputStream(new File(gotsPrefs.getGotsExternalFileDir(),
+                        newSeed.getVariety().toLowerCase().replaceAll("\\s", "")));
+                fos.write(bitmapdata);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            newSeed = seedManager.createSeed(newSeed, new File(picturePath));
+        } else
+            newSeed = seedManager.createSeed(newSeed, null);
+        // seedManager.attach
+        return seedManager.addToStock(newSeed, getCurrentGarden());
     }
 
     public void updatePlanning() {
@@ -352,6 +395,10 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
     // autoCompleteSpecie.showDropDown();
     // }
 
+    protected void onSeedCreated() {
+        runAsyncDataRetrieval();
+    };
+
     @Override
     public void onClick(View v) {
         newSeed.setDescriptionDiseases(descriptionDiseases.getText().toString());
@@ -366,39 +413,51 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
 
         case R.id.buttonStock:
             if (validateSeed()) {
-                new AsyncTask<Void, Integer, Void>() {
-                    @Override
-                    protected Void doInBackground(Void... params) {
-                        if (picturePath != null) {
-                            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                            Bitmap bitmap = FileUtilities.decodeScaledBitmapFromSdCard(picturePath, 100, 100);
-                            bitmap.compress(CompressFormat.PNG, 0 /* ignored for PNG */, bos);
-                            byte[] bitmapdata = bos.toByteArray();
+                AlertDialog.Builder builderWorkflow = new AlertDialog.Builder(this);
+                builderWorkflow.setMessage(this.getResources().getString(R.string.workflow_launch_description)).setCancelable(
+                        false).setPositiveButton(getResources().getString(R.string.seed_action_add_stock) + " + Share",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                new AsyncTask<Void, Void, Document>() {
+                                    @Override
+                                    protected Document doInBackground(Void... params) {
+                                        BaseSeedInterface mSeed = createSeed();
+                                        NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(
+                                                getApplicationContext());
+                                        return nuxeoWorkflowProvider.startWorkflowValidation(mSeed);
+                                    }
 
-                            // write the bytes in file
-                            FileOutputStream fos;
-                            try {
-                                fos = new FileOutputStream(new File(gotsPrefs.getGotsExternalFileDir(),
-                                        newSeed.getVariety().toLowerCase().replaceAll("\\s", "")));
-                                fos.write(bitmapdata);
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                                    protected void onPostExecute(Document result) {
+                                        if (result != null)
+                                            Toast.makeText(getApplicationContext(),
+                                                    "Your plant sheet has been sent to the moderator team",
+                                                    Toast.LENGTH_LONG).show();
+
+                                        onSeedCreated();
+                                    }
+
+                                }.execute();
+                                dialog.dismiss();
                             }
-                            newSeed = seedManager.createSeed(newSeed, new File(picturePath));
-                        } else
-                            newSeed = seedManager.createSeed(newSeed, null);
-                        // seedManager.attach
-                        seedManager.addToStock(newSeed, getCurrentGarden());
-                        return null;
-                    }
+                        }).setNegativeButton(getResources().getString(R.string.seed_action_add_stock),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                new AsyncTask<Void, Void, Void>() {
+                                    @Override
+                                    protected Void doInBackground(Void... params) {
+                                        BaseSeedInterface mSeed = createSeed();
+                                        return null;
+                                    }
 
-                    protected void onPostExecute(Void result) {
-                        NewSeedActivity.this.finish();
+                                    protected void onPostExecute(Void result) {
+                                        onSeedCreated();
+                                    }
 
-                    };
-                }.execute();
+                                }.execute();
+                                dialog.cancel();
+                            }
+                        });
+                builderWorkflow.show();
 
             }
             break;
@@ -725,6 +784,11 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, getCacheDir() + "_tmp");
 
         startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
+    }
+
+    @Override
+    public void onWorkflowFinished() {
+        
     }
 
 }

@@ -1,15 +1,18 @@
 package org.gots.ui.fragment;
 
 import org.gots.R;
+import org.gots.action.BaseAction;
 import org.gots.authentication.provider.google.User;
 import org.gots.bean.RouteNode;
 import org.gots.bean.TaskButton;
 import org.gots.nuxeo.NuxeoWorkflowProvider;
+import org.gots.ui.fragment.ActionsResumeFragment.OnActionsClickListener;
 import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
@@ -50,6 +53,8 @@ public class WorkflowTaskFragment extends BaseGotsFragment {
 
     private User lastactor;
 
+    private OnWorkflowClickListener mCallback;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.workflow_task, null);
@@ -60,6 +65,21 @@ public class WorkflowTaskFragment extends BaseGotsFragment {
         buttonContainer = (LinearLayout) view.findViewById(R.id.buttonWorkflowLayout);
 
         return view;
+    }
+    public interface OnWorkflowClickListener {
+        public void onWorkflowFinished();
+
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        try {
+            mCallback = (OnWorkflowClickListener) activity;
+        } catch (ClassCastException castException) {
+            throw new ClassCastException(WorkflowTaskFragment.class.getSimpleName() + " must implements OnWorkflowClickListener");
+
+        }
+        super.onAttach(activity);
     }
 
     @Override
@@ -131,8 +151,8 @@ public class WorkflowTaskFragment extends BaseGotsFragment {
                     @Override
                     public void onClick(View v) {
                         AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                        alert.setTitle("Please comment your decision");
-                        alert.setMessage("Enter Pin :");
+                        alert.setTitle("Log a comment");
+//                        alert.setMessage("Tell :");
 
                         // Set an EditText view to get user input
                         final EditText input = new EditText(getActivity());
@@ -156,11 +176,10 @@ public class WorkflowTaskFragment extends BaseGotsFragment {
                                             protected void onPostExecute(Document result) {
                                                 if (result == null) {
                                                     Log.w(TAG, "Error processing workflow " + taskButton.getName());
-
                                                 } else {
                                                     Log.i(TAG, result.getId() + " follow workflow with task : "
                                                             + taskButton.getName());
-
+                                                    mCallback.onWorkflowFinished();
                                                 }
                                                 runAsyncDataRetrieval();
                                             };

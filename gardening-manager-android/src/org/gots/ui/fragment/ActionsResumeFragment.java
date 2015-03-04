@@ -51,7 +51,7 @@ public class ActionsResumeFragment extends BaseGotsFragment {
         try {
             mCallback = (OnActionsClickListener) activity;
         } catch (ClassCastException castException) {
-            throw new ClassCastException(ActionsResumeFragment.class.getSimpleName() + " must implements ");
+            throw new ClassCastException(ActionsResumeFragment.class.getSimpleName() + " must implements OnActionsClickListener");
 
         }
         super.onAttach(activity);
