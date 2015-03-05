@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:text="Task"
+        android:text="Status"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <!--
@@ -42,7 +42,7 @@
         android:layout_below="@+id/textWorkflowTaskDirective"
         android:layout_marginTop="5dp"
         android:paddingLeft="10dp"
-        android:text="Task initiator"
+        android:text="~ Gardening Manager"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textStyle="italic" />
     <TextView
@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/imageViewTop"
         android:layout_below="@+id/imageViewTop"
-        android:text="Task directive" />
+        android:text="Validation is in progress. Please wait." />
 
     <LinearLayout
         android:id="@+id/buttonWorkflowLayout"

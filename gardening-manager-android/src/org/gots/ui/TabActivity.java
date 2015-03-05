@@ -37,6 +37,10 @@ public abstract class TabActivity extends BaseGotsActivity {
         mFragmentAdapter.addTab(getSupportActionBar().newTab().setText(title), fragment, getIntent().getExtras());
     }
 
+    protected void removeTab(Fragment fragment) {
+        mFragmentAdapter.remoteTab(fragment);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +103,18 @@ public abstract class TabActivity extends BaseGotsActivity {
             fragments.add(fragment);
             mActionBar.addTab(tab);
             notifyDataSetChanged();
+        }
+
+        private void remoteTab(Fragment fragment) {
+            for (int i = 0; i < fragments.size(); i++) {
+                Fragment fragment2 = fragments.get(i);
+                if (fragment.equals(fragment2)) {
+                    mTabs.remove(i);
+                    notifyDataSetChanged();
+                    break;
+                }
+            }
+
         }
 
         @Override

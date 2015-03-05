@@ -44,6 +44,7 @@ import org.gots.seed.view.SeedWidgetLong;
 import org.gots.ui.AllotmentListFragment.OnAllotmentSelected;
 import org.gots.ui.fragment.ActionsChoiceFragment;
 import org.gots.ui.fragment.ActionsChoiceFragment.OnActionSelectedListener;
+import org.gots.ui.fragment.WorkflowTaskFragment.OnWorkflowClickListener;
 import org.gots.ui.fragment.ActionsListFragment;
 import org.gots.ui.fragment.LoginDialogFragment;
 import org.gots.ui.fragment.WorkflowTaskFragment;
@@ -84,7 +85,8 @@ import android.widget.Toast;
 import com.android.vending.billing.util.IabHelper;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class TabSeedActivity extends TabActivity implements OnActionSelectedListener, OnAllotmentSelected {
+public class TabSeedActivity extends TabActivity implements OnActionSelectedListener, OnAllotmentSelected,
+        OnWorkflowClickListener {
     public static final String GOTS_VENDORSEED_ID = "org.gots.seed.vendorid";
 
     public static final String GOTS_GROWINGSEED_ID = "org.gots.seed.id";
@@ -188,8 +190,6 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
         });
 
         bar.setTitle(mSeed.getSpecie());
-
-        
 
         if (mSeed.getDateSowing() != null) {
             TextView textDateSowing = (TextView) findViewById(R.id.idTextSowingDate);
@@ -675,5 +675,10 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
     @Override
     protected ViewPager getViewPager() {
         return (ViewPager) findViewById(R.id.pager);
+    }
+
+    @Override
+    public void onWorkflowFinished() {
+        removeTab(fragmentWorkflow);
     }
 }
