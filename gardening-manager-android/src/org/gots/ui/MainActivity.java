@@ -28,6 +28,7 @@ import org.gots.provider.GardenContentProvider;
 import org.gots.provider.SeedsContentProvider;
 import org.gots.provider.SensorContentProvider;
 import org.gots.provider.WeatherContentProvider;
+import org.gots.sensor.parrot.ParrotLocation;
 import org.gots.sensor.parrot.ParrotSensorProvider;
 import org.gots.ui.BaseGotsActivity.GardenListener;
 import org.gots.ui.fragment.ActionsResumeFragment;
@@ -36,6 +37,7 @@ import org.gots.ui.fragment.CatalogResumeFragment;
 import org.gots.ui.fragment.IncredibleResumeFragment;
 import org.gots.ui.fragment.LoginDialogFragment;
 import org.gots.ui.fragment.SensorResumeFragment;
+import org.gots.ui.fragment.SensorResumeFragment.OnSensorClickListener;
 import org.gots.ui.fragment.TutorialResumeFragment;
 import org.gots.ui.fragment.TutorialResumeFragment.OnTutorialFinishedListener;
 import org.gots.ui.fragment.WeatherResumeFragment;
@@ -85,7 +87,7 @@ import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 
 public class MainActivity extends BaseGotsActivity implements GardenListener, OnTutorialFinishedListener,
-        OnActionsClickListener {
+        OnActionsClickListener,OnSensorClickListener {
     private DrawerLayout mDrawerLayout;
 
     private ListView mDrawerList;
@@ -944,6 +946,11 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
     @Override
     public void onActionMenuClick(View v) {
         startActivity(new Intent(this, ActionActivity.class));
+    }
+
+    @Override
+    public void OnSensorClick(ParrotLocation locationSensor) {
+        startActivity(new Intent(this, SensorActivity.class));
     }
 
 }

@@ -11,6 +11,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.gots.R;
 import org.gots.sensor.parrot.ParrotLocation;
+import org.gots.sensor.parrot.ParrotLocationsStatus;
 import org.gots.utils.FileUtilities;
 
 import android.content.Context;
@@ -35,11 +36,13 @@ public class SensorLocationWidget extends RelativeLayout {
     private String TAG = SensorLocationWidget.class.getSimpleName();
 
     private LinearLayout sensorLayoutStatus;
+    
 
     public SensorLocationWidget(Context context) {
         super(context);
         initView();
     }
+    
 
     private void initView() {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -80,19 +83,23 @@ public class SensorLocationWidget extends RelativeLayout {
         }.execute();
     }
 
-    public void setSensor(ParrotLocation location, String moisture_status_key, String fertilizer_status_key,
-            String airtemperature_status_key, Object light_status_key) {
+    public void setSensor(ParrotLocation location, ParrotLocationsStatus locationStatus) {
         this.sensorLocation = location;
         setupView();
-        if ("status_warning".equals(moisture_status_key) || "status_warning".equals(fertilizer_status_key)
+        String fertilizer_status_key=locationStatus.getFertilizer().getStatus_key();
+        String light_status_key=locationStatus.getLight().getStatus_key();
+        String airtemperature_status_key=locationStatus.getAir_temperature().getStatus_key();
+        String moisture_key=locationStatus.getSoil_moisture().getStatus_key();
+        
+        if ("status_warning".equals(moisture_key) || "status_warning".equals(fertilizer_status_key)
                 || "status_warning".equals(airtemperature_status_key) || "status_warning".equals(light_status_key)) {
             sensorLayoutStatus.setBackgroundColor(getContext().getResources().getColor(R.color.action_warning_color));
-        } else if ("status_critical".equals(moisture_status_key) || "status_critical".equals(fertilizer_status_key)
+        } else if ("status_critical".equals(moisture_key) || "status_critical".equals(fertilizer_status_key)
                 || "status_critical".equals(airtemperature_status_key) || "status_critical".equals(light_status_key)) {
             sensorLayoutStatus.setBackgroundColor(getContext().getResources().getColor(R.color.action_error_color));
 
         }
-        Log.d(TAG, moisture_status_key + " " + fertilizer_status_key + " " + airtemperature_status_key + " "
+        Log.d(TAG, moisture_key + " " + fertilizer_status_key + " " + airtemperature_status_key + " "
                 + light_status_key);
     }
 

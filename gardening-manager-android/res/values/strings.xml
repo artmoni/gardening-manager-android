@@ -202,18 +202,18 @@
     <string name="garden.type.incredibleedible.description">The Incredible Edible project is an urban gardening project which bring people together and through actions around local food, help change behaviour toward the environment and build a kinder and more resilient world.</string>
     <string name="workflow.process.title">Validation process</string>
     <string name="workflow.launch.description">Submit this plant description to the moderator team to be shared with the community</string>
-    <string name="sensor.light.too.low">Increase luminosity</string>
-    <string name="sensor.light.too.high">Decrease luminosity</string>
-    <string name="sensor.light.good">Light is good</string>
+    <string name="sensor.light.too.low">Not enough light</string>
+    <string name="sensor.light.too.high">Too many light</string>
+    <string name="sensor.light.good">Light is correct</string>
     <string name="sensor.airtemperature.too.low">Increase temperature</string>
     <string name="sensor.airtemperature.too.high">Decrease temperature</string>
-    <string name="sensor.airtemperature.good">temperature is good</string>
-    <string name="sensor.moisture.too.low">Moisture too low</string>
-    <string name="sensor.moisture.too.high">Moisture too low</string>
-    <string name="sensor.moisture.good">Moisture is good</string>
-    <string name="sensor.fertilizer.too.low">Fertilizer too low</string>
-    <string name="sensor.fertilizer.too.high">Fertilizer too high</string>
-    <string name="sensor.fertilizer.good">Fertilizer is good</string>
+    <string name="sensor.airtemperature.good">Temperature is correct</string>
+    <string name="sensor.moisture.too.low">Not enough water</string>
+    <string name="sensor.moisture.too.high">Too many water</string>
+    <string name="sensor.moisture.good">Water quantity is correct</string>
+    <string name="sensor.fertilizer.too.low">Not enough fertilizer</string>
+    <string name="sensor.fertilizer.too.high">Too many fertilizer</string>
+    <string name="sensor.fertilizer.good">Fertilizer quantity is correct</string>
 
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">

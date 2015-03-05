@@ -46,7 +46,7 @@
         android:layout_width="100dp"
         android:layout_height="5dp"
         android:layout_centerHorizontal="true"
-        android:background="@color/action_error_color"
+        android:background="@color/action_ok_color"
         android:orientation="vertical" >
     </LinearLayout>
 

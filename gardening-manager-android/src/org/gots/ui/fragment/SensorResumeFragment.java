@@ -12,6 +12,7 @@ import org.gots.sensor.parrot.ParrotSensorProvider;
 import org.gots.ui.ProfileActivity;
 import org.gots.ui.SensorActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,11 +32,27 @@ public class SensorResumeFragment extends BaseGotsFragment {
 
     private List<ParrotLocation> mySensorLocations;
 
+    private OnSensorClickListener mCallBack;
+
     // private List<ParrotSensor> mySensors;
+    public interface OnSensorClickListener {
+        public void OnSensorClick(ParrotLocation locationSensor);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.sensor_resume, null);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        if (activity instanceof OnSensorClickListener) {
+            mCallBack = (OnSensorClickListener) activity;
+
+        } else
+            throw new ClassCastException(SensorResumeFragment.class.getSimpleName()
+                    + " must implements OnSensorClickListener");
+        super.onAttach(activity);
     }
 
     @Override
@@ -76,17 +93,17 @@ public class SensorResumeFragment extends BaseGotsFragment {
         List<ParrotLocationsStatus> status = (List<ParrotLocationsStatus>) data;
         sensorListview.removeAllViews();
         for (ParrotLocationsStatus parrotLocationsStatus : status) {
-            ParrotLocation location_for_status = null;
+            ParrotLocation sensorLocation = null;
 
             for (ParrotLocation location : mySensorLocations) {
                 if (location.getLocation_identifier().equals(parrotLocationsStatus.getLocation_identifier())) {
-                    location_for_status = location;
+                    sensorLocation = location;
                     break;
                     // sensorWidget.setSensor(location.get);
                 }
             }
 
-            if (location_for_status == null)
+            if (sensorLocation == null)
                 continue;
 
             if ("status_warning".equals(parrotLocationsStatus.getSoil_moisture().getStatus_key())
@@ -98,18 +115,17 @@ public class SensorResumeFragment extends BaseGotsFragment {
                     || "status_critical".equals(parrotLocationsStatus.getAir_temperature().getStatus_key())
                     || "status_critical".equals(parrotLocationsStatus.getLight().getStatus_key())) {
                 SensorLocationWidget sensorWidget = new SensorLocationWidget(getActivity());
-                sensorWidget.setSensor(location_for_status, parrotLocationsStatus.getSoil_moisture().getStatus_key(),
-                        parrotLocationsStatus.getFertilizer().getStatus_key(),
-                        parrotLocationsStatus.getAir_temperature().getStatus_key(),
-                        parrotLocationsStatus.getLight().getStatus_key());
+                sensorWidget.setSensor(sensorLocation, parrotLocationsStatus);
 
-                // if (parrotLocationsStatus.getSoil_moisture().getInstruction_key() != null
-                // && parrotLocationsStatus.getSoil_moisture().getInstruction_key().contains("low"))
-                // sensorListview.setBackgroundColor(getResources().getColor(R.color.action_ok_color));
-                // if (parrotLocationsStatus.getFertilizer().getInstruction_key() != null
-                // && parrotLocationsStatus.getFertilizer().getInstruction_key().contains("low"))
-                // sensorListview.setBackgroundColor(getResources().getColor(R.color.action_warning_color));
                 sensorListview.addView(sensorWidget);
+                final ParrotLocation selectedLocation = sensorLocation;
+                sensorWidget.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        mCallBack.OnSensorClick(selectedLocation);
+                    }
+                });
             }
             // for (ParrotSensor sensor : mySensors) {
             // if (sensor.getSensor_serial().equals(location.getSensor_serial())) {
