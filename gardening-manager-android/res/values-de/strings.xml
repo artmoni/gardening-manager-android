@@ -74,14 +74,16 @@
   <string name="garden.cityname.inputtitle">Lage</string>
   <string name="hut.menu.favorites">Meine Favoriten</string>
   <string name="hut.menu.thismonth">Diesen Monat</string>
+  <string name="hut.menu.seedsofthemonth">What to sow or plant this month</string>
   <string name="hut.menu.filter">Filter</string>
   <string name="garden.cityname.inputtitle">Lage</string>
   <string name="garden.cityname.inputmessage">Bitte erfassen Sie Ihren Gartenplatz</string>
+  <string name="dashboard.exit">Please click BACK again to exit</string>
   <string name="dashboard.hut.name">Katalog</string>
   <string name="dashboard.allotments.name">Garten</string>
   <string name="dashboard.actions.name">Aktivitäten</string>
   <string name="dashboard.profile.name">Profil</string>
-  <string name="dashboard.sensor.name">Sensoren</string>
+  <string name="dashboard.weather.name">Weather</string>
   <string name="dateSliderTitle">dateSliderTitle string</string>
   <string name="specie.daucuscarota">Karotte</string>
   <string name="specie.brassicaoleracea">Kohl</string>
@@ -118,7 +120,7 @@
   <string name="location.notfound">Lage nicht gefunden</string>
   <string name="notification.action.title">Ihr _SPECIE_ braucht dich</string>
   <string name="notification.action.content">und _NBACTIONS_ mehr Aufgaben</string>
-  <string name="notification.seed.title">Neue Arten zum Katalog: _SPECIE_</string>
+  <string name="notification.seed.title">New variety on catalog:_SPECIE_</string>
   <string name="notification.seed.content">und _NBSEEDS_ mehr</string>
   <string name="notification.seedsow.content">Bereit zum aussäen</string>
   <string name="action.sow">Aussäen</string>
@@ -173,14 +175,58 @@
   <string name="inapp.purchase.noaccount">Sie benötigen ein Google Konto um Funktionen kaufen zu können</string>
   <string name="inapp.purchase.buy">Kaufen</string>
   <string name="inapp.purchase.title">Zusätzliche Funktionen</string>
-  <string name="tutorial.a.title">Geolokalisieren Sie Ihren Garten</string>
+  <string name="tutorial.title">Discover</string>
+  <string name="tutorial.a.title">Geolocalize my garden</string>
   <string name="tutorial.a.description">Bewahren Sie die Wetter History auf und das Wachstum mit dem Mond</string>
-  <string name="tutorial.b.title">Zugang zu einem umfangreichen Katalog an Saatgut</string>
-  <string name="tutorial.b.description">Suchen mit Filter: meine bevorzugten Pflanzen, was diesen Monat gesät wird und erstellen Sie neue Datensätze</string>
-  <string name="tutorial.c.title">Visualisieren Sie Ihren Garten</string>
-  <string name="tutorial.c.description">Erstellen Sie Ihre Parzellen, säen Sie Pflanzen und verfolgen Sie die Entwicklung der Kulturen</string>
+  <string name="tutorial.b.title">Access a large plant catalogue</string>
+  <string name="tutorial.b.description">Search plants, add new one, share with the community, manage your stock</string>
+  <string name="tutorial.c.title">Organize my allotments</string>
+  <string name="tutorial.c.description">Define allotments, sow plants and follow cultures evolution</string>
   <string name="tutorial.d.title">Planen Sie die zu erledigenden Aktivitäten</string>
   <string name="tutorial.d.description">werden Sie pünktlich erinnert und bewahren Sie die History auf</string>
   <string name="tutorial.e.title">Treten Sie einer Gemeinschaft von Gärtnern bei</string>
   <string name="tutorial.e.description">Entdecken Sie Originalgärten und teilen Sie Ihre Kreationen</string>
+  <string name="tutorial.f.title">Monitor my plants</string>
+  <string name="tutorial.f.description">Fertilizer, sunlight, temperature and soil moisture with your Parrot Flower Power</string>
+  <string name="tutorial.button.try">Demo</string>
+  <string name="tutorial.button.begin">Begin</string>
+  <string name="tutorial.finished">Great! you have finished the tutorial, take pleasure to grow your real garden and share your experience :)</string>
+  <string name="sensor.buy">Buy a Parrot Flower Power</string>
+  <string name="dashboard.sensor.name">Sensoren</string>
+  <string name="skip">Skip</string>
+  <string name="more">More</string>
+  <string name="premium">Premium</string>
+  <string name="garden.type.private">Private garden</string>
+  <string name="garden.type.incredibleedible">Incredible edible: food to share</string>
+  <string name="garden.type.incredibleedible.description">The Incredible Edible project is an urban gardening project which bring people together and through actions around local food, help change behaviour toward the environment and build a kinder and more resilient world.</string>
+  <string name="workflow.process.title">Validation workflow</string>
+  <string name="workflow.launch.description">Submit this plant description to the moderator team to be shared with the community</string>
+  <string name="sensor.light.too.low">Not enough light</string>
+  <string name="sensor.light.too.high">Too many light</string>
+  <string name="sensor.light.good">Light is correct</string>
+  <string name="sensor.airtemperature.too.low">Increase temperature</string>
+  <string name="sensor.airtemperature.too.high">Decrease temperature</string>
+  <string name="sensor.airtemperature.good">Temperature is correct</string>
+  <string name="sensor.moisture.too.low">Not enough water</string>
+  <string name="sensor.moisture.too.high">Too many water</string>
+  <string name="sensor.moisture.good">Water quantity is correct</string>
+  <string name="sensor.fertilizer.too.low">Not enough fertilizer</string>
+  <string name="sensor.fertilizer.too.high">Too many fertilizer</string>
+  <string name="sensor.fertilizer.good">Fertilizer quantity is correct</string>
+  <string-array name="nav_drawer_items">
+    <item>@string/dashboard.hut.name</item>
+    <item>@string/dashboard.allotments.name</item>
+    <item>@string/dashboard.actions.name</item>
+    <item>@string/dashboard.profile.name</item>
+    <item>@string/dashboard.sensor.name</item>
+    <item>@string/premium</item>
+  </string-array>
+  <array name="nav_drawer_icons">
+    <item>@drawable/bt_dashboard_hut</item>
+    <item>@drawable/bt_dashboard_allotment</item>
+    <item>@drawable/bt_dashboard_action</item>
+    <item>@drawable/bt_dashboard_profile</item>
+    <item>@drawable/bt_dashboard_sensor</item>
+    <item>@drawable/action_buy_online</item>
+  </array>
 </resources>
