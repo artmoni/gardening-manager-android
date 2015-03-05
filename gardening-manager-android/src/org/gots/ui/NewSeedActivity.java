@@ -396,7 +396,7 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
     // }
 
     protected void onSeedCreated() {
-        runAsyncDataRetrieval();
+        finish();
     };
 
     @Override

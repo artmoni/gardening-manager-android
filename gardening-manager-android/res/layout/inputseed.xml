@@ -1,25 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/text_color_dark"
-    android:orientation="vertical" >
-
-    <org.gots.seed.view.SeedWidgetLong
-        android:id="@+id/idSeedWidgetLong"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:padding="5dp"
-        android:paddingRight="55dp"
-        android:src="@drawable/vegetdefault" >
-    </org.gots.seed.view.SeedWidgetLong>
+    android:background="@color/text_color_dark" >
 
     <ScrollView
         android:id="@+id/layout_seed"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_margin="5dp"
+        android:layout_weight="1"
         android:background="@color/brown_light"
         android:orientation="vertical"
         android:padding="5dp"
@@ -27,8 +17,18 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical" >
+
+            <org.gots.seed.view.SeedWidgetLong
+                android:id="@+id/idSeedWidgetLong"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:paddingRight="55dp"
+                android:src="@drawable/vegetdefault" >
+            </org.gots.seed.view.SeedWidgetLong>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -40,7 +40,6 @@
                 android:padding="5dp" >
 
                 <TextView
-                    android:id="@+id/textView1"
                     style="@style/description_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -120,15 +119,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:calendarViewShown="false" />
-                <!--
-                <org.gots.seed.view.PlanningWidget
-                    android:id="@+id/IdSeedEditSowingPlanning"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:columnWidth="15dp"
-                    android:numColumns="12" >
-                </org.gots.seed.view.PlanningWidget>
-                -->
             </LinearLayout>
 
             <TextView
@@ -145,16 +135,6 @@
                 android:background="@drawable/bg_line_action"
                 android:orientation="horizontal"
                 android:padding="5dp" >
-
-                <!--
-                <org.gots.seed.view.PlanningWidget
-                    android:id="@+id/IdSeedEditHarvestPlanning"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:columnWidth="15dp"
-                    android:numColumns="12" >
-                </org.gots.seed.view.PlanningWidget>
-                -->
 
                 <TextView
                     style="@style/description_content"
@@ -202,8 +182,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
-                        android:text="@string/seed.description.barecode"
-                        android:visibility="visible" />
+                        android:text="@string/seed.description.barecode" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -369,34 +348,30 @@
                         android:background="@drawable/ic_voice" />
                 </LinearLayout>
             </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layoutSpecie"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:gravity="center_horizontal"
-                android:orientation="vertical" >
-
-                <Button
-                    android:id="@+id/buttonStock"
-                    style="@style/buttonGreen"
-                    android:text="@string/seed.action.add.stock" />
-
-                <!--
-                     <Button
-                    android:id="@+id/buttonCatalogue"
-                    style="@style/buttonRed"
-                    android:text="@string/seed.action.add.catalogue" />
-                -->
-
-                <Button
-                    android:id="@+id/buttonModify"
-                    style="@style/buttonGreen"
-                    android:text="@string/menu.edit"
-                    android:visibility="gone" />
-            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_weight="1"
+        android:background="@color/text_color_light"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/buttonStock"
+            style="@style/buttonGreen"
+            android:layout_margin="10dp"
+            android:text="@string/seed.action.add.stock" />
+
+        <Button
+            android:id="@+id/buttonModify"
+            style="@style/buttonGreen"
+            android:layout_margin="10dp"
+            android:text="@string/menu.edit"
+            android:visibility="gone" />
+    </LinearLayout>
+
+</RelativeLayout>
