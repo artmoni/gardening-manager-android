@@ -39,7 +39,7 @@
            android:debuggable="true"
     -->
 
-    <application android:debuggable="false" android:icon="@drawable/launcher" android:label="@string/app_name" android:name="org.gots.context.SimpleGotsApplication" android:theme="@style/Theme.Styled">
+    <application android:debuggable="true" android:icon="@drawable/launcher" android:label="@string/app_name" android:name="org.gots.context.SimpleGotsApplication" android:theme="@style/Theme.Styled">
         <activity android:label="@string/app_name" android:name=".ui.SplashScreenActivity" android:theme="@style/Theme.Styled">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
