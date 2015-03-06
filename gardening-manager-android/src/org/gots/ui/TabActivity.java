@@ -101,8 +101,8 @@ public abstract class TabActivity extends BaseGotsActivity {
             tab.setTabListener(this);
             mTabs.add(info);
             fragments.add(fragment);
-            mActionBar.addTab(tab);
             notifyDataSetChanged();
+            mActionBar.addTab(tab);
         }
 
         private void remoteTab(Fragment fragment) {

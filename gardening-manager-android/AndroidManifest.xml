@@ -59,7 +59,7 @@
         <activity android:name=".ui.WebHelpActivity" android:theme="@style/Theme.Styled"/>
         <activity android:name=".ui.TabSeedActivity" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow">
          <intent-filter>
-                <data android:host="my.gardening-manager.com" android:path="/nuxeo/nxdoc/default/" android:scheme="http"/>
+                <data android:host="my.gardening-manager.com" android:scheme="http"/>
 
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>

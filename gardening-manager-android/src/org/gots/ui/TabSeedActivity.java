@@ -140,56 +140,22 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 
         ActionBar bar = getSupportActionBar();
         bar.setDisplayHomeAsUpEnabled(true);
-        // bar.setDisplayShowTitleEnabled(false);
-
         getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        // ********************** **********************
-        if (getIntent().getExtras() == null) {
-            Log.e("SeedActivity", "You must provide a org.gots.seed.id as an Extra Int");
-            finish();
-            return;
-        }
-        if (getIntent().getExtras().getInt(GOTS_GROWINGSEED_ID) != 0) {
-            int seedId = getIntent().getExtras().getInt(GOTS_GROWINGSEED_ID);
-            mSeed = GotsGrowingSeedManager.getInstance().initIfNew(this).getGrowingSeedById(seedId);
-        } else if (getIntent().getExtras().getInt(GOTS_VENDORSEED_ID) != 0) {
-            int seedId = getIntent().getExtras().getInt(GOTS_VENDORSEED_ID);
-            GotsSeedProvider helper = new LocalSeedProvider(getApplicationContext());
-            mSeed = (GrowingSeed) helper.getSeedById(seedId);
-        } else
-            mSeed = new GrowingSeedImpl(); // DEFAULT SEED
-
-        if (mSeed == null)
-            mSeed = new GrowingSeedImpl(); // DEFAULT SEED
-
-        // if (getIntent().getSerializableExtra(GOTS_TASKWORKFLOW_ID) != null)
-        // taskWorkflow = (TaskInfo) getIntent().getSerializableExtra(GOTS_TASKWORKFLOW_ID);
         pictureGallery = (Gallery) findViewById(R.id.idPictureGallery);
-        if (mSeed.getGrowingSeedId() >= 0)
-            displayPictureGallery();
-        else
-            pictureGallery.setVisibility(View.GONE);
+        buttonActions = (ImageView) findViewById(R.id.imageViewOverlyAction);
 
-        pictureGallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                File f = (File) arg0.getItemAtPosition(position);
-                File dest = new File(gotsPrefs.getGotsExternalFileDir(), f.getName());
-                try {
-                    FileUtilities.copy(f, dest);
-                    Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_VIEW);
-                    intent.setDataAndType(Uri.fromFile(dest), "image/*");
-                    startActivity(intent);
-                } catch (IOException e) {
-                    Log.w(TAG, e.getMessage());
-                }
+        if (!gotsPurchase.isPremium()) {
+            GotsAdvertisement ads = new GotsAdvertisement(this);
 
-            }
-        });
+            LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
+            layout.addView(ads.getAdsLayout());
+        }
 
-        bar.setTitle(mSeed.getSpecie());
+    }
+
+    protected void initView() {
+        getSupportActionBar().setTitle(mSeed.getSpecie());
 
         if (mSeed.getDateSowing() != null) {
             TextView textDateSowing = (TextView) findViewById(R.id.idTextSowingDate);
@@ -207,69 +173,12 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
             }
         } else
             findViewById(R.id.idLayoutCulturePeriod).setVisibility(View.GONE);
-
-        // mTabsAdapter = new TabsAdapter(this, mViewPager);
-
-        if (!gotsPurchase.isPremium()) {
-            GotsAdvertisement ads = new GotsAdvertisement(this);
-
-            LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
-            layout.addView(ads.getAdsLayout());
-        }
-
-        buttonActions = (ImageView) findViewById(R.id.imageViewOverlyAction);
-        if (mSeed.getDateSowing() == null)
-            buttonActions.setImageDrawable(getResources().getDrawable(R.drawable.action_sow));
-        buttonActions.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if (mSeed.getDateSowing() != null)
-                    showOverlayFragment(new ActionsChoiceFragment());
-                else {
-                    showOverlayFragment(new AllotmentListFragment());
-                }
-            }
-
-        });
-
     }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        List<Fragment> fragments = new ArrayList<>();
-        Bundle bundle = new Bundle();
-        bundle.putInt(GOTS_GROWINGSEED_ID, mSeed.getSeedId());
-        bundle.putInt("org.gots.growingseed.id", mSeed.getGrowingSeedId());
-
-        // ********************** Tab actions **********************
-        if (mSeed.getGrowingSeedId() > 0) {
-            fragmentListAction = Fragment.instantiate(getApplicationContext(), ActionsListFragment.class.getName(),
-                    bundle);
-            fragments.add(fragmentListAction);
-            addTab(fragmentListAction, getResources().getString(R.string.seed_description_tabmenu_actions));
-
-        }
-
-        // ********************** Seed description **********************
-        fragmentDescription = (SeedDescriptionFragment) Fragment.instantiate(getApplicationContext(),
-                SeedDescriptionFragment.class.getName(), bundle);
-        fragments.add(fragmentDescription);
-        addTab(fragmentDescription, getResources().getString(R.string.seed_description_tabmenu_detail));
-
-        // ********************** Tab Wikipedia**********************
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-            urlDescription = "http://" + Locale.getDefault().getLanguage() + ".wikipedia.org/wiki/" + mSeed.getSpecie();
-            bundle.putString("org.gots.seed.url", urlDescription);
-
-            fragmentWebView = Fragment.instantiate(getApplicationContext(), WebViewActivity.class.getName(), bundle);
-            fragments.add(fragmentWebView);
-            addTab(fragmentWebView, getResources().getString(R.string.seed_description_tabmenu_wikipedia));
-        }
     }
 
     protected void showOverlayFragment(Fragment actionsListFragment) {
@@ -357,7 +266,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_seeddescription, menu);
 
-        if (mSeed.getGrowingSeedId() == 0) {
+        if (mSeed != null && mSeed.getGrowingSeedId() == 0) {
             menu.findItem(R.id.photo).setVisible(false);
             menu.findItem(R.id.delete).setVisible(false);
             workflowMenuItem = menu.findItem(R.id.workflow);
@@ -571,6 +480,29 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 
     @Override
     protected Object retrieveNuxeoData() throws Exception {
+        Uri data = getIntent().getData();
+        String scheme = data.getScheme(); // "http"
+        String host = data.getHost(); // "my.gardening-manager.com"
+        List<String> params = data.getPathSegments();
+        String seedUUID = null;
+        if (params != null && params.size() > 0)
+            seedUUID = params.get(params.size() - 2); // "status"
+
+        if (getIntent().getExtras() != null && getIntent().getExtras().getInt(GOTS_GROWINGSEED_ID) != 0) {
+            int seedId = getIntent().getExtras().getInt(GOTS_GROWINGSEED_ID);
+            mSeed = GotsGrowingSeedManager.getInstance().initIfNew(this).getGrowingSeedById(seedId);
+        } else if (getIntent().getExtras() != null && getIntent().getExtras().getInt(GOTS_VENDORSEED_ID) != 0) {
+            int seedId = getIntent().getExtras().getInt(GOTS_VENDORSEED_ID);
+            GotsSeedProvider helper = new LocalSeedProvider(getApplicationContext());
+            mSeed = (GrowingSeed) helper.getSeedById(seedId);
+        } else if (seedUUID != null) {
+            GotsSeedProvider helper = new LocalSeedProvider(getApplicationContext());
+            mSeed = (GrowingSeed) helper.getSeedByUUID(seedUUID);
+        }
+
+        if (mSeed == null)
+            mSeed = new GrowingSeedImpl(); // DEFAULT SEED
+
         NuxeoWorkflowProvider workflowProvider = new NuxeoWorkflowProvider(getApplicationContext());
         Documents taskDocs = workflowProvider.getWorkflowOpenTasks(mSeed.getUUID(), true);
         if (taskDocs != null && taskDocs.size() == 0)
@@ -580,6 +512,46 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
+        initView();
+
+        if (mSeed.getDateSowing() == null)
+            buttonActions.setImageDrawable(getResources().getDrawable(R.drawable.action_sow));
+        buttonActions.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (mSeed.getDateSowing() != null)
+                    showOverlayFragment(new ActionsChoiceFragment());
+                else {
+                    showOverlayFragment(new AllotmentListFragment());
+                }
+            }
+
+        });
+
+        if (mSeed.getGrowingSeedId() >= 0)
+            displayPictureGallery();
+        else
+            pictureGallery.setVisibility(View.GONE);
+
+        pictureGallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                File f = (File) arg0.getItemAtPosition(position);
+                File dest = new File(gotsPrefs.getGotsExternalFileDir(), f.getName());
+                try {
+                    FileUtilities.copy(f, dest);
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.setDataAndType(Uri.fromFile(dest), "image/*");
+                    startActivity(intent);
+                } catch (IOException e) {
+                    Log.w(TAG, e.getMessage());
+                }
+
+            }
+        });
+
         getIntent().putExtra(WorkflowTaskFragment.GOTS_DOC_ID, mSeed.getUUID());
         if (fragmentWorkflow == null) {
             fragmentWorkflow = new WorkflowTaskFragment();
@@ -588,6 +560,38 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
             addTab(fragmentWorkflow, "Validation");
             if (workflowMenuItem != null)
                 workflowMenuItem.setVisible(false);
+        }
+
+        List<Fragment> fragments = new ArrayList<>();
+        Bundle bundle = new Bundle();
+        bundle.putInt(GOTS_GROWINGSEED_ID, mSeed.getSeedId());
+        bundle.putInt("org.gots.growingseed.id", mSeed.getGrowingSeedId());
+
+        // ********************** Tab actions **********************
+        if (mSeed.getGrowingSeedId() > 0) {
+            fragmentListAction = Fragment.instantiate(getApplicationContext(), ActionsListFragment.class.getName(),
+                    bundle);
+            fragments.add(fragmentListAction);
+            addTab(fragmentListAction, getResources().getString(R.string.seed_description_tabmenu_actions));
+
+        }
+
+        // ********************** Seed description **********************
+        fragmentDescription = (SeedDescriptionFragment) Fragment.instantiate(getApplicationContext(),
+                SeedDescriptionFragment.class.getName(), bundle);
+        fragments.add(fragmentDescription);
+        addTab(fragmentDescription, getResources().getString(R.string.seed_description_tabmenu_detail));
+
+        // ********************** Tab Wikipedia**********************
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            urlDescription = "http://" + Locale.getDefault().getLanguage() + ".wikipedia.org/wiki/" + mSeed.getSpecie();
+            bundle.putString("org.gots.seed.url", urlDescription);
+
+            fragmentWebView = Fragment.instantiate(getApplicationContext(), WebViewActivity.class.getName(), bundle);
+            fragments.add(fragmentWebView);
+            addTab(fragmentWebView, getResources().getString(R.string.seed_description_tabmenu_wikipedia));
         }
         super.onNuxeoDataRetrieved(data);
     }
