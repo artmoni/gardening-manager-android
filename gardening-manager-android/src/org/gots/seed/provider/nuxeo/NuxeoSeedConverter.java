@@ -28,7 +28,7 @@ public class NuxeoSeedConverter {
             seed.setDateSowingMax(Integer.valueOf(document.getString("vendorseed:datesowingmax")));
             seed.setDescriptionCultivation(document.getString("vendorseed:description_cultivation"));
             seed.setDescriptionDiseases(document.getString("vendorseed:description_diseases"));
-            seed.setDescriptionGrowth(document.getString("vendorseed:description_growth"));
+            seed.setDescriptionEnvironment(document.getString("vendorseed:description_growth"));
             seed.setDescriptionHarvest(document.getString("vendorseed:description_harvest"));
             seed.setLanguage(document.getString("vendorseed:language"));
             seed.setBareCode(document.getString("vendorseed:barcode"));
@@ -56,7 +56,7 @@ public class NuxeoSeedConverter {
         doc.set("vendorseed:language", Locale.getDefault().getCountry().toLowerCase());
         doc.set("vendorseed:description_cultivation", seed.getDescriptionCultivation());
         doc.set("vendorseed:description_diseases", seed.getDescriptionDiseases());
-        doc.set("vendorseed:description_growth", seed.getDescriptionGrowth());
+        doc.set("vendorseed:description_growth", seed.getDescriptionEnvironment());
         doc.set("vendorseed:description_harvest", seed.getDescriptionHarvest());
 
         return doc;

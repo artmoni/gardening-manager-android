@@ -102,12 +102,12 @@ public abstract class BaseSeed implements Serializable, BaseSeedInterface {
     }
 
     @Override
-    public String getDescriptionGrowth() {
+    public String getDescriptionEnvironment() {
         return description_growth;
     }
 
     @Override
-    public void setDescriptionGrowth(String description) {
+    public void setDescriptionEnvironment(String description) {
         this.description_growth = description;
     }
 
@@ -159,7 +159,7 @@ public abstract class BaseSeed implements Serializable, BaseSeedInterface {
         newSeed.getActionToDo().addAll(getActionToDo());
         newSeed.setDateSowingMax(dateSowingMax);
         newSeed.setDateSowingMin(dateSowingMin);
-        newSeed.setDescriptionGrowth(description_growth);
+        newSeed.setDescriptionEnvironment(description_growth);
         newSeed.setDurationMax(durationMax);
         newSeed.setDurationMin(durationMin);
         newSeed.setFamily(family);

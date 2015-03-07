@@ -84,7 +84,7 @@ public class GardenFactory {
         GrowingSeed mySeed = new GrowingSeedImpl();
         mySeed.setName("tomates");
         mySeed.setUUID("23432LK23");
-        mySeed.setDescriptionGrowth("Variété la plus précoce pour culture de plein champ. Croissance indéterminée. Feuillage de pomme de terre. Fruit de taille moyenne (90 à 150 g), rouge brillant par bouquet de 5 à 8 fruits.");
+        mySeed.setDescriptionEnvironment("Variété la plus précoce pour culture de plein champ. Croissance indéterminée. Feuillage de pomme de terre. Fruit de taille moyenne (90 à 150 g), rouge brillant par bouquet de 5 à 8 fruits.");
         mySeed.setDateSowingMin(03);
         mySeed.setDateSowing(new GregorianCalendar(2011, 03, 12).getTime());
         mySeed.setDurationMin(150);
@@ -99,7 +99,7 @@ public class GardenFactory {
         mySeed = new GrowingSeedImpl();
         mySeed.setName("Navet précoce de Croissy");
         mySeed.setUUID("concombregynialhybridef1");
-        mySeed.setDescriptionGrowth("Variété pour fin de printemps, début d'été. Racine très blanche, cylindrique et pointue, demi – longue, pouvant devenir volumineuse. Saveur sucrée. Résiste bien à la chaleur et ne creuse pas. Développement rapide (1,5 à 2 mois). Semis en mars – avril.");
+        mySeed.setDescriptionEnvironment("Variété pour fin de printemps, début d'été. Racine très blanche, cylindrique et pointue, demi – longue, pouvant devenir volumineuse. Saveur sucrée. Résiste bien à la chaleur et ne creuse pas. Développement rapide (1,5 à 2 mois). Semis en mars – avril.");
         mySeed.setDateSowingMin(4);
         mySeed.setDateSowing(new GregorianCalendar(2011, 03, 23).getTime());
         mySeed.setDurationMin(90);
@@ -116,7 +116,7 @@ public class GardenFactory {
         mySeed = new GrowingSeedImpl();
         mySeed.setName("patates");
         mySeed.setUUID("betteravedegypte");
-        mySeed.setDescriptionGrowth("La pomme de terre, ou patate (langage familier, canadianisme et français régional), est un tubercule comestible produit par l'espèce Solanum tuberosum, appartenant à la famille des solanacées. Le terme désigne également la plante elle-même, plante herbacée, vivace par ses tubercules en l'absence de gel mais cultivée comme une plante annuelle..");
+        mySeed.setDescriptionEnvironment("La pomme de terre, ou patate (langage familier, canadianisme et français régional), est un tubercule comestible produit par l'espèce Solanum tuberosum, appartenant à la famille des solanacées. Le terme désigne également la plante elle-même, plante herbacée, vivace par ses tubercules en l'absence de gel mais cultivée comme une plante annuelle..");
         mySeed.setDateSowingMin(10);
         mySeed.setDateSowing(new GregorianCalendar(2011, 01, 11).getTime());
         mySeed.setDurationMin(100);
@@ -126,7 +126,7 @@ public class GardenFactory {
         mySeed = new GrowingSeedImpl();
         mySeed.setName("Courgette");
         mySeed.setUUID("fdgsdf989");
-        mySeed.setDescriptionGrowth("Composée de 95 % d'eau, elle contient une quantité record de minéraux et d'oligo-éléments. Une portion de 100 g de ce légume, de préférence cuit à la vapeur ou à l'étuvée afin d'éviter les pertes, apporte jusqu'à 700 mg de ces précieux nutriments, et notamment du potassium (230 mg), du phosphore, du magnésium et du calcium.");
+        mySeed.setDescriptionEnvironment("Composée de 95 % d'eau, elle contient une quantité record de minéraux et d'oligo-éléments. Une portion de 100 g de ce légume, de préférence cuit à la vapeur ou à l'étuvée afin d'éviter les pertes, apporte jusqu'à 700 mg de ces précieux nutriments, et notamment du potassium (230 mg), du phosphore, du magnésium et du calcium.");
         mySeed.setDateSowingMin(9);
         mySeed.setDateSowing(new GregorianCalendar(2011, 05, 27).getTime());
         mySeed.setDurationMin(160);

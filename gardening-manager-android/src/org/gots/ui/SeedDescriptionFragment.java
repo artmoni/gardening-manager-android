@@ -106,7 +106,7 @@ public class SeedDescriptionFragment extends BaseGotsFragment {
         
         seedWidgetLong.setSeed(mSeed);
         
-        seedDescriptionEnvironnement.setText(Html.fromHtml(mSeed.getDescriptionGrowth()));
+        seedDescriptionEnvironnement.setText(Html.fromHtml(mSeed.getDescriptionEnvironment()));
 
         seedDescriptionTitle.setOnClickListener(new View.OnClickListener() {
 

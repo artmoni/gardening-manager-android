@@ -49,9 +49,9 @@ public interface BaseSeedInterface {
 
     public abstract void setName(String name);
 
-    public abstract String getDescriptionGrowth();
+    public abstract String getDescriptionEnvironment();
 
-    public abstract void setDescriptionGrowth(String description_growth);
+    public abstract void setDescriptionEnvironment(String description_growth);
 
     public abstract String getDescriptionCultivation();
 

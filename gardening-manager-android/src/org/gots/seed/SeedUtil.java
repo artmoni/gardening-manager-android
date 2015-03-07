@@ -21,7 +21,7 @@ public class SeedUtil {
     public BaseSeedInterface copy(BaseSeedInterface originalSeed) {
         BaseSeedInterface copy = new GrowingSeedImpl();
         copy.setName(originalSeed.getName());
-        copy.setDescriptionGrowth(originalSeed.getDescriptionGrowth());
+        copy.setDescriptionEnvironment(originalSeed.getDescriptionEnvironment());
         copy.setDescriptionDiseases(originalSeed.getDescriptionDiseases());
         copy.setDescriptionCultivation(originalSeed.getDescriptionCultivation());
         copy.setDescriptionHarvest(originalSeed.getDescriptionHarvest());

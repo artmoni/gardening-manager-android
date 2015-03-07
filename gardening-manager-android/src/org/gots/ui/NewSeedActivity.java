@@ -370,7 +370,7 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
         descriptionEnvironmentVoice = (View) findViewById(R.id.IdSeedDescriptionEnvironmentVoice);
         descriptionHarvestVoice = (View) findViewById(R.id.IdSeedDescriptionHarvestVoice);
 
-        descriptionGrowth.setText(newSeed.getDescriptionGrowth());
+        descriptionGrowth.setText(newSeed.getDescriptionEnvironment());
         descriptionDiseases.setText(newSeed.getDescriptionDiseases());
         descriptionHarvest.setText(newSeed.getDescriptionHarvest());
         descriptionEnvironment.setText(newSeed.getDescriptionCultivation());
@@ -403,9 +403,9 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
     @Override
     public void onClick(View v) {
         newSeed.setDescriptionDiseases(descriptionDiseases.getText().toString());
-        newSeed.setDescriptionCultivation(descriptionEnvironment.getText().toString());
+        newSeed.setDescriptionCultivation(descriptionGrowth.getText().toString());
+        newSeed.setDescriptionEnvironment(descriptionEnvironment.getText().toString());
         newSeed.setDescriptionHarvest(descriptionHarvest.getText().toString());
-        newSeed.setDescriptionGrowth(descriptionGrowth.getText().toString());
         Intent intent;
         switch (v.getId()) {
         case R.id.imageBarCode:
@@ -723,7 +723,7 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
                 switch (requestCode) {
                 case REQUEST_GROWTH:
                     descriptionGrowth.setText(matches.get(0));
-                    newSeed.setDescriptionGrowth(matches.toArray().toString());
+                    newSeed.setDescriptionEnvironment(matches.toArray().toString());
                     break;
                 case REQUEST_DISEASES:
                     descriptionDiseases.setText(matches.get(0));

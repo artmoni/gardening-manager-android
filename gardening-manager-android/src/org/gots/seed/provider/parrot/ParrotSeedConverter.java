@@ -36,7 +36,7 @@ public class ParrotSeedConverter {
         try {
             seed.setName(plant.getString("preferred_common_name"));
             seed.setDescriptionCultivation(plant.getString("description"));
-            seed.setDescriptionGrowth(plant.getString("growth"));
+            seed.setDescriptionEnvironment(plant.getString("growth"));
             seed.setDescriptionDiseases(plant.getString("pests"));
             seed.setDescriptionHarvest(plant.getString("harvesting"));
             seed.setSpecie(plant.getString("latin_name"));

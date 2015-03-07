@@ -245,7 +245,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
         if (seed == null)
             return null;
         values.put(DatabaseHelper.SEED_NAME, seed.getName());
-        values.put(DatabaseHelper.SEED_DESCRIPTION_GROWTH, seed.getDescriptionGrowth());
+        values.put(DatabaseHelper.SEED_DESCRIPTION_GROWTH, seed.getDescriptionEnvironment());
         values.put(DatabaseHelper.SEED_DESCRIPTION_CULTIVATION, seed.getDescriptionCultivation());
         values.put(DatabaseHelper.SEED_DESCRIPTION_DISEASES, seed.getDescriptionDiseases());
         values.put(DatabaseHelper.SEED_DESCRIPTION_HARVEST, seed.getDescriptionHarvest());
@@ -281,7 +281,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
         bsi.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_NAME)));
         bsi.setUUID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_UUID)));
         bsi.setBareCode(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_BARECODE)));
-        bsi.setDescriptionGrowth(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_DESCRIPTION_GROWTH)));
+        bsi.setDescriptionEnvironment(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_DESCRIPTION_GROWTH)));
         bsi.setDescriptionCultivation(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_DESCRIPTION_CULTIVATION)));
         bsi.setDescriptionDiseases(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_DESCRIPTION_DISEASES)));
         bsi.setDescriptionHarvest(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SEED_DESCRIPTION_HARVEST)));

@@ -119,6 +119,8 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 
     private MenuItem workflowMenuItem;
 
+    private Documents taskDocs;
+
     // private TabsAdapter mTabsAdapter;
 
     @Override
@@ -501,14 +503,10 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
             mSeed = (GrowingSeed) seedManager.getSeedByUUID(seedUUID);
         }
 
-        if (mSeed == null)
-            mSeed = new GrowingSeedImpl(); // DEFAULT SEED
-
         NuxeoWorkflowProvider workflowProvider = new NuxeoWorkflowProvider(getApplicationContext());
-        Documents taskDocs = workflowProvider.getWorkflowOpenTasks(mSeed.getUUID(), true);
-        if (taskDocs != null && taskDocs.size() == 0)
-            return null;
-        return taskDocs;
+        taskDocs = workflowProvider.getWorkflowOpenTasks(mSeed.getUUID(), true);
+
+        return mSeed;
     }
 
     @Override
@@ -553,13 +551,15 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
         });
 
         getIntent().putExtra(WorkflowTaskFragment.GOTS_DOC_ID, mSeed.getUUID());
-        if (fragmentWorkflow == null) {
-            fragmentWorkflow = new WorkflowTaskFragment();
-            // FragmentManager fragmentManager = getSupportFragmentManager();
-            // fragmentManager.beginTransaction().replace(R.id.frame_workflow, fragmentWorkflow).commit();
-            addTab(fragmentWorkflow, "Validation");
-            if (workflowMenuItem != null)
-                workflowMenuItem.setVisible(false);
+        if (taskDocs != null && taskDocs.size() > 0) {
+            if (fragmentWorkflow == null) {
+                fragmentWorkflow = new WorkflowTaskFragment();
+                // FragmentManager fragmentManager = getSupportFragmentManager();
+                // fragmentManager.beginTransaction().replace(R.id.frame_workflow, fragmentWorkflow).commit();
+                addTab(fragmentWorkflow, "Validation");
+                if (workflowMenuItem != null)
+                    workflowMenuItem.setVisible(false);
+            }
         }
 
         List<Fragment> fragments = new ArrayList<>();
