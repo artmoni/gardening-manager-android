@@ -38,7 +38,7 @@ public abstract class TabActivity extends BaseGotsActivity {
     }
 
     protected void removeTab(Fragment fragment) {
-        mFragmentAdapter.remoteTab(fragment);
+        mFragmentAdapter.removeTab(fragment);
     }
 
     @Override
@@ -63,6 +63,10 @@ public abstract class TabActivity extends BaseGotsActivity {
 
     protected Fragment getCurrentFragment() {
         return mFragmentAdapter.getItem(mViewPager.getCurrentItem());
+    }
+
+    protected void removeAllTabs() {
+        mFragmentAdapter.removeAllTabs();
     }
 
     /**
@@ -105,7 +109,7 @@ public abstract class TabActivity extends BaseGotsActivity {
             mActionBar.addTab(tab);
         }
 
-        private void remoteTab(Fragment fragment) {
+        private void removeTab(Fragment fragment) {
             for (int i = 0; i < fragments.size(); i++) {
                 Fragment fragment2 = fragments.get(i);
                 if (fragment.equals(fragment2)) {
@@ -115,6 +119,13 @@ public abstract class TabActivity extends BaseGotsActivity {
                 }
             }
 
+        }
+
+        private void removeAllTabs() {
+            mTabs.clear();
+            fragments.clear();
+            notifyDataSetChanged();
+            mActionBar.removeAllTabs();
         }
 
         @Override

@@ -29,6 +29,7 @@ import org.gots.provider.SeedsContentProvider;
 import org.gots.provider.SensorContentProvider;
 import org.gots.provider.WeatherContentProvider;
 import org.gots.sensor.parrot.ParrotLocation;
+import org.gots.sensor.parrot.ParrotLocationsStatus;
 import org.gots.sensor.parrot.ParrotSensorProvider;
 import org.gots.ui.BaseGotsActivity.GardenListener;
 import org.gots.ui.fragment.ActionsResumeFragment;
@@ -87,7 +88,7 @@ import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 
 public class MainActivity extends BaseGotsActivity implements GardenListener, OnTutorialFinishedListener,
-        OnActionsClickListener,OnSensorClickListener {
+        OnActionsClickListener, OnSensorClickListener {
     private DrawerLayout mDrawerLayout;
 
     private ListView mDrawerList;
@@ -446,6 +447,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
             }
         }.execute(navDrawerItems.get(0));
     }
+
     protected void displayDrawerMenuSensorCounter() {
         new AsyncTask<NavDrawerItem, Void, Integer>() {
             NavDrawerItem item;
@@ -466,6 +468,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
             }
         }.execute(navDrawerItems.get(4));
     }
+
     /**
      * Slide menu item click listener
      * */
@@ -922,12 +925,28 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
     }
 
     private void displaySensorFragment() {
-        if (gotsPrefs.getParrotToken() != null) {
-            Fragment sensorResumeFragment = new SensorResumeFragment();
-            FragmentTransaction sensorTransaction = getSupportFragmentManager().beginTransaction();
-            sensorTransaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
-            sensorTransaction.replace(R.id.idFragmentSensor, sensorResumeFragment).commit();
-        }
+        new AsyncTask<Void, Void, List<ParrotLocationsStatus>>() {
+            @Override
+            protected List<ParrotLocationsStatus> doInBackground(Void... params) {
+                ParrotSensorProvider parrotSensorProvider = new ParrotSensorProvider(getApplicationContext());
+                final List<ParrotLocationsStatus> status = parrotSensorProvider.getStatus();
+                if (status.size() > 0)
+                    return status;
+                else
+                    return null;
+            }
+
+            @Override
+            protected void onPostExecute(List<ParrotLocationsStatus> result) {
+                if (result != null) {
+                    Fragment sensorResumeFragment = new SensorResumeFragment();
+                    FragmentTransaction sensorTransaction = getSupportFragmentManager().beginTransaction();
+                    sensorTransaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
+                    sensorTransaction.replace(R.id.idFragmentSensor, sensorResumeFragment).commit();
+                }
+                super.onPostExecute(result);
+            }
+        }.execute();
     }
 
     @Override

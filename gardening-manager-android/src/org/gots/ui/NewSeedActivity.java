@@ -69,7 +69,8 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-public class NewSeedActivity extends BaseGotsActivity implements OnClickListener, PictureSelectorListener,OnWorkflowClickListener {
+public class NewSeedActivity extends BaseGotsActivity implements OnClickListener, PictureSelectorListener,
+        OnWorkflowClickListener {
     public static final String ORG_GOTS_SEED_BARCODE = "org.gots.seed.barcode";
 
     public static final String ORG_GOTS_SEEDID = "org.gots.seedid";
@@ -413,52 +414,73 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
 
         case R.id.buttonStock:
             if (validateSeed()) {
-                AlertDialog.Builder builderWorkflow = new AlertDialog.Builder(this);
-                builderWorkflow.setMessage(this.getResources().getString(R.string.workflow_launch_description)).setCancelable(
-                        false).setPositiveButton(getResources().getString(R.string.seed_action_add_stock) + " + Share",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                new AsyncTask<Void, Void, Document>() {
-                                    @Override
-                                    protected Document doInBackground(Void... params) {
-                                        BaseSeedInterface mSeed = createSeed();
-                                        NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(
-                                                getApplicationContext());
-                                        return nuxeoWorkflowProvider.startWorkflowValidation(mSeed);
-                                    }
+                if (gotsPrefs.isConnectedToServer()) {
 
-                                    protected void onPostExecute(Document result) {
-                                        if (result != null)
-                                            Toast.makeText(getApplicationContext(),
-                                                    "Your plant sheet has been sent to the moderator team",
-                                                    Toast.LENGTH_LONG).show();
+                    AlertDialog.Builder builderWorkflow = new AlertDialog.Builder(this);
+                    builderWorkflow.setMessage(this.getResources().getString(R.string.workflow_launch_description)).setCancelable(
+                            false).setPositiveButton(
+                            getResources().getString(R.string.seed_action_add_stock) + " + Share",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    new AsyncTask<Void, Void, Document>() {
+                                        @Override
+                                        protected Document doInBackground(Void... params) {
+                                            BaseSeedInterface mSeed = createSeed();
+                                            NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(
+                                                    getApplicationContext());
+                                            return nuxeoWorkflowProvider.startWorkflowValidation(mSeed);
+                                        }
 
-                                        onSeedCreated();
-                                    }
+                                        protected void onPostExecute(Document result) {
+                                            if (result != null)
+                                                Toast.makeText(getApplicationContext(),
+                                                        "Your plant sheet has been sent to the moderator team",
+                                                        Toast.LENGTH_LONG).show();
 
-                                }.execute();
-                                dialog.dismiss();
-                            }
-                        }).setNegativeButton(getResources().getString(R.string.seed_action_add_stock),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                new AsyncTask<Void, Void, Void>() {
-                                    @Override
-                                    protected Void doInBackground(Void... params) {
-                                        BaseSeedInterface mSeed = createSeed();
-                                        return null;
-                                    }
+                                            onSeedCreated();
+                                        }
 
-                                    protected void onPostExecute(Void result) {
-                                        onSeedCreated();
-                                    }
+                                    }.execute();
+                                    dialog.dismiss();
+                                }
+                            }).setNegativeButton(getResources().getString(R.string.seed_action_add_stock),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    new AsyncTask<Void, Void, Void>() {
+                                        @Override
+                                        protected Void doInBackground(Void... params) {
+                                            BaseSeedInterface mSeed = createSeed();
+                                            return null;
+                                        }
 
-                                }.execute();
-                                dialog.cancel();
-                            }
-                        });
-                builderWorkflow.show();
+                                        protected void onPostExecute(Void result) {
+                                            onSeedCreated();
+                                        }
 
+                                    }.execute();
+                                    dialog.cancel();
+                                }
+                            });
+                    builderWorkflow.show();
+
+                } else {
+                    new AsyncTask<Void, Void, BaseSeedInterface>() {
+                        @Override
+                        protected BaseSeedInterface doInBackground(Void... params) {
+                            BaseSeedInterface mSeed = createSeed();
+                            return mSeed;
+                        }
+
+                        protected void onPostExecute(BaseSeedInterface result) {
+                            if (result != null)
+                                Toast.makeText(getApplicationContext(), "Your plant sheet has been created",
+                                        Toast.LENGTH_LONG).show();
+
+                            onSeedCreated();
+                        }
+
+                    }.execute();
+                }
             }
             break;
 
@@ -788,7 +810,7 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
 
     @Override
     public void onWorkflowFinished() {
-        
+
     }
 
 }

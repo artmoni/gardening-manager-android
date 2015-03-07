@@ -480,24 +480,25 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 
     @Override
     protected Object retrieveNuxeoData() throws Exception {
-        Uri data = getIntent().getData();
-        String scheme = data.getScheme(); // "http"
-        String host = data.getHost(); // "my.gardening-manager.com"
-        List<String> params = data.getPathSegments();
         String seedUUID = null;
-        if (params != null && params.size() > 0)
-            seedUUID = params.get(params.size() - 2); // "status"
-
+        Uri data = getIntent().getData();
+        if (data != null) {
+            String scheme = data.getScheme(); // "http"
+            String host = data.getHost(); // "my.gardening-manager.com"
+            List<String> params = data.getPathSegments();
+            if (params != null && params.size() > 0)
+                seedUUID = params.get(params.size() - 2); // "status"
+        }
         if (getIntent().getExtras() != null && getIntent().getExtras().getInt(GOTS_GROWINGSEED_ID) != 0) {
             int seedId = getIntent().getExtras().getInt(GOTS_GROWINGSEED_ID);
             mSeed = GotsGrowingSeedManager.getInstance().initIfNew(this).getGrowingSeedById(seedId);
         } else if (getIntent().getExtras() != null && getIntent().getExtras().getInt(GOTS_VENDORSEED_ID) != 0) {
             int seedId = getIntent().getExtras().getInt(GOTS_VENDORSEED_ID);
-            GotsSeedProvider helper = new LocalSeedProvider(getApplicationContext());
-            mSeed = (GrowingSeed) helper.getSeedById(seedId);
+            // GotsSeedProvider helper = new LocalSeedProvider(getApplicationContext());
+            mSeed = (GrowingSeed) seedManager.getSeedById(seedId);
         } else if (seedUUID != null) {
-            GotsSeedProvider helper = new LocalSeedProvider(getApplicationContext());
-            mSeed = (GrowingSeed) helper.getSeedByUUID(seedUUID);
+            // GotsSeedProvider helper = new LocalSeedProvider(getApplicationContext());
+            mSeed = (GrowingSeed) seedManager.getSeedByUUID(seedUUID);
         }
 
         if (mSeed == null)
@@ -513,7 +514,6 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
         initView();
-
         if (mSeed.getDateSowing() == null)
             buttonActions.setImageDrawable(getResources().getDrawable(R.drawable.action_sow));
         buttonActions.setOnClickListener(new View.OnClickListener() {
@@ -569,29 +569,33 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 
         // ********************** Tab actions **********************
         if (mSeed.getGrowingSeedId() > 0) {
-            fragmentListAction = Fragment.instantiate(getApplicationContext(), ActionsListFragment.class.getName(),
-                    bundle);
-            fragments.add(fragmentListAction);
-            addTab(fragmentListAction, getResources().getString(R.string.seed_description_tabmenu_actions));
-
+            if (fragmentListAction == null) {
+                fragmentListAction = Fragment.instantiate(getApplicationContext(), ActionsListFragment.class.getName(),
+                        bundle);
+                fragments.add(fragmentListAction);
+                addTab(fragmentListAction, getResources().getString(R.string.seed_description_tabmenu_actions));
+            }
         }
 
         // ********************** Seed description **********************
-        fragmentDescription = (SeedDescriptionFragment) Fragment.instantiate(getApplicationContext(),
-                SeedDescriptionFragment.class.getName(), bundle);
-        fragments.add(fragmentDescription);
-        addTab(fragmentDescription, getResources().getString(R.string.seed_description_tabmenu_detail));
-
+        if (fragmentDescription == null) {
+            fragmentDescription = (SeedDescriptionFragment) Fragment.instantiate(getApplicationContext(),
+                    SeedDescriptionFragment.class.getName(), bundle);
+            fragments.add(fragmentDescription);
+            addTab(fragmentDescription, getResources().getString(R.string.seed_description_tabmenu_detail));
+        } else
+            fragmentDescription.update();
         // ********************** Tab Wikipedia**********************
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         if (netInfo != null && netInfo.isConnectedOrConnecting()) {
             urlDescription = "http://" + Locale.getDefault().getLanguage() + ".wikipedia.org/wiki/" + mSeed.getSpecie();
             bundle.putString("org.gots.seed.url", urlDescription);
-
-            fragmentWebView = Fragment.instantiate(getApplicationContext(), WebViewActivity.class.getName(), bundle);
-            fragments.add(fragmentWebView);
-            addTab(fragmentWebView, getResources().getString(R.string.seed_description_tabmenu_wikipedia));
+            if (fragmentWebView == null) {
+                fragmentWebView = Fragment.instantiate(getApplicationContext(), WebViewActivity.class.getName(), bundle);
+                fragments.add(fragmentWebView);
+                addTab(fragmentWebView, getResources().getString(R.string.seed_description_tabmenu_wikipedia));
+            }
         }
         super.onNuxeoDataRetrieved(data);
     }
