@@ -4,6 +4,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class ParrotLocationsStatus {
 
+    private static final Object STATUS_CRITICAL = "status_critical";
+
+    private String STATUS_WARNING = "status_warning";;
+
     @SerializedName("location_identifier")
     String location_identifier;
 
@@ -81,4 +85,17 @@ public class ParrotLocationsStatus {
         this.soil_moisture = soil_moisture;
     }
 
+    public boolean isWarning() {
+
+        return (getSoil_moisture() != null && STATUS_WARNING.equals(getSoil_moisture().getStatus_key())
+                || (getAir_temperature() != null && STATUS_WARNING.equals(getAir_temperature().getStatus_key()))
+                || (getFertilizer() != null && STATUS_WARNING.equals(getFertilizer().getStatus_key())) || (getLight() != null && STATUS_WARNING.equals(getLight().getStatus_key())));
+    }
+
+    public boolean isCritical() {
+
+        return (getSoil_moisture() != null && STATUS_CRITICAL.equals(getSoil_moisture().getStatus_key())
+                || (getAir_temperature() != null && STATUS_CRITICAL.equals(getAir_temperature().getStatus_key()))
+                || (getFertilizer() != null && STATUS_CRITICAL.equals(getFertilizer().getStatus_key())) || (getLight() != null && STATUS_CRITICAL.equals(getLight().getStatus_key())));
+    }
 }

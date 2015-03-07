@@ -106,14 +106,7 @@ public class SensorResumeFragment extends BaseGotsFragment {
             if (sensorLocation == null)
                 continue;
 
-            if ("status_warning".equals(parrotLocationsStatus.getSoil_moisture().getStatus_key())
-                    || "status_warning".equals(parrotLocationsStatus.getFertilizer().getStatus_key())
-                    || "status_warning".equals(parrotLocationsStatus.getAir_temperature().getStatus_key())
-                    || "status_warning".equals(parrotLocationsStatus.getLight().getStatus_key())
-                    || "status_critical".equals(parrotLocationsStatus.getSoil_moisture().getStatus_key())
-                    || "status_critical".equals(parrotLocationsStatus.getFertilizer().getStatus_key())
-                    || "status_critical".equals(parrotLocationsStatus.getAir_temperature().getStatus_key())
-                    || "status_critical".equals(parrotLocationsStatus.getLight().getStatus_key())) {
+            if (parrotLocationsStatus.isWarning() || parrotLocationsStatus.isCritical()) {
                 SensorLocationWidget sensorWidget = new SensorLocationWidget(getActivity());
                 sensorWidget.setSensor(sensorLocation, parrotLocationsStatus);
 

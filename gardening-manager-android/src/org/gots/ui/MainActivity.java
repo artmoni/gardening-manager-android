@@ -925,24 +925,35 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
     }
 
     private void displaySensorFragment() {
-        new AsyncTask<Void, Void, List<ParrotLocationsStatus>>() {
+        new AsyncTask<Void, Void, Boolean>() {
+            boolean isStatusAlert = false;
+            private Fragment sensorResumeFragment;
+
             @Override
-            protected List<ParrotLocationsStatus> doInBackground(Void... params) {
+            protected Boolean doInBackground(Void... params) {
                 ParrotSensorProvider parrotSensorProvider = new ParrotSensorProvider(getApplicationContext());
                 final List<ParrotLocationsStatus> status = parrotSensorProvider.getStatus();
-                if (status.size() > 0)
-                    return status;
-                else
-                    return null;
+                for (ParrotLocationsStatus parrotLocationsStatus : status) {
+                    if (parrotLocationsStatus.isWarning() || parrotLocationsStatus.isCritical()) {
+                        isStatusAlert = true;
+                        break;
+                    }
+                }
+                    return isStatusAlert;
             }
 
             @Override
-            protected void onPostExecute(List<ParrotLocationsStatus> result) {
-                if (result != null) {
-                    Fragment sensorResumeFragment = new SensorResumeFragment();
+            protected void onPostExecute(Boolean result) {
+                if (result.booleanValue()) {
+                    sensorResumeFragment = new SensorResumeFragment();
                     FragmentTransaction sensorTransaction = getSupportFragmentManager().beginTransaction();
                     sensorTransaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
                     sensorTransaction.replace(R.id.idFragmentSensor, sensorResumeFragment).commit();
+                }else if (sensorResumeFragment!=null){
+                    FragmentTransaction sensorTransaction = getSupportFragmentManager().beginTransaction();
+                    sensorTransaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
+                    sensorTransaction.remove(sensorResumeFragment).commit();
+                    
                 }
                 super.onPostExecute(result);
             }
