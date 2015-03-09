@@ -2,9 +2,9 @@ package org.gots.test;
 
 import org.gots.R;
 import org.gots.ui.ActionActivity;
+import org.gots.ui.GardenActivity;
 import org.gots.ui.HutActivity;
 import org.gots.ui.MainActivity;
-import org.gots.ui.MyMainGarden;
 import org.gots.ui.ProfileActivity;
 import org.gots.ui.SplashScreenActivity;
 
@@ -50,21 +50,21 @@ public class TestDashboard extends ActivityInstrumentationTestCase2<MainActivity
         // Allotment Activity
         View btGarden = (View) solo.getView(R.id.dashboard_button_allotment);
         solo.clickOnView(btGarden);
-        solo.waitForActivity(MyMainGarden.class);
-        solo.assertCurrentActivity("Wrong activity Allotment", MyMainGarden.class);
+        solo.waitForActivity(GardenActivity.class);
+        solo.assertCurrentActivity("Wrong activity Allotment", GardenActivity.class);
 
-        solo.waitForView(R.id.IdGardenAllotmentsList);
-        Activity allotmentActivity = solo.getCurrentActivity();
-        ListView listAllotments = (ListView) allotmentActivity.findViewById(R.id.IdGardenAllotmentsList);
-        if (listAllotments != null && listAllotments.getCount() > 0) {
-            Log.i("allotmentActivity", "listAllotments.getCount=" + listAllotments.getCount());
-            GridView listSeeds = (GridView) listAllotments.getChildAt(0).findViewById(R.id.IdGrowingSeedList);
-            if (listSeeds != null && listSeeds.getCount() > 0) {
-                Log.i("allotmentActivity", "listSeeds.getCount=" + listSeeds.getCount());
-                View btSeed = (View) listSeeds.getChildAt(0);
-                solo.clickOnView(btSeed);
-            }
-        }
+//        solo.waitForView(R.id.IdGardenAllotmentsList);
+//        Activity allotmentActivity = solo.getCurrentActivity();
+//        ListView listAllotments = (ListView) allotmentActivity.findViewById(R.id.IdGardenAllotmentsList);
+//        if (listAllotments != null && listAllotments.getCount() > 0) {
+//            Log.i("allotmentActivity", "listAllotments.getCount=" + listAllotments.getCount());
+//            GridView listSeeds = (GridView) listAllotments.getChildAt(0).findViewById(R.id.IdGrowingSeedList);
+//            if (listSeeds != null && listSeeds.getCount() > 0) {
+//                Log.i("allotmentActivity", "listSeeds.getCount=" + listSeeds.getCount());
+//                View btSeed = (View) listSeeds.getChildAt(0);
+//                solo.clickOnView(btSeed);
+//            }
+//        }
         // Return dashboard
         btHome = (View) solo.getView(android.R.id.home);
         solo.clickOnView(btHome);
