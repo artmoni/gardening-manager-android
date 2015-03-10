@@ -18,6 +18,7 @@ import org.gots.authentication.provider.google.GoogleAuthentication;
 import org.gots.authentication.provider.google.User;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
+import org.gots.inapp.AppRater;
 import org.gots.inapp.GotsBillingDialog;
 import org.gots.inapp.GotsPurchaseItem;
 import org.gots.nuxeo.NuxeoWorkflowProvider;
@@ -573,6 +574,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         // Intent intent = new Intent(getApplicationContext(), ProfileCreationActivity.class);
         // startActivity(intent);
         // }
+        AppRater.app_launched(MainActivity.this);
     }
 
     protected void displayUserAvatar() {

@@ -98,8 +98,6 @@ public class AppRater {
                     editor.putBoolean("dontshowagain", true);
                     editor.commit();
                     GoogleAnalyticsTracker.getInstance().trackEvent("Button", "AppRater", "dontshowagain", launch_count);
-                    ;
-
                 }
                 dialog.dismiss();
             }
