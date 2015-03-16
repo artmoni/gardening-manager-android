@@ -53,6 +53,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Filterable;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -132,7 +133,8 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
                 if (Build.VERSION.SDK_INT >= 16) {
                     findViewById(R.id.clearSearchFilter).setBackground(getResources().getDrawable(R.drawable.ic_search));
                 } else {
-                    findViewById(R.id.clearSearchFilter).setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_search));
+                    findViewById(R.id.clearSearchFilter).setBackgroundDrawable(
+                            getResources().getDrawable(R.drawable.ic_search));
                 }
                 clearFilter = false;
             }
@@ -148,10 +150,7 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    performSearch(filter);
-                    EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(filter.getWindowToken(), 0);
+                    filterByName(filter);
                     return true;
                 }
                 return false;
@@ -162,12 +161,20 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
 
             @Override
             public void onClick(View v) {
-                performSearch(filter);
-                EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(filter.getWindowToken(), 0);
-            }
+                switch (v.getId()) {
+                case R.drawable.ic_search:
+                    filterByName(filter);
+                    break;
+                case R.drawable.ic_menu_close_clear_cancel:
+                    filter.setText("");
+                    filterByName(filter);
+                    break;
 
+                default:
+                    break;
+                }
+
+            }
         });
 
     }
@@ -303,25 +310,28 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
                         currentFilter = "";
                         filter.setText(currentFilter);
                         clearFilter = false;
-                        if (Build.VERSION.SDK_INT >= 16) {
-                            findViewById(R.id.clearSearchFilter).setBackground(
-                                    getResources().getDrawable(R.drawable.ic_search));
-                        } else {
-                            findViewById(R.id.clearSearchFilter).setBackgroundDrawable(
-                                    getResources().getDrawable(R.drawable.ic_search));
-                        }
+//                        if (Build.VERSION.SDK_INT >= 16) {
+//                            findViewById(R.id.clearSearchFilter).setBackground(
+//                                    getResources().getDrawable(R.drawable.ic_search));
+//                        } else {
+//                            findViewById(R.id.clearSearchFilter).setBackgroundDrawable(
+//                                    getResources().getDrawable(R.drawable.ic_search));
+//                        }
+                        ImageView imageView = (ImageView)findViewById(R.id.clearSearchFilter);
+                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_search));
                     } else {
                         currentFilter = filter.getText().toString();
                         clearFilter = true;
                         clearFilter = false;
-                        if (Build.VERSION.SDK_INT >= 16) {
-                            findViewById(R.id.clearSearchFilter).setBackground(
-                                    getResources().getDrawable(R.drawable.ic_menu_close_clear_cancel));
-                        } else {
-                            findViewById(R.id.clearSearchFilter).setBackgroundDrawable(
-                                    getResources().getDrawable(R.drawable.ic_menu_close_clear_cancel));
-                        }
-                        
+//                        if (Build.VERSION.SDK_INT >= 16) {
+//                            findViewById(R.id.clearSearchFilter).setBackground(
+//                                    getResources().getDrawable(R.drawable.ic_menu_close_clear_cancel));
+//                        } else {
+//                            findViewById(R.id.clearSearchFilter).setBackgroundDrawable(
+//                                    getResources().getDrawable(R.drawable.ic_menu_close_clear_cancel));
+//                        }
+                        ImageView imageView = (ImageView)findViewById(R.id.clearSearchFilter);
+                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_close_clear_cancel));
                     }
 
                     Fragment fragment = (Fragment) getSupportFragmentManager().findFragmentByTag(
@@ -493,5 +503,12 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
     @Override
     protected ViewPager getViewPager() {
         return (ViewPager) findViewById(R.id.pager);
+    }
+
+    protected void filterByName(final EditText filter) {
+        performSearch(filter);
+        // EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(filter.getWindowToken(), 0);
     }
 }
