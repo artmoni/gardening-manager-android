@@ -85,6 +85,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 
@@ -122,6 +123,12 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
     public static final String LAUNCHER_ACTION = "org.gots.dashboard.action";
 
     public static final String LAUNCHER_CATALOGUE = "org.gots.dashboard.catalogue";
+
+    private boolean doubleBackToExitPressedOnce;
+
+    private GardenInterface currentGarden;
+
+    private WorkflowResumeFragment workflowResumeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -272,6 +279,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         // *************************
         navDrawerItem = new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1));
         navDrawerItems.add(navDrawerItem);
+        displayDrawerMenuSensorCounter();
 
         // *************************
         // Premium
@@ -799,12 +807,6 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         };
     }
 
-    private boolean doubleBackToExitPressedOnce;
-
-    private GardenInterface currentGarden;
-
-    private WorkflowResumeFragment workflowResumeFragment;
-
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
@@ -893,11 +895,6 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         displayTutorialFragment();
         displayIncredibleFragment();
         displayWeatherFragment();
-        displayDrawerMenuAllotmentCounter();
-        displayDrawerMenuActionsCounter();
-        displayDrawerMenuCatalogCounter();
-        displayDrawerMenuProfileCounter();
-
     }
 
     private void displayTutorialFragment() {
@@ -929,6 +926,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
     private void displaySensorFragment() {
         new AsyncTask<Void, Void, Boolean>() {
             boolean isStatusAlert = false;
+
             private Fragment sensorResumeFragment;
 
             @Override
@@ -941,7 +939,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                         break;
                     }
                 }
-                    return isStatusAlert;
+                return isStatusAlert;
             }
 
             @Override
@@ -951,11 +949,11 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                     FragmentTransaction sensorTransaction = getSupportFragmentManager().beginTransaction();
                     sensorTransaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
                     sensorTransaction.replace(R.id.idFragmentSensor, sensorResumeFragment).commit();
-                }else if (sensorResumeFragment!=null){
+                } else if (sensorResumeFragment != null) {
                     FragmentTransaction sensorTransaction = getSupportFragmentManager().beginTransaction();
                     sensorTransaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
                     sensorTransaction.remove(sensorResumeFragment).commit();
-                    
+
                 }
                 super.onPostExecute(result);
             }
@@ -967,6 +965,8 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         gotsPrefs.set(GotsPreferences.ORG_GOTS_TUTORIAL_FINISHED, true);
         displayTutorialFragment();
         Toast.makeText(getApplicationContext(), getResources().getString(R.string.tutorial_finished), Toast.LENGTH_LONG).show();
+        GoogleAnalyticsTracker analyticsTracker = GoogleAnalyticsTracker.getInstance();
+        analyticsTracker.trackEvent("Tutorial", "Finished", currentGarden.getName(), 0);
     }
 
     @Override

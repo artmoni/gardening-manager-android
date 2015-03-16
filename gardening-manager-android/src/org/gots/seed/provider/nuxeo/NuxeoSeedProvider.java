@@ -1,6 +1,7 @@
 package org.gots.seed.provider.nuxeo;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -35,6 +36,7 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.PathRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 
 public class NuxeoSeedProvider extends LocalSeedProvider {
@@ -70,7 +72,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
         try {
             Session session = getNuxeoClient().getSession();
-            DocumentManager service = session.getAdapter(DocumentManager.class);
+            final DocumentManager service = session.getAdapter(DocumentManager.class);
 
             byte cacheParam = CacheBehavior.STORE;
             boolean refresh = force;
@@ -92,14 +94,45 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     Log.w(TAG, "Nuxeo Seed conversion problem " + document.getTitle() + "- " + document.getId());
                 }
 
-                // download custom image
-                File imageFile = new File(gotsPrefs.getGotsExternalFileDir(),
-                        seed.getVariety().toLowerCase().replaceAll("\\s", ""));
-                if (imageFile != null && !imageFile.exists()) {
-                    FileBlob image = service.getBlob(document);
-                    if (image != null && image.getLength() > 0)
-                        FileUtilities.copy(image.getFile(), imageFile);
-                }
+                new AsyncTask<BaseSeedInterface, Void, FileBlob>() {
+
+                    private File imageFile;
+
+                    @Override
+                    protected FileBlob doInBackground(BaseSeedInterface... params) {
+                        BaseSeedInterface seed = params[0];
+                        FileBlob image = null;
+                        imageFile = new File(gotsPrefs.getGotsExternalFileDir(),
+                                seed.getVariety().toLowerCase().replaceAll("\\s", ""));
+                        try {
+                            image = service.getBlob(new DocRef(seed.getUUID()));
+                            Log.d(TAG, "Download image blob " + image.getFileName());
+                        } catch (Exception e) {
+                            Log.w(TAG, "Image " + imageFile.getAbsolutePath() + " cannot be downloaded for document "
+                                    + seed.getUUID());
+                        }
+                        return image;
+                    }
+
+                    protected void onPostExecute(FileBlob image) {
+                        if (image != null && image.getLength() > 0)
+                            try {
+                                FileUtilities.copy(image.getFile(), imageFile);
+                            } catch (IOException e) {
+                                Log.w(TAG,
+                                        "Cannot copy " + image.getFile().getAbsolutePath() + " to "
+                                                + imageFile.getAbsolutePath());
+                            }
+                    };
+                }.execute(seed);
+//                // download custom image
+//                File imageFile = new File(gotsPrefs.getGotsExternalFileDir(),
+//                        seed.getVariety().toLowerCase().replaceAll("\\s", ""));
+//                if (imageFile != null && !imageFile.exists()) {
+//                    FileBlob image = service.getBlob(document);
+//                    if (image != null && image.getLength() > 0)
+//                        FileUtilities.copy(image.getFile(), imageFile);
+//                }
             }
             // getNuxeoClient().shutdown();
             myVendorSeeds = synchronize(super.getVendorSeeds(force, page, pageSize), remoteVendorSeeds);
