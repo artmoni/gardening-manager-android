@@ -145,7 +145,10 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         mDrawerLinear = (RelativeLayout) findViewById(R.id.frame_menu);
         mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
         spinnerGarden = (Spinner) findViewById(R.id.spinnerGarden);
-
+        if (gotsPrefs.get("firstlaunch", true)){
+            mDrawerLayout.openDrawer(mDrawerLinear);
+            gotsPrefs.set("firstlaunch", false);
+        }
         displayDrawerMenu();
 
         // enabling action bar app icon and behaving it as toggle button
@@ -330,6 +333,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         // }.execute();
         // }
         // });
+
     }
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
