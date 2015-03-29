@@ -85,6 +85,8 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
 
     private BaseSeedInterface currentSeed;
 
+    private ImageView actionBarSearchView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +104,8 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
         actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setHomeButtonEnabled(true);
+
+        actionBarSearchView = (ImageView) findViewById(R.id.clearSearchFilter);
 
         // displaySpinnerFilter();
         displaySearchBox();
@@ -121,6 +125,7 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
 
     private void displaySearchBox() {
         final EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
+
         filter.setText(currentFilter);
 
         filter.addTextChangedListener(new TextWatcher() {
@@ -130,12 +135,7 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                if (Build.VERSION.SDK_INT >= 16) {
-                    findViewById(R.id.clearSearchFilter).setBackground(getResources().getDrawable(R.drawable.ic_search));
-                } else {
-                    findViewById(R.id.clearSearchFilter).setBackgroundDrawable(
-                            getResources().getDrawable(R.drawable.ic_search));
-                }
+                actionBarSearchView.setImageDrawable(getResources().getDrawable(R.drawable.ic_search));
                 clearFilter = false;
             }
 
@@ -156,24 +156,11 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
                 return false;
             }
         });
-        ImageButton search = (ImageButton) findViewById(R.id.clearSearchFilter);
-        search.setOnClickListener(new View.OnClickListener() {
+        actionBarSearchView.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                switch (v.getId()) {
-                case R.drawable.ic_search:
-                    filterByName(filter);
-                    break;
-                case R.drawable.ic_menu_close_clear_cancel:
-                    filter.setText("");
-                    filterByName(filter);
-                    break;
-
-                default:
-                    break;
-                }
-
+                filterByName(filter);
             }
         });
 
@@ -310,28 +297,12 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
                         currentFilter = "";
                         filter.setText(currentFilter);
                         clearFilter = false;
-//                        if (Build.VERSION.SDK_INT >= 16) {
-//                            findViewById(R.id.clearSearchFilter).setBackground(
-//                                    getResources().getDrawable(R.drawable.ic_search));
-//                        } else {
-//                            findViewById(R.id.clearSearchFilter).setBackgroundDrawable(
-//                                    getResources().getDrawable(R.drawable.ic_search));
-//                        }
-                        ImageView imageView = (ImageView)findViewById(R.id.clearSearchFilter);
-                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_search));
+                        actionBarSearchView.setImageDrawable(getResources().getDrawable(R.drawable.ic_search));
                     } else {
                         currentFilter = filter.getText().toString();
                         clearFilter = true;
                         clearFilter = false;
-//                        if (Build.VERSION.SDK_INT >= 16) {
-//                            findViewById(R.id.clearSearchFilter).setBackground(
-//                                    getResources().getDrawable(R.drawable.ic_menu_close_clear_cancel));
-//                        } else {
-//                            findViewById(R.id.clearSearchFilter).setBackgroundDrawable(
-//                                    getResources().getDrawable(R.drawable.ic_menu_close_clear_cancel));
-//                        }
-                        ImageView imageView = (ImageView)findViewById(R.id.clearSearchFilter);
-                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_close_clear_cancel));
+                        actionBarSearchView.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_close_clear_cancel));
                     }
 
                     Fragment fragment = (Fragment) getSupportFragmentManager().findFragmentByTag(
@@ -433,6 +404,7 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
             if (currentSeed.getNbSachet() == 0)
                 menu.findItem(R.id.action_stock_reduce).setVisible(false);
+
             return false;
         }
 
