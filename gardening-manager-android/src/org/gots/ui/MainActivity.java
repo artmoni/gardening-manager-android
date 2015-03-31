@@ -872,7 +872,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                         workflowResumeFragment = new WorkflowResumeFragment();
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                         transaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
-                        transaction.replace(R.id.idFragmentWorkflow, workflowResumeFragment).commit();
+                        transaction.replace(R.id.idFragmentWorkflow, workflowResumeFragment).commitAllowingStateLoss();
                     } else
                         workflowResumeFragment.update();
                 } else
