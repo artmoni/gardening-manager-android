@@ -139,6 +139,8 @@ public class GotsBillingDialog extends DialogFragment {
         butBuyFeature.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (buyHelper != null)
+                    buyHelper.flagEndAsync();
                 buyHelper.launchPurchaseFlow(getActivity(), SKU_FEATURE, BUY_REQUEST_CODE,
                         new IabHelper.OnIabPurchaseFinishedListener() {
                             @Override
