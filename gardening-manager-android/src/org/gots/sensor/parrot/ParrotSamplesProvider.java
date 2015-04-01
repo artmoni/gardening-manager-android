@@ -104,12 +104,14 @@ public class ParrotSamplesProvider implements GotsSensorSamplesProvider {
         List<ParrotSampleTemperature> sensorSampleTemperature = new ArrayList<ParrotSampleTemperature>();
         try {
             JSONObject json = (JSONObject) authentication.getJSON(api_1_03_sample, params);
-            JSONArray jsonFertilizer = json.getJSONArray("samples");
-            Gson gson = new Gson();
-            for (int i = 0; i < jsonFertilizer.length(); i++) {
-                ParrotSampleTemperature location = gson.fromJson(jsonFertilizer.getString(i),
-                        ParrotSampleTemperature.class);
-                sensorSampleTemperature.add(location);
+            if (json.has("samples")){
+                JSONArray jsonFertilizer = json.getJSONArray("samples");
+                Gson gson = new Gson();
+                for (int i = 0; i < jsonFertilizer.length(); i++) {
+                    ParrotSampleTemperature location = gson.fromJson(jsonFertilizer.getString(i),
+                            ParrotSampleTemperature.class);
+                    sensorSampleTemperature.add(location);
+                }
             }
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage(), e);

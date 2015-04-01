@@ -157,9 +157,9 @@
         </service>
 
         <!-- RELEASE KEY -->
-  <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyAtaIJvzohVEECxELeBtNaS2T86diBVX9U"/>    
+   <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyAtaIJvzohVEECxELeBtNaS2T86diBVX9U"/>    
         <!-- DEBUG KEY -->
-         <!-- <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyDFN2ftNk8NqYwMCyjUV5ryM4zUdmqcWXI"/> -->   
+          <!-- <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyDFN2ftNk8NqYwMCyjUV5ryM4zUdmqcWXI"/> -->  
 
     </application>
 

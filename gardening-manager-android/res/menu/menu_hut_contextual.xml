@@ -14,9 +14,9 @@
         android:id="@+id/action_stock_reduce"
         android:icon="@drawable/action_reducequantity"
         android:title="Reduce"/>
-    <item
+   <!--  <item
         android:id="@+id/action_sow"
         android:icon="@drawable/action_sow"
-        android:title="@string/action.sow"/>
+        android:title="@string/action.sow"/> -->
 
 </menu>

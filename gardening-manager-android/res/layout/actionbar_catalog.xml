@@ -24,13 +24,13 @@
         android:layout_toRightOf="@+id/imageView1" />
     -->
 
-    <ImageButton
+    <ImageView
         android:id="@+id/clearSearchFilter"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:background="@drawable/ic_search"
+        android:src="@drawable/ic_search"
         android:contentDescription="clear Search Filter" />
 
     <EditText

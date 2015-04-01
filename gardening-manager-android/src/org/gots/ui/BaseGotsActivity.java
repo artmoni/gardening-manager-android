@@ -134,10 +134,10 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
                 Criteria criteria = new Criteria();
                 criteria.setAccuracy(Criteria.ACCURACY_LOW);
                 String bestprovider = manager.getBestProvider(criteria, true);
-                Location loc = manager.getLastKnownLocation(bestprovider);
-                Geocoder geoCoder = new Geocoder(getApplicationContext(), Locale.getDefault());
-                List<Address> addresses;
                 try {
+                    Location loc = manager.getLastKnownLocation(bestprovider);
+                    Geocoder geoCoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+                    List<Address> addresses;
                     addresses = geoCoder.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
                     currentGarden = new DefaultGarden(addresses.get(0));
                     gardenManager.addGarden(currentGarden);
