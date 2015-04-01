@@ -86,7 +86,7 @@ public class SensorActivity extends BaseGotsActivity implements OnSensorClickLis
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
         ft.addToBackStack(null);
-        ft.replace(R.id.idFragmentSensorContent, new SensorChartFragment(locationSensor.getLocation_identifier()));
+        ft.replace(R.id.idFragmentSensorContent, new SensorChartFragment(locationSensor));
         ft.commit();
     }
 

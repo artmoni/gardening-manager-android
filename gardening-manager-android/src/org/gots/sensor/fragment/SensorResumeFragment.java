@@ -98,7 +98,8 @@ public abstract class SensorResumeFragment extends BaseGotsFragment {
     protected void onNuxeoDataRetrieved(Object data) {
         Holder retrieveHolder = (Holder) data;
         sensorListview.removeAllViews();
-        onSensorStatusRetrieved(retrieveHolder.parrotLocations, retrieveHolder.parrotLocationsStatus);
+        if (isAdded())
+            onSensorStatusRetrieved(retrieveHolder.parrotLocations, retrieveHolder.parrotLocationsStatus);
         super.onNuxeoDataRetrieved(data);
     }
 

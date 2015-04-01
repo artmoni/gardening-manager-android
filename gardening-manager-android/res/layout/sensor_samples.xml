@@ -1,20 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="wrap_content"
     android:background="@color/text_color_light"
     android:orientation="vertical" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/TextView01"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
+    <!--
         <TextView
             android:id="@+id/textView1"
             android:layout_width="match_parent"
@@ -22,15 +13,21 @@
             android:layout_centerHorizontal="true"
             android:background="@color/text_color_light"
             android:text="Temperature" />
+    -->
 
-        <WebView
+
+    <!--
+             <WebView
             android:id="@+id/webViewTemperature"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_below="@+id/textView1"
             android:background="@drawable/bg_line_selector" />
+    -->
 
-        <TextView
+
+    <!--
+             <TextView
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,13 +35,37 @@
             android:layout_marginTop="20dp"
             android:background="@color/text_color_light"
             android:text="Fertilizer" />
+    -->
 
-        <WebView
+
+    <!--
+             <WebView
             android:id="@+id/webViewFertilizer"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:background="@drawable/bg_line_selector" />
+    -->
 
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chartTemperature"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chartFertilizer"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chartWater"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chartLighting"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
+    <!--
         <TextView
             android:id="@+id/textView2"
             android:layout_width="match_parent"
@@ -72,6 +93,6 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:background="@drawable/bg_line_selector" />
-    </LinearLayout>
+    -->
 
-</ScrollView>
+</LinearLayout>

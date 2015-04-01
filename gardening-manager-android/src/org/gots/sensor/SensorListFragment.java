@@ -36,14 +36,12 @@ public class SensorListFragment extends ListFragment {
         return view;
     }
 
-
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
         ft.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
-        ft.replace(R.id.idFragmentSensor, new SensorChartFragment(
-                sensorListAdapter.getItem(position).getLocation_identifier()));
+        ft.replace(R.id.idFragmentSensor, new SensorChartFragment(sensorListAdapter.getItem(position)));
         ft.commit();
     }
 }
