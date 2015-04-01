@@ -11,8 +11,8 @@
   <version>1.4.0-SNAPSHOT</version>
   <name>Gardening Manager Android</name>
   <properties>
-    <android.version>4.2</android.version>
-    <android.platform>19</android.platform>
+    <android.version>4.4</android.version>
+    <android.platform>21</android.platform>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>

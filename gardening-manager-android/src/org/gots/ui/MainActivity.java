@@ -29,6 +29,9 @@ import org.gots.provider.GardenContentProvider;
 import org.gots.provider.SeedsContentProvider;
 import org.gots.provider.SensorContentProvider;
 import org.gots.provider.WeatherContentProvider;
+import org.gots.sensor.fragment.AlertSensorResumeFragment;
+import org.gots.sensor.fragment.SensorResumeFragment;
+import org.gots.sensor.fragment.SensorResumeFragment.OnSensorClickListener;
 import org.gots.sensor.parrot.ParrotLocation;
 import org.gots.sensor.parrot.ParrotLocationsStatus;
 import org.gots.sensor.parrot.ParrotSensorProvider;
@@ -38,8 +41,6 @@ import org.gots.ui.fragment.ActionsResumeFragment.OnActionsClickListener;
 import org.gots.ui.fragment.CatalogResumeFragment;
 import org.gots.ui.fragment.IncredibleResumeFragment;
 import org.gots.ui.fragment.LoginDialogFragment;
-import org.gots.ui.fragment.SensorResumeFragment;
-import org.gots.ui.fragment.SensorResumeFragment.OnSensorClickListener;
 import org.gots.ui.fragment.TutorialResumeFragment;
 import org.gots.ui.fragment.TutorialResumeFragment.OnTutorialFinishedListener;
 import org.gots.ui.fragment.WeatherResumeFragment;
@@ -949,7 +950,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
             @Override
             protected void onPostExecute(Boolean result) {
                 if (result.booleanValue()) {
-                    sensorResumeFragment = new SensorResumeFragment();
+                    sensorResumeFragment = new AlertSensorResumeFragment();
                     FragmentTransaction sensorTransaction = getSupportFragmentManager().beginTransaction();
                     sensorTransaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
                     sensorTransaction.replace(R.id.idFragmentSensor, sensorResumeFragment).commit();
