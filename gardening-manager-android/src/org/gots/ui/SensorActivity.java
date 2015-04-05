@@ -34,8 +34,8 @@ public class SensorActivity extends BaseGotsActivity implements OnSensorClickLis
         transaction2.replace(R.id.idFragmentSensorList, allSensorResumeFragment).commit();
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.idFragmentSensorContent, new TutorialFragment(R.layout.tutorial_f));
-        transaction.addToBackStack(null);
+        transaction.replace(R.id.idFragmentSensorContent, new TutorialFragment(R.layout.tutorial_f));
+//        transaction.addToBackStack(null);
         transaction.commit();
     }
 
