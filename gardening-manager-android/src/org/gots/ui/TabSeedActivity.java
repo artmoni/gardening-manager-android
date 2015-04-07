@@ -606,7 +606,8 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
-                    ((ActionOnSeed) actionInterface).execute(mSeed);
+//                    ((ActionOnSeed) actionInterface).execute(mSeed);
+                    actionseedProvider.doAction((ActionOnSeed)actionInterface, mSeed);
                     return null;
                 }
 
@@ -622,13 +623,6 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 
     @Override
     public void onActionLongClick(final BaseAction actionInterface) {
-        // FragmentManager fm = getSupportFragmentManager();
-        // DialogFragment scheduleDialog = new ScheduleActionFragment();
-        // Bundle data = new Bundle();
-        // data.putInt(GOTS_GROWINGSEED_ID, mSeed.getGrowingSeedId());
-        // scheduleDialog.setArguments(data);
-        // scheduleDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
-        // scheduleDialog.show(fm, "fragment_planning");
         if (actionInterface instanceof ActionOnSeed) {
             new AsyncTask<Void, Void, Void>() {
                 @Override

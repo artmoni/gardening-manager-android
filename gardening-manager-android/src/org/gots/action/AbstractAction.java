@@ -23,7 +23,7 @@ public class AbstractAction implements BaseAction, Comparator<AbstractActionSeed
 
     private Date dateActionDone;
 
-    private int id;
+    private int id = -1;
 
     private String UUID;
 

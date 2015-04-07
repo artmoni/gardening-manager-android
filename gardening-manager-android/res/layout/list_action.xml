@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/IdSeedActionDate"
-            android:text="Describe the action in few words" />
+            android:text="Log some information in few words" />
 
         <ImageView
             android:id="@+id/imageviewPhoto"

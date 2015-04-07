@@ -97,11 +97,7 @@ public class ActionsChoiceFragment extends BaseGotsFragment {
 
                 @Override
                 public void onClick(View v) {
-
-                    final BaseAction newAction = ActionFactory.buildAction(getActivity(), baseActionInterface.getName());
-                    newAction.setId(baseActionInterface.getId());
-                    mCallback.onActionClick(newAction);
-
+                    mCallback.onActionClick(baseActionInterface);
                 }
             });
             actionWidget.setOnLongClickListener(new View.OnLongClickListener() {
