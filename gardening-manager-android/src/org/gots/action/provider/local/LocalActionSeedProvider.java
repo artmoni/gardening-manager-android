@@ -48,8 +48,15 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
         long rowid;
         ContentValues values = getContentValues(action, seed);
         values.remove(DatabaseHelper.ACTIONSEED_ID);
-        rowid = bdd.insert(DatabaseHelper.ACTIONSEEDS_TABLE_NAME, null, values);
-        action.setActionSeedId((int) rowid);
+        Cursor cursor = bdd.query(DatabaseHelper.ACTIONSEEDS_TABLE_NAME, null, DatabaseHelper.ACTIONSEED_ID + "='"
+                + action.getActionSeedId() + " OR " + DatabaseHelper.ACTIONSEED_UUID + "=" + action.getUUID() + "'",
+                null, null, null, null);
+        if (cursor.getCount() == 0) {
+            rowid = bdd.insert(DatabaseHelper.ACTIONSEEDS_TABLE_NAME, null, values);
+            action.setActionSeedId((int) rowid);
+        } else {
+            Log.w(TAG, action.getName() + " is already inserted in database as " + action);
+        }
         return (ActionOnSeed) action;
     }
 
@@ -210,7 +217,7 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
     public ActionOnSeed doAction(ActionOnSeed action, GrowingSeed seed) {
         ActionOnSeed mAction;
         // ContentValues values = getContentValues(action, seed);
-        if (action.getActionSeedId() >= 0)
+        if (action.getId() >= 0)
             // rowid = bdd.update(DatabaseHelper.ACTIONSEEDS_TABLE_NAME, values, DatabaseHelper.ACTIONSEED_ID + "="
             // + action.getActionSeedId(), null);
             mAction = update(seed, action);

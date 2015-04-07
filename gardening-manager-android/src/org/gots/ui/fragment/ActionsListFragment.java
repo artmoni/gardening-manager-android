@@ -22,6 +22,7 @@ import org.gots.seed.GrowingSeed;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,9 +48,12 @@ public class ActionsListFragment extends AbstractListFragment implements ListVie
 
     private GotsActionSeedProvider actionseedProvider;
 
+    boolean force_sync = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         listView = new ListView(getActivity());
+        force_sync = true;
         return listView;
     }
 
@@ -141,26 +145,34 @@ public class ActionsListFragment extends AbstractListFragment implements ListVie
             allSeeds.add(growingSeedManager.getGrowingSeedById(seedid));
         } else
             allSeeds = growingSeedManager.getGrowingSeeds();
-        
 
         List<ActionOnSeed> seedActions = new ArrayList<ActionOnSeed>();
         for (GrowingSeed seed : allSeeds) {
 
-            seedActions = actionseedProvider.getActionsDoneBySeed(seed, false);
-            seedActions.addAll(actionseedProvider.getActionsToDoBySeed(seed, false));
+            seedActions = actionseedProvider.getActionsDoneBySeed(seed, force_sync);
+            seedActions.addAll(actionseedProvider.getActionsToDoBySeed(seed, force_sync));
 
         }
+        force_sync = false;
         return seedActions;
     }
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
-        listAllActionAdapter = new ListAllActionAdapter(getActivity(), (List<ActionOnSeed>)data, ListAllActionAdapter.STATUS_DONE);
+        listAllActionAdapter = new ListAllActionAdapter(getActivity(), (List<ActionOnSeed>) data,
+                ListAllActionAdapter.STATUS_DONE);
         listView.setAdapter(listAllActionAdapter);
         super.onNuxeoDataRetrieved(data);
     }
 
+    @Override
+    protected void onNuxeoDataRetrieveFailed() {
+        Log.e(getTag(), "Error retrieving actions list");
+        super.onNuxeoDataRetrieveFailed();
+    }
+
     public void update() {
+        force_sync = true;
         runAsyncDataRetrieval();
     }
 }

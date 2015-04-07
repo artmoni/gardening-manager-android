@@ -51,7 +51,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
 
     public NuxeoActionSeedProvider(Context mContext) {
         super(mContext);
-        NuxeoManager.getInstance().initIfNew(mContext);
+        NuxeoManager.getInstance().initIfNew(mContext); 
     }
 
     protected AndroidAutomationClient getNuxeoClient() {
@@ -114,7 +114,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
 
             if (docAction != null) {
                 Document doc = documentMgr.copy(docAction, getActionsFolder(seed, documentMgr), docAction.getTitle()
-                        + "-" + String.valueOf(action.getDuration()));
+                        + "-" + String.valueOf(new Random().nextInt()));
                 documentMgr.update(doc, properties);
                 action.setUUID(doc.getId());
             }
@@ -148,22 +148,25 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
 
     @Override
     public ActionOnSeed doAction(ActionOnSeed action, GrowingSeed seed) {
+        Session session = getNuxeoClient().getSession();
+        DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
+
+        PropertyMap properties = new PropertyMap();
+        properties.set("action:dateactiondone", Calendar.getInstance().getTime());
+        properties.set("action:description", action.getDescription());
+        if (action.getData() != null)
+            properties.set("action:data", action.getData().toString());
+
         try {
-            Session session = getNuxeoClient().getSession();
-            DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
-
-            PropertyMap properties = new PropertyMap();
-            properties.set("action:dateactiondone", Calendar.getInstance().getTime());
-            properties.set("action:description", action.getDescription());
-            if (action.getData() != null)
-                properties.set("action:data", action.getData().toString());
-
-            // Document newDoc = documentMgr.copy(new DocRef(action.getUUID()),
-            // getActionsFolder(seed, documentMgr));
             documentMgr.update(new DocRef(action.getUUID()), properties);
-
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage(), e);
+            Log.w(TAG, e.getMessage()+ " - trying to create the action before updating");
+            action = insertAction(seed, action);
+            try{
+                documentMgr.update(new DocRef(action.getUUID()), properties);
+            }catch(Exception e2){
+                Log.e(TAG, e.getMessage(), e2);
+            }
         }
         return super.doAction(action, seed);
     }
@@ -427,7 +430,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
-//            seedDoc = documentMgr.getDocument(new IdRef(mSeed.getUUID()));
+            // seedDoc = documentMgr.getDocument(new IdRef(mSeed.getUUID()));
             Document pictureBook = documentMgr.getChild(new IdRef(mSeed.getUUID()), "Picture");
             Documents pictureList = documentMgr.query(
                     "SELECT * FROM Picture WHERE ecm:currentLifeCycleState != \"deleted\" AND ecm:parentId=\""
@@ -441,7 +444,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
                 // get the data URL
                 String path = map.getString("data");
                 FileBlob blob = (FileBlob) session.getFile(path);
-                Log.i(TAG, "Picture "+blob.getFileName());
+                Log.i(TAG, "Picture " + blob.getFileName());
                 imageFiles.add(blob.getFile());
             }
         } catch (Exception e) {

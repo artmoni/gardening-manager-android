@@ -2,6 +2,7 @@ package org.gots.action;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.gots.action.provider.GotsActionSeedProvider;
@@ -72,6 +73,10 @@ public class GotsActionSeedManager extends BroadcastReceiver implements GotsActi
 
     @Override
     public ActionOnSeed doAction(ActionOnSeed action, GrowingSeed seed) {
+        action.setDateActionDone(Calendar.getInstance().getTime());
+        action.setActionSeedId(seed.getSeedId());
+        seed.getActionToDo().remove(action);
+        seed.getActionDone().add(action);
         return provider.doAction(action, seed);
     }
 
