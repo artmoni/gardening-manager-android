@@ -33,7 +33,7 @@ public class GotsGardenManager extends BroadcastReceiver {
 
     private boolean initDone = false;
 
-    private Map<Long, GardenInterface> myGardens;
+    private Map<Long, GardenInterface> myGardens = new HashMap<Long, GardenInterface>();
 
     private GardenInterface currentGarden;
 
@@ -50,7 +50,6 @@ public class GotsGardenManager extends BroadcastReceiver {
         if (instance == null) {
             instance = new GotsGardenManager();
             firstCall = new Exception();
-
         } else if (!instance.initDone) {
             throw new NotConfiguredException(firstCall);
         }
@@ -151,8 +150,8 @@ public class GotsGardenManager extends BroadcastReceiver {
     }
 
     public List<GardenInterface> getMyGardens(boolean force) {
-        if (myGardens == null || force) {
-            myGardens = new HashMap<Long, GardenInterface>();
+        if (myGardens.size() == 0 || force) {
+            myGardens.clear();
             for (GardenInterface garden : gardenProvider.getMyGardens(force)) {
                 myGardens.put(garden.getId(), garden);
                 gardenProvider.getUsersAndGroups(garden);
