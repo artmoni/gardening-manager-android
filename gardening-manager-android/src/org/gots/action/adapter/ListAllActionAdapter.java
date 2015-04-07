@@ -22,6 +22,7 @@ import java.util.Locale;
 import org.gots.R;
 import org.gots.action.ActionOnSeed;
 import org.gots.action.BaseAction;
+import org.gots.action.GotsActionSeedManager;
 import org.gots.action.bean.PhotoAction;
 import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
@@ -167,7 +168,6 @@ public class ListAllActionAdapter extends BaseAdapter {
 
                 WeatherView weatherView = (WeatherView) ll.findViewById(R.id.idWeatherView);
                 weatherView.setVisibility(View.GONE);
-                textviewActionDescription.setVisibility(View.GONE);
 
             } else {
                 // textviewActionStatus.setText(mContext.getResources().getString(R.string.seed_action_done));
@@ -300,8 +300,8 @@ public class ListAllActionAdapter extends BaseAdapter {
         }
     }
 
-    private void showNoticeDialog(final int position, final GrowingSeed seed,
-            final ActionOnSeed currentAction, final Switch mSwitch) {
+    private void showNoticeDialog(final int position, final GrowingSeed seed, final ActionOnSeed currentAction,
+            final Switch mSwitch) {
 
         final EditText userinput = new EditText(mContext.getApplicationContext());
         final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
@@ -309,23 +309,23 @@ public class ListAllActionAdapter extends BaseAdapter {
         builder.setPositiveButton(currentAction.getName(), new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int id) {
-                new AsyncTask<BaseAction, Integer, BaseAction>() {
+                new AsyncTask<ActionOnSeed, Integer, ActionOnSeed>() {
                     @Override
-                    protected BaseAction doInBackground(BaseAction... params) {
+                    protected ActionOnSeed doInBackground(ActionOnSeed... params) {
 
-                        BaseAction actionItem = params[0];
+                        ActionOnSeed actionItem = params[0];
                         if (ActionOnSeed.class.isInstance(actionItem)) {
                             actionItem.setData(userinput.getText().toString());
-                            ((ActionOnSeed) actionItem).execute(seed);
+                            actionItem.execute(seed);
                         }
                         return actionItem;
                     }
 
                     @Override
-                    protected void onPostExecute(BaseAction result) {
+                    protected void onPostExecute(ActionOnSeed result) {
                         Toast.makeText(mContext, "Action done : " + result.getName(), Toast.LENGTH_SHORT).show();
-
-                        actions.remove(position);
+                        actions.set(position, result);
+                        // actions.remove(position);
                         notifyDataSetChanged();
                         mContext.sendBroadcast(new Intent(BroadCastMessages.ACTION_EVENT));
                         super.onPostExecute(result);
