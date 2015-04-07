@@ -20,7 +20,6 @@ public class LocalGardenProvider extends AbstractProvider implements GardenProvi
 
     @Override
     public GardenInterface createGarden(GardenInterface garden) {
-
         GardenInterface newGarden = helper.insertGarden(garden);
         return newGarden;
     }
