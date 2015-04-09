@@ -16,8 +16,7 @@ public class NuxeoSeedConverter {
 
     private static final String TAG = "NuxeoSeedConverter";
 
-    public static BaseSeedInterface convert(Document document) {
-        try {
+    public static BaseSeedInterface convert(Document document) throws NumberFormatException{
             BaseSeedInterface seed = new GrowingSeedImpl();
             seed.setVariety(document.getTitle());
             seed.setFamily(document.getString("vendorseed:family"));
@@ -35,11 +34,6 @@ public class NuxeoSeedConverter {
             seed.setState(document.getState());
             seed.setUUID(document.getId());
             return seed;
-        } catch (Exception e) {
-            Log.e(TAG, "Your document schema is not correct (" + document.getTitle() + " - " + document.getId() + ")",
-                    e);
-            return null;
-        }
     }
 
     public static Document convert(String parentPath, BaseSeedInterface seed) {
