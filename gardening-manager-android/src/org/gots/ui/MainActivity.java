@@ -146,7 +146,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         mDrawerLinear = (RelativeLayout) findViewById(R.id.frame_menu);
         mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
         spinnerGarden = (Spinner) findViewById(R.id.spinnerGarden);
-        if (gotsPrefs.get("firstlaunch", true)){
+        if (gotsPrefs.get("firstlaunch", true)) {
             mDrawerLayout.openDrawer(mDrawerLinear);
             gotsPrefs.set("firstlaunch", false);
         }
@@ -838,7 +838,8 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         displayIncredibleFragment();
         displayWeatherFragment();
         displayWorkflowFragment();
-        displaySensorFragment();
+        if (gotsPrefs.getParrotToken() != null)
+            displaySensorFragment();
         super.onResume();
     }
 
