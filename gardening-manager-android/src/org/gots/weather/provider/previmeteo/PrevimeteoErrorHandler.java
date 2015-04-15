@@ -19,8 +19,15 @@ import org.xml.sax.helpers.DefaultHandler;
  * SAXHandler capable of extracting information out of the xml-data returned by
  * the Google Weather API.
  */
-public class PrevimeteoErrorHandler extends DefaultHandler {
 
+public class PrevimeteoErrorHandler extends DefaultHandler {
+/*
+ * <xml_api_reply version="1">
+ *  <weather module_id="0" tab_id="0">
+ *    <problem_cause data="unknown city or country name or city with less than 15000 inhabitants"/>
+ *  </weather>
+ * </xml_api_reply>
+ */
 	// ===========================================================
 	// Fields
 	// ===========================================================

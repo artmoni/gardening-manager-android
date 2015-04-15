@@ -33,60 +33,46 @@ public class WeatherCache {
 
     private File cacheDirectory;
 
-    private final int MAX_DOWNLOAD_TRY = 3;
-
-    private static URL CURRENT_DOWNLOAD_URL;
-
-    private static int currentDownloadTry = 0;
-
     private static String TAG = "WeatherCache";
 
     public WeatherCache(Context mContext) {
         cacheDirectory = mContext.getCacheDir();
     }
 
-    public InputStream getCacheByURL(URL url) {
+    public InputStream getCacheByURL(URL url) throws URISyntaxException, ClientProtocolException, IOException {
         InputStream weatherXmlStream = null;
         String fileName = "";
         try {
             fileName = md5(url.toURI().toString());
             weatherXmlStream = getLocalCache(fileName);
 
-        } catch (URISyntaxException e) {
-            Log.w(TAG, e.getMessage(), e);
-        } catch (ObsoleteCacheException e) {
-            Log.w(TAG, e.getMessage());
-            weatherXmlStream = getRemoteWeather(url, weatherXmlStream, fileName);
+            GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+            tracker.trackEvent("Weather", "Download", url.getPath(), 0);
+            
+        } catch (ObsoleteCacheException | FileNotFoundException e) {
+            Log.w(TAG, "getLocalCache " + e.getMessage());
+            weatherXmlStream = getRemoteFile(url);
+            setLocalCache(fileName, weatherXmlStream);
+
+            GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+            tracker.trackEvent("Weather", "Download", url.getPath(), 0);
         }
         return weatherXmlStream;
     }
 
-    protected InputStream getRemoteWeather(URL url, InputStream weatherXmlStream, String fileName) {
-        try {
-            if (currentDownloadTry < MAX_DOWNLOAD_TRY || !url.equals(WeatherCache.CURRENT_DOWNLOAD_URL)) {
-                WeatherCache.CURRENT_DOWNLOAD_URL = url;
-                weatherXmlStream = downloadWeatherXML(url);
-                setLocalCache(fileName, weatherXmlStream);
-                currentDownloadTry++;
+    protected InputStream getRemoteFile(URL url) throws ClientProtocolException, URISyntaxException, IOException {
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpGet httpget = new HttpGet(url.toURI());
+        Log.d(TAG, "Get URI " + url.toURI().toString());
 
-                GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-                tracker.trackEvent("Weather", "Download", url.getPath(), currentDownloadTry);
+        // create a response handler
+        ResponseHandler<String> responseHandler = new BasicResponseHandler();
+        String responseBody = httpclient.execute(httpget, responseHandler);
+        // Log.d(DEBUG_TAG, "response from httpclient:n "+responseBody);
 
-            } else {
-                Log.w(TAG, MAX_DOWNLOAD_TRY + " Max download retry reached");
-            }
-        } catch (Exception downloadException) {
-            currentDownloadTry++;
-            Log.w(TAG, "[" + currentDownloadTry + "/" + MAX_DOWNLOAD_TRY + "] " + downloadException.getMessage()
-                    + " / " + url.toString());
+        ByteArrayInputStream is = new ByteArrayInputStream(responseBody.getBytes());
 
-            // TODO a better way to store the error XML bad request data
-            fileName = md5("errorfile");
-            if (weatherXmlStream != null)
-                setLocalCache(fileName, weatherXmlStream);
-
-        }
-        return weatherXmlStream;
+        return is;
     }
 
     public void clean(URL url) {
@@ -100,22 +86,7 @@ public class WeatherCache {
         }
     }
 
-    private InputStream downloadWeatherXML(URL url) throws URISyntaxException, ClientProtocolException, IOException {
-        HttpClient httpclient = new DefaultHttpClient();
-        HttpGet httpget = new HttpGet(url.toURI());
-        Log.i(TAG, "Get URI " + url.toURI().toString());
-
-        // create a response handler
-        ResponseHandler<String> responseHandler = new BasicResponseHandler();
-        String responseBody = httpclient.execute(httpget, responseHandler);
-        // Log.d(DEBUG_TAG, "response from httpclient:n "+responseBody);
-
-        ByteArrayInputStream is = new ByteArrayInputStream(responseBody.getBytes());
-
-        return is;
-    }
-
-    private InputStream getLocalCache(String filePath) throws ObsoleteCacheException {
+    private InputStream getLocalCache(String filePath) throws ObsoleteCacheException, FileNotFoundException {
         File f = new File(cacheDirectory, filePath);
 
         Calendar lastModDate = new GregorianCalendar();
@@ -123,17 +94,12 @@ public class WeatherCache {
         Calendar today = Calendar.getInstance();
 
         FileInputStream fileInputStream = null;
-        try {
-            fileInputStream = new FileInputStream(f);
+        fileInputStream = new FileInputStream(f);
 
-            if (lastModDate.get(Calendar.DAY_OF_YEAR) < today.get(Calendar.DAY_OF_YEAR))
-                throw new ObsoleteCacheException();
-
-            Log.i(TAG, "Open cache " + f.getAbsolutePath());
-        } catch (FileNotFoundException e) {
-            Log.w(TAG, e.getMessage());
+        if (lastModDate.get(Calendar.DAY_OF_YEAR) < today.get(Calendar.DAY_OF_YEAR))
             throw new ObsoleteCacheException();
-        }
+
+        Log.d(TAG, "Cache file " + f.getAbsolutePath());
         return fileInputStream;
     }
 
@@ -150,7 +116,7 @@ public class WeatherCache {
             os.close();
             // weatherXmlStream.close();
 
-            Log.i(TAG, "Creating cache file " + f.getAbsolutePath());
+            Log.d(TAG, "Creating cache file " + f.getAbsolutePath());
 
         } catch (Exception e) {
             Log.e(TAG, "Error creating cache file " + e.getMessage());

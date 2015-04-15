@@ -66,22 +66,26 @@ public class WeatherSyncAdapter extends GotsSyncAdapter {
             weatherProvider = new NuxeoWeatherProvider(getContext(), currentGarden);
         else
             weatherProvider = new LocalWeatherProvider(getContext());
-        for (int forecastDay = 0; forecastDay < 4; forecastDay++) {
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.DAY_OF_YEAR, forecastDay);
+        WeatherProvider previmeteoWeatherProvider = new PrevimeteoWeatherProvider(getContext());
+        if (previmeteoWeatherProvider.fetchWeatherForecast(currentGarden.getAddress()) == LocalWeatherProvider.WEATHER_OK) {
+            for (int forecastDay = 0; forecastDay < 4; forecastDay++) {
+                Calendar cal = Calendar.getInstance();
+                cal.add(Calendar.DAY_OF_YEAR, forecastDay);
 
-            WeatherProvider previmeteoWeatherProvider = new PrevimeteoWeatherProvider(getContext());
-            WeatherConditionInterface previmeteoCondition = previmeteoWeatherProvider.getCondition(cal.getTime());
+                WeatherConditionInterface previmeteoCondition = previmeteoWeatherProvider.getCondition(cal.getTime());
 
-            WeatherConditionInterface localCondition = weatherProvider.getCondition(cal.getTime());
-            if (previmeteoCondition != null && previmeteoCondition.getSummary() != null) {
-                if (localCondition != null && localCondition.getId() > 0) {
-                    previmeteoCondition.setId(localCondition.getId());
-                    previmeteoCondition = weatherProvider.updateCondition(previmeteoCondition, cal.getTime());
-                } else {
-                    previmeteoCondition = weatherProvider.insertCondition(previmeteoCondition);
+                WeatherConditionInterface localCondition = weatherProvider.getCondition(cal.getTime());
+                if (previmeteoCondition != null && previmeteoCondition.getSummary() != null) {
+                    if (localCondition != null && localCondition.getId() > 0) {
+                        previmeteoCondition.setId(localCondition.getId());
+                        previmeteoCondition = weatherProvider.updateCondition(previmeteoCondition, cal.getTime());
+                    } else {
+                        previmeteoCondition = weatherProvider.insertCondition(previmeteoCondition);
+                    }
                 }
             }
+        } else {
+            Log.e(TAG, "Weather cannot be found for city " + currentGarden.getLocality());
         }
 
         intent.setAction(BroadCastMessages.PROGRESS_FINISHED);

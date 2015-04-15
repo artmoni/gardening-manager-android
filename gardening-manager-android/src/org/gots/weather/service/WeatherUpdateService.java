@@ -3,6 +3,9 @@ package org.gots.weather.service;
 import java.util.Calendar;
 
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.garden.GardenInterface;
+import org.gots.garden.GotsGardenManager;
+import org.gots.preferences.GotsPreferences;
 import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.provider.previmeteo.PrevimeteoWeatherProvider;
 import org.gots.weather.provider.previmeteo.WeatherProvider;
@@ -71,33 +74,24 @@ public class WeatherUpdateService extends Service {
 
         try {
 
-            // GoogleWeatherTask(garden.getAddress(), cal.getTime());
-            // WeatherTask wt = new PrevimeteoWeatherProvider(this, garden.getAddress(), cal.getTime());
-            // wt.execute();
-
             new AsyncTask<Void, Integer, WeatherConditionInterface>() {
-
                 protected void onPreExecute() {
                     sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
                 };
 
                 @Override
                 protected WeatherConditionInterface doInBackground(Void... params) {
-                    for (int forecastDay = 0; forecastDay < 4; forecastDay++) {
-                        Calendar cal = Calendar.getInstance();
-                        cal.add(Calendar.DAY_OF_YEAR, forecastDay);
-                        WeatherProvider previmeteoWeatherProvider = new PrevimeteoWeatherProvider(
-                                getApplicationContext());
-                        previmeteoWeatherProvider.getCondition(cal.getTime());
-                    }
+//                    for (int forecastDay = 0; forecastDay < 4; forecastDay++) {
+//                        WeatherProvider previmeteoWeatherProvider = new PrevimeteoWeatherProvider(
+//                                getApplicationContext());
+////                        previmeteoWeatherProvider.fetchWeatherForecast(null);
+//                    }
                     return null;
 
                 }
 
                 @Override
                 protected void onPostExecute(WeatherConditionInterface weatherCondition) {
-                    // if (weatherCondition == null)
-                    // isWeatherError = true;
                     handler.removeCallbacks(sendUpdatesToUI);
                     handler.postDelayed(sendUpdatesToUI, 0); // 1 second=1000
                     sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
@@ -105,20 +99,6 @@ public class WeatherUpdateService extends Service {
 
                 }
             }.execute();
-            // if (conditionInterface != null) {
-            // updateCondition(conditionInterface, forecastDay);
-            //
-            // }
-            //
-            // else {
-            // // Toast.makeText(mContext,
-            // // mContext.getResources().getString(R.string.weather_citynotfound),
-            // // 50)
-            // // .show();
-            // Log.d(TAG, garden.getLocality() + " : " + getResources().getString(R.string.weather_citynotfound));
-            // isWeatherError = true;
-            // break;
-            // }
 
         } catch (Exception e) {
             if (e.getMessage() != null)
@@ -127,22 +107,4 @@ public class WeatherUpdateService extends Service {
         }
 
     }
-    // private void updateCondition(WeatherConditionInterface condition, int day) {
-    // LocalWeatherProvider helper = new LocalWeatherProvider(this);
-    //
-    // Calendar conditionDate = Calendar.getInstance();
-    // conditionDate.add(Calendar.DAY_OF_YEAR, day);
-    //
-    // condition.setDate(conditionDate.getTime());
-    // condition.setDayofYear(conditionDate.get(Calendar.DAY_OF_YEAR));
-    //
-    // WeatherConditionInterface wc = helper.getWeatherByDayofyear(conditionDate.get(Calendar.DAY_OF_YEAR));
-    //
-    // if (wc == null)
-    // helper.insertWeather(condition);
-    // else
-    // helper.updateWeather(condition);
-    // return;
-    //
-    // }
 }

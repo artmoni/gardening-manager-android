@@ -11,13 +11,16 @@
 package org.gots.weather.provider.previmeteo;
 
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.ws.http.HTTPException;
 
+import org.apache.http.client.HttpResponseException;
 import org.gots.bean.Address;
 import org.gots.context.GotsContext;
 import org.gots.garden.GotsGardenManager;
@@ -37,8 +40,6 @@ import android.util.Log;
 public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
     private static final String TAG = "PrevimeteoWeatherProvider";
 
-    protected URL url;
-
     private static String queryString;
 
     private WeatherSet weatherSet;
@@ -48,29 +49,79 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
     private WeatherCache cache;
 
     private GotsPreferences gotsPreferences;
+
     protected GotsContext getGotsContext() {
         return GotsContext.get(mContext);
     }
+
     public PrevimeteoWeatherProvider(Context context) {
         super(context);
         gotsPreferences = getGotsContext().getServerConfig();
+    }
+
+    protected URL buildUriFromAddress(Address address) throws MalformedURLException {
+        String weatherURL;
+
+        weatherURL = "http://api.previmeteo.com/" + gotsPreferences.getWeatherApiKey() + "/ig/api?weather="
+                + address.getLocality() + "," + mContext.getResources().getConfiguration().locale.getCountry()
+                + "&hl=fr";
+
+        queryString = weatherURL;
+
+        Log.d(TAG, "Weather request on " + weatherURL);
+        return new URL(queryString.replace(" ", "%20"));
+    }
+
+    @Override
+    public short fetchWeatherForecast(Address address) {
+        cache = new WeatherCache(mContext);
+        PrevimeteoErrorHandler error = new PrevimeteoErrorHandler();
 
         try {
-            Address address = GotsGardenManager.getInstance().initIfNew(context).getCurrentGarden().getAddress();
-            String weatherURL;
+            URL url = buildUriFromAddress(address);
 
-            weatherURL = "http://api.previmeteo.com/" + gotsPreferences.getWeatherApiKey() + "/ig/api?weather="
-                    + address.getLocality() + "," + context.getResources().getConfiguration().locale.getCountry()
-                    + "&hl=fr";
+            InputStream is = cache.getCacheByURL(url);
+            /* Get a SAXParser from the SAXPArserFactory. */
+            SAXParserFactory spf = SAXParserFactory.newInstance();
+            SAXParser sp;
+            sp = spf.newSAXParser();
 
-            queryString = weatherURL;
+            /* Get the XMLReader of the SAXParser we created. */
+            XMLReader xr = sp.getXMLReader();
 
-            url = new URL(queryString.replace(" ", "%20"));
-            Log.i(TAG, "Weather request on " + url.toString());
+            xr.setContentHandler(error);
+            xr.parse(new InputSource(is));
+            iserror = error.isError();
+
+            if (!iserror) {
+                is = cache.getCacheByURL(url);
+
+                /*
+                 * Create a new ContentHandler and apply it to the
+                 * XML-Reader
+                 */
+                PrevimeteoWeatherHandler gwh = new PrevimeteoWeatherHandler();
+                xr.setContentHandler(gwh);
+
+                // InputSource is = new InputSource(url.openStream());
+                /* Parse the xml-data our URL-call returned. */
+                xr.parse(new InputSource(is));
+
+                /* Our Handler now provides the parsed weather-data to us. */
+                weatherSet = gwh.getWeatherSet();
+            }
+        } catch (HttpResponseException httpResponseException) {
+            Log.w(TAG,
+                    "PrevimeteoErrorHandler has return an HttpResponseException" + httpResponseException.getMessage());
+            if (httpResponseException.getStatusCode() == 400) {
+                return WEATHER_ERROR_CITY_UNKNOWN;
+            }
         } catch (Exception e) {
-            Log.e(TAG, "" + e.getMessage());
+            Log.e(TAG, "PrevimeteoErrorHandler has return an error (" + error.getMessage() + ") " + e.getMessage());
+            iserror = true;
+            return WEATHER_ERROR_UNKNOWN;
         }
-
+        return WEATHER_OK;
     }
 
     // @Override
@@ -87,9 +138,6 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
         int today = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
 
         Log.d(TAG, "getCondition " + DateFormat.format("MM/dd/yy h:mmaa", requestedDay));
-        if (weatherSet == null) {
-            downloadWeatherXML();
-        }
 
         WeatherConditionInterface weatherCondition = new WeatherCondition(requestedDay);
         try {
@@ -109,51 +157,6 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
         weatherCondition.setDayofYear(requestCalendar.get(Calendar.DAY_OF_YEAR));
 
         return weatherCondition;
-
-    }
-
-    protected void downloadWeatherXML() {
-        cache = new WeatherCache(mContext);
-
-
-        try {
-            InputStream is = cache.getCacheByURL(url);
-            /* Get a SAXParser from the SAXPArserFactory. */
-            SAXParserFactory spf = SAXParserFactory.newInstance();
-            SAXParser sp;
-            sp = spf.newSAXParser();
-
-            /* Get the XMLReader of the SAXParser we created. */
-            XMLReader xr = sp.getXMLReader();
-
-            PrevimeteoErrorHandler error = new PrevimeteoErrorHandler();
-            xr.setContentHandler(error);
-            xr.parse(new InputSource(is));
-            iserror = error.isError();
-
-            if (!iserror) {
-                // TODO we should not need to get the cache file again, a
-                // better way exists
-
-                is = cache.getCacheByURL(url);
-                /*
-                 * Create a new ContentHandler and apply it to the
-                 * XML-Reader
-                 */
-                PrevimeteoWeatherHandler gwh = new PrevimeteoWeatherHandler();
-                xr.setContentHandler(gwh);
-
-                // InputSource is = new InputSource(url.openStream());
-                /* Parse the xml-data our URL-call returned. */
-                xr.parse(new InputSource(is));
-
-                /* Our Handler now provides the parsed weather-data to us. */
-                weatherSet = gwh.getWeatherSet();
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "PrevimeteoErrorHandler has return an error " + e.getMessage());
-            iserror = true;
-        }
     }
 
     public WeatherConditionInterface updateCondition(WeatherConditionInterface weatherCondition, Date day) {
