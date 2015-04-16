@@ -15,12 +15,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.gots.bean.Address;
+import org.gots.context.GotsContext;
+import org.gots.preferences.GotsPreferences;
 import org.gots.weather.provider.local.LocalWeatherProvider;
+import org.gots.weather.provider.previmeteo.PrevimeteoWeatherProvider;
 import org.gots.weather.provider.previmeteo.WeatherProvider;
 
 import android.content.Context;
 
-public class WeatherManager {
+public class WeatherManager implements WeatherProvider {
 
     private Integer temperatureLimitHot;
 
@@ -33,10 +37,23 @@ public class WeatherManager {
 
     WeatherProvider provider;
 
+    private GotsPreferences gotsPrefs;
+
+    private GotsContext getGotsContext() {
+        return GotsContext.get(mContext);
+    }
+
     public WeatherManager(Context context) {
         this.mContext = context;
-//        provider = new PrevimeteoWeatherProvider(mContext);
-        provider = new LocalWeatherProvider(mContext);
+        gotsPrefs = (GotsPreferences) getGotsContext().getServerConfig();
+
+        provider = new PrevimeteoWeatherProvider(mContext);
+        // provider = new LocalWeatherProvider(mContext);
+    }
+
+    @Override
+    public short fetchWeatherForecast(Address address) {
+        return provider.fetchWeatherForecast(address);
     }
 
     public Integer getTemperatureLimitHot() {
@@ -99,6 +116,16 @@ public class WeatherManager {
             }
         }
         return conditions;
+    }
+
+    @Override
+    public WeatherConditionInterface updateCondition(WeatherConditionInterface condition, Date day) {
+        return provider.updateCondition(condition, day);
+    }
+
+    @Override
+    public WeatherConditionInterface insertCondition(WeatherConditionInterface weatherCondition) {
+        return provider.insertCondition(weatherCondition);
     }
 
 }
