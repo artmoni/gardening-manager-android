@@ -18,6 +18,7 @@ import org.gots.garden.GardenInterface;
 import org.gots.garden.view.OnProfileEventListener;
 import org.gots.provider.GardenContentProvider;
 import org.gots.ui.BaseGotsActivity.GardenListener;
+import org.gots.ui.fragment.GardenResumeFragment;
 import org.gots.ui.fragment.ProfileListFragment;
 import org.gots.ui.fragment.ProfileMapFragment;
 
@@ -77,6 +78,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
             transactionList.setCustomAnimations(R.anim.push_right_in, R.anim.push_left_out);
             transactionList.replace(R.id.IdGardenProfileContent, profileListFragment).commit();
         }
+        openResumeFragment();
     }
 
     public BroadcastReceiver gardenBroadcastReceiver = new BroadcastReceiver() {
@@ -235,9 +237,8 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
     @Override
     public void onProfileSelected(GardenInterface garden) {
         gardenManager.setCurrentGarden(garden);
-        Button selectedGardenHandle = (Button) findViewById(R.id.handle);
-        selectedGardenHandle.setText(garden.getName() + " (" + garden.getLocality() + ")");
         openContentFragment(garden, true);
+        openResumeFragment();
     }
 
     @Override
@@ -290,7 +291,19 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
 
     @Override
     public void onCurrentGardenChanged(GardenInterface garden) {
+        openResumeFragment();
         Log.i(TAG, "garden has changed :" + garden);
     }
 
+    protected void openResumeFragment() {
+        Fragment gardenResumeFragment = getSupportFragmentManager().findFragmentById(R.id.IdGardenProfileResume);
+        if (findViewById(R.id.IdGardenProfileResume) != null) {
+            FragmentTransaction transactionCatalogue = getSupportFragmentManager().beginTransaction();
+            transactionCatalogue.setCustomAnimations(R.anim.abc_fade_in, R.anim.push_right_out);
+            transactionCatalogue.addToBackStack(null);
+
+            gardenResumeFragment = new GardenResumeFragment();
+            transactionCatalogue.replace(R.id.IdGardenProfileResume, gardenResumeFragment).commit();
+        }
+    }
 }
