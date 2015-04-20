@@ -37,6 +37,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.Toast;
 
 public class ProfileActivity extends BaseGotsActivity implements OnProfileEventListener, GardenListener {
@@ -171,7 +172,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
             builder.setTitle("Delete a garden");
-            builder.setMessage("Are you sure to delete the garden "+currentGarden.getName());
+            builder.setMessage("Are you sure to delete the garden " + currentGarden.getName());
 
             builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 
@@ -234,6 +235,8 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
     @Override
     public void onProfileSelected(GardenInterface garden) {
         gardenManager.setCurrentGarden(garden);
+        Button selectedGardenHandle = (Button) findViewById(R.id.handle);
+        selectedGardenHandle.setText(garden.getName() + " (" + garden.getLocality() + ")");
         openContentFragment(garden, true);
     }
 
