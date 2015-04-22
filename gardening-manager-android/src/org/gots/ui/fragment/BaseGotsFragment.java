@@ -1,5 +1,6 @@
 package org.gots.ui.fragment;
 
+import java.lang.reflect.Field;
 import java.util.Locale;
 
 import org.gots.bean.DefaultGarden;
@@ -12,6 +13,7 @@ import org.nuxeo.android.fragments.BaseNuxeoFragment;
 import android.content.Intent;
 import android.location.Address;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.View;
 
 public abstract class BaseGotsFragment extends BaseNuxeoFragment {
@@ -87,5 +89,22 @@ public abstract class BaseGotsFragment extends BaseNuxeoFragment {
         if (isAdded())
             getActivity().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
         super.onNuxeoDataRetrieveFailed();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        // BUGFIX
+        // http://stackoverflow.com/questions/15207305/getting-the-error-java-lang-illegalstateexception-activity-has-been-destroyed
+        try {
+            Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
+            childFragmentManager.setAccessible(true);
+            childFragmentManager.set(this, null);
+
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

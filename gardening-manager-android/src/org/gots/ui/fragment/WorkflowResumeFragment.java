@@ -2,6 +2,7 @@ package org.gots.ui.fragment;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,7 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.Blob;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,7 +91,7 @@ public class WorkflowResumeFragment extends BaseGotsFragment implements OnItemCl
                 TaskInfo task = gson.fromJson(tasksEntries.getString(i), TaskInfo.class);
                 GotsSeedProvider gotsSeedProvider = GotsSeedManager.getInstance().initIfNew(getActivity());
                 BaseSeedInterface seed = gotsSeedProvider.getSeedByUUID(task.getDocref());
-                if (seed != null){
+                if (seed != null) {
                     seeds.add(seed);
                     map.put(seed.getSeedId(), task);
                 }
@@ -128,4 +130,5 @@ public class WorkflowResumeFragment extends BaseGotsFragment implements OnItemCl
         startActivity(i);
     }
 
+   
 }
