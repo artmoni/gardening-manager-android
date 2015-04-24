@@ -15,7 +15,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.gots.bean.Address;
 import org.gots.context.GotsContext;
 import org.gots.preferences.GotsPreferences;
 import org.gots.weather.provider.local.LocalWeatherProvider;
@@ -52,8 +51,8 @@ public class WeatherManager implements WeatherProvider {
     }
 
     @Override
-    public short fetchWeatherForecast(Address address) {
-        return provider.fetchWeatherForecast(address);
+    public short fetchWeatherForecast(String forecastLocality) {
+        return provider.fetchWeatherForecast(forecastLocality);
     }
 
     public Integer getTemperatureLimitHot() {

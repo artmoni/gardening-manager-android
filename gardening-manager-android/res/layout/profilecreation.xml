@@ -2,8 +2,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="fill_parent"
-    android:background="@color/text_color_light"
     android:layout_gravity="center_horizontal"
+    android:background="@color/text_color_light"
     android:padding="5dp" >
 
     <LinearLayout
@@ -80,10 +80,40 @@
 
                 <ImageView
                     android:id="@+id/imageViewLocalize"
-                    android:background="@drawable/button_green_selector"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:background="@drawable/action_selector"
                     android:src="@drawable/bt_localize_garden" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRowWeatherLocalization"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    style="@style/description_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Weather" />
+
+                <EditText
+                    android:id="@+id/editTextGardenWeatherLocality"
+                    style="@style/description_content"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:hint="@string/garden.cityname.inputmessage"
+                    android:singleLine="true" >
+                </EditText>
+
+                <ImageView
+                    android:id="@+id/imageViewWeatherState"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/action_selector"
+                    android:src="@drawable/weather_disconnected" />
             </TableRow>
 
             <RadioGroup

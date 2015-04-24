@@ -21,7 +21,6 @@ import javax.xml.parsers.SAXParserFactory;
 import javax.xml.ws.http.HTTPException;
 
 import org.apache.http.client.HttpResponseException;
-import org.gots.bean.Address;
 import org.gots.context.GotsContext;
 import org.gots.garden.GotsGardenManager;
 import org.gots.preferences.GotsPreferences;
@@ -59,11 +58,11 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
         gotsPreferences = getGotsContext().getServerConfig();
     }
 
-    protected URL buildUriFromAddress(Address address) throws MalformedURLException {
+    protected URL buildUriFromAddress(String forecastLocality) throws MalformedURLException {
         String weatherURL;
 
         weatherURL = "http://api.previmeteo.com/" + gotsPreferences.getWeatherApiKey() + "/ig/api?weather="
-                + address.getLocality() + "," + mContext.getResources().getConfiguration().locale.getCountry()
+                + forecastLocality + "," + mContext.getResources().getConfiguration().locale.getCountry()
                 + "&hl=fr";
 
         queryString = weatherURL;
@@ -73,12 +72,12 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
     }
 
     @Override
-    public short fetchWeatherForecast(Address address) {
+    public short fetchWeatherForecast(String forecastLocality) {
         cache = new WeatherCache(mContext);
         PrevimeteoErrorHandler error = new PrevimeteoErrorHandler();
 
         try {
-            URL url = buildUriFromAddress(address);
+            URL url = buildUriFromAddress(forecastLocality);
 
             InputStream is = cache.getCacheByURL(url);
             /* Get a SAXParser from the SAXPArserFactory. */

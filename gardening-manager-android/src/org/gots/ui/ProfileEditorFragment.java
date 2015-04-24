@@ -35,6 +35,8 @@ import org.gots.seed.GrowingSeed;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.ui.fragment.BaseGotsFragment;
+import org.gots.weather.WeatherManager;
+import org.gots.weather.provider.previmeteo.PrevimeteoWeatherProvider;
 
 import android.app.Activity;
 import android.content.Context;
@@ -63,10 +65,10 @@ import android.widget.Toast;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class ProfileCreationFragment extends BaseGotsFragment implements LocationListener, OnClickListener {
+public class ProfileEditorFragment extends BaseGotsFragment implements LocationListener, OnClickListener {
     public static final int OPTION_EDIT = 1;
 
-    private static final String TAG = ProfileCreationFragment.class.getSimpleName();
+    private static final String TAG = ProfileEditorFragment.class.getSimpleName();
 
     private LocationManager mlocManager;
 
@@ -85,6 +87,10 @@ public class ProfileCreationFragment extends BaseGotsFragment implements Locatio
     private TextView editTextLocality;
 
     private ImageView buttonLocalize;
+
+    private TextView editTextWeatherLocality;
+
+    private ImageView buttonWeatherState;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -107,9 +113,11 @@ public class ProfileCreationFragment extends BaseGotsFragment implements Locatio
 
         editTextName = (TextView) view.findViewById(R.id.editTextGardenName);
         editTextLocality = (TextView) view.findViewById(R.id.editTextGardenLocality);
+        editTextWeatherLocality = (TextView) view.findViewById(R.id.editTextGardenWeatherLocality);
         buttonLocalize = (ImageView) view.findViewById(R.id.imageViewLocalize);
         buttonLocalize.setOnClickListener(this);
-
+        buttonWeatherState = (ImageView) view.findViewById(R.id.imageViewWeatherState);
+        buttonWeatherState.setOnClickListener(this);
         initProfileView();
 
     }
@@ -189,7 +197,8 @@ public class ProfileCreationFragment extends BaseGotsFragment implements Locatio
     }
 
     private void setAddressFromLocation(double latitude, double longitude) {
-
+        if (!isAdded())
+            return;
         Geocoder geo = new Geocoder(getActivity());
         try {
             List<Address> adresses = geo.getFromLocation(latitude, longitude, 1);
@@ -201,8 +210,12 @@ public class ProfileCreationFragment extends BaseGotsFragment implements Locatio
                 garden.setAdminArea(address.getAdminArea());
                 garden.setCountryName(address.getCountryName());
                 garden.setCountryCode(address.getCountryCode());
+                // force forecast locality when geolocalized
+                garden.setLocalityForecast(address.getLocality());
                 editTextLocality.setText(garden.getLocality());
                 editTextLocality.setEnabled(true);
+                editTextWeatherLocality.setText(garden.getLocalityForecast());
+                fetchWeatherAsync();
             } else {
                 // sinon on affiche un message d'erreur
                 // ((TextView) findViewById(R.id.editTextLocality)).setHint(getResources().getString(
@@ -211,6 +224,39 @@ public class ProfileCreationFragment extends BaseGotsFragment implements Locatio
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());
         }
+    }
+
+    protected void fetchWeatherAsync() {
+        if (isAdded())
+        new AsyncTask<Void, Void, Short>() {
+            String currentWeatherLocalization;
+
+            protected void onPreExecute() {
+
+                currentWeatherLocalization = String.valueOf(editTextWeatherLocality.getText());
+                if (currentWeatherLocalization == null) {
+                    currentWeatherLocalization = garden.getLocalityForecast();
+                }
+            };
+
+            @Override
+            protected Short doInBackground(Void... params) {
+                WeatherManager weatherManager = new WeatherManager(getActivity());
+                return weatherManager.fetchWeatherForecast(currentWeatherLocalization);
+            }
+
+            protected void onPostExecute(Short result) {
+                if (result.shortValue() == PrevimeteoWeatherProvider.WEATHER_OK) {
+                    buttonWeatherState.setBackgroundColor(getResources().getColor(R.color.action_ok_color));
+                    buttonWeatherState.setImageDrawable(getResources().getDrawable(R.drawable.weather_connected));
+                    garden.setLocalityForecast(currentWeatherLocalization);
+                } else {
+                    buttonWeatherState.setBackgroundColor(getResources().getColor(R.color.action_error_color));
+                    buttonWeatherState.setImageDrawable(getResources().getDrawable(R.drawable.weather_disconnected));
+                }
+                buttonWeatherState.invalidate();
+            };
+        }.execute();
     }
 
     @Override
@@ -266,6 +312,8 @@ public class ProfileCreationFragment extends BaseGotsFragment implements Locatio
             break;
         case R.id.imageViewLocalize:
             getPosition(true);
+        case R.id.imageViewWeatherState:
+            fetchWeatherAsync();
         default:
             break;
         }

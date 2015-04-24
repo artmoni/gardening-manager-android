@@ -14,7 +14,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.gots.DatabaseHelper;
-import org.gots.bean.Address;
 import org.gots.utils.GotsDBHelper;
 import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
@@ -137,7 +136,7 @@ public class LocalWeatherProvider extends GotsDBHelper implements WeatherProvide
     }
 
     @Override
-    public short fetchWeatherForecast(Address address) {
+    public short fetchWeatherForecast(String forecastLocality) {
         // if database access is right, forecast can be fetch
         return bdd.isOpen() ? WEATHER_OK : WEATHER_ERROR_CITY_UNKNOWN;
     }

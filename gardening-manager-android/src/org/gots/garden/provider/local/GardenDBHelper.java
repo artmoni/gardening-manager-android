@@ -47,6 +47,7 @@ public class GardenDBHelper extends GotsDBHelper {
         values.put(GardenSQLite.GARDEN_ADMINAREA, garden.getAdminArea());
         values.put(GardenSQLite.GARDEN_COUNTRYNAME, garden.getCountryName());
         values.put(GardenSQLite.GARDEN_LOCALITY, garden.getLocality());
+        values.put(GardenSQLite.GARDEN_LOCALITY_FORECAST, garden.getLocalityForecast());
         values.put(GardenSQLite.GARDEN_ALTITUDE, garden.getGpsAltitude());
         values.put(GardenSQLite.GARDEN_LATITUDE, garden.getGpsLatitude());
         values.put(GardenSQLite.GARDEN_LONGITUDE, garden.getGpsLongitude());
@@ -62,6 +63,7 @@ public class GardenDBHelper extends GotsDBHelper {
         garden.setAdminArea(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_ADMINAREA)));
         garden.setCountryName(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_COUNTRYNAME)));
         garden.setLocality(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_LOCALITY)));
+        garden.setLocalityForecast(cursor.getString(cursor.getColumnIndex(GardenSQLite.GARDEN_LOCALITY_FORECAST)));
         garden.setDateLastSynchro(new Date(cursor.getInt(cursor.getColumnIndex(GardenSQLite.GARDEN_LAST_SYNCHRO))));
         garden.setGpsAltitude(cursor.getDouble(cursor.getColumnIndex(GardenSQLite.GARDEN_ALTITUDE)));
         garden.setGpsLongitude(cursor.getDouble(cursor.getColumnIndex(GardenSQLite.GARDEN_LONGITUDE)));

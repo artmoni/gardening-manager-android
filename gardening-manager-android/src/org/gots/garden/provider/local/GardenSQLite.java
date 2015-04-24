@@ -16,35 +16,49 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class GardenSQLite extends SQLiteOpenHelper {
-	// ************************ DATABASE **************
-	private static final int DATABASE_VERSION = 15;
-	private static String DATABASE_NAME = "garden";
+    // ************************ DATABASE **************
+    private static final int DATABASE_VERSION = 16;
+
+    private static String DATABASE_NAME = "garden";
+
     private static GardenSQLite helper;
-	public final static String AUTHORITY = "org.gots.providers.garden";
 
-	private static final String TAG = "GardenDatabase";
+    public final static String AUTHORITY = "org.gots.providers.garden";
 
-	// ************************ GARDEN TABLE **************
-	public static final String GARDEN_TABLE_NAME = "garden";
+    private static final String TAG = "GardenDatabase";
 
-	public static final String GARDEN_ID = "_id";
-	public static final String GARDEN_UUID = "_uuid";
-	public static final String GARDEN_LATITUDE = "latitude";
-	public static final String GARDEN_LONGITUDE = "longitude";
-	public static final String GARDEN_ALTITUDE = "altitude";
-	public static final String GARDEN_LOCALITY = "locality";
-	public static final String GARDEN_ADMINAREA = "adminarea";
-	public static final String GARDEN_COUNTRYNAME = "countryname";
-	public static final String GARDEN_NAME = "name";
+    // ************************ GARDEN TABLE **************
+    public static final String GARDEN_TABLE_NAME = "garden";
 
-	public static final String GARDEN_LAST_SYNCHRO = "last_synchro";
+    public static final String GARDEN_ID = "_id";
 
-	//@formatter:off
+    public static final String GARDEN_UUID = "_uuid";
+
+    public static final String GARDEN_LATITUDE = "latitude";
+
+    public static final String GARDEN_LONGITUDE = "longitude";
+
+    public static final String GARDEN_ALTITUDE = "altitude";
+
+    public static final String GARDEN_LOCALITY = "locality";
+
+    public static final String GARDEN_LOCALITY_FORECAST = "locality_forecast";
+
+    public static final String GARDEN_ADMINAREA = "adminarea";
+
+    public static final String GARDEN_COUNTRYNAME = "countryname";
+
+    public static final String GARDEN_NAME = "name";
+
+    public static final String GARDEN_LAST_SYNCHRO = "last_synchro";
+
+    //@formatter:off
 		public static final String CREATE_TABLE_GARDEN = "CREATE TABLE " + GARDEN_TABLE_NAME 
 				+ " (" + GARDEN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
 				+ GARDEN_UUID + " STRING,"
 				+ GARDEN_NAME + " STRING,"
 				+ GARDEN_LOCALITY + " STRING,"
+				+ GARDEN_LOCALITY_FORECAST + " STRING,"
 				+ GARDEN_ADMINAREA + " STRING,"
 				+ GARDEN_COUNTRYNAME + " STRING,"
 				+ GARDEN_ALTITUDE+ " INTEGER,"		
@@ -54,21 +68,26 @@ public class GardenSQLite extends SQLiteOpenHelper {
 				+ ");";
 	//@formatter:on
 
-	// ************************ ACTION TABLE **************
-	public static final String ACTION_TABLE_NAME = "action";
-	// public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
-	// + "/action");
-	// public static final String CONTENT_TYPE =
-	// "vnd.android.cursor.dir/vnd.gots.action";
+    // ************************ ACTION TABLE **************
+    public static final String ACTION_TABLE_NAME = "action";
 
-	// public static final String GROWINGSEED_ID = "growingseed_id";
-	public static final String ACTION_ID = "_id";
-	public static final String ACTION_UUID = "uuid";
-	public static final String ACTION_NAME = "name";
-	public static final String ACTION_DESCRIPTION = "description";
-	public static final String ACTION_DURATION = "duration";
+    // public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
+    // + "/action");
+    // public static final String CONTENT_TYPE =
+    // "vnd.android.cursor.dir/vnd.gots.action";
 
-	//@formatter:off
+    // public static final String GROWINGSEED_ID = "growingseed_id";
+    public static final String ACTION_ID = "_id";
+
+    public static final String ACTION_UUID = "uuid";
+
+    public static final String ACTION_NAME = "name";
+
+    public static final String ACTION_DESCRIPTION = "description";
+
+    public static final String ACTION_DURATION = "duration";
+
+    //@formatter:off
 		public static final String CREATE_TABLE_ACTION = "CREATE TABLE " + ACTION_TABLE_NAME 
 				+ " (" + ACTION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
 				+ ACTION_UUID + " STRING,"
@@ -78,58 +97,64 @@ public class GardenSQLite extends SQLiteOpenHelper {
 				+ ");";
 	//@formatter:on
 
-	private GardenSQLite(Context context) {
-		super(context, DATABASE_NAME, null, DATABASE_VERSION);
-	}
-	 public static synchronized GardenSQLite getInstance(Context context) {
-	        if (helper == null ) {
-	            helper = new GardenSQLite(context);
-	        }
+    private GardenSQLite(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
 
-	        return helper;
-	    }
-	@Override
-	public void onCreate(SQLiteDatabase db) {
-		db.execSQL(CREATE_TABLE_GARDEN);
-		db.execSQL(CREATE_TABLE_ACTION);
+    public static synchronized GardenSQLite getInstance(Context context) {
+        if (helper == null) {
+            helper = new GardenSQLite(context);
+        }
 
-		// db.execSQL(CREATE_TABLE_ACTION);
-		populateActions(db);
+        return helper;
+    }
 
-	}
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(CREATE_TABLE_GARDEN);
+        db.execSQL(CREATE_TABLE_ACTION);
 
-	@Override
-	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion
-				+ ", which will destroy all old data");
-		if (oldVersion <= 10) {
-			db.execSQL(CREATE_TABLE_ACTION);
-			populateActions(db);
+        // db.execSQL(CREATE_TABLE_ACTION);
+        populateActions(db);
 
-		}
-		if (oldVersion < 12) {
-			db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('photo')");
-		}
-		if (oldVersion < 13) {
-			db.execSQL("ALTER TABLE " + GARDEN_TABLE_NAME + " ADD COLUMN " + GARDEN_UUID + " VARCHAR(255);");
-		}
-		if (oldVersion < 14) {
-		    db.execSQL("ALTER TABLE " + ACTION_TABLE_NAME + " ADD COLUMN " + ACTION_UUID + " VARCHAR(255);");
-		}
-		if (oldVersion < 15) {
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion
+                + ", which will destroy all old data");
+        if (oldVersion <= 10) {
+            db.execSQL(CREATE_TABLE_ACTION);
+            populateActions(db);
+
+        }
+        if (oldVersion < 12) {
+            db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('photo')");
+        }
+        if (oldVersion < 13) {
+            db.execSQL("ALTER TABLE " + GARDEN_TABLE_NAME + " ADD COLUMN " + GARDEN_UUID + " VARCHAR(255);");
+        }
+        if (oldVersion < 14) {
+            db.execSQL("ALTER TABLE " + ACTION_TABLE_NAME + " ADD COLUMN " + ACTION_UUID + " VARCHAR(255);");
+        }
+        if (oldVersion < 15) {
             db.execSQL("ALTER TABLE " + GARDEN_TABLE_NAME + " ADD COLUMN " + GARDEN_NAME + " VARCHAR(255);");
         }
-	}
+        if (oldVersion < 16) {
+            db.execSQL("ALTER TABLE " + GARDEN_TABLE_NAME + " ADD COLUMN " + GARDEN_LOCALITY_FORECAST
+                    + " VARCHAR(255);");
+        }
+    }
 
-	private void populateActions(SQLiteDatabase db) {
-		db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('sow')");
-		db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('water')");
-		db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('hoe')");
-		db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('beak')");
-		db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('cut')");
-		db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('lighten')");
-		db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('harvest')");
-		db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('photo')");
+    private void populateActions(SQLiteDatabase db) {
+        db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('sow')");
+        db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('water')");
+        db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('hoe')");
+        db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('beak')");
+        db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('cut')");
+        db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('lighten')");
+        db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('harvest')");
+        db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('photo')");
 
-	}
+    }
 }

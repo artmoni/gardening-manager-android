@@ -67,7 +67,7 @@ public class WeatherSyncAdapter extends GotsSyncAdapter {
         else
             weatherProvider = new LocalWeatherProvider(getContext());
         WeatherProvider previmeteoWeatherProvider = new PrevimeteoWeatherProvider(getContext());
-        if (previmeteoWeatherProvider.fetchWeatherForecast(currentGarden.getAddress()) == LocalWeatherProvider.WEATHER_OK) {
+        if (previmeteoWeatherProvider.fetchWeatherForecast(currentGarden.getLocalityForecast()) == LocalWeatherProvider.WEATHER_OK) {
             for (int forecastDay = 0; forecastDay < 4; forecastDay++) {
                 Calendar cal = Calendar.getInstance();
                 cal.add(Calendar.DAY_OF_YEAR, forecastDay);

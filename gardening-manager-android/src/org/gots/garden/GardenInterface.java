@@ -16,57 +16,57 @@ import org.gots.bean.Address;
 
 public interface GardenInterface {
 
-	public abstract String getAdminArea();
+    public abstract String getAdminArea();
 
-	public abstract void setAdminArea(String adminArea);
+    public abstract void setAdminArea(String adminArea);
 
-	public abstract String getCountryName();
+    public abstract String getCountryName();
 
-	public abstract void setCountryName(String countryname);
+    public abstract void setCountryName(String countryname);
 
-	public abstract String getLocality();
+    public abstract String getLocality();
 
-	public abstract void setLocality(String locality);
+    public abstract void setLocality(String locality);
 
-	public abstract void setAddress(Address address);
+    public abstract void setAddress(Address address);
 
-	public abstract Address getAddress();
+    public abstract Address getAddress();
 
-	// public abstract ArrayList<Allotment> getAllotments();
+    // public abstract ArrayList<Allotment> getAllotments();
 
-	// public abstract BaseAllotmentInterface getAllotment(String reference);
+    // public abstract BaseAllotmentInterface getAllotment(String reference);
 
-	public abstract void setDescription(String description);
+    public abstract void setDescription(String description);
 
-	public abstract String getDescription();
+    public abstract String getDescription();
 
-	public abstract void setName(String name);
+    public abstract void setName(String name);
 
-	public abstract String getName();
+    public abstract String getName();
 
-	public abstract void setGpsLongitude(double gpsLongitude);
+    public abstract void setGpsLongitude(double gpsLongitude);
 
-	public abstract double getGpsLongitude();
+    public abstract double getGpsLongitude();
 
-	public abstract void setGpsLatitude(double gpsLatitude);
+    public abstract void setGpsLatitude(double gpsLatitude);
 
-	public abstract void setId(long id);
+    public abstract void setId(long id);
 
-	public abstract long getId();
+    public abstract long getId();
 
-	public abstract void setDateLastSynchro(Date dateLastSynchro);
+    public abstract void setDateLastSynchro(Date dateLastSynchro);
 
-	public abstract Date getDateLastSynchro();
+    public abstract Date getDateLastSynchro();
 
-	public abstract double getGpsLatitude();
+    public abstract double getGpsLatitude();
 
-	public abstract double getGpsAltitude();
+    public abstract double getGpsAltitude();
 
-	public abstract void setGpsAltitude(double gpsAltitude);
+    public abstract void setGpsAltitude(double gpsAltitude);
 
-	public abstract void setUUID(String id);
+    public abstract void setUUID(String id);
 
-	public abstract String getUUID();
+    public abstract String getUUID();
 
     public abstract void setCountryCode(String countryCode);
 
@@ -75,5 +75,12 @@ public interface GardenInterface {
     public abstract void setIncredibleEdible(Boolean boolean1);
 
     public abstract Boolean isIncredibleEdible();
+
+    public abstract void setLocalityForecast(String locality);
+
+    /**
+     * @return forecast locality or default locality if null
+     */
+    public abstract String getLocalityForecast();
 
 }

@@ -121,9 +121,9 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
             // R.id.IdGardenProfileContent);
 
             if (findViewById(R.id.IdGardenProfileContent) != null) {
-                ProfileCreationFragment fragment = new ProfileCreationFragment();
+                ProfileEditorFragment fragment = new ProfileEditorFragment();
                 Bundle options = new Bundle();
-                options.putInt("option", ProfileCreationFragment.OPTION_EDIT);
+                options.putInt("option", ProfileEditorFragment.OPTION_EDIT);
                 fragment.setArguments(options);
                 FragmentTransaction transactionCatalogue = fragmentManager.beginTransaction();
                 transactionCatalogue.setCustomAnimations(R.anim.push_right_in, R.anim.push_left_out);
@@ -252,7 +252,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
         Fragment creationFragment = getSupportFragmentManager().findFragmentById(R.id.IdGardenProfileContent);
         Bundle options = new Bundle();
         if (editable) {
-            options.putInt("option", ProfileCreationFragment.OPTION_EDIT);
+            options.putInt("option", ProfileEditorFragment.OPTION_EDIT);
         }
 
         FragmentTransaction transactionCatalogue = getSupportFragmentManager().beginTransaction();
@@ -261,14 +261,14 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
 
         if (findViewById(R.id.IdGardenProfileContent) != null) {
             if (!editable) {
-                creationFragment = new ProfileCreationFragment();
+                creationFragment = new ProfileEditorFragment();
                 creationFragment.setArguments(options);
                 creationFragment.setRetainInstance(false);
                 transactionCatalogue.add(R.id.IdGardenProfileContent, creationFragment).commit();
-            } else if (creationFragment instanceof ProfileCreationFragment)
-                ((ProfileCreationFragment) creationFragment).updateGarden(garden);
+            } else if (creationFragment instanceof ProfileEditorFragment)
+                ((ProfileEditorFragment) creationFragment).updateGarden(garden);
         } else {
-            creationFragment = new ProfileCreationFragment();
+            creationFragment = new ProfileEditorFragment();
             creationFragment.setArguments(options);
             transactionCatalogue.add(R.id.IdGardenProfileList, creationFragment).commit();
         }
@@ -284,7 +284,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
         Fragment creationFragment = getSupportFragmentManager().findFragmentById(R.id.IdGardenProfileContent);
         if (creationFragment == null)
             creationFragment = getSupportFragmentManager().findFragmentById(R.id.IdGardenProfileList);
-        if (creationFragment != null && creationFragment instanceof ProfileCreationFragment)
+        if (creationFragment != null && creationFragment instanceof ProfileEditorFragment)
             getSupportFragmentManager().beginTransaction().remove(creationFragment).commit();
         runAsyncDataRetrieval();
     }

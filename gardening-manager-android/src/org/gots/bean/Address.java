@@ -10,47 +10,49 @@
  ******************************************************************************/
 package org.gots.bean;
 
+public class Address {
+    private String locality;
 
-public class Address  {
-	private String locality;
-	private String adminArea;
-	private String countryName;
-	private String postalCode;
+    private String adminArea;
 
-	public String getLocality() {
-		return locality;
-	}
+    private String countryName;
 
-	public void setLocality(String locality) {
-		this.locality = locality;
-	}
+    private String postalCode;
 
-	public String getCountryName() {
-		return countryName;
-	}
+    public String getLocality() {
+        return locality;
+    }
 
-	public void setCountryName(String countryName) {
-		this.countryName = countryName;
-	}
+    public void setLocality(String locality) {
+        this.locality = locality;
+    }
 
-	public String getAdminArea() {
-		return adminArea;
-	}
+    public String getCountryName() {
+        return countryName;
+    }
 
-	public void setAdminArea(String adminArea) {
-		this.adminArea = adminArea;
-	}
-@Override
-public String toString() {
-	// TODO Auto-generated method stub
-	return getLocality()+" "+getAdminArea()+" "+getCountryName();
-}
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
 
-public String getPostalCode() {
-	return postalCode;
-}
+    public String getAdminArea() {
+        return adminArea;
+    }
 
-public void setPostalCode(String postalCode) {
-	this.postalCode = postalCode;
-}
+    public void setAdminArea(String adminArea) {
+        this.adminArea = adminArea;
+    }
+
+    @Override
+    public String toString() {
+        return getLocality() + " " + getAdminArea() + " " + getCountryName();
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
 }

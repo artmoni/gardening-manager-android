@@ -37,6 +37,8 @@ public class Garden implements GardenInterface {
 
     private Boolean incredibleedible = false;
 
+    private String localityForecast;
+
     @Override
     public double getGpsLatitude() {
         return gpsLatitude;
@@ -184,5 +186,15 @@ public class Garden implements GardenInterface {
     @Override
     public void setIncredibleEdible(Boolean isPublicGarden) {
         this.incredibleedible = isPublicGarden;
+    }
+
+    @Override
+    public void setLocalityForecast(String locality) {
+        this.localityForecast = locality;
+    }
+
+    @Override
+    public String getLocalityForecast() {
+        return localityForecast != null ? localityForecast : getLocality();
     }
 }
