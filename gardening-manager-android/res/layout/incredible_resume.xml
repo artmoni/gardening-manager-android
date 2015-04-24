@@ -29,6 +29,6 @@
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/TextView01"
         android:layout_alignTop="@+id/TextView01"
-        android:src="@drawable/ic_incredibleedible" />
+        android:src="@drawable/ic_garden_incredible" />
 
 </RelativeLayout>

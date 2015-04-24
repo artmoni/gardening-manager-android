@@ -202,9 +202,9 @@ public class ProfileAdapter extends BaseAdapter {
 
         }
         if (itemGarden.isIncredibleEdible()){
-            imageGardenType.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_incredibleedible));
+            imageGardenType.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_garden_incredible));
         }else
-            imageGardenType.setImageDrawable(mContext.getResources().getDrawable(R.drawable.garden_private));
+            imageGardenType.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_garden_private));
             
 
         if (GotsPreferences.DEBUG)

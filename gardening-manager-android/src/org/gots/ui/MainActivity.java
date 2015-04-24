@@ -598,7 +598,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         if (gotsPrefs.isConnectedToServer()) {
             if (currentGarden.isIncredibleEdible())
                 ((ImageView) findViewById(R.id.imageAvatar)).setImageDrawable(getResources().getDrawable(
-                        R.drawable.ic_incredibleedible));
+                        R.drawable.ic_garden_incredible));
             else {
                 UserInfo userInfoTask = new UserInfo();
                 userInfoTask.execute((ImageView) findViewById(R.id.imageAvatar));

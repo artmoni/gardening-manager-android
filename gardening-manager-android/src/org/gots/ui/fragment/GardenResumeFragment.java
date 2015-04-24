@@ -60,9 +60,9 @@ public class GardenResumeFragment extends BaseGotsFragment {
         gardenName.setText(gardenInterface.getName());
         gardenLocality.setText(gardenInterface.getLocality());
         if (gardenInterface.isIncredibleEdible())
-            gardenType.setImageDrawable(getResources().getDrawable(R.drawable.ic_incredibleedible));
+            gardenType.setImageDrawable(getResources().getDrawable(R.drawable.ic_garden_incredible));
         else
-            gardenType.setImageDrawable(getResources().getDrawable(R.drawable.garden_private));
+            gardenType.setImageDrawable(getResources().getDrawable(R.drawable.ic_garden_private));
 
         super.onNuxeoDataRetrieved(data);
     }
