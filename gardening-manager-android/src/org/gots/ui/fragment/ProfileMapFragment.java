@@ -132,7 +132,7 @@ public class ProfileMapFragment extends BaseGotsFragment implements OnMapLongCli
         MarkerOptions markerOption = new MarkerOptions().title(garden.getName()).snippet(garden.getName()).position(
                 gardenPOI);
         if (garden.getId() == getCurrentGarden().getId())
-            markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.bt_dashboard_profile_current));
+            markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.bt_dashboard_profile_pressed));
         else if (garden.isIncredibleEdible())
             markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.bt_dashboard_incredible));
         else
