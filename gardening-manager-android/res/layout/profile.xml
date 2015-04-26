@@ -55,6 +55,8 @@
         android:id="@+id/bottom"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"
         
         android:content="@+id/IdGardenProfileContent"

@@ -24,6 +24,8 @@ import org.gots.action.GotsActionManager;
 import org.gots.action.GotsActionSeedManager;
 import org.gots.action.provider.GotsActionProvider;
 import org.gots.action.provider.GotsActionSeedProvider;
+import org.gots.action.util.ActionState;
+import org.gots.action.view.ActionWidget;
 import org.gots.allotment.provider.local.LocalAllotmentProvider;
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
@@ -90,7 +92,7 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
 
     private TextView editTextWeatherLocality;
 
-    private ImageView buttonWeatherState;
+    private ActionWidget buttonWeatherState;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -116,7 +118,7 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
         editTextWeatherLocality = (TextView) view.findViewById(R.id.editTextGardenWeatherLocality);
         buttonLocalize = (ImageView) view.findViewById(R.id.imageViewLocalize);
         buttonLocalize.setOnClickListener(this);
-        buttonWeatherState = (ImageView) view.findViewById(R.id.imageViewWeatherState);
+        buttonWeatherState = (ActionWidget) view.findViewById(R.id.imageViewWeatherState);
         buttonWeatherState.setOnClickListener(this);
         initProfileView();
 
@@ -144,8 +146,6 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
         }
 
         if (garden.getGpsLatitude() == 0 || garden.getGpsLongitude() == 0) {
-            String locationProvider = LocationManager.NETWORK_PROVIDER;
-            // Location lastKnownLocation = mlocManager.getLastKnownLocation(locationProvider);
             List<String> providers = mlocManager.getAllProviders();
             Location lastKnownLocation = null;
 
@@ -156,19 +156,11 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
                     lastKnownLocation.getTime();
                     Log.d(TAG, "Provider: " + providers.get(i) + ", time=" + lastKnownLocation.getTime());
                 }
-                /*
-                 * put your code here
-                 * compare loc from providers to get the most
-                 * recent location
-                 */
             }
 
             if (lastKnownLocation != null) {
                 setAddressFromLocation(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
             }
-            // else if (mlocManager.isProviderEnabled(locationProvider))
-            // ;
-            // mlocManager.requestLocationUpdates(locationProvider, 60000, 0, this);
             if ("".equals(garden.getLocality()))
                 editTextLocality.setEnabled(false);
         } else {
@@ -228,35 +220,39 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
 
     protected void fetchWeatherAsync() {
         if (isAdded())
-        new AsyncTask<Void, Void, Short>() {
-            String currentWeatherLocalization;
+            new AsyncTask<Void, Void, Short>() {
+                String currentWeatherLocalization;
 
-            protected void onPreExecute() {
+                protected void onPreExecute() {
 
-                currentWeatherLocalization = String.valueOf(editTextWeatherLocality.getText());
-                if (currentWeatherLocalization == null) {
-                    currentWeatherLocalization = garden.getLocalityForecast();
+                    currentWeatherLocalization = String.valueOf(editTextWeatherLocality.getText());
+                    if (currentWeatherLocalization == null) {
+                        currentWeatherLocalization = garden.getLocalityForecast();
+                    }
+                };
+
+                @Override
+                protected Short doInBackground(Void... params) {
+                    WeatherManager weatherManager = new WeatherManager(getActivity());
+                    return weatherManager.fetchWeatherForecast(currentWeatherLocalization);
                 }
-            };
 
-            @Override
-            protected Short doInBackground(Void... params) {
-                WeatherManager weatherManager = new WeatherManager(getActivity());
-                return weatherManager.fetchWeatherForecast(currentWeatherLocalization);
-            }
-
-            protected void onPostExecute(Short result) {
-                if (result.shortValue() == PrevimeteoWeatherProvider.WEATHER_OK) {
-                    buttonWeatherState.setBackgroundColor(getResources().getColor(R.color.action_ok_color));
-                    buttonWeatherState.setImageDrawable(getResources().getDrawable(R.drawable.weather_connected));
-                    garden.setLocalityForecast(currentWeatherLocalization);
-                } else {
-                    buttonWeatherState.setBackgroundColor(getResources().getColor(R.color.action_error_color));
-                    buttonWeatherState.setImageDrawable(getResources().getDrawable(R.drawable.weather_disconnected));
-                }
-                buttonWeatherState.invalidate();
-            };
-        }.execute();
+                protected void onPostExecute(Short result) {
+                    if (result.shortValue() == PrevimeteoWeatherProvider.WEATHER_OK) {
+                        // buttonWeatherState.setBackgroundColor(getResources().getColor(R.color.action_ok_color));
+                        buttonWeatherState.setState(ActionState.NORMAL);
+                        buttonWeatherState.setActionImage(R.drawable.weather_connected);
+                        // buttonWeatherState.setImageDrawable(getResources().getDrawable(R.drawable.weather_connected));
+                        garden.setLocalityForecast(currentWeatherLocalization);
+                    } else {
+                        // buttonWeatherState.setBackgroundColor(getResources().getColor(R.color.action_error_color));
+                        buttonWeatherState.setState(ActionState.CRITICAL);
+                        buttonWeatherState.setActionImage(R.drawable.weather_disconnected);
+                        // buttonWeatherState.setImageDrawable(getResources().getDrawable(R.drawable.weather_disconnected));
+                    }
+                    buttonWeatherState.invalidate();
+                };
+            }.execute();
     }
 
     @Override
@@ -312,8 +308,10 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
             break;
         case R.id.imageViewLocalize:
             getPosition(true);
+            break;
         case R.id.imageViewWeatherState:
             fetchWeatherAsync();
+            break;
         default:
             break;
         }
@@ -474,7 +472,6 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
 
     @Override
     protected boolean requireAsyncDataRetrieval() {
-        // TODO Auto-generated method stub
         return false;
     }
 

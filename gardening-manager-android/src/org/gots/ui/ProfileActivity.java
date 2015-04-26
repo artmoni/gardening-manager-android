@@ -78,7 +78,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
             transactionList.setCustomAnimations(R.anim.push_right_in, R.anim.push_left_out);
             transactionList.replace(R.id.IdGardenProfileContent, profileListFragment).commit();
         }
-        openResumeFragment();
+        openContentResumeFragment();
     }
 
     public BroadcastReceiver gardenBroadcastReceiver = new BroadcastReceiver() {
@@ -238,7 +238,8 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
     public void onProfileSelected(GardenInterface garden) {
         gardenManager.setCurrentGarden(garden);
         openContentFragment(garden, true);
-        openResumeFragment();
+        openContentResumeFragment();
+        mapFragment.update();
     }
 
     @Override
@@ -291,11 +292,11 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
 
     @Override
     public void onCurrentGardenChanged(GardenInterface garden) {
-        openResumeFragment();
+        openContentResumeFragment();
         Log.i(TAG, "garden has changed :" + garden);
     }
 
-    protected void openResumeFragment() {
+    protected void openContentResumeFragment() {
         Fragment gardenResumeFragment = getSupportFragmentManager().findFragmentById(R.id.IdGardenProfileResume);
         if (findViewById(R.id.IdGardenProfileResume) != null) {
             FragmentTransaction transactionCatalogue = getSupportFragmentManager().beginTransaction();

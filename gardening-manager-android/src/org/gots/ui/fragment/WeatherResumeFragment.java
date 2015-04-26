@@ -90,9 +90,11 @@ public class WeatherResumeFragment extends BaseGotsFragment {
 
     @Override
     protected void onNuxeoDataRetrieveFailed() {
-        buttonWeatherLocality.setBackgroundColor(getResources().getColor(R.color.action_error_color));
-        weatherWidgetLayout.removeAllViews();
-        buttonWeatherLocality.setText("Not available for this city");
+        if (isAdded()) {
+            buttonWeatherLocality.setBackgroundColor(getResources().getColor(R.color.action_error_color));
+            weatherWidgetLayout.removeAllViews();
+            buttonWeatherLocality.setText("Not available for this city");
+        }
         super.onNuxeoDataRetrieveFailed();
     }
 }

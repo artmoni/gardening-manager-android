@@ -38,6 +38,8 @@ public class ActionWidget extends LinearLayout {
 
     private static final int[] STATE_UNDEFINED = { R.attr.state_undefined };
 
+    private ImageView actionImage;
+
     public ActionWidget(Context context, BaseAction action) {
         super(context);
         mContext = context;
@@ -95,7 +97,7 @@ public class ActionWidget extends LinearLayout {
         if (mAction == null)
             return;
 
-        ImageView actionImage = (ImageView) findViewById(R.id.idSeedActionImage);
+        actionImage = (ImageView) findViewById(R.id.idSeedActionImage);
 
         int actionImageRessource = mContext.getResources().getIdentifier(
                 "org.gots:drawable/action_" + mAction.getName(), null, null);
@@ -105,7 +107,7 @@ public class ActionWidget extends LinearLayout {
             actionImage.setImageDrawable(drawable);
         }
         int sdk = android.os.Build.VERSION.SDK_INT;
-        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+        if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
             setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.action_selector));
         } else {
             setBackground(mContext.getResources().getDrawable(R.drawable.action_selector));
@@ -119,35 +121,14 @@ public class ActionWidget extends LinearLayout {
         // invalidate();
     }
 
-    // private boolean match(int pixel) {
-    // // There may be a better way to match, but I wanted to do a comparison
-    // // ignoring
-    // // transparency, so I couldn't just do a direct integer compare.
-    // return pixel == Color.BLACK;
-    // }
-
-    // /**
-    // * Listener for item click
-    // *
-    // */
-    // public interface OnActionItemClickListener {
-    // public abstract void onItemClick(ActionWidget source, BaseActionInterface
-    // baseActionInterface);
-    // }
-
-    // /**
-    // * Set listener for action item clicked.
-    // *
-    // * @param listener
-    // * Listener
-    // */
-    // public void setOnActionItemClickListener(OnActionItemClickListener
-    // listener) {
-    // mItemClickListener = listener;
-    // }
     public void setState(int state) {
         this.state = state;
         refreshDrawableState();
+    }
 
+    public void setActionImage(int res) {
+        final Drawable drawable = getResources().getDrawable(res);
+        if (drawable != null)
+            actionImage.setImageDrawable(drawable);
     }
 }

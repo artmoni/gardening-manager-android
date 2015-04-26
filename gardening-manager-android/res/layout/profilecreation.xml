@@ -108,7 +108,7 @@
                     android:singleLine="true" >
                 </EditText>
 
-                <ImageView
+                <org.gots.action.view.ActionWidget
                     android:id="@+id/imageViewWeatherState"
                     android:layout_width="30dp"
                     android:layout_height="30dp"

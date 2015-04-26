@@ -42,6 +42,7 @@ public class NuxeoGardenConvertor {
         garden.setCountryName(gardenWorkspace.getString("location:country"));
         garden.setCountryCode(gardenWorkspace.getString("location:countrycode"));
         garden.setIncredibleEdible(gardenWorkspace.getProperties().getBoolean("garden:incredibleedible"));
+        garden.setLocalityForecast(gardenWorkspace.getString("garden:forecast_locality"));
         // garden.setName(garden.getLocality() + " (" + gardenWorkspace.getString("dc:creator") + ")");
         return garden;
     }
@@ -57,6 +58,7 @@ public class NuxeoGardenConvertor {
         doc.set("location:country", garden.getCountryName());
         doc.set("location:countrycode", garden.getCountryCode());
         doc.set("garden:incredibleedible", String.valueOf(garden.isIncredibleEdible()));
+        doc.set("garden:forecast_locality",garden.getLocalityForecast());
         return doc;
     }
 }
