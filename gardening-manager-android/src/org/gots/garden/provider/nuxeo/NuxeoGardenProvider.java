@@ -29,6 +29,8 @@ import android.util.Log;
  */
 public class NuxeoGardenProvider extends LocalGardenProvider {
 
+    public static final String DOCTYPE_GARDEN = "Garden";
+
     private static final String TAG = "NuxeoGardenProvider";
 
     String myToken;
@@ -75,9 +77,9 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
             if (force) {
                 cacheParam = (byte) (cacheParam | CacheBehavior.FORCE_REFRESH);
             }
-            Documents gardensWorkspaces = service.query(
-                    "SELECT * FROM Garden WHERE ecm:currentLifeCycleState != \"deleted\"", null,
-                    new String[] { "dc:modified desc" }, "*", 0, 50, cacheParam);
+            Documents gardensWorkspaces = service.query("SELECT * FROM " + DOCTYPE_GARDEN
+                    + " WHERE ecm:currentLifeCycleState != \"deleted\"", null, new String[] { "dc:modified desc" },
+                    "*", 0, 50, cacheParam);
 
             // TODO JC Documents gardensWorkspaces = service.query(nxql, queryParams, sortInfo, schemaList, page,
             // pageSize, cacheFlags);
@@ -108,7 +110,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
 
             PropertyMap properties = NuxeoGardenConvertor.convert(root.getPath(), garden).getProperties();
 
-            Document newGarden = documentMgr.createDocument(root, "Garden", garden.getName());
+            Document newGarden = documentMgr.createDocument(root, DOCTYPE_GARDEN, garden.getName());
             documentMgr.update(newGarden, properties);
             garden.setUUID(newGarden.getId());
         } catch (Exception e) {

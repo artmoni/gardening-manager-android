@@ -48,7 +48,7 @@ public class NuxeoGardenConvertor {
     }
 
     public static Document convert(String parentPath, GardenInterface garden) {
-        Document doc = new Document(parentPath, garden.getLocality(), "Garden");
+        Document doc = new Document(parentPath, garden.getLocality(), NuxeoGardenProvider.DOCTYPE_GARDEN);
         doc.set("dc:title", garden.getName());
         doc.set("garden:altitude", garden.getGpsAltitude());
         doc.set("garden:latitude", garden.getGpsLatitude());
