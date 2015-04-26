@@ -80,8 +80,7 @@ public class LocalActionProvider extends GotsDBHelper implements GotsActionProvi
             if (cursor.moveToFirst()) {
                 do {
                     BaseAction action = cursorToAction(cursor);
-                    if (!PermanentActionInterface.class.isInstance(action))
-                        allActions.add(action);
+                    allActions.add(action);
                 } while (cursor.moveToNext());
             }
         } finally {
