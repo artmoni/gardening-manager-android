@@ -40,6 +40,12 @@ public class ActionWidget extends LinearLayout {
 
     private ImageView actionImage;
 
+    public ActionWidget(Context context, AttributeSet set, int defstyle) {
+        super(context, set, defstyle);
+        mContext = context;
+        initView();
+    }
+
     public ActionWidget(Context context, BaseAction action) {
         super(context);
         mContext = context;
@@ -52,7 +58,11 @@ public class ActionWidget extends LinearLayout {
         mContext = context;
         initView();
     }
-
+    public ActionWidget(Context context) {
+        super(context);
+        mContext = context;
+        initView();
+    }
     @Override
     protected int[] onCreateDrawableState(int extraSpace) {
         final int[] drawableState = super.onCreateDrawableState(extraSpace + 4);
@@ -87,6 +97,8 @@ public class ActionWidget extends LinearLayout {
     private void initView() {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.action_widget, this);
+        actionImage = (ImageView) findViewById(R.id.idSeedActionImage);
+
     }
 
     @SuppressWarnings("deprecation")
@@ -97,8 +109,6 @@ public class ActionWidget extends LinearLayout {
         if (mAction == null)
             return;
 
-        actionImage = (ImageView) findViewById(R.id.idSeedActionImage);
-
         int actionImageRessource = mContext.getResources().getIdentifier(
                 "org.gots:drawable/action_" + mAction.getName(), null, null);
 
@@ -106,19 +116,17 @@ public class ActionWidget extends LinearLayout {
             Drawable drawable = mContext.getResources().getDrawable(actionImageRessource);
             actionImage.setImageDrawable(drawable);
         }
-        int sdk = android.os.Build.VERSION.SDK_INT;
-        if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.action_selector));
-        } else {
-            setBackground(mContext.getResources().getDrawable(R.drawable.action_selector));
-        }
+        // int sdk = android.os.Build.VERSION.SDK_INT;
+        // if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+        // setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.action_selector));
+        // } else {
+        // setBackground(mContext.getResources().getDrawable(R.drawable.action_selector));
+        // }
         // invalidate();
     }
 
     public void setAction(BaseAction action) {
         this.mAction = action;
-        // requestLayout();
-        // invalidate();
     }
 
     public void setState(int state) {

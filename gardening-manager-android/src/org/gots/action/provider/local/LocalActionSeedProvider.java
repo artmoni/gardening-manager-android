@@ -54,6 +54,7 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
         if (cursor.getCount() == 0) {
             rowid = bdd.insert(DatabaseHelper.ACTIONSEEDS_TABLE_NAME, null, values);
             action.setActionSeedId((int) rowid);
+            Log.d(TAG, action.getName() + " is newly inserted as " + action);
         } else {
             Log.w(TAG, action.getName() + " is already inserted in database as " + action);
         }
