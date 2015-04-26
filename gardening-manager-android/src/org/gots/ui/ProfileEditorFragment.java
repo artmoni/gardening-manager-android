@@ -378,6 +378,7 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
                     garden.setIncredibleEdible(true);
                 }
                 garden.setLocality(editTextLocality.getText().toString());
+                garden.setLocalityForecast(editTextWeatherLocality.getText().toString());
                 garden = gardenManager.addGarden(garden);
                 if (garden.isIncredibleEdible())
                     gardenManager.share(garden, "members", "ReadWrite");
@@ -451,14 +452,12 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
         new AsyncTask<String, Integer, Void>() {
             @Override
             protected Void doInBackground(String... params) {
-                // garden = buildGarden(gardenManager.getCurrentGarden());
                 gardenManager.updateCurrentGarden(garden);
                 return null;
             }
 
             protected void onPostExecute(Void result) {
-                // ProfileCreationFragment.this.finish();
-                // TODO finish
+                mCallback.onProfileSelected(garden);
             };
         }.execute();
 

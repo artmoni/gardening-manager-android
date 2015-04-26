@@ -135,12 +135,8 @@ public class ActionsSyncAdapter extends GotsSyncAdapter {
             }
         }
 
-        // Create remote garden when not exist remotely and remove local
-        // garden if no more referenced online
         for (ActionOnSeed localAction : myLocalActions) {
-            if (localAction.getUUID() == null) { // local only without
-                                                 // UUID => create
-                                                 // remote
+            if (localAction.getUUID() == null) { 
                 BaseAction newAction = GotsActionManager.getInstance().initIfNew(getContext()).getActionByName(
                         localAction.getName());
                 newAction.setDuration(localAction.getDuration());
