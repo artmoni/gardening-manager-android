@@ -115,7 +115,7 @@ public class GardenSQLite extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_ACTION);
 
         // db.execSQL(CREATE_TABLE_ACTION);
-        populateActions(db);
+//        populateActions(db);
 
     }
 
@@ -125,7 +125,7 @@ public class GardenSQLite extends SQLiteOpenHelper {
                 + ", which will destroy all old data");
         if (oldVersion <= 10) {
             db.execSQL(CREATE_TABLE_ACTION);
-            populateActions(db);
+//            populateActions(db);
 
         }
         if (oldVersion < 12) {
@@ -146,15 +146,15 @@ public class GardenSQLite extends SQLiteOpenHelper {
         }
     }
 
-    private void populateActions(SQLiteDatabase db) {
-        db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('sow')");
-        db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('water')");
-        db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('hoe')");
-        db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('beak')");
-        db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('cut')");
-        db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('lighten')");
-        db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('harvest')");
-        db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('photo')");
-
-    }
+//    private void populateActions(SQLiteDatabase db) {
+//        db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('sow')");
+//        db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('water')");
+//        db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('hoe')");
+//        db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('beak')");
+//        db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('cut')");
+//        db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('lighten')");
+//        db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('harvest')");
+//        db.execSQL("Insert into " + ACTION_TABLE_NAME + "(" + ACTION_NAME + ") VALUES ('photo')");
+//
+//    }
 }

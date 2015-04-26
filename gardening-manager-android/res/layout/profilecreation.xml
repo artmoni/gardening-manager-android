@@ -111,9 +111,8 @@
                 <org.gots.action.view.ActionWidget
                     android:id="@+id/imageViewWeatherState"
                     android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/action_selector"
-                    android:src="@drawable/weather_disconnected" />
+                    android:layout_height="30dp" />
+
             </TableRow>
 
             <RadioGroup
