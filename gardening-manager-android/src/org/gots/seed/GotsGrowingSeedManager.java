@@ -29,7 +29,7 @@ public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGro
     GotsGrowingSeedProvider provider;
 
     Map<Integer, HashMap<Integer, GrowingSeed>> seedsByAllotment; // Map<AllotmentID, HashMap<getGrowingSeedId,
-                                                                           // GrowingSeedInterface>>
+                                                                  // GrowingSeedInterface>>
 
     private boolean initDone;
 
@@ -45,12 +45,13 @@ public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGro
         // mLocalProvider = new LocalSeedProvider(mContext);
         // allSeeds = new ArrayList<BaseSeedInterface>();
     }
+
     protected GotsContext getGotsContext() {
         return GotsContext.get(mContext);
     }
 
     protected void setGrowingSeedProvider() {
-        
+
         if (gotsPrefs.isConnectedToServer() && !nuxeoManager.getNuxeoClient().isOffline()) {
             provider = new NuxeoGrowingSeedProvider(mContext);
         } else
@@ -92,6 +93,12 @@ public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGro
         setGrowingSeedProvider();
         initDone = true;
         return this;
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        initDone = false;
+        super.finalize();
     }
 
     @Override

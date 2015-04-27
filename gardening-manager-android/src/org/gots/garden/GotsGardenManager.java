@@ -138,7 +138,7 @@ public class GotsGardenManager extends BroadcastReceiver {
     public void removeGarden(GardenInterface garden) {
         gardenProvider.removeGarden(garden);
         myGardens.remove(garden.getId());
-        mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
+//        mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
     }
 
     public void updateCurrentGarden(GardenInterface garden) {
@@ -146,7 +146,7 @@ public class GotsGardenManager extends BroadcastReceiver {
         myGardens.put(garden.getId(), garden);
         if (currentGarden.getId() == garden.getId())
             currentGarden = garden;
-        mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
+//        mContext.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
     }
 
     public List<GardenInterface> getMyGardens(boolean force) {

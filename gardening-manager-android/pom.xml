@@ -149,7 +149,7 @@
           </sdk>
           <nativeLibrariesDirectory>ignored</nativeLibrariesDirectory>
           <deleteConflictingFiles>true</deleteConflictingFiles>
-          <undeployBeforeDeploy>false</undeployBeforeDeploy>
+          <undeployBeforeDeploy>true</undeployBeforeDeploy>
         </configuration>
       </plugin>
     </plugins>

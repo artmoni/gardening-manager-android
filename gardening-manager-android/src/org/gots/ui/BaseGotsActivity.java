@@ -159,15 +159,17 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         gotsPrefs = getGotsContext().getServerConfig();
         gotsPurchase = new GotsPurchaseItem(this);
         nuxeoManager = NuxeoManager.getInstance();
-        nuxeoManager.initIfNew(this);
         gardenManager = GotsGardenManager.getInstance();
-        gardenManager.initIfNew(this);
         seedManager = GotsSeedManager.getInstance();
-        seedManager.initIfNew(this);
         allotmentManager = GotsAllotmentManager.getInstance();
-        allotmentManager.initIfNew(this);
-        gotsGrowingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(this);
+        gotsGrowingSeedManager = GotsGrowingSeedManager.getInstance();
         actionseedProvider = GotsActionSeedManager.getInstance();
+   
+        gardenManager.initIfNew(this);
+        seedManager.initIfNew(this);
+        gotsGrowingSeedManager.initIfNew(this);
+        nuxeoManager.initIfNew(this);
+        allotmentManager.initIfNew(this);
         actionseedProvider.initIfNew(this);
 
     }
@@ -227,14 +229,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         registerReceiver(gardenBroadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_EVENT));
         registerReceiver(actionseedProvider, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
         registerReceiver(actionseedProvider, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
-
-        // registerReceiver(nuxeoManager.getNuxeoContext(), new
-        // IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
-        // registerReceiver(nuxeoManager.getNuxeoContext(), new
-        // IntentFilter(NuxeoBroadcastMessages.NUXEO_SETTINGS_CHANGED));
-
-        // NuxeoContextFactory.registerReceiver(this);
-
+        
         super.onResume();
     }
 
@@ -377,8 +372,6 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         unregisterReceiver(gotsGrowingSeedManager);
         unregisterReceiver(gardenBroadcastReceiver);
         unregisterReceiver(actionseedProvider);
-        // unregisterReceiver(nuxeoManager.getNuxeoContext());
-        // NuxeoContextFactory.unregisterReceiver();
         super.onPause();
     }
 

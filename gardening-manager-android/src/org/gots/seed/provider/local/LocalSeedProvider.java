@@ -122,14 +122,14 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
     @Override
     public BaseSeedInterface getSeedById(int seedId) {
         BaseSeedInterface searchedSeed = null;
-        Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_ID + "='" + seedId
-                + "'", null, null, null, null);
-        if (managedCursor.moveToFirst()) {
+        Cursor cursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_ID + "=" + seedId + "",
+                null, null, null, null);
+        if (cursor.moveToFirst()) {
             do {
-                searchedSeed = cursorToSeed(managedCursor);
-            } while (managedCursor.moveToNext());
+                searchedSeed = cursorToSeed(cursor);
+            } while (cursor.moveToNext());
         }
-        managedCursor.close();
+        cursor.close();
         return searchedSeed;
     }
 
@@ -328,7 +328,6 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
         }
         return searchedSeed;
     }
-
 
     @Override
     public List<BaseSeedInterface> getVendorSeedsByName(String currentFilter, boolean force) {

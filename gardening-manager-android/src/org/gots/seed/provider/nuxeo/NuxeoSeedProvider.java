@@ -94,54 +94,52 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     Log.w(TAG, "Nuxeo Seed conversion problem " + document.getTitle() + "- " + document.getId());
                 }
 
-                new AsyncTask<BaseSeedInterface, Void, FileBlob>() {
-
-                    private File imageFile;
-
-                    @Override
-                    protected FileBlob doInBackground(BaseSeedInterface... params) {
-                        BaseSeedInterface seed = params[0];
-                        FileBlob image = null;
-                        imageFile = new File(gotsPrefs.getGotsExternalFileDir(),
-                                seed.getVariety().toLowerCase().replaceAll("\\s", ""));
-                        try {
-                            image = service.getBlob(new DocRef(seed.getUUID()));
-                            Log.d(TAG, "Download image blob " + image.getFileName());
-                        } catch (Exception e) {
-                            Log.w(TAG, "Image " + imageFile.getAbsolutePath() + " cannot be downloaded for document "
-                                    + seed.getUUID());
-                        }
-                        return image;
-                    }
-
-                    protected void onPostExecute(FileBlob image) {
-                        if (image != null && image.getLength() > 0)
-                            try {
-                                FileUtilities.copy(image.getFile(), imageFile);
-                            } catch (IOException e) {
-                                Log.w(TAG,
-                                        "Cannot copy " + image.getFile().getAbsolutePath() + " to "
-                                                + imageFile.getAbsolutePath());
-                            }
-                    };
-                }.execute(seed);
-//                // download custom image
-//                File imageFile = new File(gotsPrefs.getGotsExternalFileDir(),
-//                        seed.getVariety().toLowerCase().replaceAll("\\s", ""));
-//                if (imageFile != null && !imageFile.exists()) {
-//                    FileBlob image = service.getBlob(document);
-//                    if (image != null && image.getLength() > 0)
-//                        FileUtilities.copy(image.getFile(), imageFile);
-//                }
+                downloadImageAsync(service, seed);
             }
-            // getNuxeoClient().shutdown();
             myVendorSeeds = synchronize(super.getVendorSeeds(force, page, pageSize), remoteVendorSeeds);
-            // myVendorSeeds = remoteVendorSeeds;
         } catch (Exception e) {
             Log.e(TAG, "getAllSeeds " + e.getMessage(), e);
             myVendorSeeds = super.getVendorSeeds(force, 0, 25);
         }
         return myVendorSeeds;
+    }
+
+    protected void downloadImageAsync(final DocumentManager service, BaseSeedInterface seed) {
+        new AsyncTask<BaseSeedInterface, Void, FileBlob>() {
+
+            private File imageFile;
+
+            @Override
+            protected FileBlob doInBackground(BaseSeedInterface... params) {
+                BaseSeedInterface seed = params[0];
+                FileBlob image = null;
+                imageFile = new File(gotsPrefs.getGotsExternalFileDir(), seed.getVariety().toLowerCase().replaceAll(
+                        "\\s", ""));
+                if (!imageFile.exists()) {
+                    try {
+                        image = service.getBlob(new DocRef(seed.getUUID()));
+                        Log.d(TAG, "Download image blob " + image.getFileName());
+                    } catch (Exception e) {
+                        Log.w(TAG, "Image " + imageFile.getAbsolutePath() + " cannot be downloaded for document "
+                                + seed.getUUID());
+                    }
+                } else {
+                    Log.d(TAG, "Image " + imageFile.getAbsolutePath() + " already exists");
+                }
+                return image;
+            }
+
+            protected void onPostExecute(FileBlob image) {
+                if (image != null && image.getLength() > 0)
+                    try {
+                        FileUtilities.copy(image.getFile(), imageFile);
+                    } catch (IOException e) {
+                        Log.w(TAG,
+                                "Cannot copy " + image.getFile().getAbsolutePath() + " to "
+                                        + imageFile.getAbsolutePath());
+                    }
+            };
+        }.execute(seed);
     }
 
     @Override
@@ -188,8 +186,6 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             List<BaseSeedInterface> remoteVendorSeeds) {
         newSeeds.clear();
         List<BaseSeedInterface> myVendorSeeds = new ArrayList<BaseSeedInterface>();
-        // TODO send as intent
-        // List<BaseSeedInterface> myLocalSeeds = super.getVendorSeeds();
 
         for (BaseSeedInterface remoteSeed : remoteVendorSeeds) {
             boolean found = false;

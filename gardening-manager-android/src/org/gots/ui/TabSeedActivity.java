@@ -36,6 +36,7 @@ import org.gots.inapp.GotsBillingDialog;
 import org.gots.inapp.GotsPurchaseItem;
 import org.gots.nuxeo.NuxeoWorkflowProvider;
 import org.gots.seed.GotsGrowingSeedManager;
+import org.gots.seed.GotsSeedManager;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedImpl;
 import org.gots.seed.provider.GotsSeedProvider;
@@ -502,9 +503,10 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
             // GotsSeedProvider helper = new LocalSeedProvider(getApplicationContext());
             mSeed = (GrowingSeed) seedManager.getSeedByUUID(seedUUID);
         }
-
-        NuxeoWorkflowProvider workflowProvider = new NuxeoWorkflowProvider(getApplicationContext());
-        taskDocs = workflowProvider.getWorkflowOpenTasks(mSeed.getUUID(), true);
+        if (mSeed != null) {
+            NuxeoWorkflowProvider workflowProvider = new NuxeoWorkflowProvider(getApplicationContext());
+            taskDocs = workflowProvider.getWorkflowOpenTasks(mSeed.getUUID(), true);
+        }
 
         return mSeed;
     }
@@ -606,8 +608,8 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
-//                    ((ActionOnSeed) actionInterface).execute(mSeed);
-                    actionseedProvider.doAction((ActionOnSeed)actionInterface, mSeed);
+                    // ((ActionOnSeed) actionInterface).execute(mSeed);
+                    actionseedProvider.doAction((ActionOnSeed) actionInterface, mSeed);
                     return null;
                 }
 
