@@ -43,8 +43,10 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
     protected static final String TAG = "NuxeoSeedProvider";
 
-    private static final String queryDefaultFilter = " AND vendorseed:language=\""
+    private static final String QUERY_FILTER_LANGUAGE = " AND vendorseed:language=\""
             + Locale.getDefault().getCountry().toLowerCase() + "\"";
+
+    private static final String QUERY_FILTER_SECTION = " AND ecm:path STARTSWITH '/default-domain/sections/'";
 
     String myToken;
 
@@ -81,7 +83,8 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 refresh = false;
             }
             Documents docs = service.query("SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState = \"approved\""
-                    + queryDefaultFilter, null, new String[] { "dc:modified DESC" }, "*", page, pageSize, cacheParam);
+                    + QUERY_FILTER_LANGUAGE + QUERY_FILTER_SECTION, null, new String[] { "dc:modified DESC" }, "*",
+                    page, pageSize, cacheParam);
             for (Document document : docs) {
                 BaseSeedInterface seed = NuxeoSeedConverter.convert(document);
                 Blob likeStatus = service.getLikeStatus(document);
@@ -678,8 +681,8 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             byte cacheParam = CacheBehavior.STORE;
             Documents docSpecies = service.query(
                     "SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState != \"deleted\" AND vendorseed:datesowingmax >= "
-                            + month + " AND vendorseed:datesowingmin<=" + month + "" + queryDefaultFilter, null, null,
-                    "*", 0, 50, cacheParam);
+                            + month + " AND vendorseed:datesowingmin<=" + month + "" + QUERY_FILTER_LANGUAGE, null,
+                    null, "*", 0, 50, cacheParam);
             for (Document seedDoc : docSpecies) {
                 BaseSeedInterface seed = NuxeoSeedConverter.convert(seedDoc);
                 if (super.getSeedByUUID(seedDoc.getId()) == null)
@@ -711,7 +714,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 refresh = false;
             }
             Documents docs = service.query("SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState != \"deleted\""
-                    + queryDefaultFilter + "AND vendorseed:variety STARTSWITH " + currentFilter, null,
+                    + QUERY_FILTER_LANGUAGE + "AND vendorseed:variety STARTSWITH " + currentFilter, null,
                     new String[] { "dc:modified DESC" }, "*", 0, 25, cacheParam);
             for (Document document : docs) {
                 BaseSeedInterface seed = NuxeoSeedConverter.convert(document);
