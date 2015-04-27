@@ -116,74 +116,90 @@ public class ListAllActionAdapter extends BaseAdapter {
         return position;
     }
 
+    private class Holder {
+        ActionWidget actionWidget;
+
+        SeedWidget seedView;
+
+        TextView textviewActionDate;
+
+        Switch switchActionStatus;
+
+        TextView textviewActionDescription;
+
+        WeatherView weatherView;
+    }
+
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
+        final ActionOnSeed currentAction = getItem(position);
+        final GrowingSeed seed = GotsGrowingSeedManager.getInstance().initIfNew(mContext).getGrowingSeedById(
+                currentAction.getGrowingSeedId());
         View ll = convertView;
+        Holder holder;
 
         // if (convertView == null) {
         // ll = new LinearLayout(mContext);
-        if (convertView == null)
+        if (ll == null) {
+            holder = new Holder();
             ll = LayoutInflater.from(mContext).inflate(R.layout.list_action, parent, false);
+            holder.actionWidget = (ActionWidget) ll.findViewById(R.id.idActionView);
+            holder.seedView = (SeedWidget) ll.findViewById(R.id.idSeedView);
+            holder.textviewActionDate = (TextView) ll.findViewById(R.id.IdSeedActionDate);
+            holder.switchActionStatus = (Switch) ll.findViewById(R.id.switchSeedActionStatus);
+            holder.textviewActionDescription = (TextView) ll.findViewById(R.id.IdSeedActionDescription);
+            holder.weatherView = (WeatherView) ll.findViewById(R.id.idWeatherView);
 
-        final ActionOnSeed currentAction = getItem(position);
-
-        final GrowingSeed seed = GotsGrowingSeedManager.getInstance().initIfNew(mContext).getGrowingSeedById(
-                currentAction.getGrowingSeedId());
+            ll.setTag(holder);
+        } else
+            holder = (Holder) ll.getTag();
 
         if (seed != null && BaseAction.class.isInstance(currentAction)) {
-            ActionWidget actionWidget = (ActionWidget) ll.findViewById(R.id.idActionView);
-
-            SeedWidget seedView = (SeedWidget) ll.findViewById(R.id.idSeedView);
-            seedView.setSeed(seed);
-
-            final Switch switchActionStatus = (Switch) ll.findViewById(R.id.switchSeedActionStatus);
-            TextView textviewActionDate = (TextView) ll.findViewById(R.id.IdSeedActionDate);
-            TextView textviewActionDescription = (TextView) ll.findViewById(R.id.IdSeedActionDescription);
+            holder.seedView.setSeed(seed);
 
             SimpleDateFormat dateFormat = new SimpleDateFormat(" dd/MM/yyyy", Locale.FRANCE);
 
             if (currentAction.getDateActionDone() == null) {
-                // textviewActionStatus.setText(mContext.getResources().getString(R.string.seed_action_todo));
 
                 Calendar rightNow = Calendar.getInstance();
                 rightNow.setTime(seed.getDateSowing());
                 rightNow.add(Calendar.DAY_OF_YEAR, currentAction.getDuration());
-                textviewActionDate.setText(dateFormat.format(rightNow.getTime()));
+                holder.textviewActionDate.setText(dateFormat.format(rightNow.getTime()));
 
-                ll.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showNoticeDialog(position, seed, currentAction, switchActionStatus);
-                    }
-                });
-                switchActionStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                ll.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        showNoticeDialog(position, seed, currentAction, v);
+//                    }
+//                });
+                
+                holder.switchActionStatus.setOnCheckedChangeListener(new  CompoundButton.OnCheckedChangeListener() {
 
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if (isChecked)
-                            showNoticeDialog(position, seed, currentAction, switchActionStatus);
+                            showNoticeDialog(position, seed, currentAction, buttonView);
 
                     }
                 });
 
-                WeatherView weatherView = (WeatherView) ll.findViewById(R.id.idWeatherView);
-                weatherView.setVisibility(View.GONE);
+                holder.weatherView.setVisibility(View.GONE);
 
             } else {
                 // textviewActionStatus.setText(mContext.getResources().getString(R.string.seed_action_done));
-                switchActionStatus.setEnabled(false);
-                switchActionStatus.setChecked(true);
+                holder.switchActionStatus.setEnabled(false);
+                holder.switchActionStatus.setChecked(true);
                 Calendar rightNow = Calendar.getInstance();
                 if (currentAction.getDateActionDone() != null) {
                     rightNow.setTime(currentAction.getDateActionDone());
-                    textviewActionDate.setText(dateFormat.format(rightNow.getTime()));
+                    holder.textviewActionDate.setText(dateFormat.format(rightNow.getTime()));
 
                     if (currentAction.getData() != null) {
                         String data = (String) currentAction.getData();
                         String description = data.length() < 30 ? data : data.substring(0, 29).concat("...");
-                        textviewActionDescription.setText(description);
+                        holder.textviewActionDescription.setText(description);
                     } else
-                        textviewActionDescription.setVisibility(View.GONE);
+                        holder.textviewActionDescription.setVisibility(View.GONE);
 
                     WeatherView weatherView = (WeatherView) ll.findViewById(R.id.idWeatherView);
                     weatherView.setWeather(manager.getCondition(rightNow.getTime()));
@@ -225,8 +241,8 @@ public class ListAllActionAdapter extends BaseAdapter {
                     }
                 }
             }
-            actionWidget.setState(currentAction.getState());
-            actionWidget.setAction(currentAction);
+            holder.actionWidget.setState(currentAction.getState());
+            holder.actionWidget.setAction(currentAction);
             // ll.invalidate();
 
         }
@@ -300,8 +316,7 @@ public class ListAllActionAdapter extends BaseAdapter {
         }
     }
 
-    private void showNoticeDialog(final int position, final GrowingSeed seed, final ActionOnSeed currentAction,
-            final Switch mSwitch) {
+    private void showNoticeDialog(final int position, final GrowingSeed seed, final ActionOnSeed currentAction, final CompoundButton switchButton) {
 
         final EditText userinput = new EditText(mContext.getApplicationContext());
         final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
@@ -335,9 +350,9 @@ public class ListAllActionAdapter extends BaseAdapter {
         }).setNegativeButton(mContext.getResources().getString(R.string.button_cancel),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        mSwitch.setChecked(false);
                         dialog.cancel();
-
+                        switchButton.setChecked(false);
+                        
                     }
                 });
         // AlertDialog dialog = builder.create();
