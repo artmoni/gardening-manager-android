@@ -78,7 +78,7 @@ public class GotsActionSeedManager extends BroadcastReceiver implements GotsActi
     @Override
     public ActionOnSeed doAction(ActionOnSeed action, GrowingSeed seed) {
         action.setDateActionDone(Calendar.getInstance().getTime());
-        action.setActionSeedId(seed.getSeedId());
+//        action.setActionSeedId(seed.getSeedId());
         seed.getActionToDo().remove(action);
         seed.getActionDone().add(action);
         return provider.doAction(action, seed);
