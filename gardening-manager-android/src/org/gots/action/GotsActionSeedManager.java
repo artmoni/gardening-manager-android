@@ -45,9 +45,11 @@ public class GotsActionSeedManager extends BroadcastReceiver implements GotsActi
         }
         return instance;
     }
+
     protected GotsContext getGotsContext() {
         return GotsContext.get(mContext);
     }
+
     public synchronized GotsActionSeedProvider initIfNew(Context context) {
         if (initDone) {
             return this;
@@ -62,6 +64,8 @@ public class GotsActionSeedManager extends BroadcastReceiver implements GotsActi
 
     public void reset() {
         initDone = false;
+        mContext = null;
+        instance = null;
     }
 
     public void setProvider() {
@@ -102,7 +106,7 @@ public class GotsActionSeedManager extends BroadcastReceiver implements GotsActi
 
     @Override
     public File uploadPicture(GrowingSeed seed, File localPictureFile) {
-       return provider.uploadPicture(seed, localPictureFile);
+        return provider.uploadPicture(seed, localPictureFile);
     }
 
     @Override

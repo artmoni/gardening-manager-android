@@ -92,12 +92,8 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
         return this;
     }
 
-    public void reset() {
-        initDone = false;
-    }
 
-    public void finalize() {
-        // mContext.unregisterReceiver(this);
+    public void reset() {
         initDone = false;
         mContext = null;
         instance = null;

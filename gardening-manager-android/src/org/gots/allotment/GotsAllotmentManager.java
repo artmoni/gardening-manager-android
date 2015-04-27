@@ -79,11 +79,6 @@ public class GotsAllotmentManager extends BroadcastReceiver implements Allotment
 
     public void reset() {
         initDone = false;
-    }
-
-    public void finalize() {
-
-        initDone = false;
         mContext = null;
         instance = null;
     }

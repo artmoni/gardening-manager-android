@@ -58,6 +58,8 @@ public class GotsGardenManager extends BroadcastReceiver {
 
     public void reset() {
         initDone = false;
+        mContext = null;
+        instance = null;
     }
 
     /**
@@ -76,11 +78,6 @@ public class GotsGardenManager extends BroadcastReceiver {
         return instance;
     }
 
-    public void finalize() {
-        initDone = false;
-        mContext = null;
-        instance = null;
-    }
 
     protected GotsContext getGotsContext() {
         return GotsContext.get(mContext);

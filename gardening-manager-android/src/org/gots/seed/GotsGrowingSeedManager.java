@@ -95,10 +95,10 @@ public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGro
         return this;
     }
 
-    @Override
-    protected void finalize() throws Throwable {
+    public void reset() {
         initDone = false;
-        super.finalize();
+        mContext = null;
+        instance = null;
     }
 
     @Override

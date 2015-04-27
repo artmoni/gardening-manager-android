@@ -111,6 +111,8 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
             if (BroadCastMessages.GARDEN_CURRENT_CHANGED.equals(intent.getAction())
                     || BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
                 try {
+                    closeAllManager();
+                    initAllManager();
                     currentGarden = gardenManager.getCurrentGarden();
                     if (context instanceof GardenListener)
                         ((GardenListener) context).onCurrentGardenChanged(currentGarden);
@@ -165,15 +167,26 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         gotsGrowingSeedManager = GotsGrowingSeedManager.getInstance();
         actionseedProvider = GotsActionSeedManager.getInstance();
    
+        initAllManager();
+
+    }
+
+    protected void initAllManager() {
         gardenManager.initIfNew(this);
         seedManager.initIfNew(this);
         gotsGrowingSeedManager.initIfNew(this);
         nuxeoManager.initIfNew(this);
         allotmentManager.initIfNew(this);
         actionseedProvider.initIfNew(this);
-
     }
-
+    protected void closeAllManager() {
+        gardenManager.reset();
+        seedManager.reset();
+        gotsGrowingSeedManager.reset(); 
+        nuxeoManager.shutdown();
+        allotmentManager.reset();
+        actionseedProvider.reset(); 
+    }
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         activities.add(this);
@@ -256,10 +269,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
 
         if (activities.size() == 0) {
             Log.d(TAG, "onDestroy last activitie");
-            nuxeoManager.shutdown();
-            gardenManager.finalize();
-            seedManager.finalize();
-            allotmentManager.finalize();
+           closeAllManager();
         } else {
             Log.d(TAG, "No shutdown, remaining activities: " + activities);
         }
