@@ -258,7 +258,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
 
         FragmentTransaction transactionCatalogue = getSupportFragmentManager().beginTransaction();
         transactionCatalogue.setCustomAnimations(R.anim.abc_fade_in, R.anim.push_right_out);
-        transactionCatalogue.addToBackStack(null);
+//        transactionCatalogue.addToBackStack(null);
 
         if (findViewById(R.id.IdGardenProfileContent) != null) {
             if (!editable) {
@@ -301,7 +301,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
         if (findViewById(R.id.IdGardenProfileResume) != null) {
             FragmentTransaction transactionCatalogue = getSupportFragmentManager().beginTransaction();
             transactionCatalogue.setCustomAnimations(R.anim.abc_fade_in, R.anim.push_right_out);
-            transactionCatalogue.addToBackStack(null);
+//            transactionCatalogue.addToBackStack(null);
 
             gardenResumeFragment = new GardenResumeFragment();
             transactionCatalogue.replace(R.id.IdGardenProfileResume, gardenResumeFragment).commit();

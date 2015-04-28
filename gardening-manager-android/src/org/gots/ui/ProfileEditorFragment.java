@@ -58,6 +58,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -94,6 +95,8 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
 
     private ActionWidget buttonWeatherState;
 
+    private View buttonValidate;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.profilecreation, container, false);
@@ -120,6 +123,9 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
         buttonLocalize.setOnClickListener(this);
         buttonWeatherState = (ActionWidget) view.findViewById(R.id.imageViewWeatherState);
         buttonWeatherState.setOnClickListener(this);
+        buttonValidate = view.findViewById(R.id.buttonValidatePosition);
+        buttonValidate.setOnClickListener(this);
+
         initProfileView();
 
     }
@@ -135,8 +141,6 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
     }
 
     private void initProfileView() {
-
-        getView().findViewById(R.id.buttonValidatePosition).setOnClickListener(this);
 
         if (getCurrentGarden() != null)
             ((CheckBox) getView().findViewById(R.id.checkboxSamples)).setChecked(false);
@@ -164,8 +168,13 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
             if ("".equals(garden.getLocality()))
                 editTextLocality.setEnabled(false);
         } else {
-            setAddressFromLocation(garden.getGpsLatitude(), garden.getGpsLongitude());
+            // setAddressFromLocation(garden.getGpsLatitude(), garden.getGpsLongitude());
+            editTextLocality.setText(garden.getLocality());
+            editTextLocality.setEnabled(true);
         }
+
+        editTextWeatherLocality.setText(garden.getLocalityForecast());
+        fetchWeatherAsync();
 
     };
 
@@ -204,10 +213,7 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
                 garden.setCountryCode(address.getCountryCode());
                 // force forecast locality when geolocalized
                 garden.setLocalityForecast(address.getLocality());
-                editTextLocality.setText(garden.getLocality());
-                editTextLocality.setEnabled(true);
-                editTextWeatherLocality.setText(garden.getLocalityForecast());
-                fetchWeatherAsync();
+
             } else {
                 // sinon on affiche un message d'erreur
                 // ((TextView) findViewById(R.id.editTextLocality)).setHint(getResources().getString(
@@ -229,6 +235,10 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
                     if (currentWeatherLocalization == null) {
                         currentWeatherLocalization = garden.getLocalityForecast();
                     }
+                    buttonWeatherState.setActionImage(R.drawable.bt_update);
+                    Animation rotation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
+                    rotation.setRepeatCount(Animation.INFINITE);
+                    buttonWeatherState.startAnimation(rotation);
                 };
 
                 @Override
@@ -238,19 +248,14 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
                 }
 
                 protected void onPostExecute(Short result) {
+                    buttonWeatherState.clearAnimation();
                     if (result.shortValue() == PrevimeteoWeatherProvider.WEATHER_OK) {
-                        // buttonWeatherState.setBackgroundColor(getResources().getColor(R.color.action_ok_color));
-                        buttonWeatherState.setState(ActionState.NORMAL);
                         buttonWeatherState.setActionImage(R.drawable.weather_connected);
-                        // buttonWeatherState.setImageDrawable(getResources().getDrawable(R.drawable.weather_connected));
-                        garden.setLocalityForecast(currentWeatherLocalization);
+                        buttonWeatherState.setState(ActionState.NORMAL);
                     } else {
-                        // buttonWeatherState.setBackgroundColor(getResources().getColor(R.color.action_error_color));
-                        buttonWeatherState.setState(ActionState.CRITICAL);
                         buttonWeatherState.setActionImage(R.drawable.weather_disconnected);
-                        // buttonWeatherState.setImageDrawable(getResources().getDrawable(R.drawable.weather_disconnected));
+                        buttonWeatherState.setState(ActionState.CRITICAL);
                     }
-                    buttonWeatherState.invalidate();
                 };
             }.execute();
     }
@@ -317,36 +322,9 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
         }
     }
 
-    // @Override
-    // public boolean onCreateOptionsMenu(Menu menu) {
-    //
-    // MenuInflater inflater = getMenuInflater();
-    // inflater.inflate(R.menu.menu_profilecreation, menu);
-    //
-    // return super.onCreateOptionsMenu(menu);
-    // }
-
-    // @Override
-    // public boolean onOptionsItemSelected(MenuItem item) {
-    // // Handle item selection
-    // switch (item.getItemId()) {
-    // case R.id.help:
-    // Intent browserIntent = new Intent(getActivity(), WebHelpActivity.class);
-    // browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
-    // startActivity(browserIntent);
-    // return true;
-    // case R.id.localize_gaden:
-    // getPosition(true);
-    // buildProfile();
-    // return true;
-    //
-    // default:
-    // return super.onOptionsItemSelected(item);
-    // }
-    // }
-
     private boolean verifyForm() {
         garden.setName(editTextName.getText().toString());
+        garden.setLocalityForecast(editTextWeatherLocality.getText().toString());
         if (garden.getLocality() == null || "".equals(garden.getLocality())) {
             Toast.makeText(getActivity(), "Please localize your garden", Toast.LENGTH_LONG).show();
             buttonLocalize.setAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.shrink_from_bottom));
@@ -359,9 +337,9 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
             } else {
                 editTextName.setBackgroundDrawable(getResources().getDrawable(R.drawable.border_red));
             }
-
             return false;
         }
+
         return true;
     }
 

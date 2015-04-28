@@ -2,6 +2,8 @@ package org.gots.ui.fragment;
 
 import java.util.List;
 
+import javax.xml.soap.Text;
+
 import org.gots.R;
 import org.gots.garden.GardenInterface;
 import org.gots.ui.ProfileActivity;
@@ -18,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class WeatherResumeFragment extends BaseGotsFragment {
 
@@ -31,6 +34,8 @@ public class WeatherResumeFragment extends BaseGotsFragment {
 
     private WeatherWidget weatherWidget;
 
+    private TextView textError;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         weatherManager = new WeatherManager(getActivity());
@@ -42,6 +47,7 @@ public class WeatherResumeFragment extends BaseGotsFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         weatherWidgetLayout = (LinearLayout) view.findViewById(R.id.WeatherWidget);
         buttonWeatherLocality = (Button) view.findViewById(R.id.buttonWeatherLocality);
+        textError = (TextView) view.findViewById(R.id.textViewWeatherError);
         buttonWeatherLocality.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -70,18 +76,19 @@ public class WeatherResumeFragment extends BaseGotsFragment {
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
-        buttonWeatherLocality.setText(currentGarden.getLocality());
+        buttonWeatherLocality.setText(currentGarden.getLocalityForecast());
         buttonWeatherLocality.setBackgroundColor(getResources().getColor(R.color.action_ok_color));
         weatherWidget.setWeatherConditions((List<WeatherConditionInterface>) data);
         weatherWidgetLayout.removeAllViews();
         weatherWidgetLayout.addView(weatherWidget);
+        textError.setVisibility(View.GONE);
         super.onNuxeoDataRetrieved(data);
     }
 
     @Override
     protected Object retrieveNuxeoData() throws Exception {
         currentGarden = getCurrentGarden();
-        if (weatherManager.fetchWeatherForecast(null) == LocalWeatherProvider.WEATHER_OK) {
+        if (weatherManager.fetchWeatherForecast(currentGarden.getLocalityForecast()) == LocalWeatherProvider.WEATHER_OK) {
             List<WeatherConditionInterface> conditions = (List<WeatherConditionInterface>) weatherManager.getConditionSet(2);
             return conditions;
         }
@@ -93,7 +100,8 @@ public class WeatherResumeFragment extends BaseGotsFragment {
         if (isAdded()) {
             buttonWeatherLocality.setBackgroundColor(getResources().getColor(R.color.action_error_color));
             weatherWidgetLayout.removeAllViews();
-            buttonWeatherLocality.setText("Not available for this city");
+            buttonWeatherLocality.setText(getResources().getString(R.string.menu_configure));
+            textError.setVisibility(View.VISIBLE);
         }
         super.onNuxeoDataRetrieveFailed();
     }

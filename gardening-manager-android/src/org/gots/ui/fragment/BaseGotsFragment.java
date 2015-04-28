@@ -26,6 +26,9 @@ public abstract class BaseGotsFragment extends BaseNuxeoFragment {
 
     public abstract void update();
 
+    /**
+     * @return currentGarden or DefaultGarden instance if null
+     */
     protected GardenInterface getCurrentGarden() {
         try {
             currentGarden = GotsGardenManager.getInstance().initIfNew(getActivity()).getCurrentGarden();

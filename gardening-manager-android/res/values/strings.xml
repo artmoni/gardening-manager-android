@@ -54,6 +54,7 @@
     <string name="action.photo">Take a picture</string>
     <string name="action.download">Download</string>
     <string name="menu.edit">Modify</string>
+    <string name="menu.configure">Configure</string>
     <string name="allotment.action.add.message">Name your plot</string>
     <string name="allotment.description1">I select the menu button to add a plot.</string>
     <string name="allotment.description2">The plot menu, I \'performs actions on a plot. For example: I plant a seed</string>
@@ -116,6 +117,7 @@
     <string name="button.ok">OK</string>
     <string name="button.cancel">Cancel</string>
     <string name="weather.citynotfound">No weather forecast, choose a closer city</string>
+    <string name="weather.label">Weather</string>
     <string name="location.notfound">Location not found</string>
     <string name="notification.action.title">Your _SPECIE_ needs you</string>
     <string name="notification.action.content">and _NBACTIONS_ more tasks</string>

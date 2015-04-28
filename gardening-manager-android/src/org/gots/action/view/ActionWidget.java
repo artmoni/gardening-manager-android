@@ -58,11 +58,13 @@ public class ActionWidget extends LinearLayout {
         mContext = context;
         initView();
     }
+
     public ActionWidget(Context context) {
         super(context);
         mContext = context;
         initView();
     }
+
     @Override
     protected int[] onCreateDrawableState(int extraSpace) {
         final int[] drawableState = super.onCreateDrawableState(extraSpace + 4);

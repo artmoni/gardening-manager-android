@@ -45,17 +45,10 @@ public class WeatherCache {
         try {
             fileName = md5(url.toURI().toString());
             weatherXmlStream = getLocalCache(fileName);
-
-            GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-            tracker.trackEvent("Weather", "Download", url.getPath(), 0);
-            
         } catch (ObsoleteCacheException | FileNotFoundException e) {
             Log.w(TAG, "getLocalCache " + e.getMessage());
             weatherXmlStream = getRemoteFile(url);
             setLocalCache(fileName, weatherXmlStream);
-
-            GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-            tracker.trackEvent("Weather", "Download", url.getPath(), 0);
         }
         return weatherXmlStream;
     }
@@ -63,7 +56,7 @@ public class WeatherCache {
     protected InputStream getRemoteFile(URL url) throws ClientProtocolException, URISyntaxException, IOException {
         HttpClient httpclient = new DefaultHttpClient();
         HttpGet httpget = new HttpGet(url.toURI());
-        Log.d(TAG, "Get URI " + url.toURI().toString());
+        Log.d(TAG, "getRemoteFile " + url.toURI().toString());
 
         // create a response handler
         ResponseHandler<String> responseHandler = new BasicResponseHandler();
@@ -99,7 +92,7 @@ public class WeatherCache {
         if (lastModDate.get(Calendar.DAY_OF_YEAR) < today.get(Calendar.DAY_OF_YEAR))
             throw new ObsoleteCacheException();
 
-        Log.d(TAG, "Cache file " + f.getAbsolutePath());
+        Log.d(TAG, "Found cache file " + f.getAbsolutePath());
         return fileInputStream;
     }
 

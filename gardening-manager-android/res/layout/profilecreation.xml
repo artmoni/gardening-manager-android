@@ -95,7 +95,7 @@
                     style="@style/description_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Weather" />
+                    android:text="@string/weather.label" />
 
                 <EditText
                     android:id="@+id/editTextGardenWeatherLocality"

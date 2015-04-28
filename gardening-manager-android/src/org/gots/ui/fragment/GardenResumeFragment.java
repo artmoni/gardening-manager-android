@@ -56,6 +56,8 @@ public class GardenResumeFragment extends BaseGotsFragment {
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
+        if (!isAdded())
+            return;
         GardenInterface gardenInterface = (GardenInterface) data;
         gardenName.setText(gardenInterface.getName());
         gardenLocality.setText(gardenInterface.getLocality());

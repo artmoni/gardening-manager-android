@@ -25,7 +25,8 @@
         android:text="@string/dashboard.weather.name"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <!-- <TextView
+    <!--
+         <TextView
         android:id="@+id/textViewWeatherDescription"
         style="@style/seed_family_description"
         android:layout_width="fill_parent"
@@ -35,7 +36,8 @@
         android:layout_alignParentRight="true"
         android:layout_toRightOf="@+id/textViewWeather"
         android:text="City"
-        android:textStyle="italic" /> -->
+        android:textStyle="italic" />
+    -->
 
     <LinearLayout
         android:id="@+id/WeatherWidget"
@@ -47,11 +49,24 @@
         android:orientation="horizontal" >
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/textViewWeatherError"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/imageViewTop"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:text="@string/weather.citynotfound"
+        android:visibility="gone" >
+    </TextView>
+
     <Button
         android:id="@+id/buttonWeatherLocality"
         style="@style/buttonGreenDashboard"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:text="City" android:layout_marginTop="5dp"/>
+        android:layout_marginTop="5dp"
+        android:text="City" />
 
 </RelativeLayout>

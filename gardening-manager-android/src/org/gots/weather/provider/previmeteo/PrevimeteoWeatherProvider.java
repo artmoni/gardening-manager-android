@@ -32,6 +32,8 @@ import org.gots.weather.provider.local.LocalWeatherProvider;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+
 import android.content.Context;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -62,8 +64,7 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
         String weatherURL;
 
         weatherURL = "http://api.previmeteo.com/" + gotsPreferences.getWeatherApiKey() + "/ig/api?weather="
-                + forecastLocality + "," + mContext.getResources().getConfiguration().locale.getCountry()
-                + "&hl=fr";
+                + forecastLocality + "," + mContext.getResources().getConfiguration().locale.getCountry() + "&hl=fr";
 
         queryString = weatherURL;
 
@@ -109,15 +110,21 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
                 /* Our Handler now provides the parsed weather-data to us. */
                 weatherSet = gwh.getWeatherSet();
             }
+            GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+            tracker.trackEvent("Weather", "Match", gotsPreferences.getWeatherApiKey(), 0);
         } catch (HttpResponseException httpResponseException) {
             Log.w(TAG,
-                    "PrevimeteoErrorHandler has return an HttpResponseException" + httpResponseException.getMessage());
+                    "PrevimeteoErrorHandler has return an HttpResponseException " + httpResponseException.getMessage());
             if (httpResponseException.getStatusCode() == 400) {
+                GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+                tracker.trackEvent("Weather", httpResponseException.getMessage(), gotsPreferences.getWeatherApiKey(), 0);
                 return WEATHER_ERROR_CITY_UNKNOWN;
             }
         } catch (Exception e) {
             Log.e(TAG, "PrevimeteoErrorHandler has return an error (" + error.getMessage() + ") " + e.getMessage());
             iserror = true;
+            GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+            tracker.trackEvent("Weather", e.getMessage(), gotsPreferences.getWeatherApiKey(), 0);
             return WEATHER_ERROR_UNKNOWN;
         }
         return WEATHER_OK;
