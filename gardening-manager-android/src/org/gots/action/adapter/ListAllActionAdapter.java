@@ -128,6 +128,8 @@ public class ListAllActionAdapter extends BaseAdapter {
         TextView textviewActionDescription;
 
         WeatherView weatherView;
+
+        ImageView seedImage;
     }
 
     @Override
@@ -149,6 +151,7 @@ public class ListAllActionAdapter extends BaseAdapter {
             holder.switchActionStatus = (Switch) ll.findViewById(R.id.switchSeedActionStatus);
             holder.textviewActionDescription = (TextView) ll.findViewById(R.id.IdSeedActionDescription);
             holder.weatherView = (WeatherView) ll.findViewById(R.id.idWeatherView);
+            holder.seedImage = (ImageView) ll.findViewById(R.id.imageviewPhoto);
 
             ll.setTag(holder);
         } else
@@ -160,28 +163,31 @@ public class ListAllActionAdapter extends BaseAdapter {
             SimpleDateFormat dateFormat = new SimpleDateFormat(" dd/MM/yyyy", Locale.FRANCE);
 
             if (currentAction.getDateActionDone() == null) {
+                holder.switchActionStatus.setChecked(false);
 
                 Calendar rightNow = Calendar.getInstance();
                 rightNow.setTime(seed.getDateSowing());
                 rightNow.add(Calendar.DAY_OF_YEAR, currentAction.getDuration());
                 holder.textviewActionDate.setText(dateFormat.format(rightNow.getTime()));
 
-//                ll.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        showNoticeDialog(position, seed, currentAction, v);
-//                    }
-//                });
-                
-                holder.switchActionStatus.setOnCheckedChangeListener(new  CompoundButton.OnCheckedChangeListener() {
+                holder.switchActionStatus.setOnClickListener(new View.OnClickListener() {
 
                     @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (isChecked)
-                            showNoticeDialog(position, seed, currentAction, buttonView);
-
+                    public void onClick(View v) {
+                        if (v instanceof CompoundButton) {
+                            showNoticeDialog(position, seed, currentAction, (CompoundButton) v);
+                        }
                     }
                 });
+                // setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                //
+                // @Override
+                // public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // if (isChecked)
+                // showNoticeDialog(position, seed, currentAction, buttonView);
+                //
+                // }
+                // });
 
                 holder.weatherView.setVisibility(View.GONE);
 
@@ -201,8 +207,7 @@ public class ListAllActionAdapter extends BaseAdapter {
                     } else
                         holder.textviewActionDescription.setVisibility(View.GONE);
 
-                    WeatherView weatherView = (WeatherView) ll.findViewById(R.id.idWeatherView);
-                    weatherView.setWeather(manager.getCondition(rightNow.getTime()));
+                    holder.weatherView.setWeather(manager.getCondition(rightNow.getTime()));
 
                     currentAction.setState(ActionState.NORMAL);
 
@@ -214,15 +219,14 @@ public class ListAllActionAdapter extends BaseAdapter {
                             // Bitmap imageBitmap = getThumbnail(
                             // mContext.getContentResolver(),
                             // imgFile.getAbsolutePath());
-                            ImageView seedImage = (ImageView) ll.findViewById(R.id.imageviewPhoto);
                             int padding = (THUMBNAIL_WIDTH - imageBitmap.getWidth()) / 2;
-                            seedImage.setPadding(padding, 0, padding, 0);
-                            seedImage.setImageBitmap(imageBitmap);
+                            holder.seedImage.setPadding(padding, 0, padding, 0);
+                            holder.seedImage.setImageBitmap(imageBitmap);
 
-                            seedImage.setVisibility(View.VISIBLE);
-                            weatherView.setVisibility(View.GONE);
+                            holder.seedImage.setVisibility(View.VISIBLE);
+                            holder.weatherView.setVisibility(View.GONE);
 
-                            seedImage.setOnClickListener(new View.OnClickListener() {
+                            holder.seedImage.setOnClickListener(new View.OnClickListener() {
 
                                 @Override
                                 public void onClick(View v) {
@@ -235,7 +239,6 @@ public class ListAllActionAdapter extends BaseAdapter {
                         } catch (Exception e) {
                             Log.e(getClass().getName(),
                                     "imgFile.getPath()=" + imgFile.getPath() + " - " + e.getMessage());
-                            // ll.setVisibility(View.GONE);
                         }
 
                     }
@@ -243,10 +246,8 @@ public class ListAllActionAdapter extends BaseAdapter {
             }
             holder.actionWidget.setState(currentAction.getState());
             holder.actionWidget.setAction(currentAction);
-            // ll.invalidate();
 
         }
-        // }
         return ll;
     }
 
@@ -316,7 +317,8 @@ public class ListAllActionAdapter extends BaseAdapter {
         }
     }
 
-    private void showNoticeDialog(final int position, final GrowingSeed seed, final ActionOnSeed currentAction, final CompoundButton switchButton) {
+    private void showNoticeDialog(final int position, final GrowingSeed seed, final ActionOnSeed currentAction,
+            final CompoundButton switchButton) {
 
         final EditText userinput = new EditText(mContext.getApplicationContext());
         final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
@@ -352,7 +354,7 @@ public class ListAllActionAdapter extends BaseAdapter {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                         switchButton.setChecked(false);
-                        
+
                     }
                 });
         // AlertDialog dialog = builder.create();
