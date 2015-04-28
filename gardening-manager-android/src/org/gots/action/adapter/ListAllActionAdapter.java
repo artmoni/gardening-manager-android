@@ -164,7 +164,7 @@ public class ListAllActionAdapter extends BaseAdapter {
 
             if (currentAction.getDateActionDone() == null) {
                 holder.switchActionStatus.setChecked(false);
-
+                holder.switchActionStatus.setEnabled(true);
                 Calendar rightNow = Calendar.getInstance();
                 rightNow.setTime(seed.getDateSowing());
                 rightNow.add(Calendar.DAY_OF_YEAR, currentAction.getDuration());
