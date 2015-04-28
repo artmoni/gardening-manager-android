@@ -837,7 +837,8 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         displayTutorialFragment();
         displayIncredibleFragment();
         displayWeatherFragment();
-        displayWorkflowFragment();
+        if (gotsPrefs.isConnectedToServer())
+            displayWorkflowFragment();
         if (gotsPrefs.getParrotToken() != null)
             displaySensorFragment();
         super.onResume();
