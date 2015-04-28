@@ -89,7 +89,7 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
 
     private TextView editTextLocality;
 
-    private ImageView buttonLocalize;
+    private ActionWidget buttonLocalize;
 
     private TextView editTextWeatherLocality;
 
@@ -119,7 +119,8 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
         editTextName = (TextView) view.findViewById(R.id.editTextGardenName);
         editTextLocality = (TextView) view.findViewById(R.id.editTextGardenLocality);
         editTextWeatherLocality = (TextView) view.findViewById(R.id.editTextGardenWeatherLocality);
-        buttonLocalize = (ImageView) view.findViewById(R.id.imageViewLocalize);
+        buttonLocalize = (ActionWidget) view.findViewById(R.id.imageViewLocalize);
+        buttonLocalize.setActionImage(R.drawable.bt_localize_garden);
         buttonLocalize.setOnClickListener(this);
         buttonWeatherState = (ActionWidget) view.findViewById(R.id.imageViewWeatherState);
         buttonWeatherState.setOnClickListener(this);
@@ -182,6 +183,11 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
 
         Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        
+        buttonLocalize.setActionImage(R.drawable.bt_update);
+        Animation rotation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
+        rotation.setRepeatCount(Animation.INFINITE);
+        buttonLocalize.startAnimation(rotation);
 
         if (mlocManager == null)
             return;
@@ -213,8 +219,9 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
                 garden.setCountryCode(address.getCountryCode());
                 // force forecast locality when geolocalized
                 garden.setLocalityForecast(address.getLocality());
-
+                buttonLocalize.setState(ActionState.NORMAL);
             } else {
+                buttonLocalize.setState(ActionState.CRITICAL);
                 // sinon on affiche un message d'erreur
                 // ((TextView) findViewById(R.id.editTextLocality)).setHint(getResources().getString(
                 // R.string.location_notfound));
@@ -256,6 +263,7 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
                         buttonWeatherState.setActionImage(R.drawable.weather_disconnected);
                         buttonWeatherState.setState(ActionState.CRITICAL);
                     }
+                    buttonWeatherState.invalidate();
                 };
             }.execute();
     }
@@ -266,6 +274,10 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
         // this.location = location;
         setAddressFromLocation(location.getLatitude(), location.getLongitude());
         mlocManager.removeUpdates(this);
+        
+        buttonLocalize.clearAnimation();
+        buttonLocalize.setActionImage(R.drawable.bt_localize_garden);
+
     }
 
     @Override

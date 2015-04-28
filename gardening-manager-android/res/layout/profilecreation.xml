@@ -78,12 +78,10 @@
                     <requestFocus />
                 </EditText>
 
-                <ImageView
+                <org.gots.action.view.ActionWidget
                     android:id="@+id/imageViewLocalize"
                     android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/action_selector"
-                    android:src="@drawable/bt_localize_garden" />
+                    android:layout_height="30dp" />
             </TableRow>
 
             <TableRow
@@ -112,7 +110,6 @@
                     android:id="@+id/imageViewWeatherState"
                     android:layout_width="30dp"
                     android:layout_height="30dp" />
-
             </TableRow>
 
             <RadioGroup

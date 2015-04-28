@@ -18,6 +18,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -115,8 +116,7 @@ public class ActionWidget extends LinearLayout {
                 "org.gots:drawable/action_" + mAction.getName(), null, null);
 
         if (actionImageRessource != 0) {
-            Drawable drawable = mContext.getResources().getDrawable(actionImageRessource);
-            actionImage.setImageDrawable(drawable);
+            setActionImage(actionImageRessource);
         }
         // int sdk = android.os.Build.VERSION.SDK_INT;
         // if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {

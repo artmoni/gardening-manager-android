@@ -3,7 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/action_selector"
-    android:padding="5dp" >
+    android:padding="5dp" android:duplicateParentState="true">
 
     <ImageView
         android:id="@+id/idSeedActionImage"
