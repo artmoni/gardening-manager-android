@@ -158,8 +158,10 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
     }
 
     protected void initView() {
-        getSupportActionBar().setTitle(mSeed.getSpecie());
-
+        if (mSeed.getSpecie() != null)
+            getSupportActionBar().setTitle(mSeed.getSpecie());
+        else 
+            getSupportActionBar().setTitle(mSeed.getFamily());
         if (mSeed.getDateSowing() != null) {
             TextView textDateSowing = (TextView) findViewById(R.id.idTextSowingDate);
             textDateSowing.setText(new SimpleDateFormat().format(mSeed.getDateSowing()));
