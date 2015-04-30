@@ -35,7 +35,7 @@ public class NuxeoSeedConverter {
             seed.setUUID(document.getId());
             return seed;
     }
-
+//    SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState = "project" AND vendorseed:description_harvest!="null" AND vendorseed:description_harvest!=""  AND vendorseed:description_growth!="null" AND vendorseed:description_growth!="" AND vendorseed:description_diseases!="null" AND vendorseed:description_diseases!="" AND vendorseed:description_cultivation!="null" AND vendorseed:description_cultivation!=""
     public static Document convert(String parentPath, BaseSeedInterface seed) {
         Document doc = new Document(parentPath, seed.getName(), "VendorSeed");
         doc.set("dc:title", seed.getVariety());

@@ -85,6 +85,12 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             Documents docs = service.query("SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState = \"approved\""
                     + QUERY_FILTER_LANGUAGE + QUERY_FILTER_SECTION, null, new String[] { "dc:modified DESC" }, "*",
                     page, pageSize, cacheParam);
+            if (docs.size() < pageSize) {
+                docs.addAll(service.query("SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState = \"project\""
+                        + QUERY_FILTER_LANGUAGE, null, new String[] { "dc:modified DESC" }, "*", page, pageSize,
+                        cacheParam));
+
+            }
             for (Document document : docs) {
                 BaseSeedInterface seed = NuxeoSeedConverter.convert(document);
                 Blob likeStatus = service.getLikeStatus(document);

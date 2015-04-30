@@ -67,7 +67,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             // for (Document actionDoc :
             // documentMgr.getChildren(getActionsFolder(seed, documentMgr))) {
             Document garden = documentMgr.getDocument(new IdRef(
-                    GotsGardenManager.getInstance().getCurrentGarden().getUUID()));
+                    GotsGardenManager.getInstance().initIfNew(mContext).getCurrentGarden().getUUID()));
             Documents actionDocs = documentMgr.query(
                     "SELECT * FROM Action WHERE ecm:currentLifeCycleState != \"deleted\" AND  ecm:path startswith '"
                             + garden.getPath() + "' AND action:dateactiondone is null", null,
