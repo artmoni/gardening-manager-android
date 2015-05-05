@@ -76,12 +76,14 @@ public class WeatherResumeFragment extends BaseGotsFragment {
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
-        buttonWeatherLocality.setText(currentGarden.getLocalityForecast());
-        buttonWeatherLocality.setBackgroundColor(getResources().getColor(R.color.action_ok_color));
-        weatherWidget.setWeatherConditions((List<WeatherConditionInterface>) data);
-        weatherWidgetLayout.removeAllViews();
-        weatherWidgetLayout.addView(weatherWidget);
-        textError.setVisibility(View.GONE);
+        if (isAdded()) {
+            buttonWeatherLocality.setText(currentGarden.getLocalityForecast());
+            buttonWeatherLocality.setBackgroundColor(getResources().getColor(R.color.action_ok_color));
+            weatherWidget.setWeatherConditions((List<WeatherConditionInterface>) data);
+            weatherWidgetLayout.removeAllViews();
+            weatherWidgetLayout.addView(weatherWidget);
+            textError.setVisibility(View.GONE);
+        }
         super.onNuxeoDataRetrieved(data);
     }
 
