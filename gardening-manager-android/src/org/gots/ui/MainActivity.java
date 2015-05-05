@@ -30,7 +30,6 @@ import org.gots.provider.SeedsContentProvider;
 import org.gots.provider.SensorContentProvider;
 import org.gots.provider.WeatherContentProvider;
 import org.gots.sensor.fragment.AlertSensorResumeFragment;
-import org.gots.sensor.fragment.SensorResumeFragment;
 import org.gots.sensor.fragment.SensorResumeFragment.OnSensorClickListener;
 import org.gots.sensor.parrot.ParrotLocation;
 import org.gots.sensor.parrot.ParrotLocationsStatus;
@@ -833,7 +832,11 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
 
     @Override
     protected void onResume() {
-
+        displayDrawerMenuActionsCounter();
+        displayDrawerMenuAllotmentCounter();
+        displayDrawerMenuCatalogCounter();
+        displayDrawerMenuProfileCounter();
+        displayDrawerMenuSensorCounter();
         displayTutorialFragment();
         displayIncredibleFragment();
         displayWeatherFragment();
