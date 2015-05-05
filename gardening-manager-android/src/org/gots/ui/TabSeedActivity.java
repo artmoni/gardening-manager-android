@@ -571,15 +571,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
         bundle.putInt(GOTS_GROWINGSEED_ID, mSeed.getSeedId());
         bundle.putInt("org.gots.growingseed.id", mSeed.getGrowingSeedId());
 
-        // ********************** Tab actions **********************
-        if (mSeed.getGrowingSeedId() > 0) {
-            if (fragmentListAction == null) {
-                fragmentListAction = Fragment.instantiate(getApplicationContext(), ActionsListFragment.class.getName(),
-                        bundle);
-                fragments.add(fragmentListAction);
-                addTab(fragmentListAction, getResources().getString(R.string.seed_description_tabmenu_actions));
-            }
-        }
+       
 
         // ********************** Seed description **********************
         if (fragmentDescription == null) {
@@ -589,6 +581,15 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
             addTab(fragmentDescription, getResources().getString(R.string.seed_description_tabmenu_detail));
         } else
             fragmentDescription.update();
+        // ********************** Tab actions **********************
+        if (mSeed.getGrowingSeedId() > 0) {
+            if (fragmentListAction == null) {
+                fragmentListAction = Fragment.instantiate(getApplicationContext(), ActionsListFragment.class.getName(),
+                        bundle);
+                fragments.add(fragmentListAction);
+                addTab(fragmentListAction, getResources().getString(R.string.seed_description_tabmenu_actions));
+            }
+        }
         // ********************** Tab Wikipedia**********************
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
