@@ -852,6 +852,9 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
             protected JSONArray doInBackground(Void... params) {
                 NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(getApplicationContext());
                 Blob tasks = nuxeoWorkflowProvider.getUserTaskPageProvider();
+                if (tasks == null) {
+                    return null;
+                }
                 try {
                     BufferedReader r = new BufferedReader(new InputStreamReader(tasks.getStream()));
                     StringBuilder total = new StringBuilder();

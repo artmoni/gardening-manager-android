@@ -29,6 +29,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class SeedWidget extends RelativeLayout {
     Context mContext;
@@ -62,13 +63,17 @@ public class SeedWidget extends RelativeLayout {
 
         setTag(mSeed);
 
-        GotsProgressBar v1 = (GotsProgressBar) findViewById(R.id.idSeedGotsProgressBar);
+        GotsProgressBar progressBar = (GotsProgressBar) findViewById(R.id.idSeedGotsProgressBar);
+        TextView textProgress = (TextView) findViewById(R.id.textProgress);
         if (mSeed.getDateSowing() != null) {
             long progressTime = Calendar.getInstance().getTimeInMillis() - mSeed.getDateSowing().getTime();
-            v1.setMax(mSeed.getDurationMin());
-            v1.setProgress(new Long(progressTime / 86400000).intValue());
+            progressBar.setMax(mSeed.getDurationMin());
+            final int progressValue = new Long(progressTime / 86400000).intValue();
+            progressBar.setProgress(progressValue);
+            textProgress.setText(String.valueOf(progressValue) + " %");
         } else {
-            v1.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
+            textProgress.setVisibility(View.INVISIBLE);
         }
 
         new AsyncTask<Void, Void, Bitmap>() {
