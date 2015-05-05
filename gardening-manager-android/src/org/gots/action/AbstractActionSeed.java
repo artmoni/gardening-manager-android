@@ -59,7 +59,6 @@ public abstract class AbstractActionSeed extends AbstractAction implements Actio
         setDateActionDone(Calendar.getInstance().getTime());
         seed.getActionToDo().remove(this);
         seed.getActionDone().add(this);
-//        setActionSeedId(seed.getSeedId());
         actionSeedManager.doAction(this, seed);
 
         GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();

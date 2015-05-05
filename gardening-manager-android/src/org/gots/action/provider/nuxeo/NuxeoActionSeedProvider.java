@@ -44,7 +44,7 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.os.Environment;
 import android.util.Log;
-
+ 
 public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
 
     protected static final String TAG = "NuxeoActionSeedProvider";

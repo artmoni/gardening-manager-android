@@ -218,7 +218,7 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
     public ActionOnSeed doAction(ActionOnSeed action, GrowingSeed seed) {
         ActionOnSeed mAction;
         // ContentValues values = getContentValues(action, seed);
-        if (action.getActionSeedId() >= 0)
+        if (action.getId() >= 0)
             // rowid = bdd.update(DatabaseHelper.ACTIONSEEDS_TABLE_NAME, values, DatabaseHelper.ACTIONSEED_ID + "="
             // + action.getActionSeedId(), null);
             mAction = update(seed, action);

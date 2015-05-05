@@ -323,7 +323,7 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
             transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
             transactionTutorial.addToBackStack(null);
             editorFragment.setAllotment(allotment);
-            transactionTutorial.add(R.id.idFragmentAllotmentList, editorFragment).commit();
+            transactionTutorial.add(R.id.idFragmentAllotmentList, editorFragment).commitAllowingStateLoss();
         } else
             Toast.makeText(getApplicationContext(), "Only one editor at a time", Toast.LENGTH_SHORT).show();
     }
