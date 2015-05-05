@@ -77,19 +77,20 @@ public class SeedWidgetLong extends LinearLayout {
         if (mSeed == null)
             return;
 
+        View familyBackground = (View) findViewById(R.id.idSeedFamilyBackground);
         int familyImageRessource = 0;
         if (mSeed.getFamily() != null)
             familyImageRessource = getResources().getIdentifier(
                     "org.gots:drawable/family_" + mSeed.getFamily().toLowerCase(), null, null);
 
         if (familyImageRessource != 0)
-            setBackgroundResource(familyImageRessource);
+            familyBackground.setBackgroundResource(familyImageRessource);
         else {
             int sdk = android.os.Build.VERSION.SDK_INT;
             if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.family_unknown));
+                familyBackground.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.family_unknown));
             } else {
-                setBackground(mContext.getResources().getDrawable(R.drawable.family_unknown));
+                familyBackground.setBackground(mContext.getResources().getDrawable(R.drawable.family_unknown));
             }
         }
 
@@ -110,6 +111,11 @@ public class SeedWidgetLong extends LinearLayout {
         PlanningWidget planningHarvest = (PlanningWidget) findViewById(R.id.IdSeedHarvestPlanning);
         planningHarvest.setAdapter(new PlanningHarvestAdapter(mSeed));
 
+        ImageView state = (ImageView) findViewById(R.id.imageStateValidation);
+        if ("approved".equals(mSeed.getState()))
+            state.setVisibility(View.VISIBLE);
+        else
+            state.setVisibility(View.GONE);
         LinearLayout stock = (LinearLayout) findViewById(R.id.idSeedStock);
         stock.removeAllViews();
         for (int i = 0; i < mSeed.getNbSachet(); i++) {
@@ -188,7 +194,6 @@ public class SeedWidgetLong extends LinearLayout {
                         }
                         mSeed.setLikeStatus(result);
                         displayLikeStatus(result);
-                       
 
                     };
                 }.execute();

@@ -92,18 +92,24 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
             }
             for (Document document : docs) {
-                BaseSeedInterface seed = NuxeoSeedConverter.convert(document);
-                Blob likeStatus = service.getLikeStatus(document);
-                LikeStatus likes = NuxeoSeedConverter.getLikeStatus(likeStatus);
-                if (seed != null) {
-                    seed.setLikeStatus(likes);
-                    remoteVendorSeeds.add(seed);
-                    Log.i(TAG, seed.toString());
-                } else {
-                    Log.w(TAG, "Nuxeo Seed conversion problem " + document.getTitle() + "- " + document.getId());
+                try {
+                    BaseSeedInterface seed = NuxeoSeedConverter.convert(document);
+                    Blob likeStatus = service.getLikeStatus(document);
+                    LikeStatus likes = NuxeoSeedConverter.getLikeStatus(likeStatus);
+                    if (seed != null) {
+                        seed.setLikeStatus(likes);
+                        remoteVendorSeeds.add(seed);
+                        Log.i(TAG, seed.toString());
+                    } else {
+                        Log.w(TAG, "Nuxeo Seed conversion problem " + document.getTitle() + "- " + document.getId());
+                    }
+                    downloadImageAsync(service, seed);
+                } catch (NumberFormatException formatException) {
+                    Log.w(TAG,
+                            formatException.getMessage() + " for Document " + document.getTitle() + " - "
+                                    + document.getId());
                 }
 
-                downloadImageAsync(service, seed);
             }
             myVendorSeeds = synchronize(super.getVendorSeeds(force, page, pageSize), remoteVendorSeeds);
         } catch (Exception e) {
@@ -123,7 +129,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 BaseSeedInterface seed = params[0];
                 FileBlob image = null;
                 imageFile = new File(gotsPrefs.getGotsExternalFileDir(), seed.getVariety().toLowerCase().replaceAll(
-                        "\\s", ""));
+                        "\\s", "").replaceAll(" ", ""));
                 if (!imageFile.exists()) {
                     try {
                         image = service.getBlob(new DocRef(seed.getUUID()));
