@@ -229,7 +229,7 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
     };
 
     @Override
-    public void onSeedClick(BaseSeedInterface seed) {
+    public void onSeedClick(final BaseSeedInterface seed) {
         if (vendorListFragment != null) {
             FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
             transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
@@ -237,10 +237,19 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
         }
 
         if (seed != null) {
-            SowingAction action = new SowingAction(getApplicationContext());
-            action.execute(currentAllotment, (GrowingSeed) seed);
-            allotmentListFragment.update();
-            // sendBroadcast(new Intent(BroadCastMessages.ALLOTMENT_EVENT));
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    SowingAction action = new SowingAction(getApplicationContext());
+                    action.execute(currentAllotment, (GrowingSeed) seed);
+                    return null;
+                }
+
+                protected void onPostExecute(Void result) {
+                    allotmentListFragment.update();
+                };
+            }.execute();
+
         }
 
     }
@@ -312,9 +321,12 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
     }
 
     protected void displayAllotmentsFragment() {
-        FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
-        transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
-        transactionTutorial.replace(R.id.idFragmentAllotmentList, allotmentListFragment).commit();
+        if (!allotmentListFragment.isAdded()) {
+            FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
+            transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
+            transactionTutorial.replace(R.id.idFragmentAllotmentList, allotmentListFragment).commit();
+        } else
+            allotmentListFragment.update();
     }
 
     protected void displayEditorFragment(BaseAllotmentInterface allotment) {

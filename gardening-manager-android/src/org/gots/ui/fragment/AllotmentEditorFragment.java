@@ -70,8 +70,8 @@ public class AllotmentEditorFragment extends BaseGotsFragment {
                             return allotmentManager.createAllotment(allotment);
                         }
 
-                        protected void onPostExecute(BaseAllotmentInterface result) {
-                            mCallback.onAllotmentCreated(allotment);
+                        protected void onPostExecute(BaseAllotmentInterface newAllotment) {
+                            mCallback.onAllotmentCreated(newAllotment);
                         };
 
                     }.execute();
