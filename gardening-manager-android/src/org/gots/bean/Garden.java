@@ -164,7 +164,7 @@ public class Garden implements GardenInterface {
 
     @Override
     public String toString() {
-        String gardenString = "#" + getId() + " UUID[" + getUUID() + "]" + getName() + " / " + getLocality() + "\n";
+        String gardenString = "#" + getId() + " --" + getLocality() + " -- " + "UUID[" + getUUID() + "]\n";
         return gardenString;
     }
 
@@ -196,12 +196,5 @@ public class Garden implements GardenInterface {
     @Override
     public String getLocalityForecast() {
         return localityForecast != null ? localityForecast : getLocality();
-    }
-
-    @Override
-    public boolean equals(Object garden) {
-        if (garden instanceof Garden && garden != null && ((Garden) garden).getId() == getId())
-            return true;
-        return false;
     }
 }

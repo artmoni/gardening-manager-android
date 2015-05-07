@@ -126,7 +126,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
 
     private boolean doubleBackToExitPressedOnce;
 
-    // private GardenInterface currentGarden;
+    private GardenInterface currentGarden;
 
     private WorkflowResumeFragment workflowResumeFragment;
 
@@ -135,7 +135,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboard_drawer);
         // AppRater.app_launched(getApplicationContext());
-        // currentGarden = getCurrentGarden();
+        currentGarden = getCurrentGarden();
         mTitle = mDrawerTitle = getTitle();
 
         // load slide menu items
@@ -162,14 +162,17 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                                   // accessibility
         ) {
             public void onDrawerClosed(View view) {
-                displayTitle();
+                if (currentGarden != null)
+                    getSupportActionBar().setTitle(currentGarden.getName());
+                else
+                    getSupportActionBar().setTitle(getResources().getString(R.string.garden_create));
                 // calling onPrepareOptionsMenu() to show action bar icons
                 supportInvalidateOptionsMenu();
             }
 
             public void onDrawerOpened(View drawerView) {
-                if (getCurrentGarden() != null)
-                    getSupportActionBar().setTitle(getCurrentGarden().getName());
+                if (currentGarden != null)
+                    getSupportActionBar().setTitle(currentGarden.getName());
                 // calling onPrepareOptionsMenu() to hide action bar icons
                 supportInvalidateOptionsMenu();
             }
@@ -187,7 +190,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
             public void onItemSelected(AdapterView<?> arg0, View arg1, int itemPosition, long arg3) {
                 if (myGardens == null || myGardens.size() < itemPosition)
                     return;
-                if (getCurrentGarden() != null && !getCurrentGarden().equals(myGardens.get(itemPosition)))
+                if (currentGarden != null && currentGarden.getId() != myGardens.get(itemPosition).getId())
                     gardenManager.setCurrentGarden(myGardens.get(itemPosition));
 
                 // startService(weatherIntent);
@@ -252,34 +255,34 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         // *************************
         NavDrawerItem navDrawerItem = new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1));
         navDrawerItems.add(navDrawerItem);
-        // displayDrawerMenuCatalogCounter();
+        displayDrawerMenuCatalogCounter();
 
         // *************************
         // Allotments
         // *************************
         navDrawerItem = new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1));
         navDrawerItems.add(navDrawerItem);
-        // displayDrawerMenuAllotmentCounter();
+        displayDrawerMenuAllotmentCounter();
         // *************************
         // Actions
         // *************************
         navDrawerItem = new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1));
         navDrawerItems.add(navDrawerItem);
-        // displayDrawerMenuActionsCounter();
+        displayDrawerMenuActionsCounter();
 
         // *************************
         // Profiles
         // *************************
         navDrawerItem = new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1));
         navDrawerItems.add(navDrawerItem);
-        // displayDrawerMenuProfileCounter();
+        displayDrawerMenuProfileCounter();
 
         // *************************
         // Sensors
         // *************************
         navDrawerItem = new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1));
         navDrawerItems.add(navDrawerItem);
-        // displayDrawerMenuSensorCounter();
+        displayDrawerMenuSensorCounter();
 
         // *************************
         // Premium
@@ -359,13 +362,13 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                 }
             }
             if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())) {
-                displaySpinnerGarden();
+                displayGardenMenu();
                 invalidateOptionsMenu();
             } else if (BroadCastMessages.SEED_DISPLAYLIST.equals(intent.getAction())) {
                 displayDrawerMenuCatalogCounter();
             } else if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
                 displayDrawerMenuProfileCounter();
-                displaySpinnerGarden();
+                displayGardenMenu();
             } else if (BroadCastMessages.ACTION_EVENT.equals(intent.getAction())) {
                 displayDrawerMenuActionsCounter();
             } else if (BroadCastMessages.ALLOTMENT_EVENT.equals(intent.getAction())) {
@@ -571,7 +574,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
-        displaySpinnerGarden();
+        displayGardenMenu();
         displayUserAvatar();
 
         if (LAUNCHER_ACTION.equals(getIntent().getAction())) {
@@ -587,12 +590,12 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
     }
 
     protected void displayUserAvatar() {
-        if (getCurrentGarden() == null) {
+        if (currentGarden == null) {
             return;
         }
 
         if (gotsPrefs.isConnectedToServer()) {
-            if (getCurrentGarden().isIncredibleEdible())
+            if (currentGarden.isIncredibleEdible())
                 ((ImageView) findViewById(R.id.imageAvatar)).setImageDrawable(getResources().getDrawable(
                         R.drawable.ic_garden_incredible));
             else {
@@ -663,6 +666,20 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
             startActivity(i);
         }
 
+        Fragment fragment = new ActionsResumeFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.idFragmentActions, fragment).commit();
+
+        final Fragment weatherResumeFragment = new WeatherResumeFragment();
+        FragmentTransaction transactionWeather = fragmentManager.beginTransaction();
+        transactionWeather.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
+        transactionWeather.replace(R.id.idFragmentWeather, weatherResumeFragment).commit();
+
+        Fragment catalogueResumeFragment = new CatalogResumeFragment();
+        FragmentTransaction transactionCatalogue = fragmentManager.beginTransaction();
+        transactionCatalogue.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
+        transactionCatalogue.replace(R.id.idFragmentCatalog, catalogueResumeFragment).commit();
+
         // update selected item and title, then close the drawer
         if (position <= navMenuTitles.length) {
             mDrawerList.setItemChecked(position, true);
@@ -672,19 +689,6 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         }
     }
 
-    protected void displayCatalogueFragment() {
-
-        CatalogResumeFragment catalogueResumeFragment = (CatalogResumeFragment) getSupportFragmentManager().findFragmentById(
-                R.id.idFragmentCatalog);
-        if (catalogueResumeFragment == null) {
-            catalogueResumeFragment = new CatalogResumeFragment();
-            FragmentTransaction transactionCatalogue = getSupportFragmentManager().beginTransaction();
-            transactionCatalogue.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
-            transactionCatalogue.replace(R.id.idFragmentCatalog, catalogueResumeFragment).commit();
-        } else
-            catalogueResumeFragment.update();
-    }
-
     protected void displayPremiumDialog() {
         FragmentManager fm = getSupportFragmentManager();
         GotsBillingDialog editNameDialog = new GotsBillingDialog();
@@ -692,7 +696,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         editNameDialog.show(fm, "fragment_edit_name");
     }
 
-    protected void displaySpinnerGarden() {
+    protected void displayGardenMenu() {
 
         new AsyncTask<Void, Void, GardenInterface>() {
 
@@ -700,10 +704,10 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
             protected GardenInterface doInBackground(Void... params) {
                 myGardens = gardenManager.getMyGardens(false);
 
-                if (getCurrentGarden() == null)
+                if (currentGarden == null)
                     myGardens = gardenManager.getMyGardens(true);
 
-                return getCurrentGarden();
+                return currentGarden;
             }
 
             protected void onPostExecute(GardenInterface currentGarden) {
@@ -713,8 +717,8 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                         gardenManager.setCurrentGarden(myGardens.get(0));
                         // sendBroadcast(new Intent(BroadCastMessages.GARDEN_CURRENT_CHANGED));
                     } else {
-                        // Intent intent = newGarden Intent(getApplicationContext(), ProfileCreationActivity.class);
-                        // startActivity(intentGarden);
+                        // Intent intent = new Intent(getApplicationContext(), ProfileCreationActivity.class);
+                        // startActivity(intent);
                         // AccountManager accountManager = AccountManager.get(getApplicationContext()
                         // );
                         // accountManager.addAccount(accountType, authTokenType, requiredFeatures, addAccountOptions,
@@ -828,12 +832,12 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
 
     @Override
     protected void onResume() {
+<<<<<<< HEAD
+        super.onResume();
         displayTitle();
         displaySpinnerGarden();
         refreshAllCounter();
         refreshAllFragments();
-
-        super.onResume();
     }
 
     @Override
@@ -841,43 +845,30 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         // displayDrawerMenu();
         Toast.makeText(getApplicationContext(), "Loading garden " + garden.getName() + " please wait.",
                 Toast.LENGTH_LONG).show();
+        displayTitle();
         displayUserAvatar();
         displaySpinnerGarden();
         refreshAllCounter();
         refreshAllFragments();
-        displayTitle();
 
     }
 
     protected void refreshAllCounter() {
+=======
+>>>>>>> parent of fdb2a24... wip refresh all the mainactivity when garden has changed
         displayDrawerMenuActionsCounter();
         displayDrawerMenuAllotmentCounter();
         displayDrawerMenuCatalogCounter();
         displayDrawerMenuProfileCounter();
         displayDrawerMenuSensorCounter();
-    }
-
-    protected void refreshAllFragments() {
         displayTutorialFragment();
         displayIncredibleFragment();
         displayWeatherFragment();
-        displayActionsFragment();
-        displayCatalogueFragment();
         if (gotsPrefs.isConnectedToServer())
             displayWorkflowFragment();
         if (gotsPrefs.getParrotToken() != null)
             displaySensorFragment();
-    }
-
-    protected void displayActionsFragment() {
-        ActionsResumeFragment actionFragment = (ActionsResumeFragment) getSupportFragmentManager().findFragmentById(
-                R.id.idFragmentActions);
-        if (actionFragment == null) {
-            actionFragment = new ActionsResumeFragment();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.idFragmentActions, actionFragment).commit();
-        } else
-            actionFragment.update();
+        super.onResume();
     }
 
     private void displayWorkflowFragment() {
@@ -925,16 +916,22 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
     }
 
     protected void displayWeatherFragment() {
+        if (getSupportFragmentManager().findFragmentById(R.id.idFragmentWeather) != null) {
+            WeatherResumeFragment fragment = (WeatherResumeFragment) getSupportFragmentManager().findFragmentById(
+                    R.id.idFragmentWeather);
+            fragment.update();
+        }
+    }
 
-        WeatherResumeFragment weatherResumeFragment = (WeatherResumeFragment) getSupportFragmentManager().findFragmentById(
-                R.id.idFragmentWeather);
-        if (weatherResumeFragment == null) {
-            weatherResumeFragment = new WeatherResumeFragment();
-            FragmentTransaction transactionWeather = getSupportFragmentManager().beginTransaction();
-            transactionWeather.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
-            transactionWeather.replace(R.id.idFragmentWeather, weatherResumeFragment).commit();
-        } else
-            weatherResumeFragment.update();
+    @Override
+    public void onCurrentGardenChanged(GardenInterface garden) {
+        currentGarden = garden;
+        displayDrawerMenu();
+        displayUserAvatar();
+        displayGardenMenu();
+        displayTutorialFragment();
+        displayIncredibleFragment();
+        displayWeatherFragment();
     }
 
     private void displayTutorialFragment() {
@@ -952,7 +949,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
 
     private void displayIncredibleFragment() {
 
-        if (getCurrentGarden() == null || getCurrentGarden().isIncredibleEdible() == false)
+        if (currentGarden == null || currentGarden.isIncredibleEdible() == false)
             findViewById(R.id.idFragmentIncredible).setVisibility(View.GONE);
         else {
             findViewById(R.id.idFragmentIncredible).setVisibility(View.VISIBLE);
@@ -1006,7 +1003,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         displayTutorialFragment();
         Toast.makeText(getApplicationContext(), getResources().getString(R.string.tutorial_finished), Toast.LENGTH_LONG).show();
         GoogleAnalyticsTracker analyticsTracker = GoogleAnalyticsTracker.getInstance();
-        analyticsTracker.trackEvent("Tutorial", "Finished", getCurrentGarden().getName(), 0);
+        analyticsTracker.trackEvent("Tutorial", "Finished", currentGarden.getName(), 0);
     }
 
     @Override
@@ -1023,13 +1020,6 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
     @Override
     public void OnSensorClick(ParrotLocation locationSensor) {
         startActivity(new Intent(this, SensorActivity.class));
-    }
-
-    protected void displayTitle() {
-        if (getCurrentGarden() != null)
-            getSupportActionBar().setTitle(getCurrentGarden().getName());
-        else
-            getSupportActionBar().setTitle(getResources().getString(R.string.garden_create));
     }
 
 }
