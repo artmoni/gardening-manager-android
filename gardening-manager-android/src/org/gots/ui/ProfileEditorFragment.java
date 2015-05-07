@@ -183,7 +183,7 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
 
         Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        
+
         buttonLocalize.setActionImage(R.drawable.bt_update);
         Animation rotation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
         rotation.setRepeatCount(Animation.INFINITE);
@@ -274,7 +274,7 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
         // this.location = location;
         setAddressFromLocation(location.getLatitude(), location.getLongitude());
         mlocManager.removeUpdates(this);
-        
+
         buttonLocalize.clearAnimation();
         buttonLocalize.setActionImage(R.drawable.bt_localize_garden);
 
@@ -455,8 +455,7 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
 
     @Override
     public void update() {
-        // TODO Auto-generated method stub
-
+        runAsyncDataRetrieval();
     }
 
     @Override
