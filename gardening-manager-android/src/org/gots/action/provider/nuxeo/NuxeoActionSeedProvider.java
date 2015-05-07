@@ -44,14 +44,14 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.os.Environment;
 import android.util.Log;
- 
+
 public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
 
     protected static final String TAG = "NuxeoActionSeedProvider";
 
     public NuxeoActionSeedProvider(Context mContext) {
         super(mContext);
-        NuxeoManager.getInstance().initIfNew(mContext); 
+        NuxeoManager.getInstance().initIfNew(mContext);
     }
 
     protected AndroidAutomationClient getNuxeoClient() {
@@ -160,11 +160,11 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         try {
             documentMgr.update(new DocRef(action.getUUID()), properties);
         } catch (Exception e) {
-            Log.w(TAG, e.getMessage()+ " - trying to create the action before updating");
+            Log.w(TAG, e.getMessage() + " - trying to create the action before updating");
             action = insertAction(seed, action);
-            try{
+            try {
                 documentMgr.update(new DocRef(action.getUUID()), properties);
-            }catch(Exception e2){
+            } catch (Exception e2) {
                 Log.e(TAG, e.getMessage(), e2);
             }
         }
