@@ -258,7 +258,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
 
         FragmentTransaction transactionCatalogue = getSupportFragmentManager().beginTransaction();
         transactionCatalogue.setCustomAnimations(R.anim.abc_fade_in, R.anim.push_right_out);
-//        transactionCatalogue.addToBackStack(null);
+        // transactionCatalogue.addToBackStack(null);
 
         if (findViewById(R.id.IdGardenProfileContent) != null) {
             if (!editable) {
@@ -297,14 +297,14 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
     }
 
     protected void openContentResumeFragment() {
-        Fragment gardenResumeFragment = getSupportFragmentManager().findFragmentById(R.id.IdGardenProfileResume);
-        if (findViewById(R.id.IdGardenProfileResume) != null) {
+        GardenResumeFragment gardenResumeFragment =  (GardenResumeFragment) getSupportFragmentManager().findFragmentById(R.id.IdGardenProfileResume);
+        if (gardenResumeFragment == null){
+            gardenResumeFragment = new GardenResumeFragment();
             FragmentTransaction transactionCatalogue = getSupportFragmentManager().beginTransaction();
             transactionCatalogue.setCustomAnimations(R.anim.abc_fade_in, R.anim.push_right_out);
-//            transactionCatalogue.addToBackStack(null);
-
-            gardenResumeFragment = new GardenResumeFragment();
             transactionCatalogue.replace(R.id.IdGardenProfileResume, gardenResumeFragment).commit();
         }
+        else
+            gardenResumeFragment.update();
     }
 }

@@ -78,4 +78,5 @@ public class GardenResumeFragment extends BaseGotsFragment {
     protected boolean requireAsyncDataRetrieval() {
         return true;
     }
+    
 }
