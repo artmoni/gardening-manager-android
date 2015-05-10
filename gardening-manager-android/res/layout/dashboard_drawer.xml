@@ -127,8 +127,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/imageAvatar"
                 android:layout_toRightOf="@+id/imageAvatar"
-                android:alpha="0.9"
-                android:background="@color/text_color_dark" />
+                 />
 
             <ImageView
                 android:id="@+id/bt_share"
@@ -151,7 +150,7 @@
             android:choiceMode="singleChoice"
             android:divider="@color/white"
             android:dividerHeight="1dp"
-            android:listSelector="@drawable/list_selector" />
+            android:listSelector="@drawable/selector_drawer" />
     </RelativeLayout>
 
 </android.support.v4.widget.DrawerLayout>

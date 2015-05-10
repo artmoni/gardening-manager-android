@@ -301,8 +301,8 @@
         <item name="android:textAllCaps">true</item>
         <item name="android:padding">2dp</item>
         <item name="android:textColor">@color/green_light</item>
-        <item name="android:background">@color/text_color_dark</item>
-        <item name="background">@color/text_color_dark</item>
+        <item name="android:background">@drawable/garden_selector</item>
+        <item name="background">@drawable/garden_selector</item>
     </style>
 
     <style name="SpinnerGarden" parent="Widget.AppCompat.DropDownItem.Spinner">
@@ -313,6 +313,7 @@
         <item name="android:textColor">@color/text_color_dark</item>
         <item name="android:background">@color/green_light</item>
         <item name="background">@color/green_light</item>
+        <item name="android:alpha">0.9</item>
     </style>
 
     <style name="Custom.TextAppearance.Sherlock.Widget.TextView.SpinnerItem" parent="Widget.AppCompat.DropDownItem.Spinner">

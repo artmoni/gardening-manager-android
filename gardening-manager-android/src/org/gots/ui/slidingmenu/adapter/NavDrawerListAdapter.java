@@ -62,7 +62,7 @@ public class NavDrawerListAdapter extends BaseAdapter {
             // hide the counter view
             txtCount.setVisibility(View.GONE);
         }
-
+        convertView.setBackground(context.getResources().getDrawable(R.drawable.selector_drawer));
         return convertView;
     }
 
