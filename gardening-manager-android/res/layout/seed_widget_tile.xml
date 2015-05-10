@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="100dp"
-    android:layout_height="120dp" >
+    android:layout_height="120dp"
+    android:background="@drawable/selector_background_white" >
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
-        android:background="@color/white"
         android:orientation="horizontal" >
 
         <org.gots.seed.view.SeedWidget
@@ -101,14 +101,16 @@
             android:orientation="horizontal" >
         </LinearLayout>
 
-       <!--  <ImageView
+        <!--
+             <ImageView
             android:id="@+id/imageStateValidation"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentRight="true"
             android:layout_alignTop="@+id/linearLayout1"
             android:layout_marginRight="-8dp"
-            android:src="@drawable/workflow_validation_green" /> -->
+            android:src="@drawable/workflow_validation_green" />
+        -->
     </RelativeLayout>
 
     <ImageView
