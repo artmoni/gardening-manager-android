@@ -157,9 +157,10 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
             for (int i = 0; i < providers.size(); i++) {
 
                 lastKnownLocation = mlocManager.getLastKnownLocation(providers.get(i));
-                if (lastKnownLocation != null) {
-                    lastKnownLocation.getTime();
+                if (lastKnownLocation != null && lastKnownLocation.getLatitude() != 0
+                        && lastKnownLocation.getLongitude() != 0) {
                     Log.d(TAG, "Provider: " + providers.get(i) + ", time=" + lastKnownLocation.getTime());
+                    break;
                 }
             }
 
@@ -170,10 +171,10 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
                 editTextLocality.setEnabled(false);
         } else {
             // setAddressFromLocation(garden.getGpsLatitude(), garden.getGpsLongitude());
-            editTextLocality.setText(garden.getLocality());
             editTextLocality.setEnabled(true);
         }
 
+        editTextLocality.setText(garden.getLocality());
         editTextWeatherLocality.setText(garden.getLocalityForecast());
         fetchWeatherAsync();
 

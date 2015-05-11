@@ -164,8 +164,15 @@ public class Garden implements GardenInterface {
 
     @Override
     public String toString() {
-        String gardenString = "#" + getId() + " --" + getLocality() + " -- " + "UUID[" + getUUID() + "]\n";
-        return gardenString;
+        StringBuilder builder = new StringBuilder();
+        builder.append("#" + getId());
+        builder.append(" ");
+        builder.append("UUID[" + getUUID() + "]");
+        builder.append(" ");
+        builder.append(getName());
+        builder.append(" / ");
+        builder.append(getLocality());
+        return builder.toString();
     }
 
     @Override

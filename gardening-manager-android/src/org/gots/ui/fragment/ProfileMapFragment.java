@@ -155,9 +155,11 @@ public class ProfileMapFragment extends BaseGotsFragment implements OnMapLongCli
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
-        List<GardenInterface> myGardens = (List<GardenInterface>) data;
-        displayGardensOnMap(myGardens);
-        focusGardenOnMap(getCurrentGarden());
+        if (isAdded()) {
+            List<GardenInterface> myGardens = (List<GardenInterface>) data;
+            displayGardensOnMap(myGardens);
+            focusGardenOnMap(getCurrentGarden());
+        }
         super.onNuxeoDataRetrieved(data);
     }
 

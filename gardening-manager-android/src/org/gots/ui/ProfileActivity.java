@@ -59,8 +59,6 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setTitle(R.string.dashboard_profile_name);
 
-        this.registerReceiver(gardenBroadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_EVENT));
-
         try {
             runAsyncDataRetrieval();
         } catch (Exception e) {
@@ -137,9 +135,15 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onResume() {
+        registerReceiver(gardenBroadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_EVENT));
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
         unregisterReceiver(gardenBroadcastReceiver);
-        super.onDestroy();
+        super.onPause();
     }
 
     @Override
@@ -165,6 +169,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
             return true;
 
         case R.id.new_garden:
+
             openContentFragment(getCurrentGarden(), false);
             return true;
         case R.id.edit_garden:

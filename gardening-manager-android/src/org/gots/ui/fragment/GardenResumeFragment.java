@@ -33,25 +33,15 @@ public class GardenResumeFragment extends BaseGotsFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         gardenManager = GotsGardenManager.getInstance().initIfNew(getActivity());
+        gardenType = (ImageView) view.findViewById(R.id.textViewGardenTypeDescription);
+        gardenName = (TextView) view.findViewById(R.id.textViewGardenName);
+        gardenLocality = (TextView) view.findViewById(R.id.buttonGardenLocality);
         super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
     public void update() {
         runAsyncDataRetrieval();
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-    }
-
-    @Override
-    protected void onNuxeoDataRetrievalStarted() {
-        gardenType = (ImageView) getView().findViewById(R.id.textViewGardenTypeDescription);
-        gardenName = (TextView) getView().findViewById(R.id.textViewGardenName);
-        gardenLocality = (TextView) getView().findViewById(R.id.buttonGardenLocality);
-        super.onNuxeoDataRetrievalStarted();
     }
 
     @Override

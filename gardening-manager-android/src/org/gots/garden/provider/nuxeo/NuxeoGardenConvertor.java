@@ -8,6 +8,8 @@ import android.util.Log;
 
 public class NuxeoGardenConvertor {
 
+    private static final String TAG = NuxeoGardenConvertor.class.getName();
+
     public static GardenInterface convert(Document gardenWorkspace) {
         GardenInterface garden = new Garden();
 
@@ -18,21 +20,21 @@ public class NuxeoGardenConvertor {
             if (altitude != null)
                 garden.setGpsAltitude(altitude);
         } catch (NumberFormatException exception) {
-            Log.w("NuxeoGarden", garden + " has not a correct altitude");
+            Log.w(TAG, garden + " has not a correct altitude");
         }
         try {
             Double latitude = gardenWorkspace.getDouble("garden:latitude");
             if (latitude != null)
                 garden.setGpsLatitude(latitude);
         } catch (NumberFormatException exception) {
-            Log.w("NuxeoGarden", garden + " has not a correct latitude");
+            Log.w(TAG, garden + " has not a correct latitude");
         }
         try {
             Double longitude = gardenWorkspace.getDouble("garden:longitude");
             if (longitude != null)
                 garden.setGpsLongitude(longitude);
         } catch (NumberFormatException exception) {
-            Log.w("NuxeoGarden", garden + " has not a correct longitude");
+            Log.w(TAG, garden + " has not a correct longitude");
         }
         garden.setLocality(gardenWorkspace.getString("garden:city"));
         if ("null".equals(garden.getLocality()))
@@ -58,7 +60,7 @@ public class NuxeoGardenConvertor {
         doc.set("location:country", garden.getCountryName());
         doc.set("location:countrycode", garden.getCountryCode());
         doc.set("garden:incredibleedible", String.valueOf(garden.isIncredibleEdible()));
-        doc.set("garden:forecast_locality",garden.getLocalityForecast());
+        doc.set("garden:forecast_locality", garden.getLocalityForecast());
         return doc;
     }
 }

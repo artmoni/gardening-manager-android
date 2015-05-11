@@ -366,8 +366,6 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
             } else if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
                 displayDrawerMenuProfileCounter();
                 displaySpinnerGarden();
-            } else if (BroadCastMessages.ACTION_EVENT.equals(intent.getAction())) {
-                displayDrawerMenuActionsCounter();
             } else if (BroadCastMessages.ALLOTMENT_EVENT.equals(intent.getAction())) {
                 displayDrawerMenuAllotmentCounter();
             }
@@ -707,19 +705,10 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
             }
 
             protected void onPostExecute(GardenInterface currentGarden) {
-                if (currentGarden == null)
+                if (currentGarden == null && myGardens.size() > 0) {
+                    gardenManager.setCurrentGarden(myGardens.get(0));
+                }
 
-                    if (myGardens.size() > 0) {
-                        gardenManager.setCurrentGarden(myGardens.get(0));
-                        // sendBroadcast(new Intent(BroadCastMessages.GARDEN_CURRENT_CHANGED));
-                    } else {
-                        // Intent intent = newGarden Intent(getApplicationContext(), ProfileCreationActivity.class);
-                        // startActivity(intentGarden);
-                        // AccountManager accountManager = AccountManager.get(getApplicationContext()
-                        // );
-                        // accountManager.addAccount(accountType, authTokenType, requiredFeatures, addAccountOptions,
-                        // activity, callback, handler)
-                    }
                 int selectedGardenIndex = 0;
                 String[] dropdownValues = new String[myGardens.size()];
                 for (int i = 0; i < myGardens.size(); i++) {
@@ -829,10 +818,10 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
     @Override
     protected void onResume() {
         super.onResume();
-        displayTitle();
-        displaySpinnerGarden();
+        // displayTitle();
+        // displaySpinnerGarden();
         refreshAllCounter();
-        refreshAllFragments();
+        // refreshAllFragments();
     }
 
     @Override
@@ -966,7 +955,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         new AsyncTask<Void, Void, Boolean>() {
             boolean isStatusAlert = false;
 
-            private Fragment sensorResumeFragment;
+            private AlertSensorResumeFragment sensorResumeFragment;
 
             @Override
             protected Boolean doInBackground(Void... params) {
@@ -983,16 +972,23 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
 
             @Override
             protected void onPostExecute(Boolean result) {
+                sensorResumeFragment = (AlertSensorResumeFragment) getSupportFragmentManager().findFragmentById(
+                        R.id.idFragmentSensor);
+                FragmentTransaction sensorTransaction = getSupportFragmentManager().beginTransaction();
                 if (result.booleanValue()) {
-                    sensorResumeFragment = new AlertSensorResumeFragment();
-                    FragmentTransaction sensorTransaction = getSupportFragmentManager().beginTransaction();
-                    sensorTransaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
-                    sensorTransaction.replace(R.id.idFragmentSensor, sensorResumeFragment).commit();
-                } else if (sensorResumeFragment != null) {
-                    FragmentTransaction sensorTransaction = getSupportFragmentManager().beginTransaction();
-                    sensorTransaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
-                    sensorTransaction.remove(sensorResumeFragment).commit();
+                    if (sensorResumeFragment == null) {
+                        sensorResumeFragment = new AlertSensorResumeFragment();
 
+                        sensorTransaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
+                        sensorTransaction.replace(R.id.idFragmentSensor, sensorResumeFragment).commit();
+                    } else {
+                        sensorResumeFragment.update();
+                    }
+                } else if (sensorResumeFragment != null) {
+                    // FragmentTransaction sensorTransaction = getSupportFragmentManager().beginTransaction();
+                    // sensorTransaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
+                    // sensorTransaction.remove(sensorResumeFragment).commit();
+                    sensorTransaction.remove(sensorResumeFragment).commit();
                 }
                 super.onPostExecute(result);
             }

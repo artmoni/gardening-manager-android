@@ -17,7 +17,7 @@ public class GotsContext extends NuxeoContext {
     }
 
     public static GotsContext get(Context gotsContextProvider) {
-        if (gotsContextProvider.getApplicationContext() instanceof GotsContextProvider) {
+        if (gotsContextProvider != null && gotsContextProvider.getApplicationContext() instanceof GotsContextProvider) {
             GotsContextProvider nxApp = (GotsContextProvider) gotsContextProvider.getApplicationContext();
             return nxApp.getGotsContext();
         } else {
