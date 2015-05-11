@@ -8,6 +8,7 @@ import org.gots.broadcast.BroadCastMessages;
 import org.gots.exception.GardenNotFoundException;
 import org.gots.garden.GardenInterface;
 import org.gots.weather.WeatherConditionInterface;
+import org.gots.weather.exception.UnknownWeatherException;
 import org.gots.weather.provider.local.LocalWeatherProvider;
 import org.gots.weather.provider.nuxeo.NuxeoWeatherProvider;
 import org.gots.weather.provider.previmeteo.PrevimeteoWeatherProvider;
@@ -54,9 +55,12 @@ public class WeatherSyncAdapter extends GotsSyncAdapter {
             nuxeoProvider = new NuxeoWeatherProvider(getContext(), currentGarden);
             List<WeatherConditionInterface> allCondition = nuxeoProvider.getAllWeatherForecast();
             for (WeatherConditionInterface weatherCondition : allCondition) {
-                WeatherConditionInterface localCondition = localProvider.getCondition(weatherCondition.getDate());
-                if (localCondition.getSummary() == null && weatherCondition.getSummary() != null)
-                    localProvider.insertCondition(weatherCondition);
+                WeatherConditionInterface localCondition;
+                try {
+                    localCondition = localProvider.getCondition(weatherCondition.getDate());
+                } catch (UnknownWeatherException e) {
+                    localCondition = localProvider.insertCondition(weatherCondition);
+                }
             }
         }
 
@@ -66,23 +70,37 @@ public class WeatherSyncAdapter extends GotsSyncAdapter {
             weatherProvider = new NuxeoWeatherProvider(getContext(), currentGarden);
         else
             weatherProvider = new LocalWeatherProvider(getContext());
+
         WeatherProvider previmeteoWeatherProvider = new PrevimeteoWeatherProvider(getContext());
         if (previmeteoWeatherProvider.fetchWeatherForecast(currentGarden.getLocalityForecast()) == LocalWeatherProvider.WEATHER_OK) {
             for (int forecastDay = 0; forecastDay < 4; forecastDay++) {
                 Calendar cal = Calendar.getInstance();
                 cal.add(Calendar.DAY_OF_YEAR, forecastDay);
 
-                WeatherConditionInterface previmeteoCondition = previmeteoWeatherProvider.getCondition(cal.getTime());
+                WeatherConditionInterface previmeteoCondition;
+                try {
+                    previmeteoCondition = previmeteoWeatherProvider.getCondition(cal.getTime());
+                    WeatherConditionInterface storedCondition = weatherProvider.getCondition(cal.getTime());
 
-                WeatherConditionInterface localCondition = weatherProvider.getCondition(cal.getTime());
-                if (previmeteoCondition != null && previmeteoCondition.getSummary() != null) {
-                    if (localCondition != null && localCondition.getId() > 0) {
-                        previmeteoCondition.setId(localCondition.getId());
-                        previmeteoCondition = weatherProvider.updateCondition(previmeteoCondition, cal.getTime());
+                    if (storedCondition != null && storedCondition.getId() > 0) {
+                        previmeteoCondition.setId(storedCondition.getId());
+                        previmeteoCondition = weatherProvider.updateCondition(previmeteoCondition);
                     } else {
                         previmeteoCondition = weatherProvider.insertCondition(previmeteoCondition);
                     }
+                } catch (UnknownWeatherException e) {
+                    Log.w(TAG, e.getMessage(), e);
                 }
+
+                // WeatherConditionInterface localCondition = weatherProvider.getCondition(cal.getTime());
+                // if (previmeteoCondition != null && previmeteoCondition.getSummary() != null) {
+                // if (localCondition != null && localCondition.getId() > 0) {
+                // previmeteoCondition.setId(localCondition.getId());
+                // previmeteoCondition = weatherProvider.updateCondition(previmeteoCondition, cal.getTime());
+                // } else {
+                // previmeteoCondition = weatherProvider.insertCondition(previmeteoCondition);
+                // }
+                // }
             }
         } else {
             Log.e(TAG, "Weather cannot be found for city " + currentGarden.getLocality());

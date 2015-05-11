@@ -978,9 +978,11 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                 if (result.booleanValue()) {
                     if (sensorResumeFragment == null) {
                         sensorResumeFragment = new AlertSensorResumeFragment();
-
                         sensorTransaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
-                        sensorTransaction.replace(R.id.idFragmentSensor, sensorResumeFragment).commit();
+                        sensorTransaction.replace(R.id.idFragmentSensor, sensorResumeFragment);
+                        if (sensorResumeFragment.isAdded())
+                            sensorTransaction.commit();
+
                     } else {
                         sensorResumeFragment.update();
                     }

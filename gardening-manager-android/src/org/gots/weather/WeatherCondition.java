@@ -193,12 +193,16 @@ public class WeatherCondition implements WeatherConditionInterface {
 
     @Override
     public String toString() {
-        String txt = new String();
-        txt = txt.concat("[" + getDayofYear() + "]");
-        txt = txt.concat(getSummary());
-        txt = txt.concat(" - ");
-        txt = txt.concat(getTempCelciusMin() + "/" + getTempCelciusMax());
-        return txt;
+        StringBuilder builder = new StringBuilder();
+        builder.append("#" + getId());
+        builder.append("[" + getUUID() + "]");
+        builder.append(", ");
+        builder.append("Day=" + getDayofYear());
+        builder.append(", ");
+        builder.append("Forecast=" + getSummary());
+        builder.append(", ");
+        builder.append(getTempCelciusMin() + "<Temperature<" + getTempCelciusMax());
+        return builder.toString();
     }
 
     public void setUUID(String id) {

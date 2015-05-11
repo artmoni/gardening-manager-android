@@ -38,7 +38,6 @@ public class WeatherResumeFragment extends BaseGotsFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        weatherManager = new WeatherManager(getActivity());
         weatherWidget = new WeatherWidget(getActivity(), WeatherView.FULL, null);
         return inflater.inflate(R.layout.weather_resume, null);
     }
@@ -71,7 +70,18 @@ public class WeatherResumeFragment extends BaseGotsFragment {
 
     @Override
     protected void onNuxeoDataRetrievalStarted() {
+        weatherManager = new WeatherManager(getActivity());
         super.onNuxeoDataRetrievalStarted();
+    }
+
+    @Override
+    protected Object retrieveNuxeoData() throws Exception {
+        currentGarden = getCurrentGarden();
+        if (weatherManager.fetchWeatherForecast(currentGarden.getLocalityForecast()) == LocalWeatherProvider.WEATHER_OK) {
+            List<WeatherConditionInterface> conditions = (List<WeatherConditionInterface>) weatherManager.getConditionSet(2);
+            return conditions;
+        }
+        return null;
     }
 
     @Override
@@ -85,16 +95,6 @@ public class WeatherResumeFragment extends BaseGotsFragment {
             textError.setVisibility(View.GONE);
         }
         super.onNuxeoDataRetrieved(data);
-    }
-
-    @Override
-    protected Object retrieveNuxeoData() throws Exception {
-        currentGarden = getCurrentGarden();
-        if (weatherManager.fetchWeatherForecast(currentGarden.getLocalityForecast()) == LocalWeatherProvider.WEATHER_OK) {
-            List<WeatherConditionInterface> conditions = (List<WeatherConditionInterface>) weatherManager.getConditionSet(2);
-            return conditions;
-        }
-        return null;
     }
 
     @Override

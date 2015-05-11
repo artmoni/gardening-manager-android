@@ -27,6 +27,7 @@ import org.gots.preferences.GotsPreferences;
 import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.WeatherSet;
+import org.gots.weather.exception.UnknownWeatherException;
 import org.gots.weather.provider.WeatherCache;
 import org.gots.weather.provider.local.LocalWeatherProvider;
 import org.xml.sax.InputSource;
@@ -136,7 +137,7 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
      * (non-Javadoc)
      * @see org.gots.weather.provider.previmeteo.WeatherProvider#getCondition(java.util.Date)
      */
-    public WeatherConditionInterface getCondition(Date requestedDay) {
+    public WeatherConditionInterface getCondition(Date requestedDay) throws UnknownWeatherException {
         Calendar requestCalendar = Calendar.getInstance();
         requestCalendar.setTime(requestedDay);
 
@@ -159,27 +160,30 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
         } catch (Exception e) {
             weatherCondition = super.getCondition(requestedDay);
         }
-        weatherCondition.setDate(requestCalendar.getTime());
-        weatherCondition.setDayofYear(requestCalendar.get(Calendar.DAY_OF_YEAR));
+        if (weatherCondition != null) {
+            weatherCondition.setDate(requestCalendar.getTime());
+            weatherCondition.setDayofYear(requestCalendar.get(Calendar.DAY_OF_YEAR));
+        }
 
         return weatherCondition;
     }
 
-    public WeatherConditionInterface updateCondition(WeatherConditionInterface weatherCondition, Date day) {
-        WeatherConditionInterface conditionInterface = null;
-        Calendar conditionDate = Calendar.getInstance();
-        conditionDate.setTime(day);
-
-        if (weatherCondition == null)
-            return null;
-
-        weatherCondition.setDate(day);
-        weatherCondition.setDayofYear(conditionDate.get(Calendar.DAY_OF_YEAR));
-
-        if (weatherCondition == null || weatherCondition.getSummary() == null)
-            conditionInterface = super.insertCondition(weatherCondition);
-        else
-            conditionInterface = super.updateCondition(weatherCondition, day);
-        return conditionInterface;
+    public WeatherConditionInterface updateCondition(WeatherConditionInterface weatherCondition) {
+//        WeatherConditionInterface conditionInterface = null;
+//        Calendar conditionDate = Calendar.getInstance();
+//        conditionDate.setTime(day);
+//
+//        if (weatherCondition == null)
+//            return null;
+//
+//        weatherCondition.setDate(day);
+//        weatherCondition.setDayofYear(conditionDate.get(Calendar.DAY_OF_YEAR));
+//
+//        if (weatherCondition == null || weatherCondition.getSummary() == null)
+//            conditionInterface = super.insertCondition(weatherCondition);
+//        else
+//            conditionInterface = super.updateCondition(weatherCondition);
+        Log.d(TAG, "updateCondition() is not implemented here");
+        return null;
     }
 }

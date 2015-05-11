@@ -9,6 +9,7 @@ import org.gots.garden.GardenInterface;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
+import org.gots.weather.exception.UnknownWeatherException;
 import org.gots.weather.provider.local.LocalWeatherProvider;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
@@ -139,7 +140,7 @@ public class NuxeoWeatherProvider extends LocalWeatherProvider {
     // }
 
     @Override
-    public WeatherConditionInterface getCondition(Date requestedDay) {
+    public WeatherConditionInterface getCondition(Date requestedDay) throws UnknownWeatherException {
         WeatherConditionInterface condition = null;
         Calendar weatherDate = Calendar.getInstance();
         weatherDate.setTime(requestedDay);
@@ -165,7 +166,7 @@ public class NuxeoWeatherProvider extends LocalWeatherProvider {
 
             if (docs.size() > 0) {
                 condition = convert(docs.get(0));
-                condition = super.updateCondition(condition, weatherDate.getTime());
+                condition = super.updateCondition(condition);
             }
         } catch (Exception e) {
             Log.e(TAG, "getWeatherByDayofyear (" + requestedDay.toString() + ")" + e.getMessage(), e);

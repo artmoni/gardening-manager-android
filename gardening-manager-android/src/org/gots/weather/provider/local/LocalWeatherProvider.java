@@ -17,6 +17,7 @@ import org.gots.DatabaseHelper;
 import org.gots.utils.GotsDBHelper;
 import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
+import org.gots.weather.exception.UnknownWeatherException;
 import org.gots.weather.provider.previmeteo.WeatherProvider;
 
 import android.content.ContentValues;
@@ -97,8 +98,8 @@ public class LocalWeatherProvider extends GotsDBHelper implements WeatherProvide
     }
 
     @Override
-    public WeatherConditionInterface getCondition(Date requestedDay) {
-        WeatherConditionInterface weatherCondition = new WeatherCondition();
+    public WeatherConditionInterface getCondition(Date requestedDay) throws UnknownWeatherException {
+        WeatherConditionInterface weatherCondition = null;
         Cursor cursor = null;
         Calendar cal = Calendar.getInstance();
         cal.setTime(requestedDay);
@@ -110,7 +111,8 @@ public class LocalWeatherProvider extends GotsDBHelper implements WeatherProvide
 
             if (cursor.moveToFirst()) {
                 weatherCondition = cursorToWeather(cursor);
-            }
+            }else
+                throw new UnknownWeatherException();
         } finally {
             if (cursor != null)
                 cursor.close();
@@ -119,7 +121,7 @@ public class LocalWeatherProvider extends GotsDBHelper implements WeatherProvide
     }
 
     @Override
-    public WeatherConditionInterface updateCondition(WeatherConditionInterface weatherCondition, Date day) {
+    public WeatherConditionInterface updateCondition(WeatherConditionInterface weatherCondition) {
         ContentValues values = getWeatherContentValues(weatherCondition);
 
         bdd.update(DatabaseHelper.WEATHER_TABLE_NAME, values,

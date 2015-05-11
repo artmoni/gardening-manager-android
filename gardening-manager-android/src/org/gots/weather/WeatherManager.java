@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.gots.context.GotsContext;
 import org.gots.preferences.GotsPreferences;
+import org.gots.weather.exception.UnknownWeatherException;
 import org.gots.weather.provider.local.LocalWeatherProvider;
 import org.gots.weather.provider.previmeteo.PrevimeteoWeatherProvider;
 import org.gots.weather.provider.previmeteo.WeatherProvider;
@@ -38,6 +39,8 @@ public class WeatherManager implements WeatherProvider {
 
     private GotsPreferences gotsPrefs;
 
+    private LocalWeatherProvider localProvider;
+
     private GotsContext getGotsContext() {
         return GotsContext.get(mContext);
     }
@@ -47,7 +50,7 @@ public class WeatherManager implements WeatherProvider {
         gotsPrefs = (GotsPreferences) getGotsContext().getServerConfig();
 
         provider = new PrevimeteoWeatherProvider(mContext);
-        // provider = new LocalWeatherProvider(mContext);
+        localProvider = new LocalWeatherProvider(mContext);
     }
 
     @Override
@@ -95,9 +98,13 @@ public class WeatherManager implements WeatherProvider {
     public WeatherConditionInterface getCondition(Date weatherDate) {
         WeatherConditionInterface conditionInterface;
         try {
-            conditionInterface = provider.getCondition(weatherDate);
-        } catch (Exception e) {
-            conditionInterface = new WeatherCondition(weatherDate);
+            conditionInterface = localProvider.getCondition(weatherDate);
+        } catch (UnknownWeatherException e) {
+            try {
+                conditionInterface = provider.getCondition(weatherDate);
+            } catch (UnknownWeatherException e2) {
+                conditionInterface = new WeatherCondition(weatherDate);
+            }
         }
 
         return conditionInterface;
@@ -118,8 +125,8 @@ public class WeatherManager implements WeatherProvider {
     }
 
     @Override
-    public WeatherConditionInterface updateCondition(WeatherConditionInterface condition, Date day) {
-        return provider.updateCondition(condition, day);
+    public WeatherConditionInterface updateCondition(WeatherConditionInterface condition) {
+        return provider.updateCondition(condition);
     }
 
     @Override
