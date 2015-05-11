@@ -22,7 +22,7 @@ import org.gots.seed.GrowingSeed;
 import org.gots.seed.view.QuickSeedActionBuilder;
 import org.gots.seed.view.SeedWidget;
 import org.gots.ui.AllotmentListFragment.OnAllotmentSelected;
-import org.gots.ui.VendorListFragment.OnSeedSelected;
+import org.gots.ui.CatalogueFragment.OnSeedSelected;
 import org.gots.ui.fragment.AllotmentEditorFragment;
 import org.gots.ui.fragment.AllotmentEditorFragment.OnAllotmentListener;
 
@@ -48,7 +48,7 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
 
     private AllotmentListFragment allotmentListFragment;
 
-    private VendorListFragment vendorListFragment;
+    private CatalogueFragment vendorListFragment;
 
     private AllotmentEditorFragment editorFragment;
 
@@ -77,7 +77,7 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
         }
 
         // setProgressAction(new Intent(this, AllotmentNotificationService.class));
-        vendorListFragment = new VendorListFragment();
+        vendorListFragment = new VendorCatalogueFragment();
         allotmentListFragment = new AllotmentListFragment();
         editorFragment = new AllotmentEditorFragment();
     }
@@ -352,7 +352,7 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
     }
 
     @Override
-    public void onSeedLongClick(VendorListFragment fragment, BaseSeedInterface seed) {
+    public void onSeedLongClick(CatalogueFragment fragment, BaseSeedInterface seed) {
         Toast.makeText(getApplicationContext(), "This feature is not currently supported in this case",
                 Toast.LENGTH_SHORT).show();
     }

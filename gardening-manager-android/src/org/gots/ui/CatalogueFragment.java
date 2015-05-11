@@ -37,32 +37,30 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-public class VendorListFragment extends AbstractListFragment implements OnScrollListener,
+public abstract class CatalogueFragment extends AbstractListFragment implements OnScrollListener,
         AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
-    protected static final String FILTER_FAVORITES = "filter.favorites";
+    // protected static final String FILTER_FAVORITES = "filter.favorites";
 
-    protected static final String FILTER_THISMONTH = "filter.thismonth";
+    // protected static final String FILTER_THISMONTH = "filter.thismonth";
 
-    protected static final String FILTER_BARCODE = "filter.barcode";
+    // protected static final String FILTER_BARCODE = "filter.barcode";
 
-    protected static final String FILTER_VALUE = "filter.data";
+//    protected static final String FILTER_VALUE = "filter.data";
 
-    public static final String FILTER_PARROT = "filter.parrot";
+    // public static final String FILTER_PARROT = "filter.parrot";
 
-    protected static final String FILTER_STOCK = "filter.stock";
+    // protected static final String FILTER_STOCK = "filter.stock";
 
     protected static final String BROADCAST_FILTER = "broadcast_filter";
 
     protected static final String IS_SELECTABLE = "seed.selectable";
 
-    public static final String TAG = "VendorListActivity";
+    public static final String TAG = CatalogueFragment.class.getSimpleName();
 
     public Context mContext;
 
     public SeedListAdapter listVendorSeedAdapter;
-
-    private String filter;
 
     private String filterValue;
 
@@ -81,15 +79,8 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
     public interface OnSeedSelected {
         public abstract void onSeedClick(BaseSeedInterface seed);
 
-        public abstract void onSeedLongClick(VendorListFragment vendorListFragment, BaseSeedInterface seed);
+        public abstract void onSeedLongClick(CatalogueFragment vendorListFragment, BaseSeedInterface seed);
 
-    }
-
-    public VendorListFragment() {
-    }
-
-    public VendorListFragment(String filter) {
-        this.filter = filter;
     }
 
     @Override
@@ -118,32 +109,33 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
         return view;
     }
 
-    public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (BROADCAST_FILTER.equals(intent.getAction())) {
-                filterValue = intent.getExtras().getString(FILTER_VALUE);
-            }
-            if (isReady())
-                runAsyncDataRetrieval();
-        }
-    };
+//    public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+////            if (BROADCAST_FILTER.equals(intent.getAction())) {
+////                filterValue = intent.getExtras().getString(FILTER_VALUE);
+////            }
+//            if (isReady())
+//                runAsyncDataRetrieval();
+//        }
+//    };
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        runAsyncDataRetrieval();
         super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
     public void onResume() {
-        mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BROADCAST_FILTER));
-        mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.SEED_DISPLAYLIST));
+//        mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BROADCAST_FILTER));
+//        mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.SEED_DISPLAYLIST));
         super.onResume();
     }
 
     @Override
     protected boolean requireAsyncDataRetrieval() {
-        return true;
+        return false;
     }
 
     @Override
@@ -153,37 +145,18 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
         super.onNuxeoDataRetrievalStarted();
     }
 
+    protected abstract List<BaseSeedInterface> onRetrieveNuxeoData(String filterValue, int page, int pageSize,
+            boolean force);
+
     @Override
     protected Object retrieveNuxeoData() throws Exception {
-
         List<BaseSeedInterface> catalogue = new ArrayList<BaseSeedInterface>();
-        if (filterValue != null)
-            catalogue = seedProvider.getVendorSeedsByName(filterValue, false);
-        else if (filter == null) {
-            catalogue = seedProvider.getVendorSeeds(force, page, pageSize);
-            if (catalogue.size() == 0)
-                catalogue = seedProvider.getVendorSeeds(true, page, pageSize);
-        } else if (filter.equals(FILTER_STOCK))
-            catalogue = seedProvider.getMyStock(gardenManager.getCurrentGarden(), force);
+        catalogue = onRetrieveNuxeoData(filterValue, page, pageSize, force);
 
-        else if (filter.equals(FILTER_FAVORITES))
-            catalogue = seedProvider.getMyFavorites();
-        else if (filter.equals(FILTER_BARCODE)) {
-            catalogue.add(seedProvider.getSeedByBarCode(filterValue));
-        } else if (filter.equals(FILTER_THISMONTH))
-            catalogue = seedProvider.getSeedBySowingMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
-        else if (filter.equals(FILTER_PARROT)) {
-            ParrotSeedProvider parrotProvider = new ParrotSeedProvider(mContext);
-            if (filterValue == null)
-                catalogue.addAll(parrotProvider.getVendorSeeds(true, page, pageSize));
-            else
-                catalogue = parrotProvider.getVendorSeedsByName(filterValue.toString(), false);
-
-        }
-
-        if (force)
-            force = false;
-
+        // if (filter.equals(FILTER_BARCODE)) {
+        // catalogue.add(seedProvider.getSeedByBarCode(filterValue));
+        // }
+        force = false;
         return catalogue;
     }
 
@@ -204,9 +177,16 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
     }
 
     @Override
+    protected void onNuxeoDataRetrieveFailed() {
+        if (getActivity() != null)
+            getActivity().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
+        super.onNuxeoDataRetrieveFailed();
+    }
+
+    @Override
     public void onPause() {
-        if (seedBroadcastReceiver != null && isAdded())
-            mContext.unregisterReceiver(seedBroadcastReceiver);
+//        if (seedBroadcastReceiver != null && isAdded())
+//            mContext.unregisterReceiver(seedBroadcastReceiver);
         super.onPause();
     }
 
@@ -239,7 +219,6 @@ public class VendorListFragment extends AbstractListFragment implements OnScroll
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         gridViewCatalog.setSelection(position);
-        ;
         gridViewCatalog.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
         mCallback.onSeedLongClick(this, listVendorSeedAdapter.getItem(position));
         return true;

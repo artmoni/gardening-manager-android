@@ -26,7 +26,7 @@ import org.gots.seed.GrowingSeed;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.provider.nuxeo.NuxeoSeedProvider;
 import org.gots.ui.AllotmentListFragment.OnAllotmentSelected;
-import org.gots.ui.VendorListFragment.OnSeedSelected;
+import org.gots.ui.CatalogueFragment.OnSeedSelected;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -233,20 +233,20 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
         // // ********************** Tab description **********************
         Bundle args;
         args = new Bundle();
-        addTab(new VendorListFragment(), getString(R.string.hut_menu_vendorseeds));
+        addTab(new VendorCatalogueFragment(), getString(R.string.hut_menu_vendorseeds));
         args = new Bundle();
         if (currentAllotment != -1) {
-            args.putBoolean(VendorListFragment.IS_SELECTABLE, true);
+            args.putBoolean(CatalogueFragment.IS_SELECTABLE, true);
         }
         if (gotsPrefs.getParrotToken() != null)
-            addTab(new VendorListFragment(VendorListFragment.FILTER_PARROT), getString(R.string.hut_menu_vendorseeds));
+            addTab(new ParrotCatalogueFragment(), "Parrot");
 
-        addTab(new VendorListFragment(VendorListFragment.FILTER_STOCK), getString(R.string.hut_menu_myseeds));
+        addTab(new StockVendorListFragment(), getString(R.string.hut_menu_myseeds));
 
         if (gotsPrefs.isConnectedToServer()) {
-            addTab(new VendorListFragment(VendorListFragment.FILTER_FAVORITES), getString(R.string.hut_menu_favorites));
+            addTab(new FavoriteCatalogueFragment(), getString(R.string.hut_menu_favorites));
         }
-        addTab(new VendorListFragment(VendorListFragment.FILTER_THISMONTH), getString(R.string.hut_menu_thismonth));
+        addTab(new MonthlySeedListFragment(), getString(R.string.hut_menu_thismonth));
     }
 
     @Override
@@ -284,49 +284,42 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
 
     @SuppressWarnings("deprecation")
     protected void performSearch(final EditText filter) {
-        new AsyncTask<Void, Void, List<BaseSeedInterface>>() {
-            @Override
-            protected List<BaseSeedInterface> doInBackground(Void... params) {
-                NuxeoSeedProvider nuxeoSeedProvider = new NuxeoSeedProvider(getApplicationContext());
-                return nuxeoSeedProvider.getVendorSeedsByName(filter.getText().toString(), true);
-            }
+        // new AsyncTask<Void, Void, List<BaseSeedInterface>>() {
+        // @Override
+        // protected List<BaseSeedInterface> doInBackground(Void... params) {
+        // NuxeoSeedProvider nuxeoSeedProvider = new NuxeoSeedProvider(getApplicationContext());
+        // return nuxeoSeedProvider.getVendorSeedsByName(filter.getText().toString(), true);
+        // }
+        //
+        // protected void onPostExecute(List<BaseSeedInterface> result) {
+        //
+        // };
+        // }.execute();
+        if (clearFilter) {
+            currentFilter = "";
+            filter.setText(currentFilter);
+            clearFilter = false;
+            actionBarSearchView.setImageDrawable(getResources().getDrawable(R.drawable.ic_search));
+        } else {
+            currentFilter = filter.getText().toString();
+            clearFilter = true;
+            actionBarSearchView.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_close_clear_cancel));
+        }
 
-            protected void onPostExecute(List<BaseSeedInterface> result) {
-                if (result != null) {
-                    if (clearFilter) {
-                        currentFilter = "";
-                        filter.setText(currentFilter);
-                        clearFilter = false;
-                        actionBarSearchView.setImageDrawable(getResources().getDrawable(R.drawable.ic_search));
-                    } else {
-                        currentFilter = filter.getText().toString();
-                        clearFilter = true;
-                        clearFilter = false;
-                        actionBarSearchView.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_close_clear_cancel));
-                    }
-
-                    Fragment fragment = (Fragment) getSupportFragmentManager().findFragmentByTag(
-                            "android:switcher:" + R.id.pager + ":" + getSelectedTab());
-                    if (fragment.getArguments() != null
-                            && fragment.getArguments().getBoolean(VendorListFragment.FILTER_PARROT)) {
-                        Intent filterIntent = new Intent(VendorListFragment.BROADCAST_FILTER);
-                        filterIntent.putExtra(VendorListFragment.FILTER_VALUE, currentFilter);
-                        sendBroadcast(filterIntent);
-                    } else if (fragment instanceof VendorListFragment) {
-                        if (false) {
-                            Filterable fragFilter = (Filterable) ((VendorListFragment) fragment).getListAdapter();
-                            fragFilter.getFilter().filter(currentFilter.toString());
-                        } else {
-                            Fragment searchFragment = (Fragment) getSupportFragmentManager().findFragmentByTag(
-                                    "android:switcher:" + R.id.pager + ":" + (FRAGMENT_ID_CATALOG));
-                            if (searchFragment instanceof VendorListFragment)
-                                ((VendorListFragment) searchFragment).setFilterValue(currentFilter);
-                        }
-                    }
-                }
-            };
-        }.execute();
-
+        CatalogueFragment fragment = (CatalogueFragment) getSupportFragmentManager().findFragmentByTag(
+                "android:switcher:" + R.id.pager + ":" + getSelectedTab());
+        // if (fragment.getArguments() != null
+        // && fragment.getArguments().getBoolean(CatalogueFragment.FILTER_PARROT)) {
+        // Intent filterIntent = new Intent(CatalogueFragment.BROADCAST_FILTER);
+        // filterIntent.putExtra(CatalogueFragment.FILTER_VALUE, currentFilter);
+        // sendBroadcast(filterIntent);
+        // } else
+        if (fragment instanceof CatalogueFragment) {
+            // Fragment searchFragment = (Fragment) getSupportFragmentManager().findFragmentByTag(
+            // "android:switcher:" + R.id.pager + ":" + (FRAGMENT_ID_CATALOG));
+            // if (searchFragment instanceof CatalogueFragment)
+            fragment.setFilterValue(currentFilter);
+        }
     }
 
     @Override
@@ -343,7 +336,7 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
     }
 
     @Override
-    public void onSeedLongClick(VendorListFragment fragment, BaseSeedInterface seed) {
+    public void onSeedLongClick(CatalogueFragment fragment, BaseSeedInterface seed) {
         startSupportActionMode(new MyCallBack(seed));
     }
 
@@ -461,8 +454,8 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
                             SeedUtil.translateAction(getApplicationContext(), action) + " - "
                                     + SeedUtil.translateSpecie(getApplicationContext(), currentSeed), Toast.LENGTH_LONG).show();
 
-                    if (getCurrentFragment() instanceof VendorListFragment)
-                        ((VendorListFragment) getCurrentFragment()).update();
+                    if (getCurrentFragment() instanceof CatalogueFragment)
+                        ((CatalogueFragment) getCurrentFragment()).update();
                     super.onPostExecute(result);
                 }
             }.execute(actionDone);
