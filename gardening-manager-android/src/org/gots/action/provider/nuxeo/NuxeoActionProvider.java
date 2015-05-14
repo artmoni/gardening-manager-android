@@ -95,7 +95,7 @@ public class NuxeoActionProvider extends LocalActionProvider {
             // getNuxeoClient().shutdown();
 
         } catch (Exception e) {
-            Log.e(TAG, "getAllSeeds " + e.getMessage(), e);
+            Log.e(TAG, "getActions " + e.getMessage(), e);
             remoteActions = super.getActions(force);
         }
         return remoteActions;

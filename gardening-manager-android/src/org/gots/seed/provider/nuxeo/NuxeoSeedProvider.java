@@ -611,25 +611,70 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
     }
 
+    // public LikeStatus like(BaseSeedInterface vendorSeed, boolean cancel) {
+    // Blob likeStatus;
+    // LikeStatus likes = new LikeStatus();
+    // try {
+    // Session session = getNuxeoClient().getSession();
+    // DocumentManager service = session.getAdapter(DocumentManager.class);
+    // Document doc = service.getDocument(new IdRef(vendorSeed.getUUID()));
+    // if (!cancel)
+    // likeStatus = service.like(doc);
+    // else
+    // likeStatus = service.cancelLike(doc);
+    //
+    // likes = NuxeoSeedConverter.getLikeStatus(likeStatus);
+    // vendorSeed.setLikeStatus(likes);
+    // super.updateSeed(vendorSeed);
+    // } catch (Exception e) {
+    // Log.e(TAG, e.getMessage(), e);
+    // }
+    // return likes;
+    // }
     public LikeStatus like(BaseSeedInterface vendorSeed, boolean cancel) {
         Blob likeStatus;
         LikeStatus likes = new LikeStatus();
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager service = session.getAdapter(DocumentManager.class);
-            Document doc = service.getDocument(new IdRef(vendorSeed.getUUID()));
-            if (!cancel)
-                likeStatus = service.like(doc);
-            else
-                likeStatus = service.cancelLike(doc);
 
-            likes = NuxeoSeedConverter.getLikeStatus(likeStatus);
-            vendorSeed.setLikeStatus(likes);
-            super.updateSeed(vendorSeed);
+            Document doc = service.getDocument(new IdRef(vendorSeed.getUUID()));
+            
+            Document favoritesCollection = service.getChild(service.getUserHome(), "Favorites");
+            service.addToCollection(favoritesCollection, doc);
+            //TODO search for favorite collection
+//            Documents docs = service.addElementsInFavorite(doc);
+            // if (!cancel)
+            // likeStatus = service.like(doc);
+            // else
+            // likeStatus = service.cancelLike(doc);
+            //
+            // likes = NuxeoSeedConverter.getLikeStatus(likeStatus);
+            // vendorSeed.setLikeStatus(likes);
+            // likes.s
+//            super.updateSeed(vendorSeed);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
         return likes;
+    }
+
+    @Override
+    public List<BaseSeedInterface> getMyFavorites() {
+        List<BaseSeedInterface> myFavorites = new ArrayList<>();
+        try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
+            Documents docs = service.getElementsInFavorite(service.getUserHome());
+
+            for (Document doc : docs) {
+                BaseSeedInterface seed = getSeedByUUID(doc.getId());
+                myFavorites.add(super.updateSeed(seed));
+            }
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+        return myFavorites;
     }
 
     @Override

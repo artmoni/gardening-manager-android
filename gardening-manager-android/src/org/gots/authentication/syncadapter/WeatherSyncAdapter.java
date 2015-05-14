@@ -51,8 +51,7 @@ public class WeatherSyncAdapter extends GotsSyncAdapter {
             Log.e(TAG, e.getMessage());
         }
         if (gotsPrefs.isConnectedToServer() && currentGarden != null) {
-            NuxeoWeatherProvider nuxeoProvider;
-            nuxeoProvider = new NuxeoWeatherProvider(getContext(), currentGarden);
+            NuxeoWeatherProvider nuxeoProvider = new NuxeoWeatherProvider(getContext(), currentGarden);
             List<WeatherConditionInterface> allCondition = nuxeoProvider.getAllWeatherForecast();
             for (WeatherConditionInterface weatherCondition : allCondition) {
                 WeatherConditionInterface localCondition;
