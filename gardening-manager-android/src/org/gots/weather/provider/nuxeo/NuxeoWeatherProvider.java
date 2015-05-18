@@ -88,13 +88,17 @@ public class NuxeoWeatherProvider extends LocalWeatherProvider {
             Session session = getNuxeoClient().getSession();
             DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
             PropertyMap properties = new PropertyMap();
+            Calendar weatherCal = Calendar.getInstance();
+            weatherCal.setTime(weatherCondition.getDate());
+
             properties.set("dc:title", weatherCondition.getSummary());
             properties.set("weathercondition:temperature_min", String.valueOf(weatherCondition.getTempCelciusMin()));
             properties.set("weathercondition:temperature_max", String.valueOf(weatherCondition.getTempCelciusMax()));
             properties.set("weathercondition:humidity", String.valueOf(weatherCondition.getHumidity()));
             properties.set("weathercondition:icon", String.valueOf(weatherCondition.getIconURL()));
-            properties.set("weathercondition:time", weatherCondition.getDate());
-            properties.set("weathercondition:time_dayofyear", String.valueOf(weatherCondition.getDayofYear()));
+            properties.set("weathercondition:time", weatherCal.getTime());
+            properties.set("weathercondition:time_dayofyear", String.valueOf(weatherCal.get(Calendar.DAY_OF_YEAR)));
+            properties.set("weathercondition:time_year", String.valueOf(weatherCal.get(Calendar.YEAR)));
             properties.set("weathercondition:summary", weatherCondition.getSummary());
 
             Document weatherConditionDoc = documentMgr.createDocument(getWeatherRootFolder(currentGarden),
