@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1004000" android:versionName="1.4.0-SNAPSHOT" package="org.gots">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1004000" android:versionName="1.5.0-SNAPSHOT" package="org.gots">
 
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="22"/>
 
@@ -157,9 +157,9 @@
         </service>
 
         <!-- RELEASE KEY -->
-   <!-- <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyAtaIJvzohVEECxELeBtNaS2T86diBVX9U"/> -->    
+  <!--  <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyAtaIJvzohVEECxELeBtNaS2T86diBVX9U"/>  -->   
         <!-- DEBUG KEY -->
-           <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyDFN2ftNk8NqYwMCyjUV5ryM4zUdmqcWXI"/>   
+            <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyDFN2ftNk8NqYwMCyjUV5ryM4zUdmqcWXI"/>
 
     </application>
 
