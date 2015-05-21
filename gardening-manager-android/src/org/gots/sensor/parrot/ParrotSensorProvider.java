@@ -14,6 +14,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 public class ParrotSensorProvider implements GotsSensorProvider {
 
@@ -86,7 +87,8 @@ public class ParrotSensorProvider implements GotsSensorProvider {
     @Override
     public List<ParrotLocation> getLocations() {
         getToken();
-        String api_1_25_status = "/sensor_data/v2/sync?include_s3_urls=1";
+//        String api_1_25_status = "/sensor_data/v2/sync?include_s3_urls=1";
+        String api_1_25_status = "/sensor_data/v3/sync?include_s3_urls=1";
         List<ParrotLocation> sensorLocations = new ArrayList<ParrotLocation>();
         try {
             JSONObject json = (JSONObject) authentication.getJSON(api_1_25_status, null);
@@ -100,9 +102,10 @@ public class ParrotSensorProvider implements GotsSensorProvider {
             Log.e(TAG, e.getMessage(), e);
         } catch (IOException e) {
             Log.e(TAG, e.getMessage(), e);
+        } catch (JsonSyntaxException e) {
+            Log.e(TAG, e.getMessage(), e);
         }
         return sensorLocations;
     }
 
-   
 }
