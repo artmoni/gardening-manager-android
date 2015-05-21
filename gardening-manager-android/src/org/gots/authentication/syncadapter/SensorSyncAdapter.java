@@ -73,6 +73,7 @@ public class SensorSyncAdapter extends GotsSyncAdapter {
             notification.show();
         }
 
+        //TODO stop synch if data are already inserted
         // Get last 100 days of samples
         List<ParrotLocation> locations = parrotSensorProvider.getLocations();
         Calendar dateTo = Calendar.getInstance();
@@ -95,7 +96,7 @@ public class SensorSyncAdapter extends GotsSyncAdapter {
 
                 // Get Samples from last sync until now or all if never sync
                 ParrotSampleTemperature lastSync = localSensorProvider.getLastSampleTemperature();
-                if (lastSync.getCapture_ts().before(datefrom.getTime())) {
+                if (lastSync == null || datefrom.getTime().after(lastSync.getCapture_ts())) {
                     List<ParrotSampleTemperature> temperatures = parrotSamplesProvider.getSamplesTemperature(
                             datefrom.getTime(), Calendar.getInstance().getTime());
                     for (ParrotSampleTemperature parrotSampleTemperature : temperatures) {

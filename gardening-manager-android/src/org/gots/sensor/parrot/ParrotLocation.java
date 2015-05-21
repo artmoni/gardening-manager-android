@@ -4,9 +4,61 @@ import java.util.Date;
 
 import com.google.gson.annotations.SerializedName;
 
+/*{
+ "avatar_url": "5f3b23de1810eeae7fc9a7dbf276729a733860e008fad176e82a8fc5b7cc7b52e868ef4512801f1fcd549637cf42a2cbad4e87002217ad2eae7f537078492baa424611060",
+ "display_order": 1,
+ "hardiness_zone": "3b",
+ "heat_zone": 4,
+ "ignore_fertilizer_alert": true,
+ "ignore_light_alert": false,
+ "ignore_moisture_alert": false,
+ "ignore_temperature_alert": false,
+ "images": [
+ {
+ "image_identifier": "5f3b23de1810eeae7fc9a7dbf276729a733860e008fad176e82a8fc5b7cc7b52e868ef4512801f1fcd549637cf42a2cbad4e87002217ad2eae7f537078492baa424611060",
+ "location_identifier": "SPHDmUzfqR3747575460",
+ "url": "https://s3.amazonaws.com/dev-user-images/15606/SPHDmUzfqR3747575460/5f3b23de1810eeae7fc9a7dbf276729a733860e008fad176e82a8fc5b7cc7b52e868ef4512801f1fcd549637cf42a2cbad4e87002217ad2eae7f537078492baa424611060"
+ },
+ {
+ "image_identifier": "ef5c478d01962476b3ce08c3f1cd36e85f0a2f14a6e0b07547b96077267cf86ca5d55ccf3999a9a1172df1f0cbf4ede2f7cafa2a58eb97dd88410f30e8421e55417010181",
+ "location_identifier": "SPHDmUzfqR3747575460",
+ "url": "https://s3.amazonaws.com/dev-user-images/15606/SPHDmUzfqR3747575460/ef5c478d01962476b3ce08c3f1cd36e85f0a2f14a6e0b07547b96077267cf86ca5d55ccf3999a9a1172df1f0cbf4ede2f7cafa2a58eb97dd88410f30e8421e55417010181"
+ }
+ ],
+ "in_pot": true,
+ "is_indoor": true,
+ "latitude": 48.9010040788435,
+ "location_identifier": "SPHDmUzfqR3747575460",
+ "longitude": 2.23968090489715,
+ "plant_assigned_date": "2014-03-20T12:02:59Z",
+ "plant_id": 7464,
+ "plant_nickname": "Bananier dsi",
+ "sensor_serial": "9003B70000E7AD7F"
+ }
+ */
+
 public class ParrotLocation {
     @SerializedName("avatar_url")
-    String avatar_url;
+    // String avatar_url;
+    public String avatar_url;
+
+    @SerializedName("images")
+    public Images[] images;
+
+    public class Images {
+
+        @SerializedName("image_identifier")
+        public String image_identifier;
+
+        @SerializedName("location_identifier")
+        public String location_identifier;
+
+        @SerializedName("url")
+        public String url;
+
+        public Images() {
+        }
+    }
 
     @SerializedName("description")
     String description;
@@ -16,6 +68,12 @@ public class ParrotLocation {
 
     @SerializedName("first_sample_utc")
     String first_sample_utc;
+
+    @SerializedName("hardiness_zone")
+    String hardiness_zone;
+
+    @SerializedName("heat_zone")
+    int heat_zone;
 
     @SerializedName("ignore_fertilizer_alert")
     boolean ignore_fertilizer_alert;
@@ -30,20 +88,20 @@ public class ParrotLocation {
     boolean ignore_temperature_alert;
 
     @SerializedName("in_pot")
-    int in_pot;
+    boolean in_pot;
 
     @SerializedName("is_indoor")
-    int is_indoor;
+    boolean is_indoor;
 
-    @SerializedName("last_sample_upload")
-    String last_sample_upload;
-
-    @SerializedName("last_sample_utc")
-    String last_sample_utc;
+    // @SerializedName("last_sample_upload")
+    // String last_sample_upload;
+    //
+    // @SerializedName("last_sample_utc")
+    // String last_sample_utc;
 
     @SerializedName("latitude")
     Float latitude;
-    
+
     @SerializedName("longitude")
     Float longitude;
 
@@ -132,37 +190,37 @@ public class ParrotLocation {
         this.ignore_temperature_alert = ignore_temperature_alert;
     }
 
-    public int getIn_pot() {
+    public boolean getIn_pot() {
         return in_pot;
     }
 
-    public void setIn_pot(int in_pot) {
+    public void setIn_pot(boolean in_pot) {
         this.in_pot = in_pot;
     }
 
-    public int getIs_indoor() {
+    public boolean getIs_indoor() {
         return is_indoor;
     }
 
-    public void setIs_indoor(int is_indoor) {
+    public void setIs_indoor(boolean is_indoor) {
         this.is_indoor = is_indoor;
     }
 
-    public String getLast_sample_upload() {
-        return last_sample_upload;
-    }
-
-    public void setLast_sample_upload(String last_sample_upload) {
-        this.last_sample_upload = last_sample_upload;
-    }
-
-    public String getLast_sample_utc() {
-        return last_sample_utc;
-    }
-
-    public void setLast_sample_utc(String last_sample_utc) {
-        this.last_sample_utc = last_sample_utc;
-    }
+    // public String getLast_sample_upload() {
+    // return last_sample_upload;
+    // }
+    //
+    // public void setLast_sample_upload(String last_sample_upload) {
+    // this.last_sample_upload = last_sample_upload;
+    // }
+    //
+    // public String getLast_sample_utc() {
+    // return last_sample_utc;
+    // }
+    //
+    // public void setLast_sample_utc(String last_sample_utc) {
+    // this.last_sample_utc = last_sample_utc;
+    // }
 
     public Float getLatitude() {
         return latitude;
@@ -236,4 +294,38 @@ public class ParrotLocation {
         this.total_sample_count = total_sample_count;
     }
 
+    public String getHardiness_zone() {
+        return hardiness_zone;
+    }
+
+    public void setHardiness_zone(String hardiness_zone) {
+        this.hardiness_zone = hardiness_zone;
+    }
+
+    public int getHeat_zone() {
+        return heat_zone;
+    }
+
+    public void setHeat_zone(int heat_zone) {
+        this.heat_zone = heat_zone;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("#");
+        builder.append(getLocation_identifier());
+        builder.append("(");
+        builder.append(getPlant_nickname());
+        builder.append(")");
+        return builder.toString();
+    }
+
+    public Images[] getImages() {
+        return images;
+    }
+
+    public void setImages(Images[] images) {
+        this.images = images;
+    }
 }

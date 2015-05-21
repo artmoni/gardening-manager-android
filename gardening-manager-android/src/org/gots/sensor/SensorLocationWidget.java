@@ -36,13 +36,11 @@ public class SensorLocationWidget extends RelativeLayout {
     private String TAG = SensorLocationWidget.class.getSimpleName();
 
     private LinearLayout sensorLayoutStatus;
-    
 
     public SensorLocationWidget(Context context) {
         super(context);
         initView();
     }
-    
 
     private void initView() {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -65,6 +63,13 @@ public class SensorLocationWidget extends RelativeLayout {
 
             @Override
             protected File doInBackground(Object... params) {
+                //there is more than one image, the url is stored in image_identifier
+                for (int i = 0; i < sensorLocation.getImages().length; i++) {
+                    if (sensorLocation.getImages()[i].image_identifier.equals(sensorLocation.getAvatar_url()))
+                        return downloadBitmap(sensorLocation.getImages()[i].url,
+                                sensorLocation.getLocation_identifier());
+                }
+                //there is only one image, the url is stored in avatar
                 if (sensorLocation.getAvatar_url() != null)
                     return downloadBitmap(sensorLocation.getAvatar_url(), sensorLocation.getLocation_identifier());
                 else
@@ -86,11 +91,11 @@ public class SensorLocationWidget extends RelativeLayout {
     public void setSensor(ParrotLocation location, ParrotLocationsStatus locationStatus) {
         this.sensorLocation = location;
         setupView();
-        String fertilizer_status_key=locationStatus.getFertilizer().getStatus_key();
-        String light_status_key=locationStatus.getLight().getStatus_key();
-        String airtemperature_status_key=locationStatus.getAir_temperature().getStatus_key();
-        String moisture_key=locationStatus.getSoil_moisture().getStatus_key();
-        
+        String fertilizer_status_key = locationStatus.getFertilizer().getStatus_key();
+        String light_status_key = locationStatus.getLight().getStatus_key();
+        String airtemperature_status_key = locationStatus.getAir_temperature().getStatus_key();
+        String moisture_key = locationStatus.getSoil_moisture().getStatus_key();
+
         if ("status_warning".equals(moisture_key) || "status_warning".equals(fertilizer_status_key)
                 || "status_warning".equals(airtemperature_status_key) || "status_warning".equals(light_status_key)) {
             sensorLayoutStatus.setBackgroundColor(getContext().getResources().getColor(R.color.action_warning_color));
