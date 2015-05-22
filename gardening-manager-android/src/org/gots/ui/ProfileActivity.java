@@ -119,13 +119,19 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
             // R.id.IdGardenProfileContent);
 
             if (findViewById(R.id.IdGardenProfileContent) != null) {
-                ProfileEditorFragment fragment = new ProfileEditorFragment();
-                Bundle options = new Bundle();
-                options.putInt("option", ProfileEditorFragment.OPTION_EDIT);
-                fragment.setArguments(options);
-                FragmentTransaction transactionCatalogue = fragmentManager.beginTransaction();
-                transactionCatalogue.setCustomAnimations(R.anim.push_right_in, R.anim.push_left_out);
-                transactionCatalogue.replace(R.id.IdGardenProfileContent, fragment).commit();
+
+                ProfileEditorFragment fragment = (ProfileEditorFragment) getSupportFragmentManager().findFragmentById(
+                        R.id.IdGardenProfileContent);
+                if (fragment == null) {
+                    fragment = new ProfileEditorFragment();
+                    Bundle options = new Bundle();
+                    options.putInt("option", ProfileEditorFragment.OPTION_EDIT);
+                    fragment.setArguments(options);
+                    FragmentTransaction transactionCatalogue = fragmentManager.beginTransaction();
+                    transactionCatalogue.setCustomAnimations(R.anim.push_right_in, R.anim.push_left_out);
+                    transactionCatalogue.replace(R.id.IdGardenProfileContent, fragment).commitAllowingStateLoss();
+                } else
+                    fragment.update();
                 // creationFragment.getArguments().putInt("option", ProfileCreationFragment.OPTION_EDIT);
                 // creationFragment.updateGarden(getCurrentGarden());
             }
