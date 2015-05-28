@@ -128,7 +128,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             protected FileBlob doInBackground(BaseSeedInterface... params) {
                 BaseSeedInterface seed = params[0];
                 FileBlob image = null;
-                imageFile = new File(gotsPrefs.getGotsExternalFileDir(), seed.getVariety().toLowerCase().replaceAll(
+                imageFile = new File(gotsPrefs.getFilesDir(), seed.getVariety().toLowerCase().replaceAll(
                         "\\s", "").replaceAll(" ", ""));
                 if (!imageFile.exists()) {
                     try {
@@ -741,7 +741,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 }
 
                 // download custom image
-                File imageFile = new File(gotsPrefs.getGotsExternalFileDir(),
+                File imageFile = new File(gotsPrefs.getFilesDir(),
                         seed.getVariety().toLowerCase().replaceAll("\\s", ""));
                 if (imageFile != null && !imageFile.exists()) {
                     FileBlob image = service.getBlob(document);

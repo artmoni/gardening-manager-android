@@ -230,7 +230,7 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
 
     @Override
     public File uploadPicture(GrowingSeed seed, File f) {
-        File seedDir = new File(gotsPrefs.getGotsExternalFileDir(), String.valueOf(seed.getGrowingSeedId()));
+        File seedDir = new File(gotsPrefs.getFilesDir(), String.valueOf(seed.getGrowingSeedId()));
         if (!seedDir.exists())
             seedDir.mkdir();
         File newfile = new File(seedDir, f.getName());
@@ -249,7 +249,7 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
     }
 
     public List<File> getPicture(GrowingSeed mSeed) throws GotsServerRestrictedException {
-        File seedDir = new File(gotsPrefs.getGotsExternalFileDir(), String.valueOf(mSeed.getGrowingSeedId()));
+        File seedDir = new File(gotsPrefs.getFilesDir(), String.valueOf(mSeed.getGrowingSeedId()));
         File[] files = seedDir.listFiles();
 
         List<File> myPictures = new ArrayList<File>();

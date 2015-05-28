@@ -40,7 +40,7 @@ public class PhotoAction extends AbstractActionSeed implements PermanentActionIn
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(date);
         String imageFileName = JPEG_FILE_PREFIX + timeStamp;
 
-        File imageFile = new File(gotsPrefs.getGotsExternalFileDir(), imageFileName + JPEG_FILE_SUFFIX);
+        File imageFile = new File(gotsPrefs.getFilesDir(), imageFileName + JPEG_FILE_SUFFIX);
         return imageFile;
     }
 

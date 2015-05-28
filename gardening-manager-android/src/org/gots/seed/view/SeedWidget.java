@@ -96,14 +96,14 @@ public class SeedWidget extends RelativeLayout {
                 Bitmap image = null;
                 /* Check custom image for this variety */
                 if (mSeed.getVariety() != null && !"".equals(mSeed.getVariety()))
-                    imageFile = new File(gotsPref.getGotsExternalFileDir(),
+                    imageFile = new File(gotsPref.getFilesDir(),
                             mSeed.getVariety().toLowerCase().replaceAll("\\s", ""));
                 if (imageFile != null && imageFile.exists()) {
                     image = FileUtilities.decodeScaledBitmapFromSdCard(imageFile.getAbsolutePath(), 100, 100);
                 }
                 /* Check custom image for this species */
                 else if (mSeed.getSpecie() != null) {
-                    imageFile = new File(gotsPref.getGotsExternalFileDir(), mSeed.getSpecie().toLowerCase().replaceAll(
+                    imageFile = new File(gotsPref.getFilesDir(), mSeed.getSpecie().toLowerCase().replaceAll(
                             "\\s", ""));
                     if (imageFile != null && imageFile.exists()) {
                         image = FileUtilities.decodeScaledBitmapFromSdCard(imageFile.getAbsolutePath(), 100, 100);
