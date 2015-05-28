@@ -102,11 +102,13 @@ public class GotsPreferences extends NuxeoServerConfig {
     private static final String GARDENING_MANAGER_NUXEO_AUTOMATION_TEST = "http://services.gardening-manager.com/test/";
 
     private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://services.gardening-manager.com/nuxeo/";
-   // private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://192.168.43.143:8080/nuxeo/";
+
+    // private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://192.168.43.143:8080/nuxeo/";
 
     public static final String ORG_GOTS_CURRENT_GARDENID = "org.gots.preference.gardenid";
 
     public static final String ORG_GOTS_CURRENT_ALLOTMENT = "org.gots.preference.allotmentid";
+
     public static final String ORG_GOTS_TUTORIAL_FINISHED = "org.gots.tutorial.finished";
 
     protected SharedPreferences sharedPreferences;
@@ -137,26 +139,26 @@ public class GotsPreferences extends NuxeoServerConfig {
 
     private static final String ACCOUNT_TYPE = "gardening-manager";
 
-
     // private static final String PUBKEY =
     // "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtAFVYGad4FaKIZ9A0W2JfMh+B1PQMU+tal9B0XYbEJdZy6UCwqoH42/YLDn0GTjKA+ozAZJtaQqoU/ew95tYKEYszj067HfVehpRtKxLlySFMnqdai0SuGyl5EI4QQovsw3wFU1ihELWBaCg2CcTJqk1jXcWaxsqPPPWty5tAcMwQDWZ0cw6uw8QddztiKlw5IB1XTWdhZTuPL/RcR0Ns+lbEB2kdosozekXr+dRqZ4+PKyHn+j8/407hb76gqn9CmrGhOsJ3E7aOVRCZWZ9nf6aJfFYJP5JY/QHsa+9OsiSj8QXS2vic3ay+MazF09bteN7Wnb15Y9CBK/sM2RAqQIDAQAB";
 
-//    private GotsPreferences() {
-//    }
+    // private GotsPreferences() {
+    // }
 
-//    /**
-//     * After first call, {@link #initIfNew(Context)} must be called else a {@link NotConfiguredException} will be thrown
-//     * on the second call attempt.
-//     */
-//    public static synchronized GotsPreferences getInstance() {
-//        if (instance == null) {
-//            instance = new GotsPreferences();
-//            firstCall = new Exception();
-//        } else if (!instance.initDone) {
-//            throw new NotConfiguredException(firstCall);
-//        }
-//        return instance;
-//    }
+    // /**
+    // * After first call, {@link #initIfNew(Context)} must be called else a {@link NotConfiguredException} will be
+    // thrown
+    // * on the second call attempt.
+    // */
+    // public static synchronized GotsPreferences getInstance() {
+    // if (instance == null) {
+    // instance = new GotsPreferences();
+    // firstCall = new Exception();
+    // } else if (!instance.initDone) {
+    // throw new NotConfiguredException(firstCall);
+    // }
+    // return instance;
+    // }
 
     public void reset() {
         initDone = false;
@@ -372,8 +374,12 @@ public class GotsPreferences extends NuxeoServerConfig {
         return GARDENING_MANAGER_DOCUMENTATION_URL;
     }
 
-    public File getGotsExternalFileDir() {
-        return mContext.getExternalFilesDir(GARDENING_MANAGER_DIRECTORY);
+    public File getFilesDir() {
+        if (mContext.getExternalFilesDir(null) != null)
+            return mContext.getExternalFilesDir(null);
+        else
+            return mContext.getFilesDir();
+            
     }
 
     public String getPlayStorePubKey() {

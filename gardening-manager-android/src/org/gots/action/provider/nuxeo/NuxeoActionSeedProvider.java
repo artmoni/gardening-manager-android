@@ -448,7 +448,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
                 imageFiles.add(blob.getFile());
             }
         } catch (Exception e) {
-            Log.w(TAG, "No picture folder found ", e);
+            Log.w(TAG, "No picture folder found for "+mSeed);
         }
         return imageFiles;
     }
@@ -460,7 +460,8 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             DocumentManager service = session.getAdapter(DocumentManager.class);
             Document doc = service.getDocument(new DocRef(mSeed.getUUID()));
             FileBlob blob = (FileBlob) session.newRequest("seedGrowingActionHistory").setInput(doc).execute();
-            File dir = new File(Environment.getExternalStorageDirectory(), "Gardening-Manager");
+            File dir =  gotsPrefs.getFilesDir();
+           
             File pdfFile = new File(dir, blob.getFileName().replaceAll(" ", "-"));
             copy(blob.getFile(), pdfFile);
             blob.getFile().delete();

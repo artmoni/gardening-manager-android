@@ -65,7 +65,7 @@ public class ParrotSeedConverter {
         new AsyncTask<Void, Void, Void>() {
 
             protected Void doInBackground(Void... params) {
-                File file = new File(gotsPref.getGotsExternalFileDir().getAbsolutePath(),
+                File file = new File(gotsPref.getFilesDir().getAbsolutePath(),
                         plantName.toLowerCase().replaceAll("\\s", ""));
                 if (!file.exists()) {
                     try {

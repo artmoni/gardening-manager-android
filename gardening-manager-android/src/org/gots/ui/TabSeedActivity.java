@@ -540,7 +540,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 File f = (File) arg0.getItemAtPosition(position);
-                File dest = new File(gotsPrefs.getGotsExternalFileDir(), f.getName());
+                File dest = new File(gotsPrefs.getFilesDir(), f.getName());
                 try {
                     FileUtilities.copy(f, dest);
                     Intent intent = new Intent();

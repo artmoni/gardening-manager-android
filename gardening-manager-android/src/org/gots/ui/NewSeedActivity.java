@@ -214,7 +214,7 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
             // write the bytes in file
             FileOutputStream fos;
             try {
-                fos = new FileOutputStream(new File(gotsPrefs.getGotsExternalFileDir(),
+                fos = new FileOutputStream(new File(gotsPrefs.getFilesDir(),
                         newSeed.getVariety().toLowerCase().replaceAll("\\s", "")));
                 fos.write(bitmapdata);
             } catch (FileNotFoundException e) {
