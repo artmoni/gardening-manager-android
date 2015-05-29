@@ -26,9 +26,12 @@ public class LocalSensorSamplesProvider implements GotsSensorSamplesProvider {
 
     private SQLiteDatabase database;
 
+    private String locationIdentifier;
+
     public LocalSensorSamplesProvider(Context context, String locationId) {
         dbHelper = new SensorSQLiteHelper(context, locationId);
         database = dbHelper.getWritableDatabase();
+        locationIdentifier = locationId;
     }
 
     @Override
@@ -136,26 +139,23 @@ public class LocalSensorSamplesProvider implements GotsSensorSamplesProvider {
     }
 
     @Override
-    public void insertSampleFertilizer(ParrotSampleFertilizer parrotSampleFertilizer) {
+    public long insertSampleFertilizer(ParrotSampleFertilizer parrotSampleFertilizer) {
         ContentValues values = fertilizerToValues(parrotSampleFertilizer);
         // open();
+        long insertId = -1;
         Cursor cursor = database.query(SensorSQLiteHelper.TABLE_FERTILIZER, null,
                 SensorSQLiteHelper.FERTILIZER_REMOTE_ID + "=" + parrotSampleFertilizer.getId(), null, null, null, null);
         if (cursor.getCount() == 0) {
-            long insertId = database.insert(SensorSQLiteHelper.TABLE_FERTILIZER, null, values);
-            Log.d(TAG, parrotSampleFertilizer + " has been inserted in database");
+            insertId = database.insert(SensorSQLiteHelper.TABLE_FERTILIZER, null, values);
+            parrotSampleFertilizer.setId((int) insertId);
+            Log.d(TAG, "[" + locationIdentifier + "]" + parrotSampleFertilizer + " has been inserted in database");
+
         } else {
-            Log.i(TAG, parrotSampleFertilizer + " is already inserted in database");
+            Log.i(TAG, "[" + locationIdentifier + "]" + parrotSampleFertilizer + " is already inserted in database");
+
         }
         cursor.close();
-        // close();
-        // Cursor cursor = database.query(MySQLiteHelper.TABLE_COMMENTS, allColumns, MySQLiteHelper.COLUMN_ID +
-        // " = "
-        // + insertId, null, null, null, null);
-        // cursor.moveToFirst();
-        // Comment newComment = cursorToComment(cursor);
-        // cursor.close();
-        // return newComment;
+        return insertId;
     }
 
     protected ContentValues fertilizerToValues(ParrotSampleFertilizer parrotSampleFertilizer) {
@@ -204,7 +204,7 @@ public class LocalSensorSamplesProvider implements GotsSensorSamplesProvider {
         // open();
         ParrotSampleTemperature temperature = null;
         String query = "SELECT * from " + SensorSQLiteHelper.TABLE_TEMPERATURE + " order by "
-                + SensorSQLiteHelper.TEMPERATURE_ID + " DESC limit 1";
+                + SensorSQLiteHelper.TEMPERATURE_capture_ts + " DESC limit 1";
         Cursor cursor = database.rawQuery(query, null);
         if (cursor != null && cursor.moveToFirst()) {
             temperature = cursorToTemperature(cursor);

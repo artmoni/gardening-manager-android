@@ -12,7 +12,7 @@ public interface GotsSensorSamplesProvider {
 
     public abstract void insertSampleTemperature(ParrotSampleTemperature parrotSampleTemperature);
 
-    public abstract void insertSampleFertilizer(ParrotSampleFertilizer parrotSampleFertilizer);
+    public abstract long insertSampleFertilizer(ParrotSampleFertilizer parrotSampleFertilizer);
 
     public abstract List<ParrotSampleFertilizer> getSamplesFertilizer(Date from, Date to);
 }

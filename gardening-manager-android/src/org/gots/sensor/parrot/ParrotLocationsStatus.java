@@ -1,5 +1,7 @@
 package org.gots.sensor.parrot;
 
+import java.util.Date;
+
 import com.google.gson.annotations.SerializedName;
 
 public class ParrotLocationsStatus {
@@ -12,10 +14,10 @@ public class ParrotLocationsStatus {
     String location_identifier;
 
     @SerializedName("global_validity_timedate_utc")
-    String global_validity_timedate_utc;
+    Date global_validity_timedate_utc;
 
     @SerializedName("last_processed_upload_timedate_utc")
-    String last_processed_upload_timedate_utc;
+    Date last_processed_upload_timedate_utc;
 
     @SerializedName("air_temperature")
     ParrotStatus air_temperature;
@@ -37,19 +39,19 @@ public class ParrotLocationsStatus {
         this.location_identifier = location_identifier;
     }
 
-    public String getGlobal_validity_timedate_utc() {
+    public Date getGlobal_validity_timedate_utc() {
         return global_validity_timedate_utc;
     }
 
-    public void setGlobal_validity_timedate_utc(String global_validity_timedate_utc) {
+    public void setGlobal_validity_timedate_utc(Date global_validity_timedate_utc) {
         this.global_validity_timedate_utc = global_validity_timedate_utc;
     }
 
-    public String getLast_processed_upload_timedate_utc() {
+    public Date getLast_processed_upload_timedate_utc() {
         return last_processed_upload_timedate_utc;
     }
 
-    public void setLast_processed_upload_timedate_utc(String last_processed_upload_timedate_utc) {
+    public void setLast_processed_upload_timedate_utc(Date last_processed_upload_timedate_utc) {
         this.last_processed_upload_timedate_utc = last_processed_upload_timedate_utc;
     }
 

@@ -24,9 +24,10 @@ public class GotsSyncAdapter extends NuxeoSyncAdapter {
 
     protected GotsSeedManager seedManager;
 
+    protected static final String TAG = GotsSyncAdapter.class.getSimpleName();
 
     public GotsContext getGotsContext() {
-      return GotsContext.get(getContext());
+        return GotsContext.get(getContext());
     }
 
     public GotsSyncAdapter(Context context, boolean autoInitialize) {
@@ -41,6 +42,5 @@ public class GotsSyncAdapter extends NuxeoSyncAdapter {
         seedManager = GotsSeedManager.getInstance().initIfNew(getContext());
 
     }
-    
 
 }

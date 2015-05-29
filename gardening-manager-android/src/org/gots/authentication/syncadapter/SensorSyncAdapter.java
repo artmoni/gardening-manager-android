@@ -22,9 +22,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SyncResult;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Log;
 
 public class SensorSyncAdapter extends GotsSyncAdapter {
+
     public SensorSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
 
@@ -73,35 +75,60 @@ public class SensorSyncAdapter extends GotsSyncAdapter {
             notification.show();
         }
 
-        //TODO stop synch if data are already inserted
         // Get last 100 days of samples
         List<ParrotLocation> locations = parrotSensorProvider.getLocations();
+        Calendar dateLastUploadedSamples = Calendar.getInstance();
         Calendar dateTo = Calendar.getInstance();
-        Calendar datefrom = Calendar.getInstance();
-        for (int nbDays = 10; nbDays < 100; nbDays += 10) {
-            dateTo = datefrom;
-            datefrom.add(Calendar.DAY_OF_YEAR, -nbDays);
 
-            for (ParrotLocation parrotLocation : locations) {
-                LocalSensorSamplesProvider localSensorProvider = new LocalSensorSamplesProvider(getContext(),
-                        parrotLocation.getLocation_identifier());
-                ParrotSamplesProvider parrotSamplesProvider = new ParrotSamplesProvider(getContext(),
-                        parrotLocation.getLocation_identifier());
+        for (ParrotLocation parrotLocation : locations) {
+            for (ParrotLocationsStatus parrotLocationsStatus : status) {
+                if (parrotLocationsStatus.getLocation_identifier().equals(parrotLocation.getLocation_identifier())) {
+                    final Date global_validity_timedate_utc = parrotLocationsStatus.getGlobal_validity_timedate_utc();
+                    if (global_validity_timedate_utc != null)
+                        dateLastUploadedSamples.setTime(global_validity_timedate_utc);
+                    else
+                        dateLastUploadedSamples.setTime(parrotLocationsStatus.getLast_processed_upload_timedate_utc());
+                    break;
+                }
+            }
+
+            LocalSensorSamplesProvider localSensorProvider = new LocalSensorSamplesProvider(getContext(),
+                    parrotLocation.getLocation_identifier());
+            ParrotSamplesProvider parrotSamplesProvider = new ParrotSamplesProvider(getContext(),
+                    parrotLocation.getLocation_identifier());
+            final ParrotSampleTemperature lastSampleTemperature = localSensorProvider.getLastSampleTemperature();
+
+            Calendar dateFrom = Calendar.getInstance();
+            if (lastSampleTemperature != null) {
+                dateFrom.setTime(lastSampleTemperature.getCapture_ts());
+
+            } else {
+                dateFrom.add(Calendar.DAY_OF_YEAR, -100);
+                Log.d(TAG, "---" + "No temperature found locally, retrieve from last 100 days");
+            }
+            dateTo.setTime(dateFrom.getTime());
+            Log.d(TAG,
+                    "---" + parrotLocation + " last uploaded samples on "
+                            + DateFormat.format("yyyy-MM-dd HH:mm:ss", dateLastUploadedSamples)
+                            + " / last locally stored on " + DateFormat.format("yyyy-MM-dd HH:mm:ss", dateFrom));
+            for (int nbDays = 10; dateLastUploadedSamples.compareTo(dateFrom) > 0 && nbDays < 100; dateFrom.setTime(dateTo.getTime()), nbDays += 10) {
+                dateTo.add(Calendar.DAY_OF_YEAR, nbDays);
+                Log.d(TAG,
+                        "------" + parrotLocation + " sync data from  "
+                                + DateFormat.format("yyyy-MM-dd HH:mm:ss", dateFrom) + " to "
+                                + DateFormat.format("yyyy-MM-dd HH:mm:ss", dateTo));
 
                 List<ParrotSampleFertilizer> fertilizers = parrotSamplesProvider.getSamplesFertilizer(
-                        datefrom.getTime(), dateTo.getTime());
+                        dateFrom.getTime(), dateTo.getTime());
                 for (ParrotSampleFertilizer parrotSampleFertilizer : fertilizers) {
                     localSensorProvider.insertSampleFertilizer(parrotSampleFertilizer);
                 }
 
                 // Get Samples from last sync until now or all if never sync
-                ParrotSampleTemperature lastSync = localSensorProvider.getLastSampleTemperature();
-                if (lastSync == null || datefrom.getTime().after(lastSync.getCapture_ts())) {
-                    List<ParrotSampleTemperature> temperatures = parrotSamplesProvider.getSamplesTemperature(
-                            datefrom.getTime(), Calendar.getInstance().getTime());
-                    for (ParrotSampleTemperature parrotSampleTemperature : temperatures) {
-                        localSensorProvider.insertSampleTemperature(parrotSampleTemperature);
-                    }
+                List<ParrotSampleTemperature> temperatures = parrotSamplesProvider.getSamplesTemperature(
+                        dateFrom.getTime(), dateTo.getTime());
+                for (ParrotSampleTemperature parrotSampleTemperature : temperatures) {
+                    localSensorProvider.insertSampleTemperature(parrotSampleTemperature);
                 }
             }
 

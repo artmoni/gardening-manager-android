@@ -122,7 +122,8 @@ public class ParrotSamplesProvider implements GotsSensorSamplesProvider {
     }
 
     @Override
-    public void insertSampleFertilizer(ParrotSampleFertilizer parrotSampleFertilizer) {
+    public long insertSampleFertilizer(ParrotSampleFertilizer parrotSampleFertilizer) {
+        return -1;
     }
 
     @Override
