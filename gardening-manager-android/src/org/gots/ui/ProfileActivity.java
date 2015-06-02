@@ -43,11 +43,11 @@ import android.widget.Toast;
 
 public class ProfileActivity extends BaseGotsActivity implements OnProfileEventListener, GardenListener {
 
-    private static final String TAG = "ProfileActivity";
-
-    // private GoogleMap map;
-
     private GardenInterface currentGarden;
+
+    private ProfileMapFragment mapFragment;
+
+    private List<GardenInterface> allGardens;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,12 +70,12 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
         mapFragment = new ProfileMapFragment();
         transactionMap.replace(R.id.IdGardenProfileList, mapFragment).commit();
 
-        if (findViewById(R.id.IdGardenProfileContent) != null) {
-            Fragment profileListFragment = new ProfileListFragment();
-            FragmentTransaction transactionList = getSupportFragmentManager().beginTransaction();
-            transactionList.setCustomAnimations(R.anim.push_right_in, R.anim.push_left_out);
-            transactionList.replace(R.id.IdGardenProfileContent, profileListFragment).commit();
-        }
+        // if (findViewById(R.id.IdGardenProfileContent) != null) {
+        // Fragment profileListFragment = new ProfileListFragment();
+        // FragmentTransaction transactionList = getSupportFragmentManager().beginTransaction();
+        // transactionList.setCustomAnimations(R.anim.push_right_in, R.anim.push_left_out);
+        // transactionList.replace(R.id.IdGardenProfileContent, profileListFragment).commit();
+        // }
         openContentResumeFragment();
     }
 
@@ -87,10 +87,6 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
             }
         }
     };
-
-    private ProfileMapFragment mapFragment;
-
-    private List<GardenInterface> allGardens;
 
     protected boolean requireAsyncDataRetrieval() {
         return true;
@@ -308,6 +304,8 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
     }
 
     protected void openContentResumeFragment() {
+        if (findViewById(R.id.IdGardenProfileResume) == null)
+            return;
         GardenResumeFragment gardenResumeFragment = (GardenResumeFragment) getSupportFragmentManager().findFragmentById(
                 R.id.IdGardenProfileResume);
         if (gardenResumeFragment == null) {
