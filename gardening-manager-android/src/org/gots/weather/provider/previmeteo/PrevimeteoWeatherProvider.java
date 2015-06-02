@@ -124,8 +124,10 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
         } catch (Exception e) {
             Log.e(TAG, "PrevimeteoErrorHandler has return an error (" + error.getMessage() + ") " + e.getMessage());
             iserror = true;
-            GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-            tracker.trackEvent("Weather", e.getMessage(), gotsPreferences.getWeatherApiKey(), 0);
+            if (e.getMessage() != null) {
+                GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+                tracker.trackEvent("Weather", e.getMessage(), gotsPreferences.getWeatherApiKey(), 0);
+            }
             return WEATHER_ERROR_UNKNOWN;
         }
         return WEATHER_OK;
@@ -169,20 +171,20 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
     }
 
     public WeatherConditionInterface updateCondition(WeatherConditionInterface weatherCondition) {
-//        WeatherConditionInterface conditionInterface = null;
-//        Calendar conditionDate = Calendar.getInstance();
-//        conditionDate.setTime(day);
-//
-//        if (weatherCondition == null)
-//            return null;
-//
-//        weatherCondition.setDate(day);
-//        weatherCondition.setDayofYear(conditionDate.get(Calendar.DAY_OF_YEAR));
-//
-//        if (weatherCondition == null || weatherCondition.getSummary() == null)
-//            conditionInterface = super.insertCondition(weatherCondition);
-//        else
-//            conditionInterface = super.updateCondition(weatherCondition);
+        // WeatherConditionInterface conditionInterface = null;
+        // Calendar conditionDate = Calendar.getInstance();
+        // conditionDate.setTime(day);
+        //
+        // if (weatherCondition == null)
+        // return null;
+        //
+        // weatherCondition.setDate(day);
+        // weatherCondition.setDayofYear(conditionDate.get(Calendar.DAY_OF_YEAR));
+        //
+        // if (weatherCondition == null || weatherCondition.getSummary() == null)
+        // conditionInterface = super.insertCondition(weatherCondition);
+        // else
+        // conditionInterface = super.updateCondition(weatherCondition);
         Log.d(TAG, "updateCondition() is not implemented here");
         return null;
     }
