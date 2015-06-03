@@ -69,4 +69,12 @@
         android:layout_marginTop="5dp"
         android:text="City" />
 
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/idChartTemperature"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_alignLeft="@+id/WeatherWidget"
+        android:layout_below="@+id/WeatherWidget" >
+    </com.github.mikephil.charting.charts.LineChart>
+
 </RelativeLayout>

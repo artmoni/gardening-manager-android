@@ -227,31 +227,31 @@ public class SensorChartFragment extends Fragment {
         chartTemperature.invalidate();
     }
 
-    private String chartURL(String chd, String x, String y, int width, int height) {
-        // String url =
-        // "http://chart.apis.google.com/chart?cht=lc&chs=250x100&chd=t:" +
-        // serieTempMin + "|" +
-        // serieTempMax
-        // + "&chxt=x,y&chxr=0," + min.get(Calendar.DAY_OF_MONTH) + "," +
-        // max.get(Calendar.DAY_OF_MONTH)
-        // + ",1|1,-50,50&chds=-50,50&chco=009999,B65635";
-
-        String url = "http://chart.apis.google.com/chart?cht=lc";
-
-        url = url.concat("&chd=t:" + chd);
-        // if (width>1000){
-        // width=800;
-        // height=300;
-        // }
-        height = 200;
-        width = 400;
-        url = url.concat("&chs=" + width + "x" + height);
-        url = url.concat("&chco=432D07");
-        url = url.concat("&chds=a");
-        url = url.concat("&chxt=x,y");
-        url = url.concat("&chxr=" + x + "|" + y);
-        Log.d(TAG, url);
-        return url;
-    }
+//    private String chartURL(String chd, String x, String y, int width, int height) {
+//        // String url =
+//        // "http://chart.apis.google.com/chart?cht=lc&chs=250x100&chd=t:" +
+//        // serieTempMin + "|" +
+//        // serieTempMax
+//        // + "&chxt=x,y&chxr=0," + min.get(Calendar.DAY_OF_MONTH) + "," +
+//        // max.get(Calendar.DAY_OF_MONTH)
+//        // + ",1|1,-50,50&chds=-50,50&chco=009999,B65635";
+//
+//        String url = "http://chart.apis.google.com/chart?cht=lc";
+//
+//        url = url.concat("&chd=t:" + chd);
+//        // if (width>1000){
+//        // width=800;
+//        // height=300;
+//        // }
+//        height = 200;
+//        width = 400;
+//        url = url.concat("&chs=" + width + "x" + height);
+//        url = url.concat("&chco=432D07");
+//        url = url.concat("&chds=a");
+//        url = url.concat("&chxt=x,y");
+//        url = url.concat("&chxr=" + x + "|" + y);
+//        Log.d(TAG, url);
+//        return url;
+//    }
 
 }
