@@ -5,41 +5,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="horizontal" >
-
-        <!--
-             <fragment
-            android:id="@+id/map"
-            android:layout_width="fill_parent"
-            android:layout_height="150dp"
-            class="com.google.android.gms.maps.SupportMapFragment" />
-        -->
-
-        <FrameLayout
-            android:id="@+id/IdGardenProfileList"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1" >
-        </FrameLayout>
-
-        <!--
-             <FrameLayout
-            android:id="@+id/IdGardenProfileContent"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1" >
-        -->
-
-        <FrameLayout
-            android:id="@+id/IdGardenProfileContent"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1" />
-    </LinearLayout>
-
     <!--
     <LinearLayout
         android:id="@+id/btReturn"
@@ -57,6 +22,28 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:orientation="horizontal" >
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal" >
+
+        <FrameLayout
+            android:id="@+id/IdGardenProfileList"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1" >
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/IdGardenProfileContent"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1" >
+        </FrameLayout>
     </LinearLayout>
 
 </RelativeLayout>

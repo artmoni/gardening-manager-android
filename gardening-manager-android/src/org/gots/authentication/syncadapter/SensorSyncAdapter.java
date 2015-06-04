@@ -75,6 +75,7 @@ public class SensorSyncAdapter extends GotsSyncAdapter {
             notification.show();
         }
 
+        //TODO stop synch if data are already inserted
         // Get last 100 days of samples
         List<ParrotLocation> locations = parrotSensorProvider.getLocations();
         Calendar dateLastUploadedSamples = Calendar.getInstance();
