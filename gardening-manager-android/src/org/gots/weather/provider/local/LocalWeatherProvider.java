@@ -23,6 +23,7 @@ import org.gots.weather.provider.previmeteo.WeatherProvider;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 
 public class LocalWeatherProvider extends GotsDBHelper implements WeatherProvider {
 
@@ -111,7 +112,7 @@ public class LocalWeatherProvider extends GotsDBHelper implements WeatherProvide
 
             if (cursor.moveToFirst()) {
                 weatherCondition = cursorToWeather(cursor);
-            }else
+            } else
                 throw new UnknownWeatherException();
         } finally {
             if (cursor != null)
@@ -141,6 +142,11 @@ public class LocalWeatherProvider extends GotsDBHelper implements WeatherProvide
     public short fetchWeatherForecast(String forecastLocality) {
         // if database access is right, forecast can be fetch
         return bdd.isOpen() ? WEATHER_OK : WEATHER_ERROR_CITY_UNKNOWN;
+    }
+
+    @Override
+    public long getNbConditionsHistory() {
+        return DatabaseUtils.queryNumEntries(bdd, DatabaseHelper.WEATHER_TABLE_NAME);
     }
 
 }

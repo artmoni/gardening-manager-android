@@ -134,4 +134,9 @@ public class WeatherManager implements WeatherProvider {
         return provider.insertCondition(weatherCondition);
     }
 
+    @Override
+    public long getNbConditionsHistory() {
+        return provider.getNbConditionsHistory();
+    }
+
 }

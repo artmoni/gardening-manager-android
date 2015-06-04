@@ -7,8 +7,10 @@ import org.gots.weather.exception.UnknownWeatherException;
 
 public interface WeatherProvider {
 
+    public abstract long getNbConditionsHistory();
+
     public abstract WeatherConditionInterface getCondition(Date requestedDay) throws UnknownWeatherException;
-   
+
     public abstract WeatherConditionInterface updateCondition(WeatherConditionInterface condition);
 
     public abstract WeatherConditionInterface insertCondition(WeatherConditionInterface weatherCondition);

@@ -74,7 +74,8 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_alignLeft="@+id/WeatherWidget"
-        android:layout_below="@+id/WeatherWidget" >
+        android:layout_below="@+id/WeatherWidget"
+        android:visibility="gone" >
     </com.github.mikephil.charting.charts.LineChart>
 
 </RelativeLayout>
