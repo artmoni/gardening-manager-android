@@ -21,6 +21,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.util.Log;
 
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     // ************************ DATABASE **************
     private static final int DATABASE_VERSION = 22;
@@ -306,12 +308,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static int currentDatabaseId = -1;
 
+    private static Context mContext;
+
     public static synchronized DatabaseHelper getInstance(Context context, int currentGardenId) {
         if (helper == null || currentGardenId != currentDatabaseId) {
             helper = new DatabaseHelper(context, currentGardenId);
             currentDatabaseId = currentGardenId;
         }
-
+        mContext = context;
         return helper;
     }
 
@@ -412,8 +416,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion
+        Log.i(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion
                 + ", which will destroy all old data");
+        GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+        tracker.trackEvent("general", "upgrade", oldVersion + " to " + newVersion, 0);
+        
         if (oldVersion == 8 && newVersion == 9) {
             db.execSQL("ALTER TABLE " + WEATHER_TABLE_NAME + " ADD COLUMN " + WEATHER_YEAR + " INTEGER;");
         } else if (oldVersion == 9 && newVersion == 10) {
