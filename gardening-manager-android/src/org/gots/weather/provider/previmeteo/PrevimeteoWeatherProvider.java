@@ -118,7 +118,13 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
                     "PrevimeteoErrorHandler has return an HttpResponseException " + httpResponseException.getMessage());
             if (httpResponseException.getStatusCode() == 400) {
                 GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-                tracker.trackEvent("Weather", httpResponseException.getMessage(), gotsPreferences.getWeatherApiKey(), 0);
+                if (httpResponseException.getMessage() == null)
+                    tracker.trackEvent("Weather",
+                            "Empty message - httpResponseStatus " + httpResponseException.getStatusCode(), ""
+                                    + gotsPreferences.getWeatherApiKey(), 0);
+                else
+                    tracker.trackEvent("Weather", httpResponseException.getMessage(),
+                            "" + gotsPreferences.getWeatherApiKey(), 0);
                 return WEATHER_ERROR_CITY_UNKNOWN;
             }
         } catch (Exception e) {
@@ -126,7 +132,7 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
             iserror = true;
             if (e.getMessage() != null) {
                 GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-                tracker.trackEvent("Weather", e.getMessage(), gotsPreferences.getWeatherApiKey(), 0);
+                tracker.trackEvent("Weather", e.getMessage(), "" + gotsPreferences.getWeatherApiKey(), 0);
             }
             return WEATHER_ERROR_UNKNOWN;
         }
