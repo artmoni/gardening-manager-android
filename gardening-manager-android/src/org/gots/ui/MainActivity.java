@@ -920,7 +920,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
             weatherResumeFragment = new WeatherResumeFragment();
             FragmentTransaction transactionWeather = getSupportFragmentManager().beginTransaction();
             transactionWeather.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
-            transactionWeather.replace(R.id.idFragmentWeather, weatherResumeFragment).commit();
+            transactionWeather.replace(R.id.idFragmentWeather, weatherResumeFragment).commitAllowingStateLoss();
         } else
             weatherResumeFragment.update();
     }
@@ -933,7 +933,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
             FragmentTransaction transactionTutorial = fragmentManager.beginTransaction();
             // transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
-            transactionTutorial.replace(R.id.idFragmentTutorial, tutorialResumeFragment).commit();
+            transactionTutorial.replace(R.id.idFragmentTutorial, tutorialResumeFragment).commitAllowingStateLoss();
         } else
             findViewById(R.id.idFragmentTutorial).setVisibility(View.GONE);
     }
@@ -947,7 +947,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
             Fragment incredibleResumeFragment = new IncredibleResumeFragment();
             FragmentTransaction incredibleCatalogue = getSupportFragmentManager().beginTransaction();
             incredibleCatalogue.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
-            incredibleCatalogue.replace(R.id.idFragmentIncredible, incredibleResumeFragment).commit();
+            incredibleCatalogue.replace(R.id.idFragmentIncredible, incredibleResumeFragment).commitAllowingStateLoss();
         }
     }
 
@@ -981,7 +981,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                         sensorTransaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
                         sensorTransaction.replace(R.id.idFragmentSensor, sensorResumeFragment);
                         if (sensorResumeFragment.isAdded())
-                            sensorTransaction.commit();
+                            sensorTransaction.commitAllowingStateLoss();
 
                     } else {
                         sensorResumeFragment.update();
@@ -990,7 +990,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                     // FragmentTransaction sensorTransaction = getSupportFragmentManager().beginTransaction();
                     // sensorTransaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
                     // sensorTransaction.remove(sensorResumeFragment).commit();
-                    sensorTransaction.remove(sensorResumeFragment).commit();
+                    sensorTransaction.remove(sensorResumeFragment).commitAllowingStateLoss();
                 }
                 super.onPostExecute(result);
             }
