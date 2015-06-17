@@ -19,6 +19,7 @@ import org.nuxeo.android.broadcast.NuxeoBroadcastMessages;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGrowingSeedProvider {
 
@@ -140,6 +141,10 @@ public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGro
 
     @Override
     public void deleteGrowingSeed(GrowingSeed seed) {
+        if (seed == null) {
+            Log.w(GotsGrowingSeedManager.class.getSimpleName(), "GrowingSeed parameter is null, can't be deleted");
+            return;
+        }
         for (HashMap<Integer, GrowingSeed> seedMap : seedsByAllotment.values()) {
             if (seedMap.containsKey(seed.getGrowingSeedId())) {
                 seedMap.remove(seed.getGrowingSeedId());
