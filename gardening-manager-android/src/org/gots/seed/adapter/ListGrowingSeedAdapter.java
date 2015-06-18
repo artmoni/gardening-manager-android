@@ -17,6 +17,7 @@ import org.gots.seed.GrowingSeed;
 import org.gots.seed.view.SeedWidget;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -37,12 +38,15 @@ public class ListGrowingSeedAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return mySeeds.size();
+        return mySeeds.size() + 1;
     }
 
     @Override
     public GrowingSeed getItem(int position) {
-        return mySeeds.get(position);
+        if (position < getCount()-1)
+            return mySeeds.get(position);
+        else
+            return null;
     }
 
     @Override
@@ -53,30 +57,37 @@ public class ListGrowingSeedAdapter extends BaseAdapter {
     @SuppressWarnings("deprecation")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
-        SeedWidget seedWidget = (SeedWidget) convertView;
         if (convertView == null) {
-            GrowingSeed currentSeed = (GrowingSeed) getItem(position);
+            if (position < getCount()-1) {
+                GrowingSeed currentSeed = (GrowingSeed) getItem(position);
 
-            seedWidget = new SeedWidget(mContext);
-            seedWidget.setSeed(currentSeed);
-            // seedWidget.setOnClickListener(this);
-            // seedWidget.setOnLongClickListener(this);
-            seedWidget.setTag(currentSeed);
-            int sdk = android.os.Build.VERSION.SDK_INT;
-            if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                seedWidget.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.action_selector));
+                SeedWidget widget = new SeedWidget(mContext);
+                widget.setSeed(currentSeed);
+                // seedWidget.setOnClickListener(this);
+                // seedWidget.setOnLongClickListener(this);
+                widget.setTag(currentSeed);
+                int sdk = android.os.Build.VERSION.SDK_INT;
+                if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                    widget.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.action_selector));
+                } else {
+                    widget.setBackground(mContext.getResources().getDrawable(R.drawable.family_unknown));
+                }
+                convertView = widget;
+                // seedWidget.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.parcelle_dark_bg));
             } else {
-                seedWidget.setBackground(mContext.getResources().getDrawable(R.drawable.family_unknown));
+                View buttonPlus = LayoutInflater.from(mContext).inflate(R.layout.button_add, parent, false);
+                convertView = buttonPlus;
+                // buttonPlus.setOnClickListener(new View.OnClickListener() {
+                //
+                // @Override
+                // public void onClick(View v) {
+                // clickListener.onAllotmentClick(v, getItem(position));
+                // }
+                // });
             }
-
-            // seedWidget.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.parcelle_dark_bg));
-
-        } else {
-
         }
+        return convertView;
 
-        return seedWidget;
     }
 
     @Override

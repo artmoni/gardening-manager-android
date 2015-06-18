@@ -58,23 +58,20 @@ public class AllotmentListFragment extends AbstractListFragment {
         listAllotments = (ListView) v.findViewById(R.id.IdGardenAllotmentsList);
         lsa = new ListAllotmentAdapter(getActivity(), new ArrayList<BaseAllotmentInterface>());
         listAllotments.setAdapter(lsa);
-        listAllotments.setDivider(null);
-        listAllotments.setDividerHeight(0);
         listAllotments.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        listAllotments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mCallback.onAllotmentClick(lsa.getItem(position));
-                view.setSelected(true);
-            }
-
-        });
+//        listAllotments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                mCallback.onAllotmentClick(lsa.getItem(position));
+//               
+//            }
+//
+//        });
         listAllotments.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 mCallback.onAllotmentLongClick(lsa.getItem(position));
-                view.setSelected(true);
                 return true;
             }
         });

@@ -11,7 +11,7 @@
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:layout_gravity="right"
-        android:background="@drawable/selector_allotment"
+        android:background="@drawable/parcelle_contextual_bar"
         android:gravity="right"
         android:orientation="horizontal" >
 
@@ -46,18 +46,12 @@
             android:gravity="right"
             android:orientation="horizontal" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="Add a plant" style="@style/buttonGreen"/>
     </LinearLayout>
 
     <GridView
         android:id="@+id/IdGrowingSeedList"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
         android:horizontalSpacing="2dp"
         android:numColumns="4"
         android:verticalSpacing="2dp" >
