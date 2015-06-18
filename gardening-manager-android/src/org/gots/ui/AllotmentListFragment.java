@@ -56,7 +56,7 @@ public class AllotmentListFragment extends AbstractListFragment {
     @Override
     public void onViewCreated(View v, Bundle savedInstanceState) {
         listAllotments = (ListView) v.findViewById(R.id.IdGardenAllotmentsList);
-        lsa = new ListAllotmentAdapter(getActivity(), new ArrayList<BaseAllotmentInterface>(), getArguments());
+        lsa = new ListAllotmentAdapter(getActivity(), new ArrayList<BaseAllotmentInterface>());
         listAllotments.setAdapter(lsa);
         listAllotments.setDivider(null);
         listAllotments.setDividerHeight(0);

@@ -293,9 +293,6 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
         // Handle item selection
         Intent i;
         switch (item.getItemId()) {
-        case android.R.id.home:
-            finish();
-            return true;
         case R.id.help:
             Intent browserIntent = new Intent(this, WebHelpActivity.class);
             browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());

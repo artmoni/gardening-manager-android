@@ -62,13 +62,8 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setTitle(R.string.dashboard_allotments_name);
 
-        // GardenManager gm =GardenManager.getInstance();
-
         setContentView(R.layout.garden);
 
-        // listAllotments.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-
-        // listAllotments.setBackgroundDrawable(getResources().getDrawable(R.drawable.help_hut_2));
         if (!gotsPurchase.isPremium()) {
             GotsAdvertisement ads = new GotsAdvertisement(this);
 
@@ -76,7 +71,6 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
             layout.addView(ads.getAdsLayout());
         }
 
-        // setProgressAction(new Intent(this, AllotmentNotificationService.class));
         vendorListFragment = new VendorCatalogueFragment();
         allotmentListFragment = new AllotmentListFragment();
         editorFragment = new AllotmentEditorFragment();
@@ -98,9 +92,6 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-        case android.R.id.home:
-            finish();
-            return true;
         case R.id.new_allotment:
 
             displayEditorFragment(null);

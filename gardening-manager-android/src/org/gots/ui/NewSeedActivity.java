@@ -764,9 +764,6 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-        case android.R.id.home:
-            finish();
-            return true;
 
         case R.id.help:
             Intent browserIntent = new Intent(this, WebHelpActivity.class);

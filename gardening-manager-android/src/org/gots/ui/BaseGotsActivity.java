@@ -187,7 +187,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         registerReceiver(gardenBroadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_EVENT));
         registerReceiver(actionseedProvider, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));
         registerReceiver(actionseedProvider, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
-        
+
         initAllManager();
 
     }
@@ -249,7 +249,6 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
 
     @Override
     protected void onResume() {
-        
 
         super.onResume();
     }
@@ -309,7 +308,12 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         case R.id.refresh_seed:
             onRefresh(requireRefreshSyncAuthority());
             break;
-
+        case android.R.id.home:
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+                getSupportFragmentManager().popBackStack();
+            else
+                finish();
+            break;
         default:
             break;
         }

@@ -265,9 +265,6 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
             i = new Intent(this, NewSeedActivity.class);
             startActivity(i);
             return true;
-        case android.R.id.home:
-            finish();
-            return true;
         case R.id.new_seed_barcode:
             IntentIntegrator integrator = new IntentIntegrator(this);
             integrator.initiateScan();

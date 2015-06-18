@@ -45,71 +45,22 @@
             android:layout_weight="1"
             android:gravity="right"
             android:orientation="horizontal" />
-    </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/idAllotmentBoxLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/text_color_light"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        android:padding="10dp" >
-
-        <LinearLayout
-            android:id="@+id/imageView1"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:background="@drawable/parcelle_left" />
-
-        <LinearLayout
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical" >
-
-            <LinearLayout
-                android:id="@+id/imageView3"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/parcelle_top" />
-
-            <!--
-            <com.devsmart.android.ui.HorizontalListView
-                android:id="@+id/IdGrowingSeedList"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1" >
-            </com.devsmart.android.ui.HorizontalListView>
-            -->
-
-            <GridView
-                android:id="@+id/IdGrowingSeedList"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:horizontalSpacing="2dp"
-                android:numColumns="4"
-                android:verticalSpacing="2dp" >
-            </GridView>
-
-            <LinearLayout
-                android:id="@+id/imageView4"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/parcelle_bottom" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:background="@drawable/parcelle_right" />
+            android:layout_margin="8dp"
+            android:text="Add a plant" style="@style/buttonGreen"/>
     </LinearLayout>
 
-    <LinearLayout
+    <GridView
+        android:id="@+id/IdGrowingSeedList"
         android:layout_width="fill_parent"
-        android:layout_height="5dp"
-        android:background="@drawable/parcelle_bottom_line_shadow" />
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:horizontalSpacing="2dp"
+        android:numColumns="4"
+        android:verticalSpacing="2dp" >
+    </GridView>
 
 </LinearLayout>

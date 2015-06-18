@@ -62,13 +62,9 @@ public class ListAllotmentAdapter extends BaseAdapter {
 
     }
 
-    public ListAllotmentAdapter(FragmentActivity mContext, List<BaseAllotmentInterface> allotments, Bundle bundle) {
+    public ListAllotmentAdapter(FragmentActivity mContext, List<BaseAllotmentInterface> allotments) {
         this.mContext = mContext;
         myAllotments = allotments;
-        // if (bundle != null) {
-        // isSelectable = bundle.getBoolean(GardenActivity.SELECT_ALLOTMENT);
-        // currentSeedId = bundle.getInt(GardenActivity.VENDOR_SEED_ID);
-        // }
     }
 
     public void setAllotments(List<BaseAllotmentInterface> allotments) {
@@ -106,7 +102,7 @@ public class ListAllotmentAdapter extends BaseAdapter {
 
         public LinearLayout menu;
 
-        public LinearLayout allotmentBox;
+//        public LinearLayout allotmentBox;
     }
 
     @SuppressWarnings("deprecation")
@@ -127,7 +123,7 @@ public class ListAllotmentAdapter extends BaseAdapter {
             holder.titlebar = (LinearLayout) ll.findViewById(R.id.idAllotmentTitlebar);
             holder.allotmentName = (TextView) ll.findViewById(R.id.textAllotmentName);
             holder.menu = (LinearLayout) ll.findViewById(R.id.idAllotmentMenu);
-            holder.allotmentBox = (LinearLayout) ll.findViewById(R.id.idAllotmentBoxLayout);
+//            holder.allotmentBox = (LinearLayout) ll.findViewById(R.id.idAllotmentBoxLayout);
 
             holder.allotment = getItem(position);
             ll.setTag(holder);
@@ -166,13 +162,13 @@ public class ListAllotmentAdapter extends BaseAdapter {
             // LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
             // LayoutParams.WRAP_CONTENT));
         }
-        holder.allotmentBox.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                clickListener.onAllotmentClick(v, getItem(position));
-            }
-        });
+//        holder.allotmentBox.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                clickListener.onAllotmentClick(v, getItem(position));
+//            }
+//        });
         holder.seedGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -226,118 +222,7 @@ public class ListAllotmentAdapter extends BaseAdapter {
                 }
             }
         });
-        // }
-
-        // widget.setPadding(4, 4, 4, 8);
-        // holder.menu.addView(widget);
-
-        // // SowingAction sow = new SowingAction(mContext);
-        // ImageView widgetSensor = new ImageView(mContext);
-        // widgetSensor.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_sensor));
-        // widgetSensor.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.action_selector));
-        // widgetSensor.setTag(position);
-        // widgetSensor.setOnClickListener(new View.OnClickListener() {
-        //
-        // @Override
-        // public void onClick(View v) {
-        //
-        // GotsPurchaseItem purchaseItem = new GotsPurchaseItem(mContext);
-        //
-        // // if (!purchaseItem.getFeatureParrot() ? true :
-        // purchaseItem.isPremium()) {
-        // if (!purchaseItem.getFeatureParrot() || purchaseItem.isPremium()) {
-        // FragmentManager fm = mContext.getSupportFragmentManager();
-        // GotsBillingDialog editNameDialog = new
-        // GotsBillingDialog(GotsPurchaseItem.SKU_FEATURE_PARROT);
-        // editNameDialog.setStyle(DialogFragment.STYLE_NORMAL,
-        // R.style.CustomDialog);
-        // editNameDialog.show(fm, "fragment_edit_name");
-        // } else {
-        // Intent sensorIntent = new Intent(mContext, SensorActivity.class);
-        // mContext.startActivity(sensorIntent);
-        // }// new AsyncTask<Void, Void, List<ParrotLocation>>() {
-        // // private LocationListAdapter sensorListAdapter;
-        // //
-        // // List<ParrotSampleFertilizer> samplesFertilizer = null;
-        // //
-        // // List<ParrotSampleTemperature> samplesTemp = null;
-        // //
-        // // @Override
-        // // protected List<ParrotLocation> doInBackground(Void... params) {
-        // // ParrotSensorProvider sensorProvider = new
-        // ParrotSensorProvider(mContext);
-        // // List<ParrotLocation> locations = sensorProvider.getLocations();
-        // // sensorProvider.getStatus();
-        // // samplesFertilizer =
-        // sensorProvider.getSamples(locations.get(0).getLocation_identifier());
-        // // samplesTemp =
-        // sensorProvider.getSamples2(locations.get(0).getLocation_identifier());
-        // //
-        // // return locations;
-        // // }
-        // //
-        // // protected void onPostExecute(List<ParrotLocation> result) {
-        // // // sensorListAdapter = new SensorListAdapter(mContext, result);
-        // // sensorListAdapter = new LocationListAdapter(mContext, result);
-        // // // new AlertDialog.Builder(mContext).setAdapter(sensorListAdapter,
-        // // // new DialogInterface.OnClickListener() {
-        // // //
-        // // // @Override
-        // // // public void onClick(DialogInterface dialog, int which) {
-        // // // Toast.makeText(mContext,
-        // sensorListAdapter.getItem(which).getSensor_serial(),
-        // // // Toast.LENGTH_SHORT).show();
-        // // // ;
-        // // // }
-        // // // }).show();
-        // //
-        // // Intent sensorIntent = new Intent(mContext, SensorActivity.class);
-        // // mContext.startActivity(sensorIntent);
-        // //
-        // // if (samplesFertilizer != null) {
-        // // WebView webView = new WebView(mContext);
-        // // String chd = new String();
-        // // for (ParrotSampleFertilizer fertilizer : samplesFertilizer) {
-        // // chd = chd.concat(String.valueOf(fertilizer.getFertilizer_level() *
-        // 100));
-        // // chd = chd.concat(",");
-        // // }
-        // // chd = chd.substring(0, chd.length() - 1);
-        // // String url =
-        // "http://chart.apis.google.com/chart?cht=ls&chs=250x100&chd=t:" + chd;
-        // // webView.loadUrl(url);
-        // // Log.d(ListAllotmentAdapter.class.getName(), url);
-        // // AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
-        // // alert.setView(webView);
-        // // alert.show();
-        // // }
-        // // if (samplesTemp != null) {
-        // // WebView webView = new WebView(mContext);
-        // // String chd = new String();
-        // // int i = 0;
-        // // for (ParrotSampleTemperature sampleTemp : samplesTemp) {
-        // // chd =
-        // chd.concat(String.valueOf(sampleTemp.getAir_temperature_celsius()));
-        // // chd = chd.concat(",");
-        // // if (i++ >= 50)
-        // // break;
-        // // }
-        // // chd = chd.substring(0, chd.length() - 1);
-        // // String url =
-        // "http://chart.apis.google.com/chart?cht=ls&chs=250x100&chd=t:" + chd;
-        // // webView.loadUrl(url);
-        // // Log.d(ListAllotmentAdapter.class.getName(), url);
-        // // AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
-        // // alert.setView(webView);
-        // // alert.show();
-        // // }
-        // // };
-        // // }.execute();
-        // }
-        // });
-        //
-        // widgetSensor.setPadding(4, 4, 4, 8);
-        // holder.menu.addView(widgetSensor);
+        
         return ll;
     }
 
