@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.allotment.GotsAllotmentManager;
+import org.gots.allotment.provider.AllotmentProvider;
 import org.gots.context.GotsContext;
 import org.gots.garden.GotsGardenManager;
 import org.gots.preferences.GotsPreferences;
@@ -35,7 +36,7 @@ public class AbstractAction implements BaseAction, Comparator<AbstractActionSeed
 
     protected GotsPreferences gotsPrefs;
 
-    protected GotsAllotmentManager allotmentProvider;
+    protected AllotmentProvider allotmentProvider;
 
     protected Context mContext;
 

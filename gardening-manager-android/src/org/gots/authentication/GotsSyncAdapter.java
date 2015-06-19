@@ -1,6 +1,7 @@
 package org.gots.authentication;
 
 import org.gots.allotment.GotsAllotmentManager;
+import org.gots.allotment.provider.AllotmentProvider;
 import org.gots.context.GotsContext;
 import org.gots.garden.GotsGardenManager;
 import org.gots.preferences.GotsPreferences;
@@ -16,7 +17,7 @@ public class GotsSyncAdapter extends NuxeoSyncAdapter {
 
     protected GotsPreferences gotsPrefs;
 
-    protected GotsAllotmentManager allotmentManager;
+    protected AllotmentProvider allotmentManager;
 
     protected GotsGrowingSeedManager growingSeedManager;
 

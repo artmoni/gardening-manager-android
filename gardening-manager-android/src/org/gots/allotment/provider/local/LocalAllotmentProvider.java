@@ -139,4 +139,8 @@ public class LocalAllotmentProvider extends GotsDBHelper implements AllotmentPro
         return allotment;
     }
 
+    public BaseAllotmentInterface getAllotmentByID(Integer id) {
+        return null;
+    }
+
 }

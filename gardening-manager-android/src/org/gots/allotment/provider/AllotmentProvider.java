@@ -17,6 +17,8 @@ public interface AllotmentProvider {
 	BaseAllotmentInterface updateAllotment(BaseAllotmentInterface allotment);
 
     void setCurrentAllotment(BaseAllotmentInterface allotmentInterface);
+
+    public abstract BaseAllotmentInterface getAllotmentByID(Integer id);
 	
 	
 }

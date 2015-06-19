@@ -21,7 +21,6 @@ import org.gots.seed.view.SeedWidget;
 
 import android.content.Context;
 import android.graphics.Point;
-import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBar.LayoutParams;
 import android.view.Display;
@@ -31,7 +30,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -43,13 +41,7 @@ public class ListAllotmentAdapter extends BaseAdapter {
 
     private ListGrowingSeedAdapter listGrowingSeedAdapter;
 
-    // private GridView listSeeds;
-
     private List<BaseAllotmentInterface> myAllotments;
-
-    // private boolean isSelectable;
-    //
-    // private int currentSeedId;
 
     OnGrowingSeedClickListener clickListener;
 
@@ -103,9 +95,6 @@ public class ListAllotmentAdapter extends BaseAdapter {
         public BaseAllotmentInterface allotment;
 
         public LinearLayout menu;
-
-
-        // public LinearLayout allotmentBox;
     }
 
     @SuppressWarnings("deprecation")
@@ -126,12 +115,10 @@ public class ListAllotmentAdapter extends BaseAdapter {
             holder.titlebar = (LinearLayout) ll.findViewById(R.id.idAllotmentTitlebar);
             holder.allotmentName = (TextView) ll.findViewById(R.id.textAllotmentName);
             holder.menu = (LinearLayout) ll.findViewById(R.id.idAllotmentMenu);
-            // holder.allotmentBox = (LinearLayout) ll.findViewById(R.id.idAllotmentBoxLayout);
 
             holder.allotment = getItem(position);
             ll.setTag(holder);
             ll.setDescendantFocusability(LinearLayout.FOCUS_BLOCK_DESCENDANTS);
-            // ll.setOnClickListener(this);
 
         } else
             holder = (Holder) ll.getTag();
@@ -151,7 +138,7 @@ public class ListAllotmentAdapter extends BaseAdapter {
         listGrowingSeedAdapter = new ListGrowingSeedAdapter(mContext, getItem(position).getSeeds());
         holder.seedGridView.setAdapter(listGrowingSeedAdapter);
 
-        int layoutsize = 100;
+        int layoutsize = 200;
         if (width <= 480)
             layoutsize = 50;
         int nbcolumn = width / layoutsize;
@@ -160,46 +147,33 @@ public class ListAllotmentAdapter extends BaseAdapter {
         holder.seedGridView.setNumColumns(nbcolumn);
 
         if (listGrowingSeedAdapter.getCount() > 0) {
-            
+
             holder.seedGridView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
                     (holder.seedGridView.getCount() / nbcolumn + 1) * layoutsize + layoutsize));
-        }else
+        } else
             holder.seedGridView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, layoutsize));
-            
-        // holder.allotmentBox.setOnClickListener(new View.OnClickListener() {
-        //
-        // @Override
-        // public void onClick(View v) {
-        // clickListener.onAllotmentClick(v, getItem(position));
-        // }
-        // });
+
         holder.seedGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int positionSeed, long id) {
                 if (view instanceof SeedWidget)
                     clickListener.onGrowingSeedClick(view,
-                            ((ListGrowingSeedAdapter) ((GridView) parent).getAdapter()).getItem(position));
+                            ((ListGrowingSeedAdapter) ((GridView) parent).getAdapter()).getItem(positionSeed));
                 else
                     clickListener.onAllotmentClick(view, getItem(position));
             }
         });
         holder.seedGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int positionSeed, long id) {
                 if (view instanceof SeedWidget)
                     clickListener.onGrowingSeedLongClick(view,
-                            ((ListGrowingSeedAdapter) ((GridView) parent).getAdapter()).getItem(position));
+                            ((ListGrowingSeedAdapter) ((GridView) parent).getAdapter()).getItem(positionSeed));
                 return true;
             }
         });
-        // else
-        // holder.listSeeds.setLayoutParams(new
-        // LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
-        // ((holder.listSeeds.getCount() / nbcolumn) + 1) * layoutsize));
 
         holder.allotmentName.setText(getItem(position).getName());
-
-        // holder.titlebar.removeAllViews();
 
         holder.menu.setTag(holder);
         holder.menu.setOnClickListener(new View.OnClickListener() {
@@ -209,7 +183,6 @@ public class ListAllotmentAdapter extends BaseAdapter {
                 clickListener.onAllotmentMenuClick(v, getItem(position));
             }
         });
-
 
         return ll;
     }

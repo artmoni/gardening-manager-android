@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:layout_height="fill_parent" >
 
-    <LinearLayout
-        android:id="@+id/LinearLayout01"
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical" >
 
         <LinearLayout
+            android:id="@+id/LinearLayout01"
             android:layout_width="fill_parent"
-            android:layout_height="60dp"
-            android:background="@drawable/bg_allotment_top" >
-        </LinearLayout>
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
 
-        <!--
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:background="@drawable/bg_allotment_top" >
+            </LinearLayout>
+
+            <!--
         <ListView
             android:id="@+id/IdGardenAllotmentsList"
             android:layout_width="wrap_content"
@@ -26,27 +30,28 @@
             android:cacheColorHint="#00000000"
             android:focusable="false" >
         </ListView>
-        -->
+            -->
 
-        <FrameLayout
-            android:id="@+id/idFragmentAllotmentList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-        </FrameLayout>
+            <FrameLayout
+                android:id="@+id/idFragmentAllotmentList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+            </FrameLayout>
 
-        <LinearLayout
-            android:id="@+id/idAdsTop"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            <LinearLayout
+                android:id="@+id/idAdsTop"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
 
-    <ImageView
-        android:id="@+id/btReturn"
-        android:layout_width="fill_parent"
-        android:layout_height="70dp"
-        android:background="@drawable/bt_logo"
-        android:scaleType="centerCrop" >
-    </ImageView>
+        <ImageView
+            android:id="@+id/btReturn"
+            android:layout_width="fill_parent"
+            android:layout_height="70dp"
+            android:background="@drawable/bt_logo"
+            android:scaleType="centerCrop" >
+        </ImageView>
+    </RelativeLayout>
 
-</RelativeLayout>
+</ScrollView>

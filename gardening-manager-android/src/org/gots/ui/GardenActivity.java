@@ -222,9 +222,10 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
     @Override
     public void onSeedClick(final BaseSeedInterface seed) {
         if (vendorListFragment != null) {
-            FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
-            transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
-            transactionTutorial.remove(vendorListFragment).commit();
+//            FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
+//            transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
+//            transactionTutorial.remove(vendorListFragment).commit();
+            getSupportFragmentManager().popBackStack();
         }
 
         if (seed != null) {
@@ -301,7 +302,6 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
     protected void onNuxeoDataRetrieved(Object data) {
         List<BaseAllotmentInterface> allotments = (List<BaseAllotmentInterface>) data;
         if (allotments.size() > 0) {
-
             displayAllotmentsFragment();
 
         } else {

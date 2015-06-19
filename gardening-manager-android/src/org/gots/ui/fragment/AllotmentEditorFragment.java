@@ -2,8 +2,10 @@ package org.gots.ui.fragment;
 
 import org.gots.R;
 import org.gots.allotment.GotsAllotmentManager;
+import org.gots.allotment.provider.AllotmentProvider;
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
+import org.gots.seed.adapter.ListGrowingSeedAdapter;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -12,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.TextView;
 
 public class AllotmentEditorFragment extends BaseGotsFragment {
@@ -22,13 +25,17 @@ public class AllotmentEditorFragment extends BaseGotsFragment {
 
     private OnAllotmentListener mCallback;
 
-    private GotsAllotmentManager allotmentManager;
+    private AllotmentProvider allotmentManager;
 
     private TextView textviewAllotmentName;
 
     private Button buttonNewAllotment;
 
     private BaseAllotmentInterface allotment;
+
+    private TextView textviewPlantCount;
+
+    private GridView gridView;
 
     @Override
     public void onAttach(Activity activity) {
@@ -53,6 +60,8 @@ public class AllotmentEditorFragment extends BaseGotsFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         textviewAllotmentName = (TextView) view.findViewById(R.id.editTextAllotmentName);
         buttonNewAllotment = (Button) view.findViewById(R.id.buttonAllotmentNew);
+        textviewPlantCount = (TextView) view.findViewById(R.id.textViewNbPlants);
+        gridView = (GridView) view.findViewById(R.id.IdGrowingSeedList);
         if (allotment == null) {
             buttonNewAllotment.setOnClickListener(new View.OnClickListener() {
 
@@ -101,15 +110,18 @@ public class AllotmentEditorFragment extends BaseGotsFragment {
                     }.execute();
                 };
             });
+
+            ListGrowingSeedAdapter adapter = new ListGrowingSeedAdapter(getActivity(), allotment.getSeeds());
+            gridView.setAdapter(adapter);
         }
 
         textviewAllotmentName.setText(allotment != null ? allotment.getName() : "");
+        textviewPlantCount.setText(allotment != null ? "" + allotment.getSeeds().size() : "0");
         super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
     public void update() {
-
     }
 
     public void setAllotment(BaseAllotmentInterface allotment) {

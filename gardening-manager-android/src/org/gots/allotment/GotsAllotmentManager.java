@@ -66,7 +66,7 @@ public class GotsAllotmentManager extends BroadcastReceiver implements Allotment
     /**
      * If it was already called once, the method returns without any change.
      */
-    public synchronized GotsAllotmentManager initIfNew(Context context) {
+    public synchronized AllotmentProvider initIfNew(Context context) {
         if (initDone) {
             return this;
         }
@@ -148,5 +148,13 @@ public class GotsAllotmentManager extends BroadcastReceiver implements Allotment
     @Override
     public BaseAllotmentInterface getCurrentAllotment() {
         return allotmentProvider.getCurrentAllotment();
+    }
+
+    @Override
+    public BaseAllotmentInterface getAllotmentByID(Integer id) {
+        if (allotments != null)
+            return allotments.get(id);
+        else
+            return null;
     }
 }

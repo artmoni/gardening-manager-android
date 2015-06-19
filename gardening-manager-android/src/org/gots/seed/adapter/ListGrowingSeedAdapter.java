@@ -63,8 +63,6 @@ public class ListGrowingSeedAdapter extends BaseAdapter {
 
                 SeedWidget widget = new SeedWidget(mContext);
                 widget.setSeed(currentSeed);
-                // seedWidget.setOnClickListener(this);
-                // seedWidget.setOnLongClickListener(this);
                 widget.setTag(currentSeed);
                 int sdk = android.os.Build.VERSION.SDK_INT;
                 if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
@@ -73,30 +71,13 @@ public class ListGrowingSeedAdapter extends BaseAdapter {
                     widget.setBackground(mContext.getResources().getDrawable(R.drawable.family_unknown));
                 }
                 convertView = widget;
-                // seedWidget.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.parcelle_dark_bg));
             } else {
                 View buttonPlus = LayoutInflater.from(mContext).inflate(R.layout.button_add, parent, false);
                 convertView = buttonPlus;
-                // buttonPlus.setOnClickListener(new View.OnClickListener() {
-                //
-                // @Override
-                // public void onClick(View v) {
-                // clickListener.onAllotmentClick(v, getItem(position));
-                // }
-                // });
             }
         }
         return convertView;
 
-    }
-
-    @Override
-    public void notifyDataSetChanged() {
-        // GrowingSeedDBHelper helper = new GrowingSeedDBHelper(mContext);
-        // mySeeds = helper.getSeedsByAllotment(currentAllotmentReference);
-
-        // parentAdapter.notifyDataSetChanged();
-        super.notifyDataSetChanged();
     }
 
     static class SeedViewHolder {

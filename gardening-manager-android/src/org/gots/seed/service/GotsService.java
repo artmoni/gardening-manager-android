@@ -3,6 +3,7 @@ package org.gots.seed.service;
 import org.gots.action.GotsActionSeedManager;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.allotment.GotsAllotmentManager;
+import org.gots.allotment.provider.AllotmentProvider;
 import org.gots.context.GotsContext;
 import org.gots.garden.GotsGardenManager;
 import org.gots.preferences.GotsPreferences;
@@ -24,7 +25,7 @@ public abstract class GotsService extends Service {
 
     protected GotsActionSeedProvider actionseedManager;
 
-    protected GotsAllotmentManager allotmentManager;
+    protected AllotmentProvider allotmentManager;
 
     protected GotsContext getGotsContext() {
         return GotsContext.get(getApplicationContext());
