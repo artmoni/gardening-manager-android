@@ -1,57 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout01"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
-    <RelativeLayout
+    <FrameLayout
+        android:id="@+id/idFragmentAllotmentList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/idAdsTop"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content" >
+    </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/LinearLayout01"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical" >
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="60dp"
-                android:background="@drawable/bg_allotment_top" >
-            </LinearLayout>
-
-            <!--
-        <ListView
-            android:id="@+id/IdGardenAllotmentsList"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/background_simple"
-            android:cacheColorHint="#00000000"
-            android:focusable="false" >
-        </ListView>
-            -->
-
-            <FrameLayout
-                android:id="@+id/idFragmentAllotmentList"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-            </FrameLayout>
-
-            <LinearLayout
-                android:id="@+id/idAdsTop"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
-            </LinearLayout>
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/btReturn"
-            android:layout_width="fill_parent"
-            android:layout_height="70dp"
-            android:background="@drawable/bt_logo"
-            android:scaleType="centerCrop" >
-        </ImageView>
-    </RelativeLayout>
-
-</ScrollView>
+</LinearLayout>

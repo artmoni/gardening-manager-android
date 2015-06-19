@@ -222,9 +222,6 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
     @Override
     public void onSeedClick(final BaseSeedInterface seed) {
         if (vendorListFragment != null) {
-//            FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
-//            transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
-//            transactionTutorial.remove(vendorListFragment).commit();
             getSupportFragmentManager().popBackStack();
         }
 
@@ -253,7 +250,7 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
         FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
         transactionTutorial.setCustomAnimations(R.anim.push_right_in, R.anim.push_right_out);
         transactionTutorial.addToBackStack(null);
-        transactionTutorial.add(R.id.idFragmentAllotmentList, vendorListFragment).commit();
+        transactionTutorial.add(R.id.idFragmentAllotmentList, vendorListFragment).commitAllowingStateLoss();
     }
 
     @Override
@@ -315,7 +312,7 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
         if (!allotmentListFragment.isAdded()) {
             FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
             transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
-            transactionTutorial.replace(R.id.idFragmentAllotmentList, allotmentListFragment).commit();
+            transactionTutorial.add(R.id.idFragmentAllotmentList, allotmentListFragment).commitAllowingStateLoss();
         } else
             allotmentListFragment.update();
     }
@@ -336,8 +333,7 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
         if (editorFragment.isAdded()) {
             FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
             transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
-            transactionTutorial.remove(editorFragment).commit();
-            getSupportFragmentManager().popBackStack();
+            transactionTutorial.remove(editorFragment).commitAllowingStateLoss();
         }
         runAsyncDataRetrieval();
     }
