@@ -20,7 +20,7 @@ public class BaseAllotment implements Serializable, BaseAllotmentInterface {
 
     private static final long serialVersionUID = 1L;
 
-    private int id;
+    private int id = -1;
 
     private String name;
 
@@ -94,9 +94,9 @@ public class BaseAllotment implements Serializable, BaseAllotmentInterface {
     @Override
     public String toString() {
         String desc = new String();
-        desc=desc.concat("(" + getId() + ")");
-        desc=desc.concat("[" + getUUID() + "]");
-        desc=desc.concat("[" + getName() + "]");
+        desc = desc.concat("(" + getId() + ")");
+        desc = desc.concat("[" + getUUID() + "]");
+        desc = desc.concat("[" + getName() + "]");
         return desc;
     }
 

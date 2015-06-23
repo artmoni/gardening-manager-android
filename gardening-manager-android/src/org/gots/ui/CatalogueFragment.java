@@ -77,9 +77,9 @@ public abstract class CatalogueFragment extends AbstractListFragment implements 
     private OnSeedSelected mCallback;
 
     public interface OnSeedSelected {
-        public abstract void onSeedClick(BaseSeedInterface seed);
+        public abstract void onPlantCatalogueClick(BaseSeedInterface seed);
 
-        public abstract void onSeedLongClick(CatalogueFragment vendorListFragment, BaseSeedInterface seed);
+        public abstract void onPlantCatalogueLongClick(CatalogueFragment vendorListFragment, BaseSeedInterface seed);
 
     }
 
@@ -220,13 +220,13 @@ public abstract class CatalogueFragment extends AbstractListFragment implements 
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         gridViewCatalog.setSelection(position);
         gridViewCatalog.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
-        mCallback.onSeedLongClick(this, listVendorSeedAdapter.getItem(position));
+        mCallback.onPlantCatalogueLongClick(this, listVendorSeedAdapter.getItem(position));
         return true;
     }
 
     @Override
     public void onItemClick(AdapterView<?> list, View container, int position, long id) {
-        mCallback.onSeedClick(listVendorSeedAdapter.getItem(position));
+        mCallback.onPlantCatalogueClick(listVendorSeedAdapter.getItem(position));
     }
 
     public void update() {

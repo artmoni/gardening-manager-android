@@ -25,6 +25,7 @@ import org.gots.ui.AllotmentListFragment.OnAllotmentSelected;
 import org.gots.ui.CatalogueFragment.OnSeedSelected;
 import org.gots.ui.fragment.AllotmentEditorFragment;
 import org.gots.ui.fragment.AllotmentEditorFragment.OnAllotmentListener;
+import org.gots.ui.fragment.BaseGotsFragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -220,7 +221,7 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
     };
 
     @Override
-    public void onSeedClick(final BaseSeedInterface seed) {
+    public void onPlantCatalogueClick(final BaseSeedInterface seed) {
         if (vendorListFragment != null) {
             getSupportFragmentManager().popBackStack();
         }
@@ -244,13 +245,23 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
     }
 
     @Override
+    public void onPlantCatalogueLongClick(CatalogueFragment fragment, BaseSeedInterface seed) {
+        Toast.makeText(getApplicationContext(), "This feature is not currently supported in this case",
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void onAllotmentClick(BaseAllotmentInterface allotment) {
         currentAllotment = allotment;
 
+        displayPlantsFragment();
+    }
+
+    protected void displayPlantsFragment() {
         FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
         transactionTutorial.setCustomAnimations(R.anim.push_right_in, R.anim.push_right_out);
         transactionTutorial.addToBackStack(null);
-        transactionTutorial.add(R.id.idFragmentAllotmentList, vendorListFragment).commitAllowingStateLoss();
+        transactionTutorial.replace(R.id.idFragmentAllotmentList, vendorListFragment).commitAllowingStateLoss();
     }
 
     @Override
@@ -264,6 +275,10 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
 
     @Override
     public void onGrowingSeedClick(View v, GrowingSeed growingSeedInterface) {
+        displaySeedActivity(growingSeedInterface);
+    }
+
+    protected void displaySeedActivity(GrowingSeed growingSeedInterface) {
         final Intent i = new Intent(this, TabSeedActivity.class);
         i.putExtra("org.gots.seed.id", growingSeedInterface.getGrowingSeedId());
         i.putExtra("org.gots.seed.url", growingSeedInterface.getUrlDescription());
@@ -312,7 +327,7 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
         if (!allotmentListFragment.isAdded()) {
             FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
             transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
-            transactionTutorial.add(R.id.idFragmentAllotmentList, allotmentListFragment).commitAllowingStateLoss();
+            transactionTutorial.replace(R.id.idFragmentAllotmentList, allotmentListFragment).commitAllowingStateLoss();
         } else
             allotmentListFragment.update();
     }
@@ -323,24 +338,62 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
             transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
             transactionTutorial.addToBackStack(null);
             editorFragment.setAllotment(allotment);
-            transactionTutorial.add(R.id.idFragmentAllotmentList, editorFragment).commitAllowingStateLoss();
+            transactionTutorial.replace(R.id.idFragmentAllotmentList, editorFragment).commitAllowingStateLoss();
         } else
             Toast.makeText(getApplicationContext(), "Only one editor at a time", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onAllotmentCreated(BaseAllotmentInterface allotment) {
+        currentAllotment=allotment;
         if (editorFragment.isAdded()) {
             FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
             transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
             transactionTutorial.remove(editorFragment).commitAllowingStateLoss();
         }
+        new AsyncTask<Void, Integer, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                allotmentManager.createAllotment(currentAllotment);
+                return null;
+            }
+
+            protected void onPostExecute(Void result) {
+                Toast.makeText(getApplicationContext(), "Allotment created", Toast.LENGTH_SHORT).show();
+            };
+
+        }.execute();
         runAsyncDataRetrieval();
     }
 
     @Override
-    public void onSeedLongClick(CatalogueFragment fragment, BaseSeedInterface seed) {
-        Toast.makeText(getApplicationContext(), "This feature is not currently supported in this case",
-                Toast.LENGTH_SHORT).show();
+    public void onAllotmentAddPlantClicked(BaseGotsFragment fragment, BaseAllotmentInterface allotment) {
+        currentAllotment = allotment;
+        displayPlantsFragment();
+    }
+
+    @Override
+    public void onAllotmentModified(BaseAllotmentInterface allotment) {
+        currentAllotment = allotment;
+        new AsyncTask<Void, Integer, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                allotmentManager.updateAllotment(currentAllotment);
+                return null;
+            }
+
+            protected void onPostExecute(Void result) {
+                Toast.makeText(getApplicationContext(), "Allotment updated", Toast.LENGTH_SHORT).show();
+            };
+
+        }.execute();
+    }
+
+    @Override
+    public void onAllotmentSeedClicked(BaseAllotmentInterface allotment, GrowingSeed seed) {
+        currentAllotment = allotment;
+        displaySeedActivity(seed);
     }
 }

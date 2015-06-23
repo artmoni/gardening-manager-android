@@ -325,7 +325,7 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
     }
 
     @Override
-    public void onSeedClick(BaseSeedInterface seed) {
+    public void onPlantCatalogueClick(BaseSeedInterface seed) {
         Intent i = new Intent(getApplicationContext(), TabSeedActivity.class);
         i.putExtra("org.gots.seed.vendorid", seed.getSeedId());
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -333,7 +333,7 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
     }
 
     @Override
-    public void onSeedLongClick(CatalogueFragment fragment, BaseSeedInterface seed) {
+    public void onPlantCatalogueLongClick(CatalogueFragment fragment, BaseSeedInterface seed) {
         startSupportActionMode(new MyCallBack(seed));
     }
 
