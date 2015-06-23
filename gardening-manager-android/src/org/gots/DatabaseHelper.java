@@ -25,7 +25,7 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     // ************************ DATABASE **************
-    private static final int DATABASE_VERSION = 22;
+    private static final int DATABASE_VERSION = 23;
 
     private static String DATABASE_NAME = "gots";
 
@@ -291,11 +291,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String ALLOTMENT_UUID = "uuid";
 
+    public static final String ALLOTMENT_IMAGE_PATH = "image_path";
+
     //@formatter:off
 		public static final String CREATE_TABLE_ALLOTMENT = "CREATE TABLE " + ALLOTMENT_TABLE_NAME 
 				+ " (" + ALLOTMENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
 				+ ALLOTMENT_NAME + " STRING,"
 				+ ALLOTMENT_UUID + " STRING"
+				+ ALLOTMENT_IMAGE_PATH + " STRING"
 					+ ");";
 
 
@@ -418,9 +421,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.i(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion
                 + ", which will destroy all old data");
-        GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-        tracker.trackEvent("general", "upgrade", oldVersion + " to " + newVersion, 0);
-        
+//        GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+//        if (tracker != null)
+//            tracker.trackEvent("system", "upgrade", oldVersion + " to " + newVersion, 0);
+//        else 
+//            Log.d(TAG, "Tracking not available in DB");
         if (oldVersion == 8 && newVersion == 9) {
             db.execSQL("ALTER TABLE " + WEATHER_TABLE_NAME + " ADD COLUMN " + WEATHER_YEAR + " INTEGER;");
         } else if (oldVersion == 9 && newVersion == 10) {
@@ -526,6 +531,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         if (oldVersion < 22) {
             db.execSQL("ALTER TABLE " + SEEDS_TABLE_NAME + " ADD COLUMN " + SEED_STATE + " STRING;");
+
+        }
+        if (oldVersion < 23) {
+            db.execSQL("ALTER TABLE " + ALLOTMENT_TABLE_NAME + " ADD COLUMN " + ALLOTMENT_IMAGE_PATH + " STRING;");
 
         } else {
             db.execSQL("DROP TABLE IF EXISTS " + SEEDS_TABLE_NAME);

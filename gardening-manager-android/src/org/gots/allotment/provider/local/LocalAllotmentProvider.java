@@ -26,6 +26,7 @@ public class LocalAllotmentProvider extends GotsDBHelper implements AllotmentPro
         allotment.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ALLOTMENT_ID)));
         allotment.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ALLOTMENT_NAME)));
         allotment.setUUID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ALLOTMENT_UUID)));
+        allotment.setImagePath(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ALLOTMENT_IMAGE_PATH)));
         return allotment;
     }
 
@@ -33,6 +34,8 @@ public class LocalAllotmentProvider extends GotsDBHelper implements AllotmentPro
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.ALLOTMENT_NAME, allotment.getName());
         values.put(DatabaseHelper.ALLOTMENT_UUID, allotment.getUUID());
+        values.put(DatabaseHelper.ALLOTMENT_IMAGE_PATH, allotment.getImagePath());
+
         return values;
     }
 
@@ -108,8 +111,8 @@ public class LocalAllotmentProvider extends GotsDBHelper implements AllotmentPro
         Cursor cursor = null;
         try {
 
-            bdd.update(DatabaseHelper.ALLOTMENT_TABLE_NAME, values, DatabaseHelper.ALLOTMENT_ID + "=\""
-                    + allotment.getId() + "\"", null);
+            bdd.update(DatabaseHelper.ALLOTMENT_TABLE_NAME, values,
+                    DatabaseHelper.ALLOTMENT_ID + "=\"" + allotment.getId() + "\"", null);
             cursor = bdd.query(DatabaseHelper.ALLOTMENT_TABLE_NAME, null, DatabaseHelper.ALLOTMENT_ID + "='"
                     + allotment.getId() + "'", null, null, null, null);
 
