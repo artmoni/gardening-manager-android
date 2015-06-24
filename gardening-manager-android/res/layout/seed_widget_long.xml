@@ -81,16 +81,25 @@
             android:layout_below="@+id/IdSeedLanguage"
             android:src="@drawable/ic_like" />
 
-        <LinearLayout
+        <TextView
             android:id="@+id/idSeedStock"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
-            android:layout_alignRight="@+id/ImageSeedLike"
+            android:layout_alignLeft="@+id/ImageSeedLike"
             android:layout_below="@+id/ImageSeedLike"
             android:gravity="center_horizontal"
-            android:orientation="horizontal" >
-        </LinearLayout>
+            android:orientation="horizontal"
+            android:text="0" >
+        </TextView>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/idSeedStock"
+            android:layout_alignBottom="@+id/idSeedStock"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/idSeedStock"
+            android:text="Stock:" />
     </RelativeLayout>
 
     <LinearLayout
@@ -150,9 +159,9 @@
         android:id="@+id/imageStateValidation"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginTop="-6dp"
         android:layout_alignParentTop="true"
         android:layout_alignRight="@+id/idSeedWidget2"
+        android:layout_marginTop="-6dp"
         android:src="@drawable/ic_ribbon" />
 
 </RelativeLayout>

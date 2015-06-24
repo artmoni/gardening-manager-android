@@ -116,17 +116,19 @@ public class SeedWidgetLong extends LinearLayout {
             state.setVisibility(View.VISIBLE);
         else
             state.setVisibility(View.GONE);
-        LinearLayout stock = (LinearLayout) findViewById(R.id.idSeedStock);
-        stock.removeAllViews();
-        for (int i = 0; i < mSeed.getNbSachet(); i++) {
-            ImageView seedbag = new ImageView(mContext);
-            seedbag.setImageDrawable(mContext.getResources().getDrawable(R.drawable.seed_bag));
-            // seedbag.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_planning_sow));
 
-            LayoutParams params = new LinearLayout.LayoutParams(30, 30);
-            seedbag.setLayoutParams(params);
-            stock.addView(seedbag, i);
-        }
+        TextView stock = (TextView) findViewById(R.id.idSeedStock);
+        stock.setText(String.valueOf(mSeed.getNbSachet()));
+        // stock.removeAllViews();
+        // for (int i = 0; i < mSeed.getNbSachet(); i++) {
+        // ImageView seedbag = new ImageView(mContext);
+        // seedbag.setImageDrawable(mContext.getResources().getDrawable(R.drawable.seed_bag));
+        // // seedbag.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_planning_sow));
+        //
+        // LayoutParams params = new LinearLayout.LayoutParams(30, 30);
+        // seedbag.setLayoutParams(params);
+        // stock.addView(seedbag, i);
+        // }
 
         if (mSeed.getLanguage() != null && !"".equals(mSeed.getLanguage())) {
             ImageView flag = (ImageView) findViewById(R.id.IdSeedLanguage);
