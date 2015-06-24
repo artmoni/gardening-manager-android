@@ -14,6 +14,7 @@ import org.gots.exception.NotImplementedException;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GotsGardenManager;
 import org.gots.nuxeo.NuxeoManager;
+import org.gots.nuxeo.NuxeoUtils;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.LikeStatus;
 import org.gots.seed.SpeciesDocument;
@@ -103,7 +104,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     } else {
                         Log.w(TAG, "Nuxeo Seed conversion problem " + document.getTitle() + "- " + document.getId());
                     }
-                    downloadImageAsync(service, seed);
+                    downloadImageAsync(service, document, seed);
                 } catch (NumberFormatException formatException) {
                     Log.w(TAG,
                             formatException.getMessage() + " for Document " + document.getTitle() + " - "
@@ -119,7 +120,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         return myVendorSeeds;
     }
 
-    protected void downloadImageAsync(final DocumentManager service, BaseSeedInterface seed) {
+    protected void downloadImageAsync(final DocumentManager service, final Document document, BaseSeedInterface seed) {
         new AsyncTask<BaseSeedInterface, Void, FileBlob>() {
 
             private File imageFile;
@@ -127,33 +128,16 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             @Override
             protected FileBlob doInBackground(BaseSeedInterface... params) {
                 BaseSeedInterface seed = params[0];
-                FileBlob image = null;
-                imageFile = new File(gotsPrefs.getFilesDir(), seed.getVariety().toLowerCase().replaceAll(
-                        "\\s", "").replaceAll(" ", ""));
-                if (!imageFile.exists()) {
-                    try {
-                        image = service.getBlob(new DocRef(seed.getUUID()));
-                        Log.d(TAG, "Download image blob " + image.getFileName());
-                    } catch (Exception e) {
-                        Log.w(TAG, "Image " + imageFile.getAbsolutePath() + " cannot be downloaded for document "
-                                + seed.getUUID());
-                    }
-                } else {
+                File imageFile = new File(gotsPrefs.getFilesDir(),
+                        seed.getVariety().toLowerCase().replaceAll("\\s", "").replaceAll(" ", ""));
+                if (!imageFile.exists())
+                    NuxeoUtils.downloadBlob(service, document, imageFile);
+                else {
                     Log.d(TAG, "Image " + imageFile.getAbsolutePath() + " already exists");
                 }
-                return image;
+                return null;
             }
 
-            protected void onPostExecute(FileBlob image) {
-                if (image != null && image.getLength() > 0)
-                    try {
-                        FileUtilities.copy(image.getFile(), imageFile);
-                    } catch (IOException e) {
-                        Log.w(TAG,
-                                "Cannot copy " + image.getFile().getAbsolutePath() + " to "
-                                        + imageFile.getAbsolutePath());
-                    }
-            };
         }.execute(seed);
     }
 
@@ -355,41 +339,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     NuxeoSeedConverter.convert(catalog.getPath(), currentSeed).getProperties());
             // ****************** FILE UPLOAD ***************
             if (file != null) {
-                final FileBlob blobToUpload = new FileBlob(file);
-                blobToUpload.setMimeType("image/jpeg");
-
-                String batchId = String.valueOf(new Random().nextInt(1000));
-                final String fileId = blobToUpload.getFileName();
-
-                FileUploader uploader = session.getAdapter(FileUploader.class);
-                BlobWithProperties blobUploading = uploader.storeFileForUpload(batchId, fileId, blobToUpload);
-                String uploadUUID = blobUploading.getProperty(FileUploader.UPLOAD_UUID);
-                Log.i(TAG, "Started blob upload UUID " + uploadUUID);
-                final PropertyMap blobProp = new PropertyMap();
-                blobProp.set("type", "blob");
-                blobProp.set("length", Long.valueOf(blobUploading.getLength()));
-                blobProp.set("mime-type", blobUploading.getMimeType());
-                blobProp.set("name", blobToUpload.getFileName());
-                // set information for server side Blob mapping
-                blobProp.set("upload-batch", batchId);
-                blobProp.set("upload-fileId", fileId);
-                // set information for the update query to know it's
-                // dependencies
-                blobProp.set("android-require-type", "upload");
-                blobProp.set("android-require-uuid", uploadUUID);
-                uploader.startUpload(uploadUUID, new AsyncCallback<Serializable>() {
-                    @Override
-                    public void onSuccess(String executionId, Serializable data) {
-                        attachBlobToDocument(documentVendorSeed, blobProp);
-                        Log.i(TAG, "success");
-                    }
-
-                    @Override
-                    public void onError(String executionId, Throwable e) {
-                        Log.i(TAG, "errdroior");
-
-                    }
-                });
+                NuxeoUtils.uploadBlob(session, documentVendorSeed, file);
             }
             currentSeed.setUUID(documentVendorSeed.getId());
             Log.d(TAG, "RemoteSeed UUID " + documentVendorSeed.getId());
@@ -399,29 +349,6 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         }
 
         return currentSeed;
-    }
-
-    protected void attachBlobToDocument(Document seed, PropertyMap blobProp) {
-        Session session = getNuxeoClient().getSession();
-        DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
-
-        try {
-            StringBuilder toJSON = new StringBuilder("{ ");
-            toJSON.append(" \"type\" : \"blob\"");
-            toJSON.append(", \"length\" : " + blobProp.get("length"));
-            toJSON.append(", \"mime-type\" : \"" + blobProp.get("mime-type") + "\"");
-            toJSON.append(", \"name\" : \"" + blobProp.get("name") + "\"");
-            toJSON.append(", \"upload-batch\" : \"" + blobProp.get("upload-batch") + "\"");
-            toJSON.append(", \"upload-fileId\" : \"" + blobProp.get("upload-fileId") + "\" ");
-            toJSON.append("}");
-            PropertyMap properties = new PropertyMap();
-            properties.set("dc:title", blobProp.getString("name"));
-            properties.set("file:content", toJSON.toString());
-            documentMgr.update(seed, properties);
-        } catch (Exception e) {
-            Log.i(TAG, e.getMessage());
-        }
-
     }
 
     protected AndroidAutomationClient getNuxeoClient() {

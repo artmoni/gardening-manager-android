@@ -32,9 +32,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager.BackStackEntry;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.view.ActionMode;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -110,44 +112,44 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
         }
     }
 
-    public void showDialogRenameAllotment(final BaseAllotmentInterface allotmentInterface) {
-
-        final EditText userinput = new EditText(this);
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(userinput).setTitle("Allotment's name");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-            public void onClick(final DialogInterface dialog, int id) {
-                new AsyncTask<Void, Integer, Void>() {
-                    protected void onPreExecute() {
-                        allotmentInterface.setName(userinput.getText().toString());
-                    };
-
-                    @Override
-                    protected Void doInBackground(Void... params) {
-                        allotmentManager.updateAllotment(allotmentInterface);
-                        return null;
-                    }
-
-                    protected void onPostExecute(Void result) {
-                        // lsa.notifyDataSetChanged();
-                        dialog.cancel();
-                    };
-
-                }.execute();
-            }
-        }).setNegativeButton(this.getResources().getString(R.string.button_cancel),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-
-                    }
-                });
-        // AlertDialog dialog = builder.create();
-        builder.setCancelable(true);
-        builder.show();
-
-    }
+//    public void showDialogRenameAllotment(final BaseAllotmentInterface allotmentInterface) {
+//
+//        final EditText userinput = new EditText(this);
+//        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setView(userinput).setTitle("Allotment's name");
+//        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//
+//            public void onClick(final DialogInterface dialog, int id) {
+//                new AsyncTask<Void, Integer, Void>() {
+//                    protected void onPreExecute() {
+//                        allotmentInterface.setName(userinput.getText().toString());
+//                    };
+//
+//                    @Override
+//                    protected Void doInBackground(Void... params) {
+//                        allotmentManager.updateAllotment(allotmentInterface);
+//                        return null;
+//                    }
+//
+//                    protected void onPostExecute(Void result) {
+//                        // lsa.notifyDataSetChanged();
+//                        dialog.cancel();
+//                    };
+//
+//                }.execute();
+//            }
+//        }).setNegativeButton(this.getResources().getString(R.string.button_cancel),
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        dialog.cancel();
+//
+//                    }
+//                });
+//        // AlertDialog dialog = builder.create();
+//        builder.setCancelable(true);
+//        builder.show();
+//
+//    }
 
     private void removeAllotment(final BaseAllotmentInterface selectedAllotment2) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -175,11 +177,6 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
         });
 
         builder.show();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
@@ -221,36 +218,6 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
     };
 
     @Override
-    public void onPlantCatalogueClick(final BaseSeedInterface seed) {
-        if (vendorListFragment != null) {
-            getSupportFragmentManager().popBackStack();
-        }
-
-        if (seed != null) {
-            new AsyncTask<Void, Void, Void>() {
-                @Override
-                protected Void doInBackground(Void... params) {
-                    SowingAction action = new SowingAction(getApplicationContext());
-                    action.execute(currentAllotment, (GrowingSeed) seed);
-                    return null;
-                }
-
-                protected void onPostExecute(Void result) {
-                    allotmentListFragment.update();
-                };
-            }.execute();
-
-        }
-
-    }
-
-    @Override
-    public void onPlantCatalogueLongClick(CatalogueFragment fragment, BaseSeedInterface seed) {
-        Toast.makeText(getApplicationContext(), "This feature is not currently supported in this case",
-                Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
     public void onAllotmentClick(BaseAllotmentInterface allotment) {
         currentAllotment = allotment;
 
@@ -264,39 +231,12 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
         transactionTutorial.replace(R.id.idFragmentAllotmentList, vendorListFragment).commitAllowingStateLoss();
     }
 
-    @Override
-    public void onAllotmentLongClick(BaseAllotmentInterface allotment) {
-        currentAllotment = allotment;
-
-        // Start the CAB using the ActionMode.Callback defined above
-        startSupportActionMode(mActionModeCallback);
-
-    }
-
-    @Override
-    public void onGrowingSeedClick(View v, GrowingSeed growingSeedInterface) {
-        displaySeedActivity(growingSeedInterface);
-    }
-
     protected void displaySeedActivity(GrowingSeed growingSeedInterface) {
         final Intent i = new Intent(this, TabSeedActivity.class);
         i.putExtra("org.gots.seed.id", growingSeedInterface.getGrowingSeedId());
         i.putExtra("org.gots.seed.url", growingSeedInterface.getUrlDescription());
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
-    }
-
-    @Override
-    public void onGrowingSeedLongClick(View v, GrowingSeed growingSeedInterface) {
-        QuickSeedActionBuilder actionBuilder = new QuickSeedActionBuilder(this, (SeedWidget) v, growingSeedInterface);
-        actionBuilder.show();
-    }
-
-    @Override
-    public void onAllotmentMenuClick(View v, BaseAllotmentInterface allotmentInterface) {
-        // QuickAllotmentActionBuilder actionsBuilder = new QuickAllotmentActionBuilder(v, allotmentInterface);
-        // actionsBuilder.show();
-        displayEditorFragment(allotmentInterface);
     }
 
     @Override
@@ -313,13 +253,14 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
         List<BaseAllotmentInterface> allotments = (List<BaseAllotmentInterface>) data;
-        if (allotments.size() > 0) {
-            displayAllotmentsFragment();
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0)
+            if (allotments.size() > 0) {
+                displayAllotmentsFragment();
 
-        } else {
-            displayEditorFragment(null);
+            } else {
+                displayEditorFragment(null);
 
-        }
+            }
         super.onNuxeoDataRetrieved(data);
     }
 
@@ -344,13 +285,71 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
     }
 
     @Override
-    public void onAllotmentCreated(BaseAllotmentInterface allotment) {
-        currentAllotment=allotment;
-        if (editorFragment.isAdded()) {
-            FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
-            transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
-            transactionTutorial.remove(editorFragment).commitAllowingStateLoss();
+    public void onAllotmentLongClick(BaseAllotmentInterface allotment) {
+        currentAllotment = allotment;
+    
+        // Start the CAB using the ActionMode.Callback defined above
+        startSupportActionMode(mActionModeCallback);
+    
+    }
+
+    @Override
+    public void onGrowingSeedClick(View v, GrowingSeed growingSeedInterface) {
+        displaySeedActivity(growingSeedInterface);
+    }
+
+    @Override
+    public void onGrowingSeedLongClick(View v, GrowingSeed growingSeedInterface) {
+        QuickSeedActionBuilder actionBuilder = new QuickSeedActionBuilder(this, (SeedWidget) v, growingSeedInterface);
+        actionBuilder.show();
+    }
+
+    @Override
+    public void onAllotmentMenuClick(View v, BaseAllotmentInterface allotmentInterface) {
+        // QuickAllotmentActionBuilder actionsBuilder = new QuickAllotmentActionBuilder(v, allotmentInterface);
+        // actionsBuilder.show();
+        displayEditorFragment(allotmentInterface);
+    }
+
+    @Override
+    public void onPlantCatalogueLongClick(CatalogueFragment fragment, BaseSeedInterface seed) {
+        Toast.makeText(getApplicationContext(), "This feature is not currently supported in this case",
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+        public void onPlantCatalogueClick(final BaseSeedInterface seed) {
+            if (vendorListFragment != null) {
+                getSupportFragmentManager().popBackStack();
+            }
+    
+            if (seed != null) {
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        SowingAction action = new SowingAction(getApplicationContext());
+                        action.execute(currentAllotment, (GrowingSeed) seed);
+                        return null;
+                    }
+    
+                    protected void onPostExecute(Void result) {
+    //                    allotmentListFragment.update();
+                        updateFragments();
+                    };
+                }.execute();
+    
+            }
+    
         }
+
+    @Override
+    public void onAllotmentCreated(BaseAllotmentInterface allotment) {
+        currentAllotment = allotment;
+        // if (editorFragment.isAdded()) {
+        // FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
+        // transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
+        // transactionTutorial.remove(editorFragment).commitAllowingStateLoss();
+        // }
         new AsyncTask<Void, Integer, Void>() {
 
             @Override
@@ -360,11 +359,22 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
             }
 
             protected void onPostExecute(Void result) {
+                updateFragments();
                 Toast.makeText(getApplicationContext(), "Allotment created", Toast.LENGTH_SHORT).show();
-            };
+            }
 
         }.execute();
         runAsyncDataRetrieval();
+    }
+
+    protected void updateFragments() {
+        for (int entry = 0; entry < getSupportFragmentManager().getBackStackEntryCount(); entry++) {
+            final BackStackEntry backStackEntryAt = getSupportFragmentManager().getBackStackEntryAt(entry);
+            Log.i(TAG, "Found fragment: " + backStackEntryAt.getId());
+            if (backStackEntryAt instanceof BaseGotsFragment) {
+                ((BaseGotsFragment) backStackEntryAt).update();
+            }
+        }
     }
 
     @Override
@@ -385,6 +395,7 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
             }
 
             protected void onPostExecute(Void result) {
+                updateFragments();
                 Toast.makeText(getApplicationContext(), "Allotment updated", Toast.LENGTH_SHORT).show();
             };
 

@@ -43,6 +43,7 @@
                 android:layout_toRightOf="@+id/textView3"
                 android:ems="10"
                 android:hint="Name of my allotment"
+                android:singleLine="true"
                 android:textColor="@color/text_color_dark" >
 
                 <requestFocus />
@@ -77,7 +78,8 @@
         android:verticalSpacing="2dp" >
     </GridView>
 
-    <!-- <Button
+    <!--
+         <Button
         android:id="@+id/buttonAllotmentNew"
         style="@style/buttonRed"
         android:layout_width="wrap_content"
@@ -85,6 +87,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="18dp"
-        android:text="@string/allotment.button.add" /> -->
+        android:text="@string/allotment.button.add" />
+    -->
 
 </RelativeLayout>

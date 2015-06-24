@@ -76,7 +76,8 @@ public abstract class BaseGotsFragment extends BaseNuxeoFragment {
 
     @Override
     protected void onNuxeoDataRetrievalStarted() {
-        getActivity().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
+        if (isAdded())
+            getActivity().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
         super.onNuxeoDataRetrievalStarted();
     }
 

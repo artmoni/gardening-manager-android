@@ -30,6 +30,8 @@ public class BaseAllotment implements Serializable, BaseAllotmentInterface {
 
     private String uuid;
 
+    private String imagePath;
+
     public BaseAllotment() {
         super();
     }
@@ -108,6 +110,16 @@ public class BaseAllotment implements Serializable, BaseAllotmentInterface {
     @Override
     public void setUUID(String id) {
         uuid = id;
+    }
+
+    @Override
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    @Override
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
 }

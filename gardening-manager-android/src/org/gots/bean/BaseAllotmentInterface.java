@@ -35,6 +35,10 @@ public interface BaseAllotmentInterface {
     public abstract void setUUID(String id);
 
     public abstract String getUUID();
+
+    public abstract void setImagePath(String imagePath);
+
+    public abstract String getImagePath();
 	
 		
 

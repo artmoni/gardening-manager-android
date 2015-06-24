@@ -1,5 +1,6 @@
 package org.gots.allotment.provider.nuxeo;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -8,6 +9,7 @@ import org.gots.allotment.provider.local.LocalAllotmentProvider;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.garden.GotsGardenManager;
 import org.gots.nuxeo.NuxeoManager;
+import org.gots.nuxeo.NuxeoUtils;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
 import org.nuxeo.ecm.automation.client.cache.CacheBehavior;
@@ -80,7 +82,10 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
                 Document document = iterator.next();
                 BaseAllotmentInterface allotment = NuxeoAllotmentConverter.convert(document);
                 remoteAllotments.add(allotment);
-
+                File file = new File(gotsPrefs.getFilesDir().getAbsolutePath() + document.getId());
+                allotment.setImagePath(file.getAbsolutePath());
+                if (!file.exists())
+                    NuxeoUtils.downloadBlob(service, document, file);
                 Log.i(TAG, "Nuxeo Allotment " + allotment.toString());
             }
 
@@ -150,11 +155,16 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
             DocumentManager service = session.getAdapter(DocumentManager.class);
             // TODO Change this when garden UUID manage uuid and not path
             Document gardenFolder = service.getDocument(new IdRef(
-                    GotsGardenManager.getInstance().getCurrentGarden().getUUID())); 
+                    GotsGardenManager.getInstance().getCurrentGarden().getUUID()));
             Document allotmentsFolder = service.getDocument(new PathRef(gardenFolder.getPath() + "/My Allotment"));
 
             Document newAllotment = service.createDocument(allotmentsFolder, "Allotment", allotment.getName(),
                     NuxeoAllotmentConverter.convertToProperties(allotment));
+            if (allotment.getImagePath() != null) {
+                File f = new File(allotment.getImagePath());
+                if (f.exists())
+                    NuxeoUtils.uploadBlob(session, newAllotment, f);
+            }
             allotment.setUUID(newAllotment.getId());
             allotment = super.updateAllotment(allotment);
         } catch (Exception e) {
@@ -167,11 +177,10 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
     public int removeAllotment(BaseAllotmentInterface allotment) {
         super.removeAllotment(allotment);
         try {
+            Log.d(TAG, "Removing document " + allotment.getUUID());
             Session session = getNuxeoClient().getSession();
             DocumentManager service = session.getAdapter(DocumentManager.class);
             service.remove(allotment.getUUID());
-
-            Log.d(TAG, "Removing document " + allotment.getUUID());
 
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
@@ -182,11 +191,16 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
     @Override
     public BaseAllotmentInterface updateAllotment(BaseAllotmentInterface allotment) {
         try {
+            Log.d(TAG, "Updating document " + allotment.getUUID());
             Session session = getNuxeoClient().getSession();
             DocumentManager service = session.getAdapter(DocumentManager.class);
-            service.update(new DocRef(allotment.getUUID()), NuxeoAllotmentConverter.convertToProperties(allotment));
-            Log.d(TAG, "Updating document " + allotment.getUUID());
-
+            Document updatedDoc = service.update(new DocRef(allotment.getUUID()),
+                    NuxeoAllotmentConverter.convertToProperties(allotment));
+            if (allotment.getImagePath() != null) {
+                File f = new File(allotment.getImagePath());
+                if (f.exists())
+                    NuxeoUtils.uploadBlob(session, updatedDoc, f);
+            }
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
