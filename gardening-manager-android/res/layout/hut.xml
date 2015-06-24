@@ -7,51 +7,31 @@
 
     <!-- android:background="@drawable/background_simple" -->
 
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/idAdsTop"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" >
+    </android.support.v4.view.ViewPager>
+
     <LinearLayout
+        android:id="@+id/idAdsTop"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical" >
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="60dp"
-            android:background="@drawable/bg_hut_top"
-            android:scaleType="centerCrop" >
-        </LinearLayout>
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/pager"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <LinearLayout
-            android:id="@+id/idAdsTop"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-        </LinearLayout>
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:orientation="horizontal" >
     </LinearLayout>
-    <!--
-    <ListView
-        android:id="@+id/listSeed"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" android:paddingTop="60dp">
-    </ListView>
-    -->
-
-    <LinearLayout
-        android:id="@+id/btReturn"
-        android:layout_width="fill_parent"
-        android:layout_height="70dp"
-        android:background="@drawable/bt_logo"
-        android:orientation="horizontal" />
 
     <FrameLayout
         android:id="@+id/contentFragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/idAdsTop"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:layout_below="@+id/idAdsTop"
         android:visibility="gone" >
     </FrameLayout>
