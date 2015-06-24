@@ -115,6 +115,13 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
             LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
             layout.addView(ads.getAdsLayout());
         }
+        FloatingActionButton button = (FloatingActionButton) findViewById(R.id.setter);
+        button.setSize(FloatingActionButton.SIZE_MINI);
+        button.setColorNormalResId(R.color.pink);
+        button.setColorPressedResId(R.color.pink_pressed);
+        button.setIcon(R.drawable.ic_fab_star);
+        button.setStrokeVisible(false);
+
     }
 
     @Override
