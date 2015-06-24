@@ -7,11 +7,11 @@
 
     <org.gots.seed.view.SeedWidget
         android:id="@+id/idSeedWidget2"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="8dp"
         android:background="@color/white"
         android:gravity="center_vertical"
         android:src="@drawable/vegetdefault" >
@@ -21,7 +21,7 @@
         android:id="@+id/idSeedFamilyBackground"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/idSeedWidget2"
+        android:layout_alignParentBottom="true"
         android:background="@drawable/family_unknown"
         android:padding="5dp" >
 
@@ -65,16 +65,6 @@
             android:numColumns="12" >
         </org.gots.seed.view.PlanningWidget>
 
-        <LinearLayout
-            android:id="@+id/idSeedStock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/IdSeedHarvestPlanning"
-            android:layout_below="@+id/IdSeedHarvestPlanning"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal" >
-        </LinearLayout>
-
         <ImageView
             android:id="@+id/IdSeedLanguage"
             android:layout_width="20dp"
@@ -82,6 +72,25 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:src="@drawable/fr" />
+
+        <ImageView
+            android:id="@+id/ImageSeedLike"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignRight="@+id/IdSeedLanguage"
+            android:layout_below="@+id/IdSeedLanguage"
+            android:src="@drawable/ic_like" />
+
+        <LinearLayout
+            android:id="@+id/idSeedStock"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_alignRight="@+id/ImageSeedLike"
+            android:layout_below="@+id/ImageSeedLike"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal" >
+        </LinearLayout>
+
     </RelativeLayout>
 
     <LinearLayout
@@ -135,20 +144,13 @@
             android:textColor="@color/green_light"
             android:textSize="12sp"
             android:textStyle="bold" />
-
-        <ImageView
-            android:id="@+id/ImageSeedLike"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:src="@drawable/ic_like" />
     </RelativeLayout>
 
     <ImageView
         android:id="@+id/imageStateValidation"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="-6dp"
         android:layout_alignParentTop="true"
         android:layout_alignRight="@+id/idSeedWidget2"
         android:src="@drawable/ic_ribbon" />
