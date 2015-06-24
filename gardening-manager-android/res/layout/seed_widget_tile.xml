@@ -12,10 +12,9 @@
 
         <org.gots.seed.view.SeedWidget
             android:id="@+id/idSeedWidget2"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
-            android:layout_margin="10dp"
             android:gravity="center_horizontal"
             android:src="@drawable/vegetdefault" >
         </org.gots.seed.view.SeedWidget>
