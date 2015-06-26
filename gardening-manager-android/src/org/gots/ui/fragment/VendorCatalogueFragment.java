@@ -1,4 +1,4 @@
-package org.gots.ui;
+package org.gots.ui.fragment;
 
 import java.util.ArrayList;
 import java.util.List;

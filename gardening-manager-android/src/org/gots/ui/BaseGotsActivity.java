@@ -63,10 +63,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 /**
@@ -192,6 +197,19 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
 
     }
 
+    /**
+     * Called when Floating button is pressed
+     * 
+     * @param view clicked
+     */
+    protected void onFloatingButtonClicked(View v) {
+    }
+
+    /**
+     * @return true if floating button needs to be shown
+     */
+    protected abstract boolean requireFloatingButton();
+
     protected void initAllManager() {
         gardenManager.initIfNew(this);
         seedManager.initIfNew(this);
@@ -244,7 +262,81 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
                 layout.addView(ads.getAdsLayout());
         }
 
+        if (requireFloatingButton()) {
+            FloatingActionsMenu actionsMenu = new FloatingActionsMenu(getApplicationContext());
+
+            //BUTTON 1
+            FloatingActionButton button = new FloatingActionButton(getApplicationContext());
+            button.setSize(FloatingActionButton.SIZE_NORMAL);
+            button.setColorNormalResId(R.color.action_error_color);
+            button.setColorPressedResId(R.color.action_warning_color);
+            button.setIcon(getFloatingButtonIcon());
+            button.setTitle("test");
+
+            button.setStrokeVisible(false);
+            button.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    onFloatingButtonClicked(v);
+                }
+            });
+            actionsMenu.addButton(button);
+            
+            //BUTTON 1
+            FloatingActionButton button3 = new FloatingActionButton(getApplicationContext());
+            button3.setSize(FloatingActionButton.SIZE_NORMAL);
+            button3.setColorNormalResId(R.color.action_error_color);
+            button3.setColorPressedResId(R.color.action_warning_color);
+            button3.setIcon(getFloatingButtonIcon());
+            button3.setTitle("test2");
+
+            button3.setStrokeVisible(false);
+            button3.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    onFloatingButtonClicked(v);
+                }
+            });
+            actionsMenu.addButton(button3);
+            
+            
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            actionsMenu.setLayoutParams(params);
+            ViewGroup root = (ViewGroup) getWindow().getDecorView().findViewById(android.R.id.content);
+            ((ViewGroup) root.getChildAt(0)).addView(actionsMenu);
+
+            FloatingActionsMenu actionsMenu2 = (FloatingActionsMenu) findViewById(R.id.right_labels);
+
+            FloatingActionButton button2 = new FloatingActionButton(getApplicationContext());
+            button2.setSize(FloatingActionButton.SIZE_NORMAL);
+            button2.setColorNormalResId(R.color.action_error_color);
+            button2.setColorPressedResId(R.color.action_warning_color);
+            button2.setIcon(getFloatingButtonIcon());
+            button2.setTitle("test");
+
+            button2.setStrokeVisible(false);
+            button2.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    onFloatingButtonClicked(v);
+                }
+            });
+            actionsMenu2.addButton(button2);
+        }
         super.onPostCreate(savedInstanceState);
+    }
+
+    /**
+     * @return ressource id for button icon
+     */
+    protected int getFloatingButtonIcon() {
+        return 0;
     }
 
     @Override

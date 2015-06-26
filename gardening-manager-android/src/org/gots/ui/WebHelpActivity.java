@@ -102,8 +102,9 @@ public class WebHelpActivity extends BaseGotsActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-//    @Override
-//    protected void onRefresh(String AUTHORITY) {
-//        mWebView.reload();
-//    }
+    @Override
+    protected boolean requireFloatingButton() {
+        return false;
+    }
+
 }

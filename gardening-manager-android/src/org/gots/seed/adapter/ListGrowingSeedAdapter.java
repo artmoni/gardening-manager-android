@@ -17,6 +17,7 @@ import org.gots.seed.GrowingSeed;
 import org.gots.seed.view.SeedWidget;
 
 import android.content.Context;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,7 +67,7 @@ public class ListGrowingSeedAdapter extends BaseAdapter {
                 SeedWidget widget = new SeedWidget(mContext);
                 widget.setSeed(currentSeed);
                 widget.setTag(currentSeed);
-                widget.setLayoutParams(new RelativeLayout.LayoutParams(80, 100));
+//                widget.setLayoutParams(new LinearLayout.LayoutParams(80, 100));
                 int sdk = android.os.Build.VERSION.SDK_INT;
                 if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
                     widget.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.action_selector));

@@ -371,4 +371,9 @@ public class AuthenticationActivity extends BaseGotsActivity {
             }
         }
     }
+
+    @Override
+    protected boolean requireFloatingButton() {
+        return false;
+    }
 }

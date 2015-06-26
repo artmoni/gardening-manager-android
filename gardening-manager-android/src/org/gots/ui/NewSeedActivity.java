@@ -810,4 +810,8 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
 
     }
 
+    @Override
+    protected boolean requireFloatingButton() {
+        return false;
+    }
 }

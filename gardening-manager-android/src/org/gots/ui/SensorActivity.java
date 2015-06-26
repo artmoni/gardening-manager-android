@@ -90,45 +90,9 @@ public class SensorActivity extends BaseGotsActivity implements OnSensorClickLis
         ft.commit();
     }
 
-    // @Override
-    // protected boolean requireAsyncDataRetrieval() {
-    // return true;
-    // }
-    //
-    // @Override
-    // protected Object retrieveNuxeoData() throws Exception {
-    // ParrotSensorProvider sensorProvider = new ParrotSensorProvider(getApplicationContext());
-    // List<ParrotLocation> locations = sensorProvider.getLocations();
-    // return locations;
-    // }
-    //
-    // @Override
-    // protected void onNuxeoDataRetrieved(Object data) {
-    // List<ParrotLocation> result = (List<ParrotLocation>) data;
-    // FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-    //
-    // if (result.size() > 0) {
-    // // SensorListFragment sensors = new SensorListFragment(result);
-    // // ft.replace(R.id.idListFragment, sensors);
-    // Gallery gallery = (Gallery) findViewById(R.id.idGallerySensor);
-    // final LocationListAdapter locationAdapter = new LocationListAdapter(getApplicationContext(), result);
-    // gallery.setAdapter(locationAdapter);
-    // gallery.setOnItemClickListener(new OnItemClickListener() {
-    // @Override
-    // public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-    // FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-    // ft.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
-    // if (getSupportFragmentManager().getFragments().size() > 0)
-    // ft.addToBackStack(null);
-    // ft.replace(R.id.idFragmentSensor, new SensorChartFragment(
-    // locationAdapter.getItem(position).getLocation_identifier()));
-    // ft.commit();
-    // }
-    // });
-    // } else {
-    // ft.replace(R.id.idFragmentSensor, new TutorialFragment(R.layout.tutorial_f));
-    // ft.commit();
-    // }
-    // super.onNuxeoDataRetrieved(data);
-    // }
+    @Override
+    protected boolean requireFloatingButton() {
+        return false;
+    }
+
 }

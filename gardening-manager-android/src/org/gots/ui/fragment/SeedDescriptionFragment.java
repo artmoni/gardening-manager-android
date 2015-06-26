@@ -8,14 +8,13 @@
  * Contributors:
  *     sfleury - initial API and implementation
  ******************************************************************************/
-package org.gots.ui;
+package org.gots.ui.fragment;
 
 import org.gots.R;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
-import org.gots.ui.fragment.BaseGotsFragment;
 
 import android.os.Bundle;
 import android.text.Html;

@@ -25,8 +25,14 @@ import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.provider.nuxeo.NuxeoSeedProvider;
-import org.gots.ui.AllotmentListFragment.OnAllotmentSelected;
-import org.gots.ui.CatalogueFragment.OnSeedSelected;
+import org.gots.ui.fragment.CatalogueFragment;
+import org.gots.ui.fragment.FavoriteCatalogueFragment;
+import org.gots.ui.fragment.MonthlySeedListFragment;
+import org.gots.ui.fragment.ParrotCatalogueFragment;
+import org.gots.ui.fragment.StockVendorListFragment;
+import org.gots.ui.fragment.VendorCatalogueFragment;
+import org.gots.ui.fragment.AllotmentListFragment.OnAllotmentSelected;
+import org.gots.ui.fragment.CatalogueFragment.OnSeedSelected;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -59,6 +65,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -115,13 +122,24 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
             LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
             layout.addView(ads.getAdsLayout());
         }
-        FloatingActionButton button = (FloatingActionButton) findViewById(R.id.setter);
-        button.setSize(FloatingActionButton.SIZE_MINI);
-        button.setColorNormalResId(R.color.pink);
-        button.setColorPressedResId(R.color.pink_pressed);
-        button.setIcon(R.drawable.ic_fab_star);
-        button.setStrokeVisible(false);
 
+    }
+
+    @Override
+    protected boolean requireFloatingButton() {
+        return true;
+    }
+
+    @Override
+    protected int getFloatingButtonIcon() {
+        return R.drawable.bt_add_seed;
+    }
+
+    @Override
+    protected void onFloatingButtonClicked(View v) {
+        Intent i = new Intent(getApplicationContext(), NewSeedActivity.class);
+        startActivity(i);
+        super.onFloatingButtonClicked(v);
     }
 
     @Override
@@ -268,10 +286,10 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
         // Handle item selection
         Intent i;
         switch (item.getItemId()) {
-        case R.id.new_seed:
-            i = new Intent(this, NewSeedActivity.class);
-            startActivity(i);
-            return true;
+        // case R.id.new_seed:
+        // i = new Intent(this, NewSeedActivity.class);
+        // startActivity(i);
+        // return true;
         case R.id.new_seed_barcode:
             IntentIntegrator integrator = new IntentIntegrator(this);
             integrator.initiateScan();

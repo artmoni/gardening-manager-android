@@ -24,6 +24,7 @@ import org.gots.utils.GotsProgressBar;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,7 +77,7 @@ public class SeedWidget extends RelativeLayout {
             textProgress.setVisibility(View.INVISIBLE);
         }
 
-        new AsyncTask<Void, Void, Bitmap>() {
+        AsyncTask<Void, Void, Bitmap> downloadImg = new AsyncTask<Void, Void, Bitmap>() {
             ImageView seedView;
 
             private int vegetableImageRessource;
@@ -96,15 +97,13 @@ public class SeedWidget extends RelativeLayout {
                 Bitmap image = null;
                 /* Check custom image for this variety */
                 if (mSeed.getVariety() != null && !"".equals(mSeed.getVariety()))
-                    imageFile = new File(gotsPref.getFilesDir(),
-                            mSeed.getVariety().toLowerCase().replaceAll("\\s", ""));
+                    imageFile = new File(gotsPref.getFilesDir(), mSeed.getVariety().toLowerCase().replaceAll("\\s", ""));
                 if (imageFile != null && imageFile.exists()) {
                     image = FileUtilities.decodeScaledBitmapFromSdCard(imageFile.getAbsolutePath(), 100, 100);
                 }
                 /* Check custom image for this species */
                 else if (mSeed.getSpecie() != null) {
-                    imageFile = new File(gotsPref.getFilesDir(), mSeed.getSpecie().toLowerCase().replaceAll(
-                            "\\s", ""));
+                    imageFile = new File(gotsPref.getFilesDir(), mSeed.getSpecie().toLowerCase().replaceAll("\\s", ""));
                     if (imageFile != null && imageFile.exists()) {
                         image = FileUtilities.decodeScaledBitmapFromSdCard(imageFile.getAbsolutePath(), 100, 100);
                     }
@@ -121,9 +120,8 @@ public class SeedWidget extends RelativeLayout {
                     seedView.setImageResource(vegetableImageRessource);
                 }
             }
-        }.execute();
-
-        // setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_line_selector));
+        };
+        downloadImg.execute();
 
         invalidate();
     }

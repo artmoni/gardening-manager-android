@@ -1,4 +1,4 @@
-package org.gots.ui;
+package org.gots.ui.fragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,6 @@ import org.gots.allotment.adapter.ListAllotmentAdapter;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
-import org.gots.ui.fragment.AbstractListFragment;
 
 import android.app.Activity;
 import android.os.Bundle;

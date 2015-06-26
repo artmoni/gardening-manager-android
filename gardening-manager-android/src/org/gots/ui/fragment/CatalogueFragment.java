@@ -8,7 +8,7 @@
  * Contributors:
  *     sfleury - initial API and implementation
  ******************************************************************************/
-package org.gots.ui;
+package org.gots.ui.fragment;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,7 +20,6 @@ import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.adapter.SeedListAdapter;
 import org.gots.seed.adapter.VendorSeedListAdapter;
 import org.gots.seed.provider.parrot.ParrotSeedProvider;
-import org.gots.ui.fragment.AbstractListFragment;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -52,9 +51,9 @@ public abstract class CatalogueFragment extends AbstractListFragment implements 
 
     // protected static final String FILTER_STOCK = "filter.stock";
 
-    protected static final String BROADCAST_FILTER = "broadcast_filter";
+    public static final String BROADCAST_FILTER = "broadcast_filter";
 
-    protected static final String IS_SELECTABLE = "seed.selectable";
+    public static final String IS_SELECTABLE = "seed.selectable";
 
     public static final String TAG = CatalogueFragment.class.getSimpleName();
 

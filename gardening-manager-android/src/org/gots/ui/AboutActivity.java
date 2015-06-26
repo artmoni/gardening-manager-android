@@ -480,4 +480,9 @@ public class AboutActivity extends BaseGotsActivity {
         unregisterReceiver(updateReceiver);
         super.onDestroy();
     }
+
+    @Override
+    protected boolean requireFloatingButton() {
+        return false;
+    }
 }

@@ -1029,4 +1029,9 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
             getSupportActionBar().setTitle(getResources().getString(R.string.garden_create));
     }
 
+    @Override
+    protected boolean requireFloatingButton() {
+        return false;
+    }
+
 }

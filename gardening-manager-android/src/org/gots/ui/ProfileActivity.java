@@ -19,8 +19,11 @@ import org.gots.garden.view.OnProfileEventListener;
 import org.gots.provider.GardenContentProvider;
 import org.gots.ui.BaseGotsActivity.GardenListener;
 import org.gots.ui.fragment.GardenResumeFragment;
+import org.gots.ui.fragment.ProfileEditorFragment;
 import org.gots.ui.fragment.ProfileListFragment;
 import org.gots.ui.fragment.ProfileMapFragment;
+
+import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -38,7 +41,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.SlidingDrawer;
 import android.widget.Toast;
 
 public class ProfileActivity extends BaseGotsActivity implements OnProfileEventListener, GardenListener {
@@ -70,13 +77,26 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
         mapFragment = new ProfileMapFragment();
         transactionMap.replace(R.id.IdGardenProfileList, mapFragment).commit();
 
-        // if (findViewById(R.id.IdGardenProfileContent) != null) {
-        // Fragment profileListFragment = new ProfileListFragment();
-        // FragmentTransaction transactionList = getSupportFragmentManager().beginTransaction();
-        // transactionList.setCustomAnimations(R.anim.push_right_in, R.anim.push_left_out);
-        // transactionList.replace(R.id.IdGardenProfileContent, profileListFragment).commit();
-        // }
         openContentResumeFragment();
+    }
+
+    @Override
+    protected boolean requireFloatingButton() {
+        return true;
+    }
+
+    @Override
+    protected int getFloatingButtonIcon() {
+        return R.drawable.bt_add_garden;
+    }
+
+    @Override
+    protected void onFloatingButtonClicked(View v) {
+        if (findViewById(R.id.bottom) != null) {
+            ((SlidingDrawer) findViewById(R.id.bottom)).open();
+        }
+        openContentFragment(getCurrentGarden(), false);
+        super.onFloatingButtonClicked(v);
     }
 
     public BroadcastReceiver gardenBroadcastReceiver = new BroadcastReceiver() {
@@ -159,7 +179,6 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-
 
         case R.id.help:
             Intent browserIntent = new Intent(this, WebHelpActivity.class);

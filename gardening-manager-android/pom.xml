@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+>
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.gots</groupId>
@@ -49,6 +51,17 @@
       <version>4.2.2_r2</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>com.android.support</groupId>
+      <artifactId>support-annotations</artifactId>
+      <version>22.2.0</version>
+    </dependency> 
+    <!-- <dependency>
+      <groupId>com.getbase</groupId>
+      <artifactId>floatingactionbutton</artifactId>
+      <version>1.9.1</version>
+      <type>aar</type>
+    </dependency> -->
     <!-- <dependency> <groupId>com.actionbarsherlock</groupId> <artifactId>actionbarsherlock</artifactId> 
       <version>4.4.0</version> <type>apklib</type> </dependency> -->
     <!-- <dependency> <groupId>com.android.support</groupId> <artifactId>support-v4</artifactId> 

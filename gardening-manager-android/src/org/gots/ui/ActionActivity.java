@@ -138,4 +138,9 @@ public class ActionActivity extends BaseGotsActivity {
     protected String requireRefreshSyncAuthority() {
         return ActionsContentProvider.AUTHORITY;
     }
+
+    @Override
+    protected boolean requireFloatingButton() {
+        return false;
+    }
 }

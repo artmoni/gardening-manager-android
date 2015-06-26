@@ -8,7 +8,7 @@
  * Contributors:
  *     sfleury - initial API and implementation
  ******************************************************************************/
-package org.gots.ui;
+package org.gots.ui.fragment;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -36,7 +36,6 @@ import org.gots.garden.view.OnProfileEventListener;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
-import org.gots.ui.fragment.BaseGotsFragment;
 import org.gots.weather.WeatherManager;
 import org.gots.weather.provider.previmeteo.PrevimeteoWeatherProvider;
 

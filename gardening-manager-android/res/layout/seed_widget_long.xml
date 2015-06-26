@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:alpha="0.7"
+            android:alpha="0.6"
             android:src="@drawable/family_unknown" />
 
         <org.gots.seed.view.PlanningWidget

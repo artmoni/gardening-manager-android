@@ -191,4 +191,9 @@ public class SplashScreenActivity extends BaseGotsActivity {
         imageRefresh.clearAnimation();
         super.onPause();
     }
+
+    @Override
+    protected boolean requireFloatingButton() {
+        return false;
+    }
 }

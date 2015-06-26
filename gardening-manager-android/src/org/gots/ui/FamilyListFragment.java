@@ -11,7 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 
-public class FamilyListActivity extends AbstractListFragment {
+public class FamilyListFragment extends AbstractListFragment {
 
     @Override
     public void onViewCreated(View v, Bundle savedInstanceState) {

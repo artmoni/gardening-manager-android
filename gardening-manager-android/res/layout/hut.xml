@@ -20,7 +20,7 @@
     <LinearLayout
         android:id="@+id/idAdsTop"
         android:layout_width="fill_parent"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:orientation="horizontal" >
@@ -37,15 +37,37 @@
         android:visibility="gone" >
     </FrameLayout>
 
-    <com.getbase.floatingactionbutton.FloatingActionButton
-        android:id="@+id/pink_icon"
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/right_labels"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"
-        fab:fab_colorNormal="@color/white"
-        fab:fab_colorPressed="@color/white"
-        fab:fab_icon="@color/white" />
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        fab:fab_addButtonColorNormal="@color/action_error_color"
+        fab:fab_addButtonColorPressed="@color/action_warning_color"
+        fab:fab_addButtonPlusIconColor="@color/text_color_dark"
+        fab:fab_addButtonSize="mini"
+        fab:fab_labelStyle="@style/seed_family"
+        fab:fab_labelsPosition="left" >
+
+        <!--
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/green_dark"
+            fab:fab_colorPressed="@color/green_light"
+            fab:fab_title="Label on the right" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/green_dark"
+            fab:fab_colorPressed="@color/green_light"
+            fab:fab_size="mini"
+            fab:fab_title="Another one on the right" />
+        -->
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 </RelativeLayout>

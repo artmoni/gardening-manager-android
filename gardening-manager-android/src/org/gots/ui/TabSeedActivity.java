@@ -42,12 +42,14 @@ import org.gots.seed.GrowingSeedImpl;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
-import org.gots.ui.AllotmentListFragment.OnAllotmentSelected;
 import org.gots.ui.fragment.ActionsChoiceFragment;
 import org.gots.ui.fragment.ActionsChoiceFragment.OnActionSelectedListener;
+import org.gots.ui.fragment.AllotmentListFragment.OnAllotmentSelected;
 import org.gots.ui.fragment.WorkflowTaskFragment.OnWorkflowClickListener;
 import org.gots.ui.fragment.ActionsListFragment;
+import org.gots.ui.fragment.AllotmentListFragment;
 import org.gots.ui.fragment.LoginDialogFragment;
+import org.gots.ui.fragment.SeedDescriptionFragment;
 import org.gots.ui.fragment.WorkflowTaskFragment;
 import org.gots.utils.FileUtilities;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
@@ -70,20 +72,25 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.vending.billing.util.IabHelper;
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class TabSeedActivity extends TabActivity implements OnActionSelectedListener, OnAllotmentSelected,
@@ -113,8 +120,6 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
     private Fragment fragmentWebView;
 
     private SeedDescriptionFragment fragmentDescription;
-
-    private ImageView buttonActions;
 
     private Fragment fragmentWorkflow;
 
@@ -146,7 +151,6 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
         getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         pictureGallery = (Gallery) findViewById(R.id.idPictureGallery);
-        buttonActions = (ImageView) findViewById(R.id.imageViewOverlyAction);
 
         if (!gotsPurchase.isPremium()) {
             GotsAdvertisement ads = new GotsAdvertisement(this);
@@ -160,7 +164,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
     protected void initView() {
         if (mSeed.getSpecie() != null)
             getSupportActionBar().setTitle(mSeed.getSpecie());
-        else 
+        else
             getSupportActionBar().setTitle(mSeed.getFamily());
         if (mSeed.getDateSowing() != null) {
             TextView textDateSowing = (TextView) findViewById(R.id.idTextSowingDate);
@@ -178,6 +182,27 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
             }
         } else
             findViewById(R.id.idLayoutCulturePeriod).setVisibility(View.GONE);
+
+    }
+
+    @Override
+    protected boolean requireFloatingButton() {
+        return true;
+    }
+
+    @Override
+    protected int getFloatingButtonIcon() {
+        return R.drawable.action_sow;
+    }
+
+    @Override
+    protected void onFloatingButtonClicked(View v) {
+        if (mSeed.getDateSowing() != null)
+            showOverlayFragment(new ActionsChoiceFragment());
+        else {
+            showOverlayFragment(new AllotmentListFragment());
+        }
+        super.onFloatingButtonClicked(v);
     }
 
     @Override
@@ -513,20 +538,6 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
         initView();
-        if (mSeed.getDateSowing() == null)
-            buttonActions.setImageDrawable(getResources().getDrawable(R.drawable.action_sow));
-        buttonActions.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if (mSeed.getDateSowing() != null)
-                    showOverlayFragment(new ActionsChoiceFragment());
-                else {
-                    showOverlayFragment(new AllotmentListFragment());
-                }
-            }
-
-        });
 
         if (mSeed.getGrowingSeedId() >= 0)
             displayPictureGallery();
@@ -567,8 +578,6 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
         Bundle bundle = new Bundle();
         bundle.putInt(GOTS_GROWINGSEED_ID, mSeed.getSeedId());
         bundle.putInt("org.gots.growingseed.id", mSeed.getGrowingSeedId());
-
-       
 
         // ********************** Seed description **********************
         if (fragmentDescription == null) {
