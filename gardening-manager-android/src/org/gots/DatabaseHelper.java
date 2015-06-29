@@ -297,7 +297,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		public static final String CREATE_TABLE_ALLOTMENT = "CREATE TABLE " + ALLOTMENT_TABLE_NAME 
 				+ " (" + ALLOTMENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
 				+ ALLOTMENT_NAME + " STRING,"
-				+ ALLOTMENT_UUID + " STRING"
+				+ ALLOTMENT_UUID + " STRING,"
 				+ ALLOTMENT_IMAGE_PATH + " STRING"
 					+ ");";
 
