@@ -131,15 +131,21 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
     }
 
     @Override
-    protected int getFloatingButtonIcon() {
-        return R.drawable.bt_add_seed;
-    }
+    protected List<FloatingItem> onCreateFloatingMenu() {
+        List<FloatingItem> floatingItems = new ArrayList<>();
+        FloatingItem floatingItem = new FloatingItem();
+        floatingItem.setTitle(getResources().getString(R.string.seed_action_add_catalogue));
+        floatingItem.setRessourceId(R.drawable.bt_add_seed);
+        floatingItem.setOnClickListener(new View.OnClickListener() {
 
-    @Override
-    protected void onFloatingButtonClicked(View v) {
-        Intent i = new Intent(getApplicationContext(), NewSeedActivity.class);
-        startActivity(i);
-        super.onFloatingButtonClicked(v);
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), NewSeedActivity.class);
+                startActivity(i);
+            }
+        });
+        floatingItems.add(floatingItem);
+        return floatingItems;
     }
 
     @Override

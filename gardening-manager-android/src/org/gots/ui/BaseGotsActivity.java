@@ -197,19 +197,6 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
 
     }
 
-    /**
-     * Called when Floating button is pressed
-     * 
-     * @param view clicked
-     */
-    protected void onFloatingButtonClicked(View v) {
-    }
-
-    /**
-     * @return true if floating button needs to be shown
-     */
-    protected abstract boolean requireFloatingButton();
-
     protected void initAllManager() {
         gardenManager.initIfNew(this);
         seedManager.initIfNew(this);
@@ -263,86 +250,47 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         }
 
         if (requireFloatingButton()) {
-            FloatingActionsMenu actionsMenu = new FloatingActionsMenu(getApplicationContext());
-
-            //BUTTON 1
-            FloatingActionButton button = new FloatingActionButton(getApplicationContext());
-            button.setSize(FloatingActionButton.SIZE_NORMAL);
-            button.setColorNormalResId(R.color.action_error_color);
-            button.setColorPressedResId(R.color.action_warning_color);
-            button.setIcon(getFloatingButtonIcon());
-            button.setTitle("test");
-
-            button.setStrokeVisible(false);
-            button.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    onFloatingButtonClicked(v);
-                }
-            });
-            actionsMenu.addButton(button);
-            
-            //BUTTON 1
-            FloatingActionButton button3 = new FloatingActionButton(getApplicationContext());
-            button3.setSize(FloatingActionButton.SIZE_NORMAL);
-            button3.setColorNormalResId(R.color.action_error_color);
-            button3.setColorPressedResId(R.color.action_warning_color);
-            button3.setIcon(getFloatingButtonIcon());
-            button3.setTitle("test2");
-
-            button3.setStrokeVisible(false);
-            button3.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    onFloatingButtonClicked(v);
-                }
-            });
-            actionsMenu.addButton(button3);
-            
-            
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-            actionsMenu.setLayoutParams(params);
-            ViewGroup root = (ViewGroup) getWindow().getDecorView().findViewById(android.R.id.content);
-            ((ViewGroup) root.getChildAt(0)).addView(actionsMenu);
-
-            FloatingActionsMenu actionsMenu2 = (FloatingActionsMenu) findViewById(R.id.right_labels);
-
-            FloatingActionButton button2 = new FloatingActionButton(getApplicationContext());
-            button2.setSize(FloatingActionButton.SIZE_NORMAL);
-            button2.setColorNormalResId(R.color.action_error_color);
-            button2.setColorPressedResId(R.color.action_warning_color);
-            button2.setIcon(getFloatingButtonIcon());
-            button2.setTitle("test");
-
-            button2.setStrokeVisible(false);
-            button2.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    onFloatingButtonClicked(v);
-                }
-            });
-            actionsMenu2.addButton(button2);
+            createFloatingMenu();
         }
         super.onPostCreate(savedInstanceState);
     }
 
     /**
-     * @return ressource id for button icon
+     * @return true if floating button needs to be shown
      */
-    protected int getFloatingButtonIcon() {
-        return 0;
+    protected abstract boolean requireFloatingButton();
+
+    protected void createFloatingMenu() {
+        FloatingActionsMenu actionsMenu = new FloatingActionsMenu(getApplicationContext());
+
+        List<FloatingItem> items = onCreateFloatingMenu();
+        if (items != null)
+            for (FloatingItem floatingItem : items) {
+                FloatingActionButton button = new FloatingActionButton(getApplicationContext());
+                button.setSize(FloatingActionButton.SIZE_NORMAL);
+                button.setColorNormalResId(R.color.action_error_color);
+                button.setColorPressedResId(R.color.action_warning_color);
+                button.setIcon(floatingItem.getRessourceId());
+                button.setTitle(floatingItem.getTitle());
+
+                button.setStrokeVisible(false);
+                button.setOnClickListener(floatingItem.getOnClickListener());
+                actionsMenu.addButton(button);
+
+            }
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        actionsMenu.setLayoutParams(params);
+        ViewGroup root = (ViewGroup) getWindow().getDecorView().findViewById(android.R.id.content);
+        ((ViewGroup) root.getChildAt(0)).addView(actionsMenu);
+
     }
 
-    @Override
-    protected void onResume() {
-
-        super.onResume();
+    protected List<FloatingItem> onCreateFloatingMenu() {
+        return null;
     }
 
     private int progressCounter = 0;

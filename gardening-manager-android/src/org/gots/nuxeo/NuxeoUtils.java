@@ -87,7 +87,7 @@ public class NuxeoUtils {
 
         try {
             image = service.getBlob(doc);
-            if (image != null && image.getLength() > 0)
+            if (image != null)
                 try {
                     FileUtilities.copy(image.getFile(), file);
                 } catch (IOException e) {

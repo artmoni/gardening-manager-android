@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.gots.ui;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.gots.R;
@@ -86,17 +87,23 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
     }
 
     @Override
-    protected int getFloatingButtonIcon() {
-        return R.drawable.bt_add_garden;
-    }
+    protected List<FloatingItem> onCreateFloatingMenu() {
+        List<FloatingItem> floatingItems = new ArrayList<>();
+        FloatingItem floatingItem = new FloatingItem();
+        floatingItem.setTitle(getResources().getString(R.string.profile_menu_add));
+        floatingItem.setRessourceId(R.drawable.bt_add_garden);
+        floatingItem.setOnClickListener(new View.OnClickListener() {
 
-    @Override
-    protected void onFloatingButtonClicked(View v) {
-        if (findViewById(R.id.bottom) != null) {
-            ((SlidingDrawer) findViewById(R.id.bottom)).open();
-        }
-        openContentFragment(getCurrentGarden(), false);
-        super.onFloatingButtonClicked(v);
+            @Override
+            public void onClick(View v) {
+                if (findViewById(R.id.bottom) != null) {
+                    ((SlidingDrawer) findViewById(R.id.bottom)).open();
+                }
+                openContentFragment(getCurrentGarden(), false);
+            }
+        });
+        floatingItems.add(floatingItem);
+        return floatingItems;
     }
 
     public BroadcastReceiver gardenBroadcastReceiver = new BroadcastReceiver() {

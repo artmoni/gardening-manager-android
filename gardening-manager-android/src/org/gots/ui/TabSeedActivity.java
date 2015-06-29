@@ -85,6 +85,7 @@ import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.SlidingDrawer;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -191,18 +192,24 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
     }
 
     @Override
-    protected int getFloatingButtonIcon() {
-        return R.drawable.action_sow;
-    }
+    protected List<FloatingItem> onCreateFloatingMenu() {
+        List<FloatingItem> floatingItems = new ArrayList<>();
+        FloatingItem floatingItem = new FloatingItem();
+        floatingItem.setTitle(getResources().getString(R.string.action_sow));
+        floatingItem.setRessourceId(R.drawable.action_sow);
+        floatingItem.setOnClickListener(new View.OnClickListener() {
 
-    @Override
-    protected void onFloatingButtonClicked(View v) {
-        if (mSeed.getDateSowing() != null)
-            showOverlayFragment(new ActionsChoiceFragment());
-        else {
-            showOverlayFragment(new AllotmentListFragment());
-        }
-        super.onFloatingButtonClicked(v);
+            @Override
+            public void onClick(View v) {
+                if (mSeed.getDateSowing() != null)
+                    showOverlayFragment(new ActionsChoiceFragment());
+                else {
+                    showOverlayFragment(new AllotmentListFragment());
+                }
+            }
+        });
+        floatingItems.add(floatingItem);
+        return floatingItems;
     }
 
     @Override

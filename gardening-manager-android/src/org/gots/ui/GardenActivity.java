@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.gots.ui;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.gots.R;
@@ -21,6 +22,7 @@ import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.view.QuickSeedActionBuilder;
 import org.gots.seed.view.SeedWidget;
+import org.gots.ui.fragment.ActionsChoiceFragment;
 import org.gots.ui.fragment.AllotmentEditorFragment;
 import org.gots.ui.fragment.AllotmentListFragment;
 import org.gots.ui.fragment.CatalogueFragment;
@@ -416,13 +418,20 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
     }
 
     @Override
-    protected int getFloatingButtonIcon() {
-        return R.drawable.bt_add_allotment;
-    }
+    protected List<FloatingItem> onCreateFloatingMenu() {
+        List<FloatingItem> floatingItems = new ArrayList<>();
+        FloatingItem floatingItem = new FloatingItem();
+        floatingItem.setTitle(getResources().getString(R.string.allotment_action_add_message));
+        floatingItem.setRessourceId(R.drawable.bt_add_allotment);
+        floatingItem.setOnClickListener(new View.OnClickListener() {
 
-    @Override
-    protected void onFloatingButtonClicked(View v) {
-        displayEditorFragment(null);
-        super.onFloatingButtonClicked(v);
+            @Override
+            public void onClick(View v) {
+                displayEditorFragment(null);
+
+            }
+        });
+        floatingItems.add(floatingItem);
+        return floatingItems;
     }
 }
