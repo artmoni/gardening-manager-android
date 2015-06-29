@@ -262,7 +262,6 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
 
     protected void createFloatingMenu() {
         FloatingActionsMenu actionsMenu = new FloatingActionsMenu(getApplicationContext());
-
         List<FloatingItem> items = onCreateFloatingMenu();
         if (items != null)
             for (FloatingItem floatingItem : items) {
