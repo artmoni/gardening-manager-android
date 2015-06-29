@@ -120,16 +120,6 @@ public class SeedWidgetLong extends RelativeLayout {
 
         TextView stock = (TextView) findViewById(R.id.idSeedStock);
         stock.setText(String.valueOf(mSeed.getNbSachet()));
-        // stock.removeAllViews();
-        // for (int i = 0; i < mSeed.getNbSachet(); i++) {
-        // ImageView seedbag = new ImageView(mContext);
-        // seedbag.setImageDrawable(mContext.getResources().getDrawable(R.drawable.seed_bag));
-        // // seedbag.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_planning_sow));
-        //
-        // LayoutParams params = new LinearLayout.LayoutParams(30, 30);
-        // seedbag.setLayoutParams(params);
-        // stock.addView(seedbag, i);
-        // }
 
         if (mSeed.getLanguage() != null && !"".equals(mSeed.getLanguage())) {
             ImageView flag = (ImageView) findViewById(R.id.IdSeedLanguage);
