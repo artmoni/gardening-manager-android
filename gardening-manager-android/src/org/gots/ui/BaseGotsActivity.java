@@ -249,11 +249,9 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
                 layout.addView(ads.getAdsLayout());
         }
 
-        if (requireFloatingButton()) {
-            createFloatingMenu();
-        }
         super.onPostCreate(savedInstanceState);
     }
+
 
     /**
      * @return true if floating button needs to be shown
@@ -417,6 +415,9 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
         setProgressRefresh(false);
+        if (requireFloatingButton()) {
+            createFloatingMenu();
+        }
         super.onNuxeoDataRetrieved(data);
     }
 

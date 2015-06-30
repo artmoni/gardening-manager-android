@@ -22,11 +22,13 @@ import java.util.Locale;
 import org.gots.R;
 import org.gots.action.ActionOnSeed;
 import org.gots.action.BaseAction;
+import org.gots.action.GotsActionManager;
 import org.gots.action.GotsActionSeedManager;
 import org.gots.action.bean.DeleteAction;
 import org.gots.action.bean.PhotoAction;
 import org.gots.action.bean.SowingAction;
 import org.gots.action.provider.GotsActionSeedProvider;
+import org.gots.action.view.ActionWidget;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.bean.BaseAllotmentInterface;
@@ -194,21 +196,53 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
     @Override
     protected List<FloatingItem> onCreateFloatingMenu() {
         List<FloatingItem> floatingItems = new ArrayList<>();
-        FloatingItem floatingItem = new FloatingItem();
-        floatingItem.setTitle(getResources().getString(R.string.action_sow));
-        floatingItem.setRessourceId(R.drawable.action_sow);
-        floatingItem.setOnClickListener(new View.OnClickListener() {
+        if (mSeed.getDateSowing() == null) {
 
-            @Override
-            public void onClick(View v) {
-                if (mSeed.getDateSowing() != null)
-                    showOverlayFragment(new ActionsChoiceFragment());
-                else {
+            FloatingItem floatingItem = new FloatingItem();
+            floatingItem.setTitle(getResources().getString(R.string.action_sow));
+            floatingItem.setRessourceId(R.drawable.action_sow);
+            floatingItem.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
                     showOverlayFragment(new AllotmentListFragment());
                 }
+            });
+            floatingItems.add(floatingItem);
+        } else {
+            List<BaseAction> actionInterfaces = (List<BaseAction>) GotsActionManager.getInstance().initIfNew(
+                    getApplicationContext()).getActions(false);
+
+            for (final BaseAction baseActionInterface : actionInterfaces) {
+                if (!(baseActionInterface instanceof ActionOnSeed))
+                    continue;
+                FloatingItem floatingItem = new FloatingItem();
+                floatingItem.setTitle(baseActionInterface.getName());
+                int actionImageRessource = getResources().getIdentifier(
+                        "org.gots:drawable/action_" + baseActionInterface.getName(), null, null);
+                floatingItem.setRessourceId(actionImageRessource);
+                floatingItem.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        new AsyncTask<Void, Void, Void>() {
+                            @Override
+                            protected Void doInBackground(Void... params) {
+                                actionseedProvider.doAction((ActionOnSeed) baseActionInterface, mSeed);
+                                return null;
+                            }
+
+                            protected void onPostExecute(Void result) {
+                                if (fragmentListAction != null) {
+                                    ((ActionsListFragment) fragmentListAction).update();
+                                }
+                            };
+                        }.execute();
+                    }
+                });
+                floatingItems.add(floatingItem);
             }
-        });
-        floatingItems.add(floatingItem);
+        }
         return floatingItems;
     }
 
