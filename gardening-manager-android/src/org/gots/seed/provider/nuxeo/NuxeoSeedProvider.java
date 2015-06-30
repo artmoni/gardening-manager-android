@@ -496,6 +496,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
                     // seed = super.getSeedByUUID(seed.getUUID());
                     if (seed.getNbSachet() > 0) {
+                        super.updateSeed(seed);
                         mySeeds.add(seed);
                         Log.i(TAG, "getMyStock: " + seed.toString());
                     }

@@ -126,6 +126,11 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
     }
 
     @Override
+    protected boolean requireAsyncDataRetrieval() {
+        return true;
+    }
+
+    @Override
     protected boolean requireFloatingButton() {
         return true;
     }
@@ -358,7 +363,7 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
     @Override
     public void onPlantCatalogueClick(BaseSeedInterface seed) {
         Intent i = new Intent(getApplicationContext(), TabSeedActivity.class);
-        i.putExtra("org.gots.seed.vendorid", seed.getSeedId());
+        i.putExtra(TabSeedActivity.GOTS_VENDORSEED_ID, seed.getSeedId());
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
     }
