@@ -401,6 +401,11 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         return null;
     }
 
+    
+    /* (non-Javadoc)
+     * @see org.nuxeo.android.activities.BaseNuxeoActivity#requireAsyncDataRetrieval()
+     * Set to true if you need Floating Menu
+     */
     @Override
     protected boolean requireAsyncDataRetrieval() {
         return false;
