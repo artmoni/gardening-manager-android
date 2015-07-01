@@ -345,11 +345,6 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
         // Handle item selection
         Intent i;
         switch (item.getItemId()) {
-        case R.id.help:
-            Intent browserIntent = new Intent(this, WebHelpActivity.class);
-            browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
-            startActivity(browserIntent);
-            return true;
         case R.id.edit:
             Intent editIntent = new Intent(this, NewSeedActivity.class);
             editIntent.putExtra(NewSeedActivity.ORG_GOTS_SEEDID, mSeed.getSeedId());
@@ -371,12 +366,6 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
             }.execute();
             return true;
 
-            // case R.id.sow:
-            // Intent intent = new Intent(this, GardenActivity.class);
-            // intent.putExtra(GardenActivity.SELECT_ALLOTMENT, true);
-            // intent.putExtra(GardenActivity.VENDOR_SEED_ID, mSeed.getSeedId());
-            // startActivity(intent);
-            // return true;
         case R.id.download:
             new AsyncTask<Void, Integer, File>() {
                 boolean licenceAvailable = false;

@@ -60,7 +60,8 @@ public class ActionsListFragment extends AbstractListFragment implements ListVie
     @Override
     public void onViewCreated(View v, Bundle savedInstanceState) {
         Bundle bundle = this.getArguments();
-        seedid = bundle.getInt("org.gots.growingseed.id");
+        if (bundle != null)
+            seedid = bundle.getInt("org.gots.growingseed.id");
         growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(getActivity());
         actionseedProvider = GotsActionSeedManager.getInstance().initIfNew(getActivity());
         super.onViewCreated(v, savedInstanceState);

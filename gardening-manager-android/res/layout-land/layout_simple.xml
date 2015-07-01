@@ -32,17 +32,18 @@
         android:orientation="horizontal" >
 
         <FrameLayout
-            android:id="@+id/IdGardenProfileList"
+            android:id="@+id/mainLayout"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1" >
         </FrameLayout>
 
         <FrameLayout
-            android:id="@+id/IdGardenProfileContent"
+            android:id="@+id/contentLayout"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_weight="1" >
+            android:layout_weight="1"
+            android:visibility="gone" >
         </FrameLayout>
     </LinearLayout>
 

@@ -292,18 +292,9 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
         // Handle item selection
         Intent i;
         switch (item.getItemId()) {
-        // case R.id.new_seed:
-        // i = new Intent(this, NewSeedActivity.class);
-        // startActivity(i);
-        // return true;
         case R.id.new_seed_barcode:
             IntentIntegrator integrator = new IntentIntegrator(this);
             integrator.initiateScan();
-            return true;
-        case R.id.help:
-            Intent browserIntent = new Intent(this, WebHelpActivity.class);
-            browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
-            startActivity(browserIntent);
             return true;
         default:
             return super.onOptionsItemSelected(item);

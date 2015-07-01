@@ -21,6 +21,10 @@ import org.gots.bean.BaseAllotmentInterface;
 import org.gots.provider.ActionsContentProvider;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
+import org.gots.ui.fragment.ActionsListFragment;
+import org.gots.ui.fragment.AllotmentEditorFragment.OnAllotmentListener;
+import org.gots.ui.fragment.AllotmentListFragment;
+import org.gots.ui.fragment.AllotmentListFragment.OnAllotmentSelected;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -29,16 +33,16 @@ import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-public class ActionActivity extends BaseGotsActivity {
+public class ActionActivity extends BaseGotsActivity implements OnAllotmentSelected {
 
-    ListView listAllotments;
+    ListView listviewActions;
 
     ArrayList<GrowingSeed> allSeeds = new ArrayList<GrowingSeed>();
-
-    private int seedid;
 
     List<ActionOnSeed> seedActions = new ArrayList<ActionOnSeed>();
 
@@ -46,67 +50,9 @@ public class ActionActivity extends BaseGotsActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ActionBar bar = getSupportActionBar();
-        bar.setDisplayHomeAsUpEnabled(true);
-        bar.setTitle(R.string.dashboard_actions_name);
+        setTitleBar(R.string.dashboard_actions_name);
 
-        setContentView(R.layout.actions);
-        seedid = 0;
-
-        if (getIntent().getExtras() != null)
-            seedid = getIntent().getExtras().getInt("org.gots.seed.id");
-
-        if (!gotsPurchase.isPremium()) {
-            GotsAdvertisement ads = new GotsAdvertisement(this);
-
-            LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
-            layout.addView(ads.getAdsLayout());
-        }
-        // startService(new Intent(this, ActionNotificationService.class));
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        new AsyncTask<Integer, Void, ArrayList<GrowingSeed>>() {
-            private ArrayList<GrowingSeed> allSeeds = new ArrayList<GrowingSeed>();
-
-            private ListAllActionAdapter listActions;
-
-            protected void onPreExecute() {
-            };
-
-            @Override
-            protected ArrayList<GrowingSeed> doInBackground(Integer... params) {
-                GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(
-                        getApplicationContext());
-                int seedid = params[0].intValue();
-                if (seedid > 0) {
-                    allSeeds.add(growingSeedManager.getGrowingSeedById(seedid));
-                } else {
-                    for (BaseAllotmentInterface allotment : allotmentManager.getMyAllotments(false))
-                        allSeeds.addAll(growingSeedManager.getGrowingSeedsByAllotment(allotment, false));
-                }
-
-                for (GrowingSeed seed : allSeeds) {
-
-                    seedActions.addAll(actionseedProvider.getActionsToDoBySeed(seed, false));
-                }
-
-                listActions = new ListAllActionAdapter(ActionActivity.this, seedActions,
-                        ListAllActionAdapter.STATUS_TODO);
-
-                return allSeeds;
-            }
-
-            protected void onPostExecute(ArrayList<GrowingSeed> allSeeds) {
-
-                listAllotments = (ListView) findViewById(R.id.IdGardenActionsList);
-                listAllotments.setAdapter(listActions);
-                listAllotments.setDivider(null);
-                listAllotments.setDividerHeight(0);
-            };
-        }.execute(seedid);
-        super.onPostCreate(savedInstanceState);
+        addMainLayout(new ActionsListFragment(), null);
     }
 
     @Override
@@ -117,30 +63,59 @@ public class ActionActivity extends BaseGotsActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-        case android.R.id.home:
-            finish();
-            return true;
-        case R.id.help:
-            Intent browserIntent = new Intent(this, WebHelpActivity.class);
-            browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
-            startActivity(browserIntent);
-            return true;
-
-        default:
-            return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
     protected String requireRefreshSyncAuthority() {
         return ActionsContentProvider.AUTHORITY;
     }
 
     @Override
     protected boolean requireFloatingButton() {
-        return false;
+        return true;
+    }
+
+    @Override
+    protected List<FloatingItem> onCreateFloatingMenu() {
+        List<FloatingItem> floatingItems = new ArrayList<>();
+        FloatingItem floatingItem = new FloatingItem();
+        floatingItem.setTitle(getResources().getString(R.string.action_planning));
+        floatingItem.setRessourceId(R.drawable.action_schedule);
+        floatingItem.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                addContentLayout(new AllotmentListFragment(), null);
+            }
+        });
+        floatingItems.add(floatingItem);
+        return floatingItems;
+
+    }
+
+    @Override
+    public void onAllotmentClick(BaseAllotmentInterface allotmentInterface) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onAllotmentLongClick(BaseAllotmentInterface allotmentInterface) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onAllotmentMenuClick(View v, BaseAllotmentInterface allotmentInterface) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onGrowingSeedClick(View v, GrowingSeed growingSeedInterface) {
+
+    }
+
+    @Override
+    public void onGrowingSeedLongClick(View v, GrowingSeed growingSeedInterface) {
+        // TODO Auto-generated method stub
+
     }
 }

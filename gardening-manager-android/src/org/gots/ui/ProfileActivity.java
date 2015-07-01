@@ -19,6 +19,7 @@ import org.gots.garden.GardenInterface;
 import org.gots.garden.view.OnProfileEventListener;
 import org.gots.provider.GardenContentProvider;
 import org.gots.ui.BaseGotsActivity.GardenListener;
+import org.gots.ui.fragment.BaseGotsFragment;
 import org.gots.ui.fragment.GardenResumeFragment;
 import org.gots.ui.fragment.ProfileEditorFragment;
 import org.gots.ui.fragment.ProfileMapFragment;
@@ -55,23 +56,19 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.profile);
-
-        ActionBar bar = getSupportActionBar();
-        bar.setDisplayHomeAsUpEnabled(true);
-        bar.setTitle(R.string.dashboard_profile_name);
+        setTitleBar(R.string.dashboard_profile_name);
 
         try {
             runAsyncDataRetrieval();
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
-        FragmentTransaction transactionMap = getSupportFragmentManager().beginTransaction();
-        transactionMap.setCustomAnimations(R.anim.push_right_in, R.anim.push_left_out);
+        // FragmentTransaction transactionMap = getSupportFragmentManager().beginTransaction();
+        // transactionMap.setCustomAnimations(R.anim.push_right_in, R.anim.push_left_out);
+        // transactionMap.replace(getMainLayout(), mapFragment).commit();
 
         mapFragment = new ProfileMapFragment();
-        transactionMap.replace(R.id.IdGardenProfileList, mapFragment).commit();
-
+        addMainLayout(mapFragment, null);
         openContentResumeFragment();
     }
 
@@ -125,33 +122,25 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         if (currentGarden.getGpsLatitude() == 0 || currentGarden.getGpsLongitude() == 0) {
-            // Fragment fragment = new ProfileCreationFragment();
-            // FragmentTransaction transactionCatalogue = fragmentManager.beginTransaction();
-            // transactionCatalogue.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
-            // transactionCatalogue.replace(R.id.IdGardenProfileList, fragment).commit();
             Toast.makeText(getApplicationContext(), "Long press to localize your garden", Toast.LENGTH_LONG).show();
         } else {
-            // ProfileCreationFragment creationFragment = (ProfileCreationFragment)
-            // getSupportFragmentManager().findFragmentById(
-            // R.id.IdGardenProfileContent);
 
-            if (findViewById(R.id.IdGardenProfileContent) != null) {
+            // if (findViewById(getContentLayout()) != null) {
 
-                ProfileEditorFragment fragment = (ProfileEditorFragment) getSupportFragmentManager().findFragmentById(
-                        R.id.IdGardenProfileContent);
-                if (fragment == null) {
-                    fragment = new ProfileEditorFragment();
-                    Bundle options = new Bundle();
-                    options.putInt("option", ProfileEditorFragment.OPTION_EDIT);
-                    fragment.setArguments(options);
-                    FragmentTransaction transactionCatalogue = fragmentManager.beginTransaction();
-                    transactionCatalogue.setCustomAnimations(R.anim.push_right_in, R.anim.push_left_out);
-                    transactionCatalogue.replace(R.id.IdGardenProfileContent, fragment).commitAllowingStateLoss();
-                } else
-                    fragment.update();
-                // creationFragment.getArguments().putInt("option", ProfileCreationFragment.OPTION_EDIT);
-                // creationFragment.updateGarden(getCurrentGarden());
-            }
+            BaseGotsFragment fragment = getContentFragment();
+            if (fragment == null) {
+                fragment = new ProfileEditorFragment();
+                Bundle options = new Bundle();
+                options.putInt("option", ProfileEditorFragment.OPTION_EDIT);
+                addContentLayout(fragment, options);
+                // fragment.setArguments(options);
+                // FragmentTransaction transactionCatalogue = fragmentManager.beginTransaction();
+                // transactionCatalogue.addToBackStack(null);
+                // transactionCatalogue.setCustomAnimations(R.anim.push_right_in, R.anim.push_left_out);
+                // transactionCatalogue.replace(getContentLayout(), fragment).commitAllowingStateLoss();
+            } else
+                fragment.update();
+            // }
 
         }
         super.onNuxeoDataRetrieved(myGardens);
@@ -194,7 +183,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
         case R.id.edit_garden:
             openContentFragment(getCurrentGarden(), true);
             return true;
-        case R.id.delete_allotment:
+        case R.id.delete_garden:
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
             builder.setTitle("Delete a garden");
@@ -219,7 +208,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
 
                         protected void onPostExecute(GardenInterface result) {
                             if (result != null) {
-                                closeContentFragment();
+                                getSupportFragmentManager().popBackStack();
                                 mapFragment.update();
                             }
                             // sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
@@ -268,51 +257,53 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
 
     @Override
     public void onProfileEdited(GardenInterface garden) {
-        // openContentFragment(garden, true);
         gardenManager.updateCurrentGarden(garden);
 
     }
 
     protected void openContentFragment(GardenInterface garden, boolean editable) {
-        Fragment creationFragment = getSupportFragmentManager().findFragmentById(R.id.IdGardenProfileContent);
+        // Fragment creationFragment = getSupportFragmentManager().findFragmentById(getContentLayout());
         Bundle options = new Bundle();
         if (editable) {
             options.putInt("option", ProfileEditorFragment.OPTION_EDIT);
         }
 
-        FragmentTransaction transactionCatalogue = getSupportFragmentManager().beginTransaction();
-        transactionCatalogue.setCustomAnimations(R.anim.abc_fade_in, R.anim.push_right_out);
+        // FragmentTransaction transactionCatalogue = getSupportFragmentManager().beginTransaction();
+        // transactionCatalogue.setCustomAnimations(R.anim.abc_fade_in, R.anim.push_right_out);
         // transactionCatalogue.addToBackStack(null);
 
-        if (findViewById(R.id.IdGardenProfileContent) != null) {
-            if (!editable) {
-                creationFragment = new ProfileEditorFragment();
-                creationFragment.setArguments(options);
-                creationFragment.setRetainInstance(false);
-                transactionCatalogue.add(R.id.IdGardenProfileContent, creationFragment).commit();
-            } else if (creationFragment instanceof ProfileEditorFragment)
-                ((ProfileEditorFragment) creationFragment).updateGarden(garden);
-        } else {
-            creationFragment = new ProfileEditorFragment();
-            creationFragment.setArguments(options);
-            transactionCatalogue.add(R.id.IdGardenProfileList, creationFragment).commit();
-        }
+        // if (findViewById(getContentLayout()) != null) {
+        if (!editable) {
+            addContentLayout(new ProfileEditorFragment(), options);
+            // creationFragment = new ProfileEditorFragment();
+            // creationFragment.setArguments(options);
+            // creationFragment.setRetainInstance(false);
+            // transactionCatalogue.add(getContentLayout(), creationFragment).commit();
+        } else if (getContentFragment() instanceof ProfileEditorFragment)
+            ((ProfileEditorFragment) getContentFragment()).updateGarden(garden);
+
+        // } else {
+        // creationFragment = new ProfileEditorFragment();
+        // creationFragment.setArguments(options);
+        // transactionCatalogue.add(getMainLayout(), creationFragment).commit();
+        // }
     }
 
     @Override
     public void onProfileCreated(GardenInterface garden) {
-        closeContentFragment();
+//        closeContentFragment();
+        getSupportFragmentManager().popBackStack();
         mapFragment.update();
     }
 
-    protected void closeContentFragment() {
-        Fragment creationFragment = getSupportFragmentManager().findFragmentById(R.id.IdGardenProfileContent);
-        if (creationFragment == null)
-            creationFragment = getSupportFragmentManager().findFragmentById(R.id.IdGardenProfileList);
-        if (creationFragment != null && creationFragment instanceof ProfileEditorFragment)
-            getSupportFragmentManager().beginTransaction().remove(creationFragment).commit();
-        runAsyncDataRetrieval();
-    }
+//    protected void closeContentFragment() {
+//        Fragment creationFragment = getSupportFragmentManager().findFragmentById(getContentLayout());
+//        if (creationFragment == null)
+//            creationFragment = getSupportFragmentManager().findFragmentById(getMainLayout());
+//        if (creationFragment != null && creationFragment instanceof ProfileEditorFragment)
+//            getSupportFragmentManager().beginTransaction().remove(creationFragment).commit();
+//        runAsyncDataRetrieval();
+//    }
 
     @Override
     public void onCurrentGardenChanged(GardenInterface garden) {
@@ -321,16 +312,17 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
     }
 
     protected void openContentResumeFragment() {
-        if (findViewById(R.id.IdGardenProfileResume) == null)
-            return;
-        GardenResumeFragment gardenResumeFragment = (GardenResumeFragment) getSupportFragmentManager().findFragmentById(
-                R.id.IdGardenProfileResume);
-        if (gardenResumeFragment == null) {
-            gardenResumeFragment = new GardenResumeFragment();
-            FragmentTransaction transactionCatalogue = getSupportFragmentManager().beginTransaction();
-            transactionCatalogue.setCustomAnimations(R.anim.abc_fade_in, R.anim.push_right_out);
-            transactionCatalogue.replace(R.id.IdGardenProfileResume, gardenResumeFragment).commit();
-        } else
-            gardenResumeFragment.update();
+        // if (findViewById(R.id.IdGardenProfileResume) == null)
+        // return;
+        // GardenResumeFragment gardenResumeFragment = (GardenResumeFragment)
+        // getSupportFragmentManager().findFragmentById(
+        // R.id.IdGardenProfileResume);
+        // if (gardenResumeFragment == null) {
+        // gardenResumeFragment = new GardenResumeFragment();
+        // FragmentTransaction transactionCatalogue = getSupportFragmentManager().beginTransaction();
+        // transactionCatalogue.setCustomAnimations(R.anim.abc_fade_in, R.anim.push_right_out);
+        // transactionCatalogue.replace(R.id.IdGardenProfileResume, gardenResumeFragment).commit();
+        // } else
+        // gardenResumeFragment.update();
     }
 }

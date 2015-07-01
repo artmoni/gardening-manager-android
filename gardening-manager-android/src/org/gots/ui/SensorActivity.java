@@ -60,19 +60,6 @@ public class SensorActivity extends BaseGotsActivity implements OnSensorClickLis
         super.onResume();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-        case android.R.id.home:
-            finish();
-            break;
-
-        default:
-            break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     protected void onDestroy() {
