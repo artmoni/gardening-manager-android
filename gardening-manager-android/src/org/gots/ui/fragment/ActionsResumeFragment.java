@@ -89,7 +89,7 @@ public class ActionsResumeFragment extends BaseGotsFragment {
 
     @Override
     protected Object retrieveNuxeoData() throws Exception {
-        return actionSeedManager.getActionsToDo();
+        return actionSeedManager.getActionsToDo(false);
     }
 
     @Override

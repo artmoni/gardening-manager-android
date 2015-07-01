@@ -170,11 +170,6 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
         // Handle item selection
         switch (item.getItemId()) {
 
-        case R.id.help:
-            Intent browserIntent = new Intent(this, WebHelpActivity.class);
-            browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
-            startActivity(browserIntent);
-            return true;
 
         case R.id.new_garden:
 

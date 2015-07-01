@@ -39,7 +39,7 @@ import org.gots.nuxeo.NuxeoWorkflowProvider;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
 import org.gots.ui.fragment.ActionsChoiceFragment.OnActionSelectedListener;
-import org.gots.ui.fragment.ActionsListFragment;
+import org.gots.ui.fragment.ActionsDoneListFragment;
 import org.gots.ui.fragment.AllotmentListFragment;
 import org.gots.ui.fragment.AllotmentListFragment.OnAllotmentSelected;
 import org.gots.ui.fragment.LoginDialogFragment;
@@ -220,7 +220,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 
                             protected void onPostExecute(Void result) {
                                 if (fragmentListAction != null) {
-                                    ((ActionsListFragment) fragmentListAction).update();
+                                    ((ActionsDoneListFragment) fragmentListAction).update();
                                 }
                             };
                         }.execute();
@@ -606,7 +606,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
         // ********************** Tab actions **********************
         if (mSeed.getGrowingSeedId() > 0) {
             if (fragmentListAction == null) {
-                fragmentListAction = Fragment.instantiate(getApplicationContext(), ActionsListFragment.class.getName(),
+                fragmentListAction = Fragment.instantiate(getApplicationContext(), ActionsDoneListFragment.class.getName(),
                         bundle);
                 fragments.add(fragmentListAction);
                 addTab(fragmentListAction, getResources().getString(R.string.seed_description_tabmenu_actions));
@@ -640,7 +640,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 
                 protected void onPostExecute(Void result) {
                     if (fragmentListAction != null) {
-                        ((ActionsListFragment) fragmentListAction).update();
+                        ((ActionsDoneListFragment) fragmentListAction).update();
                     }
                 };
             }.execute();
@@ -661,7 +661,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 
                 protected void onPostExecute(Void result) {
                     if (fragmentListAction != null) {
-                        ((ActionsListFragment) fragmentListAction).update();
+                        ((ActionsDoneListFragment) fragmentListAction).update();
                     }
                 };
             }.execute();

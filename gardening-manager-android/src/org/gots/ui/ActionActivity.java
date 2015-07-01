@@ -14,37 +14,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.gots.R;
-import org.gots.action.ActionOnSeed;
-import org.gots.action.adapter.ListAllActionAdapter;
-import org.gots.ads.GotsAdvertisement;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.provider.ActionsContentProvider;
-import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
-import org.gots.ui.fragment.ActionsListFragment;
-import org.gots.ui.fragment.AllotmentEditorFragment.OnAllotmentListener;
+import org.gots.ui.fragment.ActionsTODOListFragment;
 import org.gots.ui.fragment.AllotmentListFragment;
 import org.gots.ui.fragment.AllotmentListFragment.OnAllotmentSelected;
 
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 
 public class ActionActivity extends BaseGotsActivity implements OnAllotmentSelected {
-
-    ListView listviewActions;
-
-    ArrayList<GrowingSeed> allSeeds = new ArrayList<GrowingSeed>();
-
-    List<ActionOnSeed> seedActions = new ArrayList<ActionOnSeed>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +34,6 @@ public class ActionActivity extends BaseGotsActivity implements OnAllotmentSelec
 
         setTitleBar(R.string.dashboard_actions_name);
 
-        addMainLayout(new ActionsListFragment(), null);
     }
 
     @Override
@@ -65,6 +46,17 @@ public class ActionActivity extends BaseGotsActivity implements OnAllotmentSelec
     @Override
     protected String requireRefreshSyncAuthority() {
         return ActionsContentProvider.AUTHORITY;
+    }
+
+    @Override
+    protected boolean requireAsyncDataRetrieval() {
+        return true;
+    }
+
+    @Override
+    protected void onResume() {
+        addMainLayout(new ActionsTODOListFragment(), null);
+        super.onResume();
     }
 
     @Override

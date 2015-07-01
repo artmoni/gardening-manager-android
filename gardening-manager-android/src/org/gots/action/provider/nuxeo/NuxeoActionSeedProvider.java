@@ -58,7 +58,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
     }
 
     @Override
-    public ArrayList<ActionOnSeed> getActionsToDo() {
+    public ArrayList<ActionOnSeed> getActionsToDo(boolean force) {
         ArrayList<ActionOnSeed> actionsToDo = new ArrayList<ActionOnSeed>();
         try {
             Session session = getNuxeoClient().getSession();
@@ -90,7 +90,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             }
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
-            actionsToDo = super.getActionsToDo();
+            actionsToDo = super.getActionsToDo(force);
         }
         return actionsToDo;
     }

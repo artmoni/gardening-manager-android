@@ -197,7 +197,7 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
     }
 
     @Override
-    public ArrayList<ActionOnSeed> getActionsToDo() {
+    public ArrayList<ActionOnSeed> getActionsToDo(boolean force) {
         ArrayList<ActionOnSeed> allActions = new ArrayList<ActionOnSeed>();
         Cursor cursor = bdd.rawQuery("select * from " + DatabaseHelper.ACTIONSEEDS_TABLE_NAME + " actionseed"
                 + " WHERE actionseed." + DatabaseHelper.ACTIONSEED_DATEACTIONDONE + " IS NULL", null);
