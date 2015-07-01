@@ -22,7 +22,6 @@ import java.util.Locale;
 import org.gots.R;
 import org.gots.action.ActionOnSeed;
 import org.gots.action.BaseAction;
-import org.gots.action.GotsActionSeedManager;
 import org.gots.action.bean.PhotoAction;
 import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;

@@ -17,13 +17,10 @@ import org.gots.seed.GrowingSeed;
 import org.gots.seed.view.SeedWidget;
 
 import android.content.Context;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class ListGrowingSeedAdapter extends BaseAdapter {

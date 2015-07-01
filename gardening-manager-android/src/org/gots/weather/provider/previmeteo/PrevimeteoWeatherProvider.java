@@ -18,11 +18,9 @@ import java.util.Date;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.ws.http.HTTPException;
 
 import org.apache.http.client.HttpResponseException;
 import org.gots.context.GotsContext;
-import org.gots.garden.GotsGardenManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
@@ -33,11 +31,11 @@ import org.gots.weather.provider.local.LocalWeatherProvider;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
-
 import android.content.Context;
 import android.text.format.DateFormat;
 import android.util.Log;
+
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
     private static final String TAG = "PrevimeteoWeatherProvider";

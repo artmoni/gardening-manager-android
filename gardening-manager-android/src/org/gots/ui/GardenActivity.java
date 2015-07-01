@@ -22,17 +22,14 @@ import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.view.QuickSeedActionBuilder;
 import org.gots.seed.view.SeedWidget;
-import org.gots.ui.fragment.ActionsChoiceFragment;
 import org.gots.ui.fragment.AllotmentEditorFragment;
-import org.gots.ui.fragment.AllotmentListFragment;
-import org.gots.ui.fragment.CatalogueFragment;
-import org.gots.ui.fragment.VendorCatalogueFragment;
 import org.gots.ui.fragment.AllotmentEditorFragment.OnAllotmentListener;
+import org.gots.ui.fragment.AllotmentListFragment;
 import org.gots.ui.fragment.AllotmentListFragment.OnAllotmentSelected;
-import org.gots.ui.fragment.CatalogueFragment.OnSeedSelected;
 import org.gots.ui.fragment.BaseGotsFragment;
-
-import com.getbase.floatingactionbutton.FloatingActionButton;
+import org.gots.ui.fragment.CatalogueFragment;
+import org.gots.ui.fragment.CatalogueFragment.OnSeedSelected;
+import org.gots.ui.fragment.VendorCatalogueFragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -48,7 +45,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 

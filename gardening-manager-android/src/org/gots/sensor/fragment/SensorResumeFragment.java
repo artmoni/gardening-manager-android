@@ -3,26 +3,17 @@ package org.gots.sensor.fragment;
 import java.util.List;
 
 import org.gots.R;
-import org.gots.sensor.LocationListAdapter;
-import org.gots.sensor.SensorLocationWidget;
 import org.gots.sensor.parrot.ParrotLocation;
 import org.gots.sensor.parrot.ParrotLocationsStatus;
-import org.gots.sensor.parrot.ParrotSensor;
 import org.gots.sensor.parrot.ParrotSensorProvider;
-import org.gots.ui.ProfileActivity;
-import org.gots.ui.SensorActivity;
 import org.gots.ui.fragment.BaseGotsFragment;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Gallery;
-import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 
 public abstract class SensorResumeFragment extends BaseGotsFragment {

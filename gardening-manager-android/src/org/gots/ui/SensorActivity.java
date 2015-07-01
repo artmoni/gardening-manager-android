@@ -1,12 +1,12 @@
 package org.gots.ui;
 
+import org.gots.R;
 import org.gots.sensor.SensorChartFragment;
 import org.gots.sensor.SensorLoginDialogFragment;
 import org.gots.sensor.fragment.AllSensorResumeFragment;
 import org.gots.sensor.fragment.SensorResumeFragment.OnSensorClickListener;
 import org.gots.sensor.parrot.ParrotLocation;
 import org.gots.ui.fragment.TutorialFragment;
-import org.gots.R;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

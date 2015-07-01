@@ -1,15 +1,11 @@
 package org.gots.ui.fragment;
 
 import org.gots.R;
-import org.gots.allotment.GotsAllotmentManager;
-import org.gots.allotment.provider.AllotmentProvider;
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
 import org.gots.utils.FileUtilities;
-
-import com.google.gson.internal.bind.ReflectiveTypeAdapterFactory.Adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -17,16 +13,13 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;

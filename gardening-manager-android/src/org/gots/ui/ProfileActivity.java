@@ -21,10 +21,7 @@ import org.gots.provider.GardenContentProvider;
 import org.gots.ui.BaseGotsActivity.GardenListener;
 import org.gots.ui.fragment.GardenResumeFragment;
 import org.gots.ui.fragment.ProfileEditorFragment;
-import org.gots.ui.fragment.ProfileListFragment;
 import org.gots.ui.fragment.ProfileMapFragment;
-
-import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -43,9 +40,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.SlidingDrawer;
 import android.widget.Toast;
 

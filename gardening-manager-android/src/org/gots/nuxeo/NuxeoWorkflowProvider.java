@@ -13,7 +13,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.gots.authentication.provider.google.User;
 import org.gots.bean.RouteNode;
-import org.gots.garden.GardenInterface;
 import org.gots.seed.BaseSeedInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
