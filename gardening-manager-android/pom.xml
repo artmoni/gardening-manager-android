@@ -56,12 +56,12 @@
       <artifactId>support-annotations</artifactId>
       <version>22.2.0</version>
     </dependency> 
-    <!-- <dependency>
+     <dependency>
       <groupId>com.getbase</groupId>
       <artifactId>floatingactionbutton</artifactId>
       <version>1.9.1</version>
       <type>aar</type>
-    </dependency> -->
+    </dependency>
     <!-- <dependency> <groupId>com.actionbarsherlock</groupId> <artifactId>actionbarsherlock</artifactId> 
       <version>4.4.0</version> <type>apklib</type> </dependency> -->
     <!-- <dependency> <groupId>com.android.support</groupId> <artifactId>support-v4</artifactId> 
@@ -159,7 +159,6 @@
             <platform>${android.platform}</platform>
           </sdk>
           <nativeLibrariesDirectory>ignored</nativeLibrariesDirectory>
-          <deleteConflictingFiles>true</deleteConflictingFiles>
           <undeployBeforeDeploy>false</undeployBeforeDeploy>
         </configuration>
       </plugin>

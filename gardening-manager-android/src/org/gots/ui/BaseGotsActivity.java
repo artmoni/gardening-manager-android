@@ -287,6 +287,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
                 button.setTitle(floatingItem.getTitle());
 
                 button.setStrokeVisible(false);
+                button.setOnLongClickListener(floatingItem.getOnLongClickListener());
                 button.setOnClickListener(floatingItem.getOnClickListener());
                 actionsMenu.addButton(button);
 
@@ -491,7 +492,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
 
     protected void addMainLayout(Fragment contentFragment, Bundle options) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_up);
+        transaction.setCustomAnimations(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_top);
         if (options != null)
             contentFragment.setArguments(options);
         contentFragment.setRetainInstance(false);

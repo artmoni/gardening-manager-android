@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
@@ -45,12 +46,8 @@ public abstract class AbstractListFragment extends BaseListFragment implements L
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         listView = new ListView(getActivity());
         listView.setOnScrollListener(this);
+        listView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         return listView;
-    }
-
-    @Override
-    protected boolean requireAsyncDataRetrieval() {
-        return false;
     }
 
     @Override

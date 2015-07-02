@@ -1,6 +1,7 @@
 package org.gots.ui;
 
 import android.view.View;
+import android.view.View.OnLongClickListener;
 
 public class FloatingItem {
     private String title;
@@ -8,6 +9,8 @@ public class FloatingItem {
     private View.OnClickListener onClickListener;
 
     private int ressourceId;
+
+    private OnLongClickListener onLongClickListener;
 
     public String getTitle() {
         return title;
@@ -23,6 +26,14 @@ public class FloatingItem {
 
     public void setOnClickListener(View.OnClickListener clickListener) {
         this.onClickListener = clickListener;
+    }
+
+    public void setOnLongClickListener(OnLongClickListener onLongClickListener) {
+        this.onLongClickListener = onLongClickListener;
+    }
+
+    public OnLongClickListener getOnLongClickListener() {
+        return onLongClickListener;
     }
 
     public int getRessourceId() {

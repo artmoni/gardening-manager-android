@@ -31,9 +31,7 @@ public class ActionActivity extends BaseGotsActivity implements OnAllotmentSelec
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setTitleBar(R.string.dashboard_actions_name);
-
     }
 
     @Override
@@ -51,6 +49,11 @@ public class ActionActivity extends BaseGotsActivity implements OnAllotmentSelec
     @Override
     protected boolean requireAsyncDataRetrieval() {
         return true;
+    }
+
+    @Override
+    protected Object retrieveNuxeoData() throws Exception {
+        return actionseedProvider.getActionsToDo(true);
     }
 
     @Override

@@ -126,6 +126,11 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
     }
 
     @Override
+    protected Object retrieveNuxeoData() throws Exception {
+        return seedManager.getVendorSeeds(false, 0, 1);
+    }
+
+    @Override
     protected boolean requireFloatingButton() {
         return true;
     }

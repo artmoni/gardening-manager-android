@@ -7,8 +7,15 @@ import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.BaseSeedInterface;
 
+import android.os.Bundle;
+
 public class ActionsTODOListFragment extends AbstractListFragment {
     private boolean force = false;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     protected boolean requireAsyncDataRetrieval() {
@@ -17,12 +24,13 @@ public class ActionsTODOListFragment extends AbstractListFragment {
 
     @Override
     protected Object retrieveNuxeoData() throws Exception {
-        return actionseedProvider.getActionsToDo(false);
+        return actionseedProvider.getActionsToDo(force);
     }
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
         getListView().setAdapter(
                 new ListAllActionAdapter(getActivity(), (List<ActionOnSeed>) data, ListAllActionAdapter.STATUS_TODO));
+        super.onNuxeoDataRetrieved(data);
     }
 }

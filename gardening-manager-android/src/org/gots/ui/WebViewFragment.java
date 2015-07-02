@@ -21,7 +21,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-public class WebViewActivity extends Fragment {
+public class WebViewFragment extends Fragment {
     private ProgressDialog pd;
 
     @Override

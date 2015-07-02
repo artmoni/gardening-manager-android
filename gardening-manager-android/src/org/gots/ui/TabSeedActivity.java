@@ -42,6 +42,7 @@ import org.gots.ui.fragment.ActionsChoiceFragment.OnActionSelectedListener;
 import org.gots.ui.fragment.ActionsDoneListFragment;
 import org.gots.ui.fragment.AllotmentListFragment;
 import org.gots.ui.fragment.AllotmentListFragment.OnAllotmentSelected;
+import org.gots.ui.fragment.BaseGotsFragment;
 import org.gots.ui.fragment.LoginDialogFragment;
 import org.gots.ui.fragment.SeedDescriptionFragment;
 import org.gots.ui.fragment.WorkflowTaskFragment;
@@ -104,7 +105,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 
     private GotsPurchaseItem gotsPurchase;
 
-    private Fragment fragmentListAction;
+    private ActionsDoneListFragment fragmentListAction;
 
     private Fragment fragmentWebView;
 
@@ -207,6 +208,27 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
                 int actionImageRessource = getResources().getIdentifier(
                         "org.gots:drawable/action_" + baseActionInterface.getName(), null, null);
                 floatingItem.setRessourceId(actionImageRessource);
+                floatingItem.setOnLongClickListener(new View.OnLongClickListener() {
+
+                    @Override
+                    public boolean onLongClick(View v) {
+                        new AsyncTask<Void, Void, Void>() {
+                            @Override
+                            protected Void doInBackground(Void... params) {
+                                baseActionInterface.setDuration(7);
+                                actionseedProvider.insertAction(mSeed, (ActionOnSeed) baseActionInterface);
+                                return null;
+                            }
+
+                            protected void onPostExecute(Void result) {
+                                if (fragmentListAction != null) {
+                                    ((ActionsDoneListFragment) fragmentListAction).update();
+                                }
+                            };
+                        }.execute();
+                        return true;
+                    }
+                });
                 floatingItem.setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -597,8 +619,8 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 
         // ********************** Seed description **********************
         if (fragmentDescription == null) {
-            fragmentDescription = (SeedDescriptionFragment) Fragment.instantiate(getApplicationContext(),
-                    SeedDescriptionFragment.class.getName(), bundle);
+            fragmentDescription = new SeedDescriptionFragment();
+            fragmentDescription.setArguments(bundle);
             fragments.add(fragmentDescription);
             addTab(fragmentDescription, getResources().getString(R.string.seed_description_tabmenu_detail));
         } else
@@ -606,8 +628,8 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
         // ********************** Tab actions **********************
         if (mSeed.getGrowingSeedId() > 0) {
             if (fragmentListAction == null) {
-                fragmentListAction = Fragment.instantiate(getApplicationContext(), ActionsDoneListFragment.class.getName(),
-                        bundle);
+                fragmentListAction = new ActionsDoneListFragment();
+                fragmentListAction.setArguments(bundle);
                 fragments.add(fragmentListAction);
                 addTab(fragmentListAction, getResources().getString(R.string.seed_description_tabmenu_actions));
             }
@@ -619,7 +641,8 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
             urlDescription = "http://" + Locale.getDefault().getLanguage() + ".wikipedia.org/wiki/" + mSeed.getSpecie();
             bundle.putString("org.gots.seed.url", urlDescription);
             if (fragmentWebView == null) {
-                fragmentWebView = Fragment.instantiate(getApplicationContext(), WebViewActivity.class.getName(), bundle);
+                fragmentWebView =new WebViewFragment();
+                fragmentWebView.setArguments(bundle);
                 fragments.add(fragmentWebView);
                 addTab(fragmentWebView, getResources().getString(R.string.seed_description_tabmenu_wikipedia));
             }
