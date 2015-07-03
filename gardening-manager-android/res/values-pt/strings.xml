@@ -77,7 +77,6 @@
   <string name="hut.menu.thismonth">Este Mês</string>
   <string name="hut.menu.seedsofthemonth">O que semear ou plantar este mês</string>
   <string name="hut.menu.filter">Filtro</string>
-  <string name="garden.cityname.inputtitle">Localização</string>
   <string name="garden.cityname.inputmessage">Por favor, digite a cidade em sua horta</string>
   <string name="dashboard.exit">Por favor, clique em voltar novamente para sair</string>
   <string name="dashboard.hut.name">Plantas</string>
