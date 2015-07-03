@@ -137,7 +137,7 @@
     </repository>
     <repository>
       <id>google-repository</id>
-      <url>file://${env.ANDROID_HOME}/extras/google/m2repository</url>
+      <url>file://${sdk.path}/extras/google/m2repository</url>
       <releases>
         <enabled>true</enabled>
       </releases>
@@ -147,7 +147,7 @@
     </repository>
     <repository>
       <id>android-repository</id>
-      <url>file://${env.ANDROID_HOME}/extras/android/m2repository</url>
+      <url>file://${sdk.path}/extras/android/m2repository</url>
       <releases>
         <enabled>true</enabled>
       </releases>
