@@ -159,7 +159,6 @@
             <platform>${android.platform}</platform>
           </sdk>
           <nativeLibrariesDirectory>ignored</nativeLibrariesDirectory>
-          <deleteConflictingFiles>true</deleteConflictingFiles>
           <undeployBeforeDeploy>false</undeployBeforeDeploy>
         </configuration>
       </plugin>
