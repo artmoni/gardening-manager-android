@@ -80,7 +80,6 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 /**
  * @author jcarsique
- * 
  */
 public abstract class BaseGotsActivity extends BaseNuxeoActivity implements GotsContextProvider,
         OnBackStackChangedListener {
@@ -275,9 +274,12 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
     protected abstract boolean requireFloatingButton();
 
     protected void createFloatingMenu() {
-        FloatingActionsMenu actionsMenu = new FloatingActionsMenu(getApplicationContext());
+        View bottomRightButton = new View(getApplicationContext());
+
         List<FloatingItem> items = onCreateFloatingMenu();
-        if (items != null)
+
+        if (items != null && items.size() > 1) {
+            FloatingActionsMenu actionsMenu = new FloatingActionsMenu(getApplicationContext());
             for (FloatingItem floatingItem : items) {
                 FloatingActionButton button = new FloatingActionButton(getApplicationContext());
                 button.setSize(FloatingActionButton.SIZE_NORMAL);
@@ -293,13 +295,32 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
 
             }
 
+            actionsMenu.setColorNormalResId(R.color.text_color_dark);
+            actionsMenu.setColorPressedResId(R.color.green_light);
+            bottomRightButton = actionsMenu;
+        } else if (items.size() == 1) {
+            FloatingItem floatingItem = items.get(0);
+            FloatingActionButton button = new FloatingActionButton(getApplicationContext());
+            button.setSize(FloatingActionButton.SIZE_NORMAL);
+            button.setColorNormalResId(R.color.action_error_color);
+            button.setColorPressedResId(R.color.action_warning_color);
+            button.setIcon(floatingItem.getRessourceId());
+            button.setTitle(floatingItem.getTitle());
+
+            button.setStrokeVisible(false);
+            button.setOnLongClickListener(floatingItem.getOnLongClickListener());
+            button.setOnClickListener(floatingItem.getOnClickListener());
+            bottomRightButton = button;
+        }
+
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        actionsMenu.setLayoutParams(params);
+        bottomRightButton.setLayoutParams(params);
         ViewGroup root = (ViewGroup) getWindow().getDecorView().findViewById(android.R.id.content);
-        ((ViewGroup) root.getChildAt(0)).addView(actionsMenu);
+        ((ViewGroup) root.getChildAt(0)).addView(bottomRightButton);
+
 
     }
 
@@ -359,22 +380,22 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-        case R.id.refresh_seed:
-            onRefresh(requireRefreshSyncAuthority());
-            break;
-        case R.id.help:
-            Intent browserIntent = new Intent(this, WebHelpActivity.class);
-            browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
-            startActivity(browserIntent);
-            return true;
-        case android.R.id.home:
-            if (getSupportFragmentManager().getBackStackEntryCount() > 0)
-                getSupportFragmentManager().popBackStack();
-            else
-                finish();
-            break;
-        default:
-            break;
+            case R.id.refresh_seed:
+                onRefresh(requireRefreshSyncAuthority());
+                break;
+            case R.id.help:
+                Intent browserIntent = new Intent(this, WebHelpActivity.class);
+                browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
+                startActivity(browserIntent);
+                return true;
+            case android.R.id.home:
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+                    getSupportFragmentManager().popBackStack();
+                else
+                    finish();
+                break;
+            default:
+                break;
         }
 
         return super.onOptionsItemSelected(item);
