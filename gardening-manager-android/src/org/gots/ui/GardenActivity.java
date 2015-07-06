@@ -200,21 +200,14 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
     protected void displayAllotmentsFragment() {
         if (!allotmentListFragment.isAdded()) {
             addMainLayout(allotmentListFragment, null);
-            // FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
-            // transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
-            // transactionTutorial.replace(getMainLayout(), allotmentListFragment).commitAllowingStateLoss();
         } else
             allotmentListFragment.update();
     }
 
     protected void displayEditorFragment(BaseAllotmentInterface allotment) {
         if (!editorFragment.isAdded()) {
+            editorFragment.setAllotment(allotment);
             addContentLayout(editorFragment, null);
-            // FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
-            // transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
-            // transactionTutorial.addToBackStack(null);
-            // editorFragment.setAllotment(allotment);
-            // transactionTutorial.replace(getContentLayout(), editorFragment).commitAllowingStateLoss();
         } else
             Toast.makeText(getApplicationContext(), "Only one editor at a time", Toast.LENGTH_SHORT).show();
     }
