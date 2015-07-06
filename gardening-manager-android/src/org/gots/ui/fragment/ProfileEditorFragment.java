@@ -371,7 +371,7 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
                 garden = gardenManager.addGarden(garden);
                 if (garden.isIncredibleEdible())
                     gardenManager.share(garden, "members", "ReadWrite");
-                gardenManager.setCurrentGarden(garden);
+                //gardenManager.setCurrentGarden(garden);
 
                 return garden;
             }
@@ -381,8 +381,7 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
                     Toast.makeText(getActivity(), "Error creating new garden, please verify your connection.",
                             Toast.LENGTH_SHORT).show();
                 else {
-                    // TODO ProfileCreationFragment.this.finish();
-                    mCallback.onProfileCreated(garden);
+                    mCallback.onProfileCreated(result);
                 }
 
             };

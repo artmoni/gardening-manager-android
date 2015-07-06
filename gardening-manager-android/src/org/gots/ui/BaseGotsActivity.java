@@ -517,7 +517,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         if (options != null)
             contentFragment.setArguments(options);
         contentFragment.setRetainInstance(false);
-        transaction.add(getMainLayout(), contentFragment).commitAllowingStateLoss();
+        transaction.replace(getMainLayout(), contentFragment).commitAllowingStateLoss();
     }
 
     @Override

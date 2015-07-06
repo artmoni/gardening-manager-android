@@ -60,12 +60,6 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
 
         setTitleBar(R.string.dashboard_profile_name);
 
-        try {
-            runAsyncDataRetrieval();
-        } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
-        }
-
         mapFragment = new ProfileMapFragment();
         addMainLayout(mapFragment, null);
         //openContentResumeFragment();
@@ -97,7 +91,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
         @Override
         public void onReceive(Context context, Intent intent) {
             if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
-                runAsyncDataRetrieval();
+                //runAsyncDataRetrieval();
             }
         }
     };
@@ -238,6 +232,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
     @Override
     public void onProfileEdited(GardenInterface garden) {
         gardenManager.updateCurrentGarden(garden);
+        openContentFragment(garden, true);
 
     }
 
@@ -255,6 +250,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
     public void onProfileCreated(GardenInterface garden) {
 //        closeContentFragment();
         getSupportFragmentManager().popBackStack();
+        gardenManager.setCurrentGarden(garden);
         mapFragment.update();
     }
 
