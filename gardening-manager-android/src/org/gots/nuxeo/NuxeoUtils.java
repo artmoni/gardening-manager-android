@@ -85,13 +85,16 @@ public class NuxeoUtils {
 
         try {
             image = service.getBlob(doc);
-            if (image != null)
+            if (image != null && image.getLength() > 0) {
                 try {
                     FileUtilities.copy(image.getFile(), file);
+                    Log.d(TAG, "Downloaded image blob " + image.getFileName());
                 } catch (IOException e) {
                     Log.w(TAG, "Cannot copy " + image.getFile().getAbsolutePath() + " to " + file.getAbsolutePath());
                 }
-            Log.d(TAG, "Download image blob " + image.getFileName());
+            } else {
+                Log.d(TAG, "No image for document " + doc.getName());
+            }
         } catch (Exception e) {
             Log.w(TAG, "Image " + file.getAbsolutePath() + " cannot be downloaded for document " + doc);
         }

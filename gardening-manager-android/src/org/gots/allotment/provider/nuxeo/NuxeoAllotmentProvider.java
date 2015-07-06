@@ -1,6 +1,7 @@
 package org.gots.allotment.provider.nuxeo;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
+import org.nuxeo.ecm.automation.client.jaxrs.model.FileBlob;
 import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PathRef;
 
@@ -58,7 +60,7 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
         List<BaseAllotmentInterface> myAllotments = new ArrayList<BaseAllotmentInterface>();
         try {
             Session session = getNuxeoClient().getSession();
-            DocumentManager service = session.getAdapter(DocumentManager.class);
+            final DocumentManager service = session.getAdapter(DocumentManager.class);
 
             byte cacheParam = CacheBehavior.STORE;
             // TODO refresh depending on call
@@ -74,18 +76,28 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
 
             Documents docs = service.query(
                     "SELECT * FROM Allotment WHERE ecm:currentLifeCycleState != \"deleted\" AND ecm:parentId=\""
-                            + allotmentsFolder.getId() + "\"", null, new String[] { "dc:modified true" }, "*", 0, 50,
+                            + allotmentsFolder.getId() + "\"", null, new String[]{"dc:modified true"}, "*", 0, 50,
                     cacheParam);
             // documentsList = docs.asUpdatableDocumentsList();
 
-            for (Iterator<Document> iterator = docs.iterator(); iterator.hasNext();) {
-                Document document = iterator.next();
-                BaseAllotmentInterface allotment = NuxeoAllotmentConverter.convert(document);
+            for (Iterator<Document> iterator = docs.iterator(); iterator.hasNext(); ) {
+                final Document document = iterator.next();
+                final BaseAllotmentInterface allotment = NuxeoAllotmentConverter.convert(document);
                 remoteAllotments.add(allotment);
-                File file = new File(gotsPrefs.getFilesDir().getAbsolutePath() + document.getId());
-                allotment.setImagePath(file.getAbsolutePath());
-                if (!file.exists())
-                    NuxeoUtils.downloadBlob(service, document, file);
+                final File file = new File(gotsPrefs.getFilesDir().getAbsolutePath(), document.getId());
+                if (!file.exists()) {
+                    Thread t = new Thread() {
+                        @Override
+                        public void run() {
+                            Log.d(TAG, "Downloading image " + file.getAbsolutePath());
+                            FileBlob fileBlob = NuxeoUtils.downloadBlob(service, document, file);
+                            if (fileBlob != null && fileBlob.getLength() > 0)
+                                allotment.setImagePath(file.getAbsolutePath());
+                        }//end run
+                    };
+                    t.start();
+
+                }
                 Log.i(TAG, "Nuxeo Allotment " + allotment.toString());
             }
 
@@ -99,7 +111,7 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
     }
 
     protected List<BaseAllotmentInterface> synchronize(List<BaseAllotmentInterface> remoteAllotments,
-            List<BaseAllotmentInterface> localAllotments) {
+                                                       List<BaseAllotmentInterface> localAllotments) {
         boolean found;
         List<BaseAllotmentInterface> myAllotments = new ArrayList<BaseAllotmentInterface>();
 
