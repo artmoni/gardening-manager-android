@@ -5,14 +5,12 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Random;
 
-import org.gots.seed.BaseSeedInterface;
 import org.gots.utils.FileUtilities;
 import org.nuxeo.android.cache.blob.BlobWithProperties;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.android.upload.FileUploader;
 import org.nuxeo.ecm.automation.client.jaxrs.AsyncCallback;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
-import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.FileBlob;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
@@ -87,13 +85,16 @@ public class NuxeoUtils {
 
         try {
             image = service.getBlob(doc);
-            if (image != null)
+            if (image != null && image.getLength() > 0) {
                 try {
                     FileUtilities.copy(image.getFile(), file);
+                    Log.d(TAG, "Downloaded image blob " + image.getFileName());
                 } catch (IOException e) {
                     Log.w(TAG, "Cannot copy " + image.getFile().getAbsolutePath() + " to " + file.getAbsolutePath());
                 }
-            Log.d(TAG, "Download image blob " + image.getFileName());
+            } else {
+                Log.d(TAG, "No image for document " + doc.getName());
+            }
         } catch (Exception e) {
             Log.w(TAG, "Image " + file.getAbsolutePath() + " cannot be downloaded for document " + doc);
         }

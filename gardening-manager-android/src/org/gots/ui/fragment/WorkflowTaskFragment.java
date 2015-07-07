@@ -1,13 +1,10 @@
 package org.gots.ui.fragment;
 
 import org.gots.R;
-import org.gots.action.BaseAction;
 import org.gots.authentication.provider.google.User;
 import org.gots.bean.RouteNode;
 import org.gots.bean.TaskButton;
 import org.gots.nuxeo.NuxeoWorkflowProvider;
-import org.gots.ui.fragment.ActionsResumeFragment.OnActionsClickListener;
-import org.nuxeo.ecm.automation.client.jaxrs.model.DocRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;

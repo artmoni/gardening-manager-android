@@ -70,21 +70,18 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
             Session session = getNuxeoClient().getSession();
             DocumentManager service = session.getAdapter(DocumentManager.class);
 
-            // gardensWorkspaces = service.getChildren(wsRef);
-            // Documents gardensWorkspaces =
-            // service.query("SELECT * FROM Garden WHERE ecm:currentLifeCycleState <> 'deleted' ORDER BY dc:modified DESC");
             byte cacheParam = CacheBehavior.STORE;
             if (force) {
                 cacheParam = (byte) (cacheParam | CacheBehavior.FORCE_REFRESH);
             }
             Documents gardensWorkspaces = service.query("SELECT * FROM " + DOCTYPE_GARDEN
-                    + " WHERE ecm:currentLifeCycleState != \"deleted\"", null, new String[] { "dc:modified desc" },
+                            + " WHERE ecm:currentLifeCycleState != \"deleted\"", null, new String[]{"dc:modified desc"},
                     "*", 0, 50, cacheParam);
 
             // TODO JC Documents gardensWorkspaces = service.query(nxql, queryParams, sortInfo, schemaList, page,
             // pageSize, cacheFlags);
             // documentsList = gardensWorkspaces.asUpdatableDocumentsList();
-            for (Iterator<Document> iterator = gardensWorkspaces.iterator(); iterator.hasNext();) {
+            for (Iterator<Document> iterator = gardensWorkspaces.iterator(); iterator.hasNext(); ) {
                 Document gardenWorkspace = iterator.next();
 
                 GardenInterface garden = NuxeoGardenConvertor.convert(gardenWorkspace);
@@ -102,7 +99,8 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
     @Override
     public GardenInterface createGarden(GardenInterface garden) {
         Log.i(TAG, "createGarden " + garden);
-
+        if (garden.getId() == 0)
+            garden = super.createGarden(garden);
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager documentMgr = session.getAdapter(DocumentManager.class);
@@ -116,8 +114,7 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
-        if (garden.getId() == 0)
-            garden = super.createGarden(garden);
+        garden = super.updateGarden(garden);
 
         currentGarden = garden;
 

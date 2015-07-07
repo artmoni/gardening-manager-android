@@ -27,8 +27,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import android.content.Context;
 import android.util.Log;
 
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
-
 public class WeatherCache {
 
     private File cacheDirectory;

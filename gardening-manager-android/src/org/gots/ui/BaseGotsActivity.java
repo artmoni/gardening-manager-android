@@ -42,6 +42,7 @@ import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GotsSeedManager;
+import org.gots.ui.fragment.BaseGotsFragment;
 import org.nuxeo.android.activities.BaseNuxeoActivity;
 import org.nuxeo.android.context.NuxeoContext;
 
@@ -58,7 +59,11 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -66,7 +71,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -76,9 +80,9 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 /**
  * @author jcarsique
- * 
  */
-public abstract class BaseGotsActivity extends BaseNuxeoActivity implements GotsContextProvider {
+public abstract class BaseGotsActivity extends BaseNuxeoActivity implements GotsContextProvider,
+        OnBackStackChangedListener {
     protected static final String TAG = BaseGotsActivity.class.getSimpleName();
 
     protected GotsPreferences gotsPrefs;
@@ -166,6 +170,9 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.layout_simple);
+
         // TODO All this should be part of the application/service/...
         gotsPrefs = getGotsContext().getServerConfig();
         gotsPurchase = new GotsPurchaseItem(this);
@@ -195,6 +202,15 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
 
         initAllManager();
 
+        if (!gotsPurchase.isPremium()) {
+            GotsAdvertisement ads = new GotsAdvertisement(this);
+
+            LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
+            if (layout != null)
+                layout.addView(ads.getAdsLayout());
+        }
+
+        getSupportFragmentManager().addOnBackStackChangedListener(this);
     }
 
     protected void initAllManager() {
@@ -252,16 +268,18 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         super.onPostCreate(savedInstanceState);
     }
 
-
     /**
      * @return true if floating button needs to be shown
      */
     protected abstract boolean requireFloatingButton();
 
     protected void createFloatingMenu() {
-        FloatingActionsMenu actionsMenu = new FloatingActionsMenu(getApplicationContext());
+        View bottomRightButton = new View(getApplicationContext());
+
         List<FloatingItem> items = onCreateFloatingMenu();
-        if (items != null)
+
+        if (items != null && items.size() > 1) {
+            FloatingActionsMenu actionsMenu = new FloatingActionsMenu(getApplicationContext());
             for (FloatingItem floatingItem : items) {
                 FloatingActionButton button = new FloatingActionButton(getApplicationContext());
                 button.setSize(FloatingActionButton.SIZE_NORMAL);
@@ -271,18 +289,38 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
                 button.setTitle(floatingItem.getTitle());
 
                 button.setStrokeVisible(false);
+                button.setOnLongClickListener(floatingItem.getOnLongClickListener());
                 button.setOnClickListener(floatingItem.getOnClickListener());
                 actionsMenu.addButton(button);
 
             }
 
+            actionsMenu.setColorNormalResId(R.color.text_color_dark);
+            actionsMenu.setColorPressedResId(R.color.green_light);
+            bottomRightButton = actionsMenu;
+        } else if (items.size() == 1) {
+            FloatingItem floatingItem = items.get(0);
+            FloatingActionButton button = new FloatingActionButton(getApplicationContext());
+            button.setSize(FloatingActionButton.SIZE_NORMAL);
+            button.setColorNormalResId(R.color.action_error_color);
+            button.setColorPressedResId(R.color.action_warning_color);
+            button.setIcon(floatingItem.getRessourceId());
+            button.setTitle(floatingItem.getTitle());
+
+            button.setStrokeVisible(false);
+            button.setOnLongClickListener(floatingItem.getOnLongClickListener());
+            button.setOnClickListener(floatingItem.getOnClickListener());
+            bottomRightButton = button;
+        }
+
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        actionsMenu.setLayoutParams(params);
+        bottomRightButton.setLayoutParams(params);
         ViewGroup root = (ViewGroup) getWindow().getDecorView().findViewById(android.R.id.content);
-        ((ViewGroup) root.getChildAt(0)).addView(actionsMenu);
+        ((ViewGroup) root.getChildAt(0)).addView(bottomRightButton);
+
 
     }
 
@@ -342,17 +380,22 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-        case R.id.refresh_seed:
-            onRefresh(requireRefreshSyncAuthority());
-            break;
-        case android.R.id.home:
-            if (getSupportFragmentManager().getBackStackEntryCount() > 0)
-                getSupportFragmentManager().popBackStack();
-            else
-                finish();
-            break;
-        default:
-            break;
+            case R.id.refresh_seed:
+                onRefresh(requireRefreshSyncAuthority());
+                break;
+            case R.id.help:
+                Intent browserIntent = new Intent(this, WebHelpActivity.class);
+                browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
+                startActivity(browserIntent);
+                return true;
+            case android.R.id.home:
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+                    getSupportFragmentManager().popBackStack();
+                else
+                    finish();
+                break;
+            default:
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -401,8 +444,8 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         return null;
     }
 
-    
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see org.nuxeo.android.activities.BaseNuxeoActivity#requireAsyncDataRetrieval()
      * Set to true if you need Floating Menu
      */
@@ -437,10 +480,57 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         return super.getNuxeoContext();
     }
 
-    @Override
-    protected void onPause() {
-
-        super.onPause();
+    protected void setTitleBar(final int dashboardAllotmentsName) {
+        ActionBar bar = getSupportActionBar();
+        bar.setDisplayHomeAsUpEnabled(true);
+        bar.setTitle(dashboardAllotmentsName);
     }
 
+    private int getMainLayout() {
+        return R.id.mainLayout;
+    }
+
+    private int getContentLayout() {
+        if (findViewById(R.id.contentLayout) != null)
+            return R.id.contentLayout;
+        else
+            return getMainLayout();
+    }
+
+    protected void addContentLayout(Fragment contentFragment, Bundle options) {
+        if (!contentFragment.isAdded()) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
+            transaction.addToBackStack(null);
+            if (options != null)
+                contentFragment.setArguments(options);
+            contentFragment.setRetainInstance(false);
+            transaction.replace(getContentLayout(), contentFragment).commitAllowingStateLoss();
+        }
+        if (findViewById(R.id.contentLayout) != null)
+            findViewById(R.id.contentLayout).setVisibility(View.VISIBLE);
+    }
+
+    protected void addMainLayout(Fragment contentFragment, Bundle options) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_top);
+        if (options != null)
+            contentFragment.setArguments(options);
+        contentFragment.setRetainInstance(false);
+        transaction.replace(getMainLayout(), contentFragment).commitAllowingStateLoss();
+    }
+
+    @Override
+    public void onBackStackChanged() {
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0 && findViewById(R.id.contentLayout) != null) {
+            findViewById(R.id.contentLayout).setVisibility(View.GONE);
+        }
+    }
+
+    protected BaseGotsFragment getContentFragment() {
+        if (getSupportFragmentManager().findFragmentById(R.id.contentLayout) instanceof BaseGotsFragment)
+            return (BaseGotsFragment) getSupportFragmentManager().findFragmentById(R.id.contentLayout);
+        else
+            return null;
+    }
 }

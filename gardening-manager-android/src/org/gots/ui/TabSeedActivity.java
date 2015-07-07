@@ -28,7 +28,6 @@ import org.gots.action.bean.DeleteAction;
 import org.gots.action.bean.PhotoAction;
 import org.gots.action.bean.SowingAction;
 import org.gots.action.provider.GotsActionSeedProvider;
-import org.gots.action.view.ActionWidget;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.bean.BaseAllotmentInterface;
@@ -38,21 +37,16 @@ import org.gots.inapp.GotsBillingDialog;
 import org.gots.inapp.GotsPurchaseItem;
 import org.gots.nuxeo.NuxeoWorkflowProvider;
 import org.gots.seed.GotsGrowingSeedManager;
-import org.gots.seed.GotsSeedManager;
 import org.gots.seed.GrowingSeed;
-import org.gots.seed.GrowingSeedImpl;
-import org.gots.seed.provider.GotsSeedProvider;
-import org.gots.seed.provider.local.LocalSeedProvider;
-import org.gots.seed.view.SeedWidgetLong;
-import org.gots.ui.fragment.ActionsChoiceFragment;
 import org.gots.ui.fragment.ActionsChoiceFragment.OnActionSelectedListener;
-import org.gots.ui.fragment.AllotmentListFragment.OnAllotmentSelected;
-import org.gots.ui.fragment.WorkflowTaskFragment.OnWorkflowClickListener;
-import org.gots.ui.fragment.ActionsListFragment;
+import org.gots.ui.fragment.ActionsDoneListFragment;
 import org.gots.ui.fragment.AllotmentListFragment;
+import org.gots.ui.fragment.AllotmentListFragment.OnAllotmentSelected;
+import org.gots.ui.fragment.BaseGotsFragment;
 import org.gots.ui.fragment.LoginDialogFragment;
 import org.gots.ui.fragment.SeedDescriptionFragment;
 import org.gots.ui.fragment.WorkflowTaskFragment;
+import org.gots.ui.fragment.WorkflowTaskFragment.OnWorkflowClickListener;
 import org.gots.utils.FileUtilities;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 
@@ -74,26 +68,19 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Gallery;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.SlidingDrawer;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.vending.billing.util.IabHelper;
-import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class TabSeedActivity extends TabActivity implements OnActionSelectedListener, OnAllotmentSelected,
@@ -118,7 +105,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 
     private GotsPurchaseItem gotsPurchase;
 
-    private Fragment fragmentListAction;
+    private ActionsDoneListFragment fragmentListAction;
 
     private Fragment fragmentWebView;
 
@@ -221,6 +208,27 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
                 int actionImageRessource = getResources().getIdentifier(
                         "org.gots:drawable/action_" + baseActionInterface.getName(), null, null);
                 floatingItem.setRessourceId(actionImageRessource);
+                floatingItem.setOnLongClickListener(new View.OnLongClickListener() {
+
+                    @Override
+                    public boolean onLongClick(View v) {
+                        new AsyncTask<Void, Void, Void>() {
+                            @Override
+                            protected Void doInBackground(Void... params) {
+                                baseActionInterface.setDuration(7);
+                                actionseedProvider.insertAction(mSeed, (ActionOnSeed) baseActionInterface);
+                                return null;
+                            }
+
+                            protected void onPostExecute(Void result) {
+                                if (fragmentListAction != null) {
+                                    ((ActionsDoneListFragment) fragmentListAction).update();
+                                }
+                            };
+                        }.execute();
+                        return true;
+                    }
+                });
                 floatingItem.setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -234,7 +242,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 
                             protected void onPostExecute(Void result) {
                                 if (fragmentListAction != null) {
-                                    ((ActionsListFragment) fragmentListAction).update();
+                                    ((ActionsDoneListFragment) fragmentListAction).update();
                                 }
                             };
                         }.execute();
@@ -359,11 +367,6 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
         // Handle item selection
         Intent i;
         switch (item.getItemId()) {
-        case R.id.help:
-            Intent browserIntent = new Intent(this, WebHelpActivity.class);
-            browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
-            startActivity(browserIntent);
-            return true;
         case R.id.edit:
             Intent editIntent = new Intent(this, NewSeedActivity.class);
             editIntent.putExtra(NewSeedActivity.ORG_GOTS_SEEDID, mSeed.getSeedId());
@@ -385,12 +388,6 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
             }.execute();
             return true;
 
-            // case R.id.sow:
-            // Intent intent = new Intent(this, GardenActivity.class);
-            // intent.putExtra(GardenActivity.SELECT_ALLOTMENT, true);
-            // intent.putExtra(GardenActivity.VENDOR_SEED_ID, mSeed.getSeedId());
-            // startActivity(intent);
-            // return true;
         case R.id.download:
             new AsyncTask<Void, Integer, File>() {
                 boolean licenceAvailable = false;
@@ -622,8 +619,8 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 
         // ********************** Seed description **********************
         if (fragmentDescription == null) {
-            fragmentDescription = (SeedDescriptionFragment) Fragment.instantiate(getApplicationContext(),
-                    SeedDescriptionFragment.class.getName(), bundle);
+            fragmentDescription = new SeedDescriptionFragment();
+            fragmentDescription.setArguments(bundle);
             fragments.add(fragmentDescription);
             addTab(fragmentDescription, getResources().getString(R.string.seed_description_tabmenu_detail));
         } else
@@ -631,8 +628,8 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
         // ********************** Tab actions **********************
         if (mSeed.getGrowingSeedId() > 0) {
             if (fragmentListAction == null) {
-                fragmentListAction = Fragment.instantiate(getApplicationContext(), ActionsListFragment.class.getName(),
-                        bundle);
+                fragmentListAction = new ActionsDoneListFragment();
+                fragmentListAction.setArguments(bundle);
                 fragments.add(fragmentListAction);
                 addTab(fragmentListAction, getResources().getString(R.string.seed_description_tabmenu_actions));
             }
@@ -644,7 +641,8 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
             urlDescription = "http://" + Locale.getDefault().getLanguage() + ".wikipedia.org/wiki/" + mSeed.getSpecie();
             bundle.putString("org.gots.seed.url", urlDescription);
             if (fragmentWebView == null) {
-                fragmentWebView = Fragment.instantiate(getApplicationContext(), WebViewActivity.class.getName(), bundle);
+                fragmentWebView =new WebViewFragment();
+                fragmentWebView.setArguments(bundle);
                 fragments.add(fragmentWebView);
                 addTab(fragmentWebView, getResources().getString(R.string.seed_description_tabmenu_wikipedia));
             }
@@ -665,7 +663,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 
                 protected void onPostExecute(Void result) {
                     if (fragmentListAction != null) {
-                        ((ActionsListFragment) fragmentListAction).update();
+                        ((ActionsDoneListFragment) fragmentListAction).update();
                     }
                 };
             }.execute();
@@ -686,7 +684,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 
                 protected void onPostExecute(Void result) {
                     if (fragmentListAction != null) {
-                        ((ActionsListFragment) fragmentListAction).update();
+                        ((ActionsDoneListFragment) fragmentListAction).update();
                     }
                 };
             }.execute();

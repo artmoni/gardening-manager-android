@@ -22,17 +22,14 @@ import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.view.QuickSeedActionBuilder;
 import org.gots.seed.view.SeedWidget;
-import org.gots.ui.fragment.ActionsChoiceFragment;
 import org.gots.ui.fragment.AllotmentEditorFragment;
-import org.gots.ui.fragment.AllotmentListFragment;
-import org.gots.ui.fragment.CatalogueFragment;
-import org.gots.ui.fragment.VendorCatalogueFragment;
 import org.gots.ui.fragment.AllotmentEditorFragment.OnAllotmentListener;
+import org.gots.ui.fragment.AllotmentListFragment;
 import org.gots.ui.fragment.AllotmentListFragment.OnAllotmentSelected;
-import org.gots.ui.fragment.CatalogueFragment.OnSeedSelected;
 import org.gots.ui.fragment.BaseGotsFragment;
-
-import com.getbase.floatingactionbutton.FloatingActionButton;
+import org.gots.ui.fragment.CatalogueFragment;
+import org.gots.ui.fragment.CatalogueFragment.OnSeedSelected;
+import org.gots.ui.fragment.VendorCatalogueFragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -41,14 +38,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager.BackStackEntry;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
 import android.support.v7.view.ActionMode;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -68,18 +63,7 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ActionBar bar = getSupportActionBar();
-        bar.setDisplayHomeAsUpEnabled(true);
-        bar.setTitle(R.string.dashboard_allotments_name);
-
-        setContentView(R.layout.garden);
-
-        if (!gotsPurchase.isPremium()) {
-            GotsAdvertisement ads = new GotsAdvertisement(this);
-
-            LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
-            layout.addView(ads.getAdsLayout());
-        }
+        setTitleBar(R.string.dashboard_allotments_name);
 
         vendorListFragment = new VendorCatalogueFragment();
         allotmentListFragment = new AllotmentListFragment();
@@ -98,62 +82,6 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
         this.menu = menu;
         return super.onCreateOptionsMenu(menu);
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-
-        case R.id.help:
-            Intent browserIntent = new Intent(this, WebHelpActivity.class);
-            browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
-            startActivity(browserIntent);
-
-            return true;
-
-        default:
-            return super.onOptionsItemSelected(item);
-        }
-    }
-
-    // public void showDialogRenameAllotment(final BaseAllotmentInterface allotmentInterface) {
-    //
-    // final EditText userinput = new EditText(this);
-    // final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    // builder.setView(userinput).setTitle("Allotment's name");
-    // builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-    //
-    // public void onClick(final DialogInterface dialog, int id) {
-    // new AsyncTask<Void, Integer, Void>() {
-    // protected void onPreExecute() {
-    // allotmentInterface.setName(userinput.getText().toString());
-    // };
-    //
-    // @Override
-    // protected Void doInBackground(Void... params) {
-    // allotmentManager.updateAllotment(allotmentInterface);
-    // return null;
-    // }
-    //
-    // protected void onPostExecute(Void result) {
-    // // lsa.notifyDataSetChanged();
-    // dialog.cancel();
-    // };
-    //
-    // }.execute();
-    // }
-    // }).setNegativeButton(this.getResources().getString(R.string.button_cancel),
-    // new DialogInterface.OnClickListener() {
-    // public void onClick(DialogInterface dialog, int id) {
-    // dialog.cancel();
-    //
-    // }
-    // });
-    // // AlertDialog dialog = builder.create();
-    // builder.setCancelable(true);
-    // builder.show();
-    //
-    // }
 
     private void removeAllotment(final BaseAllotmentInterface selectedAllotment2) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -229,10 +157,11 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
     }
 
     protected void displayPlantsFragment() {
-        FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
-        transactionTutorial.setCustomAnimations(R.anim.push_right_in, R.anim.push_right_out);
-        transactionTutorial.addToBackStack(null);
-        transactionTutorial.replace(R.id.idFragmentAllotmentList, vendorListFragment).commitAllowingStateLoss();
+        addContentLayout(vendorListFragment, null);
+        // FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
+        // transactionTutorial.setCustomAnimations(R.anim.push_right_in, R.anim.push_right_out);
+        // transactionTutorial.addToBackStack(null);
+        // transactionTutorial.replace(getContentLayout(), vendorListFragment).commitAllowingStateLoss();
     }
 
     protected void displaySeedActivity(GrowingSeed growingSeedInterface) {
@@ -270,20 +199,15 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
 
     protected void displayAllotmentsFragment() {
         if (!allotmentListFragment.isAdded()) {
-            FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
-            transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
-            transactionTutorial.replace(R.id.idFragmentAllotmentList, allotmentListFragment).commitAllowingStateLoss();
+            addMainLayout(allotmentListFragment, null);
         } else
             allotmentListFragment.update();
     }
 
     protected void displayEditorFragment(BaseAllotmentInterface allotment) {
         if (!editorFragment.isAdded()) {
-            FragmentTransaction transactionTutorial = getSupportFragmentManager().beginTransaction();
-            transactionTutorial.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
-            transactionTutorial.addToBackStack(null);
             editorFragment.setAllotment(allotment);
-            transactionTutorial.replace(R.id.idFragmentAllotmentList, editorFragment).commitAllowingStateLoss();
+            addContentLayout(editorFragment, null);
         } else
             Toast.makeText(getApplicationContext(), "Only one editor at a time", Toast.LENGTH_SHORT).show();
     }

@@ -6,18 +6,14 @@
          <item android:id="@+id/new_profile" android:icon="@drawable/bt_add_allotment"
 		android:title="@string/profile.menu.add" />
     -->
-    <item
-        android:id="@+id/new_garden"
-        android:icon="@drawable/bt_add_garden"
-        android:title="@string/profile.menu.add"
-        app:showAsAction="ifRoom"/>
+   
     <item
         android:id="@+id/help"
         android:icon="@drawable/help"
         android:title="@string/menu.help"
         app:showAsAction="always"/>
     <item
-        android:id="@+id/delete_allotment"
+        android:id="@+id/delete_garden"
         android:title="@string/action.delete"
         app:showAsAction="withText"/>
     <item

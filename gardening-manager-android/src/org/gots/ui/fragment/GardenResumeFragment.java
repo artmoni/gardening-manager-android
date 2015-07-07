@@ -4,7 +4,6 @@ import org.gots.R;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GotsGardenManager;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;

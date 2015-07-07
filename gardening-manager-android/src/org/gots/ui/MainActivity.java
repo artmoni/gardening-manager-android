@@ -403,7 +403,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
             @Override
             protected Integer doInBackground(NavDrawerItem... params) {
                 item = params[0];
-                return actionseedProvider.getActionsToDo().size();
+                return actionseedProvider.getActionsToDo(false).size();
             }
 
             @Override

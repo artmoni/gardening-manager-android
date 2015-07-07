@@ -197,7 +197,7 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
     }
 
     @Override
-    public ArrayList<ActionOnSeed> getActionsToDo() {
+    public ArrayList<ActionOnSeed> getActionsToDo(boolean force) {
         ArrayList<ActionOnSeed> allActions = new ArrayList<ActionOnSeed>();
         Cursor cursor = bdd.rawQuery("select * from " + DatabaseHelper.ACTIONSEEDS_TABLE_NAME + " actionseed"
                 + " WHERE actionseed." + DatabaseHelper.ACTIONSEED_DATEACTIONDONE + " IS NULL", null);
@@ -218,7 +218,7 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
     public ActionOnSeed doAction(ActionOnSeed action, GrowingSeed seed) {
         ActionOnSeed mAction;
         // ContentValues values = getContentValues(action, seed);
-        if (action.getId() >= 0)
+        if (action.getActionSeedId() >= 0)
             // rowid = bdd.update(DatabaseHelper.ACTIONSEEDS_TABLE_NAME, values, DatabaseHelper.ACTIONSEED_ID + "="
             // + action.getActionSeedId(), null);
             mAction = update(seed, action);

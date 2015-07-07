@@ -3,7 +3,9 @@ package org.gots.action;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.provider.local.LocalActionSeedProvider;
@@ -35,6 +37,8 @@ public class GotsActionSeedManager extends BroadcastReceiver implements GotsActi
 
     private GotsPreferences gotsPrefs;
 
+    Map<Integer, ActionOnSeed> actionsToDO;
+
     public static synchronized GotsActionSeedManager getInstance() {
         if (instance == null) {
             instance = new GotsActionSeedManager();
@@ -59,6 +63,7 @@ public class GotsActionSeedManager extends BroadcastReceiver implements GotsActi
         gotsPrefs = getGotsContext().getServerConfig();
         setProvider();
         initDone = true;
+        actionsToDO = new HashMap<>();
         return this;
     }
 
@@ -80,17 +85,34 @@ public class GotsActionSeedManager extends BroadcastReceiver implements GotsActi
         action.setDateActionDone(Calendar.getInstance().getTime());
         seed.getActionToDo().remove(action);
         seed.getActionDone().add(action);
+        actionsToDO.remove(action.getActionSeedId());
         return provider.doAction(action, seed);
     }
 
     @Override
-    public ArrayList<ActionOnSeed> getActionsToDo() {
-        return provider.getActionsToDo();
+    public ArrayList<ActionOnSeed> getActionsToDo(boolean force) {
+        if (force) {
+            for (ActionOnSeed actionOnSeed : provider.getActionsToDo(force)) {
+                actionsToDO.put(actionOnSeed.getActionSeedId(), actionOnSeed);
+            }
+        }
+        return new ArrayList<>(actionsToDO.values());
     }
 
     @Override
     public List<ActionOnSeed> getActionsToDoBySeed(GrowingSeed seed, boolean force) {
-        return provider.getActionsToDoBySeed(seed, force);
+        if (force) {
+            for (ActionOnSeed actionOnSeed : provider.getActionsToDoBySeed(seed, force)) {
+                actionsToDO.put(actionOnSeed.getActionSeedId(), actionOnSeed);
+            }
+        }
+
+        ArrayList<ActionOnSeed> actionsBySeed = new ArrayList<>();
+        for (ActionOnSeed actionOnSeed : actionsToDO.values()) {
+            if (actionOnSeed.getGrowingSeedId() == seed.getGrowingSeedId())
+                actionsBySeed.add(actionOnSeed);
+        }
+        return actionsBySeed;
     }
 
     @Override
@@ -100,6 +122,7 @@ public class GotsActionSeedManager extends BroadcastReceiver implements GotsActi
 
     @Override
     public ActionOnSeed insertAction(GrowingSeed seed, ActionOnSeed action) {
+        actionsToDO.put(action.getActionSeedId(), action);
         return provider.insertAction(seed, action);
     }
 

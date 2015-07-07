@@ -1,93 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/text_color_light"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout1"
-        android:layout_width="fill_parent"
-        android:layout_height="200dp"
-        android:background="@color/white" >
-
-        <ImageView
-            android:id="@+id/imageViewAllotment"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/bg_allotment_default" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <RelativeLayout
+            android:id="@+id/relativeLayout1"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:background="@color/text_color_light_transparent"
-            android:orientation="vertical" >
+            android:layout_height="200dp"
+            android:background="@color/white">
 
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Name: "
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <EditText
-                android:id="@+id/editTextAllotmentName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:id="@+id/imageViewAllotment"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:layout_toRightOf="@+id/textView3"
-                android:ems="10"
-                android:hint="Name of my allotment"
-                android:singleLine="true"
-                android:textColor="@color/text_color_dark" >
+                android:scaleType="centerCrop"
+                android:src="@drawable/bg_allotment_default" />
 
-                <requestFocus />
-            </EditText>
-
-            <TextView
-                android:id="@+id/textViewNbPlants"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textView3"
-                android:layout_marginTop="5dp"
-                android:layout_toRightOf="@+id/textView3"
-                android:text="6" />
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@color/text_color_light_transparent"
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/textViewNbPlants"
-                android:layout_toRightOf="@+id/textViewNbPlants"
-                android:text=" plants" />
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Name: "
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                <EditText
+                    android:id="@+id/editTextAllotmentName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@+id/textView3"
+                    android:ems="10"
+                    android:hint="Name of my allotment"
+                    android:singleLine="true"
+                    android:textColor="@color/text_color_dark">
+
+                    <requestFocus />
+                </EditText>
+
+                <TextView
+                    android:id="@+id/textViewNbPlants"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textView3"
+                    android:layout_marginTop="5dp"
+                    android:layout_toRightOf="@+id/textView3"
+                    android:text="6" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/textViewNbPlants"
+                    android:layout_toRightOf="@+id/textViewNbPlants"
+                    android:text=" plants" />
+            </RelativeLayout>
         </RelativeLayout>
-    </RelativeLayout>
 
-    <GridView
-        android:id="@+id/IdGrowingSeedList"
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/buttonAllotmentNew"
-        android:layout_below="@+id/relativeLayout1"
-        android:horizontalSpacing="2dp"
-        android:numColumns="4"
-        android:verticalSpacing="2dp" >
-    </GridView>
+        <GridView
+            android:id="@+id/IdGrowingSeedList"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/relativeLayout1"
+            android:horizontalSpacing="2dp"
+            android:numColumns="4"
+            android:verticalSpacing="2dp"></GridView>
 
-    <!--
-         <Button
-        android:id="@+id/buttonAllotmentNew"
-        style="@style/buttonRed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="18dp"
-        android:text="@string/allotment.button.add" />
-    -->
-
-</RelativeLayout>
+    </LinearLayout>
+</ScrollView>

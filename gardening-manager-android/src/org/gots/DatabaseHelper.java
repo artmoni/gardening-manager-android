@@ -21,8 +21,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.util.Log;
 
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
-
 public class DatabaseHelper extends SQLiteOpenHelper {
     // ************************ DATABASE **************
     private static final int DATABASE_VERSION = 23;

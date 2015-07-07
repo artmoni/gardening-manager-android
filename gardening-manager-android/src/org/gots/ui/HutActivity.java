@@ -24,22 +24,20 @@ import org.gots.provider.SeedsContentProvider;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.SeedUtil;
-import org.gots.seed.provider.nuxeo.NuxeoSeedProvider;
+import org.gots.ui.fragment.AllotmentListFragment.OnAllotmentSelected;
 import org.gots.ui.fragment.CatalogueFragment;
+import org.gots.ui.fragment.CatalogueFragment.OnSeedSelected;
 import org.gots.ui.fragment.FavoriteCatalogueFragment;
 import org.gots.ui.fragment.MonthlySeedListFragment;
 import org.gots.ui.fragment.ParrotCatalogueFragment;
 import org.gots.ui.fragment.StockVendorListFragment;
 import org.gots.ui.fragment.VendorCatalogueFragment;
-import org.gots.ui.fragment.AllotmentListFragment.OnAllotmentSelected;
-import org.gots.ui.fragment.CatalogueFragment.OnSeedSelected;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -57,15 +55,12 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.Filterable;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -128,6 +123,11 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
     @Override
     protected boolean requireAsyncDataRetrieval() {
         return true;
+    }
+
+    @Override
+    protected Object retrieveNuxeoData() throws Exception {
+        return seedManager.getVendorSeeds(false, 0, 1);
     }
 
     @Override
@@ -297,18 +297,9 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
         // Handle item selection
         Intent i;
         switch (item.getItemId()) {
-        // case R.id.new_seed:
-        // i = new Intent(this, NewSeedActivity.class);
-        // startActivity(i);
-        // return true;
         case R.id.new_seed_barcode:
             IntentIntegrator integrator = new IntentIntegrator(this);
             integrator.initiateScan();
-            return true;
-        case R.id.help:
-            Intent browserIntent = new Intent(this, WebHelpActivity.class);
-            browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
-            startActivity(browserIntent);
             return true;
         default:
             return super.onOptionsItemSelected(item);

@@ -11,7 +11,6 @@
 package org.gots.ui.fragment;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import org.gots.R;
@@ -19,13 +18,10 @@ import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.adapter.SeedListAdapter;
 import org.gots.seed.adapter.VendorSeedListAdapter;
-import org.gots.seed.provider.parrot.ParrotSeedProvider;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;

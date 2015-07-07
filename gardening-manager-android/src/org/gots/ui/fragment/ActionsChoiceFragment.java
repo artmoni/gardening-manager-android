@@ -3,7 +3,6 @@ package org.gots.ui.fragment;
 import java.util.List;
 
 import org.gots.R;
-import org.gots.action.ActionFactory;
 import org.gots.action.ActionOnSeed;
 import org.gots.action.BaseAction;
 import org.gots.action.GotsActionManager;

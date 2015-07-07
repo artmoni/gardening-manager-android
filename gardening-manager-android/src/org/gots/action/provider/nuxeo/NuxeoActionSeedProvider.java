@@ -42,7 +42,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
-import android.os.Environment;
 import android.util.Log;
 
 public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
@@ -59,7 +58,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
     }
 
     @Override
-    public ArrayList<ActionOnSeed> getActionsToDo() {
+    public ArrayList<ActionOnSeed> getActionsToDo(boolean force) {
         ArrayList<ActionOnSeed> actionsToDo = new ArrayList<ActionOnSeed>();
         try {
             Session session = getNuxeoClient().getSession();
@@ -91,7 +90,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             }
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
-            actionsToDo = super.getActionsToDo();
+            actionsToDo = super.getActionsToDo(force);
         }
         return actionsToDo;
     }

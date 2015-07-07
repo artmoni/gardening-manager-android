@@ -9,7 +9,7 @@
     <LinearLayout
         android:id="@+id/idFragmentContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@color/text_color_light"
         android:orientation="vertical" >
 
@@ -42,12 +42,6 @@
                     android:layout_height="wrap_content"
                     android:padding="5dp" />
 
-                <LinearLayout
-                    android:id="@+id/idAdsTop"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" >
-                </LinearLayout>
-
                 <FrameLayout
                     android:id="@+id/idFragmentSensor"
                     android:layout_width="match_parent"
@@ -74,6 +68,12 @@
                     android:padding="5dp" />
             </LinearLayout>
         </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/idAdsTop"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+        </LinearLayout>
     </LinearLayout>
 
     <!-- Listview to display slider menu -->

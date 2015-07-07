@@ -8,7 +8,6 @@ import org.gots.provider.AllotmentContentProvider;
 import org.gots.provider.GardenContentProvider;
 import org.gots.provider.SeedsContentProvider;
 import org.gots.provider.SensorContentProvider;
-import org.gots.ui.fragment.LoginDialogFragment;
 import org.nuxeo.android.config.NuxeoServerConfig;
 
 import android.accounts.Account;

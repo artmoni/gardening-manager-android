@@ -12,7 +12,7 @@ public interface GotsActionSeedProvider {
 
     public abstract ActionOnSeed doAction(ActionOnSeed action, GrowingSeed seed);
 
-    public abstract ArrayList<ActionOnSeed> getActionsToDo();
+    public abstract ArrayList<ActionOnSeed> getActionsToDo(boolean force);
 
     public abstract List<ActionOnSeed> getActionsToDoBySeed(GrowingSeed seed, boolean force);
 
