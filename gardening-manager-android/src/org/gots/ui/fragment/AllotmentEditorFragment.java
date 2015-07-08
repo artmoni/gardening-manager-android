@@ -3,6 +3,7 @@ package org.gots.ui.fragment;
 import org.gots.R;
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
+import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
 import org.gots.utils.FileUtilities;
@@ -24,7 +25,11 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.List;
+
 public class AllotmentEditorFragment extends BaseGotsFragment {
+
+    private GotsGrowingSeedManager growingSeedManager;
 
     public interface OnAllotmentListener {
         public void onAllotmentCreated(BaseAllotmentInterface allotment);
@@ -41,11 +46,7 @@ public class AllotmentEditorFragment extends BaseGotsFragment {
 
     private OnAllotmentListener mCallback;
 
-    // private AllotmentProvider allotmentManager;
-
     private TextView textviewAllotmentName;
-
-    // private Button buttonNewAllotment;
 
     private BaseAllotmentInterface allotment;
 
@@ -69,10 +70,9 @@ public class AllotmentEditorFragment extends BaseGotsFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.allotment_content, null);
-        // allotmentManager = GotsAllotmentManager.getInstance().initIfNew(getActivity());
+
 
         textviewAllotmentName = (TextView) view.findViewById(R.id.editTextAllotmentName);
-        // buttonNewAllotment = (Button) view.findViewById(R.id.buttonAllotmentNew);
         textviewPlantCount = (TextView) view.findViewById(R.id.textViewNbPlants);
         imageViewAllotment = (ImageView) view.findViewById(R.id.imageViewAllotment);
         gridView = (GridView) view.findViewById(R.id.IdGrowingSeedList);
@@ -87,58 +87,7 @@ public class AllotmentEditorFragment extends BaseGotsFragment {
         });
         if (allotment == null) {
             allotment = new Allotment();
-            // buttonNewAllotment.setOnClickListener(new View.OnClickListener() {
-            //
-            // @Override
-            // public void onClick(View v) {
-            // new AsyncTask<Void, Void, BaseAllotmentInterface>() {
-            //
-            // protected void onPreExecute() {
-            // allotment = new Allotment();
-            // allotment.setName(textviewAllotmentName.getText().toString());
-            // };
-            //
-            // @Override
-            // protected BaseAllotmentInterface doInBackground(Void... params) {
-            // return allotmentManager.createAllotment(allotment);
-            // }
-            //
-            // protected void onPostExecute(BaseAllotmentInterface newAllotment) {
-            // mCallback.onAllotmentCreated(newAllotment);
-            // };
-            //
-            // }.execute();
-            // };
-            // });
         }
-        // else {
-        // buttonNewAllotment.setText(getResources().getString(R.string.menu_edit));
-        // buttonNewAllotment.setOnClickListener(new View.OnClickListener() {
-        //
-        // @Override
-        // public void onClick(View v) {
-        // new AsyncTask<Void, Void, BaseAllotmentInterface>() {
-        //
-        // protected void onPreExecute() {
-        // allotment.setName(textviewAllotmentName.getText().toString());
-        // };
-        //
-        // @Override
-        // protected BaseAllotmentInterface doInBackground(Void... params) {
-        // return allotmentManager.updateAllotment(allotment);
-        // }
-        //
-        // protected void onPostExecute(BaseAllotmentInterface result) {
-        // mCallback.onAllotmentCreated(allotment);
-        // };
-        //
-        // }.execute();
-        // };
-        // });
-        else {
-
-        }
-        // }
 
         textviewAllotmentName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
@@ -170,7 +119,7 @@ public class AllotmentEditorFragment extends BaseGotsFragment {
         if (requestCode == REQUEST_ACTION_PICK && data != null) {
 
             Uri selectedImage = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
             Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
             cursor.moveToFirst();
@@ -193,9 +142,8 @@ public class AllotmentEditorFragment extends BaseGotsFragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    @Override
-    public void update() {
-        textviewPlantCount.setText(allotment != null ? "" + allotment.getSeeds().size() : "0");
+    private void initView(List<GrowingSeed> seeds) {
+        textviewPlantCount.setText(allotment != null ? "" + seeds.size() : "0");
         textviewAllotmentName.setText(allotment != null ? allotment.getName() : "");
 
         if (allotment.getImagePath() != null) {
@@ -203,14 +151,14 @@ public class AllotmentEditorFragment extends BaseGotsFragment {
             imageViewAllotment.setImageBitmap(bitmap);
         }
         if (allotment != null) {
-            textviewPlantCount.setText(allotment != null ? "" + allotment.getSeeds().size() : "0");
+            textviewPlantCount.setText(allotment != null ? "" + seeds.size() : "0");
             textviewAllotmentName.setText(allotment != null ? allotment.getName() : "");
             if (allotment.getImagePath() != null) {
                 Bitmap bitmap = FileUtilities.decodeScaledBitmapFromSdCard(allotment.getImagePath(), 100, 100);
                 imageViewAllotment.setImageBitmap(bitmap);
             }
             if (allotment != null) {
-                final ListGrowingSeedAdapter adapter = new ListGrowingSeedAdapter(getActivity(), allotment.getSeeds());
+                final ListGrowingSeedAdapter adapter = new ListGrowingSeedAdapter(getActivity(), seeds);
                 gridView.setAdapter(adapter);
                 gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -224,7 +172,7 @@ public class AllotmentEditorFragment extends BaseGotsFragment {
                 });
 
             }
-            final ListGrowingSeedAdapter adapter = new ListGrowingSeedAdapter(getActivity(), allotment.getSeeds());
+            final ListGrowingSeedAdapter adapter = new ListGrowingSeedAdapter(getActivity(), seeds);
             gridView.setAdapter(adapter);
             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -246,13 +194,29 @@ public class AllotmentEditorFragment extends BaseGotsFragment {
 
     @Override
     protected boolean requireAsyncDataRetrieval() {
-        return false;
+        return true;
     }
 
     @Override
-    public void onResume() {
-        update();
-        super.onResume();
+    protected void onNuxeoDataRetrievalStarted() {
+        growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(getActivity());
+        super.onNuxeoDataRetrievalStarted();
     }
 
+    @Override
+    protected Object retrieveNuxeoData() throws Exception {
+        return growingSeedManager.getGrowingSeedsByAllotment(allotment, false);
+    }
+
+    @Override
+    protected void onNuxeoDataRetrieved(Object data) {
+        if (data instanceof List)
+            initView((List<GrowingSeed>) data);
+        super.onNuxeoDataRetrieved(data);
+    }
+
+    @Override
+    public void update() {
+        runAsyncDataRetrieval();
+    }
 }

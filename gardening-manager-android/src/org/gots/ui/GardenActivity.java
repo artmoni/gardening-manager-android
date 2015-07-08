@@ -15,7 +15,6 @@ import java.util.List;
 
 import org.gots.R;
 import org.gots.action.bean.SowingAction;
-import org.gots.ads.GotsAdvertisement;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.provider.AllotmentContentProvider;
 import org.gots.seed.BaseSeedInterface;
@@ -37,14 +36,12 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager.BackStackEntry;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.view.ActionMode;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelected, OnSeedSelected,

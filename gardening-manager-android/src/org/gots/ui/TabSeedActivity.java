@@ -42,7 +42,6 @@ import org.gots.ui.fragment.ActionsChoiceFragment.OnActionSelectedListener;
 import org.gots.ui.fragment.ActionsDoneListFragment;
 import org.gots.ui.fragment.AllotmentListFragment;
 import org.gots.ui.fragment.AllotmentListFragment.OnAllotmentSelected;
-import org.gots.ui.fragment.BaseGotsFragment;
 import org.gots.ui.fragment.LoginDialogFragment;
 import org.gots.ui.fragment.SeedDescriptionFragment;
 import org.gots.ui.fragment.WorkflowTaskFragment;

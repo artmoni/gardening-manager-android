@@ -22,7 +22,6 @@ import org.gots.garden.view.OnProfileEventListener;
 import org.gots.provider.GardenContentProvider;
 import org.gots.ui.BaseGotsActivity.GardenListener;
 import org.gots.ui.fragment.BaseGotsFragment;
-import org.gots.ui.fragment.GardenResumeFragment;
 import org.gots.ui.fragment.ProfileEditorFragment;
 import org.gots.ui.fragment.ProfileMapFragment;
 
@@ -34,16 +33,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.SlidingDrawer;
 import android.widget.Toast;
 
 public class ProfileActivity extends BaseGotsActivity implements OnProfileEventListener, GardenListener {
