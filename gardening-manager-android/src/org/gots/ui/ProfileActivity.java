@@ -233,7 +233,6 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
     public void onProfileEdited(GardenInterface garden) {
         gardenManager.updateCurrentGarden(garden);
         openContentFragment(garden, true);
-
     }
 
     protected void openContentFragment(GardenInterface garden, boolean editable) {

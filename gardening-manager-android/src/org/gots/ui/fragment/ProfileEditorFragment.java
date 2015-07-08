@@ -79,8 +79,6 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
 
     private TextView editTextName;
 
-    // private GoogleMap map;
-
     private GotsGardenManager gardenManager;
 
     private OnProfileEventListener mCallback;
@@ -269,14 +267,17 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
 
     @Override
     public void onLocationChanged(Location location) {
-
-        // this.location = location;
         setAddressFromLocation(location.getLatitude(), location.getLongitude());
         mlocManager.removeUpdates(this);
 
         buttonLocalize.clearAnimation();
         buttonLocalize.setActionImage(R.drawable.bt_localize_garden);
+    }
 
+    @Override
+    public void onPause() {
+        mlocManager.removeUpdates(this);
+        super.onPause();
     }
 
     @Override
@@ -350,7 +351,6 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
             }
             return false;
         }
-
         return true;
     }
 
