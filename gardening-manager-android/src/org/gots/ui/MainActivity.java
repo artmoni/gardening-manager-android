@@ -157,9 +157,9 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, // nav menu toggle icon
                 R.string.app_name, // nav drawer open - description for
-                                   // accessibility
+                // accessibility
                 R.string.app_name // nav drawer close - description for
-                                  // accessibility
+                // accessibility
         ) {
             public void onDrawerClosed(View view) {
                 displayTitle();
@@ -479,7 +479,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
 
     /**
      * Slide menu item click listener
-     * */
+     */
     private class SlideMenuClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -503,40 +503,40 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         }
 
         switch (item.getItemId()) {
-        case R.id.help:
-            Intent browserIntent = new Intent(this, WebHelpActivity.class);
-            browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
-            startActivity(browserIntent);
+            case R.id.help:
+                Intent browserIntent = new Intent(this, WebHelpActivity.class);
+                browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
+                startActivity(browserIntent);
 
-            return true;
-        case R.id.about:
-            Intent aboutIntent = new Intent(this, AboutActivity.class);
-            startActivity(aboutIntent);
+                return true;
+            case R.id.about:
+                Intent aboutIntent = new Intent(this, AboutActivity.class);
+                startActivity(aboutIntent);
 
-            return true;
-        case R.id.premium:
-            displayPremiumDialog();
-            return true;
+                return true;
+            case R.id.premium:
+                displayPremiumDialog();
+                return true;
 
-        case R.id.settings:
-            Intent settingsIntent = new Intent(this, PreferenceActivity.class);
-            startActivity(settingsIntent);
-            // FragmentTransaction ft = getFragmentManager().beginTransaction();
-            // ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-            // ft.replace(R.id.idContent, new PreferenceActivity()).addToBackStack("back").commit();
-            return true;
+            case R.id.settings:
+                Intent settingsIntent = new Intent(this, PreferenceActivity.class);
+                startActivity(settingsIntent);
+                // FragmentTransaction ft = getFragmentManager().beginTransaction();
+                // ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+                // ft.replace(R.id.idContent, new PreferenceActivity()).addToBackStack("back").commit();
+                return true;
 
-        case R.id.connection:
-            LoginDialogFragment login = new LoginDialogFragment();
-            login.show(getSupportFragmentManager(), TAG);
-            return true;
+            case R.id.connection:
+                LoginDialogFragment login = new LoginDialogFragment();
+                login.show(getSupportFragmentManager(), TAG);
+                return true;
 
-        default:
-            return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
-    /***
+    /**
      * Called when invalidateOptionsMenu() is triggered
      */
     @Override
@@ -615,47 +615,47 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
 
     /**
      * Diplaying fragment view for selected nav drawer list item
-     * */
+     */
     private void displayView(int position) {
         // update the main content by replacing fragments
         Intent i = null;
         switch (position) {
-        case 0:
-            i = new Intent(getApplicationContext(), HutActivity.class);
-            break;
-        case 1:
-            i = new Intent(getApplicationContext(), GardenActivity.class);
-            break;
-        case 2:
-            // fragment = new ActionActivity();
-            i = new Intent(getApplicationContext(), ActionActivity.class);
+            case 0:
+                i = new Intent(getApplicationContext(), HutActivity.class);
+                break;
+            case 1:
+                i = new Intent(getApplicationContext(), GardenActivity.class);
+                break;
+            case 2:
+                // fragment = new ActionActivity();
+                i = new Intent(getApplicationContext(), ActionActivity.class);
 
-            break;
-        case 3:
-            // fragment = new ProfileActivity();
-            i = new Intent(getApplicationContext(), org.gots.ui.ProfileActivity.class);
+                break;
+            case 3:
+                // fragment = new ProfileActivity();
+                i = new Intent(getApplicationContext(), org.gots.ui.ProfileActivity.class);
 
-            break;
-        case 4:
-            // fragment = new PagesFragment();
-            GotsPurchaseItem purchaseItem = new GotsPurchaseItem(this);
+                break;
+            case 4:
+                // fragment = new PagesFragment();
+                GotsPurchaseItem purchaseItem = new GotsPurchaseItem(this);
 
-            if (purchaseItem.getFeatureParrot() ? true : purchaseItem.isPremium()) {
-                i = new Intent(this, SensorActivity.class);
-            } else {
-                // if (!purchaseItem.getFeatureParrot() && !purchaseItem.isPremium()) {
-                FragmentManager fm = getSupportFragmentManager();
-                GotsBillingDialog editNameDialog = new GotsBillingDialog(GotsPurchaseItem.SKU_FEATURE_PARROT);
-                editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
-                editNameDialog.show(fm, "fragment_edit_name");
-            }
-            break;
-        case 5:
-            displayPremiumDialog();
-            break;
+                if (purchaseItem.getFeatureParrot() ? true : purchaseItem.isPremium()) {
+                    i = new Intent(this, SensorActivity.class);
+                } else {
+                    // if (!purchaseItem.getFeatureParrot() && !purchaseItem.isPremium()) {
+                    FragmentManager fm = getSupportFragmentManager();
+                    GotsBillingDialog editNameDialog = new GotsBillingDialog(GotsPurchaseItem.SKU_FEATURE_PARROT);
+                    editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+                    editNameDialog.show(fm, "fragment_edit_name");
+                }
+                break;
+            case 5:
+                displayPremiumDialog();
+                break;
 
-        default:
-            break;
+            default:
+                break;
         }
         if (i != null) {
             startActivity(i);
@@ -728,7 +728,9 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                     spinnerGarden.setAdapter(adapter);
                     spinnerGarden.setSelection(selectedGardenIndex);
                 }
-            };
+            }
+
+            ;
         }.execute();
 
     }
@@ -793,7 +795,9 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                     e.printStackTrace();
                 }
             }
-        };
+        }
+
+        ;
     }
 
     @Override
@@ -842,7 +846,8 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         displayDrawerMenuAllotmentCounter();
         displayDrawerMenuCatalogCounter();
         displayDrawerMenuProfileCounter();
-        displayDrawerMenuSensorCounter();
+        if (gotsPrefs.getParrotToken() != null)
+            displayDrawerMenuSensorCounter();
     }
 
     protected void refreshAllFragments() {
@@ -907,7 +912,9 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                         workflowResumeFragment.update();
                 } else
                     findViewById(R.id.idFragmentWorkflow).setVisibility(View.GONE);
-            };
+            }
+
+            ;
         }.execute();
 
     }
