@@ -293,6 +293,7 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
     }
 
     protected void updateFragments() {
+        allotmentListFragment.update();
         for (int entry = 0; entry < getSupportFragmentManager().getBackStackEntryCount(); entry++) {
             final BackStackEntry backStackEntryAt = getSupportFragmentManager().getBackStackEntryAt(entry);
             Log.i(TAG, "Found fragment: " + backStackEntryAt.getId());

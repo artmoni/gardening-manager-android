@@ -72,14 +72,14 @@
             </RelativeLayout>
         </RelativeLayout>
 
-        <GridView
+        <org.gots.ui.ExpandableHeightGridView
             android:id="@+id/IdGrowingSeedList"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/relativeLayout1"
             android:horizontalSpacing="2dp"
             android:numColumns="4"
-            android:verticalSpacing="2dp"></GridView>
+            android:verticalSpacing="2dp"></org.gots.ui.ExpandableHeightGridView>
 
     </LinearLayout>
 </ScrollView>

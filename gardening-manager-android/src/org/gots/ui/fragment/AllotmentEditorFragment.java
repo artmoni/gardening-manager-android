@@ -6,6 +6,7 @@ import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
+import org.gots.ui.ExpandableHeightGridView;
 import org.gots.utils.FileUtilities;
 
 import android.app.Activity;
@@ -23,6 +24,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -52,7 +54,7 @@ public class AllotmentEditorFragment extends BaseGotsFragment {
 
     private TextView textviewPlantCount;
 
-    private GridView gridView;
+    private ExpandableHeightGridView gridView;
 
     private ImageView imageViewAllotment;
 
@@ -75,7 +77,7 @@ public class AllotmentEditorFragment extends BaseGotsFragment {
         textviewAllotmentName = (TextView) view.findViewById(R.id.editTextAllotmentName);
         textviewPlantCount = (TextView) view.findViewById(R.id.textViewNbPlants);
         imageViewAllotment = (ImageView) view.findViewById(R.id.imageViewAllotment);
-        gridView = (GridView) view.findViewById(R.id.IdGrowingSeedList);
+        gridView = (ExpandableHeightGridView) view.findViewById(R.id.IdGrowingSeedList);
 
         imageViewAllotment.setOnClickListener(new View.OnClickListener() {
 
@@ -184,6 +186,7 @@ public class AllotmentEditorFragment extends BaseGotsFragment {
                         mCallback.onAllotmentAddPlantClicked(AllotmentEditorFragment.this, allotment);
                 }
             });
+            gridView.setExpanded(true);
 
         }
     }
