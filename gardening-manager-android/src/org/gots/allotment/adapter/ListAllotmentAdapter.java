@@ -18,6 +18,7 @@ import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
 import org.gots.seed.view.SeedWidget;
+import org.gots.ui.ExpandableHeightGridView;
 
 import android.content.Context;
 import android.graphics.Point;
@@ -86,7 +87,7 @@ public class ListAllotmentAdapter extends BaseAdapter {
     }
 
     public class Holder {
-        public GridView seedGridView;
+        public ExpandableHeightGridView seedGridView;
 
         public TextView allotmentName;
 
@@ -111,7 +112,7 @@ public class ListAllotmentAdapter extends BaseAdapter {
                 ll.addView(textView);
             }
 
-            holder.seedGridView = (GridView) ll.findViewById(R.id.IdGrowingSeedList);
+            holder.seedGridView = (ExpandableHeightGridView) ll.findViewById(R.id.IdGrowingSeedList);
             holder.titlebar = (LinearLayout) ll.findViewById(R.id.idAllotmentTitlebar);
             holder.allotmentName = (TextView) ll.findViewById(R.id.textAllotmentName);
             holder.menu = (LinearLayout) ll.findViewById(R.id.idAllotmentMenu);
@@ -137,21 +138,21 @@ public class ListAllotmentAdapter extends BaseAdapter {
 
         listGrowingSeedAdapter = new ListGrowingSeedAdapter(mContext, getItem(position).getSeeds());
         holder.seedGridView.setAdapter(listGrowingSeedAdapter);
-
-        int layoutsize = 200;
-        if (width <= 480)
-            layoutsize = 50;
-        int nbcolumn = width / layoutsize;
-        if (nbcolumn < 1)
-            nbcolumn = 1;
-        holder.seedGridView.setNumColumns(nbcolumn);
-
-        if (listGrowingSeedAdapter.getCount() > 0) {
-
-            holder.seedGridView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
-                    (holder.seedGridView.getCount() / nbcolumn + 1) * layoutsize + layoutsize));
-        } else
-            holder.seedGridView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, layoutsize));
+        holder.seedGridView.setExpanded(true);
+//        int layoutsize = holder.seedGridView.getChildAt(0).getWidth();
+//        if (width <= 480)
+//            layoutsize = 50;
+//        int nbcolumn = width / layoutsize;
+//        if (nbcolumn < 1)
+//            nbcolumn = 1;
+//        holder.seedGridView.setNumColumns(nbcolumn);
+//
+//        if (listGrowingSeedAdapter.getCount() > 0) {
+//
+//            holder.seedGridView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+//                    (holder.seedGridView.getCount() / nbcolumn + 1) * layoutsize + layoutsize));
+//        } else
+//            holder.seedGridView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, layoutsize));
 
         holder.seedGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

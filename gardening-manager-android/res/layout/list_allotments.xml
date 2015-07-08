@@ -48,13 +48,13 @@
 
     </LinearLayout>
 
-    <GridView
+    <org.gots.ui.ExpandableHeightGridView
         android:id="@+id/IdGrowingSeedList"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:horizontalSpacing="2dp"
         android:numColumns="4"
         android:verticalSpacing="2dp" >
-    </GridView>
+    </org.gots.ui.ExpandableHeightGridView>
 
 </LinearLayout>

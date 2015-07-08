@@ -5,7 +5,7 @@ import java.util.List;
 import org.gots.R;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.SeedUtil;
-import org.gots.seed.view.SeedWidget;
+import org.gots.seed.SeedUtils;
 import org.gots.ui.ActionActivity;
 import org.gots.ui.MainActivity;
 
@@ -58,7 +58,7 @@ public class SeedNotification {
 //        notificationManager.notify(NOTIFICATION, notification);
         
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(mContext).setSmallIcon(
-                SeedWidget.getSeedDrawable(mContext, newSeeds.get(0))).setContentTitle(title).setContentText(content);
+                SeedUtil.getSeedDrawable(mContext, newSeeds.get(0))).setContentTitle(title).setContentText(content);
 
         // The PendingIntent to launch our activity if the user selects this
         // notification

@@ -27,7 +27,6 @@ public class PlanningSowAdapter extends PlanningAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         MonthWidget monthWidget = new MonthWidget(parent.getContext());
         monthWidget.setMonthText(getItem(position));
-        // monthWidget.setBackgroundDrawable(parent.getContext().getResources().getDrawable(R.drawable.selector_planning));
 
         if (mSeed != null) {
 

@@ -43,8 +43,6 @@ public class GotsProgressBar extends View {
 
 	public GotsProgressBar(Context context, AttributeSet as) {
 		super(context, as);
-
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -76,7 +74,6 @@ public class GotsProgressBar extends View {
 		canvas.drawRect(rectbg, paint);
 
 		Float percent = new Float(mProgress) / new Float(mMax) * 100f;
-		Log.i("percent", "" + percent);
 
 		if (percent > 100f)
 			percent = 100f;

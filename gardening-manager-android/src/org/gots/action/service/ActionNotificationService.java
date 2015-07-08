@@ -14,8 +14,8 @@ import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.SeedUtil;
+import org.gots.seed.SeedUtils;
 import org.gots.seed.service.GotsService;
-import org.gots.seed.view.SeedWidget;
 import org.gots.ui.ActionActivity;
 import org.gots.ui.MainActivity;
 
@@ -143,7 +143,7 @@ public class ActionNotificationService extends GotsService {
         // Notification notification = new Notification(SeedWidget.getSeedDrawable(this, seed), title,
         // System.currentTimeMillis());
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this).setSmallIcon(
-                SeedWidget.getSeedDrawable(this, seed)).setContentTitle(title).setContentText(content);
+                SeedUtil.getSeedDrawable(this, seed)).setContentTitle(title).setContentText(content);
 
         // The PendingIntent to launch our activity if the user selects this
         // notification

@@ -2,9 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="200dp"
-    android:orientation="horizontal" >
+    android:orientation="horizontal">
 
-    <org.gots.seed.view.SeedWidget
+    <ImageView
         android:id="@+id/idSeedWidget2"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -13,14 +13,14 @@
         android:layout_marginTop="8dp"
         android:background="@color/white"
         android:gravity="center_vertical"
-        android:src="@drawable/vegetdefault" >
-    </org.gots.seed.view.SeedWidget>
+        android:src="@drawable/no_picture"></ImageView>
 
     <RelativeLayout
         android:id="@+id/idSeedFamilyBackground"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" >
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="2dp">
 
         <ImageView
             android:layout_width="match_parent"
@@ -34,17 +34,13 @@
             android:id="@+id/IdSeedSowingPlanning"
             android:layout_width="192dp"
             android:layout_height="20dp"
-            android:layout_below="@+id/idSeedWidget2"
             android:layout_centerHorizontal="true"
-            android:numColumns="12" >
-        </org.gots.seed.view.PlanningWidget>
+            android:numColumns="12"></org.gots.seed.view.PlanningWidget>
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/idSeedWidget2"
-            android:layout_below="@+id/idSeedWidget2"
             android:text="@string/action.sow"
             android:textColor="@color/green_dark"
             android:textSize="12sp"
@@ -67,8 +63,7 @@
             android:layout_height="20dp"
             android:layout_alignLeft="@+id/IdSeedSowingPlanning"
             android:layout_alignTop="@+id/textView1"
-            android:numColumns="12" >
-        </org.gots.seed.view.PlanningWidget>
+            android:numColumns="12"></org.gots.seed.view.PlanningWidget>
 
         <ImageView
             android:id="@+id/IdSeedLanguage"
@@ -84,7 +79,7 @@
             android:layout_height="25dp"
             android:layout_alignRight="@+id/IdSeedLanguage"
             android:layout_below="@+id/IdSeedLanguage"
-            android:layout_margin="10dp" >
+            android:layout_margin="10dp">
 
             <TextView
                 android:id="@+id/textSeedLike"
@@ -108,8 +103,7 @@
             android:layout_below="@+id/ImageSeedLike"
             android:gravity="center_horizontal"
             android:orientation="horizontal"
-            android:text="0" >
-        </TextView>
+            android:text="0"></TextView>
 
         <TextView
             android:layout_width="wrap_content"
@@ -137,7 +131,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="5dp"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/IdSeedSpecie"
