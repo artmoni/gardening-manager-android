@@ -50,7 +50,7 @@ public class SeedWidgetLong extends RelativeLayout {
 
     private TextView likeCount;
 
-    private ImageView like;
+    private View like;
 
     public SeedWidgetLong(Context context) {
         super(context);
@@ -101,7 +101,7 @@ public class SeedWidgetLong extends RelativeLayout {
                 familyBackground.setBackground(mContext.getResources().getDrawable(R.drawable.family_unknown));
             }
         }
-        familyBackground.setAlpha(0.6f);
+        familyBackground.setAlpha(0.8f);
 
         ImageView seedImage = (ImageView) findViewById(R.id.idSeedWidget2);
         Bitmap image = SeedUtil.getSeedBitmap(getGotsContext().getServerConfig().getFilesDir(), mSeed);
@@ -142,7 +142,7 @@ public class SeedWidgetLong extends RelativeLayout {
         }
 
         likeCount = (TextView) findViewById(R.id.textSeedLike);
-        like = (ImageView) findViewById(R.id.ImageSeedLike);
+        like = (View) findViewById(R.id.idLikeLayout);
 
         displayLikeStatus(mSeed.getLikeStatus());
         if (mSeed.getUUID() == null)
@@ -211,18 +211,20 @@ public class SeedWidgetLong extends RelativeLayout {
     }
 
     protected void displayLikeStatus(LikeStatus likeStatus) {
+        ImageView likeImage = (ImageView) findViewById(R.id.ImageSeedLike);
         likeCount.setTextColor(getResources().getColor(R.color.text_color_dark));
         if (likeStatus != null && likeStatus.getLikesCount() > 0) {
             likeCount.setText(String.valueOf(likeStatus.getLikesCount()));
         } else
             likeCount.setText(String.valueOf(""));
 
+
         if (likeStatus != null && likeStatus.getUserLikeStatus() > 0) {
-            like.setImageDrawable(getResources().getDrawable(R.drawable.ic_like));
+            likeImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_like));
             likeCount.setTextColor(getResources().getColor(R.color.text_color_light));
 
         } else {
-            like.setImageDrawable(getResources().getDrawable(R.drawable.ic_like_unknown));
+            likeImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_like_unknown));
         }
     }
 
