@@ -140,7 +140,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         return GotsContext.get(getApplicationContext());
     }
 
-    protected GardenInterface getCurrentGarden() {
+    protected synchronized GardenInterface getCurrentGarden() {
         if (currentGarden == null)
             try {
                 currentGarden = gardenManager.getCurrentGarden();

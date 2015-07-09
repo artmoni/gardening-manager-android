@@ -285,7 +285,6 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
 
             protected void onPostExecute(Void result) {
                 updateFragments();
-                Toast.makeText(getApplicationContext(), "Allotment created", Toast.LENGTH_SHORT).show();
             }
 
         }.execute();
@@ -322,7 +321,6 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
 
             protected void onPostExecute(Void result) {
                 updateFragments();
-                Toast.makeText(getApplicationContext(), "Allotment updated", Toast.LENGTH_SHORT).show();
             };
 
         }.execute();
