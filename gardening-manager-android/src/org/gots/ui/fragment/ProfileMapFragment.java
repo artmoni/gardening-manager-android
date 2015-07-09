@@ -1,5 +1,6 @@
 package org.gots.ui.fragment;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -11,6 +12,8 @@ import org.gots.garden.GotsGardenManager;
 import org.gots.garden.view.OnProfileEventListener;
 
 import android.app.Activity;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -68,7 +71,9 @@ public class ProfileMapFragment extends BaseGotsFragment implements OnMapLongCli
         super.onAttach(activity);
     }
 
-    /***** Sets up the map if it is possible to do so *****/
+    /**
+     * ** Sets up the map if it is possible to do so ****
+     */
     public void setUpMapIfNeeded() {
 
         mMap = mapView.getMap();
@@ -196,8 +201,25 @@ public class ProfileMapFragment extends BaseGotsFragment implements OnMapLongCli
 
     @Override
     public void onMapLongClick(LatLng arg0) {
-        getCurrentGarden().setGpsLatitude(arg0.latitude);
-        getCurrentGarden().setGpsLongitude(arg0.longitude);
+        Geocoder geo = new Geocoder(getActivity());
+        GardenInterface garden = getCurrentGarden();
+        try {
+            List<Address> adresses = geo.getFromLocation(arg0.latitude, arg0.longitude, 1);
+            if (adresses != null && adresses.size() == 1) {
+                Address address = adresses.get(0);
+                garden.setGpsLatitude(address.getLatitude());
+                garden.setGpsLongitude(address.getLongitude());
+                garden.setLocality(address.getLocality());
+                garden.setAdminArea(address.getAdminArea());
+                garden.setCountryName(address.getCountryName());
+                garden.setCountryCode(address.getCountryCode());
+                if (garden.getLocalityForecast() == null || "".equals(garden.getLocalityForecast()))
+                    garden.setLocalityForecast(address.getLocality());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         Iterator it = markerGarden.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pairs = (Map.Entry) it.next();
