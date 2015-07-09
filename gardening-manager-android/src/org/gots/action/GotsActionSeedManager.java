@@ -91,7 +91,7 @@ public class GotsActionSeedManager extends BroadcastReceiver implements GotsActi
 
     @Override
     public ArrayList<ActionOnSeed> getActionsToDo(boolean force) {
-        if (force) {
+        if (force || actionsToDO.size() == 0) {
             for (ActionOnSeed actionOnSeed : provider.getActionsToDo(force)) {
                 actionsToDO.put(actionOnSeed.getActionSeedId(), actionOnSeed);
             }

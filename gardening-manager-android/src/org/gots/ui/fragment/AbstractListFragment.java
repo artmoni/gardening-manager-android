@@ -90,4 +90,9 @@ public abstract class AbstractListFragment extends BaseListFragment implements L
     protected AbsListView getListView() {
         return listView;
     }
+
+    public void update(){
+        runAsyncDataRetrieval();
+    }
+
 }
