@@ -1,5 +1,6 @@
 package org.gots.ui.fragment;
 
+import org.gots.R;
 import org.gots.action.GotsActionSeedManager;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.allotment.GotsAllotmentManager;
@@ -47,6 +48,9 @@ public abstract class AbstractListFragment extends BaseListFragment implements L
         listView = new ListView(getActivity());
         listView.setOnScrollListener(this);
         listView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        listView.setDividerHeight(5);
+        container.setPadding(5, 5, 5, 5);
+        container.setBackgroundColor(getResources().getColor(R.color.text_color_light));
         return listView;
     }
 
@@ -91,7 +95,7 @@ public abstract class AbstractListFragment extends BaseListFragment implements L
         return listView;
     }
 
-    public void update(){
+    public void update() {
         runAsyncDataRetrieval();
     }
 

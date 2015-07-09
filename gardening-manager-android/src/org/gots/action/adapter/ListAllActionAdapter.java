@@ -1,36 +1,16 @@
-/*******************************************************************************
+/**
+ * ****************************************************************************
  * Copyright (c) 2012 sfleury.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- *
+ * <p>
  * Contributors:
- *     sfleury - initial API and implementation
- ******************************************************************************/
+ * sfleury - initial API and implementation
+ * ****************************************************************************
+ */
 package org.gots.action.adapter;
-
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
-
-import org.gots.R;
-import org.gots.action.ActionOnSeed;
-import org.gots.action.BaseAction;
-import org.gots.action.bean.PhotoAction;
-import org.gots.action.util.ActionState;
-import org.gots.action.view.ActionWidget;
-import org.gots.broadcast.BroadCastMessages;
-import org.gots.seed.GotsGrowingSeedManager;
-import org.gots.seed.GrowingSeed;
-import org.gots.seed.view.SeedWidget;
-import org.gots.weather.WeatherManager;
-import org.gots.weather.view.WeatherView;
 
 import android.app.AlertDialog;
 import android.content.ContentResolver;
@@ -55,16 +35,33 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.gots.R;
+import org.gots.action.ActionOnSeed;
+import org.gots.action.BaseAction;
+import org.gots.action.bean.PhotoAction;
+import org.gots.action.util.ActionState;
+import org.gots.action.view.ActionWidget;
+import org.gots.broadcast.BroadCastMessages;
+import org.gots.seed.GotsGrowingSeedManager;
+import org.gots.seed.GrowingSeed;
+import org.gots.seed.view.SeedWidget;
+import org.gots.weather.WeatherManager;
+import org.gots.weather.view.WeatherView;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+
 public class ListAllActionAdapter extends BaseAdapter {
 
     private Context mContext;
 
     private ArrayList<ActionOnSeed> actions = new ArrayList<ActionOnSeed>();
-
-    // private ArrayList<GrowingSeedInterface> seeds = new
-    // ArrayList<GrowingSeedInterface>();
-    // private ArrayList<WeatherConditionInterface> weathers = new
-    // ArrayList<WeatherConditionInterface>();
 
     private int current_status = STATUS_DONE;
 
@@ -169,24 +166,15 @@ public class ListAllActionAdapter extends BaseAdapter {
                 rightNow.add(Calendar.DAY_OF_YEAR, currentAction.getDuration());
                 holder.textviewActionDate.setText(dateFormat.format(rightNow.getTime()));
 
-                holder.switchActionStatus.setOnClickListener(new View.OnClickListener() {
+                holder.switchActionStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
                     @Override
-                    public void onClick(View v) {
-                        if (v instanceof CompoundButton) {
-                            showNoticeDialog(position, seed, currentAction, (CompoundButton) v);
-                        }
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (isChecked)
+                            showNoticeDialog(position, seed, currentAction, buttonView);
+
                     }
                 });
-                // setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                //
-                // @Override
-                // public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                // if (isChecked)
-                // showNoticeDialog(position, seed, currentAction, buttonView);
-                //
-                // }
-                // });
 
                 holder.weatherView.setVisibility(View.GONE);
 
@@ -278,7 +266,7 @@ public class ListAllActionAdapter extends BaseAdapter {
         // MediaStore.MediaColumns.DATA + "=?", new String[] { path },
         // null);
         Cursor ca = cr.query(selectedImageUri, null, MediaStore.Images.Media.DATA + " like ? ",
-                new String[] { selectedImageUri.getPath() }, null);
+                new String[]{selectedImageUri.getPath()}, null);
 
         if (ca != null && ca.moveToFirst()) {
             int id = ca.getInt(ca.getColumnIndex(MediaStore.MediaColumns._ID));
@@ -317,7 +305,7 @@ public class ListAllActionAdapter extends BaseAdapter {
     }
 
     private void showNoticeDialog(final int position, final GrowingSeed seed, final ActionOnSeed currentAction,
-            final CompoundButton switchButton) {
+                                  final CompoundButton switchButton) {
 
         final EditText userinput = new EditText(mContext.getApplicationContext());
         final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
