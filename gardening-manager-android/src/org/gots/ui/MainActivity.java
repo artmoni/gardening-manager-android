@@ -39,6 +39,7 @@ import org.gots.ui.fragment.ActionsResumeFragment;
 import org.gots.ui.fragment.ActionsResumeFragment.OnActionsClickListener;
 import org.gots.ui.fragment.CatalogResumeFragment;
 import org.gots.ui.fragment.IncredibleResumeFragment;
+import org.gots.ui.fragment.LikeThatFragment;
 import org.gots.ui.fragment.LoginDialogFragment;
 import org.gots.ui.fragment.TutorialResumeFragment;
 import org.gots.ui.fragment.TutorialResumeFragment.OnTutorialFinishedListener;
@@ -1038,7 +1039,34 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
 
     @Override
     protected boolean requireFloatingButton() {
-        return false;
+        return true;
     }
 
+    @Override
+    protected List<FloatingItem> onCreateFloatingMenu() {
+        List<FloatingItem> list = new ArrayList();
+        FloatingItem floatingItem = new FloatingItem();
+        floatingItem.setRessourceId(R.drawable.action_photo);
+        floatingItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LikeThatFragment likeThatFragment = new LikeThatFragment();
+                FragmentTransaction transactionWeather = getSupportFragmentManager().beginTransaction();
+                transactionWeather.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
+                transactionWeather.replace(R.id.idFragmentWeather, likeThatFragment).commitAllowingStateLoss();
+            }
+        });
+        list.add(floatingItem);
+        return list;
+    }
+
+    @Override
+    protected boolean requireAsyncDataRetrieval() {
+        return true;
+    }
+
+    @Override
+    protected Object retrieveNuxeoData() throws Exception {
+        return "";
+    }
 }
