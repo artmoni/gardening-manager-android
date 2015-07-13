@@ -5,7 +5,6 @@ import java.util.List;
 import org.gots.R;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.SeedUtil;
-import org.gots.seed.SeedUtils;
 import org.gots.ui.ActionActivity;
 import org.gots.ui.MainActivity;
 

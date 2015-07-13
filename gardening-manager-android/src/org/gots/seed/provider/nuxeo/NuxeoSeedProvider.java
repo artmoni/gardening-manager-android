@@ -78,11 +78,11 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 refresh = false;
             }
             Documents docs = service.query("SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState = \"approved\""
-                    + QUERY_FILTER_LANGUAGE + QUERY_FILTER_SECTION, null, new String[] { "dc:modified DESC" }, "*",
+                            + QUERY_FILTER_LANGUAGE + QUERY_FILTER_SECTION, null, new String[]{"dc:modified DESC"}, "*",
                     page, pageSize, cacheParam);
             if (docs.size() < pageSize) {
                 docs.addAll(service.query("SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState = \"project\""
-                        + QUERY_FILTER_LANGUAGE, null, new String[] { "dc:modified DESC" }, "*", page, pageSize,
+                                + QUERY_FILTER_LANGUAGE, null, new String[]{"dc:modified DESC"}, "*", page, pageSize,
                         cacheParam));
 
             }
@@ -151,10 +151,10 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             }
             Documents docs = service.query(
                     "SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState != \"deleted\" AND vendorseed:barcode=\""
-                            + Long.parseLong(barecode) + "\"", null, new String[] { "dc:modified DESC" }, "*", 0, 200,
+                            + Long.parseLong(barecode) + "\"", null, new String[]{"dc:modified DESC"}, "*", 0, 200,
                     cacheParam);
 
-            for (Iterator<Document> iterator = docs.iterator(); iterator.hasNext();) {
+            for (Iterator<Document> iterator = docs.iterator(); iterator.hasNext(); ) {
                 Document document = iterator.next();
                 BaseSeedInterface seed = NuxeoSeedConverter.convert(document);
                 if (seed != null) {
@@ -176,7 +176,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
     }
 
     protected List<BaseSeedInterface> synchronize(List<BaseSeedInterface> localVendorSeeds,
-            List<BaseSeedInterface> remoteVendorSeeds) {
+                                                  List<BaseSeedInterface> remoteVendorSeeds) {
         newSeeds.clear();
         List<BaseSeedInterface> myVendorSeeds = new ArrayList<BaseSeedInterface>();
 
@@ -290,7 +290,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
 
     @Override
     public BaseSeedInterface createSeed(BaseSeedInterface seed, File imageFile) {
-        super.createSeed(seed, imageFile);
+        seed = super.createSeed(seed, imageFile);
         return createNuxeoVendorSeed(seed, imageFile);
     }
 
@@ -473,10 +473,10 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             }
             Documents stockItems = service.query(
                     "SELECT * FROM StockItem WHERE ecm:currentLifeCycleState != \"deleted\" AND ecm:parentId=\""
-                            + stockFolder.getId() + "\"", null, new String[] { "dc:modified DESC" }, "*", 0, 50,
+                            + stockFolder.getId() + "\"", null, new String[]{"dc:modified DESC"}, "*", 0, 50,
                     cacheParam);
 
-            for (Iterator<Document> iterator = stockItems.iterator(); iterator.hasNext();) {
+            for (Iterator<Document> iterator = stockItems.iterator(); iterator.hasNext(); ) {
                 // Document stockItem = service.getDocument(iterator.next(), "*");
                 Document stockItem = iterator.next();
                 Documents relations = service.getRelations(stockItem, "http://purl.org/dc/terms/isFormatOf", true);
@@ -566,7 +566,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             }
             Documents docSpecies = service.query(
                     "SELECT * FROM Species WHERE ecm:currentLifeCycleState != \"deleted\"", null,
-                    new String[] { "species:family_uuid DESC" }, "*", 0, 50, cacheParam);
+                    new String[]{"species:family_uuid DESC"}, "*", 0, 50, cacheParam);
             for (Document document : docSpecies) {
                 latinNameSpecies.add(document.getTitle());
 
@@ -596,7 +596,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             }
             Documents docSpecies = service.query(
                     "SELECT * FROM Species WHERE ecm:currentLifeCycleState != \"deleted\"", null,
-                    new String[] { "species:family_uuid DESC" }, "*", 0, 50, cacheParam);
+                    new String[]{"species:family_uuid DESC"}, "*", 0, 50, cacheParam);
             if (docSpecies.size() > 0)
                 doc = (SpeciesDocument) docSpecies.get(0);
         } catch (Exception e) {
@@ -648,8 +648,8 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 refresh = false;
             }
             Documents docs = service.query("SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState != \"deleted\""
-                    + QUERY_FILTER_LANGUAGE + "AND vendorseed:variety STARTSWITH " + currentFilter, null,
-                    new String[] { "dc:modified DESC" }, "*", 0, 25, cacheParam);
+                            + QUERY_FILTER_LANGUAGE + "AND vendorseed:variety STARTSWITH " + currentFilter, null,
+                    new String[]{"dc:modified DESC"}, "*", 0, 25, cacheParam);
             for (Document document : docs) {
                 BaseSeedInterface seed = NuxeoSeedConverter.convert(document);
                 Blob likeStatus = service.getLikeStatus(document);

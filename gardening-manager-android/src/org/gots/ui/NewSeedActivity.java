@@ -17,23 +17,22 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.List;
 
 import org.gots.R;
 import org.gots.nuxeo.NuxeoWorkflowProvider;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedImpl;
-import org.gots.seed.adapter.ListSpeciesAdapter;
-import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
 import org.gots.ui.fragment.PlanningFragment;
+import org.gots.ui.fragment.PlantCreationFragment;
+import org.gots.ui.fragment.SeedContentFragment;
+import org.gots.ui.fragment.SeedDescriptionEditFragment;
 import org.gots.ui.fragment.SpeciesFragment;
 import org.gots.ui.fragment.VarietyFragment;
 import org.gots.ui.fragment.WorkflowTaskFragment.OnWorkflowClickListener;
 import org.gots.utils.FileUtilities;
-import org.gots.utils.SelectOrTakePictureDialogFragment;
 import org.gots.utils.SelectOrTakePictureDialogFragment.PictureSelectorListener;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 
@@ -49,51 +48,38 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.speech.RecognizerIntent;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
+import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.Gallery;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 public class NewSeedActivity extends BaseGotsActivity implements OnClickListener, PictureSelectorListener,
-        OnWorkflowClickListener, SpeciesFragment.OnSpeciesSelected, VarietyFragment.OnVarietySelected, PlanningFragment.OnPlanningSelected {
+        OnWorkflowClickListener {
     public static final String ORG_GOTS_SEED_BARCODE = "org.gots.seed.barcode";
 
     public static final String ORG_GOTS_SEEDID = "org.gots.seedid";
 
     private static final String SELECTED_SPECIE = "selectedSpecie";
 
-//    private DatePicker planningSowMin;
-//
-//    private DatePicker planningHarvestMin;
-
 
     private AutoCompleteTextView autoCompleteVariety;
 
-    // private AutoCompleteTextView autoCompleteSpecie;
     private Gallery gallerySpecies;
 
-    private SeedWidgetLong seedWidgetLong;
+//    private SeedWidgetLong seedWidgetLong;
 
     private BaseSeedInterface newSeed;
 
@@ -101,52 +87,33 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
 
     private boolean isNewSeed = true;
 
-//    private DatePicker planningSowMax;
-//
-//    private DatePicker planningHarvestMax;
-
-    private EditText descriptionGrowth;
-
-    private EditText descriptionDiseases;
-
-    private EditText descriptionEnvironment;
-
-    private EditText descriptionHarvest;
-
-    private View descriptionDiseasesVoice;
-
-    private View descriptionGrowthVoice;
-
-    private View descriptionHarvestVoice;
-
-    private View descriptionEnvironmentVoice;
 
     private ImageView pictureSelectorView;
 
     public static final int REQUEST_SCAN = 0;
 
-    public static final int REQUEST_HARVEST = 1;
-
-    public static final int REQUEST_DISEASES = 2;
-
-    public static final int REQUEST_GROWTH = 3;
-
-    public static final int REQUEST_ENVIRONMENT = 4;
 
     public static final int REQUEST_LOAD_IMAGE = 5000;
 
     public static final int REQUEST_TAKE_PHOTO = 6000;
 
     private String picturePath;
+
+
     private VarietyFragment varietyFragment;
     private SpeciesFragment speciesFragment;
     private PlanningFragment planninfFragment;
+    private SeedDescriptionEditFragment descriptionFragment;
+    private FloatingActionButton buttonNext;
+    private List<SeedContentFragment> breadcrum;
+    private int step = -1;
+    private FloatingActionButton buttonPrevious;
+    private PlantCreationFragment finalFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        setContentView(R.layout.inputseed);
 
         setTitleBar(R.string.seed_register_title);
 
@@ -161,24 +128,64 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
         if (getIntent().getStringExtra(ORG_GOTS_SEED_BARCODE) != null)
             newSeed.setBareCode(getIntent().getStringExtra(ORG_GOTS_SEED_BARCODE));
 
+        finalFragment = new PlantCreationFragment();
 
-//        findViewById(R.id.imageNewVariety).setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                SelectOrTakePictureDialogFragment dialogFragment = new SelectOrTakePictureDialogFragment();
-//                dialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
-//                dialogFragment.show(getSupportFragmentManager(), "picture");
-//            }
-//        });
         speciesFragment = new SpeciesFragment();
         speciesFragment.setSeed(newSeed);
         varietyFragment = new VarietyFragment();
         varietyFragment.setSeed(newSeed);
         planninfFragment = new PlanningFragment();
         planninfFragment.setSeed(newSeed);
+        descriptionFragment = new SeedDescriptionEditFragment();
+        descriptionFragment.setSeed(newSeed);
 
-        addContentLayout(speciesFragment, null);
+        breadcrum = new ArrayList<>();
+        breadcrum.add(speciesFragment);
+        breadcrum.add(varietyFragment);
+        breadcrum.add(planninfFragment);
+        breadcrum.add(descriptionFragment);
+
+        buttonNext = new FloatingActionButton(getApplicationContext());
+        buttonNext.setSize(FloatingActionButton.SIZE_NORMAL);
+        buttonNext.setColorNormalResId(R.color.action_error_color);
+        buttonNext.setColorPressedResId(R.color.action_warning_color);
+        buttonNext.setIcon(R.drawable.ic_next);
+        buttonNext.setTitle("Next");
+
+        buttonNext.setStrokeVisible(false);
+        buttonNext.setOnClickListener(this);
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        buttonNext.setLayoutParams(params);
+        ViewGroup root = (ViewGroup) getWindow().getDecorView().findViewById(android.R.id.content);
+        ((ViewGroup) root.getChildAt(0)).addView(buttonNext);
+
+
+        buttonPrevious = new FloatingActionButton(getApplicationContext());
+        buttonPrevious.setSize(FloatingActionButton.SIZE_NORMAL);
+        buttonPrevious.setColorNormalResId(R.color.action_error_color);
+        buttonPrevious.setColorPressedResId(R.color.action_warning_color);
+        buttonPrevious.setIcon(R.drawable.ic_previous);
+        buttonPrevious.setTitle("Next");
+
+        buttonPrevious.setStrokeVisible(false);
+        buttonPrevious.setOnClickListener(this);
+        buttonPrevious.setVisibility(View.GONE);
+
+        RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        params2.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        params2.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        buttonPrevious.setLayoutParams(params2);
+        ((ViewGroup) root.getChildAt(0)).addView(buttonPrevious);
+
+        step++;
+        addMainLayout(finalFragment, null);
+        addContentLayout(breadcrum.get(step), null);
+
     }
 
     @Override
@@ -216,76 +223,9 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
 
     private void initview() {
 
-        /*
-         * PLANNING
-         */
-//        planningSowMin = (DatePicker) findViewById(R.id.IdSeedDateSowingPlanningMin);
-//        planningSowMax = (DatePicker) findViewById(R.id.IdSeedDateSowingPlanningMax);
-//        planningHarvestMin = (DatePicker) findViewById(R.id.IdSeedDateHarvestPlanningMin);
-//        planningHarvestMax = (DatePicker) findViewById(R.id.IdSeedDateHarvestPlanningMax);
 
-//        Calendar sowTimeMin = Calendar.getInstance();
-//        Calendar sowTimeMax = Calendar.getInstance();
-//        Calendar harvestTimeMin = Calendar.getInstance();
-//        Calendar harvestTimeMax = Calendar.getInstance();
-//
-//        if (newSeed.getDateSowingMin() > 0)
-//            sowTimeMin.set(Calendar.MONTH, newSeed.getDateSowingMin() - 1);
-//        if (newSeed.getDateSowingMax() > 0)
-//            sowTimeMax.set(Calendar.MONTH, newSeed.getDateSowingMax() - 1);
-//
-//        if (newSeed.getDateSowingMin() > 0)
-//            harvestTimeMin.set(Calendar.MONTH, newSeed.getDateSowingMin() - 1 + newSeed.getDurationMin() / 30);
-//
-//        planningSowMin.init(sowTimeMin.get(Calendar.YEAR), sowTimeMin.get(Calendar.MONTH),
-//                sowTimeMin.get(Calendar.DAY_OF_MONTH), new PlanningUpdater());
-//
-//        planningSowMax.init(sowTimeMax.get(Calendar.YEAR), sowTimeMax.get(Calendar.MONTH),
-//                sowTimeMax.get(Calendar.DAY_OF_MONTH), new PlanningUpdater());
-//
-//        planningHarvestMin.init(harvestTimeMin.get(Calendar.YEAR), harvestTimeMin.get(Calendar.MONTH),
-//                harvestTimeMin.get(Calendar.DAY_OF_MONTH), new PlanningUpdater());
-//
-//        planningHarvestMax.init(harvestTimeMax.get(Calendar.YEAR), harvestTimeMax.get(Calendar.MONTH),
-//                harvestTimeMax.get(Calendar.DAY_OF_MONTH), new PlanningUpdater());
-//
-//        monthFilter(planningSowMin);
-//        monthFilter(planningSowMax);
-//        monthFilter(planningHarvestMin);
-//        monthFilter(planningHarvestMax);
+//        seedWidgetLong = (SeedWidgetLong) findViewById(R.id.idSeedWidgetLong);
 
-        seedWidgetLong = (SeedWidgetLong) findViewById(R.id.idSeedWidgetLong);
-
-//        /*
-//         * VARIETIES
-//         */
-//        autoCompleteVariety = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewVariety);
-//        initVarietyList();
-//        autoCompleteVariety.setText(newSeed.getVariety());
-//        autoCompleteVariety.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                initVarietyList();
-//                if (autoCompleteVariety != null)
-//                    autoCompleteVariety.showDropDown();
-//            }
-//        });
-
-        // ImageButton clearVariety = (ImageButton) findViewById(R.id.buttonClearVariety);
-        // clearVariety.setOnClickListener(new View.OnClickListener() {
-        //
-        // @Override
-        // public void onClick(View v) {
-        // autoCompleteVariety.setText("");
-        // }
-        // });
-
-        /*
-         * SPECIES
-         */
-//        gallerySpecies = (Gallery) findViewById(R.id.layoutSpecieGallery);
-//        initSpecieList();
 
         /*
          * BARCODE
@@ -293,27 +233,6 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
         textViewBarCode = (TextView) findViewById(R.id.textViewBarCode);
         textViewBarCode.setText(newSeed.getBareCode());
 
-        /*
-         * DESCRIPTION
-         */
-        descriptionGrowth = (EditText) findViewById(R.id.IdSeedDescriptionCulture);
-        descriptionDiseases = (EditText) findViewById(R.id.IdSeedDescriptionEnnemi);
-        descriptionEnvironment = (EditText) findViewById(R.id.IdSeedDescriptionEnvironment);
-        descriptionHarvest = (EditText) findViewById(R.id.IdSeedDescriptionHarvest);
-        descriptionGrowthVoice = (View) findViewById(R.id.IdSeedDescriptionCultureVoice);
-        descriptionDiseasesVoice = (View) findViewById(R.id.IdSeedDescriptionEnnemiVoice);
-        descriptionEnvironmentVoice = (View) findViewById(R.id.IdSeedDescriptionEnvironmentVoice);
-        descriptionHarvestVoice = (View) findViewById(R.id.IdSeedDescriptionHarvestVoice);
-
-        descriptionGrowth.setText(newSeed.getDescriptionEnvironment());
-        descriptionDiseases.setText(newSeed.getDescriptionDiseases());
-        descriptionHarvest.setText(newSeed.getDescriptionHarvest());
-        descriptionEnvironment.setText(newSeed.getDescriptionCultivation());
-
-        descriptionDiseasesVoice.setOnClickListener(this);
-        descriptionEnvironmentVoice.setOnClickListener(this);
-        descriptionGrowthVoice.setOnClickListener(this);
-        descriptionHarvestVoice.setOnClickListener(this);
 
         findViewById(R.id.imageBarCode).setOnClickListener(this);
         findViewById(R.id.buttonStock).setOnClickListener(this);
@@ -327,250 +246,88 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
 
     }
 
-    // private void showDropdown() {
-    // autoCompleteSpecie.showDropDown();
-    // }
 
     protected void onSeedCreated() {
         finish();
     }
 
-    ;
-
     @Override
     public void onClick(View v) {
-        newSeed.setDescriptionDiseases(descriptionDiseases.getText().toString());
-        newSeed.setDescriptionCultivation(descriptionGrowth.getText().toString());
-        newSeed.setDescriptionEnvironment(descriptionEnvironment.getText().toString());
-        newSeed.setDescriptionHarvest(descriptionHarvest.getText().toString());
-        Intent intent;
-        switch (v.getId()) {
-            case R.id.imageBarCode:
-                scanBarCode();
-                break;
-
-            case R.id.buttonStock:
+        finalFragment.setSeed(newSeed);
+        finalFragment.update();
+        if (v == buttonNext) {
+            step++;
+            if (step > 0)
+                buttonPrevious.setVisibility(View.VISIBLE);
+            if (step == breadcrum.size() - 1) {
+                buttonNext.setIcon(R.drawable.ic_validate);
+            }
+            if (step == breadcrum.size()) {
+                Toast.makeText(getApplicationContext(), "the seed is " + newSeed, Toast.LENGTH_LONG).show();
                 if (validateSeed()) {
-                    if (gotsPrefs.isConnectedToServer()) {
-
-                        AlertDialog.Builder builderWorkflow = new AlertDialog.Builder(this);
-                        builderWorkflow.setMessage(this.getResources().getString(R.string.workflow_launch_description)).setCancelable(
-                                false).setPositiveButton(
-                                getResources().getString(R.string.seed_action_add_stock) + " + Share",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        new AsyncTask<Void, Void, Document>() {
-                                            @Override
-                                            protected Document doInBackground(Void... params) {
-                                                BaseSeedInterface mSeed = createSeed();
-                                                NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(
-                                                        getApplicationContext());
-                                                return nuxeoWorkflowProvider.startWorkflowValidation(mSeed);
-                                            }
-
-                                            protected void onPostExecute(Document result) {
-                                                if (result != null)
-                                                    Toast.makeText(getApplicationContext(),
-                                                            "Your plant sheet has been sent to the moderator team",
-                                                            Toast.LENGTH_LONG).show();
-
-                                                onSeedCreated();
-                                            }
-
-                                        }.execute();
-                                        dialog.dismiss();
-                                    }
-                                }).setNegativeButton(getResources().getString(R.string.seed_action_add_stock),
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        new AsyncTask<Void, Void, Void>() {
-                                            @Override
-                                            protected Void doInBackground(Void... params) {
-                                                BaseSeedInterface mSeed = createSeed();
-                                                return null;
-                                            }
-
-                                            protected void onPostExecute(Void result) {
-                                                onSeedCreated();
-                                            }
-
-                                        }.execute();
-                                        dialog.cancel();
-                                    }
-                                });
-                        builderWorkflow.show();
-
-                    } else {
-                        new AsyncTask<Void, Void, BaseSeedInterface>() {
-                            @Override
-                            protected BaseSeedInterface doInBackground(Void... params) {
-                                BaseSeedInterface mSeed = createSeed();
-                                return mSeed;
-                            }
-
-                            protected void onPostExecute(BaseSeedInterface result) {
-                                if (result != null)
-                                    Toast.makeText(getApplicationContext(), "Your plant sheet has been created",
-                                            Toast.LENGTH_LONG).show();
-
-                                onSeedCreated();
-                            }
-
-                        }.execute();
-                    }
-                }
-                break;
-
-            case R.id.buttonModify:
-                if (validateSeed()) {
-
-                    new AsyncTask<Void, Integer, Void>() {
+                    new AsyncTask<Void, Void, BaseSeedInterface>() {
                         @Override
-                        protected Void doInBackground(Void... params) {
-                            seedManager.updateSeed(newSeed);
-                            return null;
+                        protected BaseSeedInterface doInBackground(Void... voids) {
+
+                            return createSeed();
                         }
 
-                        protected void onPostExecute(Void result) {
-                            NewSeedActivity.this.finish();
+                        @Override
+                        protected void onPostExecute(BaseSeedInterface baseSeedInterface) {
+                            if (baseSeedInterface != null) {
+                                Toast.makeText(getApplicationContext(), "Excellent your plant has been created", Toast.LENGTH_LONG).show();
+                                finish();
+                            } else
+                                Toast.makeText(getApplicationContext(), "There was a problem creating your new plant", Toast.LENGTH_LONG).show();
 
+                            super.onPostExecute(baseSeedInterface);
                         }
-
-                        ;
                     }.execute();
-
                 }
-                break;
 
-            case R.id.IdSeedDescriptionCultureVoice:
-                intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-                intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Command me");
-                startActivityForResult(intent, REQUEST_GROWTH);
-                break;
-            case R.id.IdSeedDescriptionEnnemiVoice:
-                intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-                intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Command me");
-                startActivityForResult(intent, REQUEST_DISEASES);
-                break;
-            case R.id.IdSeedDescriptionEnvironmentVoice:
-                intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-                intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Command me");
-                startActivityForResult(intent, REQUEST_ENVIRONMENT);
-                break;
-            case R.id.IdSeedDescriptionHarvestVoice:
-                intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-                intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Command me");
-                startActivityForResult(intent, REQUEST_HARVEST);
-                break;
-
-            // case R.id.buttonCatalogue:
-            // if (validateSeed()) {
-            // seedManager.createSeed(newSeed);
-            // finish();
-            // }
-            // break;
-            default:
-                break;
+            }
+            if (step < breadcrum.size())
+                addContentLayout(breadcrum.get(step), null);
+        } else if (v == buttonPrevious) {
+            step--;
+            if (step < breadcrum.size())
+                buttonNext.setIcon(R.drawable.ic_next);
+            if (step == 0)
+                buttonPrevious.setVisibility(View.GONE);
+            if (step > 0)
+                getSupportFragmentManager().popBackStack();
         }
-
     }
 
-    // private void addToStock(BaseSeedInterface vendorseed) {
-    // GotsSeedProvider helper = new LocalSeedProvider(getApplicationContext());
-    // if (vendorseed.getSeedId() >= 0) {
-    // GrowingSeedInterface seed = (GrowingSeedInterface) helper.getSeedById(vendorseed.getSeedId());
-    // BuyingAction buy = new BuyingAction(this);
-    // buy.execute(seed);
-    // }
-    //
-    // }
 
     @SuppressWarnings("deprecation")
     private boolean validateSeed() {
-        if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            findViewById(R.id.layoutSpecieGallery).setBackground(null);
-            findViewById(R.id.autoCompleteTextViewVariety).setBackground(null);
-        } else {
-            findViewById(R.id.layoutSpecieGallery).setBackgroundDrawable(null);
-            findViewById(R.id.autoCompleteTextViewVariety).setBackgroundDrawable(null);
-        }
+//        if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+//            findViewById(R.id.layoutSpecieGallery).setBackground(null);
+//            findViewById(R.id.autoCompleteTextViewVariety).setBackground(null);
+//        } else {
+//            findViewById(R.id.layoutSpecieGallery).setBackgroundDrawable(null);
+//            findViewById(R.id.autoCompleteTextViewVariety).setBackgroundDrawable(null);
+//        }
         // findViewById(R.id.layoutInputSowing).setBackground(null);
 
         if (newSeed.getSpecie() == null || "".equals(newSeed.getSpecie())) {
             Toast.makeText(this, getResources().getString(R.string.fillfields_specie), Toast.LENGTH_SHORT).show();
-//            findViewById(R.id.layoutSpecieGallery).setBackground(getResources().getDrawable(R.drawable.border_red));
             return false;
         }
         if (newSeed.getVariety() == null || "".equals(newSeed.getVariety())) {
             Toast.makeText(this, getResources().getString(R.string.fillfields_variety), Toast.LENGTH_SHORT).show();
-//            findViewById(R.id.autoCompleteTextViewVariety).setBackground(
-//                    getResources().getDrawable(R.drawable.border_red));
 
             return false;
         }
         if (newSeed.getDateSowingMin() == -1 || newSeed.getDateSowingMax() == -1) {
             Toast.makeText(this, getResources().getString(R.string.fillfields_dates), Toast.LENGTH_SHORT).show();
-//            findViewById(R.id.layoutInputSowing).setBackground(getResources().getDrawable(R.drawable.border_red));
             return false;
         }
 
         return true;
     }
 
-
-//    /**
-//	 *
-//	 */
-//    private void initVarietyList() {
-//        LocalSeedProvider helper = new LocalSeedProvider(getApplicationContext());
-//
-//        String[] referenceList = null;
-//        if (newSeed.getSpecie() != null)
-//            referenceList = helper.getArrayVarietyBySpecie(newSeed.getSpecie());
-//        else
-//            referenceList = helper.getArrayVariety();
-//
-//        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-//                android.R.layout.simple_dropdown_item_1line, referenceList);
-//        autoCompleteVariety.setAdapter(adapter);
-//        autoCompleteVariety.addTextChangedListener(new TextWatcher() {
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                String variety = autoCompleteVariety.getText().toString();
-//                newSeed.setVariety(variety);
-//                seedWidgetLong.setSeed(newSeed);
-//                seedWidgetLong.invalidate();
-//            }
-//
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//                // TODO Auto-generated method stub
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//            }
-//        });
-//
-//        autoCompleteVariety.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//
-//            @Override
-//            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-//                String variety = adapter.getItem(arg2);
-//                newSeed.setVariety(variety);
-//                seedWidgetLong.setSeed(newSeed);
-//                seedWidgetLong.invalidate();
-//
-//            }
-//        });
-//        autoCompleteVariety.invalidate();
-//    }
 
     private void scanBarCode() {
         IntentIntegrator integrator = new IntentIntegrator(this);
@@ -605,39 +362,12 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
 
             cursor.close();
 
-        } else if (requestCode == REQUEST_DISEASES || requestCode == REQUEST_ENVIRONMENT
-                || requestCode == REQUEST_GROWTH || requestCode == REQUEST_HARVEST) {
-            ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            if (matches.size() > 0)
-                switch (requestCode) {
-                    case REQUEST_GROWTH:
-                        descriptionGrowth.setText(matches.get(0));
-                        newSeed.setDescriptionEnvironment(matches.toArray().toString());
-                        break;
-                    case REQUEST_DISEASES:
-                        descriptionDiseases.setText(matches.get(0));
-                        newSeed.setDescriptionDiseases(matches.toArray().toString());
-                        break;
-                    case REQUEST_ENVIRONMENT:
-                        descriptionEnvironment.setText(matches.get(0));
-                        newSeed.setDescriptionCultivation(matches.toArray().toString());
-                        break;
-                    case REQUEST_HARVEST:
-                        descriptionHarvest.setText(matches.get(0));
-                        newSeed.setDescriptionHarvest(matches.toArray().toString());
-                        break;
-                    default:
-                        break;
-                }
-
         } else {
             IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
             if (scanResult != null && scanResult.getContents() != "") {
                 Log.i("Scan result", scanResult.toString());
                 textViewBarCode.setText(scanResult.getContents());
                 newSeed.setBareCode(textViewBarCode.getText().toString());
-            } else {
-
             }
         }
     }
@@ -656,35 +386,6 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
         setContentView(R.layout.inputseed);
     }
 
-    @Override
-    public void onSpeciesSelected(String species) {
-        newSeed.setSpecie(species);
-        addContentLayout(varietyFragment, null);
-    }
-
-    @Override
-    public void onVarietySelected(String variety) {
-        newSeed.setVariety(variety);
-        addContentLayout(planninfFragment, null);
-
-    }
-
-    @Override
-    public void onPlanningSelected(int monthSowingMin, int monthSowingMax, int durationMin, int durationMax) {
-        newSeed.setDateSowingMin(monthSowingMin);
-        newSeed.setDateSowingMax(monthSowingMax);
-        newSeed.setDurationMin(durationMin);
-        newSeed.setDurationMax(durationMax);
-
-    }
-
-//    public class PlanningUpdater implements DatePicker.OnDateChangedListener {
-//
-//        @Override
-//        public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-//            updatePlanning();
-//        }
-//    }
 
     @Override
     public void onSelectInGallery(DialogFragment fragment) {
@@ -709,4 +410,5 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
     protected boolean requireFloatingButton() {
         return false;
     }
+
 }

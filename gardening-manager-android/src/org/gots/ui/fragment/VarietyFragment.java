@@ -20,20 +20,20 @@ import org.gots.seed.provider.local.LocalSeedProvider;
 public class VarietyFragment extends SeedContentFragment {
     private AutoCompleteTextView autoCompleteVariety;
     LocalSeedProvider helper;
-    private OnVarietySelected mCallback;
+//    private OnVarietySelected mCallback;
 
-    public interface OnVarietySelected {
-        void onVarietySelected(String variety);
-    }
+//    public interface OnVarietySelected {
+//        void onVarietySelected(String variety);
+//    }
 
     @Override
     public void onAttach(Activity activity) {
-        try {
-            mCallback = (OnVarietySelected) activity;
-        } catch (ClassCastException castException) {
-            throw new ClassCastException(VarietyFragment.class.getSimpleName()
-                    + " must implements OnVarietySelected");
-        }
+//        try {
+//            mCallback = (OnVarietySelected) activity;
+//        } catch (ClassCastException castException) {
+//            throw new ClassCastException(VarietyFragment.class.getSimpleName()
+//                    + " must implements OnVarietySelected");
+//        }
         super.onAttach(activity);
     }
 
@@ -82,7 +82,8 @@ public class VarietyFragment extends SeedContentFragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String variety = autoCompleteVariety.getText().toString();
-                mCallback.onVarietySelected(variety);
+//                mCallback.onVarietySelected(variety);
+                mSeed.setVariety(variety);
             }
 
             @Override

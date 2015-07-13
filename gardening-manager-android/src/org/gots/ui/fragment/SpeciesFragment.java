@@ -22,22 +22,22 @@ public class SpeciesFragment extends SeedContentFragment {
 
     private GotsSeedManager seedManager;
     private ExpandableHeightGridView gridView;
-    private OnSpeciesSelected mCallback;
+//    private OnSpeciesSelected mCallback;
 
-    public interface OnSpeciesSelected {
-        void onSpeciesSelected(String species);
-    }
+//    public interface OnSpeciesSelected {
+//        void onSpeciesSelected(String species);
+//    }
 
-    @Override
-    public void onAttach(Activity activity) {
-        try {
-            mCallback = (OnSpeciesSelected) activity;
-        } catch (ClassCastException castException) {
-            throw new ClassCastException(SpeciesFragment.class.getSimpleName()
-                    + " must implements OnSpeciesSelected");
-        }
-        super.onAttach(activity);
-    }
+//    @Override
+//    public void onAttach(Activity activity) {
+//        try {
+//            mCallback = (OnSpeciesSelected) activity;
+//        } catch (ClassCastException castException) {
+//            throw new ClassCastException(SpeciesFragment.class.getSimpleName()
+//                    + " must implements OnSpeciesSelected");
+//        }
+//        super.onAttach(activity);
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,8 +78,9 @@ public class SpeciesFragment extends SeedContentFragment {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (getActivity() instanceof OnSpeciesSelected)
-                    mCallback.onSpeciesSelected(listSpeciesAdapter.getItem(position));
+//                    mCallback.onSpeciesSelected(listSpeciesAdapter.getItem(position));
+                mSeed.setSpecie(listSpeciesAdapter.getItem(position));
+                gridView.setSelection(position);
             }
         });
 

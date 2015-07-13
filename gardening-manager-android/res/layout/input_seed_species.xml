@@ -15,7 +15,8 @@
             style="@style/description_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/seed.description.specie" />
+            android:text="@string/seed.description.specie"
+            android:layout_gravity="center_horizontal" />
 
         <org.gots.ui.ExpandableHeightGridView
             android:id="@+id/layoutSpecieGallery"

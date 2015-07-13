@@ -23,22 +23,22 @@ public class PlanningFragment extends SeedContentFragment implements DatePicker.
     private DatePicker planningSowMax;
     private DatePicker planningHarvestMin;
     private DatePicker planningHarvestMax;
-    private OnPlanningSelected mCallback;
+//    private OnPlanningSelected mCallback;
 
-    public interface OnPlanningSelected {
-        void onPlanningSelected(int monthSowingMin, int monthSowingMax, int durationMin, int durationMax);
-    }
+//    public interface OnPlanningSelected {
+//        void onPlanningSelected(int monthSowingMin, int monthSowingMax, int durationMin, int durationMax);
+//    }
 
-    @Override
-    public void onAttach(Activity activity) {
-        try {
-            mCallback = (OnPlanningSelected) activity;
-        } catch (ClassCastException castException) {
-            throw new ClassCastException(PlanningFragment.class.getSimpleName()
-                    + " must implements OnPlanningSelected");
-        }
-        super.onAttach(activity);
-    }
+//    @Override
+//    public void onAttach(Activity activity) {
+//        try {
+//            mCallback = (OnPlanningSelected) activity;
+//        } catch (ClassCastException castException) {
+//            throw new ClassCastException(PlanningFragment.class.getSimpleName()
+//                    + " must implements OnPlanningSelected");
+//        }
+//        super.onAttach(activity);
+//    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -94,26 +94,6 @@ public class PlanningFragment extends SeedContentFragment implements DatePicker.
         return true;
     }
 
-//    public void updatePlanning() {
-//
-//
-////        newSeed.setDateSowingMin(planningSowMin.getMonth() + 1);
-////        newSeed.setDateSowingMax(planningSowMax.getMonth() + 1);
-//
-//        int durationmin = planningHarvestMin.getMonth() - planningSowMin.getMonth();
-//
-//        int durationmax;
-//        if (planningHarvestMin.getMonth() <= planningHarvestMax.getMonth())
-//            // [0][1][min][3][4][5][6][7][max][9][10][11]
-//            durationmax = planningHarvestMax.getMonth() - planningSowMax.getMonth();
-//        else
-//            // [0][1][max][3][4][5][6][7][min][9][10][11]
-//            durationmax = 12 - planningSowMax.getMonth() + planningHarvestMax.getMonth();
-////        newSeed.setDurationMin(durationmin * 30);
-////        newSeed.setDurationMax(durationmax * 30);
-//
-//    }
-
     private void monthFilter(DatePicker picker) {
         try {
             Field f[] = picker.getClass().getDeclaredFields();
@@ -141,8 +121,18 @@ public class PlanningFragment extends SeedContentFragment implements DatePicker.
     }
 
     @Override
+    protected void onNuxeoDataRetrieved(Object data) {
+        updatePlanning();
+        super.onNuxeoDataRetrieved(data);
+    }
+
+    @Override
     public void onDateChanged(DatePicker datePicker, int i, int i1, int i2) {
 
+        updatePlanning();
+    }
+
+    private void updatePlanning() {
         int durationmin = planningHarvestMin.getMonth() - planningSowMin.getMonth();
 
         int durationmax;
@@ -152,6 +142,9 @@ public class PlanningFragment extends SeedContentFragment implements DatePicker.
         else
             // [0][1][max][3][4][5][6][7][min][9][10][11]
             durationmax = 12 - planningSowMax.getMonth() + planningHarvestMax.getMonth();
-        mCallback.onPlanningSelected(planningSowMin.getMonth() + 1, planningSowMax.getMonth() + 1, durationmin, durationmax);
+        mSeed.setDateSowingMin(planningSowMin.getMonth() + 1);
+        mSeed.setDateSowingMax(planningSowMax.getMonth() + 1);
+        mSeed.setDurationMin(durationmin);
+        mSeed.setDateSowingMax(durationmax);
     }
 }

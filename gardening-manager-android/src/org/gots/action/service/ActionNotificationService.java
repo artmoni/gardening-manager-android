@@ -14,7 +14,6 @@ import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.SeedUtil;
-import org.gots.seed.SeedUtils;
 import org.gots.seed.service.GotsService;
 import org.gots.ui.ActionActivity;
 import org.gots.ui.MainActivity;
