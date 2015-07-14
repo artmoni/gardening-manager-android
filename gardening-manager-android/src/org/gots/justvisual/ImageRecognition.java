@@ -8,7 +8,7 @@ public class ImageRecognition {
     private static String API_ID = "940";
     private static String SERVER_URL = "garden.vsapi01.com";
 
-    public String buildURL(String imageUrl) {
+    public String getURL(String imageUrl) {
         String url = "http://" + SERVER_URL + "/api-search/by-url?url=" + imageUrl + "&apiid=" + API_ID + "&apikey=" + API_KEY;
         return url;
 
