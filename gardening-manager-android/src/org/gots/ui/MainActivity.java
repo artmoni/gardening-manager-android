@@ -857,6 +857,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         displayWeatherFragment();
         displayActionsFragment();
         displayCatalogueFragment();
+        displayRecognitionFragment();
         if (gotsPrefs.isConnectedToServer())
             displayWorkflowFragment();
         if (gotsPrefs.getParrotToken() != null)
@@ -872,6 +873,18 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
             fragmentManager.beginTransaction().replace(R.id.idFragmentActions, actionFragment).commitAllowingStateLoss();
         } else
             actionFragment.update();
+    }
+
+    protected void displayRecognitionFragment() {
+        LikeThatFragment likeThatFragment = (LikeThatFragment) getSupportFragmentManager().findFragmentById(
+                R.id.idFragmentRecognition);
+        if (likeThatFragment == null) {
+             likeThatFragment = new LikeThatFragment();
+            FragmentTransaction transactionWeather = getSupportFragmentManager().beginTransaction();
+            transactionWeather.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
+            transactionWeather.replace(R.id.idFragmentWeather, likeThatFragment).commitAllowingStateLoss();
+        } else
+            likeThatFragment.update();
     }
 
     private void displayWorkflowFragment() {
@@ -1039,26 +1052,26 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
 
     @Override
     protected boolean requireFloatingButton() {
-        return true;
+        return false;
     }
 
-    @Override
-    protected List<FloatingItem> onCreateFloatingMenu() {
-        List<FloatingItem> list = new ArrayList();
-        FloatingItem floatingItem = new FloatingItem();
-        floatingItem.setRessourceId(R.drawable.action_photo);
-        floatingItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LikeThatFragment likeThatFragment = new LikeThatFragment();
-                FragmentTransaction transactionWeather = getSupportFragmentManager().beginTransaction();
-                transactionWeather.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
-                transactionWeather.replace(R.id.idFragmentWeather, likeThatFragment).commitAllowingStateLoss();
-            }
-        });
-        list.add(floatingItem);
-        return list;
-    }
+//    @Override
+//    protected List<FloatingItem> onCreateFloatingMenu() {
+//        List<FloatingItem> list = new ArrayList();
+//        FloatingItem floatingItem = new FloatingItem();
+//        floatingItem.setRessourceId(R.drawable.action_photo);
+//        floatingItem.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                LikeThatFragment likeThatFragment = new LikeThatFragment();
+//                FragmentTransaction transactionWeather = getSupportFragmentManager().beginTransaction();
+//                transactionWeather.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
+//                transactionWeather.replace(R.id.idFragmentWeather, likeThatFragment).commitAllowingStateLoss();
+//            }
+//        });
+//        list.add(floatingItem);
+//        return list;
+//    }
 
     @Override
     protected boolean requireAsyncDataRetrieval() {
