@@ -3,6 +3,7 @@ package org.gots.ui.fragment;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +17,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -24,7 +29,9 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.gots.R;
+import org.gots.bean.RouteNode;
 import org.gots.justvisual.ImageRecognition;
+import org.gots.justvisual.JustVisualResult;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.nuxeo.NuxeoUtils;
 import org.gots.utils.FileUtilities;
@@ -38,6 +45,7 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,14 +61,16 @@ public class LikeThatFragment extends BaseGotsFragment {
     private String TAG = LikeThatFragment.class.getSimpleName();
     private ListView listView;
     private String imageUrl;
+    private TextView progressText;
     ;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.recognition, null);
-        buttonPhoto = (Button) v.findViewById(R.id.buttonPhoto);
+        buttonPhoto = (Button) v.findViewById(R.id.buttonActions);
         imageView = (ImageView) v.findViewById(R.id.imageViewPhoto);
         listView = (ListView) v.findViewById(R.id.listViewPhoto);
+        progressText = (TextView) v.findViewById(R.id.textViewProgress);
         return v;
     }
 
@@ -96,13 +106,37 @@ public class LikeThatFragment extends BaseGotsFragment {
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String picturePath = cursor.getString(columnIndex);
 
-            Bitmap bitmap = FileUtilities.decodeScaledBitmapFromSdCard(picturePath, 100, 100);
-            imageView.setImageBitmap(bitmap);
-            sendServerAsync(picturePath);
+
+            Bitmap bitmap = FileUtilities.decodeScaledBitmapFromSdCard(picturePath, 400, 300);
+
+
+            FileOutputStream out = null;
+            try {
+                String reducePicture = picturePath+"-800x600";
+                out = new FileOutputStream(reducePicture);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+                // PNG is a lossless format, the compression factor (100) is ignored
+                imageView.setImageBitmap(bitmap);
+                sendServerAsync(reducePicture);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (out != null) {
+                        out.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+
         }
 
         super.onActivityResult(requestCode, resultCode, data);
     }
+
 
     protected AndroidAutomationClient getNuxeoClient() {
         return NuxeoManager.getInstance().getNuxeoClient();
@@ -110,6 +144,13 @@ public class LikeThatFragment extends BaseGotsFragment {
 
     private void sendServerAsync(final String filePath) {
         new AsyncTask<Void, Void, String>() {
+            @Override
+            protected void onPreExecute() {
+                progressText.setVisibility(View.VISIBLE);
+                progressText.setText("Recognition in progress...");
+                super.onPreExecute();
+            }
+
             @Override
             protected String doInBackground(Void... voids) {
                 Session session = getNuxeoClient().getSession();
@@ -125,8 +166,8 @@ public class LikeThatFragment extends BaseGotsFragment {
                     NuxeoUtils.uploadBlob(session, imageDoc, f, new NuxeoUtils.OnBlobUpload() {
                         @Override
                         public void onUploadSuccess() {
-                            //my.gardening-manager.com/nuxeo/nxfile/default/cfa401b8-5e38-42eb-9cc2-580f680f7a8d/blobholder:0/
                             imageUrl = serverImageUrl;
+//                            progressText.setText("Recognition in progress ...");
                             processJustVisual(serverImageUrl);
                         }
 
@@ -147,6 +188,7 @@ public class LikeThatFragment extends BaseGotsFragment {
 
     private void processJustVisual(final String url) {
         new AsyncTask<Void, Void, List<String>>() {
+
             @Override
             protected List<String> doInBackground(Void... voids) {
                 ImageRecognition imageRecognition = new ImageRecognition();
@@ -173,16 +215,18 @@ public class LikeThatFragment extends BaseGotsFragment {
                     }
 
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    progressText.setText("Try later, recognition server is not responding");
                 }
                 return species;
             }
 
             @Override
             protected void onPostExecute(List<String> strings) {
-
-                ListAdapter arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, strings);
-                listView.setAdapter(arrayAdapter);
+//                progressText.setVisibility(View.GONE);
+                if (isAdded()) {
+                    ListAdapter arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, strings);
+                    listView.setAdapter(arrayAdapter);
+                }
                 super.onPostExecute(strings);
             }
         }.execute();
@@ -193,18 +237,20 @@ public class LikeThatFragment extends BaseGotsFragment {
         try {
             JSONObject json = new JSONObject(responseString);
             JSONArray images = json.getJSONArray("images");
+            Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").create();
             for (int i = 0; i < images.length(); i++) {
                 try {
                     JSONObject image = images.getJSONObject(i);
-                    String id = image.getString("id");
-                    String url = image.getString("imageUrl");
-                    String title = image.getString("title");
-//                String description = image.getString("description");
-                    String pageUrl = image.getString("pageUrl");
-                    String plantNames = image.getString("plantNames");
-                    if (species.size() == 0 || (species.size() > 0 &&!species.get(species.size() - 1).equals(plantNames)))
-                        species.add(plantNames);
-                    Log.d(TAG, plantNames + " - " + id + " - " + url + " - " + title);
+                    JustVisualResult result = gson.fromJson(image.toString(), JustVisualResult.class);
+//                    String id = image.getString("id");
+//                    String url = image.getString("imageUrl");
+//                    String title = image.getString("title");
+////                String description = image.getString("description");
+//                    String pageUrl = image.getString("pageUrl");
+//                    String plantNames = image.getString("plantNames");
+                    if (species.size() == 0 || (species.size() > 0 && !species.get(species.size() - 1).equals(result.getPlantNames())))
+                        species.add(result.getPlantNames());
+                    Log.d(TAG, result.toString());
 
                 } catch (JSONException jsonException) {
                     Log.w(TAG, jsonException.getMessage());

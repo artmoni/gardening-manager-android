@@ -857,6 +857,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         displayWeatherFragment();
         displayActionsFragment();
         displayCatalogueFragment();
+        displayRecognitionFragment();
         if (gotsPrefs.isConnectedToServer())
             displayWorkflowFragment();
         if (gotsPrefs.getParrotToken() != null)
@@ -944,6 +945,13 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
             transactionTutorial.replace(R.id.idFragmentTutorial, tutorialResumeFragment).commitAllowingStateLoss();
         } else
             findViewById(R.id.idFragmentTutorial).setVisibility(View.GONE);
+    }
+
+    private void displayRecognitionFragment() {
+        LikeThatFragment likeThatFragment = new LikeThatFragment();
+        FragmentTransaction transactionWeather = getSupportFragmentManager().beginTransaction();
+        transactionWeather.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
+        transactionWeather.replace(R.id.idFragmentRecognition, likeThatFragment).commitAllowingStateLoss();
     }
 
     private void displayIncredibleFragment() {
@@ -1039,34 +1047,25 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
 
     @Override
     protected boolean requireFloatingButton() {
-        return true;
+        return false;
     }
 
-    @Override
-    protected List<FloatingItem> onCreateFloatingMenu() {
-        List<FloatingItem> list = new ArrayList();
-        FloatingItem floatingItem = new FloatingItem();
-        floatingItem.setRessourceId(R.drawable.action_photo);
-        floatingItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LikeThatFragment likeThatFragment = new LikeThatFragment();
-                FragmentTransaction transactionWeather = getSupportFragmentManager().beginTransaction();
-                transactionWeather.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
-                transactionWeather.replace(R.id.idFragmentWeather, likeThatFragment).commitAllowingStateLoss();
-            }
-        });
-        list.add(floatingItem);
-        return list;
-    }
+//    @Override
+//    protected List<FloatingItem> onCreateFloatingMenu() {
+//        List<FloatingItem> list = new ArrayList();
+//        FloatingItem floatingItem = new FloatingItem();
+//        floatingItem.setRessourceId(R.drawable.action_photo);
+//        floatingItem.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                LikeThatFragment likeThatFragment = new LikeThatFragment();
+//                FragmentTransaction transactionWeather = getSupportFragmentManager().beginTransaction();
+//                transactionWeather.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
+//                transactionWeather.replace(R.id.idFragmentWeather, likeThatFragment).commitAllowingStateLoss();
+//            }
+//        });
+//        list.add(floatingItem);
+//        return list;
+//    }
 
-    @Override
-    protected boolean requireAsyncDataRetrieval() {
-        return true;
-    }
-
-    @Override
-    protected Object retrieveNuxeoData() throws Exception {
-        return "";
-    }
 }
