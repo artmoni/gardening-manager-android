@@ -22,6 +22,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
-            android:text="Complete the social plant database with new variety."  />
+            android:text="Complete the social plant database with new variety. Follow the creation steps."  />
     </LinearLayout>
 </ScrollView>

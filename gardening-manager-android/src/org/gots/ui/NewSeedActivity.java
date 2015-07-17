@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.gots.R;
+import org.gots.analytics.GotsAnalytics;
 import org.gots.nuxeo.NuxeoWorkflowProvider;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedImpl;
@@ -67,7 +68,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 public class NewSeedActivity extends BaseGotsActivity implements OnClickListener, PictureSelectorListener,
-        OnWorkflowClickListener {
+        SeedContentFragment.OnSeedUpdated {
     public static final String ORG_GOTS_SEED_BARCODE = "org.gots.seed.barcode";
 
     public static final String ORG_GOTS_SEEDID = "org.gots.seedid";
@@ -79,8 +80,6 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
 
     private Gallery gallerySpecies;
 
-//    private SeedWidgetLong seedWidgetLong;
-
     private BaseSeedInterface newSeed;
 
     private TextView textViewBarCode;
@@ -91,7 +90,6 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
     private ImageView pictureSelectorView;
 
     public static final int REQUEST_SCAN = 0;
-
 
     public static final int REQUEST_LOAD_IMAGE = 5000;
 
@@ -106,14 +104,13 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
     private SeedDescriptionEditFragment descriptionFragment;
     private FloatingActionButton buttonNext;
     private List<SeedContentFragment> breadcrum;
-    private int step = -1;
+    private int step = 0;
     private FloatingActionButton buttonPrevious;
     private PlantCreationFragment finalFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         setTitleBar(R.string.seed_register_title);
 
@@ -182,10 +179,10 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
         buttonPrevious.setLayoutParams(params2);
         ((ViewGroup) root.getChildAt(0)).addView(buttonPrevious);
 
-        step++;
+
         addMainLayout(finalFragment, null);
         addContentLayout(breadcrum.get(step), null);
-
+        step++;
     }
 
     @Override
@@ -256,13 +253,17 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
         finalFragment.setSeed(newSeed);
         finalFragment.update();
         if (v == buttonNext) {
-            step++;
+
             if (step > 0)
                 buttonPrevious.setVisibility(View.VISIBLE);
-            if (step == breadcrum.size() - 1) {
-                buttonNext.setIcon(R.drawable.ic_validate);
-            }
             if (step == breadcrum.size()) {
+                buttonNext.setIcon(R.drawable.ic_validate);
+                for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); ++i) {
+                    getSupportFragmentManager().popBackStack();
+                }
+                buttonPrevious.setVisibility(View.GONE);
+            }
+            if (step == breadcrum.size() + 1) {
                 Toast.makeText(getApplicationContext(), "the seed is " + newSeed, Toast.LENGTH_LONG).show();
                 if (validateSeed()) {
                     new AsyncTask<Void, Void, BaseSeedInterface>() {
@@ -277,6 +278,7 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
                             if (baseSeedInterface != null) {
                                 Toast.makeText(getApplicationContext(), "Excellent your plant has been created", Toast.LENGTH_LONG).show();
                                 finish();
+
                             } else
                                 Toast.makeText(getApplicationContext(), "There was a problem creating your new plant", Toast.LENGTH_LONG).show();
 
@@ -288,13 +290,14 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
             }
             if (step < breadcrum.size())
                 addContentLayout(breadcrum.get(step), null);
+            step++;
         } else if (v == buttonPrevious) {
             step--;
             if (step < breadcrum.size())
                 buttonNext.setIcon(R.drawable.ic_next);
             if (step == 0)
                 buttonPrevious.setVisibility(View.GONE);
-            if (step > 0)
+            if (step >= 0)
                 getSupportFragmentManager().popBackStack();
         }
     }
@@ -370,6 +373,7 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
                 newSeed.setBareCode(textViewBarCode.getText().toString());
             }
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -401,14 +405,15 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
         startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
     }
 
-    @Override
-    public void onWorkflowFinished() {
-
-    }
 
     @Override
     protected boolean requireFloatingButton() {
         return false;
     }
 
+    @Override
+    public void onSeedUpdated(BaseSeedInterface seed) {
+        finalFragment.setSeed(seed);
+        finalFragment.update();
+    }
 }

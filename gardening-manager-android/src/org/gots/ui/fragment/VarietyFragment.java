@@ -73,7 +73,7 @@ public class VarietyFragment extends SeedContentFragment {
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
-
+        if (!isAdded()) return;
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line, (String[]) data);
         autoCompleteVariety.setAdapter(adapter);
@@ -84,6 +84,7 @@ public class VarietyFragment extends SeedContentFragment {
                 String variety = autoCompleteVariety.getText().toString();
 //                mCallback.onVarietySelected(variety);
                 mSeed.setVariety(variety);
+                notifyObservers();
             }
 
             @Override
@@ -103,6 +104,7 @@ public class VarietyFragment extends SeedContentFragment {
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 String variety = adapter.getItem(arg2);
                 mSeed.setVariety(variety);
+                notifyObservers();
 
             }
         });

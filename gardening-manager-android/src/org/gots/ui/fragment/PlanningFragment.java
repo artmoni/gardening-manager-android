@@ -23,22 +23,6 @@ public class PlanningFragment extends SeedContentFragment implements DatePicker.
     private DatePicker planningSowMax;
     private DatePicker planningHarvestMin;
     private DatePicker planningHarvestMax;
-//    private OnPlanningSelected mCallback;
-
-//    public interface OnPlanningSelected {
-//        void onPlanningSelected(int monthSowingMin, int monthSowingMax, int durationMin, int durationMax);
-//    }
-
-//    @Override
-//    public void onAttach(Activity activity) {
-//        try {
-//            mCallback = (OnPlanningSelected) activity;
-//        } catch (ClassCastException castException) {
-//            throw new ClassCastException(PlanningFragment.class.getSimpleName()
-//                    + " must implements OnPlanningSelected");
-//        }
-//        super.onAttach(activity);
-//    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -76,15 +60,20 @@ public class PlanningFragment extends SeedContentFragment implements DatePicker.
             harvestTimeMin.set(Calendar.MONTH, mSeed.getDateSowingMin() - 1 + mSeed.getDurationMin() / 30);
         planningSowMin.init(sowTimeMin.get(Calendar.YEAR), sowTimeMin.get(Calendar.MONTH),
                 sowTimeMin.get(Calendar.DAY_OF_MONTH), this);
+        monthFilter(planningSowMin);
 
         planningSowMax.init(sowTimeMax.get(Calendar.YEAR), sowTimeMax.get(Calendar.MONTH),
                 sowTimeMax.get(Calendar.DAY_OF_MONTH), this);
+        monthFilter(planningSowMax);
 
         planningHarvestMin.init(harvestTimeMin.get(Calendar.YEAR), harvestTimeMin.get(Calendar.MONTH),
                 harvestTimeMin.get(Calendar.DAY_OF_MONTH), this);
+        monthFilter(planningHarvestMin);
 
         planningHarvestMax.init(harvestTimeMax.get(Calendar.YEAR), harvestTimeMax.get(Calendar.MONTH),
                 harvestTimeMax.get(Calendar.DAY_OF_MONTH), this);
+        monthFilter(planningHarvestMax);
+
         super.onNuxeoDataRetrievalStarted();
     }
 
@@ -144,7 +133,8 @@ public class PlanningFragment extends SeedContentFragment implements DatePicker.
             durationmax = 12 - planningSowMax.getMonth() + planningHarvestMax.getMonth();
         mSeed.setDateSowingMin(planningSowMin.getMonth() + 1);
         mSeed.setDateSowingMax(planningSowMax.getMonth() + 1);
-        mSeed.setDurationMin(durationmin);
-        mSeed.setDateSowingMax(durationmax);
+        mSeed.setDurationMin(durationmin * 30);
+        mSeed.setDurationMax(durationmax * 30);
+        notifyObservers();
     }
 }

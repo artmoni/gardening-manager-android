@@ -82,11 +82,6 @@ public class SeedDescriptionEditFragment extends SeedContentFragment implements 
         super.onNuxeoDataRetrieved(data);
     }
 
-    @Override
-    public void setSeed(BaseSeedInterface seed) {
-
-        super.setSeed(seed);
-    }
 
     @Override
     public void onClick(View view) {
@@ -126,7 +121,7 @@ public class SeedDescriptionEditFragment extends SeedContentFragment implements 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-        if (matches.size() > 0)
+        if (matches.size() > 0) {
             switch (requestCode) {
                 case REQUEST_GROWTH:
                     descriptionGrowth.setText(matches.get(0));
@@ -147,6 +142,8 @@ public class SeedDescriptionEditFragment extends SeedContentFragment implements 
                 default:
                     break;
             }
+            notifyObservers();
+        }
 
         super.onActivityResult(requestCode, resultCode, data);
     }
