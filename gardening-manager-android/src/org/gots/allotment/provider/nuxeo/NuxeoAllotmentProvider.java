@@ -1,7 +1,6 @@
 package org.gots.allotment.provider.nuxeo;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -175,7 +174,7 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
             if (allotment.getImagePath() != null) {
                 File f = new File(allotment.getImagePath());
                 if (f.exists())
-                    NuxeoUtils.uploadBlob(session, newAllotment, f);
+                    NuxeoUtils.uploadBlob(session, newAllotment, f, null);
             }
             allotment.setUUID(newAllotment.getId());
             allotment = super.updateAllotment(allotment);
@@ -211,7 +210,7 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
             if (allotment.getImagePath() != null) {
                 File f = new File(allotment.getImagePath());
                 if (f.exists())
-                    NuxeoUtils.uploadBlob(session, updatedDoc, f);
+                    NuxeoUtils.uploadBlob(session, updatedDoc, f, null);
             }
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);

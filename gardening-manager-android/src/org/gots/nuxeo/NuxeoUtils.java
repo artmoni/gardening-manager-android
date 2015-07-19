@@ -17,9 +17,17 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
 import android.util.Log;
 
+import com.google.android.gms.internal.ca;
+
 public class NuxeoUtils {
 
     private static final String TAG = NuxeoUtils.class.getSimpleName();
+
+    public interface OnBlobUpload {
+        void onUploadSuccess();
+
+        void onUploadError();
+    }
 
     public static void attachBlobToDocument(Session session, Document document, PropertyMap blobProp) {
 
@@ -35,14 +43,14 @@ public class NuxeoUtils {
             PropertyMap properties = new PropertyMap();
             // properties.set("dc:title", blobProp.getString("name"));
             properties.set("file:content", toJSON.toString());
-            session.getAdapter(DocumentManager.class).update(document, properties);
+            Document doc = session.getAdapter(DocumentManager.class).update(document, properties);
         } catch (Exception e) {
             Log.i(TAG, e.getMessage());
         }
 
     }
 
-    public static void uploadBlob(final Session session, final Document document, File file) {
+    public static void uploadBlob(final Session session, final Document document, File file,final OnBlobUpload callBack) {
         final FileBlob blobToUpload = new FileBlob(file);
         blobToUpload.setMimeType("image/jpeg");
 
@@ -69,11 +77,15 @@ public class NuxeoUtils {
             @Override
             public void onSuccess(String executionId, Serializable data) {
                 NuxeoUtils.attachBlobToDocument(session, document, blobProp);
+                if (callBack!=null)
+                    callBack.onUploadSuccess();
                 Log.i(TAG, "success");
             }
 
             @Override
             public void onError(String executionId, Throwable e) {
+                if (callBack!=null)
+                    callBack.onUploadError();
                 Log.i(TAG, "errdroior");
 
             }
