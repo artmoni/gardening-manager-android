@@ -66,15 +66,11 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
             </intent-filter>
             </activity>
-        <activity android:name=".ui.WebViewActivity"/>
+        <activity android:name=".ui.RecognitionActivity"/>
         <activity android:name=".ui.HutActivity" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow" android:windowSoftInputMode="stateHidden|adjustResize"/>
-        <activity android:name=".inapp.BuyPremiumActivity" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow"/>
-        <activity android:name=".ui.MySeedsListFirstTimeActivity"/>
         <activity android:name=".ui.NewSeedActivity" android:theme="@style/Theme.Styled" android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity android:name=".ui.AccountList" android:theme="@style/Theme.Styled"/>
         <activity android:name=".authentication.AuthenticationActivity" android:theme="@style/Theme.Styled"/>
-        <activity android:name=".ui.LoginActivity" android:theme="@style/Theme.Styled"/>
-        <activity android:name=".ui.FirstLaunchActivity" android:theme="@style/Theme.Styled"/>
         <activity android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" android:name="com.google.ads.AdActivity"/>
         <activity android:name=".ui.PreferenceActivity" android:theme="@style/Theme.Styled"/>
 
@@ -92,8 +88,6 @@
         </receiver>
         <receiver android:name=".action.service.ActionTODOBroadcastReceiver">
         </receiver>
-        <receiver android:name=".seed.service.SeedBroadcastReceiver">
-        </receiver>
         <receiver android:name=".garden.GardenManager">
             <intent-filter android:priority="100">
                 <action android:name="org.gots.broadcast.BroadCastMessages.CONNECTION_SETTINGS_CHANGED"/>
@@ -103,7 +97,6 @@
 
         <service android:name=".action.service.ActionNotificationService"/>
         <service android:name=".weather.service.WeatherUpdateService"/>
-        <service android:name=".seed.service.SeedUpdateService"/>
         <service android:exported="true" android:name=".seed.service.SeedSyncService">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter"/>
@@ -147,7 +140,6 @@
             <meta-data android:name="android.content.SyncAdapter" android:resource="@xml/sync_adapter_weather"/>
         </service>
         <service android:name=".allotment.service.AllotmentNotificationService"/>
-        <service android:name=".allotment.service.ProfilNotificationService"/>
         <service android:name=".authentication.GotsAuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator"/>

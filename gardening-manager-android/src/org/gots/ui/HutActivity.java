@@ -150,6 +150,19 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
             }
         });
         floatingItems.add(floatingItem);
+
+        FloatingItem recognitionItem = new FloatingItem();
+        recognitionItem.setTitle(getResources().getString(R.string.action_photo));
+        recognitionItem.setRessourceId(R.drawable.action_photo);
+        recognitionItem.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), RecognitionActivity.class);
+                startActivity(i);
+            }
+        });
+        floatingItems.add(recognitionItem);
         return floatingItems;
     }
 

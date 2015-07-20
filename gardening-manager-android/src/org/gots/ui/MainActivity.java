@@ -857,7 +857,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         displayWeatherFragment();
         displayActionsFragment();
         displayCatalogueFragment();
-        displayRecognitionFragment();
+//        displayRecognitionFragment();
         if (gotsPrefs.isConnectedToServer())
             displayWorkflowFragment();
         if (gotsPrefs.getParrotToken() != null)
@@ -947,12 +947,12 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
             findViewById(R.id.idFragmentTutorial).setVisibility(View.GONE);
     }
 
-    private void displayRecognitionFragment() {
-        LikeThatFragment likeThatFragment = new LikeThatFragment();
-        FragmentTransaction transactionWeather = getSupportFragmentManager().beginTransaction();
-        transactionWeather.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
-        transactionWeather.replace(R.id.idFragmentRecognition, likeThatFragment).commitAllowingStateLoss();
-    }
+//    private void displayRecognitionFragment() {
+//        LikeThatFragment likeThatFragment = new LikeThatFragment();
+//        FragmentTransaction transactionWeather = getSupportFragmentManager().beginTransaction();
+//        transactionWeather.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
+//        transactionWeather.replace(R.id.idFragmentRecognition, likeThatFragment).commitAllowingStateLoss();
+//    }
 
     private void displayIncredibleFragment() {
 
