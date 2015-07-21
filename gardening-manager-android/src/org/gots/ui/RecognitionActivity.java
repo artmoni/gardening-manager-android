@@ -1,23 +1,107 @@
 package org.gots.ui;
 
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.View;
 
+import org.gots.R;
 import org.gots.ui.BaseGotsActivity;
 import org.gots.ui.fragment.LikeThatFragment;
+import org.gots.utils.FileUtilities;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sfleury on 20/07/15.
  */
 public class RecognitionActivity extends BaseGotsActivity {
+    private static final int REQUEST_TAKE_PHOTO = 1;
+    private static final int REQUEST_LOAD_IMAGE = 2;
+    private LikeThatFragment recognitionFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addContentLayout(new LikeThatFragment(),null);
+        setTitleBar(R.string.plant_recognition);
+        recognitionFragment = new LikeThatFragment();
+
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, getCacheDir() + "/_tmp");
+        startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_TAKE_PHOTO || requestCode == REQUEST_LOAD_IMAGE) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+
+            recognitionFragment.setSearchImage(picturePath);
+            addContentLayout(recognitionFragment, null);
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
     protected boolean requireFloatingButton() {
-        return false;
+        return true;
+    }
+
+    @Override
+    protected boolean requireAsyncDataRetrieval() {
+        return true;
+    }
+
+    @Override
+    protected Object retrieveNuxeoData() throws Exception {
+        return "";
+    }
+
+
+
+    @Override
+    protected List<FloatingItem> onCreateFloatingMenu() {
+        List<FloatingItem> floatingItems = new ArrayList<>();
+        FloatingItem floatingItem = new FloatingItem();
+        floatingItem.setTitle(getResources().getString(R.string.action_photo));
+        floatingItem.setRessourceId(R.drawable.action_photo);
+        floatingItem.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, getCacheDir() + "/_tmp");
+                startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
+            }
+        });
+        floatingItems.add(floatingItem);
+
+        FloatingItem libraryItem = new FloatingItem();
+        libraryItem.setTitle(getResources().getString(R.string.action_photo_pick));
+        libraryItem.setRessourceId(R.drawable.ic_flower_library);
+        libraryItem.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, REQUEST_LOAD_IMAGE);
+            }
+        });
+        floatingItems.add(libraryItem);
+        return floatingItems;
     }
 }

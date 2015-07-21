@@ -24,9 +24,9 @@ public class NuxeoUtils {
     private static final String TAG = NuxeoUtils.class.getSimpleName();
 
     public interface OnBlobUpload {
-        void onUploadSuccess();
+        void onUploadSuccess(Serializable data);
 
-        void onUploadError();
+        void onUploadError(String message);
     }
 
     public static void attachBlobToDocument(Session session, Document document, PropertyMap blobProp) {
@@ -78,14 +78,14 @@ public class NuxeoUtils {
             public void onSuccess(String executionId, Serializable data) {
                 NuxeoUtils.attachBlobToDocument(session, document, blobProp);
                 if (callBack!=null)
-                    callBack.onUploadSuccess();
+                    callBack.onUploadSuccess(data);
                 Log.i(TAG, "success");
             }
 
             @Override
             public void onError(String executionId, Throwable e) {
                 if (callBack!=null)
-                    callBack.onUploadError();
+                    callBack.onUploadError(e.getMessage());
                 Log.i(TAG, "errdroior");
 
             }

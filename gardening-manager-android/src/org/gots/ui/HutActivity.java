@@ -152,8 +152,8 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
         floatingItems.add(floatingItem);
 
         FloatingItem recognitionItem = new FloatingItem();
-        recognitionItem.setTitle(getResources().getString(R.string.action_photo));
-        recognitionItem.setRessourceId(R.drawable.action_photo);
+        recognitionItem.setTitle(getResources().getString(R.string.plant_recognition));
+        recognitionItem.setRessourceId(R.drawable.ic_flower_search);
         recognitionItem.setOnClickListener(new View.OnClickListener() {
 
             @Override

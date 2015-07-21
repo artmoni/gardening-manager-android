@@ -53,19 +53,19 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/imageViewPhoto" />
+        android:layout_below="@+id/textViewProgress" />
 
 
-    <com.getbase.floatingactionbutton.FloatingActionButton
-        android:id="@+id/buttonActions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        app:fab_size="normal"
-        fab:fab_colorNormal="@color/action_warning_color"
-        fab:fab_colorPressed="@color/action_error_color"
-        fab:fab_icon="@drawable/action_photo" />
+    <!--<com.getbase.floatingactionbutton.FloatingActionButton-->
+        <!--android:id="@+id/buttonActions"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--app:fab_size="normal"-->
+        <!--fab:fab_colorNormal="@color/action_warning_color"-->
+        <!--fab:fab_colorPressed="@color/action_error_color"-->
+        <!--fab:fab_icon="@drawable/action_photo" />-->
 
     <TextView
         android:id="@+id/textViewProgress"
@@ -84,6 +84,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/imageViewPhoto"
-        android:src="@drawable/no_picture" />
+        android:src="@drawable/no_picture"
+        android:visibility="gone" />
 
 </RelativeLayout>

@@ -52,6 +52,7 @@
     <string name="action.delete.seed">You are deleting a plant</string>
     <string name="action.delete">Delete</string>
     <string name="action.photo">Take a picture</string>
+    <string name="action.photo.pick">Pick a picture</string>
     <string name="action.download">Download</string>
     <string name="menu.edit">Modify</string>
     <string name="menu.configure">Configure</string>
@@ -215,7 +216,8 @@
     <string name="sensor.fertilizer.too.low">Not enough fertilizer</string>
     <string name="sensor.fertilizer.too.high">Too many fertilizer</string>
     <string name="sensor.fertilizer.good">Fertilizer quantity is correct</string>
-    <string name="plant_recognition">Plant recognition</string>
+    <string name="plant.recognition">Plants recognition</string>
+    <string name="plant.recognition.progress">Recognition in progress...</string>
 
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">

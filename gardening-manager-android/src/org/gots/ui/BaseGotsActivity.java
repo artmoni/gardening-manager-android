@@ -250,7 +250,11 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         if (gotsPurchase.isPremium()) {
             GoogleAnalyticsTracker.getInstance().setCustomVar(2, "Member Type", "Premium", 1);
         } else
-            GoogleAnalyticsTracker.getInstance().setCustomVar(2, "Member Type", "Guest", 1);
+            GoogleAnalyticsTracker.getInstance().setCustomVar(2, "Member Type", "Free", 1);
+
+        if (gotsPurchase.getFeatureParrot()) {
+            GoogleAnalyticsTracker.getInstance().setCustomVar(2, "Member Type", "Parrot", 1);
+        }
 
         if (gotsPrefs.isConnectedToServer()) {
             GoogleAnalyticsTracker.getInstance().setCustomVar(2, "Member Connected", "Connected", 1);
