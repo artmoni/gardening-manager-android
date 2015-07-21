@@ -8,11 +8,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class TutorialFragment extends BaseNuxeoFragment {
+public class TutorialFragment extends BaseGotsFragment{
 
     private int mCurrentTutorialRessource;
 
     public TutorialFragment() {
+    }
+
+    @Override
+    public void update() {
+        requireAsyncDataRetrieval();
     }
 
     public TutorialFragment(int currentRessource) {
