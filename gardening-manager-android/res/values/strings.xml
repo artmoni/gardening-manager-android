@@ -175,7 +175,7 @@
     <string name="inapp.rating.descrition">If you enjoy using _APP_TITLE_, please take a moment to rate it. Thanks for your support!</string>
     <string name="inapp.purchase.noaccount">You need a Google account to buy features</string>
     <string name="inapp.purchase.buy">Buy</string>
-    <string name="inapp.purchase.title">Additional features</string>
+    <string name="inapp.purchase.title">Got further</string>
     <string name="tutorial.title">Discover</string>
     <string name="tutorial.a.title">Geolocalize my garden</string>
     <string name="tutorial.a.description">keep weather history and grow with the moon</string>
@@ -217,7 +217,10 @@
     <string name="sensor.fertilizer.too.high">Too many fertilizer</string>
     <string name="sensor.fertilizer.good">Fertilizer quantity is correct</string>
     <string name="plant.recognition">Plants recognition</string>
+    <string name="plant.recognition.description">Pick a plant, take a picture and discover immediately what it is!</string>
+
     <string name="plant.recognition.progress">Recognition in progress...</string>
+    <string name="plant.recognition.availability">Available requests</string>
 
 
     <!-- Nav Drawer Menu Items -->

@@ -52,7 +52,6 @@ import java.util.Map;
  */
 public class RecognitionFragment extends BaseGotsFragment implements JustVisualAdapter.OnImageClick {
 
-    //    private FloatingActionButton buttonPhoto;
     private ImageView imageView;
     private String TAG = RecognitionFragment.class.getSimpleName();
     private ListView listView;
@@ -62,7 +61,7 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
     private ImageView imageCompare;
     private OnRecognitionFinished mCallback;
 
-    public interface OnRecognitionFinished{
+    public interface OnRecognitionFinished {
         void onRecognitionSucceed();
     }
 
@@ -79,7 +78,6 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.recognition, null);
-//        buttonPhoto = (FloatingActionButton) v.findViewById(R.id.buttonActions);
         imageView = (ImageView) v.findViewById(R.id.imageViewPhoto);
         listView = (ListView) v.findViewById(R.id.listViewPhoto);
         progressText = (TextView) v.findViewById(R.id.textViewProgress);
@@ -89,19 +87,9 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-//        buttonPhoto.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, getActivity().getCacheDir() + "/_tmp");
-//                startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
-//            }
-//        });
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (imageUrl != null)
-//                    processJustVisual(imageUrl);
                 if (imageResultHeight == 0) {
                     imageResultHeight = view.getHeight();
                     view.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
@@ -131,7 +119,7 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
             @Override
             protected void onPreExecute() {
                 progressText.setVisibility(View.VISIBLE);
-                progressText.setText(getResources().getString(R.string.plant_recognition));
+                progressText.setText(getResources().getString(R.string.plant_recognition_progress));
                 super.onPreExecute();
             }
 
@@ -161,12 +149,18 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
                         }
                     });
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Log.w(TAG, e.getMessage());
+                    return e.getMessage();
                 }
                 return null;
             }
 
-
+            @Override
+            protected void onPostExecute(String errormessage) {
+                if (errormessage != null)
+                    progressText.setText(errormessage);
+                super.onPostExecute(errormessage);
+            }
         }.execute();
     }
 

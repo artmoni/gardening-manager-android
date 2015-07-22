@@ -173,7 +173,7 @@
   <string name="inapp.rating.descrition">Si vous appréciez _APP_TITLE_, merci de prendre un moment pour noter l\'application. Merci de votre soutien!</string>
   <string name="inapp.purchase.noaccount">Un compte Google est nécessaire pour l\'achat de fonctionnalités</string>
   <string name="inapp.purchase.buy">Acheter</string>
-  <string name="inapp.purchase.title">Fonctionnalités supplémentaires</string>
+  <string name="inapp.purchase.title">Aller plus loin</string>
   <string name="tutorial.title">Découvrir</string>
   <string name="tutorial.a.title">Geolocaliser mon jardin </string>
   <string name="tutorial.a.description">Conservez l’historique météo et cultivez avec la lune</string>
@@ -212,7 +212,7 @@
   <string name="sensor.fertilizer.too.low">Pas assez d\'engrais</string>
   <string name="sensor.fertilizer.too.high">Trop d\'engrais</string>
   <string name="sensor.fertilizer.good">Quantité d\'engrais est correcte</string>
-  <string name="plant_recognition">Identification visuelle</string>
+  <string name="plant.recognition">Identification visuelle</string>
   <string-array name="nav_drawer_items">
     <item>@string/dashboard.hut.name</item>
     <item>@string/dashboard.allotments.name</item>

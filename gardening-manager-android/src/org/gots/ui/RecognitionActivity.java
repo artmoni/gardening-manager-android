@@ -5,9 +5,12 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 
 import org.gots.R;
+import org.gots.inapp.GotsBillingDialog;
 import org.gots.inapp.GotsPurchaseItem;
 import org.gots.ui.fragment.RecognitionFragment;
 import org.gots.ui.fragment.RecognitionMainFragment;
@@ -37,7 +40,7 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     }
 
     private void SearchByPicture() {
-        if (gotsPurchaseItem.getFeatureRecognitionCounter() > 0){
+        if (gotsPurchaseItem.getFeatureRecognitionCounter() > 0) {
             Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, getCacheDir() + "/_tmp");
             startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
@@ -83,30 +86,47 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     @Override
     protected List<FloatingItem> onCreateFloatingMenu() {
         List<FloatingItem> floatingItems = new ArrayList<>();
-        FloatingItem floatingItem = new FloatingItem();
-        floatingItem.setTitle(getResources().getString(R.string.action_photo));
-        floatingItem.setRessourceId(R.drawable.action_photo);
-        floatingItem.setOnClickListener(new View.OnClickListener() {
+        if (gotsPurchaseItem.getFeatureRecognitionCounter() > 0) {
+            FloatingItem floatingItem = new FloatingItem();
+            floatingItem.setTitle(getResources().getString(R.string.action_photo));
+            floatingItem.setRessourceId(R.drawable.action_photo);
+            floatingItem.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                SearchByPicture();
-            }
-        });
-        floatingItems.add(floatingItem);
+                @Override
+                public void onClick(View v) {
+                    SearchByPicture();
+                }
+            });
+            floatingItems.add(floatingItem);
 
-        FloatingItem libraryItem = new FloatingItem();
-        libraryItem.setTitle(getResources().getString(R.string.action_photo_pick));
-        libraryItem.setRessourceId(R.drawable.ic_flower_library);
-        libraryItem.setOnClickListener(new View.OnClickListener() {
+            FloatingItem libraryItem = new FloatingItem();
+            libraryItem.setTitle(getResources().getString(R.string.action_photo_pick));
+            libraryItem.setRessourceId(R.drawable.ic_flower_library);
+            libraryItem.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i, REQUEST_LOAD_IMAGE);
-            }
-        });
-        floatingItems.add(libraryItem);
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(i, REQUEST_LOAD_IMAGE);
+                }
+            });
+            floatingItems.add(libraryItem);
+        } else {
+            FloatingItem floatingItem = new FloatingItem();
+            floatingItem.setTitle(getResources().getString(R.string.inapp_purchase_buy));
+            floatingItem.setRessourceId(R.drawable.action_buy_online);
+            floatingItem.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    FragmentManager fm = getSupportFragmentManager();
+                    GotsBillingDialog editNameDialog = new GotsBillingDialog(GotsPurchaseItem.SKU_FEATURE_RECOGNITION_50);
+                    editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+                    editNameDialog.show(fm, "fragment_edit_name");
+                }
+            });
+            floatingItems.add(floatingItem);
+        }
         return floatingItems;
     }
 

@@ -144,6 +144,18 @@
         <item name="android:textColor">@color/text_color_dark</item>
     </style>
 
+    <style name="buttonPurchase" >
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:padding">2dp</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:textColor">@color/green_dark</item>
+        <item name="android:textStyle">bold</item>
+
+
+    </style>
+
     <style name="buttonGreenDashboard" parent="button">
         <item name="android:background">@drawable/button_green_selector</item>
         <item name="android:padding">2dp</item>
@@ -273,7 +285,8 @@
     <style name="CustomDialogTitle" parent="android:style/Theme.Dialog">
         <item name="android:background">@color/text_color_light</item>
         <item name="android:textColor">@color/green_dark</item>
-        <item name="android:textAllCaps">true</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">20dp</item>
         <item name="android:layout_marginLeft">0dp</item>
         <item name="android:layout_marginRight">0dp</item>
     </style>
@@ -284,7 +297,8 @@
         <item name="android:actionBarTabStyle">@style/Widget.Styled.TabBar</item>
         <item name="android:divider">@drawable/tab_divider</item>
         <item name="android:dropDownItemStyle">@style/Widget.DropDownItemLight</item>
-        <item name="android:autoCompleteTextViewStyle">@style/Widget.AutoCompleteTextViewLight</item>
+        <item name="android:autoCompleteTextViewStyle">@style/Widget.AutoCompleteTextViewLight
+        </item>
         <item name="android:spinnerDropDownItemStyle">@style/DropDownItem</item>
         <item name="spinnerDropDownItemStyle">@style/DropDownItem</item>
         <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
@@ -296,7 +310,9 @@
     </style>
 
     <style name="SpinnerItem" parent="Widget.AppCompat.DropDownItem.Spinner">
-        <item name="android:textAppearance">@style/Custom.TextAppearance.Sherlock.Widget.TextView.SpinnerItem</item>
+        <item name="android:textAppearance">
+            @style/Custom.TextAppearance.Sherlock.Widget.TextView.SpinnerItem
+        </item>
         <item name="android:textStyle">bold</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:padding">2dp</item>
@@ -306,7 +322,9 @@
     </style>
 
     <style name="SpinnerGarden" parent="Widget.AppCompat.DropDownItem.Spinner">
-        <item name="android:textAppearance">@style/Custom.TextAppearance.Sherlock.Widget.TextView.SpinnerItem</item>
+        <item name="android:textAppearance">
+            @style/Custom.TextAppearance.Sherlock.Widget.TextView.SpinnerItem
+        </item>
         <item name="android:textStyle">bold</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:padding">2dp</item>
@@ -329,7 +347,9 @@
     <style name="DropDownItem" parent="Widget.AppCompat.DropDownItem.Spinner">
         <item name="android:background">@color/text_color_light</item>
         <item name="background">@color/text_color_light</item>
-        <item name="android:textAppearance">@style/Custom.TextAppearance.Sherlock.Widget.TextView.DropDownItem</item>
+        <item name="android:textAppearance">
+            @style/Custom.TextAppearance.Sherlock.Widget.TextView.DropDownItem
+        </item>
         <item name="android:padding">8dp</item>
         <item name="android:paddingRight">8dp</item>
     </style>
