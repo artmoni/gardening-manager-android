@@ -1,5 +1,6 @@
 package org.gots.inapp;
 
+import java.util.Calendar;
 import java.util.List;
 
 import android.content.Context;
@@ -28,6 +29,12 @@ public class GotsPurchaseItem {
 
     public static String SKU_FEATURE_PARROT = "gots.feature.parrot";
 
+    public static String SKU_FEATURE_RECOGNITION_COUNTER = "gots.feature.recognition.counter";
+
+    public static String SKU_FEATURE_RECOGNITION_COUNTERDAILY = "gots.feature.recognition.counterdaily";
+
+    public static String SKU_FEATURE_RECOGNITION_LASTDAY = "gots.feature.recognition.lastday";
+
     // public static String SKU_FEATURE_PDFHISTORY = SKU_TEST_PURCHASE;
 
     private SharedPreferences prefs;
@@ -54,6 +61,12 @@ public class GotsPurchaseItem {
     public void setPremium(boolean hasPurchase) {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean(SKU_PREMIUM, hasPurchase);
+        editor.commit();
+    }
+
+    private void setFeatureRecognitionCounter(int nbRecognitionAllowed) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(SKU_FEATURE_RECOGNITION_COUNTER, nbRecognitionAllowed);
         editor.commit();
     }
 
@@ -92,5 +105,37 @@ public class GotsPurchaseItem {
 
     public boolean getFeatureParrot() {
         return prefs.getBoolean(SKU_FEATURE_PARROT, false);
+    }
+
+    public int getFeatureRecognitionCounter() {
+        Calendar cal = Calendar.getInstance();
+
+        int lastDay = prefs.getInt(SKU_FEATURE_RECOGNITION_LASTDAY, cal.get(Calendar.DAY_OF_YEAR));
+        int counter = prefs.getInt(SKU_FEATURE_RECOGNITION_COUNTERDAILY, getFeatureRecognitionMaxCounter());
+        if (lastDay != cal.get(Calendar.DAY_OF_YEAR) && counter < 0){
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putInt(SKU_FEATURE_RECOGNITION_COUNTERDAILY,  isPremium() ? 10 : 3);
+            editor.commit();
+            setFeatureRecognitionCounter(0);
+        }
+        return prefs.getInt(SKU_FEATURE_RECOGNITION_COUNTER, 0) + getFeatureRecognitionDailyCounter();
+    }
+
+    public int getFeatureRecognitionMaxCounter() {
+        return prefs.getInt(SKU_FEATURE_RECOGNITION_COUNTER, 0) + (isPremium() ? 10 : 3);
+    }
+
+    public int getFeatureRecognitionDailyCounter() {
+        return prefs.getInt(SKU_FEATURE_RECOGNITION_COUNTERDAILY, (isPremium() ? 10 : 3));
+    }
+
+    public void decrementRecognitionDailyCounter() {
+        if (getFeatureRecognitionDailyCounter() == 0)
+            setFeatureRecognitionCounter(getFeatureRecognitionCounter() - 1);
+        else {
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putInt(SKU_FEATURE_RECOGNITION_COUNTERDAILY, getFeatureRecognitionDailyCounter() - 1);
+            editor.commit();
+        }
     }
 }

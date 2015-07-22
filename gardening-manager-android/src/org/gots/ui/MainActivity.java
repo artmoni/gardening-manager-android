@@ -39,7 +39,6 @@ import org.gots.ui.fragment.ActionsResumeFragment;
 import org.gots.ui.fragment.ActionsResumeFragment.OnActionsClickListener;
 import org.gots.ui.fragment.CatalogResumeFragment;
 import org.gots.ui.fragment.IncredibleResumeFragment;
-import org.gots.ui.fragment.LikeThatFragment;
 import org.gots.ui.fragment.LoginDialogFragment;
 import org.gots.ui.fragment.TutorialResumeFragment;
 import org.gots.ui.fragment.TutorialResumeFragment.OnTutorialFinishedListener;
@@ -948,7 +947,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
     }
 
 //    private void displayRecognitionFragment() {
-//        LikeThatFragment likeThatFragment = new LikeThatFragment();
+//        RecognitionFragment likeThatFragment = new RecognitionFragment();
 //        FragmentTransaction transactionWeather = getSupportFragmentManager().beginTransaction();
 //        transactionWeather.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
 //        transactionWeather.replace(R.id.idFragmentRecognition, likeThatFragment).commitAllowingStateLoss();
@@ -1058,7 +1057,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
 //        floatingItem.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
-//                LikeThatFragment likeThatFragment = new LikeThatFragment();
+//                RecognitionFragment likeThatFragment = new RecognitionFragment();
 //                FragmentTransaction transactionWeather = getSupportFragmentManager().beginTransaction();
 //                transactionWeather.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
 //                transactionWeather.replace(R.id.idFragmentWeather, likeThatFragment).commitAllowingStateLoss();

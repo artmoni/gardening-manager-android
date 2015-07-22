@@ -1,5 +1,6 @@
 package org.gots.ui.fragment;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -49,16 +50,31 @@ import java.util.Map;
 /**
  * Created by sfleury on 13/07/15.
  */
-public class LikeThatFragment extends BaseGotsFragment implements JustVisualAdapter.OnImageClick {
+public class RecognitionFragment extends BaseGotsFragment implements JustVisualAdapter.OnImageClick {
 
     //    private FloatingActionButton buttonPhoto;
     private ImageView imageView;
-    private String TAG = LikeThatFragment.class.getSimpleName();
+    private String TAG = RecognitionFragment.class.getSimpleName();
     private ListView listView;
     private String imageUrl;
     private TextView progressText;
     private int imageResultHeight = 0;
     private ImageView imageCompare;
+    private OnRecognitionFinished mCallback;
+
+    public interface OnRecognitionFinished{
+        void onRecognitionSucceed();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        try {
+            mCallback = (OnRecognitionFinished) activity;
+        } catch (ClassCastException castException) {
+            throw new ClassCastException(activity.toString() + " must implement OnRecognitionFinished");
+        }
+        super.onAttach(activity);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -192,9 +208,10 @@ public class LikeThatFragment extends BaseGotsFragment implements JustVisualAdap
             protected void onPostExecute(Map<String, List<JustVisualResult>> results) {
                 if (isAdded()) {
                     JustVisualAdapter arrayAdapter = new JustVisualAdapter(getActivity(), results);
-                    arrayAdapter.setOnImageClick(LikeThatFragment.this);
+                    arrayAdapter.setOnImageClick(RecognitionFragment.this);
                     listView.setAdapter(arrayAdapter);
                     progressText.setVisibility(View.GONE);
+                    mCallback.onRecognitionSucceed();
                 }
                 super.onPostExecute(results);
             }
@@ -255,12 +272,12 @@ public class LikeThatFragment extends BaseGotsFragment implements JustVisualAdap
 
         FileOutputStream out = null;
         try {
-            String reducePicture = picturePath + "-800x600";
-            out = new FileOutputStream(reducePicture);
+            String reducePicturePath = picturePath + "-400x300";
+            out = new FileOutputStream(reducePicturePath);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
             // PNG is a lossless format, the compression factor (100) is ignored
             imageView.setImageBitmap(bitmap);
-            sendServerAsync(reducePicture);
+            sendServerAsync(reducePicturePath);
 
         } catch (Exception e) {
             Log.e(TAG, "setSearchImage " + e.getMessage());

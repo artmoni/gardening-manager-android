@@ -212,7 +212,7 @@
   <string name="sensor.fertilizer.too.low">Pas assez d\'engrais</string>
   <string name="sensor.fertilizer.too.high">Trop d\'engrais</string>
   <string name="sensor.fertilizer.good">Quantité d\'engrais est correcte</string>
-  <string name="plant_recognition">Identification visuel</string>
+  <string name="plant_recognition">Identification visuelle</string>
   <string-array name="nav_drawer_items">
     <item>@string/dashboard.hut.name</item>
     <item>@string/dashboard.allotments.name</item>

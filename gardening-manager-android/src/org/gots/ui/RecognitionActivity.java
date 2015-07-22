@@ -2,56 +2,64 @@ package org.gots.ui;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 
 import org.gots.R;
-import org.gots.ui.BaseGotsActivity;
-import org.gots.ui.fragment.LikeThatFragment;
-import org.gots.utils.FileUtilities;
+import org.gots.inapp.GotsPurchaseItem;
+import org.gots.ui.fragment.RecognitionFragment;
+import org.gots.ui.fragment.RecognitionMainFragment;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by sfleury on 20/07/15.
  */
-public class RecognitionActivity extends BaseGotsActivity {
+public class RecognitionActivity extends BaseGotsActivity implements RecognitionFragment.OnRecognitionFinished {
     private static final int REQUEST_TAKE_PHOTO = 1;
     private static final int REQUEST_LOAD_IMAGE = 2;
-    private LikeThatFragment recognitionFragment;
+    private RecognitionFragment recognitionFragment;
+    private GotsPurchaseItem gotsPurchaseItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitleBar(R.string.plant_recognition);
-        recognitionFragment = new LikeThatFragment();
+        recognitionFragment = new RecognitionFragment();
+        gotsPurchaseItem = new GotsPurchaseItem(getApplicationContext());
 
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, getCacheDir() + "/_tmp");
-        startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
+        addMainLayout(new RecognitionMainFragment(), null);
+
+        SearchByPicture();
+    }
+
+    private void SearchByPicture() {
+        if (gotsPurchaseItem.getFeatureRecognitionCounter() > 0){
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, getCacheDir() + "/_tmp");
+            startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
+        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_TAKE_PHOTO || requestCode == REQUEST_LOAD_IMAGE) {
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+        if (data != null)
+            if (requestCode == REQUEST_TAKE_PHOTO || requestCode == REQUEST_LOAD_IMAGE) {
+                Uri selectedImage = data.getData();
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
-            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-            cursor.moveToFirst();
+                Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                cursor.moveToFirst();
 
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                String picturePath = cursor.getString(columnIndex);
 
-            recognitionFragment.setSearchImage(picturePath);
-            addContentLayout(recognitionFragment, null);
-        }
+                recognitionFragment.setSearchImage(picturePath);
+                addContentLayout(recognitionFragment, null);
+            }
 
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -72,7 +80,6 @@ public class RecognitionActivity extends BaseGotsActivity {
     }
 
 
-
     @Override
     protected List<FloatingItem> onCreateFloatingMenu() {
         List<FloatingItem> floatingItems = new ArrayList<>();
@@ -83,9 +90,7 @@ public class RecognitionActivity extends BaseGotsActivity {
 
             @Override
             public void onClick(View v) {
-                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, getCacheDir() + "/_tmp");
-                startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
+                SearchByPicture();
             }
         });
         floatingItems.add(floatingItem);
@@ -103,5 +108,10 @@ public class RecognitionActivity extends BaseGotsActivity {
         });
         floatingItems.add(libraryItem);
         return floatingItems;
+    }
+
+    @Override
+    public void onRecognitionSucceed() {
+        gotsPurchaseItem.decrementRecognitionDailyCounter();
     }
 }
