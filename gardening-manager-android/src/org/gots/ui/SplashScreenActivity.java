@@ -1,13 +1,15 @@
-/*******************************ù**************************************************
+/**
+ * ****************************ù**************************************************
  * Copyright (c) 2012 sfleury.ù
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- *
+ * <p>
  * Contributors:
- *     sfleury - initial API and implementation
- ******************************************************************************/
+ * sfleury - initial API and implementation
+ * ****************************************************************************
+ */
 package org.gots.ui;
 
 import java.util.ArrayList;
@@ -32,6 +34,7 @@ import android.widget.TextView;
 import com.android.vending.billing.util.IabHelper;
 import com.android.vending.billing.util.IabResult;
 import com.android.vending.billing.util.Inventory;
+import com.android.vending.billing.util.Purchase;
 
 public class SplashScreenActivity extends BaseGotsActivity {
 
@@ -90,6 +93,8 @@ public class SplashScreenActivity extends BaseGotsActivity {
         moreSkus.add(GotsPurchaseItem.SKU_PREMIUM);
         moreSkus.add(GotsPurchaseItem.SKU_FEATURE_PDFHISTORY);
         moreSkus.add(GotsPurchaseItem.SKU_FEATURE_PARROT);
+        moreSkus.add(GotsPurchaseItem.SKU_FEATURE_RECOGNITION_50);
+
         buyHelper = new IabHelper(getApplicationContext(), gotsPrefs.getPlayStorePubKey());
 
         buyHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
@@ -107,21 +112,25 @@ public class SplashScreenActivity extends BaseGotsActivity {
                                 gotsPurchase.setPremium(inv.hasPurchase(GotsPurchaseItem.SKU_PREMIUM));
                                 gotsPurchase.setFeatureExportPDF(inv.hasPurchase(GotsPurchaseItem.SKU_FEATURE_PDFHISTORY));
                                 gotsPurchase.setFeatureParrot(inv.hasPurchase(GotsPurchaseItem.SKU_FEATURE_PARROT));
+                                if (inv.hasPurchase(GotsPurchaseItem.SKU_FEATURE_RECOGNITION_50)) {
+                                    gotsPurchase.setFeatureRecognitionCounter(gotsPurchase.getFeatureRecognitionCounter() + 50);
+                                    buyHelper.consumeAsync(inv.getPurchase(GotsPurchaseItem.SKU_FEATURE_RECOGNITION_50), new IabHelper.OnConsumeFinishedListener() {
+                                        @Override
+                                        public void onConsumeFinished(Purchase purchase, IabResult result) {
+                                            if (result.isSuccess()) {
+                                                Log.i(TAG, "Consume " + purchase.getSku());
+                                            } else {
+                                                Log.w(TAG, "Error consumming " + purchase.getSku());
+
+                                            }
+                                        }
+                                    });
+                                }
                                 Log.i(TAG, "Successful got inventory!");
 
                             } else {
-                                Log.i(TAG, "Error getting inventory!");
+                                Log.w(TAG, "Error getting inventory!");
                             }
-
-                            // Thread.currentThread();
-                            // try {
-                            // Thread.sleep(3000);
-                            // imageRefresh.clearAnimation();
-                            // startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                            // SplashScreenActivity.this.finish();
-                            // } catch (Exception e) {
-                            // Log.e(TAG, e.getMessage());
-                            // }
                         }
                     });
 
@@ -144,8 +153,6 @@ public class SplashScreenActivity extends BaseGotsActivity {
 
     @Override
     protected boolean requireAsyncDataRetrieval() {
-        // AccountManager accountManager = AccountManager.get(this);
-        // Account[] accounts = accountManager.getAccountsByType("gardening-manager");
         return true;
     }
 

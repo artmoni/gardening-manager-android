@@ -14,10 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.vending.billing.util.IabHelper;
@@ -115,16 +112,16 @@ public class GotsBillingDialog extends DialogFragment {
                     for (HolderSku mSku : mSkus) {
                         SkuDetails detailsFeature = inv.getSkuDetails(mSku.sku);
                         purchase = inv.getPurchase(mSku.sku);
-                        if (purchase!=null)
+                        if (purchase != null)
                             consumePurchase(purchase);
-                        addPurchaseItem(detailsFeature);
+                        addPurchaseItem(detailsFeature, inv.hasPurchase(mSku.sku) || inv.hasPurchase(SKU_PREMIUM));
                     }
                      /*
                      * Display premium purchase information
                      */
                     SkuDetails details = inv.getSkuDetails(SKU_PREMIUM);
                     purchase = inv.getPurchase(SKU_PREMIUM);
-                    addPurchaseItem(details);
+                    addPurchaseItem(details, inv.hasPurchase(SKU_PREMIUM));
 
                 } else {
                     Log.w(TAG, "Error getting inventory!");
@@ -143,7 +140,7 @@ public class GotsBillingDialog extends DialogFragment {
     }
 
 
-    private void addPurchaseItem(final SkuDetails detailsFeature) {
+    private void addPurchaseItem(final SkuDetails detailsFeature, boolean hasPurchase) {
         PurchaseItemLayout purchaseItemLayout = new PurchaseItemLayout(getActivity());
         purchaseItemLayout.setPurchasePrice(detailsFeature.getPrice());
         String title;
@@ -151,35 +148,41 @@ public class GotsBillingDialog extends DialogFragment {
             title = detailsFeature.getTitle().substring(0, detailsFeature.getTitle().indexOf("("));
         } else
             title = detailsFeature.getTitle();
-        purchaseItemLayout.setPurchaseTitle(title);
         purchaseItemLayout.setPurchaseDescription(detailsFeature.getDescription());
         int icon = getActivity().getResources().getIdentifier("org.gots:drawable/" + detailsFeature.getSku().replace(".", "_"), null, null);
         purchaseItemLayout.setPurchaseIcon(icon);
-        purchaseItemLayout.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        purchaseItemLayout.setPurchaseState(hasPurchase);
+        purchaseItemLayout.setPurchaseTitle(hasPurchase ? "" : title);
+        if (!hasPurchase) {
+            purchaseItemLayout.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
 //                if (buyHelper != null)
 //                    buyHelper.flagEndAsync();
-                buyHelper.launchPurchaseFlow(getActivity(), detailsFeature.getSku(), BUY_REQUEST_CODE,
-                        new IabHelper.OnIabPurchaseFinishedListener() {
-                            @Override
-                            public void onIabPurchaseFinished(IabResult result, Purchase info) {
-                                if (result.isSuccess()) {
+                    buyHelper.launchPurchaseFlow(getActivity(), detailsFeature.getSku(), BUY_REQUEST_CODE,
+                            new IabHelper.OnIabPurchaseFinishedListener() {
+                                @Override
+                                public void onIabPurchaseFinished(IabResult result, Purchase info) {
+                                    if (result.isSuccess()) {
 
-                                    Toast.makeText(getActivity(), "Thanks for buying!", Toast.LENGTH_SHORT).show();
-                                    update();
-                                    if (onPurchasedFinishedListener != null)
-                                        onPurchasedFinishedListener.onPurchaseSucceed(purchase);
-                                } else {
-                                    if (onPurchasedFinishedListener != null)
-                                        onPurchasedFinishedListener.onPurchaseFailed(purchase);
+                                        Toast.makeText(getActivity(), "Thanks for buying!", Toast.LENGTH_SHORT).show();
+                                        update();
+                                        if (onPurchasedFinishedListener != null)
+                                            onPurchasedFinishedListener.onPurchaseSucceed(purchase);
+                                    } else {
+                                        if (onPurchasedFinishedListener != null)
+                                            onPurchasedFinishedListener.onPurchaseFailed(purchase);
+                                    }
+                                    getDialog().dismiss();
                                 }
-                                getDialog().dismiss();
-                            }
-                        });
+                            });
 
-            }
-        });
+                }
+            });
+
+        }
+
+
         horizontalScrollView.addView(purchaseItemLayout);
     }
 

@@ -37,13 +37,22 @@ public class PurchaseItemLayout extends RelativeLayout {
 
         titleView.setText(title);
     }
+
     public void setPurchasePrice(String price) {
         TextView priceButton = (TextView) findViewById(R.id.buttonPrice);
         priceButton.setText(price);
     }
+
     public void setPurchaseDescription(String description) {
         TextView titleView = (TextView) findViewById(R.id.textViewPurchaseDescription);
         titleView.setText(description);
     }
 
+    public void setPurchaseState(boolean isPurchase) {
+        ImageView stateView = (ImageView) findViewById(R.id.imageViewPurchaseState);
+        if (isPurchase)
+            stateView.setVisibility(VISIBLE);
+        else
+            stateView.setVisibility(GONE);
+    }
 }

@@ -45,4 +45,13 @@
         android:textColor="@color/white"
         android:textIsSelectable="false"
         android:textSize="8dp" />
+
+    <ImageView
+        android:id="@+id/imageViewPurchaseState"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="2dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_validate" />
 </RelativeLayout>
