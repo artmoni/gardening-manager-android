@@ -284,11 +284,12 @@
 
     <style name="CustomDialogTitle" parent="android:style/Theme.Dialog">
         <item name="android:background">@color/text_color_light</item>
-        <item name="android:textColor">@color/green_dark</item>
+        <item name="android:textColor">@color/text_color_dark</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">20dp</item>
         <item name="android:layout_marginLeft">0dp</item>
         <item name="android:layout_marginRight">0dp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="Theme.Styled" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -307,6 +308,7 @@
         <item name="android:textColor">@color/text_color_dark</item>
         <item name="android:actionModeBackground">@drawable/contextual_bar_top</item>
         <item name="android:actionModeSplitBackground">@drawable/contextual_bar_bottom</item>
+        <item name="android:colorPrimaryDark">@color/text_color_dark</item>
     </style>
 
     <style name="SpinnerItem" parent="Widget.AppCompat.DropDownItem.Spinner">

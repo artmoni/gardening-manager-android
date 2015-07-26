@@ -10,9 +10,10 @@
         android:id="@+id/buttonPrice"
         style="@style/buttonPurchase"
 
-        android:text="Price"
         android:layout_below="@+id/imageViewPurchaseItem"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:text="Price"
+        android:textColor="@color/white" />
 
     <TextView
         android:id="@+id/textViewPurchaseItem"
@@ -20,15 +21,18 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="Item" />
+        android:text="Item"
+
+        android:textColor="@color/white" />
 
     <ImageView
         android:id="@+id/imageViewPurchaseItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/gots_feature_parrot"
+        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:src="@drawable/gots_feature"
+        android:textColor="@color/white" />
 
     <TextView
         android:id="@+id/textViewPurchaseDescription"
@@ -38,6 +42,7 @@
         android:layout_centerHorizontal="true"
         android:enabled="false"
         android:text="Description"
+        android:textColor="@color/white"
         android:textIsSelectable="false"
         android:textSize="8dp" />
 </RelativeLayout>

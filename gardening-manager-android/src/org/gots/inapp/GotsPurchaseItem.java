@@ -66,7 +66,7 @@ public class GotsPurchaseItem {
         editor.commit();
     }
 
-    private void setFeatureRecognitionCounter(int nbRecognitionAllowed) {
+    public void setFeatureRecognitionCounter(int nbRecognitionAllowed) {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(FEATURE_RECOGNITION_COUNTER, nbRecognitionAllowed);
         editor.commit();

@@ -2,7 +2,6 @@ package org.gots.inapp;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -34,6 +33,8 @@ public class PurchaseItemLayout extends RelativeLayout {
 
     public void setPurchaseTitle(String title) {
         TextView titleView = (TextView) findViewById(R.id.textViewPurchaseItem);
+        titleView.setTypeface(Typefaces.get(mContext, "cartoons.ttf"));
+
         titleView.setText(title);
     }
     public void setPurchasePrice(String price) {
@@ -44,4 +45,5 @@ public class PurchaseItemLayout extends RelativeLayout {
         TextView titleView = (TextView) findViewById(R.id.textViewPurchaseDescription);
         titleView.setText(description);
     }
+
 }
