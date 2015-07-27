@@ -18,12 +18,11 @@
         android:id="@+id/gallery1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textViewCatalogDescription"
         android:layout_below="@+id/imageViewTop"
         android:paddingTop="5dp"
         android:spacing="5dp" />
 
-    <TextView
+    <org.gots.ui.view.MyTextView
         android:id="@+id/textViewCatalog"
         style="@style/TitleResumeFragment"
         android:layout_width="wrap_content"

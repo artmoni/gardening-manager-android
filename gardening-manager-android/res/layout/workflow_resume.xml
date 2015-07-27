@@ -15,7 +15,7 @@
         android:scaleType="centerCrop"
         android:src="@drawable/bg_workflow_topa" />
 
-    <TextView
+    <org.gots.ui.view.MyTextView
         android:id="@+id/textViewWorkflowTitle"
         style="@style/TitleResumeFragment"
         android:layout_width="wrap_content"

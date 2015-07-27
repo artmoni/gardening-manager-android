@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
     android:background="@color/brown_light"
-    android:padding="5dp" >
+    android:padding="5dp">
 
     <ImageView
         android:id="@+id/imageViewTop"
@@ -15,15 +15,14 @@
         android:scaleType="centerCrop"
         android:src="@drawable/bg_weather_top" />
 
-    <TextView
+    <org.gots.ui.view.MyTextView
         android:id="@+id/textViewWeather"
         style="@style/TitleResumeFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="@string/dashboard.weather.name"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:text="@string/dashboard.weather.name" />
 
     <!--
          <TextView
@@ -46,8 +45,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/imageViewTop"
         android:layout_marginTop="10dp"
-        android:orientation="horizontal" >
-    </LinearLayout>
+        android:orientation="horizontal"></LinearLayout>
 
     <TextView
         android:id="@+id/textViewWeatherError"
@@ -58,8 +56,7 @@
         android:layout_marginTop="10dp"
         android:orientation="horizontal"
         android:text="@string/weather.citynotfound"
-        android:visibility="gone" >
-    </TextView>
+        android:visibility="gone"></TextView>
 
     <Button
         android:id="@+id/buttonWeatherLocality"
@@ -75,7 +72,6 @@
         android:layout_height="200dp"
         android:layout_alignLeft="@+id/WeatherWidget"
         android:layout_below="@+id/WeatherWidget"
-        android:visibility="gone" >
-    </com.github.mikephil.charting.charts.LineChart>
+        android:visibility="gone"></com.github.mikephil.charting.charts.LineChart>
 
 </RelativeLayout>

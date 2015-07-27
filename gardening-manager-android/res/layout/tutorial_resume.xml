@@ -25,7 +25,7 @@
         android:orientation="horizontal" >
     </LinearLayout>
 
-    <TextView
+    <org.gots.ui.view.MyTextView
         android:id="@+id/textViewTutorial"
         style="@style/TitleResumeFragment"
         android:layout_alignParentLeft="true"

@@ -14,7 +14,7 @@
         android:scaleType="centerCrop"
         android:src="@drawable/bg_profile_top" />
 
-    <TextView
+    <org.gots.ui.view.MyTextView
         android:id="@+id/textViewGardenName"
         style="@style/TitleResumeFragment"
         android:layout_width="wrap_content"

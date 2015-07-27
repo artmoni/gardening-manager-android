@@ -16,7 +16,7 @@
         android:scaleType="centerCrop"
         android:src="@drawable/bg_action_top" />
 
-    <TextView
+    <org.gots.ui.view.MyTextView
         android:id="@+id/textViewAction"
         style="@style/TitleResumeFragment"
         android:layout_alignLeft="@+id/imageViewTop"
