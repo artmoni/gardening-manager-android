@@ -21,9 +21,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:gravity="center"
         android:text="Item"
-
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:textSize="14dp" />
 
     <ImageView
         android:id="@+id/imageViewPurchaseItem"
@@ -41,6 +42,7 @@
         android:layout_below="@+id/textViewPurchaseItem"
         android:layout_centerHorizontal="true"
         android:enabled="false"
+        android:gravity="center"
         android:text="Description"
         android:textColor="@color/white"
         android:textIsSelectable="false"

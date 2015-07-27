@@ -14,7 +14,7 @@
         android:layout_above="@+id/textView6"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="40dp"
-        android:src="@drawable/ic_flower_search" />
+        android:src="@drawable/ic_menu_recognition" />
 
     <TextView
         android:id="@+id/textView6"
@@ -22,9 +22,10 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="@string/plant.recognition.description"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
+        android:gravity="center"
+        android:text="@string/plant.recognition.description"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <HorizontalScrollView
@@ -51,9 +52,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/textView7"
+        android:layout_marginLeft="10dp"
         android:layout_toEndOf="@+id/textView7"
         android:layout_toRightOf="@+id/textView7"
-        android:layout_marginLeft="10dp"
         android:text="0"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 

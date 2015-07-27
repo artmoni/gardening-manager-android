@@ -33,13 +33,15 @@ public class PurchaseItemLayout extends RelativeLayout {
 
     public void setPurchaseTitle(String title) {
         TextView titleView = (TextView) findViewById(R.id.textViewPurchaseItem);
-        titleView.setTypeface(Typefaces.get(mContext, "cartoons.ttf"));
+        titleView.setTypeface(Typefaces.get(mContext, "alpha_echo.ttf"));
 
         titleView.setText(title);
     }
 
     public void setPurchasePrice(String price) {
         TextView priceButton = (TextView) findViewById(R.id.buttonPrice);
+        priceButton.setTypeface(Typefaces.get(mContext, "alpha_echo.ttf"));
+
         priceButton.setText(price);
     }
 
