@@ -22,6 +22,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:orientation="vertical"
         android:background="@drawable/list_selector" >
     </LinearLayout>
 
@@ -39,8 +40,8 @@
 
     <ImageView
         android:id="@+id/icon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/linearLayout1"

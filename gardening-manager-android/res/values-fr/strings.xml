@@ -213,20 +213,5 @@
   <string name="sensor.fertilizer.too.high">Trop d\'engrais</string>
   <string name="sensor.fertilizer.good">Quantité d\'engrais est correcte</string>
   <string name="plant.recognition">Identification visuelle</string>
-  <string-array name="nav_drawer_items">
-    <item>@string/dashboard.hut.name</item>
-    <item>@string/dashboard.allotments.name</item>
-    <item>@string/dashboard.actions.name</item>
-    <item>@string/dashboard.profile.name</item>
-    <item>@string/dashboard.sensor.name</item>
-    <item>@string/plant.recognition</item>
-  </string-array>
-  <array name="nav_drawer_icons">
-    <item>@drawable/bt_dashboard_hut</item>
-    <item>@drawable/bt_dashboard_allotment</item>
-    <item>@drawable/bt_dashboard_action</item>
-    <item>@drawable/bt_dashboard_profile</item>
-    <item>@drawable/bt_dashboard_sensor</item>
-    <item>@drawable/ic_flower_search</item>
-  </array>
+
 </resources>

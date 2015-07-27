@@ -236,12 +236,12 @@
     <!-- Nav Drawer List Item Icons -->
     <!-- Keep them in order as the titles are in -->
     <array name="nav_drawer_icons">
-        <item>@drawable/bt_dashboard_hut</item>
-        <item>@drawable/bt_dashboard_allotment</item>
-        <item>@drawable/bt_dashboard_action</item>
-        <item>@drawable/bt_dashboard_profile</item>
-        <item>@drawable/bt_dashboard_sensor</item>
-        <item>@drawable/ic_flower_search</item>
+        <item>@drawable/ic_menu_plant</item>
+        <item>@drawable/ic_menu_allotment</item>
+        <item>@drawable/ic_menu_todo</item>
+        <item>@drawable/ic_menu_profile</item>
+        <item>@drawable/gots_feature_parrot</item>
+        <item>@drawable/ic_menu_recognition</item>
     </array>
 
 </resources>
