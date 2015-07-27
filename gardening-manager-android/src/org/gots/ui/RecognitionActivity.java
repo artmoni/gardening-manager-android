@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.android.vending.billing.util.Purchase;
@@ -15,6 +17,7 @@ import org.gots.R;
 import org.gots.inapp.GotsBillingDialog;
 import org.gots.inapp.GotsPurchaseItem;
 import org.gots.inapp.OnPurchaseFinished;
+import org.gots.ui.fragment.LoginDialogFragment;
 import org.gots.ui.fragment.RecognitionFragment;
 import org.gots.ui.fragment.RecognitionMainFragment;
 
@@ -114,44 +117,66 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
                 }
             });
             floatingItems.add(libraryItem);
-        }
-        FloatingItem floatingItem = new FloatingItem();
-        floatingItem.setTitle(getResources().getString(R.string.inapp_purchase_buy));
-        floatingItem.setRessourceId(R.drawable.action_buy_online);
-        floatingItem.setOnClickListener(new View.OnClickListener() {
+        } else {
+            FloatingItem floatingItem = new FloatingItem();
+            floatingItem.setTitle(getResources().getString(R.string.inapp_purchase_buy));
+            floatingItem.setRessourceId(R.drawable.action_buy_online);
+            floatingItem.setOnClickListener(new View.OnClickListener() {
 
+                @Override
+                public void onClick(View v) {
+                    displayPremiumFragment();
+                }
+            });
+            floatingItems.add(floatingItem);
+        }
+        return floatingItems;
+    }
+
+    public void displayPremiumFragment() {
+        FragmentManager fm = getSupportFragmentManager();
+        final GotsBillingDialog editNameDialog = new GotsBillingDialog(GotsPurchaseItem.SKU_FEATURE_RECOGNITION_50);
+        editNameDialog.addSKUFeature(GotsPurchaseItem.SKU_TEST_PURCHASE, true);
+        editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+        editNameDialog.show(fm, "fragment_edit_name");
+        editNameDialog.setOnPurchasedFinishedListener(new OnPurchaseFinished() {
             @Override
-            public void onClick(View v) {
-                FragmentManager fm = getSupportFragmentManager();
-                final GotsBillingDialog editNameDialog = new GotsBillingDialog(GotsPurchaseItem.SKU_FEATURE_RECOGNITION_50);
-                editNameDialog.addSKUFeature(GotsPurchaseItem.SKU_TEST_PURCHASE, true);
-                editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
-                editNameDialog.show(fm, "fragment_edit_name");
-                editNameDialog.setOnPurchasedFinishedListener(new OnPurchaseFinished() {
-                    @Override
-                    public void onPurchaseFailed(Purchase sku) {
+            public void onPurchaseFailed(Purchase sku) {
 //                            if (sku != null)
 //                                editNameDialog.consumePurchase(sku);
 
-                    }
+            }
 
-                    @Override
-                    public void onPurchaseSucceed(Purchase sku) {
-                        if (GotsPurchaseItem.SKU_TEST_PURCHASE.equals(sku)) {
-                            gotsPurchaseItem.setFeatureRecognitionCounter(gotsPurchaseItem.getFeatureRecognitionCounter() + 50);
-                            editNameDialog.consumePurchase(sku);
-                            runAsyncDataRetrieval();
-                        }
-                    }
-                });
+            @Override
+            public void onPurchaseSucceed(Purchase sku) {
+                if (GotsPurchaseItem.SKU_TEST_PURCHASE.equals(sku)) {
+                    gotsPurchaseItem.setFeatureRecognitionCounter(gotsPurchaseItem.getFeatureRecognitionCounter() + 50);
+                    editNameDialog.consumePurchase(sku);
+                    runAsyncDataRetrieval();
+                }
             }
         });
-        floatingItems.add(floatingItem);
-        return floatingItems;
     }
 
     @Override
     public void onRecognitionSucceed() {
         gotsPurchaseItem.decrementRecognitionDailyCounter();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_recognition, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.premium:
+                displayPremiumFragment();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

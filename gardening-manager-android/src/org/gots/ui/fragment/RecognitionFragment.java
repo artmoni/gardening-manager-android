@@ -28,6 +28,7 @@ import org.gots.justvisual.JustVisualAdapter;
 import org.gots.justvisual.JustVisualResult;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.nuxeo.NuxeoUtils;
+import org.gots.preferences.GotsPreferences;
 import org.gots.utils.FileUtilities;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -114,7 +115,7 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
         return NuxeoManager.getInstance().getNuxeoClient();
     }
 
-    private void sendServerAsync(final String filePath) {
+    private void sendServerAsync(final File imageFile) {
         new AsyncTask<Void, Void, String>() {
             @Override
             protected void onPreExecute() {
@@ -128,14 +129,13 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
                 Session session = getNuxeoClient().getSession();
                 DocumentManager service = session.getAdapter(DocumentManager.class);
                 try {
-                    File f = new File(filePath);
 
                     Document guestDoc = service.getDocument("/default-domain/UserWorkspaces/Guest/justvisual");
-                    Document imageDoc = service.createDocument(guestDoc, "File", f.getName());
+                    Document imageDoc = service.createDocument(guestDoc, "File", imageFile.getName());
                     Log.d(TAG, "new imageDoc " + imageDoc);
                     final String serverImageUrl = "http://my.gardening-manager.com/nuxeo/nxfile/default/" + imageDoc.getId() + "/blobholder:0/";
 
-                    NuxeoUtils.uploadBlob(session, imageDoc, f, new NuxeoUtils.OnBlobUpload() {
+                    NuxeoUtils.uploadBlob(session, imageDoc, imageFile, new NuxeoUtils.OnBlobUpload() {
                         @Override
                         public void onUploadSuccess(Serializable data) {
                             imageUrl = serverImageUrl;
@@ -266,12 +266,13 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
 
         FileOutputStream out = null;
         try {
-            String reducePicturePath = picturePath + "-400x300";
-            out = new FileOutputStream(reducePicturePath);
+            File f = new File(picturePath);
+            File outFile = new File(getActivity().getCacheDir(), f.getName() + "-400x300");
+            out = new FileOutputStream(outFile);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
             // PNG is a lossless format, the compression factor (100) is ignored
             imageView.setImageBitmap(bitmap);
-            sendServerAsync(reducePicturePath);
+            sendServerAsync(outFile);
 
         } catch (Exception e) {
             Log.e(TAG, "setSearchImage " + e.getMessage());

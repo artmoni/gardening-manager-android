@@ -45,9 +45,11 @@ public class RecognitionMainFragment extends BaseGotsFragment {
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
-        GotsPurchaseItem gotsPurchaseItem = new GotsPurchaseItem(getActivity());
-        currentCounterTextView.setText(String.valueOf(gotsPurchaseItem.getFeatureRecognitionCounter()));
-        maxCounterTextView.setText(String.valueOf(gotsPurchaseItem.getFeatureRecognitionMaxCounter()));
+        if (isAdded()){
+            GotsPurchaseItem gotsPurchaseItem = new GotsPurchaseItem(getActivity());
+            currentCounterTextView.setText(String.valueOf(gotsPurchaseItem.getFeatureRecognitionCounter()));
+            maxCounterTextView.setText(String.valueOf(gotsPurchaseItem.getFeatureRecognitionMaxCounter()));
+        }
         super.onNuxeoDataRetrieved(data);
     }
 }
