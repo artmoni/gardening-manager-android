@@ -39,7 +39,7 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
 
         addMainLayout(new RecognitionMainFragment(), null);
 
-        SearchByPicture();
+//        SearchByPicture();
     }
 
     private void SearchByPicture() {
@@ -130,16 +130,16 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
                     editNameDialog.setOnPurchasedFinishedListener(new OnPurchaseFinished() {
                         @Override
                         public void onPurchaseFailed(Purchase sku) {
-                            if (sku != null)
-                                editNameDialog.consumePurchase(sku);
+//                            if (sku != null)
+//                                editNameDialog.consumePurchase(sku);
 
                         }
 
                         @Override
                         public void onPurchaseSucceed(Purchase sku) {
                             if (GotsPurchaseItem.SKU_TEST_PURCHASE.equals(sku)) {
-                                editNameDialog.consumePurchase(sku);
                                 gotsPurchaseItem.setFeatureRecognitionCounter(gotsPurchaseItem.getFeatureRecognitionCounter() + 50);
+                                editNameDialog.consumePurchase(sku);
                                 runAsyncDataRetrieval();
                             }
                         }

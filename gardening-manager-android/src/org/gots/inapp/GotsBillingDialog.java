@@ -112,8 +112,8 @@ public class GotsBillingDialog extends DialogFragment {
                     for (HolderSku mSku : mSkus) {
                         SkuDetails detailsFeature = inv.getSkuDetails(mSku.sku);
                         purchase = inv.getPurchase(mSku.sku);
-                        if (purchase != null)
-                            consumePurchase(purchase);
+//                        if (purchase != null)
+//                            consumePurchase(purchase);
                         addPurchaseItem(detailsFeature, inv.hasPurchase(mSku.sku) || inv.hasPurchase(SKU_PREMIUM));
                     }
                      /*
@@ -142,7 +142,7 @@ public class GotsBillingDialog extends DialogFragment {
 
     private void addPurchaseItem(final SkuDetails detailsFeature, boolean hasPurchase) {
         PurchaseItemLayout purchaseItemLayout = new PurchaseItemLayout(getActivity());
-        purchaseItemLayout.setPurchasePrice(detailsFeature.getPrice());
+        purchaseItemLayout.setPurchasePrice(hasPurchase ? "":detailsFeature.getPrice());
         String title;
         if (detailsFeature.getTitle().indexOf("(") != -1) {
             title = detailsFeature.getTitle().substring(0, detailsFeature.getTitle().indexOf("("));
@@ -152,7 +152,7 @@ public class GotsBillingDialog extends DialogFragment {
         int icon = getActivity().getResources().getIdentifier("org.gots:drawable/" + detailsFeature.getSku().replace(".", "_"), null, null);
         purchaseItemLayout.setPurchaseIcon(icon);
         purchaseItemLayout.setPurchaseState(hasPurchase);
-        purchaseItemLayout.setPurchaseTitle(hasPurchase ? "" : title);
+        purchaseItemLayout.setPurchaseTitle(title);
         if (!hasPurchase) {
             purchaseItemLayout.setOnClickListener(new OnClickListener() {
                 @Override
@@ -173,7 +173,7 @@ public class GotsBillingDialog extends DialogFragment {
                                         if (onPurchasedFinishedListener != null)
                                             onPurchasedFinishedListener.onPurchaseFailed(purchase);
                                     }
-                                    getDialog().dismiss();
+//                                    getDialog().dismiss();
                                 }
                             });
 

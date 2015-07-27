@@ -126,6 +126,20 @@ public class SplashScreenActivity extends BaseGotsActivity {
                                         }
                                     });
                                 }
+                                if (inv.hasPurchase(GotsPurchaseItem.SKU_TEST_PURCHASE)) {
+                                    gotsPurchase.setFeatureRecognitionCounter(gotsPurchase.getFeatureRecognitionCounter() + 50);
+                                    buyHelper.consumeAsync(inv.getPurchase(GotsPurchaseItem.SKU_TEST_PURCHASE), new IabHelper.OnConsumeFinishedListener() {
+                                        @Override
+                                        public void onConsumeFinished(Purchase purchase, IabResult result) {
+                                            if (result.isSuccess()) {
+                                                Log.i(TAG, "Consume " + purchase.getSku());
+                                            } else {
+                                                Log.w(TAG, "Error consumming " + purchase.getSku());
+
+                                            }
+                                        }
+                                    });
+                                }
                                 Log.i(TAG, "Successful got inventory!");
 
                             } else {

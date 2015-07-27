@@ -48,9 +48,9 @@
 
     <ImageView
         android:id="@+id/imageViewPurchaseState"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_margin="2dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_margin="5dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:src="@drawable/ic_validate" />
