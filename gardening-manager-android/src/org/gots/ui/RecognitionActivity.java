@@ -114,40 +114,39 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
                 }
             });
             floatingItems.add(libraryItem);
-        } else {
-            FloatingItem floatingItem = new FloatingItem();
-            floatingItem.setTitle(getResources().getString(R.string.inapp_purchase_buy));
-            floatingItem.setRessourceId(R.drawable.action_buy_online);
-            floatingItem.setOnClickListener(new View.OnClickListener() {
+        }
+        FloatingItem floatingItem = new FloatingItem();
+        floatingItem.setTitle(getResources().getString(R.string.inapp_purchase_buy));
+        floatingItem.setRessourceId(R.drawable.action_buy_online);
+        floatingItem.setOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
-                    FragmentManager fm = getSupportFragmentManager();
-                    final GotsBillingDialog editNameDialog = new GotsBillingDialog(GotsPurchaseItem.SKU_FEATURE_RECOGNITION_50);
-                    editNameDialog.addSKUFeature(GotsPurchaseItem.SKU_TEST_PURCHASE, true);
-                    editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
-                    editNameDialog.show(fm, "fragment_edit_name");
-                    editNameDialog.setOnPurchasedFinishedListener(new OnPurchaseFinished() {
-                        @Override
-                        public void onPurchaseFailed(Purchase sku) {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getSupportFragmentManager();
+                final GotsBillingDialog editNameDialog = new GotsBillingDialog(GotsPurchaseItem.SKU_FEATURE_RECOGNITION_50);
+                editNameDialog.addSKUFeature(GotsPurchaseItem.SKU_TEST_PURCHASE, true);
+                editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+                editNameDialog.show(fm, "fragment_edit_name");
+                editNameDialog.setOnPurchasedFinishedListener(new OnPurchaseFinished() {
+                    @Override
+                    public void onPurchaseFailed(Purchase sku) {
 //                            if (sku != null)
 //                                editNameDialog.consumePurchase(sku);
 
-                        }
+                    }
 
-                        @Override
-                        public void onPurchaseSucceed(Purchase sku) {
-                            if (GotsPurchaseItem.SKU_TEST_PURCHASE.equals(sku)) {
-                                gotsPurchaseItem.setFeatureRecognitionCounter(gotsPurchaseItem.getFeatureRecognitionCounter() + 50);
-                                editNameDialog.consumePurchase(sku);
-                                runAsyncDataRetrieval();
-                            }
+                    @Override
+                    public void onPurchaseSucceed(Purchase sku) {
+                        if (GotsPurchaseItem.SKU_TEST_PURCHASE.equals(sku)) {
+                            gotsPurchaseItem.setFeatureRecognitionCounter(gotsPurchaseItem.getFeatureRecognitionCounter() + 50);
+                            editNameDialog.consumePurchase(sku);
+                            runAsyncDataRetrieval();
                         }
-                    });
-                }
-            });
-            floatingItems.add(floatingItem);
-        }
+                    }
+                });
+            }
+        });
+        floatingItems.add(floatingItem);
         return floatingItems;
     }
 

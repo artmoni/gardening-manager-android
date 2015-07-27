@@ -282,13 +282,11 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         // displayDrawerMenuSensorCounter();
 
         // *************************
-        // Premium
+        // Recognition
         // *************************
-        if (!gotsPurchase.isPremium()) {
-            navDrawerItem = new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1));
-            navDrawerItem.setCounterVisibility(false);
-            navDrawerItems.add(navDrawerItem);
-        }
+        navDrawerItem = new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1));
+        navDrawerItem.setCounterVisibility(false);
+        navDrawerItems.add(navDrawerItem);
 
         // What's hot, We will add a counter here
         // navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1)));
@@ -651,7 +649,8 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                 }
                 break;
             case 5:
-                displayPremiumDialog();
+//                displayPremiumDialog();
+                displayRecognitionDialog();
                 break;
 
             default:
@@ -668,6 +667,11 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
             setTitle(navMenuTitles[position]);
 
         }
+    }
+
+    private void displayRecognitionDialog() {
+        Intent i = new Intent(getApplicationContext(), RecognitionActivity.class);
+        startActivity(i);
     }
 
     protected void displayCatalogueFragment() {

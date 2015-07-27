@@ -10,7 +10,7 @@
         android:id="@+id/buttonPrice"
         style="@style/buttonPurchase"
 
-        android:layout_below="@+id/imageViewPurchaseItem"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:text="Price"
         android:textColor="@color/white" />
@@ -50,8 +50,8 @@
         android:id="@+id/imageViewPurchaseState"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_margin="5dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_margin="5dp"
         android:src="@drawable/ic_validate" />
 </RelativeLayout>

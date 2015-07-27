@@ -212,20 +212,5 @@
   <string name="sensor.fertilizer.too.low">Not enough fertilizer</string>
   <string name="sensor.fertilizer.too.high">Too many fertilizer</string>
   <string name="sensor.fertilizer.good">Fertilizer quantity is correct</string>
-  <string-array name="nav_drawer_items">
-    <item>@string/dashboard.hut.name</item>
-    <item>@string/dashboard.allotments.name</item>
-    <item>@string/dashboard.actions.name</item>
-    <item>@string/dashboard.profile.name</item>
-    <item>@string/dashboard.sensor.name</item>
-    <item>@string/premium</item>
-  </string-array>
-  <array name="nav_drawer_icons">
-    <item>@drawable/bt_dashboard_hut</item>
-    <item>@drawable/bt_dashboard_allotment</item>
-    <item>@drawable/bt_dashboard_action</item>
-    <item>@drawable/bt_dashboard_profile</item>
-    <item>@drawable/bt_dashboard_sensor</item>
-    <item>@drawable/action_buy_online</item>
-  </array>
+
 </resources>

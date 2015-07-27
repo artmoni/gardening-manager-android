@@ -230,7 +230,7 @@
         <item>@string/dashboard.actions.name</item>
         <item>@string/dashboard.profile.name</item>
         <item>@string/dashboard.sensor.name</item>
-        <item>@string/premium</item>
+        <item>@string/plant.recognition</item>
     </string-array>
 
     <!-- Nav Drawer List Item Icons -->
@@ -241,7 +241,7 @@
         <item>@drawable/bt_dashboard_action</item>
         <item>@drawable/bt_dashboard_profile</item>
         <item>@drawable/bt_dashboard_sensor</item>
-        <item>@drawable/action_buy_online</item>
+        <item>@drawable/ic_flower_search</item>
     </array>
 
 </resources>
