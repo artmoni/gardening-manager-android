@@ -108,6 +108,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
     private static ArrayList<BaseGotsActivity> activities = new ArrayList<BaseGotsActivity>();
 
     private GotsGrowingSeedManager gotsGrowingSeedManager;
+    private View bottomRightButton;
 
     public interface GardenListener {
         public void onCurrentGardenChanged(GardenInterface garden);
@@ -278,7 +279,14 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
     protected abstract boolean requireFloatingButton();
 
     protected void createFloatingMenu() {
-        View bottomRightButton = new View(getApplicationContext());
+        //The floating button might be already created, then toggle if it is an expanded menu
+        if (bottomRightButton != null) {
+            if (bottomRightButton instanceof FloatingActionsMenu && ((FloatingActionsMenu) bottomRightButton).isExpanded())
+                ((FloatingActionsMenu) bottomRightButton).toggle();
+            return;
+        }
+
+        bottomRightButton = new View(getApplicationContext());
 
         List<FloatingItem> items = onCreateFloatingMenu();
 
