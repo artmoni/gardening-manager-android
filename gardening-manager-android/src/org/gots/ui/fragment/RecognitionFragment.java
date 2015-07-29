@@ -2,12 +2,15 @@ package org.gots.ui.fragment;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -28,7 +31,6 @@ import org.gots.justvisual.JustVisualAdapter;
 import org.gots.justvisual.JustVisualResult;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.nuxeo.NuxeoUtils;
-import org.gots.preferences.GotsPreferences;
 import org.gots.utils.FileUtilities;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,17 +55,21 @@ import java.util.Map;
  */
 public class RecognitionFragment extends BaseGotsFragment implements JustVisualAdapter.OnImageClick {
 
+    public static final java.lang.String IMAGE_PATH = "org.gots.recognition.path";
     private ImageView imageView;
     private String TAG = RecognitionFragment.class.getSimpleName();
     private ListView listView;
-    private String imageUrl;
     private TextView progressText;
     private int imageResultHeight = 0;
     private ImageView imageCompare;
     private OnRecognitionFinished mCallback;
+    private File imageFile;
+    private ImageView imageRefresh;
 
     public interface OnRecognitionFinished {
         void onRecognitionSucceed();
+
+        void onRecognitionFailed(String message);
     }
 
     @Override
@@ -83,6 +89,16 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
         listView = (ListView) v.findViewById(R.id.listViewPhoto);
         progressText = (TextView) v.findViewById(R.id.textViewProgress);
         imageCompare = (ImageView) v.findViewById(R.id.imageViewCompare);
+        imageRefresh = (ImageView) v.findViewById(R.id.imageViewRefresh);
+        Bundle args = getArguments();
+        if (args != null) {
+            String filepath = args.getString(IMAGE_PATH);
+            imageFile = new File(filepath);
+            if (!imageFile.exists())
+                mCallback.onRecognitionFailed("File does not exists: " + imageFile.getAbsolutePath());
+        } else {
+            Log.w(TAG, "You should pass an argument");
+        }
         return v;
     }
 
@@ -97,7 +113,6 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
                 } else {
                     view.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, imageResultHeight));
                     imageResultHeight = 0;
-
                 }
             }
         });
@@ -107,7 +122,43 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
                 view.setVisibility(View.GONE);
             }
         });
+
+
+        File reduceFile = getReduceFile();
+        if (reduceFile != null) {
+            Bitmap b = BitmapFactory.decodeFile(reduceFile.getAbsolutePath());
+            imageView.setImageBitmap(b);
+            sendServerAsync(reduceFile);
+        } else{
+            mCallback.onRecognitionFailed("Error converting image, disk space might be too low");
+        }
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    public File getReduceFile() {
+        FileOutputStream out = null;
+        File outFile = null;
+        try {
+            outFile = new File(getActivity().getCacheDir(), imageFile.getName() + "-400x300");
+            out = new FileOutputStream(outFile);
+
+            Bitmap bitmap = FileUtilities.decodeScaledBitmapFromSdCard(imageFile.getAbsolutePath(), 400, 300);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+            // PNG is a lossless format, the compression factor (100) is ignored
+
+
+        } catch (Exception e) {
+            Log.e(TAG, "setSearchImage " + e.getMessage());
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                Log.e(TAG, "setSearchImage finally " + e.getMessage());
+            }
+        }
+        return outFile;
     }
 
 
@@ -119,9 +170,18 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
         new AsyncTask<Void, Void, String>() {
             @Override
             protected void onPreExecute() {
+                imageRefresh.setVisibility(View.VISIBLE);
+                Animation myRotateAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
+                myRotateAnimation.setRepeatCount(Animation.INFINITE);
+                imageRefresh.startAnimation(myRotateAnimation);
+
                 progressText.setVisibility(View.VISIBLE);
                 progressText.setText(getResources().getString(R.string.plant_recognition_progress));
+                Animation blinkAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.disappear);
+                blinkAnimation.setRepeatCount(Animation.INFINITE);
+                progressText.setAnimation(blinkAnimation);
                 super.onPreExecute();
+
             }
 
             @Override
@@ -130,17 +190,15 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
                 DocumentManager service = session.getAdapter(DocumentManager.class);
                 try {
 
-                    Document guestDoc = service.getDocument("/default-domain/UserWorkspaces/Guest/justvisual");
-                    Document imageDoc = service.createDocument(guestDoc, "File", imageFile.getName());
-                    Log.d(TAG, "new imageDoc " + imageDoc);
+                    Document rootFolder = service.getDocument("/default-domain/workspaces/justvisual");
+                    Document imageDoc = service.createDocument(rootFolder, "VendorSeed", imageFile.getName());
                     final String serverImageUrl = "http://my.gardening-manager.com/nuxeo/nxfile/default/" + imageDoc.getId() + "/blobholder:0/";
 
                     NuxeoUtils.uploadBlob(session, imageDoc, imageFile, new NuxeoUtils.OnBlobUpload() {
                         @Override
                         public void onUploadSuccess(Serializable data) {
-                            imageUrl = serverImageUrl;
-//                            progressText.setText("Recognition in progress ...");
                             processJustVisual(serverImageUrl);
+
                         }
 
                         @Override
@@ -183,7 +241,7 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
                         String responseString = out.toString();
 
                         species = parseJSON(responseString);
-                        Log.d(TAG, responseString);
+//                        Log.d(TAG, responseString);
                         out.close();
                         //..more logic
                     } else {
@@ -204,7 +262,13 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
                     JustVisualAdapter arrayAdapter = new JustVisualAdapter(getActivity(), results);
                     arrayAdapter.setOnImageClick(RecognitionFragment.this);
                     listView.setAdapter(arrayAdapter);
+
+                    progressText.clearAnimation();
                     progressText.setVisibility(View.GONE);
+
+                    imageRefresh.clearAnimation();
+                    imageRefresh.setVisibility(View.GONE);
+
                     mCallback.onRecognitionSucceed();
                 }
                 super.onPostExecute(results);
@@ -260,32 +324,5 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
         imageCompare.setImageBitmap(bitmap);
     }
 
-    public void setSearchImage(String picturePath) {
-        Bitmap bitmap = FileUtilities.decodeScaledBitmapFromSdCard(picturePath, 400, 300);
 
-
-        FileOutputStream out = null;
-        try {
-            File f = new File(picturePath);
-            File outFile = new File(getActivity().getCacheDir(), f.getName() + "-400x300");
-            out = new FileOutputStream(outFile);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
-            // PNG is a lossless format, the compression factor (100) is ignored
-            imageView.setImageBitmap(bitmap);
-            sendServerAsync(outFile);
-
-        } catch (Exception e) {
-            Log.e(TAG, "setSearchImage " + e.getMessage());
-//            e.printStackTrace();
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (IOException e) {
-//                e.printStackTrace();
-                Log.e(TAG, "setSearchImage finally " + e.getMessage());
-            }
-        }
-    }
 }

@@ -4,12 +4,15 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.android.vending.billing.util.Purchase;
 
@@ -17,11 +20,14 @@ import org.gots.R;
 import org.gots.inapp.GotsBillingDialog;
 import org.gots.inapp.GotsPurchaseItem;
 import org.gots.inapp.OnPurchaseFinished;
-import org.gots.ui.fragment.LoginDialogFragment;
 import org.gots.ui.fragment.RecognitionFragment;
 import org.gots.ui.fragment.RecognitionMainFragment;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,31 +38,63 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     private static final int REQUEST_LOAD_IMAGE = 2;
     private RecognitionFragment recognitionFragment;
     private GotsPurchaseItem gotsPurchaseItem;
+    private RecognitionMainFragment mainFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitleBar(R.string.plant_recognition);
-        recognitionFragment = new RecognitionFragment();
+
         gotsPurchaseItem = new GotsPurchaseItem(getApplicationContext());
 
-        addMainLayout(new RecognitionMainFragment(), null);
+        if (mainFragment == null) {
+            mainFragment = new RecognitionMainFragment();
+//            addMainLayout(mainFragment, null);
+        }
 
-//        SearchByPicture();
     }
 
     private void SearchByPicture() {
-//        if (gotsPurchaseItem.getFeatureRecognitionCounter() > 0) {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, getCacheDir() + "/_tmp");
-        startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
-//        }
+//        File temporaryFile = new File(gotsPrefs.getFilesDir(), "_tmp");
+//        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(temporaryFile));
+//        startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
+
+        File photoFile = null;
+        try {
+            photoFile = createImageFile();
+        } catch (IOException ex) {
+            Log.e(TAG, ex.getMessage());
+        }
+        // Continue only if the File was successfully created
+        if (photoFile != null) {
+//            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+            startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
+        }
+
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+//        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        return image;
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null)
-            if (requestCode == REQUEST_TAKE_PHOTO || requestCode == REQUEST_LOAD_IMAGE) {
+            if ((requestCode == REQUEST_TAKE_PHOTO || requestCode == REQUEST_LOAD_IMAGE) && resultCode == RESULT_OK) {
                 Uri selectedImage = data.getData();
                 String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
@@ -65,9 +103,10 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
 
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 String picturePath = cursor.getString(columnIndex);
-
-                recognitionFragment.setSearchImage(picturePath);
-                addContentLayout(recognitionFragment, null);
+                recognitionFragment = new RecognitionFragment();
+                Bundle args = new Bundle();
+                args.putString(RecognitionFragment.IMAGE_PATH, picturePath);
+                addContentLayout(recognitionFragment, args);
             }
 
         super.onActivityResult(requestCode, resultCode, data);
@@ -161,6 +200,12 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     @Override
     public void onRecognitionSucceed() {
         gotsPurchaseItem.decrementRecognitionDailyCounter();
+    }
+
+    @Override
+    public void onRecognitionFailed(String message) {
+        if (message != null)
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
 
     @Override

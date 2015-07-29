@@ -339,7 +339,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             Log.d(TAG, "RemoteSeed UUID " + documentVendorSeed.getId());
             super.updateSeed(currentSeed);
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage(), e);
+            Log.e(TAG, e.getMessage()+" : "+currentSeed);
         }
 
         return currentSeed;

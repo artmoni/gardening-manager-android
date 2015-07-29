@@ -524,12 +524,14 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
     }
 
     protected void addMainLayout(Fragment contentFragment, Bundle options) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_top);
-        if (options != null)
-            contentFragment.setArguments(options);
-        contentFragment.setRetainInstance(false);
-        transaction.replace(getMainLayout(), contentFragment).commitAllowingStateLoss();
+        if (!contentFragment.isAdded()) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_top);
+            if (options != null)
+                contentFragment.setArguments(options);
+            contentFragment.setRetainInstance(false);
+            transaction.replace(getMainLayout(), contentFragment).commitAllowingStateLoss();
+        }
     }
 
     @Override

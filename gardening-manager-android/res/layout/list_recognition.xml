@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/org.gots"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_line_selector"
@@ -10,10 +13,10 @@
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView"
         android:layout_width="fill_parent"
-        android:layout_height="100dp"
+        android:layout_height="200dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/textViewResult"
+        android:layout_below="@+id/textViewSpecies"
         android:layout_marginTop="20dp"
         android:fillViewport="false">
 
@@ -24,12 +27,33 @@
             android:orientation="horizontal" />
     </HorizontalScrollView>
 
-    <TextView
-        android:id="@+id/textViewResult"
+    <org.gots.ui.view.MyTextView
+        android:id="@+id/textViewCommonName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/textViewSpecies"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewCommonName"
+        android:layout_centerHorizontal="true"
+        android:text="Small Text"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="italic" />
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/buttonInformation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/horizontalScrollView"
+        android:layout_alignParentTop="true"
+        app:fab_size="mini"
+        fab:fab_colorNormal="@color/action_warning_color"
+        fab:fab_colorPressed="@color/action_error_color"
+        fab:fab_icon="@drawable/ic_information" />
 </RelativeLayout>

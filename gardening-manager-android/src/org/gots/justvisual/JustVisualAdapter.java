@@ -1,30 +1,32 @@
 package org.gots.justvisual;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.support.v4.app.FragmentActivity;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import org.gots.R;
-import org.gots.bean.BaseAllotmentInterface;
-import org.gots.ui.ExpandableHeightGridView;
+import org.gots.ui.WebHelpActivity;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,9 +42,11 @@ public class JustVisualAdapter extends BaseAdapter {
     private OnImageClick listener;
 
     public JustVisualAdapter(Context context, Map<String, List<JustVisualResult>> results) {
-        this.visualResults = results;
+        visualResults = results;
         this.mContext = context;
-        mKeys = results.keySet().toArray(new String[results.size()]);
+        if (visualResults == null)
+            visualResults = new HashMap<>();
+        mKeys = visualResults.keySet().toArray(new String[visualResults.size()]);
     }
 
 
@@ -63,10 +67,10 @@ public class JustVisualAdapter extends BaseAdapter {
 
     public class Holder {
 
-        public TextView textViewResult;
-
+        public TextView textViewCommonName;
+        public TextView textViewSpecies;
         public LinearLayout layoutResult;
-
+        public FloatingActionButton floatingActionInformation;
     }
 
     @Override
@@ -76,13 +80,37 @@ public class JustVisualAdapter extends BaseAdapter {
         if (view == null) {
             holder = new Holder();
             view = (RelativeLayout) LayoutInflater.from(mContext).inflate(R.layout.list_recognition, viewGroup, false);
-            holder.textViewResult = (TextView) view.findViewById(R.id.textViewResult);
+            holder.textViewCommonName = (TextView) view.findViewById(R.id.textViewCommonName);
+            holder.textViewSpecies = (TextView) view.findViewById(R.id.textViewSpecies);
             holder.layoutResult = (LinearLayout) view.findViewById(R.id.layoutResult);
+            holder.floatingActionInformation = (FloatingActionButton) view.findViewById(R.id.buttonInformation);
+            holder.floatingActionInformation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent webView = new Intent(mContext, WebHelpActivity.class);
+                    Bundle args = new Bundle();
+                    if (getItem(i).size() > 0)
+                        args.putString(WebHelpActivity.URL, getItem(i).get(0).getPageUrl());
+                    else
+                        Toast.makeText(mContext,"No information found",Toast.LENGTH_LONG).show();
+
+                }
+            });
             view.setTag(holder);
         } else
             holder = (Holder) view.getTag();
 
-        holder.textViewResult.setText(mKeys[i]);
+
+        String resultName = mKeys[i]; // Sample: camellias (camellia japonica - Camélia du Japon)
+        String commonName = null;
+        String species;
+        if (resultName.indexOf('-') > 0)
+            commonName = resultName.substring(resultName.indexOf('-'), resultName.length() - 2);
+        if (commonName == null)
+            commonName = resultName.substring(0, resultName.indexOf('('));
+        species = resultName.substring(resultName.indexOf('(') + 1, resultName.indexOf('-') != -1 ? resultName.indexOf('-') : resultName.indexOf(')'));
+        holder.textViewCommonName.setText(commonName);
+        holder.textViewSpecies.setText(species);
 
         new AsyncTask<Object, Integer, Bitmap>() {
             List<Bitmap> images = new ArrayList<Bitmap>();
@@ -102,8 +130,8 @@ public class JustVisualAdapter extends BaseAdapter {
                         publishProgress(numPlant++);
                     }
                     //stop loading TODO: load onScrollRight
-                    if (numPlant>=5)
-                        break;
+                    if (numPlant >= 5)
+                        return null;
                 }
                 return null;
             }
@@ -112,22 +140,22 @@ public class JustVisualAdapter extends BaseAdapter {
             protected void onProgressUpdate(final Integer... values) {
                 ImageView imageView = new ImageView(mContext);
                 imageView.setImageBitmap(images.get(values[0]));
-                imageView.setOnClickListener(new View.OnClickListener(){
+                imageView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         listener.onImageClick(images.get(values[0]));
                     }
                 });
                 layout.addView(imageView);
+                layout.invalidate();
                 super.onProgressUpdate(values);
             }
 
             @Override
             protected void onPostExecute(Bitmap bitmap) {
                 if (bitmap == null) return;
-                ImageView imageView = new ImageView(mContext);
-                imageView.setImageBitmap(bitmap);
-                layout.addView(imageView);
+
                 super.onPostExecute(bitmap);
             }
 

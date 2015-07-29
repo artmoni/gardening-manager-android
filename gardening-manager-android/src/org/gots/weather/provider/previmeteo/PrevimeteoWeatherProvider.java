@@ -126,7 +126,7 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
                 return WEATHER_ERROR_CITY_UNKNOWN;
             }
         } catch (Exception e) {
-            Log.e(TAG, "PrevimeteoErrorHandler has return an error (" + error.getMessage() + ") " + e.getMessage());
+            Log.e(TAG, "PrevimeteoErrorHandler (" + error.getMessage() + ") ");
             iserror = true;
             if (e.getMessage() != null) {
                 GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
