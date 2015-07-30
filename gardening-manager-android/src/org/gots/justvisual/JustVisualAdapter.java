@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -39,7 +40,7 @@ public class JustVisualAdapter extends BaseAdapter {
     private Map<String, List<JustVisualResult>> visualResults;
     private Context mContext;
     private String[] mKeys;
-    private OnImageClick listener;
+    private OnAdapterClickListener mCallback;
 
     public JustVisualAdapter(Context context, Map<String, List<JustVisualResult>> results) {
         visualResults = results;
@@ -49,6 +50,11 @@ public class JustVisualAdapter extends BaseAdapter {
         mKeys = visualResults.keySet().toArray(new String[visualResults.size()]);
     }
 
+    public interface OnAdapterClickListener {
+        void onImageClick(Bitmap bitmap);
+
+        void onConfirmeClicked(JustVisualResult result);
+    }
 
     @Override
     public int getCount() {
@@ -71,6 +77,7 @@ public class JustVisualAdapter extends BaseAdapter {
         public TextView textViewSpecies;
         public LinearLayout layoutResult;
         public FloatingActionButton floatingActionInformation;
+        public Button buttonConfirme;
     }
 
     @Override
@@ -92,8 +99,16 @@ public class JustVisualAdapter extends BaseAdapter {
                     if (getItem(i).size() > 0)
                         args.putString(WebHelpActivity.URL, getItem(i).get(0).getPageUrl());
                     else
-                        Toast.makeText(mContext,"No information found",Toast.LENGTH_LONG).show();
+                        Toast.makeText(mContext, "No information found", Toast.LENGTH_LONG).show();
 
+                }
+            });
+            holder.buttonConfirme = (Button) view.findViewById(R.id.buttonConfirme);
+            holder.buttonConfirme.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mCallback != null && getItem(i).size() > 0)
+                        mCallback.onConfirmeClicked(getItem(i).get(0));
                 }
             });
             view.setTag(holder);
@@ -102,15 +117,9 @@ public class JustVisualAdapter extends BaseAdapter {
 
 
         String resultName = mKeys[i]; // Sample: camellias (camellia japonica - Camélia du Japon)
-        String commonName = null;
-        String species;
-        if (resultName.indexOf('-') > 0)
-            commonName = resultName.substring(resultName.indexOf('-'), resultName.length() - 2);
-        if (commonName == null)
-            commonName = resultName.substring(0, resultName.indexOf('('));
-        species = resultName.substring(resultName.indexOf('(') + 1, resultName.indexOf('-') != -1 ? resultName.indexOf('-') : resultName.indexOf(')'));
-        holder.textViewCommonName.setText(commonName);
-        holder.textViewSpecies.setText(species);
+        JustVisualResult result = getItem(i).get(0);
+        holder.textViewCommonName.setText(result.getCommonName());
+        holder.textViewSpecies.setText(result.getSpecies());
 
         new AsyncTask<Object, Integer, Bitmap>() {
             List<Bitmap> images = new ArrayList<Bitmap>();
@@ -144,7 +153,7 @@ public class JustVisualAdapter extends BaseAdapter {
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        listener.onImageClick(images.get(values[0]));
+                        mCallback.onImageClick(images.get(values[0]));
                     }
                 });
                 layout.addView(imageView);
@@ -164,6 +173,10 @@ public class JustVisualAdapter extends BaseAdapter {
         return view;
     }
 
+    private void confirmeSpecies() {
+
+    }
+
     public Bitmap getBitmapFromURL(String src) {
         try {
             java.net.URL url = new java.net.URL(src);
@@ -180,11 +193,9 @@ public class JustVisualAdapter extends BaseAdapter {
         }
     }
 
-    public void setOnImageClick(OnImageClick listener) {
-        this.listener = listener;
+    public void setOnImageClick(OnAdapterClickListener listener) {
+        this.mCallback = listener;
     }
 
-    public interface OnImageClick {
-        void onImageClick(Bitmap bitmap);
-    }
+
 }

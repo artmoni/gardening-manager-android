@@ -2,6 +2,7 @@ package org.gots.seed.provider.nuxeo;
 
 import java.util.Locale;
 
+import org.gots.justvisual.JustVisualResult;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedImpl;
 import org.gots.seed.LikeStatus;
@@ -16,26 +17,27 @@ public class NuxeoSeedConverter {
 
     private static final String TAG = "NuxeoSeedConverter";
 
-    public static BaseSeedInterface convert(Document document) throws NumberFormatException{
-            BaseSeedInterface seed = new GrowingSeedImpl();
-            seed.setVariety(document.getTitle());
-            seed.setFamily(document.getString("vendorseed:family"));
-            seed.setSpecie(document.getString("vendorseed:specie"));
-            seed.setDurationMin(Integer.valueOf(document.getString("vendorseed:durationmin") != null ? document.getString("vendorseed:durationmin") : "-1"));
-            seed.setDurationMax(Integer.valueOf(document.getString("vendorseed:durationmax")));
-            seed.setDateSowingMin(Integer.valueOf(document.getString("vendorseed:datesowingmin")));
-            seed.setDateSowingMax(Integer.valueOf(document.getString("vendorseed:datesowingmax")));
-            seed.setDescriptionCultivation(document.getString("vendorseed:description_cultivation"));
-            seed.setDescriptionDiseases(document.getString("vendorseed:description_diseases"));
-            seed.setDescriptionEnvironment(document.getString("vendorseed:description_growth"));
-            seed.setDescriptionHarvest(document.getString("vendorseed:description_harvest"));
-            seed.setLanguage(document.getString("vendorseed:language"));
-            seed.setBareCode(document.getString("vendorseed:barcode"));
-            seed.setState(document.getState());
-            seed.setUUID(document.getId());
-            return seed;
+    public static BaseSeedInterface convert(Document document) throws NumberFormatException {
+        BaseSeedInterface seed = new GrowingSeedImpl();
+        seed.setVariety(document.getTitle());
+        seed.setFamily(document.getString("vendorseed:family"));
+        seed.setSpecie(document.getString("vendorseed:specie"));
+        seed.setDurationMin(Integer.valueOf(document.getString("vendorseed:durationmin") != null ? document.getString("vendorseed:durationmin") : "-1"));
+        seed.setDurationMax(Integer.valueOf(document.getString("vendorseed:durationmax")));
+        seed.setDateSowingMin(Integer.valueOf(document.getString("vendorseed:datesowingmin")));
+        seed.setDateSowingMax(Integer.valueOf(document.getString("vendorseed:datesowingmax")));
+        seed.setDescriptionCultivation(document.getString("vendorseed:description_cultivation"));
+        seed.setDescriptionDiseases(document.getString("vendorseed:description_diseases"));
+        seed.setDescriptionEnvironment(document.getString("vendorseed:description_growth"));
+        seed.setDescriptionHarvest(document.getString("vendorseed:description_harvest"));
+        seed.setLanguage(document.getString("vendorseed:language"));
+        seed.setBareCode(document.getString("vendorseed:barcode"));
+        seed.setState(document.getState());
+        seed.setUUID(document.getId());
+        return seed;
     }
-//    SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState = "project" AND vendorseed:description_harvest!="null" AND vendorseed:description_harvest!=""  AND vendorseed:description_growth!="null" AND vendorseed:description_growth!="" AND vendorseed:description_diseases!="null" AND vendorseed:description_diseases!="" AND vendorseed:description_cultivation!="null" AND vendorseed:description_cultivation!=""
+
+    //    SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState = "project" AND vendorseed:description_harvest!="null" AND vendorseed:description_harvest!=""  AND vendorseed:description_growth!="null" AND vendorseed:description_growth!="" AND vendorseed:description_diseases!="null" AND vendorseed:description_diseases!="" AND vendorseed:description_cultivation!="null" AND vendorseed:description_cultivation!=""
     public static Document convert(String parentPath, BaseSeedInterface seed) {
         Document doc = new Document(parentPath, seed.getName(), "VendorSeed");
         doc.set("dc:title", seed.getVariety());
@@ -70,4 +72,5 @@ public class NuxeoSeedConverter {
         return likes;
 
     }
+
 }

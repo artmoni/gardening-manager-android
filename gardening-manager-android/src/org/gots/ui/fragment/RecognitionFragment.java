@@ -31,6 +31,8 @@ import org.gots.justvisual.JustVisualAdapter;
 import org.gots.justvisual.JustVisualResult;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.nuxeo.NuxeoUtils;
+import org.gots.nuxeo.NuxeoWorkflowProvider;
+import org.gots.seed.provider.nuxeo.NuxeoSeedConverter;
 import org.gots.utils.FileUtilities;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,6 +41,7 @@ import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
+import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -49,13 +52,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 /**
  * Created by sfleury on 13/07/15.
  */
-public class RecognitionFragment extends BaseGotsFragment implements JustVisualAdapter.OnImageClick {
+public class RecognitionFragment extends BaseGotsFragment implements JustVisualAdapter.OnAdapterClickListener {
 
     public static final java.lang.String IMAGE_PATH = "org.gots.recognition.path";
+
+
     private ImageView imageView;
     private String TAG = RecognitionFragment.class.getSimpleName();
     private ListView listView;
@@ -65,6 +69,7 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
     private OnRecognitionFinished mCallback;
     private File imageFile;
     private ImageView imageRefresh;
+    private String nuxeoDocId;
 
     public interface OnRecognitionFinished {
         void onRecognitionSucceed();
@@ -129,7 +134,7 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
             Bitmap b = BitmapFactory.decodeFile(reduceFile.getAbsolutePath());
             imageView.setImageBitmap(b);
             sendServerAsync(reduceFile);
-        } else{
+        } else {
             mCallback.onRecognitionFailed("Error converting image, disk space might be too low");
         }
         super.onViewCreated(view, savedInstanceState);
@@ -191,9 +196,9 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
                 try {
 
                     Document rootFolder = service.getDocument("/default-domain/workspaces/justvisual");
-                    Document imageDoc = service.createDocument(rootFolder, "VendorSeed", imageFile.getName());
+                    final Document imageDoc = service.createDocument(rootFolder, "VendorSeed", imageFile.getName());
                     final String serverImageUrl = "http://my.gardening-manager.com/nuxeo/nxfile/default/" + imageDoc.getId() + "/blobholder:0/";
-
+                    nuxeoDocId = imageDoc.getId();
                     NuxeoUtils.uploadBlob(session, imageDoc, imageFile, new NuxeoUtils.OnBlobUpload() {
                         @Override
                         public void onUploadSuccess(Serializable data) {
@@ -287,7 +292,7 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
                 try {
                     JSONObject image = images.getJSONObject(i);
                     JustVisualResult result = gson.fromJson(image.toString(), JustVisualResult.class);
-
+                    result.setUuid(nuxeoDocId);
                     if (species.get(result.getPlantNames()) == null)
                         species.put(result.getPlantNames(), new ArrayList<JustVisualResult>());
                     species.get(result.getPlantNames()).add(result);
@@ -324,5 +329,50 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
         imageCompare.setImageBitmap(bitmap);
     }
 
+    @Override
+    public void onConfirmeClicked(final JustVisualResult result) {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected void onPreExecute() {
+                imageRefresh.setVisibility(View.VISIBLE);
+                Animation myRotateAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
+                myRotateAnimation.setRepeatCount(Animation.INFINITE);
+                imageRefresh.startAnimation(myRotateAnimation);
+
+
+                super.onPreExecute();
+
+            }
+
+            @Override
+            protected String doInBackground(Void... voids) {
+                Session session = getNuxeoClient().getSession();
+                DocumentManager service = session.getAdapter(DocumentManager.class);
+                try {
+
+                    Document plantDoc = service.getDocument(result.getUuid());
+                    PropertyMap props = new PropertyMap();
+                    props.set("vendorseed:specie", result.getSpecies());
+                    props.set("dc:title", result.getCommonName());
+                    service.update(plantDoc, props);
+//                    NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(getActivity());
+//                    nuxeoWorkflowProvider.startWorkflowValidation(plantDoc);
+                } catch (Exception e) {
+                    Log.w(TAG, e.getMessage());
+                    return e.getMessage();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String errormessage) {
+                if (errormessage != null)
+                    progressText.setText(errormessage);
+                imageRefresh.clearAnimation();
+                imageRefresh.setVisibility(View.GONE);
+                super.onPostExecute(errormessage);
+            }
+        }.execute();
+    }
 
 }

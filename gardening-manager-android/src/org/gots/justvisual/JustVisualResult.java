@@ -6,6 +6,12 @@ import com.google.gson.annotations.SerializedName;
  * Created by sfleury on 15/07/15.
  */
 public class JustVisualResult {
+    String uuid;
+
+    String commonName;
+
+    String species;
+
     @SerializedName("id")
     String id;
 
@@ -59,6 +65,37 @@ public class JustVisualResult {
 
     public void setPlantNames(String plantNames) {
         this.plantNames = plantNames;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getSpecies() {
+        String species;
+        species = plantNames.substring(plantNames.indexOf('(') + 1, plantNames.indexOf('-') != -1 ? plantNames.indexOf('-') : plantNames.indexOf(')'));
+        return species;
+    }
+
+    public void setSpecies(String species) {
+        this.species = species;
+    }
+
+    public String getCommonName() {
+        String commonName = null;
+        if (plantNames.indexOf('-') > 0)
+            commonName = plantNames.substring(plantNames.indexOf('-'), plantNames.length() - 2);
+        if (commonName == null)
+            commonName = plantNames.substring(0, plantNames.indexOf('('));
+        return commonName;
+    }
+
+    public void setCommonName(String commonName) {
+        this.commonName = commonName;
     }
 
     @Override
