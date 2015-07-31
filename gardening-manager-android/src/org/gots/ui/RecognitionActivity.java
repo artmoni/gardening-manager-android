@@ -22,6 +22,7 @@ import org.gots.inapp.GotsPurchaseItem;
 import org.gots.inapp.OnPurchaseFinished;
 import org.gots.ui.fragment.RecognitionFragment;
 import org.gots.ui.fragment.RecognitionMainFragment;
+import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,7 +50,7 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
 
         if (mainFragment == null) {
             mainFragment = new RecognitionMainFragment();
-//            addMainLayout(mainFragment, null);
+            addMainLayout(mainFragment, null);
         }
 
     }
@@ -206,6 +207,11 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     public void onRecognitionFailed(String message) {
         if (message != null)
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onRecognitionConfirmed(Document plantDoc) {
+
     }
 
     @Override

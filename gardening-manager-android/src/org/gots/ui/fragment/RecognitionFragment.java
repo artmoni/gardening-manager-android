@@ -32,7 +32,6 @@ import org.gots.justvisual.JustVisualResult;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.nuxeo.NuxeoUtils;
 import org.gots.nuxeo.NuxeoWorkflowProvider;
-import org.gots.seed.provider.nuxeo.NuxeoSeedConverter;
 import org.gots.utils.FileUtilities;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -52,6 +51,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 /**
  * Created by sfleury on 13/07/15.
  */
@@ -75,6 +75,8 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
         void onRecognitionSucceed();
 
         void onRecognitionFailed(String message);
+
+        void onRecognitionConfirmed(Document plantDoc);
     }
 
     @Override
@@ -301,12 +303,13 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
                     Log.d(TAG, result.toString());
 
                 } catch (JSONException jsonException) {
-                    Log.w(TAG, jsonException.getMessage());
+                    Log.w(TAG, jsonException.getMessage() + ": " + responseString);
                 }
 
             }
         } catch (JSONException e) {
-
+            if (mCallback != null)
+                mCallback.onRecognitionFailed(e.getMessage());
             e.printStackTrace();
         }
         return species;
@@ -331,7 +334,7 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
 
     @Override
     public void onConfirmeClicked(final JustVisualResult result) {
-        new AsyncTask<Void, Void, String>() {
+        new AsyncTask<Void, Void, Document>() {
             @Override
             protected void onPreExecute() {
                 imageRefresh.setVisibility(View.VISIBLE);
@@ -345,32 +348,34 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
             }
 
             @Override
-            protected String doInBackground(Void... voids) {
+            protected Document doInBackground(Void... voids) {
                 Session session = getNuxeoClient().getSession();
                 DocumentManager service = session.getAdapter(DocumentManager.class);
+                Document plantDoc = null;
                 try {
 
-                    Document plantDoc = service.getDocument(result.getUuid());
+                    plantDoc = service.getDocument(result.getUuid());
                     PropertyMap props = new PropertyMap();
                     props.set("vendorseed:specie", result.getSpecies());
                     props.set("dc:title", result.getCommonName());
                     service.update(plantDoc, props);
-//                    NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(getActivity());
-//                    nuxeoWorkflowProvider.startWorkflowValidation(plantDoc);
+                    NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(getActivity());
+                    nuxeoWorkflowProvider.startWorkflowValidation(plantDoc);
                 } catch (Exception e) {
                     Log.w(TAG, e.getMessage());
-                    return e.getMessage();
                 }
-                return null;
+                return plantDoc;
             }
 
             @Override
-            protected void onPostExecute(String errormessage) {
-                if (errormessage != null)
-                    progressText.setText(errormessage);
+            protected void onPostExecute(Document plantDoc) {
                 imageRefresh.clearAnimation();
                 imageRefresh.setVisibility(View.GONE);
-                super.onPostExecute(errormessage);
+
+                if (mCallback!=null)
+                    mCallback.onRecognitionConfirmed(plantDoc);
+
+                super.onPostExecute(plantDoc);
             }
         }.execute();
     }

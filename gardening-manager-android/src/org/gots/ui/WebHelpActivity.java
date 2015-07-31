@@ -1,13 +1,15 @@
-/*******************************************************************************
+/**
+ * ****************************************************************************
  * Copyright (c) 2012 sfleury.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- *
+ * <p>
  * Contributors:
- *     sfleury - initial API and implementation
- ******************************************************************************/
+ * sfleury - initial API and implementation
+ * ****************************************************************************
+ */
 package org.gots.ui;
 
 import org.gots.R;
@@ -26,7 +28,8 @@ import android.webkit.WebViewClient;
 
 public class WebHelpActivity extends BaseGotsActivity {
 
-    public static final String URL = "org.gots.doc.classsimplename";
+    public static final String URL_CLASSNAME = "org.gots.doc.classsimplename";
+    public static final String URL_EXTERNAL = "org.gots.doc.externalurl";
 
     private WebView mWebView;
 
@@ -39,14 +42,16 @@ public class WebHelpActivity extends BaseGotsActivity {
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setTitle("Documentation");
 
-        String helpClass = getIntent().getExtras().getString(URL);
         mWebView = (WebView) findViewById(R.id.webViewHelp);
         mWebView.setWebViewClient(new WebHelpClient());
 
-        // mWebView.getSettings().setJavaScriptEnabled(true);
-
-        mWebView.loadUrl(Uri.parse(HelpUriBuilder.getUri(this, helpClass)).toString());
-
+        if (getIntent().getExtras().getString(URL_CLASSNAME) != null) {
+            String helpClass = getIntent().getExtras().getString(URL_CLASSNAME);
+            mWebView.loadUrl(Uri.parse(HelpUriBuilder.getUri(this, helpClass)).toString());
+        } else {
+            String url = getIntent().getExtras().getString(URL_EXTERNAL);
+            mWebView.loadUrl(url);
+        }
         // Button close = (Button) findViewById(R.id.buttonClose);
         // close.setOnClickListener(new View.OnClickListener() {
         //
@@ -62,12 +67,12 @@ public class WebHelpActivity extends BaseGotsActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
-        case android.R.id.home:
-            finish();
-            return true;
+            case android.R.id.home:
+                finish();
+                return true;
 
-        default:
-            return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 

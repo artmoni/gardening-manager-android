@@ -397,7 +397,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
                 break;
             case R.id.help:
                 Intent browserIntent = new Intent(this, WebHelpActivity.class);
-                browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
+                browserIntent.putExtra(WebHelpActivity.URL_CLASSNAME, getClass().getSimpleName());
                 startActivity(browserIntent);
                 return true;
             case android.R.id.home:

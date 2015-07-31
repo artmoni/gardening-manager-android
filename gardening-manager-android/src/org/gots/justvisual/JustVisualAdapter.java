@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -95,10 +94,10 @@ public class JustVisualAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View view) {
                     Intent webView = new Intent(mContext, WebHelpActivity.class);
-                    Bundle args = new Bundle();
-                    if (getItem(i).size() > 0)
-                        args.putString(WebHelpActivity.URL, getItem(i).get(0).getPageUrl());
-                    else
+                    if (getItem(i).size() > 0 && getItem(i).get(0).getPageUrl() != null) {
+                        webView.putExtra(WebHelpActivity.URL_EXTERNAL, getItem(i).get(0).getPageUrl());
+                        mContext.startActivity(webView);
+                    } else
                         Toast.makeText(mContext, "No information found", Toast.LENGTH_LONG).show();
 
                 }
@@ -149,7 +148,8 @@ public class JustVisualAdapter extends BaseAdapter {
             protected void onProgressUpdate(final Integer... values) {
                 ImageView imageView = new ImageView(mContext);
                 imageView.setImageBitmap(images.get(values[0]));
-                imageView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                int height = layout.getHeight();
+                imageView.setLayoutParams(new LinearLayout.LayoutParams(images.get(values[0]).getWidth() * (height / images.get(values[0]).getHeight()), height));
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

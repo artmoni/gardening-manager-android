@@ -15,17 +15,17 @@ import android.util.Log;
 
 public class NuxeoSeedConverter {
 
-    private static final String TAG = "NuxeoSeedConverter";
+    private static final String TAG = NuxeoSeedConverter.class.getSimpleName();
 
     public static BaseSeedInterface convert(Document document) throws NumberFormatException {
         BaseSeedInterface seed = new GrowingSeedImpl();
         seed.setVariety(document.getTitle());
         seed.setFamily(document.getString("vendorseed:family"));
         seed.setSpecie(document.getString("vendorseed:specie"));
-        seed.setDurationMin(Integer.valueOf(document.getString("vendorseed:durationmin") != null ? document.getString("vendorseed:durationmin") : "-1"));
-        seed.setDurationMax(Integer.valueOf(document.getString("vendorseed:durationmax")));
-        seed.setDateSowingMin(Integer.valueOf(document.getString("vendorseed:datesowingmin")));
-        seed.setDateSowingMax(Integer.valueOf(document.getString("vendorseed:datesowingmax")));
+        seed.setDurationMin(Integer.valueOf(!"null".equals(document.getString("vendorseed:durationmin")) ? document.getString("vendorseed:durationmin") : "-1"));
+        seed.setDurationMax(Integer.valueOf(!"null".equals(document.getString("vendorseed:durationmax")) ? document.getString("vendorseed:durationmax") : "-1"));
+        seed.setDateSowingMin(Integer.valueOf(!"null".equals(document.getString("vendorseed:datesowingmin")) ? document.getString("vendorseed:datesowingmin") : "-1"));
+        seed.setDateSowingMax(Integer.valueOf(!"null".equals(document.getString("vendorseed:datesowingmax")) ? document.getString("vendorseed:datesowingmax") : "-1"));
         seed.setDescriptionCultivation(document.getString("vendorseed:description_cultivation"));
         seed.setDescriptionDiseases(document.getString("vendorseed:description_diseases"));
         seed.setDescriptionEnvironment(document.getString("vendorseed:description_growth"));

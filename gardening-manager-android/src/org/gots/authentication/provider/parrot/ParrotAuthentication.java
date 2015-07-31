@@ -151,7 +151,7 @@ public class ParrotAuthentication {
 
     // private String api_json(String api_url, List<NameValuePair> params, String method, Map<String, String> headers)
     // throws IOException {
-    // URL url = new URL(baseName + api_url);
+    // URL_CLASSNAME url = new URL_CLASSNAME(baseName + api_url);
     //
     // HttpClient httpclient = new DefaultHttpClient();
     //

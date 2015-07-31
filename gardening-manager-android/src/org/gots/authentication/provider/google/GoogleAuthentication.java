@@ -74,11 +74,11 @@ public class GoogleAuthentication implements GotsSocialAuthentication {
     }
 
     // public String getEmail(String accessToken, String userid) {
-    // URL url;
+    // URL_CLASSNAME url;
     // String login = null;
     // try {
     //
-    // url = new URL("https://www.googleapis.com/plus/v1/people/" + userid + "?access_token=" + accessToken);
+    // url = new URL_CLASSNAME("https://www.googleapis.com/plus/v1/people/" + userid + "?access_token=" + accessToken);
     //
     // HttpURLConnection con = (HttpURLConnection) url.openConnection();
     // int serverCode = con.getResponseCode();

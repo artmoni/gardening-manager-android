@@ -216,7 +216,7 @@ public class NuxeoAuthentication {
     // // String paramString = URLEncodedUtils.format(params,
     // // "utf-8");
     // // uri += paramString;
-    // // URL url = new URL(uri);
+    // // URL_CLASSNAME url = new URL_CLASSNAME(uri);
     // //
     // // URLConnection urlConnection;
     // // urlConnection = url.openConnection();

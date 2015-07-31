@@ -280,9 +280,10 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 remoteSeed.setId(localSeed.getSeedId());
                 remoteSeed = super.updateSeed(remoteSeed);
             }
+            downloadImageAsync(service, doc, remoteSeed);
         } catch (Exception e) {
             remoteSeed = localSeed;
-            Log.e(TAG, "" + e.getMessage());
+            Log.e(TAG, "getSeedByUUID: " + e.getMessage());
         }
 
         return remoteSeed;
@@ -339,7 +340,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             Log.d(TAG, "RemoteSeed UUID " + documentVendorSeed.getId());
             super.updateSeed(currentSeed);
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage()+" : "+currentSeed);
+            Log.e(TAG, e.getMessage() + " : " + currentSeed);
         }
 
         return currentSeed;

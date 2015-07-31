@@ -17,12 +17,14 @@ public class MyTextView extends TextView {
 
     public MyTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.setTypeface(Typeface.createFromAsset(context.getAssets(), "alpha_echo.ttf"));
+        if (!isInEditMode())
+            this.setTypeface(Typeface.createFromAsset(context.getAssets(), "alpha_echo.ttf"));
     }
 
     public MyTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        this.setTypeface(Typeface.createFromAsset(context.getAssets(), "alpha_echo.ttf"));
+        if (!isInEditMode())
+            this.setTypeface(Typeface.createFromAsset(context.getAssets(), "alpha_echo.ttf"));
 
     }
 }

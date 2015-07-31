@@ -503,7 +503,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         switch (item.getItemId()) {
             case R.id.help:
                 Intent browserIntent = new Intent(this, WebHelpActivity.class);
-                browserIntent.putExtra(WebHelpActivity.URL, getClass().getSimpleName());
+                browserIntent.putExtra(WebHelpActivity.URL_CLASSNAME, getClass().getSimpleName());
                 startActivity(browserIntent);
 
                 return true;

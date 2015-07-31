@@ -88,7 +88,7 @@ public class JustVisualResult {
     public String getCommonName() {
         String commonName = null;
         if (plantNames.indexOf('-') > 0)
-            commonName = plantNames.substring(plantNames.indexOf('-'), plantNames.length() - 2);
+            commonName = plantNames.substring(plantNames.indexOf('-') + 1, plantNames.length() - 2);
         if (commonName == null)
             commonName = plantNames.substring(0, plantNames.indexOf('('));
         return commonName;

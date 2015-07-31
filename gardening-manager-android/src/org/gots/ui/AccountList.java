@@ -125,7 +125,7 @@ public class AccountList extends ListActivity {
         // public String authRequest(String userSuppliedString, HttpRequest httpReq, HttpResponse httpResp)
         // throws IOException {
         // // try {
-        // // // configure the return_to URL where your application will
+        // // // configure the return_to URL_CLASSNAME where your application will
         // // // receive
         // // // the authentication responses from the OpenID provider
         // // String returnToUrl =
@@ -167,7 +167,7 @@ public class AccountList extends ListActivity {
         // // // Option 1: GET HTTP-redirect to the OpenID Provider
         // // // endpoint
         // // // The only method supported in OpenID 1.x
-        // // // redirect-URL usually limited ~2048 bytes
+        // // // redirect-URL_CLASSNAME usually limited ~2048 bytes
         // // httpResp.sendRedirect(authReq.getDestinationUrl(true));
         // // HttpParams params = cliauthReqent.getParams();
         // // HttpClientParams.setRedirecting(params, false);

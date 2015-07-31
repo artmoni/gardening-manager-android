@@ -1,13 +1,15 @@
-/*******************************************************************************
+/**
+ * ****************************************************************************
  * Copyright (c) 2012 sfleury.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ * <p>
  * Contributors:
- *     sfleury - initial API and implementation
- ******************************************************************************/
+ * sfleury - initial API and implementation
+ * ****************************************************************************
+ */
 package org.gots.ui;
 
 import java.io.File;
@@ -35,6 +37,7 @@ import org.gots.broadcast.BroadCastMessages;
 import org.gots.exception.GotsServerRestrictedException;
 import org.gots.inapp.GotsBillingDialog;
 import org.gots.inapp.GotsPurchaseItem;
+import org.gots.nuxeo.NuxeoManager;
 import org.gots.nuxeo.NuxeoWorkflowProvider;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
@@ -47,6 +50,10 @@ import org.gots.ui.fragment.SeedDescriptionFragment;
 import org.gots.ui.fragment.WorkflowTaskFragment;
 import org.gots.ui.fragment.WorkflowTaskFragment.OnWorkflowClickListener;
 import org.gots.utils.FileUtilities;
+import org.nuxeo.android.repository.DocumentManager;
+import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
+import org.nuxeo.ecm.automation.client.jaxrs.Session;
+import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 
 import android.app.Activity;
@@ -223,7 +230,9 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
                                 if (fragmentListAction != null) {
                                     ((ActionsDoneListFragment) fragmentListAction).update();
                                 }
-                            };
+                            }
+
+                            ;
                         }.execute();
                         return true;
                     }
@@ -243,7 +252,9 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
                                 if (fragmentListAction != null) {
                                     ((ActionsDoneListFragment) fragmentListAction).update();
                                 }
-                            };
+                            }
+
+                            ;
                         }.execute();
                     }
                 });
@@ -298,7 +309,9 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
                     pictureGallery.setAdapter(new GalleryImageAdapter(getApplicationContext(), result));
                 } else
                     pictureGallery.setVisibility(View.GONE);
-            };
+            }
+
+            ;
         }.execute();
     }
 
@@ -318,7 +331,9 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 
                     protected void onPostExecute(Void result) {
                         displayPictureGallery();
-                    };
+                    }
+
+                    ;
                 }.execute();
 
             }
@@ -366,175 +381,190 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
         // Handle item selection
         Intent i;
         switch (item.getItemId()) {
-        case R.id.edit:
-            Intent editIntent = new Intent(this, NewSeedActivity.class);
-            editIntent.putExtra(NewSeedActivity.ORG_GOTS_SEEDID, mSeed.getSeedId());
-            startActivity(editIntent);
-            return true;
-        case R.id.action_stock_add:
-            new AsyncTask<Void, Void, Void>() {
-                @Override
-                protected Void doInBackground(Void... params) {
-                    seedManager.addToStock(mSeed, getCurrentGarden());
-                    return null;
-                }
-
-                @Override
-                protected void onPostExecute(Void result) {
-                    runAsyncDataRetrieval();
-                    super.onPostExecute(result);
-                }
-            }.execute();
-            return true;
-
-        case R.id.download:
-            new AsyncTask<Void, Integer, File>() {
-                boolean licenceAvailable = false;
-
-                IabHelper buyHelper;
-
-                private ProgressDialog dialog;
-
-                protected void onPreExecute() {
-                    licenceAvailable = gotsPurchase.getFeatureExportPDF() ? true : gotsPurchase.isPremium();
-                    dialog = ProgressDialog.show(TabSeedActivity.this, "",
-                            getResources().getString(R.string.gots_loading), true);
-                    dialog.setCanceledOnTouchOutside(true);
-                };
-
-                @Override
-                protected File doInBackground(Void... params) {
-                    if (licenceAvailable)
-                        try {
-                            GotsActionSeedProvider provider = GotsActionSeedManager.getInstance().initIfNew(
-                                    getApplicationContext());
-                            return provider.downloadHistory(mSeed);
-                        } catch (GotsServerRestrictedException e) {
-                            Log.w(TAG, e.getMessage());
-                            licenceAvailable = false;
-                            return null;
-                        }
-                    return null;
-                }
-
-                @Override
-                protected void onPostExecute(File result) {
-                    try {
-                        dialog.dismiss();
-                        dialog = null;
-                    } catch (Exception e) {
-                        // nothing
+            case R.id.edit:
+                Intent editIntent = new Intent(this, NewSeedActivity.class);
+                editIntent.putExtra(NewSeedActivity.ORG_GOTS_SEEDID, mSeed.getSeedId());
+                startActivity(editIntent);
+                return true;
+            case R.id.action_stock_add:
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        seedManager.addToStock(mSeed, getCurrentGarden());
+                        return null;
                     }
-                    if (!gotsPrefs.isConnectedToServer()) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(TabSeedActivity.this);
-                        builder.setMessage(getResources().getString(R.string.login_connect_restricted)).setCancelable(
-                                false).setPositiveButton(getResources().getString(R.string.login_connect),
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        LoginDialogFragment dialogFragment = new LoginDialogFragment();
-                                        dialogFragment.show(getSupportFragmentManager(), "");
-                                    }
-                                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
+
+                    @Override
+                    protected void onPostExecute(Void result) {
+                        runAsyncDataRetrieval();
+                        super.onPostExecute(result);
+                    }
+                }.execute();
+                return true;
+
+            case R.id.download:
+                new AsyncTask<Void, Integer, File>() {
+                    boolean licenceAvailable = false;
+
+                    IabHelper buyHelper;
+
+                    private ProgressDialog dialog;
+
+                    protected void onPreExecute() {
+                        licenceAvailable = gotsPurchase.getFeatureExportPDF() ? true : gotsPurchase.isPremium();
+                        dialog = ProgressDialog.show(TabSeedActivity.this, "",
+                                getResources().getString(R.string.gots_loading), true);
+                        dialog.setCanceledOnTouchOutside(true);
+                    }
+
+                    ;
+
+                    @Override
+                    protected File doInBackground(Void... params) {
+                        if (licenceAvailable)
+                            try {
+                                GotsActionSeedProvider provider = GotsActionSeedManager.getInstance().initIfNew(
+                                        getApplicationContext());
+                                return provider.downloadHistory(mSeed);
+                            } catch (GotsServerRestrictedException e) {
+                                Log.w(TAG, e.getMessage());
+                                licenceAvailable = false;
+                                return null;
                             }
-                        });
-                        builder.show();
-                    }
-                    if (!licenceAvailable) {
-                        FragmentManager fm = getSupportFragmentManager();
-                        GotsBillingDialog editNameDialog = new GotsBillingDialog(
-                                GotsPurchaseItem.SKU_FEATURE_PDFHISTORY);
-                        editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
-
-                        editNameDialog.show(fm, "fragment_edit_name");
-                    }
-                    if (result != null) {
-                        Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
-                        pdfIntent.setDataAndType(Uri.fromFile(result), "application/pdf");
-                        startActivity(pdfIntent);
+                        return null;
                     }
 
-                }
-            }.execute();
-
-            return true;
-        case R.id.photo:
-            photoAction = new PhotoAction(getApplicationContext());
-            Date now = new Date();
-            cameraPicture = new File(photoAction.getImageFile(now).getAbsolutePath());
-            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(cameraPicture));
-            // takePictureIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivityForResult(takePictureIntent, PICK_IMAGE);
-
-            return true;
-        case R.id.delete:
-            final DeleteAction deleteAction = new DeleteAction(this);
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage(this.getResources().getString(R.string.action_delete_seed)).setCancelable(false).setPositiveButton(
-                    "OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            new AsyncTask<ActionOnSeed, Integer, Void>() {
-                                @Override
-                                protected Void doInBackground(ActionOnSeed... params) {
-                                    ActionOnSeed actionItem = params[0];
-                                    actionItem.execute(mSeed);
-                                    return null;
-                                }
-
-                                @Override
-                                protected void onPostExecute(Void result) {
-                                    Toast.makeText(getApplicationContext(), "action done", Toast.LENGTH_SHORT).show();
-                                    TabSeedActivity.this.finish();
-                                    super.onPostExecute(result);
-                                }
-                            }.execute(deleteAction);
-                            sendBroadcast(new Intent(BroadCastMessages.GROWINGSEED_DISPLAYLIST));
+                    @Override
+                    protected void onPostExecute(File result) {
+                        try {
                             dialog.dismiss();
+                            dialog = null;
+                        } catch (Exception e) {
+                            // nothing
                         }
-                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    dialog.cancel();
-                }
-            });
-            builder.show();
-            return true;
-        case R.id.workflow:
-            AlertDialog.Builder builderWorkflow = new AlertDialog.Builder(this);
-            builderWorkflow.setMessage(this.getResources().getString(R.string.workflow_launch_description)).setCancelable(
-                    false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    new AsyncTask<Void, Void, Void>() {
-                        @Override
-                        protected Void doInBackground(Void... params) {
-                            NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(
-                                    getApplicationContext());
-                            // BaseSeedInterface baseSeedInterface = (BaseSeedInterface) arg0.getItemAtPosition(arg2);
-                            nuxeoWorkflowProvider.startWorkflowValidation(mSeed);
-                            return null;
+                        if (!gotsPrefs.isConnectedToServer()) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(TabSeedActivity.this);
+                            builder.setMessage(getResources().getString(R.string.login_connect_restricted)).setCancelable(
+                                    false).setPositiveButton(getResources().getString(R.string.login_connect),
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            LoginDialogFragment dialogFragment = new LoginDialogFragment();
+                                            dialogFragment.show(getSupportFragmentManager(), "");
+                                        }
+                                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+                            builder.show();
+                        }
+                        if (!licenceAvailable) {
+                            FragmentManager fm = getSupportFragmentManager();
+                            GotsBillingDialog editNameDialog = new GotsBillingDialog(
+                                    GotsPurchaseItem.SKU_FEATURE_PDFHISTORY);
+                            editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+
+                            editNameDialog.show(fm, "fragment_edit_name");
+                        }
+                        if (result != null) {
+                            Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
+                            pdfIntent.setDataAndType(Uri.fromFile(result), "application/pdf");
+                            startActivity(pdfIntent);
                         }
 
-                        protected void onPostExecute(Void result) {
-                            Toast.makeText(getApplicationContext(),
-                                    "Your plant sheet has been sent to the moderator team", Toast.LENGTH_LONG).show();
-                            runAsyncDataRetrieval();
-                        };
-                    }.execute();
-                    dialog.dismiss();
-                }
-            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    dialog.cancel();
-                }
-            });
-            builderWorkflow.show();
+                    }
+                }.execute();
 
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
+                return true;
+            case R.id.photo:
+                photoAction = new PhotoAction(getApplicationContext());
+                Date now = new Date();
+                cameraPicture = new File(photoAction.getImageFile(now).getAbsolutePath());
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(cameraPicture));
+                // takePictureIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivityForResult(takePictureIntent, PICK_IMAGE);
+
+                return true;
+            case R.id.delete:
+                final DeleteAction deleteAction = new DeleteAction(this);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage(this.getResources().getString(R.string.action_delete_seed)).setCancelable(false).setPositiveButton(
+                        "OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                new AsyncTask<ActionOnSeed, Integer, Void>() {
+                                    @Override
+                                    protected Void doInBackground(ActionOnSeed... params) {
+                                        ActionOnSeed actionItem = params[0];
+                                        actionItem.execute(mSeed);
+                                        return null;
+                                    }
+
+                                    @Override
+                                    protected void onPostExecute(Void result) {
+                                        Toast.makeText(getApplicationContext(), "action done", Toast.LENGTH_SHORT).show();
+                                        TabSeedActivity.this.finish();
+                                        super.onPostExecute(result);
+                                    }
+                                }.execute(deleteAction);
+                                sendBroadcast(new Intent(BroadCastMessages.GROWINGSEED_DISPLAYLIST));
+                                dialog.dismiss();
+                            }
+                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+                builder.show();
+                return true;
+            case R.id.workflow:
+                AlertDialog.Builder builderWorkflow = new AlertDialog.Builder(this);
+                builderWorkflow.setMessage(this.getResources().getString(R.string.workflow_launch_description)).setCancelable(
+                        false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        new AsyncTask<Void, Void, Void>() {
+                            @Override
+                            protected Void doInBackground(Void... params) {
+                                NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(
+                                        getApplicationContext());
+                                // BaseSeedInterface baseSeedInterface = (BaseSeedInterface) arg0.getItemAtPosition(arg2);
+                                Session session = getNuxeoClient().getSession();
+                                DocumentManager service = session.getAdapter(DocumentManager.class);
+                                try {
+                                    Document docSeed = service.getDocument(mSeed.getUUID());
+                                    nuxeoWorkflowProvider.startWorkflowValidation(docSeed);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                return null;
+                            }
+
+                            protected void onPostExecute(Void result) {
+                                Toast.makeText(getApplicationContext(),
+                                        "Your plant sheet has been sent to the moderator team", Toast.LENGTH_LONG).show();
+                                runAsyncDataRetrieval();
+                            }
+
+                            ;
+                        }.execute();
+                        dialog.dismiss();
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+                builderWorkflow.show();
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
+    }
+
+    protected AndroidAutomationClient getNuxeoClient() {
+        return NuxeoManager.getInstance().getNuxeoClient();
     }
 
     @Override
@@ -640,7 +670,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
             urlDescription = "http://" + Locale.getDefault().getLanguage() + ".wikipedia.org/wiki/" + mSeed.getSpecie();
             bundle.putString("org.gots.seed.url", urlDescription);
             if (fragmentWebView == null) {
-                fragmentWebView =new WebViewFragment();
+                fragmentWebView = new WebViewFragment();
                 fragmentWebView.setArguments(bundle);
                 fragments.add(fragmentWebView);
                 addTab(fragmentWebView, getResources().getString(R.string.seed_description_tabmenu_wikipedia));
@@ -664,7 +694,9 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
                     if (fragmentListAction != null) {
                         ((ActionsDoneListFragment) fragmentListAction).update();
                     }
-                };
+                }
+
+                ;
             }.execute();
         }
         hideOverlayFragment();
@@ -685,7 +717,9 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
                     if (fragmentListAction != null) {
                         ((ActionsDoneListFragment) fragmentListAction).update();
                     }
-                };
+                }
+
+                ;
             }.execute();
         }
         hideOverlayFragment();

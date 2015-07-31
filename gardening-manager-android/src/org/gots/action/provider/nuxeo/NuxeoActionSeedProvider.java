@@ -440,7 +440,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
                 doc = documentMgr.getDocument(doc, "*");
                 // get the file content property
                 PropertyMap map = doc.getProperties().getMap("file:content");
-                // get the data URL
+                // get the data URL_CLASSNAME
                 String path = map.getString("data");
                 FileBlob blob = (FileBlob) session.getFile(path);
                 Log.i(TAG, "Picture " + blob.getFileName());

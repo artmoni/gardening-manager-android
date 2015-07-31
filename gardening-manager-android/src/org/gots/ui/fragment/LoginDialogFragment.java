@@ -148,14 +148,14 @@ public class LoginDialogFragment extends AbstractDialogFragment {
                 // StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
                 //
                 // oAuthData.http("/plus/v1/people/me", new OAuthRequest() {
-                // private URL url;
+                // private URL_CLASSNAME url;
                 //
                 // private URLConnection con;
                 //
                 // @Override
                 // public void onSetURL(String _url) {
                 // try {
-                // url = new URL(_url);
+                // url = new URL_CLASSNAME(_url);
                 // con = url.openConnection();
                 // } catch (Exception e) {
                 // e.printStackTrace();

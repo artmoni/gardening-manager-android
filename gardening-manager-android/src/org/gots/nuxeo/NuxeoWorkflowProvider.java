@@ -187,12 +187,12 @@ public class NuxeoWorkflowProvider {
         return docs;
     }
 
-    public Document startWorkflowValidation(BaseSeedInterface seed) {
+    public Document startWorkflowValidation(Document doc) {
         Document workflowDoc = null;
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager service = session.getAdapter(DocumentManager.class);
-            workflowDoc = service.startWorkflow(new IdRef(seed.getUUID()), "validation");
+            workflowDoc = service.startWorkflow(doc, "validation");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -295,7 +295,7 @@ public class NuxeoWorkflowProvider {
             // for (Map.Entry<String, String> entry : req.getConnector().getHeaders().entrySet()) {
             // httpGet.setHeader(entry.getKey(), entry.getValue());
             // }
-            // make GET request to the given URL
+            // make GET request to the given URL_CLASSNAME
             // HttpResponse httpResponse = httpclient.execute(httpGet);
             HttpResponse httpResponse = session.getConnector().executeSimpleHttp(httpGet);
 

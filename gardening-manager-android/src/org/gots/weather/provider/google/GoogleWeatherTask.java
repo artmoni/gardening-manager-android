@@ -105,7 +105,7 @@ public class GoogleWeatherTask extends AsyncTask<Object, Integer, WeatherConditi
                 xr.setContentHandler(gwh);
 
                 // InputSource is = new InputSource(url.openStream());
-                /* Parse the xml-data our URL-call returned. */
+                /* Parse the xml-data our URL_CLASSNAME-call returned. */
                 xr.parse(new InputSource(is));
 
                 /* Our Handler now provides the parsed weather-data to us. */
