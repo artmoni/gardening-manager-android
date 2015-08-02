@@ -81,18 +81,9 @@
         <provider android:authorities="org.gots.providers.allotment" android:label="@string/dashboard.allotments.name" android:name="org.gots.provider.AllotmentContentProvider" android:syncable="true"/>
         <provider android:authorities="org.gots.providers.weather" android:label="@string/dashboard.weather.name" android:name="org.gots.provider.WeatherContentProvider" android:syncable="true"/>
 
-        <receiver android:name=".service.BootBroadcastReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-            </intent-filter>
-        </receiver>
         <receiver android:name=".action.service.ActionTODOBroadcastReceiver">
         </receiver>
-        <receiver android:name=".garden.GardenManager">
-            <intent-filter android:priority="100">
-                <action android:name="org.gots.broadcast.BroadCastMessages.CONNECTION_SETTINGS_CHANGED"/>
-            </intent-filter>
-        </receiver>
+
         
 
         <service android:name=".action.service.ActionNotificationService"/>
