@@ -122,12 +122,23 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             @Override
             protected FileBlob doInBackground(BaseSeedInterface... params) {
                 BaseSeedInterface seed = params[0];
-                File imageFile = new File(gotsPrefs.getFilesDir(),
-                        seed.getVariety().toLowerCase().replaceAll("\\s", "").replaceAll(" ", ""));
-                if (!imageFile.exists())
-                    NuxeoUtils.downloadBlob(service, document, imageFile);
-                else {
-                    Log.d(TAG, "Image " + imageFile.getAbsolutePath() + " already exists");
+
+                File imageFile;
+                imageFile = new File(gotsPrefs.getFilesDir(), document.getId());
+                if (!imageFile.exists()) {
+                    String filename = seed.getVariety().toLowerCase().replaceAll("\\s", "").replaceAll(" ", "");
+                    if (!"".equals(filename))
+                        imageFile = new File(gotsPrefs.getFilesDir(), filename);
+                }
+
+                if (!imageFile.exists()) {
+                    FileBlob blob = NuxeoUtils.downloadBlob(service, document, imageFile);
+                    if (blob != null)
+                        Log.d(TAG, "downloadImageAsync: " + imageFile.getAbsolutePath() + " has been created");
+                    else
+                        Log.d(TAG, "downloadImageAsync: " + imageFile.getAbsolutePath() + " blob is null");
+                } else {
+                    Log.d(TAG, "downloadImageAsync " + imageFile.getAbsolutePath() + " already exists");
                 }
                 return null;
             }
@@ -280,10 +291,11 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 remoteSeed.setId(localSeed.getSeedId());
                 remoteSeed = super.updateSeed(remoteSeed);
             }
+            Log.d(TAG,"getSeedByUUID found: "+remoteSeed);
             downloadImageAsync(service, doc, remoteSeed);
         } catch (Exception e) {
             remoteSeed = localSeed;
-            Log.e(TAG, "getSeedByUUID: " + e.getMessage());
+            Log.w(TAG, "getSeedByUUID not found " + e.getMessage());
         }
 
         return remoteSeed;

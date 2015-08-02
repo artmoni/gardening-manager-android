@@ -19,6 +19,7 @@ public class NuxeoSeedConverter {
 
     public static BaseSeedInterface convert(Document document) throws NumberFormatException {
         BaseSeedInterface seed = new GrowingSeedImpl();
+        seed.setName(document.getString("vendorseed:name"));
         seed.setVariety(document.getTitle());
         seed.setFamily(document.getString("vendorseed:family"));
         seed.setSpecie(document.getString("vendorseed:specie"));
@@ -41,6 +42,7 @@ public class NuxeoSeedConverter {
     public static Document convert(String parentPath, BaseSeedInterface seed) {
         Document doc = new Document(parentPath, seed.getName(), "VendorSeed");
         doc.set("dc:title", seed.getVariety());
+        doc.set("vendorseed:name", seed.getName());
         doc.set("vendorseed:datesowingmin", String.valueOf(seed.getDateSowingMin()));
         doc.set("vendorseed:datesowingmax", String.valueOf(seed.getDateSowingMax()));
         doc.set("vendorseed:durationmin", String.valueOf(seed.getDurationMin()));

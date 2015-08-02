@@ -95,6 +95,8 @@ public class SeedUtil {
                 /* Check custom image for this variety */
         if (mSeed.getVariety() != null && !"".equals(mSeed.getVariety()))
             imageFile = new File(rootPath, mSeed.getVariety().toLowerCase().replaceAll("\\s", ""));
+        if (!imageFile.exists())
+            imageFile = new File(rootPath, mSeed.getUUID());
         if (imageFile != null && imageFile.exists()) {
             image = FileUtilities.decodeScaledBitmapFromSdCard(imageFile.getAbsolutePath(), 100, 100);
         }
