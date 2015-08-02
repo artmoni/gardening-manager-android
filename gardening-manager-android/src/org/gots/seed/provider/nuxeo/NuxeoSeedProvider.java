@@ -291,7 +291,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 remoteSeed.setId(localSeed.getSeedId());
                 remoteSeed = super.updateSeed(remoteSeed);
             }
-            Log.d(TAG,"getSeedByUUID found: "+remoteSeed);
+            Log.d(TAG, "getSeedByUUID found: " + remoteSeed);
             downloadImageAsync(service, doc, remoteSeed);
         } catch (Exception e) {
             remoteSeed = localSeed;
@@ -346,7 +346,8 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     NuxeoSeedConverter.convert(catalog.getPath(), currentSeed).getProperties());
             // ****************** FILE UPLOAD ***************
             if (file != null) {
-                NuxeoUtils.uploadBlob(session, documentVendorSeed, file, null);
+                NuxeoUtils nuxeoUtils = new NuxeoUtils();
+                nuxeoUtils.uploadBlob(session, documentVendorSeed, file, null);
             }
             currentSeed.setUUID(documentVendorSeed.getId());
             Log.d(TAG, "RemoteSeed UUID " + documentVendorSeed.getId());

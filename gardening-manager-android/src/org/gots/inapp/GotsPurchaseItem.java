@@ -37,6 +37,7 @@ public class GotsPurchaseItem {
 
     public static String FEATURE_RECOGNITION_LASTDAY = "gots.feature.recognition.lastday";
 
+    public static int RECOGNITION_FREE_COUNTER_MAX = 3;
     // public static String SKU_FEATURE_PDFHISTORY = SKU_TEST_PURCHASE;
 
     private SharedPreferences prefs;
@@ -110,34 +111,38 @@ public class GotsPurchaseItem {
     }
 
     public int getFeatureRecognitionCounter() {
+
+        return prefs.getInt(FEATURE_RECOGNITION_COUNTER, 0) + getFeatureRecognitionFreeCounter();
+    }
+
+//    public int getFeatureRecognitionFreeCounterMax() {
+//        return prefs.getInt(FEATURE_RECOGNITION_COUNTER, 0) + (isPremium() ? 10 : 3);
+//    }
+
+    public int getFeatureRecognitionFreeCounter() {
         Calendar cal = Calendar.getInstance();
 
         int lastDay = prefs.getInt(FEATURE_RECOGNITION_LASTDAY, cal.get(Calendar.DAY_OF_YEAR));
-        int counter = prefs.getInt(FEATURE_RECOGNITION_COUNTERDAILY, getFeatureRecognitionMaxCounter());
-        if (lastDay != cal.get(Calendar.DAY_OF_YEAR) && counter < 0){
+        int counter = prefs.getInt(FEATURE_RECOGNITION_COUNTERDAILY, RECOGNITION_FREE_COUNTER_MAX);
+        if (lastDay != cal.get(Calendar.DAY_OF_YEAR) && counter < 0) {
             SharedPreferences.Editor editor = prefs.edit();
-            editor.putInt(FEATURE_RECOGNITION_COUNTERDAILY,  isPremium() ? 10 : 3);
+            editor.putInt(FEATURE_RECOGNITION_COUNTERDAILY, RECOGNITION_FREE_COUNTER_MAX);
+            editor.putInt(FEATURE_RECOGNITION_LASTDAY, cal.get(Calendar.DAY_OF_YEAR));
             editor.commit();
-            setFeatureRecognitionCounter(0);
         }
-        return prefs.getInt(FEATURE_RECOGNITION_COUNTER, 0) + getFeatureRecognitionDailyCounter();
+        return prefs.getInt(FEATURE_RECOGNITION_COUNTERDAILY, 0);
     }
 
-    public int getFeatureRecognitionMaxCounter() {
-        return prefs.getInt(FEATURE_RECOGNITION_COUNTER, 0) + (isPremium() ? 10 : 3);
-    }
-
-    public int getFeatureRecognitionDailyCounter() {
-        return prefs.getInt(FEATURE_RECOGNITION_COUNTERDAILY, (isPremium() ? 10 : 3));
-    }
 
     public void decrementRecognitionDailyCounter() {
-        if (getFeatureRecognitionDailyCounter() == 0)
-            setFeatureRecognitionCounter(getFeatureRecognitionCounter() - 1);
-        else {
+        if (getFeatureRecognitionFreeCounter() > 0)
+        // setFeatureRecognitionCounter(getFeatureRecognitionCounter() - 1);
+        {
             SharedPreferences.Editor editor = prefs.edit();
-            editor.putInt(FEATURE_RECOGNITION_COUNTERDAILY, getFeatureRecognitionDailyCounter() - 1);
+            editor.putInt(FEATURE_RECOGNITION_COUNTERDAILY, getFeatureRecognitionFreeCounter() - 1);
             editor.commit();
+        } else if (getFeatureRecognitionCounter() > 0) {
+            setFeatureRecognitionCounter(getFeatureRecognitionCounter() - 1);
         }
     }
 }

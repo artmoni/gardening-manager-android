@@ -50,7 +50,7 @@ public class NuxeoUtils {
 
     }
 
-    public static void uploadBlob(final Session session, final Document document, File file,final OnBlobUpload callBack) {
+    public void uploadBlob(final Session session, final Document document, File file, final OnBlobUpload callBack) {
         final FileBlob blobToUpload = new FileBlob(file);
         blobToUpload.setMimeType("image/jpeg");
 
@@ -77,14 +77,14 @@ public class NuxeoUtils {
             @Override
             public void onSuccess(String executionId, Serializable data) {
                 NuxeoUtils.attachBlobToDocument(session, document, blobProp);
-                if (callBack!=null)
+                if (callBack != null)
                     callBack.onUploadSuccess(data);
                 Log.i(TAG, "success");
             }
 
             @Override
             public void onError(String executionId, Throwable e) {
-                if (callBack!=null)
+                if (callBack != null)
                     callBack.onUploadError(e.getMessage());
                 Log.i(TAG, "errdroior");
 
@@ -97,7 +97,7 @@ public class NuxeoUtils {
 
         try {
             image = service.getBlob(doc);
-            Log.d(TAG,"downloadBlob temporary file = "+image.getFile().getAbsolutePath());
+            Log.d(TAG, "downloadBlob temporary file = " + image.getFile().getAbsolutePath());
             if (image != null && image.getLength() > 0) {
                 try {
                     FileUtilities.copy(image.getFile(), file);

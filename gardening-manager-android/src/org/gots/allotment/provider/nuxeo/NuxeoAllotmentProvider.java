@@ -173,8 +173,10 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
                     NuxeoAllotmentConverter.convertToProperties(allotment));
             if (allotment.getImagePath() != null) {
                 File f = new File(allotment.getImagePath());
-                if (f.exists())
-                    NuxeoUtils.uploadBlob(session, newAllotment, f, null);
+                if (f.exists()) {
+                    NuxeoUtils nuxeoUtils = new NuxeoUtils();
+                    nuxeoUtils.uploadBlob(session, newAllotment, f, null);
+                }
             }
             allotment.setUUID(newAllotment.getId());
             allotment = super.updateAllotment(allotment);
@@ -209,8 +211,10 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
                     NuxeoAllotmentConverter.convertToProperties(allotment));
             if (allotment.getImagePath() != null) {
                 File f = new File(allotment.getImagePath());
-                if (f.exists())
-                    NuxeoUtils.uploadBlob(session, updatedDoc, f, null);
+                if (f.exists()) {
+                    NuxeoUtils nuxeoUtils = new NuxeoUtils();
+                    nuxeoUtils.uploadBlob(session, updatedDoc, f, null);
+                }
             }
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);

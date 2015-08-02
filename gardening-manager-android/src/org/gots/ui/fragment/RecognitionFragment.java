@@ -1,6 +1,10 @@
 package org.gots.ui.fragment;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -55,9 +59,10 @@ import java.util.Map;
 /**
  * Created by sfleury on 13/07/15.
  */
-public class RecognitionFragment extends BaseGotsFragment implements JustVisualAdapter.OnAdapterClickListener {
+public class RecognitionFragment extends BaseGotsFragment implements JustVisualAdapter.OnAdapterClickListener, NuxeoUtils.OnBlobUpload {
 
-    public static final java.lang.String IMAGE_PATH = "org.gots.recognition.path";
+    public static final String IMAGE_PATH = "org.gots.recognition.path";
+    private static final String RECOGNITION_SUCCESS = "org.gots.recognition.success";
 
 
     private ImageView imageView;
@@ -67,9 +72,46 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
     private int imageResultHeight = 0;
     private ImageView imageCompare;
     private OnRecognitionFinished mCallback;
-    private File imageFile;
     private ImageView imageRefresh;
-    private String nuxeoDocId;
+    Document lastDocument = null;
+    File imageFile;
+    private Map<String, List<JustVisualResult>> listMap;
+    private BroadcastReceiver mBroadcast = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            progressText.clearAnimation();
+            progressText.setVisibility(View.GONE);
+
+            imageRefresh.clearAnimation();
+            imageRefresh.setVisibility(View.GONE);
+
+            JustVisualAdapter arrayAdapter = new JustVisualAdapter(getActivity(), listMap);
+            arrayAdapter.setOnImageClick(RecognitionFragment.this);
+            listView.setAdapter(arrayAdapter);
+        }
+    };
+    private boolean uploading;
+    private Context mContext;
+
+    @Override
+    public void onUploadSuccess(Serializable data) {
+        final String serverImageUrl = "http://my.gardening-manager.com/nuxeo/nxfile/default/" + lastDocument.getId() + "/blobholder:0/";
+        listMap = processJustVisual(serverImageUrl);
+        if (listMap == null)
+            listMap = new HashMap<>();
+        Log.d(TAG, "onUploadSuccess listMap size=" + listMap.size());
+        if (mCallback != null)
+            mCallback.onRecognitionSucceed();
+        mContext.sendBroadcast(new Intent(RECOGNITION_SUCCESS));
+        uploading = false;
+    }
+
+    @Override
+    public void onUploadError(String message) {
+        if (mCallback != null)
+            mCallback.onRecognitionFailed("Upload image on server has failed: " + message);
+        uploading = false;
+    }
 
     public interface OnRecognitionFinished {
         void onRecognitionSucceed();
@@ -83,11 +125,21 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
     public void onAttach(Activity activity) {
         try {
             mCallback = (OnRecognitionFinished) activity;
+            mContext = activity;
         } catch (ClassCastException castException) {
             throw new ClassCastException(activity.toString() + " must implement OnRecognitionFinished");
         }
+        getActivity().registerReceiver(mBroadcast, new IntentFilter(RECOGNITION_SUCCESS));
+
         super.onAttach(activity);
     }
+
+    @Override
+    public void onDetach() {
+        getActivity().unregisterReceiver(mBroadcast);
+        super.onDetach();
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -97,10 +149,12 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
         progressText = (TextView) v.findViewById(R.id.textViewProgress);
         imageCompare = (ImageView) v.findViewById(R.id.imageViewCompare);
         imageRefresh = (ImageView) v.findViewById(R.id.imageViewRefresh);
+        uploading = false;
         Bundle args = getArguments();
         if (args != null) {
             String filepath = args.getString(IMAGE_PATH);
-            imageFile = new File(filepath);
+            imageFile = getReduceFile(new File(filepath));
+
             if (!imageFile.exists())
                 mCallback.onRecognitionFailed("File does not exists: " + imageFile.getAbsolutePath());
         } else {
@@ -131,25 +185,17 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
         });
 
 
-        File reduceFile = getReduceFile();
-        if (reduceFile != null) {
-            Bitmap b = BitmapFactory.decodeFile(reduceFile.getAbsolutePath());
-            imageView.setImageBitmap(b);
-            sendServerAsync(reduceFile);
-        } else {
-            mCallback.onRecognitionFailed("Error converting image, disk space might be too low");
-        }
         super.onViewCreated(view, savedInstanceState);
     }
 
-    public File getReduceFile() {
+    public File getReduceFile(File originalFile) {
         FileOutputStream out = null;
         File outFile = null;
         try {
-            outFile = new File(getActivity().getCacheDir(), imageFile.getName() + "-400x300");
+            outFile = new File(getActivity().getCacheDir(), originalFile.getName() + "-400x300");
             out = new FileOutputStream(outFile);
 
-            Bitmap bitmap = FileUtilities.decodeScaledBitmapFromSdCard(imageFile.getAbsolutePath(), 400, 300);
+            Bitmap bitmap = FileUtilities.decodeScaledBitmapFromSdCard(originalFile.getAbsolutePath(), 400, 300);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
             // PNG is a lossless format, the compression factor (100) is ignored
 
@@ -173,151 +219,68 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
         return NuxeoManager.getInstance().getNuxeoClient();
     }
 
-    private void sendServerAsync(final File imageFile) {
-        new AsyncTask<Void, Void, String>() {
-            @Override
-            protected void onPreExecute() {
-                imageRefresh.setVisibility(View.VISIBLE);
-                Animation myRotateAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
-                myRotateAnimation.setRepeatCount(Animation.INFINITE);
-                imageRefresh.startAnimation(myRotateAnimation);
 
-                progressText.setVisibility(View.VISIBLE);
-                progressText.setText(getResources().getString(R.string.plant_recognition_progress));
-                Animation blinkAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.disappear);
-                blinkAnimation.setRepeatCount(Animation.INFINITE);
-                progressText.setAnimation(blinkAnimation);
-                super.onPreExecute();
+    private Map<String, List<JustVisualResult>> processJustVisual(final String url) {
+        ImageRecognition imageRecognition = new ImageRecognition();
+        Map<String, List<JustVisualResult>> species = null;
 
-            }
-
-            @Override
-            protected String doInBackground(Void... voids) {
-                Session session = getNuxeoClient().getSession();
-                DocumentManager service = session.getAdapter(DocumentManager.class);
-                try {
-
-                    Document rootFolder = service.getDocument("/default-domain/workspaces/justvisual");
-                    final Document imageDoc = service.createDocument(rootFolder, "VendorSeed", imageFile.getName());
-                    final String serverImageUrl = "http://my.gardening-manager.com/nuxeo/nxfile/default/" + imageDoc.getId() + "/blobholder:0/";
-                    nuxeoDocId = imageDoc.getId();
-                    NuxeoUtils.uploadBlob(session, imageDoc, imageFile, new NuxeoUtils.OnBlobUpload() {
-                        @Override
-                        public void onUploadSuccess(Serializable data) {
-                            processJustVisual(serverImageUrl);
-
-                        }
-
-                        @Override
-                        public void onUploadError(String message) {
-                            Log.w(TAG, "Upload image on server has failed: " + message);
-                        }
-                    });
-                } catch (Exception e) {
-                    Log.w(TAG, e.getMessage());
-                    return e.getMessage();
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(String errormessage) {
-                if (errormessage != null)
-                    progressText.setText(errormessage);
-                super.onPostExecute(errormessage);
-            }
-        }.execute();
-    }
-
-    private void processJustVisual(final String url) {
-        new AsyncTask<Void, Void, Map<String, List<JustVisualResult>>>() {
-
-            @Override
-            protected Map<String, List<JustVisualResult>> doInBackground(Void... voids) {
-                ImageRecognition imageRecognition = new ImageRecognition();
-                Map<String, List<JustVisualResult>> species = null;
-
-                try {
-                    HttpClient httpclient = new DefaultHttpClient();
-                    HttpResponse response = null;
-                    response = httpclient.execute(new HttpGet(imageRecognition.getURL(url)));
-                    StatusLine statusLine = response.getStatusLine();
-                    if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
-                        ByteArrayOutputStream out = new ByteArrayOutputStream();
-                        response.getEntity().writeTo(out);
-                        String responseString = out.toString();
-
-                        species = parseJSON(responseString);
-//                        Log.d(TAG, responseString);
-                        out.close();
-                        //..more logic
-                    } else {
-                        //Closes the connection.
-                        response.getEntity().getContent().close();
-                        throw new IOException(statusLine.getReasonPhrase());
-                    }
-
-                } catch (IOException e) {
-                    progressText.setText("Try later, recognition server is not responding");
-                }
-                return species;
-            }
-
-            @Override
-            protected void onPostExecute(Map<String, List<JustVisualResult>> results) {
-                if (isAdded()) {
-                    JustVisualAdapter arrayAdapter = new JustVisualAdapter(getActivity(), results);
-                    arrayAdapter.setOnImageClick(RecognitionFragment.this);
-                    listView.setAdapter(arrayAdapter);
-
-                    progressText.clearAnimation();
-                    progressText.setVisibility(View.GONE);
-
-                    imageRefresh.clearAnimation();
-                    imageRefresh.setVisibility(View.GONE);
-
-                    mCallback.onRecognitionSucceed();
-                }
-                super.onPostExecute(results);
-            }
-        }.execute();
-    }
-
-    private Map<String, List<JustVisualResult>> parseJSON(String responseString) {
-//        List<String> species = new ArrayList<>();
-        Map<String, List<JustVisualResult>> species = new HashMap<>();
         try {
-            JSONObject json = new JSONObject(responseString);
-            JSONArray images = json.getJSONArray("images");
-            Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").create();
-            for (int i = 0; i < images.length(); i++) {
-                try {
-                    JSONObject image = images.getJSONObject(i);
-                    JustVisualResult result = gson.fromJson(image.toString(), JustVisualResult.class);
-                    result.setUuid(nuxeoDocId);
-                    if (species.get(result.getPlantNames()) == null)
-                        species.put(result.getPlantNames(), new ArrayList<JustVisualResult>());
-                    species.get(result.getPlantNames()).add(result);
-//                    if (species.size() == 0 || (species.size() > 0 && !species.get(species.size() - 1).equals(result.getPlantNames())))
-//                        species.add(result.getPlantNames());
-                    Log.d(TAG, result.toString());
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpResponse response = null;
+            response = httpclient.execute(new HttpGet(imageRecognition.getURL(url)));
+            StatusLine statusLine = response.getStatusLine();
+            if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                response.getEntity().writeTo(out);
+                String responseString = out.toString();
 
-                } catch (JSONException jsonException) {
-                    Log.w(TAG, jsonException.getMessage() + ": " + responseString);
-                }
-
+                species = parseJSON(responseString);
+//                        Log.d(TAG, responseString);
+                out.close();
+                //..more logic
+            } else {
+                //Closes the connection.
+                response.getEntity().getContent().close();
+                throw new IOException(statusLine.getReasonPhrase());
             }
+
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage());
         } catch (JSONException e) {
             if (mCallback != null)
-                mCallback.onRecognitionFailed(e.getMessage());
-            e.printStackTrace();
+                mCallback.onRecognitionFailed("parseJSON: " + e.getMessage());
+
+        }
+        return species;
+//    priv
+    }
+
+    private Map<String, List<JustVisualResult>> parseJSON(String responseString) throws JSONException {
+        Map<String, List<JustVisualResult>> species = new HashMap<>();
+        JSONObject json = new JSONObject(responseString);
+        JSONArray images = json.getJSONArray("images");
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").create();
+        for (int i = 0; i < images.length(); i++) {
+            try {
+                JSONObject image = images.getJSONObject(i);
+                JustVisualResult result = gson.fromJson(image.toString(), JustVisualResult.class);
+                result.setUuid(lastDocument.getId());
+                if (species.get(result.getPlantNames()) == null)
+                    species.put(result.getPlantNames(), new ArrayList<JustVisualResult>());
+                species.get(result.getPlantNames()).add(result);
+                Log.d(TAG, result.toString());
+
+            } catch (JSONException jsonException) {
+                Log.w(TAG, jsonException.getMessage() + ": " + responseString);
+            }
+
         }
         return species;
     }
 
     @Override
     public void update() {
-
+        runAsyncDataRetrieval();
     }
 
     @Override
@@ -325,6 +288,69 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
         return true;
     }
 
+    @Override
+    protected void onNuxeoDataRetrievalStarted() {
+        imageRefresh.setVisibility(View.VISIBLE);
+        Animation myRotateAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
+        myRotateAnimation.setRepeatCount(Animation.INFINITE);
+        imageRefresh.startAnimation(myRotateAnimation);
+
+        progressText.setVisibility(View.VISIBLE);
+        progressText.setText(getResources().getString(R.string.plant_recognition_progress));
+        Animation blinkAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.disappear);
+        blinkAnimation.setRepeatCount(Animation.INFINITE);
+        progressText.setAnimation(blinkAnimation);
+
+        if (imageFile != null) {
+            Bitmap b = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+            imageView.setImageBitmap(b);
+        } else {
+            mCallback.onRecognitionFailed("Error converting image, disk space might be too low");
+        }
+        super.onNuxeoDataRetrievalStarted();
+    }
+
+    @Override
+    protected Object retrieveNuxeoData() throws Exception {
+        if (lastDocument == null && !uploading) {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
+            try {
+
+                Document rootFolder = service.getDocument("/default-domain/workspaces/justvisual");
+                final Document imageDoc = service.createDocument(rootFolder, "VendorSeed", imageFile.getName());
+                lastDocument = imageDoc;
+                if (imageDoc != null) {
+                    uploading = true;
+                    NuxeoUtils nuxeoUtils = new NuxeoUtils();
+                    nuxeoUtils.uploadBlob(session, imageDoc, imageFile, this);
+                    Log.d(TAG, "Uploading " + imageDoc.getTitle() + " - " + imageFile.getAbsolutePath());
+                }
+            } catch (Exception e) {
+                Log.w(TAG, e.getMessage());
+                return e.getMessage();
+            }
+        }
+
+        return "";
+    }
+
+    @Override
+    protected void onNuxeoDataRetrieved(Object data) {
+        if (listMap != null) {
+//            JustVisualAdapter arrayAdapter = new JustVisualAdapter(getActivity(), listMap);
+//            arrayAdapter.setOnImageClick(RecognitionFragment.this);
+//            listView.setAdapter(arrayAdapter);
+
+            progressText.clearAnimation();
+            progressText.setVisibility(View.GONE);
+
+            imageRefresh.clearAnimation();
+            imageRefresh.setVisibility(View.GONE);
+        }
+
+        super.onNuxeoDataRetrieved(data);
+    }
 
     @Override
     public void onImageClick(Bitmap bitmap) {
@@ -372,7 +398,7 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
                 imageRefresh.clearAnimation();
                 imageRefresh.setVisibility(View.GONE);
 
-                if (mCallback!=null)
+                if (mCallback != null)
                     mCallback.onRecognitionConfirmed(plantDoc);
 
                 super.onPostExecute(plantDoc);
