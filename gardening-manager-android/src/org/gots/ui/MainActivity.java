@@ -285,7 +285,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         // Recognition
         // *************************
         navDrawerItem = new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1));
-        navDrawerItem.setCounterVisibility(false);
+//        navDrawerItem.setCounterVisibility(false);
         navDrawerItems.add(navDrawerItem);
 
         // What's hot, We will add a counter here
@@ -373,6 +373,27 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
 
     private Menu menu;
 
+    protected void displayDrawerMenuRecognitionCounter() {
+        new AsyncTask<NavDrawerItem, Void, Integer>() {
+            NavDrawerItem item;
+
+            @Override
+            protected Integer doInBackground(NavDrawerItem... params) {
+                item = params[0];
+                return gotsPurchase.getFeatureRecognitionCounter() + gotsPurchase.getFeatureRecognitionFreeCounter();
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
+                item.setCounterVisibility(result > 0);
+                item.setCount(result.toString());
+                adapter.notifyDataSetChanged();
+
+                super.onPostExecute(result);
+            }
+        }.execute(navDrawerItems.get(5));
+    }
+
     protected void displayDrawerMenuProfileCounter() {
         new AsyncTask<NavDrawerItem, Void, Integer>() {
             NavDrawerItem item;
@@ -393,6 +414,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
             }
         }.execute(navDrawerItems.get(3));
     }
+
 
     protected void displayDrawerMenuActionsCounter() {
         new AsyncTask<NavDrawerItem, Void, Integer>() {
@@ -852,6 +874,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         displayDrawerMenuAllotmentCounter();
         displayDrawerMenuCatalogCounter();
         displayDrawerMenuProfileCounter();
+        displayDrawerMenuRecognitionCounter();
         if (gotsPrefs.getParrotToken() != null)
             displayDrawerMenuSensorCounter();
     }
