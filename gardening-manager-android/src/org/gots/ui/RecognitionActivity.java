@@ -55,43 +55,6 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
 
     }
 
-//    private void SearchByPicture() {
-//
-//        File photoFile = null;
-//        try {
-//            photoFile = createImageFile();
-//        } catch (IOException ex) {
-//            Log.e(TAG, ex.getMessage());
-//        }
-//        // Continue only if the File was successfully created
-//        if (photoFile != null) {
-////            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-////            startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
-//            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-//                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-//            }
-//
-//        }
-//
-//    }
-//
-//    private File createImageFile() throws IOException {
-//        // Create an image file name
-//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-//        String imageFileName = "JPEG_" + timeStamp + "_";
-//        File storageDir = Environment.getExternalStoragePublicDirectory(
-//                Environment.DIRECTORY_PICTURES);
-//        File image = File.createTempFile(
-//                imageFileName,  /* prefix */
-//                ".jpg",         /* suffix */
-//                storageDir      /* directory */
-//        );
-//
-//        // Save a file: path for use with ACTION_VIEW intents
-////        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
-//        return image;
-//    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -206,7 +169,6 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     public void onRecognitionSucceed() {
         gotsPurchaseItem.decrementRecognitionDailyCounter();
         mainFragment.update();
-//        recognitionFragment.update();
     }
 
     @Override

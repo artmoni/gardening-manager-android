@@ -516,7 +516,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
             transaction.addToBackStack(null);
             if (options != null)
                 contentFragment.setArguments(options);
-            contentFragment.setRetainInstance(false);
+            contentFragment.setRetainInstance(true);
             transaction.replace(getContentLayout(), contentFragment).commitAllowingStateLoss();
         }
         if (findViewById(R.id.contentLayout) != null)

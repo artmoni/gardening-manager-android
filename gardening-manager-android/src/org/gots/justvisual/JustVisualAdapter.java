@@ -36,10 +36,12 @@ import java.util.Map;
  */
 public class JustVisualAdapter extends BaseAdapter {
 
+    private static final String TAG = JustVisualAdapter.class.getSimpleName();
     private Map<String, List<JustVisualResult>> visualResults;
     private Context mContext;
     private String[] mKeys;
     private OnAdapterClickListener mCallback;
+    private boolean stopProcessing = false;
 
     public JustVisualAdapter(Context context, Map<String, List<JustVisualResult>> results) {
         visualResults = results;
@@ -47,6 +49,10 @@ public class JustVisualAdapter extends BaseAdapter {
         if (visualResults == null)
             visualResults = new HashMap<>();
         mKeys = visualResults.keySet().toArray(new String[visualResults.size()]);
+    }
+
+    public void stopProcessing() {
+        stopProcessing = true;
     }
 
     public interface OnAdapterClickListener {
@@ -120,7 +126,7 @@ public class JustVisualAdapter extends BaseAdapter {
         holder.textViewCommonName.setText(result.getCommonName());
         holder.textViewSpecies.setText(result.getSpecies());
 
-        new AsyncTask<Object, Integer, Bitmap>() {
+        AsyncTask task = new AsyncTask<Object, Integer, Bitmap>() {
             List<Bitmap> images = new ArrayList<Bitmap>();
             ViewGroup layout;
 
@@ -130,6 +136,8 @@ public class JustVisualAdapter extends BaseAdapter {
                 layout = (ViewGroup) parameters[0];
                 int numPlant = 0;
                 for (JustVisualResult visualResult : getItem(i)) {
+                    if (numPlant >= 5 || stopProcessing)
+                        return null;
                     Log.d(JustVisualAdapter.class.getSimpleName(), visualResult.getPlantNames() + " nbResult=" + getItem(i).size());
                     Bitmap bp = getBitmapFromURL(visualResult.getImageUrl());
 
@@ -138,8 +146,7 @@ public class JustVisualAdapter extends BaseAdapter {
                         publishProgress(numPlant++);
                     }
                     //stop loading TODO: load onScrollRight
-                    if (numPlant >= 5)
-                        return null;
+
                 }
                 return null;
             }
@@ -178,6 +185,7 @@ public class JustVisualAdapter extends BaseAdapter {
     }
 
     public Bitmap getBitmapFromURL(String src) {
+        Log.d(TAG, "getBitmapFromURL: " + src);
         try {
             java.net.URL url = new java.net.URL(src);
             HttpURLConnection connection = (HttpURLConnection) url
