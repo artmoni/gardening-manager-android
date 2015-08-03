@@ -13,8 +13,11 @@
 package org.gots.weather.provider.previmeteo;
 
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -42,7 +45,6 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
     private static final String TAG = "PrevimeteoWeatherProvider";
 
-    private static String queryString;
 
     private WeatherSet weatherSet;
 
@@ -51,6 +53,8 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
     private WeatherCache cache;
 
     private GotsPreferences gotsPreferences;
+    private static String PREVIMETEO_URL = "http://services.gardening-manager.com/previmeteo/";
+
 
     protected GotsContext getGotsContext() {
         return GotsContext.get(mContext);
@@ -62,15 +66,14 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
     }
 
     protected URL buildUriFromAddress(String forecastLocality) throws MalformedURLException {
-        String weatherURL;
+        String weatherURL = null;
+        try {
+            weatherURL = PREVIMETEO_URL + URLEncoder.encode(forecastLocality + "," + mContext.getResources().getConfiguration().locale.getCountry(), "utf8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
-        weatherURL = "http://api.previmeteo.com/" + gotsPreferences.getWeatherApiKey() + "/ig/api?weather="
-                + forecastLocality + "," + mContext.getResources().getConfiguration().locale.getCountry() + "&hl=fr";
-
-        queryString = weatherURL;
-
-        Log.d(TAG, "Weather request on " + weatherURL);
-        return new URL(queryString.replace(" ", "%20"));
+        return new URL(weatherURL);
     }
 
     @Override
