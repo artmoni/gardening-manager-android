@@ -115,35 +115,35 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
     }
 
     protected void downloadImageAsync(final DocumentManager service, final Document document, BaseSeedInterface seed) {
-        new AsyncTask<BaseSeedInterface, Void, FileBlob>() {
+        File imageFile;
+        imageFile = new File(gotsPrefs.getFilesDir(), document.getId());
+        if (!imageFile.exists()) {
+            String filename = seed.getVariety().toLowerCase().replaceAll("\\s", "").replaceAll(" ", "");
+            if (!"".equals(filename))
+                imageFile = new File(gotsPrefs.getFilesDir(), filename);
+        }
 
-            private File imageFile;
-
-            @Override
-            protected FileBlob doInBackground(BaseSeedInterface... params) {
-                BaseSeedInterface seed = params[0];
-
-                File imageFile;
-                imageFile = new File(gotsPrefs.getFilesDir(), document.getId());
-                if (!imageFile.exists()) {
-                    String filename = seed.getVariety().toLowerCase().replaceAll("\\s", "").replaceAll(" ", "");
-                    if (!"".equals(filename))
-                        imageFile = new File(gotsPrefs.getFilesDir(), filename);
+        if (!imageFile.exists() && document.getProperties().getString("file:filename") != null && !"null".equals(document.getProperties().getString("file:filename"))) {
+            new AsyncTask<File, Void, FileBlob>() {
+                @Override
+                protected FileBlob doInBackground(File... params) {
+                    File imageFile = params[0];
+                    return NuxeoUtils.downloadBlob(service, document, imageFile);
                 }
 
-                if (!imageFile.exists()) {
-                    FileBlob blob = NuxeoUtils.downloadBlob(service, document, imageFile);
-                    if (blob != null)
-                        Log.d(TAG, "downloadImageAsync: " + imageFile.getAbsolutePath() + " has been created");
+                @Override
+                protected void onPostExecute(FileBlob fileBlob) {
+                    if (fileBlob != null)
+                        Log.d(TAG, "downloadImageAsync: " + fileBlob.getFile().getAbsolutePath() + " has been created");
                     else
-                        Log.d(TAG, "downloadImageAsync: " + imageFile.getAbsolutePath() + " blob is null");
-                } else {
-                    Log.d(TAG, "downloadImageAsync " + imageFile.getAbsolutePath() + " already exists");
-                }
-                return null;
-            }
+                        Log.d(TAG, "downloadImageAsync: blob is null");
 
-        }.execute(seed);
+                    super.onPostExecute(fileBlob);
+                }
+            }.execute(imageFile);
+        } else {
+            Log.d(TAG, "downloadImageAsync " + imageFile.getAbsolutePath() + " already exists");
+        }
     }
 
     @Override
