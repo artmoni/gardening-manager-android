@@ -141,8 +141,6 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     super.onPostExecute(fileBlob);
                 }
             }.execute(imageFile);
-        } else {
-            Log.d(TAG, "downloadImageAsync " + imageFile.getAbsolutePath() + " already exists");
         }
     }
 
