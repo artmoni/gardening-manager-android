@@ -58,6 +58,7 @@ import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -263,11 +264,21 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
             GoogleAnalyticsTracker.getInstance().setCustomVar(2, "Member Connected", "Guest", 1);
 
         if (!gotsPurchase.isPremium()) {
-            GotsAdvertisement ads = new GotsAdvertisement(this);
+            new AsyncTask<Void, Void, View>() {
+                @Override
+                protected View doInBackground(Void... arg0) {
+                    GotsAdvertisement ads = new GotsAdvertisement(getApplicationContext());
+                    return ads.getAdsLayout();
+                }
 
-            LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
-            if (layout != null)
-                layout.addView(ads.getAdsLayout());
+                @Override
+                protected void onPostExecute(View view) {
+                    LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
+                    if (layout != null)
+                        layout.addView(view);
+                    super.onPostExecute(view);
+                }
+            }.execute();
         }
 
         super.onPostCreate(savedInstanceState);
