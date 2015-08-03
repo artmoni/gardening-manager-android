@@ -346,8 +346,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     NuxeoSeedConverter.convert(catalog.getPath(), currentSeed).getProperties());
             // ****************** FILE UPLOAD ***************
             if (file != null) {
-                NuxeoUtils nuxeoUtils = new NuxeoUtils();
-                nuxeoUtils.uploadBlob(session, documentVendorSeed, file, null);
+                NuxeoUtils.uploadBlob(session, documentVendorSeed, file, null);
             }
             currentSeed.setUUID(documentVendorSeed.getId());
             Log.d(TAG, "RemoteSeed UUID " + documentVendorSeed.getId());

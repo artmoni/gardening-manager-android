@@ -1,6 +1,7 @@
 package org.gots.nuxeo;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Random;
@@ -15,18 +16,18 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.FileBlob;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
-
-import com.google.android.gms.internal.ca;
 
 public class NuxeoUtils {
 
     private static final String TAG = NuxeoUtils.class.getSimpleName();
 
     public interface OnBlobUpload {
-        void onUploadSuccess(Serializable data);
+        void onUploadSuccess(Document document, Serializable data);
 
-        void onUploadError(String message);
+        void onUploadError(Document document, String message);
     }
 
     public static void attachBlobToDocument(Session session, Document document, PropertyMap blobProp) {
@@ -50,7 +51,7 @@ public class NuxeoUtils {
 
     }
 
-    public void uploadBlob(final Session session, final Document document, File file, final OnBlobUpload callBack) {
+    public static void uploadBlob(final Session session, final Document document, File file, final OnBlobUpload callBack) {
         final FileBlob blobToUpload = new FileBlob(file);
         blobToUpload.setMimeType("image/jpeg");
 
@@ -78,14 +79,14 @@ public class NuxeoUtils {
             public void onSuccess(String executionId, Serializable data) {
                 NuxeoUtils.attachBlobToDocument(session, document, blobProp);
                 if (callBack != null)
-                    callBack.onUploadSuccess(data);
+                    callBack.onUploadSuccess(document, data);
                 Log.i(TAG, "success");
             }
 
             @Override
             public void onError(String executionId, Throwable e) {
                 if (callBack != null)
-                    callBack.onUploadError(e.getMessage());
+                    callBack.onUploadError(document, e.getMessage());
                 Log.i(TAG, "errdroior");
 
             }
@@ -113,5 +114,31 @@ public class NuxeoUtils {
         }
 
         return image;
+    }
+
+    public static File getReduceFile(Context context, File originalFile) {
+        FileOutputStream out = null;
+        File outFile = null;
+        try {
+            outFile = new File(context.getCacheDir(), originalFile.getName() + "-400x300");
+            out = new FileOutputStream(outFile);
+
+            Bitmap bitmap = FileUtilities.decodeScaledBitmapFromSdCard(originalFile.getAbsolutePath(), 400, 300);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+            // PNG is a lossless format, the compression factor (100) is ignored
+
+
+        } catch (Exception e) {
+            Log.e(TAG, "setSearchImage " + e.getMessage());
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                Log.e(TAG, "setSearchImage finally " + e.getMessage());
+            }
+        }
+        return outFile;
     }
 }
