@@ -22,6 +22,9 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import org.gots.R;
 import org.gots.ui.WebHelpActivity;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -83,6 +86,7 @@ public class JustVisualAdapter extends BaseAdapter {
         public LinearLayout layoutResult;
         public FloatingActionButton floatingActionInformation;
         public Button buttonConfirme;
+        public AsyncTask task;
     }
 
     @Override
@@ -116,66 +120,65 @@ public class JustVisualAdapter extends BaseAdapter {
                         mCallback.onConfirmeClicked(getItem(i).get(0));
                 }
             });
+            String resultName = mKeys[i]; // Sample: camellias (camellia japonica - Camélia du Japon)
+            JustVisualResult result = getItem(i).get(0);
+            holder.textViewCommonName.setText(result.getCommonName());
+            holder.textViewSpecies.setText(result.getSpecies());
+
+            holder.task = new AsyncTask<Object, Integer, Bitmap>() {
+                List<Bitmap> images = new ArrayList<Bitmap>();
+                ViewGroup layout;
+
+                @Override
+                protected Bitmap doInBackground(Object... parameters) {
+//                JustVisualResult visualResult= getItem(i).get(0);
+                    layout = (ViewGroup) parameters[0];
+                    int numPlant = 0;
+                    for (JustVisualResult visualResult : getItem(i)) {
+                        if (numPlant >= 5 || stopProcessing)
+                            return null;
+                        Log.d(JustVisualAdapter.class.getSimpleName(), visualResult.getPlantNames() + " nbResult=" + getItem(i).size());
+                        Bitmap bp = getBitmapFromURL(visualResult.getImageUrl());
+
+                        if (bp != null) {
+                            images.add(bp);
+                            publishProgress(numPlant++);
+                        }
+                        //stop loading TODO: load onScrollRight
+
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void onProgressUpdate(final Integer... values) {
+                    ImageView imageView = new ImageView(mContext);
+                    imageView.setImageBitmap(images.get(values[0]));
+                    int height = layout.getHeight();
+                    imageView.setLayoutParams(new LinearLayout.LayoutParams(images.get(values[0]).getWidth() * (height / images.get(values[0]).getHeight()), height));
+                    imageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            mCallback.onImageClick(images.get(values[0]));
+                        }
+                    });
+                    layout.addView(imageView);
+                    layout.invalidate();
+                    super.onProgressUpdate(values);
+                }
+
+                @Override
+                protected void onPostExecute(Bitmap bitmap) {
+                    if (bitmap == null) return;
+
+                    super.onPostExecute(bitmap);
+                }
+
+            }.execute(holder.layoutResult);
             view.setTag(holder);
         } else
             holder = (Holder) view.getTag();
 
-
-        String resultName = mKeys[i]; // Sample: camellias (camellia japonica - Camélia du Japon)
-        JustVisualResult result = getItem(i).get(0);
-        holder.textViewCommonName.setText(result.getCommonName());
-        holder.textViewSpecies.setText(result.getSpecies());
-
-        AsyncTask task = new AsyncTask<Object, Integer, Bitmap>() {
-            List<Bitmap> images = new ArrayList<Bitmap>();
-            ViewGroup layout;
-
-            @Override
-            protected Bitmap doInBackground(Object... parameters) {
-//                JustVisualResult visualResult= getItem(i).get(0);
-                layout = (ViewGroup) parameters[0];
-                int numPlant = 0;
-                for (JustVisualResult visualResult : getItem(i)) {
-                    if (numPlant >= 5 || stopProcessing)
-                        return null;
-                    Log.d(JustVisualAdapter.class.getSimpleName(), visualResult.getPlantNames() + " nbResult=" + getItem(i).size());
-                    Bitmap bp = getBitmapFromURL(visualResult.getImageUrl());
-
-                    if (bp != null) {
-                        images.add(bp);
-                        publishProgress(numPlant++);
-                    }
-                    //stop loading TODO: load onScrollRight
-
-                }
-                return null;
-            }
-
-            @Override
-            protected void onProgressUpdate(final Integer... values) {
-                ImageView imageView = new ImageView(mContext);
-                imageView.setImageBitmap(images.get(values[0]));
-                int height = layout.getHeight();
-                imageView.setLayoutParams(new LinearLayout.LayoutParams(images.get(values[0]).getWidth() * (height / images.get(values[0]).getHeight()), height));
-                imageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        mCallback.onImageClick(images.get(values[0]));
-                    }
-                });
-                layout.addView(imageView);
-                layout.invalidate();
-                super.onProgressUpdate(values);
-            }
-
-            @Override
-            protected void onPostExecute(Bitmap bitmap) {
-                if (bitmap == null) return;
-
-                super.onPostExecute(bitmap);
-            }
-
-        }.execute(holder.layoutResult);
 
         return view;
     }
@@ -188,12 +191,21 @@ public class JustVisualAdapter extends BaseAdapter {
         Log.d(TAG, "getBitmapFromURL: " + src);
         try {
             java.net.URL url = new java.net.URL(src);
+            File f = new File(mContext.getCacheDir(), url.getFile().substring(url.getFile().lastIndexOf('/'), url.getFile().length() - 1));
             HttpURLConnection connection = (HttpURLConnection) url
                     .openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+
+            if (!f.exists()) {
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                Bitmap image = BitmapFactory.decodeStream(input);
+                FileOutputStream stream = new FileOutputStream(f);
+                image.compress(Bitmap.CompressFormat.JPEG, 90, stream);
+                input.close();
+                stream.close();
+            }
+            Bitmap myBitmap = BitmapFactory.decodeFile(f.getAbsolutePath());
             return myBitmap;
         } catch (IOException e) {
             e.printStackTrace();

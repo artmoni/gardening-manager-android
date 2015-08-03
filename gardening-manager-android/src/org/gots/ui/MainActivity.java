@@ -811,16 +811,12 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
             if (user != null && user.getId() != null) {
                 File file = new File(getApplicationContext().getCacheDir() + "/"
                         + user.getId().toLowerCase().replaceAll("\\s", ""));
-                try {
-                    if (file.exists()) {
-                        Drawable d = Drawable.createFromStream(getAssets().open(file.getAbsolutePath()), null);
-                        // Bitmap usrLogo = BitmapFactory.decodeFile(file.getAbsolutePath());
-                        // imageProfile.setImageBitmap(usrLogo);
-                        imageProfile.setImageDrawable(d);
-                    }
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                if (file.exists()) {
+//                        Drawable d = Drawable.createFromStream(getAssets().open(file.getAbsolutePath()), null);
+                    Bitmap d = BitmapFactory.decodeFile(file.getAbsolutePath());
+                    // Bitmap usrLogo = BitmapFactory.decodeFile(file.getAbsolutePath());
+                    // imageProfile.setImageBitmap(usrLogo);
+                    imageProfile.setImageBitmap(d);
                 }
             }
         }

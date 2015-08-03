@@ -264,21 +264,11 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
             GoogleAnalyticsTracker.getInstance().setCustomVar(2, "Member Connected", "Guest", 1);
 
         if (!gotsPurchase.isPremium()) {
-            new AsyncTask<Void, Void, View>() {
-                @Override
-                protected View doInBackground(Void... arg0) {
-                    GotsAdvertisement ads = new GotsAdvertisement(getApplicationContext());
-                    return ads.getAdsLayout();
-                }
+            GotsAdvertisement ads = new GotsAdvertisement(BaseGotsActivity.this);
 
-                @Override
-                protected void onPostExecute(View view) {
-                    LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
-                    if (layout != null)
-                        layout.addView(view);
-                    super.onPostExecute(view);
-                }
-            }.execute();
+            LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
+            if (layout != null)
+                layout.addView(ads.getAdsLayout());
         }
 
         super.onPostCreate(savedInstanceState);

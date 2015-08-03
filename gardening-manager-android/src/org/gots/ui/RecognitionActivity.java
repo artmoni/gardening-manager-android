@@ -92,6 +92,12 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
         return "";
     }
 
+    @Override
+    protected void onNuxeoDataRetrieved(Object data) {
+        if (mainFragment != null)
+            mainFragment.update();
+        super.onNuxeoDataRetrieved(data);
+    }
 
     @Override
     protected List<FloatingItem> onCreateFloatingMenu() {
@@ -159,7 +165,7 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
                 if (GotsPurchaseItem.SKU_TEST_PURCHASE.equals(sku)) {
                     gotsPurchaseItem.setFeatureRecognitionCounter(gotsPurchaseItem.getFeatureRecognitionCounter() + 50);
                     editNameDialog.consumePurchase(sku);
-                    mainFragment.update();
+                    runAsyncDataRetrieval();
                 }
             }
         });
@@ -174,7 +180,7 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     @Override
     public void onRecognitionFailed(String message) {
         if (message != null)
-          Log.w(TAG,"onRecognitionFailed: "+message);
+            Log.w(TAG, "onRecognitionFailed: " + message);
     }
 
     @Override

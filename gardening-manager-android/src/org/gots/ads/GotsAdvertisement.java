@@ -20,7 +20,7 @@ import com.google.ads.AdSize;
 import com.google.ads.AdView;
 
 public class GotsAdvertisement {
-    private Context mContext;
+    private Activity mContext;
 
     protected String appPackageName = "org.gots.premium";
 
@@ -28,7 +28,7 @@ public class GotsAdvertisement {
     protected GotsContext getGotsContext() {
         return GotsContext.get(mContext);
     }
-    public GotsAdvertisement(Context mContext) {
+    public GotsAdvertisement(Activity mContext) {
         this.mContext = mContext;
         gotsPreferences = getGotsContext().getServerConfig();
     }
