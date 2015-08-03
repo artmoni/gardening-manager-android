@@ -167,7 +167,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
             textDateSowing.setText(new SimpleDateFormat().format(mSeed.getDateSowing()));
 
             TextView textDateHarvest = (TextView) findViewById(R.id.idTextHarvestDate);
-            if (mSeed.getDateHarvest().getTime() > 0)
+            if (mSeed.getDateHarvest() != null && mSeed.getDateHarvest().getTime() > 0)
                 textDateHarvest.setText(new SimpleDateFormat().format(mSeed.getDateHarvest()));
             else {
                 Calendar plannedHarvest = Calendar.getInstance();
@@ -667,8 +667,12 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-            urlDescription = "http://" + Locale.getDefault().getLanguage() + ".wikipedia.org/wiki/" + mSeed.getSpecie();
-            bundle.putString("org.gots.seed.url", urlDescription);
+            if (mSeed.getUrlDescription()!=null) {
+                urlDescription = mSeed.getUrlDescription();
+            } else {
+                urlDescription = "http://" + Locale.getDefault().getLanguage() + ".wikipedia.org/wiki/" + mSeed.getSpecie();
+            }
+            bundle.putString(WebViewFragment.URL, urlDescription);
             if (fragmentWebView == null) {
                 fragmentWebView = new WebViewFragment();
                 fragmentWebView.setArguments(bundle);

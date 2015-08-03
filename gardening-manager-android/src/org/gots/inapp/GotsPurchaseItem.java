@@ -111,7 +111,6 @@ public class GotsPurchaseItem {
     }
 
     public int getFeatureRecognitionCounter() {
-
         return prefs.getInt(FEATURE_RECOGNITION_COUNTER, 0) + getFeatureRecognitionFreeCounter();
     }
 
@@ -123,8 +122,7 @@ public class GotsPurchaseItem {
         Calendar cal = Calendar.getInstance();
 
         int lastDay = prefs.getInt(FEATURE_RECOGNITION_LASTDAY, cal.get(Calendar.DAY_OF_YEAR));
-        int counter = prefs.getInt(FEATURE_RECOGNITION_COUNTERDAILY, RECOGNITION_FREE_COUNTER_MAX);
-        if (lastDay != cal.get(Calendar.DAY_OF_YEAR) && counter < 0) {
+        if (lastDay != cal.get(Calendar.DAY_OF_YEAR)) {
             SharedPreferences.Editor editor = prefs.edit();
             editor.putInt(FEATURE_RECOGNITION_COUNTERDAILY, RECOGNITION_FREE_COUNTER_MAX);
             editor.putInt(FEATURE_RECOGNITION_LASTDAY, cal.get(Calendar.DAY_OF_YEAR));

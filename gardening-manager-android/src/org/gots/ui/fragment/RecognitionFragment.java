@@ -109,10 +109,10 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
         listMap = processJustVisual(serverImageUrl);
         if (listMap == null) {
             listMap = new HashMap<>();
+            mContext.sendBroadcast(new Intent(RECOGNITION_FAILED));
             if (mCallback != null) {
                 mCallback.onRecognitionFailed("No result found, try another picture");
             }
-            mContext.sendBroadcast(new Intent(RECOGNITION_FAILED));
             return;
         }
 
@@ -387,6 +387,8 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
                     PropertyMap props = new PropertyMap();
                     props.set("vendorseed:specie", result.getSpecies());
                     props.set("dc:title", result.getCommonName());
+                    props.set("vendorseed:url", result.getPageUrl());
+
                     service.update(plantDoc, props);
                     NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(getActivity());
                     nuxeoWorkflowProvider.startWorkflowValidation(plantDoc);

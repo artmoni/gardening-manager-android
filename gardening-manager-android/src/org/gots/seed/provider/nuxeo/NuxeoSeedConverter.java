@@ -33,6 +33,7 @@ public class NuxeoSeedConverter {
         seed.setDescriptionHarvest(document.getString("vendorseed:description_harvest"));
         seed.setLanguage(document.getString("vendorseed:language"));
         seed.setBareCode(document.getString("vendorseed:barcode"));
+        seed.setUrlDescription(document.getString("vendorseed:url"));
         seed.setState(document.getState());
         seed.setUUID(document.getId());
         return seed;
@@ -56,6 +57,7 @@ public class NuxeoSeedConverter {
         doc.set("vendorseed:description_diseases", seed.getDescriptionDiseases());
         doc.set("vendorseed:description_growth", seed.getDescriptionEnvironment());
         doc.set("vendorseed:description_harvest", seed.getDescriptionHarvest());
+        doc.set("vendorseed:url", seed.getUrlDescription());
 
         return doc;
     }

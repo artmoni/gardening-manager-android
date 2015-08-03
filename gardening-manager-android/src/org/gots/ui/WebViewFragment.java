@@ -22,6 +22,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 public class WebViewFragment extends Fragment {
+    public static final String URL = "org.gots.seed.url";
     private ProgressDialog pd;
 
     @Override
@@ -37,8 +38,7 @@ public class WebViewFragment extends Fragment {
         mWebView.getSettings().setJavaScriptEnabled(true);
 
         Bundle bundle = this.getArguments();
-        String url = bundle.getString("org.gots.seed.url");
-
+        String url = bundle.getString(URL);
         mWebView.loadUrl(url);
 
         pd = ProgressDialog.show(getActivity(), "", getResources().getString(R.string.gots_loading), true);
