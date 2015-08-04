@@ -61,6 +61,7 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -207,7 +208,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         });
 
         // registerReceiver(weatherBroadcastReceiver, new IntentFilter(BroadCastMessages.WEATHER_DISPLAY_EVENT));
-        registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
+        registerReceiver(broadcastReceiver, new IntentFilter("NuxeoServerConnectivityChanged"));
         registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.SEED_DISPLAYLIST));
         registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_EVENT));
         registerReceiver(broadcastReceiver, new IntentFilter(BroadCastMessages.ACTION_EVENT));
@@ -355,11 +356,11 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                         connectionView.clearAnimation();
                     MenuItem itemConnection = menu.findItem(R.id.connection);
                     itemConnection = MenuItemCompat.setActionView(itemConnection, null);
+                    displaySpinnerGarden();
                 }
             }
-            if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())) {
-                Log.d(TAG,"Connection settings changed");
-                displaySpinnerGarden();
+            if ("NuxeoServerConnectivityChanged".equals(intent.getAction())) {
+                Log.d(TAG, "Connection settings changed");
                 invalidateOptionsMenu();
             } else if (BroadCastMessages.SEED_DISPLAYLIST.equals(intent.getAction())) {
                 displayDrawerMenuCatalogCounter();
@@ -564,13 +565,24 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
 
-        MenuItem itemConnected = (MenuItem) menu.findItem(R.id.connection);
-        if(!gotsPrefs.isConnectedToServer())
+        final MenuItem itemConnected = (MenuItem) menu.findItem(R.id.connection);
+        if (!gotsPrefs.isConnectedToServer())
             itemConnected.setIcon(getResources().getDrawable(R.drawable.ic_login));
-        else if (!nuxeoManager.getNuxeoClient().isOffline())
-            itemConnected.setIcon(getResources().getDrawable(R.drawable.garden_connected));
-        else
-            itemConnected.setIcon(getResources().getDrawable(R.drawable.garden_disconnected));
+        else new AsyncTask<Void, Void, Boolean>() {
+            @Override
+            protected Boolean doInBackground(Void... voids) {
+                return nuxeoManager.getNuxeoClient().getNetworkStatus().testNuxeoServerReachable();
+            }
+
+            @Override
+            protected void onPostExecute(Boolean b) {
+                if (b)
+                    itemConnected.setIcon(getResources().getDrawable(R.drawable.garden_connected));
+                else
+                    itemConnected.setIcon(getResources().getDrawable(R.drawable.garden_disconnected));
+                super.onPostExecute(b);
+            }
+        }.execute();
 
         if (gotsPurchase.isPremium())
             menu.findItem(R.id.premium).setVisible(false);
