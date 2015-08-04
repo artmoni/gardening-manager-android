@@ -122,7 +122,7 @@ public class GotsPurchaseItem {
         Calendar cal = Calendar.getInstance();
 
         int lastDay = prefs.getInt(FEATURE_RECOGNITION_LASTDAY, cal.get(Calendar.DAY_OF_YEAR));
-        if (lastDay != cal.get(Calendar.DAY_OF_YEAR)) {
+        if (lastDay != cal.get(Calendar.DAY_OF_YEAR) || !prefs.contains(FEATURE_RECOGNITION_COUNTERDAILY)) {
             SharedPreferences.Editor editor = prefs.edit();
             editor.putInt(FEATURE_RECOGNITION_COUNTERDAILY, RECOGNITION_FREE_COUNTER_MAX);
             editor.putInt(FEATURE_RECOGNITION_LASTDAY, cal.get(Calendar.DAY_OF_YEAR));

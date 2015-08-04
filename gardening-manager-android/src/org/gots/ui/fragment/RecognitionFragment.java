@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -79,6 +80,8 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
     private boolean uploading;
     private Context mContext;
     private JustVisualAdapter arrayAdapter;
+    private LinearLayout layoutNotification;
+
 
     private Map<String, List<JustVisualResult>> listMap;
     private BroadcastReceiver mBroadcast = new BroadcastReceiver() {
@@ -86,22 +89,43 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
         public void onReceive(Context context, Intent intent) {
             if (isAdded()) {
                 if (RECOGNITION_SUCCESS.equals(intent.getAction())) {
-                    progressText.clearAnimation();
-                    progressText.setVisibility(View.GONE);
+                    hideNotification();
 
                     arrayAdapter = new JustVisualAdapter(getActivity(), listMap);
                     arrayAdapter.setOnImageClick(RecognitionFragment.this);
                     listView.setAdapter(arrayAdapter);
                 } else if (RECOGNITION_FAILED.equals(intent.getAction())) {
-                    progressText.clearAnimation();
-                    progressText.setText("Recognition is not working on this picture, try another one");
-                    progressText.setVisibility(View.VISIBLE);
+                    String errorMessage = "Recognition is not working on this picture, try another one";
+                    showNotification(errorMessage, false);
                 }
-                imageRefresh.clearAnimation();
-                imageRefresh.setVisibility(View.GONE);
+
             }
         }
     };
+
+    public void hideNotification() {
+        progressText.clearAnimation();
+        imageRefresh.clearAnimation();
+        layoutNotification.setVisibility(View.GONE);
+    }
+
+    public void showNotification(String message, boolean animation) {
+        progressText.setText(message);
+        if (animation) {
+            Animation myRotateAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
+            myRotateAnimation.setRepeatCount(Animation.INFINITE);
+            imageRefresh.startAnimation(myRotateAnimation);
+
+            Animation blinkAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.disappear);
+            blinkAnimation.setRepeatCount(Animation.INFINITE);
+            progressText.setAnimation(blinkAnimation);
+        } else {
+            imageRefresh.clearAnimation();
+            progressText.clearAnimation();
+        }
+
+        layoutNotification.setVisibility(View.VISIBLE);
+    }
 
     @Override
     public void onUploadSuccess(Serializable data) {
@@ -150,7 +174,7 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
             throw new ClassCastException(activity.toString() + " must implement OnRecognitionFinished");
         }
         getActivity().registerReceiver(mBroadcast, new IntentFilter(RECOGNITION_SUCCESS));
-
+        getActivity().registerReceiver(mBroadcast, new IntentFilter(RECOGNITION_FAILED));
         super.onAttach(activity);
     }
 
@@ -169,6 +193,7 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
         progressText = (TextView) v.findViewById(R.id.textViewProgress);
         imageCompare = (ImageView) v.findViewById(R.id.imageViewCompare);
         imageRefresh = (ImageView) v.findViewById(R.id.imageViewRefresh);
+        layoutNotification = (LinearLayout) v.findViewById(R.id.layoutNotification);
         uploading = false;
         Bundle args = getArguments();
         if (args != null) {
@@ -311,16 +336,7 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
 
     @Override
     protected void onNuxeoDataRetrievalStarted() {
-        imageRefresh.setVisibility(View.VISIBLE);
-        Animation myRotateAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
-        myRotateAnimation.setRepeatCount(Animation.INFINITE);
-        imageRefresh.startAnimation(myRotateAnimation);
-
-        progressText.setVisibility(View.VISIBLE);
-        progressText.setText(getResources().getString(R.string.plant_recognition_progress));
-        Animation blinkAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.disappear);
-        blinkAnimation.setRepeatCount(Animation.INFINITE);
-        progressText.setAnimation(blinkAnimation);
+        showNotification(getResources().getString(R.string.plant_recognition_progress), true);
 
         if (imageFile != null) {
             Bitmap b = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
@@ -345,11 +361,9 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
             arrayAdapter.setOnImageClick(RecognitionFragment.this);
             listView.setAdapter(arrayAdapter);
 
-            progressText.clearAnimation();
-            progressText.setVisibility(View.GONE);
+            hideNotification();
 
-            imageRefresh.clearAnimation();
-            imageRefresh.setVisibility(View.GONE);
+
         }
 
         super.onNuxeoDataRetrieved(data);
@@ -366,12 +380,7 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
         new AsyncTask<Void, Void, Document>() {
             @Override
             protected void onPreExecute() {
-                imageRefresh.setVisibility(View.VISIBLE);
-                Animation myRotateAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
-                myRotateAnimation.setRepeatCount(Animation.INFINITE);
-                imageRefresh.startAnimation(myRotateAnimation);
-
-
+                showNotification("Confirmation in progress...", true);
                 super.onPreExecute();
 
             }
@@ -394,14 +403,17 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
                     nuxeoWorkflowProvider.startWorkflowValidation(plantDoc);
                 } catch (Exception e) {
                     Log.w(TAG, e.getMessage());
+                    return null;
                 }
                 return plantDoc;
             }
 
             @Override
             protected void onPostExecute(Document plantDoc) {
-                imageRefresh.clearAnimation();
-                imageRefresh.setVisibility(View.GONE);
+                if (plantDoc != null)
+                    hideNotification();
+                else
+                    showNotification("Confirmation problem, please try later.", false);
 
                 if (mCallback != null)
                     mCallback.onRecognitionConfirmed(plantDoc);
