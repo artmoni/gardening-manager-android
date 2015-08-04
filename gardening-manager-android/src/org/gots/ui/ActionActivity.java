@@ -73,9 +73,9 @@ public class ActionActivity extends BaseGotsActivity implements OnAllotmentSelec
     }
 
     @Override
-    protected void onResume() {
+    protected void onNuxeoDataRetrieved(Object data) {
         addMainLayout(contentFragment, null);
-        super.onResume();
+        super.onNuxeoDataRetrieved(data);
     }
 
     @Override
@@ -170,7 +170,7 @@ public class ActionActivity extends BaseGotsActivity implements OnAllotmentSelec
 
                         protected void onPostExecute(Void result) {
                             getSupportFragmentManager().popBackStack();
-                            contentFragment.update();
+                            runAsyncDataRetrieval();
                             menu.setVisibility(View.GONE);
                         }
 
