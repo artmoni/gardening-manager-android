@@ -89,7 +89,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
                 actionsToDo.add(action);
             }
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage(), e);
+            Log.e(TAG, e.getMessage());
             actionsToDo = super.getActionsToDo(force);
         }
         return actionsToDo;

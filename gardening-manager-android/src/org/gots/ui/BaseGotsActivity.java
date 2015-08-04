@@ -58,6 +58,7 @@ import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -185,7 +186,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         gotsGrowingSeedManager = GotsGrowingSeedManager.getInstance();
         actionseedProvider = GotsActionSeedManager.getInstance();
 
-        registerReceiver(nuxeoManager, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
+        registerReceiver(nuxeoManager, new IntentFilter("NuxeoServerConnectivityChanged"));
         registerReceiver(gardenManager, new IntentFilter(BroadCastMessages.CONNECTION_SETTINGS_CHANGED));
         registerReceiver(gardenManager, new IntentFilter(BroadCastMessages.GARDEN_SETTINGS_CHANGED));
         registerReceiver(gardenManager, new IntentFilter(BroadCastMessages.GARDEN_CURRENT_CHANGED));

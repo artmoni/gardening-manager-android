@@ -37,6 +37,7 @@ import org.nuxeo.ecm.automation.client.jaxrs.spi.auth.TokenRequestInterceptor;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.util.Log;
 
 /**
@@ -139,7 +140,7 @@ public class NuxeoManager extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())) {
+        if ("NuxeoServerConnectivityChanged".equals(intent.getAction())) {
             shutdown();
             initIfNew(context);
             Log.w(TAG, "Connection settings changed, shutdown nuxeocontext, initIfNew");
