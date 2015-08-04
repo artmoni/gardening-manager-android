@@ -140,11 +140,11 @@ public class NuxeoManager extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if ("NuxeoServerConnectivityChanged".equals(intent.getAction())) {
-            shutdown();
-            initIfNew(context);
-            Log.w(TAG, "Connection settings changed, shutdown nuxeocontext, initIfNew");
-            // context.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
-        }
+//        if ("NuxeoServerConnectivityChanged".equals(intent.getAction())) {
+//            shutdown();
+//            initIfNew(context);
+//            Log.w(TAG, "Connection settings changed, shutdown nuxeocontext, initIfNew");
+//            // context.sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
+//        }
     }
 }
