@@ -71,6 +71,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -357,6 +358,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                 }
             }
             if (BroadCastMessages.CONNECTION_SETTINGS_CHANGED.equals(intent.getAction())) {
+                Log.d(TAG,"Connection settings changed");
                 displaySpinnerGarden();
                 invalidateOptionsMenu();
             } else if (BroadCastMessages.SEED_DISPLAYLIST.equals(intent.getAction())) {
@@ -563,7 +565,9 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
     public boolean onPrepareOptionsMenu(Menu menu) {
 
         MenuItem itemConnected = (MenuItem) menu.findItem(R.id.connection);
-        if (gotsPrefs.isConnectedToServer() && !nuxeoManager.getNuxeoClient().isOffline())
+        if(!gotsPrefs.isConnectedToServer())
+            itemConnected.setIcon(getResources().getDrawable(R.drawable.ic_login));
+        else if (!nuxeoManager.getNuxeoClient().isOffline())
             itemConnected.setIcon(getResources().getDrawable(R.drawable.garden_connected));
         else
             itemConnected.setIcon(getResources().getDrawable(R.drawable.garden_disconnected));

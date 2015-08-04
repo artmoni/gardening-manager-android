@@ -412,13 +412,13 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
     }
 
     public void uploadImage(final File imageFile) {
-        new AsyncTask<Void, Void, Void>() {
+        new AsyncTask<Void, Void, String>() {
             @Override
-            protected Void doInBackground(Void... voids) {
+            protected String doInBackground(Void... voids) {
                 if (lastDocument == null && !uploading) {
-                    Session session = getNuxeoClient().getSession();
-                    DocumentManager service = session.getAdapter(DocumentManager.class);
                     try {
+                        Session session = getNuxeoClient().getSession();
+                        DocumentManager service = session.getAdapter(DocumentManager.class);
 
                         Document rootFolder = service.getDocument("/default-domain/workspaces/justvisual");
                         final Document imageDoc = service.createDocument(rootFolder, "VendorSeed", imageFile.getName());
@@ -431,9 +431,21 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
                         }
                     } catch (Exception e) {
                         Log.w(TAG, "uploadImage: " + e.getMessage());
+                        return e.getMessage();
                     }
                 }
                 return null;
+            }
+
+            @Override
+            protected void onPostExecute(String errorMessage) {
+                if (errorMessage != null) {
+                    progressText.setVisibility(View.VISIBLE);
+                    progressText.setText(errorMessage);
+                    imageRefresh.clearAnimation();
+                    imageRefresh.setVisibility(View.GONE);
+                }
+                super.onPostExecute(errorMessage);
             }
         }.execute();
     }

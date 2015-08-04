@@ -109,6 +109,7 @@ public class NuxeoManager extends BroadcastReceiver {
             String myDeviceId = gotsPrefs.getDeviceId();
             String myApp = gotsPrefs.getGardeningManagerAppname();
             nuxeoClient.setRequestInterceptor(new TokenRequestInterceptor(myApp, myToken, myLogin, myDeviceId));
+
             Log.d(TAG, "Got new nuxeoClient " + nuxeoClient);
         }
         return nuxeoClient;

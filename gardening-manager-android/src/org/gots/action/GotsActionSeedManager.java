@@ -74,7 +74,7 @@ public class GotsActionSeedManager extends BroadcastReceiver implements GotsActi
     }
 
     public void setProvider() {
-        if (gotsPrefs.isConnectedToServer() && !NuxeoManager.getInstance().getNuxeoClient().isOffline()) {
+        if (gotsPrefs.isConnectedToServer() && !NuxeoManager.getInstance().initIfNew(mContext).getNuxeoClient().isOffline()) {
             provider = new NuxeoActionSeedProvider(mContext);
         } else
             provider = new LocalActionSeedProvider(mContext);
