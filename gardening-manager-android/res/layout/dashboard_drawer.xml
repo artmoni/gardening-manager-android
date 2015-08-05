@@ -126,6 +126,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
+                android:background="@color/transparent"
                 android:src="@drawable/bt_dashboard_profile" />
 
             <Spinner
