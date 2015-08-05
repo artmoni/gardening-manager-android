@@ -23,6 +23,9 @@ import org.gots.weather.provider.previmeteo.PrevimeteoWeatherProvider;
 import org.gots.weather.provider.previmeteo.WeatherProvider;
 
 import android.content.Context;
+import android.util.Log;
+
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class WeatherManager implements WeatherProvider {
 

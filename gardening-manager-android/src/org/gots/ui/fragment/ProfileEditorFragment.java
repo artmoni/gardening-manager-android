@@ -1,13 +1,15 @@
-/*******************************************************************************
+/**
+ * ****************************************************************************
  * Copyright (c) 2012 sfleury.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- *
+ * <p>
  * Contributors:
- *     sfleury - initial API and implementation
- ******************************************************************************/
+ * sfleury - initial API and implementation
+ * ****************************************************************************
+ */
 package org.gots.ui.fragment;
 
 import java.io.IOException;
@@ -174,7 +176,9 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
         editTextWeatherLocality.setText(garden.getLocalityForecast());
         fetchWeatherAsync();
 
-    };
+    }
+
+    ;
 
     private void getPosition(boolean force) {
 
@@ -210,7 +214,7 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
                 Address address = adresses.get(0);
                 garden.setGpsLatitude(latitude);
                 garden.setGpsLongitude(longitude);
-                garden.setLocality(address.getLocality());
+                garden.setLocality(address.getLocality().replaceAll("\\s+$", ""));//remove space,tab,new line at the end
                 garden.setAdminArea(address.getAdminArea());
                 garden.setCountryName(address.getCountryName());
                 garden.setCountryCode(address.getCountryCode());
@@ -243,7 +247,9 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
                     Animation rotation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
                     rotation.setRepeatCount(Animation.INFINITE);
                     buttonWeatherState.startAnimation(rotation);
-                };
+                }
+
+                ;
 
                 @Override
                 protected Short doInBackground(Void... params) {
@@ -261,7 +267,9 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
                         buttonWeatherState.setState(ActionState.CRITICAL);
                     }
                     buttonWeatherState.invalidate();
-                };
+                }
+
+                ;
             }.execute();
     }
 
@@ -298,18 +306,18 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
         switch (status) {
-        case LocationProvider.OUT_OF_SERVICE:
-            Log.v(TAG, "Status Changed: Out of Service");
-            Toast.makeText(getActivity(), "Status Changed: Out of Service", Toast.LENGTH_SHORT).show();
-            break;
-        case LocationProvider.TEMPORARILY_UNAVAILABLE:
-            Log.v(TAG, "Status Changed: Temporarily Unavailable");
-            Toast.makeText(getActivity(), "Status Changed: Temporarily Unavailable", Toast.LENGTH_SHORT).show();
-            break;
-        case LocationProvider.AVAILABLE:
-            Log.v(TAG, "Status Changed: Available");
-            Toast.makeText(getActivity(), "Status Changed: Available", Toast.LENGTH_SHORT).show();
-            break;
+            case LocationProvider.OUT_OF_SERVICE:
+                Log.v(TAG, "Status Changed: Out of Service");
+                Toast.makeText(getActivity(), "Status Changed: Out of Service", Toast.LENGTH_SHORT).show();
+                break;
+            case LocationProvider.TEMPORARILY_UNAVAILABLE:
+                Log.v(TAG, "Status Changed: Temporarily Unavailable");
+                Toast.makeText(getActivity(), "Status Changed: Temporarily Unavailable", Toast.LENGTH_SHORT).show();
+                break;
+            case LocationProvider.AVAILABLE:
+                Log.v(TAG, "Status Changed: Available");
+                Toast.makeText(getActivity(), "Status Changed: Available", Toast.LENGTH_SHORT).show();
+                break;
         }
     }
 
@@ -317,20 +325,20 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
     public void onClick(View v) {
         switch (v.getId()) {
 
-        case R.id.buttonValidatePosition:
-            if (mode == OPTION_EDIT)
-                updateProfile();
-            else
-                createNewProfile();
-            break;
-        case R.id.imageViewLocalize:
-            getPosition(true);
-            break;
-        case R.id.imageViewWeatherState:
-            fetchWeatherAsync();
-            break;
-        default:
-            break;
+            case R.id.buttonValidatePosition:
+                if (mode == OPTION_EDIT)
+                    updateProfile();
+                else
+                    createNewProfile();
+                break;
+            case R.id.imageViewLocalize:
+                getPosition(true);
+                break;
+            case R.id.imageViewWeatherState:
+                fetchWeatherAsync();
+                break;
+            default:
+                break;
         }
     }
 
@@ -384,7 +392,9 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
                     mCallback.onProfileCreated(result);
                 }
 
-            };
+            }
+
+            ;
         }.execute();
 
         // SAMPLE GARDEN
@@ -446,7 +456,9 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
 
             protected void onPostExecute(Void result) {
                 mCallback.onProfileSelected(garden);
-            };
+            }
+
+            ;
         }.execute();
 
     }
