@@ -102,7 +102,7 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     @Override
     protected List<FloatingItem> onCreateFloatingMenu() {
         List<FloatingItem> floatingItems = new ArrayList<>();
-        if (gotsPurchaseItem.getFeatureRecognitionCounter() > 0) {
+        if (gotsPurchaseItem.getFeatureRecognitionCounter() + gotsPurchaseItem.getFeatureRecognitionFreeCounter() > 0) {
             FloatingItem floatingItem = new FloatingItem();
             floatingItem.setTitle(getResources().getString(R.string.action_photo));
             floatingItem.setRessourceId(R.drawable.action_photo);

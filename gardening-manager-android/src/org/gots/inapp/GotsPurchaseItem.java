@@ -111,7 +111,7 @@ public class GotsPurchaseItem {
     }
 
     public int getFeatureRecognitionCounter() {
-        return prefs.getInt(FEATURE_RECOGNITION_COUNTER, 0) + getFeatureRecognitionFreeCounter();
+        return prefs.getInt(FEATURE_RECOGNITION_COUNTER, 0);
     }
 
 //    public int getFeatureRecognitionFreeCounterMax() {
