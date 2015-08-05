@@ -83,7 +83,7 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
 
         try {
             URL url = buildUriFromAddress(forecastLocality);
-
+            Log.d(TAG, url.toString());
             InputStream is = cache.getCacheByURL(url);
             /* Get a SAXParser from the SAXPArserFactory. */
             SAXParserFactory spf = SAXParserFactory.newInstance();
@@ -117,26 +117,26 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
             GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
             tracker.trackEvent("Weather", "Match", gotsPreferences.getWeatherApiKey(), 0);
         } catch (HttpResponseException httpResponseException) {
-            Log.w(TAG,
-                    "PrevimeteoErrorHandler has return an HttpResponseException " + httpResponseException.getMessage());
+            Log.w(TAG, "fetchWeatherForecast " + httpResponseException.getMessage());
             if (httpResponseException.getStatusCode() == 400) {
-                GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-                if (httpResponseException.getMessage() == null)
-                    tracker.trackEvent("Weather",
-                            "Empty message - httpResponseStatus " + httpResponseException.getStatusCode(), ""
-                                    + gotsPreferences.getWeatherApiKey(), 0);
-                else
-                    tracker.trackEvent("Weather", httpResponseException.getMessage(),
-                            "" + gotsPreferences.getWeatherApiKey(), 0);
+                try {
+                    GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+                    tracker.trackEvent("Weather", gotsPreferences.getWeatherApiKey(), httpResponseException.getMessage(), 0);
+
+                } catch (Exception e) {
+                    Log.w(TAG, "Tracking weather: " + e.getMessage());
+                }
                 return WEATHER_ERROR_CITY_UNKNOWN;
             }
         } catch (Exception e) {
             Log.e(TAG, "PrevimeteoErrorHandler (" + error.getMessage() + ") ");
             iserror = true;
-            if (e.getMessage() != null) {
+            try {
                 GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-                if (tracker != null)
-                    tracker.trackEvent("Weather", e.getMessage(), "" + gotsPreferences.getWeatherApiKey(), 0);
+                tracker.trackEvent("Weather", gotsPreferences.getWeatherApiKey(), e.getMessage(), 0);
+
+            } catch (Exception e1) {
+                Log.w(TAG, "Tracking weather: " + e1.getMessage());
             }
             return WEATHER_ERROR_UNKNOWN;
         }
