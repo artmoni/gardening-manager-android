@@ -98,7 +98,8 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     } else {
                         Log.w(TAG, "Nuxeo Seed conversion problem " + document.getTitle() + "- " + document.getId());
                     }
-                    downloadImageAsync(service, document, seed);
+                    NuxeoUtils.downloadBlob(service, document, getImageFile(seed), null);
+//                    downloadImageAsync(service, document, seed);
                 } catch (NumberFormatException formatException) {
                     Log.w(TAG,
                             formatException.getMessage() + " for Document " + document.getTitle() + " - "
@@ -114,34 +115,27 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         return myVendorSeeds;
     }
 
-    protected void downloadImageAsync(final DocumentManager service, final Document document, BaseSeedInterface seed) {
+//    protected void downloadImageAsync(final DocumentManager service, final Document document, BaseSeedInterface seed) {
+//
+//            new AsyncTask<File, Void, FileBlob>() {
+//                @Override
+//                protected FileBlob doInBackground(File... params) {
+//                    File imageFile = params[0];
+//                    return NuxeoUtils.downloadBlob(service, document, imageFile);
+//                }
+//
+//            }.execute(imageFile);
+//    }
+
+    private File getImageFile(BaseSeedInterface seed) {
         File imageFile;
-        imageFile = new File(gotsPrefs.getFilesDir(), document.getId());
+        imageFile = new File(gotsPrefs.getFilesDir(), seed.getUUID());
         if (!imageFile.exists()) {
             String filename = seed.getVariety().toLowerCase().replaceAll("\\s", "").replaceAll(" ", "");
             if (!"".equals(filename))
                 imageFile = new File(gotsPrefs.getFilesDir(), filename);
         }
-
-        if (!imageFile.exists() && document.getProperties().getString("file:filename") != null && !"null".equals(document.getProperties().getString("file:filename"))) {
-            new AsyncTask<File, Void, FileBlob>() {
-                @Override
-                protected FileBlob doInBackground(File... params) {
-                    File imageFile = params[0];
-                    return NuxeoUtils.downloadBlob(service, document, imageFile);
-                }
-
-                @Override
-                protected void onPostExecute(FileBlob fileBlob) {
-                    if (fileBlob != null)
-                        Log.d(TAG, "downloadImageAsync: " + fileBlob.getFile().getAbsolutePath() + " has been created");
-                    else
-                        Log.d(TAG, "downloadImageAsync: blob is null");
-
-                    super.onPostExecute(fileBlob);
-                }
-            }.execute(imageFile);
-        }
+        return imageFile;
     }
 
     @Override
@@ -290,7 +284,9 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 remoteSeed = super.updateSeed(remoteSeed);
             }
             Log.d(TAG, "getSeedByUUID found: " + remoteSeed);
-            downloadImageAsync(service, doc, remoteSeed);
+//            downloadImageAsync(service, doc, remoteSeed);
+            NuxeoUtils.downloadBlob(service, doc, getImageFile(remoteSeed), null);
+
         } catch (Exception e) {
             remoteSeed = localSeed;
             Log.w(TAG, "getSeedByUUID not found " + e.getMessage());

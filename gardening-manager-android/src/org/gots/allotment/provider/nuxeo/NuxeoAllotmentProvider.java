@@ -85,16 +85,19 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
                 remoteAllotments.add(allotment);
                 final File file = new File(gotsPrefs.getFilesDir().getAbsolutePath(), document.getId());
                 if (!file.exists()) {
-                    Thread t = new Thread() {
+                    NuxeoUtils.downloadBlob(service, document, file, new NuxeoUtils.OnDownloadBlob() {
                         @Override
-                        public void run() {
-                            Log.d(TAG, "Downloading image " + file.getAbsolutePath());
-                            FileBlob fileBlob = NuxeoUtils.downloadBlob(service, document, file);
-                            if (fileBlob != null && fileBlob.getLength() > 0)
-                                allotment.setImagePath(file.getAbsolutePath());
-                        }//end run
-                    };
-                    t.start();
+                        public void onDownloadSuccess(FileBlob fileBlob) {
+                            allotment.setImagePath(file.getAbsolutePath());
+                        }
+
+                        @Override
+                        public void onDownloadFailed() {
+
+                        }
+                    });
+//                    if (fileBlob != null && fileBlob.getLength() > 0)
+//                        allotment.setImagePath(file.getAbsolutePath());
 
                 }
                 Log.i(TAG, "Nuxeo Allotment " + allotment.toString());
