@@ -15,6 +15,7 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.FileBlob;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 public class NuxeoUtils {
@@ -90,29 +91,55 @@ public class NuxeoUtils {
         });
     }
 
-    public static FileBlob downloadBlob(final DocumentManager service, Document doc, File file) {
-        FileBlob image = null;
-        if (!file.exists())
-            try {
-                image = service.getBlob(doc);
-                Log.d(TAG, "downloadBlob temporary file = " + image.getFile().getAbsolutePath());
-                if (image != null && image.getLength() > 0) {
-                    try {
-                        FileUtilities.copy(image.getFile(), file);
-                        Log.d(TAG, "downloadBlob " + image.getFileName());
-                    } catch (IOException e) {
-                        Log.w(TAG, "downloadBlob cannot copy " + image.getFile().getAbsolutePath() + " to " + file.getAbsolutePath());
-                    }
-                } else {
-                    Log.d(TAG, "downloadBlob didn't find image for document " + doc.getName());
-                }
-            } catch (Exception e) {
-                Log.w(TAG, "downloadBlob Image " + file.getAbsolutePath() + " cannot be downloaded for document " + doc);
-            }
-        else
+    public interface OnDownloadBlob{
+        void onDownloadSuccess(FileBlob fileBlob);
+        void onDownloadFailed();
+    }
+    public static void downloadBlob(final DocumentManager service, final Document doc, final File file, final OnDownloadBlob onDownloadBlob) {
+
+        if (file.exists()) {
             Log.d(TAG, "downloadBlob: File already exists");
+            return;
+        }
+        if (doc.getProperties().getString("file:filename") != null && !"null".equals(doc.getProperties().getString("file:filename"))) {
+            return;
+        }
+        new AsyncTask<File, Void, FileBlob>() {
+            @Override
+            protected FileBlob doInBackground(File... params) {
+                FileBlob image=null;
+
+                try {
+                    image = service.getBlob(doc);
+                    Log.d(TAG, "downloadBlob temporary file = " + image.getFile().getAbsolutePath());
+                    if (image != null && image.getLength() > 0) {
+                        try {
+                            FileUtilities.copy(image.getFile(), file);
+                            Log.d(TAG, "downloadBlob " + image.getFileName());
+                        } catch (IOException e) {
+                            Log.w(TAG, "downloadBlob cannot copy " + image.getFile().getAbsolutePath() + " to " + file.getAbsolutePath());
+                        }
+                    } else {
+                        Log.d(TAG, "downloadBlob didn't find image for document " + doc.getName());
+                    }
+                } catch (Exception e) {
+                    Log.w(TAG, "downloadBlob Image " + file.getAbsolutePath() + " cannot be downloaded for document " + doc);
+                }
+                return image;
+            }
+
+            @Override
+            protected void onPostExecute(FileBlob fileBlob) {
+                if (onDownloadBlob!=null){
+                    if (fileBlob!=null)
+                        onDownloadBlob.onDownloadSuccess(fileBlob);
+                    else
+                        onDownloadBlob.onDownloadFailed();
+                }
+                super.onPostExecute(fileBlob);
+            }
+        }.execute();
 
 
-        return image;
     }
 }
