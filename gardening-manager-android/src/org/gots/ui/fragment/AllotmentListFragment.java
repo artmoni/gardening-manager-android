@@ -78,12 +78,12 @@ public class AllotmentListFragment extends AbstractListFragment {
 
             @Override
             public void onGrowingSeedLongClick(View v, GrowingSeed seedInterface) {
-                mCallback.onGrowingSeedLongClick(v,seedInterface);
+                mCallback.onGrowingSeedLongClick(v, seedInterface);
             }
 
             @Override
             public void onGrowingSeedClick(View v, GrowingSeed seedInterface) {
-                mCallback.onGrowingSeedClick(v,seedInterface);
+                mCallback.onGrowingSeedClick(v, seedInterface);
             }
 
             @Override
@@ -107,6 +107,8 @@ public class AllotmentListFragment extends AbstractListFragment {
 
     @Override
     protected Object retrieveNuxeoData() throws Exception {
+        if (allotmentManager == null)
+            return null;
 
         List<BaseAllotmentInterface> allotments = allotmentManager.getMyAllotments(false);
         GotsGrowingSeedManager growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(getActivity());
