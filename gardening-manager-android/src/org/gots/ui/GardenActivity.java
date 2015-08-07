@@ -4,9 +4,9 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- *
+ * <p>
  * Contributors:
- *     sfleury - initial API and implementation
+ * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.ui;
 
@@ -95,7 +95,9 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
 
                             protected void onPostExecute(Void result) {
                                 allotmentListFragment.update();
-                            };
+                            }
+
+                            ;
                         }.execute();
                         dialog.dismiss();
                     }
@@ -130,15 +132,15 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 
             switch (item.getItemId()) {
-            case R.id.update_allotment:
-                // showDialogRenameAllotment(currentAllotment);
-                displayEditorFragment(currentAllotment);
-                break;
-            case R.id.delete_allotment:
-                removeAllotment(currentAllotment);
-                break;
-            default:
-                break;
+                case R.id.update_allotment:
+                    // showDialogRenameAllotment(currentAllotment);
+                    displayEditorFragment(currentAllotment);
+                    break;
+                case R.id.delete_allotment:
+                    removeAllotment(currentAllotment);
+                    break;
+                default:
+                    break;
             }
             // listAllotments.setItemChecked(-1, true);// clear selection in listview
             mode.finish();
@@ -202,11 +204,13 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
     }
 
     protected void displayEditorFragment(BaseAllotmentInterface allotment) {
+        editorFragment.setAllotment(allotment);
         if (!editorFragment.isAdded()) {
-            editorFragment.setAllotment(allotment);
             addContentLayout(editorFragment, null);
-        } else
-            Toast.makeText(getApplicationContext(), "Only one editor at a time", Toast.LENGTH_SHORT).show();
+        } else {
+            editorFragment.update();
+//            Toast.makeText(getApplicationContext(), "Only one editor at a time", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -259,8 +263,12 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
 
                 protected void onPostExecute(Void result) {
                     // allotmentListFragment.update();
-                    updateFragments();
-                };
+//                    updateFragments();
+                    runAsyncDataRetrieval();
+                }
+
+                ;
+
             }.execute();
 
         }
@@ -284,7 +292,8 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
             }
 
             protected void onPostExecute(Void result) {
-                updateFragments();
+//                updateFragments();
+                runAsyncDataRetrieval();
             }
 
         }.execute();
@@ -320,8 +329,11 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
             }
 
             protected void onPostExecute(Void result) {
-                updateFragments();
-            };
+//                updateFragments();
+                runAsyncDataRetrieval();
+            }
+
+            ;
 
         }.execute();
     }
