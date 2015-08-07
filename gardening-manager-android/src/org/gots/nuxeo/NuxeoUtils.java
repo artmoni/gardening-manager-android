@@ -91,13 +91,15 @@ public class NuxeoUtils {
         });
     }
 
-    public interface OnDownloadBlob{
+    public interface OnDownloadBlob {
         void onDownloadSuccess(FileBlob fileBlob);
+
         void onDownloadFailed();
     }
+
     public static void downloadBlob(final DocumentManager service, final Document doc, final File file, final OnDownloadBlob onDownloadBlob) {
 
-        if (file.exists()) {
+        if (file != null && file.exists()) {
             Log.d(TAG, "downloadBlob: File already exists");
             return;
         }
@@ -107,7 +109,7 @@ public class NuxeoUtils {
         new AsyncTask<File, Void, FileBlob>() {
             @Override
             protected FileBlob doInBackground(File... params) {
-                FileBlob image=null;
+                FileBlob image = null;
 
                 try {
                     image = service.getBlob(doc);
@@ -130,8 +132,8 @@ public class NuxeoUtils {
 
             @Override
             protected void onPostExecute(FileBlob fileBlob) {
-                if (onDownloadBlob!=null){
-                    if (fileBlob!=null)
+                if (onDownloadBlob != null) {
+                    if (fileBlob != null)
                         onDownloadBlob.onDownloadSuccess(fileBlob);
                     else
                         onDownloadBlob.onDownloadFailed();
