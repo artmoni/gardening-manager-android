@@ -60,7 +60,7 @@
         <groupId>com.android.support</groupId>
         <artifactId>appcompat-v7</artifactId>
         <type>aar</type>
-        <version>19.1.0</version>
+        <version>21.0</version>
       </dependency> -->
       
       <dependency>
