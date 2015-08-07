@@ -13,7 +13,7 @@
         android:layout_below="@+id/textView1"
         android:layout_centerHorizontal="true"
         android:gravity="center"
-        android:text="@string/tutorial.c.description"
+        android:text="@string/plant.recognition.description"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <ImageView
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/ic_menu_allotment" />
+        android:src="@drawable/ic_menu_recognition"/>
 
     <TextView
         android:id="@+id/textView1"
@@ -31,15 +31,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/imageView1"
         android:layout_centerHorizontal="true"
-        android:text="@string/tutorial.c.title"
+        android:gravity="center"
+        android:text="@string/tutorial.g.title"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <!--<ImageView-->
-        <!--android:id="@+id/imageView3"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_below="@+id/textView2"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:src="@drawable/tutorial_allotment" />-->
 
 </RelativeLayout>

@@ -133,15 +133,16 @@
         <item name="android:textSize">14dp</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textColor">@color/white</item>
+        <item name="android:capitalize">characters</item>
     </style>
 
     <style name="buttonRed" parent="button">
-        <item name="android:background">@drawable/button_red_selector</item>
+        <item name="android:background">@drawable/bg_line_action_selector</item>
     </style>
 
     <style name="buttonGreen" parent="button">
-        <item name="android:background">@drawable/button_green_selector</item>
-        <item name="android:textColor">@color/text_color_dark</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textColor">@color/selector_text_brown</item>
     </style>
 
     <style name="buttonPurchase" >
@@ -402,8 +403,10 @@
 
     <style name="TutorialTitle">
         <item name="android:textColor">@color/text_color_dark</item>
-        <item name="android:textSize">20dp</item>
+        <item name="android:textSize">30dp</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:capitalize">sentences</item>
+        <item name="android:layout_marginTop">10dp</item>
     </style>
 
     <style name="TitleResumeFragment">

@@ -183,14 +183,15 @@
     <string name="tutorial.b.description">Search plants, add new one, share with the community, manage your stock</string>
     <string name="tutorial.c.title">Organize my allotments</string>
     <string name="tutorial.c.description">Define allotments, sow plants and follow cultures evolution</string>
-    <string name="tutorial.d.title">Schedule the actions to do</string>
+    <string name="tutorial.d.title">Schedule tasks</string>
     <string name="tutorial.d.description">be notified on time and keep history</string>
     <string name="tutorial.e.title">Join a community of gardeners</string>
     <string name="tutorial.e.description">Discover original gardens and share your creations</string>
-    <string name="tutorial.f.title">Monitor my plants</string>
+    <string name="tutorial.f.title">Monitor plants</string>
     <string name="tutorial.f.description">Fertilizer, sunlight, temperature and soil moisture with your Parrot Flower Power</string>
-    <string name="tutorial.button.try">Demo</string>
-    <string name="tutorial.button.begin">Begin</string>
+    <string name="tutorial.g.title">Recognize plants</string>
+    <string name="tutorial.button.try">Demonstration</string>
+    <string name="tutorial.button.begin">Start</string>
     
     <string name="tutorial.finished">Great! you have finished the tutorial, take pleasure to grow your real garden and share your experience :)</string>
     

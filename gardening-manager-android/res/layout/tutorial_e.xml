@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/bt_dashboard_profile" />
+        android:src="@drawable/ic_menu_profile" />
 
     <TextView
         android:id="@+id/textView1"
@@ -35,12 +35,12 @@
         android:text="@string/tutorial.e.title"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/garden_shared" />
+    <!--<ImageView-->
+        <!--android:id="@+id/imageView3"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/textView2"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:src="@drawable/garden_shared" />-->
 
 </RelativeLayout>

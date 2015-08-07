@@ -28,11 +28,11 @@
         android:layout_alignParentTop="true"
         android:paddingBottom="20dp" >
 
-        <android.support.v4.view.PagerTitleStrip
+        <org.gots.ui.view.MyPagerTitleStrip
             style="@style/TutorialTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
+            android:layout_gravity="top"
             android:padding="10dp"/>
     </android.support.v4.view.ViewPager>
 
