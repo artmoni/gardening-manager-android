@@ -38,15 +38,12 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     private static final int REQUEST_TAKE_PHOTO = 1;
     private static final int REQUEST_LOAD_IMAGE = 2;
     private RecognitionFragment recognitionFragment;
-    private GotsPurchaseItem gotsPurchaseItem;
     private RecognitionMainFragment mainFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitleBar(R.string.plant_recognition);
-
-        gotsPurchaseItem = new GotsPurchaseItem(getApplicationContext());
 
         if (mainFragment == null) {
             mainFragment = new RecognitionMainFragment();
@@ -102,7 +99,7 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     @Override
     protected List<FloatingItem> onCreateFloatingMenu() {
         List<FloatingItem> floatingItems = new ArrayList<>();
-        if (gotsPurchaseItem.getFeatureRecognitionCounter() + gotsPurchaseItem.getFeatureRecognitionFreeCounter() > 0) {
+        if (gotsPurchase.getFeatureRecognitionCounter() + gotsPurchase.getFeatureRecognitionFreeCounter() > 0) {
             FloatingItem floatingItem = new FloatingItem();
             floatingItem.setTitle(getResources().getString(R.string.action_photo));
             floatingItem.setRessourceId(R.drawable.action_photo);
@@ -138,7 +135,7 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
 
                 @Override
                 public void onClick(View v) {
-                    displayPremiumFragment();
+                    openPurchaseFragment();
                 }
             });
             floatingItems.add(floatingItem);
@@ -146,34 +143,9 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
         return floatingItems;
     }
 
-    public void displayPremiumFragment() {
-        FragmentManager fm = getSupportFragmentManager();
-        final GotsBillingDialog editNameDialog = new GotsBillingDialog(GotsPurchaseItem.SKU_FEATURE_RECOGNITION_50);
-        editNameDialog.addSKUFeature(GotsPurchaseItem.SKU_TEST_PURCHASE, true);
-        editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
-        editNameDialog.show(fm, "fragment_edit_name");
-        editNameDialog.setOnPurchasedFinishedListener(new OnPurchaseFinished() {
-            @Override
-            public void onPurchaseFailed(Purchase sku) {
-//                            if (sku != null)
-//                                editNameDialog.consumePurchase(sku);
-
-            }
-
-            @Override
-            public void onPurchaseSucceed(Purchase sku) {
-                if (GotsPurchaseItem.SKU_TEST_PURCHASE.equals(sku)) {
-                    gotsPurchaseItem.setFeatureRecognitionCounter(gotsPurchaseItem.getFeatureRecognitionCounter() + 50);
-                    editNameDialog.consumePurchase(sku);
-                    runAsyncDataRetrieval();
-                }
-            }
-        });
-    }
-
     @Override
     public void onRecognitionSucceed() {
-        gotsPurchaseItem.decrementRecognitionDailyCounter();
+        gotsPurchase.decrementRecognitionDailyCounter();
         mainFragment.update();
     }
 
@@ -198,10 +170,17 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.premium:
-                displayPremiumFragment();
+                openPurchaseFragment();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void openPurchaseFragment() {
+        List<String> skus = new ArrayList<>();
+        skus.add(GotsPurchaseItem.SKU_FEATURE_RECOGNITION_50);
+        skus.add(GotsPurchaseItem.SKU_TEST_PURCHASE);
+        displayPremiumFragment(skus);
     }
 }

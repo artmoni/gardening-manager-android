@@ -37,7 +37,9 @@ import org.gots.context.GotsContextProvider;
 import org.gots.exception.GardenNotFoundException;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GotsGardenManager;
+import org.gots.inapp.GotsBillingDialog;
 import org.gots.inapp.GotsPurchaseItem;
+import org.gots.inapp.OnPurchaseFinished;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
@@ -61,7 +63,9 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
 import android.support.v4.view.MenuItemCompat;
@@ -76,6 +80,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.android.vending.billing.util.Purchase;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
@@ -338,6 +343,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
 
     }
 
+
     protected List<FloatingItem> onCreateFloatingMenu() {
         return null;
     }
@@ -378,6 +384,34 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         unregisterReceiver(gardenBroadcastReceiver);
         unregisterReceiver(actionseedProvider);
         super.onDestroy();
+    }
+
+    public void displayPremiumFragment(List<String> skuList) {
+        FragmentManager fm = getSupportFragmentManager();
+        final GotsBillingDialog editNameDialog = new GotsBillingDialog();
+        if (skuList != null) {
+            for (String sku : skuList)
+                editNameDialog.addSKUFeature(sku, true);
+        }
+        editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+        editNameDialog.show(fm, "fragment_edit_name");
+        editNameDialog.setOnPurchasedFinishedListener(new OnPurchaseFinished() {
+            @Override
+            public void onPurchaseFailed(Purchase sku) {
+//                            if (sku != null)
+//                                editNameDialog.consumePurchase(sku);
+
+            }
+
+            @Override
+            public void onPurchaseSucceed(Purchase sku) {
+                if (GotsPurchaseItem.SKU_TEST_PURCHASE.equals(sku)) {
+                    gotsPurchase.setFeatureRecognitionCounter(gotsPurchase.getFeatureRecognitionCounter() + 50);
+                    editNameDialog.consumePurchase(sku);
+                    runAsyncDataRetrieval();
+                }
+            }
+        });
     }
 
     @Override

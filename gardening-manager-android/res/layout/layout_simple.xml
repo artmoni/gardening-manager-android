@@ -14,20 +14,12 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true" />
 
-    <FrameLayout
-        android:id="@+id/contentLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_above="@+id/idAdsTop"
-        android:layout_weight="1"
-        android:visibility="visible" />
-
     <LinearLayout
         android:id="@+id/idAdsTop"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:layout_alignParentLeft="true" />
+        android:layout_alignParentLeft="true"
+        android:orientation="horizontal" />
 
 </RelativeLayout>

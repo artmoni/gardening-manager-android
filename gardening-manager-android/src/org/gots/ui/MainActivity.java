@@ -486,8 +486,11 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
             @Override
             protected Integer doInBackground(NavDrawerItem... params) {
                 item = params[0];
-                ParrotSensorProvider parrotSensorProvider = new ParrotSensorProvider(getApplicationContext());
-                return parrotSensorProvider.getSensors().size();
+                if (gotsPrefs.getParrotToken() != null) {
+                    ParrotSensorProvider parrotSensorProvider = new ParrotSensorProvider(getApplicationContext());
+                    return parrotSensorProvider.getSensors().size();
+                } else
+                    return 0;
             }
 
             @Override
@@ -673,18 +676,19 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
 
                 break;
             case 4:
+                i = new Intent(getApplicationContext(), SensorActivity.class);
                 // fragment = new PagesFragment();
-                GotsPurchaseItem purchaseItem = new GotsPurchaseItem(this);
-
-                if (purchaseItem.getFeatureParrot() ? true : purchaseItem.isPremium()) {
-                    i = new Intent(this, SensorActivity.class);
-                } else {
-                    // if (!purchaseItem.getFeatureParrot() && !purchaseItem.isPremium()) {
-                    FragmentManager fm = getSupportFragmentManager();
-                    GotsBillingDialog editNameDialog = new GotsBillingDialog(GotsPurchaseItem.SKU_FEATURE_PARROT);
-                    editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
-                    editNameDialog.show(fm, "fragment_edit_name");
-                }
+//                GotsPurchaseItem purchaseItem = new GotsPurchaseItem(this);
+//
+//                if (purchaseItem.getFeatureParrot() ? true : purchaseItem.isPremium()) {
+//                    i = new Intent(this, SensorActivity.class);
+//                } else {
+//                    // if (!purchaseItem.getFeatureParrot() && !purchaseItem.isPremium()) {
+//                    FragmentManager fm = getSupportFragmentManager();
+//                    GotsBillingDialog editNameDialog = new GotsBillingDialog(GotsPurchaseItem.SKU_FEATURE_PARROT);
+//                    editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+//                    editNameDialog.show(fm, "fragment_edit_name");
+//                }
                 break;
             case 5:
 //                displayPremiumDialog();
@@ -887,8 +891,8 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         displayDrawerMenuCatalogCounter();
         displayDrawerMenuProfileCounter();
         displayDrawerMenuRecognitionCounter();
-        if (gotsPrefs.getParrotToken() != null)
-            displayDrawerMenuSensorCounter();
+//        if (gotsPrefs.getParrotToken() != null)
+        displayDrawerMenuSensorCounter();
     }
 
     protected void refreshAllFragments() {
