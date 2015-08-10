@@ -44,7 +44,7 @@
         android:layout_alignStart="@+id/textView6"
         android:layout_below="@+id/textView6"
         android:layout_marginTop="10dp"
-        android:text="Free requests"
+        android:text="@string/plant.recognition.dailyfreerequest"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -78,7 +78,7 @@
         android:text="3"
         android:textAppearance="?android:attr/textAppearanceMedium" />
     <TextView
-        android:id="@+id/textView10"
+        android:id="@+id/textViewPurchased"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/textView6"

@@ -192,9 +192,9 @@
     <string name="tutorial.g.title">Recognize plants</string>
     <string name="tutorial.button.try">Demonstration</string>
     <string name="tutorial.button.begin">Start</string>
-    
+
     <string name="tutorial.finished">Great! you have finished the tutorial, take pleasure to grow your real garden and share your experience :)</string>
-    
+
     <string name="sensor.buy">Buy a Parrot Flower Power</string>
     <string name="dashboard.sensor.name">Sensors</string>
     <string name="skip">Skip</string>
@@ -222,6 +222,7 @@
 
     <string name="plant.recognition.progress">Recognition in progress...</string>
     <string name="plant.recognition.availability">Available requests</string>
+    <string name="plant.recognition.dailyfreerequest">Daily free request</string>
 
 
     <!-- Nav Drawer Menu Items -->

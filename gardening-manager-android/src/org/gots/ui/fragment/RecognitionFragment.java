@@ -198,10 +198,13 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
         Bundle args = getArguments();
         if (args != null) {
             String filepath = args.getString(IMAGE_PATH);
-            imageFile = getReduceFile(new File(filepath));
+            if (filepath != null) {
+                imageFile = getReduceFile(new File(filepath));
+                if (!imageFile.exists())
+                    mCallback.onRecognitionFailed("File does not exists: " + imageFile.getAbsolutePath());
+            } else
+                mCallback.onRecognitionFailed("Image path is null");
 
-            if (!imageFile.exists())
-                mCallback.onRecognitionFailed("File does not exists: " + imageFile.getAbsolutePath());
         } else {
             Log.w(TAG, "You should pass an argument");
         }

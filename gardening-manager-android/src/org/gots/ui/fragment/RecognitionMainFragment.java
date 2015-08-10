@@ -17,6 +17,7 @@ public class RecognitionMainFragment extends BaseGotsFragment {
     private TextView maxCounterTextView;
     private TextView currentCounterTextView;
     private TextView counterPurchased;
+    private TextView textViewPurchased;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -24,7 +25,7 @@ public class RecognitionMainFragment extends BaseGotsFragment {
         currentCounterTextView = (TextView) v.findViewById(R.id.textViewCounterCurrent);
         maxCounterTextView = (TextView) v.findViewById(R.id.textViewCounterMax);
         counterPurchased = (TextView) v.findViewById(R.id.textViewCounterPurchased);
-
+        textViewPurchased = (TextView) v.findViewById(R.id.textViewPurchased);
         return v;
     }
 
@@ -49,7 +50,15 @@ public class RecognitionMainFragment extends BaseGotsFragment {
             GotsPurchaseItem gotsPurchaseItem = new GotsPurchaseItem(getActivity());
             currentCounterTextView.setText(String.valueOf(gotsPurchaseItem.getFeatureRecognitionFreeCounter()));
             maxCounterTextView.setText(String.valueOf(gotsPurchaseItem.RECOGNITION_FREE_COUNTER_MAX));
-            counterPurchased.setText(String.valueOf(gotsPurchaseItem.getFeatureRecognitionCounter()));
+            if (gotsPurchaseItem.getFeatureRecognitionCounter() > 0){
+                counterPurchased.setVisibility(View.VISIBLE);
+                textViewPurchased.setVisibility(View.VISIBLE);
+                counterPurchased.setText(String.valueOf(gotsPurchaseItem.getFeatureRecognitionCounter()));
+            }
+            else{
+                textViewPurchased.setVisibility(View.GONE);
+                counterPurchased.setVisibility(View.GONE);
+            }
         }
         super.onNuxeoDataRetrieved(data);
     }
