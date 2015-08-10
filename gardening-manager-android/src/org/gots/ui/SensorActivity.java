@@ -123,7 +123,7 @@ public class SensorActivity extends BaseGotsActivity implements OnSensorClickLis
     @Override
     protected List<FloatingItem> onCreateFloatingMenu() {
         FloatingItem item = new FloatingItem();
-        if (gotsPrefs.getParrotToken() != null) {
+        if (gotsPurchase.getFeatureParrot()) {
             item.setRessourceId(R.drawable.ic_login);
             item.setOnClickListener(new View.OnClickListener() {
                 @Override
