@@ -18,6 +18,7 @@ import java.util.List;
 import org.gots.context.GotsContext;
 import org.gots.preferences.GotsPreferences;
 import org.gots.weather.exception.UnknownWeatherException;
+import org.gots.weather.provider.forecast.io.ForecastIOProvider;
 import org.gots.weather.provider.local.LocalWeatherProvider;
 import org.gots.weather.provider.previmeteo.PrevimeteoWeatherProvider;
 import org.gots.weather.provider.previmeteo.WeatherProvider;
@@ -52,8 +53,10 @@ public class WeatherManager implements WeatherProvider {
         this.mContext = context;
         gotsPrefs = (GotsPreferences) getGotsContext().getServerConfig();
 
-        provider = new PrevimeteoWeatherProvider(mContext);
+//        provider = new PrevimeteoWeatherProvider(mContext);
+        provider = new ForecastIOProvider(mContext);
         localProvider = new LocalWeatherProvider(mContext);
+
     }
 
     @Override
