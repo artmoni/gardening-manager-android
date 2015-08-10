@@ -46,9 +46,9 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textSize="20dp"
                     android:hint="My garden"
-                    android:singleLine="true">
+                    android:singleLine="true"
+                    android:textSize="20dp">
 
                     <requestFocus />
                 </EditText>
@@ -67,6 +67,25 @@
                     android:layout_alignBaseline="@+id/textViewNbAllotments"
                     android:layout_toRightOf="@+id/textViewNbAllotments"
                     android:text=" lots" />
+
+                <TextView
+                    android:id="@+id/editTextGardenWeatherLocality"
+                    style="@style/description_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/imageViewWeatherState"
+                    android:layout_toLeftOf="@+id/imageViewWeatherState"
+                    android:layout_toStartOf="@+id/imageViewWeatherState"
+                    android:text="Activate weather forecast" />
+
+
+                <org.gots.action.view.ActionWidget
+                    android:id="@+id/imageViewWeatherState"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignEnd="@+id/editTextGardenName"
+                    android:layout_alignRight="@+id/editTextGardenName"
+                    android:layout_below="@+id/editTextGardenName" />
             </RelativeLayout>
         </RelativeLayout>
         <!--
@@ -85,63 +104,6 @@
             android:layout_height="wrap_content"
             android:padding="5dp">
 
-
-            <TableRow
-                android:id="@+id/tableRow1"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    style="@style/description_content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/garden.cityname.inputtitle" />
-
-                <EditText
-                    android:id="@+id/editTextGardenLocality"
-                    style="@style/description_content"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:hint="@string/garden.cityname.inputmessage"
-                    android:singleLine="true">
-
-                    <requestFocus />
-                </EditText>
-
-                <org.gots.action.view.ActionWidget
-                    android:id="@+id/imageViewLocalize"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp" />
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/tableRowWeatherLocalization"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    style="@style/description_content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/weather.label" />
-
-                <EditText
-                    android:id="@+id/editTextGardenWeatherLocality"
-                    style="@style/description_content"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:hint="@string/garden.cityname.inputmessage"
-                    android:singleLine="true"></EditText>
-
-                <org.gots.action.view.ActionWidget
-                    android:id="@+id/imageViewWeatherState"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp" />
-            </TableRow>
 
             <RadioGroup
                 android:id="@+id/radioGardenType"

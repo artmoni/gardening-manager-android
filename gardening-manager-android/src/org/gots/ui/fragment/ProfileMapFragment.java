@@ -1,16 +1,5 @@
 package org.gots.ui.fragment;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import org.gots.R;
-import org.gots.garden.GardenInterface;
-import org.gots.garden.GotsGardenManager;
-import org.gots.garden.view.OnProfileEventListener;
-
 import android.app.Activity;
 import android.location.Address;
 import android.location.Geocoder;
@@ -31,6 +20,17 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.gots.R;
+import org.gots.garden.GardenInterface;
+import org.gots.garden.GotsGardenManager;
+import org.gots.garden.view.OnProfileEventListener;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class ProfileMapFragment extends BaseGotsFragment implements OnMapLongClickListener, OnMarkerClickListener {
     private static final String TAG = ProfileMapFragment.class.getSimpleName();
@@ -213,8 +213,7 @@ public class ProfileMapFragment extends BaseGotsFragment implements OnMapLongCli
                 garden.setAdminArea(address.getAdminArea());
                 garden.setCountryName(address.getCountryName());
                 garden.setCountryCode(address.getCountryCode());
-                if (garden.getLocalityForecast() == null || "".equals(garden.getLocalityForecast()))
-                    garden.setLocalityForecast(address.getLocality());
+                garden.setLocalityForecast(address.getLocality());
             }
         } catch (IOException e) {
             e.printStackTrace();
