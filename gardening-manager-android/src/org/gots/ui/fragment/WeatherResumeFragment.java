@@ -10,7 +10,6 @@ import org.gots.garden.GardenInterface;
 import org.gots.ui.ProfileActivity;
 import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.WeatherManager;
-import org.gots.weather.provider.local.LocalWeatherProvider;
 import org.gots.weather.view.WeatherView;
 import org.gots.weather.view.WeatherWidget;
 
@@ -89,7 +88,7 @@ public class WeatherResumeFragment extends BaseGotsFragment {
     @Override
     protected Object retrieveNuxeoData() throws Exception {
         currentGarden = getCurrentGarden();
-        if (weatherManager.fetchWeatherForecast(currentGarden) == LocalWeatherProvider.WEATHER_OK) {
+        if (weatherManager.fetchWeatherForecast(currentGarden) == WeatherManager.WEATHER_OK) {
             List<WeatherConditionInterface> conditions = (List<WeatherConditionInterface>) weatherManager.getConditionSet(2);
             return conditions;
         }

@@ -1,19 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_gravity="center_horizontal"
     android:background="@color/text_color_light"
-    android:padding="5dp" >
+    android:padding="5dp">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_line_action"
+        android:background="@color/white"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:padding="10dp" >
+        android:padding="0dp">
 
+        <RelativeLayout
+            android:id="@+id/relativeLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="200dp"
+            android:background="@color/white">
+
+            <ImageView
+                android:id="@+id/imageViewAllotment"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:scaleType="centerCrop"
+
+                android:src="@drawable/bg_garden_top" />
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@color/text_color_light_transparent"
+                android:orientation="vertical"
+                android:padding="5dp">
+
+
+                <EditText
+                    android:id="@+id/editTextGardenName"
+                    style="@style/description_content"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="20dp"
+                    android:hint="My garden"
+                    android:singleLine="true">
+
+                    <requestFocus />
+                </EditText>
+
+                <TextView
+                    android:id="@+id/textViewNbAllotments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/editTextGardenName"
+                    android:layout_toRightOf="@+id/textView3"
+                    android:text="0" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/textViewNbAllotments"
+                    android:layout_toRightOf="@+id/textViewNbAllotments"
+                    android:text=" lots" />
+            </RelativeLayout>
+        </RelativeLayout>
         <!--
                      <ImageView
                     android:id="@+id/imageView2"
@@ -27,37 +82,14 @@
         <TableLayout
             android:id="@+id/tableLayout1"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
 
             <TableRow
                 android:id="@+id/tableRow1"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
-
-                <TextView
-                    style="@style/description_content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/garden.name" />
-
-                <EditText
-                    android:id="@+id/editTextGardenName"
-                    style="@style/description_content"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:hint="My vegetable garden"
-                    android:singleLine="true" >
-
-                    <requestFocus />
-                </EditText>
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/tableRow1"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content">
 
                 <TextView
                     style="@style/description_content"
@@ -73,7 +105,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:hint="@string/garden.cityname.inputmessage"
-                    android:singleLine="true" >
+                    android:singleLine="true">
 
                     <requestFocus />
                 </EditText>
@@ -87,7 +119,7 @@
             <TableRow
                 android:id="@+id/tableRowWeatherLocalization"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content">
 
                 <TextView
                     style="@style/description_content"
@@ -103,8 +135,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:hint="@string/garden.cityname.inputmessage"
-                    android:singleLine="true" >
-                </EditText>
+                    android:singleLine="true"></EditText>
 
                 <org.gots.action.view.ActionWidget
                     android:id="@+id/imageViewWeatherState"
@@ -116,7 +147,7 @@
                 android:id="@+id/radioGardenType"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
                 <RadioButton
                     android:id="@+id/radioGardenPrivate"
@@ -250,8 +281,8 @@
 
         <Button
             android:id="@+id/buttonValidatePosition"
-            style="@style/buttonGreen"
-            android:layout_width="fill_parent"
+            style="@style/buttonRed"
+            android:layout_width="wrap_content"
             android:layout_margin="10dp"
             android:text="@string/profile.location.validate" />
     </LinearLayout>

@@ -29,6 +29,7 @@ import org.gots.garden.GardenInterface;
 import org.gots.preferences.GotsPreferences;
 import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
+import org.gots.weather.WeatherManager;
 import org.gots.weather.WeatherSet;
 import org.gots.weather.exception.UnknownWeatherException;
 import org.gots.weather.provider.WeatherCache;
@@ -125,7 +126,7 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
                 } catch (Exception e) {
                     Log.w(TAG, "Tracking weather: " + e.getMessage());
                 }
-                return WEATHER_ERROR_CITY_UNKNOWN;
+                return WeatherManager.WEATHER_ERROR_CITY_UNKNOWN;
             }
         } catch (Exception e) {
             Log.e(TAG, "PrevimeteoErrorHandler (" + error.getMessage() + ") ");
@@ -137,9 +138,9 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
             } catch (Exception e1) {
                 Log.w(TAG, "Tracking weather: " + e1.getMessage());
             }
-            return WEATHER_ERROR_UNKNOWN;
+            return WeatherManager.WEATHER_ERROR_UNKNOWN;
         }
-        return WEATHER_OK;
+        return WeatherManager.WEATHER_OK;
     }
 
     // @Override

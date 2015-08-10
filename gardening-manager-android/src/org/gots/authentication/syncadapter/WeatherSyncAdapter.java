@@ -1,19 +1,5 @@
 package org.gots.authentication.syncadapter;
 
-import java.util.Calendar;
-import java.util.List;
-
-import org.gots.authentication.GotsSyncAdapter;
-import org.gots.broadcast.BroadCastMessages;
-import org.gots.exception.GardenNotFoundException;
-import org.gots.garden.GardenInterface;
-import org.gots.weather.WeatherConditionInterface;
-import org.gots.weather.exception.UnknownWeatherException;
-import org.gots.weather.provider.local.LocalWeatherProvider;
-import org.gots.weather.provider.nuxeo.NuxeoWeatherProvider;
-import org.gots.weather.provider.previmeteo.PrevimeteoWeatherProvider;
-import org.gots.weather.provider.previmeteo.WeatherProvider;
-
 import android.accounts.Account;
 import android.content.ContentProviderClient;
 import android.content.Context;
@@ -21,6 +7,20 @@ import android.content.Intent;
 import android.content.SyncResult;
 import android.os.Bundle;
 import android.util.Log;
+
+import org.gots.authentication.GotsSyncAdapter;
+import org.gots.broadcast.BroadCastMessages;
+import org.gots.exception.GardenNotFoundException;
+import org.gots.garden.GardenInterface;
+import org.gots.weather.WeatherConditionInterface;
+import org.gots.weather.WeatherManager;
+import org.gots.weather.exception.UnknownWeatherException;
+import org.gots.weather.provider.local.LocalWeatherProvider;
+import org.gots.weather.provider.nuxeo.NuxeoWeatherProvider;
+import org.gots.weather.provider.previmeteo.WeatherProvider;
+
+import java.util.Calendar;
+import java.util.List;
 
 public class WeatherSyncAdapter extends GotsSyncAdapter {
     private String TAG = WeatherSyncAdapter.class.getSimpleName();
@@ -34,7 +34,7 @@ public class WeatherSyncAdapter extends GotsSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider,
-            SyncResult syncResult) {
+                              SyncResult syncResult) {
 
         Log.d(TAG, "onPerformSync for account[" + account.name + "]");
         final Intent intent = new Intent();
@@ -65,28 +65,29 @@ public class WeatherSyncAdapter extends GotsSyncAdapter {
         }
 
         // Get forecast weather from previmeteo web service
-        WeatherProvider weatherProvider = null;
+        WeatherProvider nuxeoWeatherProvider = null;
         if (gotsPrefs.isConnectedToServer() && currentGarden != null)
-            weatherProvider = new NuxeoWeatherProvider(getContext(), currentGarden);
-        else
-            weatherProvider = new LocalWeatherProvider(getContext());
+            nuxeoWeatherProvider = new NuxeoWeatherProvider(getContext(), currentGarden);
+//        else
+//            weatherProvider = new LocalWeatherProvider(getContext());
 
-        WeatherProvider previmeteoWeatherProvider = new PrevimeteoWeatherProvider(getContext());
-        if (previmeteoWeatherProvider.fetchWeatherForecast(currentGarden) == LocalWeatherProvider.WEATHER_OK) {
+        WeatherProvider weatherManager = new WeatherManager(getContext());
+        short weatherRequestState = weatherManager.fetchWeatherForecast(currentGarden);
+        if (weatherRequestState == WeatherManager.WEATHER_OK && nuxeoWeatherProvider != null) {
             for (int forecastDay = 0; forecastDay < 4; forecastDay++) {
                 Calendar cal = Calendar.getInstance();
                 cal.add(Calendar.DAY_OF_YEAR, forecastDay);
 
-                WeatherConditionInterface previmeteoCondition;
+                WeatherConditionInterface localWeatherCondition;
                 try {
-                    previmeteoCondition = previmeteoWeatherProvider.getCondition(cal.getTime());
-                    WeatherConditionInterface storedCondition = weatherProvider.getCondition(cal.getTime());
+                    localWeatherCondition = weatherManager.getCondition(cal.getTime());
+                    WeatherConditionInterface storedCondition = nuxeoWeatherProvider.getCondition(cal.getTime());
 
                     if (storedCondition != null && storedCondition.getId() > 0) {
-                        previmeteoCondition.setId(storedCondition.getId());
-                        previmeteoCondition = weatherProvider.updateCondition(previmeteoCondition);
+                        localWeatherCondition.setId(storedCondition.getId());
+                        localWeatherCondition = nuxeoWeatherProvider.updateCondition(localWeatherCondition);
                     } else {
-                        previmeteoCondition = weatherProvider.insertCondition(previmeteoCondition);
+                        localWeatherCondition = nuxeoWeatherProvider.insertCondition(localWeatherCondition);
                     }
                 } catch (UnknownWeatherException e) {
                     Log.w(TAG, e.getMessage(), e);

@@ -12,6 +12,7 @@ import com.google.gson.JsonParseException;
 
 import org.gots.garden.GardenInterface;
 import org.gots.weather.WeatherConditionInterface;
+import org.gots.weather.WeatherManager;
 import org.gots.weather.exception.UnknownWeatherException;
 import org.gots.weather.provider.WeatherCache;
 import org.gots.weather.provider.local.LocalWeatherProvider;
@@ -38,6 +39,7 @@ public class ForecastIOProvider extends LocalWeatherProvider {
     private static final String URL_UNITS = "units=si";
     private static final String URL_FORECAST = "http://services.gardening-manager.com/forecast/";
     private static final String URL_EXCLUDE = "exclude=minutly,hourly,flags";
+    public static final String TAG = ForecastIOProvider.class.getSimpleName();
 
     public ForecastIOProvider(Context mContext) {
         super(mContext);
@@ -46,8 +48,12 @@ public class ForecastIOProvider extends LocalWeatherProvider {
     @Override
     public short fetchWeatherForecast(GardenInterface gardenInterface) {
         WeatherCache weatherCache = new WeatherCache(mContext);
+        if (gardenInterface.getGpsLatitude() == 0||gardenInterface.getGpsLongitude()==0) {
+            return WeatherManager.WEATHER_ERROR_CITY_UNKNOWN;
+        }
         try {
             URL url = new URL(URL_FORECAST + gardenInterface.getGpsLatitude() + "," + gardenInterface.getGpsLongitude() + "?" + URL_UNITS + "&" + URL_EXCLUDE);
+            Log.d(TAG, "fetchWeatherForecast: " + url.toString());
             InputStream forecast = weatherCache.getCacheByURL(url);
             BufferedReader streamReader = new BufferedReader(new InputStreamReader(forecast, "UTF-8"));
             StringBuilder responseStrBuilder = new StringBuilder();
@@ -81,7 +87,7 @@ public class ForecastIOProvider extends LocalWeatherProvider {
 
                 }
             }
-            return WEATHER_OK;
+            return WeatherManager.WEATHER_OK;
         } catch (URISyntaxException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -89,7 +95,7 @@ public class ForecastIOProvider extends LocalWeatherProvider {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return WEATHER_ERROR_UNKNOWN;
+        return WeatherManager.WEATHER_ERROR_UNKNOWN;
     }
 
 

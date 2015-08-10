@@ -25,6 +25,8 @@ import android.location.LocationProvider;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +51,7 @@ import org.gots.action.provider.GotsActionProvider;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
+import org.gots.allotment.GotsAllotmentManager;
 import org.gots.allotment.provider.local.LocalAllotmentProvider;
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
@@ -60,7 +63,6 @@ import org.gots.seed.GrowingSeed;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.weather.WeatherManager;
-import org.gots.weather.provider.previmeteo.PrevimeteoWeatherProvider;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -94,6 +96,8 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
     private ActionWidget buttonWeatherState;
 
     private View buttonValidate;
+    private int nbAllotments = 0;
+    private TextView textViewNbAllotments;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -114,9 +118,62 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
             garden = new Garden();
         }
 
+        textViewNbAllotments = (TextView) view.findViewById(R.id.textViewNbAllotments);
+
         editTextName = (TextView) view.findViewById(R.id.editTextGardenName);
+        editTextName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                garden.setName(charSequence.toString());
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         editTextLocality = (TextView) view.findViewById(R.id.editTextGardenLocality);
+        editTextLocality.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                garden.setLocality(charSequence.toString());
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         editTextWeatherLocality = (TextView) view.findViewById(R.id.editTextGardenWeatherLocality);
+        editTextWeatherLocality.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                garden.setLocalityForecast(charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         buttonLocalize = (ActionWidget) view.findViewById(R.id.imageViewLocalize);
         buttonLocalize.setActionImage(R.drawable.bt_localize_garden);
         buttonLocalize.setOnClickListener(this);
@@ -237,7 +294,8 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
             new AsyncTask<Void, Void, Short>() {
 
                 protected void onPreExecute() {
-                    garden.setLocality(editTextWeatherLocality.getText().toString());
+//                    garden.setLocality(editTextWeatherLocality.getText().toString());
+
                     buttonWeatherState.setActionImage(R.drawable.bt_update);
                     Animation rotation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
                     rotation.setRepeatCount(Animation.INFINITE);
@@ -254,7 +312,7 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
 
                 protected void onPostExecute(Short result) {
                     buttonWeatherState.clearAnimation();
-                    if (result.shortValue() == PrevimeteoWeatherProvider.WEATHER_OK) {
+                    if (result.shortValue() == WeatherManager.WEATHER_OK) {
                         buttonWeatherState.setActionImage(R.drawable.weather_connected);
                         buttonWeatherState.setState(ActionState.NORMAL);
                     } else {
@@ -465,7 +523,21 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
 
     @Override
     protected boolean requireAsyncDataRetrieval() {
-        return false;
+        return true;
+    }
+
+    @Override
+    protected Object retrieveNuxeoData() throws Exception {
+        GotsAllotmentManager gotsAllotmentManager = GotsAllotmentManager.getInstance();
+        nbAllotments = gotsAllotmentManager.getMyAllotments(false).size();
+
+        return super.retrieveNuxeoData();
+    }
+
+    @Override
+    protected void onNuxeoDataRetrieved(Object data) {
+        textViewNbAllotments.setText(String.valueOf(nbAllotments));
+        super.onNuxeoDataRetrieved(data);
     }
 
     public void updateGarden(GardenInterface garden) {

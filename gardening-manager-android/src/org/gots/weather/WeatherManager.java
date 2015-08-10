@@ -27,6 +27,9 @@ import android.content.Context;
 
 public class WeatherManager implements WeatherProvider {
 
+    public static final short WEATHER_OK = 0;
+    public static final short WEATHER_ERROR_CITY_UNKNOWN = 1;
+    public static final short WEATHER_ERROR_UNKNOWN = 2;
     private Integer temperatureLimitHot;
 
     private Integer temperatureLimitCold;

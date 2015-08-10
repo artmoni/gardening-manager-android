@@ -18,6 +18,7 @@ import org.gots.garden.GardenInterface;
 import org.gots.utils.GotsDBHelper;
 import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
+import org.gots.weather.WeatherManager;
 import org.gots.weather.exception.UnknownWeatherException;
 import org.gots.weather.provider.previmeteo.WeatherProvider;
 
@@ -27,12 +28,6 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 
 public class LocalWeatherProvider extends GotsDBHelper implements WeatherProvider {
-
-    public static final short WEATHER_OK = 0;
-
-    public static final short WEATHER_ERROR_CITY_UNKNOWN = 1;
-
-    protected static final short WEATHER_ERROR_UNKNOWN = 2;
 
     public LocalWeatherProvider(Context mContext) {
         super(mContext);
@@ -142,7 +137,7 @@ public class LocalWeatherProvider extends GotsDBHelper implements WeatherProvide
     @Override
     public short fetchWeatherForecast(GardenInterface gardenInterface) {
         // if database access is right, forecast can be fetch
-        return bdd.isOpen() ? WEATHER_OK : WEATHER_ERROR_CITY_UNKNOWN;
+        return bdd.isOpen() ? WeatherManager.WEATHER_OK : WeatherManager.WEATHER_ERROR_CITY_UNKNOWN;
     }
 
     @Override

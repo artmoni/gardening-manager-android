@@ -12,25 +12,8 @@
  */
 package org.gots.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.gots.R;
-import org.gots.broadcast.BroadCastMessages;
-import org.gots.garden.GardenInterface;
-import org.gots.garden.view.OnProfileEventListener;
-import org.gots.provider.GardenContentProvider;
-import org.gots.ui.BaseGotsActivity.GardenListener;
-import org.gots.ui.fragment.BaseGotsFragment;
-import org.gots.ui.fragment.ProfileEditorFragment;
-import org.gots.ui.fragment.ProfileMapFragment;
-
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,6 +23,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import org.gots.R;
+import org.gots.garden.GardenInterface;
+import org.gots.garden.view.OnProfileEventListener;
+import org.gots.provider.GardenContentProvider;
+import org.gots.ui.BaseGotsActivity.GardenListener;
+import org.gots.ui.fragment.ProfileEditorFragment;
+import org.gots.ui.fragment.ProfileMapFragment;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class ProfileActivity extends BaseGotsActivity implements OnProfileEventListener, GardenListener {
 
     private GardenInterface currentGarden;
@@ -47,6 +41,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
     private ProfileMapFragment mapFragment;
 
     private List<GardenInterface> allGardens;
+    private ProfileEditorFragment contentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,14 +76,14 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
         return floatingItems;
     }
 
-    public BroadcastReceiver gardenBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
-                //runAsyncDataRetrieval();
-            }
-        }
-    };
+//    public BroadcastReceiver gardenBroadcastReceiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
+//                //runAsyncDataRetrieval();
+//            }
+//        }
+//    };
 
     protected boolean requireAsyncDataRetrieval() {
         return true;
@@ -108,16 +103,25 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
 
         if (currentGarden.getGpsLatitude() == 0 || currentGarden.getGpsLongitude() == 0) {
             Toast.makeText(getApplicationContext(), "Long press to localize your garden", Toast.LENGTH_LONG).show();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            builder.setTitle(getResources().getString(R.string.dialog_garden_localize));
+            builder.setMessage(getResources().getString(R.string.dialog_garden_localize_description));
+
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+
+            });
+
+            AlertDialog alert = builder.create();
+            alert.show();
         } else {
 
-            BaseGotsFragment fragment = getContentFragment();
-            if (fragment == null) {
-                fragment = new ProfileEditorFragment();
-                Bundle options = new Bundle();
-                options.putInt("option", ProfileEditorFragment.OPTION_EDIT);
-                addContentLayout(fragment, options);
-            } else
-                fragment.update();
+            if (contentFragment != null)
+                contentFragment.update();
 
         }
         super.onNuxeoDataRetrieved(myGardens);
@@ -125,13 +129,13 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
 
     @Override
     protected void onResume() {
-        registerReceiver(gardenBroadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_EVENT));
+//        registerReceiver(gardenBroadcastReceiver, new IntentFilter(BroadCastMessages.GARDEN_EVENT));
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        unregisterReceiver(gardenBroadcastReceiver);
+//        unregisterReceiver(gardenBroadcastReceiver);
         super.onPause();
     }
 
@@ -219,7 +223,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
     public void onProfileSelected(GardenInterface garden) {
         gardenManager.setCurrentGarden(garden);
         openContentFragment(garden, true);
-        openContentResumeFragment();
+//        openContentResumeFragment();
         mapFragment.update();
     }
 
@@ -235,8 +239,11 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
         if (editable) {
             options.putInt("option", ProfileEditorFragment.OPTION_EDIT);
         }
-
-        addContentLayout(new ProfileEditorFragment(), options);
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            contentFragment = new ProfileEditorFragment();
+            addContentLayout(contentFragment, options);
+        }
+        contentFragment.update();
     }
 
     @Override
@@ -249,22 +256,22 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
 
     @Override
     public void onCurrentGardenChanged(GardenInterface garden) {
-        openContentResumeFragment();
+//        openContentResumeFragment();
         Log.i(TAG, "garden has changed :" + garden);
     }
 
-    protected void openContentResumeFragment() {
-        // if (findViewById(R.id.IdGardenProfileResume) == null)
-        // return;
-        // GardenResumeFragment gardenResumeFragment = (GardenResumeFragment)
-        // getSupportFragmentManager().findFragmentById(
-        // R.id.IdGardenProfileResume);
-        // if (gardenResumeFragment == null) {
-        // gardenResumeFragment = new GardenResumeFragment();
-        // FragmentTransaction transactionCatalogue = getSupportFragmentManager().beginTransaction();
-        // transactionCatalogue.setCustomAnimations(R.anim.abc_fade_in, R.anim.push_right_out);
-        // transactionCatalogue.replace(R.id.IdGardenProfileResume, gardenResumeFragment).commit();
-        // } else
-        // gardenResumeFragment.update();
-    }
+//    protected void openContentResumeFragment() {
+//        // if (findViewById(R.id.IdGardenProfileResume) == null)
+//        // return;
+//        // GardenResumeFragment gardenResumeFragment = (GardenResumeFragment)
+//        // getSupportFragmentManager().findFragmentById(
+//        // R.id.IdGardenProfileResume);
+//        // if (gardenResumeFragment == null) {
+//        // gardenResumeFragment = new GardenResumeFragment();
+//        // FragmentTransaction transactionCatalogue = getSupportFragmentManager().beginTransaction();
+//        // transactionCatalogue.setCustomAnimations(R.anim.abc_fade_in, R.anim.push_right_out);
+//        // transactionCatalogue.replace(R.id.IdGardenProfileResume, gardenResumeFragment).commit();
+//        // } else
+//        // gardenResumeFragment.update();
+//    }
 }
