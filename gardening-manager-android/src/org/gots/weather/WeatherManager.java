@@ -16,17 +16,14 @@ import java.util.Date;
 import java.util.List;
 
 import org.gots.context.GotsContext;
+import org.gots.garden.GardenInterface;
 import org.gots.preferences.GotsPreferences;
 import org.gots.weather.exception.UnknownWeatherException;
 import org.gots.weather.provider.forecast.io.ForecastIOProvider;
 import org.gots.weather.provider.local.LocalWeatherProvider;
-import org.gots.weather.provider.previmeteo.PrevimeteoWeatherProvider;
 import org.gots.weather.provider.previmeteo.WeatherProvider;
 
 import android.content.Context;
-import android.util.Log;
-
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class WeatherManager implements WeatherProvider {
 
@@ -60,8 +57,8 @@ public class WeatherManager implements WeatherProvider {
     }
 
     @Override
-    public short fetchWeatherForecast(String forecastLocality) {
-        return provider.fetchWeatherForecast(forecastLocality);
+    public short fetchWeatherForecast(GardenInterface gardenInterface) {
+        return provider.fetchWeatherForecast(gardenInterface);
     }
 
     public Integer getTemperatureLimitHot() {

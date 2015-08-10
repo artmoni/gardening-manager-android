@@ -2,6 +2,7 @@ package org.gots.weather.provider.previmeteo;
 
 import java.util.Date;
 
+import org.gots.garden.GardenInterface;
 import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.exception.UnknownWeatherException;
 
@@ -15,6 +16,6 @@ public interface WeatherProvider {
 
     public abstract WeatherConditionInterface insertCondition(WeatherConditionInterface weatherCondition);
 
-    public abstract short fetchWeatherForecast(String forecastLocality);
+    public abstract short fetchWeatherForecast(GardenInterface gardenInterface);
 
 }

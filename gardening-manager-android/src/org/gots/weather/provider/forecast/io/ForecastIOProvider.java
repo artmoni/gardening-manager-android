@@ -10,7 +10,9 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
-import org.gots.bean.RouteNode;
+import org.gots.garden.GardenInterface;
+import org.gots.weather.WeatherConditionInterface;
+import org.gots.weather.exception.UnknownWeatherException;
 import org.gots.weather.provider.WeatherCache;
 import org.gots.weather.provider.local.LocalWeatherProvider;
 import org.json.JSONArray;
@@ -24,7 +26,6 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -43,22 +44,23 @@ public class ForecastIOProvider extends LocalWeatherProvider {
     }
 
     @Override
-    public short fetchWeatherForecast(String forecastLocality) {
+    public short fetchWeatherForecast(GardenInterface gardenInterface) {
         WeatherCache weatherCache = new WeatherCache(mContext);
         try {
-            InputStream forecast = weatherCache.getCacheByURL(new URL(URL_FORECAST + "37.8267,-122.423?"+URL_UNITS+"&"+URL_EXCLUDE));
+            URL url = new URL(URL_FORECAST + gardenInterface.getGpsLatitude() + "," + gardenInterface.getGpsLongitude() + "?" + URL_UNITS + "&" + URL_EXCLUDE);
+            InputStream forecast = weatherCache.getCacheByURL(url);
             BufferedReader streamReader = new BufferedReader(new InputStreamReader(forecast, "UTF-8"));
             StringBuilder responseStrBuilder = new StringBuilder();
 
             String inputStr;
             while ((inputStr = streamReader.readLine()) != null)
                 responseStrBuilder.append(inputStr);
-           JSONObject json =  new JSONObject(responseStrBuilder.toString());
+            JSONObject json = new JSONObject(responseStrBuilder.toString());
             JsonDeserializer<Date> deser = new JsonDeserializer<Date>() {
                 @Override
                 public Date deserialize(JsonElement json, Type typeOfT,
                                         JsonDeserializationContext context) throws JsonParseException {
-                    return json == null ? null : new Date(json.getAsJsonPrimitive().getAsLong()*1000); //convert seconds to milliseconds
+                    return json == null ? null : new Date(json.getAsJsonPrimitive().getAsLong() * 1000); //convert seconds to milliseconds
                 }
             };
             Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, deser).create();
@@ -69,9 +71,17 @@ public class ForecastIOProvider extends LocalWeatherProvider {
             for (int i = 0; i < days.length(); i++) {
                 ForecastIOHandler weatherForecast = gson.fromJson(days.getJSONObject(i).toString(), ForecastIOHandler.class);
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                Log.d(ForecastIOProvider.class.getSimpleName(),weatherForecast.summary+" "+dateFormat.format(weatherForecast.time));
+                Log.d(ForecastIOProvider.class.getSimpleName(), weatherForecast.getSummary() + " " + dateFormat.format(weatherForecast.getDate()));
+                try {
+                    WeatherConditionInterface condition = super.getCondition(weatherForecast.getDate());
+                    weatherForecast.setId(condition.getId());
+                    super.updateCondition(weatherForecast);
+                } catch (UnknownWeatherException e) {
+                    super.insertCondition(weatherForecast);
+
+                }
             }
-                return WEATHER_OK;
+            return WEATHER_OK;
         } catch (URISyntaxException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -81,4 +91,6 @@ public class ForecastIOProvider extends LocalWeatherProvider {
         }
         return WEATHER_ERROR_UNKNOWN;
     }
+
+
 }

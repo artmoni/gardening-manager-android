@@ -89,7 +89,7 @@ public class WeatherResumeFragment extends BaseGotsFragment {
     @Override
     protected Object retrieveNuxeoData() throws Exception {
         currentGarden = getCurrentGarden();
-        if (weatherManager.fetchWeatherForecast(currentGarden.getLocalityForecast()) == LocalWeatherProvider.WEATHER_OK) {
+        if (weatherManager.fetchWeatherForecast(currentGarden) == LocalWeatherProvider.WEATHER_OK) {
             List<WeatherConditionInterface> conditions = (List<WeatherConditionInterface>) weatherManager.getConditionSet(2);
             return conditions;
         }

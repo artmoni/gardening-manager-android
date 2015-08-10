@@ -12,35 +12,6 @@
  */
 package org.gots.ui.fragment;
 
-import java.io.IOException;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Random;
-
-import org.gots.R;
-import org.gots.action.ActionOnSeed;
-import org.gots.action.BaseAction;
-import org.gots.action.GardeningActionInterface;
-import org.gots.action.GotsActionManager;
-import org.gots.action.GotsActionSeedManager;
-import org.gots.action.provider.GotsActionProvider;
-import org.gots.action.provider.GotsActionSeedProvider;
-import org.gots.action.util.ActionState;
-import org.gots.action.view.ActionWidget;
-import org.gots.allotment.provider.local.LocalAllotmentProvider;
-import org.gots.bean.Allotment;
-import org.gots.bean.BaseAllotmentInterface;
-import org.gots.bean.Garden;
-import org.gots.garden.GardenInterface;
-import org.gots.garden.GotsGardenManager;
-import org.gots.garden.view.OnProfileEventListener;
-import org.gots.seed.GrowingSeed;
-import org.gots.seed.provider.GotsSeedProvider;
-import org.gots.seed.provider.local.LocalSeedProvider;
-import org.gots.weather.WeatherManager;
-import org.gots.weather.provider.previmeteo.PrevimeteoWeatherProvider;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -67,6 +38,35 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+
+import org.gots.R;
+import org.gots.action.ActionOnSeed;
+import org.gots.action.BaseAction;
+import org.gots.action.GardeningActionInterface;
+import org.gots.action.GotsActionManager;
+import org.gots.action.GotsActionSeedManager;
+import org.gots.action.provider.GotsActionProvider;
+import org.gots.action.provider.GotsActionSeedProvider;
+import org.gots.action.util.ActionState;
+import org.gots.action.view.ActionWidget;
+import org.gots.allotment.provider.local.LocalAllotmentProvider;
+import org.gots.bean.Allotment;
+import org.gots.bean.BaseAllotmentInterface;
+import org.gots.bean.Garden;
+import org.gots.garden.GardenInterface;
+import org.gots.garden.GotsGardenManager;
+import org.gots.garden.view.OnProfileEventListener;
+import org.gots.seed.GrowingSeed;
+import org.gots.seed.provider.GotsSeedProvider;
+import org.gots.seed.provider.local.LocalSeedProvider;
+import org.gots.weather.WeatherManager;
+import org.gots.weather.provider.previmeteo.PrevimeteoWeatherProvider;
+
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Random;
 
 public class ProfileEditorFragment extends BaseGotsFragment implements LocationListener, OnClickListener {
     public static final int OPTION_EDIT = 1;
@@ -235,14 +235,9 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
     protected void fetchWeatherAsync() {
         if (isAdded())
             new AsyncTask<Void, Void, Short>() {
-                String currentWeatherLocalization;
 
                 protected void onPreExecute() {
-
-                    currentWeatherLocalization = String.valueOf(editTextWeatherLocality.getText());
-                    if (currentWeatherLocalization == null) {
-                        currentWeatherLocalization = garden.getLocalityForecast();
-                    }
+                    garden.setLocality(editTextWeatherLocality.getText().toString());
                     buttonWeatherState.setActionImage(R.drawable.bt_update);
                     Animation rotation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
                     rotation.setRepeatCount(Animation.INFINITE);
@@ -254,7 +249,7 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
                 @Override
                 protected Short doInBackground(Void... params) {
                     WeatherManager weatherManager = new WeatherManager(getActivity());
-                    return weatherManager.fetchWeatherForecast(currentWeatherLocalization);
+                    return weatherManager.fetchWeatherForecast(garden);
                 }
 
                 protected void onPostExecute(Short result) {

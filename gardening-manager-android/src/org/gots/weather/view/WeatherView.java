@@ -4,19 +4,11 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ * <p>
  * Contributors:
- *     sfleury - initial API and implementation
+ * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.weather.view;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
-
-import org.gots.R;
-import org.gots.weather.WeatherConditionInterface;
-import org.gots.weather.provider.MoonCalculation;
 
 import android.content.Context;
 import android.text.Layout;
@@ -26,6 +18,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import org.gots.R;
+import org.gots.weather.WeatherConditionInterface;
+import org.gots.weather.provider.MoonCalculation;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class WeatherView extends LinearLayout {
     Context mContext;
@@ -108,29 +108,29 @@ public class WeatherView extends LinearLayout {
             return;
         }
         switch (mType) {
-        case TEXT:
-            weatherWidget.setVisibility(View.GONE);
+            case TEXT:
+                weatherWidget.setVisibility(View.GONE);
 
-            if (mWeather.getIconURL() == null) {
+                if (mWeather.getIconURL() == null) {
+                    boxTemp.setVisibility(View.GONE);
+                    weatherDay.setVisibility(View.GONE);
+
+                }
+                weatherImageContainer.setVisibility(View.GONE);
+
+                break;
+            case IMAGE:
                 boxTemp.setVisibility(View.GONE);
                 weatherDay.setVisibility(View.GONE);
 
-            }
-            weatherImageContainer.setVisibility(View.GONE);
+                break;
 
-            break;
-        case IMAGE:
-            boxTemp.setVisibility(View.GONE);
-            weatherDay.setVisibility(View.GONE);
+            default:
+                if (mWeather.getIconURL() == null) {
+                    boxTemp.setVisibility(View.INVISIBLE);
 
-            break;
-
-        default:
-            if (mWeather.getIconURL() == null) {
-                boxTemp.setVisibility(View.INVISIBLE);
-
-            }
-            break;
+                }
+                break;
         }
         try {
             Calendar t = Calendar.getInstance();
@@ -213,23 +213,30 @@ public class WeatherView extends LinearLayout {
         setupView();
     }
 
-    public static int getWeatherResource(WeatherConditionInterface weatherCondition) {
-        if (weatherCondition.getIconURL() == null)
-            return R.drawable.weather_nonet;
+    public int getWeatherResource(WeatherConditionInterface weatherCondition) {
+        int weatherImageRessource = 0;
+        if (weatherCondition.getIconURL() != null)
+            weatherImageRessource = mContext.getResources().getIdentifier(
+                    "org.gots:drawable/weather_" + weatherCondition.getIconURL().toLowerCase().replaceAll("-", ""), null, null);
+        if (weatherImageRessource == 0)
+            weatherImageRessource = R.drawable.weather_nonet;
 
-        if (weatherCondition.getIconURL().contains("rain"))
-            return R.drawable.weather_rain;
-        else if (weatherCondition.getIconURL().contains("mostly_sunny"))
-            return R.drawable.weather_mostlysunny;
-        else if (weatherCondition.getIconURL().contains("cloud") || weatherCondition.getIconURL().contains("mist"))
-            return R.drawable.weather_cloud;
-        else if (weatherCondition.getIconURL().contains("snow"))
-            return R.drawable.weather_snow;
-        else if (weatherCondition.getIconURL().contains("sunny"))
-            return R.drawable.weather_mostlysunny;
-        else if (weatherCondition.getIconURL().contains("storm") || weatherCondition.getIconURL().contains("thunder"))
-            return R.drawable.weather_thunder;
-        return R.drawable.weather_sun;
+//        if (weatherCondition.getIconURL() == null)
+//            return R.drawable.weather_nonet;
+//
+//        if (weatherCondition.getIconURL().contains("rain"))
+//            return R.drawable.weather_rain;
+//        else if (weatherCondition.getIconURL().contains("mostly_sunny"))
+//            return R.drawable.weather_mostlysunny;
+//        else if (weatherCondition.getIconURL().contains("cloud") || weatherCondition.getIconURL().contains("mist"))
+//            return R.drawable.weather_cloud;
+//        else if (weatherCondition.getIconURL().contains("snow"))
+//            return R.drawable.weather_snow;
+//        else if (weatherCondition.getIconURL().contains("sunny"))
+//            return R.drawable.weather_mostlysunny;
+//        else if (weatherCondition.getIconURL().contains("storm") || weatherCondition.getIconURL().contains("thunder"))
+//            return R.drawable.weather_thunder;
+        return weatherImageRessource;
     }
 
     public static int getMoonResource(String moon) {

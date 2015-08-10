@@ -17,7 +17,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -26,6 +25,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.http.client.HttpResponseException;
 import org.gots.context.GotsContext;
+import org.gots.garden.GardenInterface;
 import org.gots.preferences.GotsPreferences;
 import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
@@ -76,12 +76,12 @@ public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
     }
 
     @Override
-    public short fetchWeatherForecast(String forecastLocality) {
+    public short fetchWeatherForecast(GardenInterface gardenInterface) {
         cache = new WeatherCache(mContext);
         PrevimeteoErrorHandler error = new PrevimeteoErrorHandler();
 
         try {
-            URL url = buildUriFromAddress(forecastLocality);
+            URL url = buildUriFromAddress(gardenInterface.getLocality());
             Log.d(TAG, url.toString());
             InputStream is = cache.getCacheByURL(url);
             /* Get a SAXParser from the SAXPArserFactory. */
