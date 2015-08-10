@@ -43,8 +43,7 @@ import android.util.Log;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
-    private static final String TAG = "PrevimeteoWeatherProvider";
-
+    private static final String TAG = PrevimeteoWeatherProvider.class.getSimpleName();
 
     private WeatherSet weatherSet;
 
