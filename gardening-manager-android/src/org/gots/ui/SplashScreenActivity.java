@@ -35,6 +35,8 @@ import com.android.vending.billing.util.IabHelper;
 import com.android.vending.billing.util.IabResult;
 import com.android.vending.billing.util.Inventory;
 import com.android.vending.billing.util.Purchase;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 
 public class SplashScreenActivity extends BaseGotsActivity {
 
@@ -182,7 +184,7 @@ public class SplashScreenActivity extends BaseGotsActivity {
         if (accounts.length == 0) {
             return null;
         } else {
-            if (!gotsPurchase.isPremium())
+            if (!gotsPurchase.isPremium() && GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext()) == ConnectionResult.SUCCESS)
                 checkPurchaseFeature();
         }
 
