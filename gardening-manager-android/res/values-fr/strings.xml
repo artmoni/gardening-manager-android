@@ -176,19 +176,19 @@
   <string name="inapp.purchase.buy">Acheter</string>
   <string name="inapp.purchase.title">Aller plus loin</string>
   <string name="tutorial.title">Découvrir</string>
-  <string name="tutorial.a.title">Geolocaliser son jardin </string>
+  <string name="tutorial.a.title">Géolocaliser son jardin </string>
   <string name="tutorial.a.description">Conservez l’historique météo et cultivez avec la lune</string>
   <string name="tutorial.b.title">Accéder au catalogue</string>
-  <string name="tutorial.b.description">Recherche de plantes, ajout de nouvelles références, partage avec la communauté, gestion des stocks</string>
+  <string name="tutorial.b.description">Recherchez des plantes, ajoutez de nouvelles références, partagez avec la communauté, gérez vos stocks</string>
   <string name="tutorial.c.title">Organiser ses parcelles</string>
-  <string name="tutorial.c.description">Je défini les parcelles, renseigne les plantes semées et suis la progression des cultures</string>
+  <string name="tutorial.c.description">Organisez vos parcelles, planifiez vos semences et suivez la progression des cultures</string>
   <string name="tutorial.d.title">Planifier des taches</string>
-  <string name="tutorial.d.description">soyez alerté lorqu’il est temps et conservez l’historique des tâches effectuées</string>
+  <string name="tutorial.d.description">Soyez alerté à temps, consultez votre historique</string>
   <string name="tutorial.e.title">Rejoindre une communauté de jardiniers</string>
-  <string name="tutorial.e.description">découvrez des jardins originaux et partagez vos créations</string>
-  <string name="tutorial.f.title">Surveiller ses cultures</string>
-  <string name="tutorial.f.description">Parrot Flower Power est une sonde compatible qui vous permet de suivre plus précisément: température, engrais, ensoleillement et hydrométrie</string>
-  <string name="tutorial.g.title">Reconnaissance des plantes</string>
+  <string name="tutorial.e.description">Découvrez des jardins originaux et partagez vos créations</string>
+  <string name="tutorial.f.title">Surveiller les cultures</string>
+  <string name="tutorial.f.description">Suivez avec précision température, engrais, ensoleillement et hydrométrie grâce à votre sonde Parrot Flower Power</string>
+  <string name="tutorial.g.title">Reconnaissance de plantes</string>
   <string name="tutorial.button.try">Démonstration</string>
   <string name="tutorial.button.begin">Commencer</string>
   <string name="tutorial.finished">Bravo! vous avez terminé le tutorial, prenez plaisir à jardiner et partagez votre expérience.</string>
@@ -215,5 +215,6 @@
   <string name="sensor.fertilizer.too.high">Trop d\'engrais</string>
   <string name="sensor.fertilizer.good">Quantité d\'engrais est correcte</string>
   <string name="plant.recognition">Identification visuelle</string>
+  <string name="plant.recognition.description">Recherchez une plante à partir d\'une photo</string>
 
 </resources>

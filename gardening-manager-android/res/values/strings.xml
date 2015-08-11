@@ -178,18 +178,18 @@
     <string name="inapp.purchase.title">Got further</string>
     <string name="tutorial.title">Discover</string>
     <string name="tutorial.a.title">Geolocalize my garden</string>
-    <string name="tutorial.a.description">keep weather history and grow with the moon</string>
+    <string name="tutorial.a.description">Keep weather history and grow with the moon</string>
     <string name="tutorial.b.title">Access a large plant catalogue</string>
-    <string name="tutorial.b.description">Search plants, add new one, share with the community, manage your stock</string>
+    <string name="tutorial.b.description">Search for plants, add new references, share with the community, manage your stock</string>
     <string name="tutorial.c.title">Organize my allotments</string>
-    <string name="tutorial.c.description">Define allotments, sow plants and follow cultures evolution</string>
+    <string name="tutorial.c.description">Define allotments, sow plants and follow growth</string>
     <string name="tutorial.d.title">Schedule tasks</string>
-    <string name="tutorial.d.description">be notified on time and keep history</string>
-    <string name="tutorial.e.title">Join a community of gardeners</string>
+    <string name="tutorial.d.description">Be notified on time and refer back to your history</string>
+    <string name="tutorial.e.title">Join the gardeners community</string>
     <string name="tutorial.e.description">Discover original gardens and share your creations</string>
     <string name="tutorial.f.title">Monitor plants</string>
-    <string name="tutorial.f.description">Fertilizer, sunlight, temperature and soil moisture with your Parrot Flower Power</string>
-    <string name="tutorial.g.title">Recognize plants</string>
+    <string name="tutorial.f.description">Follow accurately fertilizer, sunlight, temperature and soil moisture with your Parrot Flower Power sensor</string>
+    <string name="tutorial.g.title">Plant recognition</string>
     <string name="tutorial.button.try">Demonstration</string>
     <string name="tutorial.button.begin">Start</string>
 
@@ -217,8 +217,8 @@
     <string name="sensor.fertilizer.too.low">Not enough fertilizer</string>
     <string name="sensor.fertilizer.too.high">Too many fertilizer</string>
     <string name="sensor.fertilizer.good">Fertilizer quantity is correct</string>
-    <string name="plant.recognition">Plants recognition</string>
-    <string name="plant.recognition.description">Pick a plant, take a picture and discover immediately what it is!</string>
+    <string name="plant.recognition">Plant recognition</string>
+    <string name="plant.recognition.description">Search for a plant from a picture</string>
 
     <string name="plant.recognition.progress">Recognition in progress...</string>
     <string name="plant.recognition.availability">Available requests</string>
