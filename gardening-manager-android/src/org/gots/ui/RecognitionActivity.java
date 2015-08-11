@@ -6,36 +6,22 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
-
-import com.android.vending.billing.util.Purchase;
 
 import org.gots.R;
-import org.gots.inapp.GotsBillingDialog;
 import org.gots.inapp.GotsPurchaseItem;
-import org.gots.inapp.OnPurchaseFinished;
 import org.gots.ui.fragment.RecognitionFragment;
 import org.gots.ui.fragment.RecognitionMainFragment;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -79,8 +65,9 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
 
         if (data != null) {
             if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-                Bitmap photo = (Bitmap) data.getExtras().get("data");
-                Uri selectedImage = getImageUri(getApplicationContext(), photo);
+                try {
+                    Bitmap photo = (Bitmap) data.getExtras().get("data");
+                    Uri selectedImage = getImageUri(getApplicationContext(), photo);
 //                String[] filePathColumn = {MediaStore.Images.Media.DATA};
 //
 //                Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
@@ -90,8 +77,11 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
 //                int columnIndex = cursor.getColumnIndexOrThrow(filePathColumn[0]);
 //                picturePath = cursor.getString(columnIndex);
 //                Toast.makeText(getApplicationContext(), picturePath != null ? picturePath : "null", Toast.LENGTH_LONG).show();
-                File finalFile = new File(getRealPathFromURI(selectedImage));
-                picturePath = finalFile.getAbsolutePath();
+                    File finalFile = new File(getRealPathFromURI(selectedImage));
+                    picturePath = finalFile.getAbsolutePath();
+                } catch (Exception e) {
+                    Log.e(TAG, e.getMessage(), e);
+                }
             } else if (requestCode == REQUEST_LOAD_IMAGE && resultCode == RESULT_OK) {
                 Uri selectedImage = data.getData();
                 String[] filePathColumn = {MediaStore.Images.Media.DATA};
