@@ -1,8 +1,7 @@
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <!-- Framelayout to display Fragments -->
 
@@ -11,16 +10,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/text_color_light"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
                 <FrameLayout
                     android:id="@+id/idFragmentTutorial"
@@ -28,6 +27,19 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentTop="true"
+                    android:padding="5dp" />
+
+
+                <FrameLayout
+                    android:id="@+id/idFragmentActions"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:padding="5dp" />
+
+                <FrameLayout
+                    android:id="@+id/idFragmentCatalog"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:padding="5dp" />
 
                 <FrameLayout
@@ -55,30 +67,18 @@
                     android:padding="5dp"
                     android:visibility="visible" />
 
-                <FrameLayout
-                    android:id="@+id/idFragmentCatalog"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp" />
-
-                <FrameLayout
-                    android:id="@+id/idFragmentActions"
-                    android:layout_width="match_parent"
-                    android:layout_height="fill_parent"
-                    android:padding="5dp" />
                 <!--<FrameLayout-->
-                    <!--android:id="@+id/idFragmentRecognition"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="fill_parent"-->
-                    <!--android:padding="5dp" />-->
+                <!--android:id="@+id/idFragmentRecognition"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="fill_parent"-->
+                <!--android:padding="5dp" />-->
             </LinearLayout>
         </ScrollView>
 
         <LinearLayout
             android:id="@+id/idAdsTop"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
-        </LinearLayout>
+            android:layout_height="wrap_content"></LinearLayout>
     </LinearLayout>
 
     <!-- Listview to display slider menu -->
@@ -99,7 +99,7 @@
         android:id="@+id/frame_menu"
         android:layout_width="240dp"
         android:layout_height="fill_parent"
-        android:layout_gravity="start" >
+        android:layout_gravity="start">
 
         <RelativeLayout
             android:id="@+id/relativeLayout1"
@@ -107,7 +107,7 @@
             android:layout_height="100dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:background="@color/text_color_light" >
+            android:background="@color/text_color_light">
 
             <ImageView
                 android:id="@+id/imageView1"
