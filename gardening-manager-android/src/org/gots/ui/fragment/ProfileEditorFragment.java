@@ -528,7 +528,7 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
     @Override
     protected Object retrieveNuxeoData() throws Exception {
         GotsAllotmentManager gotsAllotmentManager = GotsAllotmentManager.getInstance();
-        nbAllotments = gotsAllotmentManager.getMyAllotments(false).size();
+        nbAllotments = gotsAllotmentManager.getMyAllotments(true).size();
 
         return super.retrieveNuxeoData();
     }

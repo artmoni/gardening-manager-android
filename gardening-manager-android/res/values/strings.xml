@@ -225,6 +225,7 @@
     <string name="plant.recognition.dailyfreerequest">Daily free request</string>
     <string name="dialog_garden_localize">Garden location</string>
     <string name="dialog_garden_localize_description">Weather forecast needs garden location. Long press on the map to localize your garden.</string>
+    <string name="allotment.name">My allotment</string>
 
 
     <!-- Nav Drawer Menu Items -->

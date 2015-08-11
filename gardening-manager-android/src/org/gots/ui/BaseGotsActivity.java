@@ -565,7 +565,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
             transaction.setCustomAnimations(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_top);
             if (options != null)
                 contentFragment.setArguments(options);
-            contentFragment.setRetainInstance(false);
+            contentFragment.setRetainInstance(true);
             transaction.replace(getMainLayout(), contentFragment).commitAllowingStateLoss();
         }
     }

@@ -140,7 +140,7 @@
   <string name="garden.name">Nom du jardin</string>
   <string name="garden.create.description">Utilisez des fonctions simples en mode déconnecté sans sauvegarde ni réseau sociale</string>
   <string name="login.connect">Me connecter</string>
-  <string name="login.connect.state">Vous êtes synchronizé</string>
+  <string name="login.connect.state">Vous êtes synchronisé</string>
   <string name="login.connect.error">La connexion a échoué, avez- vous déjà créé un compte ? \n s\'il vous plaît vérifiez les informations et réessayez. </string>
   <string name="login.disconnect">Déconnexion</string>
   <string name="login.disconnect.state">Vous travaillez déconnecté</string>
@@ -182,12 +182,12 @@
   <string name="tutorial.b.description">Recherchez des plantes, ajoutez de nouvelles références, partagez avec la communauté, gérez vos stocks</string>
   <string name="tutorial.c.title">Organiser ses parcelles</string>
   <string name="tutorial.c.description">Organisez vos parcelles, planifiez vos semences et suivez la progression des cultures</string>
-  <string name="tutorial.d.title">Planifier des taches</string>
+  <string name="tutorial.d.title">Planifier des tâches</string>
   <string name="tutorial.d.description">Soyez alerté à temps, consultez votre historique</string>
   <string name="tutorial.e.title">Rejoindre une communauté de jardiniers</string>
   <string name="tutorial.e.description">Découvrez des jardins originaux et partagez vos créations</string>
   <string name="tutorial.f.title">Surveiller les cultures</string>
-  <string name="tutorial.f.description">Suivez avec précision température, engrais, ensoleillement et hydrométrie grâce à votre sonde Parrot Flower Power</string>
+  <string name="tutorial.f.description">Suivez avec précision température, niveau d'engrais, ensoleillement et hydrométrie grâce à votre sonde Parrot Flower Power</string>
   <string name="tutorial.g.title">Reconnaissance de plantes</string>
   <string name="tutorial.button.try">Démonstration</string>
   <string name="tutorial.button.begin">Commencer</string>
@@ -216,5 +216,7 @@
   <string name="sensor.fertilizer.good">Quantité d\'engrais est correcte</string>
   <string name="plant.recognition">Identification visuelle</string>
   <string name="plant.recognition.description">Recherchez une plante à partir d\'une photo</string>
+  <string name="allotment.name">Ma parcelle</string>
+  <string name="plant.recognition.progress">Analyse en cours ...</string>
 
 </resources>

@@ -47,8 +47,9 @@
                     android:layout_alignParentTop="true"
                     android:layout_toRightOf="@+id/textView3"
                     android:ems="10"
-                    android:hint="Name of my allotment"
+                    android:hint="@string/allotment.name"
                     android:singleLine="true"
+                    android:textSize="20dp"
                     android:textColor="@color/text_color_dark">
 
                     <requestFocus />
