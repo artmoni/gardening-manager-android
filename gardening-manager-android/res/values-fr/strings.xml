@@ -200,7 +200,7 @@
   <string name="garden.type.private">Jardin privé</string>
   <string name="garden.type.incredibleedible">Les incroyables comestibles: nourriture à partager</string>
   <string name="garden.type.incredibleedible.description">Incredible Edible ou incroyables comestibles en français est une expérience communautaire qui consiste en la mise à disposition gratuite, dans de petits potagers disséminés dans les villes et les campagnes, de légumes cultivés par les volontaires participant au mouvement.</string>
-  <string name="workflow.process.title">Processus de validation</string>
+  <string name="workflow.process.title">Modération</string>
   <string name="workflow.launch.description">Soumettre cette description de plante à l\'équipe de modération pour la partager avec la communauté</string>
   <string name="sensor.light.too.low">Pas assez de lumière</string>
   <string name="sensor.light.too.high">Trop de lumière</string>
