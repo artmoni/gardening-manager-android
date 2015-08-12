@@ -12,7 +12,14 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/idAdsTop"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="right|bottom"
+            android:orientation="horizontal"></LinearLayout>
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/idAdsTop"
@@ -21,5 +28,12 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:orientation="horizontal" />
+
+    <LinearLayout
+        android:layout_width="70dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="@color/text_color_light"></LinearLayout>
 
 </RelativeLayout>
