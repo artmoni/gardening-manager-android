@@ -629,17 +629,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
             }
         });
 
-        getIntent().putExtra(WorkflowTaskFragment.GOTS_DOC_ID, mSeed.getUUID());
-        if (taskDocs != null && taskDocs.size() > 0) {
-            if (fragmentWorkflow == null) {
-                fragmentWorkflow = new WorkflowTaskFragment();
-                // FragmentManager fragmentManager = getSupportFragmentManager();
-                // fragmentManager.beginTransaction().replace(R.id.frame_workflow, fragmentWorkflow).commit();
-                addTab(fragmentWorkflow, "Validation");
-                if (workflowMenuItem != null)
-                    workflowMenuItem.setVisible(false);
-            }
-        }
+
 
         List<Fragment> fragments = new ArrayList<>();
         Bundle bundle = new Bundle();
@@ -654,6 +644,19 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
             addTab(fragmentDescription, getResources().getString(R.string.seed_description_tabmenu_detail));
         } else
             fragmentDescription.update();
+
+        // ********************** Moderation description **********************
+        getIntent().putExtra(WorkflowTaskFragment.GOTS_DOC_ID, mSeed.getUUID());
+        if (taskDocs != null && taskDocs.size() > 0) {
+            if (fragmentWorkflow == null) {
+                fragmentWorkflow = new WorkflowTaskFragment();
+                // FragmentManager fragmentManager = getSupportFragmentManager();
+                // fragmentManager.beginTransaction().replace(R.id.frame_workflow, fragmentWorkflow).commit();
+                addTab(fragmentWorkflow, getResources().getString(R.string.workflow_process_title));
+                if (workflowMenuItem != null)
+                    workflowMenuItem.setVisible(false);
+            }
+        }
         // ********************** Tab actions **********************
         if (mSeed.getGrowingSeedId() > 0) {
             if (fragmentListAction == null) {
