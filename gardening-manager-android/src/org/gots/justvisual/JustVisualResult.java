@@ -78,7 +78,7 @@ public class JustVisualResult {
     public String getSpecies() {
         String species;
         try {
-            species = plantNames.substring(plantNames.indexOf('(') + 1, plantNames.indexOf('-') != -1 ? plantNames.indexOf('-') : plantNames.indexOf(')'));
+            species = plantNames.substring(plantNames.indexOf('(') + 1, plantNames.indexOf('-') != -1 ? plantNames.indexOf('-') : plantNames.indexOf(')') );
         } catch (Exception e) {
             species = plantNames;
         }
@@ -92,7 +92,7 @@ public class JustVisualResult {
     public String getCommonName() {
         String commonName = null;
         if (plantNames.indexOf('-') > 0)
-            commonName = plantNames.substring(plantNames.indexOf('-') + 1, plantNames.length() - 2);
+            commonName = plantNames.substring(plantNames.indexOf('-') + 1, plantNames.length() - 1);
         if (commonName == null && plantNames.indexOf('(') > 1)
             commonName = plantNames.substring(0, plantNames.indexOf('(') - 1);
 

@@ -95,7 +95,7 @@
         android:text="0"
         android:id="@+id/textViewCounterPurchased"
         android:layout_marginStart="19dp"
-        android:layout_alignBaseline="@+id/textView10"
-        android:layout_alignBottom="@+id/textView10"
-        android:layout_toEndOf="@+id/textView10" />
+        android:layout_alignBaseline="@+id/textViewPurchased"
+        android:layout_alignBottom="@+id/textViewPurchased"
+        android:layout_toEndOf="@+id/textViewPurchased" />
 </RelativeLayout>
