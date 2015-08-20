@@ -1,6 +1,5 @@
 package org.gots.ui.fragment;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -10,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import org.gots.R;
-import org.gots.seed.BaseSeedInterface;
 
 import java.util.ArrayList;
 
@@ -125,19 +123,19 @@ public class SeedDescriptionEditFragment extends SeedContentFragment implements 
             switch (requestCode) {
                 case REQUEST_GROWTH:
                     descriptionGrowth.setText(matches.get(0));
-                    mSeed.setDescriptionEnvironment(matches.toArray().toString());
+                    mSeed.setDescriptionCultivation(mSeed.getDescriptionCultivation() + " " + matches.toArray().toString());
                     break;
                 case REQUEST_DISEASES:
                     descriptionDiseases.setText(matches.get(0));
-                    mSeed.setDescriptionDiseases(matches.toArray().toString());
+                    mSeed.setDescriptionDiseases(mSeed.getDescriptionDiseases() + " " + matches.toArray().toString());
                     break;
                 case REQUEST_ENVIRONMENT:
                     descriptionEnvironment.setText(matches.get(0));
-                    mSeed.setDescriptionCultivation(matches.toArray().toString());
+                    mSeed.setDescriptionEnvironment(mSeed.getDescriptionEnvironment() + " " + matches.toArray().toString());
                     break;
                 case REQUEST_HARVEST:
                     descriptionHarvest.setText(matches.get(0));
-                    mSeed.setDescriptionHarvest(matches.toArray().toString());
+                    mSeed.setDescriptionHarvest(mSeed.getDescriptionHarvest() + " " + matches.toArray().toString());
                     break;
                 default:
                     break;
