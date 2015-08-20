@@ -55,6 +55,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -397,7 +398,9 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
 
                     plantDoc = service.getDocument(result.getUuid());
                     PropertyMap props = new PropertyMap();
+                    props.set("vendorseed:variety", result.getCommonName());
                     props.set("vendorseed:specie", result.getSpecies());
+                    props.set("vendorseed:language", Locale.getDefault().getCountry().toLowerCase());
                     props.set("dc:title", result.getCommonName());
                     props.set("vendorseed:url", result.getPageUrl());
 
