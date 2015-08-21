@@ -119,6 +119,7 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
             newSeed.setBareCode(getIntent().getStringExtra(ORG_GOTS_SEED_BARCODE));
 
         finalFragment = new PlantCreationFragment();
+        finalFragment.setSeed(newSeed);
 
         speciesFragment = new SpeciesFragment();
         speciesFragment.setSeed(newSeed);
@@ -255,9 +256,9 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
                 buttonPrevious.setVisibility(View.VISIBLE);
             if (step == breadcrum.size()) {
                 buttonNext.setIcon(R.drawable.ic_validate);
-                for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); ++i) {
-                    getSupportFragmentManager().popBackStack();
-                }
+//                for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); ++i) {
+//                    getSupportFragmentManager().popBackStack();
+//                }
 //                buttonPrevious.setVisibility(View.GONE);
             }
             if (step == breadcrum.size() + 1) {
