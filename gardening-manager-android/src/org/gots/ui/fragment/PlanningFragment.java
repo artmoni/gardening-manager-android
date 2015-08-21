@@ -1,6 +1,7 @@
 package org.gots.ui.fragment;
 
-import android.app.Activity;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,7 +13,6 @@ import org.gots.R;
 
 import java.lang.reflect.Field;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by sfleury on 10/07/15.
@@ -85,28 +85,69 @@ public class PlanningFragment extends SeedContentFragment implements DatePicker.
 
     private void monthFilter(DatePicker picker) {
         try {
-            Field f[] = picker.getClass().getDeclaredFields();
-            for (Field field : f) {
-                if (field.getName().equals("mDaySpinner")) {
-                    field.setAccessible(true);
-                    Object dayPicker = new Object();
-                    dayPicker = field.get(picker);
-                    ((View) dayPicker).setVisibility(View.GONE);
+
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                int daySpinnerId = Resources.getSystem().getIdentifier("day", "id", "android");
+                if (daySpinnerId != 0) {
+                    View daySpinner = picker.findViewById(daySpinnerId);
+                    if (daySpinner != null) {
+                        daySpinner.setVisibility(View.GONE);
+                    }
                 }
-                if (field.getName().equals("mYearSpinner")) {
-                    field.setAccessible(true);
-                    Object dayPicker = new Object();
-                    dayPicker = field.get(picker);
-                    ((View) dayPicker).setVisibility(View.GONE);
+//                int monthSpinnerId = Resources.getSystem().getIdentifier("month", "id", "android");
+//                if (monthSpinnerId != 0) {
+//                    View monthSpinner = picker.findViewById(monthSpinnerId);
+//                    if (monthSpinner != null) {
+//                        monthSpinner.setVisibility(View.GONE);
+//                    }
+//                }
+
+                int yearSpinnerId = Resources.getSystem().getIdentifier("year", "id", "android");
+                if (yearSpinnerId != 0) {
+                    View yearSpinner = picker.findViewById(yearSpinnerId);
+                    if (yearSpinner != null) {
+                        yearSpinner.setVisibility(View.GONE);
+                    }
+                }
+            } else {
+                Field f[] = picker.getClass().getDeclaredFields();
+                for (Field field : f) {
+
+                    if (field.getName().equals("mDayPicker") || field.getName().equals("mDaySpinner")) {
+                        field.setAccessible(true);
+                        Object dayPicker = new Object();
+                        dayPicker = field.get(picker);
+                        ((View) dayPicker).setVisibility(View.GONE);
+                    }
+                    if (field.getName().equals("mYearPicker") || field.getName().equals("mYearSpinner")) {
+                        field.setAccessible(true);
+                        Object yearPicker = new Object();
+                        yearPicker = field.get(picker);
+                        ((View) yearPicker).setVisibility(View.GONE);
+                    }
+
                 }
             }
-        } catch (SecurityException e) {
+        } catch (
+                SecurityException e
+                )
+
+        {
             Log.d("ERROR", e.getMessage());
-        } catch (IllegalArgumentException e) {
+        } catch (
+                IllegalArgumentException e
+                )
+
+        {
             Log.d("ERROR", e.getMessage());
-        } catch (IllegalAccessException e) {
+        } catch (
+                IllegalAccessException e
+                )
+
+        {
             Log.d("ERROR", e.getMessage());
         }
+
     }
 
     @Override
@@ -122,17 +163,25 @@ public class PlanningFragment extends SeedContentFragment implements DatePicker.
     }
 
     private void updatePlanning() {
-        int durationmin = planningHarvestMin.getMonth() - planningSowMin.getMonth();
+        int harvestMin = planningHarvestMin.getMonth() + 1;
+        int harvestMax = planningHarvestMax.getMonth() + 1;
+        int sowMin = planningSowMin.getMonth() + 1;
+        int sowMax = planningSowMax.getMonth() + 1;
+
+        int durationmin;
+        if (sowMin > harvestMin)
+            durationmin = 12 - sowMin + harvestMin;
+        else
+            durationmin = harvestMin - sowMin;
 
         int durationmax;
-        if (planningHarvestMin.getMonth() <= planningHarvestMax.getMonth())
-            // [0][1][min][3][4][5][6][7][max][9][10][11]
-            durationmax = planningHarvestMax.getMonth() - planningSowMax.getMonth();
+        if (sowMax > harvestMax)
+            durationmax = 12 - sowMax + harvestMax;
         else
-            // [0][1][max][3][4][5][6][7][min][9][10][11]
-            durationmax = 12 - planningSowMax.getMonth() + planningHarvestMax.getMonth();
-        mSeed.setDateSowingMin(planningSowMin.getMonth() + 1);
-        mSeed.setDateSowingMax(planningSowMax.getMonth() + 1);
+            durationmax = harvestMax - sowMax;
+
+        mSeed.setDateSowingMin(sowMin);
+        mSeed.setDateSowingMax(sowMax);
         mSeed.setDurationMin(durationmin * 30);
         mSeed.setDurationMax(durationmax * 30);
         notifyObservers();

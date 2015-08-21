@@ -12,33 +12,6 @@
  */
 package org.gots.ui;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.gots.R;
-import org.gots.analytics.GotsAnalytics;
-import org.gots.nuxeo.NuxeoWorkflowProvider;
-import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.GrowingSeedImpl;
-import org.gots.seed.view.SeedWidgetLong;
-import org.gots.ui.fragment.PlanningFragment;
-import org.gots.ui.fragment.PlantCreationFragment;
-import org.gots.ui.fragment.SeedContentFragment;
-import org.gots.ui.fragment.SeedDescriptionEditFragment;
-import org.gots.ui.fragment.SpeciesFragment;
-import org.gots.ui.fragment.VarietyFragment;
-import org.gots.ui.fragment.WorkflowTaskFragment.OnWorkflowClickListener;
-import org.gots.utils.FileUtilities;
-import org.gots.utils.SelectOrTakePictureDialogFragment.PictureSelectorListener;
-import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
-
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -46,7 +19,6 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
@@ -66,6 +38,26 @@ import android.widget.Toast;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import org.gots.R;
+import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.GrowingSeedImpl;
+import org.gots.ui.fragment.PlanningFragment;
+import org.gots.ui.fragment.PlantCreationFragment;
+import org.gots.ui.fragment.SeedContentFragment;
+import org.gots.ui.fragment.SeedDescriptionEditFragment;
+import org.gots.ui.fragment.SpeciesFragment;
+import org.gots.ui.fragment.VarietyFragment;
+import org.gots.utils.FileUtilities;
+import org.gots.utils.SelectOrTakePictureDialogFragment.PictureSelectorListener;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NewSeedActivity extends BaseGotsActivity implements OnClickListener, PictureSelectorListener,
         SeedContentFragment.OnSeedUpdated {
@@ -114,6 +106,7 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
 
         setTitleBar(R.string.seed_register_title);
 
+        setContentView(R.layout.seed_new);
         if (getIntent().getIntExtra(ORG_GOTS_SEEDID, -1) != -1) {
             newSeed = seedManager.getSeedById(getIntent().getIntExtra(ORG_GOTS_SEEDID, -1));
             isNewSeed = false;
@@ -192,56 +185,60 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
             outState.putInt(SELECTED_SPECIE, gallerySpecies.getSelectedItemPosition());
     }
 
-    protected BaseSeedInterface createSeed() {
-        if (picturePath != null) {
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            Bitmap bitmap = FileUtilities.decodeScaledBitmapFromSdCard(picturePath, 100, 100);
-            bitmap.compress(CompressFormat.PNG, 0 /* ignored for PNG */, bos);
-            byte[] bitmapdata = bos.toByteArray();
+    protected BaseSeedInterface createOrUpdateSeed() {
+        if (isNewSeed) {
+            if (picturePath != null) {
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                Bitmap bitmap = FileUtilities.decodeScaledBitmapFromSdCard(picturePath, 100, 100);
+                bitmap.compress(CompressFormat.PNG, 0 /* ignored for PNG */, bos);
+                byte[] bitmapdata = bos.toByteArray();
 
-            // write the bytes in file
-            FileOutputStream fos;
-            try {
-                fos = new FileOutputStream(new File(gotsPrefs.getFilesDir(),
-                        newSeed.getVariety().toLowerCase().replaceAll("\\s", "")));
-                fos.write(bitmapdata);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            newSeed = seedManager.createSeed(newSeed, new File(picturePath));
+                // write the bytes in file
+                FileOutputStream fos;
+                try {
+                    fos = new FileOutputStream(new File(gotsPrefs.getFilesDir(),
+                            newSeed.getVariety().toLowerCase().replaceAll("\\s", "")));
+                    fos.write(bitmapdata);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                newSeed = seedManager.createSeed(newSeed, new File(picturePath));
+            } else
+                newSeed = seedManager.createSeed(newSeed, null);
         } else
-            newSeed = seedManager.createSeed(newSeed, null);
+            newSeed = seedManager.updateSeed(newSeed);
         // seedManager.attach
-        return seedManager.addToStock(newSeed, getCurrentGarden());
+//        return seedManager.addToStock(newSeed, getCurrentGarden());
+        return newSeed;
     }
 
 
-    private void initview() {
-
-
-//        seedWidgetLong = (SeedWidgetLong) findViewById(R.id.idSeedWidgetLong);
-
-
-        /*
-         * BARCODE
-         */
-        textViewBarCode = (TextView) findViewById(R.id.textViewBarCode);
-        textViewBarCode.setText(newSeed.getBareCode());
-
-
-        findViewById(R.id.imageBarCode).setOnClickListener(this);
-        findViewById(R.id.buttonStock).setOnClickListener(this);
-        findViewById(R.id.buttonModify).setOnClickListener(this);
-
-        if (!isNewSeed) {
-            // findViewById(R.id.buttonCatalogue).setVisibility(View.GONE);
-            findViewById(R.id.buttonStock).setVisibility(View.GONE);
-            findViewById(R.id.buttonModify).setVisibility(View.VISIBLE);
-        }
-
-    }
+//    private void initview() {
+//
+//
+////        seedWidgetLong = (SeedWidgetLong) findViewById(R.id.idSeedWidgetLong);
+//
+//
+//        /*
+//         * BARCODE
+//         */
+//        textViewBarCode = (TextView) findViewById(R.id.textViewBarCode);
+//        textViewBarCode.setText(newSeed.getBareCode());
+//
+//
+//        findViewById(R.id.imageBarCode).setOnClickListener(this);
+//        findViewById(R.id.buttonStock).setOnClickListener(this);
+//        findViewById(R.id.buttonModify).setOnClickListener(this);
+//
+//        if (!isNewSeed) {
+//            // findViewById(R.id.buttonCatalogue).setVisibility(View.GONE);
+//            findViewById(R.id.buttonStock).setVisibility(View.GONE);
+//            findViewById(R.id.buttonModify).setVisibility(View.VISIBLE);
+//        }
+//
+//    }
 
 
     protected void onSeedCreated() {
@@ -261,26 +258,24 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
                 for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); ++i) {
                     getSupportFragmentManager().popBackStack();
                 }
-                buttonPrevious.setVisibility(View.GONE);
+//                buttonPrevious.setVisibility(View.GONE);
             }
             if (step == breadcrum.size() + 1) {
-                Toast.makeText(getApplicationContext(), "the seed is " + newSeed, Toast.LENGTH_LONG).show();
+//                Toast.makeText(getApplicationContext(), "the seed is " + newSeed, Toast.LENGTH_LONG).show();
                 if (validateSeed()) {
                     new AsyncTask<Void, Void, BaseSeedInterface>() {
                         @Override
                         protected BaseSeedInterface doInBackground(Void... voids) {
-
-                            return createSeed();
+                            return createOrUpdateSeed();
                         }
 
                         @Override
                         protected void onPostExecute(BaseSeedInterface baseSeedInterface) {
                             if (baseSeedInterface != null) {
                                 Toast.makeText(getApplicationContext(), "Excellent your plant has been created", Toast.LENGTH_LONG).show();
-                                finish();
-
+                                NewSeedActivity.this.finish();
                             } else
-                                Toast.makeText(getApplicationContext(), "There was a problem creating your new plant", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "There was a problem creating your plant", Toast.LENGTH_LONG).show();
 
                             super.onPostExecute(baseSeedInterface);
                         }
@@ -292,13 +287,16 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
                 addContentLayout(breadcrum.get(step), null);
             step++;
         } else if (v == buttonPrevious) {
-            step--;
-            if (step < breadcrum.size())
+            if (step < breadcrum.size()) {
                 buttonNext.setIcon(R.drawable.ic_next);
-            if (step == 0)
+            }
+            if (step == 0) {
                 buttonPrevious.setVisibility(View.GONE);
-            if (step >= 0)
+            }
+            if (step >= 0) {
                 getSupportFragmentManager().popBackStack();
+            }
+            step--;
         }
     }
 

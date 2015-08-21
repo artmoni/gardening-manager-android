@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
 import org.gots.R;
+import org.gots.seed.SeedUtil;
 import org.gots.seed.provider.local.LocalSeedProvider;
 
 /**
@@ -108,6 +109,7 @@ public class VarietyFragment extends SeedContentFragment {
 
             }
         });
+        autoCompleteVariety.setText(mSeed.getVariety() != null ? mSeed.getVariety().toString() : "");
         autoCompleteVariety.invalidate();
         super.onNuxeoDataRetrieved(data);
     }
