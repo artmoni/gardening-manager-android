@@ -106,8 +106,6 @@ public class TutorialResumeFragment extends BaseGotsFragment implements OnClickL
             tutorialLevel = COMPLETE_SEED;
         else if (!gotsPrefs.isConnectedToServer())
             tutorialLevel = COMPLETE_SOCIAL;
-        else
-            mCallback.onTutorialFinished();
         return "";
     }
 
@@ -133,6 +131,7 @@ public class TutorialResumeFragment extends BaseGotsFragment implements OnClickL
             textViewDescription.setText(getResources().getString(R.string.tutorial_e_description));
             break;
         default:
+            mCallback.onTutorialFinished();
             break;
         }
         super.onNuxeoDataRetrieved(data);
