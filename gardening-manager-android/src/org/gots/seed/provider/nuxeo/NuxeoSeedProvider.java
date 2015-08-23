@@ -1,10 +1,7 @@
 package org.gots.seed.provider.nuxeo;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
+import android.content.Context;
+import android.util.Log;
 
 import org.gots.exception.GardenNotFoundException;
 import org.gots.exception.NotImplementedException;
@@ -30,9 +27,11 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PathRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
-import android.content.Context;
-import android.os.AsyncTask;
-import android.util.Log;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
 
 public class NuxeoSeedProvider extends LocalSeedProvider {
 
@@ -293,6 +292,31 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
         }
 
         return remoteSeed;
+    }
+
+    @Override
+    public List<BaseSeedInterface> getRecognitionSeeds(boolean force) {
+        Session session = getNuxeoClient().getSession();
+        DocumentManager service = session.getAdapter(DocumentManager.class);
+        List<BaseSeedInterface> result = new ArrayList<>();
+        try {
+            byte store = CacheBehavior.STORE;
+            if (force)
+                store = CacheBehavior.FORCE_REFRESH;
+            Documents docs = service.query("SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState != 'deleted' AND ecm:path STARTSWITH '/default-domain/workspaces/justvisual'"
+                    , null, new String[]{"dc:modified DESC"}, null, 0, 200,
+                    store);
+            for (Iterator<Document> iterator = docs.iterator(); iterator.hasNext(); ) {
+                Document document = iterator.next();
+                BaseSeedInterface seed = getSeedByUUID(document.getId());
+                if (seed != null) {
+                    result.add(seed);
+                }
+            }
+        } catch (Exception e) {
+            Log.w(TAG, e.getMessage());
+        }
+        return result;
     }
 
     @Override

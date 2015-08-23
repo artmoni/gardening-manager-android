@@ -52,4 +52,6 @@ public interface GotsSeedProvider {
     public abstract SpeciesDocument getSpecies(boolean force) throws NotImplementedException;
 
     public abstract BaseSeedInterface getSeedByUUID(String uuid);
+
+    List<BaseSeedInterface> getRecognitionSeeds(boolean force);
 }

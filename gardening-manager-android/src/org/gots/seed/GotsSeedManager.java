@@ -284,4 +284,9 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
             allSeeds.put(searchedSeed.getSeedId(), searchedSeed);
         return searchedSeed;
     }
+
+    @Override
+    public List<BaseSeedInterface> getRecognitionSeeds(boolean force) {
+        return mSeedProvider.getRecognitionSeeds(false);
+    }
 }

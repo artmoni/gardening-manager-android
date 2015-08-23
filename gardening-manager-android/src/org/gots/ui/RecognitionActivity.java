@@ -15,6 +15,7 @@ import android.view.View;
 
 import org.gots.R;
 import org.gots.inapp.GotsPurchaseItem;
+import org.gots.seed.BaseSeedInterface;
 import org.gots.ui.fragment.RecognitionFragment;
 import org.gots.ui.fragment.RecognitionMainFragment;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
@@ -188,7 +189,7 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
 
     @Override
     public void onRecognitionConfirmed(Document plantDoc) {
-
+        getSupportFragmentManager().popBackStack();
     }
 
     @Override
