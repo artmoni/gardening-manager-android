@@ -303,7 +303,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             byte store = CacheBehavior.STORE;
             if (force)
                 store = CacheBehavior.FORCE_REFRESH;
-            Documents docs = service.query("SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState != 'deleted' AND ecm:path STARTSWITH '/default-domain/workspaces/justvisual'"
+            Documents docs = service.query("SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState = 'published' AND ecm:path STARTSWITH '/default-domain/workspaces/justvisual' AND dc:creator = '" + session.getLogin().getUsername() + "'"
                     , null, new String[]{"dc:modified DESC"}, null, 0, 200,
                     store);
             for (Iterator<Document> iterator = docs.iterator(); iterator.hasNext(); ) {

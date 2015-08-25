@@ -12,15 +12,15 @@
  */
 package org.gots.seed;
 
-import java.io.File;
-import java.util.ArrayList;
+import android.content.Context;
+import android.graphics.Bitmap;
 
 import org.gots.R;
 import org.gots.action.BaseAction;
 import org.gots.utils.FileUtilities;
 
-import android.content.Context;
-import android.graphics.Bitmap;
+import java.io.File;
+import java.util.ArrayList;
 
 public class SeedUtil {
     @SuppressWarnings("unchecked")
@@ -95,7 +95,7 @@ public class SeedUtil {
                 /* Check custom image for this variety */
         if (mSeed.getVariety() != null && !"".equals(mSeed.getVariety()))
             imageFile = new File(rootPath, mSeed.getVariety().toLowerCase().replaceAll("\\s", ""));
-        if (!imageFile.exists() && mSeed.getUUID() != null)
+        if (imageFile != null && !imageFile.exists() && mSeed.getUUID() != null)
             imageFile = new File(rootPath, mSeed.getUUID());
         if (imageFile != null && imageFile.exists()) {
             image = FileUtilities.decodeScaledBitmapFromSdCard(imageFile.getAbsolutePath(), 100, 100);

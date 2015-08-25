@@ -33,6 +33,7 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     private static final int REQUEST_LOAD_IMAGE = 2;
     private RecognitionFragment recognitionFragment;
     private RecognitionMainFragment mainFragment;
+    String picturePath = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +63,6 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        String picturePath = null;
 
         if (data != null) {
             if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
@@ -95,12 +95,7 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
                 picturePath = cursor.getString(columnIndex);
             }
         }
-        if (picturePath != null) {
-            recognitionFragment = new RecognitionFragment();
-            Bundle args = new Bundle();
-            args.putString(RecognitionFragment.IMAGE_PATH, picturePath);
-            addContentLayout(recognitionFragment, args);
-        }
+
 
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -124,6 +119,12 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     protected void onNuxeoDataRetrieved(Object data) {
         if (mainFragment != null)
             mainFragment.update();
+        if (picturePath != null) {
+            recognitionFragment = new RecognitionFragment();
+            Bundle args = new Bundle();
+            args.putString(RecognitionFragment.IMAGE_PATH, picturePath);
+            addContentLayout(recognitionFragment, args);
+        }
         super.onNuxeoDataRetrieved(data);
     }
 
