@@ -288,7 +288,7 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     @Override
     public List<BaseSeedInterface> getRecognitionSeeds(boolean force) {
-        return mSeedProvider.getRecognitionSeeds(false);
+        return mSeedProvider.getRecognitionSeeds(force);
     }
 
     @Override

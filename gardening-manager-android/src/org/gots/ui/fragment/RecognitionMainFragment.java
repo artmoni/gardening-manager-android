@@ -13,7 +13,6 @@ import org.gots.inapp.GotsPurchaseItem;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.provider.GotsSeedProvider;
-import org.gots.seed.view.SeedWidget;
 import org.gots.seed.view.SeedWidgetTile;
 import org.gots.ui.TabSeedActivity;
 
@@ -30,6 +29,7 @@ public class RecognitionMainFragment extends BaseGotsFragment {
     private TextView textViewPurchased;
     private LinearLayout horizontalScrollViewRecognition;
     private TextView textViewMessage;
+    private boolean force = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,6 +40,7 @@ public class RecognitionMainFragment extends BaseGotsFragment {
         textViewPurchased = (TextView) v.findViewById(R.id.textViewPurchased);
         horizontalScrollViewRecognition = (LinearLayout) v.findViewById(R.id.layoutRecognitionResults);
         textViewMessage = (TextView) v.findViewById(R.id.textViewRecognitionMessage);
+        force = true;
         return v;
     }
 
@@ -56,7 +57,7 @@ public class RecognitionMainFragment extends BaseGotsFragment {
     @Override
     protected Object retrieveNuxeoData() throws Exception {
         GotsSeedProvider seedManager = GotsSeedManager.getInstance();
-        List<BaseSeedInterface> recognitionSeeds = seedManager.getRecognitionSeeds(false);
+        List<BaseSeedInterface> recognitionSeeds = seedManager.getRecognitionSeeds(force);
         return recognitionSeeds;
     }
 
@@ -89,16 +90,13 @@ public class RecognitionMainFragment extends BaseGotsFragment {
                 });
                 horizontalScrollViewRecognition.addView(seedWidget);
             }
-
+            force = false;
         }
         super.onNuxeoDataRetrieved(data);
     }
 
-    public void addPlants(List<BaseSeedInterface> data) {
 
-    }
-
-    public void setMessage(String message){
+    public void setMessage(String message) {
         textViewMessage.setText(message);
     }
 }
