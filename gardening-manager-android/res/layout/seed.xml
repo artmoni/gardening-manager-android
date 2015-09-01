@@ -33,7 +33,7 @@
         <TextView
             android:id="@+id/IdSeedDescriptionEnvironment"
             style="@style/seed_description_content"
-            android:text="seedDescription"
+            android:text=""
             android:visibility="visible" >
         </TextView>
         <!-- seed.description.culture -->
@@ -48,7 +48,7 @@
         <TextView
             android:id="@+id/IdSeedDescriptionCulture"
             style="@style/seed_description_content"
-            android:text="Récolte"
+            android:text=""
             android:visibility="visible" >
         </TextView>
 
@@ -64,7 +64,7 @@
         <TextView
             android:id="@+id/IdSeedDescriptionHarvest"
             style="@style/seed_description_content"
-            android:text="seedDescription"
+            android:text=""
             android:visibility="visible" >
         </TextView>
 
@@ -80,7 +80,7 @@
         <TextView
             android:id="@+id/IdSeedDescriptionEnnemi"
             style="@style/seed_description_content"
-            android:text="seedDescription"
+            android:text=""
             android:visibility="visible" >
         </TextView>
     </LinearLayout>
