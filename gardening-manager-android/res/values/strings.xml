@@ -220,12 +220,13 @@
     <string name="plant.recognition">Plant recognition</string>
     <string name="plant.recognition.description">Search for a plant from a picture</string>
 
-    <string name="plant.recognition.progress">Recognition in progress...</string>
+    <string name="plant.recognition.progress">Recognition in progress</string>
     <string name="plant.recognition.availability">Available requests</string>
     <string name="plant.recognition.dailyfreerequest">Daily free request</string>
     <string name="dialog_garden_localize">Garden location</string>
     <string name="dialog_garden_localize_description">Weather forecast needs garden location. Long press on the map to localize your garden.</string>
     <string name="allotment.name">My allotment</string>
+    <string name="plant_recognition_begin">Uploading picture to recognition service</string>
 
 
     <!-- Nav Drawer Menu Items -->

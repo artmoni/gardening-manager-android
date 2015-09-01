@@ -12,6 +12,7 @@ import org.gots.exception.GotsException;
 import org.gots.exception.NotImplementedException;
 import org.gots.garden.GardenInterface;
 import org.gots.nuxeo.NuxeoManager;
+import org.gots.nuxeo.NuxeoUtils;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
@@ -288,5 +289,10 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     @Override
     public List<BaseSeedInterface> getRecognitionSeeds(boolean force) {
         return mSeedProvider.getRecognitionSeeds(false);
+    }
+
+    @Override
+    public void createRecognitionSeed(File file, NuxeoUtils.OnBlobUpload callback) {
+        mSeedProvider.createRecognitionSeed(file,callback);
     }
 }

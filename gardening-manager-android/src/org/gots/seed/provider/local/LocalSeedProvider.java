@@ -1,8 +1,9 @@
 package org.gots.seed.provider.local;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.util.Log;
 
 import org.gots.DatabaseHelper;
 import org.gots.action.ActionFactory;
@@ -11,6 +12,7 @@ import org.gots.exception.GotsException;
 import org.gots.exception.GotsUserNotConnectedException;
 import org.gots.exception.NotImplementedException;
 import org.gots.garden.GardenInterface;
+import org.gots.nuxeo.NuxeoUtils;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedImpl;
 import org.gots.seed.LikeStatus;
@@ -18,10 +20,9 @@ import org.gots.seed.SpeciesDocument;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.utils.GotsDBHelper;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.util.Log;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider {
     private static final String TAG = "LocalSeedProvider";
@@ -331,8 +332,15 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
 
     @Override
     public List<BaseSeedInterface> getRecognitionSeeds(boolean force) {
+        Log.d(TAG, "createRecognitionSeed not implemented here");
         return new ArrayList<>();
     }
+
+    @Override
+    public void createRecognitionSeed(File file, NuxeoUtils.OnBlobUpload callback) {
+        Log.d(TAG, "createRecognitionSeed not implemented here");
+    }
+
 
     @Override
     public List<BaseSeedInterface> getVendorSeedsByName(String currentFilter, boolean force) {

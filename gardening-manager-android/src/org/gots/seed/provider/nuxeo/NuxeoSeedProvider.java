@@ -267,6 +267,25 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
     }
 
     @Override
+    public void createRecognitionSeed(File file, NuxeoUtils.OnBlobUpload callback) {
+        try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
+
+            Document rootFolder = service.getDocument("/default-domain/workspaces/justvisual");
+            final Document imageDoc = service.createDocument(rootFolder, "VendorSeed", file.getName());
+            if (imageDoc != null) {
+                NuxeoUtils nuxeoUtils = new NuxeoUtils();
+                nuxeoUtils.uploadBlob(session, imageDoc, file, callback);
+                Log.d(TAG, "createRecognitionSeed " + imageDoc.getTitle() + " - " + file.getAbsolutePath());
+            }
+        } catch (Exception e) {
+            Log.w(TAG, "createRecognitionSeed: " + e.getMessage());
+//            return e.getMessage();
+        }
+    }
+
+    @Override
     public BaseSeedInterface getSeedByUUID(String uuid) {
         BaseSeedInterface remoteSeed = null;
 

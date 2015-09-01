@@ -1,14 +1,15 @@
 package org.gots.seed.provider;
 
-import java.io.File;
-import java.util.List;
-
 import org.gots.exception.GotsException;
 import org.gots.exception.NotImplementedException;
 import org.gots.garden.GardenInterface;
+import org.gots.nuxeo.NuxeoUtils;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.LikeStatus;
 import org.gots.seed.SpeciesDocument;
+
+import java.io.File;
+import java.util.List;
 
 public interface GotsSeedProvider {
 
@@ -47,11 +48,13 @@ public interface GotsSeedProvider {
 
     public abstract String[] getArraySpecies(boolean force);
 
-    public abstract  String getFamilyBySpecie(String specie);
-    
+    public abstract String getFamilyBySpecie(String specie);
+
     public abstract SpeciesDocument getSpecies(boolean force) throws NotImplementedException;
 
     public abstract BaseSeedInterface getSeedByUUID(String uuid);
 
     List<BaseSeedInterface> getRecognitionSeeds(boolean force);
+
+    public void createRecognitionSeed(File file, NuxeoUtils.OnBlobUpload callback);
 }

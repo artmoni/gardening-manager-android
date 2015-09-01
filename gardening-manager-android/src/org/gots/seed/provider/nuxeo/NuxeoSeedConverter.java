@@ -1,8 +1,7 @@
 package org.gots.seed.provider.nuxeo;
 
-import java.util.Locale;
+import android.util.Log;
 
-import org.gots.justvisual.JustVisualResult;
 import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GrowingSeedImpl;
 import org.gots.seed.LikeStatus;
@@ -11,7 +10,7 @@ import org.json.JSONObject;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Blob;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 
-import android.util.Log;
+import java.util.Locale;
 
 public class NuxeoSeedConverter {
 
@@ -53,12 +52,11 @@ public class NuxeoSeedConverter {
         doc.set("vendorseed:variety", seed.getVariety());
         doc.set("vendorseed:barcode", seed.getBareCode());
         doc.set("vendorseed:language", Locale.getDefault().getCountry().toLowerCase());
-        doc.set("vendorseed:description_cultivation", seed.getDescriptionCultivation());
-        doc.set("vendorseed:description_diseases", seed.getDescriptionDiseases());
-        doc.set("vendorseed:description_growth", seed.getDescriptionEnvironment());
-        doc.set("vendorseed:description_harvest", seed.getDescriptionHarvest());
+        doc.set("vendorseed:description_cultivation", seed.getDescriptionCultivation() != null ? seed.getDescriptionCultivation() : "");
+        doc.set("vendorseed:description_diseases", seed.getDescriptionDiseases() != null ? seed.getDescriptionDiseases() : "");
+        doc.set("vendorseed:description_growth", seed.getDescriptionEnvironment() != null ? seed.getDescriptionEnvironment() : "");
+        doc.set("vendorseed:description_harvest", seed.getDescriptionHarvest() != null ? seed.getDescriptionHarvest() : "");
         doc.set("vendorseed:url", seed.getUrlDescription());
-
         return doc;
     }
 

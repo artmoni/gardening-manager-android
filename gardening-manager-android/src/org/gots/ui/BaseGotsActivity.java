@@ -555,8 +555,8 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
             contentFragment.setRetainInstance(true);
             transaction.replace(getContentLayout(), contentFragment).commitAllowingStateLoss();
         }
-        if (findViewById(R.id.contentLayout) != null)
-            findViewById(R.id.contentLayout).setVisibility(View.VISIBLE);
+        if (findViewById(R.id.contentScrollView) != null)
+            findViewById(R.id.contentScrollView).setVisibility(View.VISIBLE);
     }
 
     protected void addMainLayout(Fragment contentFragment, Bundle options) {
@@ -573,7 +573,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
     @Override
     public void onBackStackChanged() {
         if (getSupportFragmentManager().getBackStackEntryCount() == 0 && findViewById(R.id.contentLayout) != null) {
-            findViewById(R.id.contentLayout).setVisibility(View.GONE);
+            findViewById(R.id.contentScrollView).setVisibility(View.GONE);
         }
     }
 

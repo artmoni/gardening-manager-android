@@ -1,10 +1,7 @@
 package org.gots.ui.fragment;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -35,9 +32,7 @@ import org.gots.justvisual.ImageRecognition;
 import org.gots.justvisual.JustVisualAdapter;
 import org.gots.justvisual.JustVisualResult;
 import org.gots.nuxeo.NuxeoManager;
-import org.gots.nuxeo.NuxeoUtils;
 import org.gots.nuxeo.NuxeoWorkflowProvider;
-import org.gots.utils.FileUtilities;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,9 +44,7 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,11 +54,12 @@ import java.util.Map;
 /**
  * Created by sfleury on 13/07/15.
  */
-public class RecognitionFragment extends BaseGotsFragment implements JustVisualAdapter.OnAdapterClickListener, NuxeoUtils.OnBlobUpload {
+public class RecognitionFragment extends BaseGotsFragment implements JustVisualAdapter.OnAdapterClickListener {
 
-    public static final String IMAGE_PATH = "org.gots.recognition.path";
+    public static final String DOCUMENT_ID = "org.gots.recognition.docid";
     private static final String RECOGNITION_SUCCESS = "org.gots.recognition.success";
     private static final String RECOGNITION_FAILED = "org.gots.recognition.failed";
+    public static final String IMAGE_PATH = "org.gots.recognition.path";
 
 
     private ImageView imageView;
@@ -76,33 +70,35 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
     private ImageView imageCompare;
     private OnRecognitionFinished mCallback;
     private ImageView imageRefresh;
-    Document lastDocument = null;
-    File imageFile;
-    private boolean uploading;
+    //    File imageFile;
+//    private boolean uploading;
     private Context mContext;
     private JustVisualAdapter arrayAdapter;
     private LinearLayout layoutNotification;
 
 
+    //    private BroadcastReceiver mBroadcast = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            if (isAdded()) {
+//                if (RECOGNITION_SUCCESS.equals(intent.getAction())) {
+//                    hideNotification();
+//
+//                    arrayAdapter = new JustVisualAdapter(getActivity(), listMap);
+//                    arrayAdapter.setOnImageClick(RecognitionFragment.this);
+//                    listView.setAdapter(arrayAdapter);
+//                } else if (RECOGNITION_FAILED.equals(intent.getAction())) {
+//                    String errorMessage = "Recognition is not working on this picture, try another one";
+//                    showNotification(errorMessage, false);
+//                }
+//
+//            }
+//        }
+//    };
+
+    private String docId;
+    private File imageFile;
     private Map<String, List<JustVisualResult>> listMap;
-    private BroadcastReceiver mBroadcast = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (isAdded()) {
-                if (RECOGNITION_SUCCESS.equals(intent.getAction())) {
-                    hideNotification();
-
-                    arrayAdapter = new JustVisualAdapter(getActivity(), listMap);
-                    arrayAdapter.setOnImageClick(RecognitionFragment.this);
-                    listView.setAdapter(arrayAdapter);
-                } else if (RECOGNITION_FAILED.equals(intent.getAction())) {
-                    String errorMessage = "Recognition is not working on this picture, try another one";
-                    showNotification(errorMessage, false);
-                }
-
-            }
-        }
-    };
 
     public void hideNotification() {
         progressText.clearAnimation();
@@ -128,36 +124,6 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
         layoutNotification.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void onUploadSuccess(Serializable data) {
-        final String serverImageUrl = "http://my.gardening-manager.com/nuxeo/nxfile/default/" + lastDocument.getId() + "/blobholder:0/";
-        listMap = processJustVisual(serverImageUrl);
-        if (listMap == null) {
-            listMap = new HashMap<>();
-            mContext.sendBroadcast(new Intent(RECOGNITION_FAILED));
-            if (mCallback != null) {
-                mCallback.onRecognitionFailed("No result found, try another picture");
-            }
-            return;
-        }
-
-        Log.d(TAG, "onUploadSuccess listMap size=" + listMap.size());
-        if (mCallback != null)
-            mCallback.onRecognitionSucceed();
-        mContext.sendBroadcast(new Intent(RECOGNITION_SUCCESS));
-        uploading = false;
-
-    }
-
-    @Override
-    public void onUploadFailed(String message) {
-        if (mCallback != null) {
-            mCallback.onRecognitionFailed("Upload image on server has failed: " + message);
-        }
-        mContext.sendBroadcast(new Intent(RECOGNITION_FAILED));
-        uploading = false;
-    }
-
     public interface OnRecognitionFinished {
         void onRecognitionSucceed();
 
@@ -174,17 +140,8 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
         } catch (ClassCastException castException) {
             throw new ClassCastException(activity.toString() + " must implement OnRecognitionFinished");
         }
-        getActivity().registerReceiver(mBroadcast, new IntentFilter(RECOGNITION_SUCCESS));
-        getActivity().registerReceiver(mBroadcast, new IntentFilter(RECOGNITION_FAILED));
         super.onAttach(activity);
     }
-
-    @Override
-    public void onDetach() {
-        getActivity().unregisterReceiver(mBroadcast);
-        super.onDetach();
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -195,17 +152,11 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
         imageCompare = (ImageView) v.findViewById(R.id.imageViewCompare);
         imageRefresh = (ImageView) v.findViewById(R.id.imageViewRefresh);
         layoutNotification = (LinearLayout) v.findViewById(R.id.layoutNotification);
-        uploading = false;
+//        uploading = false;
         Bundle args = getArguments();
         if (args != null) {
-            String filepath = args.getString(IMAGE_PATH);
-            if (filepath != null) {
-                imageFile = getReduceFile(new File(filepath));
-                if (!imageFile.exists())
-                    mCallback.onRecognitionFailed("File does not exists: " + imageFile.getAbsolutePath());
-            } else
-                mCallback.onRecognitionFailed("Image path is null");
-
+            docId = args.getString(DOCUMENT_ID);
+            imageFile = new File(args.getString(IMAGE_PATH));
         } else {
             Log.w(TAG, "You should pass an argument");
         }
@@ -233,42 +184,12 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
             }
         });
 
-        uploadImage(imageFile);
-
         super.onViewCreated(view, savedInstanceState);
     }
-
-    public File getReduceFile(File originalFile) {
-        FileOutputStream out = null;
-        File outFile = null;
-        try {
-            outFile = new File(getActivity().getCacheDir(), originalFile.getName() + "-400x300");
-            out = new FileOutputStream(outFile);
-
-            Bitmap bitmap = FileUtilities.decodeScaledBitmapFromSdCard(originalFile.getAbsolutePath(), 400, 300);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
-            // PNG is a lossless format, the compression factor (100) is ignored
-
-
-        } catch (Exception e) {
-            Log.e(TAG, "setSearchImage " + e.getMessage());
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (IOException e) {
-                Log.e(TAG, "setSearchImage finally " + e.getMessage());
-            }
-        }
-        return outFile;
-    }
-
 
     protected AndroidAutomationClient getNuxeoClient() {
         return NuxeoManager.getInstance().getNuxeoClient();
     }
-
 
     private Map<String, List<JustVisualResult>> processJustVisual(final String url) {
         ImageRecognition imageRecognition = new ImageRecognition();
@@ -314,11 +235,10 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
             try {
                 JSONObject image = images.getJSONObject(i);
                 JustVisualResult result = gson.fromJson(image.toString(), JustVisualResult.class);
-                result.setUuid(lastDocument.getId());
+                result.setUuid(docId);
                 if (species.get(result.getPlantNames()) == null)
                     species.put(result.getPlantNames(), new ArrayList<JustVisualResult>());
                 species.get(result.getPlantNames()).add(result);
-                Log.d(TAG, result.toString());
 
             } catch (JSONException jsonException) {
                 Log.w(TAG, jsonException.getMessage() + ": " + responseString);
@@ -354,23 +274,41 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
     @Override
     protected Object retrieveNuxeoData() throws Exception {
 
+        final String serverImageUrl = "http://my.gardening-manager.com/nuxeo/nxfile/default/" + docId + "/blobholder:0/";
 
-        return "";
+//        mContext.sendBroadcast(new Intent(RECOGNITION_SUCCESS));
+        if (listMap == null) {
+
+            return processJustVisual(serverImageUrl);
+        } else
+            return listMap;
     }
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
-        if (listMap != null) {
-            JustVisualAdapter arrayAdapter = new JustVisualAdapter(getActivity(), listMap);
-            arrayAdapter.setOnImageClick(RecognitionFragment.this);
-            listView.setAdapter(arrayAdapter);
+        listMap = (Map<String, List<JustVisualResult>>) data;
 
-            hideNotification();
+        JustVisualAdapter arrayAdapter = new JustVisualAdapter(getActivity(), listMap);
+        arrayAdapter.setOnImageClick(RecognitionFragment.this);
+        listView.setAdapter(arrayAdapter);
 
-
-        }
+        hideNotification();
+        Log.d(TAG, "onUploadSuccess listMap size=" + listMap.size());
+        if (mCallback != null)
+            mCallback.onRecognitionSucceed();
 
         super.onNuxeoDataRetrieved(data);
+    }
+
+    @Override
+    protected void onNuxeoDataRetrieveFailed() {
+        listMap = new HashMap<>();
+
+        showNotification("No result found, try another picture", false);
+        if (mCallback != null) {
+            mCallback.onRecognitionFailed("No result found, try another picture");
+        }
+        super.onNuxeoDataRetrieveFailed();
     }
 
     @Override
@@ -429,44 +367,6 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
         }.execute();
     }
 
-    public void uploadImage(final File imageFile) {
-        new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... voids) {
-                if (lastDocument == null && !uploading) {
-                    try {
-                        Session session = getNuxeoClient().getSession();
-                        DocumentManager service = session.getAdapter(DocumentManager.class);
-
-                        Document rootFolder = service.getDocument("/default-domain/workspaces/justvisual");
-                        final Document imageDoc = service.createDocument(rootFolder, "VendorSeed", imageFile.getName());
-                        lastDocument = imageDoc;
-                        if (imageDoc != null) {
-                            uploading = true;
-                            NuxeoUtils nuxeoUtils = new NuxeoUtils();
-                            nuxeoUtils.uploadBlob(session, imageDoc, imageFile, RecognitionFragment.this);
-                            Log.d(TAG, "uploadImage " + imageDoc.getTitle() + " - " + imageFile.getAbsolutePath());
-                        }
-                    } catch (Exception e) {
-                        Log.w(TAG, "uploadImage: " + e.getMessage());
-                        return e.getMessage();
-                    }
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(String errorMessage) {
-                if (errorMessage != null) {
-                    progressText.setVisibility(View.VISIBLE);
-                    progressText.setText(errorMessage);
-                    imageRefresh.clearAnimation();
-                    imageRefresh.setVisibility(View.GONE);
-                }
-                super.onPostExecute(errorMessage);
-            }
-        }.execute();
-    }
 
     @Override
     public void onPause() {

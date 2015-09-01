@@ -217,6 +217,7 @@
   <string name="plant.recognition">Identification visuelle</string>
   <string name="plant.recognition.description">Recherchez une plante à partir d\'une photo</string>
   <string name="allotment.name">Ma parcelle</string>
-  <string name="plant.recognition.progress">Analyse en cours ...</string>
+  <string name="plant.recognition.progress">Analyse en cours</string>
+  <string name="plant_recognition_begin">Transmission de l\'image au service de reconnaissance</string>
 
 </resources>

@@ -29,6 +29,7 @@ public class RecognitionMainFragment extends BaseGotsFragment {
     private TextView counterPurchased;
     private TextView textViewPurchased;
     private LinearLayout horizontalScrollViewRecognition;
+    private TextView textViewMessage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,6 +39,7 @@ public class RecognitionMainFragment extends BaseGotsFragment {
         counterPurchased = (TextView) v.findViewById(R.id.textViewCounterPurchased);
         textViewPurchased = (TextView) v.findViewById(R.id.textViewPurchased);
         horizontalScrollViewRecognition = (LinearLayout) v.findViewById(R.id.layoutRecognitionResults);
+        textViewMessage = (TextView) v.findViewById(R.id.textViewRecognitionMessage);
         return v;
     }
 
@@ -94,5 +96,9 @@ public class RecognitionMainFragment extends BaseGotsFragment {
 
     public void addPlants(List<BaseSeedInterface> data) {
 
+    }
+
+    public void setMessage(String message){
+        textViewMessage.setText(message);
     }
 }

@@ -23,7 +23,7 @@ public class NuxeoUtils {
     private static final String TAG = NuxeoUtils.class.getSimpleName();
 
     public interface OnBlobUpload {
-        void onUploadSuccess(Serializable data);
+        void onUploadSuccess(Document document, File file, Serializable data);
 
         void onUploadFailed(String message);
     }
@@ -49,7 +49,7 @@ public class NuxeoUtils {
 
     }
 
-    public void uploadBlob(final Session session, final Document document, File file, final OnBlobUpload callBack) {
+    public void uploadBlob(final Session session, final Document document, final File file, final OnBlobUpload callBack) {
         final FileBlob blobToUpload = new FileBlob(file);
         blobToUpload.setMimeType("image/jpeg");
 
@@ -77,7 +77,7 @@ public class NuxeoUtils {
             public void onSuccess(String executionId, Serializable data) {
                 NuxeoUtils.attachBlobToDocument(session, document, blobProp);
                 if (callBack != null)
-                    callBack.onUploadSuccess(data);
+                    callBack.onUploadSuccess(document, file, data);
                 Log.i(TAG, "success");
             }
 
