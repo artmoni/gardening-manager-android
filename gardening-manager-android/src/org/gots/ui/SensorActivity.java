@@ -91,7 +91,7 @@ public class SensorActivity extends BaseGotsActivity implements OnSensorClickLis
     public void openPurchaseFragment() {
         List<String> skus = new ArrayList<>();
         skus.add(GotsPurchaseItem.SKU_FEATURE_PARROT);
-        displayPremiumFragment(skus);
+        displayPurchaseFragment(skus);
     }
 
     @Override

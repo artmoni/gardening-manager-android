@@ -386,7 +386,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         super.onDestroy();
     }
 
-    public void displayPremiumFragment(List<String> skuList) {
+    public void displayPurchaseFragment(List<String> skuList) {
         FragmentManager fm = getSupportFragmentManager();
         final GotsBillingDialog editNameDialog = new GotsBillingDialog();
         if (skuList != null) {
