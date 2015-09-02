@@ -327,7 +327,6 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     public void openPurchaseFragment() {
         List<String> skus = new ArrayList<>();
         skus.add(GotsPurchaseItem.SKU_FEATURE_RECOGNITION_50);
-        skus.add(GotsPurchaseItem.SKU_TEST_PURCHASE);
         displayPremiumFragment(skus);
     }
 
