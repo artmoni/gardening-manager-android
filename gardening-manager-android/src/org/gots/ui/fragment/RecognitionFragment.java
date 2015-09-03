@@ -158,7 +158,7 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
             docId = args.getString(DOCUMENT_ID);
             imageFile = new File(args.getString(IMAGE_PATH));
         } else {
-            Log.w(TAG, "You should pass an argument");
+            Log.w(TAG, "You should have both args "+DOCUMENT_ID+" and "+IMAGE_PATH);
         }
         return v;
     }

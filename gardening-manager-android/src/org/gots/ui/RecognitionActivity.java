@@ -102,15 +102,6 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
                 try {
                     Bitmap photo = (Bitmap) data.getExtras().get("data");
                     Uri selectedImage = getImageUri(getApplicationContext(), photo);
-//                String[] filePathColumn = {MediaStore.Images.Media.DATA};
-//
-//                Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-//                Log.d(TAG, DatabaseUtils.dumpCursorToString(cursor));
-//                cursor.moveToFirst();
-//
-//                int columnIndex = cursor.getColumnIndexOrThrow(filePathColumn[0]);
-//                picturePath = cursor.getString(columnIndex);
-//                Toast.makeText(getApplicationContext(), picturePath != null ? picturePath : "null", Toast.LENGTH_LONG).show();
                     File finalFile = new File(getRealPathFromURI(selectedImage));
                     picturePath = finalFile.getAbsolutePath();
                 } catch (Exception e) {
@@ -160,24 +151,12 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
                         Intent intent = new Intent(UPLOAD_FAILED);
                         sendBroadcast(intent);
                         onRecognitionFailed("Upload image on server has failed: " + message);
-//        mContext.sendBroadcast(new Intent(RECOGNITION_FAILED));
-//        uploading = false;
                     }
                 });
                 return null;
             }
 
-            @Override
-            protected void onPostExecute(String errorMessage) {
-                if (errorMessage != null) {
-                    mainFragment.setMessage(errorMessage);
-//                    progressText.setVisibility(View.VISIBLE);
-//                    progressText.setText(errorMessage);
-//                    imageRefresh.clearAnimation();
-//                    imageRefresh.setVisibility(View.GONE);
-                }
-                super.onPostExecute(errorMessage);
-            }
+
         }.execute();
     }
 

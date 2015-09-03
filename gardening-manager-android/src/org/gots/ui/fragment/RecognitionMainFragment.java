@@ -40,12 +40,12 @@ public class RecognitionMainFragment extends BaseGotsFragment {
         textViewPurchased = (TextView) v.findViewById(R.id.textViewPurchased);
         horizontalScrollViewRecognition = (LinearLayout) v.findViewById(R.id.layoutRecognitionResults);
         textViewMessage = (TextView) v.findViewById(R.id.textViewRecognitionMessage);
-        force = true;
         return v;
     }
 
     @Override
     public void update() {
+        force = true;
         runAsyncDataRetrieval();
     }
 
