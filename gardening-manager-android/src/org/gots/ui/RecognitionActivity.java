@@ -81,15 +81,19 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(UPLOAD_BEGIN)) {
-                mainFragment.setMessage(getResources().getString(R.string.plant_recognition_begin));
+//                mainFragment.setMessage(getResources().getString(R.string.plant_recognition_begin));
+                showNotification(getResources().getString(R.string.plant_recognition_begin), true, LENGHT_SHORT);
             } else if (intent.getAction().equals(UPLOAD_SUCCEED)) {
                 recognitionFragment = new RecognitionFragment();
                 addContentLayout(recognitionFragment, intent.getExtras());
-                mainFragment.setMessage(getResources().getString(R.string.plant_recognition_progress));
+//                mainFragment.setMessage(getResources().getString(R.string.plant_recognition_progress));
+                showNotification(getResources().getString(R.string.plant_recognition_progress), true, LENGHT_SHORT);
             } else if (intent.getAction().equals(UPLOAD_FAILED)) {
-                mainFragment.setMessage("Please check your internet access");
-            }else if (intent.getAction().equals(RECOGNITION_FAILED)) {
-                mainFragment.setMessage("Try with another picture");
+//                mainFragment.setMessage("Please check your internet access");
+                showNotification("Please check your internet access", false, LENGHT_SHORT);
+            } else if (intent.getAction().equals(RECOGNITION_FAILED)) {
+                showNotification("Try with another picture", false, LENGHT_SHORT);
+//                mainFragment.setMessage("Try with another picture");
             }
         }
     };
@@ -266,7 +270,8 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     @Override
     public void onRecognitionSucceed() {
         gotsPurchase.decrementRecognitionDailyCounter();
-        mainFragment.setMessage("Great some plants are matching.");
+        showNotification("Great some plants are matching", false, LENGHT_LONG);
+//        mainFragment.setMessage("Great some plants are matching.");
         mainFragment.update();
     }
 
@@ -314,4 +319,6 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
         unregisterReceiver(broadcastReceiver);
         super.onDestroy();
     }
+
+
 }

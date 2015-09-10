@@ -21,9 +21,42 @@
  * *********************************************************************** */
 package org.gots.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import android.accounts.Account;
+import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.location.Address;
+import android.location.Criteria;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.android.vending.billing.util.Purchase;
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 import org.gots.R;
 import org.gots.action.GotsActionSeedManager;
@@ -48,42 +81,9 @@ import org.gots.ui.fragment.BaseGotsFragment;
 import org.nuxeo.android.activities.BaseNuxeoActivity;
 import org.nuxeo.android.context.NuxeoContext;
 
-import android.accounts.Account;
-import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.location.Address;
-import android.location.Criteria;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationManager;
-import android.net.ConnectivityManager;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBar;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-
-import com.android.vending.billing.util.Purchase;
-import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * @author jcarsique
@@ -91,6 +91,8 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 public abstract class BaseGotsActivity extends BaseNuxeoActivity implements GotsContextProvider,
         OnBackStackChangedListener {
     protected static final String TAG = BaseGotsActivity.class.getSimpleName();
+    protected static final int LENGHT_SHORT = 3000;
+    protected static final int LENGHT_LONG = 5000;
 
     protected GotsPreferences gotsPrefs;
 
@@ -116,6 +118,9 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
 
     private GotsGrowingSeedManager gotsGrowingSeedManager;
     private View bottomRightButton;
+    private TextView notificationText;
+    private ImageView imageView;
+    private View layoutNotification;
 
     public interface GardenListener {
         public void onCurrentGardenChanged(GardenInterface garden);
@@ -219,6 +224,10 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         }
 
         getSupportFragmentManager().addOnBackStackChangedListener(this);
+
+        notificationText = (TextView) findViewById(R.id.textViewProgress);
+        imageView = (ImageView) findViewById(R.id.imageViewRefresh);
+        layoutNotification = (View) findViewById(R.id.layoutNotification);
     }
 
     protected void initAllManager() {
@@ -582,5 +591,49 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
             return (BaseGotsFragment) getSupportFragmentManager().findFragmentById(R.id.contentLayout);
         else
             return null;
+    }
+
+    public void showNotification(String message, boolean animation) {
+        showNotification(message, animation, LENGHT_LONG);
+    }
+
+    public void showNotification(String message, boolean animation, final int millis) {
+        notificationText.setText(message);
+        if (animation) {
+            Animation myRotateAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate);
+            myRotateAnimation.setRepeatCount(Animation.INFINITE);
+            imageView.startAnimation(myRotateAnimation);
+
+            Animation blinkAnimation = AnimationUtils.loadAnimation(this, R.anim.disappear);
+            blinkAnimation.setRepeatCount(Animation.INFINITE);
+            notificationText.setAnimation(blinkAnimation);
+        } else {
+            imageView.clearAnimation();
+            notificationText.clearAnimation();
+        }
+        layoutNotification.setVisibility(View.VISIBLE);
+
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    sleep(millis);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            layoutNotification.setVisibility(View.GONE);
+                            imageView.clearAnimation();
+                            notificationText.clearAnimation();
+                        }
+                    });
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        if (!animation)
+            thread.start();
+
     }
 }

@@ -1,22 +1,20 @@
 package org.gots.ui.fragment;
 
-import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Locale;
+import android.content.Intent;
+import android.location.Address;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.View;
 
 import org.gots.bean.DefaultGarden;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.exception.GardenNotFoundException;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GotsGardenManager;
-import org.gots.seed.GrowingSeed;
 import org.nuxeo.android.fragments.BaseNuxeoFragment;
 
-import android.content.Intent;
-import android.location.Address;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.View;
+import java.lang.reflect.Field;
+import java.util.Locale;
 
 public abstract class BaseGotsFragment extends BaseNuxeoFragment {
 
@@ -113,4 +111,6 @@ public abstract class BaseGotsFragment extends BaseNuxeoFragment {
             throw new RuntimeException(e);
         }
     }
+
+
 }
