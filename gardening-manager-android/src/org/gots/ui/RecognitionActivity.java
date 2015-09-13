@@ -17,7 +17,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+
 import org.gots.R;
+import org.gots.analytics.GotsAnalytics;
 import org.gots.inapp.GotsPurchaseItem;
 import org.gots.nuxeo.NuxeoUtils;
 import org.gots.ui.fragment.RecognitionFragment;
@@ -270,6 +273,8 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     @Override
     public void onRecognitionSucceed() {
         gotsPurchase.decrementRecognitionDailyCounter();
+        GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+        tracker.trackEvent(RecognitionActivity.class.getSimpleName(), GotsAnalytics.TRACK_EVENT_RECOGNITION, Thread.currentThread().getStackTrace()[1].getMethodName(), 0);
         showNotification("Great some plants are matching", false, LENGHT_LONG);
 //        mainFragment.setMessage("Great some plants are matching.");
         mainFragment.update();
@@ -277,6 +282,9 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
 
     @Override
     public void onRecognitionFailed(String message) {
+        GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+        tracker.trackEvent(RecognitionActivity.class.getSimpleName(), GotsAnalytics.TRACK_EVENT_RECOGNITION, Thread.currentThread().getStackTrace()[1].getMethodName(), 0);
+
         if (message != null) {
 //            mainFragment.setMessage(message);
             Log.w(TAG, "onRecognitionFailed: " + message);
@@ -288,7 +296,11 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     public void onRecognitionConfirmed(Document plantDoc) {
         Toast.makeText(this, "The plant has been published", Toast.LENGTH_LONG).show();
         getSupportFragmentManager().popBackStack();
+
         mainFragment.update();
+        GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+        tracker.trackEvent(RecognitionActivity.class.getSimpleName(), GotsAnalytics.TRACK_EVENT_RECOGNITION, Thread.currentThread().getStackTrace()[1].getMethodName(), 0);
+
     }
 
     @Override
