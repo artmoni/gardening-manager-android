@@ -227,6 +227,7 @@
     <string name="dialog_garden_localize_description">Weather forecast needs garden location. Long press on the map to localize your garden.</string>
     <string name="allotment.name">My allotment</string>
     <string name="plant_recognition_begin">Uploading picture to recognition service</string>
+    <string name="plant.recognition.confirm">Confirm</string>
 
 
     <!-- Nav Drawer Menu Items -->
