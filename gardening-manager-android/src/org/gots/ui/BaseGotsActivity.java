@@ -300,13 +300,27 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
             if (bottomRightButton instanceof FloatingActionsMenu && ((FloatingActionsMenu) bottomRightButton).isExpanded())
                 ((FloatingActionsMenu) bottomRightButton).toggle();
             return;
-        }
-
-        bottomRightButton = new View(getApplicationContext());
+        } else
+            bottomRightButton = new View(getApplicationContext());
 
         List<FloatingItem> items = onCreateFloatingMenu();
+        if (items == null || (items != null && items.size() == 0))
+            return;
 
-        if (items != null && items.size() > 1) {
+        if (items.size() == 1) {
+            FloatingItem floatingItem = items.get(0);
+            FloatingActionButton button = new FloatingActionButton(getApplicationContext());
+            button.setSize(FloatingActionButton.SIZE_NORMAL);
+            button.setColorNormalResId(R.color.action_error_color);
+            button.setColorPressedResId(R.color.action_warning_color);
+            button.setIcon(floatingItem.getRessourceId());
+            button.setTitle(floatingItem.getTitle());
+
+            button.setStrokeVisible(false);
+            button.setOnLongClickListener(floatingItem.getOnLongClickListener());
+            button.setOnClickListener(floatingItem.getOnClickListener());
+            bottomRightButton = button;
+        } else if (items.size() > 1) {
             FloatingActionsMenu actionsMenu = new FloatingActionsMenu(getApplicationContext());
             for (FloatingItem floatingItem : items) {
                 FloatingActionButton button = new FloatingActionButton(getApplicationContext());
@@ -326,19 +340,6 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
             actionsMenu.setColorNormalResId(R.color.text_color_dark);
             actionsMenu.setColorPressedResId(R.color.green_light);
             bottomRightButton = actionsMenu;
-        } else if (items.size() == 1) {
-            FloatingItem floatingItem = items.get(0);
-            FloatingActionButton button = new FloatingActionButton(getApplicationContext());
-            button.setSize(FloatingActionButton.SIZE_NORMAL);
-            button.setColorNormalResId(R.color.action_error_color);
-            button.setColorPressedResId(R.color.action_warning_color);
-            button.setIcon(floatingItem.getRessourceId());
-            button.setTitle(floatingItem.getTitle());
-
-            button.setStrokeVisible(false);
-            button.setOnLongClickListener(floatingItem.getOnLongClickListener());
-            button.setOnClickListener(floatingItem.getOnClickListener());
-            bottomRightButton = button;
         }
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,

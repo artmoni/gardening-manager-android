@@ -1,5 +1,12 @@
 package org.gots.ui;
 
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+
 import org.gots.R;
 import org.gots.inapp.GotsPurchaseItem;
 import org.gots.sensor.SensorChartFragment;
@@ -8,16 +15,6 @@ import org.gots.sensor.fragment.AllSensorResumeFragment;
 import org.gots.sensor.fragment.SensorResumeFragment.OnSensorClickListener;
 import org.gots.sensor.parrot.ParrotLocation;
 import org.gots.ui.fragment.TutorialFragment;
-
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +28,7 @@ public class SensorActivity extends BaseGotsActivity implements OnSensorClickLis
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        registerReceiver(sensorBroadcast, new IntentFilter(SensorLoginDialogFragment.EVENT_AUTHENTICATE));
+//        registerReceiver(sensorBroadcast, new IntentFilter(SensorLoginDialogFragment.EVENT_AUTHENTICATE));
 
 //        FragmentTransaction transaction2 = getSupportFragmentManager().beginTransaction();
 //        AllSensorResumeFragment allSensorResumeFragment = new AllSensorResumeFragment();
@@ -42,22 +39,19 @@ public class SensorActivity extends BaseGotsActivity implements OnSensorClickLis
 //        transaction.replace(R.id.idFragmentSensorContent, new TutorialFragment(R.layout.tutorial_f));
 ////        transaction.addToBackStack(null);
 //        transaction.commit();
-        if (gotsPrefs.getParrotToken() == null)
-            addMainLayout(new TutorialFragment(R.layout.tutorial_f), null);
-        else
-            addMainLayout(new AllSensorResumeFragment(), null);
+
 
     }
 
-    BroadcastReceiver sensorBroadcast = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (SensorLoginDialogFragment.EVENT_AUTHENTICATE.equals(intent.getAction())) {
-                runAsyncDataRetrieval();
-            }
-        }
-    };
+//    BroadcastReceiver sensorBroadcast = new BroadcastReceiver() {
+//
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            if (SensorLoginDialogFragment.EVENT_AUTHENTICATE.equals(intent.getAction())) {
+//                runAsyncDataRetrieval();
+//            }
+//        }
+//    };
 
     @Override
     protected void onResume() {
@@ -67,7 +61,7 @@ public class SensorActivity extends BaseGotsActivity implements OnSensorClickLis
 
     @Override
     protected void onDestroy() {
-        unregisterReceiver(sensorBroadcast);
+//        unregisterReceiver(sensorBroadcast);
         super.onDestroy();
     }
 
@@ -121,31 +115,54 @@ public class SensorActivity extends BaseGotsActivity implements OnSensorClickLis
     }
 
     @Override
-    protected List<FloatingItem> onCreateFloatingMenu() {
-        FloatingItem item = new FloatingItem();
-        if (gotsPurchase.getFeatureParrot()) {
-            item.setRessourceId(R.drawable.ic_login);
-            item.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    SensorLoginDialogFragment login = new SensorLoginDialogFragment();
-                    login.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.CustomDialog);
-                    login.show(getSupportFragmentManager(), "sensor_login");
-                }
-            });
-        } else {
-            item.setTitle(getResources().getString(R.string.inapp_purchase_buy));
-            item.setRessourceId(R.drawable.action_buy_online);
-            item.setOnClickListener(new View.OnClickListener() {
+    protected void onNuxeoDataRetrieved(Object data) {
+        if (gotsPrefs.getParrotToken() == null)
+            addMainLayout(new TutorialFragment(R.layout.tutorial_f), null);
+        else
+            addMainLayout(new AllSensorResumeFragment(), null);
+        super.onNuxeoDataRetrieved(data);
+    }
 
-                @Override
-                public void onClick(View v) {
-                    openPurchaseFragment();
-                }
-            });
-        }
+    @Override
+    protected List<FloatingItem> onCreateFloatingMenu() {
         ArrayList<FloatingItem> items = new ArrayList<>();
-        items.add(item);
+        if (gotsPrefs.getParrotToken() == null) {
+            FloatingItem item = new FloatingItem();
+            if (gotsPurchase.getFeatureParrot()) {
+                item.setRessourceId(R.drawable.ic_login);
+                item.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        SensorLoginDialogFragment login = new SensorLoginDialogFragment(new SensorLoginDialogFragment.SensorLoginEvent() {
+                            @Override
+                            public void onSensorLoginSuccess() {
+                                runAsyncDataRetrieval();
+                            }
+
+                            @Override
+                            public void onSensorLoginFailed() {
+                                Log.w(TAG, "onSensorLoginFailed");
+                            }
+                        });
+                        login.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.CustomDialog);
+                        login.show(getSupportFragmentManager(), "sensor_login");
+                    }
+                });
+            } else {
+                item.setTitle(getResources().getString(R.string.inapp_purchase_buy));
+                item.setRessourceId(R.drawable.action_buy_online);
+                item.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        openPurchaseFragment();
+                    }
+                });
+            }
+            items.add(item);
+        }
+
+
         return items;
     }
 }
