@@ -18,6 +18,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.util.Log;
+import android.view.MenuItem;
 
 public class PreferenceActivity extends android.preference.PreferenceActivity implements
         OnSharedPreferenceChangeListener {
@@ -45,12 +46,16 @@ public class PreferenceActivity extends android.preference.PreferenceActivity im
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
         gotsPreferences = getGotsContext().getServerConfig();
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         displayPreference(NuxeoServerConfig.PREF_SERVER_LOGIN, gotsPreferences.getNuxeoLogin());
         displayPreference(NuxeoServerConfig.PREF_SERVER_URL, gotsPreferences.getGardeningManagerServerURI());
         displayPreference(NuxeoServerConfig.PREF_SERVER_TOKEN, gotsPreferences.getToken());
         displayPreference(GotsPreferences.SYNC_SCHEDULE,
                 String.valueOf(gotsPreferences.getScheduleTimeForNotification()));
+
+        findPreference("parrot.login").setSummary(gotsPreferences.getParrotLogin());
+        findPreference("parrot.auth.token").setSummary(gotsPreferences.getParrotToken());
         // displayPreference(NuxeoServerConfig.PREF_SERVER_LOGIN, gotsPreferences.getNuxeoLogin());
 
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
@@ -77,7 +82,18 @@ public class PreferenceActivity extends android.preference.PreferenceActivity im
                 }
             });
         }
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.home:
+                finish();
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

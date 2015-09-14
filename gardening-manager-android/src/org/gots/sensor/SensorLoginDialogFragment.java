@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,12 +73,18 @@ public class SensorLoginDialogFragment extends AbstractDialogFragment {
 
     protected void login() {
         new AsyncTask<Void, Void, String>() {
+            String login;
+
+            @Override
+            protected void onPreExecute() {
+                login = loginTextView.getText().toString();
+                super.onPreExecute();
+            }
 
             @Override
             protected String doInBackground(Void... params) {
                 ParrotAuthentication parrotAuthentication = ParrotAuthentication.getInstance(getActivity());
-                String token = parrotAuthentication.getToken(loginTextView.getText().toString(),
-                        passwordTextView.getText().toString());
+                String token = parrotAuthentication.getToken(login, passwordTextView.getText().toString());
 
                 return token;
             }
@@ -90,6 +95,8 @@ public class SensorLoginDialogFragment extends AbstractDialogFragment {
 //                    Log.i(TAG, token);
                     if (mCallback != null)
                         mCallback.onSensorLoginSuccess();
+                    gotsPrefs.setParrotLogin(login);
+                    gotsPrefs.setParrotToken(token);
                 } else if (mCallback != null) {
                     mCallback.onSensorLoginFailed();
                 }
