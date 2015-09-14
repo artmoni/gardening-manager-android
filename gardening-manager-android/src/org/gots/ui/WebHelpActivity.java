@@ -44,6 +44,7 @@ public class WebHelpActivity extends BaseGotsActivity {
 
         mWebView = (WebView) findViewById(R.id.webViewHelp);
         mWebView.setWebViewClient(new WebHelpClient());
+        mWebView.getSettings().setJavaScriptEnabled(true);
 
         if (getIntent().getExtras().getString(URL_CLASSNAME) != null) {
             String helpClass = getIntent().getExtras().getString(URL_CLASSNAME);
