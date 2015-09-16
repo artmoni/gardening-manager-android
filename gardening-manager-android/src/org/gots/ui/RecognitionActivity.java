@@ -17,7 +17,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+
 import org.gots.R;
+import org.gots.analytics.GotsAnalytics;
 import org.gots.inapp.GotsPurchaseItem;
 import org.gots.nuxeo.NuxeoUtils;
 import org.gots.ui.fragment.RecognitionFragment;
@@ -81,15 +84,19 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(UPLOAD_BEGIN)) {
-                mainFragment.setMessage(getResources().getString(R.string.plant_recognition_begin));
+//                mainFragment.setMessage(getResources().getString(R.string.plant_recognition_begin));
+                showNotification(getResources().getString(R.string.plant_recognition_begin), true, LENGHT_SHORT);
             } else if (intent.getAction().equals(UPLOAD_SUCCEED)) {
                 recognitionFragment = new RecognitionFragment();
                 addContentLayout(recognitionFragment, intent.getExtras());
-                mainFragment.setMessage(getResources().getString(R.string.plant_recognition_progress));
+//                mainFragment.setMessage(getResources().getString(R.string.plant_recognition_progress));
+                showNotification(getResources().getString(R.string.plant_recognition_progress), true, LENGHT_SHORT);
             } else if (intent.getAction().equals(UPLOAD_FAILED)) {
-                mainFragment.setMessage("Please check your internet access");
-            }else if (intent.getAction().equals(RECOGNITION_FAILED)) {
-                mainFragment.setMessage("Try with another picture");
+//                mainFragment.setMessage("Please check your internet access");
+                showNotification("Please check your internet access", false, LENGHT_SHORT);
+            } else if (intent.getAction().equals(RECOGNITION_FAILED)) {
+                showNotification("Try with another picture", false, LENGHT_SHORT);
+//                mainFragment.setMessage("Try with another picture");
             }
         }
     };
@@ -102,15 +109,6 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
                 try {
                     Bitmap photo = (Bitmap) data.getExtras().get("data");
                     Uri selectedImage = getImageUri(getApplicationContext(), photo);
-//                String[] filePathColumn = {MediaStore.Images.Media.DATA};
-//
-//                Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-//                Log.d(TAG, DatabaseUtils.dumpCursorToString(cursor));
-//                cursor.moveToFirst();
-//
-//                int columnIndex = cursor.getColumnIndexOrThrow(filePathColumn[0]);
-//                picturePath = cursor.getString(columnIndex);
-//                Toast.makeText(getApplicationContext(), picturePath != null ? picturePath : "null", Toast.LENGTH_LONG).show();
                     File finalFile = new File(getRealPathFromURI(selectedImage));
                     picturePath = finalFile.getAbsolutePath();
                 } catch (Exception e) {
@@ -160,24 +158,12 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
                         Intent intent = new Intent(UPLOAD_FAILED);
                         sendBroadcast(intent);
                         onRecognitionFailed("Upload image on server has failed: " + message);
-//        mContext.sendBroadcast(new Intent(RECOGNITION_FAILED));
-//        uploading = false;
                     }
                 });
                 return null;
             }
 
-            @Override
-            protected void onPostExecute(String errorMessage) {
-                if (errorMessage != null) {
-                    mainFragment.setMessage(errorMessage);
-//                    progressText.setVisibility(View.VISIBLE);
-//                    progressText.setText(errorMessage);
-//                    imageRefresh.clearAnimation();
-//                    imageRefresh.setVisibility(View.GONE);
-                }
-                super.onPostExecute(errorMessage);
-            }
+
         }.execute();
     }
 
@@ -287,12 +273,18 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     @Override
     public void onRecognitionSucceed() {
         gotsPurchase.decrementRecognitionDailyCounter();
-        mainFragment.setMessage("Great some plants are matching.");
+        GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+        tracker.trackEvent(RecognitionActivity.class.getSimpleName(), GotsAnalytics.TRACK_EVENT_RECOGNITION, Thread.currentThread().getStackTrace()[1].getMethodName(), 0);
+        showNotification("Great some plants are matching", false, LENGHT_LONG);
+//        mainFragment.setMessage("Great some plants are matching.");
         mainFragment.update();
     }
 
     @Override
     public void onRecognitionFailed(String message) {
+        GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+        tracker.trackEvent(RecognitionActivity.class.getSimpleName(), GotsAnalytics.TRACK_EVENT_RECOGNITION, Thread.currentThread().getStackTrace()[1].getMethodName(), 0);
+
         if (message != null) {
 //            mainFragment.setMessage(message);
             Log.w(TAG, "onRecognitionFailed: " + message);
@@ -304,7 +296,11 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     public void onRecognitionConfirmed(Document plantDoc) {
         Toast.makeText(this, "The plant has been published", Toast.LENGTH_LONG).show();
         getSupportFragmentManager().popBackStack();
+
         mainFragment.update();
+        GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
+        tracker.trackEvent(RecognitionActivity.class.getSimpleName(), GotsAnalytics.TRACK_EVENT_RECOGNITION, Thread.currentThread().getStackTrace()[1].getMethodName(), 0);
+
     }
 
     @Override
@@ -327,8 +323,7 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     public void openPurchaseFragment() {
         List<String> skus = new ArrayList<>();
         skus.add(GotsPurchaseItem.SKU_FEATURE_RECOGNITION_50);
-        skus.add(GotsPurchaseItem.SKU_TEST_PURCHASE);
-        displayPremiumFragment(skus);
+        displayPurchaseFragment(skus);
     }
 
     @Override
@@ -336,4 +331,6 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
         unregisterReceiver(broadcastReceiver);
         super.onDestroy();
     }
+
+
 }

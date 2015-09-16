@@ -48,16 +48,18 @@ public class ProfileMapFragment extends BaseGotsFragment implements OnMapLongCli
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.profilemap_fragment, null, false);
-        mapView = (MapView) v.findViewById(R.id.map);
+//        View v = inflater.inflate(R.layout.profilemap_fragment, null, false);
+        mapView = new MapView(getActivity());
+//        mapView = (MapView) v.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
+
         try {
             MapsInitializer.initialize(getActivity());
             setUpMapIfNeeded();
         } catch (GooglePlayServicesNotAvailableException e) {
             Log.e(TAG, "Could not initialize google play", e);
         }
-        return v;
+        return mapView;
     }
 
     @Override

@@ -20,7 +20,7 @@ import android.widget.ListView;
 public class AllotmentListFragment extends AbstractListFragment {
     private ListAllotmentAdapter lsa;
 
-    ListView listAllotments;
+//    ListView listAllotments;
 
     private OnAllotmentSelected mCallback;
 
@@ -47,17 +47,17 @@ public class AllotmentListFragment extends AbstractListFragment {
         super.onAttach(activity);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.allotment_list_fragment, null);
-    }
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+//        return inflater.inflate(R.layout.allotment_list_fragment, null);
+//    }
 
     @Override
     public void onViewCreated(View v, Bundle savedInstanceState) {
-        listAllotments = (ListView) v.findViewById(R.id.IdGardenAllotmentsList);
+//        listAllotments = (ListView) v.findViewById(R.id.IdGardenAllotmentsList);
         lsa = new ListAllotmentAdapter(getActivity(), new ArrayList<BaseAllotmentInterface>());
-        listAllotments.setAdapter(lsa);
-        listAllotments.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        getListView().setAdapter(lsa);
+        getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 //        listAllotments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //
 //            @Override
@@ -67,7 +67,7 @@ public class AllotmentListFragment extends AbstractListFragment {
 //            }
 //
 //        });
-        listAllotments.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 mCallback.onAllotmentLongClick(lsa.getItem(position));

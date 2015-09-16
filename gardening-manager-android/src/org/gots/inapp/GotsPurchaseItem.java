@@ -1,8 +1,5 @@
 package org.gots.inapp;
 
-import java.util.Calendar;
-import java.util.List;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
@@ -10,6 +7,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
+
+import java.util.Calendar;
+import java.util.List;
 
 /*
  * This class describe all Playstore inapp Items
@@ -103,11 +103,11 @@ public class GotsPurchaseItem {
     }
 
     public boolean getFeatureExportPDF() {
-        return prefs.getBoolean(SKU_FEATURE_PDFHISTORY, false);
+        return prefs.getBoolean(SKU_FEATURE_PDFHISTORY, false) || isPremium();
     }
 
     public boolean getFeatureParrot() {
-        return prefs.getBoolean(SKU_FEATURE_PARROT, false);
+        return prefs.getBoolean(SKU_FEATURE_PARROT, false) || isPremium();
     }
 
     public int getFeatureRecognitionCounter() {

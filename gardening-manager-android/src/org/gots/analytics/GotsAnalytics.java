@@ -10,6 +10,7 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class GotsAnalytics {
 
+    public static final String TRACK_EVENT_RECOGNITION = "Recognition";
     protected static GotsAnalytics INSTANCE;
 
     protected int activityCount = 0;

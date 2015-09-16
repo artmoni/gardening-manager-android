@@ -28,7 +28,7 @@ public class RecognitionMainFragment extends BaseGotsFragment {
     private TextView counterPurchased;
     private TextView textViewPurchased;
     private LinearLayout horizontalScrollViewRecognition;
-    private TextView textViewMessage;
+//    private TextView textViewMessage;
     private boolean force = false;
 
     @Override
@@ -39,13 +39,13 @@ public class RecognitionMainFragment extends BaseGotsFragment {
         counterPurchased = (TextView) v.findViewById(R.id.textViewCounterPurchased);
         textViewPurchased = (TextView) v.findViewById(R.id.textViewPurchased);
         horizontalScrollViewRecognition = (LinearLayout) v.findViewById(R.id.layoutRecognitionResults);
-        textViewMessage = (TextView) v.findViewById(R.id.textViewRecognitionMessage);
-        force = true;
+//        textViewMessage = (TextView) v.findViewById(R.id.textViewRecognitionMessage);
         return v;
     }
 
     @Override
     public void update() {
+        force = true;
         runAsyncDataRetrieval();
     }
 
@@ -96,7 +96,7 @@ public class RecognitionMainFragment extends BaseGotsFragment {
     }
 
 
-    public void setMessage(String message) {
-        textViewMessage.setText(message);
-    }
+//    public void setMessage(String message) {
+//        textViewMessage.setText(message);
+//    }
 }

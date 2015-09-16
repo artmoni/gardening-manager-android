@@ -20,15 +20,6 @@
  * *********************************************************************** */
 package org.gots.preferences;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-
-import org.gots.R;
-import org.gots.broadcast.BroadCastMessages;
-import org.nuxeo.android.config.NuxeoServerConfig;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
@@ -36,6 +27,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
+import org.gots.R;
+import org.gots.broadcast.BroadCastMessages;
+import org.nuxeo.android.config.NuxeoServerConfig;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 public class GotsPreferences extends NuxeoServerConfig {
 
@@ -379,7 +379,7 @@ public class GotsPreferences extends NuxeoServerConfig {
             return mContext.getExternalFilesDir(null);
         else
             return mContext.getFilesDir();
-            
+
     }
 
     public String getPlayStorePubKey() {
@@ -412,4 +412,11 @@ public class GotsPreferences extends NuxeoServerConfig {
         return get(ORG_GOTS_PARROT_TOKEN, null);
     }
 
+    public void setParrotLogin(String parrotLogin) {
+        set(ORG_GOTS_PARROT_LOGIN, parrotLogin);
+    }
+
+    public String getParrotLogin() {
+        return get(ORG_GOTS_PARROT_LOGIN, null);
+    }
 }
