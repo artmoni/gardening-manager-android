@@ -12,14 +12,35 @@
  */
 package org.gots.ui;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.Gallery;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.vending.billing.util.IabHelper;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 import org.gots.R;
 import org.gots.action.ActionOnSeed;
@@ -49,45 +70,19 @@ import org.gots.ui.fragment.LoginDialogFragment;
 import org.gots.ui.fragment.SeedDescriptionFragment;
 import org.gots.ui.fragment.WorkflowTaskFragment;
 import org.gots.ui.fragment.WorkflowTaskFragment.OnWorkflowClickListener;
-import org.gots.utils.FileUtilities;
 import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.Gallery;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.android.vending.billing.util.IabHelper;
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 public class TabSeedActivity extends TabActivity implements OnActionSelectedListener, OnAllotmentSelected,
         OnWorkflowClickListener {
@@ -101,7 +96,6 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 
     GrowingSeed mSeed = null;
 
-    private String urlDescription;
 
     private File cameraPicture;
 
@@ -615,23 +609,18 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 File f = (File) arg0.getItemAtPosition(position);
-                File dest = new File(gotsPrefs.getFilesDir(), f.getName());
-                try {
-                    FileUtilities.copy(f, dest);
-                    Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_VIEW);
-                    intent.setDataAndType(Uri.fromFile(dest), "image/*");
-                    startActivity(intent);
-                } catch (IOException e) {
-                    Log.w(TAG, e.getMessage());
-                }
+//                File dest = new File(gotsPrefs.getFilesDir(), f.getName());
+//                    FileUtilities.copy(f, dest);
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.fromFile(f), "image/*");
+                startActivity(intent);
 
             }
         });
 
 
-
-        List<Fragment> fragments = new ArrayList<>();
+        final List<Fragment> fragments = new ArrayList<>();
         Bundle bundle = new Bundle();
         bundle.putInt(GOTS_GROWINGSEED_ID, mSeed.getSeedId());
         bundle.putInt("org.gots.growingseed.id", mSeed.getGrowingSeedId());
@@ -640,6 +629,21 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
         if (fragmentDescription == null) {
             fragmentDescription = new SeedDescriptionFragment();
             fragmentDescription.setArguments(bundle);
+            fragmentDescription.setOnDescriptionFragmentClicked(new SeedDescriptionFragment.OnDescriptionFragmentClicked() {
+                @Override
+                public void onInformationClick(String urlDescription) {
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString(WebViewFragment.URL, urlDescription);
+                    if (fragmentWebView == null) {
+                        fragmentWebView = new WebViewFragment();
+                        fragmentWebView.setArguments(bundle);
+                        fragments.add(fragmentWebView);
+                        addTab(fragmentWebView, getResources().getString(R.string.seed_description_tabmenu_wikipedia));
+
+                    }
+                }
+            });
             fragments.add(fragmentDescription);
             addTab(fragmentDescription, getResources().getString(R.string.seed_description_tabmenu_detail));
         } else
@@ -667,23 +671,23 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
             }
         }
         // ********************** Tab Wikipedia**********************
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-            if (mSeed.getUrlDescription()!=null) {
-                urlDescription = mSeed.getUrlDescription();
-            } else {
-                urlDescription = "http://" + Locale.getDefault().getLanguage() + ".wikipedia.org/wiki/" + mSeed.getSpecie();
-            }
-            bundle.putString(WebViewFragment.URL, urlDescription);
-            if (fragmentWebView == null) {
-                fragmentWebView = new WebViewFragment();
-                fragmentWebView.setArguments(bundle);
-                fragments.add(fragmentWebView);
-                addTab(fragmentWebView, getResources().getString(R.string.seed_description_tabmenu_wikipedia));
-            }
+        if (!getGotsContext().getNuxeoClient().isOffline()) {
+//            if (mSeed.getUrlDescription() != null) {
+//                urlDescription = mSeed.getUrlDescription();
+//            } else {
+//                urlDescription = "http://" + Locale.getDefault().getLanguage() + ".wikipedia.org/wiki/" + mSeed.getSpecie();
+//            }
+//            bundle.putString(WebViewFragment.URL, urlDescription);
+//            if (fragmentWebView == null) {
+//                fragmentWebView = new WebViewFragment();
+//                fragmentWebView.setArguments(bundle);
+//                fragments.add(fragmentWebView);
+//                addTab(fragmentWebView, getResources().getString(R.string.seed_description_tabmenu_wikipedia));
+//            }
         }
+
         super.onNuxeoDataRetrieved(data);
+
     }
 
     @Override

@@ -4,17 +4,11 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ * <p>
  * Contributors:
- *     sfleury - initial API and implementation
+ * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.ui.fragment;
-
-import org.gots.R;
-import org.gots.seed.BaseSeedInterface;
-import org.gots.seed.GotsSeedManager;
-import org.gots.seed.provider.GotsSeedProvider;
-import org.gots.seed.view.SeedWidgetLong;
 
 import android.os.Bundle;
 import android.text.Html;
@@ -23,6 +17,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import org.gots.R;
+import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.GotsSeedManager;
+import org.gots.seed.provider.GotsSeedProvider;
+import org.gots.seed.view.SeedWidgetLong;
 
 public class SeedDescriptionFragment extends BaseGotsFragment {
     public static final String GOTS_SEED_ID = "org.gots.seed.id";
@@ -52,6 +52,15 @@ public class SeedDescriptionFragment extends BaseGotsFragment {
     private TextView seedDescriptionHarvest;
 
     private SeedWidgetLong seedWidgetLong;
+    private OnDescriptionFragmentClicked mCallback;
+
+    public interface OnDescriptionFragmentClicked {
+        public void onInformationClick(String url);
+    }
+
+    public void setOnDescriptionFragmentClicked(OnDescriptionFragmentClicked descriptionFragmentClicked) {
+        mCallback = descriptionFragmentClicked;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,7 +89,12 @@ public class SeedDescriptionFragment extends BaseGotsFragment {
         seedDescriptionCultureHarvest = (TextView) v.findViewById(R.id.IdSeedDescriptionHarvest);
         seedDescriptionHarvest = (TextView) v.findViewById(R.id.IdSeedDescriptionHarvestTitle);
         seedWidgetLong = (SeedWidgetLong) v.findViewById(R.id.IdSeedWidgetLong);
-
+        seedWidgetLong.setOnSeedWidgetLongClickListener(new SeedWidgetLong.OnSeedWidgetLongClickListener() {
+            @Override
+            public void onInformationClick(String url) {
+                mCallback.onInformationClick(url);
+            }
+        });
         return v;
     }
 
@@ -102,9 +116,9 @@ public class SeedDescriptionFragment extends BaseGotsFragment {
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
         BaseSeedInterface mSeed = (BaseSeedInterface) data;
-        
+
         seedWidgetLong.setSeed(mSeed);
-        
+
         seedDescriptionEnvironnement.setText(Html.fromHtml(mSeed.getDescriptionEnvironment()));
 
         seedDescriptionTitle.setOnClickListener(new View.OnClickListener() {

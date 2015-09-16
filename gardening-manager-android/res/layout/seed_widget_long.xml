@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/org.gots"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
+
     android:layout_height="200dp"
     android:orientation="horizontal">
 
@@ -168,9 +171,20 @@
         android:id="@+id/imageStateValidation"
         android:layout_width="60dp"
         android:layout_height="60dp"
+        android:src="@drawable/ic_ribbon"
         android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/idSeedWidget2"
-        android:layout_marginTop="-6dp"
-        android:src="@drawable/ic_ribbon" />
+        android:layout_toLeftOf="@+id/buttonInformation"
+        android:layout_toStartOf="@+id/buttonInformation" />
 
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/buttonInformation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="8dp"
+        app:fab_size="mini"
+        fab:fab_colorNormal="@color/action_warning_color"
+        fab:fab_colorPressed="@color/action_error_color"
+        fab:fab_icon="@drawable/ic_information" />
 </RelativeLayout>

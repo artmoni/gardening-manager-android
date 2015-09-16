@@ -12,6 +12,23 @@
  */
 package org.gots.seed.view;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.getbase.floatingactionbutton.FloatingActionButton;
+
 import org.gots.R;
 import org.gots.context.GotsContext;
 import org.gots.exception.GotsException;
@@ -25,21 +42,7 @@ import org.gots.seed.adapter.PlanningHarvestAdapter;
 import org.gots.seed.adapter.PlanningSowAdapter;
 import org.gots.ui.fragment.LoginDialogFragment;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
-import android.util.AttributeSet;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import java.util.Locale;
 
 public class SeedWidgetLong extends RelativeLayout {
     Context mContext;
@@ -51,6 +54,7 @@ public class SeedWidgetLong extends RelativeLayout {
     private TextView likeCount;
 
     private View like;
+    private OnSeedWidgetLongClickListener mCallback;
 
     public SeedWidgetLong(Context context) {
         super(context);
@@ -77,6 +81,14 @@ public class SeedWidgetLong extends RelativeLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         setupView();
+    }
+
+    public interface OnSeedWidgetLongClickListener {
+        public void onInformationClick(String url);
+    }
+
+    public void setOnSeedWidgetLongClickListener(OnSeedWidgetLongClickListener seedWidgetLongClickListener) {
+        mCallback = seedWidgetLongClickListener;
     }
 
     @SuppressWarnings("deprecation")
@@ -125,6 +137,21 @@ public class SeedWidgetLong extends RelativeLayout {
         PlanningWidget planningHarvest = (PlanningWidget) findViewById(R.id.IdSeedHarvestPlanning);
         planningHarvest.setAdapter(new PlanningHarvestAdapter(mSeed));
 
+        FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.buttonInformation);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mCallback != null) {
+                    String urlDescription;
+                    if (mSeed.getUrlDescription() != null && !"null".equals(mSeed.getUrlDescription())) {
+                        urlDescription = mSeed.getUrlDescription();
+                    } else {
+                        urlDescription = "http://" + Locale.getDefault().getLanguage() + ".wikipedia.org/wiki/" + mSeed.getSpecie();
+                    }
+                    mCallback.onInformationClick(urlDescription);
+                }
+            }
+        });
         ImageView state = (ImageView) findViewById(R.id.imageStateValidation);
         if ("approved".equals(mSeed.getState()))
             state.setVisibility(View.VISIBLE);
