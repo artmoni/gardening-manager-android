@@ -1,14 +1,5 @@
 package org.gots.ui.fragment;
 
-import org.gots.R;
-import org.gots.bean.Allotment;
-import org.gots.bean.BaseAllotmentInterface;
-import org.gots.seed.GotsGrowingSeedManager;
-import org.gots.seed.GrowingSeed;
-import org.gots.seed.adapter.ListGrowingSeedAdapter;
-import org.gots.ui.ExpandableHeightGridView;
-import org.gots.utils.FileUtilities;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -22,10 +13,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import org.gots.R;
+import org.gots.bean.Allotment;
+import org.gots.bean.BaseAllotmentInterface;
+import org.gots.seed.GotsGrowingSeedManager;
+import org.gots.seed.GrowingSeed;
+import org.gots.seed.adapter.ListGrowingSeedAdapter;
+import org.gots.ui.ExpandableHeightGridView;
+import org.gots.utils.FileUtilities;
 
 import java.util.List;
 
@@ -95,7 +93,7 @@ public class AllotmentEditorFragment extends BaseGotsFragment {
 
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
+                if (!hasFocus && allotment != null) {
                     allotment.setName(textviewAllotmentName.getText().toString());
                     if (allotment.getId() >= 0)
                         mCallback.onAllotmentModified(allotment);
