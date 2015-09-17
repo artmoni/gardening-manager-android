@@ -366,8 +366,8 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
 
     @Override
     public void onPlantCatalogueClick(BaseSeedInterface seed) {
-        Intent i = new Intent(getApplicationContext(), TabSeedActivity.class);
-        i.putExtra(TabSeedActivity.GOTS_VENDORSEED_ID, seed.getSeedId());
+        Intent i = new Intent(getApplicationContext(), PlantDescriptionActivity.class);
+        i.putExtra(PlantDescriptionActivity.GOTS_VENDORSEED_ID, seed.getSeedId());
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
     }
@@ -454,8 +454,8 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
             ActionOnSeed actionDone = null;
             switch (item.getItemId()) {
             case R.id.action_seed_detail:
-                Intent i = new Intent(getApplicationContext(), TabSeedActivity.class);
-                i.putExtra("org.gots.seed.vendorid", currentSeed.getSeedId());
+                Intent i = new Intent(getApplicationContext(), PlantDescriptionActivity.class);
+                i.putExtra(PlantDescriptionActivity.GOTS_VENDORSEED_ID, currentSeed.getSeedId());
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
                 break;

@@ -15,6 +15,7 @@ import org.gots.seed.GotsSeedManager;
 import org.gots.seed.adapter.SeedListAdapter;
 import org.gots.seed.adapter.VendorSeedListAdapter;
 import org.gots.seed.provider.GotsSeedProvider;
+import org.gots.ui.PlantDescriptionActivity;
 import org.gots.ui.TabSeedActivity;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -122,9 +123,9 @@ public class WorkflowResumeFragment extends BaseGotsFragment implements OnItemCl
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
         BaseSeedInterface baseSeedInterface = (BaseSeedInterface) arg0.getItemAtPosition(arg2);
-        Intent i = new Intent(getActivity(), TabSeedActivity.class);
+        Intent i = new Intent(getActivity(), PlantDescriptionActivity.class);
         i.putExtra(WorkflowTaskFragment.GOTS_DOC_ID, baseSeedInterface.getUUID());
-        i.putExtra(TabSeedActivity.GOTS_VENDORSEED_ID, baseSeedInterface.getSeedId());
+        i.putExtra(PlantDescriptionActivity.GOTS_VENDORSEED_ID, baseSeedInterface.getSeedId());
         startActivity(i);
     }
 

@@ -28,6 +28,7 @@ import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.GrowingSeed;
+import org.gots.ui.PlantDescriptionActivity;
 import org.gots.ui.TabSeedActivity;
 import org.gots.ui.fragment.ScheduleActionFragment;
 
@@ -150,9 +151,8 @@ public class QuickSeedActionBuilder {
                 ActionOnSeed actionItem = detail;
                 if (DetailAction.class.isInstance(actionItem)) {
                     // alert.show();
-                    final Intent i = new Intent(mContext, TabSeedActivity.class);
-                    i.putExtra("org.gots.seed.id", ((GrowingSeed) parentView.getTag()).getGrowingSeedId());
-                    i.putExtra("org.gots.seed.url", ((GrowingSeed) parentView.getTag()).getUrlDescription());
+                    final Intent i = new Intent(mContext, PlantDescriptionActivity.class);
+                    i.putExtra(PlantDescriptionActivity.GOTS_GROWINGSEED_ID, ((GrowingSeed) parentView.getTag()).getGrowingSeedId());
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContext.startActivity(i);
                 } else {

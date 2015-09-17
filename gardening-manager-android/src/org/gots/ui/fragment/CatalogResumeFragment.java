@@ -9,6 +9,7 @@ import org.gots.seed.GotsSeedManager;
 import org.gots.seed.adapter.SeedListAdapter;
 import org.gots.seed.adapter.VendorSeedListAdapter;
 import org.gots.ui.HutActivity;
+import org.gots.ui.PlantDescriptionActivity;
 import org.gots.ui.TabSeedActivity;
 
 import android.content.Intent;
@@ -99,8 +100,8 @@ public class CatalogResumeFragment extends BaseGotsFragment implements OnItemCli
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
         BaseSeedInterface baseSeedInterface = (BaseSeedInterface) arg0.getItemAtPosition(arg2);
-        Intent i = new Intent(getActivity(), TabSeedActivity.class);
-        i.putExtra(TabSeedActivity.GOTS_VENDORSEED_ID, baseSeedInterface.getSeedId());
+        Intent i = new Intent(getActivity(), PlantDescriptionActivity.class);
+        i.putExtra(PlantDescriptionActivity.GOTS_VENDORSEED_ID, baseSeedInterface.getSeedId());
         startActivity(i);
     }
 }

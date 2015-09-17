@@ -82,7 +82,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class TabSeedActivity extends TabActivity implements OnActionSelectedListener, OnAllotmentSelected,
         OnWorkflowClickListener {
@@ -621,7 +620,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 
 
         final List<Fragment> fragments = new ArrayList<>();
-        Bundle bundle = new Bundle();
+        final Bundle bundle = new Bundle();
         bundle.putInt(GOTS_GROWINGSEED_ID, mSeed.getSeedId());
         bundle.putInt("org.gots.growingseed.id", mSeed.getGrowingSeedId());
 
@@ -640,7 +639,16 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
                         fragmentWebView.setArguments(bundle);
                         fragments.add(fragmentWebView);
                         addTab(fragmentWebView, getResources().getString(R.string.seed_description_tabmenu_wikipedia));
+                    }
+                }
 
+                @Override
+                public void onLogClick() {
+                    if (fragmentListAction == null) {
+                        fragmentListAction = new ActionsDoneListFragment();
+                        fragmentListAction.setArguments(bundle);
+                        fragments.add(fragmentListAction);
+                        addTab(fragmentListAction, getResources().getString(R.string.seed_description_tabmenu_actions));
                     }
                 }
             });

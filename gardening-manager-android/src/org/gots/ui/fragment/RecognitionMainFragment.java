@@ -14,6 +14,7 @@ import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.view.SeedWidgetTile;
+import org.gots.ui.PlantDescriptionActivity;
 import org.gots.ui.TabSeedActivity;
 
 import java.util.List;
@@ -83,8 +84,8 @@ public class RecognitionMainFragment extends BaseGotsFragment {
                 seedWidget.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), TabSeedActivity.class);
-                        intent.putExtra(TabSeedActivity.GOTS_VENDORSEED_ID, plant.getSeedId());
+                        Intent intent = new Intent(getActivity(), PlantDescriptionActivity.class);
+                        intent.putExtra(PlantDescriptionActivity.GOTS_VENDORSEED_ID, plant.getSeedId());
                         startActivity(intent);
                     }
                 });

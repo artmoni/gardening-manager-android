@@ -73,66 +73,101 @@
                 android:layout_alignTop="@+id/textView1"
                 android:numColumns="12" />
 
-            <ImageView
-                android:id="@+id/IdSeedLanguage"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:src="@drawable/fr" />
 
-            <RelativeLayout
-                android:id="@+id/idLikeLayout"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/IdSeedLanguage">
+            <!--<RelativeLayout-->
+            <!--android:id="@+id/idLikeLayout"-->
+            <!--android:layout_width="20dp"-->
+            <!--android:layout_height="20dp"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_below="@+id/IdSeedLanguage">-->
 
-                <ImageView
-                    android:id="@+id/ImageSeedLike"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/ic_like" />
+            <!--<ImageView-->
+            <!--android:id="@+id/ImageSeedLike"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="fill_parent"-->
+            <!--android:layout_alignParentLeft="true"-->
+            <!--android:layout_alignParentTop="true"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:src="@drawable/ic_like" />-->
 
-                <TextView
-                    android:id="@+id/textSeedLike"
-                    style="@style/seed_variety_description"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:gravity="center_horizontal"
-                    android:text="0"
-                    android:textColor="@color/green_light"
-                    android:textSize="10sp"
-                    android:textStyle="bold" />
-            </RelativeLayout>
+            <!--<TextView-->
+            <!--android:id="@+id/textSeedLike"-->
+            <!--style="@style/seed_variety_description"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:gravity="center_horizontal"-->
+            <!--android:text="0"-->
+            <!--android:textColor="@color/green_light"-->
+            <!--android:textSize="10sp"-->
+            <!--android:textStyle="bold" />-->
+            <!--</RelativeLayout>-->
 
             <TextView
                 android:id="@+id/idSeedStock"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/idLikeLayout"
+                android:layout_alignLeft="@+id/IdSeedHarvestPlanning"
+                android:layout_alignStart="@+id/IdSeedHarvestPlanning"
+                android:layout_alignTop="@+id/textView5"
                 android:gravity="center_horizontal"
+
                 android:orientation="horizontal"
-                android:text="0" />
+                android:text="0"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView1"
+                android:layout_marginLeft="5dp"
+
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@+id/idSeedStock"
+                android:layout_toRightOf="@+id/idSeedStock"
+                android:text="@string/seed.action.stock.description"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/textSeedLike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/idSeedStock"
+                android:layout_alignStart="@+id/idSeedStock"
+                android:layout_below="@+id/textView5"
+                android:gravity="center_horizontal"
+                android:text="0"
+                android:textSize="10sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/idSeedStock"
-                android:layout_alignBottom="@+id/idSeedStock"
-                android:layout_marginRight="5dp"
-                android:layout_toLeftOf="@+id/idSeedStock"
-                android:text="Stock:" />
+                android:layout_below="@+id/textView5"
+                android:layout_marginLeft="5dp"
+                android:layout_toEndOf="@+id/textSeedLike"
+                android:layout_toRightOf="@+id/textSeedLike"
+                android:gravity="center_horizontal"
+                android:text="@string/seed.action.like.description"
+                android:textSize="10sp" />
 
         </RelativeLayout>
     </RelativeLayout>
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/buttonActions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/buttonLike"
+        app:fab_size="mini"
+        app:fab_title="test"
+        fab:fab_colorNormal="@color/action_ok_color"
+        fab:fab_colorPressed="@color/action_warning_color"
+        fab:fab_icon="@drawable/ic_menu_todo" />
 
     <LinearLayout
         android:id="@+id/layoutSeedName"
@@ -171,10 +206,10 @@
         android:id="@+id/imageStateValidation"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@drawable/ic_ribbon"
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/buttonInformation"
-        android:layout_toStartOf="@+id/buttonInformation" />
+        android:layout_toStartOf="@+id/buttonInformation"
+        android:src="@drawable/ic_ribbon" />
 
     <com.getbase.floatingactionbutton.FloatingActionButton
         android:id="@+id/buttonInformation"
@@ -187,4 +222,25 @@
         fab:fab_colorNormal="@color/action_warning_color"
         fab:fab_colorPressed="@color/action_error_color"
         fab:fab_icon="@drawable/ic_information" />
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/buttonLike"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/buttonInformation"
+        app:fab_size="mini"
+        fab:fab_colorNormal="@color/white"
+        fab:fab_colorPressed="@color/action_warning_color"
+        fab:fab_icon="@drawable/ic_like" />
+
+    <ImageView
+        android:id="@+id/IdSeedLanguage"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignLeft="@+id/layoutSeedName"
+        android:layout_alignStart="@+id/layoutSeedName"
+        android:layout_below="@+id/layoutSeedName"
+        android:src="@drawable/fr" />
 </RelativeLayout>

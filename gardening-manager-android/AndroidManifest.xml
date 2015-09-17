@@ -58,14 +58,23 @@
         <activity android:name=".ui.AboutActivity" android:theme="@style/Theme.Styled"/>
         <activity android:name=".ui.WebHelpActivity" android:theme="@style/Theme.Styled"/>
         <activity android:name=".ui.TabSeedActivity" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow">
-         <intent-filter>
+         <!--<intent-filter>-->
+                <!--<data android:host="my.gardening-manager.com" android:scheme="http"/>-->
+
+                <!--<action android:name="android.intent.action.VIEW"/>-->
+                <!--<category android:name="android.intent.category.DEFAULT"/>-->
+                <!--<category android:name="android.intent.category.BROWSABLE"/>-->
+            <!--</intent-filter>-->
+            </activity>
+        <activity android:name=".ui.PlantDescriptionActivity" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow">
+            <intent-filter>
                 <data android:host="my.gardening-manager.com" android:scheme="http"/>
 
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
             </intent-filter>
-            </activity>
+        </activity>
         <activity android:name=".ui.RecognitionActivity"/>
         <activity android:name=".ui.HutActivity" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow" android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity android:name=".ui.NewSeedActivity" android:theme="@style/Theme.Styled" android:windowSoftInputMode="stateHidden|adjustResize"/>
@@ -140,9 +149,9 @@
         </service>
 
         <!-- RELEASE KEY -->
-   <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyAtaIJvzohVEECxELeBtNaS2T86diBVX9U"/>
+   <!--<meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyAtaIJvzohVEECxELeBtNaS2T86diBVX9U"/>-->
         <!-- DEBUG KEY -->
-         <!--<meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyDFN2ftNk8NqYwMCyjUV5ryM4zUdmqcWXI"/>-->
+         <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyDFN2ftNk8NqYwMCyjUV5ryM4zUdmqcWXI"/>
 
     </application>
 

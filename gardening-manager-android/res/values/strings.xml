@@ -228,6 +228,8 @@
     <string name="allotment.name">My allotment</string>
     <string name="plant_recognition_begin">Uploading picture to recognition service</string>
     <string name="plant.recognition.confirm">Confirm</string>
+    <string name="seed.action.like.description">people like this</string>
+    <string name="seed.action.stock.description">in stock</string>
 
 
     <!-- Nav Drawer Menu Items -->

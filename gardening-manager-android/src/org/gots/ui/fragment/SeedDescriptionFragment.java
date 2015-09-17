@@ -56,6 +56,8 @@ public class SeedDescriptionFragment extends BaseGotsFragment {
 
     public interface OnDescriptionFragmentClicked {
         public void onInformationClick(String url);
+
+        public void onLogClick();
     }
 
     public void setOnDescriptionFragmentClicked(OnDescriptionFragmentClicked descriptionFragmentClicked) {
@@ -93,6 +95,11 @@ public class SeedDescriptionFragment extends BaseGotsFragment {
             @Override
             public void onInformationClick(String url) {
                 mCallback.onInformationClick(url);
+            }
+
+            @Override
+            public void onLogClick() {
+                mCallback.onLogClick();
             }
         });
         return v;

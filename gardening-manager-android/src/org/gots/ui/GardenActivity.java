@@ -164,9 +164,8 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
     }
 
     protected void displaySeedActivity(GrowingSeed growingSeedInterface) {
-        final Intent i = new Intent(this, TabSeedActivity.class);
-        i.putExtra("org.gots.seed.id", growingSeedInterface.getGrowingSeedId());
-        i.putExtra("org.gots.seed.url", growingSeedInterface.getUrlDescription());
+        final Intent i = new Intent(this, PlantDescriptionActivity.class);
+        i.putExtra(PlantDescriptionActivity.GOTS_GROWINGSEED_ID, growingSeedInterface.getGrowingSeedId());
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
     }

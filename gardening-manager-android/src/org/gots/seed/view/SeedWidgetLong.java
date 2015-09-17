@@ -53,7 +53,8 @@ public class SeedWidgetLong extends RelativeLayout {
 
     private TextView likeCount;
 
-    private View like;
+    private FloatingActionButton floatingActionLike;
+    private FloatingActionButton floatingActionActions;
     private OnSeedWidgetLongClickListener mCallback;
 
     public SeedWidgetLong(Context context) {
@@ -85,6 +86,8 @@ public class SeedWidgetLong extends RelativeLayout {
 
     public interface OnSeedWidgetLongClickListener {
         public void onInformationClick(String url);
+
+        public void onLogClick();
     }
 
     public void setOnSeedWidgetLongClickListener(OnSeedWidgetLongClickListener seedWidgetLongClickListener) {
@@ -168,14 +171,25 @@ public class SeedWidgetLong extends RelativeLayout {
             flag.setImageResource(flagRessource);
         }
 
+        floatingActionActions = (FloatingActionButton) findViewById(R.id.buttonActions);
+        floatingActionActions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mCallback != null)
+                    mCallback.onLogClick();
+            }
+        });
+        if (mSeed instanceof BaseSeedInterface)
+            floatingActionActions.setVisibility(View.GONE);
+
         likeCount = (TextView) findViewById(R.id.textSeedLike);
-        like = (View) findViewById(R.id.idLikeLayout);
+        floatingActionLike = (FloatingActionButton) findViewById(R.id.buttonLike);
 
         displayLikeStatus(mSeed.getLikeStatus());
         if (mSeed.getUUID() == null)
-            like.setVisibility(View.GONE);
+            this.floatingActionLike.setVisibility(View.GONE);
 
-        like.setOnClickListener(new View.OnClickListener() {
+        floatingActionLike.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -238,20 +252,22 @@ public class SeedWidgetLong extends RelativeLayout {
     }
 
     protected void displayLikeStatus(LikeStatus likeStatus) {
-        ImageView likeImage = (ImageView) findViewById(R.id.ImageSeedLike);
+//        ImageView likeImage = (ImageView) findViewById(R.id.ImageSeedLike);
         likeCount.setTextColor(getResources().getColor(R.color.text_color_dark));
         if (likeStatus != null && likeStatus.getLikesCount() > 0) {
             likeCount.setText(String.valueOf(likeStatus.getLikesCount()));
-        } else
-            likeCount.setText(String.valueOf(""));
+        }
 
 
         if (likeStatus != null && likeStatus.getUserLikeStatus() > 0) {
-            likeImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_like));
+            floatingActionLike.setIconDrawable(getResources().getDrawable(R.drawable.ic_like));
+//            likeImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_like));
             likeCount.setTextColor(getResources().getColor(R.color.text_color_light));
 
         } else {
-            likeImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_like_unknown));
+            floatingActionLike.setIconDrawable(getResources().getDrawable(R.drawable.ic_like_unknown));
+
+//            likeImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_like_unknown));
         }
     }
 
