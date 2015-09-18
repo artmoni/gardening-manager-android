@@ -6,7 +6,7 @@ import org.gots.authentication.GotsSyncAdapter;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.exception.GardenNotFoundException;
 import org.gots.garden.GardenInterface;
-import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.BaseSeed;
 import org.gots.seed.service.SeedNotification;
 
 import android.accounts.Account;
@@ -45,7 +45,7 @@ public class SeedSyncAdapter extends GotsSyncAdapter {
             Log.e(TAG, e.getMessage());
         }
 
-        List<BaseSeedInterface> newSeeds = seedManager.getNewSeeds();
+        List<BaseSeed> newSeeds = seedManager.getNewSeeds();
         if (newSeeds != null && newSeeds.size() > 0) {
             SeedNotification notification = new SeedNotification(getContext());
             notification.createNotification(newSeeds);

@@ -12,7 +12,7 @@ package org.gots.seed;
 
 import java.util.Date;
 
-public class GrowingSeedImpl extends BaseSeed implements GrowingSeed {
+public class GrowingSeedImpl extends BaseSeedImpl implements GrowingSeed {
     private int growingSeedId;
 
     private static final long serialVersionUID = 1L;

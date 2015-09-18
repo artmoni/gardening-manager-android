@@ -4,26 +4,27 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ * <p>
  * Contributors:
- *     sfleury - initial API and implementation
+ * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.seed.provider.local;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
 
 import org.gots.DatabaseHelper;
 import org.gots.bean.BaseAllotmentInterface;
+import org.gots.seed.BaseSeed;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedImpl;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.utils.GotsDBHelper;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowingSeedProvider {
 
@@ -96,21 +97,20 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
     }
 
     private GrowingSeed cursorToSeed(Cursor cursor) {
-        GrowingSeed bsi = null;
+        GrowingSeed bsi = new GrowingSeedImpl();
         GotsSeedProvider localSeedProvider = new LocalSeedProvider(mContext);
-        bsi = (GrowingSeed) localSeedProvider.getSeedById(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_SEED_ID)));
-        if (bsi == null) {
-            bsi = new GrowingSeedImpl();
-            bsi.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_SEED_ID)));
-        }
+        bsi.copy(localSeedProvider.getSeedById(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_SEED_ID))));
         bsi.setUUID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_UUID)));
-        bsi.setGrowingSeedId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_ID)));
-        bsi.setDateSowing(new Date(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_DATESOWING))));
-        bsi.setDateHarvest(new Date(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_DATEHARVEST))));
-        bsi.setDateLastWatering(new Date(
-                cursor.getLong(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_DATELASTWATERING))));
+        if (bsi instanceof GrowingSeed) {
 
-        return bsi;
+            bsi.setGrowingSeedId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_ID)));
+            bsi.setDateSowing(new Date(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_DATESOWING))));
+            bsi.setDateHarvest(new Date(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_DATEHARVEST))));
+            bsi.setDateLastWatering(new Date(
+                    cursor.getLong(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_DATELASTWATERING))));
+        }
+
+        return  bsi;
     }
 
     /*

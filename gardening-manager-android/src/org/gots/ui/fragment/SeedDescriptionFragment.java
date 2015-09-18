@@ -12,28 +12,30 @@ package org.gots.ui.fragment;
 
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.gots.R;
-import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.BaseSeed;
+import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
 
 public class SeedDescriptionFragment extends BaseGotsFragment {
     public static final String GOTS_SEED_ID = "org.gots.seed.id";
+    private static final String GOTS_GROWINGSEED_ID = "org.gots.growingseed.id";
 
     private int seedId;
 
-    // protected BaseSeedInterface mSeed;
+    // protected BaseSeed mSeed;
 
     protected int resultCameraActivity = 1;
 
     private GotsSeedProvider seedManager;
+    private GotsGrowingSeedManager growingSeedManager;
 
     private TextView seedDescriptionEnvironnement;
 
@@ -68,19 +70,23 @@ public class SeedDescriptionFragment extends BaseGotsFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         seedManager = GotsSeedManager.getInstance().initIfNew(getActivity());
+        growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(getActivity());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.seed, container, false);
 
-        Bundle bundle = this.getArguments();
-        seedId = bundle.getInt(GOTS_SEED_ID);
-
-        if (seedId <= 0) {
-            Log.e("SeedActivity", "You must provide a org.gots.seed.id as an Extra Int");
-            return v;
-        }
+//        Bundle bundle = this.getArguments();
+//        if (bundle != null && bundle.getInt(GOTS_SEED_ID) != 0) {
+//            seedId = bundle.getInt(GOTS_SEED_ID);
+//        } else if (bundle != null && bundle.getInt(GOTS_GROWINGSEED_ID) != 0)
+//            seedId = bundle.getInt(GOTS_GROWINGSEED_ID);
+//
+//        if (seedId <= 0) {
+//            Log.e("SeedActivity", "You must provide a org.gots.seed.id as an Extra Int");
+//            return v;
+//        }
 
         seedDescriptionEnvironnement = (TextView) v.findViewById(R.id.IdSeedDescriptionEnvironment);
         seedDescriptionTitle = (TextView) v.findViewById(R.id.IdSeedDescriptionEnvironmentTitle);
@@ -117,12 +123,18 @@ public class SeedDescriptionFragment extends BaseGotsFragment {
 
     @Override
     protected Object retrieveNuxeoData() throws Exception {
-        return seedManager.getSeedById(seedId);
+        Bundle bundle = this.getArguments();
+        BaseSeed baseSeed = null;
+        if (bundle != null && bundle.getInt(GOTS_SEED_ID) != 0) {
+            baseSeed = seedManager.getSeedById(bundle.getInt(GOTS_SEED_ID));
+        } else if (bundle != null && bundle.getInt(GOTS_GROWINGSEED_ID) != 0)
+            baseSeed = growingSeedManager.getGrowingSeedById(bundle.getInt(GOTS_GROWINGSEED_ID));
+        return baseSeed;
     }
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
-        BaseSeedInterface mSeed = (BaseSeedInterface) data;
+        BaseSeed mSeed = (BaseSeed) data;
 
         seedWidgetLong.setSeed(mSeed);
 

@@ -14,7 +14,7 @@ import org.gots.R;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.exception.GotsException;
 import org.gots.preferences.GotsPreferences;
-import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.BaseSeed;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.LikeStatus;
@@ -41,7 +41,7 @@ public class SeedWidgetTile extends LinearLayout {
 
     // private String TAG = SeedWidgetLong.class.getSimpleName();
 
-    private GrowingSeed mSeed;
+    private BaseSeed mSeed;
 
     private TextView likeCount;
 
@@ -241,8 +241,8 @@ public class SeedWidgetTile extends LinearLayout {
     // actionBuilder.show();
     // }
 
-    public void setSeed(BaseSeedInterface seed) {
-        this.mSeed = (GrowingSeed) seed;
+    public void setSeed(BaseSeed seed) {
+        this.mSeed = seed;
         setupView();
         // invalidate();
         // requestLayout();

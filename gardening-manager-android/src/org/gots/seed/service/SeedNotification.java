@@ -3,7 +3,7 @@ package org.gots.seed.service;
 import java.util.List;
 
 import org.gots.R;
-import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.BaseSeed;
 import org.gots.seed.SeedUtil;
 import org.gots.ui.ActionActivity;
 import org.gots.ui.MainActivity;
@@ -28,7 +28,7 @@ public class SeedNotification {
 //        notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
-    public final void createNotification(List<BaseSeedInterface> newSeeds) {
+    public final void createNotification(List<BaseSeed> newSeeds) {
         String content = "";
         CharSequence specieName = SeedUtil.translateSpecie(mContext, newSeeds.get(0));
         String title = mContext.getText(R.string.notification_seed_title).toString();

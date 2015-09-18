@@ -43,7 +43,7 @@ public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGro
 
     private GotsGrowingSeedManager() {
         // mLocalProvider = new LocalSeedProvider(mContext);
-        // allSeeds = new ArrayList<BaseSeedInterface>();
+        // allSeeds = new ArrayList<BaseSeed>();
     }
 
     protected GotsContext getGotsContext() {

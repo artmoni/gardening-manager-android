@@ -4,7 +4,7 @@ import org.gots.exception.GotsException;
 import org.gots.exception.NotImplementedException;
 import org.gots.garden.GardenInterface;
 import org.gots.nuxeo.NuxeoUtils;
-import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.BaseSeed;
 import org.gots.seed.LikeStatus;
 import org.gots.seed.SpeciesDocument;
 
@@ -13,38 +13,38 @@ import java.util.List;
 
 public interface GotsSeedProvider {
 
-    public List<BaseSeedInterface> getVendorSeeds(boolean force, int page, int pageSize);
+    public List<BaseSeed> getVendorSeeds(boolean force, int page, int pageSize);
 
-    public BaseSeedInterface getSeedById(int seedId);
+    public BaseSeed getSeedById(int seedId);
 
-    public BaseSeedInterface createSeed(BaseSeedInterface newSeed, File imageFile);
+    public BaseSeed createSeed(BaseSeed newSeed, File imageFile);
 
-    public BaseSeedInterface updateSeed(BaseSeedInterface currentSeed);
+    public BaseSeed updateSeed(BaseSeed currentSeed);
 
-    public void deleteSeed(BaseSeedInterface currentSeed);
+    public void deleteSeed(BaseSeed currentSeed);
 
-    public BaseSeedInterface addToStock(BaseSeedInterface vendorSeed, GardenInterface garden);
+    public BaseSeed addToStock(BaseSeed vendorSeed, GardenInterface garden);
 
-    public BaseSeedInterface removeToStock(BaseSeedInterface vendorSeed, GardenInterface garden);
+    public BaseSeed removeToStock(BaseSeed vendorSeed, GardenInterface garden);
 
-    public List<BaseSeedInterface> getMyStock(GardenInterface garden, boolean force);
+    public List<BaseSeed> getMyStock(GardenInterface garden, boolean force);
 
-    public abstract List<BaseSeedInterface> getNewSeeds();
+    public abstract List<BaseSeed> getNewSeeds();
 
     public void getAllFamilies();
 
     public void getFamilyById(int id);
 
 
-    public abstract BaseSeedInterface getSeedByBarCode(String barecode);
+    public abstract BaseSeed getSeedByBarCode(String barecode);
 
-    public List<BaseSeedInterface> getVendorSeedsByName(String currentFilter, boolean force);
+    public List<BaseSeed> getVendorSeedsByName(String currentFilter, boolean force);
 
-    public abstract LikeStatus like(BaseSeedInterface mSeed, boolean cancelLike) throws GotsException;
+    public abstract LikeStatus like(BaseSeed mSeed, boolean cancelLike) throws GotsException;
 
-    public abstract List<BaseSeedInterface> getMyFavorites();
+    public abstract List<BaseSeed> getMyFavorites();
 
-    public abstract List<BaseSeedInterface> getSeedBySowingMonth(int month);
+    public abstract List<BaseSeed> getSeedBySowingMonth(int month);
 
     public abstract String[] getArraySpecies(boolean force);
 
@@ -52,9 +52,9 @@ public interface GotsSeedProvider {
 
     public abstract SpeciesDocument getSpecies(boolean force) throws NotImplementedException;
 
-    public abstract BaseSeedInterface getSeedByUUID(String uuid);
+    public abstract BaseSeed getSeedByUUID(String uuid);
 
-    List<BaseSeedInterface> getRecognitionSeeds(boolean force);
+    List<BaseSeed> getRecognitionSeeds(boolean force);
 
     public void createRecognitionSeed(File file, NuxeoUtils.OnBlobUpload callback);
 }

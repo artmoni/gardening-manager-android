@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.gots.authentication.provider.parrot.ParrotAuthentication;
-import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.BaseSeed;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,9 +56,9 @@ public class ParrotSeedProvider extends LocalSeedProvider {
     }
 
     @Override
-    public List<BaseSeedInterface> getVendorSeedsByName(String currentFilter, boolean force) {
+    public List<BaseSeed> getVendorSeedsByName(String currentFilter, boolean force) {
         getToken();
-        List<BaseSeedInterface> parrotPlants = new ArrayList<BaseSeedInterface>();
+        List<BaseSeed> parrotPlants = new ArrayList<BaseSeed>();
         List<String> plantsId = getVendorSeeds(currentFilter);
         try {
 
@@ -73,7 +73,7 @@ public class ParrotSeedProvider extends LocalSeedProvider {
             for (int i = 0; i < plants.length(); i++) {
                 JSONObject plant = plants.getJSONObject(i);
                 ParrotSeedConverter converter = new ParrotSeedConverter(mContext);
-                BaseSeedInterface seed = converter.convert(plant);
+                BaseSeed seed = converter.convert(plant);
                 parrotPlants.add(seed);
             }
 
@@ -87,9 +87,9 @@ public class ParrotSeedProvider extends LocalSeedProvider {
     }
 
     @Override
-    public List<BaseSeedInterface> getVendorSeeds(boolean force, int page, int pageSize) {
+    public List<BaseSeed> getVendorSeeds(boolean force, int page, int pageSize) {
         getToken();
-        List<BaseSeedInterface> parrotPlants = new ArrayList<BaseSeedInterface>();
+        List<BaseSeed> parrotPlants = new ArrayList<BaseSeed>();
 //        if ("".equals(filterCriteria)) {
 //            final String ALLOWED_CHARACTERS = "qwertyuiopasdfghjklzxcvbnm";
 //            final Random random = new Random();
@@ -110,7 +110,7 @@ public class ParrotSeedProvider extends LocalSeedProvider {
                 JSONObject json_plant = (JSONObject) authentication.getJSON(api_5_01_plants, null);
                 JSONObject plant = json_plant.getJSONObject("response");
                 ParrotSeedConverter converter = new ParrotSeedConverter(mContext);
-                BaseSeedInterface seed = converter.convert(plant);
+                BaseSeed seed = converter.convert(plant);
                 parrotPlants.add(seed);
             }
             // for (int i = 0; i < plants.length(); i++) {
@@ -120,7 +120,7 @@ public class ParrotSeedProvider extends LocalSeedProvider {
             // JSONArray plants = json_plants.getJSONArray("plants");
             // JSONObject plant = plants.getJSONObject(i);
             // ParrotSeedConverter converter = new ParrotSeedConverter(mContext);
-            // BaseSeedInterface seed = converter.convert(plant);
+            // BaseSeed seed = converter.convert(plant);
             // parrotPlants.add(seed);
             // }
 
@@ -133,19 +133,19 @@ public class ParrotSeedProvider extends LocalSeedProvider {
         return synchronize(super.getVendorSeeds(false, page, pageSize), parrotPlants);
     }
 
-    protected List<BaseSeedInterface> synchronize(List<BaseSeedInterface> localVendorSeeds,
-            List<BaseSeedInterface> remoteVendorSeeds) {
+    protected List<BaseSeed> synchronize(List<BaseSeed> localVendorSeeds,
+            List<BaseSeed> remoteVendorSeeds) {
         getToken();
 
-        List<BaseSeedInterface> myVendorSeeds = new ArrayList<BaseSeedInterface>();
+        List<BaseSeed> myVendorSeeds = new ArrayList<BaseSeed>();
 
-        for (BaseSeedInterface remoteSeed : remoteVendorSeeds) {
+        for (BaseSeed remoteSeed : remoteVendorSeeds) {
             boolean found = false;
-            for (BaseSeedInterface localSeed : localVendorSeeds) {
+            for (BaseSeed localSeed : localVendorSeeds) {
                 if (remoteSeed.getUUID() != null && remoteSeed.getUUID().equals(localSeed.getUUID())) {
                     found = true;
 //                     myVendorSeeds.add(localSeed);
-                    remoteSeed.setId(localSeed.getSeedId());
+                    remoteSeed.setSeedId(localSeed.getSeedId());
                     break;
                 }
             }
@@ -160,13 +160,13 @@ public class ParrotSeedProvider extends LocalSeedProvider {
 //            myVendorSeeds.add(remoteSeed);
         }
 
-        // for (BaseSeedInterface localSeed : localVendorSeeds) {
+        // for (BaseSeed localSeed : localVendorSeeds) {
         //
         // if (localSeed.getUUID() == null) {
         // myVendorSeeds.add(localSeed);
         // } else {
         // boolean found = false;
-        // for (BaseSeedInterface remoteSeed : remoteVendorSeeds) {
+        // for (BaseSeed remoteSeed : remoteVendorSeeds) {
         // if (remoteSeed.getUUID() != null && remoteSeed.getUUID().equals(localSeed.getUUID())) {
         // found = true;
         // break;

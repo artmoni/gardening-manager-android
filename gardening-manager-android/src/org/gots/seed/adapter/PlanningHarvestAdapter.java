@@ -10,16 +10,16 @@
  ******************************************************************************/
 package org.gots.seed.adapter;
 
-import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.BaseSeed;
 import org.gots.seed.view.MonthWidget;
 
 import android.view.View;
 import android.view.ViewGroup;
 
 public class PlanningHarvestAdapter extends PlanningAdapter {
-    BaseSeedInterface mSeed;
+    BaseSeed mSeed;
 
-    public PlanningHarvestAdapter(BaseSeedInterface seed) {
+    public PlanningHarvestAdapter(BaseSeed seed) {
         mSeed = seed;
     }
 

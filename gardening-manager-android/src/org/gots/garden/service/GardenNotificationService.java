@@ -101,7 +101,7 @@ public class GardenNotificationService extends GotsService {
 
     }
 
-//    private final void createNotification(BaseActionInterface action, BaseSeedInterface seed) {
+//    private final void createNotification(BaseActionInterface action, BaseSeed seed) {
 //        // In this sample, we'll use the same text for the ticker and the
 //        // expanded notification
 //        String content = "";

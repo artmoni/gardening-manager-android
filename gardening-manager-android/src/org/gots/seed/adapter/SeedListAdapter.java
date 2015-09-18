@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.gots.R;
 import org.gots.action.adapter.comparator.ISeedSpecieComparator;
-import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.BaseSeed;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.view.SeedWidgetTile;
 
@@ -23,17 +23,17 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
 
     HolderFilter holderFilter;
 
-    protected List<BaseSeedInterface> vendorSeeds;
+    protected List<BaseSeed> vendorSeeds;
 
-    protected List<BaseSeedInterface> vendorSeedsFilter;
+    protected List<BaseSeed> vendorSeedsFilter;
 
     protected Context mContext;
 
     protected LayoutInflater inflater;
 
-    public SeedListAdapter(Context context, List<BaseSeedInterface> vendorSeeds) {
+    public SeedListAdapter(Context context, List<BaseSeed> vendorSeeds) {
         this.vendorSeeds = vendorSeeds;
-        vendorSeedsFilter = new ArrayList<BaseSeedInterface>();
+        vendorSeedsFilter = new ArrayList<BaseSeed>();
         vendorSeedsFilter.addAll(vendorSeeds);
         mContext = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -81,7 +81,7 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
     }
 
     @Override
-    public BaseSeedInterface getItem(int position) {
+    public BaseSeed getItem(int position) {
 
         return vendorSeedsFilter.get(position);
     }
@@ -92,9 +92,9 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
         return vendorSeedsFilter.get(position).getSeedId();
     }
 
-    public void setSeeds(List<BaseSeedInterface> vendorSeeds) {
+    public void setSeeds(List<BaseSeed> vendorSeeds) {
         this.vendorSeeds = vendorSeeds;
-        vendorSeedsFilter = new ArrayList<BaseSeedInterface>();
+        vendorSeedsFilter = new ArrayList<BaseSeed>();
         vendorSeedsFilter.addAll(vendorSeeds);
     }
 
@@ -108,12 +108,12 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults results = new FilterResults();
-            List<BaseSeedInterface> nHolderList = new ArrayList<BaseSeedInterface>();
+            List<BaseSeed> nHolderList = new ArrayList<BaseSeed>();
             if (constraint == null || constraint.length() == 0) {
                 results.values = vendorSeeds;
                 results.count = vendorSeeds.size();
             } else if ("LIKE".equals(constraint)) {
-                for (BaseSeedInterface seed : vendorSeeds) {
+                for (BaseSeed seed : vendorSeeds) {
                     if (seed.getLikeStatus() != null && seed.getLikeStatus().getUserLikeStatus() > 0)
                         nHolderList.add(seed);
                 }
@@ -121,7 +121,7 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
                 results.count = nHolderList.size();
 
             } else if ("THISMONTH".equals(constraint)) {
-                for (BaseSeedInterface seed : vendorSeeds) {
+                for (BaseSeed seed : vendorSeeds) {
                     int month = Calendar.getInstance().get(Calendar.MONTH);
                     if (seed.getDateSowingMin() >= month && seed.getDateSowingMax() <= month)
                         nHolderList.add(seed);
@@ -130,7 +130,7 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
                 results.count = nHolderList.size();
 
             } else {
-                for (BaseSeedInterface seed : vendorSeeds) {
+                for (BaseSeed seed : vendorSeeds) {
                     if (SeedUtil.translateSpecie(mContext, seed).toUpperCase().startsWith(
                             constraint.toString().toUpperCase())
                             || seed.getVariety().toUpperCase().startsWith(constraint.toString().toUpperCase())
@@ -149,7 +149,7 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
             if (results.count == 0)
                 notifyDataSetInvalidated();
             else {
-                vendorSeedsFilter = (ArrayList<BaseSeedInterface>) results.values;
+                vendorSeedsFilter = (ArrayList<BaseSeed>) results.values;
                 notifyDataSetChanged();
             }
         }

@@ -14,15 +14,15 @@ package org.gots.seed;
 public class SeedFactory {
 	// private static SeedFactory instance = null;
 
-	public static BaseSeedInterface createSeed(String family) {
-		BaseSeedInterface productedSeed = new GrowingSeedImpl();
+	public static BaseSeed createSeed(String family) {
+		BaseSeed productedSeed = new GrowingSeedImpl();
 		family = family.toLowerCase();
 		if ("cucurbitacae".equals(family))
-			productedSeed = new CucurbitacaeSeed();
+			productedSeed = new CucurbitacaeSeedImpl();
 		else if ("basellacee".equals(family))
-			productedSeed = new BasellaceeSeed();
+			productedSeed = new BasellaceeSeedImpl();
 		else if ("brassicacee".equals(family))
-			productedSeed = new BrassicaceeSeed();
+			productedSeed = new BrassicaceeSeedImpl();
 		return productedSeed;
 	}
 

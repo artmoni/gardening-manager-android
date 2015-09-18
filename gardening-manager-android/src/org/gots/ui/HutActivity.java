@@ -21,7 +21,7 @@ import org.gots.action.bean.SowingAction;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.provider.SeedsContentProvider;
-import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.BaseSeed;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.SeedUtil;
 import org.gots.ui.fragment.AllotmentListFragment.OnAllotmentSelected;
@@ -85,7 +85,7 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
 
     private Fragment listAllotmentfragment;
 
-    private BaseSeedInterface currentSeed;
+    private BaseSeed currentSeed;
 
     private ImageView actionBarSearchView;
 
@@ -220,10 +220,10 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
         if (scanResult != null && scanResult.getContents() != null) {
             Log.i("Scan result", scanResult.toString());
 
-            new AsyncTask<Void, Void, BaseSeedInterface>() {
+            new AsyncTask<Void, Void, BaseSeed>() {
                 @Override
-                protected BaseSeedInterface doInBackground(Void... params) {
-                    BaseSeedInterface scanSeed = seedManager.getSeedByBarCode(scanResult.getContents());
+                protected BaseSeed doInBackground(Void... params) {
+                    BaseSeed scanSeed = seedManager.getSeedByBarCode(scanResult.getContents());
                     if (scanSeed != null) {
                         seedManager.addToStock(scanSeed, getCurrentGarden());
                     }
@@ -231,7 +231,7 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
                     return scanSeed;
                 }
 
-                protected void onPostExecute(BaseSeedInterface scanSeed) {
+                protected void onPostExecute(BaseSeed scanSeed) {
                     if (scanSeed != null) {
                         currentFilter = scanSeed.getBareCode();
                         Toast.makeText(getApplicationContext(), scanSeed.getSpecie() + " Added to stock",
@@ -321,14 +321,14 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
 
     @SuppressWarnings("deprecation")
     protected void performSearch(final EditText filter) {
-        // new AsyncTask<Void, Void, List<BaseSeedInterface>>() {
+        // new AsyncTask<Void, Void, List<BaseSeed>>() {
         // @Override
-        // protected List<BaseSeedInterface> doInBackground(Void... params) {
+        // protected List<BaseSeed> doInBackground(Void... params) {
         // NuxeoSeedProvider nuxeoSeedProvider = new NuxeoSeedProvider(getApplicationContext());
         // return nuxeoSeedProvider.getVendorSeedsByName(filter.getText().toString(), true);
         // }
         //
-        // protected void onPostExecute(List<BaseSeedInterface> result) {
+        // protected void onPostExecute(List<BaseSeed> result) {
         //
         // };
         // }.execute();
@@ -365,7 +365,7 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
     }
 
     @Override
-    public void onPlantCatalogueClick(BaseSeedInterface seed) {
+    public void onPlantCatalogueClick(BaseSeed seed) {
         Intent i = new Intent(getApplicationContext(), PlantDescriptionActivity.class);
         i.putExtra(PlantDescriptionActivity.GOTS_VENDORSEED_ID, seed.getSeedId());
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -373,7 +373,7 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
     }
 
     @Override
-    public void onPlantCatalogueLongClick(CatalogueFragment fragment, BaseSeedInterface seed) {
+    public void onPlantCatalogueLongClick(CatalogueFragment fragment, BaseSeed seed) {
         startSupportActionMode(new MyCallBack(seed));
     }
 
@@ -424,9 +424,9 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
 
     private final class MyCallBack implements ActionMode.Callback {
 
-        private BaseSeedInterface currentSeed;
+        private BaseSeed currentSeed;
 
-        private MyCallBack(BaseSeedInterface seedInterface) {
+        private MyCallBack(BaseSeed seedInterface) {
             currentSeed = seedInterface;
         }
 

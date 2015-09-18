@@ -13,7 +13,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.gots.authentication.provider.google.User;
 import org.gots.bean.RouteNode;
-import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.BaseSeed;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.nuxeo.android.repository.DocumentManager;
@@ -44,7 +44,7 @@ public class NuxeoWorkflowProvider {
         return NuxeoManager.getInstance().getNuxeoClient();
     }
 
-    public Documents getDocumentsRoute(BaseSeedInterface seed) {
+    public Documents getDocumentsRoute(BaseSeed seed) {
         Documents documentsRoute = null;
         try {
             Session session = getNuxeoClient().getSession();

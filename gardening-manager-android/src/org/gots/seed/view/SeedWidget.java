@@ -16,7 +16,7 @@ import java.util.Calendar;
 
 import org.gots.R;
 import org.gots.context.GotsContext;
-import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.BaseSeed;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.SeedUtil;
 import org.gots.utils.GotsProgressBar;
@@ -33,7 +33,7 @@ import android.widget.TextView;
 public class SeedWidget extends RelativeLayout {
     Context mContext;
 
-    private GrowingSeed mSeed;
+    private BaseSeed mSeed;
     private ImageView seedView;
     private GotsProgressBar progressBar;
     private TextView textProgress;
@@ -67,8 +67,8 @@ public class SeedWidget extends RelativeLayout {
 
         progressBar = (GotsProgressBar) findViewById(R.id.idSeedGotsProgressBar);
         textProgress = (TextView) findViewById(R.id.textProgress);
-        if (mSeed.getDateSowing() != null) {
-            long progressTime = Calendar.getInstance().getTimeInMillis() - mSeed.getDateSowing().getTime();
+        if (mSeed instanceof GrowingSeed && ((GrowingSeed)mSeed).getDateSowing() != null) {
+            long progressTime = Calendar.getInstance().getTimeInMillis() - ((GrowingSeed)mSeed).getDateSowing().getTime();
             progressBar.setMax(mSeed.getDurationMin());
             final int progressValue = new Long(progressTime / 86400000).intValue();
             progressBar.setProgress(progressValue);
@@ -124,8 +124,8 @@ public class SeedWidget extends RelativeLayout {
         invalidate();
     }
 
-    public void setSeed(BaseSeedInterface seed) {
-        this.mSeed = (GrowingSeed) seed;
+    public void setSeed(BaseSeed seed) {
+        this.mSeed =  seed;
         setupView();
     }
 

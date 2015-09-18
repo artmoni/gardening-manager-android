@@ -521,7 +521,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
                             protected Void doInBackground(Void... params) {
                                 NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(
                                         getApplicationContext());
-                                // BaseSeedInterface baseSeedInterface = (BaseSeedInterface) arg0.getItemAtPosition(arg2);
+                                // BaseSeed baseSeedInterface = (BaseSeed) arg0.getItemAtPosition(arg2);
                                 Session session = getNuxeoClient().getSession();
                                 DocumentManager service = session.getAdapter(DocumentManager.class);
                                 try {

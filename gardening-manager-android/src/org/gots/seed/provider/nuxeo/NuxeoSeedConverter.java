@@ -2,7 +2,7 @@ package org.gots.seed.provider.nuxeo;
 
 import android.util.Log;
 
-import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.BaseSeed;
 import org.gots.seed.GrowingSeedImpl;
 import org.gots.seed.LikeStatus;
 import org.json.JSONException;
@@ -16,8 +16,8 @@ public class NuxeoSeedConverter {
 
     private static final String TAG = NuxeoSeedConverter.class.getSimpleName();
 
-    public static BaseSeedInterface convert(Document document) throws NumberFormatException {
-        BaseSeedInterface seed = new GrowingSeedImpl();
+    public static BaseSeed convert(Document document) throws NumberFormatException {
+        BaseSeed seed = new GrowingSeedImpl();
         seed.setName(document.getString("vendorseed:name"));
         seed.setVariety(document.getTitle());
         seed.setFamily(document.getString("vendorseed:family"));
@@ -39,7 +39,7 @@ public class NuxeoSeedConverter {
     }
 
     //    SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState = "project" AND vendorseed:description_harvest!="null" AND vendorseed:description_harvest!=""  AND vendorseed:description_growth!="null" AND vendorseed:description_growth!="" AND vendorseed:description_diseases!="null" AND vendorseed:description_diseases!="" AND vendorseed:description_cultivation!="null" AND vendorseed:description_cultivation!=""
-    public static Document convert(String parentPath, BaseSeedInterface seed) {
+    public static Document convert(String parentPath, BaseSeed seed) {
         Document doc = new Document(parentPath, seed.getName(), "VendorSeed");
         doc.set("dc:title", seed.getVariety());
         doc.set("vendorseed:name", seed.getName());

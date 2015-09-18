@@ -17,7 +17,7 @@ import org.gots.R;
 import org.gots.action.bean.SowingAction;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.provider.AllotmentContentProvider;
-import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.BaseSeed;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.view.QuickSeedActionBuilder;
 import org.gots.seed.view.SeedWidget;
@@ -240,13 +240,13 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
     }
 
     @Override
-    public void onPlantCatalogueLongClick(CatalogueFragment fragment, BaseSeedInterface seed) {
+    public void onPlantCatalogueLongClick(CatalogueFragment fragment, BaseSeed seed) {
         Toast.makeText(getApplicationContext(), "This feature is not currently supported in this case",
                 Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onPlantCatalogueClick(final BaseSeedInterface seed) {
+    public void onPlantCatalogueClick(final BaseSeed seed) {
         if (vendorListFragment != null) {
             getSupportFragmentManager().popBackStack();
         }

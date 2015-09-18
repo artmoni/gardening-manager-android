@@ -13,6 +13,7 @@ import org.gots.action.BaseAction;
 import org.gots.action.GotsActionManager;
 import org.gots.action.bean.SowingAction;
 import org.gots.bean.BaseAllotmentInterface;
+import org.gots.seed.BaseSeed;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
 import org.gots.ui.fragment.ActionsDoneListFragment;
@@ -30,7 +31,7 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
 
     public static final String GOTS_GROWINGSEED_ID = "org.gots.seed.id";
 
-    GrowingSeed mSeed = null;
+    BaseSeed mSeed = null;
     private SeedDescriptionFragment fragmentDescription;
 
     @Override
@@ -60,7 +61,7 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
         } else if (getIntent().getExtras() != null && getIntent().getExtras().getInt(GOTS_VENDORSEED_ID) != 0) {
             int seedId = getIntent().getExtras().getInt(GOTS_VENDORSEED_ID);
             // GotsSeedProvider helper = new LocalSeedProvider(getApplicationContext());
-            mSeed = (GrowingSeed) seedManager.getSeedById(seedId);
+            mSeed =  seedManager.getSeedById(seedId);
         } else if (seedUUID != null) {
             // GotsSeedProvider helper = new LocalSeedProvider(getApplicationContext());
             mSeed = (GrowingSeed) seedManager.getSeedByUUID(seedUUID);
@@ -76,8 +77,8 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
         final Bundle bundle = new Bundle();
-        bundle.putInt(GOTS_GROWINGSEED_ID, mSeed.getSeedId());
-        bundle.putInt("org.gots.growingseed.id", mSeed.getGrowingSeedId());
+        bundle.putInt(SeedDescriptionFragment.GOTS_SEED_ID, mSeed.getSeedId());
+//        bundle.putInt("org.gots.growingseed.id", mSeed.getGrowingSeedId());
 
         // ********************** Seed description **********************
         if (fragmentDescription == null) {
@@ -92,10 +93,10 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
 
                 @Override
                 public void onLogClick() {
-                    addContentLayout(new ActionsDoneListFragment(),bundle);
+                    addContentLayout(new ActionsDoneListFragment(), bundle);
                 }
             });
-            addMainLayout(fragmentDescription,bundle);
+            addMainLayout(fragmentDescription, bundle);
         } else
             fragmentDescription.update();
 
@@ -109,7 +110,7 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
     @Override
     protected List<FloatingItem> onCreateFloatingMenu() {
         List<FloatingItem> floatingItems = new ArrayList<>();
-        if (mSeed.getDateSowing() == null) {
+        if (!(mSeed instanceof GrowingSeed)) {
 
             FloatingItem floatingItem = new FloatingItem();
             floatingItem.setTitle(getResources().getString(R.string.action_sow));
@@ -143,7 +144,8 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
                             @Override
                             protected Void doInBackground(Void... params) {
                                 baseActionInterface.setDuration(7);
-                                actionseedProvider.insertAction(mSeed, (ActionOnSeed) baseActionInterface);
+                                if (mSeed instanceof GrowingSeed)
+                                    actionseedProvider.insertAction(((GrowingSeed) mSeed), (ActionOnSeed) baseActionInterface);
                                 return null;
                             }
 
@@ -165,7 +167,8 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
                         new AsyncTask<Void, Void, Void>() {
                             @Override
                             protected Void doInBackground(Void... params) {
-                                actionseedProvider.doAction((ActionOnSeed) baseActionInterface, mSeed);
+                                if (mSeed instanceof GrowingSeed)
+                                    actionseedProvider.doAction((ActionOnSeed) baseActionInterface, ((GrowingSeed) mSeed));
                                 return null;
                             }
 

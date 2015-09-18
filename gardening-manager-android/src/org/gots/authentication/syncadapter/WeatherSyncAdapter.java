@@ -96,7 +96,7 @@ public class WeatherSyncAdapter extends GotsSyncAdapter {
                 // WeatherConditionInterface localCondition = weatherProvider.getCondition(cal.getTime());
                 // if (previmeteoCondition != null && previmeteoCondition.getSummary() != null) {
                 // if (localCondition != null && localCondition.getId() > 0) {
-                // previmeteoCondition.setId(localCondition.getId());
+                // previmeteoCondition.setSeedId(localCondition.getId());
                 // previmeteoCondition = weatherProvider.updateCondition(previmeteoCondition, cal.getTime());
                 // } else {
                 // previmeteoCondition = weatherProvider.insertCondition(previmeteoCondition);

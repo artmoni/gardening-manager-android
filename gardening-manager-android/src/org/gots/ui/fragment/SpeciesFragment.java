@@ -1,16 +1,12 @@
 package org.gots.ui.fragment;
 
-import android.app.Activity;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AutoCompleteTextView;
 
 import org.gots.R;
-import org.gots.seed.BaseSeedInterface;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.adapter.ListSpeciesAdapter;
 import org.gots.ui.ExpandableHeightGridView;

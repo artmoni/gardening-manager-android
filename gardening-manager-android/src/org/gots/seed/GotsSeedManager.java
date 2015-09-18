@@ -36,14 +36,14 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     private boolean initDone = false;
 
-    private List<BaseSeedInterface> newSeeds = new ArrayList<BaseSeedInterface>();
+    private List<BaseSeed> newSeeds = new ArrayList<BaseSeed>();
 
-    // private List<BaseSeedInterface> allSeeds = new ArrayList<BaseSeedInterface>();
-    Map<Integer, BaseSeedInterface> allSeeds;
+    // private List<BaseSeed> allSeeds = new ArrayList<BaseSeed>();
+    Map<Integer, BaseSeed> allSeeds;
 
     private static Exception firstCall;
 
-    // private List<BaseSeedInterface> myStock;
+    // private List<BaseSeed> myStock;
 
     private GotsPreferences gotsPrefs;
 
@@ -53,7 +53,7 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     private GotsSeedManager() {
         // mLocalProvider = new LocalSeedProvider(mContext);
-        // allSeeds = new ArrayList<BaseSeedInterface>();
+        // allSeeds = new ArrayList<BaseSeed>();
         allSeeds = new HashMap<>();
     }
 
@@ -104,9 +104,9 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     }
 
     @Override
-    public List<BaseSeedInterface> getVendorSeeds(boolean force, int page, int pageSize) {
+    public List<BaseSeed> getVendorSeeds(boolean force, int page, int pageSize) {
         if (!force && allSeeds.size() > 10 || mContext == null)
-            return new ArrayList<BaseSeedInterface>(allSeeds.values());
+            return new ArrayList<BaseSeed>(allSeeds.values());
         GotsSeedProvider provider;
         if (force && !nuxeoManager.getNuxeoClient().isOffline()) {
             provider = new NuxeoSeedProvider(mContext);
@@ -114,11 +114,11 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
         } else {
             provider = new LocalSeedProvider(mContext);
         }
-        for (BaseSeedInterface seedInterface : provider.getVendorSeeds(force, page, pageSize)) {
+        for (BaseSeed seedInterface : provider.getVendorSeeds(force, page, pageSize)) {
             allSeeds.put(seedInterface.getSeedId(), seedInterface);
         }
 
-        return new ArrayList<BaseSeedInterface>(allSeeds.values());
+        return new ArrayList<BaseSeed>(allSeeds.values());
     }
 
     @Override
@@ -134,7 +134,7 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     }
 
     @Override
-    public BaseSeedInterface getSeedById(int seedId) {
+    public BaseSeed getSeedById(int seedId) {
         if (allSeeds.get(seedId) != null) {
             return allSeeds.get(seedId);
         }
@@ -142,30 +142,30 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     }
 
     @Override
-    public BaseSeedInterface createSeed(BaseSeedInterface seed, File file) {
-        final BaseSeedInterface createSeed = mSeedProvider.createSeed(seed, file);
+    public BaseSeed createSeed(BaseSeed seed, File file) {
+        final BaseSeed createSeed = mSeedProvider.createSeed(seed, file);
         mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
         allSeeds.put(createSeed.getSeedId(), createSeed);
         return createSeed;
     }
 
     @Override
-    public BaseSeedInterface updateSeed(BaseSeedInterface newSeed) {
-        final BaseSeedInterface updateSeed = mSeedProvider.updateSeed(newSeed);
+    public BaseSeed updateSeed(BaseSeed newSeed) {
+        final BaseSeed updateSeed = mSeedProvider.updateSeed(newSeed);
         mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
         allSeeds.put(updateSeed.getSeedId(), updateSeed);
         return updateSeed;
     }
 
     @Override
-    public void deleteSeed(BaseSeedInterface vendorSeed) {
+    public void deleteSeed(BaseSeed vendorSeed) {
         mSeedProvider.deleteSeed(vendorSeed);
         allSeeds.remove(vendorSeed.getSeedId());
         mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
     }
 
     @Override
-    public BaseSeedInterface addToStock(BaseSeedInterface vendorSeed, final GardenInterface garden) {
+    public BaseSeed addToStock(BaseSeed vendorSeed, final GardenInterface garden) {
         vendorSeed = mSeedProvider.addToStock(vendorSeed, garden);
         mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
         allSeeds.put(vendorSeed.getSeedId(), vendorSeed);
@@ -173,7 +173,7 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     }
 
     @Override
-    public BaseSeedInterface removeToStock(BaseSeedInterface vendorSeed, final GardenInterface garden) {
+    public BaseSeed removeToStock(BaseSeed vendorSeed, final GardenInterface garden) {
         vendorSeed = mSeedProvider.removeToStock(vendorSeed, garden);
         mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
         allSeeds.put(vendorSeed.getSeedId(), vendorSeed);
@@ -181,18 +181,18 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     }
 
     @Override
-    public List<BaseSeedInterface> getMyStock(GardenInterface garden, boolean force) {
-        List<BaseSeedInterface> myStock = new ArrayList<>();
+    public List<BaseSeed> getMyStock(GardenInterface garden, boolean force) {
+        List<BaseSeed> myStock = new ArrayList<>();
         if (!force) {
-            for (BaseSeedInterface seedInterface : allSeeds.values()) {
+            for (BaseSeed seedInterface : allSeeds.values()) {
                 if (seedInterface.getNbSachet() > 0) {
                     myStock.add(seedInterface);
                 }
             }
         } else {
             myStock = mSeedProvider.getMyStock(garden, force);
-            for (BaseSeedInterface baseSeedInterface : myStock) {
-                allSeeds.put(baseSeedInterface.getSeedId(), baseSeedInterface);
+            for (BaseSeed baseSeed : myStock) {
+                allSeeds.put(baseSeed.getSeedId(), baseSeed);
             }
         }
         return myStock;
@@ -210,21 +210,21 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     }
 
     @Override
-    public List<BaseSeedInterface> getNewSeeds() {
+    public List<BaseSeed> getNewSeeds() {
         return newSeeds;
     }
 
     @Override
-    public synchronized BaseSeedInterface getSeedByBarCode(String barecode) {
+    public synchronized BaseSeed getSeedByBarCode(String barecode) {
         return mSeedProvider.getSeedByBarCode(barecode);
     }
 
     @Override
-    public List<BaseSeedInterface> getVendorSeedsByName(String currentFilter, boolean force) {
+    public List<BaseSeed> getVendorSeedsByName(String currentFilter, boolean force) {
         return mSeedProvider.getVendorSeedsByName(currentFilter, force);
     }
 
-    public LikeStatus like(BaseSeedInterface mSeed, boolean cancelLike) throws GotsException {
+    public LikeStatus like(BaseSeed mSeed, boolean cancelLike) throws GotsException {
         final LikeStatus like = mSeedProvider.like(mSeed, cancelLike);
         allSeeds.put(mSeed.getSeedId(), mSeed);
         mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
@@ -232,19 +232,19 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     }
 
     @Override
-    public List<BaseSeedInterface> getMyFavorites() {
+    public List<BaseSeed> getMyFavorites() {
         return mSeedProvider.getMyFavorites();
     }
 
     @Override
-    public List<BaseSeedInterface> getSeedBySowingMonth(int month) {
-        List<BaseSeedInterface> seedBySowingMonth = new ArrayList<>();
-        for (BaseSeedInterface baseSeedInterface : allSeeds.values()) {
-            if (baseSeedInterface.getDateSowingMin() <= month && baseSeedInterface.getDateSowingMax() >= month)
-                seedBySowingMonth.add(baseSeedInterface);
+    public List<BaseSeed> getSeedBySowingMonth(int month) {
+        List<BaseSeed> seedBySowingMonth = new ArrayList<>();
+        for (BaseSeed baseSeed : allSeeds.values()) {
+            if (baseSeed.getDateSowingMin() <= month && baseSeed.getDateSowingMax() >= month)
+                seedBySowingMonth.add(baseSeed);
         }
         if (seedBySowingMonth.size() == 0) {
-            for (BaseSeedInterface seed : mSeedProvider.getSeedBySowingMonth(month)) {
+            for (BaseSeed seed : mSeedProvider.getSeedBySowingMonth(month)) {
                 allSeeds.put(seed.getSeedId(), seed);
                 seedBySowingMonth.add(seed);
             }
@@ -270,9 +270,9 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     }
 
     @Override
-    public BaseSeedInterface getSeedByUUID(String uuid) {
-        BaseSeedInterface searchedSeed = null;
-        for (BaseSeedInterface seed : allSeeds.values()) {
+    public BaseSeed getSeedByUUID(String uuid) {
+        BaseSeed searchedSeed = null;
+        for (BaseSeed seed : allSeeds.values()) {
             if (uuid != null && uuid.equals(seed.getUUID())) {
                 searchedSeed = seed;
                 return seed;
@@ -287,7 +287,7 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     }
 
     @Override
-    public List<BaseSeedInterface> getRecognitionSeeds(boolean force) {
+    public List<BaseSeed> getRecognitionSeeds(boolean force) {
         return mSeedProvider.getRecognitionSeeds(force);
     }
 

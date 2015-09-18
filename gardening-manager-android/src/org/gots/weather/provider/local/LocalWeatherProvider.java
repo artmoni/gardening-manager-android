@@ -55,7 +55,7 @@ public class LocalWeatherProvider extends GotsDBHelper implements WeatherProvide
     //
     // if (cursor.moveToFirst()) {
     // int weatherid = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.WEATHER_ID));
-    // weatherCondition.setId(weatherid);
+    // weatherCondition.setSeedId(weatherid);
     // }
     // return weatherCondition;
     // }

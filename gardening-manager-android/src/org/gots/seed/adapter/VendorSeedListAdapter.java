@@ -14,7 +14,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.BaseSeed;
 
 import android.content.Context;
 import android.view.View;
@@ -23,7 +23,7 @@ import android.view.ViewGroup;
 public class VendorSeedListAdapter extends SeedListAdapter {
 
 
-    public VendorSeedListAdapter(Context context, List<BaseSeedInterface> vendorSeeds) {
+    public VendorSeedListAdapter(Context context, List<BaseSeed> vendorSeeds) {
         super(context, vendorSeeds);
     }
 
@@ -32,7 +32,7 @@ public class VendorSeedListAdapter extends SeedListAdapter {
 
         View vi = super.getView(position, convertView, parent);
 
-        final BaseSeedInterface currentSeed = getItem(position);
+        final BaseSeed currentSeed = getItem(position);
 
         Calendar sowTime = Calendar.getInstance();
         if (sowTime.get(Calendar.MONTH) > currentSeed.getDateSowingMin())

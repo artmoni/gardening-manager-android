@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.gots.action.ActionOnSeed;
 import org.gots.action.adapter.ListAllActionAdapter;
-import org.gots.bean.BaseAllotmentInterface;
-import org.gots.seed.BaseSeedInterface;
 
 import android.os.Bundle;
 

@@ -3,7 +3,7 @@ package org.gots.seed.adapter;
 import java.util.Locale;
 
 import org.gots.R;
-import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.BaseSeed;
 
 import android.content.Context;
 import android.view.View;
@@ -16,9 +16,9 @@ public class ListSpeciesAdapter extends BaseAdapter {
 
     private String[] mSpecies;
 
-    private BaseSeedInterface mSelectedSeed;
+    private BaseSeed mSelectedSeed;
 
-    public ListSpeciesAdapter(Context context, String[] species, BaseSeedInterface newSeed) {
+    public ListSpeciesAdapter(Context context, String[] species, BaseSeed newSeed) {
         mContext = context;
         mSpecies = species;
         mSelectedSeed = newSeed;
@@ -43,7 +43,7 @@ public class ListSpeciesAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // SeedWidget seedWidget = new SeedWidget(mContext);
-        // BaseSeedInterface seed = new GrowingSeed();
+        // BaseSeed seed = new GrowingSeed();
         // seed.setSpecie(getItem(position));
         // seedWidget.setSeed(seed);
         //

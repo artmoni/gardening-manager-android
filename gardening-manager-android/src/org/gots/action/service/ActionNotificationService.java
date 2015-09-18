@@ -10,7 +10,7 @@ import org.gots.action.BaseAction;
 import org.gots.action.GotsActionSeedManager;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.BaseSeed;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.SeedUtil;
@@ -122,7 +122,7 @@ public class ActionNotificationService extends GotsService {
 
     }
 
-    private final void createNotification(BaseAction action, BaseSeedInterface seed) {
+    private final void createNotification(BaseAction action, BaseSeed seed) {
         // In this sample, we'll use the same text for the ticker and the
         // expanded notification
         String content = "";

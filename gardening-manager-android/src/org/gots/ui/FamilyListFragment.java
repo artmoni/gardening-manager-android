@@ -3,7 +3,7 @@ package org.gots.ui;
 import java.util.ArrayList;
 
 import org.gots.exception.NotImplementedException;
-import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.BaseSeed;
 import org.gots.seed.adapter.VendorSeedListAdapter;
 import org.gots.ui.fragment.AbstractListFragment;
 
@@ -16,7 +16,7 @@ public class FamilyListFragment extends AbstractListFragment {
     @Override
     public void onViewCreated(View v, Bundle savedInstanceState) {
         listView = new ListView(getActivity());
-        listView.setAdapter(new VendorSeedListAdapter(getActivity(), new ArrayList<BaseSeedInterface>()));
+        listView.setAdapter(new VendorSeedListAdapter(getActivity(), new ArrayList<BaseSeed>()));
         super.onViewCreated(listView, savedInstanceState);
     }
 

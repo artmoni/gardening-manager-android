@@ -29,7 +29,7 @@ public class AllotmentSyncAdapter extends GotsSyncAdapter {
         //
         // seedManager.getMyStock(gardenManager.getCurrentGarden());
         //
-        // List<BaseSeedInterface> newSeeds = seedManager.getNewSeeds();
+        // List<BaseSeed> newSeeds = seedManager.getNewSeeds();
         // if (newSeeds != null && newSeeds.size() > 0) {
         // SeedNotification notification = new SeedNotification(getContext());
         // notification.createNotification(newSeeds);

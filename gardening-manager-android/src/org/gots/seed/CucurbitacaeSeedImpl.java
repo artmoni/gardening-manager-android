@@ -11,8 +11,11 @@
 package org.gots.seed;
 
 
-public class BrassicaceeSeed extends GrowingSeedImpl {
-
+public class CucurbitacaeSeedImpl extends GrowingSeedImpl {
     private static final long serialVersionUID = 1L;
 
+    public CucurbitacaeSeedImpl() {
+		setFamily("cucurbitacae");
+
+	}
 }

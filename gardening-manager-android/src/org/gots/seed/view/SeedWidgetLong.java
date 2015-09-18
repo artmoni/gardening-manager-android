@@ -33,7 +33,7 @@ import org.gots.R;
 import org.gots.context.GotsContext;
 import org.gots.exception.GotsException;
 import org.gots.preferences.GotsPreferences;
-import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.BaseSeed;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.LikeStatus;
@@ -47,7 +47,7 @@ import java.util.Locale;
 public class SeedWidgetLong extends RelativeLayout {
     private static final String TAG = SeedWidgetLong.class.getSimpleName();
     Context mContext;
-    private GrowingSeed mSeed;
+    private BaseSeed mSeed;
     private TextView likeCount;
     private FloatingActionButton floatingActionLike;
     private FloatingActionButton floatingActionActions;
@@ -175,7 +175,7 @@ public class SeedWidgetLong extends RelativeLayout {
                     mCallback.onLogClick();
             }
         });
-        if (mSeed instanceof BaseSeedInterface)
+        if (mSeed instanceof BaseSeed)
             floatingActionActions.setVisibility(View.GONE);
 
         likeCount = (TextView) findViewById(R.id.textSeedLike);
@@ -265,8 +265,8 @@ public class SeedWidgetLong extends RelativeLayout {
     }
 
 
-    public void setSeed(BaseSeedInterface seed) {
-        this.mSeed = (GrowingSeed) seed;
+    public void setSeed(BaseSeed seed) {
+        this.mSeed =  seed;
         setupView();
     }
 

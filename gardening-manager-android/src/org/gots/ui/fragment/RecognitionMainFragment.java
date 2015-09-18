@@ -10,12 +10,11 @@ import android.widget.TextView;
 
 import org.gots.R;
 import org.gots.inapp.GotsPurchaseItem;
-import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.BaseSeed;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.view.SeedWidgetTile;
 import org.gots.ui.PlantDescriptionActivity;
-import org.gots.ui.TabSeedActivity;
 
 import java.util.List;
 
@@ -58,13 +57,13 @@ public class RecognitionMainFragment extends BaseGotsFragment {
     @Override
     protected Object retrieveNuxeoData() throws Exception {
         GotsSeedProvider seedManager = GotsSeedManager.getInstance();
-        List<BaseSeedInterface> recognitionSeeds = seedManager.getRecognitionSeeds(force);
+        List<BaseSeed> recognitionSeeds = seedManager.getRecognitionSeeds(force);
         return recognitionSeeds;
     }
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
-        List<BaseSeedInterface> myRecognitionPlants = (List<BaseSeedInterface>) data;
+        List<BaseSeed> myRecognitionPlants = (List<BaseSeed>) data;
         if (isAdded()) {
             GotsPurchaseItem gotsPurchaseItem = new GotsPurchaseItem(getActivity());
             currentCounterTextView.setText(String.valueOf(gotsPurchaseItem.getFeatureRecognitionFreeCounter()));
@@ -78,7 +77,7 @@ public class RecognitionMainFragment extends BaseGotsFragment {
                 counterPurchased.setVisibility(View.GONE);
             }
             horizontalScrollViewRecognition.removeAllViews();
-            for (final BaseSeedInterface plant : myRecognitionPlants) {
+            for (final BaseSeed plant : myRecognitionPlants) {
                 SeedWidgetTile seedWidget = new SeedWidgetTile(getActivity());
                 seedWidget.setSeed(plant);
                 seedWidget.setOnClickListener(new View.OnClickListener() {

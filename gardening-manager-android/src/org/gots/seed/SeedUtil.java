@@ -24,8 +24,8 @@ import java.util.ArrayList;
 
 public class SeedUtil {
     @SuppressWarnings("unchecked")
-    public BaseSeedInterface copy(BaseSeedInterface originalSeed) {
-        BaseSeedInterface copy = new GrowingSeedImpl();
+    public BaseSeed copy(BaseSeed originalSeed) {
+        BaseSeed copy = new GrowingSeedImpl();
         copy.setName(originalSeed.getName());
         copy.setDescriptionEnvironment(originalSeed.getDescriptionEnvironment());
         copy.setDescriptionDiseases(originalSeed.getDescriptionDiseases());
@@ -50,7 +50,7 @@ public class SeedUtil {
 
     }
 
-    public static String translateSpecie(Context context, BaseSeedInterface growingSeedInterface) {
+    public static String translateSpecie(Context context, BaseSeed growingSeedInterface) {
         if (growingSeedInterface == null)
             return "";
         String translateSpecie = growingSeedInterface.getSpecie();
@@ -74,7 +74,7 @@ public class SeedUtil {
         return translateAction;
     }
 
-    public static int getSeedDrawable(Context context, BaseSeedInterface seed) {
+    public static int getSeedDrawable(Context context, BaseSeed seed) {
         int vegetableImageRessource = 0;
 
         if (seed.getUUID() != null)
@@ -89,7 +89,7 @@ public class SeedUtil {
         return vegetableImageRessource;
     }
 
-    public static Bitmap getSeedBitmap(File rootPath, BaseSeedInterface mSeed) {
+    public static Bitmap getSeedBitmap(File rootPath, BaseSeed mSeed) {
         File imageFile = null;
         Bitmap image = null;
                 /* Check custom image for this variety */

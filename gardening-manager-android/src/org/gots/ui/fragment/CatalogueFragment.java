@@ -15,7 +15,7 @@ import java.util.List;
 
 import org.gots.R;
 import org.gots.broadcast.BroadCastMessages;
-import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.BaseSeed;
 import org.gots.seed.adapter.SeedListAdapter;
 import org.gots.seed.adapter.VendorSeedListAdapter;
 
@@ -72,9 +72,9 @@ public abstract class CatalogueFragment extends AbstractListFragment implements 
     private OnSeedSelected mCallback;
 
     public interface OnSeedSelected {
-        public abstract void onPlantCatalogueClick(BaseSeedInterface seed);
+        public abstract void onPlantCatalogueClick(BaseSeed seed);
 
-        public abstract void onPlantCatalogueLongClick(CatalogueFragment vendorListFragment, BaseSeedInterface seed);
+        public abstract void onPlantCatalogueLongClick(CatalogueFragment vendorListFragment, BaseSeed seed);
 
     }
 
@@ -93,7 +93,7 @@ public abstract class CatalogueFragment extends AbstractListFragment implements 
         mContext = getActivity();
         // args = getArguments();
 
-        listVendorSeedAdapter = new VendorSeedListAdapter(mContext, new ArrayList<BaseSeedInterface>());
+        listVendorSeedAdapter = new VendorSeedListAdapter(mContext, new ArrayList<BaseSeed>());
         View view = inflater.inflate(R.layout.list_seed_grid, container, false);
         gridViewCatalog = (GridView) view.findViewById(R.id.seedgridview);
         gridViewCatalog.setAdapter(listVendorSeedAdapter);
@@ -140,12 +140,12 @@ public abstract class CatalogueFragment extends AbstractListFragment implements 
         super.onNuxeoDataRetrievalStarted();
     }
 
-    protected abstract List<BaseSeedInterface> onRetrieveNuxeoData(String filterValue, int page, int pageSize,
+    protected abstract List<BaseSeed> onRetrieveNuxeoData(String filterValue, int page, int pageSize,
             boolean force);
 
     @Override
     protected Object retrieveNuxeoData() throws Exception {
-        List<BaseSeedInterface> catalogue = new ArrayList<BaseSeedInterface>();
+        List<BaseSeed> catalogue = new ArrayList<BaseSeed>();
         catalogue = onRetrieveNuxeoData(filterValue, page, pageSize, force);
 
         // if (filter.equals(FILTER_BARCODE)) {
@@ -162,7 +162,7 @@ public abstract class CatalogueFragment extends AbstractListFragment implements 
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
-        List<BaseSeedInterface> vendorSeeds = (List<BaseSeedInterface>) data;
+        List<BaseSeed> vendorSeeds = (List<BaseSeed>) data;
         listVendorSeedAdapter.setSeeds(vendorSeeds);
         listVendorSeedAdapter.notifyDataSetChanged();
         if (getActivity() != null)

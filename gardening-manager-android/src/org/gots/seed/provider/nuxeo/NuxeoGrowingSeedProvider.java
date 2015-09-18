@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.nuxeo.NuxeoManager;
-import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.BaseSeed;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.provider.local.LocalGrowingSeedProvider;
@@ -138,7 +138,7 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
             PropertyMap properties = getProperties(growingSeed);
 
             final GotsSeedManager VendorSeedManager = GotsSeedManager.getInstance().initIfNew(mContext);
-            BaseSeedInterface vendorSeed = VendorSeedManager.getSeedById(growingSeed.getSeedId());
+            BaseSeed vendorSeed = VendorSeedManager.getSeedById(growingSeed.getSeedId());
             if (vendorSeed == null || vendorSeed.getUUID() == null)
                 vendorSeed = VendorSeedManager.createSeed(vendorSeed, null);
 

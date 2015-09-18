@@ -40,7 +40,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import org.gots.R;
-import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.BaseSeed;
 import org.gots.seed.GrowingSeedImpl;
 import org.gots.ui.fragment.PlanningFragment;
 import org.gots.ui.fragment.PlantCreationFragment;
@@ -72,7 +72,7 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
 
     private Gallery gallerySpecies;
 
-    private BaseSeedInterface newSeed;
+    private BaseSeed newSeed;
 
     private TextView textViewBarCode;
 
@@ -186,7 +186,7 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
             outState.putInt(SELECTED_SPECIE, gallerySpecies.getSelectedItemPosition());
     }
 
-    protected BaseSeedInterface createOrUpdateSeed() {
+    protected BaseSeed createOrUpdateSeed() {
         if (isNewSeed) {
             if (picturePath != null) {
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -264,21 +264,21 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
             if (step == breadcrum.size() + 1) {
 //                Toast.makeText(getApplicationContext(), "the seed is " + newSeed, Toast.LENGTH_LONG).show();
                 if (validateSeed()) {
-                    new AsyncTask<Void, Void, BaseSeedInterface>() {
+                    new AsyncTask<Void, Void, BaseSeed>() {
                         @Override
-                        protected BaseSeedInterface doInBackground(Void... voids) {
+                        protected BaseSeed doInBackground(Void... voids) {
                             return createOrUpdateSeed();
                         }
 
                         @Override
-                        protected void onPostExecute(BaseSeedInterface baseSeedInterface) {
-                            if (baseSeedInterface != null) {
+                        protected void onPostExecute(BaseSeed baseSeed) {
+                            if (baseSeed != null) {
                                 Toast.makeText(getApplicationContext(), "Excellent your plant has been created", Toast.LENGTH_LONG).show();
                                 NewSeedActivity.this.finish();
                             } else
                                 Toast.makeText(getApplicationContext(), "There was a problem creating your plant", Toast.LENGTH_LONG).show();
 
-                            super.onPostExecute(baseSeedInterface);
+                            super.onPostExecute(baseSeed);
                         }
                     }.execute();
                 }
@@ -411,7 +411,7 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
     }
 
     @Override
-    public void onSeedUpdated(BaseSeedInterface seed) {
+    public void onSeedUpdated(BaseSeed seed) {
         finalFragment.setSeed(seed);
         finalFragment.update();
     }

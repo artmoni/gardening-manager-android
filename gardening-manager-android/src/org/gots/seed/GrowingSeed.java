@@ -12,7 +12,7 @@ package org.gots.seed;
 
 import java.util.Date;
 
-public interface GrowingSeed extends BaseSeedInterface {
+public interface GrowingSeed extends BaseSeed {
 
 	public abstract void setGrowingSeedId(int id);
 

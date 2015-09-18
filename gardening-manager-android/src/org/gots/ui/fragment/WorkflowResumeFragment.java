@@ -10,13 +10,12 @@ import java.util.Map;
 import org.gots.R;
 import org.gots.bean.TaskInfo;
 import org.gots.nuxeo.NuxeoWorkflowProvider;
-import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.BaseSeed;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.adapter.SeedListAdapter;
 import org.gots.seed.adapter.VendorSeedListAdapter;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.ui.PlantDescriptionActivity;
-import org.gots.ui.TabSeedActivity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -81,7 +80,7 @@ public class WorkflowResumeFragment extends BaseGotsFragment implements OnItemCl
         }
 
         JSONObject json;
-        List<BaseSeedInterface> seeds = new ArrayList<>();
+        List<BaseSeed> seeds = new ArrayList<>();
         try {
             json = new JSONObject(String.valueOf(total.toString()));
             JSONArray tasksEntries = json.getJSONArray("entries");
@@ -89,7 +88,7 @@ public class WorkflowResumeFragment extends BaseGotsFragment implements OnItemCl
             for (int i = 0; i < tasksEntries.length(); i++) {
                 TaskInfo task = gson.fromJson(tasksEntries.getString(i), TaskInfo.class);
                 GotsSeedProvider gotsSeedProvider = GotsSeedManager.getInstance().initIfNew(getActivity());
-                BaseSeedInterface seed = gotsSeedProvider.getSeedByUUID(task.getDocref());
+                BaseSeed seed = gotsSeedProvider.getSeedByUUID(task.getDocref());
                 if (seed != null) {
                     seeds.add(seed);
                     map.put(seed.getSeedId(), task);
@@ -104,7 +103,7 @@ public class WorkflowResumeFragment extends BaseGotsFragment implements OnItemCl
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
         if (isAdded()) {
-            List<BaseSeedInterface> seeds = (List<BaseSeedInterface>) data;
+            List<BaseSeed> seeds = (List<BaseSeed>) data;
             SeedListAdapter adapter = new VendorSeedListAdapter(getActivity(), seeds);
             gallery.setAdapter(adapter);
             gallery.setOnItemClickListener(this);
@@ -122,10 +121,10 @@ public class WorkflowResumeFragment extends BaseGotsFragment implements OnItemCl
 
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-        BaseSeedInterface baseSeedInterface = (BaseSeedInterface) arg0.getItemAtPosition(arg2);
+        BaseSeed baseSeed = (BaseSeed) arg0.getItemAtPosition(arg2);
         Intent i = new Intent(getActivity(), PlantDescriptionActivity.class);
-        i.putExtra(WorkflowTaskFragment.GOTS_DOC_ID, baseSeedInterface.getUUID());
-        i.putExtra(PlantDescriptionActivity.GOTS_VENDORSEED_ID, baseSeedInterface.getSeedId());
+        i.putExtra(WorkflowTaskFragment.GOTS_DOC_ID, baseSeed.getUUID());
+        i.putExtra(PlantDescriptionActivity.GOTS_VENDORSEED_ID, baseSeed.getSeedId());
         startActivity(i);
     }
 

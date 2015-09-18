@@ -2,14 +2,13 @@ package org.gots.ui.fragment;
 
 import android.app.Activity;
 
-import org.gots.analytics.GotsAnalytics;
-import org.gots.seed.BaseSeedInterface;
+import org.gots.seed.BaseSeed;
 
 /**
  * Created by sfleury on 10/07/15.
  */
 public abstract class SeedContentFragment extends BaseGotsFragment {
-    protected BaseSeedInterface mSeed;
+    protected BaseSeed mSeed;
     private OnSeedUpdated mCallBack;
 
     @Override
@@ -20,10 +19,10 @@ public abstract class SeedContentFragment extends BaseGotsFragment {
     }
 
     public interface OnSeedUpdated {
-        void onSeedUpdated(BaseSeedInterface seed);
+        void onSeedUpdated(BaseSeed seed);
     }
 
-    public void setSeed(BaseSeedInterface seed) {
+    public void setSeed(BaseSeed seed) {
         this.mSeed = seed;
     }
 
