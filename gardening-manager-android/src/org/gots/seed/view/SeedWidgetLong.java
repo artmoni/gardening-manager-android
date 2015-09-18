@@ -45,14 +45,10 @@ import org.gots.ui.fragment.LoginDialogFragment;
 import java.util.Locale;
 
 public class SeedWidgetLong extends RelativeLayout {
+    private static final String TAG = SeedWidgetLong.class.getSimpleName();
     Context mContext;
-
-    // private String TAG = SeedWidgetLong.class.getSimpleName();
-
     private GrowingSeed mSeed;
-
     private TextView likeCount;
-
     private FloatingActionButton floatingActionLike;
     private FloatingActionButton floatingActionActions;
     private OnSeedWidgetLongClickListener mCallback;
@@ -252,22 +248,19 @@ public class SeedWidgetLong extends RelativeLayout {
     }
 
     protected void displayLikeStatus(LikeStatus likeStatus) {
-//        ImageView likeImage = (ImageView) findViewById(R.id.ImageSeedLike);
-        likeCount.setTextColor(getResources().getColor(R.color.text_color_dark));
-        if (likeStatus != null && likeStatus.getLikesCount() > 0) {
-            likeCount.setText(String.valueOf(likeStatus.getLikesCount()));
+        if (likeStatus == null) {
+            Log.w(TAG, "likestatus is null");
+            return;
         }
+        likeCount.setTextColor(getResources().getColor(R.color.text_color_dark));
+        likeCount.setText(String.valueOf(likeStatus.getLikesCount()));
 
 
-        if (likeStatus != null && likeStatus.getUserLikeStatus() > 0) {
+        if (likeStatus.getUserLikeStatus() > 0) {
             floatingActionLike.setIconDrawable(getResources().getDrawable(R.drawable.ic_like));
-//            likeImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_like));
-            likeCount.setTextColor(getResources().getColor(R.color.text_color_light));
 
         } else {
             floatingActionLike.setIconDrawable(getResources().getDrawable(R.drawable.ic_like_unknown));
-
-//            likeImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_like_unknown));
         }
     }
 
