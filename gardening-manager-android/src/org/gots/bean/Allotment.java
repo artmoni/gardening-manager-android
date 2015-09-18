@@ -12,30 +12,8 @@ package org.gots.bean;
 
 import java.io.Serializable;
 
-import org.gots.seed.IActionSeedAlert;
-
-public class Allotment extends BaseAllotment implements Serializable, IActionSeedAlert {
+public class Allotment extends BaseAllotment implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    @Override
-    public boolean onActionAlert() {
-        // for (Iterator<BaseSeedInterface> iterator = getSeeds().values().iterator(); iterator.hasNext();) {
-        // BaseSeedInterface currentSeed = iterator.next();
-        // if (currentSeed.onActionAlert())
-        // return true;
-        // }
-        return false;
-    }
-
-    @Override
-    public boolean onActionWarning() {
-        // for (Iterator<BaseSeedInterface> iterator = getSeeds().values().iterator(); iterator.hasNext();) {
-        // BaseSeedInterface currentSeed = iterator.next();
-        // if (currentSeed.onActionWarning())
-        // return true;
-        // }
-        return false;
-    }
 
 }
