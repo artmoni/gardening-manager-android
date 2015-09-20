@@ -7,8 +7,12 @@ import android.os.PersistableBundle;
 import android.util.AttributeSet;
 import android.view.View;
 
+import org.gots.R;
 import org.gots.seed.BaseSeed;
 import org.gots.ui.fragment.CatalogueFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sfleury on 20/09/15.
@@ -46,5 +50,35 @@ public class CatalogueActivity extends BaseGotsActivity implements CatalogueFrag
     @Override
     public void onPlantCatalogueLongClick(CatalogueFragment vendorListFragment, BaseSeed seed) {
 //        startSupportActionMode(new MyCallBack(seed));
+    }
+    @Override
+    protected List<FloatingItem> onCreateFloatingMenu() {
+        List<FloatingItem> floatingItems = new ArrayList<>();
+        FloatingItem floatingItem = new FloatingItem();
+        floatingItem.setTitle(getResources().getString(R.string.seed_action_add_catalogue));
+        floatingItem.setRessourceId(R.drawable.bt_add_seed);
+        floatingItem.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), NewSeedActivity.class);
+                startActivity(i);
+            }
+        });
+        floatingItems.add(floatingItem);
+
+        FloatingItem recognitionItem = new FloatingItem();
+        recognitionItem.setTitle(getResources().getString(R.string.plant_recognition));
+        recognitionItem.setRessourceId(R.drawable.ic_menu_recognition);
+        recognitionItem.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), RecognitionActivity.class);
+                startActivity(i);
+            }
+        });
+        floatingItems.add(recognitionItem);
+        return floatingItems;
     }
 }

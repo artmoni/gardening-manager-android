@@ -766,7 +766,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this,
                             android.R.layout.simple_spinner_item, android.R.id.text1, dropdownValues);
 
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     // actionBar.setListNavigationCallbacks(adapter, MainActivity.this);
 
                     spinnerGarden.setAdapter(adapter);

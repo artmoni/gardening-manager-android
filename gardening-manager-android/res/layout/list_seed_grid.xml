@@ -8,8 +8,7 @@
         android:id="@+id/idSpinnerFilter"
         style="@style/SpinnerItem"
         android:layout_width="fill_parent"
-        android:layout_height="75dp"
-        />
+        android:layout_height="wrap_content" />
 
     <GridView
         android:id="@+id/seedgridview"
