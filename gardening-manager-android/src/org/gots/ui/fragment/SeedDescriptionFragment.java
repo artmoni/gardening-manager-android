@@ -23,10 +23,11 @@ import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
+import org.gots.ui.PlantDescriptionActivity;
 
 public class SeedDescriptionFragment extends BaseGotsFragment {
-    public static final String GOTS_SEED_ID = "org.gots.seed.id";
-    private static final String GOTS_GROWINGSEED_ID = "org.gots.growingseed.id";
+//    public static final String GOTS_SEED_ID = "org.gots.seed.id";
+//    private static final String GOTS_GROWINGSEED_ID = "org.gots.growingseed.id";
 
     private int seedId;
 
@@ -125,10 +126,10 @@ public class SeedDescriptionFragment extends BaseGotsFragment {
     protected Object retrieveNuxeoData() throws Exception {
         Bundle bundle = this.getArguments();
         BaseSeed baseSeed = null;
-        if (bundle != null && bundle.getInt(GOTS_SEED_ID) != 0) {
-            baseSeed = seedManager.getSeedById(bundle.getInt(GOTS_SEED_ID));
-        } else if (bundle != null && bundle.getInt(GOTS_GROWINGSEED_ID) != 0)
-            baseSeed = growingSeedManager.getGrowingSeedById(bundle.getInt(GOTS_GROWINGSEED_ID));
+        if (bundle != null && bundle.getInt(PlantDescriptionActivity.GOTS_VENDORSEED_ID) != 0) {
+            baseSeed = seedManager.getSeedById(bundle.getInt(PlantDescriptionActivity.GOTS_VENDORSEED_ID));
+        } else if (bundle != null && bundle.getInt(PlantDescriptionActivity.GOTS_GROWINGSEED_ID) != 0)
+            baseSeed = growingSeedManager.getGrowingSeedById(bundle.getInt(PlantDescriptionActivity.GOTS_GROWINGSEED_ID));
         return baseSeed;
     }
 

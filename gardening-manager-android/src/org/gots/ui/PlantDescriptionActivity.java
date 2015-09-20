@@ -76,8 +76,8 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
-        final Bundle bundle = new Bundle();
-        bundle.putInt(SeedDescriptionFragment.GOTS_SEED_ID, mSeed.getSeedId());
+//        final Bundle bundle = new Bundle();
+//        bundle.putInt(SeedDescriptionFragment.GOTS_SEED_ID, mSeed.getSeedId());
 //        bundle.putInt("org.gots.growingseed.id", mSeed.getGrowingSeedId());
 
         // ********************** Seed description **********************
@@ -93,10 +93,10 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
 
                 @Override
                 public void onLogClick() {
-                    addContentLayout(new ActionsDoneListFragment(), bundle);
+                    addContentLayout(new ActionsDoneListFragment(), getIntent().getExtras());
                 }
             });
-            addMainLayout(fragmentDescription, bundle);
+            addMainLayout(fragmentDescription, getIntent().getExtras());
         } else
             fragmentDescription.update();
 
