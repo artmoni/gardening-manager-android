@@ -319,8 +319,8 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:padding">2dp</item>
-        <item name="android:textColor">@color/green_light</item>
-        <item name="android:background">@drawable/garden_selector</item>
+        <item name="android:textColor">@color/text_color_light</item>
+        <item name="android:background">@drawable/btn_dropdown</item>
         <item name="background">@drawable/garden_selector</item>
     </style>
 
@@ -331,15 +331,15 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:padding">2dp</item>
-        <item name="android:textColor">@color/text_color_dark</item>
+        <item name="android:textColor">@color/text_color_light</item>
         <item name="android:background">@color/text_color_dark</item>
         <item name="background">@color/text_color_dark</item>
         <item name="android:alpha">0.9</item>
     </style>
 
     <style name="Custom.TextAppearance.Sherlock.Widget.TextView.SpinnerItem" parent="Widget.AppCompat.DropDownItem.Spinner">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/green_light</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/text_color_light</item>
         <item name="android:shadowColor">#4ccfff</item>
         <item name="android:shadowDy">3</item>
         <item name="android:textStyle">bold</item>

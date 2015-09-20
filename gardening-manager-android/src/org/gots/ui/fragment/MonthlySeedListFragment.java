@@ -7,9 +7,9 @@ import org.gots.seed.BaseSeed;
 
 public class MonthlySeedListFragment extends CatalogueFragment {
 
-    @Override
-    protected List<BaseSeed> onRetrieveNuxeoData(String filterValue, int page, int pageSize, boolean force) {
-        return seedProvider.getSeedBySowingMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
-    }
+//    @Override
+//    protected List<BaseSeed> onRetrieveNuxeoData(String filterValue, int page, int pageSize, boolean force) {
+//        return seedProvider.getSeedBySowingMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
+//    }
 
 }

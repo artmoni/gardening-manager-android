@@ -4,20 +4,11 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ * <p>
  * Contributors:
- *     sfleury - initial API and implementation
+ * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.ui.fragment;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.gots.R;
-import org.gots.broadcast.BroadCastMessages;
-import org.gots.seed.BaseSeed;
-import org.gots.seed.adapter.SeedListAdapter;
-import org.gots.seed.adapter.VendorSeedListAdapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -30,14 +21,26 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.Spinner;
 
-public abstract class CatalogueFragment extends AbstractListFragment implements OnScrollListener,
+import org.gots.R;
+import org.gots.broadcast.BroadCastMessages;
+import org.gots.seed.BaseSeed;
+import org.gots.seed.adapter.SeedListAdapter;
+import org.gots.seed.adapter.VendorSeedListAdapter;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+public class CatalogueFragment extends AbstractListFragment implements OnScrollListener,
         AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
-    // protected static final String FILTER_FAVORITES = "filter.favorites";
+    protected static final String FILTER_FAVORITES = "filter.favorites";
 
-    // protected static final String FILTER_THISMONTH = "filter.thismonth";
+    protected static final String FILTER_THISMONTH = "filter.thismonth";
 
     // protected static final String FILTER_BARCODE = "filter.barcode";
 
@@ -45,7 +48,7 @@ public abstract class CatalogueFragment extends AbstractListFragment implements 
 
     // public static final String FILTER_PARROT = "filter.parrot";
 
-    // protected static final String FILTER_STOCK = "filter.stock";
+    protected static final String FILTER_STOCK = "filter.stock";
 
     public static final String BROADCAST_FILTER = "broadcast_filter";
 
@@ -70,6 +73,8 @@ public abstract class CatalogueFragment extends AbstractListFragment implements 
     private int paddingPage = 10;
 
     private OnSeedSelected mCallback;
+    private Spinner spinner;
+    private String filter = null;
 
     public interface OnSeedSelected {
         public abstract void onPlantCatalogueClick(BaseSeed seed);
@@ -91,46 +96,73 @@ public abstract class CatalogueFragment extends AbstractListFragment implements 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mContext = getActivity();
-        // args = getArguments();
 
         listVendorSeedAdapter = new VendorSeedListAdapter(mContext, new ArrayList<BaseSeed>());
         View view = inflater.inflate(R.layout.list_seed_grid, container, false);
+        spinner = (Spinner) view.findViewById(R.id.idSpinnerFilter);
         gridViewCatalog = (GridView) view.findViewById(R.id.seedgridview);
         gridViewCatalog.setAdapter(listVendorSeedAdapter);
         gridViewCatalog.setOnItemClickListener(this);
         gridViewCatalog.setOnItemLongClickListener(this);
         gridViewCatalog.setOnScrollListener(this);
 
+        List<String> list = new ArrayList<String>();
+        list.add(getResources().getString(R.string.hut_menu_vendorseeds));
+        list.add(getResources().getString(R.string.hut_menu_favorites));
+        list.add(getResources().getString(R.string.hut_menu_thismonth));
+        list.add(getResources().getString(R.string.hut_menu_myseeds));
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>
+                (getActivity(), android.R.layout.simple_spinner_item, list);
+
+        dataAdapter.setDropDownViewResource
+                (android.R.layout.simple_spinner_dropdown_item);
+
+        spinner.setAdapter(dataAdapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                filter=null;
+            }
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 1:
+                        filter = FILTER_FAVORITES;
+                        break;
+                    case 2:
+                        filter = FILTER_THISMONTH;
+                        break;
+                    case 3:
+                        filter = FILTER_STOCK;
+                        break;
+                    default:
+                        filter = null;
+                        break;
+                }
+                force=true;
+                runAsyncDataRetrieval();
+            }
+        });
+
         return view;
     }
 
-//    public BroadcastReceiver seedBroadcastReceiver = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-////            if (BROADCAST_FILTER.equals(intent.getAction())) {
-////                filterValue = intent.getExtras().getString(FILTER_VALUE);
-////            }
-//            if (isReady())
-//                runAsyncDataRetrieval();
-//        }
-//    };
-
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        runAsyncDataRetrieval();
+//        runAsyncDataRetrieval();
         super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
     public void onResume() {
-//        mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BROADCAST_FILTER));
-//        mContext.registerReceiver(seedBroadcastReceiver, new IntentFilter(BroadCastMessages.SEED_DISPLAYLIST));
         super.onResume();
     }
 
     @Override
     protected boolean requireAsyncDataRetrieval() {
-        return false;
+        return true;
     }
 
     @Override
@@ -140,17 +172,17 @@ public abstract class CatalogueFragment extends AbstractListFragment implements 
         super.onNuxeoDataRetrievalStarted();
     }
 
-    protected abstract List<BaseSeed> onRetrieveNuxeoData(String filterValue, int page, int pageSize,
-            boolean force);
-
     @Override
     protected Object retrieveNuxeoData() throws Exception {
         List<BaseSeed> catalogue = new ArrayList<BaseSeed>();
-        catalogue = onRetrieveNuxeoData(filterValue, page, pageSize, force);
-
-        // if (filter.equals(FILTER_BARCODE)) {
-        // catalogue.add(seedProvider.getSeedByBarCode(filterValue));
-        // }
+        if (FILTER_FAVORITES.equals(filter))
+            catalogue = seedProvider.getMyFavorites();
+        else if (FILTER_STOCK.equals(filter))
+            catalogue = seedProvider.getMyStock(gardenManager.getCurrentGarden(), force);
+        else if (FILTER_THISMONTH.equals(filter))
+            catalogue = seedProvider.getSeedBySowingMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
+        else
+            catalogue = seedProvider.getVendorSeeds(force, page, pageSize);
         force = false;
         return catalogue;
     }
@@ -176,13 +208,6 @@ public abstract class CatalogueFragment extends AbstractListFragment implements 
         if (getActivity() != null)
             getActivity().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
         super.onNuxeoDataRetrieveFailed();
-    }
-
-    @Override
-    public void onPause() {
-//        if (seedBroadcastReceiver != null && isAdded())
-//            mContext.unregisterReceiver(seedBroadcastReceiver);
-        super.onPause();
     }
 
     @Override

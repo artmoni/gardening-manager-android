@@ -658,7 +658,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         Intent i = null;
         switch (position) {
             case 0:
-                i = new Intent(getApplicationContext(), HutActivity.class);
+                i = new Intent(getApplicationContext(), CatalogueActivity.class);
                 break;
             case 1:
                 i = new Intent(getApplicationContext(), GardenActivity.class);
