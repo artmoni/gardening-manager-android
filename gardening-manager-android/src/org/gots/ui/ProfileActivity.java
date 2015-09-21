@@ -50,7 +50,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
         setTitleBar(R.string.dashboard_profile_name);
 
         mapFragment = new ProfileMapFragment();
-        addMainLayout(mapFragment, null);
+        addMainLayout(new ProfileEditorFragment(), null);
         //openContentResumeFragment();
     }
 
@@ -209,6 +209,9 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
 
                 // profileAdapter.notifyDataSetChanged();
                 return true;
+            case R.id.map:
+                addContentLayout(new ProfileMapFragment(), null);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -241,7 +244,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
         }
         if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
             contentFragment = new ProfileEditorFragment();
-            addContentLayout(contentFragment, options);
+            addMainLayout(contentFragment, options);
         }
         contentFragment.update();
     }
