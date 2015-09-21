@@ -74,6 +74,7 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
     public static final int OPTION_EDIT = 1;
 
     private static final String TAG = ProfileEditorFragment.class.getSimpleName();
+    public static final String PROFILE_EDITOR_MODE = "option";
 
     private LocationManager mlocManager;
 
@@ -111,7 +112,7 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
         mlocManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
         if (getArguments() != null)
-            mode = getArguments().getInt("option");
+            mode = getArguments().getInt(PROFILE_EDITOR_MODE);
         if (mode == OPTION_EDIT) {
             garden = getCurrentGarden();
         } else {

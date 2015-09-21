@@ -13,6 +13,12 @@
         android:title="@string/menu.help"
         app:showAsAction="always"/>
     <item
+        android:id="@+id/map"
+        android:icon="@drawable/ic_login"
+        android:title="Map"
+        app:showAsAction="always"/>
+
+    <item
         android:id="@+id/delete_garden"
         android:title="@string/action.delete"
         app:showAsAction="withText"/>
