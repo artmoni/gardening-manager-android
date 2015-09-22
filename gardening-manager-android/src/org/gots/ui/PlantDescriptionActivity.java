@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * Created by sfleury on 17/09/15.
  */
-public class PlantDescriptionActivity extends BaseGotsActivity implements AllotmentListFragment.OnAllotmentSelected,WorkflowTaskFragment.OnWorkflowClickListener {
+public class PlantDescriptionActivity extends BaseGotsActivity implements AllotmentListFragment.OnAllotmentSelected, WorkflowTaskFragment.OnWorkflowClickListener {
     public static final String GOTS_VENDORSEED_ID = "org.gots.seed.vendorid";
 
     public static final String GOTS_GROWINGSEED_ID = "org.gots.seed.id";
@@ -216,6 +216,7 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
         SowingAction action = new SowingAction(getApplicationContext());
         action.execute(allotmentInterface, (GrowingSeed) mSeed);
         getSupportFragmentManager().popBackStack();
+        showNotification(mSeed.getVariety() + " added to allotment " + allotmentInterface.getName(), false);
     }
 
     @Override
