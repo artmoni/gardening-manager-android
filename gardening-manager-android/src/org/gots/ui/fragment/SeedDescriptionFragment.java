@@ -139,7 +139,7 @@ public class SeedDescriptionFragment extends BaseGotsFragment {
 
         seedWidgetLong.setSeed(mSeed);
 
-        seedDescriptionEnvironnement.setText(Html.fromHtml(mSeed.getDescriptionEnvironment()));
+        seedDescriptionEnvironnement.setText(mSeed.getDescriptionEnvironment() != null ? Html.fromHtml(mSeed.getDescriptionEnvironment()) : "");
 
         seedDescriptionTitle.setOnClickListener(new View.OnClickListener() {
 
@@ -151,7 +151,7 @@ public class SeedDescriptionFragment extends BaseGotsFragment {
             }
         });
 
-        seedDescriptionCulture.setText(Html.fromHtml(mSeed.getDescriptionCultivation()));
+        seedDescriptionCulture.setText(Html.fromHtml(mSeed.getDescriptionCultivation() != null ? mSeed.getDescriptionCultivation() : ""));
         seedDescriptionCultureTitle.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -162,7 +162,7 @@ public class SeedDescriptionFragment extends BaseGotsFragment {
             }
         });
 
-        seedDescriptionEnnemi.setText(Html.fromHtml(mSeed.getDescriptionDiseases()));
+        seedDescriptionEnnemi.setText(Html.fromHtml(mSeed.getDescriptionDiseases() != null ? mSeed.getDescriptionDiseases() : ""));
         seedDescriptionEnnemiTitle.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -173,7 +173,7 @@ public class SeedDescriptionFragment extends BaseGotsFragment {
             }
         });
 
-        seedDescriptionCultureHarvest.setText(Html.fromHtml(mSeed.getDescriptionHarvest()));
+        seedDescriptionCultureHarvest.setText(Html.fromHtml(mSeed.getDescriptionHarvest() != null ? mSeed.getDescriptionHarvest() : ""));
         seedDescriptionHarvest.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {

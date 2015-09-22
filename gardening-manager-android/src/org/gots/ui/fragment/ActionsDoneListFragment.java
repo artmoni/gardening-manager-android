@@ -18,6 +18,7 @@ import org.gots.action.GotsActionSeedManager;
 import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
+import org.gots.ui.PlantDescriptionActivity;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,7 +29,7 @@ import android.widget.TextView;
 
 public class ActionsDoneListFragment extends AbstractListFragment {
 
-    public static final String ORG_GOTS_GROWINGSEED_ID = "org.gots.growingseed.id";
+//    public static final String ORG_GOTS_GROWINGSEED_ID = "org.gots.growingseed.id";
 
     Handler mHandler = new Handler();
 
@@ -46,7 +47,7 @@ public class ActionsDoneListFragment extends AbstractListFragment {
     public void onViewCreated(View v, Bundle savedInstanceState) {
         Bundle bundle = this.getArguments();
         if (bundle != null)
-            seedid = bundle.getInt(ORG_GOTS_GROWINGSEED_ID);
+            seedid = bundle.getInt(PlantDescriptionActivity.GOTS_GROWINGSEED_ID);
         super.onViewCreated(v, savedInstanceState);
     }
 

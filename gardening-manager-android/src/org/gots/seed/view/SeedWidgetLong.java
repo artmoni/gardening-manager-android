@@ -175,8 +175,9 @@ public class SeedWidgetLong extends RelativeLayout {
                     mCallback.onLogClick();
             }
         });
-        if (mSeed instanceof BaseSeed)
-            floatingActionActions.setVisibility(View.GONE);
+        if (mSeed instanceof GrowingSeed)
+            floatingActionActions.setVisibility(View.VISIBLE);
+        else floatingActionActions.setVisibility(View.GONE);
 
         likeCount = (TextView) findViewById(R.id.textSeedLike);
         floatingActionLike = (FloatingActionButton) findViewById(R.id.buttonLike);
@@ -266,7 +267,7 @@ public class SeedWidgetLong extends RelativeLayout {
 
 
     public void setSeed(BaseSeed seed) {
-        this.mSeed =  seed;
+        this.mSeed = seed;
         setupView();
     }
 

@@ -60,10 +60,8 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
             mSeed = GotsGrowingSeedManager.getInstance().initIfNew(this).getGrowingSeedById(seedId);
         } else if (getIntent().getExtras() != null && getIntent().getExtras().getInt(GOTS_VENDORSEED_ID) != 0) {
             int seedId = getIntent().getExtras().getInt(GOTS_VENDORSEED_ID);
-            // GotsSeedProvider helper = new LocalSeedProvider(getApplicationContext());
             mSeed =  seedManager.getSeedById(seedId);
         } else if (seedUUID != null) {
-            // GotsSeedProvider helper = new LocalSeedProvider(getApplicationContext());
             mSeed = (GrowingSeed) seedManager.getSeedByUUID(seedUUID);
         }
 //        if (mSeed != null) {
@@ -136,6 +134,7 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
                 int actionImageRessource = getResources().getIdentifier(
                         "org.gots:drawable/action_" + baseActionInterface.getName(), null, null);
                 floatingItem.setRessourceId(actionImageRessource);
+
                 floatingItem.setOnLongClickListener(new View.OnLongClickListener() {
 
                     @Override
