@@ -13,12 +13,15 @@ import org.gots.action.BaseAction;
 import org.gots.action.GotsActionManager;
 import org.gots.action.bean.SowingAction;
 import org.gots.bean.BaseAllotmentInterface;
+import org.gots.nuxeo.NuxeoWorkflowProvider;
 import org.gots.seed.BaseSeed;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
 import org.gots.ui.fragment.ActionsDoneListFragment;
 import org.gots.ui.fragment.AllotmentListFragment;
 import org.gots.ui.fragment.PlantDescriptionFragment;
+import org.gots.ui.fragment.WorkflowTaskFragment;
+import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +29,7 @@ import java.util.List;
 /**
  * Created by sfleury on 17/09/15.
  */
-public class PlantDescriptionActivity extends BaseGotsActivity implements AllotmentListFragment.OnAllotmentSelected {
+public class PlantDescriptionActivity extends BaseGotsActivity implements AllotmentListFragment.OnAllotmentSelected,WorkflowTaskFragment.OnWorkflowClickListener {
     public static final String GOTS_VENDORSEED_ID = "org.gots.seed.vendorid";
 
     public static final String GOTS_GROWINGSEED_ID = "org.gots.seed.id";
@@ -60,7 +63,7 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
             mSeed = GotsGrowingSeedManager.getInstance().initIfNew(this).getGrowingSeedById(seedId);
         } else if (getIntent().getExtras() != null && getIntent().getExtras().getInt(GOTS_VENDORSEED_ID) != 0) {
             int seedId = getIntent().getExtras().getInt(GOTS_VENDORSEED_ID);
-            mSeed =  seedManager.getSeedById(seedId);
+            mSeed = seedManager.getSeedById(seedId);
         } else if (seedUUID != null) {
             mSeed = (GrowingSeed) seedManager.getSeedByUUID(seedUUID);
         }
@@ -102,7 +105,28 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setTitle(mSeed.getVariety());
 
+        testWorkflow();
         super.onNuxeoDataRetrieved(data);
+    }
+
+    private void testWorkflow() {
+        new AsyncTask<Void, Void, Documents>() {
+            @Override
+            protected Documents doInBackground(Void... params) {
+                NuxeoWorkflowProvider workflowProvider = new NuxeoWorkflowProvider(getApplicationContext());
+                return workflowProvider.getWorkflowOpenTasks(mSeed.getUUID(), true);
+            }
+
+            @Override
+            protected void onPostExecute(Documents taskDocs) {
+                if (taskDocs != null && taskDocs.size() > 0) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString(WorkflowTaskFragment.GOTS_DOC_ID, mSeed.getUUID());
+                    addContentLayout(new WorkflowTaskFragment(), bundle);
+                }
+                super.onPostExecute(taskDocs);
+            }
+        }.execute();
     }
 
     @Override
@@ -216,5 +240,11 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
     public void onAllotmentMenuClick(View v, BaseAllotmentInterface allotmentInterface) {
         Toast.makeText(getApplicationContext(), "This feature is not currently supported in this case",
                 Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onWorkflowFinished() {
+        getSupportFragmentManager().popBackStack();
+        requireAsyncDataRetrieval();
     }
 }
