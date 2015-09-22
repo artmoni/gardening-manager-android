@@ -18,7 +18,7 @@ import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
 import org.gots.ui.fragment.ActionsDoneListFragment;
 import org.gots.ui.fragment.AllotmentListFragment;
-import org.gots.ui.fragment.SeedDescriptionFragment;
+import org.gots.ui.fragment.PlantDescriptionFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
     public static final String GOTS_GROWINGSEED_ID = "org.gots.seed.id";
 
     BaseSeed mSeed = null;
-    private SeedDescriptionFragment fragmentDescription;
+    private PlantDescriptionFragment fragmentDescription;
 
     @Override
     protected boolean requireFloatingButton() {
@@ -75,13 +75,13 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
 //        final Bundle bundle = new Bundle();
-//        bundle.putInt(SeedDescriptionFragment.GOTS_SEED_ID, mSeed.getSeedId());
+//        bundle.putInt(PlantDescriptionFragment.GOTS_SEED_ID, mSeed.getSeedId());
 //        bundle.putInt("org.gots.growingseed.id", mSeed.getGrowingSeedId());
 
         // ********************** Seed description **********************
         if (fragmentDescription == null) {
-            fragmentDescription = new SeedDescriptionFragment();
-            fragmentDescription.setOnDescriptionFragmentClicked(new SeedDescriptionFragment.OnDescriptionFragmentClicked() {
+            fragmentDescription = new PlantDescriptionFragment();
+            fragmentDescription.setOnDescriptionFragmentClicked(new PlantDescriptionFragment.OnDescriptionFragmentClicked() {
                 @Override
                 public void onInformationClick(String urlDescription) {
                     Bundle bundle = new Bundle();

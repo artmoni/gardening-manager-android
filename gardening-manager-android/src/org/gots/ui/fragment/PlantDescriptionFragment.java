@@ -25,7 +25,7 @@ import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
 import org.gots.ui.PlantDescriptionActivity;
 
-public class SeedDescriptionFragment extends BaseGotsFragment {
+public class PlantDescriptionFragment extends BaseGotsFragment {
 //    public static final String GOTS_SEED_ID = "org.gots.seed.id";
 //    private static final String GOTS_GROWINGSEED_ID = "org.gots.growingseed.id";
 
