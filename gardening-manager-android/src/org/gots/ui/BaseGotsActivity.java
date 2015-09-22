@@ -324,7 +324,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
             FloatingActionsMenu actionsMenu = new FloatingActionsMenu(getApplicationContext());
             for (FloatingItem floatingItem : items) {
                 FloatingActionButton button = new FloatingActionButton(getApplicationContext());
-                button.setSize(FloatingActionButton.SIZE_NORMAL);
+                button.setSize(FloatingActionButton.SIZE_MINI);
                 button.setColorNormalResId(R.color.action_error_color);
                 button.setColorPressedResId(R.color.action_warning_color);
                 button.setIcon(floatingItem.getRessourceId());
