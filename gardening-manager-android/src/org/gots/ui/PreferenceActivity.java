@@ -8,6 +8,7 @@ import org.gots.provider.AllotmentContentProvider;
 import org.gots.provider.GardenContentProvider;
 import org.gots.provider.SeedsContentProvider;
 import org.gots.provider.SensorContentProvider;
+import org.gots.ui.fragment.LoginDialogFragment;
 import org.nuxeo.android.config.NuxeoServerConfig;
 
 import android.accounts.Account;
@@ -48,11 +49,6 @@ public class PreferenceActivity extends android.preference.PreferenceActivity im
         gotsPreferences = getGotsContext().getServerConfig();
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        displayPreference(NuxeoServerConfig.PREF_SERVER_LOGIN, gotsPreferences.getNuxeoLogin());
-        displayPreference(NuxeoServerConfig.PREF_SERVER_URL, gotsPreferences.getGardeningManagerServerURI());
-        displayPreference(NuxeoServerConfig.PREF_SERVER_TOKEN, gotsPreferences.getToken());
-        displayPreference(GotsPreferences.SYNC_SCHEDULE,
-                String.valueOf(gotsPreferences.getScheduleTimeForNotification()));
 
         findPreference("parrot.login").setSummary(gotsPreferences.getParrotLogin());
         findPreference("parrot.auth.token").setSummary(gotsPreferences.getParrotToken());
@@ -67,6 +63,16 @@ public class PreferenceActivity extends android.preference.PreferenceActivity im
 
     }
 
+    @Override
+    protected void onResume() {
+        displayPreference(NuxeoServerConfig.PREF_SERVER_LOGIN, gotsPreferences.getNuxeoLogin());
+        displayPreference(NuxeoServerConfig.PREF_SERVER_URL, gotsPreferences.getGardeningManagerServerURI());
+        displayPreference(NuxeoServerConfig.PREF_SERVER_TOKEN, gotsPreferences.getToken());
+        displayPreference(GotsPreferences.SYNC_SCHEDULE,
+                String.valueOf(gotsPreferences.getScheduleTimeForNotification()));
+        super.onResume();
+    }
+
     private void displayPreference(String key, String value) {
         Preference pref = findPreference(key);
         if (pref != null && value != null)
@@ -77,7 +83,7 @@ public class PreferenceActivity extends android.preference.PreferenceActivity im
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
 //                    LoginDialogFragment login = new LoginDialogFragment();
-//                    login.show(getFragmentManager(), TAG);
+//                    login.show(, TAG);
                     return true;
                 }
             });

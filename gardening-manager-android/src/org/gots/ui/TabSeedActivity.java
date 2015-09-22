@@ -67,7 +67,7 @@ import org.gots.ui.fragment.ActionsDoneListFragment;
 import org.gots.ui.fragment.AllotmentListFragment;
 import org.gots.ui.fragment.AllotmentListFragment.OnAllotmentSelected;
 import org.gots.ui.fragment.LoginDialogFragment;
-import org.gots.ui.fragment.SeedDescriptionFragment;
+import org.gots.ui.fragment.PlantDescriptionFragment;
 import org.gots.ui.fragment.WorkflowTaskFragment;
 import org.gots.ui.fragment.WorkflowTaskFragment.OnWorkflowClickListener;
 import org.nuxeo.android.repository.DocumentManager;
@@ -108,7 +108,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 
     private Fragment fragmentWebView;
 
-    private SeedDescriptionFragment fragmentDescription;
+    private PlantDescriptionFragment fragmentDescription;
 
     private Fragment fragmentWorkflow;
 
@@ -626,9 +626,9 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 
         // ********************** Seed description **********************
         if (fragmentDescription == null) {
-            fragmentDescription = new SeedDescriptionFragment();
+            fragmentDescription = new PlantDescriptionFragment();
             fragmentDescription.setArguments(bundle);
-            fragmentDescription.setOnDescriptionFragmentClicked(new SeedDescriptionFragment.OnDescriptionFragmentClicked() {
+            fragmentDescription.setOnDescriptionFragmentClicked(new PlantDescriptionFragment.OnDescriptionFragmentClicked() {
                 @Override
                 public void onInformationClick(String urlDescription) {
 

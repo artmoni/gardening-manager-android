@@ -93,6 +93,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
     protected static final String TAG = BaseGotsActivity.class.getSimpleName();
     protected static final int LENGHT_SHORT = 3000;
     protected static final int LENGHT_LONG = 5000;
+    private static ArrayList<BaseGotsActivity> activities = new ArrayList<BaseGotsActivity>();
 
     protected GotsPreferences gotsPrefs;
 
@@ -114,7 +115,6 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
 
     private GardenInterface currentGarden;
 
-    private static ArrayList<BaseGotsActivity> activities = new ArrayList<BaseGotsActivity>();
 
     private GotsGrowingSeedManager gotsGrowingSeedManager;
     private View bottomRightButton;
@@ -185,6 +185,10 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.layout_simple);
+        ActionBar bar = getSupportActionBar();
+
+        if (activities.size() > 0)
+            bar.setDisplayHomeAsUpEnabled(true);
 
         // TODO All this should be part of the application/service/...
         gotsPrefs = getGotsContext().getServerConfig();
@@ -228,6 +232,8 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         notificationText = (TextView) findViewById(R.id.textViewProgress);
         imageView = (ImageView) findViewById(R.id.imageViewRefresh);
         layoutNotification = (View) findViewById(R.id.layoutNotification);
+
+
     }
 
     protected void initAllManager() {
@@ -324,7 +330,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
             FloatingActionsMenu actionsMenu = new FloatingActionsMenu(getApplicationContext());
             for (FloatingItem floatingItem : items) {
                 FloatingActionButton button = new FloatingActionButton(getApplicationContext());
-                button.setSize(FloatingActionButton.SIZE_NORMAL);
+                button.setSize(FloatingActionButton.SIZE_MINI);
                 button.setColorNormalResId(R.color.action_error_color);
                 button.setColorPressedResId(R.color.action_warning_color);
                 button.setIcon(floatingItem.getRessourceId());

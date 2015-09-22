@@ -38,9 +38,9 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
 
     private GardenInterface currentGarden;
 
-    private ProfileMapFragment mapFragment;
+//    private ProfileMapFragment mapFragment;
 
-    private List<GardenInterface> allGardens;
+    //    private List<GardenInterface> allGardens;
     private ProfileEditorFragment contentFragment;
 
     @Override
@@ -49,9 +49,9 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
 
         setTitleBar(R.string.dashboard_profile_name);
 
-        mapFragment = new ProfileMapFragment();
-        addMainLayout(new ProfileEditorFragment(), null);
-        //openContentResumeFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(ProfileEditorFragment.PROFILE_EDITOR_MODE,ProfileEditorFragment.OPTION_EDIT);
+        addMainLayout(new ProfileEditorFragment(), bundle);
     }
 
     @Override
@@ -93,14 +93,14 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
 
     @Override
     protected Object retrieveNuxeoData() throws Exception {
-        currentGarden = getCurrentGarden();
-        return gardenManager.getMyGardens(true);
+//        currentGarden = getCurrentGarden();
+        return getCurrentGarden();
     }
 
     @Override
-    protected void onNuxeoDataRetrieved(Object myGardens) {
-        this.allGardens = (List<GardenInterface>) myGardens;
-
+    protected void onNuxeoDataRetrieved(Object myGarden) {
+//        this.allGardens = (List<GardenInterface>) myGardens;
+        currentGarden = (GardenInterface) myGarden;
         if (currentGarden.getGpsLatitude() == 0 || currentGarden.getGpsLongitude() == 0) {
             Toast.makeText(getApplicationContext(), "Long press to localize your garden", Toast.LENGTH_LONG).show();
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -124,7 +124,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
                 contentFragment.update();
 
         }
-        super.onNuxeoDataRetrieved(myGardens);
+        super.onNuxeoDataRetrieved(myGarden);
     }
 
     @Override
@@ -165,6 +165,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
                         new AsyncTask<Void, Void, GardenInterface>() {
                             @Override
                             protected GardenInterface doInBackground(Void... params) {
+                                List<GardenInterface> allGardens = gardenManager.getMyGardens(false);
                                 for (int i = allGardens.size() - 1; i >= 0; i--) {
                                     GardenInterface garden = allGardens.get(i);
                                     if (garden.getId() != getCurrentGarden().getId()) {
@@ -179,7 +180,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
                             protected void onPostExecute(GardenInterface result) {
                                 if (result != null) {
                                     getSupportFragmentManager().popBackStack();
-                                    mapFragment.update();
+//                                    mapFragment.update();
                                 }
                                 // sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
                                 else
@@ -227,7 +228,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
         gardenManager.setCurrentGarden(garden);
         openContentFragment(garden, true);
 //        openContentResumeFragment();
-        mapFragment.update();
+//        mapFragment.update();
     }
 
     @Override
@@ -240,7 +241,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
         // Fragment creationFragment = getSupportFragmentManager().findFragmentById(getContentLayout());
         Bundle options = new Bundle();
         if (editable) {
-            options.putInt("option", ProfileEditorFragment.OPTION_EDIT);
+            options.putInt(ProfileEditorFragment.PROFILE_EDITOR_MODE, ProfileEditorFragment.OPTION_EDIT);
         }
         if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
             contentFragment = new ProfileEditorFragment();
@@ -254,7 +255,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
 //        closeContentFragment();
         getSupportFragmentManager().popBackStack();
         gardenManager.setCurrentGarden(garden);
-        mapFragment.update();
+//        mapFragment.update();
     }
 
     @Override

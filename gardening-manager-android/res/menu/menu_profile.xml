@@ -16,7 +16,7 @@
         android:id="@+id/map"
         android:icon="@drawable/ic_login"
         android:title="Map"
-        app:showAsAction="never"/>
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/delete_garden"
