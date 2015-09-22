@@ -1,20 +1,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:background="@color/text_color_light"
     android:orientation="vertical">
 
 
     <Spinner
         android:id="@+id/idSpinnerFilter"
-        style="@style/SpinnerItem"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        style="@style/SpinnerItem"/>
 
     <GridView
         android:id="@+id/seedgridview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@color/text_color_light"
         android:columnWidth="100dp"
         android:horizontalSpacing="5dp"
         android:numColumns="auto_fit"

@@ -67,19 +67,12 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
         } else if (seedUUID != null) {
             mSeed = (GrowingSeed) seedManager.getSeedByUUID(seedUUID);
         }
-//        if (mSeed != null) {
-//            NuxeoWorkflowProvider workflowProvider = new NuxeoWorkflowProvider(getApplicationContext());
-//            taskDocs = workflowProvider.getWorkflowOpenTasks(mSeed.getUUID(), true);
-//        }
 
         return mSeed;
     }
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
-//        final Bundle bundle = new Bundle();
-//        bundle.putInt(PlantDescriptionFragment.GOTS_SEED_ID, mSeed.getSeedId());
-//        bundle.putInt("org.gots.growingseed.id", mSeed.getGrowingSeedId());
 
         // ********************** Seed description **********************
         if (fragmentDescription == null) {
