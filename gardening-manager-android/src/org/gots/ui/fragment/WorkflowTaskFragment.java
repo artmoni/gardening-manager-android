@@ -81,8 +81,8 @@ public class WorkflowTaskFragment extends BaseGotsFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        if (getActivity().getIntent() != null)
-            docId = getActivity().getIntent().getExtras().getString(GOTS_DOC_ID);
+        if (getArguments() != null)
+            docId = getArguments().getString(GOTS_DOC_ID);
 
         super.onViewCreated(view, savedInstanceState);
     }
