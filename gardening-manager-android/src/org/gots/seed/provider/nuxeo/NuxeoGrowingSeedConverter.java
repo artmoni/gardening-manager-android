@@ -13,7 +13,7 @@ public class NuxeoGrowingSeedConverter {
         try {
             seed.setDateSowing(document.getDate("growingseed:datesowing"));
             seed.setDateHarvest(document.getDate("growingseed:dateharvest"));
-            seed.setUUID(document.getId());
+            seed.getPlant().setUUID(document.getId());
             return seed;
         } catch (Exception e) {
             Log.e(TAG, "Your document schema is not correct", e);

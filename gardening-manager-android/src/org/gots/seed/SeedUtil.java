@@ -25,7 +25,7 @@ import java.util.ArrayList;
 public class SeedUtil {
     @SuppressWarnings("unchecked")
     public BaseSeed copy(BaseSeed originalSeed) {
-        BaseSeed copy = new GrowingSeedImpl();
+        BaseSeed copy = new BaseSeedImpl();
         copy.setName(originalSeed.getName());
         copy.setDescriptionEnvironment(originalSeed.getDescriptionEnvironment());
         copy.setDescriptionDiseases(originalSeed.getDescriptionDiseases());

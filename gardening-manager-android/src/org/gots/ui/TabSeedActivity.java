@@ -151,10 +151,10 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
     }
 
     protected void initView() {
-        if (mSeed.getSpecie() != null)
-            getSupportActionBar().setTitle(mSeed.getSpecie());
+        if (mSeed.getPlant().getSpecie() != null)
+            getSupportActionBar().setTitle(mSeed.getPlant().getSpecie());
         else
-            getSupportActionBar().setTitle(mSeed.getFamily());
+            getSupportActionBar().setTitle(mSeed.getPlant().getFamily());
         if (mSeed.getDateSowing() != null) {
             TextView textDateSowing = (TextView) findViewById(R.id.idTextSowingDate);
             textDateSowing.setText(new SimpleDateFormat().format(mSeed.getDateSowing()));
@@ -165,7 +165,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
             else {
                 Calendar plannedHarvest = Calendar.getInstance();
                 plannedHarvest.setTime(mSeed.getDateSowing());
-                plannedHarvest.add(Calendar.DAY_OF_YEAR, mSeed.getDurationMin());
+                plannedHarvest.add(Calendar.DAY_OF_YEAR, mSeed.getPlant().getDurationMin());
                 textDateHarvest.setText(new SimpleDateFormat().format(plannedHarvest.getTime()));
                 textDateHarvest.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tween));
             }
@@ -352,11 +352,11 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_seeddescription, menu);
 
-        if (mSeed != null && mSeed.getGrowingSeedId() == 0) {
+        if (mSeed != null && mSeed.getId() == 0) {
             menu.findItem(R.id.photo).setVisible(false);
             menu.findItem(R.id.delete).setVisible(false);
             workflowMenuItem = menu.findItem(R.id.workflow);
-            if ("project".equals(mSeed.getState()))
+            if ("project".equals(mSeed.getPlant().getState()))
                 workflowMenuItem.setVisible(true);
             else
                 workflowMenuItem.setVisible(false);
@@ -376,14 +376,14 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
         switch (item.getItemId()) {
             case R.id.edit:
                 Intent editIntent = new Intent(this, NewSeedActivity.class);
-                editIntent.putExtra(NewSeedActivity.ORG_GOTS_SEEDID, mSeed.getSeedId());
+                editIntent.putExtra(NewSeedActivity.ORG_GOTS_SEEDID, mSeed.getPlant().getSeedId());
                 startActivity(editIntent);
                 return true;
             case R.id.action_stock_add:
                 new AsyncTask<Void, Void, Void>() {
                     @Override
                     protected Void doInBackground(Void... params) {
-                        seedManager.addToStock(mSeed, getCurrentGarden());
+                        seedManager.addToStock(mSeed.getPlant(), getCurrentGarden());
                         return null;
                     }
 
@@ -525,7 +525,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
                                 Session session = getNuxeoClient().getSession();
                                 DocumentManager service = session.getAdapter(DocumentManager.class);
                                 try {
-                                    Document docSeed = service.getDocument(mSeed.getUUID());
+                                    Document docSeed = service.getDocument(mSeed.getPlant().getUUID());
                                     nuxeoWorkflowProvider.startWorkflowValidation(docSeed);
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -589,7 +589,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
         }
         if (mSeed != null) {
             NuxeoWorkflowProvider workflowProvider = new NuxeoWorkflowProvider(getApplicationContext());
-            taskDocs = workflowProvider.getWorkflowOpenTasks(mSeed.getUUID(), true);
+            taskDocs = workflowProvider.getWorkflowOpenTasks(mSeed.getPlant().getUUID(), true);
         }
 
         return mSeed;
@@ -599,7 +599,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
     protected void onNuxeoDataRetrieved(Object data) {
         initView();
 
-        if (mSeed.getGrowingSeedId() >= 0)
+        if (mSeed.getId() >= 0)
             displayPictureGallery();
         else
             pictureGallery.setVisibility(View.GONE);
@@ -621,8 +621,8 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 
         final List<Fragment> fragments = new ArrayList<>();
         final Bundle bundle = new Bundle();
-        bundle.putInt(GOTS_GROWINGSEED_ID, mSeed.getSeedId());
-        bundle.putInt("org.gots.growingseed.id", mSeed.getGrowingSeedId());
+        bundle.putInt(GOTS_GROWINGSEED_ID, mSeed.getPlant().getSeedId());
+        bundle.putInt("org.gots.growingseed.id", mSeed.getId());
 
         // ********************** Seed description **********************
         if (fragmentDescription == null) {
@@ -658,7 +658,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
             fragmentDescription.update();
 
         // ********************** Moderation description **********************
-        getIntent().putExtra(WorkflowTaskFragment.GOTS_DOC_ID, mSeed.getUUID());
+        getIntent().putExtra(WorkflowTaskFragment.GOTS_DOC_ID, mSeed.getPlant().getUUID());
         if (taskDocs != null && taskDocs.size() > 0) {
             if (fragmentWorkflow == null) {
                 fragmentWorkflow = new WorkflowTaskFragment();
@@ -670,7 +670,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
             }
         }
         // ********************** Tab actions **********************
-        if (mSeed.getGrowingSeedId() > 0) {
+        if (mSeed.getId() > 0) {
             if (fragmentListAction == null) {
                 fragmentListAction = new ActionsDoneListFragment();
                 fragmentListAction.setArguments(bundle);

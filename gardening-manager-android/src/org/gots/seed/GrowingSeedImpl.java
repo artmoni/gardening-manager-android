@@ -4,16 +4,17 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- *
+ * <p>
  * Contributors:
- *     sfleury - initial API and implementation
+ * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.seed;
 
 import java.util.Date;
 
-public class GrowingSeedImpl extends BaseSeedImpl implements GrowingSeed {
-    private int growingSeedId;
+public class GrowingSeedImpl implements GrowingSeed {
+    private int id;
+    private BaseSeed plant;
 
     private static final long serialVersionUID = 1L;
 
@@ -24,7 +25,6 @@ public class GrowingSeedImpl extends BaseSeedImpl implements GrowingSeed {
     private Date dateLastWatering;
 
     public static final int NB_DAY_ALERT = 10;
-
     public static final int NB_DAY_WARNING = 5;
 
     @Override
@@ -53,15 +53,35 @@ public class GrowingSeedImpl extends BaseSeedImpl implements GrowingSeed {
         this.dateSowing = dateSowing;
     }
 
+//    @Override
+//    public void setGrowingSeedId(int id) {
+//        this.growingSeedId = id;
+//    }
+//
+//    @Override
+//    public int getGrowingSeedId() {
+//
+//        return growingSeedId;
+//    }
+
     @Override
-    public void setGrowingSeedId(int id) {
-        this.growingSeedId = id;
+    public void setPlant(BaseSeed plant) {
+        this.plant = plant;
     }
 
     @Override
-    public int getGrowingSeedId() {
+    public BaseSeed getPlant() {
+        return plant;
+    }
 
-        return growingSeedId;
+    @Override
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public int getId() {
+        return this.id;
     }
 
     @Override

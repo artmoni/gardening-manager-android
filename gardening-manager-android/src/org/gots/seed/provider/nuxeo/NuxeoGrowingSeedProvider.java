@@ -56,7 +56,7 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
             // Documents docs = service.getChildren(new IdRef(allotment.getUUID()));
             NuxeoSeedProvider provider = new NuxeoSeedProvider(mContext);
             for (Document growingSeedDocument : growingSeedDocuments) {
-
+//TODO growingseed:vendorseedid
                 Documents relations = service.getRelations(growingSeedDocument, "http://purl.org/dc/terms/isFormatOf");
                 if (relations.size() >= 1) {
                     GrowingSeed growingSeed;
@@ -71,7 +71,7 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
             }
             myGrowingSeeds = synchronize(localGrowingSeeds, remoteGrowingSeeds, allotment);
         } catch (Exception e) {
-            Log.e(TAG, "getGrowingSeedsByAllotment " + e.getMessage(), e);
+            Log.e(TAG, "getGrowingSeedsByAllotment " + e.getMessage());
             myGrowingSeeds = localGrowingSeeds;
         }
         return myGrowingSeeds;
@@ -84,7 +84,7 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
         for (GrowingSeed remoteGrowingSeed : remoteGrowingSeeds) {
             boolean found = false;
             for (GrowingSeed localGrowingSeed : localGrowingSeeds) {
-                if (remoteGrowingSeed.getUUID().equals(localGrowingSeed.getUUID())) {
+                if (remoteGrowingSeed.getPlant().getUUID().equals(localGrowingSeed.getPlant().getUUID())) {
                     found = true;
                     break;
                 }
@@ -93,19 +93,19 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
             if (!found)
                 myGrowingSeeds.add(super.plantingSeed(remoteGrowingSeed, allotment));
             else {
-                GrowingSeed updatableSeed = super.getGrowingSeedsByUUID(remoteGrowingSeed.getUUID());
-                remoteGrowingSeed.setGrowingSeedId(updatableSeed.getGrowingSeedId());
+                GrowingSeed updatableSeed = super.getGrowingSeedsByUUID(remoteGrowingSeed.getPlant().getUUID());
+                remoteGrowingSeed.setId(updatableSeed.getId());
                 myGrowingSeeds.add(super.updateGrowingSeed(updatableSeed, allotment));
             }
         }
 
         for (GrowingSeed localGrowingSeed : localGrowingSeeds) {
-            if (localGrowingSeed.getUUID() == null)
+            if (localGrowingSeed.getPlant().getUUID() == null)
                 myGrowingSeeds.add(insertNuxeoSeed(localGrowingSeed, allotment));
             else {
                 boolean found = false;
                 for (GrowingSeed remoteGrowingSeed : remoteGrowingSeeds) {
-                    if (localGrowingSeed.getUUID().equals(remoteGrowingSeed.getUUID())) {
+                    if (localGrowingSeed.getPlant().getUUID().equals(remoteGrowingSeed.getPlant().getUUID())) {
                         found = true;
                         break;
                     }
@@ -119,7 +119,7 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
 
     @Override
     public GrowingSeed plantingSeed(GrowingSeed growingSeed, BaseAllotmentInterface allotment) {
-        growingSeed.setUUID(null);
+        growingSeed.getPlant().setUUID(null);
         return insertNuxeoSeed(super.plantingSeed(growingSeed, allotment), allotment);
     }
 
@@ -138,15 +138,15 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
             PropertyMap properties = getProperties(growingSeed);
 
             final GotsSeedManager VendorSeedManager = GotsSeedManager.getInstance().initIfNew(mContext);
-            BaseSeed vendorSeed = VendorSeedManager.getSeedById(growingSeed.getSeedId());
+            BaseSeed vendorSeed = VendorSeedManager.getSeedById(growingSeed.getPlant().getSeedId());
             if (vendorSeed == null || vendorSeed.getUUID() == null)
                 vendorSeed = VendorSeedManager.createSeed(vendorSeed, null);
 
             properties.set("growingseed:vendorseedid", vendorSeed.getUUID());
 
-            Document newSeed = service.createDocument(allotmentDoc, "GrowingSeed", growingSeed.getSpecie(), properties);
+            Document newSeed = service.createDocument(allotmentDoc, "GrowingSeed", growingSeed.getPlant().getSpecie(), properties);
 
-            growingSeed.setUUID(newSeed.getId());
+            growingSeed.getPlant().setUUID(newSeed.getId());
             growingSeed = super.updateGrowingSeed(growingSeed, allotment);
             service.createRelation(newSeed, "http://purl.org/dc/terms/isFormatOf", new IdRef(vendorSeed.getUUID()));
         } catch (Exception e) {
@@ -157,7 +157,7 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
 
     protected PropertyMap getProperties(GrowingSeed growingSeed) {
         PropertyMap properties = new PropertyMap();
-        properties.set("dc:title", growingSeed.getSpecie() + " " + growingSeed.getVariety());
+        properties.set("dc:title", growingSeed.getPlant().getSpecie() + " " + growingSeed.getPlant().getVariety());
         if (growingSeed.getDateSowing() != null)
             properties.set("growingseed:datesowing", growingSeed.getDateSowing());
         if (growingSeed.getDateHarvest() != null)
@@ -171,7 +171,7 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager service = session.getAdapter(DocumentManager.class);
-            service.remove(new IdRef(seed.getUUID()));
+            service.remove(new IdRef(seed.getPlant().getUUID()));
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         } finally {
@@ -185,7 +185,7 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager service = session.getAdapter(DocumentManager.class);
-            service.update(new IdRef(seed.getUUID()), getProperties(seed));
+            service.update(new IdRef(seed.getPlant().getUUID()), getProperties(seed));
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }

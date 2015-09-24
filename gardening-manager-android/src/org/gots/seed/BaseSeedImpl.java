@@ -150,30 +150,30 @@ public class BaseSeedImpl implements Serializable, BaseSeed, Cloneable {
         return seed;
     }
 
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        GrowingSeed newSeed = new GrowingSeedImpl();
-        newSeed.setActionDone(new ArrayList<BaseAction>());
-        newSeed.getActionDone().addAll(getActionDone());
-        newSeed.setActionToDo(new ArrayList<BaseAction>());
-        newSeed.getActionToDo().addAll(getActionToDo());
-        newSeed.setDateSowingMax(dateSowingMax);
-        newSeed.setDateSowingMin(dateSowingMin);
-        newSeed.setDescriptionEnvironment(description_growth);
-        newSeed.setDurationMax(durationMax);
-        newSeed.setDurationMin(durationMin);
-        newSeed.setFamily(family);
-        newSeed.setGenus(genus);
-        newSeed.setOrder(order);
-        newSeed.setName(name);
-        newSeed.setUUID(reference);
-        newSeed.setSpecie(species);
-        newSeed.setUrlDescription(urlDescription);
-        newSeed.setVariety(variety);
-        newSeed.setSeedId(id);
-        newSeed.setNbSachet(getNbSachet());
-        return newSeed;
-    }
+//    @Override
+//    public Object clone() throws CloneNotSupportedException {
+//        GrowingSeed newSeed = new GrowingSeedImpl();
+//        newSeed.setActionDone(new ArrayList<BaseAction>());
+//        newSeed.getActionDone().addAll(getActionDone());
+//        newSeed.setActionToDo(new ArrayList<BaseAction>());
+//        newSeed.getActionToDo().addAll(getActionToDo());
+//        newSeed.setDateSowingMax(dateSowingMax);
+//        newSeed.setDateSowingMin(dateSowingMin);
+//        newSeed.setDescriptionEnvironment(description_growth);
+//        newSeed.setDurationMax(durationMax);
+//        newSeed.setDurationMin(durationMin);
+//        newSeed.setFamily(family);
+//        newSeed.setGenus(genus);
+//        newSeed.setOrder(order);
+//        newSeed.setName(name);
+//        newSeed.setUUID(reference);
+//        newSeed.setSpecie(species);
+//        newSeed.setUrlDescription(urlDescription);
+//        newSeed.setVariety(variety);
+//        newSeed.setSeedId(id);
+//        newSeed.setNbSachet(getNbSachet());
+//        return newSeed;
+//    }
 
     @Override
     public void copy(BaseSeed original) {

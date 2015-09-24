@@ -12,20 +12,19 @@
  */
 package org.gots.seed.adapter;
 
-import java.util.List;
-
-import org.gots.R;
-import org.gots.seed.GrowingSeed;
-import org.gots.seed.view.SeedWidget;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import org.gots.R;
+import org.gots.seed.BaseSeed;
+import org.gots.seed.GrowingSeed;
+import org.gots.seed.view.SeedWidget;
+
+import java.util.List;
 
 public class ListGrowingSeedAdapter extends BaseAdapter {
     Context mContext;
@@ -63,7 +62,7 @@ public class ListGrowingSeedAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             if (position < getCount() - 1) {
-                GrowingSeed currentSeed = (GrowingSeed) getItem(position);
+                BaseSeed currentSeed = getItem(position).getPlant();
 
                 SeedWidget seedWidget = new SeedWidget(mContext);
                 seedWidget.setSeed(currentSeed);

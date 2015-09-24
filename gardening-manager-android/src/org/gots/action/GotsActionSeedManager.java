@@ -83,8 +83,8 @@ public class GotsActionSeedManager extends BroadcastReceiver implements GotsActi
     @Override
     public ActionOnSeed doAction(ActionOnSeed action, GrowingSeed seed) {
         action.setDateActionDone(Calendar.getInstance().getTime());
-        seed.getActionToDo().remove(action);
-        seed.getActionDone().add(action);
+        seed.getPlant().getActionToDo().remove(action);
+        seed.getPlant().getActionDone().add(action);
         actionsToDO.remove(action.getActionSeedId());
         return provider.doAction(action, seed);
     }
@@ -109,7 +109,7 @@ public class GotsActionSeedManager extends BroadcastReceiver implements GotsActi
 
         ArrayList<ActionOnSeed> actionsBySeed = new ArrayList<>();
         for (ActionOnSeed actionOnSeed : actionsToDO.values()) {
-            if (actionOnSeed.getGrowingSeedId() == seed.getGrowingSeedId())
+            if (actionOnSeed.getGrowingSeedId() == seed.getId())
                 actionsBySeed.add(actionOnSeed);
         }
         return actionsBySeed;

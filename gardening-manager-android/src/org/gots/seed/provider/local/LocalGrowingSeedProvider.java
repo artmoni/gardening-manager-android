@@ -16,7 +16,6 @@ import android.database.Cursor;
 
 import org.gots.DatabaseHelper;
 import org.gots.bean.BaseAllotmentInterface;
-import org.gots.seed.BaseSeed;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedImpl;
 import org.gots.seed.provider.GotsSeedProvider;
@@ -49,15 +48,15 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
         long rowid;
 
         rowid = bdd.insert(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, seedToValues(growingSeed, allotment));
-        growingSeed.setGrowingSeedId((int) rowid);
+        growingSeed.setId((int) rowid);
 
         return growingSeed;
     }
 
     protected ContentValues seedToValues(GrowingSeed seed, BaseAllotmentInterface allotment) {
         ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.GROWINGSEED_SEED_ID, seed.getSeedId());
-        values.put(DatabaseHelper.GROWINGSEED_UUID, seed.getUUID());
+        values.put(DatabaseHelper.GROWINGSEED_SEED_ID, seed.getPlant().getSeedId());
+        values.put(DatabaseHelper.GROWINGSEED_UUID, seed.getPlant().getUUID());
 
         values.put(DatabaseHelper.GROWINGSEED_ALLOTMENT_ID, allotment.getId());
         if (seed.getDateSowing() != null)
@@ -98,19 +97,17 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
 
     private GrowingSeed cursorToSeed(Cursor cursor) {
         GrowingSeed bsi = new GrowingSeedImpl();
+        bsi.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_ID)));
+
         GotsSeedProvider localSeedProvider = new LocalSeedProvider(mContext);
-        bsi.copy(localSeedProvider.getSeedById(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_SEED_ID))));
-        bsi.setUUID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_UUID)));
-        if (bsi instanceof GrowingSeed) {
+        bsi.setPlant(localSeedProvider.getSeedById(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_SEED_ID))));
+        bsi.getPlant().setUUID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_UUID)));
+        bsi.setDateSowing(new Date(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_DATESOWING))));
+        bsi.setDateHarvest(new Date(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_DATEHARVEST))));
+        bsi.setDateLastWatering(new Date(
+                cursor.getLong(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_DATELASTWATERING))));
 
-            bsi.setGrowingSeedId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_ID)));
-            bsi.setDateSowing(new Date(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_DATESOWING))));
-            bsi.setDateHarvest(new Date(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_DATEHARVEST))));
-            bsi.setDateLastWatering(new Date(
-                    cursor.getLong(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_DATELASTWATERING))));
-        }
-
-        return  bsi;
+        return bsi;
     }
 
     /*
@@ -170,7 +167,7 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
     public void deleteGrowingSeed(GrowingSeed seed) {
 
         bdd.delete(DatabaseHelper.GROWINGSEEDS_TABLE_NAME,
-                DatabaseHelper.GROWINGSEED_ID + "='" + seed.getGrowingSeedId() + "'", null);
+                DatabaseHelper.GROWINGSEED_ID + "='" + seed.getId() + "'", null);
     }
 
     public GrowingSeed updateGrowingSeed(GrowingSeed seed, BaseAllotmentInterface allotment) {
@@ -179,7 +176,7 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
         ContentValues values = seedToValues(seed, allotment);
 
         bdd.update(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, values,
-                DatabaseHelper.GROWINGSEED_ID + "='" + seed.getGrowingSeedId() + "'", null);
+                DatabaseHelper.GROWINGSEED_ID + "='" + seed.getId() + "'", null);
 
         return seed;
     }

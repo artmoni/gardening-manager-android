@@ -124,7 +124,7 @@ public class ScheduleActionFragment extends DialogFragment implements OnItemClic
             mySeed = growingSeedManager.getGrowingSeedById(seedId);
 
             SeedWidgetLong seed = (SeedWidgetLong) v.findViewById(R.id.seedWidgetLong);
-            seed.setSeed(mySeed);
+            seed.setSeed(mySeed.getPlant());
         }
 
         radioGroup = (RadioGroup) v.findViewById(R.id.radioGroupSelectDuration);

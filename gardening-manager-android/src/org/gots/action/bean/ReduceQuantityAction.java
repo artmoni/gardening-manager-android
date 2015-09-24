@@ -28,7 +28,7 @@ public class ReduceQuantityAction extends AbstractActionSeed implements ActionOn
     @Override
     public int execute(GrowingSeed seed) {
 
-        if (seed.getNbSachet() <= 0)
+        if (seed.getPlant().getNbSachet() <= 0)
             return 0;
         super.execute(seed);
 //        seed.setNbSachet(seed.getNbSachet() - 1);
@@ -36,7 +36,7 @@ public class ReduceQuantityAction extends AbstractActionSeed implements ActionOn
 //        helper.updateSeed(seed);
         
         try {
-            seedManager.removeToStock(seed, gardenManager.getCurrentGarden());
+            seedManager.removeToStock(seed.getPlant(), gardenManager.getCurrentGarden());
         } catch (GardenNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

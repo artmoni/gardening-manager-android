@@ -63,7 +63,7 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
 
     protected ContentValues getContentValues(ActionOnSeed action, GrowingSeed seed) {
         ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.ACTIONSEED_GROWINGSEED_ID, seed.getGrowingSeedId());
+        values.put(DatabaseHelper.ACTIONSEED_GROWINGSEED_ID, seed.getId());
         values.put(DatabaseHelper.ACTIONSEED_DURATION, action.getDuration());
         values.put(DatabaseHelper.ACTIONSEED_ACTION_ID, action.getId());
         values.put(DatabaseHelper.ACTIONSEED_ID, action.getActionSeedId());
@@ -131,7 +131,7 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
         if (seed != null) {
             //@formatter:off
 		Cursor cursor = bdd.rawQuery("select * from " + DatabaseHelper.ACTIONSEEDS_TABLE_NAME + " actionseed"
-				+ " WHERE actionseed." + DatabaseHelper.ACTIONSEED_GROWINGSEED_ID+ "=" + seed.getGrowingSeedId() 
+				+ " WHERE actionseed." + DatabaseHelper.ACTIONSEED_GROWINGSEED_ID+ "=" + seed.getId()
 				+ " AND actionseed." + DatabaseHelper.ACTIONSEED_DATEACTIONDONE+ " IS NOT NULL"
 				, null);
 		//@formatter:on
@@ -153,7 +153,7 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
         Cursor cursor = null;
         try {
             cursor = bdd.rawQuery("select * from " + DatabaseHelper.ACTIONSEEDS_TABLE_NAME + " actionseed"
-                    + " WHERE actionseed." + DatabaseHelper.ACTIONSEED_GROWINGSEED_ID + "=" + seed.getGrowingSeedId()
+                    + " WHERE actionseed." + DatabaseHelper.ACTIONSEED_GROWINGSEED_ID + "=" + seed.getId()
                     + " AND actionseed." + DatabaseHelper.ACTIONSEED_DATEACTIONDONE + " IS NULL", null);
 
             if (cursor.moveToFirst()) {
@@ -230,7 +230,7 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
 
     @Override
     public File uploadPicture(GrowingSeed seed, File f) {
-        File seedDir = new File(gotsPrefs.getFilesDir(), String.valueOf(seed.getGrowingSeedId()));
+        File seedDir = new File(gotsPrefs.getFilesDir(), String.valueOf(seed.getId()));
         if (!seedDir.exists())
             seedDir.mkdir();
         File newfile = new File(seedDir, f.getName());
@@ -249,7 +249,7 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
     }
 
     public List<File> getPicture(GrowingSeed mSeed) throws GotsServerRestrictedException {
-        File seedDir = new File(gotsPrefs.getFilesDir(), String.valueOf(mSeed.getGrowingSeedId()));
+        File seedDir = new File(gotsPrefs.getFilesDir(), String.valueOf(mSeed.getId()));
         File[] files = seedDir.listFiles();
 
         List<File> myPictures = new ArrayList<File>();

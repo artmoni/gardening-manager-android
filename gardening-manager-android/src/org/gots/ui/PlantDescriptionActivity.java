@@ -60,12 +60,12 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
         }
         if (getIntent().getExtras() != null && getIntent().getExtras().getInt(GOTS_GROWINGSEED_ID) != 0) {
             int seedId = getIntent().getExtras().getInt(GOTS_GROWINGSEED_ID);
-            mSeed = GotsGrowingSeedManager.getInstance().initIfNew(this).getGrowingSeedById(seedId);
+            mSeed = GotsGrowingSeedManager.getInstance().initIfNew(this).getGrowingSeedById(seedId).getPlant();
         } else if (getIntent().getExtras() != null && getIntent().getExtras().getInt(GOTS_VENDORSEED_ID) != 0) {
             int seedId = getIntent().getExtras().getInt(GOTS_VENDORSEED_ID);
             mSeed = seedManager.getSeedById(seedId);
         } else if (seedUUID != null) {
-            mSeed = (GrowingSeed) seedManager.getSeedByUUID(seedUUID);
+            mSeed = seedManager.getSeedByUUID(seedUUID);
         }
 
         return mSeed;

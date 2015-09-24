@@ -41,6 +41,7 @@ import com.google.zxing.integration.android.IntentResult;
 
 import org.gots.R;
 import org.gots.seed.BaseSeed;
+import org.gots.seed.BaseSeedImpl;
 import org.gots.seed.GrowingSeedImpl;
 import org.gots.ui.fragment.PlanningFragment;
 import org.gots.ui.fragment.PlantCreationFragment;
@@ -112,7 +113,7 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
             isNewSeed = false;
 
         } else {
-            newSeed = new GrowingSeedImpl();
+            newSeed = new BaseSeedImpl();
         }
 
         if (getIntent().getStringExtra(ORG_GOTS_SEED_BARCODE) != null)

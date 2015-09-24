@@ -32,7 +32,7 @@ public abstract class AbstractActionGarden extends AbstractAction implements Gar
         setDateActionDone(Calendar.getInstance().getTime());
         mContext.sendBroadcast(new Intent(BroadCastMessages.ACTION_EVENT));
         GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-        tracker.trackEvent("Seed", getName(), seed.getSpecie(), 0);
+        tracker.trackEvent("Seed", getName(), seed.getPlant().getSpecie(), 0);
         return 1;
     }
 

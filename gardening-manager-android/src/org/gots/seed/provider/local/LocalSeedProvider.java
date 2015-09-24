@@ -135,7 +135,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
 
     @Override
     public BaseSeed getSeedByBarCode(String barecode) {
-        BaseSeed searchedSeed = new GrowingSeedImpl();
+        BaseSeed searchedSeed = new BaseSeedImpl();
         if (bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_BARECODE + "=\"" + barecode + "\"",
                 null, null, null, null).moveToFirst()) {
             searchedSeed = cursorToSeed(bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_BARECODE
@@ -150,7 +150,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
     public List<BaseSeed> getVendorSeeds(boolean force, int page, int pageSize) {
         ArrayList<BaseSeed> vendorSeeds = new ArrayList<BaseSeed>();
         try {
-            BaseSeed searchedSeed = new GrowingSeedImpl();
+            BaseSeed searchedSeed = new BaseSeedImpl();
             Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, null, null, null, null, null);
 
             if (managedCursor.moveToFirst()) {
@@ -215,7 +215,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
     @Override
     public List<BaseSeed> getMyStock(GardenInterface garden, boolean force) {
         ArrayList<BaseSeed> mySeeds = new ArrayList<BaseSeed>();
-        BaseSeed searchedSeed = new GrowingSeedImpl();
+        BaseSeed searchedSeed = new BaseSeedImpl();
         Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_NBSACHET + ">0",
                 null, null, null, null);
 
@@ -346,7 +346,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
     public List<BaseSeed> getVendorSeedsByName(String currentFilter, boolean force) {
         ArrayList<BaseSeed> vendorSeeds = new ArrayList<BaseSeed>();
         try {
-            BaseSeed searchedSeed = new GrowingSeedImpl();
+            BaseSeed searchedSeed = new BaseSeedImpl();
             Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_VARIETY
                     + " LIKE \"%" + currentFilter + "%\"", null, null, null, null);
 
@@ -381,7 +381,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
     public List<BaseSeed> getSeedBySowingMonth(int month) {
         ArrayList<BaseSeed> vendorSeeds = new ArrayList<BaseSeed>();
         try {
-            BaseSeed searchedSeed = new GrowingSeedImpl();
+            BaseSeed searchedSeed = new BaseSeedImpl();
             Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_DATESOWINGMIN
                     + "=" + month, null, null, null, null);
 

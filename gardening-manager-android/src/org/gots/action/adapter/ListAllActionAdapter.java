@@ -154,7 +154,7 @@ public class ListAllActionAdapter extends BaseAdapter {
             holder = (Holder) ll.getTag();
 
         if (seed != null && BaseAction.class.isInstance(currentAction)) {
-            holder.seedView.setSeed(seed);
+            holder.seedView.setSeed(seed.getPlant());
 
             SimpleDateFormat dateFormat = new SimpleDateFormat(" dd/MM/yyyy", Locale.FRANCE);
 

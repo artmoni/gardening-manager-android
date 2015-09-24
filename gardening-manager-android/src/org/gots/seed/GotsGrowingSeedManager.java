@@ -107,7 +107,7 @@ public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGro
             seedsByAllotment.put(allotment.getId(), new HashMap<Integer, GrowingSeed>());
         }
         seed = provider.plantingSeed(seed, allotment);
-        seedsByAllotment.get(allotment.getId()).put(seed.getGrowingSeedId(), seed);
+        seedsByAllotment.get(allotment.getId()).put(seed.getId(), seed);
         return seed;
     }
 
@@ -126,7 +126,7 @@ public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGro
         if (force || seedsByAllotment.get(allotment.getId()) == null) {
             seedsByAllotment.put(allotment.getId(), new HashMap<Integer, GrowingSeed>());
             for (GrowingSeed seed : provider.getGrowingSeedsByAllotment(allotment, force)) {
-                seedsByAllotment.get(allotment.getId()).put(seed.getGrowingSeedId(), seed);
+                seedsByAllotment.get(allotment.getId()).put(seed.getId(), seed);
             }
         }
         // return provider.getGrowingSeedsByAllotment(allotment, force);
@@ -139,14 +139,14 @@ public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGro
     }
 
     @Override
-    public void deleteGrowingSeed(GrowingSeed seed) {
+    public void deleteGrowingSeed(GrowingSeed growingSeed) {
         for (HashMap<Integer, GrowingSeed> seedMap : seedsByAllotment.values()) {
-            if (seedMap.containsKey(seed.getGrowingSeedId())) {
-                seedMap.remove(seed.getGrowingSeedId());
+            if (seedMap.containsKey(growingSeed.getId())) {
+                seedMap.remove(growingSeed.getId());
                 break;
             }
         }
-        provider.deleteGrowingSeed(seed);
+        provider.deleteGrowingSeed(growingSeed);
     }
 
 }

@@ -129,7 +129,7 @@ public class PlantDescriptionFragment extends BaseGotsFragment {
         if (bundle != null && bundle.getInt(PlantDescriptionActivity.GOTS_VENDORSEED_ID) != 0) {
             baseSeed = seedManager.getSeedById(bundle.getInt(PlantDescriptionActivity.GOTS_VENDORSEED_ID));
         } else if (bundle != null && bundle.getInt(PlantDescriptionActivity.GOTS_GROWINGSEED_ID) != 0)
-            baseSeed = growingSeedManager.getGrowingSeedById(bundle.getInt(PlantDescriptionActivity.GOTS_GROWINGSEED_ID));
+            baseSeed = growingSeedManager.getGrowingSeedById(bundle.getInt(PlantDescriptionActivity.GOTS_GROWINGSEED_ID)).getPlant();
         return baseSeed;
     }
 

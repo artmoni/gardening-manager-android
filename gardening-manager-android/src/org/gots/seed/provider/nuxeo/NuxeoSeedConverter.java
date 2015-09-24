@@ -3,6 +3,7 @@ package org.gots.seed.provider.nuxeo;
 import android.util.Log;
 
 import org.gots.seed.BaseSeed;
+import org.gots.seed.BaseSeedImpl;
 import org.gots.seed.GrowingSeedImpl;
 import org.gots.seed.LikeStatus;
 import org.json.JSONException;
@@ -17,7 +18,7 @@ public class NuxeoSeedConverter {
     private static final String TAG = NuxeoSeedConverter.class.getSimpleName();
 
     public static BaseSeed convert(Document document) throws NumberFormatException {
-        BaseSeed seed = new GrowingSeedImpl();
+        BaseSeed seed = new BaseSeedImpl();
         seed.setName(document.getString("vendorseed:name"));
         seed.setVariety(document.getTitle());
         seed.setFamily(document.getString("vendorseed:family"));

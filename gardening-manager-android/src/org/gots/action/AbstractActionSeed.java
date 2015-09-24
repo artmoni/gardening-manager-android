@@ -57,12 +57,12 @@ public abstract class AbstractActionSeed extends AbstractAction implements Actio
     @Override
     public int execute(GrowingSeed seed) {
         setDateActionDone(Calendar.getInstance().getTime());
-        seed.getActionToDo().remove(this);
-        seed.getActionDone().add(this);
+        seed.getPlant().getActionToDo().remove(this);
+        seed.getPlant().getActionDone().add(this);
         actionSeedManager.doAction(this, seed);
 
         GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-        tracker.trackEvent("Seed", getName(), seed.getSpecie(), 0);
+        tracker.trackEvent("Seed", getName(), seed.getPlant().getSpecie(), 0);
 
         mContext.sendBroadcast(new Intent(BroadCastMessages.ACTION_EVENT));
         return 1;

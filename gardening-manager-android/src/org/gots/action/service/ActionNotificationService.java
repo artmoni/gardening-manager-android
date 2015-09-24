@@ -97,7 +97,7 @@ public class ActionNotificationService extends GotsService {
 
                     GrowingSeed seed = growingSeedManager.getGrowingSeedById(action.getGrowingSeedId());
                     if (seed != null)
-                        createNotification(action, seed);
+                        createNotification(action, seed.getPlant());
 
                 }
 

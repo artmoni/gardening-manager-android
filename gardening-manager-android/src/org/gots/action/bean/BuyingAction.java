@@ -30,7 +30,7 @@ public class BuyingAction extends AbstractActionSeed implements PermanentActionI
     public int execute(GrowingSeed seed) {
         super.execute(seed);
         try {
-            seedManager.addToStock(seed, gardenManager.getCurrentGarden());
+            seedManager.addToStock(seed.getPlant(), gardenManager.getCurrentGarden());
         } catch (GardenNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

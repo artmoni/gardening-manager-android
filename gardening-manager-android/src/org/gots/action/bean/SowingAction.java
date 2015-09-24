@@ -38,13 +38,13 @@ public class SowingAction extends AbstractActionGarden implements PermanentActio
         super.execute(allotment, seed);
 
         seed.setDateSowing(Calendar.getInstance().getTime());
-        seed.setUUID(null);
+        seed.getPlant().setUUID(null);//TODO try to change this
         seed = growingSeedManager.plantingSeed(seed, allotment);
 
 //        actionSeedManager.insertAction(seed, this);
         // asdh.doAction(this, seed);
 
-        for (Iterator<BaseAction> iterator = seed.getActionToDo().iterator(); iterator.hasNext();) {
+        for (Iterator<BaseAction> iterator = seed.getPlant().getActionToDo().iterator(); iterator.hasNext();) {
 
             BaseAction type1 = iterator.next();
             if (type1 != null) {

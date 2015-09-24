@@ -59,6 +59,7 @@ import org.gots.bean.Garden;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GotsGardenManager;
 import org.gots.garden.view.OnProfileEventListener;
+import org.gots.seed.BaseSeed;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.provider.local.LocalSeedProvider;
@@ -449,50 +450,6 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
 
             ;
         }.execute();
-
-        // SAMPLE GARDEN
-        CheckBox samples = (CheckBox) getView().findViewById(R.id.checkboxSamples);
-        if (samples.isChecked()) {
-            GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-            tracker.trackEvent("Garden", "sample", garden.getLocality(), 0);
-
-            // Allotment
-            BaseAllotmentInterface newAllotment = new Allotment();
-            newAllotment.setName("" + new Random().nextInt());
-
-            LocalAllotmentProvider helper = new LocalAllotmentProvider(getActivity());
-            helper.createAllotment(newAllotment);
-
-            // Seed
-            GotsSeedProvider seedHelper = new LocalSeedProvider(getActivity());
-
-            int nbSeed = seedHelper.getVendorSeeds(false, 0, 25).size();
-            Random random = new Random();
-            for (int i = 1; i <= 5 && i < nbSeed; i++) {
-                int alea = random.nextInt(nbSeed);
-
-                GrowingSeed seed = (GrowingSeed) seedHelper.getSeedById(alea % nbSeed + 1);
-                if (seed != null) {
-                    seed.setNbSachet(alea % 3 + 1);
-                    seedHelper.updateSeed(seed);
-
-                    GotsActionProvider actionHelper = GotsActionManager.getInstance().initIfNew(getActivity());
-                    BaseAction bakering = actionHelper.getActionByName("beak");
-                    GardeningActionInterface sowing = (GardeningActionInterface) actionHelper.getActionByName("sow");
-
-                    sowing.execute(newAllotment, seed);
-
-                    Calendar cal = new GregorianCalendar();
-                    cal.setTime(Calendar.getInstance().getTime());
-                    cal.add(Calendar.MONTH, -3);
-                    seed.setDateSowing(cal.getTime());
-
-                    GotsActionSeedProvider actionsHelper = GotsActionSeedManager.getInstance().initIfNew(getActivity());
-                    actionsHelper.insertAction(seed, (ActionOnSeed) bakering);
-                }
-            }
-        }
-        // TODO Close finish();
 
     }
 

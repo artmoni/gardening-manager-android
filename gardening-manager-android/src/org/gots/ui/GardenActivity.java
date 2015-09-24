@@ -163,9 +163,9 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
         // transactionTutorial.replace(getContentLayout(), vendorListFragment).commitAllowingStateLoss();
     }
 
-    protected void displaySeedActivity(GrowingSeed growingSeedInterface) {
+    protected void displaySeedActivity(GrowingSeed growingSeed) {
         final Intent i = new Intent(this, PlantDescriptionActivity.class);
-        i.putExtra(PlantDescriptionActivity.GOTS_GROWINGSEED_ID, growingSeedInterface.getGrowingSeedId());
+        i.putExtra(PlantDescriptionActivity.GOTS_GROWINGSEED_ID, growingSeed.getId());
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
     }

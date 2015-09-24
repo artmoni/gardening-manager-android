@@ -128,7 +128,7 @@ public class QuickSeedActionBuilder {
                 FragmentManager fm = ((FragmentActivity) mContext).getSupportFragmentManager();
                 DialogFragment editNameDialog = new ScheduleActionFragment();
                 Bundle data = new Bundle();
-                data.putInt("org.gots.seed.id", seed.getGrowingSeedId());
+                data.putInt("org.gots.seed.id", seed.getId());
                 editNameDialog.setArguments(data);
                 editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
                 editNameDialog.show(fm, "fragment_edit_name");
@@ -152,7 +152,7 @@ public class QuickSeedActionBuilder {
                 if (DetailAction.class.isInstance(actionItem)) {
                     // alert.show();
                     final Intent i = new Intent(mContext, PlantDescriptionActivity.class);
-                    i.putExtra(PlantDescriptionActivity.GOTS_GROWINGSEED_ID, ((GrowingSeed) parentView.getTag()).getGrowingSeedId());
+                    i.putExtra(PlantDescriptionActivity.GOTS_GROWINGSEED_ID, ((GrowingSeed) parentView.getTag()).getId());
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContext.startActivity(i);
                 } else {
