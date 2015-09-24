@@ -301,7 +301,7 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_hut, menu);
+        inflater.inflate(R.menu.menu_catalogue, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

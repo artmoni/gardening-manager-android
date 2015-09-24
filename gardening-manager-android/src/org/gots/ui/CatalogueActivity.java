@@ -1,13 +1,15 @@
 package org.gots.ui;
 
-import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.util.AttributeSet;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+
 import org.gots.R;
+import org.gots.provider.SeedsContentProvider;
 import org.gots.seed.BaseSeed;
 import org.gots.ui.fragment.CatalogueFragment;
 
@@ -21,6 +23,11 @@ public class CatalogueActivity extends BaseGotsActivity implements CatalogueFrag
     @Override
     protected boolean requireFloatingButton() {
         return true;
+    }
+
+    @Override
+    protected String requireRefreshSyncAuthority() {
+        return SeedsContentProvider.AUTHORITY;
     }
 
     @Override
@@ -80,5 +87,26 @@ public class CatalogueActivity extends BaseGotsActivity implements CatalogueFrag
         });
         floatingItems.add(recognitionItem);
         return floatingItems;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_catalogue, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        Intent i;
+        switch (item.getItemId()) {
+            case R.id.new_seed_barcode:
+                IntentIntegrator integrator = new IntentIntegrator(this);
+                integrator.initiateScan();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

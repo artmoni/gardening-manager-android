@@ -141,7 +141,7 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
                         filter = null;
                         break;
                 }
-                force=true;
+//                force=true;
                 runAsyncDataRetrieval();
             }
         });
@@ -167,7 +167,6 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
 
     @Override
     protected void onNuxeoDataRetrievalStarted() {
-        getActivity().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
 
         super.onNuxeoDataRetrievalStarted();
     }
@@ -197,17 +196,8 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
         List<BaseSeed> vendorSeeds = (List<BaseSeed>) data;
         listVendorSeedAdapter.setSeeds(vendorSeeds);
         listVendorSeedAdapter.notifyDataSetChanged();
-        if (getActivity() != null)
-            getActivity().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
 
         super.onNuxeoDataRetrieved(data);
-    }
-
-    @Override
-    protected void onNuxeoDataRetrieveFailed() {
-        if (getActivity() != null)
-            getActivity().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
-        super.onNuxeoDataRetrieveFailed();
     }
 
     @Override

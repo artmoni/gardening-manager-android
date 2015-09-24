@@ -240,7 +240,8 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
         return newSeeds;
     }
 
-    private ContentValues getContentValuesFromSeed(BaseSeed seed) {
+    private ContentValues
+    getContentValuesFromSeed(BaseSeed seed) {
         ContentValues values = new ContentValues();
         if (seed == null)
             return null;
