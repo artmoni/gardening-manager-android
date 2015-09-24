@@ -14,29 +14,28 @@ import java.util.Date;
 
 public interface GrowingSeed {
 
-    //	public abstract void setGrowingSeedId(int id);
-//
-//	public abstract int getGrowingSeedId();
-    public abstract void setId(int id);
+    public void setId(int id);
 
-    public abstract int getId();
+    public int getId();
 
-    public abstract void setPlant(BaseSeed plant);
+    public void setPlant(BaseSeed plant);
 
-    public abstract BaseSeed getPlant();
+    public BaseSeed getPlant();
 
+    public Date getDateSowing();
 
-    public abstract Date getDateSowing();
+    public void setDateSowing(Date dateSowing);
 
-    public abstract void setDateSowing(Date dateSowing);
+    public Date getDateLastWatering();
 
-    public abstract Date getDateLastWatering();
+    public void setDateLastWatering(Date dateLastWatering);
 
-    public abstract void setDateLastWatering(Date dateLastWatering);
+    public Date getDateHarvest();
 
-    public abstract Date getDateHarvest();
+    public void setDateHarvest(Date dateHarvest);
 
-    public abstract void setDateHarvest(Date dateHarvest);
+    public void setUUID(String id);
 
+    public String getUUID();
 
 }

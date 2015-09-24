@@ -26,6 +26,7 @@ public class GrowingSeedImpl implements GrowingSeed {
 
     public static final int NB_DAY_ALERT = 10;
     public static final int NB_DAY_WARNING = 5;
+    private String uuid;
 
     @Override
     public Date getDateLastWatering() {
@@ -92,5 +93,15 @@ public class GrowingSeedImpl implements GrowingSeed {
     @Override
     public Date getDateHarvest() {
         return dateHarvest;
+    }
+
+    @Override
+    public void setUUID(String id) {
+        this.uuid=id;
+    }
+
+    @Override
+    public String getUUID() {
+        return this.uuid;
     }
 }

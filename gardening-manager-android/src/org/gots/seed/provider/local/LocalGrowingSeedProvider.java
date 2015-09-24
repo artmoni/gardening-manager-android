@@ -98,10 +98,9 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
     private GrowingSeed cursorToSeed(Cursor cursor) {
         GrowingSeed bsi = new GrowingSeedImpl();
         bsi.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_ID)));
-
         GotsSeedProvider localSeedProvider = new LocalSeedProvider(mContext);
         bsi.setPlant(localSeedProvider.getSeedById(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_SEED_ID))));
-        bsi.getPlant().setUUID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_UUID)));
+        bsi.setUUID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_UUID)));
         bsi.setDateSowing(new Date(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_DATESOWING))));
         bsi.setDateHarvest(new Date(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.GROWINGSEED_DATEHARVEST))));
         bsi.setDateLastWatering(new Date(
@@ -170,15 +169,15 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
                 DatabaseHelper.GROWINGSEED_ID + "='" + seed.getId() + "'", null);
     }
 
-    public GrowingSeed updateGrowingSeed(GrowingSeed seed, BaseAllotmentInterface allotment) {
+    public GrowingSeed updateGrowingSeed(GrowingSeed growingSeed, BaseAllotmentInterface allotment) {
 
         // Création d'un ContentValues (fonctionne comme une HashMap)
-        ContentValues values = seedToValues(seed, allotment);
+        ContentValues values = seedToValues(growingSeed, allotment);
 
         bdd.update(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, values,
-                DatabaseHelper.GROWINGSEED_ID + "='" + seed.getId() + "'", null);
+                DatabaseHelper.GROWINGSEED_ID + "='" + growingSeed.getId() + "'", null);
 
-        return seed;
+        return growingSeed;
     }
 
     public GrowingSeed getGrowingSeedsByUUID(String uuid) {
