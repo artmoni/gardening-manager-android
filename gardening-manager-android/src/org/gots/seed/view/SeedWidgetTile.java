@@ -168,7 +168,7 @@ public class SeedWidgetTile extends LinearLayout {
                             return null;
                         } catch (Exception e) {
                             Log.e(getClass().getName(), "" + e.getMessage(), e);
-                            return null;
+                            return new LikeStatus();
                         }
                     }
 
