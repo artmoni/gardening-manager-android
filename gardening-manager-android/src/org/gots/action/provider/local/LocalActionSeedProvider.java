@@ -4,20 +4,16 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ * <p>
  * Contributors:
- *     sfleury - initial API and implementation
+ * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.action.provider.local;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.util.Log;
 
 import org.gots.DatabaseHelper;
 import org.gots.action.ActionOnSeed;
@@ -30,10 +26,14 @@ import org.gots.seed.GrowingSeed;
 import org.gots.utils.FileUtilities;
 import org.gots.utils.GotsDBHelper;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.util.Log;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionSeedProvider {
 
@@ -49,14 +49,14 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
         ContentValues values = getContentValues(action, seed);
         values.remove(DatabaseHelper.ACTIONSEED_ID);
         Cursor cursor = bdd.query(DatabaseHelper.ACTIONSEEDS_TABLE_NAME, null, DatabaseHelper.ACTIONSEED_ID + "='"
-                + action.getActionSeedId() + " OR " + DatabaseHelper.ACTIONSEED_UUID + "=" + action.getUUID() + "'",
+                        + action.getActionSeedId() + " OR " + DatabaseHelper.ACTIONSEED_UUID + "=" + action.getUUID() + "'",
                 null, null, null, null);
         if (cursor.getCount() == 0) {
             rowid = bdd.insert(DatabaseHelper.ACTIONSEEDS_TABLE_NAME, null, values);
             action.setActionSeedId((int) rowid);
             Log.d(TAG, action.getName() + " is newly inserted as " + action);
         } else {
-            Log.w(TAG, action.getName() + " is already inserted in database as " + action);
+            Log.d(TAG, action.getName() + " is already inserted in database as " + action);
         }
         return (ActionOnSeed) action;
     }
@@ -108,20 +108,23 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
             cursor = bdd.query(DatabaseHelper.ACTIONSEEDS_TABLE_NAME, null, DatabaseHelper.ACTIONSEED_ID + "='"
                     + actionSeed.getActionSeedId() + "'", null, null, null, null);
         } else {
-
-            nbRows = bdd.update(DatabaseHelper.ACTIONSEEDS_TABLE_NAME, values, DatabaseHelper.ACTIONSEED_UUID + "='"
-                    + actionSeed.getUUID() + "'", null);
-
             cursor = bdd.query(DatabaseHelper.ACTIONSEEDS_TABLE_NAME, null, DatabaseHelper.ACTIONSEED_UUID + "='"
                     + actionSeed.getUUID() + "'", null, null, null, null);
+            if (cursor.getCount() == 1) {
+                nbRows = bdd.update(DatabaseHelper.ACTIONSEEDS_TABLE_NAME, values, DatabaseHelper.ACTIONSEED_UUID + "='"
+                        + actionSeed.getUUID() + "'", null);
+                Log.d(TAG, "Updating " + nbRows + " rows > " + actionSeed);
 
-            if (cursor.moveToFirst()) {
-                int rowid = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_ID));
-                actionSeed.setActionSeedId(rowid);
+                cursor = bdd.query(DatabaseHelper.ACTIONSEEDS_TABLE_NAME, null, DatabaseHelper.ACTIONSEED_UUID + "='"
+                        + actionSeed.getUUID() + "'", null, null, null, null);
+
+                if (cursor.moveToFirst()) {
+                    int rowid = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIONSEED_ID));
+                    actionSeed.setActionSeedId(rowid);
+                }
             }
             cursor.close();
         }
-        Log.d(TAG, "Updating " + nbRows + " rows > " + actionSeed);
         return actionSeed;
     }
 
@@ -130,11 +133,11 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
         ArrayList<ActionOnSeed> allActions = new ArrayList<ActionOnSeed>();
         if (seed != null) {
             //@formatter:off
-		Cursor cursor = bdd.rawQuery("select * from " + DatabaseHelper.ACTIONSEEDS_TABLE_NAME + " actionseed"
-				+ " WHERE actionseed." + DatabaseHelper.ACTIONSEED_GROWINGSEED_ID+ "=" + seed.getId()
-				+ " AND actionseed." + DatabaseHelper.ACTIONSEED_DATEACTIONDONE+ " IS NOT NULL"
-				, null);
-		//@formatter:on
+            Cursor cursor = bdd.rawQuery("select * from " + DatabaseHelper.ACTIONSEEDS_TABLE_NAME + " actionseed"
+                    + " WHERE actionseed." + DatabaseHelper.ACTIONSEED_GROWINGSEED_ID + "=" + seed.getId()
+                    + " AND actionseed." + DatabaseHelper.ACTIONSEED_DATEACTIONDONE + " IS NOT NULL"
+                    , null);
+            //@formatter:on
             if (cursor.moveToFirst()) {
                 do {
                     ActionOnSeed action = cursorToAction(cursor);

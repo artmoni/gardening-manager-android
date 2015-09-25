@@ -1,11 +1,8 @@
 package org.gots.action;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.provider.local.LocalActionSeedProvider;
@@ -19,9 +16,12 @@ import org.gots.seed.GrowingSeed;
 import org.gots.utils.NotConfiguredException;
 import org.nuxeo.android.broadcast.NuxeoBroadcastMessages;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GotsActionSeedManager extends BroadcastReceiver implements GotsActionSeedProvider {
 
@@ -122,6 +122,11 @@ public class GotsActionSeedManager extends BroadcastReceiver implements GotsActi
 
     @Override
     public ActionOnSeed insertAction(GrowingSeed seed, ActionOnSeed action) {
+        if (action.getDuration() > 0) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DAY_OF_YEAR, action.getDuration());
+            action.setDateActionTodo(calendar.getTime());
+        }
         actionsToDO.put(action.getActionSeedId(), action);
         return provider.insertAction(seed, action);
     }

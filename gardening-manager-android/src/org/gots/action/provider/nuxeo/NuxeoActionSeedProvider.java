@@ -1,17 +1,11 @@
 package org.gots.action.provider.nuxeo;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Random;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.util.Log;
 
 import org.gots.action.ActionFactory;
 import org.gots.action.ActionOnSeed;
@@ -37,12 +31,18 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PathRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.media.ExifInterface;
-import android.util.Log;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Random;
 
 public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
 
@@ -70,7 +70,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             Documents actionDocs = documentMgr.query(
                     "SELECT * FROM Action WHERE ecm:currentLifeCycleState != \"deleted\" AND  ecm:path startswith '"
                             + garden.getPath() + "' AND action:dateactiondone is null", null,
-                    new String[] { "dc:modified DESC" }, "*", 0, 50, CacheBehavior.FORCE_REFRESH);
+                    new String[]{"dc:modified DESC"}, "*", 0, 50, CacheBehavior.FORCE_REFRESH);
 
             NuxeoGrowingSeedProvider gotsSeedManager = new NuxeoGrowingSeedProvider(mContext);
             for (Document actionDoc : actionDocs) {
@@ -185,7 +185,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             Documents actionDocs = documentMgr.query(
                     "SELECT * FROM Action WHERE ecm:currentLifeCycleState != \"deleted\" AND ecm:parentId=\""
                             + getActionsFolder(seed, documentMgr).getId() + "\" AND action:dateactiondone is null",
-                    null, new String[] { "dc:modified DESC" }, "*", 0, 50, cacheParam);
+                    null, new String[]{"dc:modified DESC"}, "*", 0, 50, cacheParam);
 
             for (Document actionDoc : actionDocs) {
                 BaseAction actionConverted = convert(actionDoc);
@@ -198,7 +198,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             }
 
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage(), e);
+            Log.e(TAG, "getActionsToDoBySeed " + e.getMessage());
             actionsToDo.addAll(super.getActionsToDoBySeed(seed, force));
         }
         // return synchronize(seed, super.getActionsToDoBySeed(seed),
@@ -219,7 +219,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             Documents actionDocs = documentMgr.query(
                     "SELECT * FROM Action WHERE ecm:currentLifeCycleState != \"deleted\" AND ecm:parentId=\""
                             + getActionsFolder(seed, documentMgr).getId() + "\" AND action:dateactiondone is not null",
-                    null, new String[] { "dc:modified DESC" }, "*", 0, 50, cacheParam);
+                    null, new String[]{"dc:modified DESC"}, "*", 0, 50, cacheParam);
 
             for (Document actionDoc : actionDocs) {
                 BaseAction actionConverted = convert(actionDoc);
@@ -356,14 +356,14 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
 
             Matrix matrix = new Matrix();
             switch (orientation) {
-            case ExifInterface.ORIENTATION_ROTATE_90:
-                matrix.postRotate(90);
-                scaledBm = Bitmap.createBitmap(scaledBm, 0, 0, scaledBm.getWidth(), scaledBm.getHeight(), matrix, true);
-                break;
-            case ExifInterface.ORIENTATION_ROTATE_180:
-                matrix.postRotate(180);
-                scaledBm = Bitmap.createBitmap(scaledBm, 0, 0, scaledBm.getWidth(), scaledBm.getHeight(), matrix, true);
-                break;
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    matrix.postRotate(90);
+                    scaledBm = Bitmap.createBitmap(scaledBm, 0, 0, scaledBm.getWidth(), scaledBm.getHeight(), matrix, true);
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    matrix.postRotate(180);
+                    scaledBm = Bitmap.createBitmap(scaledBm, 0, 0, scaledBm.getWidth(), scaledBm.getHeight(), matrix, true);
+                    break;
             }
 
             try (FileOutputStream fos = new FileOutputStream(imageFile)) {
@@ -433,7 +433,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             Document pictureBook = documentMgr.getChild(new IdRef(mSeed.getPlant().getUUID()), "Picture");
             Documents pictureList = documentMgr.query(
                     "SELECT * FROM Picture WHERE ecm:currentLifeCycleState != \"deleted\" AND ecm:parentId=\""
-                            + pictureBook.getId() + "\"", null, new String[] { "dc:modified DESC" }, "*", 0, 50,
+                            + pictureBook.getId() + "\"", null, new String[]{"dc:modified DESC"}, "*", 0, 50,
                     CacheBehavior.FORCE_REFRESH);
             for (Document doc : pictureList) {
 
@@ -447,7 +447,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
                 imageFiles.add(blob.getFile());
             }
         } catch (Exception e) {
-            Log.w(TAG, "No picture folder found for "+mSeed);
+            Log.w(TAG, "No picture folder found for " + mSeed);
         }
         return imageFiles;
     }
@@ -459,8 +459,8 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
             DocumentManager service = session.getAdapter(DocumentManager.class);
             Document doc = service.getDocument(new DocRef(mSeed.getPlant().getUUID()));
             FileBlob blob = (FileBlob) session.newRequest("seedGrowingActionHistory").setInput(doc).execute();
-            File dir =  gotsPrefs.getFilesDir();
-           
+            File dir = gotsPrefs.getFilesDir();
+
             File pdfFile = new File(dir, blob.getFileName().replaceAll(" ", "-"));
             copy(blob.getFile(), pdfFile);
             blob.getFile().delete();

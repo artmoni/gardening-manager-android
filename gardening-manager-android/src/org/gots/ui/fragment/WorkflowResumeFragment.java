@@ -1,11 +1,16 @@
 package org.gots.ui.fragment;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Gallery;
+import android.widget.TextView;
+
+import com.google.gson.Gson;
 
 import org.gots.R;
 import org.gots.bean.TaskInfo;
@@ -21,17 +26,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Blob;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Gallery;
-import android.widget.TextView;
-
-import com.google.gson.Gson;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class WorkflowResumeFragment extends BaseGotsFragment implements OnItemClickListener {
 
@@ -70,32 +70,34 @@ public class WorkflowResumeFragment extends BaseGotsFragment implements OnItemCl
     @Override
     protected Object retrieveNuxeoData() throws Exception {
         NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(getActivity());
-        tasks = nuxeoWorkflowProvider.getUserTaskPageProvider();
-
-        BufferedReader r = new BufferedReader(new InputStreamReader(tasks.getStream()));
-        StringBuilder total = new StringBuilder();
-        String line;
-        while ((line = r.readLine()) != null) {
-            total.append(line);
-        }
-
-        JSONObject json;
         List<BaseSeed> seeds = new ArrayList<>();
-        try {
-            json = new JSONObject(String.valueOf(total.toString()));
-            JSONArray tasksEntries = json.getJSONArray("entries");
-            Gson gson = new Gson();
-            for (int i = 0; i < tasksEntries.length(); i++) {
-                TaskInfo task = gson.fromJson(tasksEntries.getString(i), TaskInfo.class);
-                GotsSeedProvider gotsSeedProvider = GotsSeedManager.getInstance().initIfNew(getActivity());
-                BaseSeed seed = gotsSeedProvider.getSeedByUUID(task.getDocref());
-                if (seed != null) {
-                    seeds.add(seed);
-                    map.put(seed.getSeedId(), task);
-                }
+        tasks = nuxeoWorkflowProvider.getUserTaskPageProvider();
+        if (tasks != null) {
+            BufferedReader r = new BufferedReader(new InputStreamReader(tasks.getStream()));
+            StringBuilder total = new StringBuilder();
+            String line;
+            while ((line = r.readLine()) != null) {
+                total.append(line);
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+
+            JSONObject json;
+
+            try {
+                json = new JSONObject(String.valueOf(total.toString()));
+                JSONArray tasksEntries = json.getJSONArray("entries");
+                Gson gson = new Gson();
+                for (int i = 0; i < tasksEntries.length(); i++) {
+                    TaskInfo task = gson.fromJson(tasksEntries.getString(i), TaskInfo.class);
+                    GotsSeedProvider gotsSeedProvider = GotsSeedManager.getInstance().initIfNew(getActivity());
+                    BaseSeed seed = gotsSeedProvider.getSeedByUUID(task.getDocref());
+                    if (seed != null) {
+                        seeds.add(seed);
+                        map.put(seed.getSeedId(), task);
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
         return seeds;
     }
@@ -128,5 +130,5 @@ public class WorkflowResumeFragment extends BaseGotsFragment implements OnItemCl
         startActivity(i);
     }
 
-   
+
 }
