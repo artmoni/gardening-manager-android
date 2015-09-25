@@ -10,14 +10,14 @@
         android:layout_marginTop="7dp"
         android:orientation="horizontal" >
 
-        <org.gots.seed.view.SeedWidget
-            android:id="@+id/idSeedWidget2"
+        <ImageView
+            android:id="@+id/idSeedImage2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             android:gravity="center_horizontal"
-            android:src="@drawable/vegetdefault" >
-        </org.gots.seed.view.SeedWidget>
+            android:src="@drawable/no_picture" >
+        </ImageView>
 
         <RelativeLayout
             android:id="@+id/relativeLayout1"
@@ -88,7 +88,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="2dp"
-            android:src="@drawable/fr" />
+            android:src="@drawable/fr" android:visibility="gone"/>
 
         <LinearLayout
             android:id="@+id/idSeedStock"
@@ -118,7 +118,6 @@
         android:layout_height="30dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="16dp"
         android:src="@drawable/ic_ribbon" />
 
 </RelativeLayout>

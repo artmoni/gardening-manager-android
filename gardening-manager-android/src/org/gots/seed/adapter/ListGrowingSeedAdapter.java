@@ -22,7 +22,7 @@ import android.widget.TextView;
 import org.gots.R;
 import org.gots.seed.BaseSeed;
 import org.gots.seed.GrowingSeed;
-import org.gots.seed.view.SeedWidget;
+import org.gots.seed.view.GrowingSeedWidget;
 
 import java.util.List;
 
@@ -62,18 +62,18 @@ public class ListGrowingSeedAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             if (position < getCount() - 1) {
-                BaseSeed currentSeed = getItem(position).getPlant();
+                GrowingSeed growingSeed = getItem(position);
 
-                SeedWidget seedWidget = new SeedWidget(mContext);
-                seedWidget.setSeed(currentSeed);
-                seedWidget.setTag(currentSeed);
+                GrowingSeedWidget growingSeedWidget = new GrowingSeedWidget(mContext);
+                growingSeedWidget.setSeed(growingSeed);
+                growingSeedWidget.setTag(growingSeed);
                 int sdk = android.os.Build.VERSION.SDK_INT;
                 if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                    seedWidget.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.action_selector));
+                    growingSeedWidget.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.action_selector));
                 } else {
-                    seedWidget.setBackground(mContext.getResources().getDrawable(R.drawable.family_unknown));
+                    growingSeedWidget.setBackground(mContext.getResources().getDrawable(R.drawable.family_unknown));
                 }
-                convertView = seedWidget;
+                convertView = growingSeedWidget;
             } else {
                 View buttonPlus = LayoutInflater.from(mContext).inflate(R.layout.button_add, parent, false);
                 convertView = buttonPlus;

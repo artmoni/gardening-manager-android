@@ -21,9 +21,9 @@ import android.content.Intent;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public abstract class AbstractActionGarden extends AbstractAction implements GardeningActionInterface {
+public abstract class AbstractGrowingAction extends AbstractAction implements GrowingActionInterface {
 
-    public AbstractActionGarden(Context context) {
+    public AbstractGrowingAction(Context context) {
         super(context);
     }
 

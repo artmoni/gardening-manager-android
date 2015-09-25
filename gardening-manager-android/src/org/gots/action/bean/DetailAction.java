@@ -12,14 +12,15 @@ package org.gots.action.bean;
 
 import org.gots.action.AbstractActionSeed;
 import org.gots.action.ActionOnSeed;
-import org.gots.action.GardeningActionInterface;
+import org.gots.action.GrowingActionInterface;
 import org.gots.action.PermanentActionInterface;
 import org.gots.bean.BaseAllotmentInterface;
+import org.gots.seed.BaseSeed;
 import org.gots.seed.GrowingSeed;
 
 import android.content.Context;
 
-public class DetailAction extends AbstractActionSeed implements PermanentActionInterface, ActionOnSeed, GardeningActionInterface {
+public class DetailAction extends AbstractActionSeed implements PermanentActionInterface, ActionOnSeed, GrowingActionInterface {
 
 	public DetailAction(Context context) {
 	    super(context);
@@ -33,4 +34,8 @@ public class DetailAction extends AbstractActionSeed implements PermanentActionI
     }
 
 
+    @Override
+    public void execute(BaseAllotmentInterface allotment, BaseSeed seed) {
+
+    }
 }

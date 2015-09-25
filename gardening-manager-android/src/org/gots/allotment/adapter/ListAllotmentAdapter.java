@@ -17,13 +17,12 @@ import org.gots.bean.BaseAllotmentInterface;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
-import org.gots.seed.view.SeedWidget;
+import org.gots.seed.view.GrowingSeedWidget;
 import org.gots.ui.ExpandableHeightGridView;
 
 import android.content.Context;
 import android.graphics.Point;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBar.LayoutParams;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -157,7 +156,7 @@ public class ListAllotmentAdapter extends BaseAdapter {
         holder.seedGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int positionSeed, long id) {
-                if (view instanceof SeedWidget)
+                if (view instanceof GrowingSeedWidget)
                     clickListener.onGrowingSeedClick(view,
                             ((ListGrowingSeedAdapter) ((GridView) parent).getAdapter()).getItem(positionSeed));
                 else
@@ -167,7 +166,7 @@ public class ListAllotmentAdapter extends BaseAdapter {
         holder.seedGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int positionSeed, long id) {
-                if (view instanceof SeedWidget)
+                if (view instanceof GrowingSeedWidget)
                     clickListener.onGrowingSeedLongClick(view,
                             ((ListGrowingSeedAdapter) ((GridView) parent).getAdapter()).getItem(positionSeed));
                 return true;

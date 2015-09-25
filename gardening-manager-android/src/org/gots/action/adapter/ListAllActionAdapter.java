@@ -44,7 +44,7 @@ import org.gots.action.view.ActionWidget;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
-import org.gots.seed.view.SeedWidget;
+import org.gots.seed.view.GrowingSeedWidget;
 import org.gots.weather.WeatherManager;
 import org.gots.weather.view.WeatherView;
 
@@ -115,7 +115,7 @@ public class ListAllActionAdapter extends BaseAdapter {
     private class Holder {
         ActionWidget actionWidget;
 
-        SeedWidget seedView;
+        GrowingSeedWidget seedView;
 
         TextView textviewActionDate;
 
@@ -142,7 +142,7 @@ public class ListAllActionAdapter extends BaseAdapter {
             holder = new Holder();
             ll = LayoutInflater.from(mContext).inflate(R.layout.list_action, parent, false);
             holder.actionWidget = (ActionWidget) ll.findViewById(R.id.idActionView);
-            holder.seedView = (SeedWidget) ll.findViewById(R.id.idSeedView);
+            holder.seedView = (GrowingSeedWidget) ll.findViewById(R.id.idSeedView);
             holder.textviewActionDate = (TextView) ll.findViewById(R.id.IdSeedActionDate);
             holder.switchActionStatus = (Switch) ll.findViewById(R.id.switchSeedActionStatus);
             holder.textviewActionDescription = (TextView) ll.findViewById(R.id.IdSeedActionDescription);
@@ -154,7 +154,7 @@ public class ListAllActionAdapter extends BaseAdapter {
             holder = (Holder) ll.getTag();
 
         if (seed != null && BaseAction.class.isInstance(currentAction)) {
-            holder.seedView.setSeed(seed.getPlant());
+            holder.seedView.setSeed(seed);
 
             SimpleDateFormat dateFormat = new SimpleDateFormat(" dd/MM/yyyy", Locale.FRANCE);
 

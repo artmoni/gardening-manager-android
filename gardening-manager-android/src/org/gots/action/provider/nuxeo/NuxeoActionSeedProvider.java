@@ -126,7 +126,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
     protected Document getActionsFolder(GrowingSeed seed, DocumentManager documentMgr) throws Exception {
         boolean subFolderExists = false;
         Document actionFolder = null;
-        for (Document subFolder : documentMgr.getChildren(new IdRef(seed.getPlant().getUUID()))) {
+        for (Document subFolder : documentMgr.getChildren(new IdRef(seed.getUUID()))) {
 
             if ("Actions".equals(subFolder.getTitle())) {
                 Document currentDoc = documentMgr.getDocument(subFolder);
@@ -140,7 +140,7 @@ public class NuxeoActionSeedProvider extends LocalActionSeedProvider {
         if (!subFolderExists) {
             PropertyMap properties = new PropertyMap();
             properties.set("dc:title", "Actions");
-            actionFolder = documentMgr.createDocument(new IdRef(seed.getPlant().getUUID()), "Folder", "Actions", properties);
+            actionFolder = documentMgr.createDocument(new IdRef(seed.getUUID()), "Folder", "Actions", properties);
         }
         return actionFolder;
     }

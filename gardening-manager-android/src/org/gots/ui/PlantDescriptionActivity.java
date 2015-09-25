@@ -207,7 +207,7 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
     @Override
     public void onAllotmentClick(BaseAllotmentInterface allotmentInterface) {
         SowingAction action = new SowingAction(getApplicationContext());
-        action.execute(allotmentInterface, (GrowingSeed) mSeed);
+        action.execute(allotmentInterface, mSeed);
         getSupportFragmentManager().popBackStack();
         showNotification(mSeed.getVariety() + " added to allotment " + allotmentInterface.getName(), false);
     }

@@ -13,7 +13,7 @@ package org.gots.action;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GrowingSeed;
 
-public interface GardeningActionInterface extends BaseAction {
+public interface GrowingActionInterface extends BaseAction {
 
     public int execute(BaseAllotmentInterface allotment, GrowingSeed seed);
 

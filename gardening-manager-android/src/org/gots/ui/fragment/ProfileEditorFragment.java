@@ -39,37 +39,18 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
-
 import org.gots.R;
-import org.gots.action.ActionOnSeed;
-import org.gots.action.BaseAction;
-import org.gots.action.GardeningActionInterface;
-import org.gots.action.GotsActionManager;
-import org.gots.action.GotsActionSeedManager;
-import org.gots.action.provider.GotsActionProvider;
-import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.action.util.ActionState;
 import org.gots.action.view.ActionWidget;
 import org.gots.allotment.GotsAllotmentManager;
-import org.gots.allotment.provider.local.LocalAllotmentProvider;
-import org.gots.bean.Allotment;
-import org.gots.bean.BaseAllotmentInterface;
 import org.gots.bean.Garden;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GotsGardenManager;
 import org.gots.garden.view.OnProfileEventListener;
-import org.gots.seed.BaseSeed;
-import org.gots.seed.GrowingSeed;
-import org.gots.seed.provider.GotsSeedProvider;
-import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.weather.WeatherManager;
 
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Random;
 
 public class ProfileEditorFragment extends BaseGotsFragment implements LocationListener, OnClickListener {
     public static final int OPTION_EDIT = 1;

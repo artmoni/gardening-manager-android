@@ -1,6 +1,7 @@
 package org.gots.seed;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -102,13 +103,14 @@ public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGro
     }
 
     @Override
-    public GrowingSeed plantingSeed(GrowingSeed seed, BaseAllotmentInterface allotment) {
+    public GrowingSeed plantingSeed(GrowingSeed growingSeed, BaseAllotmentInterface allotment) {
         if (!seedsByAllotment.containsKey(allotment.getId())) {
             seedsByAllotment.put(allotment.getId(), new HashMap<Integer, GrowingSeed>());
         }
-        seed = provider.plantingSeed(seed, allotment);
-        seedsByAllotment.get(allotment.getId()).put(seed.getId(), seed);
-        return seed;
+        growingSeed.setDateSowing(Calendar.getInstance().getTime());
+        growingSeed = provider.plantingSeed(growingSeed, allotment);
+        seedsByAllotment.get(allotment.getId()).put(growingSeed.getId(), growingSeed);
+        return growingSeed;
     }
 
     @Override

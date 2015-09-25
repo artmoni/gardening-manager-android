@@ -13,18 +13,36 @@ package org.gots.action.bean;
 import java.util.Calendar;
 import java.util.Iterator;
 
-import org.gots.action.AbstractActionGarden;
+import org.gots.action.AbstractGrowingAction;
 import org.gots.action.ActionOnSeed;
 import org.gots.action.BaseAction;
-import org.gots.action.GardeningActionInterface;
 import org.gots.action.PermanentActionInterface;
 import org.gots.bean.BaseAllotmentInterface;
+import org.gots.seed.BaseSeed;
 import org.gots.seed.GrowingSeed;
+import org.gots.seed.GrowingSeedImpl;
 
 import android.content.Context;
 
-public class SowingAction extends AbstractActionGarden implements PermanentActionInterface, GardeningActionInterface {
+public class SowingAction extends AbstractGrowingAction implements PermanentActionInterface {
     Context mContext;
+
+    @Override
+    public void execute(BaseAllotmentInterface allotment, BaseSeed seed) {
+        GrowingSeed growingSeed = new GrowingSeedImpl();
+        growingSeed.setPlant(seed);
+        growingSeed = growingSeedManager.plantingSeed(growingSeed, allotment);
+
+        for (Iterator<BaseAction> iterator = growingSeed.getPlant().getActionToDo().iterator(); iterator.hasNext();) {
+
+            BaseAction type1 = iterator.next();
+            if (type1 != null) {
+                BaseAction action = actionManager.getActionByName(type1.getName());
+                actionSeedManager.insertAction(growingSeed, (ActionOnSeed)action);
+            }
+        }
+
+    }
 
     public SowingAction(Context context) {
         super(context);
@@ -33,29 +51,6 @@ public class SowingAction extends AbstractActionGarden implements PermanentActio
     }
 
 
-    @Override
-    public int execute(BaseAllotmentInterface allotment, GrowingSeed seed) {
-        super.execute(allotment, seed);
-
-        seed.setDateSowing(Calendar.getInstance().getTime());
-        seed.getPlant().setUUID(null);//TODO try to change this
-        seed = growingSeedManager.plantingSeed(seed, allotment);
-
-//        actionSeedManager.insertAction(seed, this);
-        // asdh.doAction(this, seed);
-
-        for (Iterator<BaseAction> iterator = seed.getPlant().getActionToDo().iterator(); iterator.hasNext();) {
-
-            BaseAction type1 = iterator.next();
-            if (type1 != null) {
-                BaseAction action = actionManager.getActionByName(type1.getName());
-                actionSeedManager.insertAction(seed, (ActionOnSeed)action);
-            }
-        }
-        
-        // tracker.dispatch();
-        return 0;
-    }
 
 
 }

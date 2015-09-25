@@ -10,20 +10,18 @@
  ******************************************************************************/
 package org.gots.action.bean;
 
-import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
 import org.gots.action.AbstractActionSeed;
-import org.gots.action.ActionOnSeed;
-import org.gots.action.GardeningActionInterface;
+import org.gots.action.GrowingActionInterface;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GrowingSeed;
 
 import android.content.Context;
 import android.os.AsyncTask;
 
-public class WateringAction extends AbstractActionSeed implements ActionOnSeed, GardeningActionInterface {
+public class WateringAction extends AbstractActionSeed implements  GrowingActionInterface {
 
     public WateringAction(Context context) {
         super(context);
@@ -32,7 +30,7 @@ public class WateringAction extends AbstractActionSeed implements ActionOnSeed, 
 
     @Override
     public int execute(GrowingSeed seed) {
-        seed.setDateLastWatering(Calendar.getInstance().getTime());
+//        seed.setDateLastWatering(Calendar.getInstance().getTime());
         
         return super.execute(seed);
     }

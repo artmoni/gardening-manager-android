@@ -14,7 +14,7 @@ import java.util.Calendar;
 
 import org.gots.action.AbstractActionSeed;
 import org.gots.action.ActionOnSeed;
-import org.gots.seed.GrowingSeed;
+import org.gots.seed.BaseSeed;
 
 import android.content.Context;
 
@@ -24,15 +24,6 @@ public class ScheduleAction extends AbstractActionSeed implements ActionOnSeed {
         super(mContext);
 
         setName("schedule");
-    }
-
-    @Override
-    public int execute(GrowingSeed seed) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(seed.getDateSowing());
-        cal.add(Calendar.DAY_OF_YEAR, getDuration());
-        setDateActionTodo(cal.getTime());
-        return super.execute(seed);
     }
 
 }

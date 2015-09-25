@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.gots.action;
 
+import org.gots.seed.BaseSeed;
 import org.gots.seed.GrowingSeed;
 
 public interface ActionOnSeed extends BaseAction {

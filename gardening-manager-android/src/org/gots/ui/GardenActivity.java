@@ -19,8 +19,6 @@ import org.gots.bean.BaseAllotmentInterface;
 import org.gots.provider.AllotmentContentProvider;
 import org.gots.seed.BaseSeed;
 import org.gots.seed.GrowingSeed;
-import org.gots.seed.view.QuickSeedActionBuilder;
-import org.gots.seed.view.SeedWidget;
 import org.gots.ui.fragment.AllotmentEditorFragment;
 import org.gots.ui.fragment.AllotmentEditorFragment.OnAllotmentListener;
 import org.gots.ui.fragment.AllotmentListFragment;
@@ -228,8 +226,8 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
 
     @Override
     public void onGrowingSeedLongClick(View v, GrowingSeed growingSeedInterface) {
-        QuickSeedActionBuilder actionBuilder = new QuickSeedActionBuilder(this, (SeedWidget) v, growingSeedInterface);
-        actionBuilder.show();
+//        QuickSeedActionBuilder actionBuilder = new QuickSeedActionBuilder(this, (GrowingSeedWidget) v, growingSeedInterface);
+//        actionBuilder.show();
     }
 
     @Override
@@ -256,7 +254,7 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
                 @Override
                 protected Void doInBackground(Void... params) {
                     SowingAction action = new SowingAction(getApplicationContext());
-                    action.execute(currentAllotment, (GrowingSeed) seed);
+                    action.execute(currentAllotment,  seed);
                     return null;
                 }
 

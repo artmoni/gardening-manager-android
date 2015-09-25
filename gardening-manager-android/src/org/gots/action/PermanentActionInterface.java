@@ -10,6 +10,11 @@
  ******************************************************************************/
 package org.gots.action;
 
+import org.gots.bean.BaseAllotmentInterface;
+import org.gots.seed.BaseSeed;
+import org.gots.seed.GrowingSeed;
+
 public interface PermanentActionInterface {
 
+    public void execute(BaseAllotmentInterface allotment, BaseSeed seed) ;
 }

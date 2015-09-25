@@ -64,14 +64,14 @@
             android:layout_toRightOf="@+id/idWeatherView"
             android:visibility="gone" />
 
-        <org.gots.seed.view.SeedWidget
+        <org.gots.seed.view.GrowingSeedWidget
             android:id="@+id/idSeedView"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/imageviewPhoto" >
-        </org.gots.seed.view.SeedWidget>
+        </org.gots.seed.view.GrowingSeedWidget>
 
         <org.gots.weather.view.WeatherView
             android:id="@+id/idWeatherView"

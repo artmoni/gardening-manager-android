@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.gots.action.ActionOnSeed;
 import org.gots.exception.GotsServerRestrictedException;
+import org.gots.seed.BaseSeed;
 import org.gots.seed.GrowingSeed;
 
 public interface GotsActionSeedProvider {

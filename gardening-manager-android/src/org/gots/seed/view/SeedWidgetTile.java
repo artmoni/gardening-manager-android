@@ -12,11 +12,11 @@ package org.gots.seed.view;
 
 import org.gots.R;
 import org.gots.broadcast.BroadCastMessages;
+import org.gots.context.GotsContext;
 import org.gots.exception.GotsException;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeed;
 import org.gots.seed.GotsSeedManager;
-import org.gots.seed.GrowingSeed;
 import org.gots.seed.LikeStatus;
 import org.gots.seed.SeedUtil;
 import org.gots.ui.fragment.LoginDialogFragment;
@@ -25,6 +25,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
@@ -91,13 +92,19 @@ public class SeedWidgetTile extends LinearLayout {
         // if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
         // setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.family_unknown));
         // } else {
-        // setBackground(mContext.getResources().getDrawable(R.drawable.family_unknown));
+        // setBackground(mContext.getResources().getDrawable(R.drawableTag.family_unknown));
         // }
         // }
 
-        SeedWidget seedWidget = (SeedWidget) findViewById(R.id.idSeedWidget2);
-        seedWidget.setSeed(mSeed);
-
+//        GrowingSeedWidget growingSeedWidget = (GrowingSeedWidget) findViewById(R.id.idSeedWidget2);
+//        growingSeedWidget.setSeed(mSeed);
+        ImageView seedView = (ImageView) findViewById(R.id.idSeedImage2);
+        Bitmap image = SeedUtil.getSeedBitmap(GotsContext.get(mContext).getServerConfig().getFilesDir(), mSeed);
+        if (image != null)
+            seedView.setImageBitmap(image);
+        else {
+            seedView.setImageResource(SeedUtil.getSeedDrawable(getContext(), mSeed));
+        }
         TextView seedSpecie = (TextView) findViewById(R.id.IdSeedSpecie);
         seedSpecie.setText(SeedUtil.translateSpecie(mContext, mSeed));
         if (GotsPreferences.DEBUG)

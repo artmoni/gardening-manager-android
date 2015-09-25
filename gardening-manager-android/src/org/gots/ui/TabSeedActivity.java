@@ -47,7 +47,6 @@ import org.gots.action.ActionOnSeed;
 import org.gots.action.BaseAction;
 import org.gots.action.GotsActionManager;
 import org.gots.action.GotsActionSeedManager;
-import org.gots.action.bean.DeleteAction;
 import org.gots.action.bean.PhotoAction;
 import org.gots.action.bean.SowingAction;
 import org.gots.action.provider.GotsActionSeedProvider;
@@ -480,27 +479,26 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 
                 return true;
             case R.id.delete:
-                final DeleteAction deleteAction = new DeleteAction(this);
+//                final DeleteAction deleteAction = new DeleteAction(this);
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage(this.getResources().getString(R.string.action_delete_seed)).setCancelable(false).setPositiveButton(
                         "OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                new AsyncTask<ActionOnSeed, Integer, Void>() {
+                                new AsyncTask<Void, Integer, Void>() {
                                     @Override
-                                    protected Void doInBackground(ActionOnSeed... params) {
-                                        ActionOnSeed actionItem = params[0];
-                                        actionItem.execute(mSeed);
+                                    protected Void doInBackground(Void... params) {
+                                        seedManager.deleteSeed(mSeed.getPlant());
                                         return null;
                                     }
 
                                     @Override
                                     protected void onPostExecute(Void result) {
-                                        Toast.makeText(getApplicationContext(), "action done", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), "Deletion complete", Toast.LENGTH_SHORT).show();
                                         TabSeedActivity.this.finish();
                                         super.onPostExecute(result);
                                     }
-                                }.execute(deleteAction);
+                                }.execute();
                                 sendBroadcast(new Intent(BroadCastMessages.GROWINGSEED_DISPLAYLIST));
                                 dialog.dismiss();
                             }

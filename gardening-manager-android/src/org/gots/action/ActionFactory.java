@@ -33,7 +33,6 @@ public class ActionFactory {
             seedAction = new CuttingAction(context);
         else if ("lighten".equals(name))
             seedAction = new LighteningAction(context);
-
         else if ("water".equals(name))
             seedAction = new WateringAction(context);
         else if ("sow".equals(name))

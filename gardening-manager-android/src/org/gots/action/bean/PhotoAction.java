@@ -16,15 +16,16 @@ import java.util.Date;
 
 import org.gots.action.AbstractActionSeed;
 import org.gots.action.ActionOnSeed;
-import org.gots.action.GardeningActionInterface;
+import org.gots.action.GrowingActionInterface;
 import org.gots.action.PermanentActionInterface;
 import org.gots.bean.BaseAllotmentInterface;
+import org.gots.seed.BaseSeed;
 import org.gots.seed.GrowingSeed;
 
 import android.content.Context;
 
 public class PhotoAction extends AbstractActionSeed implements PermanentActionInterface, ActionOnSeed,
-        GardeningActionInterface {
+        GrowingActionInterface {
 
     private static final String JPEG_FILE_PREFIX = "GOTS_";
 
@@ -51,4 +52,8 @@ public class PhotoAction extends AbstractActionSeed implements PermanentActionIn
         return 0;
     }
 
+    @Override
+    public void execute(BaseAllotmentInterface allotment, BaseSeed seed) {
+
+    }
 }

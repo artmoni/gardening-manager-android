@@ -4,34 +4,11 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- *
+ * <p>
  * Contributors:
- *     sfleury - initial API and implementation
+ * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.ui;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.gots.R;
-import org.gots.action.ActionOnSeed;
-import org.gots.action.bean.BuyingAction;
-import org.gots.action.bean.ReduceQuantityAction;
-import org.gots.action.bean.SowingAction;
-import org.gots.ads.GotsAdvertisement;
-import org.gots.bean.BaseAllotmentInterface;
-import org.gots.provider.SeedsContentProvider;
-import org.gots.seed.BaseSeed;
-import org.gots.seed.GrowingSeed;
-import org.gots.seed.SeedUtil;
-import org.gots.ui.fragment.AllotmentListFragment.OnAllotmentSelected;
-import org.gots.ui.fragment.CatalogueFragment;
-import org.gots.ui.fragment.CatalogueFragment.OnSeedSelected;
-import org.gots.ui.fragment.FavoriteCatalogueFragment;
-import org.gots.ui.fragment.MonthlySeedListFragment;
-import org.gots.ui.fragment.ParrotCatalogueFragment;
-import org.gots.ui.fragment.StockVendorListFragment;
-import org.gots.ui.fragment.VendorCatalogueFragment;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -63,6 +40,26 @@ import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import org.gots.R;
+import org.gots.action.bean.SowingAction;
+import org.gots.ads.GotsAdvertisement;
+import org.gots.bean.BaseAllotmentInterface;
+import org.gots.provider.SeedsContentProvider;
+import org.gots.seed.BaseSeed;
+import org.gots.seed.GrowingSeed;
+import org.gots.seed.SeedUtil;
+import org.gots.ui.fragment.AllotmentListFragment.OnAllotmentSelected;
+import org.gots.ui.fragment.CatalogueFragment;
+import org.gots.ui.fragment.CatalogueFragment.OnSeedSelected;
+import org.gots.ui.fragment.FavoriteCatalogueFragment;
+import org.gots.ui.fragment.MonthlySeedListFragment;
+import org.gots.ui.fragment.ParrotCatalogueFragment;
+import org.gots.ui.fragment.StockVendorListFragment;
+import org.gots.ui.fragment.VendorCatalogueFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotmentSelected {
 
@@ -264,7 +261,9 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
                         AlertDialog alertDialog = alertDialogBuilder.create();
                         alertDialog.show();
                     }
-                };
+                }
+
+                ;
             }.execute();
 
         }
@@ -310,12 +309,12 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
         // Handle item selection
         Intent i;
         switch (item.getItemId()) {
-        case R.id.new_seed_barcode:
-            IntentIntegrator integrator = new IntentIntegrator(this);
-            integrator.initiateScan();
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
+            case R.id.new_seed_barcode:
+                IntentIntegrator integrator = new IntentIntegrator(this);
+                integrator.initiateScan();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -451,51 +450,56 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 
-            ActionOnSeed actionDone = null;
             switch (item.getItemId()) {
-            case R.id.action_seed_detail:
-                Intent i = new Intent(getApplicationContext(), PlantDescriptionActivity.class);
-                i.putExtra(PlantDescriptionActivity.GOTS_VENDORSEED_ID, currentSeed.getSeedId());
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(i);
-                break;
-            case R.id.action_stock_add:
-                actionDone = new BuyingAction(getApplicationContext());
-                break;
-            case R.id.action_stock_reduce:
-                actionDone = new ReduceQuantityAction(getApplicationContext());
-                break;
-            default:
-                break;
+                case R.id.action_seed_detail:
+                    Intent i = new Intent(getApplicationContext(), PlantDescriptionActivity.class);
+                    i.putExtra(PlantDescriptionActivity.GOTS_VENDORSEED_ID, currentSeed.getSeedId());
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(i);
+                    break;
+                case R.id.action_stock_add:
+                    new AsyncTask<Void, Integer, Void>() {
+
+                        @Override
+                        protected Void doInBackground(Void... params) {
+                            seedManager.addToStock(currentSeed, getCurrentGarden());
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void result) {
+                            showNotification(SeedUtil.translateSpecie(getApplicationContext(), currentSeed) + " +1 " + getResources().getString(R.string.seed_action_stock_description), false);
+
+                            if (getCurrentFragment() instanceof CatalogueFragment)
+                                ((CatalogueFragment) getCurrentFragment()).update();
+                            super.onPostExecute(result);
+                        }
+                    }.execute();
+                    break;
+
+                case R.id.action_stock_reduce:
+                    new AsyncTask<Void, Integer, Void>() {
+
+                        @Override
+                        protected Void doInBackground(Void... params) {
+                            seedManager.removeToStock(currentSeed, getCurrentGarden());
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void result) {
+                            showNotification(SeedUtil.translateSpecie(getApplicationContext(), currentSeed) + " -1 " + getResources().getString(R.string.seed_action_stock_description), false);
+
+                            if (getCurrentFragment() instanceof CatalogueFragment)
+                                ((CatalogueFragment) getCurrentFragment()).update();
+                            super.onPostExecute(result);
+                        }
+                    }.execute();
+                    break;
+                default:
+                    break;
             }
 
-            if (actionDone == null) {
-                Log.w(TAG, "onActionItemClicked - unknown selected action");
-                return false;
-            }
-
-            new AsyncTask<ActionOnSeed, Integer, Void>() {
-                ActionOnSeed action;
-
-                @Override
-                protected Void doInBackground(ActionOnSeed... params) {
-                    action = params[0];
-                    action.execute((GrowingSeed) currentSeed);
-                    return null;
-                }
-
-                @Override
-                protected void onPostExecute(Void result) {
-                    Toast.makeText(
-                            getApplicationContext(),
-                            SeedUtil.translateAction(getApplicationContext(), action) + " - "
-                                    + SeedUtil.translateSpecie(getApplicationContext(), currentSeed), Toast.LENGTH_LONG).show();
-
-                    if (getCurrentFragment() instanceof CatalogueFragment)
-                        ((CatalogueFragment) getCurrentFragment()).update();
-                    super.onPostExecute(result);
-                }
-            }.execute(actionDone);
 
             mode.finish();
             return true;

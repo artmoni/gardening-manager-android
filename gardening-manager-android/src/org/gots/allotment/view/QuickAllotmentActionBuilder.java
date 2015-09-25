@@ -73,7 +73,7 @@ public class QuickAllotmentActionBuilder {
 //
 //            @Override
 //            public void onClick(View v) {
-//                GardeningActionInterface actionItem = watering;
+//                GrowingActionInterface actionItem = watering;
 //
 //                actionItem.execute((Allotment) v.getTag(), null);
 //
@@ -86,7 +86,7 @@ public class QuickAllotmentActionBuilder {
         // @Override
         // public void onItemClick(ActionWidget source, BaseActionInterface
         // action) {
-        // GardeningActionInterface actionItem = (GardeningActionInterface)
+        // GrowingActionInterface actionItem = (GrowingActionInterface)
         // action;
         //
         // actionItem.execute((Allotment) v.getTag(), null);
