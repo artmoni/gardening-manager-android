@@ -1,26 +1,30 @@
 package org.gots.ui;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import org.gots.R;
-import org.gots.action.ActionOnSeed;
-import org.gots.action.BaseAction;
-import org.gots.action.GotsActionManager;
 import org.gots.action.bean.SowingAction;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.nuxeo.NuxeoWorkflowProvider;
 import org.gots.seed.BaseSeed;
-import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
 import org.gots.ui.fragment.ActionsDoneListFragment;
 import org.gots.ui.fragment.AllotmentListFragment;
 import org.gots.ui.fragment.PlantDescriptionFragment;
 import org.gots.ui.fragment.WorkflowTaskFragment;
+import org.nuxeo.android.repository.DocumentManager;
+import org.nuxeo.ecm.automation.client.jaxrs.Session;
+import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 
 import java.util.ArrayList;
@@ -31,8 +35,6 @@ import java.util.List;
  */
 public class PlantDescriptionActivity extends BaseGotsActivity implements AllotmentListFragment.OnAllotmentSelected, WorkflowTaskFragment.OnWorkflowClickListener {
     public static final String GOTS_VENDORSEED_ID = "org.gots.seed.vendorid";
-
-    public static final String GOTS_GROWINGSEED_ID = "org.gots.seed.id";
 
     BaseSeed mSeed = null;
     private PlantDescriptionFragment fragmentDescription;
@@ -49,6 +51,11 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
 
     @Override
     protected Object retrieveNuxeoData() throws Exception {
+        mSeed = getSeed();
+        return mSeed;
+    }
+
+    protected BaseSeed getSeed() {
         String seedUUID = null;
         Uri data = getIntent().getData();
         if (data != null) {
@@ -58,17 +65,32 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
             if (params != null && params.size() > 0)
                 seedUUID = params.get(params.size() - 2); // "status"
         }
-        if (getIntent().getExtras() != null && getIntent().getExtras().getInt(GOTS_GROWINGSEED_ID) != 0) {
-            int seedId = getIntent().getExtras().getInt(GOTS_GROWINGSEED_ID);
-            mSeed = GotsGrowingSeedManager.getInstance().initIfNew(this).getGrowingSeedById(seedId).getPlant();
-        } else if (getIntent().getExtras() != null && getIntent().getExtras().getInt(GOTS_VENDORSEED_ID) != 0) {
+        if (getIntent().getExtras() != null && getIntent().getExtras().getInt(GOTS_VENDORSEED_ID) != 0) {
             int seedId = getIntent().getExtras().getInt(GOTS_VENDORSEED_ID);
             mSeed = seedManager.getSeedById(seedId);
         } else if (seedUUID != null) {
             mSeed = seedManager.getSeedByUUID(seedUUID);
         }
-
         return mSeed;
+    }
+
+
+    @Override
+    protected List<FloatingItem> onCreateFloatingMenu() {
+        List<FloatingItem> floatingItems = new ArrayList<>();
+
+        FloatingItem floatingItem = new FloatingItem();
+        floatingItem.setTitle(getResources().getString(R.string.action_sow));
+        floatingItem.setRessourceId(R.drawable.action_sow);
+        floatingItem.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                addContentLayout(new AllotmentListFragment(), null);
+            }
+        });
+        floatingItems.add(floatingItem);
+        return floatingItems;
     }
 
     @Override
@@ -85,18 +107,16 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
                     addContentLayout(new WebViewFragment(), bundle);
                 }
 
-                @Override
-                public void onLogClick() {
-                    addContentLayout(new ActionsDoneListFragment(), getIntent().getExtras());
-                }
+//                @Override
+//                public void onLogClick() {
+//                    addContentLayout(new ActionsDoneListFragment(), getIntent().getExtras());
+//                }
             });
             addMainLayout(fragmentDescription, getIntent().getExtras());
         } else
             fragmentDescription.update();
 
-        ActionBar bar = getSupportActionBar();
-        bar.setDisplayHomeAsUpEnabled(true);
-        bar.setTitle(mSeed.getVariety());
+        getSupportActionBar().setTitle(mSeed.getVariety());
 
         testWorkflow();
         super.onNuxeoDataRetrieved(data);
@@ -123,85 +143,110 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
     }
 
     @Override
-    protected List<FloatingItem> onCreateFloatingMenu() {
-        List<FloatingItem> floatingItems = new ArrayList<>();
-        if (!(mSeed instanceof GrowingSeed)) {
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_seeddescription, menu);
+        return true;
+    }
 
-            FloatingItem floatingItem = new FloatingItem();
-            floatingItem.setTitle(getResources().getString(R.string.action_sow));
-            floatingItem.setRessourceId(R.drawable.action_sow);
-            floatingItem.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-//                    showOverlayFragment(new AllotmentListFragment());
-                    addContentLayout(new AllotmentListFragment(), null);
-                }
-            });
-            floatingItems.add(floatingItem);
-        } else {
-            List<BaseAction> actionInterfaces = (List<BaseAction>) GotsActionManager.getInstance().initIfNew(
-                    getApplicationContext()).getActions(false);
-
-            for (final BaseAction baseActionInterface : actionInterfaces) {
-                if (!(baseActionInterface instanceof ActionOnSeed))
-                    continue;
-                FloatingItem floatingItem = new FloatingItem();
-                floatingItem.setTitle(baseActionInterface.getName());
-                int actionImageRessource = getResources().getIdentifier(
-                        "org.gots:drawable/action_" + baseActionInterface.getName(), null, null);
-                floatingItem.setRessourceId(actionImageRessource);
-
-                floatingItem.setOnLongClickListener(new View.OnLongClickListener() {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        Intent i;
+        switch (item.getItemId()) {
+            case R.id.edit:
+                Intent editIntent = new Intent(this, NewSeedActivity.class);
+                editIntent.putExtra(NewSeedActivity.ORG_GOTS_SEEDID, mSeed.getSeedId());
+                startActivity(editIntent);
+                return true;
+            case R.id.action_stock_add:
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        seedManager.addToStock(mSeed, getCurrentGarden());
+                        return null;
+                    }
 
                     @Override
-                    public boolean onLongClick(View v) {
-                        new AsyncTask<Void, Void, Void>() {
-                            @Override
-                            protected Void doInBackground(Void... params) {
-                                baseActionInterface.setDuration(7);
-                                if (mSeed instanceof GrowingSeed)
-                                    actionseedProvider.insertAction(((GrowingSeed) mSeed), (ActionOnSeed) baseActionInterface);
-                                return null;
-                            }
+                    protected void onPostExecute(Void result) {
+                        showNotification(mSeed.getName() + " added to stock", false);
+                        runAsyncDataRetrieval();
+                        super.onPostExecute(result);
+                    }
+                }.execute();
+                return true;
 
-                            protected void onPostExecute(Void result) {
-//                                if (fragmentListAction != null) {
-//                                    ((ActionsDoneListFragment) fragmentListAction).update();
-//                                }
-                            }
+            case R.id.delete:
 
-                            ;
-                        }.execute();
-                        return true;
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage(this.getResources().getString(R.string.action_delete_seed)).setCancelable(false).setPositiveButton(
+                        "OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                new AsyncTask<Void, Integer, Void>() {
+                                    @Override
+                                    protected Void doInBackground(Void... params) {
+                                        seedManager.deleteSeed(mSeed);
+                                        return null;
+                                    }
+
+                                    @Override
+                                    protected void onPostExecute(Void result) {
+                                        showNotification(mSeed.getName() + " has been deleted", false);
+                                        super.onPostExecute(result);
+                                    }
+                                }.execute();
+                                dialog.dismiss();
+                            }
+                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
                     }
                 });
-                floatingItem.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        new AsyncTask<Void, Void, Void>() {
-                            @Override
-                            protected Void doInBackground(Void... params) {
-                                if (mSeed instanceof GrowingSeed)
-                                    actionseedProvider.doAction((ActionOnSeed) baseActionInterface, ((GrowingSeed) mSeed));
-                                return null;
-                            }
-
-                            protected void onPostExecute(Void result) {
-//                                if (fragmentListAction != null) {
-//                                    ((ActionsDoneListFragment) fragmentListAction).update();
+                builder.show();
+                return true;
+//            case R.id.workflow:
+//                AlertDialog.Builder builderWorkflow = new AlertDialog.Builder(this);
+//                builderWorkflow.setMessage(this.getResources().getString(R.string.workflow_launch_description)).setCancelable(
+//                        false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        new AsyncTask<Void, Void, Void>() {
+//                            @Override
+//                            protected Void doInBackground(Void... params) {
+//                                NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(
+//                                        getApplicationContext());
+//                                // BaseSeed baseSeedInterface = (BaseSeed) arg0.getItemAtPosition(arg2);
+//                                Session session = getNuxeoClient().getSession();
+//                                DocumentManager service = session.getAdapter(DocumentManager.class);
+//                                try {
+//                                    Document docSeed = service.getDocument(mSeed.getPlant().getUUID());
+//                                    nuxeoWorkflowProvider.startWorkflowValidation(docSeed);
+//                                } catch (Exception e) {
+//                                    e.printStackTrace();
 //                                }
-                            }
-
-                            ;
-                        }.execute();
-                    }
-                });
-                floatingItems.add(floatingItem);
-            }
+//                                return null;
+//                            }
+//
+//                            protected void onPostExecute(Void result) {
+//                                Toast.makeText(getApplicationContext(),
+//                                        "Your plant sheet has been sent to the moderator team", Toast.LENGTH_LONG).show();
+//                                runAsyncDataRetrieval();
+//                            }
+//
+//                            ;
+//                        }.execute();
+//                        dialog.dismiss();
+//                    }
+//                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        dialog.cancel();
+//                    }
+//                });
+//                builderWorkflow.show();
+//
+//                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return floatingItems;
     }
 
     @Override

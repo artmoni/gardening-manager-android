@@ -75,6 +75,7 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
             </intent-filter>
         </activity>
+        <activity android:name=".ui.GrowingPlantDescriptionActivity"/>
         <activity android:name=".ui.RecognitionActivity"/>
         <activity android:name=".ui.HutActivity" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow" android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity android:name=".ui.NewSeedActivity" android:theme="@style/Theme.Styled" android:windowSoftInputMode="stateHidden|adjustResize"/>

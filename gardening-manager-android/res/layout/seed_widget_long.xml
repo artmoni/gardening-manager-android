@@ -156,18 +156,6 @@
         </RelativeLayout>
     </RelativeLayout>
 
-    <com.getbase.floatingactionbutton.FloatingActionButton
-        android:id="@+id/buttonActions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/buttonLike"
-        app:fab_size="mini"
-        app:fab_title="test"
-        fab:fab_colorNormal="@color/action_ok_color"
-        fab:fab_colorPressed="@color/action_warning_color"
-        fab:fab_icon="@drawable/ic_menu_todo" />
 
     <LinearLayout
         android:id="@+id/layoutSeedName"

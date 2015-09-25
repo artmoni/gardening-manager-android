@@ -7,18 +7,6 @@
         android:icon="@drawable/action_download"
         android:title="@string/action.download"
         app:showAsAction="always"/>
-    <!--
-         <item
-        android:id="@+id/planning"
-        android:icon="@drawable/action_schedule"
-        app:showAsAction="always"
-        android:title="@string/action.planning"/>
-    -->
-    <item
-        android:id="@+id/photo"
-        android:icon="@drawable/action_photo"
-        android:title="@string/action.photo"
-        app:showAsAction="always"/>
     <item
         android:id="@+id/action_stock_add"
         android:icon="@drawable/action_buy"
@@ -39,11 +27,11 @@
         android:icon="@drawable/ic_edit"
         android:title="@string/menu.edit"
         app:showAsAction="never"/>
-    <item
-        android:id="@+id/workflow"
-        android:icon="@drawable/ic_workflow_validation"
-        android:title="workflow"
-        android:visible="false"
-        app:showAsAction="always"/>
+    <!--<item-->
+        <!--android:id="@+id/workflow"-->
+        <!--android:icon="@drawable/ic_workflow_validation"-->
+        <!--android:title="workflow"-->
+        <!--android:visible="false"-->
+        <!--app:showAsAction="always"/>-->
 
 </menu>

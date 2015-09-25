@@ -23,6 +23,7 @@ import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.seed.view.SeedWidgetLong;
+import org.gots.ui.GrowingPlantDescriptionActivity;
 import org.gots.ui.PlantDescriptionActivity;
 
 public class PlantDescriptionFragment extends BaseGotsFragment {
@@ -60,7 +61,6 @@ public class PlantDescriptionFragment extends BaseGotsFragment {
     public interface OnDescriptionFragmentClicked {
         public void onInformationClick(String url);
 
-        public void onLogClick();
     }
 
     public void setOnDescriptionFragmentClicked(OnDescriptionFragmentClicked descriptionFragmentClicked) {
@@ -104,10 +104,7 @@ public class PlantDescriptionFragment extends BaseGotsFragment {
                 mCallback.onInformationClick(url);
             }
 
-            @Override
-            public void onLogClick() {
-                mCallback.onLogClick();
-            }
+
         });
         return v;
     }
@@ -128,8 +125,8 @@ public class PlantDescriptionFragment extends BaseGotsFragment {
         BaseSeed baseSeed = null;
         if (bundle != null && bundle.getInt(PlantDescriptionActivity.GOTS_VENDORSEED_ID) != 0) {
             baseSeed = seedManager.getSeedById(bundle.getInt(PlantDescriptionActivity.GOTS_VENDORSEED_ID));
-        } else if (bundle != null && bundle.getInt(PlantDescriptionActivity.GOTS_GROWINGSEED_ID) != 0)
-            baseSeed = growingSeedManager.getGrowingSeedById(bundle.getInt(PlantDescriptionActivity.GOTS_GROWINGSEED_ID)).getPlant();
+        } else if (bundle != null && bundle.getInt(GrowingPlantDescriptionActivity.GOTS_GROWINGSEED_ID) != 0)
+            baseSeed = growingSeedManager.getGrowingSeedById(bundle.getInt(GrowingPlantDescriptionActivity.GOTS_GROWINGSEED_ID)).getPlant();
         return baseSeed;
     }
 

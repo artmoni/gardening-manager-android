@@ -111,7 +111,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 
     private Fragment fragmentWorkflow;
 
-    private MenuItem workflowMenuItem;
+//    private MenuItem workflowMenuItem;
 
     private Documents taskDocs;
 
@@ -354,11 +354,11 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
         if (mSeed != null && mSeed.getId() == 0) {
             menu.findItem(R.id.photo).setVisible(false);
             menu.findItem(R.id.delete).setVisible(false);
-            workflowMenuItem = menu.findItem(R.id.workflow);
-            if ("project".equals(mSeed.getPlant().getState()))
-                workflowMenuItem.setVisible(true);
-            else
-                workflowMenuItem.setVisible(false);
+//            workflowMenuItem = menu.findItem(R.id.workflow);
+//            if ("project".equals(mSeed.getPlant().getState()))
+//                workflowMenuItem.setVisible(true);
+//            else
+//                workflowMenuItem.setVisible(false);
         } else {
             // if ("project".equals(mSeed.getState()))
             // else
@@ -509,46 +509,46 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
                 });
                 builder.show();
                 return true;
-            case R.id.workflow:
-                AlertDialog.Builder builderWorkflow = new AlertDialog.Builder(this);
-                builderWorkflow.setMessage(this.getResources().getString(R.string.workflow_launch_description)).setCancelable(
-                        false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        new AsyncTask<Void, Void, Void>() {
-                            @Override
-                            protected Void doInBackground(Void... params) {
-                                NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(
-                                        getApplicationContext());
-                                // BaseSeed baseSeedInterface = (BaseSeed) arg0.getItemAtPosition(arg2);
-                                Session session = getNuxeoClient().getSession();
-                                DocumentManager service = session.getAdapter(DocumentManager.class);
-                                try {
-                                    Document docSeed = service.getDocument(mSeed.getPlant().getUUID());
-                                    nuxeoWorkflowProvider.startWorkflowValidation(docSeed);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                                return null;
-                            }
-
-                            protected void onPostExecute(Void result) {
-                                Toast.makeText(getApplicationContext(),
-                                        "Your plant sheet has been sent to the moderator team", Toast.LENGTH_LONG).show();
-                                runAsyncDataRetrieval();
-                            }
-
-                            ;
-                        }.execute();
-                        dialog.dismiss();
-                    }
-                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-                builderWorkflow.show();
-
-                return true;
+//            case R.id.workflow:
+//                AlertDialog.Builder builderWorkflow = new AlertDialog.Builder(this);
+//                builderWorkflow.setMessage(this.getResources().getString(R.string.workflow_launch_description)).setCancelable(
+//                        false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        new AsyncTask<Void, Void, Void>() {
+//                            @Override
+//                            protected Void doInBackground(Void... params) {
+//                                NuxeoWorkflowProvider nuxeoWorkflowProvider = new NuxeoWorkflowProvider(
+//                                        getApplicationContext());
+//                                // BaseSeed baseSeedInterface = (BaseSeed) arg0.getItemAtPosition(arg2);
+//                                Session session = getNuxeoClient().getSession();
+//                                DocumentManager service = session.getAdapter(DocumentManager.class);
+//                                try {
+//                                    Document docSeed = service.getDocument(mSeed.getPlant().getUUID());
+//                                    nuxeoWorkflowProvider.startWorkflowValidation(docSeed);
+//                                } catch (Exception e) {
+//                                    e.printStackTrace();
+//                                }
+//                                return null;
+//                            }
+//
+//                            protected void onPostExecute(Void result) {
+//                                Toast.makeText(getApplicationContext(),
+//                                        "Your plant sheet has been sent to the moderator team", Toast.LENGTH_LONG).show();
+//                                runAsyncDataRetrieval();
+//                            }
+//
+//                            ;
+//                        }.execute();
+//                        dialog.dismiss();
+//                    }
+//                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        dialog.cancel();
+//                    }
+//                });
+//                builderWorkflow.show();
+//
+//                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -663,8 +663,8 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
                 // FragmentManager fragmentManager = getSupportFragmentManager();
                 // fragmentManager.beginTransaction().replace(R.id.frame_workflow, fragmentWorkflow).commit();
                 addTab(fragmentWorkflow, getResources().getString(R.string.workflow_process_title));
-                if (workflowMenuItem != null)
-                    workflowMenuItem.setVisible(false);
+//                if (workflowMenuItem != null)
+//                    workflowMenuItem.setVisible(false);
             }
         }
         // ********************** Tab actions **********************

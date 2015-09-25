@@ -10,22 +10,19 @@
  ******************************************************************************/
 package org.gots.ui.fragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.gots.action.ActionOnSeed;
-import org.gots.action.GotsActionSeedManager;
-import org.gots.action.adapter.ListAllActionAdapter;
-import org.gots.seed.GotsGrowingSeedManager;
-import org.gots.seed.GrowingSeed;
-import org.gots.ui.PlantDescriptionActivity;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.TextView;
+
+import org.gots.action.ActionOnSeed;
+import org.gots.action.adapter.ListAllActionAdapter;
+import org.gots.seed.GrowingSeed;
+import org.gots.ui.GrowingPlantDescriptionActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ActionsDoneListFragment extends AbstractListFragment {
 
@@ -47,7 +44,7 @@ public class ActionsDoneListFragment extends AbstractListFragment {
     public void onViewCreated(View v, Bundle savedInstanceState) {
         Bundle bundle = this.getArguments();
         if (bundle != null)
-            seedid = bundle.getInt(PlantDescriptionActivity.GOTS_GROWINGSEED_ID);
+            seedid = bundle.getInt(GrowingPlantDescriptionActivity.GOTS_GROWINGSEED_ID);
         super.onViewCreated(v, savedInstanceState);
     }
 

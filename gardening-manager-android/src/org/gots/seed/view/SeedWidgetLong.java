@@ -50,7 +50,7 @@ public class SeedWidgetLong extends RelativeLayout {
     private BaseSeed mSeed;
     private TextView likeCount;
     private FloatingActionButton floatingActionLike;
-    private FloatingActionButton floatingActionActions;
+//    private FloatingActionButton floatingActionActions;
     private OnSeedWidgetLongClickListener mCallback;
 
     public SeedWidgetLong(Context context) {
@@ -83,7 +83,7 @@ public class SeedWidgetLong extends RelativeLayout {
     public interface OnSeedWidgetLongClickListener {
         public void onInformationClick(String url);
 
-        public void onLogClick();
+//        public void onLogClick();
     }
 
     public void setOnSeedWidgetLongClickListener(OnSeedWidgetLongClickListener seedWidgetLongClickListener) {
@@ -167,17 +167,17 @@ public class SeedWidgetLong extends RelativeLayout {
             flag.setImageResource(flagRessource);
         }
 
-        floatingActionActions = (FloatingActionButton) findViewById(R.id.buttonActions);
-        floatingActionActions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mCallback != null)
-                    mCallback.onLogClick();
-            }
-        });
-        if (mSeed instanceof GrowingSeed)
-            floatingActionActions.setVisibility(View.VISIBLE);
-        else floatingActionActions.setVisibility(View.GONE);
+//        floatingActionActions = (FloatingActionButton) findViewById(R.id.buttonActions);
+//        floatingActionActions.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (mCallback != null)
+//                    mCallback.onLogClick();
+//            }
+//        });
+//        if (mSeed instanceof GrowingSeed)
+//            floatingActionActions.setVisibility(View.VISIBLE);
+//        else floatingActionActions.setVisibility(View.GONE);
 
         likeCount = (TextView) findViewById(R.id.textSeedLike);
         floatingActionLike = (FloatingActionButton) findViewById(R.id.buttonLike);
