@@ -1,9 +1,9 @@
 package org.gots.seed;
 
 public class LikeStatus {
-    int userLikeStatus;
+    int userLikeStatus = 0;
 
-    int likesCount;
+    int likesCount = 0;
 
     public int getLikesCount() {
         return likesCount;

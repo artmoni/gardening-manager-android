@@ -58,7 +58,7 @@ public class GrowingSeedWidget extends RelativeLayout {
     }
 
     protected void setupView() {
-        if (mSeed == null /* || !changed */)
+        if (mSeed == null || mSeed.getPlant() == null)
             return;
 
         setTag(mSeed);

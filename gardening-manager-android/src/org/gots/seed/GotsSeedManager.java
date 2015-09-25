@@ -1,10 +1,8 @@
 package org.gots.seed;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.context.GotsContext;
@@ -20,9 +18,11 @@ import org.gots.seed.provider.nuxeo.NuxeoSeedProvider;
 import org.gots.utils.NotConfiguredException;
 import org.nuxeo.android.broadcast.NuxeoBroadcastMessages;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvider {
 
@@ -38,12 +38,9 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     private List<BaseSeed> newSeeds = new ArrayList<BaseSeed>();
 
-    // private List<BaseSeed> allSeeds = new ArrayList<BaseSeed>();
     Map<Integer, BaseSeed> allSeeds;
 
     private static Exception firstCall;
-
-    // private List<BaseSeed> myStock;
 
     private GotsPreferences gotsPrefs;
 
@@ -62,8 +59,6 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     }
 
     protected void setSeedProvider() {
-        // ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        // NetworkInfo ni = cm.getActiveNetworkInfo();
         if (gotsPrefs.isConnectedToServer() && !nuxeoManager.getNuxeoClient().isOffline()) {
             mSeedProvider = new NuxeoSeedProvider(mContext);
         } else
@@ -233,7 +228,13 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     @Override
     public List<BaseSeed> getMyFavorites() {
-        return mSeedProvider.getMyFavorites();
+        List<BaseSeed> myFavorites = new ArrayList<>();
+
+        for (BaseSeed baseSeed : allSeeds.values()) {
+            if (baseSeed.getLikeStatus() != null && baseSeed.getLikeStatus().getUserLikeStatus() > 0)
+                myFavorites.add(baseSeed);
+        }
+        return myFavorites;
     }
 
     @Override
@@ -293,6 +294,6 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     @Override
     public void createRecognitionSeed(File file, NuxeoUtils.OnBlobUpload callback) {
-        mSeedProvider.createRecognitionSeed(file,callback);
+        mSeedProvider.createRecognitionSeed(file, callback);
     }
 }
