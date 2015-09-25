@@ -8,6 +8,7 @@ import org.gots.seed.BaseSeed;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.adapter.SeedListAdapter;
 import org.gots.seed.adapter.VendorSeedListAdapter;
+import org.gots.ui.CatalogueActivity;
 import org.gots.ui.HutActivity;
 import org.gots.ui.PlantDescriptionActivity;
 
@@ -30,23 +31,6 @@ public class CatalogResumeFragment extends BaseGotsFragment implements OnItemCli
         return inflater.inflate(R.layout.catalog_resume, null);
     }
 
-    // @Override
-    // protected void onCurrentGardenChanged() {
-    // // TODO Auto-generated method stub
-    //
-    // }
-    //
-    // @Override
-    // protected void onWeatherChanged() {
-    // // TODO Auto-generated method stub
-    //
-    // }
-    //
-    // @Override
-    // protected void onActionChanged() {
-    // // TODO Auto-generated method stub
-    //
-    // }
     @Override
     public void update() {
         // TODO Auto-generated method stub
@@ -81,7 +65,7 @@ public class CatalogResumeFragment extends BaseGotsFragment implements OnItemCli
 
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(getActivity(), HutActivity.class));
+                    startActivity(new Intent(getActivity(), CatalogueActivity.class));
                 }
             });
         }

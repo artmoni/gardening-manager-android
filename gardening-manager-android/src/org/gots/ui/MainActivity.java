@@ -612,7 +612,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         if (LAUNCHER_ACTION.equals(getIntent().getAction())) {
             startActivity(new Intent(this, ActionActivity.class));
         } else if (LAUNCHER_CATALOGUE.equals(getIntent().getAction()))
-            startActivity(new Intent(this, HutActivity.class));
+            startActivity(new Intent(this, CatalogueActivity.class));
 
         // if (getCurrentGarden() == null || (myGardens != null && myGardens.size() == 0)) {
         // Intent intent = new Intent(getApplicationContext(), ProfileCreationActivity.class);

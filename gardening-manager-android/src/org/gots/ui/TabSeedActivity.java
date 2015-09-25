@@ -640,15 +640,15 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
                     }
                 }
 
-                @Override
-                public void onLogClick() {
-                    if (fragmentListAction == null) {
-                        fragmentListAction = new ActionsDoneListFragment();
-                        fragmentListAction.setArguments(bundle);
-                        fragments.add(fragmentListAction);
-                        addTab(fragmentListAction, getResources().getString(R.string.seed_description_tabmenu_actions));
-                    }
-                }
+//                @Override
+//                public void onLogClick() {
+//                    if (fragmentListAction == null) {
+//                        fragmentListAction = new ActionsDoneListFragment();
+//                        fragmentListAction.setArguments(bundle);
+//                        fragments.add(fragmentListAction);
+//                        addTab(fragmentListAction, getResources().getString(R.string.seed_description_tabmenu_actions));
+//                    }
+//                }
             });
             fragments.add(fragmentDescription);
             addTab(fragmentDescription, getResources().getString(R.string.seed_description_tabmenu_detail));

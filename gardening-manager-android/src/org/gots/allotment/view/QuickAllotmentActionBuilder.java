@@ -16,6 +16,7 @@ import org.gots.action.GotsActionManager;
 import org.gots.action.bean.SowingAction;
 import org.gots.action.view.ActionWidget;
 import org.gots.bean.BaseAllotmentInterface;
+import org.gots.ui.CatalogueActivity;
 import org.gots.ui.HutActivity;
 
 import android.content.Intent;
@@ -47,7 +48,7 @@ public class QuickAllotmentActionBuilder {
                 // v.getTag()).getName());
                 // v.getContext().startActivity(i);
                 // quickAction.dismiss();
-                Intent i = new Intent(v.getContext(), HutActivity.class);
+                Intent i = new Intent(v.getContext(), CatalogueActivity.class);
                 i.putExtra("org.gots.allotment.reference", currentAllotment.getId());
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 v.getContext().startActivity(i);

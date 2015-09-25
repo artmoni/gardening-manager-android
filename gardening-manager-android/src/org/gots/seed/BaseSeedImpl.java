@@ -93,7 +93,10 @@ public class BaseSeedImpl implements Serializable, BaseSeed, Cloneable {
 
     @Override
     public String getName() {
-        return name;
+        String customName = name;
+        if (customName == null || "null".equals(customName))
+            customName = getVariety() + " (" + getSpecie() + ")";
+        return customName;
     }
 
     @Override

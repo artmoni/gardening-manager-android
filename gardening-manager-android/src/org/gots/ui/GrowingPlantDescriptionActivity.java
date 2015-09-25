@@ -1,8 +1,7 @@
 package org.gots.ui;
 
-import android.content.Context;
 import android.os.AsyncTask;
-import android.util.AttributeSet;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -30,7 +29,7 @@ public class GrowingPlantDescriptionActivity extends PlantDescriptionActivity {
     private GrowingSeed growingSeed;
 
     @Override
-    public View onCreateView(String name, Context context, AttributeSet attrs) {
+    protected void onPostCreate(Bundle savedInstanceState) {
         FloatingActionButton bottomRightLeft = new FloatingActionButton(getApplicationContext());
         bottomRightLeft.setSize(FloatingActionButton.SIZE_NORMAL);
         bottomRightLeft.setColorNormalResId(R.color.action_error_color);
@@ -52,7 +51,7 @@ public class GrowingPlantDescriptionActivity extends PlantDescriptionActivity {
         bottomRightLeft.setLayoutParams(params);
         ViewGroup root = (ViewGroup) getWindow().getDecorView().findViewById(android.R.id.content);
         ((ViewGroup) root.getChildAt(0)).addView(bottomRightLeft);
-        return super.onCreateView(name, context, attrs);
+        super.onPostCreate(savedInstanceState);
     }
 
     @Override

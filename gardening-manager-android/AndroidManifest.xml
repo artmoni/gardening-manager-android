@@ -57,15 +57,15 @@
         <activity android:name=".ui.ActionActivity" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow"/>
         <activity android:name=".ui.AboutActivity" android:theme="@style/Theme.Styled"/>
         <activity android:name=".ui.WebHelpActivity" android:theme="@style/Theme.Styled"/>
-        <activity android:name=".ui.TabSeedActivity" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow">
-         <!--<intent-filter>-->
-                <!--<data android:host="my.gardening-manager.com" android:scheme="http"/>-->
+        <!--<activity android:name=".ui.TabSeedActivity" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow">-->
+         <!--&lt;!&ndash;<intent-filter>&ndash;&gt;-->
+                <!--&lt;!&ndash;<data android:host="my.gardening-manager.com" android:scheme="http"/>&ndash;&gt;-->
 
-                <!--<action android:name="android.intent.action.VIEW"/>-->
-                <!--<category android:name="android.intent.category.DEFAULT"/>-->
-                <!--<category android:name="android.intent.category.BROWSABLE"/>-->
-            <!--</intent-filter>-->
-            </activity>
+                <!--&lt;!&ndash;<action android:name="android.intent.action.VIEW"/>&ndash;&gt;-->
+                <!--&lt;!&ndash;<category android:name="android.intent.category.DEFAULT"/>&ndash;&gt;-->
+                <!--&lt;!&ndash;<category android:name="android.intent.category.BROWSABLE"/>&ndash;&gt;-->
+            <!--&lt;!&ndash;</intent-filter>&ndash;&gt;-->
+            <!--</activity>-->
         <activity android:name=".ui.PlantDescriptionActivity" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow">
             <intent-filter>
                 <data android:host="my.gardening-manager.com" android:scheme="http"/>
@@ -75,7 +75,7 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.GrowingPlantDescriptionActivity"/>
+        <activity android:name=".ui.GrowingPlantDescriptionActivity" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow"/>
         <activity android:name=".ui.RecognitionActivity"/>
         <activity android:name=".ui.HutActivity" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow" android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity android:name=".ui.NewSeedActivity" android:theme="@style/Theme.Styled" android:windowSoftInputMode="stateHidden|adjustResize"/>

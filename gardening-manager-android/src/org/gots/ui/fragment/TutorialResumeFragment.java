@@ -7,6 +7,7 @@ import org.gots.garden.GardenInterface;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsSeedManager;
 import org.gots.ui.BaseGotsActivity;
+import org.gots.ui.CatalogueActivity;
 import org.gots.ui.GardenActivity;
 import org.gots.ui.HutActivity;
 import org.gots.ui.ProfileActivity;
@@ -145,7 +146,7 @@ public class TutorialResumeFragment extends BaseGotsFragment implements OnClickL
             startActivity(i);
             break;
         case COMPLETE_SEED:
-            Intent i2 = new Intent(getActivity(), HutActivity.class);
+            Intent i2 = new Intent(getActivity(), CatalogueActivity.class);
             startActivity(i2);
             break;
         case COMPLETE_ALLOTMENT:
