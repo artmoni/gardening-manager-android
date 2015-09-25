@@ -17,8 +17,10 @@ import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
 import org.gots.ui.fragment.ActionsDoneListFragment;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by sfleury on 25/09/15.
@@ -32,8 +34,8 @@ public class GrowingPlantDescriptionActivity extends PlantDescriptionActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         FloatingActionButton bottomRightLeft = new FloatingActionButton(getApplicationContext());
         bottomRightLeft.setSize(FloatingActionButton.SIZE_NORMAL);
-        bottomRightLeft.setColorNormalResId(R.color.action_error_color);
-        bottomRightLeft.setColorPressedResId(R.color.action_warning_color);
+        bottomRightLeft.setColorNormalResId(R.color.text_color_light);
+        bottomRightLeft.setColorPressedResId(R.color.text_color_light_transparent);
         bottomRightLeft.setIcon(R.drawable.ic_menu_todo);
 
         bottomRightLeft.setStrokeVisible(false);
@@ -93,10 +95,8 @@ public class GrowingPlantDescriptionActivity extends PlantDescriptionActivity {
                         }
 
                         protected void onPostExecute(ActionOnSeed actionOnSeed) {
-                            showNotification(actionOnSeed.getName() + " planned on " + actionOnSeed.getDateActionTodo().toString(), false);
+                            showNotification(actionOnSeed.getName() + " planned on " + new SimpleDateFormat(" dd/MM/yyyy", Locale.FRANCE).format(actionOnSeed.getDateActionTodo()), false);
                         }
-
-                        ;
                     }.execute();
                     return true;
                 }
