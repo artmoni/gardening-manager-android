@@ -22,6 +22,8 @@
 package org.gots.ui;
 
 import android.accounts.Account;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -611,36 +613,32 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
             myRotateAnimation.setRepeatCount(Animation.INFINITE);
             imageView.startAnimation(myRotateAnimation);
 
-            Animation blinkAnimation = AnimationUtils.loadAnimation(this, R.anim.disappear);
-            blinkAnimation.setRepeatCount(Animation.INFINITE);
-            notificationText.setAnimation(blinkAnimation);
         } else {
             imageView.clearAnimation();
+            imageView.setVisibility(View.GONE);
             notificationText.clearAnimation();
         }
+//        Animation slideInUp = AnimationUtils.loadAnimation(this, R.anim.slide_in_up);
+//        layoutNotification.startAnimation(slideInUp);
         layoutNotification.setVisibility(View.VISIBLE);
+        layoutNotification.setAlpha(0.0f);
 
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    sleep(millis);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            layoutNotification.setVisibility(View.GONE);
-                            imageView.clearAnimation();
-                            notificationText.clearAnimation();
-                        }
-                    });
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        if (!animation)
-            thread.start();
+        layoutNotification.animate()
+                .alpha(1.0f)
+                .setDuration(600)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        layoutNotification.animate()
+                                .translationY(0)
+                                .alpha(0.0f)
+                                .setDuration(millis);
+//                        imageView.clearAnimation();
+//                        notificationText.clearAnimation();
+                    }
+                });
+        ;
 
     }
 }

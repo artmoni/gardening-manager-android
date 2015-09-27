@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/refresh_seed"
-        app:actionLayout="@layout/actionbar_indeterminate_progress"
         android:icon="@drawable/bt_update"
         android:title="@string/seed.menu.update"
-        app:showAsAction="always"/>
+        android:visible="false"
+        app:actionLayout="@layout/actionbar_indeterminate_progress"
+        app:showAsAction="always" />
 
 </menu>

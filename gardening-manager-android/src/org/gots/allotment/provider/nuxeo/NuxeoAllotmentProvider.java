@@ -1,9 +1,7 @@
 package org.gots.allotment.provider.nuxeo;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import android.content.Context;
+import android.util.Log;
 
 import org.gots.allotment.provider.local.LocalAllotmentProvider;
 import org.gots.bean.BaseAllotmentInterface;
@@ -21,8 +19,10 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.FileBlob;
 import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PathRef;
 
-import android.content.Context;
-import android.util.Log;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
     protected static final String TAG = "NuxeoAllotmentProvider";
@@ -93,7 +93,7 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
 
                         @Override
                         public void onDownloadFailed() {
-
+                            Log.w(TAG, "getMyAllotments() onDownloadFailed() file=" + file.getAbsolutePath());
                         }
                     });
 //                    if (fileBlob != null && fileBlob.getLength() > 0)

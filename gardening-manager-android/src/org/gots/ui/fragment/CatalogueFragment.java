@@ -12,7 +12,6 @@ package org.gots.ui.fragment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,7 +25,6 @@ import android.widget.GridView;
 import android.widget.Spinner;
 
 import org.gots.R;
-import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.BaseSeed;
 import org.gots.seed.adapter.SeedListAdapter;
 import org.gots.seed.adapter.VendorSeedListAdapter;
@@ -81,6 +79,7 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
 
         public abstract void onPlantCatalogueLongClick(CatalogueFragment vendorListFragment, BaseSeed seed);
 
+        public abstract void onPlantFiltered(String filterTitle);
     }
 
     @Override
@@ -106,7 +105,7 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
         gridViewCatalog.setOnItemLongClickListener(this);
         gridViewCatalog.setOnScrollListener(this);
 
-        List<String> list = new ArrayList<String>();
+        final List<String> list = new ArrayList<String>();
         list.add(getResources().getString(R.string.hut_menu_vendorseeds));
         list.add(getResources().getString(R.string.hut_menu_favorites));
         list.add(getResources().getString(R.string.hut_menu_thismonth));
@@ -122,7 +121,7 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                filter=null;
+                filter = null;
             }
 
             @Override
@@ -141,7 +140,7 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
                         filter = null;
                         break;
                 }
-//                force=true;
+                mCallback.onPlantFiltered(list.get(position));
                 runAsyncDataRetrieval();
             }
         });
@@ -149,16 +148,6 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
         return view;
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-//        runAsyncDataRetrieval();
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
     @Override
     protected boolean requireAsyncDataRetrieval() {
