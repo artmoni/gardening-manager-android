@@ -176,7 +176,7 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
     @Override
     protected Object retrieveNuxeoData() throws Exception {
 
-        return allotmentManager.getMyAllotments(false);
+        return allotmentManager.getMyAllotments(true);
     }
 
     @Override

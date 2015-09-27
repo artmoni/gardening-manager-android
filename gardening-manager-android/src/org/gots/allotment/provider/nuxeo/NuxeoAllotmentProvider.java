@@ -56,7 +56,7 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
     @Override
     public List<BaseAllotmentInterface> getMyAllotments(boolean force) {
         List<BaseAllotmentInterface> remoteAllotments = new ArrayList<BaseAllotmentInterface>();
-        List<BaseAllotmentInterface> myAllotments = new ArrayList<BaseAllotmentInterface>();
+//        List<BaseAllotmentInterface> myAllotments = new ArrayList<BaseAllotmentInterface>();
         try {
             Session session = getNuxeoClient().getSession();
             final DocumentManager service = session.getAdapter(DocumentManager.class);
@@ -81,14 +81,23 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
 
             for (Iterator<Document> iterator = docs.iterator(); iterator.hasNext(); ) {
                 final Document document = iterator.next();
-                final BaseAllotmentInterface allotment = NuxeoAllotmentConverter.convert(document);
-                remoteAllotments.add(allotment);
-                final File file = new File(gotsPrefs.getFilesDir().getAbsolutePath(), document.getId());
+                BaseAllotmentInterface allotment = NuxeoAllotmentConverter.convert(document);
+                if (super.getAllotmentByUUID(allotment.getUUID()) != null)
+                    allotment = super.updateAllotment(allotment);
+                else
+                    allotment = super.createAllotment(allotment);
+
+
+                final File file = allotment.getImagePath() != null ? new File (allotment.getImagePath()) : new File(gotsPrefs.getFilesDir().getAbsolutePath(), document.getId());
+                allotment.setImagePath(file.getAbsolutePath());
+                super.updateAllotment(allotment);
                 if (!file.exists()) {
                     NuxeoUtils.downloadBlob(service, document, file, new NuxeoUtils.OnDownloadBlob() {
                         @Override
                         public void onDownloadSuccess(FileBlob fileBlob) {
-                            allotment.setImagePath(file.getAbsolutePath());
+                            Log.w(TAG, "getMyAllotments() onDownloadSuccess() file=" + file.getAbsolutePath());
+
+
                         }
 
                         @Override
@@ -101,15 +110,16 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
 
                 }
                 Log.i(TAG, "Nuxeo Allotment " + allotment.toString());
+                remoteAllotments.add(allotment);
             }
 
-            List<BaseAllotmentInterface> localAllotments = super.getMyAllotments(force);
-            myAllotments = synchronize(remoteAllotments, localAllotments);
+//            List<BaseAllotmentInterface> localAllotments = super.getMyAllotments(force);
+//            myAllotments = synchronize(remoteAllotments, localAllotments);
         } catch (Exception e) {
             Log.e(TAG, "getMyAllotments " + e.getMessage(), e);
             return super.getMyAllotments(force);
         }
-        return myAllotments;
+        return remoteAllotments;
     }
 
     protected List<BaseAllotmentInterface> synchronize(List<BaseAllotmentInterface> remoteAllotments,

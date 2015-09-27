@@ -1,7 +1,8 @@
 package org.gots.allotment.provider.local;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
 
 import org.gots.DatabaseHelper;
 import org.gots.allotment.provider.AllotmentProvider;
@@ -10,9 +11,8 @@ import org.gots.bean.BaseAllotmentInterface;
 import org.gots.preferences.GotsPreferences;
 import org.gots.utils.GotsDBHelper;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LocalAllotmentProvider extends GotsDBHelper implements AllotmentProvider {
 
@@ -110,11 +110,17 @@ public class LocalAllotmentProvider extends GotsDBHelper implements AllotmentPro
         ContentValues values = convertToContentValues(allotment);
         Cursor cursor = null;
         try {
-
-            bdd.update(DatabaseHelper.ALLOTMENT_TABLE_NAME, values,
-                    DatabaseHelper.ALLOTMENT_ID + "=\"" + allotment.getId() + "\"", null);
-            cursor = bdd.query(DatabaseHelper.ALLOTMENT_TABLE_NAME, null, DatabaseHelper.ALLOTMENT_ID + "='"
-                    + allotment.getId() + "'", null, null, null, null);
+            if (allotment.getId() >= 0){
+                bdd.update(DatabaseHelper.ALLOTMENT_TABLE_NAME, values,
+                        DatabaseHelper.ALLOTMENT_ID + "=\"" + allotment.getId() + "\"", null);
+                cursor = bdd.query(DatabaseHelper.ALLOTMENT_TABLE_NAME, null, DatabaseHelper.ALLOTMENT_ID + "='"
+                        + allotment.getId() + "'", null, null, null, null);
+            }else {
+                bdd.update(DatabaseHelper.ALLOTMENT_TABLE_NAME, values,
+                        DatabaseHelper.ALLOTMENT_UUID + "=\"" + allotment.getUUID()+ "\"", null);
+                cursor = bdd.query(DatabaseHelper.ALLOTMENT_TABLE_NAME, null, DatabaseHelper.ALLOTMENT_UUID + "='"
+                        + allotment.getUUID() + "'", null, null, null, null);
+            }
 
             if (cursor.moveToFirst()) {
                 int rowid = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ALLOTMENT_ID));

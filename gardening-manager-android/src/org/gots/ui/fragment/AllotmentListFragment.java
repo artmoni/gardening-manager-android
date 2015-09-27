@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -130,4 +131,8 @@ public class AllotmentListFragment extends AbstractListFragment {
         runAsyncDataRetrieval();
     }
 
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        super.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+    }
 }
