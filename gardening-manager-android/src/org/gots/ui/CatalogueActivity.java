@@ -19,7 +19,9 @@ import java.util.List;
 /**
  * Created by sfleury on 20/09/15.
  */
-public class CatalogueActivity extends BaseGotsActivity implements CatalogueFragment.OnSeedSelected{
+public class CatalogueActivity extends BaseGotsActivity implements CatalogueFragment.OnSeedSelected {
+
+
     @Override
     protected boolean requireFloatingButton() {
         return true;
@@ -58,6 +60,7 @@ public class CatalogueActivity extends BaseGotsActivity implements CatalogueFrag
     public void onPlantCatalogueLongClick(CatalogueFragment vendorListFragment, BaseSeed seed) {
 //        startSupportActionMode(new MyCallBack(seed));
     }
+
     @Override
     protected List<FloatingItem> onCreateFloatingMenu() {
         List<FloatingItem> floatingItems = new ArrayList<>();
@@ -108,5 +111,10 @@ public class CatalogueActivity extends BaseGotsActivity implements CatalogueFrag
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onPlantFiltered(String filterTitle) {
+        showNotification(filterTitle, true);
     }
 }

@@ -17,7 +17,9 @@ import org.gots.action.bean.SowingAction;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.nuxeo.NuxeoWorkflowProvider;
 import org.gots.seed.BaseSeed;
+import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
+import org.gots.seed.GrowingSeedImpl;
 import org.gots.ui.fragment.ActionsDoneListFragment;
 import org.gots.ui.fragment.AllotmentListFragment;
 import org.gots.ui.fragment.PlantDescriptionFragment;
@@ -250,11 +252,22 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
     }
 
     @Override
-    public void onAllotmentClick(BaseAllotmentInterface allotmentInterface) {
-        SowingAction action = new SowingAction(getApplicationContext());
-        action.execute(allotmentInterface, mSeed);
-        getSupportFragmentManager().popBackStack();
-        showNotification(mSeed.getVariety() + " added to allotment " + allotmentInterface.getName(), false);
+    public void onAllotmentClick(final BaseAllotmentInterface allotmentInterface) {
+        new AsyncTask<Void,Void,GrowingSeed>(){
+            @Override
+            protected GrowingSeed doInBackground(Void... params) {
+                GotsGrowingSeedManager  growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(getApplicationContext());
+                GrowingSeed growingSeed = new GrowingSeedImpl();
+                growingSeed.setPlant(mSeed);
+                return growingSeedManager.plantingSeed(growingSeed, allotmentInterface);
+            }
+
+            @Override
+            protected void onPostExecute(GrowingSeed growingSeed) {
+                getSupportFragmentManager().popBackStack();
+                showNotification(mSeed.getVariety() + " added to allotment " + allotmentInterface.getName(), false);
+            }
+        }.execute();
     }
 
     @Override

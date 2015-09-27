@@ -5,14 +5,40 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
+
+    <FrameLayout
+        android:id="@+id/mainLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/idAdsTop"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="right|bottom"
+            android:orientation="horizontal"></LinearLayout>
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/idAdsTop"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:orientation="horizontal" />
+
     <RelativeLayout
         android:id="@+id/layoutNotification"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:background="@color/text_color_dark"
+        android:layout_margin="20dp"
+        android:background="@drawable/bg_line_action"
         android:gravity="center_vertical"
         android:orientation="vertical"
+        android:layout_above="@id/idAdsTop"
         android:visibility="gone">
 
         <ImageView
@@ -31,35 +57,11 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/imageViewRefresh"
             android:gravity="center"
             android:text="@string/plant.recognition.progress"
-            android:textSize="12dp"
-            android:layout_toLeftOf="@id/imageViewRefresh"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/text_color_light" />
+            android:textColor="@color/text_color_dark"
+            android:textSize="12dp" />
     </RelativeLayout>
-
-    <FrameLayout
-        android:id="@+id/mainLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/idAdsTop"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/layoutNotification">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="right|bottom"
-            android:orientation="horizontal"></LinearLayout>
-    </FrameLayout>
-
-    <LinearLayout
-        android:id="@+id/idAdsTop"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:orientation="horizontal" />
-
 </RelativeLayout>

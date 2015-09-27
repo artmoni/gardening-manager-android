@@ -10,8 +10,19 @@
  ******************************************************************************/
 package org.gots.ui;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.FragmentManager.BackStackEntry;
+import android.support.v7.view.ActionMode;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import org.gots.R;
 import org.gots.action.bean.SowingAction;
@@ -28,19 +39,8 @@ import org.gots.ui.fragment.CatalogueFragment;
 import org.gots.ui.fragment.CatalogueFragment.OnSeedSelected;
 import org.gots.ui.fragment.VendorCatalogueFragment;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v4.app.FragmentManager.BackStackEntry;
-import android.support.v7.view.ActionMode;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelected, OnSeedSelected,
         OnAllotmentListener {
@@ -244,6 +244,11 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
     }
 
     @Override
+    public void onPlantFiltered(String filterTitle) {
+        showNotification(filterTitle, true);
+    }
+
+    @Override
     public void onPlantCatalogueClick(final BaseSeed seed) {
         if (vendorListFragment != null) {
             getSupportFragmentManager().popBackStack();
@@ -254,7 +259,7 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
                 @Override
                 protected Void doInBackground(Void... params) {
                     SowingAction action = new SowingAction(getApplicationContext());
-                    action.execute(currentAllotment,  seed);
+                    action.execute(currentAllotment, seed);
                     return null;
                 }
 

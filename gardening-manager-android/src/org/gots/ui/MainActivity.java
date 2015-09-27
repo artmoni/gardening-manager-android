@@ -873,8 +873,9 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
     @Override
     public void onCurrentGardenChanged(GardenInterface garden) {
         // displayDrawerMenu();
-        Toast.makeText(getApplicationContext(), "Loading garden " + garden.getName() + " please wait.",
-                Toast.LENGTH_LONG).show();
+//        Toast.makeText(getApplicationContext(), "Loading garden " + garden.getName() + " please wait.",
+//                Toast.LENGTH_LONG).show();
+        showNotification(getResources().getString(R.string.gots_loading) + garden.getName(),true);
         displayTitle();
         displayUserAvatar();
         displaySpinnerGarden();

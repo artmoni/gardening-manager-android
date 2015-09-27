@@ -377,6 +377,11 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
     }
 
     @Override
+    public void onPlantFiltered(String filterTitle) {
+
+    }
+
+    @Override
     public void onAllotmentClick(BaseAllotmentInterface allotmentInterface) {
 
         if (listAllotmentfragment != null && listAllotmentfragment.isAdded()) {
