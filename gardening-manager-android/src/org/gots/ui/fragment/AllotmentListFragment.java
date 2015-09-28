@@ -1,22 +1,18 @@
 package org.gots.ui.fragment;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
-import org.gots.R;
 import org.gots.allotment.adapter.ListAllotmentAdapter;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AllotmentListFragment extends AbstractListFragment {
     private ListAllotmentAdapter lsa;
@@ -132,7 +128,12 @@ public class AllotmentListFragment extends AbstractListFragment {
     }
 
     @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        super.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+    protected void onListItemClicked(int i) {
+
+    }
+
+    @Override
+    protected void doRefresh() {
+
     }
 }

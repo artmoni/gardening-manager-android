@@ -94,6 +94,7 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater,container,savedInstanceState);
         mContext = getActivity();
 
         listVendorSeedAdapter = new VendorSeedListAdapter(mContext, new ArrayList<BaseSeed>());
@@ -226,6 +227,16 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
     @Override
     public void onItemClick(AdapterView<?> list, View container, int position, long id) {
         mCallback.onPlantCatalogueClick(listVendorSeedAdapter.getItem(position));
+    }
+
+    @Override
+    protected void onListItemClicked(int i) {
+
+    }
+
+    @Override
+    protected void doRefresh() {
+
     }
 
     public void update() {

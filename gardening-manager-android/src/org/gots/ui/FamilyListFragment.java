@@ -1,23 +1,21 @@
 package org.gots.ui;
 
-import java.util.ArrayList;
+import android.os.Bundle;
+import android.view.View;
 
 import org.gots.exception.NotImplementedException;
 import org.gots.seed.BaseSeed;
 import org.gots.seed.adapter.VendorSeedListAdapter;
 import org.gots.ui.fragment.AbstractListFragment;
 
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ListView;
+import java.util.ArrayList;
 
 public class FamilyListFragment extends AbstractListFragment {
 
     @Override
     public void onViewCreated(View v, Bundle savedInstanceState) {
-        listView = new ListView(getActivity());
-        listView.setAdapter(new VendorSeedListAdapter(getActivity(), new ArrayList<BaseSeed>()));
-        super.onViewCreated(listView, savedInstanceState);
+        getListView().setAdapter(new VendorSeedListAdapter(getActivity(), new ArrayList<BaseSeed>()));
+        super.onViewCreated(getListView(), savedInstanceState);
     }
 
     @Override
@@ -39,6 +37,16 @@ public class FamilyListFragment extends AbstractListFragment {
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
         super.onNuxeoDataRetrieved(data);
+    }
+
+    @Override
+    protected void onListItemClicked(int i) {
+
+    }
+
+    @Override
+    protected void doRefresh() {
+
     }
 
 }

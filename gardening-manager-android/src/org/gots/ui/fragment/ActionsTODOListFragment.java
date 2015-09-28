@@ -31,4 +31,14 @@ public class ActionsTODOListFragment extends AbstractListFragment {
                 new ListAllActionAdapter(getActivity(), (List<ActionOnSeed>) data, ListAllActionAdapter.STATUS_TODO));
         super.onNuxeoDataRetrieved(data);
     }
+
+    @Override
+    protected void onListItemClicked(int i) {
+
+    }
+
+    @Override
+    protected void doRefresh() {
+
+    }
 }

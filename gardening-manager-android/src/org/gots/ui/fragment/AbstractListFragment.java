@@ -1,5 +1,14 @@
 package org.gots.ui.fragment;
 
+import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.ListView;
+
 import org.gots.R;
 import org.gots.action.GotsActionSeedManager;
 import org.gots.action.provider.GotsActionSeedProvider;
@@ -9,16 +18,8 @@ import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GotsSeedManager;
 import org.nuxeo.android.fragments.BaseListFragment;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
-import android.widget.ListView;
 
-public abstract class AbstractListFragment extends BaseListFragment implements ListView.OnScrollListener {
+public abstract class AbstractListFragment extends BaseListFragment {
     protected GotsSeedManager seedProvider;
 
     protected GotsAllotmentManager allotmentManager;
@@ -43,52 +44,32 @@ public abstract class AbstractListFragment extends BaseListFragment implements L
         super.onCreate(savedInstanceState);
     }
 
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+////        View view = inflater.inflate(R.layout.swipe_listview, container, false);
+//        return view;
+//    }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+//        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+//        swipeRefreshLayout.setOnRefreshListener(this);
         listView = new ListView(getActivity());
-        listView.setOnScrollListener(this);
-        listView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-        listView.setDividerHeight(5);
-        container.setPadding(5, 5, 5, 5);
-        container.setBackgroundColor(getResources().getColor(R.color.text_color_light));
-        return listView;
-    }
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
 
-    @Override
-    protected void onListItemClicked(int listItemPosition) {
-        // TODO Auto-generated method stub
+            }
 
-    }
-
-    @Override
-    protected void doRefresh() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        // int lastItem = firstVisibleItem + visibleItemCount - 1;
-        // if (mReady) {
-        // char firstLetter = mStrings[firstVisibleItem].charAt(0);
-        //
-        // if (!mShowing && firstLetter != mPrevLetter) {
-        //
-        // mShowing = true;
-        // mDialogText.setVisibility(View.VISIBLE);
-        //
-        // }
-        // mDialogText.setText(((Character) firstLetter).toString());
-        // mHandler.removeCallbacks(mWindowRemover);
-        // mHandler.postDelayed(mWindowRemover, 3000);
-        // mPrevLetter = firstLetter;
-        // }
-    }
-
-    @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
-        // TODO Auto-generated method stub
-
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+//                if (firstVisibleItem == 0)
+//                    swipeRefreshLayout.setEnabled(true);
+//                else
+//                    swipeRefreshLayout.setEnabled(false);
+            }
+        });
     }
 
     protected AbsListView getListView() {
@@ -97,6 +78,13 @@ public abstract class AbstractListFragment extends BaseListFragment implements L
 
     public void update() {
         runAsyncDataRetrieval();
+    }
+
+
+
+    @Override
+    protected boolean requireAsyncDataRetrieval() {
+        return true;
     }
 
 }
