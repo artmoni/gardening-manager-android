@@ -49,21 +49,18 @@ public class AllotmentListFragment extends AbstractListFragment {
 //        return inflater.inflate(R.layout.allotment_list_fragment, null);
 //    }
 
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        lsa = new ListAllotmentAdapter(getActivity(), new ArrayList<BaseAllotmentInterface>());
+
+    }
+
     @Override
     public void onViewCreated(View v, Bundle savedInstanceState) {
-//        listAllotments = (ListView) v.findViewById(R.id.IdGardenAllotmentsList);
-        lsa = new ListAllotmentAdapter(getActivity(), new ArrayList<BaseAllotmentInterface>());
         getListView().setAdapter(lsa);
         getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-//        listAllotments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                mCallback.onAllotmentClick(lsa.getItem(position));
-//               
-//            }
-//
-//        });
         getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
