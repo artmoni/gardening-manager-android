@@ -44,17 +44,9 @@ public abstract class AbstractListFragment extends BaseListFragment {
         super.onCreate(savedInstanceState);
     }
 
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-////        View view = inflater.inflate(R.layout.swipe_listview, container, false);
-//        return view;
-//    }
-
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-//        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
-//        swipeRefreshLayout.setOnRefreshListener(this);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+//        View view = inflater.inflate(R.layout.swipe_listview, container, false);
         listView = new ListView(getActivity());
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -70,6 +62,15 @@ public abstract class AbstractListFragment extends BaseListFragment {
 //                    swipeRefreshLayout.setEnabled(false);
             }
         });
+        return listView;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+//        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+//        swipeRefreshLayout.setOnRefreshListener(this);
+
     }
 
     protected AbsListView getListView() {
