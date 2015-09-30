@@ -204,6 +204,12 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     }
 
     @Override
+    protected void onNuxeoDataRetrievalStarted() {
+        super.onNuxeoDataRetrievalStarted();
+        showNotification(getResources().getString(R.string.plant_recognition_description),false);
+    }
+
+    @Override
     protected Object retrieveNuxeoData() throws Exception {
         return "";
     }
