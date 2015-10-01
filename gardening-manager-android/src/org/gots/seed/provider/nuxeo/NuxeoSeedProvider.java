@@ -420,11 +420,13 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             try {
                 stockitem = service.getDocument(new PathRef(stockFolder.getPath() + "/" + vendorSeed.getSpecie() + " "
                         + vendorSeed.getVariety()), true);
+                
                 quantity = Integer.valueOf(stockitem.getString("stockitem:quantity"));
             } catch (Exception e) {
                 Log.i(TAG, e.getMessage() + " The seed is not in f");
                 stockitem = service.createDocument(stockFolder, "StockItem",
                         vendorSeed.getSpecie() + " " + vendorSeed.getVariety());
+                //TODO change relation to attribute
                 service.createRelation(stockitem, "http://purl.org/dc/terms/isFormatOf",
                         new PathRef(vendorSeed.getUUID()));
 

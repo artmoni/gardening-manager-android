@@ -37,7 +37,6 @@ import org.gots.ui.fragment.AllotmentListFragment.OnAllotmentSelected;
 import org.gots.ui.fragment.BaseGotsFragment;
 import org.gots.ui.fragment.CatalogueFragment;
 import org.gots.ui.fragment.CatalogueFragment.OnSeedSelected;
-import org.gots.ui.fragment.VendorCatalogueFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +59,7 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
 
         setTitleBar(R.string.dashboard_allotments_name);
 
-        vendorListFragment = new VendorCatalogueFragment();
+        vendorListFragment = new CatalogueFragment();
         allotmentListFragment = new AllotmentListFragment();
         editorFragment = new AllotmentEditorFragment();
 

@@ -102,7 +102,7 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
     private PlantCreationFragment finalFragment;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setTitleBar(R.string.seed_register_title);

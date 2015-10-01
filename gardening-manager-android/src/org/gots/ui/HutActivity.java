@@ -56,7 +56,6 @@ import org.gots.ui.fragment.FavoriteCatalogueFragment;
 import org.gots.ui.fragment.MonthlySeedListFragment;
 import org.gots.ui.fragment.ParrotCatalogueFragment;
 import org.gots.ui.fragment.StockVendorListFragment;
-import org.gots.ui.fragment.VendorCatalogueFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -281,7 +280,7 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
         // // ********************** Tab description **********************
         Bundle args;
         args = new Bundle();
-        addTab(new VendorCatalogueFragment(), getString(R.string.hut_menu_vendorseeds));
+        addTab(new CatalogueFragment(), getString(R.string.hut_menu_vendorseeds));
         args = new Bundle();
         if (currentAllotment != -1) {
             args.putBoolean(CatalogueFragment.IS_SELECTABLE, true);
