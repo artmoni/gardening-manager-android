@@ -1,9 +1,7 @@
 package org.gots.nuxeo;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.Random;
+import android.os.AsyncTask;
+import android.util.Log;
 
 import org.gots.utils.FileUtilities;
 import org.nuxeo.android.cache.blob.BlobWithProperties;
@@ -15,8 +13,10 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.FileBlob;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
-import android.os.AsyncTask;
-import android.util.Log;
+import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Random;
 
 public class NuxeoUtils {
 
@@ -133,7 +133,7 @@ public class NuxeoUtils {
             @Override
             protected void onPostExecute(FileBlob fileBlob) {
                 if (onDownloadBlob != null) {
-                    if (fileBlob != null)
+                    if (fileBlob != null && fileBlob.getLength() > 0)
                         onDownloadBlob.onDownloadSuccess(fileBlob);
                     else
                         onDownloadBlob.onDownloadFailed();

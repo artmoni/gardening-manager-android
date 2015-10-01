@@ -89,6 +89,7 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
 
 
                 final File file = allotment.getImagePath() != null ? new File (allotment.getImagePath()) : new File(gotsPrefs.getFilesDir().getAbsolutePath(), document.getId());
+                Log.d(TAG,file.toString());
                 allotment.setImagePath(file.getAbsolutePath());
                 super.updateAllotment(allotment);
                 if (!file.exists()) {
