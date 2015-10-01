@@ -61,7 +61,7 @@ public class CatalogueActivity extends BaseGotsActivity implements CatalogueFrag
 
     @Override
     public void onPlantCatalogueLongClick(CatalogueFragment vendorListFragment, BaseSeed seed) {
-        startSupportActionMode(new MyCallBack(seed));
+        startSupportActionMode(new MyCallBack(seed, vendorListFragment));
     }
 
     @Override
@@ -127,10 +127,12 @@ public class CatalogueActivity extends BaseGotsActivity implements CatalogueFrag
 
     private final class MyCallBack implements ActionMode.Callback {
 
+        private final CatalogueFragment currentFragment;
         private BaseSeed currentSeed;
 
-        private MyCallBack(BaseSeed seedInterface) {
+        private MyCallBack(BaseSeed seedInterface, CatalogueFragment catalogueFragment) {
             currentSeed = seedInterface;
+            currentFragment = catalogueFragment;
         }
 
         @Override
@@ -168,7 +170,7 @@ public class CatalogueActivity extends BaseGotsActivity implements CatalogueFrag
                         @Override
                         protected void onPostExecute(Void result) {
                             showNotification(SeedUtil.translateSpecie(getApplicationContext(), currentSeed) + " +1 " + getResources().getString(R.string.seed_action_stock_description), false);
-
+                            if (currentFragment != null) currentFragment.update();
 
                             super.onPostExecute(result);
                         }
@@ -187,6 +189,7 @@ public class CatalogueActivity extends BaseGotsActivity implements CatalogueFrag
                         @Override
                         protected void onPostExecute(Void result) {
                             showNotification(SeedUtil.translateSpecie(getApplicationContext(), currentSeed) + " -1 " + getResources().getString(R.string.seed_action_stock_description), false);
+                            if (currentFragment != null) currentFragment.update();
 
                             super.onPostExecute(result);
                         }

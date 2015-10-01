@@ -455,12 +455,12 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 
             switch (item.getItemId()) {
-                case R.id.action_seed_detail:
-                    Intent i = new Intent(getApplicationContext(), PlantDescriptionActivity.class);
-                    i.putExtra(PlantDescriptionActivity.GOTS_VENDORSEED_ID, currentSeed.getSeedId());
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(i);
-                    break;
+//                case R.id.action_seed_detail:
+//                    Intent i = new Intent(getApplicationContext(), PlantDescriptionActivity.class);
+//                    i.putExtra(PlantDescriptionActivity.GOTS_VENDORSEED_ID, currentSeed.getSeedId());
+//                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    startActivity(i);
+//                    break;
                 case R.id.action_stock_add:
                     new AsyncTask<Void, Integer, Void>() {
 

@@ -420,7 +420,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             try {
                 stockitem = service.getDocument(new PathRef(stockFolder.getPath() + "/" + vendorSeed.getSpecie() + " "
                         + vendorSeed.getVariety()), true);
-                
+
                 quantity = Integer.valueOf(stockitem.getString("stockitem:quantity"));
             } catch (Exception e) {
                 Log.i(TAG, e.getMessage() + " The seed is not in f");

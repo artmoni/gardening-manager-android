@@ -394,80 +394,80 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
                 }.execute();
                 return true;
 
-            case R.id.download:
-                new AsyncTask<Void, Integer, File>() {
-                    boolean licenceAvailable = false;
-
-                    IabHelper buyHelper;
-
-                    private ProgressDialog dialog;
-
-                    protected void onPreExecute() {
-                        licenceAvailable = gotsPurchase.getFeatureExportPDF() ? true : gotsPurchase.isPremium();
-                        dialog = ProgressDialog.show(TabSeedActivity.this, "",
-                                getResources().getString(R.string.gots_loading), true);
-                        dialog.setCanceledOnTouchOutside(true);
-                    }
-
-                    ;
-
-                    @Override
-                    protected File doInBackground(Void... params) {
-                        if (licenceAvailable)
-                            try {
-                                GotsActionSeedProvider provider = GotsActionSeedManager.getInstance().initIfNew(
-                                        getApplicationContext());
-                                return provider.downloadHistory(mSeed);
-                            } catch (GotsServerRestrictedException e) {
-                                Log.w(TAG, e.getMessage());
-                                licenceAvailable = false;
-                                return null;
-                            }
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(File result) {
-                        try {
-                            dialog.dismiss();
-                            dialog = null;
-                        } catch (Exception e) {
-                            // nothing
-                        }
-                        if (!gotsPrefs.isConnectedToServer()) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(TabSeedActivity.this);
-                            builder.setMessage(getResources().getString(R.string.login_connect_restricted)).setCancelable(
-                                    false).setPositiveButton(getResources().getString(R.string.login_connect),
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            LoginDialogFragment dialogFragment = new LoginDialogFragment();
-                                            dialogFragment.show(getSupportFragmentManager(), "");
-                                        }
-                                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            });
-                            builder.show();
-                        }
-                        if (!licenceAvailable) {
-                            FragmentManager fm = getSupportFragmentManager();
-                            GotsBillingDialog editNameDialog = new GotsBillingDialog(
-                                    GotsPurchaseItem.SKU_FEATURE_PDFHISTORY);
-                            editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
-
-                            editNameDialog.show(fm, "fragment_edit_name");
-                        }
-                        if (result != null) {
-                            Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
-                            pdfIntent.setDataAndType(Uri.fromFile(result), "application/pdf");
-                            startActivity(pdfIntent);
-                        }
-
-                    }
-                }.execute();
-
-                return true;
+//            case R.id.download:
+//                new AsyncTask<Void, Integer, File>() {
+//                    boolean licenceAvailable = false;
+//
+//                    IabHelper buyHelper;
+//
+//                    private ProgressDialog dialog;
+//
+//                    protected void onPreExecute() {
+//                        licenceAvailable = gotsPurchase.getFeatureExportPDF() ? true : gotsPurchase.isPremium();
+//                        dialog = ProgressDialog.show(TabSeedActivity.this, "",
+//                                getResources().getString(R.string.gots_loading), true);
+//                        dialog.setCanceledOnTouchOutside(true);
+//                    }
+//
+//                    ;
+//
+//                    @Override
+//                    protected File doInBackground(Void... params) {
+//                        if (licenceAvailable)
+//                            try {
+//                                GotsActionSeedProvider provider = GotsActionSeedManager.getInstance().initIfNew(
+//                                        getApplicationContext());
+//                                return provider.downloadHistory(mSeed);
+//                            } catch (GotsServerRestrictedException e) {
+//                                Log.w(TAG, e.getMessage());
+//                                licenceAvailable = false;
+//                                return null;
+//                            }
+//                        return null;
+//                    }
+//
+//                    @Override
+//                    protected void onPostExecute(File result) {
+//                        try {
+//                            dialog.dismiss();
+//                            dialog = null;
+//                        } catch (Exception e) {
+//                            // nothing
+//                        }
+//                        if (!gotsPrefs.isConnectedToServer()) {
+//                            AlertDialog.Builder builder = new AlertDialog.Builder(TabSeedActivity.this);
+//                            builder.setMessage(getResources().getString(R.string.login_connect_restricted)).setCancelable(
+//                                    false).setPositiveButton(getResources().getString(R.string.login_connect),
+//                                    new DialogInterface.OnClickListener() {
+//                                        public void onClick(DialogInterface dialog, int id) {
+//                                            LoginDialogFragment dialogFragment = new LoginDialogFragment();
+//                                            dialogFragment.show(getSupportFragmentManager(), "");
+//                                        }
+//                                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                    dialog.cancel();
+//                                }
+//                            });
+//                            builder.show();
+//                        }
+//                        if (!licenceAvailable) {
+//                            FragmentManager fm = getSupportFragmentManager();
+//                            GotsBillingDialog editNameDialog = new GotsBillingDialog(
+//                                    GotsPurchaseItem.SKU_FEATURE_PDFHISTORY);
+//                            editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+//
+//                            editNameDialog.show(fm, "fragment_edit_name");
+//                        }
+//                        if (result != null) {
+//                            Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
+//                            pdfIntent.setDataAndType(Uri.fromFile(result), "application/pdf");
+//                            startActivity(pdfIntent);
+//                        }
+//
+//                    }
+//                }.execute();
+//
+//                return true;
             case R.id.photo:
                 photoAction = new PhotoAction(getApplicationContext());
                 Date now = new Date();

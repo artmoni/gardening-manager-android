@@ -6,7 +6,7 @@
     <item
         android:id="@+id/action_stock_add"
         android:icon="@drawable/action_buy"
-        android:title="Buy"/>
+        android:title="@string/seed.action.add.stock"/>
     <item
         android:id="@+id/action_stock_reduce"
         android:icon="@drawable/action_reducequantity"
