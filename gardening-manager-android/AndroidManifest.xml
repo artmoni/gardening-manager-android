@@ -83,7 +83,7 @@
         <activity android:name=".authentication.AuthenticationActivity" android:theme="@style/Theme.Styled"/>
         <activity android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" android:name="com.google.ads.AdActivity"/>
         <activity android:name=".ui.PreferenceActivity" android:theme="@style/Theme.Styled"/>
-        <activity android:name=".ui.CatalogueActivity" android:theme="@style/Theme.Styled"/>
+        <activity android:name=".ui.CatalogueActivity" android:theme="@style/Theme.Styled" android:uiOptions="splitActionBarWhenNarrow"/>
 
         <provider android:authorities="org.gots.providers.sensor" android:label="@string/dashboard.sensor.name" android:name="org.gots.provider.SensorContentProvider" android:syncable="true"/>
         <provider android:authorities="org.gots.providers.seeds" android:label="@string/dashboard.hut.name" android:name="org.gots.provider.SeedsContentProvider" android:syncable="true"/>
@@ -95,7 +95,7 @@
         <receiver android:name=".action.service.ActionTODOBroadcastReceiver">
         </receiver>
 
-        
+
 
         <service android:name=".action.service.ActionNotificationService"/>
         <service android:name=".weather.service.WeatherUpdateService"/>
