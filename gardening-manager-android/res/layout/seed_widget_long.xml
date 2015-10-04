@@ -16,7 +16,7 @@
         android:layout_marginTop="8dp"
         android:background="@color/white"
         android:gravity="center_vertical"
-        android:src="@drawable/no_picture"></ImageView>
+        android:src="@drawable/no_picture" />
 
     <RelativeLayout
         android:id="@+id/idSeedFamilyBackground"
@@ -113,7 +113,6 @@
                 android:layout_alignStart="@+id/IdSeedHarvestPlanning"
                 android:layout_alignTop="@+id/textView5"
                 android:gravity="center_horizontal"
-
                 android:orientation="horizontal"
                 android:text="0"
                 android:textSize="10sp" />

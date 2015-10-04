@@ -4,22 +4,11 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ * <p>
  * Contributors:
- *     sfleury - initial API and implementation
+ * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.seed.view;
-
-import org.gots.R;
-import org.gots.broadcast.BroadCastMessages;
-import org.gots.context.GotsContext;
-import org.gots.exception.GotsException;
-import org.gots.preferences.GotsPreferences;
-import org.gots.seed.BaseSeed;
-import org.gots.seed.GotsSeedManager;
-import org.gots.seed.LikeStatus;
-import org.gots.seed.SeedUtil;
-import org.gots.ui.fragment.LoginDialogFragment;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -37,6 +26,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.gots.R;
+import org.gots.broadcast.BroadCastMessages;
+import org.gots.context.GotsContext;
+import org.gots.exception.GotsException;
+import org.gots.preferences.GotsPreferences;
+import org.gots.seed.BaseSeed;
+import org.gots.seed.GotsSeedManager;
+import org.gots.seed.LikeStatus;
+import org.gots.seed.SeedUtil;
+import org.gots.ui.fragment.LoginDialogFragment;
+
 public class SeedWidgetTile extends LinearLayout {
     Context mContext;
 
@@ -49,6 +49,12 @@ public class SeedWidgetTile extends LinearLayout {
     private ImageView like;
 
     private ImageView state;
+    private View likeContainer;
+    LinearLayout stockLayout;
+    TextView stockValue;
+    ImageView seedView;
+    TextView seedSpecie;
+    TextView seedVariety;
 
     public SeedWidgetTile(Context context) {
         super(context);
@@ -66,6 +72,16 @@ public class SeedWidgetTile extends LinearLayout {
     private void initView() {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.seed_widget_tile, this);
+
+
+        stockLayout = (LinearLayout) findViewById(R.id.idSeedStock);
+        stockValue = (TextView) findViewById(R.id.textViewNbStock);
+        seedView = (ImageView) findViewById(R.id.idSeedImage2);
+
+        seedSpecie = (TextView) findViewById(R.id.IdSeedSpecie);
+        seedVariety = (TextView) findViewById(R.id.IdSeedVariety);
+        state = (ImageView) findViewById(R.id.imageStateValidation);
+
     }
 
     @Override
@@ -80,62 +96,30 @@ public class SeedWidgetTile extends LinearLayout {
         if (mSeed == null)
             return;
 
-        // int familyImageRessource = 0;
-        // if (mSeed.getFamily() != null)
-        // familyImageRessource = getResources().getIdentifier(
-        // "org.gots:drawable/family_" + mSeed.getFamily().toLowerCase(), null, null);
-        //
-        // if (familyImageRessource != 0)
-        // setBackgroundResource(familyImageRessource);
-        // else {
-        // int sdk = android.os.Build.VERSION.SDK_INT;
-        // if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-        // setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.family_unknown));
-        // } else {
-        // setBackground(mContext.getResources().getDrawable(R.drawableTag.family_unknown));
-        // }
-        // }
-
-//        GrowingSeedWidget growingSeedWidget = (GrowingSeedWidget) findViewById(R.id.idSeedWidget2);
-//        growingSeedWidget.setSeed(mSeed);
-        ImageView seedView = (ImageView) findViewById(R.id.idSeedImage2);
         Bitmap image = SeedUtil.getSeedBitmap(GotsContext.get(mContext).getServerConfig().getFilesDir(), mSeed);
         if (image != null)
             seedView.setImageBitmap(image);
         else {
             seedView.setImageResource(SeedUtil.getSeedDrawable(getContext(), mSeed));
         }
-        TextView seedSpecie = (TextView) findViewById(R.id.IdSeedSpecie);
+
         seedSpecie.setText(SeedUtil.translateSpecie(mContext, mSeed));
         if (GotsPreferences.DEBUG)
             seedSpecie.setText("(" + mSeed.getSeedId() + ")" + SeedUtil.translateSpecie(mContext, mSeed));
 
-        TextView seedVariety = (TextView) findViewById(R.id.IdSeedVariety);
         seedVariety.setText(mSeed.getVariety());
 
-        state = (ImageView) findViewById(R.id.imageStateValidation);
         if ("approved".equals(mSeed.getState()))
             state.setVisibility(View.VISIBLE);
         else
             state.setVisibility(View.GONE);
 
-        // PlanningWidget planningSow = (PlanningWidget) fidindViewById(R.id.IdSeedSowingPlanning);
-        // planningSow.setAdapter(new PlanningSowAdapter(mSeed));
-        // //
-        // PlanningWidget planningHarvest = (PlanningWidget) findViewById(R.id.IdSeedHarvestPlanning);
-        // planningHarvest.setAdapter(new PlanningHarvestAdapter(mSeed));
+        if (mSeed.getNbSachet() > 0) {
+            stockLayout.setVisibility(View.VISIBLE);
+            stockValue.setText(String.valueOf(mSeed.getNbSachet()));
+        } else
+            stockLayout.setVisibility(View.GONE);
 
-        LinearLayout stock = (LinearLayout) findViewById(R.id.idSeedStock);
-        stock.removeAllViews();
-        for (int i = 0; i < mSeed.getNbSachet(); i++) {
-            ImageView seedbag = new ImageView(mContext);
-            seedbag.setImageDrawable(mContext.getResources().getDrawable(R.drawable.seed_bag));
-            // seedbag.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.bg_planning_sow));
-
-            LayoutParams params = new LinearLayout.LayoutParams(30, 30);
-            seedbag.setLayoutParams(params);
-            stock.addView(seedbag, i);
-        }
 
         if (mSeed.getLanguage() != null && !"".equals(mSeed.getLanguage())) {
             ImageView flag = (ImageView) findViewById(R.id.IdSeedLanguage);
@@ -144,6 +128,7 @@ public class SeedWidgetTile extends LinearLayout {
             flag.setImageResource(flagRessource);
         }
 
+        likeContainer = (View) findViewById(R.id.layoutLikeContainer);
         likeCount = (TextView) findViewById(R.id.textSeedLike);
         like = (ImageView) findViewById(R.id.ImageSeedLike);
 
@@ -205,7 +190,9 @@ public class SeedWidgetTile extends LinearLayout {
                         displayLikeStatus(result);
                         mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
 
-                    };
+                    }
+
+                    ;
                 }.execute();
 
             }
@@ -213,47 +200,26 @@ public class SeedWidgetTile extends LinearLayout {
     }
 
     protected void displayLikeStatus(LikeStatus likeStatus) {
-        likeCount.setTextColor(getResources().getColor(R.color.text_color_dark));
         if (likeStatus != null && likeStatus.getLikesCount() > 0) {
             likeCount.setText(String.valueOf(likeStatus.getLikesCount()));
-        } else
-            likeCount.setText(String.valueOf(""));
+            likeCount.setTextColor(getResources().getColor(R.color.text_color_dark));
+        }
 
         if (likeStatus != null && likeStatus.getUserLikeStatus() > 0) {
             like.setImageDrawable(getResources().getDrawable(R.drawable.ic_like));
             likeCount.setTextColor(getResources().getColor(R.color.text_color_light));
+            likeContainer.setVisibility(View.VISIBLE);
 
         } else {
             like.setImageDrawable(getResources().getDrawable(R.drawable.ic_like_unknown));
+            likeContainer.setVisibility(View.GONE);
+
         }
     }
-
-    // public static String unAccent(String s) {
-    // //
-    // // JDK1.5
-    // // use sun.text.Normalizer.normalize(s, Normalizer.DECOMP, 0);
-    // //
-    // String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
-    // Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-    // return pattern.matcher(temp).replaceAll("");
-    // }
-
-    //
-    // @Override
-    // public void onClick(View v) {
-    //
-    // setTag(mSeed);
-    // QuickSeedActionBuilder actionBuilder = new
-    // QuickSeedActionBuilder((SeedWidget)v);
-    // actionBuilder.show();
-    // }
 
     public void setSeed(BaseSeed seed) {
         this.mSeed = seed;
         setupView();
-        // invalidate();
-        // requestLayout();
-        // refreshDrawableState();
     }
 
 }

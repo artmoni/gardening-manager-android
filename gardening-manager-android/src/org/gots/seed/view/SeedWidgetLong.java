@@ -35,7 +35,6 @@ import org.gots.exception.GotsException;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeed;
 import org.gots.seed.GotsSeedManager;
-import org.gots.seed.GrowingSeed;
 import org.gots.seed.LikeStatus;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.adapter.PlanningHarvestAdapter;
@@ -50,7 +49,7 @@ public class SeedWidgetLong extends RelativeLayout {
     private BaseSeed mSeed;
     private TextView likeCount;
     private FloatingActionButton floatingActionLike;
-//    private FloatingActionButton floatingActionActions;
+    //    private FloatingActionButton floatingActionActions;
     private OnSeedWidgetLongClickListener mCallback;
 
     public SeedWidgetLong(Context context) {
@@ -116,9 +115,12 @@ public class SeedWidgetLong extends RelativeLayout {
 
         ImageView seedImage = (ImageView) findViewById(R.id.idSeedWidget2);
         Bitmap image = SeedUtil.getSeedBitmap(getGotsContext().getServerConfig().getFilesDir(), mSeed);
-        if (image != null)
+
+        if (image != null) {
             seedImage.setImageBitmap(image);
-        else {
+            if (image.getHeight() > image.getWidth())
+                seedImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        } else {
             seedImage.setImageResource(SeedUtil.getSeedDrawable(getContext(), mSeed));
         }
 
