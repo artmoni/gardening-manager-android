@@ -14,10 +14,10 @@ import org.gots.seed.SeedUtil;
 /**
  * Created by sfleury on 04/10/15.
  */
-final class PlantCallBack implements ActionMode.Callback {
+class PlantCallBack implements ActionMode.Callback {
 
-    private final OnPlantCallBackClicked mPlantCallBackClicked;
-    private BaseGotsActivity gotsActivity;
+    protected final OnPlantCallBackClicked mPlantCallBackListener;
+    protected BaseGotsActivity gotsActivity;
     private BaseSeed currentSeed;
 
     public interface OnPlantCallBackClicked {
@@ -27,7 +27,7 @@ final class PlantCallBack implements ActionMode.Callback {
     PlantCallBack(BaseGotsActivity gotsActivity, BaseSeed seedInterface, OnPlantCallBackClicked plantCallBackClicked) {
         this.gotsActivity = gotsActivity;
         currentSeed = seedInterface;
-        mPlantCallBackClicked = plantCallBackClicked;
+        mPlantCallBackListener = plantCallBackClicked;
     }
 
     @Override
@@ -65,8 +65,8 @@ final class PlantCallBack implements ActionMode.Callback {
                     @Override
                     protected void onPostExecute(Void result) {
                         gotsActivity.showNotification(SeedUtil.translateSpecie(gotsActivity.getApplicationContext(), currentSeed) + " +1 " + gotsActivity.getResources().getString(R.string.seed_action_stock_description), false);
-                        if (mPlantCallBackClicked != null)
-                            mPlantCallBackClicked.onPlantCallBackClicked();
+                        if (mPlantCallBackListener != null)
+                            mPlantCallBackListener.onPlantCallBackClicked();
                         super.onPostExecute(result);
                     }
                 }.execute();
@@ -84,8 +84,8 @@ final class PlantCallBack implements ActionMode.Callback {
                     @Override
                     protected void onPostExecute(Void result) {
                         gotsActivity.showNotification(SeedUtil.translateSpecie(gotsActivity.getApplicationContext(), currentSeed) + " -1 " + gotsActivity.getResources().getString(R.string.seed_action_stock_description), false);
-                        if (mPlantCallBackClicked != null)
-                            mPlantCallBackClicked.onPlantCallBackClicked();
+                        if (mPlantCallBackListener != null)
+                            mPlantCallBackListener.onPlantCallBackClicked();
                         super.onPostExecute(result);
                     }
                 }.execute();
@@ -106,6 +106,8 @@ final class PlantCallBack implements ActionMode.Callback {
                                     @Override
                                     protected void onPostExecute(Void result) {
                                         gotsActivity.showNotification(currentSeed.getName() + " has been deleted", false);
+                                        if (mPlantCallBackListener != null)
+                                            mPlantCallBackListener.onPlantCallBackClicked();
                                         super.onPostExecute(result);
                                     }
                                 }.execute();

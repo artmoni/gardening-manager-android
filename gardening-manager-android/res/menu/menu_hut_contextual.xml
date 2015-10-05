@@ -6,16 +6,18 @@
     <item
         android:id="@+id/action_stock_add"
         android:icon="@drawable/action_buy"
-        android:title="@string/seed.action.add.stock" />
+        android:title="@string/seed.action.add.stock"
+        app:showAsAction="always" />
     <item
         android:id="@+id/action_stock_reduce"
         android:icon="@drawable/action_reducequantity"
+        android:showAsAction="always"
         android:title="Reduce" />
     <item
         android:id="@+id/delete"
         android:icon="@drawable/action_delete"
         android:title="@string/action.delete"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
     <!--  <item
          android:id="@+id/action_sow"
          android:icon="@drawable/action_sow"

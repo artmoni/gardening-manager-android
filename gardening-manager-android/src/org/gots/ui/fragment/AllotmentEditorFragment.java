@@ -40,6 +40,7 @@ public class AllotmentEditorFragment extends BaseGotsFragment {
 
         public void onAllotmentAddPlantClicked(BaseGotsFragment fragment, BaseAllotmentInterface allotment);
 
+        public void onAllotmentSeedLongClicked(BaseAllotmentInterface allotment, GrowingSeed item);
     }
 
     protected static final int REQUEST_ACTION_PICK = 10;
@@ -182,6 +183,14 @@ public class AllotmentEditorFragment extends BaseGotsFragment {
 
                     } else
                         mCallback.onAllotmentAddPlantClicked(AllotmentEditorFragment.this, allotment);
+                }
+            });
+            gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (position < adapter.getCount() - 1)
+                        mCallback.onAllotmentSeedLongClicked(allotment, adapter.getItem(position));
+                    return true;
                 }
             });
             gridView.setExpanded(true);

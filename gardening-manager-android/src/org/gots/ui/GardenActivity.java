@@ -227,6 +227,12 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
     public void onGrowingSeedLongClick(View v, GrowingSeed growingSeedInterface) {
 //        QuickSeedActionBuilder actionBuilder = new QuickSeedActionBuilder(this, (GrowingSeedWidget) v, growingSeedInterface);
 //        actionBuilder.show();
+        startSupportActionMode(new GrowingPlantCallBack(this, growingSeedInterface, new PlantCallBack.OnPlantCallBackClicked() {
+            @Override
+            public void onPlantCallBackClicked() {
+                displayAllotmentsFragment();
+            }
+        }));
     }
 
     @Override
@@ -310,6 +316,16 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
                 ((BaseGotsFragment) backStackEntryAt).update();
             }
         }
+    }
+
+    @Override
+    public void onAllotmentSeedLongClicked(BaseAllotmentInterface allotment, GrowingSeed growingSeed) {
+        startSupportActionMode(new GrowingPlantCallBack(this, growingSeed, new PlantCallBack.OnPlantCallBackClicked() {
+            @Override
+            public void onPlantCallBackClicked() {
+                displayAllotmentsFragment();
+            }
+        }));
     }
 
     @Override
