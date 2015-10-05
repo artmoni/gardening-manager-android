@@ -102,22 +102,22 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
 //        this.allGardens = (List<GardenInterface>) myGardens;
         currentGarden = (GardenInterface) myGarden;
         if (currentGarden.getGpsLatitude() == 0 || currentGarden.getGpsLongitude() == 0) {
-            Toast.makeText(getApplicationContext(), "Long press to localize your garden", Toast.LENGTH_LONG).show();
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-            builder.setTitle(getResources().getString(R.string.dialog_garden_localize));
-            builder.setMessage(getResources().getString(R.string.dialog_garden_localize_description));
-
-            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-
-            });
-
-            AlertDialog alert = builder.create();
-            alert.show();
+//            Toast.makeText(getApplicationContext(), "Long press to localize your garden", Toast.LENGTH_LONG).show();
+//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//
+//            builder.setTitle(getResources().getString(R.string.dialog_garden_localize));
+//            builder.setMessage(getResources().getString(R.string.dialog_garden_localize_description));
+//
+//            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//
+//                public void onClick(DialogInterface dialog, int which) {
+//                    dialog.dismiss();
+//                }
+//
+//            });
+//
+//            AlertDialog alert = builder.create();
+//            alert.show();
         } else {
 
             if (contentFragment != null)

@@ -39,9 +39,9 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
+
 import org.gots.R;
-import org.gots.action.util.ActionState;
-import org.gots.action.view.ActionWidget;
 import org.gots.allotment.GotsAllotmentManager;
 import org.gots.bean.Garden;
 import org.gots.garden.GardenInterface;
@@ -76,7 +76,7 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
 
     private TextView editTextWeatherLocality;
 
-    private ActionWidget buttonWeatherState;
+    private FloatingActionButton buttonWeatherState;
 
     private View buttonValidate;
     private int nbAllotments = 0;
@@ -145,9 +145,9 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
 //        buttonLocalize = (ActionWidget) view.findViewById(R.id.imageViewLocalize);
 //        buttonLocalize.setActionImage(R.drawable.bt_localize_garden);
 //        buttonLocalize.setOnClickListener(this);
-        buttonWeatherState = (ActionWidget) view.findViewById(R.id.imageViewWeatherState);
+        buttonWeatherState = (FloatingActionButton) view.findViewById(R.id.imageViewWeatherState);
         buttonWeatherState.setOnClickListener(this);
-        buttonWeatherState.setActionImage(R.drawable.weather_disconnected);
+        buttonWeatherState.setImageResource(R.drawable.weather_disconnected);
 
         buttonValidate = view.findViewById(R.id.buttonValidatePosition);
         buttonValidate.setOnClickListener(this);
@@ -212,7 +212,7 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
         Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_FINE);
 
-        buttonWeatherState.setActionImage(R.drawable.bt_update);
+        buttonWeatherState.setImageResource(R.drawable.bt_update);
         Animation rotation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
         rotation.setRepeatCount(Animation.INFINITE);
         buttonWeatherState.startAnimation(rotation);
@@ -247,10 +247,10 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
                 garden.setCountryCode(address.getCountryCode());
                 // force forecast locality when geolocalized
                 garden.setLocalityForecast(address.getLocality());
-                buttonWeatherState.setState(ActionState.NORMAL);
+                buttonWeatherState.setColorNormal(getResources().getColor(R.color.green_light));
                 fetchWeatherAsync();
             } else {
-                buttonWeatherState.setState(ActionState.CRITICAL);
+                buttonWeatherState.setColorNormal(getResources().getColor(R.color.action_warning_color));
                 // sinon on affiche un message d'erreur
                 // ((TextView) findViewById(R.id.editTextLocality)).setHint(getResources().getString(
                 // R.string.location_notfound));
@@ -267,7 +267,7 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
                 protected void onPreExecute() {
 //                    garden.setLocality(editTextWeatherLocality.getText().toString());
 
-                    buttonWeatherState.setActionImage(R.drawable.bt_update);
+                    buttonWeatherState.setImageResource(R.drawable.bt_update);
                     Animation rotation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
                     rotation.setRepeatCount(Animation.INFINITE);
                     buttonWeatherState.startAnimation(rotation);
@@ -284,19 +284,19 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
                 protected void onPostExecute(Short result) {
                     buttonWeatherState.clearAnimation();
                     if (result.shortValue() == WeatherManager.WEATHER_OK) {
-                        buttonWeatherState.setActionImage(R.drawable.weather_connected);
-                        buttonWeatherState.setState(ActionState.NORMAL);
+                        buttonWeatherState.setImageResource(R.drawable.weather_connected);
+                        buttonWeatherState.setColorNormal(getResources().getColor(R.color.green_light));
 
                         StringBuilder stringBuilder = new StringBuilder();
                         stringBuilder.append(garden.getLocality());
-                        if (garden.getAdminArea()!= null) {
+                        if (garden.getAdminArea() != null) {
                             stringBuilder.append(", ");
                             stringBuilder.append(garden.getAdminArea());
                         }
                         editTextWeatherLocality.setText(stringBuilder.toString());
                     } else {
-                        buttonWeatherState.setActionImage(R.drawable.weather_disconnected);
-                        buttonWeatherState.setState(ActionState.CRITICAL);
+                        buttonWeatherState.setImageResource(R.drawable.weather_disconnected);
+                        buttonWeatherState.setColorNormal(getResources().getColor(R.color.action_warning_color));
                     }
                     buttonWeatherState.invalidate();
                 }
@@ -311,7 +311,7 @@ public class ProfileEditorFragment extends BaseGotsFragment implements LocationL
         mlocManager.removeUpdates(this);
 
         buttonWeatherState.clearAnimation();
-        buttonWeatherState.setActionImage(R.drawable.bt_localize_garden);
+        buttonWeatherState.setImageResource(R.drawable.bt_localize_garden);
     }
 
     @Override

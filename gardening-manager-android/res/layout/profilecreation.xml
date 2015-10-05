@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/org.gots"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_gravity="center_horizontal"
@@ -9,7 +10,6 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:padding="0dp">
@@ -37,7 +37,8 @@
                 android:layout_centerHorizontal="true"
                 android:background="@color/text_color_light_transparent"
                 android:orientation="vertical"
-                android:padding="5dp">
+                android:padding="5dp"
+                android:id="@+id/relativeLayout">
 
 
                 <EditText
@@ -48,9 +49,10 @@
                     android:gravity="center"
                     android:hint="My garden"
                     android:singleLine="true"
-                    android:textSize="20dp">
+                    android:textSize="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_centerHorizontal="true">
 
-                    <requestFocus />
                 </EditText>
 
                 <TextView
@@ -66,27 +68,33 @@
                     android:layout_height="wrap_content"
                     android:layout_alignBaseline="@+id/textViewNbAllotments"
                     android:layout_toRightOf="@+id/textViewNbAllotments"
-                    android:text=" lots" />
+                    android:text=" lots"
+                    android:id="@+id/textView6" />
 
                 <TextView
                     android:id="@+id/editTextGardenWeatherLocality"
                     style="@style/description_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/imageViewWeatherState"
-                    android:layout_toLeftOf="@+id/imageViewWeatherState"
-                    android:layout_toStartOf="@+id/imageViewWeatherState"
-                    android:text="Activate weather forecast" />
+                    android:text="@string/weather.activation.title"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:textSize="10dp"
+                     />
 
 
-                <org.gots.action.view.ActionWidget
-                    android:id="@+id/imageViewWeatherState"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignEnd="@+id/editTextGardenName"
-                    android:layout_alignRight="@+id/editTextGardenName"
-                    android:layout_below="@+id/editTextGardenName" />
             </RelativeLayout>
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/imageViewWeatherState"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                app:fab_size="mini"
+                app:fab_colorNormal="@color/action_ok_color"
+                app:fab_colorPressed="@color/action_warning_color"
+                android:layout_above="@+id/relativeLayout"
+                android:layout_centerHorizontal="true" android:layout_marginBottom="-30dp"/>
+
         </RelativeLayout>
         <!--
                      <ImageView
@@ -130,86 +138,6 @@
                     android:gravity="center_vertical"
                     android:text="@string/garden.type.incredibleedible" />
             </RadioGroup>
-            <!--
-                    <TableRow
-                        android:id="@+id/tableRow2"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content" >
-
-                        <TextView
-                            style="@style/description_content"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/garden.cityname.inputtitle" />
-
-                        <RelativeLayout
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1" >
-
-                            <EditText
-                                android:id="@+id/editTextLocality"
-                                style="@style/description_content"
-                                android:layout_width="fill_parent"
-                                android:layout_height="wrap_content"
-                                android:ems="10"
-                                android:gravity="center"
-                                android:hint="City"
-                                android:singleLine="true" />
-
-                            <ImageView
-                                android:id="@+id/idButtonLocalize"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                android:layout_alignParentTop="true"
-                                android:background="@color/text_color_light"
-                                android:src="@drawable/bt_localize_garden" />
-                        </RelativeLayout>
-                    </TableRow>
-
-                    <TableRow
-                        android:id="@+id/tableRow3"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content" >
-
-                        <TextView
-                            style="@style/description_content"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:editable="false"
-                            android:text="Latitude" />
-
-                        <TextView
-                            android:id="@+id/textGardenLatitude"
-                            style="@style/description_content"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:editable="false"
-                            android:hint="undefined" />
-                    </TableRow>
-
-                    <TableRow
-                        android:id="@+id/tableRow4"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content" >
-
-                        <TextView
-                            style="@style/description_content"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:editable="false"
-                            android:text="Longitude" />
-
-                        <TextView
-                            android:id="@+id/textGardenLongitude"
-                            style="@style/description_content"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:editable="false"
-                            android:hint="undefined" />
-                    </TableRow>
-            -->
         </TableLayout>
 
         <!--
