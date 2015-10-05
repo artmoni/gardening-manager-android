@@ -221,5 +221,7 @@
   <string name="plant_recognition_begin">Transmission de l\'image au service de reconnaissance</string>
   <string name="plant.recognition.confirm">Confirmer</string>
   <string name="weather.activation.title">Activer les prévisions météo</string>
+  <string name="seed.action.like.description">jardiniers aiment cette plante</string>
+  <string name="seed.action.stock.description">au stock</string>
 
 </resources>

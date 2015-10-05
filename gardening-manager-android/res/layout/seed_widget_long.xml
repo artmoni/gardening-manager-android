@@ -108,7 +108,7 @@
             <TextView
                 android:id="@+id/idSeedStock"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/IdSeedHarvestPlanning"
                 android:layout_alignStart="@+id/IdSeedHarvestPlanning"
                 android:layout_alignTop="@+id/textView5"
@@ -123,8 +123,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textView1"
                 android:layout_marginLeft="5dp"
-
                 android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
                 android:layout_toEndOf="@+id/idSeedStock"
                 android:layout_toRightOf="@+id/idSeedStock"
                 android:text="@string/seed.action.stock.description"
@@ -193,34 +193,10 @@
         android:id="@+id/imageStateValidation"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/buttonInformation"
-        android:layout_toStartOf="@+id/buttonInformation"
-        android:src="@drawable/ic_ribbon" />
-
-    <com.getbase.floatingactionbutton.FloatingActionButton
-        android:id="@+id/buttonInformation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="8dp"
-        app:fab_size="mini"
-        fab:fab_colorNormal="@color/action_warning_color"
-        fab:fab_colorPressed="@color/action_error_color"
-        fab:fab_icon="@drawable/ic_information" />
-
-    <com.getbase.floatingactionbutton.FloatingActionButton
-        android:id="@+id/buttonLike"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/layoutSeedName"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/buttonInformation"
-        app:fab_size="mini"
-        fab:fab_colorNormal="@color/white"
-        fab:fab_colorPressed="@color/action_warning_color"
-        fab:fab_icon="@drawable/ic_like" />
+        android:src="@drawable/ic_ribbon" />
 
     <ImageView
         android:id="@+id/IdSeedLanguage"
@@ -230,4 +206,27 @@
         android:layout_alignStart="@+id/layoutSeedName"
         android:layout_below="@+id/layoutSeedName"
         android:src="@drawable/fr" />
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/buttonInformation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        app:fab_size="mini"
+        fab:fab_colorNormal="@color/action_warning_color"
+        fab:fab_colorPressed="@color/action_error_color"
+        fab:fab_icon="@drawable/ic_information" />
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/buttonLike"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/buttonInformation"
+        android:layout_toLeftOf="@+id/buttonInformation"
+        android:layout_toStartOf="@+id/buttonInformation"
+        app:fab_size="mini"
+        fab:fab_colorNormal="@color/white"
+        fab:fab_colorPressed="@color/action_warning_color"
+        fab:fab_icon="@drawable/ic_like" />
 </RelativeLayout>
