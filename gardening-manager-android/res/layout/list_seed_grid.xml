@@ -7,9 +7,16 @@
 
     <Spinner
         android:id="@+id/idSpinnerFilter"
+        style="@style/SpinnerItem"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <AutoCompleteTextView
+        android:id="@+id/idAutoCompleteTextViewSearch"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        style="@style/SpinnerItem"/>
+        android:hint="Search plant by name"
+        android:visibility="gone" />
 
     <GridView
         android:id="@+id/seedgridview"

@@ -13,6 +13,8 @@ package org.gots.ui.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,7 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.GridView;
 import android.widget.Spinner;
 
@@ -48,6 +51,8 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
 
     protected static final String FILTER_STOCK = "filter.stock";
 
+    protected static final String FILTER_TEXT = "filter.text";
+
     public static final String BROADCAST_FILTER = "broadcast_filter";
 
     public static final String IS_SELECTABLE = "seed.selectable";
@@ -73,6 +78,7 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
     private OnSeedSelected mCallback;
     private Spinner spinner;
     private String filter = null;
+    private AutoCompleteTextView autoCompleteTextView;
 
     public interface OnSeedSelected {
         public abstract void onPlantCatalogueClick(BaseSeed seed);
@@ -94,13 +100,33 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater,container,savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
         mContext = getActivity();
 
         listVendorSeedAdapter = new VendorSeedListAdapter(mContext, new ArrayList<BaseSeed>());
         View view = inflater.inflate(R.layout.list_seed_grid, container, false);
         spinner = (Spinner) view.findViewById(R.id.idSpinnerFilter);
         gridViewCatalog = (GridView) view.findViewById(R.id.seedgridview);
+        autoCompleteTextView = (AutoCompleteTextView) view.findViewById(R.id.idAutoCompleteTextViewSearch);
+
+        autoCompleteTextView.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                runAsyncDataRetrieval();
+            }
+        });
+
         gridViewCatalog.setAdapter(listVendorSeedAdapter);
         gridViewCatalog.setOnItemClickListener(this);
         gridViewCatalog.setOnItemLongClickListener(this);
@@ -111,6 +137,7 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
         list.add(getResources().getString(R.string.hut_menu_favorites));
         list.add(getResources().getString(R.string.hut_menu_thismonth));
         list.add(getResources().getString(R.string.hut_menu_myseeds));
+        list.add(getResources().getString(R.string.seed_menu_search));
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>
                 (getActivity(), android.R.layout.simple_spinner_item, list);
@@ -127,22 +154,30 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                autoCompleteTextView.setVisibility(View.GONE);
                 switch (position) {
                     case 1:
                         filter = FILTER_FAVORITES;
+                        runAsyncDataRetrieval();
                         break;
                     case 2:
                         filter = FILTER_THISMONTH;
+                        runAsyncDataRetrieval();
                         break;
                     case 3:
                         filter = FILTER_STOCK;
+                        runAsyncDataRetrieval();
+                        break;
+                    case 4:
+                        filter = FILTER_TEXT;
+                        autoCompleteTextView.setVisibility(View.VISIBLE);
                         break;
                     default:
                         filter = null;
                         break;
                 }
                 mCallback.onPlantFiltered(list.get(position));
-                runAsyncDataRetrieval();
+
             }
         });
 
@@ -170,6 +205,8 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
             catalogue = seedProvider.getMyStock(gardenManager.getCurrentGarden(), force);
         else if (FILTER_THISMONTH.equals(filter))
             catalogue = seedProvider.getSeedBySowingMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
+        else if (FILTER_TEXT.equals(filter))
+            catalogue = seedProvider.getVendorSeedsByName(autoCompleteTextView.getText().toString(),false);
         else
             catalogue = seedProvider.getVendorSeeds(force, page, pageSize);
         force = false;
@@ -186,6 +223,7 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
         List<BaseSeed> vendorSeeds = (List<BaseSeed>) data;
         listVendorSeedAdapter.setSeeds(vendorSeeds);
         listVendorSeedAdapter.notifyDataSetChanged();
+
 
         super.onNuxeoDataRetrieved(data);
     }
