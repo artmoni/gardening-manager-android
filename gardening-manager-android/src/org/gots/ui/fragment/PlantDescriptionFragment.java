@@ -17,6 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
+
 import org.gots.R;
 import org.gots.seed.BaseSeed;
 import org.gots.seed.GotsGrowingSeedManager;
@@ -57,6 +59,7 @@ public class PlantDescriptionFragment extends BaseGotsFragment {
 
     private SeedWidgetLong seedWidgetLong;
     private OnDescriptionFragmentClicked mCallback;
+    private FloatingActionButton buttonMore;
 
     public interface OnDescriptionFragmentClicked {
         public void onInformationClick(String url);
@@ -106,6 +109,14 @@ public class PlantDescriptionFragment extends BaseGotsFragment {
 
 
         });
+        buttonMore = (FloatingActionButton) v.findViewById(R.id.idFloatingButtonMore);
+        buttonMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buttonMore.setVisibility(View.GONE);
+                getView().findViewById(R.id.idLayoutDescriptionMore).setVisibility(View.VISIBLE);
+            }
+        });
         return v;
     }
 
@@ -148,38 +159,44 @@ public class PlantDescriptionFragment extends BaseGotsFragment {
             }
         });
 
-        seedDescriptionCulture.setText(Html.fromHtml(mSeed.getDescriptionCultivation() != null ? mSeed.getDescriptionCultivation() : ""));
-        seedDescriptionCultureTitle.setOnClickListener(new View.OnClickListener() {
+        if (mSeed.getDescriptionCultivation() != null && !"null".equals(mSeed.getDescriptionCultivation())) {
+            buttonMore.setVisibility(View.GONE);
+            getView().findViewById(R.id.idLayoutDescriptionMore).setVisibility(View.VISIBLE);
 
-            public void onClick(View v) {
-                if (seedDescriptionCulture.getVisibility() == View.VISIBLE)
-                    seedDescriptionCulture.setVisibility(View.GONE);
-                else
-                    seedDescriptionCulture.setVisibility(View.VISIBLE);
-            }
-        });
+            seedDescriptionCulture.setText(Html.fromHtml(mSeed.getDescriptionCultivation() != null ? mSeed.getDescriptionCultivation() : ""));
+            seedDescriptionCultureTitle.setOnClickListener(new View.OnClickListener() {
 
-        seedDescriptionEnnemi.setText(Html.fromHtml(mSeed.getDescriptionDiseases() != null ? mSeed.getDescriptionDiseases() : ""));
-        seedDescriptionEnnemiTitle.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    if (seedDescriptionCulture.getVisibility() == View.VISIBLE)
+                        seedDescriptionCulture.setVisibility(View.GONE);
+                    else
+                        seedDescriptionCulture.setVisibility(View.VISIBLE);
+                }
+            });
 
-            public void onClick(View v) {
-                if (seedDescriptionEnnemi.getVisibility() == View.VISIBLE)
-                    seedDescriptionEnnemi.setVisibility(View.GONE);
-                else
-                    seedDescriptionEnnemi.setVisibility(View.VISIBLE);
-            }
-        });
+            seedDescriptionEnnemi.setText(Html.fromHtml(mSeed.getDescriptionDiseases() != null ? mSeed.getDescriptionDiseases() : ""));
+            seedDescriptionEnnemiTitle.setOnClickListener(new View.OnClickListener() {
 
-        seedDescriptionCultureHarvest.setText(Html.fromHtml(mSeed.getDescriptionHarvest() != null ? mSeed.getDescriptionHarvest() : ""));
-        seedDescriptionHarvest.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    if (seedDescriptionEnnemi.getVisibility() == View.VISIBLE)
+                        seedDescriptionEnnemi.setVisibility(View.GONE);
+                    else
+                        seedDescriptionEnnemi.setVisibility(View.VISIBLE);
+                }
+            });
 
-            public void onClick(View v) {
-                if (seedDescriptionCultureHarvest.getVisibility() == View.VISIBLE)
-                    seedDescriptionCultureHarvest.setVisibility(View.GONE);
-                else
-                    seedDescriptionCultureHarvest.setVisibility(View.VISIBLE);
-            }
-        });
+            seedDescriptionCultureHarvest.setText(Html.fromHtml(mSeed.getDescriptionHarvest() != null ? mSeed.getDescriptionHarvest() : ""));
+            seedDescriptionHarvest.setOnClickListener(new View.OnClickListener() {
+
+                public void onClick(View v) {
+                    if (seedDescriptionCultureHarvest.getVisibility() == View.VISIBLE)
+                        seedDescriptionCultureHarvest.setVisibility(View.GONE);
+                    else
+                        seedDescriptionCultureHarvest.setVisibility(View.VISIBLE);
+                }
+            });
+        }
+
         super.onNuxeoDataRetrieved(data);
     }
 
