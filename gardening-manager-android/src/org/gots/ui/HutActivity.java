@@ -216,54 +216,54 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
         if (scanResult != null && scanResult.getContents() != null) {
             Log.i("Scan result", scanResult.toString());
 
-            new AsyncTask<Void, Void, BaseSeed>() {
-                @Override
-                protected BaseSeed doInBackground(Void... params) {
-                    BaseSeed scanSeed = seedManager.getSeedByBarCode(scanResult.getContents());
-                    if (scanSeed != null) {
-                        seedManager.addToStock(scanSeed, getCurrentGarden());
-                    }
-
-                    return scanSeed;
-                }
-
-                protected void onPostExecute(BaseSeed scanSeed) {
-                    if (scanSeed != null) {
-                        currentFilter = scanSeed.getBareCode();
-                        Toast.makeText(getApplicationContext(), scanSeed.getSpecie() + " Added to stock",
-                                Toast.LENGTH_LONG).show();
-
-                    } else {
-                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HutActivity.this);
-                        alertDialogBuilder.setTitle(getResources().getString(R.string.seed_menu_add_barcode));
-                        alertDialogBuilder.setMessage(
-                                getResources().getString(R.string.seed_description_barcode_noresult)).setCancelable(
-                                false).setPositiveButton(getResources().getString(R.string.seed_action_add_catalogue),
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        // if this button is clicked, close
-                                        // current activity
-                                        // MainActivity.this.finish();
-                                        Intent i = new Intent(HutActivity.this, NewSeedActivity.class);
-                                        i.putExtra("org.gots.seed.barcode", scanResult.getContents());
-                                        startActivity(i);
-                                    }
-                                }).setNegativeButton(getResources().getString(R.string.button_cancel),
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        // if this button is clicked, just close
-                                        // the dialog box and do nothing
-                                        dialog.cancel();
-                                    }
-                                });
-
-                        AlertDialog alertDialog = alertDialogBuilder.create();
-                        alertDialog.show();
-                    }
-                }
-
-                ;
-            }.execute();
+//            new AsyncTask<Void, Void, BaseSeed>() {
+//                @Override
+//                protected BaseSeed doInBackground(Void... params) {
+//                    BaseSeed scanSeed = seedManager.getSeedByBarCode(scanResult.getContents());
+//                    if (scanSeed != null) {
+//                        seedManager.addToStock(scanSeed, getCurrentGarden());
+//                    }
+//
+//                    return scanSeed;
+//                }
+//
+//                protected void onPostExecute(BaseSeed scanSeed) {
+//                    if (scanSeed != null) {
+//                        currentFilter = scanSeed.getBareCode();
+//                        Toast.makeText(getApplicationContext(), scanSeed.getSpecie() + " Added to stock",
+//                                Toast.LENGTH_LONG).show();
+//
+//                    } else {
+//                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HutActivity.this);
+//                        alertDialogBuilder.setTitle(getResources().getString(R.string.seed_menu_search_barcode));
+//                        alertDialogBuilder.setMessage(
+//                                getResources().getString(R.string.seed_description_barcode_noresult)).setCancelable(
+//                                false).setPositiveButton(getResources().getString(R.string.seed_action_add_catalogue),
+//                                new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int id) {
+//                                        // if this button is clicked, close
+//                                        // current activity
+//                                        // MainActivity.this.finish();
+//                                        Intent i = new Intent(HutActivity.this, NewSeedActivity.class);
+//                                        i.putExtra("org.gots.seed.barcode", scanResult.getContents());
+//                                        startActivity(i);
+//                                    }
+//                                }).setNegativeButton(getResources().getString(R.string.button_cancel),
+//                                new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int id) {
+//                                        // if this button is clicked, just close
+//                                        // the dialog box and do nothing
+//                                        dialog.cancel();
+//                                    }
+//                                });
+//
+//                        AlertDialog alertDialog = alertDialogBuilder.create();
+//                        alertDialog.show();
+//                    }
+//                }
+//
+//                ;
+//            }.execute();
 
         }
 

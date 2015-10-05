@@ -45,7 +45,7 @@
   <string name="seed.description.barecode">El código de barras asociado facilitará la búsqueda</string>
   <string name="seed.description.barcode.noresult">No se ha encontrado ninguna planta con ese código de barras. Sé el primero en añadirlo al catálogo.</string>
   <string name="seed.menu.add">Añadir semillas</string>
-  <string name="seed.menu.add.barcode">Añadir con código de barras</string>
+  <string name="seed.menu.search.barcode">Añadir con código de barras</string>
   <string name="seed.menu.update">actualización</string>
   <string name="seed.menu.search">Buscar</string>
   <string name="action.planning">Planear una acción</string>

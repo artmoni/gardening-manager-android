@@ -105,8 +105,8 @@ public class CatalogueActivity extends BaseGotsActivity implements CatalogueFrag
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_catalogue, menu);
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.menu_catalogue, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -129,8 +129,8 @@ public class CatalogueActivity extends BaseGotsActivity implements CatalogueFrag
         showNotification(filterTitle, true);
     }
 
-     /*
-     * CallBACK on long press
-     */
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }

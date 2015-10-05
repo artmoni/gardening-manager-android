@@ -45,7 +45,7 @@
   <string name="seed.description.barecode">Einlesen mit Barcode wird Ihre Suche erleichtern</string>
   <string name="seed.description.barcode.noresult">Mit diesem Barcode ist keine Pflanze gefunden worden. Fügen Sie als Erste/r die Beschreibung zum Katalog hinzu.</string>
   <string name="seed.menu.add">Samen hinzufügen</string>
-  <string name="seed.menu.add.barcode">Hinzufügen via Barcode</string>
+  <string name="seed.menu.search.barcode">Hinzufügen via Barcode</string>
   <string name="seed.menu.update">Aktualisieren</string>
   <string name="seed.menu.search">Suche</string>
   <string name="action.planning">Planen Sie eine Aktivität</string>

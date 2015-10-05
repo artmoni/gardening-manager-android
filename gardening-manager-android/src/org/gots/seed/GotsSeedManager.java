@@ -210,7 +210,7 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     }
 
     @Override
-    public synchronized BaseSeed getSeedByBarCode(String barecode) {
+    public synchronized ArrayList<BaseSeed> getSeedByBarCode(String barecode) {
         return mSeedProvider.getSeedByBarCode(barecode);
     }
 

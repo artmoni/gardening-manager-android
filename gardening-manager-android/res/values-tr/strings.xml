@@ -45,7 +45,7 @@
   <string name="seed.description.barecode">Barkod ile ilişkilendirmek aramanızı kolaylaştıracak</string>
   <string name="seed.description.barcode.noresult">Bu barkod ile hiçbir bitki bulunamadı. Kataloğa ekleyiniz</string>
   <string name="seed.menu.add">Bir tohum ekleyin</string>
-  <string name="seed.menu.add.barcode">Barkod ile ekleyiniz</string>
+  <string name="seed.menu.search.barcode">Barkod ile ekleyiniz</string>
   <string name="seed.menu.update">Güncelleştirme</string>
   <string name="seed.menu.search">Arama</string>
   <string name="action.planning">Bir eylem planlayın</string>

@@ -11,7 +11,12 @@
 package org.gots.ui.fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -26,11 +31,16 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.GridView;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import org.gots.R;
 import org.gots.seed.BaseSeed;
 import org.gots.seed.adapter.SeedListAdapter;
 import org.gots.seed.adapter.VendorSeedListAdapter;
+import org.gots.ui.NewSeedActivity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -53,10 +63,11 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
 
     protected static final String FILTER_TEXT = "filter.text";
 
+    private static final String FILTER_BARCODE = "filter.barcode";
+
     public static final String BROADCAST_FILTER = "broadcast_filter";
 
     public static final String IS_SELECTABLE = "seed.selectable";
-
     public static final String TAG = CatalogueFragment.class.getSimpleName();
 
     public Context mContext;
@@ -79,6 +90,7 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
     private Spinner spinner;
     private String filter = null;
     private AutoCompleteTextView autoCompleteTextView;
+    private String lastBarcode;
 
     public interface OnSeedSelected {
         public abstract void onPlantCatalogueClick(BaseSeed seed);
@@ -138,7 +150,8 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
         list.add(getResources().getString(R.string.hut_menu_thismonth));
         list.add(getResources().getString(R.string.hut_menu_myseeds));
         list.add(getResources().getString(R.string.seed_menu_search));
-
+//        list.add(getResources().getString(R.string.seed_menu_search_barcode));
+        
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>
                 (getActivity(), android.R.layout.simple_spinner_item, list);
 
@@ -171,6 +184,11 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
                     case 4:
                         filter = FILTER_TEXT;
                         autoCompleteTextView.setVisibility(View.VISIBLE);
+                        break;
+                    case 5:
+                        filter = FILTER_BARCODE;
+                        IntentIntegrator integrator = new IntentIntegrator(getActivity());
+                        integrator.initiateScan();
                         break;
                     default:
                         filter = null;
@@ -207,6 +225,8 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
             catalogue = seedProvider.getSeedBySowingMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
         else if (FILTER_TEXT.equals(filter))
             catalogue = seedProvider.getVendorSeedsByName(autoCompleteTextView.getText().toString(),false);
+        else if (FILTER_BARCODE.equals(filter))
+            catalogue.addAll(seedProvider.getSeedByBarCode(lastBarcode));
         else
             catalogue = seedProvider.getVendorSeeds(force, page, pageSize);
         force = false;
@@ -279,5 +299,17 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
 
     public void update() {
         runAsyncDataRetrieval();
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        final IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        if (scanResult != null && scanResult.getContents() != null) {
+            Log.i("Scan result", scanResult.toString());
+            lastBarcode = scanResult.getContents();
+            runAsyncDataRetrieval();
+
+
+        }
+
     }
 }

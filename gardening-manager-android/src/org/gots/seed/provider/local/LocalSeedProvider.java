@@ -13,7 +13,6 @@ import org.gots.garden.GardenInterface;
 import org.gots.nuxeo.NuxeoUtils;
 import org.gots.seed.BaseSeed;
 import org.gots.seed.BaseSeedImpl;
-import org.gots.seed.GrowingSeedImpl;
 import org.gots.seed.LikeStatus;
 import org.gots.seed.SpeciesDocument;
 import org.gots.seed.provider.GotsSeedProvider;
@@ -134,16 +133,19 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
     }
 
     @Override
-    public BaseSeed getSeedByBarCode(String barecode) {
-        BaseSeed searchedSeed = new BaseSeedImpl();
-        if (bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_BARECODE + "=\"" + barecode + "\"",
-                null, null, null, null).moveToFirst()) {
-            searchedSeed = cursorToSeed(bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_BARECODE
-                    + "=\"" + barecode + "\"", null, null, null, null));
-        }
-        bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_BARECODE + "=\"" + barecode + "\"", null,
-                null, null, null).close();
-        return searchedSeed;
+    public ArrayList<BaseSeed> getSeedByBarCode(String barecode) {
+        ArrayList<BaseSeed> vendorSeeds = new ArrayList<BaseSeed>();
+
+        Cursor query = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, DatabaseHelper.SEED_BARECODE
+                + "=\"" + barecode + "\"", null, null, null, null);
+
+        if (query.moveToFirst())
+            do {
+                vendorSeeds.add(cursorToSeed(query));
+            } while (query.moveToNext());
+
+        query.close();
+        return vendorSeeds;
     }
 
     @Override
@@ -151,15 +153,15 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
         ArrayList<BaseSeed> vendorSeeds = new ArrayList<BaseSeed>();
         try {
             BaseSeed searchedSeed = new BaseSeedImpl();
-            Cursor managedCursor = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, null, null, null, null, null);
+            Cursor query = bdd.query(DatabaseHelper.SEEDS_TABLE_NAME, null, null, null, null, null, null);
 
-            if (managedCursor.moveToFirst()) {
+            if (query.moveToFirst()) {
                 do {
-                    searchedSeed = cursorToSeed(managedCursor);
+                    searchedSeed = cursorToSeed(query);
                     vendorSeeds.add(searchedSeed);
-                } while (managedCursor.moveToNext());
+                } while (query.moveToNext());
             }
-            managedCursor.close();
+            query.close();
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }

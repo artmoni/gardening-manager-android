@@ -25,10 +25,7 @@ public class GrowingPlantCallBack extends PlantCallBack {
     @Override
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
         switch (item.getItemId()) {
-
-
             case R.id.delete:
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(gotsActivity);
                 builder.setMessage(gotsActivity.getResources().getString(R.string.action_delete_seed)).setCancelable(false).setPositiveButton(
                         "OK", new DialogInterface.OnClickListener() {
@@ -64,11 +61,12 @@ public class GrowingPlantCallBack extends PlantCallBack {
                     }
                 });
                 builder.show();
-                break;
+                mode.finish();
+                return true;
             default:
-                break;
+                return super.onActionItemClicked(mode, item);
         }
-        mode.finish();
-        return true;
+
+
     }
 }

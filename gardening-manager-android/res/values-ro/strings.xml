@@ -45,7 +45,7 @@
   <string name="seed.description.barecode">Associate the barcode will facilitate your search</string>
   <string name="seed.description.barcode.noresult">No plant has been found with this barcode. Be the first to add its description to the catalog.</string>
   <string name="seed.menu.add">Add a seed</string>
-  <string name="seed.menu.add.barcode">Add by barcode</string>
+  <string name="seed.menu.search.barcode">Add by barcode</string>
   <string name="seed.menu.update">Update</string>
   <string name="seed.menu.search">Search</string>
   <string name="action.planning">Planificaţi o acţiune</string>

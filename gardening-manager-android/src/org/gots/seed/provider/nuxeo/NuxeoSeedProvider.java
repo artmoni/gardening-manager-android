@@ -138,9 +138,8 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
     }
 
     @Override
-    public BaseSeed getSeedByBarCode(String barecode) {
-        List<BaseSeed> remoteVendorSeeds = new ArrayList<BaseSeed>();
-        BaseSeed scannedSeed = null;
+    public ArrayList<BaseSeed> getSeedByBarCode(String barecode) {
+        ArrayList<BaseSeed> remoteVendorSeeds = new ArrayList<BaseSeed>();
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager service = session.getAdapter(DocumentManager.class);
@@ -160,21 +159,18 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 Document document = iterator.next();
                 BaseSeed seed = NuxeoSeedConverter.convert(document);
                 if (seed != null) {
-
                     remoteVendorSeeds.add(seed);
                     Log.i(TAG, "Nuxeo Seed: " + seed);
                 } else {
                     Log.w(TAG, "Nuxeo Seed conversion problem " + document.getTitle() + "- " + document.getId());
                 }
             }
-            if (remoteVendorSeeds.size() > 0)
-                scannedSeed = remoteVendorSeeds.get(0);
 
         } catch (Exception e) {
             Log.e(TAG, "getSeedByBarCode " + e.getMessage(), e);
-            scannedSeed = super.getSeedByBarCode(barecode);
+            remoteVendorSeeds = super.getSeedByBarCode(barecode);
         }
-        return scannedSeed;
+        return remoteVendorSeeds;
     }
 
     protected List<BaseSeed> synchronize(List<BaseSeed> localVendorSeeds,

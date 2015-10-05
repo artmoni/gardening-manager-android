@@ -9,6 +9,7 @@ import org.gots.seed.LikeStatus;
 import org.gots.seed.SpeciesDocument;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public interface GotsSeedProvider {
@@ -36,7 +37,7 @@ public interface GotsSeedProvider {
     public void getFamilyById(int id);
 
 
-    public abstract BaseSeed getSeedByBarCode(String barecode);
+    public abstract ArrayList<BaseSeed> getSeedByBarCode(String barecode);
 
     public List<BaseSeed> getVendorSeedsByName(String currentFilter, boolean force);
 
