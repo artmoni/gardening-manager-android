@@ -20,10 +20,10 @@
         android:showAsAction="ifRoom"
         android:title="@string/seed.action.add.catalogue"/>
     -->
-    <item
-        android:id="@+id/help"
-        android:icon="@drawable/help"
-        android:title="@string/menu.help"
-        app:showAsAction="always"/>
+    <!--<item-->
+        <!--android:id="@+id/help"-->
+        <!--android:icon="@drawable/help"-->
+        <!--android:title="@string/menu.help"-->
+        <!--app:showAsAction="always"/>-->
 
 </menu>

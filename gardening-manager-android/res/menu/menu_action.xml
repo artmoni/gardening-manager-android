@@ -6,10 +6,10 @@
          <item android:id="@+id/new_action" android:icon="@drawable/bt_add_seed"
 		android:title="@string/action.menu.add" />
     -->
-    <item
-        android:id="@+id/help"
-        android:icon="@drawable/help"
-        android:title="@string/menu.help"
-        app:showAsAction="ifRoom"/>
+    <!--<item-->
+        <!--android:id="@+id/help"-->
+        <!--android:icon="@drawable/help"-->
+        <!--android:title="@string/menu.help"-->
+        <!--app:showAsAction="ifRoom"/>-->
 
 </menu>

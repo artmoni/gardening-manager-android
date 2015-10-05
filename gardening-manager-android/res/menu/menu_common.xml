@@ -9,5 +9,10 @@
         android:visible="false"
         app:actionLayout="@layout/actionbar_indeterminate_progress"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/help"
+        android:icon="@drawable/help"
+        android:title="@string/menu.help"
+        app:showAsAction="always" />
 
 </menu>
