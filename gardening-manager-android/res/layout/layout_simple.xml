@@ -6,21 +6,35 @@
     android:background="@color/text_color_light"
     android:orientation="vertical">
 
-
-    <FrameLayout
-        android:id="@+id/mainLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:layout_above="@+id/idAdsTop"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="right|bottom"
-            android:orientation="horizontal"></LinearLayout>
-    </FrameLayout>
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/resumeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/mainLayout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" android:layout_weight="1">
+
+            </FrameLayout>
+        </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
         android:id="@+id/idAdsTop"

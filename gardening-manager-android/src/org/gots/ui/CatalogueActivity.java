@@ -1,8 +1,8 @@
 package org.gots.ui;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -12,6 +12,7 @@ import org.gots.R;
 import org.gots.provider.SeedsContentProvider;
 import org.gots.seed.BaseSeed;
 import org.gots.ui.fragment.CatalogueFragment;
+import org.gots.ui.fragment.PlantDescriptionFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.List;
 /**
  * Created by sfleury on 20/09/15.
  */
-public class CatalogueActivity extends BaseGotsActivity implements CatalogueFragment.OnSeedSelected {
+public class CatalogueActivity extends BaseGotsActivity implements CatalogueFragment.OnSeedSelected, PlantDescriptionFragment.OnDescriptionFragmentClicked {
 
 
     private CatalogueFragment contentFragment;
@@ -55,10 +56,13 @@ public class CatalogueActivity extends BaseGotsActivity implements CatalogueFrag
 
     @Override
     public void onPlantCatalogueClick(BaseSeed seed) {
-        Intent i = new Intent(getApplicationContext(), PlantDescriptionActivity.class);
-        i.putExtra(PlantDescriptionActivity.GOTS_VENDORSEED_ID, seed.getSeedId());
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(i);
+//        Intent i = new Intent(getApplicationContext(), PlantDescriptionActivity.class);
+//        i.putExtra(PlantDescriptionActivity.GOTS_VENDORSEED_ID, seed.getSeedId());
+//        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        startActivity(i);
+        Bundle bundle = new Bundle();
+        bundle.putInt(PlantDescriptionActivity.GOTS_VENDORSEED_ID, seed.getSeedId());
+        addResumeLayout(new PlantDescriptionFragment(), bundle);
     }
 
     @Override
@@ -66,7 +70,7 @@ public class CatalogueActivity extends BaseGotsActivity implements CatalogueFrag
         startSupportActionMode(new PlantCallBack(this, seed, new PlantCallBack.OnPlantCallBackClicked() {
             @Override
             public void onPlantCallBackClicked() {
-                if (contentFragment!=null)
+                if (contentFragment != null)
                     contentFragment.update();
             }
         }));
@@ -132,5 +136,12 @@ public class CatalogueActivity extends BaseGotsActivity implements CatalogueFrag
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onInformationClick(String url) {
+        Bundle bundle = new Bundle();
+        bundle.putString(WebViewFragment.URL, url);
+        addContentLayout(new WebViewFragment(), bundle);
     }
 }

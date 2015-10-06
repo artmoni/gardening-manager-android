@@ -576,6 +576,19 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         if (findViewById(R.id.contentScrollView) != null)
             findViewById(R.id.contentScrollView).setVisibility(View.VISIBLE);
     }
+    protected void addResumeLayout(Fragment resumeFragment, Bundle options) {
+        if (!resumeFragment.isAdded()) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
+            if (options != null)
+                resumeFragment.setArguments(options);
+            resumeFragment.setRetainInstance(true);
+            if (findViewById(R.id.resumeLayout)!=null)
+            transaction.replace(R.id.resumeLayout, resumeFragment).commitAllowingStateLoss();
+        }
+        if (findViewById(R.id.contentScrollView) != null)
+            findViewById(R.id.contentScrollView).setVisibility(View.VISIBLE);
+    }
 
     protected void addMainLayout(Fragment contentFragment, Bundle options) {
         if (!contentFragment.isAdded()) {
