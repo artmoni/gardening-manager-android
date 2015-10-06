@@ -57,9 +57,7 @@ public class PlantDescriptionFragment extends BaseGotsFragment {
 
     private TextView seedDescriptionHarvest;
 
-    private SeedWidgetLong seedWidgetLong;
     private OnDescriptionFragmentClicked mCallback;
-    private FloatingActionButton buttonMore;
 
     public interface OnDescriptionFragmentClicked {
         public void onInformationClick(String url);
@@ -81,17 +79,6 @@ public class PlantDescriptionFragment extends BaseGotsFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.seed, container, false);
 
-//        Bundle bundle = this.getArguments();
-//        if (bundle != null && bundle.getInt(GOTS_SEED_ID) != 0) {
-//            seedId = bundle.getInt(GOTS_SEED_ID);
-//        } else if (bundle != null && bundle.getInt(GOTS_GROWINGSEED_ID) != 0)
-//            seedId = bundle.getInt(GOTS_GROWINGSEED_ID);
-//
-//        if (seedId <= 0) {
-//            Log.e("SeedActivity", "You must provide a org.gots.seed.id as an Extra Int");
-//            return v;
-//        }
-
         seedDescriptionEnvironnement = (TextView) v.findViewById(R.id.IdSeedDescriptionEnvironment);
         seedDescriptionTitle = (TextView) v.findViewById(R.id.IdSeedDescriptionEnvironmentTitle);
         seedDescriptionCulture = (TextView) v.findViewById(R.id.IdSeedDescriptionCulture);
@@ -100,23 +87,6 @@ public class PlantDescriptionFragment extends BaseGotsFragment {
         seedDescriptionEnnemiTitle = (TextView) v.findViewById(R.id.IdSeedDescriptionEnnemiTitle);
         seedDescriptionCultureHarvest = (TextView) v.findViewById(R.id.IdSeedDescriptionHarvest);
         seedDescriptionHarvest = (TextView) v.findViewById(R.id.IdSeedDescriptionHarvestTitle);
-        seedWidgetLong = (SeedWidgetLong) v.findViewById(R.id.IdSeedWidgetLong);
-        seedWidgetLong.setOnSeedWidgetLongClickListener(new SeedWidgetLong.OnSeedWidgetLongClickListener() {
-            @Override
-            public void onInformationClick(String url) {
-                mCallback.onInformationClick(url);
-            }
-
-
-        });
-        buttonMore = (FloatingActionButton) v.findViewById(R.id.idFloatingButtonMore);
-        buttonMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                buttonMore.setVisibility(View.GONE);
-                getView().findViewById(R.id.idLayoutDescriptionMore).setVisibility(View.VISIBLE);
-            }
-        });
         return v;
     }
 
@@ -145,8 +115,6 @@ public class PlantDescriptionFragment extends BaseGotsFragment {
     protected void onNuxeoDataRetrieved(Object data) {
         BaseSeed mSeed = (BaseSeed) data;
 
-        seedWidgetLong.setSeed(mSeed);
-
         seedDescriptionEnvironnement.setText(mSeed.getDescriptionEnvironment() != null ? Html.fromHtml(mSeed.getDescriptionEnvironment()) : "");
 
         seedDescriptionTitle.setOnClickListener(new View.OnClickListener() {
@@ -160,8 +128,6 @@ public class PlantDescriptionFragment extends BaseGotsFragment {
         });
 
         if (mSeed.getDescriptionCultivation() != null && !"null".equals(mSeed.getDescriptionCultivation())) {
-            buttonMore.setVisibility(View.GONE);
-            getView().findViewById(R.id.idLayoutDescriptionMore).setVisibility(View.VISIBLE);
 
             seedDescriptionCulture.setText(Html.fromHtml(mSeed.getDescriptionCultivation() != null ? mSeed.getDescriptionCultivation() : ""));
             seedDescriptionCultureTitle.setOnClickListener(new View.OnClickListener() {

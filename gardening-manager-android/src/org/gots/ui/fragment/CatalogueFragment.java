@@ -40,6 +40,7 @@ import org.gots.R;
 import org.gots.seed.BaseSeed;
 import org.gots.seed.adapter.SeedListAdapter;
 import org.gots.seed.adapter.VendorSeedListAdapter;
+import org.gots.ui.ExpandableHeightGridView;
 import org.gots.ui.NewSeedActivity;
 
 import java.util.ArrayList;
@@ -248,7 +249,6 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
         List<BaseSeed> vendorSeeds = (List<BaseSeed>) data;
         listVendorSeedAdapter.setSeeds(vendorSeeds);
         listVendorSeedAdapter.notifyDataSetChanged();
-
 
         super.onNuxeoDataRetrieved(data);
     }

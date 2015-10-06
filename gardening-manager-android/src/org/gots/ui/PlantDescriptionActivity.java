@@ -16,6 +16,7 @@ import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedImpl;
 import org.gots.ui.fragment.AllotmentListFragment;
 import org.gots.ui.fragment.PlantDescriptionFragment;
+import org.gots.ui.fragment.PlantResumeFragment;
 import org.gots.ui.fragment.WorkflowTaskFragment;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 
@@ -30,6 +31,7 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
 
     BaseSeed mSeed = null;
     private PlantDescriptionFragment fragmentDescription;
+    private PlantResumeFragment resumeFragment;
 
     @Override
     protected boolean requireFloatingButton() {
@@ -110,6 +112,7 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
 //                    addContentLayout(new ActionsDoneListFragment(), getIntent().getExtras());
 //                }
             });
+            addResumeLayout(new PlantResumeFragment(),getIntent().getExtras());
             addMainLayout(fragmentDescription, getIntent().getExtras());
         } else
             fragmentDescription.update();

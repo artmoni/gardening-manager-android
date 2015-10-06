@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res/org.gots"
     android:id="@+id/layout_seed"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -16,84 +15,59 @@
 
         <!-- seed.description.environment -->
 
-        <org.gots.seed.view.SeedWidgetLong
-            android:id="@+id/IdSeedWidgetLong"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:padding="5dp"></org.gots.seed.view.SeedWidgetLong>
 
+        <TextView
+            android:id="@+id/IdSeedDescriptionEnvironmentTitle"
+            style="@style/seed_description_title"
+            android:background="@drawable/titre_climat_et_sol"
+            android:text="@string/seed.description.environment"
+            android:layout_width="wrap_content" />
 
-        <!-- seed.description.culture -->
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/idFloatingButtonMore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:fab_colorNormal="@color/action_ok_color"
-            app:fab_colorPressed="@color/action_warning_color"
-            app:fab_icon="@drawable/ic_arrow_down"
-            app:fab_size="mini" />
+        <TextView
+            android:id="@+id/IdSeedDescriptionEnvironment"
+            style="@style/seed_description_content"
+            android:text=""
+            android:visibility="visible"/>
 
-        <LinearLayout
-            android:id="@+id/idLayoutDescriptionMore"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
+        <TextView
+            android:id="@+id/IdSeedDescriptionCultureTitle"
+            style="@style/seed_description_title"
+            android:background="@drawable/titre_culture"
+            android:text="@string/seed.description.culture"/>
 
-            <TextView
-                android:id="@+id/IdSeedDescriptionEnvironmentTitle"
-                style="@style/seed_description_title"
-                android:background="@drawable/titre_climat_et_sol"
-                android:text="@string/seed.description.environment"></TextView>
+        <TextView
+            android:id="@+id/IdSeedDescriptionCulture"
+            style="@style/seed_description_content"
+            android:text=""
+            android:visibility="visible"/>
 
-            <TextView
-                android:id="@+id/IdSeedDescriptionEnvironment"
-                style="@style/seed_description_content"
-                android:text=""
-                android:visibility="visible"></TextView>
+        <!-- seed.description.harvest -->
 
-            <TextView
-                android:id="@+id/IdSeedDescriptionCultureTitle"
-                style="@style/seed_description_title"
-                android:background="@drawable/titre_culture"
-                android:text="@string/seed.description.culture"></TextView>
+        <TextView
+            android:id="@+id/IdSeedDescriptionHarvestTitle"
+            style="@style/seed_description_title"
+            android:background="@drawable/titre_recolte"
+            android:text="@string/seed.description.harvest"/>
 
-            <TextView
-                android:id="@+id/IdSeedDescriptionCulture"
-                style="@style/seed_description_content"
-                android:text=""
-                android:visibility="visible"></TextView>
+        <TextView
+            android:id="@+id/IdSeedDescriptionHarvest"
+            style="@style/seed_description_content"
+            android:text=""
+            android:visibility="visible"/>
 
-            <!-- seed.description.harvest -->
+        <!-- seed.description.ennemi -->
 
-            <TextView
-                android:id="@+id/IdSeedDescriptionHarvestTitle"
-                style="@style/seed_description_title"
-                android:background="@drawable/titre_recolte"
-                android:text="@string/seed.description.harvest"></TextView>
+        <TextView
+            android:id="@+id/IdSeedDescriptionEnnemiTitle"
+            style="@style/seed_description_title"
+            android:background="@drawable/titre_ennemis"
+            android:text="@string/seed.description.ennemi"/>
 
-            <TextView
-                android:id="@+id/IdSeedDescriptionHarvest"
-                style="@style/seed_description_content"
-                android:text=""
-                android:visibility="visible"></TextView>
-
-            <!-- seed.description.ennemi -->
-
-            <TextView
-                android:id="@+id/IdSeedDescriptionEnnemiTitle"
-                style="@style/seed_description_title"
-                android:background="@drawable/titre_ennemis"
-                android:text="@string/seed.description.ennemi"></TextView>
-
-            <TextView
-                android:id="@+id/IdSeedDescriptionEnnemi"
-                style="@style/seed_description_content"
-                android:text=""
-                android:visibility="visible"></TextView>
-        </LinearLayout>
+        <TextView
+            android:id="@+id/IdSeedDescriptionEnnemi"
+            style="@style/seed_description_content"
+            android:text=""
+            android:visibility="visible"/>
     </LinearLayout>
 
 </ScrollView>

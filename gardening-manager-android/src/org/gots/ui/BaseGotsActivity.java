@@ -53,6 +53,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.vending.billing.util.Purchase;
@@ -576,6 +577,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         if (findViewById(R.id.contentScrollView) != null)
             findViewById(R.id.contentScrollView).setVisibility(View.VISIBLE);
     }
+
     protected void addResumeLayout(Fragment resumeFragment, Bundle options) {
         if (!resumeFragment.isAdded()) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -583,11 +585,9 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
             if (options != null)
                 resumeFragment.setArguments(options);
             resumeFragment.setRetainInstance(true);
-            if (findViewById(R.id.resumeLayout)!=null)
-            transaction.replace(R.id.resumeLayout, resumeFragment).commitAllowingStateLoss();
+            if (findViewById(R.id.resumeLayout) != null)
+                transaction.replace(R.id.resumeLayout, resumeFragment).commitAllowingStateLoss();
         }
-        if (findViewById(R.id.contentScrollView) != null)
-            findViewById(R.id.contentScrollView).setVisibility(View.VISIBLE);
     }
 
     protected void addMainLayout(Fragment contentFragment, Bundle options) {

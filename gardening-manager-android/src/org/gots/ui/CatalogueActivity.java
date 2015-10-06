@@ -13,6 +13,7 @@ import org.gots.provider.SeedsContentProvider;
 import org.gots.seed.BaseSeed;
 import org.gots.ui.fragment.CatalogueFragment;
 import org.gots.ui.fragment.PlantDescriptionFragment;
+import org.gots.ui.fragment.PlantResumeFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +63,7 @@ public class CatalogueActivity extends BaseGotsActivity implements CatalogueFrag
 //        startActivity(i);
         Bundle bundle = new Bundle();
         bundle.putInt(PlantDescriptionActivity.GOTS_VENDORSEED_ID, seed.getSeedId());
-        addResumeLayout(new PlantDescriptionFragment(), bundle);
+        addResumeLayout(new PlantResumeFragment(), bundle);
     }
 
     @Override
