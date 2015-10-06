@@ -79,7 +79,7 @@
   <string name="garden.cityname.inputmessage">Por favor, entra la colocación de su jardín </string>
   <string name="dashboard.exit">Please click BACK again to exit</string>
   <string name="dashboard.hut.name">Catálogo</string>
-  <string name="dashboard.allotments.name">Jardín</string>
+  <string name="dashboard.garden.name">Jardín</string>
   <string name="dashboard.actions.name">Acciones</string>
   <string name="dashboard.profile.name">Perfil</string>
   <string name="dashboard.weather.name">Weather</string>

@@ -80,7 +80,7 @@
   <string name="garden.cityname.inputmessage">Por favor, digite a cidade em sua horta</string>
   <string name="dashboard.exit">Por favor, clique em voltar novamente para sair</string>
   <string name="dashboard.hut.name">Plantas</string>
-  <string name="dashboard.allotments.name">Allotments</string>
+  <string name="dashboard.garden.name">Allotments</string>
   <string name="dashboard.actions.name">Tasks</string>
   <string name="dashboard.profile.name">Jardins</string>
   <string name="dashboard.weather.name">Meteorologia</string>

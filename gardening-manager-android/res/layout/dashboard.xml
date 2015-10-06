@@ -40,7 +40,7 @@
                 android:id="@+id/dashboard_button_allotment"
                 style="@style/DashboardButton"
                 android:drawableTop="@drawable/dashboard_button_allotment_selector"
-                android:text="@string/dashboard.allotments.name" />
+                android:text="@string/dashboard.garden.name" />
 
             <Button
                 android:id="@+id/dashboard_button_action"

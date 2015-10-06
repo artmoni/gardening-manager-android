@@ -79,7 +79,7 @@
   <string name="garden.cityname.inputmessage">Bahçe yerinizi belirtiniz</string>
   <string name="dashboard.exit">Lütfen yeniden çıkmak için GERİ\'yi tıklatın</string>
   <string name="dashboard.hut.name">Katalog</string>
-  <string name="dashboard.allotments.name">Bahçe</string>
+  <string name="dashboard.garden.name">Bahçe</string>
   <string name="dashboard.actions.name">Eylemler</string>
   <string name="dashboard.profile.name">Profili</string>
   <string name="dashboard.weather.name">Hava</string>

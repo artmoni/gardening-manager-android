@@ -57,7 +57,7 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTitleBar(R.string.dashboard_allotments_name);
+        setTitleBar(R.string.dashboard_garden_name);
 
         vendorListFragment = new CatalogueFragment();
         allotmentListFragment = new AllotmentListFragment();

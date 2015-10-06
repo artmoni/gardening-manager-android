@@ -66,7 +66,7 @@ public class AuthenticationActivity extends BaseGotsActivity {
     int[] tutorialList = { R.layout.tutorial_a, R.layout.tutorial_b, R.layout.tutorial_c, R.layout.tutorial_d,
             R.layout.tutorial_g, R.layout.tutorial_f, R.layout.tutorial_e };
 
-    int[] tutorialTitle = { R.string.weather_label, R.string.dashboard_hut_name, R.string.dashboard_allotments_name,
+    int[] tutorialTitle = { R.string.weather_label, R.string.dashboard_hut_name, R.string.dashboard_garden_name,
             R.string.dashboard_actions_name, R.string.tutorial_g_title,R.string.dashboard_sensor_name, R.string.profile_share_data };
 
     private ViewPager mPager;

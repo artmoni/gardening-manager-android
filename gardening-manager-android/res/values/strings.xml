@@ -80,9 +80,9 @@
     <string name="garden.cityname.inputmessage">Please enter your garden place</string>
     <string name="dashboard.exit">Please click BACK again to exit</string>
     <string name="dashboard.hut.name">Plants</string>
-    <string name="dashboard.allotments.name">Allotments</string>
+    <string name="dashboard.garden.name">Garden</string>
     <string name="dashboard.actions.name">Tasks</string>
-    <string name="dashboard.profile.name">Gardens</string>
+    <string name="dashboard.profile.name">Profile</string>
     <string name="dashboard.weather.name">Weather</string>
     <string name="dateSliderTitle">dateSliderTitle string</string>
     <string name="specie.daucuscarota">Carrot</string>
@@ -234,9 +234,8 @@
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
         <item>@string/dashboard.hut.name</item>
-        <item>@string/dashboard.allotments.name</item>
+        <item>@string/dashboard.garden.name</item>
         <item>@string/dashboard.actions.name</item>
-        <item>@string/dashboard.profile.name</item>
         <item>@string/dashboard.sensor.name</item>
         <item>@string/plant.recognition</item>
     </string-array>
@@ -247,7 +246,6 @@
         <item>@drawable/ic_menu_plant</item>
         <item>@drawable/ic_menu_allotment</item>
         <item>@drawable/ic_menu_todo</item>
-        <item>@drawable/ic_menu_profile</item>
         <item>@drawable/gots_feature_parrot</item>
         <item>@drawable/ic_menu_recognition</item>
     </array>

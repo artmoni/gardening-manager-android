@@ -45,7 +45,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/linearLayout1"
-        android:contentDescription="@string/dashboard.allotments.name"
+        android:contentDescription="@string/dashboard.garden.name"
         android:src="@drawable/bt_dashboard_allotment" />
 
 </RelativeLayout>

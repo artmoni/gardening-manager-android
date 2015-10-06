@@ -79,7 +79,7 @@
   <string name="garden.cityname.inputmessage">Bitte erfassen Sie Ihren Gartenplatz</string>
   <string name="dashboard.exit">Please click BACK again to exit</string>
   <string name="dashboard.hut.name">Katalog</string>
-  <string name="dashboard.allotments.name">Garten</string>
+  <string name="dashboard.garden.name">Garten</string>
   <string name="dashboard.actions.name">Aktivitäten</string>
   <string name="dashboard.profile.name">Profil</string>
   <string name="dashboard.weather.name">Weather</string>

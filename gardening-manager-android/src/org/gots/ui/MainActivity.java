@@ -91,6 +91,12 @@ import java.util.List;
 
 public class MainActivity extends BaseGotsActivity implements GardenListener, OnTutorialFinishedListener,
         OnActionsClickListener, OnSensorClickListener {
+    public static final int INDEX_CATALOGUE = 0;
+    public static final int INDEX_GARDEN = 1;
+    public static final int INDEX_ACTIONS = 2;
+    //    public static final int INDEX_PROFILE = 3;
+    public static final int INDEX_SENSOR = 3;
+    public static final int INDEX_RECOGNITION = 4;
     private DrawerLayout mDrawerLayout;
 
     private ListView mDrawerList;
@@ -250,41 +256,41 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         // *************************
         // Catalogue
         // *************************
-        NavDrawerItem navDrawerItem = new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1));
+        NavDrawerItem navDrawerItem = new NavDrawerItem(navMenuTitles[INDEX_CATALOGUE], navMenuIcons.getResourceId(INDEX_CATALOGUE, -1));
         navDrawerItems.add(navDrawerItem);
         // displayDrawerMenuCatalogCounter();
 
         // *************************
         // Allotments
         // *************************
-        navDrawerItem = new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1));
+        navDrawerItem = new NavDrawerItem(navMenuTitles[INDEX_GARDEN], navMenuIcons.getResourceId(INDEX_GARDEN, -1));
         navDrawerItems.add(navDrawerItem);
         // displayDrawerMenuAllotmentCounter();
         // *************************
         // Actions
         // *************************
-        navDrawerItem = new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1));
+        navDrawerItem = new NavDrawerItem(navMenuTitles[INDEX_ACTIONS], navMenuIcons.getResourceId(INDEX_ACTIONS, -1));
         navDrawerItems.add(navDrawerItem);
         // displayDrawerMenuActionsCounter();
 
         // *************************
         // Profiles
         // *************************
-        navDrawerItem = new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1));
-        navDrawerItems.add(navDrawerItem);
+//        navDrawerItem = new NavDrawerItem(navMenuTitles[IN], navMenuIcons.getResourceId(3, -1));
+//        navDrawerItems.add(navDrawerItem);
         // displayDrawerMenuProfileCounter();
 
         // *************************
         // Sensors
         // *************************
-        navDrawerItem = new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1));
+        navDrawerItem = new NavDrawerItem(navMenuTitles[INDEX_SENSOR], navMenuIcons.getResourceId(INDEX_SENSOR, -1));
         navDrawerItems.add(navDrawerItem);
         // displayDrawerMenuSensorCounter();
 
         // *************************
         // Recognition
         // *************************
-        navDrawerItem = new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1));
+        navDrawerItem = new NavDrawerItem(navMenuTitles[INDEX_RECOGNITION], navMenuIcons.getResourceId(INDEX_RECOGNITION, -1));
 //        navDrawerItem.setCounterVisibility(false);
         navDrawerItems.add(navDrawerItem);
 
@@ -363,7 +369,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
             } else if (BroadCastMessages.SEED_DISPLAYLIST.equals(intent.getAction())) {
                 displayDrawerMenuCatalogCounter();
             } else if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
-                displayDrawerMenuProfileCounter();
+//                displayDrawerMenuProfileCounter();
                 displaySpinnerGarden();
             } else if (BroadCastMessages.ALLOTMENT_EVENT.equals(intent.getAction())) {
                 displayDrawerMenuAllotmentCounter();
@@ -392,29 +398,29 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
 
                 super.onPostExecute(result);
             }
-        }.execute(navDrawerItems.get(5));
+        }.execute(navDrawerItems.get(INDEX_RECOGNITION));
     }
 
-    protected void displayDrawerMenuProfileCounter() {
-        new AsyncTask<NavDrawerItem, Void, Integer>() {
-            NavDrawerItem item;
-
-            @Override
-            protected Integer doInBackground(NavDrawerItem... params) {
-                item = params[0];
-                return gardenManager.getMyGardens(false).size();
-            }
-
-            @Override
-            protected void onPostExecute(Integer result) {
-                item.setCounterVisibility(result > 0);
-                item.setCount(result.toString());
-                adapter.notifyDataSetChanged();
-
-                super.onPostExecute(result);
-            }
-        }.execute(navDrawerItems.get(3));
-    }
+//    protected void displayDrawerMenuProfileCounter() {
+//        new AsyncTask<NavDrawerItem, Void, Integer>() {
+//            NavDrawerItem item;
+//
+//            @Override
+//            protected Integer doInBackground(NavDrawerItem... params) {
+//                item = params[0];
+//                return gardenManager.getMyGardens(false).size();
+//            }
+//
+//            @Override
+//            protected void onPostExecute(Integer result) {
+//                item.setCounterVisibility(result > 0);
+//                item.setCount(result.toString());
+//                adapter.notifyDataSetChanged();
+//
+//                super.onPostExecute(result);
+//            }
+//        }.execute(navDrawerItems.get(INDEX_PROFILE));
+//    }
 
 
     protected void displayDrawerMenuActionsCounter() {
@@ -434,7 +440,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                 adapter.notifyDataSetChanged();
                 super.onPostExecute(result);
             }
-        }.execute(navDrawerItems.get(2));
+        }.execute(navDrawerItems.get(INDEX_ACTIONS));
     }
 
     protected void displayDrawerMenuAllotmentCounter() {
@@ -454,7 +460,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                 adapter.notifyDataSetChanged();
                 super.onPostExecute(result);
             }
-        }.execute(navDrawerItems.get(1));
+        }.execute(navDrawerItems.get(INDEX_GARDEN));
     }
 
     protected void displayDrawerMenuCatalogCounter() {
@@ -474,7 +480,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                 adapter.notifyDataSetChanged();
                 super.onPostExecute(result);
             }
-        }.execute(navDrawerItems.get(0));
+        }.execute(navDrawerItems.get(INDEX_CATALOGUE));
     }
 
     protected void displayDrawerMenuSensorCounter() {
@@ -498,7 +504,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                 adapter.notifyDataSetChanged();
                 super.onPostExecute(result);
             }
-        }.execute(navDrawerItems.get(4));
+        }.execute(navDrawerItems.get(INDEX_SENSOR));
     }
 
     /**
@@ -626,15 +632,23 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
             return;
         }
 
+        View avatarView = findViewById(R.id.imageAvatar);
         if (gotsPrefs.isConnectedToServer()) {
             if (getCurrentGarden().isIncredibleEdible())
-                ((ImageView) findViewById(R.id.imageAvatar)).setImageDrawable(getResources().getDrawable(
+                ((ImageView) avatarView).setImageDrawable(getResources().getDrawable(
                         R.drawable.ic_garden_incredible));
             else {
                 UserInfo userInfoTask = new UserInfo();
-                userInfoTask.execute((ImageView) findViewById(R.id.imageAvatar));
+                userInfoTask.execute((ImageView) avatarView);
             }
         }
+        avatarView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), org.gots.ui.ProfileActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
     @Override
@@ -657,23 +671,23 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         // update the main content by replacing fragments
         Intent i = null;
         switch (position) {
-            case 0:
+            case INDEX_CATALOGUE:
                 i = new Intent(getApplicationContext(), CatalogueActivity.class);
                 break;
-            case 1:
+            case INDEX_GARDEN:
                 i = new Intent(getApplicationContext(), GardenActivity.class);
                 break;
-            case 2:
+            case INDEX_ACTIONS:
                 // fragment = new ActionActivity();
                 i = new Intent(getApplicationContext(), ActionActivity.class);
 
                 break;
-            case 3:
-                // fragment = new ProfileActivity();
-                i = new Intent(getApplicationContext(), org.gots.ui.ProfileActivity.class);
-
-                break;
-            case 4:
+//            case 3:
+//                // fragment = new ProfileActivity();
+//                i = new Intent(getApplicationContext(), org.gots.ui.ProfileActivity.class);
+//
+//                break;
+            case INDEX_SENSOR:
                 i = new Intent(getApplicationContext(), SensorActivity.class);
                 // fragment = new PagesFragment();
 //                GotsPurchaseItem purchaseItem = new GotsPurchaseItem(this);
@@ -688,7 +702,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
 //                    editNameDialog.show(fm, "fragment_edit_name");
 //                }
                 break;
-            case 5:
+            case INDEX_RECOGNITION:
 //                displayPremiumDialog();
                 displayRecognitionDialog();
                 break;
@@ -838,8 +852,6 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                 }
             }
         }
-
-        ;
     }
 
     @Override
@@ -888,7 +900,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
         displayDrawerMenuActionsCounter();
         displayDrawerMenuAllotmentCounter();
         displayDrawerMenuCatalogCounter();
-        displayDrawerMenuProfileCounter();
+//        displayDrawerMenuProfileCounter();
         displayDrawerMenuRecognitionCounter();
 //        if (gotsPrefs.getParrotToken() != null)
         displayDrawerMenuSensorCounter();

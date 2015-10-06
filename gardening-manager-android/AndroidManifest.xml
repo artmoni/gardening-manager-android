@@ -89,7 +89,7 @@
         <provider android:authorities="org.gots.providers.seeds" android:label="@string/dashboard.hut.name" android:name="org.gots.provider.SeedsContentProvider" android:syncable="true"/>
         <provider android:authorities="org.gots.providers.garden" android:label="@string/dashboard.profile.name" android:name="org.gots.provider.GardenContentProvider" android:syncable="true"/>
         <provider android:authorities="org.gots.providers.actions" android:label="@string/dashboard.actions.name" android:name="org.gots.provider.ActionsContentProvider" android:syncable="true"/>
-        <provider android:authorities="org.gots.providers.allotment" android:label="@string/dashboard.allotments.name" android:name="org.gots.provider.AllotmentContentProvider" android:syncable="true"/>
+        <provider android:authorities="org.gots.providers.allotment" android:label="@string/dashboard.garden.name" android:name="org.gots.provider.AllotmentContentProvider" android:syncable="true"/>
         <provider android:authorities="org.gots.providers.weather" android:label="@string/dashboard.weather.name" android:name="org.gots.provider.WeatherContentProvider" android:syncable="true"/>
 
         <receiver android:name=".action.service.ActionTODOBroadcastReceiver">
