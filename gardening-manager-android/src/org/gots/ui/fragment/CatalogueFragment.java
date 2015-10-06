@@ -65,8 +65,9 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
 
     private static final String FILTER_BARCODE = "filter.barcode";
 
-    public static final String BROADCAST_FILTER = "broadcast_filter";
+    private static final String FILTER_CATALOGUE = "filter.catalogue";
 
+    public static final String BROADCAST_FILTER = "broadcast_filter";
     public static final String IS_SELECTABLE = "seed.selectable";
     public static final String TAG = CatalogueFragment.class.getSimpleName();
 
@@ -169,6 +170,10 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 autoCompleteTextView.setVisibility(View.GONE);
                 switch (position) {
+                    case 0:
+                        filter = FILTER_CATALOGUE;
+                        runAsyncDataRetrieval();
+                        break;
                     case 1:
                         filter = FILTER_FAVORITES;
                         runAsyncDataRetrieval();
