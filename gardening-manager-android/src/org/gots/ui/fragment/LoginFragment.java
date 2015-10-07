@@ -3,9 +3,7 @@ package org.gots.ui.fragment;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ContentResolver;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,6 +12,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
@@ -46,6 +47,7 @@ public class LoginFragment extends BaseGotsFragment {
     private View v;
     private OnLoginEventListener mCallBack;
     private GotsContextProvider gotsContextProvider;
+    private ListView listView;
 
     public interface OnLoginEventListener {
         public void onAuthenticationSucceed(Account account);
@@ -81,57 +83,26 @@ public class LoginFragment extends BaseGotsFragment {
 //            buildLayoutConnected();
 //        } else {
 //            getDialog().setTitle(R.string.login_disconnect_state);
-        buildLayoutDisconnected();
+        listView = (ListView) v.findViewById(R.id.listViewAccount);
 //        }
+        buildListAccount("com.google");
 
         return v;
     }
 
 
-    public List<String> getAccounts(String account_type) {
-        AccountManager manager = (AccountManager) getActivity().getSystemService(FragmentActivity.ACCOUNT_SERVICE);
-        Account[] accounts = manager.getAccounts();
-        List<String> accountString = new ArrayList<String>();
-        for (int i = 0; i < accounts.length; i++) {
-            if (accounts[i].type.equals(account_type))
-                accountString.add(accounts[i].name);
-        }
+//    public List<String> getAccounts(String account_type) {
+//        AccountManager manager = (AccountManager) getActivity().getSystemService(FragmentActivity.ACCOUNT_SERVICE);
+//        Account[] accounts = manager.getAccounts();
+//        List<String> accountString = new ArrayList<String>();
+//        for (int i = 0; i < accounts.length; i++) {
+//            if (accounts[i].type.equals(account_type))
+//                accountString.add(accounts[i].name);
+//        }
+//
+//        return accountString;
+//    }
 
-        return accountString;
-    }
-
-    protected void buildLayoutDisconnected() {
-//        v.findViewById(R.id.idLayoutOAuthDisconnect).setVisibility(View.GONE);
-
-        View buttonLayout = (View) v.findViewById(R.id.idLayoutOAuthGoogle);
-        buttonLayout.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                selectAccount("com.google");
-
-                GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Login", "Request account", 0);
-
-
-            }
-
-        });
-
-        View buttonLayoutFacebook = (View) v.findViewById(R.id.idLayoutOAuthFacebook);
-        buttonLayoutFacebook.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Login", "Request facebook", 0);
-                if (mCallBack!=null)
-                    mCallBack.onAuthenticationFailed(getResources().getString(R.string.feature_unavalaible));
-
-            }
-
-        });
-
-    }
 
 
     @Override
@@ -205,15 +176,16 @@ public class LoginFragment extends BaseGotsFragment {
 
                 } else {
                     if (isAdded())
-                        Toast.makeText(getActivity(), "Please check your internet connection or try later",
-                                Toast.LENGTH_SHORT).show();
+                        mCallBack.onAuthenticationFailed("Please check your internet connection or try later");
+//                        Toast.makeText(getActivity(), "Please check your internet connection or try later",
+//                                Toast.LENGTH_SHORT).show();
                 }
                 super.onPostExecute(resultToken);
             }
         }.execute(account.name);
     }
 
-    void selectAccount(String accountType) {
+    void buildListAccount(String accountType) {
         AccountManager manager = (AccountManager) getActivity().getSystemService(FragmentActivity.ACCOUNT_SERVICE);
         Account[] accounts = manager.getAccounts();
         final List<Account> usableAccounts = new ArrayList<Account>();
@@ -221,24 +193,38 @@ public class LoginFragment extends BaseGotsFragment {
         for (Account account : accounts) {
             if (account.type.equals(accountType)) {
                 usableAccounts.add(account);
-                items.add(String.format("%s (%s)", account.name, account.type));
+                items.add(account.name);
             }
         }
-        if (usableAccounts.size() > 1)
-            new AlertDialog.Builder(getActivity()).setTitle("Action").setItems(items.toArray(new String[items.size()]),
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int item) {
-                            getActivity().sendBroadcast(new Intent(BroadCastMessages.AUTHENTIFICATION_BEGIN));
-                            selectedAccount = usableAccounts.get(item);
-                            requestOAuth2Token(selectedAccount);
-                        }
+//        if (usableAccounts.size() > 1) {
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1);
+        arrayAdapter.addAll(items);
+        listView.setAdapter(arrayAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                getActivity().sendBroadcast(new Intent(BroadCastMessages.AUTHENTIFICATION_BEGIN));
+                selectedAccount = usableAccounts.get(position);
+                requestOAuth2Token(selectedAccount);
+                GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Login", "Request " +selectedAccount.type, 0);
+            }
+        });
 
-                    }).show();
-        else if (usableAccounts.size() == 1 && usableAccounts.get(0) != null) {
-            selectedAccount = usableAccounts.get(0);
-            requestOAuth2Token(usableAccounts.get(0));
-        }
+
+//        new AlertDialog.Builder(getActivity()).setTitle("Action").setItems(items.toArray(new String[items.size()]),
+//                new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int item) {
+//                        getActivity().sendBroadcast(new Intent(BroadCastMessages.AUTHENTIFICATION_BEGIN));
+//                        selectedAccount = usableAccounts.get(item);
+//                        requestOAuth2Token(selectedAccount);
+//                    }
+//
+//                }).show();
+//        }else if (usableAccounts.size() == 1 && usableAccounts.get(0) != null) {
+//            selectedAccount = usableAccounts.get(0);
+//            requestOAuth2Token(usableAccounts.get(0));
+//        }
 
     }
 

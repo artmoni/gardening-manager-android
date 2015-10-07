@@ -148,7 +148,7 @@
   <string name="login.connect.description2">Partager avec vos amis</string>
   <string name="login.connect.description3">Créer et partager les plantes de votre catalogue</string>
   <string name="login.connect.description4">Vous connecter depuis n\'importe quel appareil</string>
-  <string name="login.sso.description">Connectez vous avec votre compte Google pour synchroniser et sauvegarder Gardening Manager sur vos appareils</string>
+  <string name="login.sso.description">Connectez vous pour synchroniser et sauvegarder Gardening Manager sur vos appareils</string>
   <string name="login.simple.description">Synchronisez votre potager sur Gardening Manager Cloud et jardinez avec vos amis</string>
   <string name="login.creation.description">Créez un compte sur Gardening Manager Server pour synchroniser et partager votre journal de bord avec vos amis</string>
   <string name="login.signup">Enregistrez vous</string>
