@@ -57,13 +57,20 @@ public class CatalogueActivity extends BaseGotsActivity implements CatalogueFrag
 
     @Override
     public void onPlantCatalogueClick(BaseSeed seed) {
-//        Intent i = new Intent(getApplicationContext(), PlantDescriptionActivity.class);
-//        i.putExtra(PlantDescriptionActivity.GOTS_VENDORSEED_ID, seed.getSeedId());
-//        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        startActivity(i);
         Bundle bundle = new Bundle();
         bundle.putInt(PlantDescriptionActivity.GOTS_VENDORSEED_ID, seed.getSeedId());
-        addResumeLayout(new PlantResumeFragment(), bundle);
+        PlantResumeFragment resumeFragment = new PlantResumeFragment();
+
+        resumeFragment.setOnDescriptionFragmentClicked(new PlantResumeFragment.OnDescriptionFragmentClicked() {
+            @Override
+            public void onInformationClick(BaseSeed seed, String url) {
+                Intent i = new Intent(getApplicationContext(), PlantDescriptionActivity.class);
+                i.putExtra(PlantDescriptionActivity.GOTS_VENDORSEED_ID, seed.getSeedId());
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+            }
+        });
+        addResumeLayout(resumeFragment, bundle);
     }
 
     @Override

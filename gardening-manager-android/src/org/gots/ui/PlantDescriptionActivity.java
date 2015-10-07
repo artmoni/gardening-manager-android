@@ -102,7 +102,7 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
             PlantResumeFragment resumeFragment = new PlantResumeFragment();
             resumeFragment.setOnDescriptionFragmentClicked(new PlantResumeFragment.OnDescriptionFragmentClicked() {
                 @Override
-                public void onInformationClick(String urlDescription) {
+                public void onInformationClick(BaseSeed seed, String urlDescription) {
                     Bundle bundle = new Bundle();
                     bundle.putString(WebViewFragment.URL, urlDescription);
                     addContentLayout(new WebViewFragment(), bundle);

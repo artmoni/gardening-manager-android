@@ -37,7 +37,7 @@ public class PlantResumeFragment extends BaseGotsFragment {
     private SeedWidgetLong seedWidgetLong;
 
     public interface OnDescriptionFragmentClicked {
-        public void onInformationClick(String url);
+        public void onInformationClick(BaseSeed seed, String url);
 
     }
 
@@ -56,14 +56,7 @@ public class PlantResumeFragment extends BaseGotsFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.plant_resume, container, false);
         seedWidgetLong = (SeedWidgetLong) v.findViewById(R.id.idSeedWidgetLong);
-        seedWidgetLong.setOnSeedWidgetLongClickListener(new SeedWidgetLong.OnSeedWidgetLongClickListener() {
-            @Override
-            public void onInformationClick(String url) {
-                mCallback.onInformationClick(url);
-            }
 
-
-        });
         return v;
     }
 
@@ -90,10 +83,17 @@ public class PlantResumeFragment extends BaseGotsFragment {
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
-        BaseSeed mSeed = (BaseSeed) data;
+        final BaseSeed mSeed = (BaseSeed) data;
 
         seedWidgetLong.setSeed(mSeed);
+        seedWidgetLong.setOnSeedWidgetLongClickListener(new SeedWidgetLong.OnSeedWidgetLongClickListener() {
+            @Override
+            public void onInformationClick(String url) {
+                mCallback.onInformationClick(mSeed, url);
+            }
 
+
+        });
         super.onNuxeoDataRetrieved(data);
     }
 
