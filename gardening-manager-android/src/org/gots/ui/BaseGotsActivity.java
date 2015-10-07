@@ -50,10 +50,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.vending.billing.util.Purchase;
@@ -590,6 +590,20 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         }
     }
 
+    protected void hideResumeLayout() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.resumeLayout);
+
+        if (fragment != null) {
+
+//            findViewById(R.id.resumeLayout).animate().translationY(-findViewById(R.id.resumeLayout).getHeight()).setInterpolator(new DecelerateInterpolator(2)).start();
+//            findViewById(R.id.mainLayout).animate().y(-findViewById(R.id.resumeLayout).getHeight()).setInterpolator(new DecelerateInterpolator(2)).start();
+            transaction.setCustomAnimations(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_top);
+            transaction.remove(fragment).commitAllowingStateLoss();
+        }
+
+    }
+
     protected void addMainLayout(Fragment contentFragment, Bundle options) {
         if (!contentFragment.isAdded()) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -600,6 +614,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
             transaction.replace(getMainLayout(), contentFragment).commitAllowingStateLoss();
         }
     }
+
 
     @Override
     public void onBackStackChanged() {

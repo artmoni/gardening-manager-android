@@ -12,8 +12,17 @@
  */
 package org.gots.ui;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.RelativeLayout;
+
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import org.gots.R;
 import org.gots.action.ActionOnSeed;
@@ -22,21 +31,13 @@ import org.gots.action.GotsActionManager;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.provider.ActionsContentProvider;
 import org.gots.seed.GrowingSeed;
-import org.gots.ui.fragment.ActionsDoneListFragment;
 import org.gots.ui.fragment.ActionsTODOListFragment;
 import org.gots.ui.fragment.AllotmentListFragment;
 import org.gots.ui.fragment.AllotmentListFragment.OnAllotmentSelected;
+import org.gots.ui.fragment.PlantResumeFragment;
 
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-
-import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ActionActivity extends BaseGotsActivity implements OnAllotmentSelected {
 
@@ -125,7 +126,9 @@ public class ActionActivity extends BaseGotsActivity implements OnAllotmentSelec
 
         GotsActionManager gotsActionManager = GotsActionManager.getInstance().initIfNew(getApplicationContext());
         ArrayList<BaseAction> actions = gotsActionManager.getActions(false);
-
+        Bundle bundle = new Bundle();
+        bundle.putInt(PlantDescriptionActivity.GOTS_VENDORSEED_ID, growingSeedInterface.getPlant().getSeedId());
+        addResumeLayout(new PlantResumeFragment(), bundle);
         for (final BaseAction baseActionInterface : actions) {
             if (!(baseActionInterface instanceof ActionOnSeed))
                 continue;
@@ -150,6 +153,7 @@ public class ActionActivity extends BaseGotsActivity implements OnAllotmentSelec
                             getSupportFragmentManager().popBackStack();
                             contentFragment.update();
                             menu.setVisibility(View.GONE);
+                            hideResumeLayout();
                         }
 
                         ;
@@ -172,6 +176,8 @@ public class ActionActivity extends BaseGotsActivity implements OnAllotmentSelec
                             getSupportFragmentManager().popBackStack();
                             runAsyncDataRetrieval();
                             menu.setVisibility(View.GONE);
+                            hideResumeLayout();
+
                         }
 
                         ;
