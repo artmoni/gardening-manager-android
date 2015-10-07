@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res/org.gots"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_gravity="center_horizontal"
@@ -14,97 +13,6 @@
         android:orientation="vertical"
         android:padding="0dp">
 
-        <RelativeLayout
-            android:id="@+id/relativeLayout1"
-            android:layout_width="fill_parent"
-            android:layout_height="200dp"
-            android:background="@color/white">
-
-            <ImageView
-                android:id="@+id/imageViewAllotment"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:scaleType="centerCrop"
-
-                android:src="@drawable/bg_garden_top" />
-
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:background="@color/text_color_light_transparent"
-                android:orientation="vertical"
-                android:padding="5dp"
-                android:id="@+id/relativeLayout">
-
-
-                <EditText
-                    android:id="@+id/editTextGardenName"
-                    style="@style/description_content"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:hint="My garden"
-                    android:singleLine="true"
-                    android:textSize="20dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_centerHorizontal="true">
-
-                </EditText>
-
-                <TextView
-                    android:id="@+id/textViewNbAllotments"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/editTextGardenName"
-                    android:layout_toRightOf="@+id/textView3"
-                    android:text="0" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@+id/textViewNbAllotments"
-                    android:layout_toRightOf="@+id/textViewNbAllotments"
-                    android:text=" lots"
-                    android:id="@+id/textView6" />
-
-                <TextView
-                    android:id="@+id/editTextGardenWeatherLocality"
-                    style="@style/description_content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/weather.activation.title"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:textSize="10dp"
-                     />
-
-
-            </RelativeLayout>
-
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/imageViewWeatherState"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                app:fab_size="mini"
-                app:fab_colorNormal="@color/action_ok_color"
-                app:fab_colorPressed="@color/action_warning_color"
-                android:layout_above="@+id/relativeLayout"
-                android:layout_centerHorizontal="true" android:layout_marginBottom="-30dp"/>
-
-        </RelativeLayout>
-        <!--
-                     <ImageView
-                    android:id="@+id/imageView2"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:contentDescription="@drawable/dashboard_button_profile_selector"
-                    android:padding="10dp"
-                    android:src="@drawable/dashboard_button_profile_selector" />
-        -->
 
         <TableLayout
             android:id="@+id/tableLayout1"
@@ -140,34 +48,6 @@
             </RadioGroup>
         </TableLayout>
 
-        <!--
-                     <fragment
-                    android:id="@+id/map"
-                    android:layout_width="fill_parent"
-                    android:layout_height="200dp"
-                    class="com.google.android.gms.maps.SupportMapFragment" />
-        -->
-
-        <CheckBox
-            android:id="@+id/checkboxSamples"
-            style="@style/description_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="false"
-            android:gravity="center_vertical"
-            android:text="@string/profile.sample.data"
-            android:visibility="gone" />
-
-        <!--
-                     <CheckBox
-                    android:id="@+id/checkboxShare"
-                    style="@style/description_content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:gravity="center_vertical"
-                    android:text="@string/profile.share.data" />
-        -->
 
         <Button
             android:id="@+id/buttonValidatePosition"

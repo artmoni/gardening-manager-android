@@ -30,6 +30,7 @@ import org.gots.provider.GardenContentProvider;
 import org.gots.ui.BaseGotsActivity.GardenListener;
 import org.gots.ui.fragment.ProfileEditorFragment;
 import org.gots.ui.fragment.ProfileMapFragment;
+import org.gots.ui.fragment.ProfileResumeFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
         Bundle bundle = new Bundle();
         bundle.putInt(ProfileEditorFragment.PROFILE_EDITOR_MODE,ProfileEditorFragment.OPTION_EDIT);
         addMainLayout(new ProfileEditorFragment(), bundle);
+        addResumeLayout(new ProfileResumeFragment(),bundle);
     }
 
     @Override
