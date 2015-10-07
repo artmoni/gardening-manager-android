@@ -39,6 +39,7 @@ public class PlantResumeFragment extends BaseGotsFragment {
     public interface OnDescriptionFragmentClicked {
         public void onInformationClick(BaseSeed seed, String url);
 
+        public void onAuthenticationNeeded();
     }
 
     public void setOnDescriptionFragmentClicked(OnDescriptionFragmentClicked descriptionFragmentClicked) {
@@ -90,6 +91,12 @@ public class PlantResumeFragment extends BaseGotsFragment {
             @Override
             public void onInformationClick(String url) {
                 mCallback.onInformationClick(mSeed, url);
+            }
+
+            @Override
+            public void onAuthenticationNeeded() {
+                if (mCallback!=null)
+                    mCallback.onAuthenticationNeeded();
             }
 
 

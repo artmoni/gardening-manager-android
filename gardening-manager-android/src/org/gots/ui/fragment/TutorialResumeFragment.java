@@ -9,7 +9,6 @@ import org.gots.seed.GotsSeedManager;
 import org.gots.ui.BaseGotsActivity;
 import org.gots.ui.CatalogueActivity;
 import org.gots.ui.GardenActivity;
-import org.gots.ui.HutActivity;
 import org.gots.ui.ProfileActivity;
 
 import android.app.Activity;
@@ -154,8 +153,10 @@ public class TutorialResumeFragment extends BaseGotsFragment implements OnClickL
             startActivity(i3);
             break;
         case COMPLETE_SOCIAL:
-            LoginDialogFragment login = new LoginDialogFragment();
-            login.show(getFragmentManager(), "");
+//            LoginFragment login = new LoginFragment();
+//            login.show(getFragmentManager(), "");
+            Intent i4 = new Intent(getActivity(), ProfileActivity.class);
+            startActivity(i4);
             break;
         default:
             break;

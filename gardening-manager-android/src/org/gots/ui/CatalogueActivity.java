@@ -12,6 +12,7 @@ import org.gots.R;
 import org.gots.provider.SeedsContentProvider;
 import org.gots.seed.BaseSeed;
 import org.gots.ui.fragment.CatalogueFragment;
+import org.gots.ui.fragment.LoginFragment;
 import org.gots.ui.fragment.PlantDescriptionFragment;
 import org.gots.ui.fragment.PlantResumeFragment;
 
@@ -68,6 +69,11 @@ public class CatalogueActivity extends BaseGotsActivity implements CatalogueFrag
                 i.putExtra(PlantDescriptionActivity.GOTS_VENDORSEED_ID, seed.getSeedId());
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
+            }
+
+            @Override
+            public void onAuthenticationNeeded() {
+                addContentLayout(new LoginFragment(), null);
             }
         });
         addResumeLayout(resumeFragment, bundle);

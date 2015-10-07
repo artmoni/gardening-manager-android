@@ -14,16 +14,13 @@ package org.gots.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -39,23 +36,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.vending.billing.util.IabHelper;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 import org.gots.R;
 import org.gots.action.ActionOnSeed;
 import org.gots.action.BaseAction;
 import org.gots.action.GotsActionManager;
-import org.gots.action.GotsActionSeedManager;
 import org.gots.action.bean.PhotoAction;
 import org.gots.action.bean.SowingAction;
-import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.ads.GotsAdvertisement;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.exception.GotsServerRestrictedException;
-import org.gots.inapp.GotsBillingDialog;
 import org.gots.inapp.GotsPurchaseItem;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.nuxeo.NuxeoWorkflowProvider;
@@ -65,14 +58,10 @@ import org.gots.ui.fragment.ActionsChoiceFragment.OnActionSelectedListener;
 import org.gots.ui.fragment.ActionsDoneListFragment;
 import org.gots.ui.fragment.AllotmentListFragment;
 import org.gots.ui.fragment.AllotmentListFragment.OnAllotmentSelected;
-import org.gots.ui.fragment.LoginDialogFragment;
 import org.gots.ui.fragment.PlantDescriptionFragment;
 import org.gots.ui.fragment.WorkflowTaskFragment;
 import org.gots.ui.fragment.WorkflowTaskFragment.OnWorkflowClickListener;
-import org.nuxeo.android.repository.DocumentManager;
 import org.nuxeo.ecm.automation.client.android.AndroidAutomationClient;
-import org.nuxeo.ecm.automation.client.jaxrs.Session;
-import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 
 import java.io.File;
@@ -440,7 +429,7 @@ public class TabSeedActivity extends TabActivity implements OnActionSelectedList
 //                                    false).setPositiveButton(getResources().getString(R.string.login_connect),
 //                                    new DialogInterface.OnClickListener() {
 //                                        public void onClick(DialogInterface dialog, int id) {
-//                                            LoginDialogFragment dialogFragment = new LoginDialogFragment();
+//                                            LoginFragment dialogFragment = new LoginFragment();
 //                                            dialogFragment.show(getSupportFragmentManager(), "");
 //                                        }
 //                                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

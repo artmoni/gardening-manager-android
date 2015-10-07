@@ -12,13 +12,9 @@
  */
 package org.gots.seed.view;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,7 +35,6 @@ import org.gots.seed.LikeStatus;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.adapter.PlanningHarvestAdapter;
 import org.gots.seed.adapter.PlanningSowAdapter;
-import org.gots.ui.fragment.LoginDialogFragment;
 
 import java.util.Locale;
 
@@ -82,6 +77,7 @@ public class SeedWidgetLong extends RelativeLayout {
     public interface OnSeedWidgetLongClickListener {
         public void onInformationClick(String url);
 
+        public void onAuthenticationNeeded();
 //        public void onLogClick();
     }
 
@@ -211,31 +207,31 @@ public class SeedWidgetLong extends RelativeLayout {
 
                     protected void onPostExecute(LikeStatus result) {
                         if (result == null && exception != null) {
-                            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
-
-                            // set title
-                            alertDialogBuilder.setTitle(exception.getMessage());
-                            alertDialogBuilder.setMessage(exception.getMessageDescription()).setCancelable(false).setPositiveButton(
-                                    mContext.getResources().getString(R.string.login_connect),
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            // Intent loginIntent = new Intent(mContext, LoginDialogFragment.class);
-                                            // mContext.startActivity(loginIntent);
-                                            LoginDialogFragment dialogFragment = new LoginDialogFragment();
-                                            dialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
-                                            dialogFragment.show(
-                                                    ((FragmentActivity) mContext).getSupportFragmentManager(), "");
-                                        }
-                                    }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            });
-
-                            AlertDialog alertDialog = alertDialogBuilder.create();
-
-                            alertDialog.show();
-
+//                            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
+//
+//                            // set title
+//                            alertDialogBuilder.setTitle(exception.getMessage());
+//                            alertDialogBuilder.setMessage(exception.getMessageDescription()).setCancelable(false).setPositiveButton(
+//                                    mContext.getResources().getString(R.string.login_connect),
+//                                    new DialogInterface.OnClickListener() {
+//                                        public void onClick(DialogInterface dialog, int id) {
+//                                            // Intent loginIntent = new Intent(mContext, LoginFragment.class);
+//                                            // mContext.startActivity(loginIntent);
+//                                            LoginFragment dialogFragment = new LoginFragment();
+//                                            dialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+//                                            dialogFragment.show(
+//                                                    ((FragmentActivity) mContext).getSupportFragmentManager(), "");
+//                                        }
+//                                    }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                    dialog.cancel();
+//                                }
+//                            });
+//
+//                            AlertDialog alertDialog = alertDialogBuilder.create();
+//
+//                            alertDialog.show();
+                            if (mCallback != null) mCallback.onAuthenticationNeeded();
                             return;
                         }
                         mSeed.setLikeStatus(result);

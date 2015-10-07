@@ -139,7 +139,7 @@
   <string name="garden.name">Name des Gartens</string>
   <string name="garden.create.description">Offline arbeiten ohne Sicherung und soziale Netzwerke</string>
   <string name="login.connect">Verbinde mich</string>
-  <string name="login.connect.state">Sie arbeiten online sicher</string>
+  <string name="login.connection.succeed">Sie arbeiten online sicher</string>
   <string name="login.connect.error">Verbindung fehlgeschlagen, haben Sie bereits einen Account erstellt? \n Bitte überprüfen Sie Ihre Angaben und versuchen Sie es erneut. </string>
   <string name="login.disconnect">Abmelden</string>
   <string name="login.disconnect.state">Sie arbeiten offline</string>

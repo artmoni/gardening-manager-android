@@ -139,7 +139,7 @@
   <string name="garden.name">Bahçe\'nın adı</string>
   <string name="garden.create.description">Yedek ve sosyal ağ olmadan çevrimdışı çalışma</string>
   <string name="login.connect">Bağlan</string>
-  <string name="login.connect.state">Güvenli bir şekilde çevrimiçi</string>
+  <string name="login.connection.succeed">Güvenli bir şekilde çevrimiçi</string>
   <string name="login.connect.error">Bağlantı başarısız oldu, zaten bir hesap var mı? \n lütfen bilgileriniz doğrulayın ve yeniden deneyin. </string>
   <string name="login.disconnect">Çıkış yap</string>
   <string name="login.disconnect.state">Çevrimdışı çalışma</string>

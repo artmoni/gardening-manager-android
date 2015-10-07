@@ -35,7 +35,7 @@ import org.gots.seed.BaseSeed;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.LikeStatus;
 import org.gots.seed.SeedUtil;
-import org.gots.ui.fragment.LoginDialogFragment;
+import org.gots.ui.fragment.LoginFragment;
 
 public class SeedWidgetTile extends LinearLayout {
     Context mContext;
@@ -136,67 +136,67 @@ public class SeedWidgetTile extends LinearLayout {
         if (mSeed.getUUID() == null)
             like.setVisibility(View.GONE);
 
-        like.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                new AsyncTask<Void, Void, LikeStatus>() {
-                    GotsException exception = null;
-
-                    @Override
-                    protected LikeStatus doInBackground(Void... params) {
-                        GotsSeedManager manager = GotsSeedManager.getInstance().initIfNew(mContext);
-                        try {
-                            return manager.like(mSeed, mSeed.getLikeStatus().getUserLikeStatus() == 1);
-                        } catch (GotsException e) {
-                            exception = e;
-                            return null;
-                        } catch (Exception e) {
-                            Log.e(getClass().getName(), "" + e.getMessage(), e);
-                            return new LikeStatus();
-                        }
-                    }
-
-                    protected void onPostExecute(LikeStatus result) {
-                        if (result == null && exception != null) {
-                            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
-
-                            // set title
-                            alertDialogBuilder.setTitle(exception.getMessage());
-                            alertDialogBuilder.setMessage(exception.getMessageDescription()).setCancelable(false).setPositiveButton(
-                                    mContext.getResources().getString(R.string.login_connect),
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            // Intent loginIntent = new Intent(mContext, LoginDialogFragment.class);
-                                            // mContext.startActivity(loginIntent);
-                                            LoginDialogFragment dialogFragment = new LoginDialogFragment();
-                                            dialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
-                                            dialogFragment.show(
-                                                    ((FragmentActivity) mContext).getSupportFragmentManager(), "");
-                                        }
-                                    }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            });
-
-                            AlertDialog alertDialog = alertDialogBuilder.create();
-
-                            alertDialog.show();
-
-                            return;
-                        }
-                        mSeed.setLikeStatus(result);
-                        displayLikeStatus(result);
-                        mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
-
-                    }
-
-                    ;
-                }.execute();
-
-            }
-        });
+//        like.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                new AsyncTask<Void, Void, LikeStatus>() {
+//                    GotsException exception = null;
+//
+//                    @Override
+//                    protected LikeStatus doInBackground(Void... params) {
+//                        GotsSeedManager manager = GotsSeedManager.getInstance().initIfNew(mContext);
+//                        try {
+//                            return manager.like(mSeed, mSeed.getLikeStatus().getUserLikeStatus() == 1);
+//                        } catch (GotsException e) {
+//                            exception = e;
+//                            return null;
+//                        } catch (Exception e) {
+//                            Log.e(getClass().getName(), "" + e.getMessage(), e);
+//                            return new LikeStatus();
+//                        }
+//                    }
+//
+//                    protected void onPostExecute(LikeStatus result) {
+//                        if (result == null && exception != null) {
+//                            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
+//
+//                            // set title
+//                            alertDialogBuilder.setTitle(exception.getMessage());
+//                            alertDialogBuilder.setMessage(exception.getMessageDescription()).setCancelable(false).setPositiveButton(
+//                                    mContext.getResources().getString(R.string.login_connect),
+//                                    new DialogInterface.OnClickListener() {
+//                                        public void onClick(DialogInterface dialog, int id) {
+//                                            // Intent loginIntent = new Intent(mContext, LoginFragment.class);
+//                                            // mContext.startActivity(loginIntent);
+//                                            LoginFragment dialogFragment = new LoginFragment();
+//                                            dialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+//                                            dialogFragment.show(
+//                                                    ((FragmentActivity) mContext).getSupportFragmentManager(), "");
+//                                        }
+//                                    }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                    dialog.cancel();
+//                                }
+//                            });
+//
+//                            AlertDialog alertDialog = alertDialogBuilder.create();
+//
+//                            alertDialog.show();
+//
+//                            return;
+//                        }
+//                        mSeed.setLikeStatus(result);
+//                        displayLikeStatus(result);
+//                        mContext.sendBroadcast(new Intent(BroadCastMessages.SEED_DISPLAYLIST));
+//
+//                    }
+//
+//                    ;
+//                }.execute();
+//
+//            }
+//        });
     }
 
     protected void displayLikeStatus(LikeStatus likeStatus) {

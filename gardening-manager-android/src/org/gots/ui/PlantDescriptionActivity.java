@@ -15,6 +15,7 @@ import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.GrowingSeedImpl;
 import org.gots.ui.fragment.AllotmentListFragment;
+import org.gots.ui.fragment.LoginFragment;
 import org.gots.ui.fragment.PlantDescriptionFragment;
 import org.gots.ui.fragment.PlantResumeFragment;
 import org.gots.ui.fragment.WorkflowTaskFragment;
@@ -108,12 +109,17 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
                     addContentLayout(new WebViewFragment(), bundle);
                 }
 
+                @Override
+                public void onAuthenticationNeeded() {
+                    addContentLayout(new LoginFragment(), null);
+                }
+
 //                @Override
 //                public void onLogClick() {
 //                    addContentLayout(new ActionsDoneListFragment(), getIntent().getExtras());
 //                }
             });
-            addResumeLayout(resumeFragment,getIntent().getExtras());
+            addResumeLayout(resumeFragment, getIntent().getExtras());
             addMainLayout(fragmentDescription, getIntent().getExtras());
         } else
             fragmentDescription.update();
@@ -129,7 +135,7 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
             startSupportActionMode(new PlantCallBack(this, mSeed, new PlantCallBack.OnPlantCallBackClicked() {
                 @Override
                 public void onPlantCallBackClicked() {
-                    if (fragmentDescription!=null)
+                    if (fragmentDescription != null)
                         fragmentDescription.update();
                 }
             }));

@@ -140,7 +140,7 @@
   <string name="garden.name">Nom du jardin</string>
   <string name="garden.create.description">Utilisez des fonctions simples en mode déconnecté sans sauvegarde ni réseau sociale</string>
   <string name="login.connect">Me connecter</string>
-  <string name="login.connect.state">Vous êtes synchronisé</string>
+  <string name="login.connection.succeed">Vous êtes synchronisé</string>
   <string name="login.connect.error">La connexion a échoué, avez- vous déjà créé un compte ? \n s\'il vous plaît vérifiez les informations et réessayez. </string>
   <string name="login.disconnect">Déconnexion</string>
   <string name="login.disconnect.state">Vous travaillez déconnecté</string>

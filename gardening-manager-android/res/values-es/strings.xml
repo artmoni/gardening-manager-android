@@ -139,7 +139,7 @@
   <string name="garden.name">Nombre de la plantación</string>
   <string name="garden.create.description">Funciona sin conexión sin copia de seguridad ni red social</string>
   <string name="login.connect">Conéctame</string>
-  <string name="login.connect.state">Trabajando con seguridad en línea</string>
+  <string name="login.connection.succeed">Trabajando con seguridad en línea</string>
   <string name="login.connect.error">Conexión fallida, ¿te has creado ya una cuenta? \n Verifica tu información y vuelve a intentarlo. </string>
   <string name="login.disconnect">Cerrar sesión</string>
   <string name="login.disconnect.state">Trabajando sin conexión</string>

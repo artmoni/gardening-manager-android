@@ -68,7 +68,7 @@ import org.gots.ui.fragment.ActionsResumeFragment;
 import org.gots.ui.fragment.ActionsResumeFragment.OnActionsClickListener;
 import org.gots.ui.fragment.CatalogResumeFragment;
 import org.gots.ui.fragment.IncredibleResumeFragment;
-import org.gots.ui.fragment.LoginDialogFragment;
+import org.gots.ui.fragment.LoginFragment;
 import org.gots.ui.fragment.TutorialResumeFragment;
 import org.gots.ui.fragment.TutorialResumeFragment.OnTutorialFinishedListener;
 import org.gots.ui.fragment.WeatherResumeFragment;
@@ -557,8 +557,10 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                 return true;
 
             case R.id.connection:
-                LoginDialogFragment login = new LoginDialogFragment();
-                login.show(getSupportFragmentManager(), TAG);
+//                LoginFragment login = new LoginFragment();
+//                login.show(getSupportFragmentManager(), TAG);
+                Intent profile = new Intent(this, ProfileActivity.class);
+                startActivity(profile);
                 return true;
 
             default:

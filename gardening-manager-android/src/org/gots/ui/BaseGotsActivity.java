@@ -50,7 +50,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -81,6 +80,7 @@ import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GotsSeedManager;
 import org.gots.ui.fragment.BaseGotsFragment;
+import org.gots.ui.fragment.LoginFragment;
 import org.nuxeo.android.activities.BaseNuxeoActivity;
 import org.nuxeo.android.context.NuxeoContext;
 
@@ -92,7 +92,7 @@ import java.util.Locale;
  * @author jcarsique
  */
 public abstract class BaseGotsActivity extends BaseNuxeoActivity implements GotsContextProvider,
-        OnBackStackChangedListener {
+        OnBackStackChangedListener, LoginFragment.OnLoginEventListener {
     protected static final String TAG = BaseGotsActivity.class.getSimpleName();
     protected static final int LENGHT_SHORT = 3000;
     protected static final int LENGHT_LONG = 5000;
@@ -124,6 +124,17 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
     private TextView notificationText;
     private ImageView imageView;
     private View layoutNotification;
+
+    @Override
+    public void onAuthenticationSucceed(Account account) {
+        showNotification(account.name + ", " + getResources().getString(R.string.login_connection_succeed), false);
+    }
+
+    @Override
+    public void onAuthenticationFailed(String string) {
+        showNotification(string, false);
+
+    }
 
     public interface GardenListener {
         public void onCurrentGardenChanged(GardenInterface garden);

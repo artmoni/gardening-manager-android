@@ -28,6 +28,7 @@ import org.gots.garden.GardenInterface;
 import org.gots.garden.view.OnProfileEventListener;
 import org.gots.provider.GardenContentProvider;
 import org.gots.ui.BaseGotsActivity.GardenListener;
+import org.gots.ui.fragment.LoginFragment;
 import org.gots.ui.fragment.ProfileEditorFragment;
 import org.gots.ui.fragment.ProfileMapFragment;
 import org.gots.ui.fragment.ProfileResumeFragment;
@@ -51,9 +52,14 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
         setTitleBar(R.string.dashboard_profile_name);
 
         Bundle bundle = new Bundle();
-        bundle.putInt(ProfileEditorFragment.PROFILE_EDITOR_MODE,ProfileEditorFragment.OPTION_EDIT);
-        addMainLayout(new ProfileEditorFragment(), bundle);
-        addResumeLayout(new ProfileResumeFragment(),bundle);
+        bundle.putInt(ProfileEditorFragment.PROFILE_EDITOR_MODE, ProfileEditorFragment.OPTION_EDIT);
+        addResumeLayout(new ProfileResumeFragment(), bundle);
+
+        if (gotsPrefs.isConnectedToServer())
+            addMainLayout(new ProfileEditorFragment(), bundle);
+        else
+            addMainLayout(new LoginFragment(), bundle);
+
     }
 
     @Override

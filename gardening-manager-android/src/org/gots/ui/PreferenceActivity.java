@@ -8,7 +8,6 @@ import org.gots.provider.AllotmentContentProvider;
 import org.gots.provider.GardenContentProvider;
 import org.gots.provider.SeedsContentProvider;
 import org.gots.provider.SensorContentProvider;
-import org.gots.ui.fragment.LoginDialogFragment;
 import org.nuxeo.android.config.NuxeoServerConfig;
 
 import android.accounts.Account;
@@ -82,7 +81,7 @@ public class PreferenceActivity extends android.preference.PreferenceActivity im
 
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-//                    LoginDialogFragment login = new LoginDialogFragment();
+//                    LoginFragment login = new LoginFragment();
 //                    login.show(, TAG);
                     return true;
                 }
