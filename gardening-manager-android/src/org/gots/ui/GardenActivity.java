@@ -37,6 +37,7 @@ import org.gots.ui.fragment.AllotmentListFragment.OnAllotmentSelected;
 import org.gots.ui.fragment.BaseGotsFragment;
 import org.gots.ui.fragment.CatalogueFragment;
 import org.gots.ui.fragment.CatalogueFragment.OnSeedSelected;
+import org.gots.ui.fragment.GardenResumeFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -184,7 +185,7 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
         if (getSupportFragmentManager().getBackStackEntryCount() == 0)
             if (allotments.size() > 0) {
                 displayAllotmentsFragment();
-
+                addResumeLayout(new GardenResumeFragment(), getIntent().getExtras());
             } else {
                 displayEditorFragment(null);
 
