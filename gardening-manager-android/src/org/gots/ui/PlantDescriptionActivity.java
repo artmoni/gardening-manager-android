@@ -99,7 +99,8 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
         // ********************** Seed description **********************
         if (fragmentDescription == null) {
             fragmentDescription = new PlantDescriptionFragment();
-            fragmentDescription.setOnDescriptionFragmentClicked(new PlantDescriptionFragment.OnDescriptionFragmentClicked() {
+            PlantResumeFragment resumeFragment = new PlantResumeFragment();
+            resumeFragment.setOnDescriptionFragmentClicked(new PlantResumeFragment.OnDescriptionFragmentClicked() {
                 @Override
                 public void onInformationClick(String urlDescription) {
                     Bundle bundle = new Bundle();
@@ -112,7 +113,7 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
 //                    addContentLayout(new ActionsDoneListFragment(), getIntent().getExtras());
 //                }
             });
-            addResumeLayout(new PlantResumeFragment(),getIntent().getExtras());
+            addResumeLayout(resumeFragment,getIntent().getExtras());
             addMainLayout(fragmentDescription, getIntent().getExtras());
         } else
             fragmentDescription.update();
