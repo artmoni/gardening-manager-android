@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * <p>
+ * <p/>
  * Contributors:
  * sfleury - initial API and implementation
  ******************************************************************************/
@@ -79,7 +79,6 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
         // open();
 
         try {
-            // TODO replace allotment reference to Id instead of name
             Cursor cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, null, null, null, null, null);
 
             if (cursor.moveToFirst()) {
@@ -119,14 +118,7 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
         GrowingSeed searchedSeed = new GrowingSeedImpl();
 
         Cursor cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, DatabaseHelper.GROWINGSEED_ALLOTMENT_ID
-                + "='" + allotment.getName() + "'", null, null, null, null);
-
-        // TODO change this and remove code above when version 1.0.2 will be removed from users
-        if (cursor.getCount() == 0) {
-            cursor = bdd.query(DatabaseHelper.GROWINGSEEDS_TABLE_NAME, null, DatabaseHelper.GROWINGSEED_ALLOTMENT_ID
-                    + "='" + allotment.getId() + "'", null, null, null, null);
-
-        }
+                + "='" + allotment.getId() + "'", null, null, null, null);
 
         if (cursor.moveToFirst()) {
             do {
@@ -163,10 +155,10 @@ public class LocalGrowingSeedProvider extends GotsDBHelper implements GotsGrowin
      * @see org.gots.seed.provider.local.GotsGrowingSeedProvider#deleteGrowingSeed(org.gots.seed.GrowingSeedInterface)
      */
     @Override
-    public void deleteGrowingSeed(GrowingSeed seed) {
+    public void deleteGrowingSeed(GrowingSeed growingSeed) {
 
         bdd.delete(DatabaseHelper.GROWINGSEEDS_TABLE_NAME,
-                DatabaseHelper.GROWINGSEED_ID + "='" + seed.getId() + "'", null);
+                DatabaseHelper.GROWINGSEED_ID + "='" + growingSeed.getId() + "'", null);
     }
 
     public GrowingSeed updateGrowingSeed(GrowingSeed growingSeed, BaseAllotmentInterface allotment) {
