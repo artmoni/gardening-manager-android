@@ -71,6 +71,7 @@ public class SplashScreenActivity extends BaseGotsActivity {
 
     @Override
     protected void onResume() {
+        super.onResume();
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
@@ -84,7 +85,7 @@ public class SplashScreenActivity extends BaseGotsActivity {
             }
         }.execute();
 
-        super.onResume();
+
     }
 
     private void checkPurchaseFeature() {

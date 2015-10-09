@@ -1,4 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/org.gots"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/text_color_light"
@@ -11,12 +13,32 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 
-    <AutoCompleteTextView
-        android:id="@+id/idAutoCompleteTextViewSearch"
+    <LinearLayout
+        android:id="@+id/idLayoutSearch"
+
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="Search plant by name"
-        android:visibility="gone" />
+        android:orientation="horizontal">
+
+        <AutoCompleteTextView
+            android:id="@+id/idAutoCompleteTextViewSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Search plant by name"
+            android:singleLine="true"
+            android:visibility="visible" />
+
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/idFabSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_size="mini"
+            fab:fab_colorNormal="@color/text_color_dark"
+            fab:fab_colorPressed="@color/action_warning_color"
+            fab:fab_icon="@drawable/ic_search" />
+    </LinearLayout>
 
     <GridView
         android:id="@+id/seedgridview"

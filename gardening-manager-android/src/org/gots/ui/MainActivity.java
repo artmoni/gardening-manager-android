@@ -645,7 +645,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                 userInfoTask.execute((ImageView) avatarView);
             }
         }
-       
+
     }
 
     @Override

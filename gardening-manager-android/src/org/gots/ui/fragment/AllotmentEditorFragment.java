@@ -147,11 +147,11 @@ public class AllotmentEditorFragment extends BaseGotsFragment {
         textviewPlantCount.setText(allotment != null ? "" + seeds.size() : "0");
         textviewAllotmentName.setText(allotment != null ? allotment.getName() : "");
 
-        if (allotment.getImagePath() != null) {
-            Bitmap bitmap = FileUtilities.decodeScaledBitmapFromSdCard(allotment.getImagePath(), 100, 100);
-            imageViewAllotment.setImageBitmap(bitmap);
-        }
         if (allotment != null) {
+            if (allotment.getImagePath() != null) {
+                Bitmap bitmap = FileUtilities.decodeScaledBitmapFromSdCard(allotment.getImagePath(), 100, 100);
+                imageViewAllotment.setImageBitmap(bitmap);
+            }
             textviewPlantCount.setText(allotment != null ? "" + seeds.size() : "0");
             textviewAllotmentName.setText(allotment != null ? allotment.getName() : "");
             if (allotment.getImagePath() != null) {

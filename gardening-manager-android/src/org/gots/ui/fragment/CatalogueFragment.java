@@ -11,12 +11,8 @@
 package org.gots.ui.fragment;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -24,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
@@ -31,8 +28,8 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.GridView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -40,8 +37,6 @@ import org.gots.R;
 import org.gots.seed.BaseSeed;
 import org.gots.seed.adapter.SeedListAdapter;
 import org.gots.seed.adapter.VendorSeedListAdapter;
-import org.gots.ui.ExpandableHeightGridView;
-import org.gots.ui.NewSeedActivity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -93,6 +88,8 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
     private String filter = null;
     private AutoCompleteTextView autoCompleteTextView;
     private String lastBarcode;
+    private View layoutSearchFileter;
+    private FloatingActionButton fabSearch;
 
     public interface OnSeedSelected {
         public abstract void onPlantCatalogueClick(BaseSeed seed);
@@ -121,8 +118,8 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
         View view = inflater.inflate(R.layout.list_seed_grid, container, false);
         spinner = (Spinner) view.findViewById(R.id.idSpinnerFilter);
         gridViewCatalog = (GridView) view.findViewById(R.id.seedgridview);
-        autoCompleteTextView = (AutoCompleteTextView) view.findViewById(R.id.idAutoCompleteTextViewSearch);
 
+        autoCompleteTextView = (AutoCompleteTextView) view.findViewById(R.id.idAutoCompleteTextViewSearch);
         autoCompleteTextView.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -141,6 +138,20 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
             }
         });
 
+        layoutSearchFileter = (View) view.findViewById(R.id.idLayoutSearch);
+
+        fabSearch = (FloatingActionButton) view.findViewById(R.id.idFabSearch);
+
+        fabSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(fabSearch.getWindowToken(), 0);
+                force = true;
+                runAsyncDataRetrieval();
+            }
+        });
+
         gridViewCatalog.setAdapter(listVendorSeedAdapter);
         gridViewCatalog.setOnItemClickListener(this);
         gridViewCatalog.setOnItemLongClickListener(this);
@@ -153,7 +164,7 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
         list.add(getResources().getString(R.string.hut_menu_myseeds));
         list.add(getResources().getString(R.string.seed_menu_search));
 //        list.add(getResources().getString(R.string.seed_menu_search_barcode));
-        
+
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>
                 (getActivity(), android.R.layout.simple_spinner_item, list);
 
@@ -169,7 +180,7 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                autoCompleteTextView.setVisibility(View.GONE);
+                layoutSearchFileter.setVisibility(View.GONE);
                 switch (position) {
                     case 0:
                         filter = FILTER_CATALOGUE;
@@ -189,7 +200,7 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
                         break;
                     case 4:
                         filter = FILTER_TEXT;
-                        autoCompleteTextView.setVisibility(View.VISIBLE);
+                        layoutSearchFileter.setVisibility(View.VISIBLE);
                         break;
                     case 5:
                         filter = FILTER_BARCODE;
@@ -230,7 +241,7 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
         else if (FILTER_THISMONTH.equals(filter))
             catalogue = seedProvider.getSeedBySowingMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
         else if (FILTER_TEXT.equals(filter))
-            catalogue = seedProvider.getVendorSeedsByName(autoCompleteTextView.getText().toString(),false);
+            catalogue = seedProvider.getVendorSeedsByName(autoCompleteTextView.getText().toString(), force);
         else if (FILTER_BARCODE.equals(filter))
             catalogue.addAll(seedProvider.getSeedByBarCode(lastBarcode));
         else
