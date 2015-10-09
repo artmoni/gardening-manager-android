@@ -216,7 +216,15 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     @Override
     public List<BaseSeed> getVendorSeedsByName(String currentFilter, boolean force) {
-        return mSeedProvider.getVendorSeedsByName(currentFilter, force);
+        List<BaseSeed> vendorSeedsByName = new ArrayList<>();
+        if (force && !nuxeoManager.getNuxeoClient().isOffline()) {
+            NuxeoSeedProvider nuxeoSeedProvider = new NuxeoSeedProvider(mContext);
+            vendorSeedsByName.addAll(nuxeoSeedProvider.getVendorSeedsByName(currentFilter, force));
+        } else {
+            vendorSeedsByName.addAll(mSeedProvider.getVendorSeedsByName(currentFilter, force));
+        }
+
+        return vendorSeedsByName;
     }
 
     public LikeStatus like(BaseSeed mSeed, boolean cancelLike) throws GotsException {
