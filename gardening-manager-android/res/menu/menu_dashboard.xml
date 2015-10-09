@@ -22,7 +22,7 @@
         app:showAsAction="never"/>
     <item
         android:id="@+id/connection"
-        android:icon="@drawable/garden_disconnected"
+        android:icon="@drawable/ic_login"
         android:title="@string/login.disconnect"
         app:showAsAction="always"/>
     <item

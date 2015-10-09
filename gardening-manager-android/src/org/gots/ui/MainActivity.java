@@ -68,7 +68,6 @@ import org.gots.ui.fragment.ActionsResumeFragment;
 import org.gots.ui.fragment.ActionsResumeFragment.OnActionsClickListener;
 import org.gots.ui.fragment.CatalogResumeFragment;
 import org.gots.ui.fragment.IncredibleResumeFragment;
-import org.gots.ui.fragment.LoginFragment;
 import org.gots.ui.fragment.TutorialResumeFragment;
 import org.gots.ui.fragment.TutorialResumeFragment.OnTutorialFinishedListener;
 import org.gots.ui.fragment.WeatherResumeFragment;
@@ -575,23 +574,25 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
     public boolean onPrepareOptionsMenu(Menu menu) {
 
         final MenuItem itemConnected = (MenuItem) menu.findItem(R.id.connection);
-        if (!gotsPrefs.isConnectedToServer())
-            itemConnected.setIcon(getResources().getDrawable(R.drawable.ic_login));
-        else new AsyncTask<Void, Void, Boolean>() {
-            @Override
-            protected Boolean doInBackground(Void... voids) {
-                return nuxeoManager.getNuxeoClient().getNetworkStatus().testNuxeoServerReachable();
-            }
-
-            @Override
-            protected void onPostExecute(Boolean b) {
-                if (b)
-                    itemConnected.setIcon(getResources().getDrawable(R.drawable.garden_connected));
-                else
-                    itemConnected.setIcon(getResources().getDrawable(R.drawable.garden_disconnected));
-                super.onPostExecute(b);
-            }
-        }.execute();
+//        if (!gotsPrefs.isConnectedToServer())
+//            itemConnected.setIcon(getResources().getDrawable(R.drawable.ic_login));
+//        else {
+//            new AsyncTask<Void, Void, Boolean>() {
+//                @Override
+//                protected Boolean doInBackground(Void... voids) {
+//                    return nuxeoManager.getNuxeoClient().getNetworkStatus().testNuxeoServerReachable();
+//                }
+//
+//                @Override
+//                protected void onPostExecute(Boolean b) {
+//                    if (b)
+//                        itemConnected.setIcon(getResources().getDrawable(R.drawable.garden_connected));
+//                    else
+//                        itemConnected.setIcon(getResources().getDrawable(R.drawable.garden_disconnected));
+//                    super.onPostExecute(b);
+//                }
+//            }.execute();
+//        }
 
         if (gotsPurchase.isPremium())
             menu.findItem(R.id.premium).setVisible(false);
@@ -644,13 +645,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                 userInfoTask.execute((ImageView) avatarView);
             }
         }
-        avatarView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), org.gots.ui.ProfileActivity.class);
-                startActivity(i);
-            }
-        });
+       
     }
 
     @Override
