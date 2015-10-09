@@ -64,7 +64,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
     @Override
     public List<BaseSeed> getVendorSeeds(boolean force, int page, int pageSize) {
         List<BaseSeed> remoteVendorSeeds = new ArrayList<BaseSeed>();
-        List<BaseSeed> myVendorSeeds = new ArrayList<BaseSeed>();
+//        List<BaseSeed> myVendorSeeds = new ArrayList<BaseSeed>();
 
         try {
             Session session = getNuxeoClient().getSession();
@@ -92,13 +92,18 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                     LikeStatus likes = NuxeoSeedConverter.getLikeStatus(likeStatus);
                     if (seed != null) {
                         seed.setLikeStatus(likes);
-                        remoteVendorSeeds.add(seed);
                         Log.i(TAG, seed.toString());
+
+                        NuxeoUtils.downloadBlob(service, document, getImageFile(seed), null);
+//                    downloadImageAsync(service, document, seed);
+                        if (super.getSeedByUUID(seed.getUUID()) == null)
+                            seed = super.createSeed(seed, getImageFile(seed));
+                        else
+                            seed = super.updateSeed(seed);
+                        remoteVendorSeeds.add(seed);
                     } else {
                         Log.w(TAG, "Nuxeo Seed conversion problem " + document.getTitle() + "- " + document.getId());
                     }
-                    NuxeoUtils.downloadBlob(service, document, getImageFile(seed), null);
-//                    downloadImageAsync(service, document, seed);
                 } catch (NumberFormatException formatException) {
                     Log.w(TAG,
                             formatException.getMessage() + " for Document " + document.getTitle() + " - "
@@ -106,12 +111,12 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 }
 
             }
-            myVendorSeeds = synchronize(super.getVendorSeeds(force, page, pageSize), remoteVendorSeeds);
+//            myVendorSeeds = synchronize(super.getVendorSeeds(force, page, pageSize), remoteVendorSeeds);
         } catch (Exception e) {
             Log.e(TAG, "getAllSeeds " + e.getMessage(), e);
-            myVendorSeeds = super.getVendorSeeds(force, 0, 25);
+            remoteVendorSeeds = super.getVendorSeeds(force, 0, 25);
         }
-        return myVendorSeeds;
+        return remoteVendorSeeds;
     }
 
 //    protected void downloadImageAsync(final DocumentManager service, final Document document, BaseSeed seed) {
@@ -174,7 +179,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
     }
 
     protected List<BaseSeed> synchronize(List<BaseSeed> localVendorSeeds,
-                                                  List<BaseSeed> remoteVendorSeeds) {
+                                         List<BaseSeed> remoteVendorSeeds) {
         newSeeds.clear();
         List<BaseSeed> myVendorSeeds = new ArrayList<BaseSeed>();
 

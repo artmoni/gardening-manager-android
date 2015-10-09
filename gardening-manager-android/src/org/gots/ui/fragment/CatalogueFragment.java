@@ -266,9 +266,10 @@ public class CatalogueFragment extends AbstractListFragment implements OnScrollL
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (firstVisibleItem + visibleItemCount >= totalItemCount && firstVisibleItem != 0) {
+        if (firstVisibleItem + visibleItemCount >= totalItemCount - 1 && firstVisibleItem == 0) {
             if (isReady()) {
                 additems();
+                Log.d("onScroll:", "loadMore f=" + firstVisibleItem + ", vc=" + visibleItemCount + ", tc=" + totalItemCount);
             }
         }
     }
