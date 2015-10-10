@@ -54,13 +54,16 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
                     cacheParam);
             for (Document doc : growingSeedDocuments) {
                 GrowingSeed growingSeed = convertToGrowingSeed(doc);
-                growingSeed = super.updateGrowingSeed(growingSeed, allotment);
+                if (super.getGrowingSeedsByUUID(growingSeed.getUUID()) == null)
+                    growingSeed = super.plantingSeed(growingSeed, allotment);
+                else
+                    growingSeed = super.updateGrowingSeed(growingSeed, allotment);
                 remoteGrowingSeeds.add(growingSeed);
             }
 
         } catch (Exception e) {
             Log.e(TAG, "getGrowingSeedsByAllotment " + e.getMessage());
-            return super.getGrowingSeedsByAllotment(allotment,force);
+            return super.getGrowingSeedsByAllotment(allotment, force);
         }
         return remoteGrowingSeeds;
     }
@@ -161,7 +164,7 @@ public class NuxeoGrowingSeedProvider extends LocalGrowingSeedProvider {
             growingSeed.setDateHarvest(doc.getDate("growingseed:dateharvest"));
 
             NuxeoSeedProvider provider = new NuxeoSeedProvider(mContext);
-            growingSeed.setPlant(provider.getSeedByUUID("growingseed:vendorseedid"));
+            growingSeed.setPlant(provider.getSeedByUUID(doc.getString("growingseed:vendorseedid")));
             growingSeed.setUUID(doc.getId());
             return growingSeed;
         } catch (Exception e) {

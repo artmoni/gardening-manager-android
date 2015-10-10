@@ -19,12 +19,15 @@ import android.widget.TextView;
 import org.gots.R;
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
+import org.gots.context.GotsContext;
+import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
 import org.gots.ui.ExpandableHeightGridView;
 import org.gots.utils.FileUtilities;
 
+import java.io.File;
 import java.util.List;
 
 public class AllotmentEditorFragment extends BaseGotsFragment {
@@ -127,10 +130,13 @@ public class AllotmentEditorFragment extends BaseGotsFragment {
 
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String picturePath = cursor.getString(columnIndex);
+//            if (allotment.getUUID() != null){
+//                File f = new File(GotsPreferences..getFilesDir().getAbsolutePath(), document.getId())
+//                FileUtilities.copy(picturePath,)
+//            }
+                allotment.setImagePath(picturePath);
 
-            allotment.setImagePath(picturePath);
             Bitmap bitmap = FileUtilities.decodeScaledBitmapFromSdCard(picturePath, 100, 100);
-
             imageViewAllotment.setImageBitmap(bitmap);
             cursor.close();
             super.onActivityResult(requestCode, resultCode, data);
@@ -148,14 +154,14 @@ public class AllotmentEditorFragment extends BaseGotsFragment {
         textviewAllotmentName.setText(allotment != null ? allotment.getName() : "");
 
         if (allotment != null) {
-            if (allotment.getImagePath() != null) {
-                Bitmap bitmap = FileUtilities.decodeScaledBitmapFromSdCard(allotment.getImagePath(), 100, 100);
-                imageViewAllotment.setImageBitmap(bitmap);
-            }
+//            if (allotment.getImagePath() != null) {
+//                Bitmap bitmap = FileUtilities.decodeScaledBitmapFromSdCard(allotment.getImagePath(), 100, 100);
+//                imageViewAllotment.setImageBitmap(bitmap);
+//            }
             textviewPlantCount.setText(allotment != null ? "" + seeds.size() : "0");
             textviewAllotmentName.setText(allotment != null ? allotment.getName() : "");
             if (allotment.getImagePath() != null) {
-                Bitmap bitmap = FileUtilities.decodeScaledBitmapFromSdCard(allotment.getImagePath(), 100, 100);
+                Bitmap bitmap = FileUtilities.decodeScaledBitmapFromSdCard(allotment.getImagePath(), 400, 400);
                 imageViewAllotment.setImageBitmap(bitmap);
             }
             if (allotment != null) {

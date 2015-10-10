@@ -125,10 +125,10 @@ public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGro
             seedsByAllotment = new HashMap<Integer, HashMap<Integer, GrowingSeed>>();
         }
 
-        if (force || seedsByAllotment.get(allotment.getId()) == null) {
+        if (force || seedsByAllotment.get(allotment.getId()) == null ) {
             seedsByAllotment.put(allotment.getId(), new HashMap<Integer, GrowingSeed>());
-            for (GrowingSeed seed : provider.getGrowingSeedsByAllotment(allotment, force)) {
-                seedsByAllotment.get(allotment.getId()).put(seed.getId(), seed);
+            for (GrowingSeed growingSeed : provider.getGrowingSeedsByAllotment(allotment, force)) {
+                seedsByAllotment.get(allotment.getId()).put(growingSeed.getId(), growingSeed);
             }
         }
         // return provider.getGrowingSeedsByAllotment(allotment, force);

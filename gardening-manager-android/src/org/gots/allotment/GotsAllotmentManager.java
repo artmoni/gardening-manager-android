@@ -107,7 +107,7 @@ public class GotsAllotmentManager extends BroadcastReceiver implements Allotment
         if (allotments == null || force || haschanged) {
             haschanged = false;
             allotments = new HashMap<Integer, BaseAllotmentInterface>();
-            for (BaseAllotmentInterface allotment : allotmentProvider.getMyAllotments(true)) {
+            for (BaseAllotmentInterface allotment : allotmentProvider.getMyAllotments(force)) {
                 allotments.put(allotment.getId(), allotment);
             }
         }

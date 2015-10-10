@@ -45,7 +45,7 @@ public class BaseSeedImpl implements Serializable, BaseSeed, Cloneable {
 
     private ArrayList<BaseAction> actionDone = new ArrayList<BaseAction>();
 
-    private String reference;
+    private String uuid;
 
     private int dateSowingMin = -1;
 
@@ -116,12 +116,12 @@ public class BaseSeedImpl implements Serializable, BaseSeed, Cloneable {
 
     @Override
     public String getUUID() {
-        return reference;
+        return uuid;
     }
 
     @Override
-    public void setUUID(String reference) {
-        this.reference = reference;
+    public void setUUID(String uuid) {
+        this.uuid = uuid;
     }
 
     @Override
@@ -169,7 +169,7 @@ public class BaseSeedImpl implements Serializable, BaseSeed, Cloneable {
 //        newSeed.setGenus(genus);
 //        newSeed.setOrder(order);
 //        newSeed.setName(name);
-//        newSeed.setUUID(reference);
+//        newSeed.setUUID(uuid);
 //        newSeed.setSpecie(species);
 //        newSeed.setUrlDescription(urlDescription);
 //        newSeed.setVariety(variety);

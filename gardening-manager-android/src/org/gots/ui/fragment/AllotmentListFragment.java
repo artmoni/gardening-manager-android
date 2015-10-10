@@ -2,7 +2,9 @@ package org.gots.ui.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -91,6 +93,40 @@ public class AllotmentListFragment extends AbstractListFragment {
 
             }
         });
+        getListView().setOnScrollListener(new AbsListView.OnScrollListener() {
+                                              private int currentVisibleItemCount;
+                                              private int currentScrollState;
+                                              private int currentFirstVisibleItem;
+                                              private int totalItem;
+
+
+                                              @Override
+                                              public void onScrollStateChanged(AbsListView view, int scrollState) {
+                                                  this.currentScrollState = scrollState;
+                                                  this.isScrollCompleted();
+                                              }
+
+                                              @Override
+                                              public void onScroll(AbsListView view, int firstVisibleItem,
+                                                                   int visibleItemCount, int totalItemCount) {
+                                                  this.currentFirstVisibleItem = firstVisibleItem;
+                                                  this.currentVisibleItemCount = visibleItemCount;
+                                                  this.totalItem = totalItemCount;
+
+
+                                              }
+
+                                              private void isScrollCompleted() {
+                                                  if (totalItem - currentFirstVisibleItem == currentVisibleItemCount
+                                                          && this.currentScrollState == SCROLL_STATE_IDLE) {
+                                                      /** To do code here*/
+                                                      Log.d(AllotmentListFragment.class.getSimpleName(), "totalItem " + totalItem + " - currentFirstVisibleItem " + currentFirstVisibleItem + "== currentVisibleItemCount " + currentFirstVisibleItem);
+
+
+                                                  }
+                                              }
+                                          }
+        );
         super.onViewCreated(v, savedInstanceState);
     }
 
@@ -115,8 +151,8 @@ public class AllotmentListFragment extends AbstractListFragment {
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
-        List<BaseAllotmentInterface> result = (List<BaseAllotmentInterface>) data;
-        lsa.setAllotments(result);
+        List<BaseAllotmentInterface> allotments = (List<BaseAllotmentInterface>) data;
+        lsa.setAllotments(allotments);
         super.onNuxeoDataRetrieved(data);
     }
 

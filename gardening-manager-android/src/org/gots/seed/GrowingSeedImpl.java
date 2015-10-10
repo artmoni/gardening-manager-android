@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * <p>
+ * <p/>
  * Contributors:
  * sfleury - initial API and implementation
  ******************************************************************************/
@@ -13,7 +13,7 @@ package org.gots.seed;
 import java.util.Date;
 
 public class GrowingSeedImpl implements GrowingSeed {
-    private int id;
+    private int id = -1;
     private BaseSeed plant;
 
     private static final long serialVersionUID = 1L;
@@ -97,7 +97,7 @@ public class GrowingSeedImpl implements GrowingSeed {
 
     @Override
     public void setUUID(String id) {
-        this.uuid=id;
+        this.uuid = id;
     }
 
     @Override
