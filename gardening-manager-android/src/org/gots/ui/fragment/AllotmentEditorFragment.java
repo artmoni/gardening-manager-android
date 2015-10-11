@@ -172,7 +172,6 @@ public class AllotmentEditorFragment extends BaseGotsFragment {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         if (position < adapter.getCount() - 1) {
                             mCallback.onAllotmentSeedClicked(allotment, adapter.getItem(position));
-
                         } else
                             mCallback.onAllotmentAddPlantClicked(AllotmentEditorFragment.this, allotment);
                     }

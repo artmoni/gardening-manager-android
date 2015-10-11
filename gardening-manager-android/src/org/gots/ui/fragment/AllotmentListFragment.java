@@ -117,7 +117,7 @@ public class AllotmentListFragment extends AbstractListFragment {
                                               }
 
                                               private void isScrollCompleted() {
-                                                  if (totalItem - currentFirstVisibleItem == currentVisibleItemCount
+                                                  if (currentFirstVisibleItem == 0
                                                           && this.currentScrollState == SCROLL_STATE_IDLE) {
                                                       /** To do code here*/
                                                       Log.d(AllotmentListFragment.class.getSimpleName(), "totalItem " + totalItem + " - currentFirstVisibleItem " + currentFirstVisibleItem + "== currentVisibleItemCount " + currentFirstVisibleItem);
@@ -145,6 +145,7 @@ public class AllotmentListFragment extends AbstractListFragment {
 
         for (int i = 0; i < allotments.size(); i++) {
             allotments.get(i).setSeeds(growingSeedManager.getGrowingSeedsByAllotment(allotments.get(i), false));
+
         }
         return allotments;
     }

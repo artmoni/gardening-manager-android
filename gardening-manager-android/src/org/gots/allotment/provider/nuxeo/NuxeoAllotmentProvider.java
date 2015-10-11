@@ -87,23 +87,23 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
                 else
                     allotment = super.createAllotment(allotment);
 
-
-                final File file = allotment.getImagePath() != null ? new File (allotment.getImagePath()) : new File(gotsPrefs.getFilesDir().getAbsolutePath(), document.getId());
-                Log.d(TAG,file.toString());
-                allotment.setImagePath(file.getAbsolutePath());
-                super.updateAllotment(allotment);
+                File file = allotment.getImagePath() != null ? new File (allotment.getImagePath()) : new File(gotsPrefs.getFilesDir().getAbsolutePath(), document.getId());
+                Log.d(TAG, file.toString());
                 if (!file.exists()) {
+
                     NuxeoUtils.downloadBlob(service, document, file, new NuxeoUtils.OnDownloadBlob() {
                         @Override
                         public void onDownloadSuccess(FileBlob fileBlob) {
-                            Log.w(TAG, "getMyAllotments() onDownloadSuccess() file=" + file.getAbsolutePath());
-
+                            Log.w(TAG, "getMyAllotments() onDownloadSuccess() file=" + fileBlob.getFile().getAbsolutePath());
+                            BaseAllotmentInterface allotment = NuxeoAllotmentProvider.super.getAllotmentByUUID(document.getId());
+                            allotment.setImagePath(fileBlob.getFile().getAbsolutePath());
+                            NuxeoAllotmentProvider.super.updateAllotment(allotment);
 
                         }
 
                         @Override
-                        public void onDownloadFailed() {
-                            Log.w(TAG, "getMyAllotments() onDownloadFailed() file=" + file.getAbsolutePath());
+                        public void onDownloadFailed(FileBlob fileBlob) {
+                            Log.w(TAG, "getMyAllotments() onDownloadFailed() file=" + fileBlob.getFile().getAbsolutePath()+" allotment= "+document.getTitle() );
                         }
                     });
 //                    if (fileBlob != null && fileBlob.getLength() > 0)

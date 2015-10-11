@@ -94,10 +94,10 @@ public class NuxeoUtils {
     public interface OnDownloadBlob {
         void onDownloadSuccess(FileBlob fileBlob);
 
-        void onDownloadFailed();
+        void onDownloadFailed(FileBlob fileBlob);
     }
 
-    public static void downloadBlob(final DocumentManager service, final Document doc, final File file, final OnDownloadBlob onDownloadBlob) {
+    public static void downloadBlob(final DocumentManager service, final Document doc, final File file, final OnDownloadBlob mCallBack) {
 
         if (file != null && file.exists()) {
             Log.d(TAG, "downloadBlob: File already exists");
@@ -132,11 +132,11 @@ public class NuxeoUtils {
 
             @Override
             protected void onPostExecute(FileBlob fileBlob) {
-                if (onDownloadBlob != null) {
+                if (mCallBack != null) {
                     if (fileBlob != null && fileBlob.getLength() > 0)
-                        onDownloadBlob.onDownloadSuccess(fileBlob);
+                        mCallBack.onDownloadSuccess(fileBlob);
                     else
-                        onDownloadBlob.onDownloadFailed();
+                        mCallBack.onDownloadFailed(fileBlob);
                 }
                 super.onPostExecute(fileBlob);
             }
