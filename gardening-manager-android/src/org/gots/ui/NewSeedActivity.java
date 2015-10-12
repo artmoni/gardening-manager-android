@@ -33,7 +33,6 @@ import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -42,7 +41,6 @@ import com.google.zxing.integration.android.IntentResult;
 import org.gots.R;
 import org.gots.seed.BaseSeed;
 import org.gots.seed.BaseSeedImpl;
-import org.gots.seed.GrowingSeedImpl;
 import org.gots.ui.fragment.PlanningFragment;
 import org.gots.ui.fragment.PlantCreationFragment;
 import org.gots.ui.fragment.SeedContentFragment;
@@ -263,7 +261,6 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
 //                buttonPrevious.setVisibility(View.GONE);
             }
             if (step == breadcrum.size() + 1) {
-//                Toast.makeText(getApplicationContext(), "the seed is " + newSeed, Toast.LENGTH_LONG).show();
                 if (validateSeed()) {
                     new AsyncTask<Void, Void, BaseSeed>() {
                         @Override
@@ -274,10 +271,11 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
                         @Override
                         protected void onPostExecute(BaseSeed baseSeed) {
                             if (baseSeed != null) {
-                                Toast.makeText(getApplicationContext(), "Excellent your plant has been created", Toast.LENGTH_LONG).show();
+                                showNotification("Excellent your plant has been created",false);
                                 NewSeedActivity.this.finish();
-                            } else
-                                Toast.makeText(getApplicationContext(), "There was a problem creating your plant", Toast.LENGTH_LONG).show();
+                            } else{
+                                showNotification("There was a problem creating your plant", false);
+                            }
 
                             super.onPostExecute(baseSeed);
                         }
@@ -315,16 +313,17 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
         // findViewById(R.id.layoutInputSowing).setBackground(null);
 
         if (newSeed.getSpecie() == null || "".equals(newSeed.getSpecie())) {
-            Toast.makeText(this, getResources().getString(R.string.fillfields_specie), Toast.LENGTH_SHORT).show();
+            showNotification(getResources().getString(R.string.fillfields_specie),false);
             return false;
         }
         if (newSeed.getVariety() == null || "".equals(newSeed.getVariety())) {
-            Toast.makeText(this, getResources().getString(R.string.fillfields_variety), Toast.LENGTH_SHORT).show();
+            showNotification(getResources().getString(R.string.fillfields_variety), false);
 
             return false;
         }
         if (newSeed.getDateSowingMin() == -1 || newSeed.getDateSowingMax() == -1) {
-            Toast.makeText(this, getResources().getString(R.string.fillfields_dates), Toast.LENGTH_SHORT).show();
+            showNotification(getResources().getString(R.string.fillfields_dates), false);
+
             return false;
         }
 
@@ -345,8 +344,7 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
                 && null != data) {
 
             if (!validateSeed()) {
-                Toast.makeText(getApplicationContext(), "Seed must be validable to execute this action",
-                        Toast.LENGTH_LONG).show();
+                showNotification( "Seed must be validable to execute this action",false);
                 return;
             }
             Uri selectedImage = data.getData();

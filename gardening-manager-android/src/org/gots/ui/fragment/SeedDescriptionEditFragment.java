@@ -122,20 +122,20 @@ public class SeedDescriptionEditFragment extends SeedContentFragment implements 
         if (matches.size() > 0) {
             switch (requestCode) {
                 case REQUEST_GROWTH:
-                    descriptionGrowth.setText(matches.get(0));
-                    mSeed.setDescriptionCultivation(mSeed.getDescriptionCultivation() + " " + matches.toArray().toString());
+                    descriptionGrowth.setText(descriptionGrowth.getText() + " " + matches.get(0));
+                    mSeed.setDescriptionCultivation(descriptionGrowth.getText().toString());
                     break;
                 case REQUEST_DISEASES:
-                    descriptionDiseases.setText(matches.get(0));
-                    mSeed.setDescriptionDiseases(mSeed.getDescriptionDiseases() + " " + matches.toArray().toString());
+                    descriptionDiseases.setText(descriptionDiseases.getText() + " " + matches.get(0));
+                    mSeed.setDescriptionDiseases(descriptionDiseases.getText().toString());
                     break;
                 case REQUEST_ENVIRONMENT:
-                    descriptionEnvironment.setText(matches.get(0));
-                    mSeed.setDescriptionEnvironment(mSeed.getDescriptionEnvironment() + " " + matches.toArray().toString());
+                    descriptionEnvironment.setText(descriptionEnvironment.getText() + " " + matches.get(0));
+                    mSeed.setDescriptionEnvironment(descriptionEnvironment.getText().toString());
                     break;
                 case REQUEST_HARVEST:
-                    descriptionHarvest.setText(matches.get(0));
-                    mSeed.setDescriptionHarvest(mSeed.getDescriptionHarvest() + " " + matches.toArray().toString());
+                    descriptionHarvest.setText(descriptionHarvest.getText() + " " + matches.get(0));
+                    mSeed.setDescriptionHarvest(descriptionHarvest.getText().toString());
                     break;
                 default:
                     break;
