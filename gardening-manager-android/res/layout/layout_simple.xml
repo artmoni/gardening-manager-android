@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res/org.gots"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:id="@+id/LinearLayout01"
     android:layout_width="fill_parent"
@@ -40,6 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/idFAB"
         android:orientation="horizontal" />
 
     <RelativeLayout
@@ -81,10 +81,10 @@
 
     <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:id="@+id/idFAB"
-        fab:fab_labelStyle="@style/fab_label"
-        fab:fab_labelsPosition="left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true" />
+        android:layout_alignParentRight="true"
+        fab:fab_labelStyle="@style/fab_label"
+        fab:fab_labelsPosition="left" />
 </RelativeLayout>

@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * <p>
+ * <p/>
  * Contributors:
  * sfleury - initial API and implementation
  ******************************************************************************/
@@ -272,7 +272,8 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
                 protected void onPostExecute(Void result) {
                     // allotmentListFragment.update();
 //                    updateFragments();
-                    runAsyncDataRetrieval();
+                    updateFragments();
+                    showNotification(currentAllotment.getName() + " +1 " + seed.getName(), false);
                 }
 
                 ;
@@ -348,10 +349,10 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
 
             protected void onPostExecute(Void result) {
 //                updateFragments();
-                runAsyncDataRetrieval();
+//                runAsyncDataRetrieval();
+                updateFragments();
             }
 
-            ;
 
         }.execute();
     }
