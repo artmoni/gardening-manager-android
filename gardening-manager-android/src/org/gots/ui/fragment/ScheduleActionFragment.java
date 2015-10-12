@@ -106,7 +106,7 @@ public class ScheduleActionFragment extends DialogFragment implements OnItemClic
                 int layoutsize = 200;
                 int nbcolumn = (width - 200) / layoutsize;
                 listActions.setNumColumns(nbcolumn);
-                listActions.setAdapter(new SimpleListActionAdapter(actions));
+                listActions.setAdapter(new SimpleListActionAdapter(getActivity(), actions));
                 listActions.setOnItemClickListener(ScheduleActionFragment.this);
             };
         }.execute();

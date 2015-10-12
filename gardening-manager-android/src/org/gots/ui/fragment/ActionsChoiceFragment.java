@@ -6,18 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import org.gots.R;
-import org.gots.action.ActionOnSeed;
 import org.gots.action.BaseAction;
 import org.gots.action.GotsActionManager;
-import org.gots.action.adapter.ActionAdapter;
 import org.gots.action.adapter.SimpleListActionAdapter;
-import org.gots.action.view.ActionWidget;
 
 import java.util.List;
 
@@ -37,7 +32,6 @@ public class ActionsChoiceFragment extends BaseGotsFragment {
 
     private GotsActionManager actionManager;
 
-    private ScrollView parent;
 
 //    private LinearLayout layout;
 
@@ -61,8 +55,6 @@ public class ActionsChoiceFragment extends BaseGotsFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        parent = (ScrollView) view.findViewById(R.id.scrollviewActions);
-//        layout = (LinearLayout) parent.getChildAt(0);
         gridView = (GridView) view.findViewById(R.id.gridViewActions);
         super.onViewCreated(view, savedInstanceState);
     }
@@ -116,7 +108,7 @@ public class ActionsChoiceFragment extends BaseGotsFragment {
 //            });
 //        }
 //        ArrayAdapter<Object> arrayAdapter = new ArrayAdapter<Object>(getActivity(), android.R.layout.simple_list_item_1, actionInterfaces.toArray());
-        SimpleListActionAdapter simpleListActionAdapter = new SimpleListActionAdapter(actionInterfaces);
+        SimpleListActionAdapter simpleListActionAdapter = new SimpleListActionAdapter(getActivity(), actionInterfaces);
         gridView.setAdapter(simpleListActionAdapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

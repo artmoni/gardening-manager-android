@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/org.gots"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:id="@+id/LinearLayout01"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -44,13 +46,14 @@
         android:id="@+id/layoutNotification"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/idAdsTop"
+        android:layout_above="@+id/idFAB"
         android:layout_centerHorizontal="true"
-        android:layout_margin="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:background="@drawable/bg_line_action"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        android:padding="5dp"
+        android:padding="20dp"
         android:visibility="gone">
 
         <ImageView
@@ -75,4 +78,13 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/text_color_dark" />
     </RelativeLayout>
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/idFAB"
+        fab:fab_labelStyle="@style/fab_label"
+        fab:fab_labelsPosition="left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true" />
 </RelativeLayout>

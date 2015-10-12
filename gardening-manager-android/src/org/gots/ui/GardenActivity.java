@@ -371,7 +371,7 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
     protected List<FloatingItem> onCreateFloatingMenu() {
         List<FloatingItem> floatingItems = new ArrayList<>();
         FloatingItem floatingItem = new FloatingItem();
-        floatingItem.setTitle(getResources().getString(R.string.allotment_action_add_message));
+        floatingItem.setTitle(getResources().getString(R.string.allotment_button_add));
         floatingItem.setRessourceId(R.drawable.bt_add_allotment);
         floatingItem.setOnClickListener(new View.OnClickListener() {
 

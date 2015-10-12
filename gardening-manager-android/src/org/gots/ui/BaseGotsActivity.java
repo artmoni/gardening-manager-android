@@ -47,12 +47,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.vending.billing.util.Purchase;
@@ -124,6 +122,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
     private TextView notificationText;
     private ImageView imageView;
     private View layoutNotification;
+    private FloatingActionsMenu floatingActionsMenu;
 
     @Override
     public void onAuthenticationSucceed(Account account) {
@@ -246,8 +245,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         notificationText = (TextView) findViewById(R.id.textViewProgress);
         imageView = (ImageView) findViewById(R.id.imageViewRefresh);
         layoutNotification = (View) findViewById(R.id.layoutNotification);
-
-
+        floatingActionsMenu = (FloatingActionsMenu) findViewById(R.id.idFAB);
     }
 
     protected void initAllManager() {
@@ -327,10 +325,24 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         if (items == null || (items != null && items.size() == 0))
             return;
 
-        if (items.size() == 1) {
-            FloatingItem floatingItem = items.get(0);
+//        if (items.size() == 1) {
+//            FloatingItem floatingItem = items.get(0);
+//            FloatingActionButton button = new FloatingActionButton(getApplicationContext());
+//            button.setSize(FloatingActionButton.SIZE_NORMAL);
+//            button.setColorNormalResId(R.color.action_error_color);
+//            button.setColorPressedResId(R.color.action_warning_color);
+//            button.setIcon(floatingItem.getRessourceId());
+//            button.setTitle(floatingItem.getTitle());
+//
+//            button.setStrokeVisible(false);
+//            button.setOnLongClickListener(floatingItem.getOnLongClickListener());
+//            button.setOnClickListener(floatingItem.getOnClickListener());
+//            bottomRightButton = button;
+//        } else if (items.size() > 1) {
+//            FloatingActionsMenu floatingActionsMenu = new FloatingActionsMenu(getApplicationContext());
+        for (FloatingItem floatingItem : items) {
             FloatingActionButton button = new FloatingActionButton(getApplicationContext());
-            button.setSize(FloatingActionButton.SIZE_NORMAL);
+            button.setSize(FloatingActionButton.SIZE_MINI);
             button.setColorNormalResId(R.color.action_error_color);
             button.setColorPressedResId(R.color.action_warning_color);
             button.setIcon(floatingItem.getRessourceId());
@@ -339,36 +351,22 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
             button.setStrokeVisible(false);
             button.setOnLongClickListener(floatingItem.getOnLongClickListener());
             button.setOnClickListener(floatingItem.getOnClickListener());
-            bottomRightButton = button;
-        } else if (items.size() > 1) {
-            FloatingActionsMenu actionsMenu = new FloatingActionsMenu(getApplicationContext());
-            for (FloatingItem floatingItem : items) {
-                FloatingActionButton button = new FloatingActionButton(getApplicationContext());
-                button.setSize(FloatingActionButton.SIZE_MINI);
-                button.setColorNormalResId(R.color.action_error_color);
-                button.setColorPressedResId(R.color.action_warning_color);
-                button.setIcon(floatingItem.getRessourceId());
-                button.setTitle(floatingItem.getTitle());
+            floatingActionsMenu.addButton(button);
 
-                button.setStrokeVisible(false);
-                button.setOnLongClickListener(floatingItem.getOnLongClickListener());
-                button.setOnClickListener(floatingItem.getOnClickListener());
-                actionsMenu.addButton(button);
+//            }
 
-            }
-
-            actionsMenu.setColorNormalResId(R.color.text_color_dark);
-            actionsMenu.setColorPressedResId(R.color.green_light);
-            bottomRightButton = actionsMenu;
+            floatingActionsMenu.setColorNormalResId(R.color.text_color_dark);
+            floatingActionsMenu.setColorPressedResId(R.color.green_light);
+            bottomRightButton = floatingActionsMenu;
         }
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        bottomRightButton.setLayoutParams(params);
-        ViewGroup root = (ViewGroup) getWindow().getDecorView().findViewById(android.R.id.content);
-        ((ViewGroup) root.getChildAt(0)).addView(bottomRightButton);
+//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+//                ViewGroup.LayoutParams.WRAP_CONTENT);
+//        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+//        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+//        bottomRightButton.setLayoutParams(params);
+//        ViewGroup root = (ViewGroup) getWindow().getDecorView().findViewById(android.R.id.content);
+//        ((ViewGroup) root.getChildAt(0)).addView(bottomRightButton);
 
 
     }
@@ -576,6 +574,8 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
     }
 
     protected void addContentLayout(Fragment contentFragment, Bundle options) {
+        if (floatingActionsMenu != null && floatingActionsMenu.isExpanded())
+            floatingActionsMenu.collapse();
         if (!contentFragment.isAdded()) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
@@ -657,8 +657,6 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
             imageView.setVisibility(View.GONE);
             notificationText.clearAnimation();
         }
-//        Animation slideInUp = AnimationUtils.loadAnimation(this, R.anim.slide_in_up);
-//        layoutNotification.startAnimation(slideInUp);
         layoutNotification.setVisibility(View.VISIBLE);
         layoutNotification.setAlpha(0.0f);
 
@@ -673,8 +671,6 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
                                 .translationY(0)
                                 .alpha(0.0f)
                                 .setDuration(millis);
-//                        imageView.clearAnimation();
-//                        notificationText.clearAnimation();
                     }
                 });
         ;

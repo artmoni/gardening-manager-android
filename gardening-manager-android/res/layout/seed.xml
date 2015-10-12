@@ -20,26 +20,25 @@
             android:id="@+id/IdSeedDescriptionEnvironmentTitle"
             style="@style/seed_description_title"
             android:background="@drawable/titre_climat_et_sol"
-            android:text="@string/seed.description.environment"
-            android:layout_width="wrap_content" />
+            android:text="@string/seed.description.environment" />
 
         <TextView
             android:id="@+id/IdSeedDescriptionEnvironment"
             style="@style/seed_description_content"
             android:text=""
-            android:visibility="visible"/>
+            android:visibility="visible" />
 
         <TextView
             android:id="@+id/IdSeedDescriptionCultureTitle"
             style="@style/seed_description_title"
             android:background="@drawable/titre_culture"
-            android:text="@string/seed.description.culture"/>
+            android:text="@string/seed.description.culture" />
 
         <TextView
             android:id="@+id/IdSeedDescriptionCulture"
             style="@style/seed_description_content"
             android:text=""
-            android:visibility="visible"/>
+            android:visibility="visible" />
 
         <!-- seed.description.harvest -->
 
@@ -47,13 +46,13 @@
             android:id="@+id/IdSeedDescriptionHarvestTitle"
             style="@style/seed_description_title"
             android:background="@drawable/titre_recolte"
-            android:text="@string/seed.description.harvest"/>
+            android:text="@string/seed.description.harvest" />
 
         <TextView
             android:id="@+id/IdSeedDescriptionHarvest"
             style="@style/seed_description_content"
             android:text=""
-            android:visibility="visible"/>
+            android:visibility="visible" />
 
         <!-- seed.description.ennemi -->
 
@@ -61,13 +60,13 @@
             android:id="@+id/IdSeedDescriptionEnnemiTitle"
             style="@style/seed_description_title"
             android:background="@drawable/titre_ennemis"
-            android:text="@string/seed.description.ennemi"/>
+            android:text="@string/seed.description.ennemi" />
 
         <TextView
             android:id="@+id/IdSeedDescriptionEnnemi"
             style="@style/seed_description_content"
             android:text=""
-            android:visibility="visible"/>
+            android:visibility="visible" />
     </LinearLayout>
 
 </ScrollView>

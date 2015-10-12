@@ -232,7 +232,7 @@ public class ActionActivity extends BaseGotsActivity implements OnAllotmentSelec
                 getSupportFragmentManager().popBackStack();
                 runAsyncDataRetrieval();
                 hideResumeLayout();
-
+                showNotification(actionInterface.getName() + " " + growingSeedInterface.getPlant().getName(), false);
             }
 
             ;
@@ -253,6 +253,7 @@ public class ActionActivity extends BaseGotsActivity implements OnAllotmentSelec
                 getSupportFragmentManager().popBackStack();
                 runAsyncDataRetrieval();
                 hideResumeLayout();
+                showNotification(actionInterface.getName() + " " + growingSeedInterface.getPlant().getName(), false);
             }
 
             ;
