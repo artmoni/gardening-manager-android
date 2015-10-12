@@ -1,22 +1,29 @@
 package org.gots.ui.fragment;
 
-import java.util.List;
-
-import org.gots.R;
-import org.gots.action.ActionOnSeed;
-import org.gots.action.BaseAction;
-import org.gots.action.GotsActionManager;
-import org.gots.action.view.ActionWidget;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
+import org.gots.R;
+import org.gots.action.ActionOnSeed;
+import org.gots.action.BaseAction;
+import org.gots.action.GotsActionManager;
+import org.gots.action.adapter.ActionAdapter;
+import org.gots.action.adapter.SimpleListActionAdapter;
+import org.gots.action.view.ActionWidget;
+
+import java.util.List;
+
 public class ActionsChoiceFragment extends BaseGotsFragment {
+
+    private GridView gridView;
 
     public interface OnActionSelectedListener {
 
@@ -32,7 +39,7 @@ public class ActionsChoiceFragment extends BaseGotsFragment {
 
     private ScrollView parent;
 
-    private LinearLayout layout;
+//    private LinearLayout layout;
 
     @Override
     public void onAttach(Activity activity) {
@@ -55,8 +62,8 @@ public class ActionsChoiceFragment extends BaseGotsFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         parent = (ScrollView) view.findViewById(R.id.scrollviewActions);
-        layout = (LinearLayout) parent.getChildAt(0);
-
+//        layout = (LinearLayout) parent.getChildAt(0);
+        gridView = (GridView) view.findViewById(R.id.gridViewActions);
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -82,32 +89,42 @@ public class ActionsChoiceFragment extends BaseGotsFragment {
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
-        List<BaseAction> actionInterfaces = (List<BaseAction>) data;
-        for (final BaseAction baseActionInterface : actionInterfaces) {
-            if (!(baseActionInterface instanceof ActionOnSeed))
-                continue;
-            ActionWidget actionWidget = new ActionWidget(getActivity(), baseActionInterface);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(5, 5, 5, 5);
-            actionWidget.setLayoutParams(lp);
-            layout.addView(actionWidget);
-            actionWidget.setOnClickListener(new View.OnClickListener() {
+        final List<BaseAction> actionInterfaces = (List<BaseAction>) data;
+//        for (final BaseAction baseActionInterface : actionInterfaces) {
+//            if (!(baseActionInterface instanceof ActionOnSeed))
+//                continue;
+//            ActionWidget actionWidget = new ActionWidget(getActivity(), baseActionInterface);
+//            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+//                    LinearLayout.LayoutParams.WRAP_CONTENT);
+//            lp.setMargins(5, 5, 5, 5);
+//            actionWidget.setLayoutParams(lp);
+//            layout.addView(actionWidget);
+//            actionWidget.setOnClickListener(new View.OnClickListener() {
+//
+//                @Override
+//                public void onClick(View v) {
+//                    mCallback.onActionClick(baseActionInterface);
+//                }
+//            });
+//            actionWidget.setOnLongClickListener(new View.OnLongClickListener() {
+//
+//                @Override
+//                public boolean onLongClick(View v) {
+//                    mCallback.onActionLongClick(baseActionInterface);
+//                    return true;
+//                }
+//            });
+//        }
+//        ArrayAdapter<Object> arrayAdapter = new ArrayAdapter<Object>(getActivity(), android.R.layout.simple_list_item_1, actionInterfaces.toArray());
+        SimpleListActionAdapter simpleListActionAdapter = new SimpleListActionAdapter(actionInterfaces);
+        gridView.setAdapter(simpleListActionAdapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mCallback.onActionClick(actionInterfaces.get(position));
 
-                @Override
-                public void onClick(View v) {
-                    mCallback.onActionClick(baseActionInterface);
-                }
-            });
-            actionWidget.setOnLongClickListener(new View.OnLongClickListener() {
-
-                @Override
-                public boolean onLongClick(View v) {
-                    mCallback.onActionLongClick(baseActionInterface);
-                    return true;
-                }
-            });
-        }
+            }
+        });
         super.onNuxeoDataRetrieved(data);
     }
 }

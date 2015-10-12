@@ -5,40 +5,14 @@
     android:layout_margin="5dp"
     android:background="@color/text_color_light_transparent"
     android:padding="2dp"
-    android:visibility="visible" >
+    android:visibility="visible">
 
-    <ScrollView
-        android:id="@+id/scrollviewActions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:spacing="10dp" >
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:orientation="vertical" >
-        </LinearLayout>
-    </ScrollView>
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/scrollviewActions"
-        android:layout_alignParentLeft="true"
-        android:text="Simple click to do the action now" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView1"
-        android:layout_alignRight="@+id/textView1"
-        android:layout_below="@+id/textView1"
-        android:layout_marginTop="10dp"
-        android:text="Long click to plan the action in one week" />
+    <GridView
+        android:id="@+id/gridViewActions"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/textView2"/>
 
 </RelativeLayout>
