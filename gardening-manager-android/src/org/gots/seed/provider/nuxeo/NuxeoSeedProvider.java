@@ -11,7 +11,6 @@ import org.gots.nuxeo.NuxeoUtils;
 import org.gots.seed.BaseSeed;
 import org.gots.seed.BotanicSpecie;
 import org.gots.seed.LikeStatus;
-import org.gots.seed.SpeciesDocument;
 import org.gots.seed.provider.local.LocalSeedProvider;
 import org.gots.utils.FileUtilities;
 import org.nuxeo.android.repository.DocumentManager;
@@ -706,7 +705,9 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 refresh = false;
             }
             Documents docs = service.query("SELECT * FROM VendorSeed WHERE ecm:currentLifeCycleState != \"deleted\""
-                            + QUERY_FILTER_LANGUAGE + "AND vendorseed:variety STARTSWITH " + currentFilter, null,
+                            + QUERY_FILTER_LANGUAGE +
+                            " AND vendorseed:variety LIKE \"%" + currentFilter + "%\"" +
+                            " OR vendorseed:specie LIKE \"%" + currentFilter + "%\"", null,
                     new String[]{"dc:modified DESC"}, "*", 0, 25, cacheParam);
             for (Document document : docs) {
                 BaseSeed seed = NuxeoSeedConverter.convert(document);
