@@ -180,11 +180,11 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
                     Geocoder geoCoder = new Geocoder(getApplicationContext(), Locale.getDefault());
                     List<Address> addresses;
                     addresses = geoCoder.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
-                    currentGarden = new DefaultGarden(addresses.get(0));
+                    currentGarden = new DefaultGarden(getApplicationContext(), addresses.get(0) );
                     gardenManager.addGarden(currentGarden);
                     gardenManager.setCurrentGarden(currentGarden);
                 } catch (Exception e1) {
-                    currentGarden = new DefaultGarden(new Address(Locale.getDefault()));
+                    currentGarden = new DefaultGarden(getApplicationContext(), new Address(Locale.getDefault()) );
                     gardenManager.addGarden(currentGarden);
                     gardenManager.setCurrentGarden(currentGarden);
                     e1.printStackTrace();

@@ -33,7 +33,7 @@ public abstract class BaseGotsFragment extends BaseNuxeoFragment {
         try {
             currentGarden = GotsGardenManager.getInstance().initIfNew(getActivity()).getCurrentGarden();
         } catch (GardenNotFoundException e) {
-            currentGarden = new DefaultGarden(new Address(Locale.getDefault()));
+            currentGarden = new DefaultGarden(, new Address(Locale.getDefault()), );
         }
         return currentGarden;
     }
