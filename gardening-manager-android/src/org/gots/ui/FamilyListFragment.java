@@ -24,14 +24,8 @@ public class FamilyListFragment extends AbstractListFragment {
     }
 
     @Override
-    protected void runAsyncDataRetrieval() {
-        try {
-            seedProvider.getSpecies(true);
-        } catch (NotImplementedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        super.runAsyncDataRetrieval();
+    protected Object retrieveNuxeoData() throws Exception {
+        return seedProvider.getAllFamilies();
     }
 
     @Override

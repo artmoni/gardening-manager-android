@@ -7,9 +7,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import org.gots.R;
+import org.gots.seed.BotanicSpecie;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.adapter.ListSpeciesAdapter;
 import org.gots.ui.ExpandableHeightGridView;
+
+import java.util.List;
 
 /**
  * Created by sfleury on 09/07/15.
@@ -24,7 +27,6 @@ public class SpeciesFragment extends SeedContentFragment {
         View v = inflater.inflate(R.layout.input_seed_species, null);
         gridView = (ExpandableHeightGridView) v.findViewById(R.id.layoutSpecieGallery);
         gridView.setExpanded(true);
-
         return v;
     }
 
@@ -46,12 +48,13 @@ public class SpeciesFragment extends SeedContentFragment {
 
     @Override
     protected Object retrieveNuxeoData() throws Exception {
-        return seedManager.getArraySpecies(true);
+        return seedManager.getSpecies(false);
     }
 
     @Override
     protected void onNuxeoDataRetrieved(final Object data) {
-        final ListSpeciesAdapter listSpeciesAdapter = new ListSpeciesAdapter(getActivity(), (String[]) data,
+        List<BotanicSpecie> botanicSpecies = (List<BotanicSpecie>) data;
+        final ListSpeciesAdapter listSpeciesAdapter = new ListSpeciesAdapter(getActivity(), botanicSpecies,
                 mSeed);
         gridView.setAdapter(listSpeciesAdapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -59,7 +62,7 @@ public class SpeciesFragment extends SeedContentFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                    mCallback.onSpeciesSelected(listSpeciesAdapter.getItem(position));
-                mSeed.setSpecie(listSpeciesAdapter.getItem(position));
+                mSeed.setSpecie(listSpeciesAdapter.getItem(position).getSpecieName());
                 gridView.setItemChecked(position, true);
                 listSpeciesAdapter.notifyDataSetChanged();
                 notifyObservers();

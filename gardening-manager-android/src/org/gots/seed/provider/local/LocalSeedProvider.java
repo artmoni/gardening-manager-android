@@ -13,8 +13,9 @@ import org.gots.garden.provider.local.GardenSQLite;
 import org.gots.nuxeo.NuxeoUtils;
 import org.gots.seed.BaseSeed;
 import org.gots.seed.BaseSeedImpl;
+import org.gots.seed.BotanicFamily;
+import org.gots.seed.BotanicSpecie;
 import org.gots.seed.LikeStatus;
-import org.gots.seed.SpeciesDocument;
 import org.gots.seed.provider.GotsSeedProvider;
 import org.gots.utils.GotsDBHelper;
 
@@ -109,8 +110,9 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
     }
 
     @Override
-    public void getAllFamilies() {
+    public List<BotanicFamily> getAllFamilies() {
         // TODO
+        return new ArrayList<>();
     }
 
     @Override
@@ -401,7 +403,8 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
     }
 
     @Override
-    public SpeciesDocument getSpecies(boolean force) throws NotImplementedException {
-        throw new NotImplementedException();
+    public List<BotanicSpecie> getSpecies(boolean force) {
+       Log.d(TAG," -- not implemented --");
+        return new ArrayList<>();
     }
 }

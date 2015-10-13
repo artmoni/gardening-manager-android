@@ -1,11 +1,12 @@
 package org.gots.seed;
 
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
+import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 
-public class SpeciesDocument extends Document {
+public class SpeciesDocument extends Documents {
 
     public SpeciesDocument(String parentPath, String name, String type) {
-        super(parentPath, name, type);
+        super();
     }
 
     /**

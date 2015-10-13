@@ -175,7 +175,6 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
 
         addMainLayout(finalFragment, null);
         addContentLayout(breadcrum.get(step), null);
-        step++;
     }
 
     @Override
@@ -215,50 +214,17 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
     }
 
 
-//    private void initview() {
-//
-//
-////        seedWidgetLong = (SeedWidgetLong) findViewById(R.id.idSeedWidgetLong);
-//
-//
-//        /*
-//         * BARCODE
-//         */
-//        textViewBarCode = (TextView) findViewById(R.id.textViewBarCode);
-//        textViewBarCode.setText(newSeed.getBareCode());
-//
-//
-//        findViewById(R.id.imageBarCode).setOnClickListener(this);
-//        findViewById(R.id.buttonStock).setOnClickListener(this);
-//        findViewById(R.id.buttonModify).setOnClickListener(this);
-//
-//        if (!isNewSeed) {
-//            // findViewById(R.id.buttonCatalogue).setVisibility(View.GONE);
-//            findViewById(R.id.buttonStock).setVisibility(View.GONE);
-//            findViewById(R.id.buttonModify).setVisibility(View.VISIBLE);
-//        }
-//
-//    }
-
-
-    protected void onSeedCreated() {
-        finish();
-    }
 
     @Override
     public void onClick(View v) {
         finalFragment.setSeed(newSeed);
         finalFragment.update();
         if (v == buttonNext) {
-
+            step++;
             if (step > 0)
                 buttonPrevious.setVisibility(View.VISIBLE);
             if (step == breadcrum.size()) {
                 buttonNext.setIcon(R.drawable.ic_validate);
-//                for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); ++i) {
-//                    getSupportFragmentManager().popBackStack();
-//                }
-//                buttonPrevious.setVisibility(View.GONE);
             }
             if (step == breadcrum.size() + 1) {
                 if (validateSeed()) {
@@ -285,8 +251,9 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
             }
             if (step < breadcrum.size())
                 addContentLayout(breadcrum.get(step), null);
-            step++;
+
         } else if (v == buttonPrevious) {
+            step--;
             if (step < breadcrum.size()) {
                 buttonNext.setIcon(R.drawable.ic_next);
             }
@@ -296,7 +263,7 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
             if (step >= 0) {
                 getSupportFragmentManager().popBackStack();
             }
-            step--;
+
         }
     }
 

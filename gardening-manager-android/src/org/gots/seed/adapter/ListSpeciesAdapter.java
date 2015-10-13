@@ -1,9 +1,11 @@
 package org.gots.seed.adapter;
 
+import java.util.List;
 import java.util.Locale;
 
 import org.gots.R;
 import org.gots.seed.BaseSeed;
+import org.gots.seed.BotanicSpecie;
 
 import android.content.Context;
 import android.view.View;
@@ -14,24 +16,24 @@ import android.widget.ImageView;
 public class ListSpeciesAdapter extends BaseAdapter {
     private Context mContext;
 
-    private String[] mSpecies;
+    private List<BotanicSpecie> botanicSpecies;
 
     private BaseSeed mSelectedSeed;
 
-    public ListSpeciesAdapter(Context context, String[] species, BaseSeed newSeed) {
+    public ListSpeciesAdapter(Context context, List<BotanicSpecie> botanicSpecies, BaseSeed newSeed) {
         mContext = context;
-        mSpecies = species;
+        this.botanicSpecies = botanicSpecies;
         mSelectedSeed = newSeed;
     }
 
     @Override
     public int getCount() {
-        return mSpecies.length;
+        return botanicSpecies.size();
     }
 
     @Override
-    public String getItem(int position) {
-        return mSpecies[position];
+    public BotanicSpecie getItem(int position) {
+        return botanicSpecies.get(position);
     }
 
     @Override
@@ -39,7 +41,6 @@ public class ListSpeciesAdapter extends BaseAdapter {
         return 0;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // SeedWidget seedWidget = new SeedWidget(mContext);
@@ -47,9 +48,9 @@ public class ListSpeciesAdapter extends BaseAdapter {
         // seed.setSpecie(getItem(position));
         // seedWidget.setSeed(seed);
         //
-        String specie = getItem(position);
+        BotanicSpecie specie = getItem(position);
         int vegetableImageRessource = mContext.getResources().getIdentifier(
-                "org.gots:drawable/specie_" + specie.trim().toLowerCase(Locale.US).replaceAll("\\s", ""), null, null);
+                "org.gots:drawable/specie_" + specie.getSpecieName().trim().toLowerCase(Locale.US).replaceAll("\\s", ""), null, null);
         ImageView v = new ImageView(mContext);
         v.setImageResource(vegetableImageRessource);
 

@@ -629,9 +629,9 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
 
     @Override
     public void onBackStackChanged() {
-        if (getSupportFragmentManager().getBackStackEntryCount() == 0 && findViewById(R.id.contentLayout) != null) {
-            findViewById(R.id.contentScrollView).setVisibility(View.GONE);
-        }
+//        if (getSupportFragmentManager().getBackStackEntryCount() == 0 && findViewById(R.id.contentLayout) != null) {
+//            findViewById(R.id.contentScrollView).setVisibility(View.GONE);
+//        }
     }
 
     protected BaseGotsFragment getContentFragment() {

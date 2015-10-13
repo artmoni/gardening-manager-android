@@ -5,6 +5,8 @@ import org.gots.exception.NotImplementedException;
 import org.gots.garden.GardenInterface;
 import org.gots.nuxeo.NuxeoUtils;
 import org.gots.seed.BaseSeed;
+import org.gots.seed.BotanicFamily;
+import org.gots.seed.BotanicSpecie;
 import org.gots.seed.LikeStatus;
 import org.gots.seed.SpeciesDocument;
 
@@ -32,7 +34,7 @@ public interface GotsSeedProvider {
 
     public abstract List<BaseSeed> getNewSeeds();
 
-    public void getAllFamilies();
+    public List<BotanicFamily> getAllFamilies();
 
     public void getFamilyById(int id);
 
@@ -47,11 +49,11 @@ public interface GotsSeedProvider {
 
     public abstract List<BaseSeed> getSeedBySowingMonth(int month);
 
-    public abstract String[] getArraySpecies(boolean force);
+//    public abstract String[] getArraySpecies(boolean force);
 
     public abstract String getFamilyBySpecie(String specie);
 
-    public abstract SpeciesDocument getSpecies(boolean force) throws NotImplementedException;
+    public abstract List<BotanicSpecie> getSpecies(boolean force);
 
     public abstract BaseSeed getSeedByUUID(String uuid);
 

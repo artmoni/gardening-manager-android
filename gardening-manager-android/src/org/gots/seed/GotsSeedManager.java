@@ -7,7 +7,6 @@ import android.content.Intent;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.context.GotsContext;
 import org.gots.exception.GotsException;
-import org.gots.exception.NotImplementedException;
 import org.gots.garden.GardenInterface;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.nuxeo.NuxeoUtils;
@@ -47,6 +46,7 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     private String[] listSpecies;
 
     private NuxeoManager nuxeoManager;
+    private List<BotanicSpecie> botanicSpecies = null;
 
     private GotsSeedManager() {
         // mLocalProvider = new LocalSeedProvider(mContext);
@@ -117,9 +117,9 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     }
 
     @Override
-    public void getAllFamilies() {
+    public List<BotanicFamily> getAllFamilies() {
         // TODO Auto-generated method stub
-
+        return new ArrayList<>();
     }
 
     @Override
@@ -262,20 +262,29 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
         return seedBySowingMonth;
     }
 
-    public synchronized String[] getArraySpecies(boolean force) {
-        if (listSpecies == null || force)
-            listSpecies = mSeedProvider.getArraySpecies(force);
-
-        return listSpecies;
-    }
+//    public synchronized String[] getArraySpecies(boolean force) {
+//        if (botanicSpecies == null || force) {
+//            NuxeoSeedProvider seedProvider = new NuxeoSeedProvider(mContext);
+//            botanicSpecies = seedProvider.getSpecies(force);
+//
+//        } else botanicSpecies = mSeedProvider.getSpecies(force);
+//
+//        return botanicSpecies;
+//    }
 
     public synchronized String getFamilyBySpecie(String specie) {
         return mSeedProvider.getFamilyBySpecie(specie);
     }
 
     @Override
-    public SpeciesDocument getSpecies(boolean force) throws NotImplementedException {
-        return mSeedProvider.getSpecies(force);
+    public List<BotanicSpecie> getSpecies(boolean force) {
+        if (botanicSpecies == null || force) {
+            NuxeoSeedProvider seedProvider = new NuxeoSeedProvider(mContext);
+            botanicSpecies = seedProvider.getSpecies(force);
+
+        } else botanicSpecies = mSeedProvider.getSpecies(force);
+
+        return botanicSpecies;
     }
 
     @Override

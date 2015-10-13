@@ -4,12 +4,12 @@ import android.content.Context;
 import android.util.Log;
 
 import org.gots.exception.GardenNotFoundException;
-import org.gots.exception.NotImplementedException;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GotsGardenManager;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.nuxeo.NuxeoUtils;
 import org.gots.seed.BaseSeed;
+import org.gots.seed.BotanicSpecie;
 import org.gots.seed.LikeStatus;
 import org.gots.seed.SpeciesDocument;
 import org.gots.seed.provider.local.LocalSeedProvider;
@@ -639,8 +639,8 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
     }
 
     @Override
-    public SpeciesDocument getSpecies(boolean force) throws NotImplementedException {
-        SpeciesDocument doc = null;
+    public List<BotanicSpecie> getSpecies(boolean force) {
+        List<BotanicSpecie> botanicSpecies = new ArrayList<>();
         try {
             Session session = getNuxeoClient().getSession();
             DocumentManager service = session.getAdapter(DocumentManager.class);
@@ -651,12 +651,16 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             Documents docSpecies = service.query(
                     "SELECT * FROM Species WHERE ecm:currentLifeCycleState != \"deleted\"", null,
                     new String[]{"species:family_uuid DESC"}, "*", 0, 50, cacheParam);
-            if (docSpecies.size() > 0)
-                doc = (SpeciesDocument) docSpecies.get(0);
+            for (Document doc : docSpecies) {
+                BotanicSpecie botanicSpecie = new BotanicSpecie();
+                botanicSpecie.setSpecieName(doc.getTitle());
+                botanicSpecies.add(botanicSpecie);
+            }
+
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
-        return doc;
+        return botanicSpecies;
     }
 
     @Override

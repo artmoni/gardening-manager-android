@@ -178,9 +178,10 @@
     <style name="fab_label">
         <item name="android:textSize">14dp</item>
         <item name="android:textStyle">normal</item>
-        <item name="android:textColor">@color/text_color_dark</item>
+        <item name="android:textColor">@color/text_color_light</item>
         <item name="android:paddingRight">5dp</item>
-        <item name="android:background">@color/text_color_light_transparent</item>
+        <item name="android:background">@color/text_color_dark</item>
+        <item name="android:padding">5dp</item>
     </style>
     <style name="seed_specie">
         <item name="android:textSize">22dp</item>
