@@ -14,7 +14,7 @@
   <string name="seed.register.title">Ajout variété</string>
   <string name="seed.action.date">Effectuée le :</string>
   <string name="seed.action.add.stock">Ajouter au stock</string>
-  <string name="seed.action.add.catalogue">Ajouter au catalogue</string>
+  <string name="seed.action.add.catalogue">Ajouter une plante</string>
   <string name="seed.action.save">Sauvegarder</string>
   <string name="seed.action.todo">A faire avant le</string>
   <string name="seed.action.done">Fait le</string>
