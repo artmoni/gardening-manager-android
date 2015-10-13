@@ -42,12 +42,12 @@
 
 
                 <org.gots.ui.view.MyTextView
-                    android:id="@+id/editTextGardenName"
+                    android:id="@+id/myTextViewGardenName"
                     style="@style/description_content"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:hint="My garden"
+                    android:hint="@string/garden_default_name"
                     android:singleLine="true"
                     android:textSize="20dp"
                     android:layout_marginTop="20dp"

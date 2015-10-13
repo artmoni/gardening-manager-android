@@ -768,7 +768,7 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
                 String[] dropdownValues = new String[myGardens.size()];
                 for (int i = 0; i < myGardens.size(); i++) {
                     GardenInterface garden = myGardens.get(i);
-                    dropdownValues[i] = garden.getName() != null ? garden.getName() : garden.getLocality();
+                    dropdownValues[i] = garden.getName() != null ? garden.getName() : garden.getAddress().toString();
                     if (garden != null && currentGarden != null && garden.getId() == currentGarden.getId()) {
                         selectedGardenIndex = i;
                     }
@@ -871,12 +871,20 @@ public class MainActivity extends BaseGotsActivity implements GardenListener, On
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        // displayTitle();
-        // displaySpinnerGarden();
+    protected boolean requireAsyncDataRetrieval() {
+        return true;
+    }
+
+    @Override
+    protected Object retrieveNuxeoData() throws Exception {
+        return "";
+    }
+
+    @Override
+    protected void onNuxeoDataRetrieved(Object data) {
         refreshAllCounter();
-        // refreshAllFragments();
+        displaySpinnerGarden();
+        super.onNuxeoDataRetrieved(data);
     }
 
     @Override

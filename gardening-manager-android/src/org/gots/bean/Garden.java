@@ -4,15 +4,15 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ * <p/>
  * Contributors:
- *     sfleury - initial API and implementation
+ * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.bean;
 
-import java.util.Date;
-
 import org.gots.garden.GardenInterface;
+
+import java.util.Date;
 
 public class Garden implements GardenInterface {
     private long id;
@@ -204,4 +204,5 @@ public class Garden implements GardenInterface {
     public String getLocalityForecast() {
         return localityForecast != null ? localityForecast : getLocality();
     }
+
 }

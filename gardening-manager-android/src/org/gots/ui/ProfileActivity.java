@@ -5,7 +5,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * <p>
+ * <p/>
  * Contributors:
  * sfleury - initial API and implementation
  * ****************************************************************************
@@ -21,13 +21,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import org.gots.R;
+import org.gots.bean.DefaultGarden;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.view.OnProfileEventListener;
 import org.gots.provider.GardenContentProvider;
 import org.gots.ui.BaseGotsActivity.GardenListener;
+import org.gots.ui.fragment.BaseGotsFragment;
 import org.gots.ui.fragment.LoginFragment;
 import org.gots.ui.fragment.ProfileEditorFragment;
 import org.gots.ui.fragment.ProfileMapFragment;
@@ -44,6 +45,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
 
     //    private List<GardenInterface> allGardens;
     private ProfileEditorFragment contentFragment;
+    private ProfileResumeFragment resumeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +55,8 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
 
         Bundle bundle = new Bundle();
         bundle.putInt(ProfileEditorFragment.PROFILE_EDITOR_MODE, ProfileEditorFragment.OPTION_EDIT);
-        addResumeLayout(new ProfileResumeFragment(), bundle);
+        resumeFragment = new ProfileResumeFragment();
+        addResumeLayout(resumeFragment, bundle);
 
         if (gotsPrefs.isConnectedToServer())
             addMainLayout(new ProfileEditorFragment(), bundle);
@@ -77,7 +80,23 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
 
             @Override
             public void onClick(View v) {
-                openContentFragment(getCurrentGarden(), false);
+                new AsyncTask<Void, Void, GardenInterface>() {
+                    @Override
+                    protected GardenInterface doInBackground(Void... params) {
+                        return gardenManager.addGarden(new DefaultGarden(getApplicationContext(), null));
+                    }
+
+                    @Override
+                    protected void onPostExecute(GardenInterface gardenInterface) {
+                        if (gardenInterface != null)
+                            showNotification("New garden created", false);
+                        resumeFragment.update();
+                        Bundle options = new Bundle();
+                        options.putInt(ProfileEditorFragment.PROFILE_EDITOR_MODE, ProfileEditorFragment.OPTION_EDIT);
+                        addMainLayout(new ProfileEditorFragment(), options);
+                        super.onPostExecute(gardenInterface);
+                    }
+                }.execute();
             }
         });
         floatingItems.add(floatingItem);
@@ -192,8 +211,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
                                 }
                                 // sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));
                                 else
-                                    Toast.makeText(getApplicationContext(), "Last garden cannot be deleted",
-                                            Toast.LENGTH_LONG).show();
+                                    showNotification("Last garden cannot be deleted", false);
                             }
 
                             ;
@@ -232,17 +250,42 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
     }
 
     @Override
-    public void onProfileSelected(GardenInterface garden) {
-        gardenManager.setCurrentGarden(garden);
-        openContentFragment(garden, true);
-//        openContentResumeFragment();
-//        mapFragment.update();
+    public void onProfileSelected(final GardenInterface garden) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                gardenManager.setCurrentGarden(garden);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                resumeFragment.update();
+                super.onPostExecute(aVoid);
+            }
+        }.execute();
     }
 
     @Override
-    public void onProfileEdited(GardenInterface garden) {
-        gardenManager.updateCurrentGarden(garden);
-        openContentFragment(garden, true);
+    public void onProfileEdited(final BaseGotsFragment fragment, final GardenInterface garden) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                gardenManager.updateCurrentGarden(garden);
+                gardenManager.setCurrentGarden(garden);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                resumeFragment.update();
+                if (fragment instanceof ProfileEditorFragment) //TODO launch weather fragment here on main layout
+                    addMainLayout(new ProfileMapFragment(),getIntent().getExtras());
+                super.onPostExecute(aVoid);
+            }
+        }.execute();
+
+
     }
 
     protected void openContentFragment(GardenInterface garden, boolean editable) {
@@ -251,7 +294,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
         if (editable) {
             options.putInt(ProfileEditorFragment.PROFILE_EDITOR_MODE, ProfileEditorFragment.OPTION_EDIT);
         }
-        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+        if (contentFragment == null) {
             contentFragment = new ProfileEditorFragment();
             addMainLayout(contentFragment, options);
         }

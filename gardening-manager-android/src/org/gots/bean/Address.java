@@ -4,9 +4,9 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ * <p/>
  * Contributors:
- *     sfleury - initial API and implementation
+ * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.bean;
 
@@ -45,7 +45,16 @@ public class Address {
 
     @Override
     public String toString() {
-        return getLocality() + " " + getAdminArea() + " " + getCountryName();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(getLocality());
+        if (getLocality() != null)
+            return getLocality();
+        else if (getAdminArea() != null) {
+            return getAdminArea();
+        } else if (getCountryName() != null) {
+            return getCountryName();
+        }
+        return "";
     }
 
     public String getPostalCode() {

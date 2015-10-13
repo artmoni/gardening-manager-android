@@ -5,7 +5,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * <p>
+ * <p/>
  * Contributors:
  * sfleury - initial API and implementation
  * ****************************************************************************
@@ -33,7 +33,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -98,7 +97,7 @@ public class ProfileResumeFragment extends BaseGotsFragment implements LocationL
 
         textViewNbAllotments = (TextView) view.findViewById(R.id.textViewNbAllotments);
 
-        textGardenName = (MyTextView) view.findViewById(R.id.editTextGardenName);
+        textGardenName = (MyTextView) view.findViewById(R.id.myTextViewGardenName);
         textGardenName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -122,9 +121,6 @@ public class ProfileResumeFragment extends BaseGotsFragment implements LocationL
         buttonWeatherState = (FloatingActionButton) view.findViewById(R.id.imageViewWeatherState);
         buttonWeatherState.setOnClickListener(this);
         buttonWeatherState.setImageResource(R.drawable.weather_disconnected);
-
-        initProfileView();
-
     }
 
     @Override
@@ -140,9 +136,11 @@ public class ProfileResumeFragment extends BaseGotsFragment implements LocationL
     private void initProfileView() {
 
 
-        if (mode == OPTION_EDIT && getCurrentGarden() != null && getCurrentGarden().getLocality() != null) {
-            textGardenName.setText(getCurrentGarden().getName());
+        if (mode == OPTION_EDIT) {
+            textGardenName.setText(garden.getName());
         }
+
+        textViewNbAllotments.setText(String.valueOf(nbAllotments));
 
         if (garden.getGpsLatitude() == 0 || garden.getGpsLongitude() == 0) {
             List<String> providers = mlocManager.getAllProviders();
@@ -160,16 +158,11 @@ public class ProfileResumeFragment extends BaseGotsFragment implements LocationL
 
             if (lastKnownLocation != null) {
                 setAddressFromLocation(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+                fetchWeatherAsync();
             }
-//            if ("".equals(garden.getLocality()))
-//                editTextLocality.setEnabled(false);
         } else {
             fetchWeatherAsync();
-            // setAddressFromLocation(garden.getGpsLatitude(), garden.getGpsLongitude());
-//            editTextLocality.setEnabled(true);
         }
-
-//        editTextLocality.setText(garden.getLocality());
 
 
     }
@@ -255,14 +248,7 @@ public class ProfileResumeFragment extends BaseGotsFragment implements LocationL
                     if (result.shortValue() == WeatherManager.WEATHER_OK) {
                         buttonWeatherState.setImageResource(R.drawable.weather_connected);
                         buttonWeatherState.setColorNormal(getResources().getColor(R.color.green_light));
-
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append(garden.getLocality());
-                        if (garden.getAdminArea() != null) {
-                            stringBuilder.append(", ");
-                            stringBuilder.append(garden.getAdminArea());
-                        }
-                        textWeatherLocality.setText(stringBuilder.toString());
+                        textWeatherLocality.setText(garden.getAddress().toString());
                     } else {
                         buttonWeatherState.setImageResource(R.drawable.weather_disconnected);
                         buttonWeatherState.setColorNormal(getResources().getColor(R.color.action_warning_color));
@@ -338,8 +324,6 @@ public class ProfileResumeFragment extends BaseGotsFragment implements LocationL
     }
 
 
-
-
     @Override
     public void update() {
         runAsyncDataRetrieval();
@@ -355,12 +339,12 @@ public class ProfileResumeFragment extends BaseGotsFragment implements LocationL
         GotsAllotmentManager gotsAllotmentManager = GotsAllotmentManager.getInstance();
         nbAllotments = gotsAllotmentManager.getMyAllotments(false).size();
 
-        return super.retrieveNuxeoData();
+        return "";
     }
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
-        textViewNbAllotments.setText(String.valueOf(nbAllotments));
+        initProfileView();
         super.onNuxeoDataRetrieved(data);
     }
 

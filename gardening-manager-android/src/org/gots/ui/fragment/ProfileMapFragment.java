@@ -234,7 +234,7 @@ public class ProfileMapFragment extends BaseGotsFragment implements OnMapLongCli
             }
             // it.remove(); // avoids a ConcurrentModificationException
         }
-        mCallback.onProfileEdited(getCurrentGarden());
+        mCallback.onProfileEdited(this, getCurrentGarden());
     }
 
 }

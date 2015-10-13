@@ -5,7 +5,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * <p>
+ * <p/>
  * Contributors:
  * sfleury - initial API and implementation
  * ****************************************************************************
@@ -19,6 +19,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioButton;
 
 import org.gots.R;
@@ -46,10 +48,12 @@ public class ProfileEditorFragment extends BaseGotsFragment {
     private View buttonValidate;
     private RadioButton publicButton;
     private RadioButton privateButton;
+    private EditText editTextGardenName;
+    private GardenInterface garden;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.profilecreation, container, false);
+        return inflater.inflate(R.layout.profile_editor, container, false);
     }
 
     @Override
@@ -62,6 +66,18 @@ public class ProfileEditorFragment extends BaseGotsFragment {
             mode = getArguments().getInt(PROFILE_EDITOR_MODE);
         privateButton = (RadioButton) view.findViewById(R.id.radioGardenPrivate);
         publicButton = (RadioButton) view.findViewById(R.id.radioGardenIncredibleEdible);
+        editTextGardenName = (EditText) view.findViewById(R.id.editTextGardenName);
+
+        Button button = (Button) view.findViewById(R.id.buttonValidatePosition);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                verifyForm();
+                if (mCallback != null && garden != null)
+                    mCallback.onProfileEdited(ProfileEditorFragment.this, garden);
+
+            }
+        });
 //        if (mode == OPTION_EDIT) {
 //            garden = getCurrentGarden();
 //        } else {
@@ -71,7 +87,10 @@ public class ProfileEditorFragment extends BaseGotsFragment {
 //        buttonValidate = view.findViewById(R.id.buttonValidatePosition);
 //        buttonValidate.setOnClickListener(this);
 
+        initView();
+    }
 
+    private void initView() {
     }
 
     @Override
@@ -85,25 +104,15 @@ public class ProfileEditorFragment extends BaseGotsFragment {
     }
 
 
-//    private boolean verifyForm() {
-//        garden.setName(editTextName.getText().toString());
-//        garden.setLocalityForecast(editTextWeatherLocality.getText().toString());
-//        if (garden.getLocality() == null || "".equals(garden.getLocality())) {
-//            Toast.makeText(getActivity(), "Please localize your garden", Toast.LENGTH_LONG).show();
-////            buttonWeatherState.setAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.shrink_from_bottom));
-//            return false;
-//        }
-//        if ("".equals(garden.getName())) {
-//            Toast.makeText(getActivity(), "Please name your garden", Toast.LENGTH_LONG).show();
-//            if (Build.VERSION.SDK_INT >= 16) {
-//                editTextName.setBackground(getResources().getDrawable(R.drawable.border_red));
-//            } else {
-//                editTextName.setBackgroundDrawable(getResources().getDrawable(R.drawable.border_red));
-//            }
-//            return false;
-//        }
-//        return true;
-//    }
+    private boolean verifyForm() {
+
+        if (!"".equals(editTextGardenName.getText().toString())) {
+            garden.setName(editTextGardenName.getText().toString());
+        } else {
+            garden.setName(editTextGardenName.getHint().toString());
+        }
+        return true;
+    }
 //
 //    private void createNewProfile() {
 //        if (!verifyForm())
@@ -160,11 +169,13 @@ public class ProfileEditorFragment extends BaseGotsFragment {
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
-        GardenInterface gardenInterface = (GardenInterface) data;
-        if (gardenInterface.isIncredibleEdible())
+        garden = (GardenInterface) data;
+        if (garden.isIncredibleEdible())
             publicButton.setSelected(true);
         else
             privateButton.setSelected(true);
+        if (garden.getName() != null)
+            editTextGardenName.setText(garden.getName());
         super.onNuxeoDataRetrieved(data);
     }
 

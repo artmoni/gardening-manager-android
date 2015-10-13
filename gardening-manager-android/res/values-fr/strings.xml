@@ -80,8 +80,8 @@
   <string name="dashboard.exit">Veuillez cliquer sur RETOUR une seconde fois pour quitter l\'application</string>
   <string name="dashboard.hut.name">Plantes</string>
   <string name="dashboard.garden.name">Jardin</string>
-  <string name="dashboard.actions.name">A faire</string>
-  <string name="dashboard.profile.name">Profile</string>
+  <string name="dashboard.actions.name">Taches</string>
+  <string name="dashboard.profile.name">Profil</string>
   <string name="dashboard.weather.name">Météo</string>
   <string name="dateSliderTitle">dateSliderTitle strings</string>
   <string name="specie.daucuscarota">Carotte</string>

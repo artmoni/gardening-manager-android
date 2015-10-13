@@ -574,8 +574,6 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
     }
 
     protected void addContentLayout(Fragment contentFragment, Bundle options) {
-        if (floatingActionsMenu != null && floatingActionsMenu.isExpanded())
-            floatingActionsMenu.collapse();
         if (!contentFragment.isAdded()) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
@@ -632,6 +630,8 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
 //        if (getSupportFragmentManager().getBackStackEntryCount() == 0 && findViewById(R.id.contentLayout) != null) {
 //            findViewById(R.id.contentScrollView).setVisibility(View.GONE);
 //        }
+        if (floatingActionsMenu != null && floatingActionsMenu.isExpanded())
+            floatingActionsMenu.collapse();
     }
 
     protected BaseGotsFragment getContentFragment() {
