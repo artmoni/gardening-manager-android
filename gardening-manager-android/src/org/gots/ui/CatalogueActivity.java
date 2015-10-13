@@ -53,6 +53,7 @@ public class CatalogueActivity extends BaseGotsActivity implements CatalogueFrag
             contentFragment = new CatalogueFragment();
             addMainLayout(contentFragment, null);
         }
+        getActionBar().setTitle(getResources().getString(R.string.dashboard_hut_name));
         super.onNuxeoDataRetrieved(data);
     }
 

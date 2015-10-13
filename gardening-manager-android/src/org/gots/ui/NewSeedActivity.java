@@ -223,10 +223,10 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
             step++;
             if (step > 0)
                 buttonPrevious.setVisibility(View.VISIBLE);
-            if (step == breadcrum.size()) {
+            if (step == breadcrum.size()-1) {
                 buttonNext.setIcon(R.drawable.ic_validate);
             }
-            if (step == breadcrum.size() + 1) {
+            if (step == breadcrum.size()) {
                 if (validateSeed()) {
                     new AsyncTask<Void, Void, BaseSeed>() {
                         @Override
@@ -254,7 +254,7 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
 
         } else if (v == buttonPrevious) {
             step--;
-            if (step < breadcrum.size()) {
+            if (step < breadcrum.size()-1) {
                 buttonNext.setIcon(R.drawable.ic_next);
             }
             if (step == 0) {
