@@ -311,6 +311,7 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     @Override
     public void createRecognitionSeed(File file, NuxeoUtils.OnBlobUpload callback) {
-        mSeedProvider.createRecognitionSeed(file, callback);
+        NuxeoSeedProvider provider = new NuxeoSeedProvider(mContext);
+        provider.createRecognitionSeed(file, callback);
     }
 }

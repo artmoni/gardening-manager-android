@@ -336,7 +336,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
 
     @Override
     public List<BaseSeed> getRecognitionSeeds(boolean force) {
-        Log.d(TAG, "createRecognitionSeed not implemented here");
+        Log.d(TAG, "getRecognitionSeeds not implemented here");
         return new ArrayList<>();
     }
 

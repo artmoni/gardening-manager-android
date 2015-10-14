@@ -300,7 +300,7 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
 
     @Override
     public void onRecognitionConfirmed(Document plantDoc) {
-        Toast.makeText(this, "The plant has been published", Toast.LENGTH_LONG).show();
+        showNotification( "The plant has been published", false);
         getSupportFragmentManager().popBackStack();
 
         mainFragment.update();
