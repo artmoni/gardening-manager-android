@@ -35,9 +35,13 @@ public class SeedSyncAdapter extends GotsSyncAdapter {
         intent.putExtra("AUTHORITY", authority);
         getContext().sendBroadcast(intent);
 
+        seedManager.getSpecies(true);
         seedManager.getVendorSeeds(true, 0, 25);
 
         GardenInterface currentGarden;
+
+
+
         try {
             currentGarden = gardenManager.getCurrentGarden();
             seedManager.getMyStock(currentGarden, true);
