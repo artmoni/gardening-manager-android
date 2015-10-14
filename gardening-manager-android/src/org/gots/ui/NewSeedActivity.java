@@ -131,7 +131,7 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
         descriptionFragment.setSeed(newSeed);
 
         breadcrum = new ArrayList<>();
-        breadcrum.add(speciesFragment);
+//        breadcrum.add(speciesFragment);
         breadcrum.add(varietyFragment);
         breadcrum.add(planninfFragment);
         breadcrum.add(descriptionFragment);

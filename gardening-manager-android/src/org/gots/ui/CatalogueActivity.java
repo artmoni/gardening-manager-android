@@ -1,5 +1,6 @@
 package org.gots.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -18,6 +19,10 @@ import org.gots.ui.fragment.LoginFragment;
 import org.gots.ui.fragment.PlantDescriptionFragment;
 import org.gots.ui.fragment.PlantResumeFragment;
 import org.gots.ui.fragment.SpeciesFragment;
+import org.nuxeo.android.fragments.BaseDocumentLayoutFragment;
+import org.nuxeo.android.fragments.BaseDocumentsListFragment;
+import org.nuxeo.android.fragments.BaseListFragment;
+import org.nuxeo.android.fragments.BaseNuxeoFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +30,10 @@ import java.util.List;
 /**
  * Created by sfleury on 20/09/15.
  */
-public class CatalogueActivity extends BaseGotsActivity implements CatalogueFragment.OnSeedSelected, PlantDescriptionFragment.OnDescriptionFragmentClicked, SpeciesFragment.OnSpeciesSelected {
+public class CatalogueActivity extends BaseGotsActivity implements CatalogueFragment.OnSeedSelected, PlantDescriptionFragment.OnDescriptionFragmentClicked, SpeciesFragment.OnSpeciesSelected, BaseDocumentsListFragment.Callback {
 
 
-    private BaseGotsFragment contentFragment;
+    private BaseNuxeoFragment contentFragment;
 
     @Override
     protected boolean requireFloatingButton() {
@@ -53,7 +58,6 @@ public class CatalogueActivity extends BaseGotsActivity implements CatalogueFrag
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
         if (contentFragment == null) {
-//            contentFragment = new CatalogueFragment();
             contentFragment = new SpeciesFragment();
             addMainLayout(contentFragment, null);
         }
@@ -90,8 +94,8 @@ public class CatalogueActivity extends BaseGotsActivity implements CatalogueFrag
         startSupportActionMode(new PlantCallBack(this, seed, new PlantCallBack.OnPlantCallBackClicked() {
             @Override
             public void onPlantCallBackClicked() {
-                if (contentFragment != null)
-                    contentFragment.update();
+//                if (contentFragment != null)
+//                    contentFragment.update();
             }
         }));
     }
@@ -168,5 +172,30 @@ public class CatalogueActivity extends BaseGotsActivity implements CatalogueFrag
     @Override
     public void onSpeciesClicked(BotanicSpecie botanicSpecie) {
         addContentLayout(new CatalogueFragment(), getIntent().getExtras());
+    }
+
+    @Override
+    public boolean isTwoPane() {
+        return false;
+    }
+
+    @Override
+    public int getLayoutFragmentContainerId() {
+        return 0;
+    }
+
+    @Override
+    public Class<? extends Activity> getLayoutFragmentActivity() {
+        return null;
+    }
+
+    @Override
+    public BaseDocumentLayoutFragment getLayoutFragment() {
+        return null;
+    }
+
+    @Override
+    public int getListFragmentContainerId() {
+        return 0;
     }
 }

@@ -91,7 +91,10 @@
         <provider android:authorities="org.gots.providers.actions" android:label="@string/dashboard.actions.name" android:name="org.gots.provider.ActionsContentProvider" android:syncable="true"/>
         <provider android:authorities="org.gots.providers.allotment" android:label="@string/dashboard.garden.name" android:name="org.gots.provider.AllotmentContentProvider" android:syncable="true"/>
         <provider android:authorities="org.gots.providers.weather" android:label="@string/dashboard.weather.name" android:name="org.gots.provider.WeatherContentProvider" android:syncable="true"/>
-
+        <provider
+            android:name="org.gots.provider.NuxeoDocumentContentProvider"
+            android:authorities="gardening-manager" >
+        </provider>
         <receiver android:name=".action.service.ActionTODOBroadcastReceiver">
         </receiver>
 
