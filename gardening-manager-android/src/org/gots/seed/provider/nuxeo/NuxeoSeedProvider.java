@@ -649,10 +649,28 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             }
             Documents docSpecies = service.query(
                     "SELECT * FROM Species WHERE ecm:currentLifeCycleState != \"deleted\"", null,
-                    new String[]{"species:family_uuid DESC"}, "*", 0, 50, cacheParam);
+                    null, "*", 0, 50, cacheParam);
             for (Document doc : docSpecies) {
-                BotanicSpecie botanicSpecie = new BotanicSpecie();
+                final BotanicSpecie botanicSpecie = new BotanicSpecie();
                 botanicSpecie.setSpecieName(doc.getTitle());
+
+                File f = new File(gotsPrefs.getFilesDir(), doc.getId());
+                if (!f.exists()){
+                    NuxeoUtils.downloadBlob(service, doc, f, new NuxeoUtils.OnDownloadBlob() {
+                        @Override
+                        public void onDownloadSuccess(FileBlob fileBlob) {
+                            botanicSpecie.setFilepath(fileBlob.getFile().getAbsolutePath());
+                            Log.d(TAG, "downloaded picture for "+botanicSpecie.getSpecieName()+" "+fileBlob.getFile().getAbsolutePath());
+                        }
+
+                        @Override
+                        public void onDownloadFailed(FileBlob fileBlob) {
+                            Log.d(TAG, "no picture for this species");
+                        }
+                    });
+                }
+                else
+                    botanicSpecie.setFilepath(f.getAbsolutePath());
                 botanicSpecies.add(botanicSpecie);
             }
 

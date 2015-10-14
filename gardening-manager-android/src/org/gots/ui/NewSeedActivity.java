@@ -41,6 +41,8 @@ import com.google.zxing.integration.android.IntentResult;
 import org.gots.R;
 import org.gots.seed.BaseSeed;
 import org.gots.seed.BaseSeedImpl;
+import org.gots.seed.BotanicSpecie;
+import org.gots.ui.fragment.BaseGotsFragment;
 import org.gots.ui.fragment.PlanningFragment;
 import org.gots.ui.fragment.PlantCreationFragment;
 import org.gots.ui.fragment.SeedContentFragment;
@@ -59,7 +61,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NewSeedActivity extends BaseGotsActivity implements OnClickListener, PictureSelectorListener,
-        SeedContentFragment.OnSeedUpdated {
+        SeedContentFragment.OnSeedUpdated ,SpeciesFragment.OnSpeciesSelected{
     public static final String ORG_GOTS_SEED_BARCODE = "org.gots.seed.barcode";
 
     public static final String ORG_GOTS_SEEDID = "org.gots.seedid";
@@ -94,7 +96,7 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
     private PlanningFragment planninfFragment;
     private SeedDescriptionEditFragment descriptionFragment;
     private FloatingActionButton buttonNext;
-    private List<SeedContentFragment> breadcrum;
+    private List<BaseGotsFragment> breadcrum;
     private int step = 0;
     private FloatingActionButton buttonPrevious;
     private PlantCreationFragment finalFragment;
@@ -121,7 +123,6 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
         finalFragment.setSeed(newSeed);
 
         speciesFragment = new SpeciesFragment();
-        speciesFragment.setSeed(newSeed);
         varietyFragment = new VarietyFragment();
         varietyFragment.setSeed(newSeed);
         planninfFragment = new PlanningFragment();
@@ -379,6 +380,12 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
     @Override
     public void onSeedUpdated(BaseSeed seed) {
         finalFragment.setSeed(seed);
+        finalFragment.update();
+    }
+
+    @Override
+    public void onSpeciesClicked(BotanicSpecie botanicSpecie) {
+        newSeed.setSpecie(botanicSpecie.getSpecieName());
         finalFragment.update();
     }
 }

@@ -50,6 +50,19 @@ public class SeedUtil {
 
     }
 
+    public static String translateSpecie(Context context, BotanicSpecie botanicSpecie) {
+        if (botanicSpecie == null)
+            return "";
+        String translateSpecie = botanicSpecie.getSpecieName();
+        if (translateSpecie == null || "null".equals(translateSpecie))
+            return "";
+        int specieRessourceString = context.getResources().getIdentifier(
+                "org.gots:string/specie." + translateSpecie.toLowerCase().replaceAll("\\s", ""), null, null);
+        if (specieRessourceString != 0)
+            translateSpecie = context.getResources().getString(specieRessourceString);
+        return translateSpecie;
+    }
+
     public static String translateSpecie(Context context, BaseSeed growingSeedInterface) {
         if (growingSeedInterface == null)
             return "";

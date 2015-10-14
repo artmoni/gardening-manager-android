@@ -1,32 +1,46 @@
 package org.gots.ui.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ListView;
 
 import org.gots.R;
 import org.gots.seed.BotanicSpecie;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.adapter.ListSpeciesAdapter;
-import org.gots.ui.ExpandableHeightGridView;
 
 import java.util.List;
 
 /**
  * Created by sfleury on 09/07/15.
  */
-public class SpeciesFragment extends SeedContentFragment {
+public class SpeciesFragment extends BaseGotsFragment {
 
     private GotsSeedManager seedManager;
-    private ExpandableHeightGridView gridView;
+    private ListView listView;
+    private OnSpeciesSelected mCallBack;
+
+    public interface OnSpeciesSelected {
+        public void onSpeciesClicked(BotanicSpecie botanicSpecie);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        if (getActivity() instanceof OnSpeciesSelected)
+            mCallBack = (OnSpeciesSelected) getActivity();
+        super.onAttach(activity);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.input_seed_species, null);
-        gridView = (ExpandableHeightGridView) v.findViewById(R.id.layoutSpecieGallery);
-        gridView.setExpanded(true);
+        listView = (ListView) v.findViewById(R.id.listViewSpecies);
+        seedManager = GotsSeedManager.getInstance().initIfNew(getActivity());
+//        listView.setExpanded(true);
         return v;
     }
 
@@ -42,7 +56,7 @@ public class SpeciesFragment extends SeedContentFragment {
 
     @Override
     protected void onNuxeoDataRetrievalStarted() {
-        seedManager = GotsSeedManager.getInstance().initIfNew(getActivity());
+
         super.onNuxeoDataRetrievalStarted();
     }
 
@@ -54,18 +68,19 @@ public class SpeciesFragment extends SeedContentFragment {
     @Override
     protected void onNuxeoDataRetrieved(final Object data) {
         List<BotanicSpecie> botanicSpecies = (List<BotanicSpecie>) data;
-        final ListSpeciesAdapter listSpeciesAdapter = new ListSpeciesAdapter(getActivity(), botanicSpecies,
-                mSeed);
-        gridView.setAdapter(listSpeciesAdapter);
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        final ListSpeciesAdapter listSpeciesAdapter = new ListSpeciesAdapter(getActivity(), botanicSpecies
+        );
+        listView.setAdapter(listSpeciesAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                    mCallback.onSpeciesSelected(listSpeciesAdapter.getItem(position));
-                mSeed.setSpecie(listSpeciesAdapter.getItem(position).getSpecieName());
-                gridView.setItemChecked(position, true);
+//                mSeed.setSpecie(listSpeciesAdapter.getItem(position).getSpecieName());
+                mCallBack.onSpeciesClicked(listSpeciesAdapter.getItem(position));
+                listView.setItemChecked(position, true);
                 listSpeciesAdapter.notifyDataSetChanged();
-                notifyObservers();
+                listView.setSelection(position);
             }
 
 

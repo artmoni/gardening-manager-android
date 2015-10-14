@@ -11,10 +11,13 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import org.gots.R;
 import org.gots.provider.SeedsContentProvider;
 import org.gots.seed.BaseSeed;
+import org.gots.seed.BotanicSpecie;
+import org.gots.ui.fragment.BaseGotsFragment;
 import org.gots.ui.fragment.CatalogueFragment;
 import org.gots.ui.fragment.LoginFragment;
 import org.gots.ui.fragment.PlantDescriptionFragment;
 import org.gots.ui.fragment.PlantResumeFragment;
+import org.gots.ui.fragment.SpeciesFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +25,7 @@ import java.util.List;
 /**
  * Created by sfleury on 20/09/15.
  */
-public class CatalogueActivity extends BaseGotsActivity implements CatalogueFragment.OnSeedSelected, PlantDescriptionFragment.OnDescriptionFragmentClicked {
+public class CatalogueActivity extends BaseGotsActivity implements CatalogueFragment.OnSeedSelected, PlantDescriptionFragment.OnDescriptionFragmentClicked, SpeciesFragment.OnSpeciesSelected {
 
 
     private CatalogueFragment contentFragment;
@@ -51,8 +54,10 @@ public class CatalogueActivity extends BaseGotsActivity implements CatalogueFrag
     protected void onNuxeoDataRetrieved(Object data) {
         if (contentFragment == null) {
             contentFragment = new CatalogueFragment();
+//            contentFragment = new SpeciesFragment();
             addMainLayout(contentFragment, null);
         }
+
         getActionBar().setTitle(getResources().getString(R.string.dashboard_hut_name));
         super.onNuxeoDataRetrieved(data);
     }
@@ -158,5 +163,10 @@ public class CatalogueActivity extends BaseGotsActivity implements CatalogueFrag
         Bundle bundle = new Bundle();
         bundle.putString(WebViewFragment.URL, url);
         addContentLayout(new WebViewFragment(), bundle);
+    }
+
+    @Override
+    public void onSpeciesClicked(BotanicSpecie botanicSpecie) {
+        addContentLayout(new CatalogueFragment(), getIntent().getExtras());
     }
 }

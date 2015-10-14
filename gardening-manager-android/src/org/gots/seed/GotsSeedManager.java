@@ -46,7 +46,7 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     private String[] listSpecies;
 
     private NuxeoManager nuxeoManager;
-    private List<BotanicSpecie> botanicSpecies = null;
+    private List<BotanicSpecie> botanicSpecies = new ArrayList<>();
 
     private GotsSeedManager() {
         // mLocalProvider = new LocalSeedProvider(mContext);
@@ -278,11 +278,11 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
 
     @Override
     public List<BotanicSpecie> getSpecies(boolean force) {
-        if (botanicSpecies == null || force) {
+        if (botanicSpecies.size() == 0 || force) {
             NuxeoSeedProvider seedProvider = new NuxeoSeedProvider(mContext);
-            botanicSpecies = seedProvider.getSpecies(force);
+            botanicSpecies.addAll(seedProvider.getSpecies(force));
 
-        } else botanicSpecies = mSeedProvider.getSpecies(force);
+        } else botanicSpecies.addAll(mSeedProvider.getSpecies(force));
 
         return botanicSpecies;
     }
