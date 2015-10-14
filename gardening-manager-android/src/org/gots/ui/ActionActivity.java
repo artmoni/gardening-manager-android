@@ -35,14 +35,15 @@ import java.util.List;
 
 public class ActionActivity extends BaseGotsActivity implements OnAllotmentSelected, ActionsChoiceFragment.OnActionSelectedListener {
 
-    private ActionsTODOListFragment contentFragment;
+    private ActionsTODOListFragment mainFragment;
     private GrowingSeed growingSeedInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitleBar(R.string.dashboard_actions_name);
-        contentFragment = new ActionsTODOListFragment();
+        mainFragment = new ActionsTODOListFragment();
+        addMainLayout(mainFragment, null);
     }
 
     @Override
@@ -69,7 +70,8 @@ public class ActionActivity extends BaseGotsActivity implements OnAllotmentSelec
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
-        addMainLayout(contentFragment, null);
+        if (mainFragment != null && mainFragment.isAdded())
+            mainFragment.update();
         super.onNuxeoDataRetrieved(data);
     }
 
@@ -120,6 +122,7 @@ public class ActionActivity extends BaseGotsActivity implements OnAllotmentSelec
         Bundle bundle = new Bundle();
         bundle.putInt(PlantDescriptionActivity.GOTS_VENDORSEED_ID, growingSeedInterface.getPlant().getSeedId());
         addResumeLayout(new PlantResumeFragment(), bundle);
+        getSupportFragmentManager().popBackStack();
         addContentLayout(new ActionsChoiceFragment(), getIntent().getExtras());
 //        menu = new FloatingActionsMenu(getApplicationContext());
 //
@@ -150,7 +153,7 @@ public class ActionActivity extends BaseGotsActivity implements OnAllotmentSelec
 //
 //                        protected void onPostExecute(Void result) {
 //                            getSupportFragmentManager().popBackStack();
-//                            contentFragment.update();
+//                            mainFragment.update();
 //                            menu.setVisibility(View.GONE);
 //                            hideResumeLayout();
 //                        }
