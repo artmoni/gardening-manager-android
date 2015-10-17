@@ -165,7 +165,6 @@ public class GotsBillingDialog extends DialogFragment {
                                 public void onIabPurchaseFinished(IabResult result, Purchase info) {
                                     if (result.isSuccess()) {
 
-                                        Toast.makeText(getActivity(), "Thanks for buying!", Toast.LENGTH_SHORT).show();
                                         update();
                                         if (onPurchasedFinishedListener != null)
                                             onPurchasedFinishedListener.onPurchaseSucceed(purchase);

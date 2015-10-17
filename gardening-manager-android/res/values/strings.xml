@@ -176,6 +176,8 @@
     <string name="inapp.purchase.noaccount">You need a Google account to buy features</string>
     <string name="inapp.purchase.buy">Buy</string>
     <string name="inapp.purchase.title">Got further</string>
+    <string name="inapp.purchase.succeed">Your are ready to discover new feature</string>
+    <string name="inapp.purchase.failed">Your purchase has failed, try later to discover more feature</string>
     <string name="tutorial.title">Discover</string>
     <string name="tutorial.a.title">Geolocalize my garden</string>
     <string name="tutorial.a.description">Keep weather history and grow with the moon</string>

@@ -116,7 +116,6 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
 
     private GardenInterface currentGarden;
 
-
     private GotsGrowingSeedManager gotsGrowingSeedManager;
     private View bottomRightButton;
     private TextView notificationText;
@@ -180,11 +179,11 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
                     Geocoder geoCoder = new Geocoder(getApplicationContext(), Locale.getDefault());
                     List<Address> addresses;
                     addresses = geoCoder.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
-                    currentGarden = new DefaultGarden(getApplicationContext(), addresses.get(0) );
+                    currentGarden = new DefaultGarden(getApplicationContext(), addresses.get(0));
                     gardenManager.addGarden(currentGarden);
                     gardenManager.setCurrentGarden(currentGarden);
                 } catch (Exception e1) {
-                    currentGarden = new DefaultGarden(getApplicationContext(), new Address(Locale.getDefault()) );
+                    currentGarden = new DefaultGarden(getApplicationContext(), new Address(Locale.getDefault()));
                     gardenManager.addGarden(currentGarden);
                     gardenManager.setCurrentGarden(currentGarden);
                     e1.printStackTrace();
@@ -296,13 +295,6 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         } else
             GoogleAnalyticsTracker.getInstance().setCustomVar(2, "Member Connected", "Guest", 1);
 
-        if (!gotsPurchase.isPremium()) {
-            GotsAdvertisement ads = new GotsAdvertisement(BaseGotsActivity.this);
-
-            LinearLayout layout = (LinearLayout) findViewById(R.id.idAdsTop);
-            if (layout != null)
-                layout.addView(ads.getAdsLayout());
-        }
 
         super.onPostCreate(savedInstanceState);
     }
@@ -325,21 +317,6 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         if (items == null || (items != null && items.size() == 0))
             return;
 
-//        if (items.size() == 1) {
-//            FloatingItem floatingItem = items.get(0);
-//            FloatingActionButton button = new FloatingActionButton(getApplicationContext());
-//            button.setSize(FloatingActionButton.SIZE_NORMAL);
-//            button.setColorNormalResId(R.color.action_error_color);
-//            button.setColorPressedResId(R.color.action_warning_color);
-//            button.setIcon(floatingItem.getRessourceId());
-//            button.setTitle(floatingItem.getTitle());
-//
-//            button.setStrokeVisible(false);
-//            button.setOnLongClickListener(floatingItem.getOnLongClickListener());
-//            button.setOnClickListener(floatingItem.getOnClickListener());
-//            bottomRightButton = button;
-//        } else if (items.size() > 1) {
-//            FloatingActionsMenu floatingActionsMenu = new FloatingActionsMenu(getApplicationContext());
         for (FloatingItem floatingItem : items) {
             FloatingActionButton button = new FloatingActionButton(getApplicationContext());
             button.setSize(FloatingActionButton.SIZE_MINI);
@@ -353,21 +330,10 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
             button.setOnClickListener(floatingItem.getOnClickListener());
             floatingActionsMenu.addButton(button);
 
-//            }
-
             floatingActionsMenu.setColorNormalResId(R.color.text_color_dark);
             floatingActionsMenu.setColorPressedResId(R.color.green_light);
             bottomRightButton = floatingActionsMenu;
         }
-
-//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-//                ViewGroup.LayoutParams.WRAP_CONTENT);
-//        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-//        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-//        bottomRightButton.setLayoutParams(params);
-//        ViewGroup root = (ViewGroup) getWindow().getDecorView().findViewById(android.R.id.content);
-//        ((ViewGroup) root.getChildAt(0)).addView(bottomRightButton);
-
 
     }
 
@@ -416,18 +382,17 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
 
     public void displayPurchaseFragment(List<String> skuList) {
         FragmentManager fm = getSupportFragmentManager();
-        final GotsBillingDialog editNameDialog = new GotsBillingDialog();
+        final GotsBillingDialog gotsBillingDialog = new GotsBillingDialog();
         if (skuList != null) {
             for (String sku : skuList)
-                editNameDialog.addSKUFeature(sku, true);
+                gotsBillingDialog.addSKUFeature(sku, true);
         }
-        editNameDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
-        editNameDialog.show(fm, "fragment_edit_name");
-        editNameDialog.setOnPurchasedFinishedListener(new OnPurchaseFinished() {
+        gotsBillingDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+        gotsBillingDialog.show(fm, "fragment_edit_name");
+        gotsBillingDialog.setOnPurchasedFinishedListener(new OnPurchaseFinished() {
             @Override
             public void onPurchaseFailed(Purchase sku) {
-//                            if (sku != null)
-//                                editNameDialog.consumePurchase(sku);
+                showNotification(getResources().getString(R.string.inapp_purchase_failed) + ": " + sku.getSku(), false);
 
             }
 
@@ -435,9 +400,10 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
             public void onPurchaseSucceed(Purchase sku) {
                 if (GotsPurchaseItem.SKU_TEST_PURCHASE.equals(sku)) {
                     gotsPurchase.setFeatureRecognitionCounter(gotsPurchase.getFeatureRecognitionCounter() + 50);
-                    editNameDialog.consumePurchase(sku);
-                    runAsyncDataRetrieval();
+                    gotsBillingDialog.consumePurchase(sku);
                 }
+                showNotification(getResources().getString(R.string.inapp_purchase_succeed) + ": " + sku.getSku(), false);
+                runAsyncDataRetrieval();
             }
         });
     }

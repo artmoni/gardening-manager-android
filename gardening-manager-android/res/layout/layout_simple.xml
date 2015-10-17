@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/org.gots"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:id="@+id/LinearLayout01"
     android:layout_width="fill_parent"
@@ -51,16 +52,16 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:background="@drawable/bg_line_action"
-        android:gravity="center_vertical"
         android:orientation="vertical"
         android:padding="20dp"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <ImageView
             android:id="@+id/imageViewRefresh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_margin="5dp"
             android:src="@drawable/bt_update_green"
@@ -84,7 +85,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        app:fab_addButtonColorNormal="@color/text_color_dark"
+        app:fab_addButtonColorPressed="@color/action_warning_color"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         fab:fab_labelStyle="@style/fab_label"
         fab:fab_labelsPosition="left" />
 </RelativeLayout>
