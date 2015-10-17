@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1006003" android:versionName="1.7.0-SNAPSHOT" package="org.gots">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1007000" android:versionName="1.7.1-SNAPSHOT" package="org.gots">
 
     <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="22"/>
 
@@ -47,14 +47,14 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.GardenActivity" android:theme="@style/Theme.Styled" />
+        <activity android:name=".ui.GardenActivity" android:theme="@style/Theme.Styled"/>
         <activity android:name=".ui.MainActivity" android:theme="@style/Theme.Styled">
         </activity>
         <activity android:name=".ui.SensorActivity" android:theme="@style/Theme.Styled">
         </activity>
-        <activity android:name=".ui.ProfileActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" android:theme="@style/Theme.Styled" >
+        <activity android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" android:name=".ui.ProfileActivity" android:theme="@style/Theme.Styled">
         </activity>
-        <activity android:name=".ui.ActionActivity" android:theme="@style/Theme.Styled" />
+        <activity android:name=".ui.ActionActivity" android:theme="@style/Theme.Styled"/>
         <activity android:name=".ui.AboutActivity" android:theme="@style/Theme.Styled"/>
         <activity android:name=".ui.WebHelpActivity" android:theme="@style/Theme.Styled"/>
         <!--<activity android:name=".ui.TabSeedActivity" android:theme="@style/Theme.Styled" >-->
@@ -66,7 +66,7 @@
                 <!--&lt;!&ndash;<category android:name="android.intent.category.BROWSABLE"/>&ndash;&gt;-->
             <!--&lt;!&ndash;</intent-filter>&ndash;&gt;-->
             <!--</activity>-->
-        <activity android:name=".ui.PlantDescriptionActivity" android:theme="@style/Theme.Styled" >
+        <activity android:name=".ui.PlantDescriptionActivity" android:theme="@style/Theme.Styled">
             <intent-filter>
                 <data android:host="my.gardening-manager.com" android:scheme="http"/>
 
@@ -75,15 +75,15 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.GrowingPlantDescriptionActivity" android:theme="@style/Theme.Styled" />
+        <activity android:name=".ui.GrowingPlantDescriptionActivity" android:theme="@style/Theme.Styled"/>
         <activity android:name=".ui.RecognitionActivity"/>
-        <activity android:name=".ui.HutActivity" android:theme="@style/Theme.Styled"  android:windowSoftInputMode="stateHidden|adjustResize"/>
+        <activity android:name=".ui.HutActivity" android:theme="@style/Theme.Styled" android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity android:name=".ui.NewSeedActivity" android:theme="@style/Theme.Styled" android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity android:name=".ui.AccountList" android:theme="@style/Theme.Styled"/>
         <activity android:name=".authentication.AuthenticationActivity" android:theme="@style/Theme.Styled"/>
         <activity android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" android:name="com.google.ads.AdActivity"/>
         <activity android:name=".ui.PreferenceActivity" android:theme="@style/Theme.Styled"/>
-        <activity android:name=".ui.CatalogueActivity" android:theme="@style/Theme.Styled" />
+        <activity android:name=".ui.CatalogueActivity" android:theme="@style/Theme.Styled"/>
 
         <provider android:authorities="org.gots.providers.sensor" android:label="@string/dashboard.sensor.name" android:name="org.gots.provider.SensorContentProvider" android:syncable="true"/>
         <provider android:authorities="org.gots.providers.seeds" android:label="@string/dashboard.hut.name" android:name="org.gots.provider.SeedsContentProvider" android:syncable="true"/>
