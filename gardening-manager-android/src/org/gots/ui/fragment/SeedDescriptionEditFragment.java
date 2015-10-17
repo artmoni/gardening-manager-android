@@ -3,6 +3,8 @@ package org.gots.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +53,75 @@ public class SeedDescriptionEditFragment extends SeedContentFragment implements 
         descriptionDiseases = (EditText) view.findViewById(R.id.IdSeedDescriptionEnnemi);
         descriptionEnvironment = (EditText) view.findViewById(R.id.IdSeedDescriptionEnvironment);
         descriptionHarvest = (EditText) view.findViewById(R.id.IdSeedDescriptionHarvest);
+
+        descriptionGrowth.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mSeed.setDescriptionCultivation(s.toString());
+                notifyObservers();
+            }
+        });
+        descriptionEnvironment.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mSeed.setDescriptionEnvironment(s.toString());
+                notifyObservers();
+            }
+        });
+        descriptionHarvest.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mSeed.setDescriptionHarvest(s.toString());
+                notifyObservers();
+            }
+        });
+        descriptionDiseases.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mSeed.setDescriptionDiseases(s.toString());
+                notifyObservers();
+            }
+        });
 
         descriptionGrowth.setText(mSeed.getDescriptionEnvironment());
         descriptionDiseases.setText(mSeed.getDescriptionDiseases());
