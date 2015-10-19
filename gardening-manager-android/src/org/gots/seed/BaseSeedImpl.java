@@ -23,7 +23,7 @@ public class BaseSeedImpl implements Serializable, BaseSeed, Cloneable {
 
     private String name;
 
-    private String description_growth;
+    private String description_environment;
 
     private String description_harvest;
 
@@ -106,12 +106,12 @@ public class BaseSeedImpl implements Serializable, BaseSeed, Cloneable {
 
     @Override
     public String getDescriptionEnvironment() {
-        return description_growth;
+        return description_environment;
     }
 
     @Override
-    public void setDescriptionEnvironment(String description) {
-        this.description_growth = description;
+    public void setDescriptionEnvironment(String environment) {
+        this.description_environment = environment;
     }
 
     @Override
@@ -162,7 +162,7 @@ public class BaseSeedImpl implements Serializable, BaseSeed, Cloneable {
 //        newSeed.getActionToDo().addAll(getActionToDo());
 //        newSeed.setDateSowingMax(dateSowingMax);
 //        newSeed.setDateSowingMin(dateSowingMin);
-//        newSeed.setDescriptionEnvironment(description_growth);
+//        newSeed.setDescriptionEnvironment(description_environment);
 //        newSeed.setDurationMax(durationMax);
 //        newSeed.setDurationMin(durationMin);
 //        newSeed.setFamily(family);

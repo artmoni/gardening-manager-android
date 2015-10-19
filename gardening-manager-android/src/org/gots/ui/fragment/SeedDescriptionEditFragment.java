@@ -21,9 +21,9 @@ public class SeedDescriptionEditFragment extends SeedContentFragment implements 
 
     public static final int REQUEST_HARVEST = 1;
     public static final int REQUEST_DISEASES = 2;
-    public static final int REQUEST_GROWTH = 3;
+    public static final int REQUEST_CULTIVATION = 3;
     public static final int REQUEST_ENVIRONMENT = 4;
-    private EditText descriptionGrowth;
+    private EditText descriptionCultivation;
     private EditText descriptionDiseases;
     private View descriptionGrowthVoice;
     private View descriptionDiseasesVoice;
@@ -49,12 +49,12 @@ public class SeedDescriptionEditFragment extends SeedContentFragment implements 
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        descriptionGrowth = (EditText) view.findViewById(R.id.IdSeedDescriptionCulture);
+        descriptionCultivation = (EditText) view.findViewById(R.id.IdSeedDescriptionCulture);
         descriptionDiseases = (EditText) view.findViewById(R.id.IdSeedDescriptionEnnemi);
         descriptionEnvironment = (EditText) view.findViewById(R.id.IdSeedDescriptionEnvironment);
         descriptionHarvest = (EditText) view.findViewById(R.id.IdSeedDescriptionHarvest);
 
-        descriptionGrowth.addTextChangedListener(new TextWatcher() {
+        descriptionCultivation.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -123,10 +123,10 @@ public class SeedDescriptionEditFragment extends SeedContentFragment implements 
             }
         });
 
-        descriptionGrowth.setText(mSeed.getDescriptionEnvironment());
+        descriptionCultivation.setText(mSeed.getDescriptionCultivation());
         descriptionDiseases.setText(mSeed.getDescriptionDiseases());
         descriptionHarvest.setText(mSeed.getDescriptionHarvest());
-        descriptionEnvironment.setText(mSeed.getDescriptionCultivation());
+        descriptionEnvironment.setText(mSeed.getDescriptionEnvironment());
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -155,7 +155,7 @@ public class SeedDescriptionEditFragment extends SeedContentFragment implements 
     @Override
     public void onClick(View view) {
         mSeed.setDescriptionDiseases(descriptionDiseases.getText().toString());
-        mSeed.setDescriptionCultivation(descriptionGrowth.getText().toString());
+        mSeed.setDescriptionCultivation(descriptionCultivation.getText().toString());
         mSeed.setDescriptionEnvironment(descriptionEnvironment.getText().toString());
         mSeed.setDescriptionHarvest(descriptionHarvest.getText().toString());
         Intent intent;
@@ -164,7 +164,7 @@ public class SeedDescriptionEditFragment extends SeedContentFragment implements 
                 intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                 intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
                 intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Command me");
-                startActivityForResult(intent, REQUEST_GROWTH);
+                startActivityForResult(intent, REQUEST_CULTIVATION);
                 break;
             case R.id.IdSeedDescriptionEnnemiVoice:
                 intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -192,9 +192,9 @@ public class SeedDescriptionEditFragment extends SeedContentFragment implements 
         ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
         if (matches.size() > 0) {
             switch (requestCode) {
-                case REQUEST_GROWTH:
-                    descriptionGrowth.setText(descriptionGrowth.getText() + " " + matches.get(0));
-                    mSeed.setDescriptionCultivation(descriptionGrowth.getText().toString());
+                case REQUEST_CULTIVATION:
+                    descriptionCultivation.setText(descriptionCultivation.getText() + " " + matches.get(0));
+                    mSeed.setDescriptionCultivation(descriptionCultivation.getText().toString());
                     break;
                 case REQUEST_DISEASES:
                     descriptionDiseases.setText(descriptionDiseases.getText() + " " + matches.get(0));

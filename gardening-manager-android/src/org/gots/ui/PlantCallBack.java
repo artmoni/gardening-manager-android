@@ -2,6 +2,7 @@ package org.gots.ui;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.view.ActionMode;
 import android.view.Menu;
@@ -89,6 +90,11 @@ class PlantCallBack implements ActionMode.Callback {
                         super.onPostExecute(result);
                     }
                 }.execute();
+                break;
+            case R.id.edit:
+                Intent i = new Intent(gotsActivity, NewSeedActivity.class);
+                i.putExtra(NewSeedActivity.ORG_GOTS_SEEDID, currentSeed.getSeedId());
+                gotsActivity.startActivity(i);
                 break;
             case R.id.delete:
 
