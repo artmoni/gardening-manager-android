@@ -1,11 +1,5 @@
 package org.gots.inapp;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.gots.R;
-import org.gots.context.GotsContext;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -15,13 +9,18 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.android.vending.billing.util.IabHelper;
 import com.android.vending.billing.util.IabResult;
 import com.android.vending.billing.util.Inventory;
 import com.android.vending.billing.util.Purchase;
 import com.android.vending.billing.util.SkuDetails;
+
+import org.gots.R;
+import org.gots.context.GotsContext;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GotsBillingDialog extends DialogFragment {
 
@@ -44,23 +43,9 @@ public class GotsBillingDialog extends DialogFragment {
     private List<HolderSku> mSkus = new ArrayList<>();
     private OnPurchaseFinished onPurchasedFinishedListener;
 
-    private class HolderSku {
-        String sku;
-        boolean consumable = false;
-    }
 
-    public GotsBillingDialog() {
-    }
-
-    public GotsBillingDialog(String featureSKU) {
-        addSKUFeature(featureSKU, false);
-    }
-
-    public void addSKUFeature(String featureSKU, boolean consumable) {
-        HolderSku holderSku = new HolderSku();
-        holderSku.consumable = consumable;
-        holderSku.sku = featureSKU;
-        mSkus.add(holderSku);
+    public void addSKUFeature(HolderSku sku) {
+        mSkus.add(sku);
     }
 
     @Override
@@ -100,21 +85,22 @@ public class GotsBillingDialog extends DialogFragment {
         ArrayList<String> moreSkus = new ArrayList<String>();
         moreSkus.add(SKU_PREMIUM);
         for (HolderSku mSku : mSkus)
-            moreSkus.add(mSku.sku);
+            moreSkus.add(mSku.getSku());
 
         buyHelper.queryInventoryAsync(true, moreSkus, new IabHelper.QueryInventoryFinishedListener() {
             @Override
             public void onQueryInventoryFinished(IabResult result, Inventory inv) {
                 if (result.isSuccess() && getDialog() != null) {
+                    horizontalScrollView.removeAllViews();
                     /*
                      * Display feature purchase information
                      */
                     for (HolderSku mSku : mSkus) {
-                        SkuDetails detailsFeature = inv.getSkuDetails(mSku.sku);
-                        purchase = inv.getPurchase(mSku.sku);
-//                        if (purchase != null)
-//                            consumePurchase(purchase);
-                        addPurchaseItem(detailsFeature, inv.hasPurchase(mSku.sku) || inv.hasPurchase(SKU_PREMIUM));
+                        SkuDetails detailsFeature = inv.getSkuDetails(mSku.getSku());
+                        purchase = inv.getPurchase(mSku.getSku());
+                        if (purchase != null && purchase.getSku().equals(GotsPurchaseItem.SKU_TEST_PURCHASE))
+                            consumePurchase(purchase);
+                        addPurchaseItem(detailsFeature, inv.hasPurchase(mSku.getSku()) || inv.hasPurchase(SKU_PREMIUM));
                     }
                      /*
                      * Display premium purchase information
@@ -131,18 +117,43 @@ public class GotsBillingDialog extends DialogFragment {
     }
 
     public void consumePurchase(Purchase purchase) {
+        if (buyHelper != null)
+            buyHelper.flagEndAsync();
         buyHelper.consumeAsync(purchase, new IabHelper.OnConsumeFinishedListener() {
             @Override
             public void onConsumeFinished(Purchase purchase, IabResult result) {
-                Log.d(TAG, "consume finished");
+                Log.d(TAG, "consume finished: " + result.getMessage());
             }
         });
     }
 
+    IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener
+            = new IabHelper.OnIabPurchaseFinishedListener() {
+        public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
+//            if (result.isFailure()) {
+//                Log.d(TAG, "Error purchasing: " + result);
+//                return;
+//            }
+
+            if (result.isSuccess()) {
+                update();
+                if (onPurchasedFinishedListener != null)
+                    onPurchasedFinishedListener.onPurchaseSucceed(purchase);
+                Log.d(TAG, "Success purchasing: " + result);
+
+            } else {
+                if (onPurchasedFinishedListener != null)
+                    onPurchasedFinishedListener.onPurchaseFailed(purchase);
+                Log.d(TAG, "Error purchasing: " + result);
+
+            }
+        }
+    };
+
 
     private void addPurchaseItem(final SkuDetails detailsFeature, boolean hasPurchase) {
         PurchaseItemLayout purchaseItemLayout = new PurchaseItemLayout(getActivity());
-        purchaseItemLayout.setPurchasePrice(hasPurchase ? "":detailsFeature.getPrice());
+        purchaseItemLayout.setPurchasePrice(hasPurchase ? "" : detailsFeature.getPrice());
         String title;
         if (detailsFeature.getTitle().indexOf("(") != -1) {
             title = detailsFeature.getTitle().substring(0, detailsFeature.getTitle().indexOf("("));
@@ -157,31 +168,12 @@ public class GotsBillingDialog extends DialogFragment {
             purchaseItemLayout.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                if (buyHelper != null)
-//                    buyHelper.flagEndAsync();
-                    buyHelper.launchPurchaseFlow(getActivity(), detailsFeature.getSku(), BUY_REQUEST_CODE,
-                            new IabHelper.OnIabPurchaseFinishedListener() {
-                                @Override
-                                public void onIabPurchaseFinished(IabResult result, Purchase info) {
-                                    if (result.isSuccess()) {
-
-                                        update();
-                                        if (onPurchasedFinishedListener != null)
-                                            onPurchasedFinishedListener.onPurchaseSucceed(purchase);
-                                    } else {
-                                        if (onPurchasedFinishedListener != null)
-                                            onPurchasedFinishedListener.onPurchaseFailed(purchase);
-                                    }
-//                                    getDialog().dismiss();
-                                }
-                            });
-
+                    if (buyHelper != null)
+                        buyHelper.flagEndAsync();
+                    buyHelper.launchPurchaseFlow(getActivity(), detailsFeature.getSku(), BUY_REQUEST_CODE, mPurchaseFinishedListener);
                 }
             });
-
         }
-
-
         horizontalScrollView.addView(purchaseItemLayout);
     }
 

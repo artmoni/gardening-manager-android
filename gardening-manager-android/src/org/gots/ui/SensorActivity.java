@@ -7,8 +7,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.android.vending.billing.util.Purchase;
+
 import org.gots.R;
 import org.gots.inapp.GotsPurchaseItem;
+import org.gots.inapp.HolderSku;
+import org.gots.inapp.OnPurchaseFinished;
 import org.gots.sensor.SensorChartFragment;
 import org.gots.sensor.SensorLoginDialogFragment;
 import org.gots.sensor.fragment.AllSensorResumeFragment;
@@ -83,9 +87,21 @@ public class SensorActivity extends BaseGotsActivity implements OnSensorClickLis
     }
 
     public void openPurchaseFragment() {
-        List<String> skus = new ArrayList<>();
-        skus.add(GotsPurchaseItem.SKU_FEATURE_PARROT);
-        displayPurchaseFragment(skus);
+        List<HolderSku> skus = new ArrayList<>();
+        skus.add(new HolderSku(GotsPurchaseItem.SKU_FEATURE_PARROT, false));
+        displayPurchaseFragment(skus, new OnPurchaseFinished() {
+            @Override
+            public void onPurchaseSucceed(Purchase purchase) {
+                if (GotsPurchaseItem.SKU_FEATURE_PARROT.equals(purchase.getSku())) {
+                    gotsPurchase.setFeatureParrot(true);
+                }
+            }
+
+            @Override
+            public void onPurchaseFailed(Purchase purchase) {
+
+            }
+        });
     }
 
     @Override

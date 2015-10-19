@@ -15,13 +15,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
+import com.android.vending.billing.util.Purchase;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 import org.gots.R;
 import org.gots.analytics.GotsAnalytics;
 import org.gots.inapp.GotsPurchaseItem;
+import org.gots.inapp.HolderSku;
+import org.gots.inapp.OnPurchaseFinished;
 import org.gots.nuxeo.NuxeoUtils;
 import org.gots.ui.fragment.RecognitionFragment;
 import org.gots.ui.fragment.RecognitionMainFragment;
@@ -128,6 +130,7 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
 
 
         }
+
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -206,7 +209,7 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     @Override
     protected void onNuxeoDataRetrievalStarted() {
         super.onNuxeoDataRetrievalStarted();
-        showNotification(getResources().getString(R.string.plant_recognition_description),false);
+        showNotification(getResources().getString(R.string.plant_recognition_description), false);
     }
 
     @Override
@@ -300,7 +303,7 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
 
     @Override
     public void onRecognitionConfirmed(Document plantDoc) {
-        showNotification( "The plant has been published", false);
+        showNotification("The plant has been published", false);
         getSupportFragmentManager().popBackStack();
 
         mainFragment.update();
@@ -327,9 +330,27 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     }
 
     public void openPurchaseFragment() {
-        List<String> skus = new ArrayList<>();
-        skus.add(GotsPurchaseItem.SKU_FEATURE_RECOGNITION_50);
-        displayPurchaseFragment(skus);
+        List<HolderSku> skus = new ArrayList<>();
+        skus.add(new HolderSku(GotsPurchaseItem.SKU_FEATURE_RECOGNITION_50, true));
+        skus.add(new HolderSku(GotsPurchaseItem.SKU_TEST_PURCHASE, true));
+        displayPurchaseFragment(skus, new OnPurchaseFinished() {
+            @Override
+            public void onPurchaseSucceed(Purchase purchase) {
+                if (GotsPurchaseItem.SKU_TEST_PURCHASE.equals(purchase.getSku())) {
+                    gotsPurchase.setFeatureRecognitionCounter(gotsPurchase.getFeatureRecognitionCounter() + 50);
+//                    gotsBillingDialog.consumePurchase(purchase);
+                }
+
+                if (GotsPurchaseItem.SKU_FEATURE_RECOGNITION_50.equals(purchase.getSku())) {
+                    gotsPurchase.setFeatureRecognitionCounter(gotsPurchase.getFeatureRecognitionCounter() + 50);
+                }
+            }
+
+            @Override
+            public void onPurchaseFailed(Purchase purchase) {
+
+            }
+        });
     }
 
     @Override

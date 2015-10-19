@@ -72,6 +72,7 @@ import org.gots.garden.GardenInterface;
 import org.gots.garden.GotsGardenManager;
 import org.gots.inapp.GotsBillingDialog;
 import org.gots.inapp.GotsPurchaseItem;
+import org.gots.inapp.HolderSku;
 import org.gots.inapp.OnPurchaseFinished;
 import org.gots.nuxeo.NuxeoManager;
 import org.gots.preferences.GotsPreferences;
@@ -122,6 +123,7 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
     private ImageView imageView;
     private View layoutNotification;
     private FloatingActionsMenu floatingActionsMenu;
+    private GotsBillingDialog gotsBillingDialog;
 
     @Override
     public void onAuthenticationSucceed(Account account) {
@@ -380,32 +382,51 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
         super.onDestroy();
     }
 
-    public void displayPurchaseFragment(List<String> skuList) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (gotsBillingDialog != null && gotsBillingDialog.isAdded())
+            gotsBillingDialog.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void displayPurchaseFragment(final List<HolderSku> skuList, final OnPurchaseFinished onPurchaseFinished) {
         FragmentManager fm = getSupportFragmentManager();
-        final GotsBillingDialog gotsBillingDialog = new GotsBillingDialog();
+        gotsBillingDialog = new GotsBillingDialog();
         if (skuList != null) {
-            for (String sku : skuList)
-                gotsBillingDialog.addSKUFeature(sku, true);
+            for (HolderSku sku : skuList)
+                gotsBillingDialog.addSKUFeature(sku);
         }
         gotsBillingDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
-        gotsBillingDialog.show(fm, "fragment_edit_name");
+
+
         gotsBillingDialog.setOnPurchasedFinishedListener(new OnPurchaseFinished() {
             @Override
             public void onPurchaseFailed(Purchase sku) {
-                showNotification(getResources().getString(R.string.inapp_purchase_failed) + ": " + sku.getSku(), false);
-
+                showNotification(getResources().getString(R.string.inapp_purchase_failed), false);
+                if (onPurchaseFinished != null)
+                    onPurchaseFinished.onPurchaseFailed(sku);
             }
 
             @Override
-            public void onPurchaseSucceed(Purchase sku) {
-                if (GotsPurchaseItem.SKU_TEST_PURCHASE.equals(sku)) {
-                    gotsPurchase.setFeatureRecognitionCounter(gotsPurchase.getFeatureRecognitionCounter() + 50);
-                    gotsBillingDialog.consumePurchase(sku);
+            public void onPurchaseSucceed(Purchase purchase) {
+                if (GotsPurchaseItem.SKU_PREMIUM.equals(purchase.getSku())) {
+                    gotsPurchase.setPremium(true);
                 }
-                showNotification(getResources().getString(R.string.inapp_purchase_succeed) + ": " + sku.getSku(), false);
+                if (onPurchaseFinished != null) {
+                    onPurchaseFinished.onPurchaseSucceed(purchase);
+                }
+
+                //check if sku has been set consumable and consume
+                for (HolderSku sku : skuList) {
+                    if (sku.getSku() != null & sku.getSku().equals(purchase.getSku()) && sku.isConsumable())
+                        gotsBillingDialog.consumePurchase(purchase);
+                }
+                showNotification(getResources().getString(R.string.inapp_purchase_succeed) + ": " + purchase.getSku(), false);
                 runAsyncDataRetrieval();
+                gotsBillingDialog.dismiss();
             }
         });
+        gotsBillingDialog.show(fm, "fragment_edit_name");
     }
 
     @Override
@@ -623,23 +644,33 @@ public abstract class BaseGotsActivity extends BaseNuxeoActivity implements Gots
             imageView.setVisibility(View.GONE);
             notificationText.clearAnimation();
         }
+
         layoutNotification.setVisibility(View.VISIBLE);
         layoutNotification.setAlpha(0.0f);
 
+//        Animation animationIn = AnimationUtils.loadAnimation(this, R.anim.slide_in_up);
+//        layoutNotification.setAnimation(animationIn);
         layoutNotification.animate()
                 .alpha(1.0f)
-                .setDuration(600)
+                .setDuration(500)
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
+                        Animation animationOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_out_up);
                         layoutNotification.animate()
-                                .translationY(0)
                                 .alpha(0.0f)
-                                .setDuration(millis);
+                                .setDuration(millis).setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                layoutNotification.setVisibility(View.GONE);
+                                super.onAnimationEnd(animation);
+                            }
+                        });
+//                        layoutNotification.setVisibility(View.GONE);
+
                     }
                 });
-        ;
 
     }
 }

@@ -56,17 +56,35 @@ public class Security {
      * @param signature the signature for the data, signed with the private key
      */
     public static boolean verifyPurchase(String base64PublicKey, String signedData, String signature) {
-        if (TextUtils.isEmpty(signedData) || TextUtils.isEmpty(base64PublicKey) || TextUtils.isEmpty(signature)) {
+//        if (TextUtils.isEmpty(signedData) || TextUtils.isEmpty(base64PublicKey) || TextUtils.isEmpty(signature)) {
+//            Log.e(TAG, "Purchase verification failed: missing data.");
+//            if (BuildConfig.DEBUG) {
+//                return true;
+//            }
+//            return false;
+//            // return false;
+//        }
+//
+//        PublicKey key = Security.generatePublicKey(base64PublicKey);
+//        return Security.verify(key, signedData, signature);
+        if (signedData == null) {
+            Log.e(TAG, "data is null");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(signedData) || TextUtils.isEmpty(base64PublicKey)
+                || TextUtils.isEmpty(signature)) {
             Log.e(TAG, "Purchase verification failed: missing data.");
             if (BuildConfig.DEBUG) {
+                Log.d("DeBUG", ">>>"+BuildConfig.DEBUG);
                 return true;
             }
             return false;
-            // return false;
         }
 
         PublicKey key = Security.generatePublicKey(base64PublicKey);
         return Security.verify(key, signedData, signature);
+
     }
 
     /**
