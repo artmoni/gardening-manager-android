@@ -27,6 +27,8 @@ import org.gots.inapp.OnPurchaseFinished;
 import org.gots.nuxeo.NuxeoUtils;
 import org.gots.ui.fragment.RecognitionFragment;
 import org.gots.ui.fragment.RecognitionMainFragment;
+import org.gots.ui.fragment.RecognitionResumeFragment;
+import org.gots.ui.fragment.TutorialFragment;
 import org.gots.utils.FileUtilities;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 
@@ -49,17 +51,21 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     private static final String RECOGNITION_FAILED = "org.gots.recognition.failed";
     private static final String UPLOAD_FAILED = "org.gots.recognition.uploadfailed";
     private RecognitionFragment recognitionFragment;
-    private RecognitionMainFragment mainFragment;
+    private TutorialFragment mainFragment;
     String picturePath = null;
     private boolean uploaded = false;
+    private RecognitionResumeFragment resumeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitleBar(R.string.plant_recognition);
 
+        resumeFragment = new RecognitionResumeFragment();
+        addResumeLayout(resumeFragment,getIntent().getExtras());
         if (mainFragment == null) {
-            mainFragment = new RecognitionMainFragment();
+//            mainFragment = new RecognitionMainFragment();
+            mainFragment = new TutorialFragment(R.layout.tutorial_g);
             addMainLayout(mainFragment, null);
         }
         registerReceiver(broadcastReceiver, new IntentFilter(UPLOAD_BEGIN));
@@ -86,19 +92,15 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(UPLOAD_BEGIN)) {
-//                mainFragment.setMessage(getResources().getString(R.string.plant_recognition_begin));
                 showNotification(getResources().getString(R.string.plant_recognition_begin), true, LENGHT_SHORT);
             } else if (intent.getAction().equals(UPLOAD_SUCCEED)) {
                 recognitionFragment = new RecognitionFragment();
                 addContentLayout(recognitionFragment, intent.getExtras());
-//                mainFragment.setMessage(getResources().getString(R.string.plant_recognition_progress));
                 showNotification(getResources().getString(R.string.plant_recognition_progress), true, LENGHT_SHORT);
             } else if (intent.getAction().equals(UPLOAD_FAILED)) {
-//                mainFragment.setMessage("Please check your internet access");
                 showNotification("Please check your internet access", false, LENGHT_SHORT);
             } else if (intent.getAction().equals(RECOGNITION_FAILED)) {
                 showNotification("Try with another picture", false, LENGHT_SHORT);
-//                mainFragment.setMessage("Try with another picture");
             }
         }
     };
@@ -221,6 +223,8 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     protected void onNuxeoDataRetrieved(Object data) {
         if (mainFragment != null)
             mainFragment.update();
+        if (resumeFragment!=null)
+            resumeFragment.update();
 
         if (picturePath != null && !uploaded) {
             File imageFile = getReduceFile(new File(picturePath));

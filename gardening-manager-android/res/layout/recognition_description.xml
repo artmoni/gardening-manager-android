@@ -5,26 +5,6 @@
     android:background="@color/text_color_light">
 
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_menu_recognition"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="50dp" />
-
-
-    <!--<TextView-->
-        <!--android:id="@+id/textViewRecognitionMessage"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:gravity="center"-->
-        <!--android:text="@string/plant.recognition.description"-->
-        <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
-        <!--android:layout_below="@+id/imageView"-->
-        <!--android:layout_margin="20dp"-->
-        <!--android:layout_centerHorizontal="true" />-->
 
     <HorizontalScrollView
         android:layout_width="match_parent"
@@ -40,65 +20,4 @@
             android:orientation="horizontal" />
     </HorizontalScrollView>
 
-    <TextView
-        android:id="@+id/textView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/imageView"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
-        android:text="@string/plant.recognition.dailyfreerequest"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/textViewCounterCurrent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textView7"
-        android:layout_marginLeft="10dp"
-        android:layout_toEndOf="@+id/textView7"
-        android:layout_toRightOf="@+id/textView7"
-        android:text="0"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textViewCounterCurrent"
-        android:layout_toEndOf="@+id/textViewCounterCurrent"
-        android:layout_toRightOf="@+id/textViewCounterCurrent"
-        android:text="/"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/textViewCounterMax"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textView9"
-        android:layout_toEndOf="@+id/textView9"
-        android:layout_toRightOf="@+id/textView9"
-        android:text="3"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/textViewPurchased"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView7"
-        android:layout_alignStart="@id/textView7"
-        android:layout_marginTop="10dp"
-        android:text="Purchased requests"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/textViewCounterPurchased"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textViewPurchased"
-        android:layout_alignBottom="@+id/textViewPurchased"
-        android:layout_marginStart="19dp"
-        android:layout_toEndOf="@+id/textViewPurchased"
-        android:text="0"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
 </RelativeLayout>
