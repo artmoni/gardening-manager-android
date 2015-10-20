@@ -207,6 +207,7 @@
     <string name="garden.type.incredibleedible.description">The Incredible Edible project is an urban gardening project which bring people together and through actions around local food, help change behaviour toward the environment and build a kinder and more resilient world.</string>
     <string name="workflow.process.title">Moderation</string>
     <string name="workflow.launch.description">Submit this plant description to the moderator team to be shared with the community</string>
+    <string name="workflow.task.notification">A workflow task has been assigned to you</string>
     <string name="sensor.light.too.low">Not enough light</string>
     <string name="sensor.light.too.high">Too many light</string>
     <string name="sensor.light.good">Light is correct</string>
