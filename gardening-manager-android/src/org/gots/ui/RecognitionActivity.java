@@ -336,17 +336,15 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     public void openPurchaseFragment() {
         List<HolderSku> skus = new ArrayList<>();
         skus.add(new HolderSku(GotsPurchaseItem.SKU_FEATURE_RECOGNITION_50, true));
-        skus.add(new HolderSku(GotsPurchaseItem.SKU_TEST_PURCHASE, true));
+        skus.add(new HolderSku(GotsPurchaseItem.SKU_FEATURE_RECOGNITION_100, true));
         displayPurchaseFragment(skus, new OnPurchaseFinished() {
             @Override
             public void onPurchaseSucceed(Purchase purchase) {
-                if (GotsPurchaseItem.SKU_TEST_PURCHASE.equals(purchase.getSku())) {
-                    gotsPurchase.setFeatureRecognitionCounter(gotsPurchase.getFeatureRecognitionCounter() + 50);
-//                    gotsBillingDialog.consumePurchase(purchase);
-                }
 
                 if (GotsPurchaseItem.SKU_FEATURE_RECOGNITION_50.equals(purchase.getSku())) {
                     gotsPurchase.setFeatureRecognitionCounter(gotsPurchase.getFeatureRecognitionCounter() + 50);
+                }else  if (GotsPurchaseItem.SKU_FEATURE_RECOGNITION_100.equals(purchase.getSku())) {
+                    gotsPurchase.setFeatureRecognitionCounter(gotsPurchase.getFeatureRecognitionCounter() + 100);
                 }
             }
 

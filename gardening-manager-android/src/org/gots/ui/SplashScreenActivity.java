@@ -97,6 +97,7 @@ public class SplashScreenActivity extends BaseGotsActivity {
         moreSkus.add(GotsPurchaseItem.SKU_FEATURE_PDFHISTORY);
         moreSkus.add(GotsPurchaseItem.SKU_FEATURE_PARROT);
         moreSkus.add(GotsPurchaseItem.SKU_FEATURE_RECOGNITION_50);
+        moreSkus.add(GotsPurchaseItem.SKU_FEATURE_RECOGNITION_100);
 
         buyHelper = new IabHelper(getApplicationContext(), gotsPrefs.getPlayStorePubKey());
 
@@ -118,6 +119,20 @@ public class SplashScreenActivity extends BaseGotsActivity {
                                 if (inv.hasPurchase(GotsPurchaseItem.SKU_FEATURE_RECOGNITION_50)) {
                                     gotsPurchase.setFeatureRecognitionCounter(gotsPurchase.getFeatureRecognitionCounter() + 50);
                                     buyHelper.consumeAsync(inv.getPurchase(GotsPurchaseItem.SKU_FEATURE_RECOGNITION_50), new IabHelper.OnConsumeFinishedListener() {
+                                        @Override
+                                        public void onConsumeFinished(Purchase purchase, IabResult result) {
+                                            if (result.isSuccess()) {
+                                                Log.i(TAG, "Consume " + purchase.getSku());
+                                            } else {
+                                                Log.w(TAG, "Error consumming " + purchase.getSku());
+
+                                            }
+                                        }
+                                    });
+                                }
+                                if (inv.hasPurchase(GotsPurchaseItem.SKU_FEATURE_RECOGNITION_100)) {
+                                    gotsPurchase.setFeatureRecognitionCounter(gotsPurchase.getFeatureRecognitionCounter() + 100);
+                                    buyHelper.consumeAsync(inv.getPurchase(GotsPurchaseItem.SKU_FEATURE_RECOGNITION_100), new IabHelper.OnConsumeFinishedListener() {
                                         @Override
                                         public void onConsumeFinished(Purchase purchase, IabResult result) {
                                             if (result.isSuccess()) {
