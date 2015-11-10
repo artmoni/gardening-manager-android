@@ -294,7 +294,7 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
                 addContentLayout(new WorkflowTaskFragment(), bundle);
                 break;
         }
-        return false;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
