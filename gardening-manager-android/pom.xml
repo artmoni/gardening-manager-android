@@ -8,7 +8,7 @@
   </parent>
   <artifactId>gardening-manager-android</artifactId>
   <packaging>apk</packaging>
-  <version>1.7.4-SNAPSHOT</version>
+  <version>1.7.5-SNAPSHOT</version>
   <name>Gardening Manager Android</name>
   <properties>
     <android.version>4.4</android.version>
