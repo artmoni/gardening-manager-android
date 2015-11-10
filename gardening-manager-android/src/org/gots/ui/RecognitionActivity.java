@@ -287,7 +287,7 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     public void onRecognitionSucceed() {
         gotsPurchase.decrementRecognitionDailyCounter();
         GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-        tracker.trackEvent(RecognitionActivity.class.getSimpleName(), GotsAnalytics.TRACK_EVENT_RECOGNITION, Thread.currentThread().getStackTrace()[1].getMethodName(), 0);
+        tracker.trackEvent(RecognitionActivity.class.getSimpleName(), GotsAnalytics.TRACK_EVENT_RECOGNITION, Thread.currentThread().getStackTrace()[2].getMethodName(), 0);
         showNotification("Great some plants are matching", false, LENGHT_LONG);
 //        mainFragment.setMessage("Great some plants are matching.");
         mainFragment.update();
@@ -296,7 +296,7 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     @Override
     public void onRecognitionFailed(String message) {
         GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-        tracker.trackEvent(RecognitionActivity.class.getSimpleName(), GotsAnalytics.TRACK_EVENT_RECOGNITION, Thread.currentThread().getStackTrace()[1].getMethodName(), 0);
+        tracker.trackEvent(RecognitionActivity.class.getSimpleName(), GotsAnalytics.TRACK_EVENT_RECOGNITION, Thread.currentThread().getStackTrace()[2].getMethodName(), 0);
 
         if (message != null) {
 //            mainFragment.setMessage(message);
@@ -312,7 +312,7 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
 
         mainFragment.update();
         GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-        tracker.trackEvent(RecognitionActivity.class.getSimpleName(), GotsAnalytics.TRACK_EVENT_RECOGNITION, Thread.currentThread().getStackTrace()[1].getMethodName(), 0);
+        tracker.trackEvent(RecognitionActivity.class.getSimpleName(), GotsAnalytics.TRACK_EVENT_RECOGNITION, Thread.currentThread().getStackTrace()[2].getMethodName(), 0);
 
     }
 
