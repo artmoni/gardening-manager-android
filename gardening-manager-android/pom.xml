@@ -57,7 +57,7 @@
      <dependency>
       <groupId>com.getbase</groupId>
       <artifactId>floatingactionbutton</artifactId>
-      <version>1.9.1</version>
+      <version>1.10.1</version>
       <type>aar</type>
     </dependency>
     <!-- <dependency> <groupId>com.actionbarsherlock</groupId> <artifactId>actionbarsherlock</artifactId> 
