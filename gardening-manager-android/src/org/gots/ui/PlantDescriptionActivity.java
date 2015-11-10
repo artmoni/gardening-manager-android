@@ -1,6 +1,5 @@
 package org.gots.ui;
 
-import android.animation.AnimatorInflater;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,9 +7,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.gots.R;
@@ -267,8 +263,12 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
         new AsyncTask<Void, Void, Documents>() {
             @Override
             protected Documents doInBackground(Void... params) {
-                NuxeoWorkflowProvider workflowProvider = new NuxeoWorkflowProvider(getApplicationContext());
-                return workflowProvider.getWorkflowOpenTasks(mSeed.getUUID(), true);
+                if (mSeed != null) {
+                    NuxeoWorkflowProvider workflowProvider = new NuxeoWorkflowProvider(getApplicationContext());
+                    return workflowProvider.getWorkflowOpenTasks(mSeed.getUUID(), true);
+                } else {
+                    return null;
+                }
             }
 
             @Override
@@ -276,8 +276,8 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
 
                 if (taskDocs != null && taskDocs.size() > 0) {
                     menu.findItem(R.id.workflow).setVisible(true);
-                    showNotification(getResources().getString(R.string.workflow_task_notification),false);
-                }else
+                    showNotification(getResources().getString(R.string.workflow_task_notification), false);
+                } else
                     menu.findItem(R.id.workflow).setVisible(false);
                 super.onPostExecute(taskDocs);
             }
