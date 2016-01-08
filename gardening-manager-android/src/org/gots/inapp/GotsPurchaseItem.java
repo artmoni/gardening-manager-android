@@ -19,7 +19,7 @@ public class GotsPurchaseItem {
 
     private static final String TAG = "GotsPurchaseItem";
 
-    private static final boolean FORCE_PREMIUM = false;
+    private static final boolean FORCE_PREMIUM = true; // REMOVED ADS FROM 01/01/16
     public static final String SKU_TEST_PURCHASE = "android.test.purchased";
 
     public static final String SKU_PREMIUM = "gots.premium";
