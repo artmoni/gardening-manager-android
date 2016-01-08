@@ -7,12 +7,17 @@ import org.gots.action.adapter.ListAllActionAdapter;
 
 import android.os.Bundle;
 
-public class ActionsTODOListFragment extends AbstractListFragment {
+public class ActionsTODOListFragment extends BaseGotsListFragment {
     private boolean force = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void update() {
+
     }
 
     @Override
@@ -27,7 +32,7 @@ public class ActionsTODOListFragment extends AbstractListFragment {
 
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
-        getListView().setAdapter(
+        listView.setAdapter(
                 new ListAllActionAdapter(getActivity(), (List<ActionOnSeed>) data, ListAllActionAdapter.STATUS_TODO));
         super.onNuxeoDataRetrieved(data);
     }

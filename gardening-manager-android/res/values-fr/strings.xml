@@ -224,5 +224,6 @@
   <string name="seed.action.like.description">jardiniers aiment cette plante</string>
   <string name="seed.action.stock.description">au stock</string>
   <string name="garden_default_name" >Mon jardin</string>
+  <string name="allotment">Parcelle</string>
 
 </resources>

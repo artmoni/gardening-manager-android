@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import org.gots.R;
 import org.gots.weather.WeatherConditionInterface;
+import org.gots.weather.WeatherUtils;
 import org.gots.weather.provider.MoonCalculation;
 
 import java.text.SimpleDateFormat;
@@ -132,28 +133,24 @@ public class WeatherView extends LinearLayout {
                 }
                 break;
         }
-        try {
-            Calendar t = Calendar.getInstance();
-            if (mWeather.getDate() != null)
-                t.setTime(mWeather.getDate());
+        Calendar t = Calendar.getInstance();
+        if (mWeather.getDate() != null)
+            t.setTime(mWeather.getDate());
 
-            tempMin.setText("" + mWeather.getTempCelciusMin());
+        tempMin.setText("" + Math.round(mWeather.getTempCelciusMin()));
 
-            tempMax.setText("" + mWeather.getTempCelciusMax());
+        tempMax.setText("" + Math.round(mWeather.getTempCelciusMax()));
 
-            SimpleDateFormat sdf = new SimpleDateFormat("E dd/MM", Locale.getDefault());
-            if (mWeather.getDate() != null)
-                weatherDay.setText("" + sdf.format(mWeather.getDate()));
+        SimpleDateFormat sdf = new SimpleDateFormat("E dd/MM", Locale.getDefault());
+        if (mWeather.getDate() != null)
+            weatherDay.setText("" + sdf.format(mWeather.getDate()));
 
-            weatherWidget.setImageResource(getWeatherResource(mWeather));
+        weatherWidget.setImageResource(WeatherUtils.getWeatherResource(getContext(), mWeather));
 
-            MoonCalculation moon = new MoonCalculation();
-            moonWidget.setImageDrawable(getResources().getDrawable(
-                    getMoonResource(moon.phaseName(moon.moonPhase(t.get(Calendar.YEAR), t.get(Calendar.MONTH),
-                            t.get(Calendar.DAY_OF_MONTH))))));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        MoonCalculation moon = new MoonCalculation();
+        moonWidget.setImageDrawable(getResources().getDrawable(
+                getMoonResource(moon.phaseName(moon.moonPhase(t.get(Calendar.YEAR), t.get(Calendar.MONTH),
+                        t.get(Calendar.DAY_OF_MONTH))))));
         // final Handler mHandler = new Handler();
         // final Runnable mUpdateUITimerTask = new Runnable() {
         // public void run() {
@@ -213,31 +210,6 @@ public class WeatherView extends LinearLayout {
         setupView();
     }
 
-    public int getWeatherResource(WeatherConditionInterface weatherCondition) {
-        int weatherImageRessource = 0;
-        if (weatherCondition.getIconURL() != null)
-            weatherImageRessource = mContext.getResources().getIdentifier(
-                    "org.gots:drawable/weather_" + weatherCondition.getIconURL().toLowerCase().replaceAll("-", ""), null, null);
-        if (weatherImageRessource == 0)
-            weatherImageRessource = R.drawable.weather_nonet;
-
-//        if (weatherCondition.getIconURL() == null)
-//            return R.drawable.weather_nonet;
-//
-//        if (weatherCondition.getIconURL().contains("rain"))
-//            return R.drawable.weather_rain;
-//        else if (weatherCondition.getIconURL().contains("mostly_sunny"))
-//            return R.drawable.weather_mostlysunny;
-//        else if (weatherCondition.getIconURL().contains("cloud") || weatherCondition.getIconURL().contains("mist"))
-//            return R.drawable.weather_cloud;
-//        else if (weatherCondition.getIconURL().contains("snow"))
-//            return R.drawable.weather_snow;
-//        else if (weatherCondition.getIconURL().contains("sunny"))
-//            return R.drawable.weather_mostlysunny;
-//        else if (weatherCondition.getIconURL().contains("storm") || weatherCondition.getIconURL().contains("thunder"))
-//            return R.drawable.weather_thunder;
-        return weatherImageRessource;
-    }
 
     public static int getMoonResource(String moon) {
         if ("First quarter".equals(moon))

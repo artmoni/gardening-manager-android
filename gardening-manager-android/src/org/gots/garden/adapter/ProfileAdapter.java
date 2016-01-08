@@ -31,6 +31,7 @@ import org.gots.preferences.GotsPreferences;
 import org.gots.weather.WeatherCondition;
 import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.WeatherManager;
+import org.gots.weather.exception.UnknownWeatherException;
 import org.gots.weather.view.WeatherView;
 
 import android.content.Context;
@@ -330,11 +331,29 @@ public class ProfileAdapter extends BaseAdapter {
             chl = chl.substring(0, chl.length() - 1);
 
         Calendar min = Calendar.getInstance();
-        if (weatherManager.getCondition(-10).getDate() != null)
-            min.setTime(weatherManager.getCondition(-10).getDate());
         Calendar max = Calendar.getInstance();
-        if (weatherManager.getCondition(0).getDate() != null)
-            max.setTime(weatherManager.getCondition(0).getDate());
+
+        //default min 10 days before
+        int lastConditionDay = 10;
+        while (lastConditionDay-- !=0)
+            try{
+                if (weatherManager.getCondition(-lastConditionDay).getDate() != null)
+                    min.setTime(weatherManager.getCondition(-lastConditionDay).getDate());
+                lastConditionDay=0;
+            }catch (UnknownWeatherException e){
+
+            }
+
+        //default max coord 30 days before
+        while (lastConditionDay++ < 30)
+            try{
+                if (weatherManager.getCondition(-lastConditionDay).getDate() != null)
+                    max.setTime(weatherManager.getCondition(-lastConditionDay).getDate());
+                lastConditionDay=30;
+            }catch (UnknownWeatherException e){
+
+            }
+
 
         String url = "http://chart.apis.google.com/chart?cht=lc&chs=250x100&chd=t:" + serieTempMin + "|" + serieTempMax
                 + "&chxt=x,y&chxr=0," + min.get(Calendar.DAY_OF_MONTH) + "," + max.get(Calendar.DAY_OF_MONTH)

@@ -24,7 +24,7 @@ import org.gots.ui.GrowingPlantDescriptionActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActionsDoneListFragment extends AbstractListFragment {
+public class ActionsDoneListFragment extends BaseGotsListFragment {
 
 //    public static final String ORG_GOTS_GROWINGSEED_ID = "org.gots.growingseed.id";
 
@@ -73,7 +73,7 @@ public class ActionsDoneListFragment extends AbstractListFragment {
     protected void onNuxeoDataRetrieved(Object data) {
         listAllActionAdapter = new ListAllActionAdapter(getActivity(), (List<ActionOnSeed>) data,
                 ListAllActionAdapter.STATUS_DONE);
-        getListView().setAdapter(listAllActionAdapter);
+        listView.setAdapter(listAllActionAdapter);
         super.onNuxeoDataRetrieved(data);
     }
 

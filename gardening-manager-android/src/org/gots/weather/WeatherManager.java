@@ -91,7 +91,7 @@ public class WeatherManager implements WeatherProvider {
     /*
      * GetCondition from today until passed argument (-i or +i)
      */
-    public WeatherConditionInterface getCondition(int i) {
+    public WeatherConditionInterface getCondition(int i) throws UnknownWeatherException {
 
         Calendar weatherCalendar = Calendar.getInstance();
         weatherCalendar.add(Calendar.DAY_OF_YEAR, i);
@@ -101,29 +101,29 @@ public class WeatherManager implements WeatherProvider {
         return getCondition(weatherDate);
     }
 
-    public WeatherConditionInterface getCondition(Date weatherDate) {
+    public WeatherConditionInterface getCondition(Date weatherDate) throws UnknownWeatherException {
         WeatherConditionInterface conditionInterface;
         try {
             conditionInterface = localProvider.getCondition(weatherDate);
         } catch (UnknownWeatherException e) {
-            try {
+//            try {
                 conditionInterface = provider.getCondition(weatherDate);
-            } catch (UnknownWeatherException e2) {
-                conditionInterface = new WeatherCondition(weatherDate);
-            }
+//            } catch (UnknownWeatherException e2) {
+//                conditionInterface = new WeatherCondition(weatherDate);
+//            }
         }
 
         return conditionInterface;
     }
 
-    public List<WeatherConditionInterface> getConditionSet(int nbDays) {
+    public List<WeatherConditionInterface> getConditionSet(int nbDaysBeforeToday, int nbDaysAfterToday) {
         List<WeatherConditionInterface> conditions = new ArrayList<WeatherConditionInterface>();
-        for (int i = -nbDays; i <= nbDays; i++) {
+        for (int i = -nbDaysBeforeToday; i <= nbDaysAfterToday; i++) {
 
             try {
                 conditions.add(getCondition(i));
-            } catch (Exception e) {
-                conditions.add(new WeatherCondition());
+            } catch (UnknownWeatherException e) {
+//                conditions.add(new WeatherCondition());
                 e.printStackTrace();
             }
         }

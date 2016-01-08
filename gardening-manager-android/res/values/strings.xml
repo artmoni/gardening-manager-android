@@ -233,6 +233,7 @@
     <string name="seed.action.stock.description">in stock</string>
     <string name="weather.activation.title">Activate weather forecast</string>
     <string name="garden_default_name" >My garden</string>
+    <string name="allotment">Plot</string>
 
 
     <!-- Nav Drawer Menu Items -->
