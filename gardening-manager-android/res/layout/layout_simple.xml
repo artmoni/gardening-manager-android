@@ -16,7 +16,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:orientation="verticagit difl">
+        >
 
 
         <FrameLayout
@@ -34,13 +34,6 @@
         </FrameLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/idAdsTop"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:orientation="horizontal" />
 
 
     <com.getbase.floatingactionbutton.FloatingActionsMenu
@@ -66,7 +59,7 @@
         android:background="@drawable/bg_line_action"
         android:orientation="vertical"
         android:padding="10dp"
-        android:layout_above="@+id/idAdsTop"
+        android:layout_above="@+id/idFAB"
         android:visibility="gone" >
 
         <ImageView

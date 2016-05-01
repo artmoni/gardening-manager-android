@@ -41,7 +41,7 @@ public class WeatherListFragment extends BaseGotsListFragment {
     protected Object retrieveNuxeoData() throws Exception {
         GardenInterface currentGarden = getCurrentGarden();
         if (weatherManager.fetchWeatherForecast(currentGarden) == WeatherManager.WEATHER_OK) {
-            List<WeatherConditionInterface> conditions = (List<WeatherConditionInterface>) weatherManager.getConditionSet(0, 50);
+            List<WeatherConditionInterface> conditions = (List<WeatherConditionInterface>) weatherManager.getConditionSet(-20, 10);
             return conditions;
         }
         return super.retrieveNuxeoData();

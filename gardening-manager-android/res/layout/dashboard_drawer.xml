@@ -23,49 +23,39 @@
 
                 <FrameLayout
                     android:id="@+id/idFragmentTutorial"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentTop="true"
-                    android:padding="5dp" />
+                    style="@style/dashboard_card"
+                     />
 
 
                 <FrameLayout
                     android:id="@+id/idFragmentActions"
-                    android:layout_width="match_parent"
-                    android:layout_height="fill_parent"
-                    android:padding="5dp" />
+                    style="@style/dashboard_card"
+                    />
 
                 <FrameLayout
                     android:id="@+id/idFragmentCatalog"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp" />
+                    style="@style/dashboard_card"
+                    />
 
                 <FrameLayout
                     android:id="@+id/idFragmentIncredible"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp" />
+                    style="@style/dashboard_card"
+                    />
 
                 <FrameLayout
                     android:id="@+id/idFragmentWeather"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp" />
+                    style="@style/dashboard_card"
+                    />
 
                 <FrameLayout
                     android:id="@+id/idFragmentSensor"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp" />
+                    style="@style/dashboard_card"
+                    />
 
                 <FrameLayout
                     android:id="@+id/idFragmentWorkflow"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:visibility="visible" />
+                    style="@style/dashboard_card"
+                    />
 
                 <!--<FrameLayout-->
                 <!--android:id="@+id/idFragmentRecognition"-->
@@ -75,10 +65,6 @@
             </LinearLayout>
         </ScrollView>
 
-        <LinearLayout
-            android:id="@+id/idAdsTop"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"></LinearLayout>
     </LinearLayout>
 
     <!-- Listview to display slider menu -->

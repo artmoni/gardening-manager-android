@@ -24,12 +24,14 @@ import org.gots.weather.provider.local.LocalWeatherProvider;
 import org.gots.weather.provider.previmeteo.WeatherProvider;
 
 import android.content.Context;
+import android.util.Log;
 
 public class WeatherManager implements WeatherProvider {
 
     public static final short WEATHER_OK = 0;
     public static final short WEATHER_ERROR_CITY_UNKNOWN = 1;
     public static final short WEATHER_ERROR_UNKNOWN = 2;
+    private static final String TAG = WeatherManager.class.getSimpleName();
     private Integer temperatureLimitHot;
 
     private Integer temperatureLimitCold;
@@ -116,15 +118,15 @@ public class WeatherManager implements WeatherProvider {
         return conditionInterface;
     }
 
-    public List<WeatherConditionInterface> getConditionSet(int nbDaysBeforeToday, int nbDaysAfterToday) {
+    public List<WeatherConditionInterface> getConditionSet(int from_days, int to_days) {
         List<WeatherConditionInterface> conditions = new ArrayList<WeatherConditionInterface>();
-        for (int i = -nbDaysBeforeToday; i <= nbDaysAfterToday; i++) {
+        for (int i = from_days; i <= to_days; i++) {
 
             try {
                 conditions.add(getCondition(i));
             } catch (UnknownWeatherException e) {
 //                conditions.add(new WeatherCondition());
-                e.printStackTrace();
+                Log.d(TAG, "Weather Condition ("+i + " days) does not exists");
             }
         }
         return conditions;

@@ -35,6 +35,7 @@ import java.util.List;
 
 public class ActionActivity extends BaseGotsActivity implements OnAllotmentSelected, ActionsChoiceFragment.OnActionSelectedListener {
 
+
     private ActionsTODOListFragment mainFragment;
     private GrowingSeed growingSeedInterface;
 

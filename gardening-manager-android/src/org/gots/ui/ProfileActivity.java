@@ -88,7 +88,8 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
                     protected void onPostExecute(GardenInterface gardenInterface) {
                         if (gardenInterface != null)
                             showNotification("New garden created", false);
-                        resumeFragment.update();
+                        if (resumeFragment.isAdded())
+                            resumeFragment.update();
                         Bundle options = new Bundle();
                         options.putInt(ProfileEditorFragment.PROFILE_EDITOR_MODE, ProfileEditorFragment.OPTION_EDIT);
                         addMainLayout(new ProfileEditorFragment(), options);
@@ -258,7 +259,8 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
 
             @Override
             protected void onPostExecute(Void aVoid) {
-                resumeFragment.update();
+                if (resumeFragment.isAdded())
+                    resumeFragment.update();
                 super.onPostExecute(aVoid);
             }
         }.execute();
@@ -276,9 +278,10 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
 
             @Override
             protected void onPostExecute(Void aVoid) {
-                resumeFragment.update();
-                if (fragment instanceof ProfileEditorFragment) //TODO launch weather fragment here on main layout
-                    addMainLayout(new ProfileMapFragment(), getIntent().getExtras());
+                if (resumeFragment.isAdded())
+                    resumeFragment.update();
+//                if (fragment instanceof ProfileEditorFragment) //TODO launch weather fragment here on main layout
+                    addMainLayout(new WeatherListFragment(), getIntent().getExtras());
                 super.onPostExecute(aVoid);
             }
         }.execute();
