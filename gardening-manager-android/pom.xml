@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/maven-v4_0_0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.gots</groupId>
@@ -53,11 +53,11 @@
       <groupId>com.android.support</groupId>
       <artifactId>support-annotations</artifactId>
       <version>22.2.0</version>
-    </dependency> 
-     <dependency>
+    </dependency>
+    <dependency>
       <groupId>com.getbase</groupId>
       <artifactId>floatingactionbutton</artifactId>
-      <version>1.9.1</version>
+      <version>1.10.1</version>
       <type>aar</type>
     </dependency>
     <!-- <dependency> <groupId>com.actionbarsherlock</groupId> <artifactId>actionbarsherlock</artifactId> 
@@ -218,7 +218,7 @@
               <zipalign>
                 <verbose>true</verbose>
                 <inputApk>${project.build.directory}/${project.artifactId}.apk</inputApk>
-                <outputApk>${project.build.directory}/${project.artifactId}-signed-aligned.apk 
+                <outputApk>${project.build.directory}/${project.artifactId}-signed-aligned.apk
                 </outputApk>
               </zipalign>
             </configuration>
@@ -250,8 +250,12 @@
                   <zipalign>
                     <skip>false</skip>
                     <verbose>true</verbose>
-                    <inputApk>${project.build.directory}/${project.artifactId}-${project.version}.apk</inputApk>
-                    <outputApk>${project.build.directory}/${project.artifactId}-release-v${project.version}.apk</outputApk>
+                    <inputApk>
+                      ${project.build.directory}/${project.artifactId}-${project.version}.apk
+                    </inputApk>
+                    <outputApk>
+                      ${project.build.directory}/${project.artifactId}-release-v${project.version}.apk
+                    </outputApk>
                   </zipalign>
                 </configuration>
               </execution>
@@ -263,8 +267,9 @@
   </profiles>
   <scm>
     <connection>scm:git:https://github.com/artmoni/gardening-manager-android</connection>
-    <developerConnection>scm:git:https://github.com/artmoni/gardening-manager-android</developerConnection>
+    <developerConnection>scm:git:https://github.com/artmoni/gardening-manager-android
+    </developerConnection>
     <url>https://github.com/artmoni/gardening-manager-android</url>
-    <tag>v1_2_1</tag>
+    <tag>v1_7_2</tag>
   </scm>
 </project>

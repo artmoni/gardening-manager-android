@@ -71,6 +71,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * replaced by CatalogueActivity
+ */
+@Deprecated
+
 public class TabSeedActivity extends TabActivity implements OnActionSelectedListener, OnAllotmentSelected,
         OnWorkflowClickListener {
     public static final String GOTS_VENDORSEED_ID = "org.gots.seed.vendorid";

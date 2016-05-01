@@ -62,6 +62,40 @@
         <item name="android:layout_marginRight">10dp</item>
     </style>
 
+    <style name="weather_title">
+        <item name="android:layout_marginBottom">2dp</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">left</item>
+        <item name="android:drawablePadding">0dp</item>
+        <item name="android:textSize">10dp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="weather_tempmax">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="weather_tempmin">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">9dp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="weather_condition">
+        <item name="android:layout_marginBottom">2dp</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">left</item>
+        <item name="android:drawablePadding">0dp</item>
+        <item name="android:textSize">10dp</item>
+        <item name="android:textColor">@color/text_color_dark</item>
+    </style>
+
     <style name="seed_description_content">
         <item name="android:layout_marginLeft">10dp</item>
         <item name="android:layout_marginRight">10dp</item>
@@ -73,6 +107,17 @@
         <item name="android:textSize">14dp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/text_color_dark</item>
+    </style>
+
+
+    <style name="dashboard_card">
+        <item name="android:layout_marginLeft">2dp</item>
+        <item name="android:layout_marginRight">2dp</item>
+        <item name="android:layout_marginBottom">1dp</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:elevation">4dp</item>
+        <item name="android:padding">5dp</item>
     </style>
 
     <style name="tutorial_title">
@@ -162,6 +207,7 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">25dp</item>
+        <item name="android:elevation">4dp</item>
     </style>
 
     <style name="description_increment">

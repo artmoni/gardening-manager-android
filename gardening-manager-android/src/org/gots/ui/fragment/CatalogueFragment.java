@@ -42,7 +42,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class CatalogueFragment extends AbstractListFragment implements OnScrollListener,
+public class CatalogueFragment extends BaseGotsListFragment implements OnScrollListener,
         AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     protected static final String FILTER_FAVORITES = "filter.favorites";

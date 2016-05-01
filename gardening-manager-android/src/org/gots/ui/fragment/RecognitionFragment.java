@@ -75,7 +75,7 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
     private Context mContext;
     private JustVisualAdapter arrayAdapter;
     private LinearLayout layoutNotification;
-
+    private boolean recognitionSucceed = false;
 
     //    private BroadcastReceiver mBroadcast = new BroadcastReceiver() {
 //        @Override
@@ -158,7 +158,7 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
             docId = args.getString(DOCUMENT_ID);
             imageFile = new File(args.getString(IMAGE_PATH));
         } else {
-            Log.w(TAG, "You should have both args "+DOCUMENT_ID+" and "+IMAGE_PATH);
+            Log.w(TAG, "You should have both args " + DOCUMENT_ID + " and " + IMAGE_PATH);
         }
         return v;
     }
@@ -294,8 +294,10 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
 
         hideNotification();
         Log.d(TAG, "onUploadSuccess listMap size=" + listMap.size());
-        if (mCallback != null)
+        if (mCallback != null && recognitionSucceed == false) {
             mCallback.onRecognitionSucceed();
+            recognitionSucceed = true;
+        }
 
         super.onNuxeoDataRetrieved(data);
     }

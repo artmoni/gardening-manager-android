@@ -3,19 +3,18 @@ package org.gots.ui;
 import android.os.Bundle;
 import android.view.View;
 
-import org.gots.exception.NotImplementedException;
 import org.gots.seed.BaseSeed;
 import org.gots.seed.adapter.VendorSeedListAdapter;
-import org.gots.ui.fragment.AbstractListFragment;
+import org.gots.ui.fragment.BaseGotsListFragment;
 
 import java.util.ArrayList;
 
-public class FamilyListFragment extends AbstractListFragment {
+public class FamilyListFragment extends BaseGotsListFragment {
 
     @Override
     public void onViewCreated(View v, Bundle savedInstanceState) {
-        getListView().setAdapter(new VendorSeedListAdapter(getActivity(), new ArrayList<BaseSeed>()));
-        super.onViewCreated(getListView(), savedInstanceState);
+        listView.setAdapter(new VendorSeedListAdapter(getActivity(), new ArrayList<BaseSeed>()));
+        super.onViewCreated(listView, savedInstanceState);
     }
 
     @Override
@@ -43,4 +42,8 @@ public class FamilyListFragment extends AbstractListFragment {
 
     }
 
+    @Override
+    public void update() {
+
+    }
 }

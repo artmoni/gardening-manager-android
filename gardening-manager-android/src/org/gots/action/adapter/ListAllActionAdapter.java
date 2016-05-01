@@ -46,6 +46,7 @@ import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.view.GrowingSeedWidget;
 import org.gots.weather.WeatherManager;
+import org.gots.weather.exception.UnknownWeatherException;
 import org.gots.weather.view.WeatherView;
 
 import java.io.File;
@@ -194,7 +195,12 @@ public class ListAllActionAdapter extends BaseAdapter {
                     } else
                         holder.textviewActionDescription.setVisibility(View.GONE);
 
-                    holder.weatherView.setWeather(manager.getCondition(rightNow.getTime()));
+                    try {
+                        holder.weatherView.setWeather(manager.getCondition(rightNow.getTime()));
+                        holder.weatherView.setVisibility(View.VISIBLE);
+                    } catch (UnknownWeatherException e) {
+                        holder.weatherView.setVisibility(View.GONE);
+                    }
 
                     currentAction.setState(ActionState.NORMAL);
 

@@ -1,0 +1,192 @@
+[1mdiff --git i/gardening-manager-android/src/org/gots/ui/ProfileActivity.java w/gardening-manager-android/src/org/gots/ui/ProfileActivity.java[m
+[1mindex 0319dd9..9eb4dfb 100644[m
+[1m--- i/gardening-manager-android/src/org/gots/ui/ProfileActivity.java[m
+[1m+++ w/gardening-manager-android/src/org/gots/ui/ProfileActivity.java[m
+[36m@@ -1,13 +1,15 @@[m
+[31m-/*******************************************************************************[m
+[32m+[m[32m/**[m
+[32m+[m[32m * ****************************************************************************[m
+  * Copyright (c) 2012 sfleury.[m
+  * All rights reserved. This program and the accompanying materials[m
+  * are made available under the terms of the GNU Public License v3.0[m
+  * which accompanies this distribution, and is available at[m
+  * http://www.gnu.org/licenses/gpl.html[m
+[31m- *[m
+[32m+[m[32m * <p>[m
+  * Contributors:[m
+[31m- *     sfleury - initial API and implementation[m
+[31m- ******************************************************************************/[m
+[32m+[m[32m * sfleury - initial API and implementation[m
+[32m+[m[32m * ****************************************************************************[m
+[32m+[m[32m */[m
+ package org.gots.ui;[m
+ [m
+ import java.util.ArrayList;[m
+[36m@@ -69,7 +71,7 @@[m [mpublic class ProfileActivity extends BaseGotsActivity implements OnProfileEventL[m
+ [m
+         mapFragment = new ProfileMapFragment();[m
+         addMainLayout(mapFragment, null);[m
+[31m-        openContentResumeFragment();[m
+[32m+[m[32m        //openContentResumeFragment();[m
+     }[m
+ [m
+     @Override[m
+[36m@@ -87,9 +89,6 @@[m [mpublic class ProfileActivity extends BaseGotsActivity implements OnProfileEventL[m
+ [m
+             @Override[m
+             public void onClick(View v) {[m
+[31m-                if (findViewById(R.id.bottom) != null) {[m
+[31m-                    ((SlidingDrawer) findViewById(R.id.bottom)).open();[m
+[31m-                }[m
+                 openContentFragment(getCurrentGarden(), false);[m
+             }[m
+         });[m
+[36m@@ -108,7 +107,9 @@[m [mpublic class ProfileActivity extends BaseGotsActivity implements OnProfileEventL[m
+ [m
+     protected boolean requireAsyncDataRetrieval() {[m
+         return true;[m
+[31m-    };[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    ;[m
+ [m
+     @Override[m
+     protected Object retrieveNuxeoData() throws Exception {[m
+[36m@@ -119,7 +120,6 @@[m [mpublic class ProfileActivity extends BaseGotsActivity implements OnProfileEventL[m
+     @Override[m
+     protected void onNuxeoDataRetrieved(Object myGardens) {[m
+         this.allGardens = (List<GardenInterface>) myGardens;[m
+[31m-        FragmentManager fragmentManager = getSupportFragmentManager();[m
+ [m
+         if (currentGarden.getGpsLatitude() == 0 || currentGarden.getGpsLongitude() == 0) {[m
+             Toast.makeText(getApplicationContext(), "Long press to localize your garden", Toast.LENGTH_LONG).show();[m
+[36m@@ -171,69 +171,71 @@[m [mpublic class ProfileActivity extends BaseGotsActivity implements OnProfileEventL[m
+         switch (item.getItemId()) {[m
+ [m
+ [m
+[31m-        case R.id.new_garden:[m
+[32m+[m[32m            case R.id.new_garden:[m
+ [m
+[31m-            openContentFragment(getCurrentGarden(), false);[m
+[31m-            return true;[m
+[31m-        case R.id.edit_garden:[m
+[31m-            openContentFragment(getCurrentGarden(), true);[m
+[31m-            return true;[m
+[31m-        case R.id.delete_garden:[m
+[31m-            AlertDialog.Builder builder = new AlertDialog.Builder(this);[m
+[31m-[m
+[31m-            builder.setTitle("Delete a garden");[m
+[31m-            builder.setMessage("Are you sure to delete the garden " + currentGarden.getName());[m
+[31m-[m
+[31m-            builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {[m
+[31m-[m
+[31m-                public void onClick(DialogInterface dialog, int which) {[m
+[31m-                    new AsyncTask<Void, Void, GardenInterface>() {[m
+[31m-                        @Override[m
+[31m-                        protected GardenInterface doInBackground(Void... params) {[m
+[31m-                            for (int i = allGardens.size() - 1; i >= 0; i--) {[m
+[31m-                                GardenInterface garden = allGardens.get(i);[m
+[31m-                                if (garden.getId() != getCurrentGarden().getId()) {[m
+[31m-                                    gardenManager.removeGarden(getCurrentGarden());[m
+[31m-                                    gardenManager.setCurrentGarden(garden);[m
+[31m-                                    return garden;[m
+[32m+[m[32m                openContentFragment(getCurrentGarden(), false);[m
+[32m+[m[32m                return true;[m
+[32m+[m[32m            case R.id.edit_garden:[m
+[32m+[m[32m                openContentFragment(getCurrentGarden(), true);[m
+[32m+[m[32m                return true;[m
+[32m+[m[32m            case R.id.delete_garden:[m
+[32m+[m[32m                AlertDialog.Builder builder = new AlertDialog.Builder(this);[m
+[32m+[m
+[32m+[m[32m                builder.setTitle("Delete a garden");[m
+[32m+[m[32m                builder.setMessage("Are you sure to delete the garden " + currentGarden.getName());[m
+[32m+[m
+[32m+[m[32m                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {[m
+[32m+[m
+[32m+[m[32m                    public void onClick(DialogInterface dialog, int which) {[m
+[32m+[m[32m                        new AsyncTask<Void, Void, GardenInterface>() {[m
+[32m+[m[32m                            @Override[m
+[32m+[m[32m                            protected GardenInterface doInBackground(Void... params) {[m
+[32m+[m[32m                                for (int i = allGardens.size() - 1; i >= 0; i--) {[m
+[32m+[m[32m                                    GardenInterface garden = allGardens.get(i);[m
+[32m+[m[32m                                    if (garden.getId() != getCurrentGarden().getId()) {[m
+[32m+[m[32m                                        gardenManager.removeGarden(getCurrentGarden());[m
+[32m+[m[32m                                        gardenManager.setCurrentGarden(garden);[m
+[32m+[m[32m                                        return garden;[m
+[32m+[m[32m                                    }[m
+                                 }[m
+[32m+[m[32m                                return null;[m
+                             }[m
+[31m-                            return null;[m
+[31m-                        }[m
+ [m
+[31m-                        protected void onPostExecute(GardenInterface result) {[m
+[31m-                            if (result != null) {[m
+[31m-                                getSupportFragmentManager().popBackStack();[m
+[31m-                                mapFragment.update();[m
+[32m+[m[32m                            protected void onPostExecute(GardenInterface result) {[m
+[32m+[m[32m                                if (result != null) {[m
+[32m+[m[32m                                    getSupportFragmentManager().popBackStack();[m
+[32m+[m[32m                                    mapFragment.update();[m
+[32m+[m[32m                                }[m
+[32m+[m[32m                                // sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));[m
+[32m+[m[32m                                else[m
+[32m+[m[32m                                    Toast.makeText(getApplicationContext(), "Last garden cannot be deleted",[m
+[32m+[m[32m                                            Toast.LENGTH_LONG).show();[m
+                             }[m
+[31m-                            // sendBroadcast(new Intent(BroadCastMessages.GARDEN_EVENT));[m
+[31m-                            else[m
+[31m-                                Toast.makeText(getApplicationContext(), "Last garden cannot be deleted",[m
+[31m-                                        Toast.LENGTH_LONG).show();[m
+[31m-                        };[m
+[31m-                    }.execute();[m
+[31m-[m
+[31m-                    dialog.dismiss();[m
+[31m-                }[m
+[31m-[m
+[31m-            });[m
+[31m-[m
+[31m-            builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {[m
+[31m-[m
+[31m-                @Override[m
+[31m-                public void onClick(DialogInterface dialog, int which) {[m
+[31m-                    // Do nothing[m
+[31m-                    dialog.dismiss();[m
+[31m-                }[m
+[31m-            });[m
+[31m-[m
+[31m-            AlertDialog alert = builder.create();[m
+[31m-            alert.show();[m
+[31m-[m
+[31m-            // profileAdapter.notifyDataSetChanged();[m
+[31m-            return true;[m
+[31m-        default:[m
+[31m-            return super.onOptionsItemSelected(item);[m
+[32m+[m
+[32m+[m[32m                            ;[m
+[32m+[m[32m                        }.execute();[m
+[32m+[m
+[32m+[m[32m                        dialog.dismiss();[m
+[32m+[m[32m                    }[m
+[32m+[m
+[32m+[m[32m                });[m
+[32m+[m
+[32m+[m[32m                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {[m
+[32m+[m
+[32m+[m[32m                    @Override[m
+[32m+[m[32m                    public void onClick(DialogInterface dialog, int which) {[m
+[32m+[m[32m                        // Do nothing[m
+[32m+[m[32m                        dialog.dismiss();[m
+[32m+[m[32m                    }[m
+[32m+[m[32m                });[m
+[32m+[m
+[32m+[m[32m                AlertDialog alert = builder.create();[m
+[32m+[m[32m                alert.show();[m
+[32m+[m
+[32m+[m[32m                // profileAdapter.notifyDataSetChanged();[m
+[32m+[m[32m                return true;[m
+[32m+[m[32m            default:[m
+[32m+[m[32m                return super.onOptionsItemSelected(item);[m
+         }[m
+     }[m
+ [m

@@ -16,7 +16,7 @@ import org.gots.seed.GrowingSeed;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AllotmentListFragment extends AbstractListFragment {
+public class AllotmentListFragment extends BaseGotsListFragment {
     private ListAllotmentAdapter lsa;
 
 //    ListView listAllotments;
@@ -61,9 +61,9 @@ public class AllotmentListFragment extends AbstractListFragment {
 
     @Override
     public void onViewCreated(View v, Bundle savedInstanceState) {
-        getListView().setAdapter(lsa);
-        getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        listView.setAdapter(lsa);
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 mCallback.onAllotmentLongClick(lsa.getItem(position));
@@ -93,7 +93,7 @@ public class AllotmentListFragment extends AbstractListFragment {
 
             }
         });
-        getListView().setOnScrollListener(new AbsListView.OnScrollListener() {
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
                                               private int currentVisibleItemCount;
                                               private int currentScrollState;
                                               private int currentFirstVisibleItem;

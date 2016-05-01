@@ -59,28 +59,30 @@
                     android:id="@+id/textViewNbAllotments"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/editTextGardenName"
-                    android:layout_toRightOf="@+id/textView3"
-                    android:text="0" />
+                    android:text="0"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_below="@+id/editTextGardenWeatherLocality"
+                    android:layout_toRightOf="@+id/textView6"
+                    android:layout_toEndOf="@+id/textView6" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@+id/textViewNbAllotments"
-                    android:layout_toRightOf="@+id/textViewNbAllotments"
-                    android:text=" lots"
-                    android:id="@+id/textView6" />
+                    android:text="@string/allotment"
+                    android:id="@+id/textView6"
+                    android:layout_below="@+id/editTextGardenWeatherLocality"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
 
                 <TextView
                     android:id="@+id/editTextGardenWeatherLocality"
-                    style="@style/description_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/weather.activation.title"
                     android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:textSize="10dp"
-                     />
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
 
 
             </RelativeLayout>

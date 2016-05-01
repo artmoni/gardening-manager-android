@@ -24,12 +24,14 @@ import org.gots.weather.provider.local.LocalWeatherProvider;
 import org.gots.weather.provider.previmeteo.WeatherProvider;
 
 import android.content.Context;
+import android.util.Log;
 
 public class WeatherManager implements WeatherProvider {
 
     public static final short WEATHER_OK = 0;
     public static final short WEATHER_ERROR_CITY_UNKNOWN = 1;
     public static final short WEATHER_ERROR_UNKNOWN = 2;
+    private static final String TAG = WeatherManager.class.getSimpleName();
     private Integer temperatureLimitHot;
 
     private Integer temperatureLimitCold;
@@ -91,7 +93,7 @@ public class WeatherManager implements WeatherProvider {
     /*
      * GetCondition from today until passed argument (-i or +i)
      */
-    public WeatherConditionInterface getCondition(int i) {
+    public WeatherConditionInterface getCondition(int i) throws UnknownWeatherException {
 
         Calendar weatherCalendar = Calendar.getInstance();
         weatherCalendar.add(Calendar.DAY_OF_YEAR, i);
@@ -101,30 +103,30 @@ public class WeatherManager implements WeatherProvider {
         return getCondition(weatherDate);
     }
 
-    public WeatherConditionInterface getCondition(Date weatherDate) {
+    public WeatherConditionInterface getCondition(Date weatherDate) throws UnknownWeatherException {
         WeatherConditionInterface conditionInterface;
         try {
             conditionInterface = localProvider.getCondition(weatherDate);
         } catch (UnknownWeatherException e) {
-            try {
+//            try {
                 conditionInterface = provider.getCondition(weatherDate);
-            } catch (UnknownWeatherException e2) {
-                conditionInterface = new WeatherCondition(weatherDate);
-            }
+//            } catch (UnknownWeatherException e2) {
+//                conditionInterface = new WeatherCondition(weatherDate);
+//            }
         }
 
         return conditionInterface;
     }
 
-    public List<WeatherConditionInterface> getConditionSet(int nbDays) {
+    public List<WeatherConditionInterface> getConditionSet(int from_days, int to_days) {
         List<WeatherConditionInterface> conditions = new ArrayList<WeatherConditionInterface>();
-        for (int i = -nbDays; i <= nbDays; i++) {
+        for (int i = from_days; i <= to_days; i++) {
 
             try {
                 conditions.add(getCondition(i));
-            } catch (Exception e) {
-                conditions.add(new WeatherCondition());
-                e.printStackTrace();
+            } catch (UnknownWeatherException e) {
+//                conditions.add(new WeatherCondition());
+                Log.d(TAG, "Weather Condition ("+i + " days) does not exists");
             }
         }
         return conditions;

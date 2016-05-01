@@ -5,7 +5,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * <p/>
+ * <p>
  * Contributors:
  * sfleury - initial API and implementation
  * ****************************************************************************
@@ -33,6 +33,7 @@ import org.gots.ui.fragment.LoginFragment;
 import org.gots.ui.fragment.ProfileEditorFragment;
 import org.gots.ui.fragment.ProfileMapFragment;
 import org.gots.ui.fragment.ProfileResumeFragment;
+import org.gots.ui.fragment.WeatherListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +45,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
 //    private ProfileMapFragment mapFragment;
 
     //    private List<GardenInterface> allGardens;
-    private ProfileEditorFragment contentFragment;
+    private ProfileEditorFragment fragment;
     private ProfileResumeFragment resumeFragment;
 
     @Override
@@ -58,10 +59,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
         resumeFragment = new ProfileResumeFragment();
         addResumeLayout(resumeFragment, bundle);
 
-        if (gotsPrefs.isConnectedToServer())
-            addMainLayout(new ProfileEditorFragment(), bundle);
-        else
-            addMainLayout(new LoginFragment(), bundle);
+        addMainLayout(new WeatherListFragment(), bundle);
 
     }
 
@@ -90,7 +88,8 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
                     protected void onPostExecute(GardenInterface gardenInterface) {
                         if (gardenInterface != null)
                             showNotification("New garden created", false);
-                        resumeFragment.update();
+                        if (resumeFragment.isAdded())
+                            resumeFragment.update();
                         Bundle options = new Bundle();
                         options.putInt(ProfileEditorFragment.PROFILE_EDITOR_MODE, ProfileEditorFragment.OPTION_EDIT);
                         addMainLayout(new ProfileEditorFragment(), options);
@@ -147,8 +146,8 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
 //            alert.show();
         } else {
 
-            if (contentFragment != null)
-                contentFragment.update();
+            if (fragment != null)
+                fragment.update();
 
         }
         super.onNuxeoDataRetrieved(myGarden);
@@ -260,7 +259,8 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
 
             @Override
             protected void onPostExecute(Void aVoid) {
-                resumeFragment.update();
+                if (resumeFragment.isAdded())
+                    resumeFragment.update();
                 super.onPostExecute(aVoid);
             }
         }.execute();
@@ -278,9 +278,10 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
 
             @Override
             protected void onPostExecute(Void aVoid) {
-                resumeFragment.update();
-                if (fragment instanceof ProfileEditorFragment) //TODO launch weather fragment here on main layout
-                    addMainLayout(new ProfileMapFragment(),getIntent().getExtras());
+                if (resumeFragment.isAdded())
+                    resumeFragment.update();
+//                if (fragment instanceof ProfileEditorFragment) //TODO launch weather fragment here on main layout
+                    addMainLayout(new WeatherListFragment(), getIntent().getExtras());
                 super.onPostExecute(aVoid);
             }
         }.execute();
@@ -294,11 +295,11 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
         if (editable) {
             options.putInt(ProfileEditorFragment.PROFILE_EDITOR_MODE, ProfileEditorFragment.OPTION_EDIT);
         }
-        if (contentFragment == null) {
-            contentFragment = new ProfileEditorFragment();
-            addMainLayout(contentFragment, options);
+        if (fragment == null) {
+            fragment = new ProfileEditorFragment();
+            addMainLayout(fragment, options);
         }
-        contentFragment.update();
+        fragment.update();
     }
 
     @Override

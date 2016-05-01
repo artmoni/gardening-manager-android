@@ -19,23 +19,24 @@ public class GotsPurchaseItem {
 
     private static final String TAG = "GotsPurchaseItem";
 
-    private static final boolean FORCE_PREMIUM = false;
+    private static final boolean FORCE_PREMIUM = true; // REMOVED ADS FROM 01/01/16
+    public static final String SKU_TEST_PURCHASE = "android.test.purchased";
 
-    public static String SKU_TEST_PURCHASE = "android.test.purchased";
+    public static final String SKU_PREMIUM = "gots.premium";
 
-    public static String SKU_PREMIUM = "gots.premium";
+    public static final String SKU_FEATURE_PDFHISTORY = "gots.feature.pdfhistory";
 
-    public static String SKU_FEATURE_PDFHISTORY = "gots.feature.pdfhistory";
+    public static final String SKU_FEATURE_PARROT = "gots.feature.parrot";
 
-    public static String SKU_FEATURE_PARROT = "gots.feature.parrot";
+    public static final String SKU_FEATURE_RECOGNITION_50 = "gots.feature.recognition.50";
 
-    public static String SKU_FEATURE_RECOGNITION_50 = "gots.feature.recognition.50";
+    public static final String SKU_FEATURE_RECOGNITION_100 = "gots.feature.recognition.100";
 
-    public static String FEATURE_RECOGNITION_COUNTER = "gots.feature.recognition.counter";
+    public static final String FEATURE_RECOGNITION_COUNTER = "gots.feature.recognition.counter";
 
-    public static String FEATURE_RECOGNITION_COUNTERDAILY = "gots.feature.recognition.counterdaily";
+    public static final String FEATURE_RECOGNITION_COUNTERDAILY = "gots.feature.recognition.counterdaily";
 
-    public static String FEATURE_RECOGNITION_LASTDAY = "gots.feature.recognition.lastday";
+    public static final String FEATURE_RECOGNITION_LASTDAY = "gots.feature.recognition.lastday";
 
     public static int RECOGNITION_FREE_COUNTER_MAX = 3;
     // public static String SKU_FEATURE_PDFHISTORY = SKU_TEST_PURCHASE;

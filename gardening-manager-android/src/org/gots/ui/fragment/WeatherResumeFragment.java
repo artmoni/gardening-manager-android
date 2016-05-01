@@ -10,6 +10,7 @@ import org.gots.garden.GardenInterface;
 import org.gots.ui.ProfileActivity;
 import org.gots.weather.WeatherConditionInterface;
 import org.gots.weather.WeatherManager;
+import org.gots.weather.exception.UnknownWeatherException;
 import org.gots.weather.view.WeatherView;
 import org.gots.weather.view.WeatherWidget;
 
@@ -45,11 +46,11 @@ public class WeatherResumeFragment extends BaseGotsFragment {
 
     private LineChart tempChart;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        weatherWidget = new WeatherWidget(getActivity(), WeatherView.FULL, null);
-        return inflater.inflate(R.layout.weather_resume, null);
-    }
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            weatherWidget = new WeatherWidget(getActivity(), WeatherView.FULL, null);
+            return inflater.inflate(R.layout.weather_resume, null);
+        }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -81,7 +82,6 @@ public class WeatherResumeFragment extends BaseGotsFragment {
     @Override
     protected void onNuxeoDataRetrievalStarted() {
         weatherManager = new WeatherManager(getActivity());
-
         super.onNuxeoDataRetrievalStarted();
     }
 
@@ -89,7 +89,7 @@ public class WeatherResumeFragment extends BaseGotsFragment {
     protected Object retrieveNuxeoData() throws Exception {
         currentGarden = getCurrentGarden();
         if (weatherManager.fetchWeatherForecast(currentGarden) == WeatherManager.WEATHER_OK) {
-            List<WeatherConditionInterface> conditions = (List<WeatherConditionInterface>) weatherManager.getConditionSet(2);
+                List<WeatherConditionInterface> conditions = (List<WeatherConditionInterface>) weatherManager.getConditionSet(-2, 2);
             return conditions;
         }
 
@@ -105,7 +105,10 @@ public class WeatherResumeFragment extends BaseGotsFragment {
                 for (long i = -weatherManager.getNbConditionsHistory(); i <= 0; i++) {
                     Calendar cal = Calendar.getInstance();
                     cal.add(Calendar.DAY_OF_YEAR, (int) i);
-                    conditions.add(weatherManager.getCondition(cal.getTime()));
+                    try {
+                        conditions.add(weatherManager.getCondition(cal.getTime()));
+                    } catch (UnknownWeatherException e) {
+                    }
                 }
                 return conditions;
             }
@@ -161,16 +164,16 @@ public class WeatherResumeFragment extends BaseGotsFragment {
         int currentMonth = -1;
         for (WeatherConditionInterface temperature : weatherConditions) {
 
-            double tempCelciusMin = temperature.getTempCelciusMin();
-            double tempCelciusMax = temperature.getTempCelciusMax();
+            int tempCelciusMin = Math.round(temperature.getTempCelciusMin());
+            int tempCelciusMax = Math.round(temperature.getTempCelciusMax());
             if (tempCelciusMax < tempCelciusMin)
                 tempCelciusMax = tempCelciusMin;
             cal.setTime(temperature.getDate());
             if (currentMonth == -1 || cal.get(Calendar.MONTH) != currentMonth) {
                 xValsMonth.add(cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()));
             }
-            Entry entryMin = new Entry((float) tempCelciusMin, index);
-            Entry entryMax = new Entry((float) tempCelciusMax, index);
+            Entry entryMin = new Entry( tempCelciusMin, index);
+            Entry entryMax = new Entry( tempCelciusMax, index);
             xVals.add(String.valueOf(cal.get(Calendar.DAY_OF_MONTH)));
 
             valsTemperatureMin.add(entryMin);
