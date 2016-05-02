@@ -1,0 +1,550 @@
+[
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/abc_action_mode_close_item_material.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/abc_action_mode_close_item_material.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/simple_listview.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/simple_listview.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/abc_action_bar_title_item.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/abc_action_bar_title_item.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/tutorial.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/tutorial.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/mr_media_route_controller_material_dialog_b.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/layout/mr_media_route_controller_material_dialog_b.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/notification_template_media.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/notification_template_media.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/list_allotments.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/list_allotments.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/month_widget.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/month_widget.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/notification_media_action.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/notification_media_action.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/activity_main.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/activity_main.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/seed_widget.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/seed_widget.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/purchase.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/purchase.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/input_seed_planning.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/input_seed_planning.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/drawer_list_item.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/drawer_list_item.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/seed_widget_long.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/seed_widget_long.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/list_recognition.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/list_recognition.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/layout_simple.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/layout_simple.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/abc_action_mode_bar.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/abc_action_mode_bar.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/surface_camera.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/surface_camera.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/seed_tab.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/seed_tab.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/sensor_login.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/sensor_login.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/actions_resume.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/actions_resume.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/notification_template_lines.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/notification_template_lines.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/abc_list_menu_item_layout.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/abc_list_menu_item_layout.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/list_sensor.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/list_sensor.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/about.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/about.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/recognition_description.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/recognition_description.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/row.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/row.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/dashboard.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/dashboard.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/abc_list_menu_item_checkbox.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/abc_list_menu_item_checkbox.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/input_seed_main.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/input_seed_main.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/inputaction.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/inputaction.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/weather_widget.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/weather_widget.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/map_activity.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/map_activity.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/abc_screen_simple_overlay_action_mode.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/abc_screen_simple_overlay_action_mode.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/abc_list_menu_item_icon.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/abc_list_menu_item_icon.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/horiz_separator.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/horiz_separator.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/tutorial_g.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/tutorial_g.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/allotment_content.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/allotment_content.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/recycler.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/recycler.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/list_garden.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/list_garden.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/abc_action_bar_view_list_nav_layout.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/abc_action_bar_view_list_nav_layout.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/abc_action_menu_layout.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/abc_action_menu_layout.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/list_position.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/list_position.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/tutorial_a.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/tutorial_a.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/select_dialog_singlechoice_material.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/select_dialog_singlechoice_material.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/seed_widget_tile.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/seed_widget_tile.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/profilemap_fragment.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/profilemap_fragment.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/list_seed.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/list_seed.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/garden_resume.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/garden_resume.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/plant_resume.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/plant_resume.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/popup_horizontal.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/popup_horizontal.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/abc_screen_simple.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/abc_screen_simple.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/list_species_simple.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/list_species_simple.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/notification_media_cancel_action.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/notification_media_cancel_action.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/input_seed_variety.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/input_seed_variety.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/abc_search_view.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/abc_search_view.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/login.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/login.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/workflow_resume.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/workflow_resume.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/sensor_samples.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/sensor_samples.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/purchase_item.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/purchase_item.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/weather_list_item.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/weather_list_item.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/abc_list_menu_item_radio.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/abc_list_menu_item_radio.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/place_autocomplete_item_prediction.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/8.4.0/res/layout/place_autocomplete_item_prediction.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/sensor.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/sensor.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/abc_activity_chooser_view.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/abc_activity_chooser_view.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/profile_list.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/profile_list.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/actionbar_indeterminate_progress.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/actionbar_indeterminate_progress.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/tutorial_d.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/tutorial_d.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/action_widget.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/action_widget.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/select_dialog_item_material.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/select_dialog_item_material.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/actions_list_fragment.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/actions_list_fragment.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/seed_new.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/seed_new.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/profile_editor.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/profile_editor.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/scroller.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/scroller.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/progress_bar.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/progress_bar.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/input_seed_description.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/input_seed_description.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/spinner_item_text.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/spinner_item_text.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/dialogtitle.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/dialogtitle.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/main.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/main.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/dashboard_drawer.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/dashboard_drawer.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/abc_screen_toolbar.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/abc_screen_toolbar.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/hut.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/hut.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/action_item_vertical.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/action_item_vertical.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/sensor_resume.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/sensor_resume.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/action_item_horizontal.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/action_item_horizontal.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/premium_ads.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/premium_ads.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/place_autocomplete_progress.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/8.4.0/res/layout/place_autocomplete_progress.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/recognition.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/recognition.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/sensor_location.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/sensor_location.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/select_dialog_multichoice_material.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/select_dialog_multichoice_material.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/profile_resume.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/profile_resume.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/notification_template_big_media_narrow.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/notification_template_big_media_narrow.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/weather_resume.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/weather_resume.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/menu_drawer_fragment.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/menu_drawer_fragment.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/tutorial_c.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/tutorial_c.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/input_seed_species.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/input_seed_species.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/abc_select_dialog_material.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/abc_select_dialog_material.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/splash_screen.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/splash_screen.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/tutorial_f.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/tutorial_f.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/action_description.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/action_description.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/allotment_list_fragment.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/allotment_list_fragment.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/list_seed_grid.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/list_seed_grid.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/abc_search_dropdown_item_icons_2line.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/abc_search_dropdown_item_icons_2line.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/abc_alert_dialog_button_bar_material.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/abc_alert_dialog_button_bar_material.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/notification_template_big_media.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/notification_template_big_media.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/list_action.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/list_action.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/abc_activity_chooser_view_list_item.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/abc_activity_chooser_view_list_item.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/abc_popup_menu_item_layout.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/abc_popup_menu_item_layout.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/inputseed.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/inputseed.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/abc_action_bar_up_container.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/abc_action_bar_up_container.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/help.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/help.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/notification_template_part_time.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/notification_template_part_time.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/seed.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/seed.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/abc_screen_content_include.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/abc_screen_content_include.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/first_launch.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/first_launch.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/abc_dialog_title_material.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/abc_dialog_title_material.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/place_autocomplete_item_powered_by_google.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/8.4.0/res/layout/place_autocomplete_item_powered_by_google.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/tutorial_resume.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/tutorial_resume.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/abc_action_menu_item_layout.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/abc_action_menu_item_layout.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/mr_media_route_chooser_dialog.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/layout/mr_media_route_chooser_dialog.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/abc_alert_dialog_material.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/abc_alert_dialog_material.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/recognition_resume.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/recognition_resume.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/popup_vertical.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/popup_vertical.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/tutorial_b.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/tutorial_b.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/support_simple_spinner_dropdown_item.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/support_simple_spinner_dropdown_item.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/notification_template_part_chronometer.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/notification_template_part_chronometer.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/incredible_resume.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/incredible_resume.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/tutorial_e.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/tutorial_e.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/catalog_resume.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/catalog_resume.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/list_action_simple.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/list_action_simple.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/tabs_bg.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/tabs_bg.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/workflow_task.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/workflow_task.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/dateslider.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/dateslider.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/abc_expanded_menu_layout.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/res/layout/abc_expanded_menu_layout.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/actionbar_catalog.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/actionbar_catalog.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/layout/button_add.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/layout/button_add.xml"
+    }
+]

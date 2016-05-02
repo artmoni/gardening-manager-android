@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/idContent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_simple"
+    android:gravity="center_vertical"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="43dp"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/bannerAd"
+            android:layout_width="fill_parent"
+            android:layout_height="90dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/text_color_dark"
+            android:gravity="center_horizontal" >
+        </LinearLayout>
+
+        <org.gots.layout.DashboardLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:orientation="vertical" 
+            >
+
+            <Button
+                android:id="@+id/dashboard_button_hut"
+                style="@style/DashboardButton"
+                android:drawableTop="@drawable/dashboard_button_hut_selector"
+                android:text="@string/dashboard.hut.name" />
+
+            <Button
+                android:id="@+id/dashboard_button_allotment"
+                style="@style/DashboardButton"
+                android:drawableTop="@drawable/dashboard_button_allotment_selector"
+                android:text="@string/dashboard.garden.name" />
+
+            <Button
+                android:id="@+id/dashboard_button_action"
+                style="@style/DashboardButton"
+                android:drawableTop="@drawable/dashboard_button_action_selector"
+                android:text="@string/dashboard.actions.name" />
+
+            <Button
+                android:id="@+id/dashboard_button_profile"
+                style="@style/DashboardButton"
+                android:drawableTop="@drawable/dashboard_button_profile_selector"
+                android:text="@string/dashboard.profile.name" />
+             <Button
+                android:id="@+id/dashboard_button_sensor"
+                style="@style/DashboardButton"
+                android:drawableTop="@drawable/dashboard_button_sensor_selector"
+                android:text="@string/dashboard.sensor.name" />
+        </org.gots.layout.DashboardLayout>
+    </LinearLayout>
+
+    <org.gots.weather.view.WrappingSlidingDrawer
+        android:id="@+id/drawer"
+        android:layout_width="fill_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:content="@+id/WeatherWidget"
+        android:handle="@+id/handle"
+        android:orientation="vertical"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp" >
+
+        <LinearLayout
+            android:id="@+id/handle"
+            android:layout_width="fill_parent"
+            android:layout_height="53dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/weather_background"
+            android:paddingBottom="0dp" />
+
+        <LinearLayout
+            android:id="@+id/WeatherWidget"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/weather_background2"
+            android:gravity="top"
+            android:orientation="horizontal"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp" >
+        </LinearLayout>
+    </org.gots.weather.view.WrappingSlidingDrawer>
+
+    <ImageView
+        android:id="@+id/idImageLogo"
+        android:layout_width="fill_parent"
+        android:layout_height="100dp"
+        android:background="@drawable/bt_logo" >
+    </ImageView>
+
+</RelativeLayout>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/text_color_light"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:gravity="center_vertical"
+        android:padding="5dp">
+
+        <ImageView
+            style="@style/logo"
+            android:src="@drawable/ic_opensource" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:id="@+id/idTranslateButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_red_selector"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingRight="10dp"
+                android:text="@string/translate.button"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:id="@+id/imageTranslateFlag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:background="@drawable/ca"
+                android:contentDescription="@string/login.signin" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:src="@drawable/logosplah" />
+
+    <TextView
+        android:id="@+id/textVersion"
+        style="@style/seed_variety"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+
+        android:layout_gravity="center"
+        android:text="Version 1.0.0" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <!--<ImageView-->
+        <!--android:id="@+id/webArtmoni"-->
+        <!--style="@style/logo"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:src="@drawable/logo_artmoni" />-->
+
+        <!--<ImageView-->
+        <!--android:id="@+id/webSauterDansLesFlaques"-->
+        <!--style="@style/logo"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:src="@drawable/logosdlf" />-->
+
+        <ImageView
+            android:id="@+id/idSocialGoogle"
+            style="@style/logo"
+            android:layout_margin="5dp"
+            android:src="@drawable/social_google" />
+
+        <ImageView
+            android:id="@+id/idSocialFacebook"
+            style="@style/logo"
+            android:layout_margin="5dp"
+
+            android:src="@drawable/social_facebook" />
+
+        <ImageView
+            android:id="@+id/idSocialTwitter"
+            style="@style/logo"
+            android:layout_margin="5dp"
+
+            android:src="@drawable/social_twitter" />
+        <!--
+             <ImageView
+            android:id="@+id/idPrevimeteo"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/logo_previmeteo" />
+        -->
+    </LinearLayout>
+
+</LinearLayout>

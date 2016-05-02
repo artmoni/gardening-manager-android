@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/text_color_light"
+    android:orientation="vertical" >
+
+    <!-- android:background="@drawable/background_simple" -->
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/idAdsTop"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" >
+    </android.support.v4.view.ViewPager>
+
+    <LinearLayout
+        android:id="@+id/idAdsTop"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:orientation="horizontal" >
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/contentFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/idAdsTop"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_below="@+id/idAdsTop"
+        android:visibility="gone" >
+    </FrameLayout>
+
+</RelativeLayout>

@@ -4,6 +4,7 @@
     <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="22"/>
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" android:required="false"/>
+    <uses-permission android:name="android.permission.MA" android:required="false"/>
 
     <uses-feature android:name="android.hardware.location.gps" android:required="false"/>
     <uses-feature android:name="android.hardware.location" android:required="false"/>
@@ -48,7 +49,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.GardenActivity" android:theme="@style/Theme.Styled"/>
-        <activity android:name=".ui.MainActivity" android:theme="@style/Theme.Styled">
+        <activity android:name=".ui.CoreActivity" android:theme="@style/Theme.Styled">
         </activity>
         <activity android:name=".ui.SensorActivity" android:theme="@style/Theme.Styled">
         </activity>

@@ -1,0 +1,46 @@
+[
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/xml/conditions.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/xml/conditions.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/xml/authenticator.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/xml/authenticator.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/xml/account_preferences.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/xml/account_preferences.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/xml/sync_adapter_garden.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/xml/sync_adapter_garden.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/xml/sync_adapter_allotment.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/xml/sync_adapter_allotment.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/xml/preferences.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/xml/preferences.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/xml/sync_adapter_actions.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/xml/sync_adapter_actions.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/xml/sync_adapter_weather.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/xml/sync_adapter_weather.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/xml/seed.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/xml/seed.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/xml/sync_adapter_seed.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/xml/sync_adapter_seed.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/xml/sync_adapter_sensor.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/xml/sync_adapter_sensor.xml"
+    }
+]

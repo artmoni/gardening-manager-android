@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/text_color_light"
+    android:gravity="center_vertical" >
+
+    <TextView
+        android:id="@+id/textView2"
+        style="@style/tutorial_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="@string/tutorial.d.description"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ic_menu_todo" />
+
+    <TextView
+        android:id="@+id/textView1"
+        style="@style/tutorial_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView1"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="@string/tutorial.d.title"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <!--<ImageView-->
+        <!--android:id="@+id/imageView3"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/textView2"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:src="@drawable/tutorial_actions" />-->
+
+</RelativeLayout>

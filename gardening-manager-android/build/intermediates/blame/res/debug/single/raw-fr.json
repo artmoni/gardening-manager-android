@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/raw-fr/test.json",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/raw-fr/test.json"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/raw-fr/seedbak.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/raw-fr/seedbak.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/raw-fr/vendor_seeds.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/raw-fr/vendor_seeds.xml"
+    }
+]

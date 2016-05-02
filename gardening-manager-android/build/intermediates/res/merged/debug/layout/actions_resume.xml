@@ -1,0 +1,43 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutDashboardActions"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:background="@color/brown_light"
+    android:padding="5dp"
+    android:visibility="gone" >
+
+    <ImageView
+        android:id="@+id/imageViewTop"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_action_top" />
+
+    <org.gots.ui.view.MyTextView
+        android:id="@+id/textViewAction"
+        style="@style/TitleResumeFragment"
+        android:layout_alignLeft="@+id/imageViewTop"
+        android:layout_alignTop="@+id/imageViewTop"
+        android:text="@string/dashboard.actions.name"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/buttonActions"
+        style="@style/buttonGreenDashboard"
+        android:layout_alignRight="@+id/imageViewTop"
+        android:layout_alignTop="@+id/textViewAction"
+        android:text="@string/more" />
+
+    <ListView
+        android:id="@+id/listActions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/imageViewTop"
+        android:dividerHeight="2dp" >
+    </ListView>
+
+</RelativeLayout>

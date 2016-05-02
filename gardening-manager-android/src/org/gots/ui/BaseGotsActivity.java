@@ -80,7 +80,6 @@ import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GotsSeedManager;
 import org.gots.ui.fragment.BaseGotsFragment;
 import org.gots.ui.fragment.LoginFragment;
-import org.nuxeo.android.activities.BaseNuxeoActivity;
 import org.nuxeo.android.context.NuxeoContext;
 
 import java.util.ArrayList;
@@ -90,7 +89,7 @@ import java.util.Locale;
 /**
  * @author jcarsique
  */
-public abstract class BaseGotsActivity extends BaseNuxeoActivity implements GotsContextProvider,
+public abstract class BaseGotsActivity extends GotsCoreActivity implements GotsContextProvider,
         OnBackStackChangedListener, LoginFragment.OnLoginEventListener {
     protected static final String TAG = BaseGotsActivity.class.getSimpleName();
     protected static final int LENGHT_SHORT = 3000;

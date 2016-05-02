@@ -11,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 
 public abstract class TabActivity extends BaseGotsActivity {
 
@@ -91,7 +92,7 @@ public abstract class TabActivity extends BaseGotsActivity {
 
         private List<Fragment> fragments = new ArrayList<>();
 
-        public TabsAdapter(ActionBarActivity activity, ViewPager pager) {
+        public TabsAdapter(AppCompatActivity activity, ViewPager pager) {
             super(activity.getSupportFragmentManager());
             mActionBar = activity.getSupportActionBar();
             mViewPager = pager;

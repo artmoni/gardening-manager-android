@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2">
+    <string msgid="4600421777120114993" name="abc_action_bar_home_description">"Navigați la ecranul de pornire"</string>
+    <string msgid="1397052879051804371" name="abc_action_bar_home_description_format">"%1$s, %2$s"</string>
+    <string msgid="6623331958280229229" name="abc_action_bar_home_subtitle_description_format">"%1$s, %2$s, %3$s"</string>
+    <string msgid="1594238315039666878" name="abc_action_bar_up_description">"Navigați în sus"</string>
+    <string msgid="3588849162933574182" name="abc_action_menu_overflow_description">"Mai multe opțiuni"</string>
+    <string msgid="4076576682505996667" name="abc_action_mode_done">"Terminat"</string>
+    <string msgid="7468859129482906941" name="abc_activity_chooser_view_see_all">"Afișați-le pe toate"</string>
+    <string msgid="2031811694353399454" name="abc_activitychooserview_choose_application">"Alegeți o aplicație"</string>
+    <string msgid="121134116657445385" name="abc_capital_off">"DEZACTIVAȚI"</string>
+    <string msgid="3405795526292276155" name="abc_capital_on">"ACTIVAȚI"</string>
+    <string msgid="7723749260725869598" name="abc_search_hint">"Căutați…"</string>
+    <string msgid="3691816814315814921" name="abc_searchview_description_clear">"Ștergeți interogarea"</string>
+    <string msgid="2550479030709304392" name="abc_searchview_description_query">"Interogare de căutare"</string>
+    <string msgid="8264924765203268293" name="abc_searchview_description_search">"Căutați"</string>
+    <string msgid="8928215447528550784" name="abc_searchview_description_submit">"Trimiteți interogarea"</string>
+    <string msgid="893419373245838918" name="abc_searchview_description_voice">"Căutare vocală"</string>
+    <string msgid="3421042268587513524" name="abc_shareactionprovider_share_with">"Trimiteți la"</string>
+    <string msgid="7165123711973476752" name="abc_shareactionprovider_share_with_application">"Trimiteți la %s"</string>
+    <string msgid="1603543279005712093" name="abc_toolbar_collapse_description">"Restrângeți"</string>
+    <string name="action.beak">Beak</string>
+    <string name="action.delete">Delete</string>
+    <string name="action.delete.allotment">You are deleting a plot</string>
+    <string name="action.delete.seed">You are deleting a plant</string>
+    <string name="action.download">Download</string>
+    <string name="action.harvest">Harvest</string>
+    <string name="action.lighten">Lighten</string>
+    <string name="action.photo">Take a picture</string>
+    <string name="action.planning">Planificaţi o acţiune</string>
+    <string name="action.sow">Sow</string>
+    <string name="allotment.action.add.message">Name your plot</string>
+    <string name="allotment.button.add">Add a plot</string>
+    <string name="allotment.description1">I select the menu button to add a plot.</string>
+    <string name="allotment.description2">The plot menu, I \'performs actions on a plot. For example: I plant a seed</string>
+    <string name="allotment.description3">I monitor development of my vegetables, I note my actions, I get informations.</string>
+    <string name="app_name">Gardening manager</string>
+    <string name="button.cancel">Cancel</string>
+    <string name="button.close">Close</string>
+    <string name="button.next">Next</string>
+    <string name="button.ok">OK</string>
+    <string msgid="2785372108150982144" name="common_google_play_services_api_unavailable_text">"<ns1:g id="APP_NAME">%1$s</ns1:g> necesită unul sau mai multe servicii Google Play, care momentan nu sunt disponibile. Contactați dezvoltatorul pentru asistență."</string>
+    <string msgid="7334167077229901382" name="common_google_play_services_enable_button">"Activați serviciile Google Play"</string>
+    <string msgid="2016066508617425489" name="common_google_play_services_enable_text">"<ns1:g id="APP_NAME">%1$s</ns1:g> nu va funcționa decât dacă activați serviciile Google Play."</string>
+    <string msgid="4763733806837472840" name="common_google_play_services_enable_title">"Activați serviciile Google Play"</string>
+    <string msgid="5765996826213593005" name="common_google_play_services_install_button">"Descărcați serviciile Google Play"</string>
+    <string msgid="1545874412485515659" name="common_google_play_services_install_text_phone">"<ns1:g id="APP_NAME">%1$s</ns1:g> nu va rula fără serviciile Google Play, care lipsesc de pe telefon."</string>
+    <string msgid="2742131317258851812" name="common_google_play_services_install_text_tablet">"<ns1:g id="APP_NAME">%1$s</ns1:g> nu va rula fără serviciile Google Play, care lipsesc de pe tabletă."</string>
+    <string msgid="2110712637922504348" name="common_google_play_services_install_title">"Descărcați serviciile Google Play"</string>
+    <string msgid="8004809446015217370" name="common_google_play_services_invalid_account_text">"Contul menționat nu există pe acest dispozitiv. Alegeți alt cont."</string>
+    <string msgid="9894539456463288" name="common_google_play_services_invalid_account_title">"Contul nu este valid"</string>
+    <string msgid="2602915190038884860" name="common_google_play_services_network_error_text">"Este necesară o conexiune de date pentru a vă conecta la serviciile Google Play."</string>
+    <string msgid="5183831421651758225" name="common_google_play_services_network_error_title">"Eroare de rețea"</string>
+    <string msgid="3936796119014022295" name="common_google_play_services_notification_ticker">"Eroare privind serviciile Google Play"</string>
+    <string msgid="6951442375899151085" name="common_google_play_services_restricted_profile_text">"Accesarea conturilor dintr-un profil cu permisiuni limitate nu este acceptată."</string>
+    <string msgid="4958149393843193760" name="common_google_play_services_restricted_profile_title">"Profil cu permisiuni limitate"</string>
+    <string msgid="59739986196915578" name="common_google_play_services_sign_in_failed_text">"Eroare la conectarea la contul specificat. Alegeți alt cont."</string>
+    <string msgid="8431204498860131150" name="common_google_play_services_sign_in_failed_title">"Conectarea nu a reușit"</string>
+    <string msgid="7170719956698345984" name="common_google_play_services_unknown_issue">"<ns1:g id="APP_NAME">%1$s</ns1:g> întâmpină probleme privind serviciile Google Play. Dacă problema persistă, contactați dezvoltatorul pentru asistență."</string>
+    <string msgid="4291190028362992831" name="common_google_play_services_unsupported_text">"<ns1:g id="APP_NAME">%1$s</ns1:g> se bazează pe serviciile Google Play, care nu sunt acceptate de dispozitiv. Contactați producătorul pentru asistență."</string>
+    <string msgid="909734065366822541" name="common_google_play_services_unsupported_title">"Serviciile Google Play"</string>
+    <string msgid="2221302284291941971" name="common_google_play_services_update_button">"Actualizați"</string>
+    <string msgid="6230553430311881723" name="common_google_play_services_update_text">"<ns1:g id="APP_NAME">%1$s</ns1:g> nu va rula decât dacă actualizați serviciile Google Play."</string>
+    <string msgid="2926201203597631481" name="common_google_play_services_update_title">"Actualizați serviciile Google Play"</string>
+    <string msgid="1576144479907495032" name="common_google_play_services_updating_text">"<ns1:g id="APP_NAME">%1$s</ns1:g> nu va rula fără serviciile Google Play, care momentan se actualizează."</string>
+    <string msgid="1604540693139938838" name="common_google_play_services_updating_title">"Se actualizează serviciile Google Play"</string>
+    <string msgid="8334920661858223093" name="common_google_play_services_wear_update_text">"Este necesară o nouă versiune a serviciilor Google Play. Se vor actualiza automat în curând."</string>
+    <string msgid="311697239335516384" name="common_open_on_phone">"Deschideți pe telefon"</string>
+    <string msgid="3156914698180786012" name="common_signin_button_text">"Conectați-vă"</string>
+    <string msgid="1483290677806110088" name="common_signin_button_text_long">"Conectați-vă cu Google"</string>
+    <string name="dashboard.actions.name">Acțiuni</string>
+    <string name="dashboard.exit">Please click BACK again to exit</string>
+    <string name="dashboard.garden.name">Garden</string>
+    <string name="dashboard.hut.name">Catalog</string>
+    <string name="dashboard.profile.name">Profile</string>
+    <string name="dashboard.sensor.name">Senzori</string>
+    <string name="dashboard.weather.name">Weather</string>
+    <string name="dateSliderTitle">dateSliderTitle string</string>
+    <string name="day">Ziua</string>
+    <string name="feature.unavalaible">This feature will be available in next release</string>
+    <string name="fillfields.dates">Please give the dates</string>
+    <string name="fillfields.specie">Please choose the specie</string>
+    <string name="fillfields.variety">Please fill the variety</string>
+    <string name="garden.cityname.inputmessage">Please enter your garden place</string>
+    <string name="garden.cityname.inputtitle">Location</string>
+    <string name="garden.create">Create a new garden</string>
+    <string name="garden.create.description">Work offline without backup and social network</string>
+    <string name="garden.name">Garden\'s name</string>
+    <string name="garden.type.incredibleedible">Incredible edible: food to share</string>
+    <string name="garden.type.incredibleedible.description">The Incredible Edible project is an urban gardening project which bring people together and through actions around local food, help change behaviour toward the environment and build a kinder and more resilient world.</string>
+    <string name="garden.type.private">Private garden</string>
+    <string name="gots.beta.description">This is a beta feature.</string>
+    <string name="gots.billing.title">Remove all ads and unlock all feature</string>
+    <string name="gots.credits.code">DEVELOPPEMENT \nArtmoni</string>
+    <string name="gots.credits.design">DESIGN \nSauter dans les flaques</string>
+    <string name="gots.description">The biologeekal growing</string>
+    <string name="gots.loading">Loading, please wait.</string>
+    <string name="gots.opensource">This is a collaborative Project,\n you are invited to participate.</string>
+    <string name="help.loading">Please wait, web help is loading</string>
+    <string name="hut.menu.favorites">Favoritele mele</string>
+    <string name="hut.menu.filter">Filter</string>
+    <string name="hut.menu.myseeds">My stock</string>
+    <string name="hut.menu.seedsofthemonth">What to sow or plant this month</string>
+    <string name="hut.menu.thismonth">This month</string>
+    <string name="hut.menu.vendorseeds">Catalog</string>
+    <string name="hut.menu.vendorseeds.plant">Plant</string>
+    <string name="hut.menu.vendorseeds.veget">Legume</string>
+    <string name="inapp.purchase.buy">Buy</string>
+    <string name="inapp.purchase.noaccount">You need a Google account to buy features</string>
+    <string name="inapp.purchase.title">Additional features</string>
+    <string name="inapp.rating.cancel">No, thanks</string>
+    <string name="inapp.rating.descrition">If you enjoy using _APP_TITLE_, please take a moment to rate it. Thanks for your support!</string>
+    <string name="inapp.rating.later">Remind me later</string>
+    <string name="inapp.rating.title">Rate</string>
+    <string name="location.notfound">Locaţia nu a fost găsită</string>
+    <string name="login.account">Account</string>
+    <string name="login.connect">Connect me</string>
+    <string name="login.connect.description">Your account _ACCOUNT_ is now synchronized with my.gardening-manager.com online</string>
+    <string name="login.connect.description2">Share with your friends</string>
+    <string name="login.connect.description3">Create and share your plant descriptions</string>
+    <string name="login.connect.description4">Use the application on any of your devices</string>
+    <string name="login.connect.error">Connection failed, have you already create an account ? \n please verify your informations and try again. </string>
+    <string name="login.connect.restricted">This feature is restricted to connected users</string>
+    <string name="login.connection.succeed">You work safely online</string>
+    <string name="login.creation.description">Create an account on Gardening Manager Server to synchronize and share your garden information with your friends</string>
+    <string name="login.disconnect">Sign out</string>
+    <string name="login.disconnect.state">You work offline</string>
+    <string name="login.email">Email</string>
+    <string name="login.login">Login</string>
+    <string name="login.missinginformation">Some informations are missing</string>
+    <string name="login.password">Password</string>
+    <string name="login.signin">Sign in</string>
+    <string name="login.signup">Sign up for Gardening Manager</string>
+    <string name="login.simple.description">Synchronize your garden on Gardening Manager Cloud and share with friends</string>
+    <string name="login.sso.description">Use your Google account to synchronize and backup Gardening Manager on your devices</string>
+    <string name="menu.about">Despre</string>
+    <string name="menu.edit">Modify</string>
+    <string name="menu.help">Ajutor</string>
+    <string name="menu.help.firstlaunch">Do you want to have a look on the documentation?</string>
+    <string name="month">lună</string>
+    <string name="more">More</string>
+    <string msgid="8327680881775995150" name="mr_media_route_button_content_description">"Trimiteți"</string>
+    <string msgid="7553005460920830010" name="mr_media_route_chooser_searching">"Se caută dispozitive..."</string>
+    <string msgid="7106830097177242655" name="mr_media_route_chooser_title">"Conectați-vă la dispozitiv"</string>
+    <string msgid="109793632378378069" name="mr_media_route_controller_disconnect">"Deconectați-vă"</string>
+    <string msgid="3641544772007543920" name="mr_media_route_controller_no_info_available">"Nu sunt disponibile informații"</string>
+    <string msgid="8315773974194466049" name="mr_media_route_controller_pause">"Întrerupeți"</string>
+    <string msgid="5214423499524760404" name="mr_media_route_controller_play">"Redați"</string>
+    <string msgid="379358765881274425" name="mr_media_route_controller_settings_description">"Setări pentru traseu"</string>
+    <string msgid="5398645111664294430" name="mr_media_route_controller_stop">"Nu mai proiectați"</string>
+    <string msgid="5441529851481176817" name="mr_system_route_name">"Sistem"</string>
+    <string msgid="7498112907524977311" name="mr_user_route_category_name">"Dispozitive"</string>
+    <string name="notification.action.content">and _NBACTIONS_ more tasks</string>
+    <string name="notification.action.title">Your _SPECIE_ needs you</string>
+    <string name="notification.seed.content">and _NBSEEDS_ more</string>
+    <string name="notification.seed.title">New variety on catalog:_SPECIE_</string>
+    <string name="notification.seedsow.content">Ready to sow</string>
+    <string msgid="2132213647576279742" name="place_autocomplete_clear_button">"Ștergeți căutarea"</string>
+    <string msgid="4600782048316473865" name="place_autocomplete_search_hint">"Căutați"</string>
+    <string name="premium">Premium</string>
+    <string name="profile.location.selectsource">Source choice</string>
+    <string name="profile.location.validate">Validare</string>
+    <string name="profile.menu.add">Add a garden</string>
+    <string name="profile.menu.add.description">I can manage multiple gardens</string>
+    <string name="profile.menu.localize">Locate my garden</string>
+    <string name="profile.menu.localize.description"> I geo-tag my garden to get the weather</string>
+    <string name="profile.sample.data">Begin with an already created garden</string>
+    <string name="profile.share.data">Share this garden with friends</string>
+    <string name="seed.action.add.catalogue">Add to catalog</string>
+    <string name="seed.action.add.stock">Add to stock</string>
+    <string name="seed.action.buy.done">Seeds purchased</string>
+    <string name="seed.action.buy.todo">Consider buying your seeds</string>
+    <string name="seed.action.date">action date :</string>
+    <string name="seed.action.done">Dated</string>
+    <string name="seed.action.picking.button">Harvest</string>
+    <string name="seed.action.picking.date">Harvest Date</string>
+    <string name="seed.action.picking.period">Harvesting times</string>
+    <string name="seed.action.picking.todo">You must collect</string>
+    <string name="seed.action.save">Salvaţi</string>
+    <string name="seed.action.sowing.button">Sow</string>
+    <string name="seed.action.sowing.choosetitle">Choose a seed</string>
+    <string name="seed.action.sowing.date">Planting date</string>
+    <string name="seed.action.sowing.period">Sowing times</string>
+    <string name="seed.action.sowing.todo">Select month period to harvest</string>
+    <string name="seed.action.todo">To do before the</string>
+    <string name="seed.action.watering.Button">Water</string>
+    <string name="seed.action.watering.done">Watering done</string>
+    <string name="seed.action.watering.todo">You should water</string>
+    <string name="seed.description.barcode.noresult">No plant has been found with this barcode. Be the first to add its description to the catalog.</string>
+    <string name="seed.description.barecode">Associate the barcode will facilitate your search</string>
+    <string name="seed.description.culture">Plantation</string>
+    <string name="seed.description.ennemi">Enemies</string>
+    <string name="seed.description.environment">Climate and soil</string>
+    <string name="seed.description.family">Family</string>
+    <string name="seed.description.harvest">Harvest</string>
+    <string name="seed.description.specie">Species</string>
+    <string name="seed.description.tabmenu.actions">Istoric</string>
+    <string name="seed.description.tabmenu.detail">Detalii</string>
+    <string name="seed.description.tabmenu.wikipedia">Wikipedia</string>
+    <string name="seed.description.variety">Variety</string>
+    <string name="seed.menu.add">Add a seed</string>
+    <string name="seed.menu.search">Search</string>
+    <string name="seed.menu.search.barcode">Add by barcode</string>
+    <string name="seed.menu.update">Update</string>
+    <string name="seed.register.title">Register variety</string>
+    <string name="sensor.airtemperature.good">Temperature is correct</string>
+    <string name="sensor.airtemperature.too.high">Decrease temperature</string>
+    <string name="sensor.airtemperature.too.low">Increase temperature</string>
+    <string name="sensor.buy">Buy a Parrot Flower Power</string>
+    <string name="sensor.fertilizer.good">Fertilizer quantity is correct</string>
+    <string name="sensor.fertilizer.too.high">Too many fertilizer</string>
+    <string name="sensor.fertilizer.too.low">Not enough fertilizer</string>
+    <string name="sensor.light.good">Light is correct</string>
+    <string name="sensor.light.too.high">Too many light</string>
+    <string name="sensor.light.too.low">Not enough light</string>
+    <string name="sensor.moisture.good">Water quantity is correct</string>
+    <string name="sensor.moisture.too.high">Too many water</string>
+    <string name="sensor.moisture.too.low">Not enough water</string>
+    <string name="skip">Skip</string>
+    <string name="specie.alliumcepa">Ceapa</string>
+    <string name="specie.alliumporrum">Praz</string>
+    <string name="specie.asparagusofficinalis">Asparagus</string>
+    <string name="specie.brassicaoleracea">Varza</string>
+    <string name="specie.brassicarapa">Gulie</string>
+    <string name="specie.capsicumannuum">Piper</string>
+    <string name="specie.cichoriumendivia">Andive</string>
+    <string name="specie.cucumissativus">Gherkin</string>
+    <string name="specie.cucurbitamaxima">Squash</string>
+    <string name="specie.daucuscarota">Morcov</string>
+    <string name="specie.fragariaxananassa">Strawberry</string>
+    <string name="specie.lactucasativa">Lettuce</string>
+    <string name="specie.ocimumbasilicum">Basilic</string>
+    <string name="specie.pastinacasativa">Parsnip</string>
+    <string name="specie.perseaamericana">Avocado</string>
+    <string name="specie.phaseolusvulgaris">Fasole</string>
+    <string name="specie.raphanussativus">Ridiche</string>
+    <string name="specie.ribesrubrum">Redcurrant</string>
+    <string name="specie.ribesuvacrispa">Gooseberry</string>
+    <string name="specie.solanumlycopersicum">Tomato</string>
+    <string name="specie.solanummelongena">Vinete</string>
+    <string name="specie.solanumtuberosum">Cartofi</string>
+    <string name="specie.vacciniummyrtillus">Bilberry</string>
+    <string msgid="2869576371154716097" name="status_bar_notification_info_overflow">"˃999"</string>
+    <string name="synchro.actions.checking">Updating actions list in progress</string>
+    <string name="synchro.actions.ok">Actions list updated</string>
+    <string name="synchro.error.server">We are sorry, server is not available at this time, try again or verify your internet connection.</string>
+    <string name="synchro.garden.checking">Updating shared garden in progress</string>
+    <string name="synchro.garden.ok">Shared garden updated</string>
+    <string name="synchro.purchase.checking">Updating purchase feature</string>
+    <string name="synchro.purchase.ok">Purchase feature list updated</string>
+    <string name="synchro.seeds.checking">Updating plant catalog in progress</string>
+    <string name="synchro.seeds.ok">Plant catalog updated</string>
+    <string name="synchro.weather.checking">Updating weather in progress</string>
+    <string name="synchro.weather.ok">Weather updated</string>
+    <string name="translate.button">I want to translate</string>
+    <string name="tutorial.a.description">keep weather history and grow with the moon</string>
+    <string name="tutorial.a.title">Geolocalize my garden</string>
+    <string name="tutorial.b.description">Search plants, add new one, share with the community, manage your stock</string>
+    <string name="tutorial.b.title">Access a large plant catalogue</string>
+    <string name="tutorial.button.begin">Begin</string>
+    <string name="tutorial.button.try">Demo</string>
+    <string name="tutorial.c.description">Define allotments, sow plants and follow cultures evolution</string>
+    <string name="tutorial.c.title">Organize my allotments</string>
+    <string name="tutorial.d.description">be notified on time and keep history</string>
+    <string name="tutorial.d.title">Schedule the actions to do</string>
+    <string name="tutorial.e.description">Discover original gardens and share your creations</string>
+    <string name="tutorial.e.title">Join a community of gardeners</string>
+    <string name="tutorial.f.description">Fertilizer, sunlight, temperature and soil moisture with your Parrot Flower Power</string>
+    <string name="tutorial.f.title">Monitor my plants</string>
+    <string name="tutorial.finished">Great! you have finished the tutorial, take pleasure to grow your real garden and share your experience :)</string>
+    <string name="tutorial.title">Discover</string>
+    <string msgid="4184147110658930238" name="wallet_buy_button_place_holder">"Cumpărați cu Google"</string>
+    <string name="weather.citynotfound">No weather forecast, choose a closer city</string>
+    <string name="week">săptămâna</string>
+    <string name="workflow.launch.description">Submit this plant description to the moderator team to be shared with the community</string>
+    <string name="workflow.process.title">Validation workflow</string>
+</resources>

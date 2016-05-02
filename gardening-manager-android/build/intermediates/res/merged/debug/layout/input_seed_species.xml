@@ -1,0 +1,38 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/text_color_light"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/textViewSpecies"
+            style="@style/description_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/seed.description.specie" />
+
+        <!--<org.gots.ui.ExpandableHeightGridView-->
+        <!--android:id="@+id/layoutSpecieGallery"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:horizontalSpacing="2dp"-->
+        <!--android:numColumns="4"-->
+        <!--android:verticalSpacing="2dp" />-->
+        <ListView
+            android:id="@+id/listViewSpecies"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:dividerHeight="2dp" />
+
+
+    </LinearLayout>
+</ScrollView>

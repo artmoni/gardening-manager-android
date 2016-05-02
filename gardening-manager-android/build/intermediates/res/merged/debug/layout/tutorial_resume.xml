@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutResumeTutorial"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:background="@color/brown_light"
+    android:padding="5dp" >
+
+    <ImageView
+        android:id="@+id/imageViewTop"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_allotment_top" />
+
+    <LinearLayout
+        android:id="@+id/WeatherWidget"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewTutorialDescription"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal" >
+    </LinearLayout>
+
+    <org.gots.ui.view.MyTextView
+        android:id="@+id/textViewTutorial"
+        style="@style/TitleResumeFragment"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/tutorial.title" />
+
+    <TextView
+        android:id="@+id/textViewTutorialDescription"
+        style="@style/seed_family_description"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/WeatherWidget"
+        android:layout_below="@+id/imageViewTop"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/tutorial.a.description" />
+
+    <Button
+        android:id="@+id/buttonTutorial"
+        style="@style/buttonRed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/WeatherWidget"
+        android:layout_centerHorizontal="true"
+        android:text="@string/tutorial.a.title" />
+
+</RelativeLayout>

@@ -65,7 +65,7 @@ public class SplashScreenActivity extends BaseGotsActivity {
 //        if (arg1 == 1)
 //            onRefresh(null);
         // if (arg1 == 2)
-        // startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        // startActivity(new Intent(getApplicationContext(), CoreActivity.class));
         super.onActivityResult(arg0, arg1, arg2);
     }
 
@@ -210,7 +210,7 @@ public class SplashScreenActivity extends BaseGotsActivity {
     @Override
     protected void onNuxeoDataRetrieved(Object data) {
         super.onNuxeoDataRetrieved(data);
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, CoreActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();

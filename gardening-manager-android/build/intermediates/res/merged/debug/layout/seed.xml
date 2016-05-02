@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_seed"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/text_color_light"
+    android:orientation="vertical"
+    android:paddingTop="5dp"
+    android:scrollbars="vertical">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
+        <!-- seed.description.environment -->
+
+
+        <TextView
+            android:id="@+id/IdSeedDescriptionEnvironmentTitle"
+            style="@style/seed_description_title"
+            android:background="@drawable/titre_climat_et_sol"
+            android:text="@string/seed.description.environment" />
+
+        <TextView
+            android:id="@+id/IdSeedDescriptionEnvironment"
+            style="@style/seed_description_content"
+            android:text=""
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/IdSeedDescriptionCultureTitle"
+            style="@style/seed_description_title"
+            android:background="@drawable/titre_culture"
+            android:text="@string/seed.description.culture" />
+
+        <TextView
+            android:id="@+id/IdSeedDescriptionCulture"
+            style="@style/seed_description_content"
+            android:text=""
+            android:visibility="visible" />
+
+        <!-- seed.description.harvest -->
+
+        <TextView
+            android:id="@+id/IdSeedDescriptionHarvestTitle"
+            style="@style/seed_description_title"
+            android:background="@drawable/titre_recolte"
+            android:text="@string/seed.description.harvest" />
+
+        <TextView
+            android:id="@+id/IdSeedDescriptionHarvest"
+            style="@style/seed_description_content"
+            android:text=""
+            android:visibility="visible" />
+
+        <!-- seed.description.ennemi -->
+
+        <TextView
+            android:id="@+id/IdSeedDescriptionEnnemiTitle"
+            style="@style/seed_description_title"
+            android:background="@drawable/titre_ennemis"
+            android:text="@string/seed.description.ennemi" />
+
+        <TextView
+            android:id="@+id/IdSeedDescriptionEnnemi"
+            style="@style/seed_description_content"
+            android:text=""
+            android:visibility="visible" />
+    </LinearLayout>
+
+</ScrollView>

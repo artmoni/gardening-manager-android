@@ -4,12 +4,10 @@ import android.app.Activity;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
@@ -53,12 +51,8 @@ public class ProfileMapFragment extends BaseGotsFragment implements OnMapLongCli
 //        mapView = (MapView) v.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
 
-        try {
-            MapsInitializer.initialize(getActivity());
-            setUpMapIfNeeded();
-        } catch (GooglePlayServicesNotAvailableException e) {
-            Log.e(TAG, "Could not initialize google play", e);
-        }
+        MapsInitializer.initialize(getActivity());
+        setUpMapIfNeeded();
         return mapView;
     }
 

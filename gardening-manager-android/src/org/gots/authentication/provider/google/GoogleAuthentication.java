@@ -1,5 +1,18 @@
 package org.gots.authentication.provider.google;
 
+import android.content.Context;
+import android.util.Log;
+
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
+import com.google.android.gms.common.Scopes;
+
+import org.gots.authentication.GotsSocialAuthentication;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,18 +22,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.gots.authentication.GotsSocialAuthentication;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.content.Context;
-import android.util.Log;
-
-import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.android.gms.common.Scopes;
 
 public class GoogleAuthentication implements GotsSocialAuthentication {
     // private String CLIENT_ID = "473239775303-khctmm26flfc9c3m97ge3uss4ajo8c3r.apps.googleusercontent.com";
@@ -64,7 +65,7 @@ public class GoogleAuthentication implements GotsSocialAuthentication {
         String token = null;
 
         final String SCOPE_PREFIX = "oauth2:";
-        final String SCOPES = SCOPE_PREFIX + Scopes.PLUS_LOGIN + " " + Scopes.PLUS_PROFILE + " "
+        final String SCOPES = SCOPE_PREFIX + Scopes.PLUS_LOGIN + " " + Scopes.PROFILE + " "
                 + "https://www.googleapis.com/auth/userinfo.email";
 
         token = GoogleAuthUtil.getToken(mContext, accountName, SCOPES);
@@ -147,17 +148,21 @@ public class GoogleAuthentication implements GotsSocialAuthentication {
                 }
                 // bad token, invalidate and get a new one
             } else if (serverCode == 401) {
-                GoogleAuthUtil.invalidateToken(mContext, accessToken);
+                GoogleAuthUtil.clearToken(mContext, accessToken);
                 // Log.e(TAG, "Server auth error: " + readResponse(con.getErrorStream()));
                 Log.e(TAG, "Server auth error: ");
                 // unknown error, do something else
             } else {
-                Log.e("Server returned the following error code: " + serverCode, null);
+                Log.e(TAG, "Server returned the following error code: " + serverCode);
             }
         } catch (MalformedURLException e1) {
             Log.e(TAG, e1.getMessage(), e1);
         } catch (IOException e1) {
             Log.e(TAG, e1.getMessage(), e1);
+        } catch (GooglePlayServicesAvailabilityException e) {
+            Log.e(TAG, e.getMessage(), e);
+        } catch (GoogleAuthException e) {
+            Log.e(TAG, e.getMessage(), e);
         }
         return user;
     }
@@ -187,17 +192,21 @@ public class GoogleAuthentication implements GotsSocialAuthentication {
                 }
                 // bad token, invalidate and get a new one
             } else if (serverCode == 401) {
-                GoogleAuthUtil.invalidateToken(mContext, accessToken);
+                GoogleAuthUtil.clearToken(mContext, accessToken);
                 // Log.e(TAG, "Server auth error: " + readResponse(con.getErrorStream()));
                 Log.e(TAG, "Server auth error: ");
                 // unknown error, do something else
             } else {
-                Log.e("Server returned the following error code: " + serverCode, null);
+                Log.e(TAG, "Server returned the following error code: " + serverCode);
             }
         } catch (MalformedURLException e1) {
             Log.e(TAG, e1.getMessage(), e1);
         } catch (IOException e1) {
             Log.e(TAG, e1.getMessage(), e1);
+        } catch (GooglePlayServicesAvailabilityException e) {
+            Log.e(TAG, e.getMessage(), e);
+        } catch (GoogleAuthException e) {
+            Log.e(TAG, e.getMessage(), e);
         }
         return userID;
     }
@@ -269,17 +278,22 @@ public class GoogleAuthentication implements GotsSocialAuthentication {
                 }
                 // bad token, invalidate and get a new one
             } else if (serverCode == 401) {
-                GoogleAuthUtil.invalidateToken(mContext, accessToken);
+                GoogleAuthUtil.clearToken(mContext, accessToken);
                 // Log.e(TAG, "Server auth error: " + readResponse(con.getErrorStream()));
                 Log.e(TAG, "Server auth error: ");
                 // unknown error, do something else
             } else {
-                Log.e("Server returned the following error code: " + serverCode, null);
+                Log.e(TAG,"Server returned the following error code: " + serverCode);
             }
         } catch (MalformedURLException e1) {
             Log.e(TAG, e1.getMessage(), e1);
         } catch (IOException e1) {
             Log.e(TAG, e1.getMessage(), e1);
+        } catch (GooglePlayServicesAvailabilityException e) {
+            Log.e(TAG, e.getMessage(), e);
+        } catch (GoogleAuthException e) {
+            Log.e(TAG, e.getMessage(), e);
+
         }
         return friends;
     }

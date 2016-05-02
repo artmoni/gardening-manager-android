@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<instant-run
+    abi="arm64-v8a,armeabi-v7a,armeabi"
+    api-level="22"
+    density="400dpi"
+    format="7"
+    timestamp="94383556563982" >
+
+    <task
+        name="javac"
+        duration="2339" />
+    <task
+        name="instant-run-dex"
+        duration="0" />
+    <task
+        name="instant-run-transform"
+        duration="3141" />
+    <task
+        name="verifier"
+        duration="162" />
+
+    <artifact
+        location="/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/outputs/apk/gardening-manager-android-debug.apk"
+        type="MAIN" />
+
+    <build timestamp="94383556563982" >
+        <artifact
+            location="/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/outputs/apk/gardening-manager-android-debug.apk"
+            type="MAIN" />
+    </build>
+
+</instant-run>

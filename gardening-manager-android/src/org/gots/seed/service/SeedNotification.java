@@ -6,7 +6,7 @@ import org.gots.R;
 import org.gots.seed.BaseSeed;
 import org.gots.seed.SeedUtil;
 import org.gots.ui.ActionActivity;
-import org.gots.ui.MainActivity;
+import org.gots.ui.CoreActivity;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -63,8 +63,8 @@ public class SeedNotification {
         // notification
 //        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, ActionActivity.class), 0);
 
-        Intent resultIntent = new Intent(mContext, MainActivity.class);
-        resultIntent.setAction(MainActivity.LAUNCHER_CATALOGUE);
+        Intent resultIntent = new Intent(mContext, CoreActivity.class);
+        resultIntent.setAction(CoreActivity.LAUNCHER_CATALOGUE);
         // The stack builder object will contain an artificial back stack for the
         // started Activity.
         // This ensures that navigating backward from the Activity leads out of

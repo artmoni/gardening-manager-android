@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/brown_light"
+    android:padding="5dp">
+
+    <ImageView
+        android:id="@+id/imageViewTop"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_weather_top" />
+
+    <org.gots.ui.view.MyTextView
+        android:id="@+id/textViewWeather"
+        style="@style/TitleResumeFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/dashboard.weather.name" />
+
+    <!--
+         <TextView
+        android:id="@+id/textViewWeatherDescription"
+        style="@style/seed_family_description"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textViewWeather"
+        android:layout_alignBottom="@+id/textViewWeather"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/textViewWeather"
+        android:text="City"
+        android:textStyle="italic" />
+    -->
+
+    <LinearLayout
+        android:id="@+id/WeatherWidget"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/imageViewTop"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"></LinearLayout>
+
+    <TextView
+        android:id="@+id/textViewWeatherError"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/imageViewTop"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:text="@string/weather.citynotfound"
+        android:visibility="gone"></TextView>
+
+    <Button
+        android:id="@+id/buttonWeatherLocality"
+        style="@style/buttonGreenDashboard"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="5dp"
+        android:text="City" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/idChartTemperature"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_alignLeft="@+id/WeatherWidget"
+        android:layout_below="@+id/WeatherWidget"
+        android:visibility="gone"></com.github.mikephil.charting.charts.LineChart>
+
+</RelativeLayout>

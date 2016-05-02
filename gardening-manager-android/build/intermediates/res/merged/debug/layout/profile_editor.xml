@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="center_horizontal"
+    android:background="@color/text_color_light"
+    android:padding="5dp">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="0dp">
+
+        <EditText
+            android:id="@+id/editTextGardenName"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/garden_default_name"
+            android:singleLine="true" />
+
+        <TableLayout
+            android:id="@+id/tableLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+
+            <RadioGroup
+                android:id="@+id/radioGardenType"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/radioGardenPrivate"
+                    style="@style/description_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:drawableLeft="@drawable/ic_garden_private"
+                    android:gravity="center_vertical"
+                    android:text="@string/garden.type.private" />
+
+                <RadioButton
+                    android:id="@+id/radioGardenIncredibleEdible"
+                    style="@style/description_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_garden_incredible"
+                    android:gravity="center_vertical"
+                    android:text="@string/garden.type.incredibleedible" />
+            </RadioGroup>
+        </TableLayout>
+
+
+        <Button
+            android:id="@+id/buttonValidatePosition"
+            style="@style/buttonRed"
+            android:layout_width="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/profile.location.validate" />
+    </LinearLayout>
+
+</ScrollView>

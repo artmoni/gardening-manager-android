@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/text_color_dark" >
+
+    <ScrollView
+        android:id="@+id/layout_seed"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/idLayoutButtonNewseed"
+        android:layout_margin="5dp"
+        android:layout_weight="1"
+        android:background="@color/brown_light"
+        android:orientation="vertical"
+        android:padding="5dp"
+        android:scrollbars="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <org.gots.seed.view.SeedWidgetLong
+                android:id="@+id/idSeedWidgetLong"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:paddingRight="55dp"
+                android:src="@drawable/vegetdefault" >
+            </org.gots.seed.view.SeedWidgetLong>
+
+
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_line_action"
+                android:orientation="vertical"
+                android:padding="5dp"
+                android:visibility="visible" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="visible" >
+
+                    <TextView
+                        style="@style/description_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="@string/seed.description.barecode" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:orientation="vertical" >
+
+                        <ImageView
+                            android:id="@+id/imageBarCode"
+                            android:layout_width="100dp"
+                            android:layout_height="58dp"
+                            android:contentDescription="barcode scanner"
+                            android:src="@drawable/codebarre" />
+
+                        <TextView
+                            android:id="@+id/textViewBarCode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:text="0283878732" >
+                        </TextView>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="visible" >
+
+                    <TextView
+                        style="@style/description_content"
+                        android:layout_width="fill_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="@string/action.photo"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/imageNewVariety"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/no_picture" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/idLayoutButtonNewseed"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_weight="1"
+        android:background="@color/text_color_light"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/buttonStock"
+            style="@style/buttonGreen"
+            android:layout_margin="10dp"
+            android:text="@string/seed.action.add.stock" />
+
+        <Button
+            android:id="@+id/buttonModify"
+            style="@style/buttonGreen"
+            android:layout_margin="10dp"
+            android:text="@string/menu.edit"
+            android:visibility="gone" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -243,7 +243,7 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
 //                                    public void onClick(DialogInterface dialog, int id) {
 //                                        // if this button is clicked, close
 //                                        // current activity
-//                                        // MainActivity.this.finish();
+//                                        // CoreActivity.this.finish();
 //                                        Intent i = new Intent(HutActivity.this, NewSeedActivity.class);
 //                                        i.putExtra("org.gots.seed.barcode", scanResult.getContents());
 //                                        startActivity(i);

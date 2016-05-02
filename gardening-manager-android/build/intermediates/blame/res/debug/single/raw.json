@@ -1,0 +1,22 @@
+[
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/raw/vendor_seeds.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/raw/vendor_seeds.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/raw/gtm_analytics",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-analytics/8.4.0/res/raw/gtm_analytics"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/raw/config.properties",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/raw/config.properties"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/raw/seedbak.xml",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/raw/seedbak.xml"
+    },
+    {
+        "merged": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/build/intermediates/res/merged/debug/raw/test.json",
+        "source": "/home/sfleury/git/gardening-manager-android/gardening-manager-android/res/raw/test.json"
+    }
+]
