@@ -1,8 +1,5 @@
 package org.gots.weather.service;
 
-import org.gots.broadcast.BroadCastMessages;
-import org.gots.weather.WeatherConditionInterface;
-
 import android.app.Service;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -11,14 +8,20 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.gots.broadcast.BroadCastMessages;
+import org.gots.weather.WeatherConditionInterface;
+
 public class WeatherUpdateService extends Service {
     private static final String TAG = "WeatherUpdateService";
-
-    private Intent intent;
-
     private final Handler handler = new Handler();
-
+    private Intent intent;
     private boolean isWeatherError = false;
+    private Runnable sendUpdatesToUI = new Runnable() {
+        public void run() {
+            displayWeatherAvailable();
+            // handler.postDelayed(this, 5000); // 5 seconds
+        }
+    };
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -40,13 +43,6 @@ public class WeatherUpdateService extends Service {
 
         return super.onStartCommand(intent, flags, startId);
     }
-
-    private Runnable sendUpdatesToUI = new Runnable() {
-        public void run() {
-            displayWeatherAvailable();
-            // handler.postDelayed(this, 5000); // 5 seconds
-        }
-    };
 
     private void displayWeatherAvailable() {
         Log.d(TAG, "entered displayWeatherAvailable");
@@ -70,7 +66,9 @@ public class WeatherUpdateService extends Service {
             new AsyncTask<Void, Integer, WeatherConditionInterface>() {
                 protected void onPreExecute() {
                     sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
-                };
+                }
+
+                ;
 
                 @Override
                 protected WeatherConditionInterface doInBackground(Void... params) {

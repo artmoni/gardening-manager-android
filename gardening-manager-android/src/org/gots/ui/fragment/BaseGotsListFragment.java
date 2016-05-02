@@ -1,6 +1,5 @@
 package org.gots.ui.fragment;
 
-import android.content.Intent;
 import android.location.Address;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,14 +13,12 @@ import org.gots.action.GotsActionSeedManager;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.allotment.GotsAllotmentManager;
 import org.gots.bean.DefaultGarden;
-import org.gots.broadcast.BroadCastMessages;
 import org.gots.exception.GardenNotFoundException;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.GotsGardenManager;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GotsSeedManager;
 import org.nuxeo.android.fragments.BaseListFragment;
-import org.nuxeo.android.fragments.BaseNuxeoFragment;
 
 import java.lang.reflect.Field;
 import java.util.Locale;

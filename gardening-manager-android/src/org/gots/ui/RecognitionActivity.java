@@ -26,7 +26,6 @@ import org.gots.inapp.HolderSku;
 import org.gots.inapp.OnPurchaseFinished;
 import org.gots.nuxeo.NuxeoUtils;
 import org.gots.ui.fragment.RecognitionFragment;
-import org.gots.ui.fragment.RecognitionMainFragment;
 import org.gots.ui.fragment.RecognitionResumeFragment;
 import org.gots.ui.fragment.TutorialFragment;
 import org.gots.utils.FileUtilities;
@@ -50,9 +49,25 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     private static final String UPLOAD_SUCCEED = "org.gots.recognition.uploadsucceed";
     private static final String RECOGNITION_FAILED = "org.gots.recognition.failed";
     private static final String UPLOAD_FAILED = "org.gots.recognition.uploadfailed";
-    private RecognitionFragment recognitionFragment;
-    private TutorialFragment mainFragment;
     String picturePath = null;
+    private RecognitionFragment recognitionFragment;
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(UPLOAD_BEGIN)) {
+                showNotification(getResources().getString(R.string.plant_recognition_begin), true, LENGHT_SHORT);
+            } else if (intent.getAction().equals(UPLOAD_SUCCEED)) {
+                recognitionFragment = new RecognitionFragment();
+                addContentLayout(recognitionFragment, intent.getExtras());
+                showNotification(getResources().getString(R.string.plant_recognition_progress), true, LENGHT_SHORT);
+            } else if (intent.getAction().equals(UPLOAD_FAILED)) {
+                showNotification("Please check your internet access", false, LENGHT_SHORT);
+            } else if (intent.getAction().equals(RECOGNITION_FAILED)) {
+                showNotification("Try with another picture", false, LENGHT_SHORT);
+            }
+        }
+    };
+    private TutorialFragment mainFragment;
     private boolean uploaded = false;
     private RecognitionResumeFragment resumeFragment;
 
@@ -62,7 +77,7 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
         setTitleBar(R.string.plant_recognition);
 
         resumeFragment = new RecognitionResumeFragment();
-        addResumeLayout(resumeFragment,getIntent().getExtras());
+        addResumeLayout(resumeFragment, getIntent().getExtras());
         if (mainFragment == null) {
 //            mainFragment = new RecognitionMainFragment();
             mainFragment = new TutorialFragment(R.layout.tutorial_g);
@@ -87,23 +102,6 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
         int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
         return cursor.getString(idx);
     }
-
-    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(UPLOAD_BEGIN)) {
-                showNotification(getResources().getString(R.string.plant_recognition_begin), true, LENGHT_SHORT);
-            } else if (intent.getAction().equals(UPLOAD_SUCCEED)) {
-                recognitionFragment = new RecognitionFragment();
-                addContentLayout(recognitionFragment, intent.getExtras());
-                showNotification(getResources().getString(R.string.plant_recognition_progress), true, LENGHT_SHORT);
-            } else if (intent.getAction().equals(UPLOAD_FAILED)) {
-                showNotification("Please check your internet access", false, LENGHT_SHORT);
-            } else if (intent.getAction().equals(RECOGNITION_FAILED)) {
-                showNotification("Try with another picture", false, LENGHT_SHORT);
-            }
-        }
-    };
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -223,7 +221,7 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
     protected void onNuxeoDataRetrieved(Object data) {
         if (mainFragment != null)
             mainFragment.update();
-        if (resumeFragment!=null)
+        if (resumeFragment != null)
             resumeFragment.update();
 
         if (picturePath != null && !uploaded) {
@@ -343,7 +341,7 @@ public class RecognitionActivity extends BaseGotsActivity implements Recognition
 
                 if (GotsPurchaseItem.SKU_FEATURE_RECOGNITION_50.equals(purchase.getSku())) {
                     gotsPurchase.setFeatureRecognitionCounter(gotsPurchase.getFeatureRecognitionCounter() + 50);
-                }else  if (GotsPurchaseItem.SKU_FEATURE_RECOGNITION_100.equals(purchase.getSku())) {
+                } else if (GotsPurchaseItem.SKU_FEATURE_RECOGNITION_100.equals(purchase.getSku())) {
                     gotsPurchase.setFeatureRecognitionCounter(gotsPurchase.getFeatureRecognitionCounter() + 100);
                 }
             }

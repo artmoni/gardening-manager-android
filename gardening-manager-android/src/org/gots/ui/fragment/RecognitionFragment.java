@@ -57,11 +57,9 @@ import java.util.Map;
 public class RecognitionFragment extends BaseGotsFragment implements JustVisualAdapter.OnAdapterClickListener {
 
     public static final String DOCUMENT_ID = "org.gots.recognition.docid";
+    public static final String IMAGE_PATH = "org.gots.recognition.path";
     private static final String RECOGNITION_SUCCESS = "org.gots.recognition.success";
     private static final String RECOGNITION_FAILED = "org.gots.recognition.failed";
-    public static final String IMAGE_PATH = "org.gots.recognition.path";
-
-
     private ImageView imageView;
     private String TAG = RecognitionFragment.class.getSimpleName();
     private ListView listView;
@@ -122,14 +120,6 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
         }
 
         layoutNotification.setVisibility(View.VISIBLE);
-    }
-
-    public interface OnRecognitionFinished {
-        void onRecognitionSucceed();
-
-        void onRecognitionFailed(String message);
-
-        void onRecognitionConfirmed(Document plantDoc);
     }
 
     @Override
@@ -369,11 +359,19 @@ public class RecognitionFragment extends BaseGotsFragment implements JustVisualA
         }.execute();
     }
 
-
     @Override
     public void onPause() {
         if (arrayAdapter != null)
             arrayAdapter.stopProcessing();
         super.onPause();
+    }
+
+
+    public interface OnRecognitionFinished {
+        void onRecognitionSucceed();
+
+        void onRecognitionFailed(String message);
+
+        void onRecognitionConfirmed(Document plantDoc);
     }
 }

@@ -4,32 +4,25 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ * <p/>
  * Contributors:
- *     sfleury - initial API and implementation
+ * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots;
-
-import java.util.ArrayList;
-
-import org.gots.action.AbstractActionSeed;
-import org.gots.garden.provider.local.GardenSQLite;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.net.Uri;
 import android.util.Log;
 
+import org.gots.garden.provider.local.GardenSQLite;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
-    // ************************ DATABASE **************
-    private static final int DATABASE_VERSION = 23;
-
-    private static String DATABASE_NAME = "gots";
-
     public final static String AUTHORITY = "org.gots.providers.seeds";
-
-    private static final String TAG = "DatabaseHelper";
+    // ************************ GROWINGSEEDS TABLE **************
+    public static final String GROWINGSEEDS_TABLE_NAME = "growseeds";
+    public static final String GROWINGSEED_ID = "_id";
+    public static final String GROWINGSEED_UUID = "uuid";
 
 //    // ************************ FAMILY TABLE **************
 //    public static final String FAMILY_TABLE_NAME = "family";
@@ -151,165 +144,131 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //			+ SEED_STATE + " VARCHAR(255)"
 //			+ ");";
 //	//@formatter:on
-
-    // ************************ GROWINGSEEDS TABLE **************
-    public static final String GROWINGSEEDS_TABLE_NAME = "growseeds";
+    public static final String GROWINGSEED_SEED_ID = "seed_id";
 
     // public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
     // + "/growseeds");
     // public static final String CONTENT_TYPE =
     // "vnd.android.cursor.dir/vnd.gots.growseeds";
-
-    public static final String GROWINGSEED_ID = "_id";
-
-    public static final String GROWINGSEED_UUID = "uuid";
-
-    public static final String GROWINGSEED_SEED_ID = "seed_id";
-
     public static final String GROWINGSEED_ALLOTMENT_ID = "allotment_id";
-
     public static final String GROWINGSEED_DATESOWING = "datesowing";
-
     public static final String GROWINGSEED_DATEHARVEST = "dateharvest";
-
     public static final String GROWINGSEED_DATELASTWATERING = "datelastwatering";
-
     //@formatter:off
-	public static final String CREATE_TABLE_GROWINDSEEDS = "CREATE TABLE " + GROWINGSEEDS_TABLE_NAME 
-			+ " ("+ GROWINGSEED_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," 
-			+ GROWINGSEED_SEED_ID + " INTEGER NOT NULL,"
-			+ GROWINGSEED_ALLOTMENT_ID + " INTEGER NOT NULL," 
-			+ GROWINGSEED_DATESOWING + " INTEGER,"
-			+ GROWINGSEED_DATEHARVEST + " INTEGER,"
-			+ GROWINGSEED_DATELASTWATERING + " DATETIME,"
-			+ GROWINGSEED_UUID+ " STRING"
+    public static final String CREATE_TABLE_GROWINDSEEDS = "CREATE TABLE " + GROWINGSEEDS_TABLE_NAME
+            + " (" + GROWINGSEED_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + GROWINGSEED_SEED_ID + " INTEGER NOT NULL,"
+            + GROWINGSEED_ALLOTMENT_ID + " INTEGER NOT NULL,"
+            + GROWINGSEED_DATESOWING + " INTEGER,"
+            + GROWINGSEED_DATEHARVEST + " INTEGER,"
+            + GROWINGSEED_DATELASTWATERING + " DATETIME,"
+            + GROWINGSEED_UUID + " STRING"
 
-			// + "  FOREIGN KEY(" + SEED_ID
-			// + ") REFERENCES " + SeedSQLite.SEEDS_TABLE_NAME + "(" +
-			// SeedSQLite.SEED_ID + ")"
-			+ ");";
-	//@formatter:on
-
+            // + "  FOREIGN KEY(" + SEED_ID
+            // + ") REFERENCES " + SeedSQLite.SEEDS_TABLE_NAME + "(" +
+            // SeedSQLite.SEED_ID + ")"
+            + ");";
     // ************************ ACTIONSEED TABLE **************
     public static final String ACTIONSEEDS_TABLE_NAME = "actionseed";
-
     // public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
     // + "/actionseed");
     // public static final String CONTENT_TYPE =
     // "vnd.android.cursor.dir/vnd.gots.actionseed";
     public static final String ACTIONSEED_ID = "_id";
-
     public static final String ACTIONSEED_UUID = "uuid";
-
+    //@formatter:on
     public static final String ACTIONSEED_GROWINGSEED_ID = "growingseed_id";
-
     public static final String ACTIONSEED_ACTION_ID = "action_id";
-
     public static final String ACTIONSEED_DURATION = "action_seed_duration";
-
     public static final String ACTIONSEED_DATA = "data";
-
-    // public static final String SEED_ID = "seed_id";
-
     //@formatter:off
-	public static final String ACTIONSEED_DATEACTIONDONE = "dateactiondone";
-	private static final String CREATE_TABLE_ACTIONSEED = "CREATE TABLE " + ACTIONSEEDS_TABLE_NAME 
-			+ " ("+ACTIONSEED_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," 
-			+ACTIONSEED_GROWINGSEED_ID + " INTEGER," 
-			+ ACTIONSEED_ACTION_ID + " INTEGER," 
-			+ ACTIONSEED_UUID + " STRING," 
-			+ ACTIONSEED_DATEACTIONDONE	+ " INTEGER,"
-			+ ACTIONSEED_DURATION+ " INTEGER,"
-			+ ACTIONSEED_DATA+ " VARCHAR(255)"
-
-			// + DATE_LAST_WATERING + " DATETIME"
-			// + "  FOREIGN KEY(" + SEED_ID
-			// + ") REFERENCES " + SeedSQLite.SEEDS_TABLE_NAME + "(" +
-			// SeedSQLite.SEED_ID + ")"
-			+ ");";
-	//@formatter:on
-
+    public static final String ACTIONSEED_DATEACTIONDONE = "dateactiondone";
     // ************************ WEATHER TABLE **************
     public static final String WEATHER_TABLE_NAME = "weather";
-
     public static final String WEATHER_ID = "_id";
 
+    // public static final String SEED_ID = "seed_id";
     public static final String WEATHER_UUID = "_uuid";
-
     public static final String WEATHER_DAYOFYEAR = "dayofyear";
-
+    //@formatter:on
     public static final String WEATHER_YEAR = "year";
-
     public static final String WEATHER_TEMPCELCIUSMIN = "tempcelciusmin";
-
     public static final String WEATHER_TEMPCELCIUSMAX = "tempcelciusmax";
-
     public static final String WEATHER_TEMPFAHRENHEIT = "tempfahrenheit";
-
     public static final String WEATHER_CONDITION = "condition";
-
     public static final String WEATHER_WINDCONDITION = "windcondition";
-
     public static final String WEATHER_HUMIDITY = "humidity";
-
     public static final String WEATHER_ICONURL = "iconurl";
-
     public static final String WEATHER_DATE = "date";
-
     //@formatter:off
-		public static final String CREATE_TABLE_WEATHER = "CREATE TABLE " + WEATHER_TABLE_NAME 
-				+ " (" + WEATHER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-				+ GardenSQLite.ACTION_NAME + " STRING,"
-				+ WEATHER_CONDITION + " STRING,"
-				+ WEATHER_UUID + " STRING,"
-				+ WEATHER_WINDCONDITION + " STRING,"
-				+ WEATHER_DAYOFYEAR + " INTEGER,"	
-				+ WEATHER_YEAR + " INTEGER,"		
-				+ WEATHER_TEMPCELCIUSMIN + " INTEGER,"
-				+ WEATHER_TEMPCELCIUSMAX + " INTEGER,"
-				+ WEATHER_TEMPFAHRENHEIT + " INTEGER,"
-				+ WEATHER_HUMIDITY + " INTEGER,"
-				+ WEATHER_ICONURL + " String,"
-				+ WEATHER_DATE + " INTEGER"
-				+ ");";
-	//@formatter:on
-
+    public static final String CREATE_TABLE_WEATHER = "CREATE TABLE " + WEATHER_TABLE_NAME
+            + " (" + WEATHER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + GardenSQLite.ACTION_NAME + " STRING,"
+            + WEATHER_CONDITION + " STRING,"
+            + WEATHER_UUID + " STRING,"
+            + WEATHER_WINDCONDITION + " STRING,"
+            + WEATHER_DAYOFYEAR + " INTEGER,"
+            + WEATHER_YEAR + " INTEGER,"
+            + WEATHER_TEMPCELCIUSMIN + " INTEGER,"
+            + WEATHER_TEMPCELCIUSMAX + " INTEGER,"
+            + WEATHER_TEMPFAHRENHEIT + " INTEGER,"
+            + WEATHER_HUMIDITY + " INTEGER,"
+            + WEATHER_ICONURL + " String,"
+            + WEATHER_DATE + " INTEGER"
+            + ");";
     // ************************ ALLOTMENT TABLE **************
     public static final String ALLOTMENT_TABLE_NAME = "allotment";
+    // public static final String GROWINGSEED_ID = "growingseed_id";
+    public static final String ALLOTMENT_ID = "_id";
+    public static final String ALLOTMENT_NAME = "name";
+    public static final String ALLOTMENT_UUID = "uuid";
+    //@formatter:on
+    public static final String ALLOTMENT_IMAGE_PATH = "image_path";
 
     // public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
     // + "/action");
     // public static final String CONTENT_TYPE =
     // "vnd.android.cursor.dir/vnd.gots.action";
-
-    // public static final String GROWINGSEED_ID = "growingseed_id";
-    public static final String ALLOTMENT_ID = "_id";
-
-    public static final String ALLOTMENT_NAME = "name";
-
-    public static final String ALLOTMENT_UUID = "uuid";
-
-    public static final String ALLOTMENT_IMAGE_PATH = "image_path";
-
     //@formatter:off
-		public static final String CREATE_TABLE_ALLOTMENT = "CREATE TABLE " + ALLOTMENT_TABLE_NAME 
-				+ " (" + ALLOTMENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-				+ ALLOTMENT_NAME + " STRING,"
-				+ ALLOTMENT_UUID + " STRING,"
-				+ ALLOTMENT_IMAGE_PATH + " STRING"
-					+ ");";
+    public static final String CREATE_TABLE_ALLOTMENT = "CREATE TABLE " + ALLOTMENT_TABLE_NAME
+            + " (" + ALLOTMENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + ALLOTMENT_NAME + " STRING,"
+            + ALLOTMENT_UUID + " STRING,"
+            + ALLOTMENT_IMAGE_PATH + " STRING"
+            + ");";
+    // ************************ DATABASE **************
+    private static final int DATABASE_VERSION = 23;
+    private static final String TAG = "DatabaseHelper";
+    private static final String CREATE_TABLE_ACTIONSEED = "CREATE TABLE " + ACTIONSEEDS_TABLE_NAME
+            + " (" + ACTIONSEED_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + ACTIONSEED_GROWINGSEED_ID + " INTEGER,"
+            + ACTIONSEED_ACTION_ID + " INTEGER,"
+            + ACTIONSEED_UUID + " STRING,"
+            + ACTIONSEED_DATEACTIONDONE + " INTEGER,"
+            + ACTIONSEED_DURATION + " INTEGER,"
+            + ACTIONSEED_DATA + " VARCHAR(255)"
 
+            // + DATE_LAST_WATERING + " DATETIME"
+            // + "  FOREIGN KEY(" + SEED_ID
+            // + ") REFERENCES " + SeedSQLite.SEEDS_TABLE_NAME + "(" +
+            // SeedSQLite.SEED_ID + ")"
+            + ");";
+    private static String DATABASE_NAME = "gots";
 
 
 //    private static DatabaseHelper helper = null;
-
-//    private static boolean newInstance=false;
-		//@formatter:on
+    //    private static boolean newInstance=false;
+    //@formatter:on
     private static DatabaseHelper helper = null;
 
     private static int currentDatabaseId = -1;
 
     private static Context mContext;
+
+    private DatabaseHelper(Context context, int currentGardenId) {
+        super(context, DATABASE_NAME.concat(String.valueOf(currentGardenId)), null, DATABASE_VERSION);
+
+    }
 
     public static synchronized DatabaseHelper getInstance(Context context, int currentGardenId) {
         if (helper == null || currentGardenId != currentDatabaseId) {
@@ -318,11 +277,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         mContext = context;
         return helper;
-    }
-
-    private DatabaseHelper(Context context, int currentGardenId) {
-        super(context, DATABASE_NAME.concat(String.valueOf(currentGardenId)), null, DATABASE_VERSION);
-
     }
 
     /*

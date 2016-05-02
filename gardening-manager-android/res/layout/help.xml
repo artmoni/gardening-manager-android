@@ -4,7 +4,7 @@
     android:layout_height="fill_parent"
     android:background="@drawable/background_simple"
     android:gravity="center_vertical"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <WebView
         android:id="@+id/webViewHelp"
@@ -12,9 +12,9 @@
         android:layout_height="0dip"
         android:layout_weight="1" />
 
-   <!--  <Button
-        android:id="@+id/buttonClose"
-        style="@style/buttonRed"
-        android:text="@string/button.close" /> -->
+    <!--  <Button
+         android:id="@+id/buttonClose"
+         style="@style/buttonRed"
+         android:text="@string/button.close" /> -->
 
 </LinearLayout>

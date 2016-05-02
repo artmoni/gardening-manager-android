@@ -5,7 +5,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * <p>
+ * <p/>
  * Contributors:
  * sfleury - initial API and implementation
  * ****************************************************************************
@@ -53,14 +53,14 @@ public class SeedWidgetLong extends RelativeLayout {
         initView();
     }
 
-    protected GotsContext getGotsContext() {
-        return GotsContext.get(mContext);
-    }
-
     public SeedWidgetLong(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.mContext = context;
         initView();
+    }
+
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(mContext);
     }
 
     private void initView() {
@@ -72,13 +72,6 @@ public class SeedWidgetLong extends RelativeLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         setupView();
-    }
-
-    public interface OnSeedWidgetLongClickListener {
-        public void onInformationClick(String url);
-
-        public void onAuthenticationNeeded();
-//        public void onLogClick();
     }
 
     public void setOnSeedWidgetLongClickListener(OnSeedWidgetLongClickListener seedWidgetLongClickListener) {
@@ -263,10 +256,17 @@ public class SeedWidgetLong extends RelativeLayout {
         }
     }
 
-
     public void setSeed(BaseSeed seed) {
         this.mSeed = seed;
         setupView();
+    }
+
+
+    public interface OnSeedWidgetLongClickListener {
+        public void onInformationClick(String url);
+
+        public void onAuthenticationNeeded();
+//        public void onLogClick();
     }
 
 }

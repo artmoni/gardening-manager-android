@@ -181,18 +181,13 @@ public class ForecastIOHandler implements WeatherConditionInterface {
     }
 
     @Override
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @Override
     public int getId() {
         return this.id;
     }
 
     @Override
-    public void setDate(Date date) {
-        time = date;
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
@@ -201,12 +196,17 @@ public class ForecastIOHandler implements WeatherConditionInterface {
     }
 
     @Override
-    public void setUUID(String id) {
-        uuid = id;
+    public void setDate(Date date) {
+        time = date;
     }
 
     @Override
     public String getUUID() {
         return uuid;
+    }
+
+    @Override
+    public void setUUID(String id) {
+        uuid = id;
     }
 }

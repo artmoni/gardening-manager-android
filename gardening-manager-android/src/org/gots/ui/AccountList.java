@@ -1,7 +1,5 @@
 package org.gots.ui;
 
-import org.gots.context.GotsContext;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
@@ -16,6 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.gots.context.GotsContext;
+
 public class AccountList extends ListActivity {
     protected AccountManager accountManager;
 
@@ -25,7 +25,9 @@ public class AccountList extends ListActivity {
         return GotsContext.get(getApplicationContext());
     }
 
-    /** Called when the activity is first created. */
+    /**
+     * Called when the activity is first created.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,11 +61,11 @@ public class AccountList extends ListActivity {
         }
 
         accountManager.getAuthToken(account, // Account retrieved using
-                                             // getAccountsByType()
+                // getAccountsByType()
                 type, // Auth scope
                 null, // Authenticator-specific options
                 this, new OnTokenAcquired(), // Callback called when a token is
-                                             // successfully acquired
+                // successfully acquired
                 null); // Callback called if an error occurs
 
         // Intent intent = new Intent(this, ApplicationInfo.class);

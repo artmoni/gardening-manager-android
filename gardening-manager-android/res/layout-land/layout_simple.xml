@@ -71,7 +71,7 @@
         </ScrollView>
     </LinearLayout>
 
-    <RelativeLayout
+    <android.support.design.widget.CoordinatorLayout
         android:id="@+id/layoutNotification"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -85,28 +85,28 @@
         android:padding="20dp"
         android:visibility="gone">
 
-        <ImageView
-            android:id="@+id/imageViewRefresh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_margin="5dp"
-            android:src="@drawable/bt_update_green"
-            android:visibility="visible" />
+        <!--<ImageView-->
+        <!--android:id="@+id/imageViewRefresh"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_margin="5dp"-->
+        <!--android:src="@drawable/bt_update_green"-->
+        <!--android:visibility="visible" />-->
 
-        <TextView
-            android:id="@+id/textViewProgress"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/imageViewRefresh"
-            android:gravity="center"
-            android:text="@string/gots.loading"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/text_color_dark" />
-    </RelativeLayout>
+        <!--<TextView-->
+        <!--android:id="@+id/textViewProgress"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_toLeftOf="@id/imageViewRefresh"-->
+        <!--android:gravity="center"-->
+        <!--android:text="@string/gots.loading"-->
+        <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+        <!--android:textColor="@color/text_color_dark" />-->
+    </android.support.design.widget.CoordinatorLayout>
 
     <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:id="@+id/idFAB"

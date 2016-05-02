@@ -4,12 +4,12 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/background_simple"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/linearLayout1"
@@ -25,7 +25,7 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="70dp" >
+        android:layout_marginTop="70dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,7 +34,7 @@
             android:gravity="center_horizontal"
             android:orientation="vertical"
             android:padding="10dp"
-            android:visibility="visible" >
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -42,7 +42,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:gravity="center_horizontal|center_vertical"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
                 <!--
                  <Button
@@ -66,7 +66,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_green_selector"
                     android:gravity="center_horizontal|center_vertical"
-                    android:orientation="horizontal" >
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -92,7 +92,7 @@
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:paddingBottom="10dp"
-                android:paddingTop="10dp" >
+                android:paddingTop="10dp">
 
                 <TextView
                     android:id="@+id/textViewError"
@@ -121,7 +121,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:gravity="center_horizontal|top"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
                 <TextView
                     style="@style/description_content"
@@ -143,7 +143,6 @@
         android:layout_width="fill_parent"
         android:layout_height="70dp"
         android:background="@drawable/bt_logo"
-        tools:ignore="Orientation" >
-    </LinearLayout>
+        tools:ignore="Orientation"></LinearLayout>
 
 </RelativeLayout>

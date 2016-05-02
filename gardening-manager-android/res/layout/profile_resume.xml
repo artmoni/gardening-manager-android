@@ -4,8 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_gravity="center_horizontal"
-    android:background="@color/text_color_light"
-    >
+    android:background="@color/text_color_light">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -31,14 +30,14 @@
                 android:src="@drawable/bg_garden_top" />
 
             <RelativeLayout
+                android:id="@+id/relativeLayout"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:background="@color/text_color_light_transparent"
                 android:orientation="vertical"
-                android:padding="5dp"
-                android:id="@+id/relativeLayout">
+                android:padding="5dp">
 
 
                 <org.gots.ui.view.MyTextView
@@ -46,12 +45,12 @@
                     style="@style/description_content"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20dp"
                     android:gravity="center"
                     android:hint="@string/garden_default_name"
                     android:singleLine="true"
-                    android:textSize="20dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_centerHorizontal="true">
+                    android:textSize="20dp">
 
                 </org.gots.ui.view.MyTextView>
 
@@ -59,30 +58,30 @@
                     android:id="@+id/textViewNbAllotments"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0"
+                    android:layout_below="@+id/editTextGardenWeatherLocality"
                     android:layout_marginLeft="20dp"
                     android:layout_marginStart="20dp"
-                    android:layout_below="@+id/editTextGardenWeatherLocality"
+                    android:layout_toEndOf="@+id/textView6"
                     android:layout_toRightOf="@+id/textView6"
-                    android:layout_toEndOf="@+id/textView6" />
+                    android:text="0" />
 
                 <TextView
+                    android:id="@+id/textView6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/allotment"
-                    android:id="@+id/textView6"
-                    android:layout_below="@+id/editTextGardenWeatherLocality"
                     android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/editTextGardenWeatherLocality"
+                    android:text="@string/allotment" />
 
                 <TextView
                     android:id="@+id/editTextGardenWeatherLocality"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/weather.activation.title"
-                    android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:text="@string/weather.activation.title" />
 
 
             </RelativeLayout>
@@ -91,11 +90,12 @@
                 android:id="@+id/imageViewWeatherState"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                app:fab_size="mini"
+                android:layout_above="@+id/relativeLayout"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="-30dp"
                 app:fab_colorNormal="@color/action_ok_color"
                 app:fab_colorPressed="@color/action_warning_color"
-                android:layout_above="@+id/relativeLayout"
-                android:layout_centerHorizontal="true" android:layout_marginBottom="-30dp"/>
+                app:fab_size="mini" />
 
         </RelativeLayout>
 

@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * <p>
+ * <p/>
  * Contributors:
  * sfleury - initial API and implementation
  ******************************************************************************/
@@ -29,23 +29,15 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class WeatherView extends LinearLayout {
-    Context mContext;
-
-    WeatherConditionInterface mWeather = null;
-
-    LayoutInflater inflater;
-
-    Layout layout;
-
     public static final int IMAGE = 0;
-
     public static final int TEXT = 1;
-
     public static final int FULL = 2;
-
-    private int mType = FULL;
-
     protected boolean bolToggle = true;
+    Context mContext;
+    WeatherConditionInterface mWeather = null;
+    LayoutInflater inflater;
+    Layout layout;
+    private int mType = FULL;
 
     // private AnimationDrawable animation;
 
@@ -60,6 +52,27 @@ public class WeatherView extends LinearLayout {
         super(context, attrs);
         this.mContext = context;
         initView();
+    }
+
+    public static int getMoonResource(String moon) {
+        if ("First quarter".equals(moon))
+            return R.drawable.moon_first_quarter;
+        else if ("New".equals(moon))
+            return R.drawable.moon_new_moon;
+        else if ("Waxing crescent".equals(moon))
+            return R.drawable.moon_waxing_crescent;
+        else if ("Waxing gibbous".equals(moon))
+            return R.drawable.moon_waxing_gibbous;
+        else if ("Waning gibbous".equals(moon))
+            return R.drawable.moon_waning_gibbous;
+        else if ("Third quarter".equals(moon))
+            return R.drawable.moon_third_quarter;
+        else if ("Waning crescent".equals(moon))
+            return R.drawable.moon_waning_crescent;
+        else if ("Full".equals(moon))
+            return R.drawable.moon_full_moon;
+
+        return R.drawable.weather_nonet;
     }
 
     @Override
@@ -208,28 +221,6 @@ public class WeatherView extends LinearLayout {
         this.mWeather = weather;
         // invalidate();
         setupView();
-    }
-
-
-    public static int getMoonResource(String moon) {
-        if ("First quarter".equals(moon))
-            return R.drawable.moon_first_quarter;
-        else if ("New".equals(moon))
-            return R.drawable.moon_new_moon;
-        else if ("Waxing crescent".equals(moon))
-            return R.drawable.moon_waxing_crescent;
-        else if ("Waxing gibbous".equals(moon))
-            return R.drawable.moon_waxing_gibbous;
-        else if ("Waning gibbous".equals(moon))
-            return R.drawable.moon_waning_gibbous;
-        else if ("Third quarter".equals(moon))
-            return R.drawable.moon_third_quarter;
-        else if ("Waning crescent".equals(moon))
-            return R.drawable.moon_waning_crescent;
-        else if ("Full".equals(moon))
-            return R.drawable.moon_full_moon;
-
-        return R.drawable.weather_nonet;
     }
 
     public void setType(int mType) {

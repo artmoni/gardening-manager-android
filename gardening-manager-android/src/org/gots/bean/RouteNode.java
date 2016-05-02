@@ -1,9 +1,9 @@
 package org.gots.bean;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.ArrayList;
-
-import com.google.gson.annotations.SerializedName;
 
 public class RouteNode implements Serializable {
 

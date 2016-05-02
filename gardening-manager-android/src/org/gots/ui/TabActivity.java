@@ -1,8 +1,5 @@
 package org.gots.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -10,24 +7,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class TabActivity extends BaseGotsActivity {
 
-    protected static final class TabInfo {
-        private final Fragment fragment;
-
-        private final Bundle args;
-
-        TabInfo(Fragment f, Bundle _args) {
-            fragment = f;
-            args = _args;
-        }
-    }
-
     protected ViewPager mViewPager;
-
     private TabsAdapter mFragmentAdapter;
 
     public TabActivity() {
@@ -68,6 +55,17 @@ public abstract class TabActivity extends BaseGotsActivity {
 
     protected void removeAllTabs() {
         mFragmentAdapter.removeAllTabs();
+    }
+
+    protected static final class TabInfo {
+        private final Fragment fragment;
+
+        private final Bundle args;
+
+        TabInfo(Fragment f, Bundle _args) {
+            fragment = f;
+            args = _args;
+        }
     }
 
     /**

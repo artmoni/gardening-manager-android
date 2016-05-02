@@ -1,9 +1,7 @@
 package org.gots.weather.provider.nuxeo;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import android.content.Context;
+import android.util.Log;
 
 import org.gots.garden.GardenInterface;
 import org.gots.nuxeo.NuxeoManager;
@@ -20,8 +18,10 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
-import android.content.Context;
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 public class NuxeoWeatherProvider extends LocalWeatherProvider {
     private static final String WEATHER_FOLDER = "Weather";
@@ -166,7 +166,7 @@ public class NuxeoWeatherProvider extends LocalWeatherProvider {
                             + getWeatherRootFolder(currentGarden).getId()
                             + "\" AND weathercondition:time_dayofyear = \"" + weatherDate.get(Calendar.DAY_OF_YEAR)
                             + "\" AND weathercondition:time_year = \"" + weatherDate.get(Calendar.YEAR) + "\"", null,
-                    new String[] { "dc:modified DESC" }, "*", 0, 50, cacheParam);
+                    new String[]{"dc:modified DESC"}, "*", 0, 50, cacheParam);
 
             if (docs.size() > 0) {
                 condition = convert(docs.get(0));
@@ -199,7 +199,7 @@ public class NuxeoWeatherProvider extends LocalWeatherProvider {
             Documents docs = service.query(
                     "SELECT * FROM WeatherCondition WHERE ecm:currentLifeCycleState != \"deleted\" And ecm:parentId = \""
                             + getWeatherRootFolder(currentGarden).getId() + "\"", null,
-                    new String[] { "dc:modified DESC" }, "*", 0, 50, cacheParam);
+                    new String[]{"dc:modified DESC"}, "*", 0, 50, cacheParam);
             for (Document documentWeather : docs) {
 
                 WeatherConditionInterface condition = convert(documentWeather);

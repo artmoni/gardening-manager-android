@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * <p>
+ * <p/>
  * Contributors:
  * sfleury - initial API and implementation
  ******************************************************************************/
@@ -26,21 +26,13 @@ import org.gots.ui.PlantDescriptionActivity;
 
 public class PlantResumeFragment extends BaseGotsFragment {
 
-    private int seedId;
-
     protected int resultCameraActivity = 1;
-
+    private int seedId;
     private GotsSeedProvider seedManager;
     private GotsGrowingSeedManager growingSeedManager;
 
     private OnDescriptionFragmentClicked mCallback;
     private SeedWidgetLong seedWidgetLong;
-
-    public interface OnDescriptionFragmentClicked {
-        public void onInformationClick(BaseSeed seed, String url);
-
-        public void onAuthenticationNeeded();
-    }
 
     public void setOnDescriptionFragmentClicked(OnDescriptionFragmentClicked descriptionFragmentClicked) {
         mCallback = descriptionFragmentClicked;
@@ -95,7 +87,7 @@ public class PlantResumeFragment extends BaseGotsFragment {
 
             @Override
             public void onAuthenticationNeeded() {
-                if (mCallback!=null)
+                if (mCallback != null)
                     mCallback.onAuthenticationNeeded();
             }
 
@@ -107,5 +99,11 @@ public class PlantResumeFragment extends BaseGotsFragment {
     @Override
     public void update() {
         runAsyncDataRetrieval();
+    }
+
+    public interface OnDescriptionFragmentClicked {
+        public void onInformationClick(BaseSeed seed, String url);
+
+        public void onAuthenticationNeeded();
     }
 }

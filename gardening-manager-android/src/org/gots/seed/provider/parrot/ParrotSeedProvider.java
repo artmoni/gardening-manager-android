@@ -1,8 +1,7 @@
 package org.gots.seed.provider.parrot;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import android.content.Context;
+import android.util.Log;
 
 import org.gots.authentication.provider.parrot.ParrotAuthentication;
 import org.gots.seed.BaseSeed;
@@ -11,8 +10,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
-import android.util.Log;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ParrotSeedProvider extends LocalSeedProvider {
 
@@ -134,7 +134,7 @@ public class ParrotSeedProvider extends LocalSeedProvider {
     }
 
     protected List<BaseSeed> synchronize(List<BaseSeed> localVendorSeeds,
-            List<BaseSeed> remoteVendorSeeds) {
+                                         List<BaseSeed> remoteVendorSeeds) {
         getToken();
 
         List<BaseSeed> myVendorSeeds = new ArrayList<BaseSeed>();
@@ -149,10 +149,10 @@ public class ParrotSeedProvider extends LocalSeedProvider {
                     break;
                 }
             }
-            if (found){
+            if (found) {
                 myVendorSeeds.add(super.updateSeed(remoteSeed));
             }
-                // myVendorSeeds.add();
+            // myVendorSeeds.add();
             else {
                 remoteSeed = super.createSeed(remoteSeed, null);
                 myVendorSeeds.add(remoteSeed);

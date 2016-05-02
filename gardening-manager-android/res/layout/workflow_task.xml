@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/brown_light"
-    android:padding="5dp" >
+    android:padding="5dp">
 
     <ImageView
         android:id="@+id/imageViewTop"
@@ -34,7 +34,7 @@
         android:layout_marginRight="50dp"
         android:text="Approve" />
     -->
-<TextView
+    <TextView
         android:id="@+id/textWorkflowTaskInitiator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,6 +45,7 @@
         android:text="~ Gardening Manager"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textStyle="italic" />
+
     <TextView
         android:id="@+id/textWorkflowTaskDirective"
         android:layout_width="wrap_content"
@@ -60,8 +61,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textWorkflowTaskInitiator"
         android:layout_marginTop="10dp"
-        android:gravity="center" >
-    </LinearLayout>
+        android:gravity="center"></LinearLayout>
 
     <!-- <TextView
         android:id="@+id/textWorkflowLogs"

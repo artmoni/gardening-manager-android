@@ -1,8 +1,8 @@
 package org.gots.exception;
 
-import org.gots.R;
-
 import android.content.Context;
+
+import org.gots.R;
 
 public class GotsUserNotConnectedException extends GotsException {
     private static final long serialVersionUID = -2949217490218307754L;

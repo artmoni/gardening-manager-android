@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
     android:background="@color/brown_light"
-    android:padding="5dp" >
+    android:padding="5dp">
 
     <ImageView
         android:id="@+id/imageViewTop"
@@ -22,8 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/textViewTutorialDescription"
         android:layout_centerHorizontal="true"
-        android:orientation="horizontal" >
-    </LinearLayout>
+        android:orientation="horizontal"></LinearLayout>
 
     <org.gots.ui.view.MyTextView
         android:id="@+id/textViewTutorial"
@@ -39,8 +38,8 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/WeatherWidget"
         android:layout_below="@+id/imageViewTop"
-        android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
         android:text="@string/tutorial.a.description" />
 
     <Button

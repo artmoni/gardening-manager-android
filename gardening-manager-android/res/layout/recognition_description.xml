@@ -5,13 +5,12 @@
     android:background="@color/text_color_light">
 
 
-
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textViewPurchased"
-        android:layout_marginTop="20dp"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp">
 
         <LinearLayout
             android:id="@+id/layoutRecognitionResults"

@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:orientation="vertical">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
 
 
-	<ProgressBar android:layout_width="100px"
-		android:layout_height="1px" style="?android:attr/progressBarStyleHorizontal"
-		android:id="@+id/IdSeedProgressionBar" android:max="100"
-		android:progress="50" />
+    <ProgressBar
+        android:id="@+id/IdSeedProgressionBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="100px"
+        android:layout_height="1px"
+        android:max="100"
+        android:progress="50" />
 </LinearLayout>				

@@ -5,7 +5,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * <p>
+ * <p/>
  * Contributors:
  * sfleury - initial API and implementation
  * ****************************************************************************
@@ -60,23 +60,15 @@ import java.util.Locale;
 
 public class ListAllActionAdapter extends BaseAdapter {
 
-    private Context mContext;
-
-    private ArrayList<ActionOnSeed> actions = new ArrayList<ActionOnSeed>();
-
-    private int current_status = STATUS_DONE;
-
     public static final int STATUS_TODO = 0;
-
     public static final int STATUS_DONE = 1;
-
-    private WeatherManager manager;
-
     public static final int THUMBNAIL_HEIGHT = 48;
-
     public static final int THUMBNAIL_WIDTH = 66;
-
     private static final String TAG = "ListAllActionAdapter";
+    private Context mContext;
+    private ArrayList<ActionOnSeed> actions = new ArrayList<ActionOnSeed>();
+    private int current_status = STATUS_DONE;
+    private WeatherManager manager;
 
     public ListAllActionAdapter(Context context, List<ActionOnSeed> allActions, int status) {
         this.mContext = context;
@@ -90,6 +82,27 @@ public class ListAllActionAdapter extends BaseAdapter {
         else
             Collections.sort(actions, new IActionDescendantComparator());
         manager = new WeatherManager(mContext);
+    }
+
+    public static Bitmap getThumbnail(ContentResolver cr, String path) throws Exception {
+        Uri selectedImageUri = Uri.fromFile(new File(path));
+        // Cursor ca = cr.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+        // new String[] { MediaStore.MediaColumns._ID },
+        // MediaStore.MediaColumns.DATA + "=?", new String[] { path },
+        // null);
+        Cursor ca = cr.query(selectedImageUri, null, MediaStore.Images.Media.DATA + " like ? ",
+                new String[]{selectedImageUri.getPath()}, null);
+
+        if (ca != null && ca.moveToFirst()) {
+            int id = ca.getInt(ca.getColumnIndex(MediaStore.MediaColumns._ID));
+            Log.d(TAG, ca.getString(ca.getColumnIndex(MediaStore.MediaColumns.DATA)));
+            ca.close();
+            return MediaStore.Images.Thumbnails.getThumbnail(cr, id, MediaStore.Images.Thumbnails.MICRO_KIND, null);
+        }
+
+        ca.close();
+        return null;
+
     }
 
     @Override
@@ -111,22 +124,6 @@ public class ListAllActionAdapter extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         return position;
-    }
-
-    private class Holder {
-        ActionWidget actionWidget;
-
-        GrowingSeedWidget seedView;
-
-        TextView textviewActionDate;
-
-        Switch switchActionStatus;
-
-        TextView textviewActionDescription;
-
-        WeatherView weatherView;
-
-        ImageView seedImage;
     }
 
     @Override
@@ -265,51 +262,6 @@ public class ListAllActionAdapter extends BaseAdapter {
         return imageBitmap;
     }
 
-    public static Bitmap getThumbnail(ContentResolver cr, String path) throws Exception {
-        Uri selectedImageUri = Uri.fromFile(new File(path));
-        // Cursor ca = cr.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-        // new String[] { MediaStore.MediaColumns._ID },
-        // MediaStore.MediaColumns.DATA + "=?", new String[] { path },
-        // null);
-        Cursor ca = cr.query(selectedImageUri, null, MediaStore.Images.Media.DATA + " like ? ",
-                new String[]{selectedImageUri.getPath()}, null);
-
-        if (ca != null && ca.moveToFirst()) {
-            int id = ca.getInt(ca.getColumnIndex(MediaStore.MediaColumns._ID));
-            Log.d(TAG, ca.getString(ca.getColumnIndex(MediaStore.MediaColumns.DATA)));
-            ca.close();
-            return MediaStore.Images.Thumbnails.getThumbnail(cr, id, MediaStore.Images.Thumbnails.MICRO_KIND, null);
-        }
-
-        ca.close();
-        return null;
-
-    }
-
-    class IActionAscendantComparator implements Comparator<BaseAction> {
-        @Override
-        public int compare(BaseAction obj1, BaseAction obj2) {
-            int result = 0;
-            if (obj1.getDuration() >= 0 && obj2.getDuration() >= 0) {
-                result = obj1.getDuration() < obj2.getDuration() ? -1 : 0;
-            }
-
-            return result;
-        }
-    }
-
-    class IActionDescendantComparator implements Comparator<ActionOnSeed> {
-        @Override
-        public int compare(ActionOnSeed obj1, ActionOnSeed obj2) {
-            int result = 0;
-            if (obj1.getDateActionDone() != null && obj2.getDateActionDone() != null) {
-                result = obj1.getDateActionDone().getTime() > obj2.getDateActionDone().getTime() ? -1 : 0;
-            }
-
-            return result;
-        }
-    }
-
     private void showNoticeDialog(final int position, final GrowingSeed seed, final ActionOnSeed currentAction,
                                   final CompoundButton switchButton) {
 
@@ -354,5 +306,45 @@ public class ListAllActionAdapter extends BaseAdapter {
         builder.setCancelable(true);
         builder.show();
 
+    }
+
+    private class Holder {
+        ActionWidget actionWidget;
+
+        GrowingSeedWidget seedView;
+
+        TextView textviewActionDate;
+
+        Switch switchActionStatus;
+
+        TextView textviewActionDescription;
+
+        WeatherView weatherView;
+
+        ImageView seedImage;
+    }
+
+    class IActionAscendantComparator implements Comparator<BaseAction> {
+        @Override
+        public int compare(BaseAction obj1, BaseAction obj2) {
+            int result = 0;
+            if (obj1.getDuration() >= 0 && obj2.getDuration() >= 0) {
+                result = obj1.getDuration() < obj2.getDuration() ? -1 : 0;
+            }
+
+            return result;
+        }
+    }
+
+    class IActionDescendantComparator implements Comparator<ActionOnSeed> {
+        @Override
+        public int compare(ActionOnSeed obj1, ActionOnSeed obj2) {
+            int result = 0;
+            if (obj1.getDateActionDone() != null && obj2.getDateActionDone() != null) {
+                result = obj1.getDateActionDone().getTime() > obj2.getDateActionDone().getTime() ? -1 : 0;
+            }
+
+            return result;
+        }
     }
 }

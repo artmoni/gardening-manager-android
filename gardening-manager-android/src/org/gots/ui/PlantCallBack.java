@@ -21,10 +21,6 @@ class PlantCallBack implements ActionMode.Callback {
     protected BaseGotsActivity gotsActivity;
     private BaseSeed currentSeed;
 
-    public interface OnPlantCallBackClicked {
-        public void onPlantCallBackClicked();
-    }
-
     PlantCallBack(BaseGotsActivity gotsActivity, BaseSeed seedInterface, OnPlantCallBackClicked plantCallBackClicked) {
         this.gotsActivity = gotsActivity;
         currentSeed = seedInterface;
@@ -133,5 +129,9 @@ class PlantCallBack implements ActionMode.Callback {
 
         mode.finish();
         return true;
+    }
+
+    public interface OnPlantCallBackClicked {
+        public void onPlantCallBackClicked();
     }
 }

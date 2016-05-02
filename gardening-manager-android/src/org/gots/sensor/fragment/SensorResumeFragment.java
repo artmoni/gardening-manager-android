@@ -1,13 +1,5 @@
 package org.gots.sensor.fragment;
 
-import java.util.List;
-
-import org.gots.R;
-import org.gots.sensor.parrot.ParrotLocation;
-import org.gots.sensor.parrot.ParrotLocationsStatus;
-import org.gots.sensor.parrot.ParrotSensorProvider;
-import org.gots.ui.fragment.BaseGotsFragment;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +8,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import org.gots.R;
+import org.gots.sensor.parrot.ParrotLocation;
+import org.gots.sensor.parrot.ParrotLocationsStatus;
+import org.gots.sensor.parrot.ParrotSensorProvider;
+import org.gots.ui.fragment.BaseGotsFragment;
+
+import java.util.List;
+
 public abstract class SensorResumeFragment extends BaseGotsFragment {
 
     private LinearLayout sensorListview;
@@ -23,10 +23,6 @@ public abstract class SensorResumeFragment extends BaseGotsFragment {
     private Button button;
 
     private OnSensorClickListener mCallBack;
-
-    public interface OnSensorClickListener {
-        public void OnSensorClick(ParrotLocation locationSensor);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -70,12 +66,6 @@ public abstract class SensorResumeFragment extends BaseGotsFragment {
         return true;
     }
 
-    private class Holder {
-        public List<ParrotLocation> parrotLocations;
-
-        public List<ParrotLocationsStatus> parrotLocationsStatus;
-    }
-
     @Override
     protected Holder retrieveNuxeoData() throws Exception {
         ParrotSensorProvider sensorProvider = new ParrotSensorProvider(getActivity());
@@ -103,9 +93,19 @@ public abstract class SensorResumeFragment extends BaseGotsFragment {
     }
 
     protected abstract void onSensorStatusRetrieved(List<ParrotLocation> parrotLocations,
-            List<ParrotLocationsStatus> parrotLocationsStatus);
+                                                    List<ParrotLocationsStatus> parrotLocationsStatus);
 
     protected abstract void onMenuButtonClicked();
 
     protected abstract void onMenuButtonCreated(Button button2);
+
+    public interface OnSensorClickListener {
+        public void OnSensorClick(ParrotLocation locationSensor);
+    }
+
+    private class Holder {
+        public List<ParrotLocation> parrotLocations;
+
+        public List<ParrotLocationsStatus> parrotLocationsStatus;
+    }
 }

@@ -1,13 +1,5 @@
 package org.gots.ui.fragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.gots.exception.GardenNotFoundException;
-import org.gots.seed.BaseSeed;
-
-import android.util.Log;
-
 public class StockVendorListFragment extends CatalogueFragment {
 
 //    @Override

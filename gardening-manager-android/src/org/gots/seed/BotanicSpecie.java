@@ -6,28 +6,28 @@ public class BotanicSpecie {
     private int specieId;
     private String filepath = null;
 
-    public void setSpecieName(String specieName) {
-        this.specieName = specieName;
-    }
-
-    public void setSpecieId(int specieId) {
-        this.specieId = specieId;
-    }
-
-    public void setFamily(BotanicFamily family) {
-        this.family = family;
-    }
-
     public String getSpecieName() {
         return specieName;
+    }
+
+    public void setSpecieName(String specieName) {
+        this.specieName = specieName;
     }
 
     public int getSpecieId() {
         return specieId;
     }
 
+    public void setSpecieId(int specieId) {
+        this.specieId = specieId;
+    }
+
     public BotanicFamily getFamily() {
         return family;
+    }
+
+    public void setFamily(BotanicFamily family) {
+        this.family = family;
     }
 
     public String getFilepath() {

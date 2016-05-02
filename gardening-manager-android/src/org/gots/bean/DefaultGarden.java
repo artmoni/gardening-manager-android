@@ -1,11 +1,11 @@
 package org.gots.bean;
 
-import org.gots.R;
-import org.gots.garden.GardenInterface;
-
 import android.content.Context;
 import android.location.Address;
 import android.util.Log;
+
+import org.gots.R;
+import org.gots.garden.GardenInterface;
 
 public class DefaultGarden extends Garden implements GardenInterface {
 

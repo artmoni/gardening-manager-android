@@ -1,9 +1,5 @@
 package org.gots.inapp;
 
-import org.gots.R;
-import org.gots.context.GotsContext;
-import org.gots.preferences.GotsPreferences;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +12,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+
+import org.gots.R;
+import org.gots.context.GotsContext;
+import org.gots.preferences.GotsPreferences;
 
 public class AppRater {
     private final static String APP_TITLE = "Gardening Manager";

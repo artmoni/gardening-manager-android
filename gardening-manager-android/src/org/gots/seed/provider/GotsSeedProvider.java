@@ -1,14 +1,12 @@
 package org.gots.seed.provider;
 
 import org.gots.exception.GotsException;
-import org.gots.exception.NotImplementedException;
 import org.gots.garden.GardenInterface;
 import org.gots.nuxeo.NuxeoUtils;
 import org.gots.seed.BaseSeed;
 import org.gots.seed.BotanicFamily;
 import org.gots.seed.BotanicSpecie;
 import org.gots.seed.LikeStatus;
-import org.gots.seed.SpeciesDocument;
 
 import java.io.File;
 import java.util.ArrayList;

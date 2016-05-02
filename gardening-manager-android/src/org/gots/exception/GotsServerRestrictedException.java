@@ -1,8 +1,8 @@
 package org.gots.exception;
 
-import org.gots.R;
-
 import android.content.Context;
+
+import org.gots.R;
 
 public class GotsServerRestrictedException extends Exception {
     private Context mContext;

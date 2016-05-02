@@ -1,9 +1,5 @@
 package org.gots.ads;
 
-import org.gots.R;
-import org.gots.context.GotsContext;
-import org.gots.preferences.GotsPreferences;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
@@ -19,24 +15,28 @@ import com.google.ads.AdRequest;
 import com.google.ads.AdSize;
 import com.google.ads.AdView;
 
+import org.gots.R;
+import org.gots.context.GotsContext;
+import org.gots.preferences.GotsPreferences;
+
 public class GotsAdvertisement {
+    protected String appPackageName = "org.gots.premium";
+    GotsPreferences gotsPreferences;
     private Activity mContext;
 
-    protected String appPackageName = "org.gots.premium";
-
-    GotsPreferences gotsPreferences;
-    protected GotsContext getGotsContext() {
-        return GotsContext.get(mContext);
-    }
     public GotsAdvertisement(Activity mContext) {
         this.mContext = mContext;
         gotsPreferences = getGotsContext().getServerConfig();
     }
 
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(mContext);
+    }
+
     @SuppressWarnings("deprecation")
     public View getAdsLayout() {
         View convertView;
-        Display display =  ((Activity)mContext).getWindowManager().getDefaultDisplay();
+        Display display = ((Activity) mContext).getWindowManager().getDefaultDisplay();
         int width;
         int sdk = android.os.Build.VERSION.SDK_INT;
         if (sdk < android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH) {

@@ -1,7 +1,7 @@
 package org.gots.action.provider.nuxeo;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import android.content.Context;
+import android.util.Log;
 
 import org.gots.action.BaseAction;
 import org.gots.action.provider.local.LocalActionProvider;
@@ -13,8 +13,8 @@ import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 
-import android.content.Context;
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class NuxeoActionProvider extends LocalActionProvider {
 
@@ -46,7 +46,7 @@ public class NuxeoActionProvider extends LocalActionProvider {
             Documents docs = service.query(
                     "SELECT * FROM Action WHERE ecm:currentLifeCycleState != \"deleted\" And ecm:parentId = \""
                             + root.getId() + "\" AND dc:title = \"" + name + "\"", null,
-                    new String[] { "dc:modified DESC" }, "*", 0, 50, cacheParam);
+                    new String[]{"dc:modified DESC"}, "*", 0, 50, cacheParam);
 
             if (docs.size() > 0)
                 action = NuxeoActionConverter.convert(mContext, docs.get(0));
@@ -79,9 +79,9 @@ public class NuxeoActionProvider extends LocalActionProvider {
             Document root = service.getDocument("/default-domain/workspaces/Public hut/Actions");
             Documents docs = service.query(
                     "SELECT * FROM Action WHERE ecm:currentLifeCycleState != \"deleted\" And ecm:parentId = ?",
-                    new String[] { root.getId() }, new String[] { "dc:modified DESC" }, "*", 0, 50, cacheParam);
+                    new String[]{root.getId()}, new String[]{"dc:modified DESC"}, "*", 0, 50, cacheParam);
 
-            for (Iterator<Document> iterator = docs.iterator(); iterator.hasNext();) {
+            for (Iterator<Document> iterator = docs.iterator(); iterator.hasNext(); ) {
                 Document document = iterator.next();
                 BaseAction action = NuxeoActionConverter.convert(mContext, document);
                 if (action != null) {

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity" >
+    tools:context=".MainActivity">
 
     <!--
          <fragment
@@ -12,7 +12,8 @@
         class="com.google.android.gms.maps.SupportMapFragment" />
     -->
 
-<com.google.android.gms.maps.MapView android:id="@+id/map"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" />
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/map"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
 </RelativeLayout> 

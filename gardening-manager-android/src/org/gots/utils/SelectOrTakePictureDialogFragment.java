@@ -8,15 +8,9 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 
 public class SelectOrTakePictureDialogFragment extends DialogFragment {
-    CharSequence[] items = { "Select Picture", "Take Photo" };
+    CharSequence[] items = {"Select Picture", "Take Photo"};
 
     PictureSelectorListener mListener;
-
-    public interface PictureSelectorListener {
-        public void onSelectInGallery(DialogFragment fragment);
-
-        public void onTakePicture(DialogFragment fragment);
-    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -24,14 +18,14 @@ public class SelectOrTakePictureDialogFragment extends DialogFragment {
         builder.setTitle("Select Picture").setItems(items, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
-                case 0:
-                    mListener.onSelectInGallery(SelectOrTakePictureDialogFragment.this);
-                    break;
-                case 1:
-                    mListener.onTakePicture(SelectOrTakePictureDialogFragment.this);
-                    break;
-                default:
-                    break;
+                    case 0:
+                        mListener.onSelectInGallery(SelectOrTakePictureDialogFragment.this);
+                        break;
+                    case 1:
+                        mListener.onTakePicture(SelectOrTakePictureDialogFragment.this);
+                        break;
+                    default:
+                        break;
                 }
             }
         });
@@ -49,6 +43,12 @@ public class SelectOrTakePictureDialogFragment extends DialogFragment {
             // The activity doesn't implement the interface, throw exception
             throw new ClassCastException(activity.toString() + " must implement PictureSelectorListener");
         }
+    }
+
+    public interface PictureSelectorListener {
+        public void onSelectInGallery(DialogFragment fragment);
+
+        public void onTakePicture(DialogFragment fragment);
     }
 
 }

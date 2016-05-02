@@ -4,29 +4,29 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ * <p/>
  * Contributors:
- *     sfleury - initial API and implementation
+ * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.bean;
 
 import java.util.ArrayList;
 
 public class Botanic {
-	private ArrayList<String> botanicFamilyList = new ArrayList<String>();
+    private ArrayList<String> botanicFamilyList = new ArrayList<String>();
 
-	public Botanic() {
-		botanicFamilyList.add("Apiacee");
-		botanicFamilyList.add("Brassicacees");
-		botanicFamilyList.add("Cucurbitacae");
-		botanicFamilyList.add("Chénopodiacees");
-		botanicFamilyList.add("Liliacees");
-		botanicFamilyList.add("Polygonacees");
-		botanicFamilyList.add("Solanacees");
+    public Botanic() {
+        botanicFamilyList.add("Apiacee");
+        botanicFamilyList.add("Brassicacees");
+        botanicFamilyList.add("Cucurbitacae");
+        botanicFamilyList.add("Chénopodiacees");
+        botanicFamilyList.add("Liliacees");
+        botanicFamilyList.add("Polygonacees");
+        botanicFamilyList.add("Solanacees");
 
-	}
+    }
 
-	public ArrayList<String> getBotanicFamilyList() {
-		return botanicFamilyList;
-	}
+    public ArrayList<String> getBotanicFamilyList() {
+        return botanicFamilyList;
+    }
 }

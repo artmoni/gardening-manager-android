@@ -78,7 +78,7 @@ public class JustVisualResult {
     public String getSpecies() {
         String species;
         try {
-            species = plantNames.substring(plantNames.indexOf('(') + 1, plantNames.indexOf('-') != -1 ? plantNames.indexOf('-') : plantNames.indexOf(')') );
+            species = plantNames.substring(plantNames.indexOf('(') + 1, plantNames.indexOf('-') != -1 ? plantNames.indexOf('-') : plantNames.indexOf(')'));
         } catch (Exception e) {
             species = plantNames;
         }

@@ -1,11 +1,11 @@
 package org.gots.utils;
 
+import android.util.Log;
+
 import org.apache.http.HttpRequest;
 import org.nuxeo.ecm.automation.client.jaxrs.RequestInterceptor;
 import org.nuxeo.ecm.automation.client.jaxrs.spi.Connector;
 import org.nuxeo.ecm.automation.client.jaxrs.spi.Request;
-
-import android.util.Log;
 
 public class TemporaryTokenRequestInterceptor implements RequestInterceptor {
     private String mToken;

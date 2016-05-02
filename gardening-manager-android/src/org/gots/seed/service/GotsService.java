@@ -1,5 +1,9 @@
 package org.gots.seed.service;
 
+import android.app.Service;
+import android.content.Intent;
+import android.os.IBinder;
+
 import org.gots.action.GotsActionSeedManager;
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.allotment.GotsAllotmentManager;
@@ -9,10 +13,6 @@ import org.gots.garden.GotsGardenManager;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GotsSeedManager;
-
-import android.app.Service;
-import android.content.Intent;
-import android.os.IBinder;
 
 public abstract class GotsService extends Service {
     protected GotsPreferences gotsPrefs;
@@ -29,7 +29,8 @@ public abstract class GotsService extends Service {
 
     protected GotsContext getGotsContext() {
         return GotsContext.get(getApplicationContext());
-    }    
+    }
+
     @Override
     public void onCreate() {
         gotsPrefs = getGotsContext().getServerConfig();

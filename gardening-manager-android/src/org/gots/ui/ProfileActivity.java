@@ -5,7 +5,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * <p>
+ * <p/>
  * Contributors:
  * sfleury - initial API and implementation
  * ****************************************************************************
@@ -29,7 +29,6 @@ import org.gots.garden.view.OnProfileEventListener;
 import org.gots.provider.GardenContentProvider;
 import org.gots.ui.BaseGotsActivity.GardenListener;
 import org.gots.ui.fragment.BaseGotsFragment;
-import org.gots.ui.fragment.LoginFragment;
 import org.gots.ui.fragment.ProfileEditorFragment;
 import org.gots.ui.fragment.ProfileMapFragment;
 import org.gots.ui.fragment.ProfileResumeFragment;
@@ -281,7 +280,7 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
                 if (resumeFragment.isAdded())
                     resumeFragment.update();
 //                if (fragment instanceof ProfileEditorFragment) //TODO launch weather fragment here on main layout
-                    addMainLayout(new WeatherListFragment(), getIntent().getExtras());
+                addMainLayout(new WeatherListFragment(), getIntent().getExtras());
                 super.onPostExecute(aVoid);
             }
         }.execute();

@@ -4,15 +4,13 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * <p>
+ * <p/>
  * Contributors:
  * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.ui;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -62,23 +60,15 @@ import java.util.List;
 
 public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotmentSelected {
 
+    private static final short FRAGMENT_ID_CATALOG = 0;
     // private ListVendorSeedAdapter lvsea;
     ListView listSeeds;
-
     ArrayList<GrowingSeed> allSeeds = new ArrayList<GrowingSeed>();
-
-    private ViewPager mViewPager;
-
-    private int currentAllotment = -1;
-
     TabsAdapter mTabsAdapter;
-
-    private static final short FRAGMENT_ID_CATALOG = 0;
-
     String currentFilter = "";
-
     boolean clearFilter = true;
-
+    private ViewPager mViewPager;
+    private int currentAllotment = -1;
     private Fragment listAllotmentfragment;
 
     private BaseSeed currentSeed;
@@ -425,6 +415,18 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
      * CallBACK on long press
      */
 
+    @Override
+    protected ViewPager getViewPager() {
+        return (ViewPager) findViewById(R.id.pager);
+    }
+
+    protected void filterByName(final EditText filter) {
+        performSearch(filter);
+        // EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(filter.getWindowToken(), 0);
+    }
+
     private final class MyCallBack implements ActionMode.Callback {
 
         private BaseSeed currentSeed;
@@ -508,17 +510,5 @@ public class HutActivity extends TabActivity implements OnSeedSelected, OnAllotm
             mode.finish();
             return true;
         }
-    }
-
-    @Override
-    protected ViewPager getViewPager() {
-        return (ViewPager) findViewById(R.id.pager);
-    }
-
-    protected void filterByName(final EditText filter) {
-        performSearch(filter);
-        // EditText filter = (EditText) findViewById(R.id.edittextSearchFilter);
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(filter.getWindowToken(), 0);
     }
 }

@@ -5,7 +5,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * <p>
+ * <p/>
  * Contributors:
  * sfleury - initial API and implementation
  * ****************************************************************************
@@ -23,33 +23,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class SeedUtil {
-    @SuppressWarnings("unchecked")
-    public BaseSeed copy(BaseSeed originalSeed) {
-        BaseSeed copy = new BaseSeedImpl();
-        copy.setName(originalSeed.getName());
-        copy.setDescriptionEnvironment(originalSeed.getDescriptionEnvironment());
-        copy.setDescriptionDiseases(originalSeed.getDescriptionDiseases());
-        copy.setDescriptionCultivation(originalSeed.getDescriptionCultivation());
-        copy.setDescriptionHarvest(originalSeed.getDescriptionHarvest());
-        copy.setDurationMin(originalSeed.getDurationMin());
-        copy.setDurationMax(originalSeed.getDurationMax());
-        copy.setDateSowingMin(originalSeed.getDateSowingMin());
-        copy.setDateSowingMax(originalSeed.getDateSowingMax());
-        copy.setUrlDescription(originalSeed.getUrlDescription());
-        copy.setUUID(originalSeed.getUUID());
-        copy.setActionToDo((ArrayList<BaseAction>) originalSeed.getActionToDo().clone());
-        // copy.getActionToDo().addAll((ArrayList<Action>)originalSeed.getActionToDo().clone());
-        copy.setActionDone((ArrayList<BaseAction>) originalSeed.getActionDone().clone());
-        copy.setFamily(originalSeed.getFamily());
-        copy.setSpecie(originalSeed.getSpecie());
-        copy.setVariety(originalSeed.getVariety());
-        copy.setBareCode(originalSeed.getBareCode());
-        copy.setLanguage(originalSeed.getLanguage());
-        copy.setState(originalSeed.getState());
-        return copy;
-
-    }
-
     public static String translateSpecie(Context context, BotanicSpecie botanicSpecie) {
         if (botanicSpecie == null)
             return "";
@@ -121,5 +94,32 @@ public class SeedUtil {
             }
         }
         return image;
+    }
+
+    @SuppressWarnings("unchecked")
+    public BaseSeed copy(BaseSeed originalSeed) {
+        BaseSeed copy = new BaseSeedImpl();
+        copy.setName(originalSeed.getName());
+        copy.setDescriptionEnvironment(originalSeed.getDescriptionEnvironment());
+        copy.setDescriptionDiseases(originalSeed.getDescriptionDiseases());
+        copy.setDescriptionCultivation(originalSeed.getDescriptionCultivation());
+        copy.setDescriptionHarvest(originalSeed.getDescriptionHarvest());
+        copy.setDurationMin(originalSeed.getDurationMin());
+        copy.setDurationMax(originalSeed.getDurationMax());
+        copy.setDateSowingMin(originalSeed.getDateSowingMin());
+        copy.setDateSowingMax(originalSeed.getDateSowingMax());
+        copy.setUrlDescription(originalSeed.getUrlDescription());
+        copy.setUUID(originalSeed.getUUID());
+        copy.setActionToDo((ArrayList<BaseAction>) originalSeed.getActionToDo().clone());
+        // copy.getActionToDo().addAll((ArrayList<Action>)originalSeed.getActionToDo().clone());
+        copy.setActionDone((ArrayList<BaseAction>) originalSeed.getActionDone().clone());
+        copy.setFamily(originalSeed.getFamily());
+        copy.setSpecie(originalSeed.getSpecie());
+        copy.setVariety(originalSeed.getVariety());
+        copy.setBareCode(originalSeed.getBareCode());
+        copy.setLanguage(originalSeed.getLanguage());
+        copy.setState(originalSeed.getState());
+        return copy;
+
     }
 }

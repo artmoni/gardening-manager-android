@@ -36,10 +36,10 @@ import java.util.Date;
  */
 public class ForecastIOProvider extends LocalWeatherProvider {
 
+    public static final String TAG = ForecastIOProvider.class.getSimpleName();
     private static final String URL_UNITS = "units=si";
     private static final String URL_FORECAST = "http://services.gardening-manager.com/forecast/";
     private static final String URL_EXCLUDE = "exclude=minutly,hourly,flags";
-    public static final String TAG = ForecastIOProvider.class.getSimpleName();
 
     public ForecastIOProvider(Context mContext) {
         super(mContext);
@@ -48,7 +48,7 @@ public class ForecastIOProvider extends LocalWeatherProvider {
     @Override
     public short fetchWeatherForecast(GardenInterface gardenInterface) {
         WeatherCache weatherCache = new WeatherCache(mContext);
-        if (gardenInterface.getGpsLatitude() == 0||gardenInterface.getGpsLongitude()==0) {
+        if (gardenInterface.getGpsLatitude() == 0 || gardenInterface.getGpsLongitude() == 0) {
             return WeatherManager.WEATHER_ERROR_CITY_UNKNOWN;
         }
         try {

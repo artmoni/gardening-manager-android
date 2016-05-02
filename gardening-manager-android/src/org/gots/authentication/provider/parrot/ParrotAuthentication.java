@@ -1,5 +1,18 @@
 package org.gots.authentication.provider.parrot;
 
+import android.content.Context;
+import android.util.Log;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.message.BasicNameValuePair;
+import org.gots.R;
+import org.gots.context.GotsContext;
+import org.gots.preferences.GotsPreferences;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -14,45 +27,23 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.message.BasicNameValuePair;
-import org.gots.R;
-import org.gots.context.GotsContext;
-import org.gots.preferences.GotsPreferences;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.content.Context;
-import android.util.Log;
-
 public class ParrotAuthentication {
-    // https://apiflowerpower.parrot.com//user/v1/authenticate?Accept-Language=fr&grant_type=password&client_id=sebastien.fleury@gmail.com&client_secret=arfkUnBAcTL99ynPXelq2u7msb7aMkOk2LgVZP7w4CANMFBZ&username=apiflowerpower.demo@parrot.com&password=api_demo
-    private String baseName = "https://apiflowerpower.parrot.com";
+    private static ParrotAuthentication instance;
 
     // private String username = "";
     //
     // private String password = "";
-
+    // https://apiflowerpower.parrot.com//user/v1/authenticate?Accept-Language=fr&grant_type=password&client_id=sebastien.fleury@gmail.com&client_secret=arfkUnBAcTL99ynPXelq2u7msb7aMkOk2LgVZP7w4CANMFBZ&username=apiflowerpower.demo@parrot.com&password=api_demo
+    private String baseName = "https://apiflowerpower.parrot.com";
     private String clientId = "";
 
-    private String clientSecret = "";
-
     // private String access_token = null;
-
+    private String clientSecret = "";
     private String TAG = "ParrotAuthentication";
-
     private Context mContext;
-
     private Properties properties = new Properties();
-
     private GotsPreferences gotsPref;
 
-    private static ParrotAuthentication instance;
-    protected GotsContext getGotsContext() {
-        return GotsContext.get(mContext);
-    }
     private ParrotAuthentication(Context context) {
         mContext = context;
         InputStream propertiesStream = null;
@@ -76,6 +67,10 @@ public class ParrotAuthentication {
             instance = new ParrotAuthentication(context);
         }
         return instance;
+    }
+
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(mContext);
     }
 
     private void enableHttpResponseCache() {

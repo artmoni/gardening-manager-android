@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!--
          <item android:id="@+id/new_profile" android:icon="@drawable/bt_add_allotment"
@@ -10,25 +10,25 @@
         android:id="@+id/help"
         android:icon="@drawable/help"
         android:title="@string/menu.help"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/premium"
         android:icon="@drawable/action_buy_online"
         android:title="Premium"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
     <item
         android:id="@+id/about"
         android:title="@string/menu.about"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
     <item
         android:id="@+id/connection"
         android:icon="@drawable/ic_login"
         android:title="@string/login.disconnect"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
     <item
         android:id="@+id/settings"
         android:icon="@drawable/ic_compose"
         android:showAsAction="always"
-        android:title="settings"/>
+        android:title="settings" />
 
 </menu>

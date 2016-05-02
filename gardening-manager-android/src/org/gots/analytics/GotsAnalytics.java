@@ -1,12 +1,12 @@
 package org.gots.analytics;
 
-import org.gots.context.GotsContext;
-import org.gots.preferences.GotsPreferences;
-
 import android.app.Application;
 import android.content.Context;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+
+import org.gots.context.GotsContext;
+import org.gots.preferences.GotsPreferences;
 
 public class GotsAnalytics {
 
@@ -29,9 +29,7 @@ public class GotsAnalytics {
     protected GotsAnalytics(Application context) {
         this.context = context;
     }
-    protected GotsContext getGotsContext() {
-        return GotsContext.get(context);
-    }
+
     /**
      * NOTE: you should use your Application context, not your Activity context,
      * in order to avoid memory leaks.
@@ -40,6 +38,21 @@ public class GotsAnalytics {
         this.dispatchIntervalSecs = dispatchIntervalSecs;
         this.context = context;
 
+    }
+
+    /**
+     * Get or create an instance of GoogleAnalyticsSessionManager
+     */
+    public static GotsAnalytics getInstance(Application application) {
+        if (INSTANCE == null) {
+            INSTANCE = new GotsAnalytics(application);
+
+        }
+        return INSTANCE;
+    }
+
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(context);
     }
 
     /**
@@ -76,17 +89,6 @@ public class GotsAnalytics {
 
         if (activityCount == 0)
             GoogleAnalyticsTracker.getInstance().stopSession();
-    }
-
-    /**
-     * Get or create an instance of GoogleAnalyticsSessionManager
-     */
-    public static GotsAnalytics getInstance(Application application) {
-        if (INSTANCE == null) {
-            INSTANCE = new GotsAnalytics(application);
-
-        }
-        return INSTANCE;
     }
 
 }

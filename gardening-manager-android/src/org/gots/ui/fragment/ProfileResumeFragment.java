@@ -52,14 +52,10 @@ import java.util.List;
 
 public class ProfileResumeFragment extends BaseGotsFragment implements LocationListener, OnClickListener {
     public static final int OPTION_EDIT = 1;
-
-    private static final String TAG = ProfileResumeFragment.class.getSimpleName();
     public static final String PROFILE_EDITOR_MODE = "option";
-
-    private LocationManager mlocManager;
-
+    private static final String TAG = ProfileResumeFragment.class.getSimpleName();
     GardenInterface garden;
-
+    private LocationManager mlocManager;
     private int mode = 0;
 
     private MyTextView textGardenName;

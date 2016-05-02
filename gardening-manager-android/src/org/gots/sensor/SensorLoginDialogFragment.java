@@ -33,13 +33,6 @@ public class SensorLoginDialogFragment extends AbstractDialogFragment {
         mCallback = callback;
     }
 
-    public interface SensorLoginEvent {
-        public void onSensorLoginSuccess();
-
-        public void onSensorLoginFailed();
-
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.sensor_login, container, false);
@@ -110,6 +103,13 @@ public class SensorLoginDialogFragment extends AbstractDialogFragment {
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    public interface SensorLoginEvent {
+        public void onSensorLoginSuccess();
+
+        public void onSensorLoginFailed();
+
     }
 
 }

@@ -1,24 +1,22 @@
 package org.gots.allotment.service;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.util.Log;
 
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.service.GotsService;
 
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AllotmentNotificationService extends GotsService {
     private static final int NOTIFICATION = 100;
 
     // NotificationManager mNM;
-
-    private List<BaseAllotmentInterface> allotments = new ArrayList<BaseAllotmentInterface>();
-
     private static final String TAG = "AllotmentNotificationService";
+    private List<BaseAllotmentInterface> allotments = new ArrayList<BaseAllotmentInterface>();
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -30,9 +28,8 @@ public class AllotmentNotificationService extends GotsService {
 
         new AsyncTask<Void, Void, Void>() {
 
-            private Thread thread;
-
             boolean shouldcontinue = true;
+            private Thread thread;
 
             protected void onPreExecute() {
                 thread = new Thread() {
@@ -50,7 +47,9 @@ public class AllotmentNotificationService extends GotsService {
                 };
 
                 thread.start();
-            };
+            }
+
+            ;
 
             @Override
             protected Void doInBackground(Void... params) {
@@ -80,7 +79,9 @@ public class AllotmentNotificationService extends GotsService {
                 shouldcontinue = false;
                 sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
 
-            };
+            }
+
+            ;
         }.execute();
 
         return super.onStartCommand(intent, flags, startId);

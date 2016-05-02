@@ -22,8 +22,6 @@
 package org.gots.ui;
 
 import android.accounts.Account;
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -36,6 +34,8 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -120,25 +120,9 @@ public abstract class BaseGotsActivity extends GotsCoreActivity implements GotsC
     private View bottomRightButton;
     private TextView notificationText;
     private ImageView imageView;
-    private View layoutNotification;
+    private CoordinatorLayout layoutNotification;
     private FloatingActionsMenu floatingActionsMenu;
     private GotsBillingDialog gotsBillingDialog;
-
-    @Override
-    public void onAuthenticationSucceed(Account account) {
-        showNotification(account.name + ", " + getResources().getString(R.string.login_connection_succeed), false);
-    }
-
-    @Override
-    public void onAuthenticationFailed(String string) {
-        showNotification(string, false);
-
-    }
-
-    public interface GardenListener {
-        public void onCurrentGardenChanged(GardenInterface garden);
-    }
-
     private BroadcastReceiver gardenBroadcastReceiver = new BroadcastReceiver() {
 
         @Override
@@ -161,6 +145,31 @@ public abstract class BaseGotsActivity extends GotsCoreActivity implements GotsC
             }
         }
     };
+    private int progressCounter = 0;
+    private BroadcastReceiver progressReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (BroadCastMessages.PROGRESS_UPDATE.equals(intent.getAction())) {
+                setProgressRefresh(true);
+                progressCounter++;
+            } else if (BroadCastMessages.PROGRESS_FINISHED.equals(intent.getAction())) {
+                if (--progressCounter == 0)
+                    setProgressRefresh(false);
+            }
+        }
+    };
+
+    @Override
+    public void onAuthenticationSucceed(Account account) {
+        showNotification(account.name + ", " + getResources().getString(R.string.login_connection_succeed), false);
+    }
+
+    @Override
+    public void onAuthenticationFailed(String string) {
+        showNotification(string, false);
+
+    }
 
     public GotsContext getGotsContext() {
         return GotsContext.get(getApplicationContext());
@@ -244,7 +253,7 @@ public abstract class BaseGotsActivity extends GotsCoreActivity implements GotsC
 
         notificationText = (TextView) findViewById(R.id.textViewProgress);
         imageView = (ImageView) findViewById(R.id.imageViewRefresh);
-        layoutNotification = (View) findViewById(R.id.layoutNotification);
+        layoutNotification = (CoordinatorLayout) findViewById(R.id.layoutNotification);
         floatingActionsMenu = (FloatingActionsMenu) findViewById(R.id.idFAB);
     }
 
@@ -338,26 +347,9 @@ public abstract class BaseGotsActivity extends GotsCoreActivity implements GotsC
 
     }
 
-
     protected List<FloatingItem> onCreateFloatingMenu() {
         return null;
     }
-
-    private int progressCounter = 0;
-
-    private BroadcastReceiver progressReceiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (BroadCastMessages.PROGRESS_UPDATE.equals(intent.getAction())) {
-                setProgressRefresh(true);
-                progressCounter++;
-            } else if (BroadCastMessages.PROGRESS_FINISHED.equals(intent.getAction())) {
-                if (--progressCounter == 0)
-                    setProgressRefresh(false);
-            }
-        }
-    };
 
     @Override
     protected void onDestroy() {
@@ -610,7 +602,6 @@ public abstract class BaseGotsActivity extends GotsCoreActivity implements GotsC
         }
     }
 
-
     @Override
     public void onBackStackChanged() {
 //        if (getSupportFragmentManager().getBackStackEntryCount() == 0 && findViewById(R.id.contentLayout) != null) {
@@ -632,44 +623,52 @@ public abstract class BaseGotsActivity extends GotsCoreActivity implements GotsC
     }
 
     public void showNotification(String message, boolean animation, final int millis) {
-        notificationText.setText(message);
-        if (animation) {
-            Animation myRotateAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate);
-            myRotateAnimation.setRepeatCount(Animation.INFINITE);
-            imageView.startAnimation(myRotateAnimation);
+        Snackbar snackbar = Snackbar
+                .make(layoutNotification, message, Snackbar.LENGTH_LONG);
 
-        } else {
-            imageView.clearAnimation();
-            imageView.setVisibility(View.GONE);
-            notificationText.clearAnimation();
-        }
+        snackbar.show();
+//        notificationText.setText(message);
+//        if (animation) {
+//            Animation myRotateAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate);
+//            myRotateAnimation.setRepeatCount(Animation.INFINITE);
+//            imageView.startAnimation(myRotateAnimation);
+//
+//        } else {
+//            imageView.clearAnimation();
+//            imageView.setVisibility(View.GONE);
+//            notificationText.clearAnimation();
+//        }
+//
+//        layoutNotification.setVisibility(View.VISIBLE);
+//        layoutNotification.setAlpha(0.0f);
+//
+////        Animation animationIn = AnimationUtils.loadAnimation(this, R.anim.slide_in_up);
+////        layoutNotification.setAnimation(animationIn);
+//        layoutNotification.animate()
+//                .alpha(1.0f)
+//                .setDuration(500)
+//                .setListener(new AnimatorListenerAdapter() {
+//                    @Override
+//                    public void onAnimationEnd(Animator animation) {
+//                        super.onAnimationEnd(animation);
+//                        Animation animationOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_out_up);
+//                        layoutNotification.animate()
+//                                .alpha(0.0f)
+//                                .setDuration(millis).setListener(new AnimatorListenerAdapter() {
+//                            @Override
+//                            public void onAnimationEnd(Animator animation) {
+//                                layoutNotification.setVisibility(View.GONE);
+//                                super.onAnimationEnd(animation);
+//                            }
+//                        });
+////                        layoutNotification.setVisibility(View.GONE);
+//
+//                    }
+//                });
 
-        layoutNotification.setVisibility(View.VISIBLE);
-        layoutNotification.setAlpha(0.0f);
+    }
 
-//        Animation animationIn = AnimationUtils.loadAnimation(this, R.anim.slide_in_up);
-//        layoutNotification.setAnimation(animationIn);
-        layoutNotification.animate()
-                .alpha(1.0f)
-                .setDuration(500)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        Animation animationOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_out_up);
-                        layoutNotification.animate()
-                                .alpha(0.0f)
-                                .setDuration(millis).setListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                layoutNotification.setVisibility(View.GONE);
-                                super.onAnimationEnd(animation);
-                            }
-                        });
-//                        layoutNotification.setVisibility(View.GONE);
-
-                    }
-                });
-
+    public interface GardenListener {
+        public void onCurrentGardenChanged(GardenInterface garden);
     }
 }

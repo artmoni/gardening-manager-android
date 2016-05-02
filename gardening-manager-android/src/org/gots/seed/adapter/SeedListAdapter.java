@@ -1,16 +1,5 @@
 package org.gots.seed.adapter;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
-
-import org.gots.R;
-import org.gots.action.adapter.comparator.ISeedSpecieComparator;
-import org.gots.seed.BaseSeed;
-import org.gots.seed.SeedUtil;
-import org.gots.seed.view.SeedWidgetTile;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,17 +8,24 @@ import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 
+import org.gots.R;
+import org.gots.action.adapter.comparator.ISeedSpecieComparator;
+import org.gots.seed.BaseSeed;
+import org.gots.seed.SeedUtil;
+import org.gots.seed.view.SeedWidgetTile;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
+
 public abstract class SeedListAdapter extends BaseAdapter implements Filterable {
 
-    HolderFilter holderFilter;
-
     protected List<BaseSeed> vendorSeeds;
-
     protected List<BaseSeed> vendorSeedsFilter;
-
     protected Context mContext;
-
     protected LayoutInflater inflater;
+    HolderFilter holderFilter;
 
     public SeedListAdapter(Context context, List<BaseSeed> vendorSeeds) {
         this.vendorSeeds = vendorSeeds;
@@ -44,10 +40,6 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
 
     public SeedListAdapter() {
         super();
-    }
-
-    public class Holder {
-        public SeedWidgetTile seedWidgetTile;
     }
 
     @Override
@@ -102,6 +94,10 @@ public abstract class SeedListAdapter extends BaseAdapter implements Filterable 
     public void notifyDataSetInvalidated() {
         vendorSeedsFilter = vendorSeeds;
         super.notifyDataSetInvalidated();
+    }
+
+    public class Holder {
+        public SeedWidgetTile seedWidgetTile;
     }
 
     class HolderFilter extends Filter {

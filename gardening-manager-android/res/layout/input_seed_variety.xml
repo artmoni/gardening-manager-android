@@ -8,23 +8,23 @@
         style="@style/SpinnerTextViewItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/seed.description.variety"
-        android:singleLine="true"
         android:layout_below="@+id/imageView4"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="@string/seed.description.variety"
+        android:singleLine="true">
 
         <requestFocus />
     </AutoCompleteTextView>
 
     <ImageView
+        android:id="@+id/imageView4"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/input_seed_variety"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:id="@+id/imageView4" />
+        android:src="@drawable/input_seed_variety" />
 
 </RelativeLayout>

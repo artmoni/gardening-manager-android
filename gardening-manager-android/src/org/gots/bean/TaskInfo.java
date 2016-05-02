@@ -1,8 +1,8 @@
 package org.gots.bean;
 
-import java.io.Serializable;
-
 import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
 
 /*
  * {"id":"ec232bf1-c997-444f-acb9-2605ca5258f2","docref":"e68a2769-1a7e-4cf3-8f3f-b42366016991","name":

@@ -1,8 +1,13 @@
 package org.gots.authentication.syncadapter;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import android.accounts.Account;
+import android.content.ContentProviderClient;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SyncResult;
+import android.os.Bundle;
+import android.text.format.DateFormat;
+import android.util.Log;
 
 import org.gots.R;
 import org.gots.authentication.GotsSyncAdapter;
@@ -16,14 +21,9 @@ import org.gots.sensor.parrot.ParrotSampleTemperature;
 import org.gots.sensor.parrot.ParrotSamplesProvider;
 import org.gots.sensor.parrot.ParrotSensorProvider;
 
-import android.accounts.Account;
-import android.content.ContentProviderClient;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SyncResult;
-import android.os.Bundle;
-import android.text.format.DateFormat;
-import android.util.Log;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 public class SensorSyncAdapter extends GotsSyncAdapter {
 
@@ -34,7 +34,7 @@ public class SensorSyncAdapter extends GotsSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider,
-            SyncResult syncResult) {
+                              SyncResult syncResult) {
         Log.d("SensorSyncAdapter", "onPerformSync for account[" + account.name + "]");
 
         final Intent intent = new Intent();

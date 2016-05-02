@@ -49,8 +49,8 @@
                     android:ems="10"
                     android:hint="@string/allotment.name"
                     android:singleLine="true"
-                    android:textSize="20dp"
-                    android:textColor="@color/text_color_dark" >
+                    android:textColor="@color/text_color_dark"
+                    android:textSize="20dp">
 
                     <requestFocus />
                 </EditText>

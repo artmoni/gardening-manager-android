@@ -1,8 +1,8 @@
 package org.gots.sensor.parrot;
 
-import java.util.Date;
-
 import com.google.gson.annotations.SerializedName;
+
+import java.util.Date;
 
 /*{
  "avatar_url": "5f3b23de1810eeae7fc9a7dbf276729a733860e008fad176e82a8fc5b7cc7b52e868ef4512801f1fcd549637cf42a2cbad4e87002217ad2eae7f537078492baa424611060",
@@ -44,85 +44,50 @@ public class ParrotLocation {
 
     @SerializedName("images")
     public Images[] images;
-
-    public class Images {
-
-        @SerializedName("image_identifier")
-        public String image_identifier;
-
-        @SerializedName("location_identifier")
-        public String location_identifier;
-
-        @SerializedName("url")
-        public String url;
-
-        public Images() {
-        }
-    }
-
     @SerializedName("description")
     String description;
-
     @SerializedName("display_order")
     int display_order;
-
     @SerializedName("first_sample_utc")
     String first_sample_utc;
-
     @SerializedName("hardiness_zone")
     String hardiness_zone;
-
     @SerializedName("heat_zone")
     int heat_zone;
-
     @SerializedName("ignore_fertilizer_alert")
     boolean ignore_fertilizer_alert;
-
     @SerializedName("ignore_light_alert")
     boolean ignore_light_alert;
-
     @SerializedName("ignore_moisture_alert")
     boolean ignore_moisture_alert;
-
     @SerializedName("ignore_temperature_alert")
     boolean ignore_temperature_alert;
-
     @SerializedName("in_pot")
     boolean in_pot;
-
     @SerializedName("is_indoor")
     boolean is_indoor;
+    @SerializedName("latitude")
+    Float latitude;
 
     // @SerializedName("last_sample_upload")
     // String last_sample_upload;
     //
     // @SerializedName("last_sample_utc")
     // String last_sample_utc;
-
-    @SerializedName("latitude")
-    Float latitude;
-
     @SerializedName("longitude")
     Float longitude;
-
     @SerializedName("location_identifier")
     String location_identifier;
-
     @SerializedName("location_name")
     String location_name;
-
     @SerializedName("plant_assigned_date")
     Date plant_assigned_date;
-
     @SerializedName("plant_id")
     String plant_id;
-
     @SerializedName("plant_nickname")
     String plant_nickname;
-
     @SerializedName("sensor_serial")
     String sensor_serial;
-
     @SerializedName("total_sample_count")
     int total_sample_count;
 
@@ -206,6 +171,10 @@ public class ParrotLocation {
         this.is_indoor = is_indoor;
     }
 
+    public Float getLatitude() {
+        return latitude;
+    }
+
     // public String getLast_sample_upload() {
     // return last_sample_upload;
     // }
@@ -221,10 +190,6 @@ public class ParrotLocation {
     // public void setLast_sample_utc(String last_sample_utc) {
     // this.last_sample_utc = last_sample_utc;
     // }
-
-    public Float getLatitude() {
-        return latitude;
-    }
 
     public void setLatitude(Float latitude) {
         this.latitude = latitude;
@@ -327,5 +292,20 @@ public class ParrotLocation {
 
     public void setImages(Images[] images) {
         this.images = images;
+    }
+
+    public class Images {
+
+        @SerializedName("image_identifier")
+        public String image_identifier;
+
+        @SerializedName("location_identifier")
+        public String location_identifier;
+
+        @SerializedName("url")
+        public String url;
+
+        public Images() {
+        }
     }
 }

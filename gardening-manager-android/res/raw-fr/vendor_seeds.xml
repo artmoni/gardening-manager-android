@@ -1,347 +1,412 @@
 <gots>
-	<seeds>
-		<seed>
-			<reference>990001</reference>
-			<family>apiaceae</family>
-			<specie>daucus carota</specie>
-			<description_growth>Semis : directement sur place. Eclaircir à 3-4 cm
-Levée : 10 à 14 jours en sol à 20°C
-Sol : meuble, frais et léger.
-Arrosage : Besoins plus particulièrement élevés en eau dans le mois suivant le semis, en azote pendant le développement du feuillage, et en potassium pendant la phase de développement de la racine.
-</description_growth>
-			<description_cultivation>Dans un sillon d'un centimètre, de préférence sablonneux et avec un apport de compost bien fais. Eclaircissez lorsque les tiges font 3 centimères tous les 3 centimètres puis tous les 8 centimètres lorsqu'elles ont 3-4 feuilles.
-			</description_cultivation>
-			<description_harvest>3 à 6 mois après semis. Selon si c'est en pleine terre ou sous-abri et selon la variété. En climat tempéré, les périodes de semis peuvent s'étaler de fin janvier à début juillet, pour des récoltes d'Avril à Décembre.
-			</description_harvest>
-			<description_diseases>maladies cryptogamiques :
+    <seeds>
+        <seed>
+            <reference>990001</reference>
+            <family>apiaceae</family>
+            <specie>daucus carota</specie>
+            <description_growth>Semis : directement sur place. Eclaircir à 3-4 cm
+                Levée : 10 à 14 jours en sol à 20°C
+                Sol : meuble, frais et léger.
+                Arrosage : Besoins plus particulièrement élevés en eau dans le mois suivant le
+                semis, en azote pendant le développement du feuillage, et en potassium pendant la
+                phase de développement de la racine.
+            </description_growth>
+            <description_cultivation>Dans un sillon d'un centimètre, de préférence sablonneux et
+                avec un apport de compost bien fais. Eclaircissez lorsque les tiges font 3
+                centimères tous les 3 centimètres puis tous les 8 centimètres lorsqu'elles ont 3-4
+                feuilles.
+            </description_cultivation>
+            <description_harvest>3 à 6 mois après semis. Selon si c'est en pleine terre ou sous-abri
+                et selon la variété. En climat tempéré, les périodes de semis peuvent s'étaler de
+                fin janvier à début juillet, pour des récoltes d'Avril à Décembre.
+            </description_harvest>
+            <description_diseases>maladies cryptogamiques :
 
-- le mildiou: Bremia, Peronospora, Phytophthora, Plasmopara, Pseudoperonospora, Sclerospora
-Provoquée par le champignon appelé Phytophthora infestans.
-Ces maladies se manifestent par des taches brunes et/ou une apparence de moisissures blanches et cotonneuse suivies d'un flétrissement général de la feuille, d'un rameau ou de toute la plante. Le tubercule atteint pourrit rapidement, même au cours de la conservation, dégageant une odeur désagréable et forte.
+                - le mildiou: Bremia, Peronospora, Phytophthora, Plasmopara, Pseudoperonospora,
+                Sclerospora
+                Provoquée par le champignon appelé Phytophthora infestans.
+                Ces maladies se manifestent par des taches brunes et/ou une apparence de moisissures
+                blanches et cotonneuse suivies d'un flétrissement général de la feuille, d'un rameau
+                ou de toute la plante. Le tubercule atteint pourrit rapidement, même au cours de la
+                conservation, dégageant une odeur désagréable et forte.
 
-- l'oïdium : Erysiphe heraclei ou Erysiphe umbelliferarum, Leveillula taurica.
-Champignon.Taches poudreuses blanc-grisâtre à la surface des feuilles, des tiges et parfois des fleurs ou des fruits. L'oïdium peut provoquer une déformation des feuilles, qui se gondolent et se boursouflent.
-Pour Leveillula taurica, Les symptômes sont différents en fonction de la face des folioles :
-- Sur la face supérieure, on note la présence de taches jaunâtres.
-- Sur la face inférieure, le feutrage blanc est constitué par les conidiophores et conidies du champignon.
+                - l'oïdium : Erysiphe heraclei ou Erysiphe umbelliferarum, Leveillula taurica.
+                Champignon.Taches poudreuses blanc-grisâtre à la surface des feuilles, des tiges et
+                parfois des fleurs ou des fruits. L'oïdium peut provoquer une déformation des
+                feuilles, qui se gondolent et se boursouflent.
+                Pour Leveillula taurica, Les symptômes sont différents en fonction de la face des
+                folioles :
+                - Sur la face supérieure, on note la présence de taches jaunâtres.
+                - Sur la face inférieure, le feutrage blanc est constitué par les conidiophores et
+                conidies du champignon.
 
-Les porte-graines peuvent également être attaqués.
+                Les porte-graines peuvent également être attaqués.
 
-- L'alternariose : Alternaria radicina, Stemphylium radicinum
-Provoquée par le champignon Alternaria dauci. Les facteurs favorisants sont la chaleur et l'humidité (ex: condensation). Des petites taches brunâtres, auréolées de jaune, apparaissent sur le bord des feuilles. Puis dessèchement des folioles qui se nécrosent et tombent. Les pétioles peuvent aussi être attaqués.
-			</description_diseases>
-			<sowingDateMin>3</sowingDateMin>
-			<sowingDateMax>6</sowingDateMax>
-			<durationMin>84</durationMin>
-			<durationMax>192</durationMax>
-			<actions> <action 	name="lighten" 	duration="20" ></action>
+                - L'alternariose : Alternaria radicina, Stemphylium radicinum
+                Provoquée par le champignon Alternaria dauci. Les facteurs favorisants sont la
+                chaleur et l'humidité (ex: condensation). Des petites taches brunâtres, auréolées de
+                jaune, apparaissent sur le bord des feuilles. Puis dessèchement des folioles qui se
+                nécrosent et tombent. Les pétioles peuvent aussi être attaqués.
+            </description_diseases>
+            <sowingDateMin>3</sowingDateMin>
+            <sowingDateMax>6</sowingDateMax>
+            <durationMin>84</durationMin>
+            <durationMax>192</durationMax>
+            <actions>
+                <action name="lighten" duration="20"></action>
 
-			</actions>
-		</seed>
-		#########################################
-		<seed>
-			<reference>990002</reference>
-			<family>Liliaceae</family>
-			<specie>allium cepa</specie>
-			<description_growth>L'oignon est une espèce herbacée, vivace par son bulbe unique, cultivée comme une annuelle ou bisannuelle (floraison la deuxième année). C'est une plante haute de 60 à 100 cm, dont les feuilles de couleur verte sont cylindriques, creuses (ce qui distingue cette espèce du poireau et de l'ail, autres espèces cultivées appartenant aussi au genre Allium). La tige florale dressée est également creuse. Elle présente un renflement vers sa base.
- Le b ulbe est relativement gros, de forme sphérique, parfois plus ou moins aplati.
- Les fleurs petites (de 4 à 5 mm de large), de couleur blanche ou verte, sont regroupées en une ombelle sphérique, en position terminale sur la tige. Les fleurs ont une symétrie trimère, à trois sépales, trois pétales et six étamines. L'ovaire unique est divisé en trois loges. Le fruit est une capsule s'ouvrant par trois valves, libérant chacune généralement deux graines.
- Chez certaines variétés, il arrive que des bulbilles se développent à la place des fleurs.
- Cette plante possède un bulbe qui lui permet de se reproduire.
-			</description_growth>
-			<description_cultivation>Espacez vos plants de 10 centimètres dans des rangs distants de 20 centimètres
-			</description_cultivation>
-			<description_harvest>Vous pouvez récoltez les oignons blanc à partir de juin, les jaunes en septembre lorsque les tiges jaunissent
-			</description_harvest>
-			<description_diseases></description_diseases>
-			<sowingDateMin>3</sowingDateMin>
-			<sowingDateMax>4</sowingDateMax>
-			<durationMin>120</durationMin>
-			<durationMax>150</durationMax>
-		</seed>
-		<seed>
-			<reference>990003</reference>
-			<family>Asteraceae</family>
-			<specie>Lactuca sativa</specie>
-			<variety>
-			</variety>
-			<link>
-			</link>
-			<description_growth>Les nombreuses variétés de laitues actuelles sont généralement classées selon la forme et la couleur du feuillage, leur mode de culture et de récolte (période de culture, sous abris ou en plein champ, 4ème gamme,...).
- Plus de 1500 variétés sont inscrites au catalogue officiel européen des espèces et variétés et plus de 400 au catalogue français.
- La création variétale est extrêmement active du fait des différents modes de culture et de commercialisation, mais aussi de la recherche de variétés résistantes à des maladies telles que le Bremia qui évolue rapidement.
-			</description_growth>
-			<description_cultivation>Semez en ligne dans des sillons d'un centimètre de profondeur en espacant les graines de 25 centimètres
-			</description_cultivation>
-			<description_harvest>Lorsque la salade a une taille correcte
-			</description_harvest>
-			<description_diseases>Attention aux limaces</description_diseases>
-			<sowingDateMin>3</sowingDateMin>
-			<sowingDateMax>9</sowingDateMax>
-			<durationMin>90</durationMin>
-			<durationMax>120</durationMax>
-			<actions> <action 	name="lighten" 	duration="20" ></action>
+            </actions>
+        </seed>
+        #########################################
+        <seed>
+            <reference>990002</reference>
+            <family>Liliaceae</family>
+            <specie>allium cepa</specie>
+            <description_growth>L'oignon est une espèce herbacée, vivace par son bulbe unique,
+                cultivée comme une annuelle ou bisannuelle (floraison la deuxième année). C'est une
+                plante haute de 60 à 100 cm, dont les feuilles de couleur verte sont cylindriques,
+                creuses (ce qui distingue cette espèce du poireau et de l'ail, autres espèces
+                cultivées appartenant aussi au genre Allium). La tige florale dressée est également
+                creuse. Elle présente un renflement vers sa base.
+                Le b ulbe est relativement gros, de forme sphérique, parfois plus ou moins aplati.
+                Les fleurs petites (de 4 à 5 mm de large), de couleur blanche ou verte, sont
+                regroupées en une ombelle sphérique, en position terminale sur la tige. Les fleurs
+                ont une symétrie trimère, à trois sépales, trois pétales et six étamines. L'ovaire
+                unique est divisé en trois loges. Le fruit est une capsule s'ouvrant par trois
+                valves, libérant chacune généralement deux graines.
+                Chez certaines variétés, il arrive que des bulbilles se développent à la place des
+                fleurs.
+                Cette plante possède un bulbe qui lui permet de se reproduire.
+            </description_growth>
+            <description_cultivation>Espacez vos plants de 10 centimètres dans des rangs distants de
+                20 centimètres
+            </description_cultivation>
+            <description_harvest>Vous pouvez récoltez les oignons blanc à partir de juin, les jaunes
+                en septembre lorsque les tiges jaunissent
+            </description_harvest>
+            <description_diseases></description_diseases>
+            <sowingDateMin>3</sowingDateMin>
+            <sowingDateMax>4</sowingDateMax>
+            <durationMin>120</durationMin>
+            <durationMax>150</durationMax>
+        </seed>
+        <seed>
+            <reference>990003</reference>
+            <family>Asteraceae</family>
+            <specie>Lactuca sativa</specie>
+            <variety></variety>
+            <link></link>
+            <description_growth>Les nombreuses variétés de laitues actuelles sont généralement
+                classées selon la forme et la couleur du feuillage, leur mode de culture et de
+                récolte (période de culture, sous abris ou en plein champ, 4ème gamme,...).
+                Plus de 1500 variétés sont inscrites au catalogue officiel européen des espèces et
+                variétés et plus de 400 au catalogue français.
+                La création variétale est extrêmement active du fait des différents modes de culture
+                et de commercialisation, mais aussi de la recherche de variétés résistantes à des
+                maladies telles que le Bremia qui évolue rapidement.
+            </description_growth>
+            <description_cultivation>Semez en ligne dans des sillons d'un centimètre de profondeur
+                en espacant les graines de 25 centimètres
+            </description_cultivation>
+            <description_harvest>Lorsque la salade a une taille correcte
+            </description_harvest>
+            <description_diseases>Attention aux limaces</description_diseases>
+            <sowingDateMin>3</sowingDateMin>
+            <sowingDateMax>9</sowingDateMax>
+            <durationMin>90</durationMin>
+            <durationMax>120</durationMax>
+            <actions>
+                <action name="lighten" duration="20"></action>
 
-			</actions>
-		</seed>
-		<seed>
-			<reference>990004</reference>
-			<family>Brassicaceae</family>
-			<specie>Raphanus sativus</specie>
-			<variety>
-			</variety>
-			<link>
-			</link>
-			<description_growth>Semez toutes les 2-3 semaines une rangée pour avoir des radis régulièrement
-			</description_growth>
-			<description_cultivation>Eclaircissez tous les 3 centimères lorsque les tiges font 1-2 centimètres
-			</description_cultivation>
-			<description_harvest>
-			</description_harvest>
-			<description_diseases>En arrosant régulièrement, vous éviterez les attaques des altises qui mangent les feuilles
-			</description_diseases>
-			<sowingDateMin>4</sowingDateMin>
-			<sowingDateMax>8</sowingDateMax>
-			<durationMin>20</durationMin>
-			<durationMax>42</durationMax>
-		</seed>
-		<seed>
-			<reference>990005</reference>
-			<family>Solanaceae</family>
-			<specie>Solanum lycopersicum</specie>
-			<variety>
-			</variety>
-			<link>
-			</link>
-			<description_growth>semis en godet (sous chassis, sur couche chaude, en serre à 20°C), 3 à 4 graines par pot.
-Repiquer en terre dès que le plant atteint 12-15 cm. Espacer les plants de 70 cm.
-Sol : léger, frais, humifère, bien ameubli
-Exposition : ensoleillée
-Climat : tempéré, chaud (T° entre 15 et 27°C)
-Pincer les gourmands pour les enlever.	
-			</description_growth>
-			<description_cultivation>Supprimez régulièrement les pouces latérales de la tomate appelés gourmands
-			</description_cultivation>
-			<description_harvest>
-			</description_harvest>
-			<description_diseases>- Le mildiou : Bremia, Peronospora, Phytophthora, Plasmopara, Pseudoperonospora, Sclerospora
-Provoquée par le champignon appelé Phytophthora infestans.
-Ces maladies se manifestent par des taches brunes et/ou une apparence de moisissures blanches et cotonneuse suivies d'un flétrissement général de la feuille, d'un rameau ou de toute la plante. Le tubercule atteint pourrit rapidement, même au cours de la conservation, dégageant une odeur désagréable et forte.
-
-
-- La maladie fauve : Feuilles jaunes, se dessèchent et meurent.
-
-
-- La gangrène des fruits : Taches brunes à noires sur les fruits encore verts. Cause : humidité prolongée, éviter l'arrosage des feuilles. 
-			</description_diseases>
-			<sowingDateMin>2</sowingDateMin>
-			<sowingDateMax>3</sowingDateMax>
-			<durationMin>150</durationMin>
-			<durationMax>150</durationMax>
-		</seed>
-		<seed>
-			<reference>990006</reference>
-			<family>Brassicaceae</family>
-			<specie>Brassica rapa</specie>
-			<variety>
-			</variety>
-			<link>
-			</link>
-			<description_growth>
-			</description_growth>
-			<description_cultivation>Semez dans des sillons d'un centimètre et distants de 25 centimètres
-			</description_cultivation>
-			<description_harvest>Récoltez au fur et à mesure de vos besoins
-			</description_harvest>
-			<description_diseases>Lorqu'il fait très sec, l'Altise menace, arrosez régulièrement pour vous en protéger
-			</description_diseases>
-			<sowingDateMin>6</sowingDateMin>
-			<sowingDateMax>7</sowingDateMax>
-			<durationMin>60</durationMin>
-			<durationMax>150</durationMax>
-			<actions> 
-			    <action name="lighten" 	duration="20" ></action>
-			</actions>
-		</seed>
-		<seed>
-			<reference>990007</reference>
-			<family>Cucurbitaceae</family>
-			<specie>Cucumis sativus</specie>
-			<variety>
-			</variety>
-			<link>
-			</link>
-			<description_growth>-En semis sous abri (+12°C) en avril, 2 graines par godet. Lorsque les plants ont 4 feuilles, éclaircir.
-Mettre en place en terre après les gelées de Mai.
-Distance de plantation : 1 m
-Sol : léger, frais, meuble, riche en humus.
-Exposition : ensoleillée
-Climat : tempéré et chaud.
-Le paillage au compost est recommandé à partir de Juin avant que les plants ne soient trop développés.
-Binage et sarclages conseillés.
-
--En semis directement en terre en place d'avril à fin mai. De préférence en lune croissante.
-			</description_growth>
-			<description_cultivation>Pailler sous les fruits pour qu'ils ne s'abiment pas.
-			</description_cultivation>
-			<description_harvest>2 mois après le semis.
-Cueillir le fruit avec leur pédoncule. Si celui ci se casse au ras du fruit, poudrer immédiatement à l'endroit de la rupture avec du lithothamme.
-			</description_harvest>
-			<description_diseases>- L'oïdium : Erysiphe heraclei ou Erysiphe umbelliferarum, Leveillula taurica.
-Champignon.Taches poudreuses blanc-grisâtre à la surface des feuilles, des tiges et parfois des fleurs ou des fruits. L'oïdium peut provoquer une déformation des feuilles, qui se gondolent et se boursouflent.
-
-- L'anthracnose : Les feuilles des jeunes plants ont des tâches grises, puis brunes, entourées de jaune, les feuilles atteintes meurent. Cause : manque d'aération sous chassis. Pévention : saupoudrage des feuilles avec du lithothamme.
-
-- La grise des cucurbitacées : parasite qui suce le dessous des feuilles. Pulvériser du purin d'ortie ou un insecticide végétal.
-			</description_diseases>
-			<sowingDateMin>4</sowingDateMin>
-			<sowingDateMax>6</sowingDateMax>
-			<durationMin>120</durationMin>
-			<durationMax>180</durationMax>
-		</seed>
-		<seed>
-			<reference>990008</reference>
-			<family>Fabaceae</family>
-			<specie>Phaseolus vulgaris</specie>
-			<variety>
-			</variety>
-			<link>
-			</link>
-			<description_growth>
-			</description_growth>
-			<description_cultivation>
-			</description_cultivation>
-			<description_harvest>
-			</description_harvest>
-			<description_diseases>
-			</description_diseases>
-			<sowingDateMin>4</sowingDateMin>
-			<sowingDateMax>6</sowingDateMax>
-			<durationMin>120</durationMin>
-			<durationMax>180</durationMax>
-		</seed>
-		<seed>
-			<reference>990009</reference>
-			<family>Solanaceae</family>
-			<specie>Solanum tuberosum</specie>
-			<variety></variety>
-			<link></link>
-			<description_growth>Plantez les tubercules ou semez en mars avril, bouturez en avril.
-Semis sur couche en février-mars
-Semis en place sous tunnel en Avril.
-Sol : Profond, fertile, meuble et humifère, sablonneux, au PH neutre et argilo-silicieux.
-Exposition : ensoleillée de préférence ou mi-ombragée
-Climat : Tempéré, pousse dans toutes les régions, craint le gel
-			</description_growth>
-			<description_cultivation></description_cultivation>
-			<description_harvest>Après 2-3 mois pour les variétés précoces et 4-5 mois pour les variétés à longue conservation.
-			</description_harvest>
-			<description_diseases>- La galle : Tâches grisâtres à brunâtres comme des croutes sur les tubercules.
-Cause : terre à PH calcaire ou chaulée
-
-- le mildiou : Bremia, Peronospora, Phytophthora, Plasmopara, Pseudoperonospora, Sclerospora
-Provoquée par le champignon appelé Phytophthora infestans.
-Ces maladies se manifestent par des taches brunes et/ou une apparence de moisissures blanches et cotonneuse suivies d'un flétrissement général de la feuille, d'un rameau ou de toute la plante. Le tubercule atteint pourrit rapidement, même au cours de la conservation, dégageant une odeur désagréable et forte. Pratiquer une rotation de 4 ou 5 ans. Tous les 15 jours, pratiquer une pulvérisation de lithothamme. Pendant l'hiver, pulvériser du purin d'ortie 2 fois sur le sol pour éviter les champignons.
+            </actions>
+        </seed>
+        <seed>
+            <reference>990004</reference>
+            <family>Brassicaceae</family>
+            <specie>Raphanus sativus</specie>
+            <variety></variety>
+            <link></link>
+            <description_growth>Semez toutes les 2-3 semaines une rangée pour avoir des radis
+                régulièrement
+            </description_growth>
+            <description_cultivation>Eclaircissez tous les 3 centimères lorsque les tiges font 1-2
+                centimètres
+            </description_cultivation>
+            <description_harvest></description_harvest>
+            <description_diseases>En arrosant régulièrement, vous éviterez les attaques des altises
+                qui mangent les feuilles
+            </description_diseases>
+            <sowingDateMin>4</sowingDateMin>
+            <sowingDateMax>8</sowingDateMax>
+            <durationMin>20</durationMin>
+            <durationMax>42</durationMax>
+        </seed>
+        <seed>
+            <reference>990005</reference>
+            <family>Solanaceae</family>
+            <specie>Solanum lycopersicum</specie>
+            <variety></variety>
+            <link></link>
+            <description_growth>semis en godet (sous chassis, sur couche chaude, en serre à 20°C), 3
+                à 4 graines par pot.
+                Repiquer en terre dès que le plant atteint 12-15 cm. Espacer les plants de 70 cm.
+                Sol : léger, frais, humifère, bien ameubli
+                Exposition : ensoleillée
+                Climat : tempéré, chaud (T° entre 15 et 27°C)
+                Pincer les gourmands pour les enlever.
+            </description_growth>
+            <description_cultivation>Supprimez régulièrement les pouces latérales de la tomate
+                appelés gourmands
+            </description_cultivation>
+            <description_harvest></description_harvest>
+            <description_diseases>- Le mildiou : Bremia, Peronospora, Phytophthora, Plasmopara,
+                Pseudoperonospora, Sclerospora
+                Provoquée par le champignon appelé Phytophthora infestans.
+                Ces maladies se manifestent par des taches brunes et/ou une apparence de moisissures
+                blanches et cotonneuse suivies d'un flétrissement général de la feuille, d'un rameau
+                ou de toute la plante. Le tubercule atteint pourrit rapidement, même au cours de la
+                conservation, dégageant une odeur désagréable et forte.
 
 
-- le doryphore : coléoptère jaune orangé avec des lignes noires, bombé, très vorace. Pulvériser un insecticide végétal. Prélever les doryphores à la main.
+                - La maladie fauve : Feuilles jaunes, se dessèchent et meurent.
 
 
-- la rouille : Apparition de tâches grisâtres, sur les folioles. Pulvériser de la bouillie bordelaise.
+                - La gangrène des fruits : Taches brunes à noires sur les fruits encore verts. Cause
+                : humidité prolongée, éviter l'arrosage des feuilles.
+            </description_diseases>
+            <sowingDateMin>2</sowingDateMin>
+            <sowingDateMax>3</sowingDateMax>
+            <durationMin>150</durationMin>
+            <durationMax>150</durationMax>
+        </seed>
+        <seed>
+            <reference>990006</reference>
+            <family>Brassicaceae</family>
+            <specie>Brassica rapa</specie>
+            <variety></variety>
+            <link></link>
+            <description_growth></description_growth>
+            <description_cultivation>Semez dans des sillons d'un centimètre et distants de 25
+                centimètres
+            </description_cultivation>
+            <description_harvest>Récoltez au fur et à mesure de vos besoins
+            </description_harvest>
+            <description_diseases>Lorqu'il fait très sec, l'Altise menace, arrosez régulièrement
+                pour vous en protéger
+            </description_diseases>
+            <sowingDateMin>6</sowingDateMin>
+            <sowingDateMax>7</sowingDateMax>
+            <durationMin>60</durationMin>
+            <durationMax>150</durationMax>
+            <actions>
+                <action name="lighten" duration="20"></action>
+            </actions>
+        </seed>
+        <seed>
+            <reference>990007</reference>
+            <family>Cucurbitaceae</family>
+            <specie>Cucumis sativus</specie>
+            <variety></variety>
+            <link></link>
+            <description_growth>-En semis sous abri (+12°C) en avril, 2 graines par godet. Lorsque
+                les plants ont 4 feuilles, éclaircir.
+                Mettre en place en terre après les gelées de Mai.
+                Distance de plantation : 1 m
+                Sol : léger, frais, meuble, riche en humus.
+                Exposition : ensoleillée
+                Climat : tempéré et chaud.
+                Le paillage au compost est recommandé à partir de Juin avant que les plants ne
+                soient trop développés.
+                Binage et sarclages conseillés.
+
+                -En semis directement en terre en place d'avril à fin mai. De préférence en lune
+                croissante.
+            </description_growth>
+            <description_cultivation>Pailler sous les fruits pour qu'ils ne s'abiment pas.
+            </description_cultivation>
+            <description_harvest>2 mois après le semis.
+                Cueillir le fruit avec leur pédoncule. Si celui ci se casse au ras du fruit, poudrer
+                immédiatement à l'endroit de la rupture avec du lithothamme.
+            </description_harvest>
+            <description_diseases>- L'oïdium : Erysiphe heraclei ou Erysiphe umbelliferarum,
+                Leveillula taurica.
+                Champignon.Taches poudreuses blanc-grisâtre à la surface des feuilles, des tiges et
+                parfois des fleurs ou des fruits. L'oïdium peut provoquer une déformation des
+                feuilles, qui se gondolent et se boursouflent.
+
+                - L'anthracnose : Les feuilles des jeunes plants ont des tâches grises, puis brunes,
+                entourées de jaune, les feuilles atteintes meurent. Cause : manque d'aération sous
+                chassis. Pévention : saupoudrage des feuilles avec du lithothamme.
+
+                - La grise des cucurbitacées : parasite qui suce le dessous des feuilles. Pulvériser
+                du purin d'ortie ou un insecticide végétal.
+            </description_diseases>
+            <sowingDateMin>4</sowingDateMin>
+            <sowingDateMax>6</sowingDateMax>
+            <durationMin>120</durationMin>
+            <durationMax>180</durationMax>
+        </seed>
+        <seed>
+            <reference>990008</reference>
+            <family>Fabaceae</family>
+            <specie>Phaseolus vulgaris</specie>
+            <variety></variety>
+            <link></link>
+            <description_growth></description_growth>
+            <description_cultivation></description_cultivation>
+            <description_harvest></description_harvest>
+            <description_diseases></description_diseases>
+            <sowingDateMin>4</sowingDateMin>
+            <sowingDateMax>6</sowingDateMax>
+            <durationMin>120</durationMin>
+            <durationMax>180</durationMax>
+        </seed>
+        <seed>
+            <reference>990009</reference>
+            <family>Solanaceae</family>
+            <specie>Solanum tuberosum</specie>
+            <variety></variety>
+            <link></link>
+            <description_growth>Plantez les tubercules ou semez en mars avril, bouturez en avril.
+                Semis sur couche en février-mars
+                Semis en place sous tunnel en Avril.
+                Sol : Profond, fertile, meuble et humifère, sablonneux, au PH neutre et
+                argilo-silicieux.
+                Exposition : ensoleillée de préférence ou mi-ombragée
+                Climat : Tempéré, pousse dans toutes les régions, craint le gel
+            </description_growth>
+            <description_cultivation></description_cultivation>
+            <description_harvest>Après 2-3 mois pour les variétés précoces et 4-5 mois pour les
+                variétés à longue conservation.
+            </description_harvest>
+            <description_diseases>- La galle : Tâches grisâtres à brunâtres comme des croutes sur
+                les tubercules.
+                Cause : terre à PH calcaire ou chaulée
+
+                - le mildiou : Bremia, Peronospora, Phytophthora, Plasmopara, Pseudoperonospora,
+                Sclerospora
+                Provoquée par le champignon appelé Phytophthora infestans.
+                Ces maladies se manifestent par des taches brunes et/ou une apparence de moisissures
+                blanches et cotonneuse suivies d'un flétrissement général de la feuille, d'un rameau
+                ou de toute la plante. Le tubercule atteint pourrit rapidement, même au cours de la
+                conservation, dégageant une odeur désagréable et forte. Pratiquer une rotation de 4
+                ou 5 ans. Tous les 15 jours, pratiquer une pulvérisation de lithothamme. Pendant
+                l'hiver, pulvériser du purin d'ortie 2 fois sur le sol pour éviter les champignons.
 
 
-- La fusariose ou pourriture sèche : Sur les tubercules stockés apparaissent des taches blanches encerclés de de petites surfaces brunes et sèches. Les tubercules pourrissent en dégageant une forte odeur. Eliminer les tubercules atteints et saupoudrer en traitement et en prévention du lithothamme.</description_diseases>
-			<sowingDateMin>3</sowingDateMin>
-			<sowingDateMax>4</sowingDateMax>
-			<durationMin>120</durationMin>
-			<durationMax>180</durationMax>
-			<actions> <action 	name="beak" 	duration="30" ></action>
-
-			</actions>
+                - le doryphore : coléoptère jaune orangé avec des lignes noires, bombé, très vorace.
+                Pulvériser un insecticide végétal. Prélever les doryphores à la main.
 
 
-		</seed>
-		<seed>
-			<reference>990010</reference>
-			<family>solanaceae</family>
-			<specie>capsicum annuum</specie>
-			<variety>piment de cayenne</variety>
-			<link></link>
-			<description_growth>Semis en février mars, sur couche chaude ou en serre, en pots.
-Garder un plant par pot.
-Semis en terre vers fin mai-juin. Espacer de 50 cm.
-Sol : fertile, humifère, profond et frais.
-Exposition : Ensoleillé et chaud.
-Climat : Tempéré à chaud.
-
-			</description_growth>
-			<description_cultivation>Binage et sarclage nécessaires. Arrosage régulier. Tuteurs si nécessaire.			    
-			</description_cultivation>
-			<description_harvest>De fin juillet à l'hiver.
-Récolte 5 à 6 mois après semis.
-Leur couleur doit être verte car le piment continue de se colorer après récolte.
-Pour une longue conservation, les cueillir bien mûrs et les faire sécher en botte au soleil.
-			</description_harvest>
-			<description_diseases>Traiter l'apparition de pucerons ou d'araignées rouges avec un insecticide végétal.</description_diseases>
-			<sowingDateMin>2</sowingDateMin>
-			<sowingDateMax>6</sowingDateMax>
-			<durationMin>150</durationMin>
-			<durationMax>150</durationMax>
-			
+                - la rouille : Apparition de tâches grisâtres, sur les folioles. Pulvériser de la
+                bouillie bordelaise.
 
 
-		</seed>
-		<seed>
-			<reference>990011</reference>
-			<family>solanaceae</family>
-			<specie>capsicum annuum</specie>
-			<variety>poivron Rosso</variety>
-			<link></link>
-			<description_growth>Semis en mars, sur couche chaude ou en serre (28°C), en godets.
-Garder un plant par pot.
-Semis en terre vers fin mai-juin. Espacer de 50 cm. Déposer un peu de compost dans le trou qui recevra le plan.
-Sol : fertile, humifère, profond et frais (15°C)
-Exposition : Ensoleillé et chaud.
-Climat : Tempéré à chaud.
+                - La fusariose ou pourriture sèche : Sur les tubercules stockés apparaissent des
+                taches blanches encerclés de de petites surfaces brunes et sèches. Les tubercules
+                pourrissent en dégageant une forte odeur. Eliminer les tubercules atteints et
+                saupoudrer en traitement et en prévention du lithothamme.
+            </description_diseases>
+            <sowingDateMin>3</sowingDateMin>
+            <sowingDateMax>4</sowingDateMax>
+            <durationMin>120</durationMin>
+            <durationMax>180</durationMax>
+            <actions>
+                <action name="beak" duration="30"></action>
 
-			</description_growth>
-			<description_cultivation>Tailler le plan, pour faire grossir les fruits.
-Binage et sarclage nécessaires. Arrosage régulier. Tuteurs si nécessaire. Pailler les pieds.
-Un apport d'engrais aux premiers fruits est favorable.
-			</description_cultivation>
-			<description_harvest>De fin juin à l'hiver. Récolter un mois après le premier fruit vert.
-Récolte 5 à 6 mois après semis.
-Leur couleur doit être verte car le poivron continue de se colorer après récolte.
-			</description_harvest>
-			<description_diseases>Traiter l'apparition de pucerons ou d'araignées rouges avec un insecticide végétal</description_diseases>
-			<sowingDateMin>2</sowingDateMin>
-			<sowingDateMax>6</sowingDateMax>
-			<durationMin>150</durationMin>
-			<durationMax>150</durationMax>
-			
+            </actions>
 
 
-		</seed>
-		<seed>
-			<reference>990012</reference>
-			<family>Cucurbitaceae</family>
-			<specie>courge</specie>
-			<variety>
-			</variety>
-			<link>
-			</link>
-			<description_growth>Semez en petit lot de 5-6 graines, dans des sillons d'un centimètre et distants de 60 centimètres
-			</description_growth>
-			<description_cultivation>Pailler sous les fruits pour qu'ils ne s'abiment pas.
-			</description_cultivation>
-			<description_harvest>Récoltez selon votre préférence
-			</description_harvest>
-			<description_diseases>Le blanc ou oïdium, caractérisé par des feuilles grisatres et rigide. La nuile qui forme sur les feuilles et les fruits de tâches brunâtres. Le chancre qui attaque les rameaux et la tige principale.
-			</description_diseases>
-			<sowingDateMin>4</sowingDateMin>
-			<sowingDateMax>6</sowingDateMax>
-			<durationMin>120</durationMin>
-			<durationMax>180</durationMax>
-		</seed>
-	</seeds>
+        </seed>
+        <seed>
+            <reference>990010</reference>
+            <family>solanaceae</family>
+            <specie>capsicum annuum</specie>
+            <variety>piment de cayenne</variety>
+            <link></link>
+            <description_growth>Semis en février mars, sur couche chaude ou en serre, en pots.
+                Garder un plant par pot.
+                Semis en terre vers fin mai-juin. Espacer de 50 cm.
+                Sol : fertile, humifère, profond et frais.
+                Exposition : Ensoleillé et chaud.
+                Climat : Tempéré à chaud.
+
+            </description_growth>
+            <description_cultivation>Binage et sarclage nécessaires. Arrosage régulier. Tuteurs si
+                nécessaire.
+            </description_cultivation>
+            <description_harvest>De fin juillet à l'hiver.
+                Récolte 5 à 6 mois après semis.
+                Leur couleur doit être verte car le piment continue de se colorer après récolte.
+                Pour une longue conservation, les cueillir bien mûrs et les faire sécher en botte au
+                soleil.
+            </description_harvest>
+            <description_diseases>Traiter l'apparition de pucerons ou d'araignées rouges avec un
+                insecticide végétal.
+            </description_diseases>
+            <sowingDateMin>2</sowingDateMin>
+            <sowingDateMax>6</sowingDateMax>
+            <durationMin>150</durationMin>
+            <durationMax>150</durationMax>
+
+
+        </seed>
+        <seed>
+            <reference>990011</reference>
+            <family>solanaceae</family>
+            <specie>capsicum annuum</specie>
+            <variety>poivron Rosso</variety>
+            <link></link>
+            <description_growth>Semis en mars, sur couche chaude ou en serre (28°C), en godets.
+                Garder un plant par pot.
+                Semis en terre vers fin mai-juin. Espacer de 50 cm. Déposer un peu de compost dans
+                le trou qui recevra le plan.
+                Sol : fertile, humifère, profond et frais (15°C)
+                Exposition : Ensoleillé et chaud.
+                Climat : Tempéré à chaud.
+
+            </description_growth>
+            <description_cultivation>Tailler le plan, pour faire grossir les fruits.
+                Binage et sarclage nécessaires. Arrosage régulier. Tuteurs si nécessaire. Pailler
+                les pieds.
+                Un apport d'engrais aux premiers fruits est favorable.
+            </description_cultivation>
+            <description_harvest>De fin juin à l'hiver. Récolter un mois après le premier fruit
+                vert.
+                Récolte 5 à 6 mois après semis.
+                Leur couleur doit être verte car le poivron continue de se colorer après récolte.
+            </description_harvest>
+            <description_diseases>Traiter l'apparition de pucerons ou d'araignées rouges avec un
+                insecticide végétal
+            </description_diseases>
+            <sowingDateMin>2</sowingDateMin>
+            <sowingDateMax>6</sowingDateMax>
+            <durationMin>150</durationMin>
+            <durationMax>150</durationMax>
+
+
+        </seed>
+        <seed>
+            <reference>990012</reference>
+            <family>Cucurbitaceae</family>
+            <specie>courge</specie>
+            <variety></variety>
+            <link></link>
+            <description_growth>Semez en petit lot de 5-6 graines, dans des sillons d'un centimètre
+                et distants de 60 centimètres
+            </description_growth>
+            <description_cultivation>Pailler sous les fruits pour qu'ils ne s'abiment pas.
+            </description_cultivation>
+            <description_harvest>Récoltez selon votre préférence
+            </description_harvest>
+            <description_diseases>Le blanc ou oïdium, caractérisé par des feuilles grisatres et
+                rigide. La nuile qui forme sur les feuilles et les fruits de tâches brunâtres. Le
+                chancre qui attaque les rameaux et la tige principale.
+            </description_diseases>
+            <sowingDateMin>4</sowingDateMin>
+            <sowingDateMax>6</sowingDateMax>
+            <durationMin>120</durationMin>
+            <durationMax>180</durationMax>
+        </seed>
+    </seeds>
 </gots>

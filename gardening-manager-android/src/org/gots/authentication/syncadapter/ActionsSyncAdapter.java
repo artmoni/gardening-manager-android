@@ -1,7 +1,12 @@
 package org.gots.authentication.syncadapter;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.accounts.Account;
+import android.content.ContentProviderClient;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SyncResult;
+import android.os.Bundle;
+import android.util.Log;
 
 import org.gots.action.ActionOnSeed;
 import org.gots.action.BaseAction;
@@ -15,13 +20,8 @@ import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.seed.GrowingSeed;
 
-import android.accounts.Account;
-import android.content.ContentProviderClient;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SyncResult;
-import android.os.Bundle;
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ActionsSyncAdapter extends GotsSyncAdapter {
     private LocalActionProvider localActionProvider;
@@ -42,7 +42,7 @@ public class ActionsSyncAdapter extends GotsSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider,
-            SyncResult syncResult) {
+                              SyncResult syncResult) {
         Log.d("ActionsSyncAdapter", "onPerformSync for account[" + account.name + "]");
         getContext().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
         //
@@ -112,7 +112,7 @@ public class ActionsSyncAdapter extends GotsSyncAdapter {
     }
 
     protected List<ActionOnSeed> synchronizeActionSeed(GrowingSeed seed, List<ActionOnSeed> myLocalActions,
-            List<ActionOnSeed> remoteActions) {
+                                                       List<ActionOnSeed> remoteActions) {
         List<ActionOnSeed> myActions = new ArrayList<ActionOnSeed>();
         // Synchronize remote actions with local gardens
         for (ActionOnSeed remoteAction : remoteActions) {
@@ -136,7 +136,7 @@ public class ActionsSyncAdapter extends GotsSyncAdapter {
         }
 
         for (ActionOnSeed localAction : myLocalActions) {
-            if (localAction.getUUID() == null) { 
+            if (localAction.getUUID() == null) {
                 BaseAction newAction = GotsActionManager.getInstance().initIfNew(getContext()).getActionByName(
                         localAction.getName());
                 newAction.setDuration(localAction.getDuration());

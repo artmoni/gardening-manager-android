@@ -2,26 +2,26 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/text_color_light" >
+    android:background="@color/text_color_light">
 
     <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" >
+        android:layout_alignParentTop="true">
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <RelativeLayout
                 android:id="@+id/idLayoutCulturePeriod"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:background="@color/text_color_dark" >
+                android:background="@color/text_color_dark">
 
                 <TextView
                     android:id="@+id/textView1"
@@ -105,8 +105,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/idAdsTop"
         android:layout_below="@id/scrollView1"
-        android:layout_weight="1" >
-    </android.support.v4.view.ViewPager>
+        android:layout_weight="1"></android.support.v4.view.ViewPager>
 
     <FrameLayout
         android:id="@+id/idFragmentOverlay"
@@ -114,8 +113,7 @@
         android:layout_height="fill_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:visibility="gone" >
-    </FrameLayout>
+        android:visibility="gone"></FrameLayout>
 
     <LinearLayout
         android:id="@+id/idAdsTop"
@@ -123,7 +121,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:orientation="horizontal" >
-    </LinearLayout>
+        android:orientation="horizontal"></LinearLayout>
 
 </RelativeLayout>

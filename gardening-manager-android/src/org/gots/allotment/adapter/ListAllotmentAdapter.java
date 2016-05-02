@@ -4,21 +4,11 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- *
+ * <p/>
  * Contributors:
- *     sfleury - initial API and implementation
+ * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.allotment.adapter;
-
-import java.util.List;
-
-import org.gots.R;
-import org.gots.bean.BaseAllotmentInterface;
-import org.gots.preferences.GotsPreferences;
-import org.gots.seed.GrowingSeed;
-import org.gots.seed.adapter.ListGrowingSeedAdapter;
-import org.gots.seed.view.GrowingSeedWidget;
-import org.gots.ui.ExpandableHeightGridView;
 
 import android.content.Context;
 import android.graphics.Point;
@@ -34,27 +24,23 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.gots.R;
+import org.gots.bean.BaseAllotmentInterface;
+import org.gots.preferences.GotsPreferences;
+import org.gots.seed.GrowingSeed;
+import org.gots.seed.adapter.ListGrowingSeedAdapter;
+import org.gots.seed.view.GrowingSeedWidget;
+import org.gots.ui.ExpandableHeightGridView;
+
+import java.util.List;
+
 public class ListAllotmentAdapter extends BaseAdapter {
     protected static final String TAG = "ListAllotmentAdapter";
 
     FragmentActivity mContext;
-
-    private ListGrowingSeedAdapter listGrowingSeedAdapter;
-
-    private List<BaseAllotmentInterface> myAllotments;
-
     OnGrowingSeedClickListener clickListener;
-
-    public interface OnGrowingSeedClickListener {
-        public void onGrowingSeedClick(View view, GrowingSeed seedInterface);
-
-        public void onGrowingSeedLongClick(View view, GrowingSeed seedInterface);
-
-        public void onAllotmentMenuClick(View view, BaseAllotmentInterface allotmentInterface);
-
-        public void onAllotmentClick(View v, BaseAllotmentInterface item);
-
-    }
+    private ListGrowingSeedAdapter listGrowingSeedAdapter;
+    private List<BaseAllotmentInterface> myAllotments;
 
     public ListAllotmentAdapter(FragmentActivity mContext, List<BaseAllotmentInterface> allotments) {
         this.mContext = mContext;
@@ -64,11 +50,13 @@ public class ListAllotmentAdapter extends BaseAdapter {
     public void setAllotments(List<BaseAllotmentInterface> allotments) {
         myAllotments = allotments;
         notifyDataSetChanged();
-    };
+    }
 
     public void setOnGrowingSeedClickListener(OnGrowingSeedClickListener listener) {
         this.clickListener = listener;
     }
+
+    ;
 
     @Override
     public int getCount() {
@@ -83,18 +71,6 @@ public class ListAllotmentAdapter extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         return myAllotments.get(position).getId();
-    }
-
-    public class Holder {
-        public ExpandableHeightGridView seedGridView;
-
-        public TextView allotmentName;
-
-        public LinearLayout titlebar;
-
-        public BaseAllotmentInterface allotment;
-
-        public LinearLayout menu;
     }
 
     @SuppressWarnings("deprecation")
@@ -185,6 +161,29 @@ public class ListAllotmentAdapter extends BaseAdapter {
         });
 
         return ll;
+    }
+
+    public interface OnGrowingSeedClickListener {
+        public void onGrowingSeedClick(View view, GrowingSeed seedInterface);
+
+        public void onGrowingSeedLongClick(View view, GrowingSeed seedInterface);
+
+        public void onAllotmentMenuClick(View view, BaseAllotmentInterface allotmentInterface);
+
+        public void onAllotmentClick(View v, BaseAllotmentInterface item);
+
+    }
+
+    public class Holder {
+        public ExpandableHeightGridView seedGridView;
+
+        public TextView allotmentName;
+
+        public LinearLayout titlebar;
+
+        public BaseAllotmentInterface allotment;
+
+        public LinearLayout menu;
     }
 
 }

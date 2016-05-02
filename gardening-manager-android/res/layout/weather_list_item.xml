@@ -19,9 +19,9 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/textViewWind"
         android:layout_below="@+id/weatherConditionDate"
-        android:text="textViewWeather"
         android:layout_toLeftOf="@+id/tempMax"
-        android:layout_toStartOf="@+id/tempMax" />
+        android:layout_toStartOf="@+id/tempMax"
+        android:text="textViewWeather" />
 
     <TextView
         android:id="@+id/weatherConditionDate"
@@ -40,46 +40,45 @@
         android:layout_below="@id/textViewWeather"
         android:layout_marginLeft="20dp"
         android:layout_marginStart="20dp"
-        android:layout_toRightOf="@+id/weatherImage"
-        android:text="Wind condition"
         android:layout_toLeftOf="@+id/tempMin"
-        android:layout_toStartOf="@+id/tempMin" />
+        android:layout_toRightOf="@+id/weatherImage"
+        android:layout_toStartOf="@+id/tempMin"
+        android:text="Wind condition" />
 
 
+    <TextView
+        android:id="@+id/tempMax"
+        style="@style/weather_tempmax"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/textView10"
+        android:text="35"
 
-        <TextView
-            android:id="@+id/tempMax"
-            style="@style/weather_tempmax"
-            android:text="35"
-            android:layout_toLeftOf="@+id/textView10"
-            android:layout_centerVertical="true"
+        />
 
-            />
-
-        <TextView
-            style="@style/weather_tempmax"
-            android:text="°C"
-            android:id="@+id/textView10"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:layout_marginEnd="10dp" />
+    <TextView
+        android:id="@+id/textView10"
+        style="@style/weather_tempmax"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:text="°C" />
 
     <TextView
         android:id="@+id/tempMin"
         style="@style/weather_tempmin"
-        android:text="15"
         android:layout_alignTop="@+id/textView8"
         android:layout_toLeftOf="@+id/textView8"
-        android:layout_toStartOf="@+id/textView8" />
+        android:layout_toStartOf="@+id/textView8"
+        android:text="15" />
 
     <TextView
-        style="@style/weather_tempmin"
-        android:text="°C"
         android:id="@+id/textView8"
+        style="@style/weather_tempmin"
         android:layout_alignBaseline="@+id/textViewWind"
         android:layout_alignBottom="@+id/textViewWind"
+        android:layout_alignEnd="@+id/textView10"
         android:layout_alignRight="@+id/textView10"
-        android:layout_alignEnd="@+id/textView10" />
+        android:text="°C" />
 
 </RelativeLayout>

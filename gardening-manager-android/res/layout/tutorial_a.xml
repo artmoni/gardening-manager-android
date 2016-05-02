@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/text_color_light"
-    android:gravity="center_vertical" >
+    android:gravity="center_vertical">
 
     <TextView
         android:id="@+id/textView2"
@@ -17,13 +17,13 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <!--<ImageView-->
-        <!--android:id="@+id/imageView2"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_below="@+id/textView2"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:layout_marginTop="30dp"-->
-        <!--android:src="@drawable/tutorial_temp" />-->
+    <!--android:id="@+id/imageView2"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@+id/textView2"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:layout_marginTop="30dp"-->
+    <!--android:src="@drawable/tutorial_temp" />-->
 
     <ImageView
         android:id="@+id/ImageView01"
@@ -46,11 +46,11 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <!--<ImageView-->
-        <!--android:id="@+id/imageView1"-->
-        <!--android:layout_width="50dp"-->
-        <!--android:layout_height="50dp"-->
-        <!--android:layout_alignBottom="@+id/imageView2"-->
-        <!--android:layout_toLeftOf="@+id/imageView2"-->
-        <!--android:src="@drawable/weather_mostlysunny" />-->
+    <!--android:id="@+id/imageView1"-->
+    <!--android:layout_width="50dp"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:layout_alignBottom="@+id/imageView2"-->
+    <!--android:layout_toLeftOf="@+id/imageView2"-->
+    <!--android:src="@drawable/weather_mostlysunny" />-->
 
 </RelativeLayout>

@@ -1,6 +1,11 @@
 package org.gots.ui.fragment;
 
-import java.util.List;
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
 
 import org.gots.R;
 import org.gots.action.ActionOnSeed;
@@ -9,12 +14,7 @@ import org.gots.action.GotsActionSeedManager;
 import org.gots.action.adapter.ListAllActionAdapter;
 import org.gots.action.provider.GotsActionSeedProvider;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListView;
+import java.util.List;
 
 public class ActionsResumeFragment extends BaseGotsFragment {
 
@@ -33,12 +33,6 @@ public class ActionsResumeFragment extends BaseGotsFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         actionSeedManager = GotsActionSeedManager.getInstance().initIfNew(getActivity());
         super.onViewCreated(view, savedInstanceState);
-    }
-
-    public interface OnActionsClickListener {
-        public void onActionClick(View v, BaseAction actionInterface);
-
-        public void onActionMenuClick(View v);
     }
 
     @Override
@@ -95,5 +89,11 @@ public class ActionsResumeFragment extends BaseGotsFragment {
     @Override
     protected boolean requireAsyncDataRetrieval() {
         return true;
+    }
+
+    public interface OnActionsClickListener {
+        public void onActionClick(View v, BaseAction actionInterface);
+
+        public void onActionMenuClick(View v);
     }
 }

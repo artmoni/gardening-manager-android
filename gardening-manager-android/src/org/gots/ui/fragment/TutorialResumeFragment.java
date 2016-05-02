@@ -1,5 +1,15 @@
 package org.gots.ui.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+
 import org.gots.R;
 import org.gots.allotment.GotsAllotmentManager;
 import org.gots.bean.DefaultGarden;
@@ -10,16 +20,6 @@ import org.gots.ui.BaseGotsActivity;
 import org.gots.ui.CatalogueActivity;
 import org.gots.ui.GardenActivity;
 import org.gots.ui.ProfileActivity;
-
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 public class TutorialResumeFragment extends BaseGotsFragment implements OnClickListener {
     private static final int COMPLETE_LOCATION = 1;
@@ -43,10 +43,6 @@ public class TutorialResumeFragment extends BaseGotsFragment implements OnClickL
     private OnTutorialFinishedListener mCallback;
 
     private GotsPreferences gotsPrefs;
-
-    public interface OnTutorialFinishedListener {
-        public abstract void onTutorialFinished();
-    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -114,25 +110,25 @@ public class TutorialResumeFragment extends BaseGotsFragment implements OnClickL
         if (!isAdded())
             return;
         switch (tutorialLevel) {
-        case COMPLETE_LOCATION:
-            button.setText(getResources().getString(R.string.tutorial_a_title));
-            textViewDescription.setText(getResources().getString(R.string.tutorial_a_description));
-            break;
-        case COMPLETE_ALLOTMENT:
-            button.setText(getResources().getString(R.string.tutorial_c_title));
-            textViewDescription.setText(getResources().getString(R.string.tutorial_c_description));
-            break;
-        case COMPLETE_SEED:
-            button.setText(getResources().getString(R.string.tutorial_b_title));
-            textViewDescription.setText(getResources().getString(R.string.tutorial_b_description));
-            break;
-        case COMPLETE_SOCIAL:
-            button.setText(getResources().getString(R.string.tutorial_e_title));
-            textViewDescription.setText(getResources().getString(R.string.tutorial_e_description));
-            break;
-        default:
-            mCallback.onTutorialFinished();
-            break;
+            case COMPLETE_LOCATION:
+                button.setText(getResources().getString(R.string.tutorial_a_title));
+                textViewDescription.setText(getResources().getString(R.string.tutorial_a_description));
+                break;
+            case COMPLETE_ALLOTMENT:
+                button.setText(getResources().getString(R.string.tutorial_c_title));
+                textViewDescription.setText(getResources().getString(R.string.tutorial_c_description));
+                break;
+            case COMPLETE_SEED:
+                button.setText(getResources().getString(R.string.tutorial_b_title));
+                textViewDescription.setText(getResources().getString(R.string.tutorial_b_description));
+                break;
+            case COMPLETE_SOCIAL:
+                button.setText(getResources().getString(R.string.tutorial_e_title));
+                textViewDescription.setText(getResources().getString(R.string.tutorial_e_description));
+                break;
+            default:
+                mCallback.onTutorialFinished();
+                break;
         }
         super.onNuxeoDataRetrieved(data);
     }
@@ -140,26 +136,30 @@ public class TutorialResumeFragment extends BaseGotsFragment implements OnClickL
     @Override
     public void onClick(View view) {
         switch (tutorialLevel) {
-        case COMPLETE_LOCATION:
-            Intent i = new Intent(getActivity(), ProfileActivity.class);
-            startActivity(i);
-            break;
-        case COMPLETE_SEED:
-            Intent i2 = new Intent(getActivity(), CatalogueActivity.class);
-            startActivity(i2);
-            break;
-        case COMPLETE_ALLOTMENT:
-            Intent i3 = new Intent(getActivity(), GardenActivity.class);
-            startActivity(i3);
-            break;
-        case COMPLETE_SOCIAL:
+            case COMPLETE_LOCATION:
+                Intent i = new Intent(getActivity(), ProfileActivity.class);
+                startActivity(i);
+                break;
+            case COMPLETE_SEED:
+                Intent i2 = new Intent(getActivity(), CatalogueActivity.class);
+                startActivity(i2);
+                break;
+            case COMPLETE_ALLOTMENT:
+                Intent i3 = new Intent(getActivity(), GardenActivity.class);
+                startActivity(i3);
+                break;
+            case COMPLETE_SOCIAL:
 //            LoginFragment login = new LoginFragment();
 //            login.show(getFragmentManager(), "");
-            Intent i4 = new Intent(getActivity(), ProfileActivity.class);
-            startActivity(i4);
-            break;
-        default:
-            break;
+                Intent i4 = new Intent(getActivity(), ProfileActivity.class);
+                startActivity(i4);
+                break;
+            default:
+                break;
         }
+    }
+
+    public interface OnTutorialFinishedListener {
+        public abstract void onTutorialFinished();
     }
 }

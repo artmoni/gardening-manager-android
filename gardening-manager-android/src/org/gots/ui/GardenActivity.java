@@ -44,15 +44,48 @@ import java.util.List;
 
 public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelected, OnSeedSelected,
         OnAllotmentListener {
-    private BaseAllotmentInterface currentAllotment;
-
-    private AllotmentListFragment allotmentListFragment;
-
-    private CatalogueFragment vendorListFragment;
-
-    private AllotmentEditorFragment editorFragment;
-
     Menu menu;
+    private BaseAllotmentInterface currentAllotment;
+    private AllotmentListFragment allotmentListFragment;
+    private CatalogueFragment vendorListFragment;
+    private AllotmentEditorFragment editorFragment;
+    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+
+        }
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mode.getMenuInflater().inflate(R.menu.menu_allotment_contextual, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+
+            switch (item.getItemId()) {
+                case R.id.update_allotment:
+                    // showDialogRenameAllotment(currentAllotment);
+                    displayEditorFragment(currentAllotment);
+                    break;
+                case R.id.delete_allotment:
+                    removeAllotment(currentAllotment);
+                    break;
+                default:
+                    break;
+            }
+            // listAllotments.setItemChecked(-1, true);// clear selection in listview
+            mode.finish();
+            return true;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,44 +140,6 @@ public class GardenActivity extends BaseGotsActivity implements OnAllotmentSelec
 
         builder.show();
     }
-
-    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-
-        }
-
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.getMenuInflater().inflate(R.menu.menu_allotment_contextual, menu);
-            return true;
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-
-            switch (item.getItemId()) {
-                case R.id.update_allotment:
-                    // showDialogRenameAllotment(currentAllotment);
-                    displayEditorFragment(currentAllotment);
-                    break;
-                case R.id.delete_allotment:
-                    removeAllotment(currentAllotment);
-                    break;
-                default:
-                    break;
-            }
-            // listAllotments.setItemChecked(-1, true);// clear selection in listview
-            mode.finish();
-            return true;
-        }
-    };
 
     @Override
     public void onAllotmentClick(BaseAllotmentInterface allotment) {

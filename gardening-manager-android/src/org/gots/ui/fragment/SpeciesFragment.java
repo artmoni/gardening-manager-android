@@ -24,10 +24,6 @@ public class SpeciesFragment extends BaseGotsFragment {
     private ListView listView;
     private OnSpeciesSelected mCallBack;
 
-    public interface OnSpeciesSelected {
-        public void onSpeciesClicked(BotanicSpecie botanicSpecie);
-    }
-
     @Override
     public void onAttach(Activity activity) {
         if (getActivity() instanceof OnSpeciesSelected)
@@ -87,6 +83,10 @@ public class SpeciesFragment extends BaseGotsFragment {
         });
 
         super.onNuxeoDataRetrieved(data);
+    }
+
+    public interface OnSpeciesSelected {
+        public void onSpeciesClicked(BotanicSpecie botanicSpecie);
     }
 
 

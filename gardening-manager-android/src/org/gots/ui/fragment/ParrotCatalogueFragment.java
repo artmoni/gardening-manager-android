@@ -1,11 +1,5 @@
 package org.gots.ui.fragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.gots.seed.BaseSeed;
-import org.gots.seed.provider.parrot.ParrotSeedProvider;
-
 public class ParrotCatalogueFragment extends CatalogueFragment {
 
 //    @Override

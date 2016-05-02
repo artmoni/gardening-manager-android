@@ -4,7 +4,6 @@ import android.util.Log;
 
 import org.gots.seed.BaseSeed;
 import org.gots.seed.BaseSeedImpl;
-import org.gots.seed.GrowingSeedImpl;
 import org.gots.seed.LikeStatus;
 import org.json.JSONException;
 import org.json.JSONObject;

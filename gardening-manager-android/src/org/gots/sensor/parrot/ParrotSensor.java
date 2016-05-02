@@ -1,8 +1,8 @@
 package org.gots.sensor.parrot;
 
-import org.gots.R;
-
 import com.google.gson.annotations.SerializedName;
+
+import org.gots.R;
 
 public class ParrotSensor {
 
@@ -74,18 +74,18 @@ public class ParrotSensor {
 
     public int getResourceDrawable() {
         switch (getColor()) {
-        case 0:
-            return R.drawable.flowerpower_brown;
-        case 1:
-            return R.drawable.flowerpower_blue;
-        case 2:
-            return R.drawable.flowerpower_green;
-        case 3:
-            return R.drawable.flowerpower_brown;
-        case 4:
-            return R.drawable.flowerpower_brown;
-        default:
-            return R.drawable.flowerpower_brown;
+            case 0:
+                return R.drawable.flowerpower_brown;
+            case 1:
+                return R.drawable.flowerpower_blue;
+            case 2:
+                return R.drawable.flowerpower_green;
+            case 3:
+                return R.drawable.flowerpower_brown;
+            case 4:
+                return R.drawable.flowerpower_brown;
+            default:
+                return R.drawable.flowerpower_brown;
 
         }
     }

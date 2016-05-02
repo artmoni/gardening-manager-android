@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * <p>
+ * <p/>
  * Contributors:
  * sfleury - initial API and implementation
  ******************************************************************************/
@@ -72,13 +72,13 @@ public class BaseSeedImpl implements Serializable, BaseSeed, Cloneable {
     }
 
     @Override
-    public void setLanguage(String string) {
-        language = string;
+    public String getLanguage() {
+        return language;
     }
 
     @Override
-    public String getLanguage() {
-        return language;
+    public void setLanguage(String string) {
+        language = string;
     }
 
     @Override
@@ -135,13 +135,13 @@ public class BaseSeedImpl implements Serializable, BaseSeed, Cloneable {
     }
 
     @Override
-    public void setDateSowingMax(int dateSowingMax) {
-        this.dateSowingMax = dateSowingMax;
+    public int getDateSowingMax() {
+        return dateSowingMax;
     }
 
     @Override
-    public int getDateSowingMax() {
-        return dateSowingMax;
+    public void setDateSowingMax(int dateSowingMax) {
+        this.dateSowingMax = dateSowingMax;
     }
 
     @Override
@@ -362,13 +362,13 @@ public class BaseSeedImpl implements Serializable, BaseSeed, Cloneable {
     }
 
     @Override
-    public void setState(String state) {
-        this.state = state;
+    public String getState() {
+        return this.state;
     }
 
     @Override
-    public String getState() {
-        return this.state;
+    public void setState(String state) {
+        this.state = state;
     }
 
 }

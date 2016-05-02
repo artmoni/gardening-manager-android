@@ -1,26 +1,22 @@
 package org.gots.garden.service;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.util.Log;
 
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.garden.GardenInterface;
 import org.gots.seed.service.GotsService;
 
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GardenNotificationService extends GotsService {
     private static final int NOTIFICATION = 100;
 
     // NotificationManager mNM;
-
-    private List<GardenInterface> gardens = new ArrayList<GardenInterface>();
-
     private static final String TAG = "GardenNotificationService";
-
-
+    private List<GardenInterface> gardens = new ArrayList<GardenInterface>();
 
     @Override
     public void onCreate() {
@@ -37,9 +33,8 @@ public class GardenNotificationService extends GotsService {
 
         new AsyncTask<Void, Void, Void>() {
 
-            private Thread thread;
-
             boolean shouldcontinue = true;
+            private Thread thread;
 
             protected void onPreExecute() {
                 thread = new Thread() {
@@ -57,7 +52,9 @@ public class GardenNotificationService extends GotsService {
                 };
 
                 thread.start();
-            };
+            }
+
+            ;
 
             @Override
             protected Void doInBackground(Void... params) {
@@ -87,7 +84,9 @@ public class GardenNotificationService extends GotsService {
                 shouldcontinue = false;
                 sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
 
-            };
+            }
+
+            ;
         }.execute();
 
         return super.onStartCommand(intent, flags, startId);

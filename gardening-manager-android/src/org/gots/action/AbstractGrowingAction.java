@@ -4,22 +4,22 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ * <p/>
  * Contributors:
- *     sfleury - initial API and implementation
+ * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.action;
-
-import java.util.Calendar;
-
-import org.gots.bean.BaseAllotmentInterface;
-import org.gots.broadcast.BroadCastMessages;
-import org.gots.seed.GrowingSeed;
 
 import android.content.Context;
 import android.content.Intent;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+
+import org.gots.bean.BaseAllotmentInterface;
+import org.gots.broadcast.BroadCastMessages;
+import org.gots.seed.GrowingSeed;
+
+import java.util.Calendar;
 
 public abstract class AbstractGrowingAction extends AbstractAction implements GrowingActionInterface {
 

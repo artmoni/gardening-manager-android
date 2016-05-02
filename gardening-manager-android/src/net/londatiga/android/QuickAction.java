@@ -1,12 +1,5 @@
 package net.londatiga.android;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.gots.R;
-import org.gots.action.BaseAction;
-import org.gots.action.view.ActionWidget;
-
 import android.content.Context;
 import android.graphics.Rect;
 import android.view.Gravity;
@@ -18,64 +11,49 @@ import android.widget.ImageView;
 import android.widget.PopupWindow.OnDismissListener;
 import android.widget.ScrollView;
 
+import org.gots.R;
+import org.gots.action.BaseAction;
+import org.gots.action.view.ActionWidget;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * QuickAction dialog, shows action list as icon and text like the one in
  * Gallery3D app. Currently supports vertical and horizontal layout.
- * 
+ *
  * @author Lorensius W. L. T <lorenz@londatiga.net>
- * 
+ *         <p/>
  *         Contributors: - Kevin Peck <kevinwpeck@gmail.com>
  */
 public class QuickAction extends PopupWindows implements OnDismissListener {
-    private View mRootView;
-
-    private ImageView mArrowUp;
-
-    private ImageView mArrowDown;
-
-    private LayoutInflater mInflater;
-
-    private ViewGroup mTrack;
-
-    private ViewGroup mTrack2;
-
-    private ScrollView mScroller;
-
-    private OnDismissListener mDismissListener;
-
-    private List<BaseAction> actionItems = new ArrayList<BaseAction>();
-
-    private boolean mDidAction;
-
-    private int mInsertPos;
-
-    private int mInsertPos2;
-
-    private int mAnimStyle;
-
-    private int mOrientation;
-
-    private int rootWidth = 0;
-
     public static final int HORIZONTAL = 0;
-
     public static final int VERTICAL = 1;
-
     public static final int ANIM_GROW_FROM_LEFT = 1;
-
     public static final int ANIM_GROW_FROM_RIGHT = 2;
-
     public static final int ANIM_GROW_FROM_CENTER = 3;
-
     public static final int ANIM_REFLECT = 4;
-
     public static final int ANIM_AUTO = 5;
+    private View mRootView;
+    private ImageView mArrowUp;
+    private ImageView mArrowDown;
+    private LayoutInflater mInflater;
+    private ViewGroup mTrack;
+    private ViewGroup mTrack2;
+    private ScrollView mScroller;
+    private OnDismissListener mDismissListener;
+    private List<BaseAction> actionItems = new ArrayList<BaseAction>();
+    private boolean mDidAction;
+    private int mInsertPos;
+    private int mInsertPos2;
+    private int mAnimStyle;
+    private int mOrientation;
+    private int rootWidth = 0;
 
     /**
      * Constructor for default vertical layout
-     * 
-     * @param context
-     *            Context
+     *
+     * @param context Context
      */
     public QuickAction(Context context) {
         this(context, VERTICAL);
@@ -84,11 +62,9 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 
     /**
      * Constructor allowing orientation override
-     * 
-     * @param context
-     *            Context
-     * @param orientation
-     *            Layout orientation, can be vartical or horizontal
+     *
+     * @param context     Context
+     * @param orientation Layout orientation, can be vartical or horizontal
      */
     public QuickAction(Context context, int orientation) {
         super(context);
@@ -108,10 +84,8 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 
     /**
      * Get action item at an index
-     * 
-     * @param index
-     *            Index of item (position from callback)
-     * 
+     *
+     * @param index Index of item (position from callback)
      * @return Action Item at the position
      */
     public BaseAction getAction(int index) {
@@ -120,9 +94,8 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 
     /**
      * Set root view.
-     * 
-     * @param id
-     *            Layout resource id
+     *
+     * @param id Layout resource id
      */
     public void setRootViewId(int id) {
         mRootView = (ViewGroup) mInflater.inflate(id, null);
@@ -145,9 +118,8 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 
     /**
      * Set animation style
-     * 
-     * @param mAnimStyle
-     *            animation style, default is set to ANIM_AUTO
+     *
+     * @param mAnimStyle animation style, default is set to ANIM_AUTO
      */
     public void setAnimStyle(int mAnimStyle) {
         this.mAnimStyle = mAnimStyle;
@@ -155,9 +127,8 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 
     /**
      * Add action item
-     * 
-     * @param action
-     *            {@link ActionItem}
+     *
+     * @param action {@link ActionItem}
      */
     public void addPermanentActionItem(ActionWidget action) {
 
@@ -167,9 +138,8 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 
     /**
      * Add action item
-     * 
-     * @param action
-     *            {@link ActionItem}
+     *
+     * @param action {@link ActionItem}
      */
     public void addActionItem(ActionWidget action) {
 
@@ -181,7 +151,6 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
     /**
      * Show quickaction popup. Popup is automatically positioned, on top or
      * bottom of anchor view.
-     * 
      */
     public void show(View anchor) {
         preShow();
@@ -259,55 +228,50 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 
     /**
      * Set animation style
-     * 
-     * @param screenWidth
-     *            screen width
-     * @param requestedX
-     *            distance from left edge
-     * @param onTop
-     *            flag to indicate where the popup should be displayed. Set TRUE
-     *            if displayed on top of anchor view and vice versa
+     *
+     * @param screenWidth screen width
+     * @param requestedX  distance from left edge
+     * @param onTop       flag to indicate where the popup should be displayed. Set TRUE
+     *                    if displayed on top of anchor view and vice versa
      */
     private void setAnimationStyle(int screenWidth, int requestedX, boolean onTop) {
         int arrowPos = requestedX - mArrowUp.getMeasuredWidth() / 2;
 
         switch (mAnimStyle) {
-        case ANIM_GROW_FROM_LEFT:
-            mWindow.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Left : R.style.Animations_PopDownMenu_Left);
-            break;
-
-        case ANIM_GROW_FROM_RIGHT:
-            mWindow.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Right : R.style.Animations_PopDownMenu_Right);
-            break;
-
-        case ANIM_GROW_FROM_CENTER:
-            mWindow.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Center : R.style.Animations_PopDownMenu_Center);
-            break;
-
-        case ANIM_REFLECT:
-            mWindow.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Reflect : R.style.Animations_PopDownMenu_Reflect);
-            break;
-
-        case ANIM_AUTO:
-            if (arrowPos <= screenWidth / 4) {
+            case ANIM_GROW_FROM_LEFT:
                 mWindow.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Left : R.style.Animations_PopDownMenu_Left);
-            } else if (arrowPos > screenWidth / 4 && arrowPos < 3 * (screenWidth / 4)) {
-                mWindow.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Center : R.style.Animations_PopDownMenu_Center);
-            } else {
-                mWindow.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Right : R.style.Animations_PopDownMenu_Right);
-            }
+                break;
 
-            break;
+            case ANIM_GROW_FROM_RIGHT:
+                mWindow.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Right : R.style.Animations_PopDownMenu_Right);
+                break;
+
+            case ANIM_GROW_FROM_CENTER:
+                mWindow.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Center : R.style.Animations_PopDownMenu_Center);
+                break;
+
+            case ANIM_REFLECT:
+                mWindow.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Reflect : R.style.Animations_PopDownMenu_Reflect);
+                break;
+
+            case ANIM_AUTO:
+                if (arrowPos <= screenWidth / 4) {
+                    mWindow.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Left : R.style.Animations_PopDownMenu_Left);
+                } else if (arrowPos > screenWidth / 4 && arrowPos < 3 * (screenWidth / 4)) {
+                    mWindow.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Center : R.style.Animations_PopDownMenu_Center);
+                } else {
+                    mWindow.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Right : R.style.Animations_PopDownMenu_Right);
+                }
+
+                break;
         }
     }
 
     /**
      * Show arrow
-     * 
-     * @param whichArrow
-     *            arrow type resource id
-     * @param requestedX
-     *            distance from left screen
+     *
+     * @param whichArrow arrow type resource id
+     * @param requestedX distance from left screen
      */
     private void showArrow(int whichArrow, int requestedX) {
         final View showArrow = (whichArrow == R.id.arrow_up) ? mArrowUp : mArrowDown;
@@ -344,7 +308,6 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 
     /**
      * Listener for window dismiss
-     * 
      */
     public interface OnDismissListener {
         public abstract void onDismiss();

@@ -1,10 +1,10 @@
 package org.gots.garden.provider.nuxeo;
 
+import android.util.Log;
+
 import org.gots.bean.Garden;
 import org.gots.garden.GardenInterface;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
-
-import android.util.Log;
 
 public class NuxeoGardenConvertor {
 

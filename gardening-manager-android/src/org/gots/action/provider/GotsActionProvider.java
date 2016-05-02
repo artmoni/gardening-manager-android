@@ -1,8 +1,8 @@
 package org.gots.action.provider;
 
-import java.util.ArrayList;
-
 import org.gots.action.BaseAction;
+
+import java.util.ArrayList;
 
 public interface GotsActionProvider {
 

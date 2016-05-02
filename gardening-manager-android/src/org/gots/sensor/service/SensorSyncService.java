@@ -1,11 +1,11 @@
 package org.gots.sensor.service;
 
-import org.gots.authentication.GotsSyncAdapter;
-import org.gots.authentication.syncadapter.SensorSyncAdapter;
-
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+
+import org.gots.authentication.GotsSyncAdapter;
+import org.gots.authentication.syncadapter.SensorSyncAdapter;
 
 public class SensorSyncService extends Service {
 

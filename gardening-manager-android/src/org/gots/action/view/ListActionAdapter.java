@@ -1,13 +1,13 @@
 package org.gots.action.view;
 
-import java.util.List;
-
-import org.gots.action.BaseAction;
-
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+
+import org.gots.action.BaseAction;
+
+import java.util.List;
 
 public class ListActionAdapter extends BaseAdapter {
 
@@ -37,7 +37,7 @@ public class ListActionAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-         ActionWidget actionWidget = new ActionWidget(mContext, getItem(position));
+        ActionWidget actionWidget = new ActionWidget(mContext, getItem(position));
         return actionWidget;
     }
 

@@ -21,14 +21,13 @@
  * *********************************************************************** */
 package org.gots.provider;
 
+import android.content.Context;
+
 import org.gots.context.GotsContext;
 import org.gots.preferences.GotsPreferences;
 
-import android.content.Context;
-
 /**
  * @author jcarsique
- * 
  */
 public abstract class AbstractProvider {
 
@@ -36,16 +35,15 @@ public abstract class AbstractProvider {
 
     protected Context mContext;
 
-    protected GotsContext getGotsContext() {
-        return GotsContext.get(mContext);
-    }
-
     /**
      * @param context
-     * 
      */
     public AbstractProvider(Context context) {
         mContext = context;
         gotsPrefs = getGotsContext().getServerConfig();
+    }
+
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(mContext);
     }
 }

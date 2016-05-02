@@ -1,14 +1,13 @@
 package org.gots.sensor;
 
-import java.util.List;
-
 import org.gots.sensor.parrot.ParrotLocation;
 import org.gots.sensor.parrot.ParrotLocationsStatus;
 import org.gots.sensor.parrot.ParrotSensor;
 
+import java.util.List;
+
 public interface GotsSensorProvider {
 
-   
 
     public abstract List<ParrotLocation> getLocations();
 

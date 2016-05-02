@@ -1,10 +1,8 @@
 package org.gots.seed;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.broadcast.BroadCastMessages;
@@ -17,9 +15,11 @@ import org.gots.seed.provider.nuxeo.NuxeoGrowingSeedProvider;
 import org.gots.utils.NotConfiguredException;
 import org.nuxeo.android.broadcast.NuxeoBroadcastMessages;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGrowingSeedProvider {
 
@@ -30,7 +30,7 @@ public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGro
     GotsGrowingSeedProvider provider;
 
     Map<Integer, HashMap<Integer, GrowingSeed>> seedsByAllotment; // Map<AllotmentID, HashMap<getGrowingSeedId,
-                                                                  // GrowingSeedInterface>>
+    // GrowingSeedInterface>>
 
     private boolean initDone;
 
@@ -47,6 +47,17 @@ public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGro
         // allSeeds = new ArrayList<BaseSeed>();
     }
 
+    public static synchronized GotsGrowingSeedManager getInstance() {
+        if (instance == null) {
+            instance = new GotsGrowingSeedManager();
+            firstCall = new Exception();
+
+        } else if (!instance.initDone) {
+            throw new NotConfiguredException(firstCall);
+        }
+        return instance;
+    }
+
     protected GotsContext getGotsContext() {
         return GotsContext.get(mContext);
     }
@@ -57,17 +68,6 @@ public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGro
             provider = new NuxeoGrowingSeedProvider(mContext);
         } else
             provider = new LocalGrowingSeedProvider(mContext);
-    }
-
-    public static synchronized GotsGrowingSeedManager getInstance() {
-        if (instance == null) {
-            instance = new GotsGrowingSeedManager();
-            firstCall = new Exception();
-
-        } else if (!instance.initDone) {
-            throw new NotConfiguredException(firstCall);
-        }
-        return instance;
     }
 
     @Override
@@ -125,7 +125,7 @@ public class GotsGrowingSeedManager extends BroadcastReceiver implements GotsGro
             seedsByAllotment = new HashMap<Integer, HashMap<Integer, GrowingSeed>>();
         }
 
-        if (force || seedsByAllotment.get(allotment.getId()) == null ) {
+        if (force || seedsByAllotment.get(allotment.getId()) == null) {
             seedsByAllotment.put(allotment.getId(), new HashMap<Integer, GrowingSeed>());
             for (GrowingSeed growingSeed : provider.getGrowingSeedsByAllotment(allotment, force)) {
                 seedsByAllotment.get(allotment.getId()).put(growingSeed.getId(), growingSeed);

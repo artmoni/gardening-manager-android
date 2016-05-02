@@ -96,44 +96,70 @@ public class CoreActivity extends BaseGotsActivity implements GardenListener, On
     //    public static final int INDEX_PROFILE = 3;
     public static final int INDEX_SENSOR = 3;
     public static final int INDEX_RECOGNITION = 4;
+    public static final String LAUNCHER_ACTION = "org.gots.dashboard.action";
+    public static final String LAUNCHER_CATALOGUE = "org.gots.dashboard.catalogue";
     private DrawerLayout mDrawerLayout;
-
     private ListView mDrawerList;
-
     private ActionBarDrawerToggle mDrawerToggle;
-
     // nav drawer title
     private CharSequence mDrawerTitle;
-
     // used to store app title
     private CharSequence mTitle;
-
     // slide menu items
     private String[] navMenuTitles;
-
     private TypedArray navMenuIcons;
-
     private ArrayList<NavDrawerItem> navDrawerItems;
-
     private NavDrawerListAdapter adapter;
-
     private RelativeLayout mDrawerLinear;
-
     private Spinner spinnerGarden;
-
     private String TAG = "CoreActivity";
-
     private List<GardenInterface> myGardens;
-
-    public static final String LAUNCHER_ACTION = "org.gots.dashboard.action";
-
-    public static final String LAUNCHER_CATALOGUE = "org.gots.dashboard.catalogue";
-
     private boolean doubleBackToExitPressedOnce;
 
     // private GardenInterface currentGarden;
 
     private WorkflowResumeFragment workflowResumeFragment;
+    private Menu menu;
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        private ImageView connectionView;
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (BroadCastMessages.AUTHENTIFICATION_BEGIN.equals(intent.getAction())) {
+                if (menu != null && menu.findItem(R.id.connection) != null) {
+                    MenuItem itemConnection = menu.findItem(R.id.connection);
+                    if (connectionView == null)
+                        connectionView = new ImageView(getApplicationContext());
+                    connectionView.setImageDrawable(getResources().getDrawable(R.drawable.garden_disconnected));
+                    Animation rotation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.disappear);
+                    rotation.setRepeatCount(Animation.INFINITE);
+                    connectionView.startAnimation(rotation);
+                    itemConnection = MenuItemCompat.setActionView(itemConnection, connectionView);
+                }
+
+            } else if (BroadCastMessages.AUTHENTIFICATION_END.equals(intent.getAction())) {
+                if (menu != null && menu.findItem(R.id.connection) != null) {
+                    if (connectionView != null)
+                        connectionView.clearAnimation();
+                    MenuItem itemConnection = menu.findItem(R.id.connection);
+                    itemConnection = MenuItemCompat.setActionView(itemConnection, null);
+                    displaySpinnerGarden();
+                }
+            }
+            if ("NuxeoServerConnectivityChanged".equals(intent.getAction())) {
+                Log.d(TAG, "Connection settings changed");
+                invalidateOptionsMenu();
+            } else if (BroadCastMessages.SEED_DISPLAYLIST.equals(intent.getAction())) {
+                displayDrawerMenuCatalogCounter();
+            } else if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
+//                displayDrawerMenuProfileCounter();
+                displaySpinnerGarden();
+            } else if (BroadCastMessages.ALLOTMENT_EVENT.equals(intent.getAction())) {
+                displayDrawerMenuAllotmentCounter();
+            }
+        }
+
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -336,49 +362,6 @@ public class CoreActivity extends BaseGotsActivity implements GardenListener, On
 
     }
 
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        private ImageView connectionView;
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (BroadCastMessages.AUTHENTIFICATION_BEGIN.equals(intent.getAction())) {
-                if (menu != null && menu.findItem(R.id.connection) != null) {
-                    MenuItem itemConnection = menu.findItem(R.id.connection);
-                    if (connectionView == null)
-                        connectionView = new ImageView(getApplicationContext());
-                    connectionView.setImageDrawable(getResources().getDrawable(R.drawable.garden_disconnected));
-                    Animation rotation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.disappear);
-                    rotation.setRepeatCount(Animation.INFINITE);
-                    connectionView.startAnimation(rotation);
-                    itemConnection = MenuItemCompat.setActionView(itemConnection, connectionView);
-                }
-
-            } else if (BroadCastMessages.AUTHENTIFICATION_END.equals(intent.getAction())) {
-                if (menu != null && menu.findItem(R.id.connection) != null) {
-                    if (connectionView != null)
-                        connectionView.clearAnimation();
-                    MenuItem itemConnection = menu.findItem(R.id.connection);
-                    itemConnection = MenuItemCompat.setActionView(itemConnection, null);
-                    displaySpinnerGarden();
-                }
-            }
-            if ("NuxeoServerConnectivityChanged".equals(intent.getAction())) {
-                Log.d(TAG, "Connection settings changed");
-                invalidateOptionsMenu();
-            } else if (BroadCastMessages.SEED_DISPLAYLIST.equals(intent.getAction())) {
-                displayDrawerMenuCatalogCounter();
-            } else if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
-//                displayDrawerMenuProfileCounter();
-                displaySpinnerGarden();
-            } else if (BroadCastMessages.ALLOTMENT_EVENT.equals(intent.getAction())) {
-                displayDrawerMenuAllotmentCounter();
-            }
-        }
-
-    };
-
-    private Menu menu;
-
     protected void displayDrawerMenuRecognitionCounter() {
         new AsyncTask<NavDrawerItem, Void, Integer>() {
             NavDrawerItem item;
@@ -504,17 +487,6 @@ public class CoreActivity extends BaseGotsActivity implements GardenListener, On
                 super.onPostExecute(result);
             }
         }.execute(navDrawerItems.get(INDEX_SENSOR));
-    }
-
-    /**
-     * Slide menu item click listener
-     */
-    private class SlideMenuClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            // display view for selected nav drawer item
-            displayView(position);
-        }
     }
 
     @Override
@@ -811,46 +783,6 @@ public class CoreActivity extends BaseGotsActivity implements GardenListener, On
         return;
     }
 
-    public class UserInfo extends AsyncTask<ImageView, Void, Void> {
-        ImageView imageProfile;
-
-        private User user;
-
-        @Override
-        protected Void doInBackground(ImageView... params) {
-            imageProfile = params[0];
-            GotsSocialAuthentication authentication = new GoogleAuthentication(getApplicationContext());
-            try {
-                String token = authentication.getToken(gotsPrefs.getNuxeoLogin());
-                user = authentication.getUser(token);
-                if (user != null) {
-                    downloadImage(user.getId(), user.getPictureURL());
-                }
-            } catch (UserRecoverableAuthException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (GoogleAuthException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        protected void onPostExecute(Void result) {
-            if (user != null && user.getId() != null) {
-                File file = new File(getApplicationContext().getCacheDir() + "/"
-                        + user.getId().toLowerCase().replaceAll("\\s", ""));
-                if (file.exists()) {
-//                        Drawable d = Drawable.createFromStream(getAssets().open(file.getAbsolutePath()), null);
-                    Bitmap d = BitmapFactory.decodeFile(file.getAbsolutePath());
-                    // Bitmap usrLogo = BitmapFactory.decodeFile(file.getAbsolutePath());
-                    // imageProfile.setImageBitmap(usrLogo);
-                    imageProfile.setImageBitmap(d);
-                }
-            }
-        }
-    }
-
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
@@ -1007,13 +939,6 @@ public class CoreActivity extends BaseGotsActivity implements GardenListener, On
             findViewById(R.id.idFragmentTutorial).setVisibility(View.GONE);
     }
 
-//    private void displayRecognitionFragment() {
-//        RecognitionFragment likeThatFragment = new RecognitionFragment();
-//        FragmentTransaction transactionWeather = getSupportFragmentManager().beginTransaction();
-//        transactionWeather.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
-//        transactionWeather.replace(R.id.idFragmentRecognition, likeThatFragment).commitAllowingStateLoss();
-//    }
-
     private void displayIncredibleFragment() {
 
         if (getCurrentGarden() == null || getCurrentGarden().isIncredibleEdible() == false)
@@ -1073,6 +998,13 @@ public class CoreActivity extends BaseGotsActivity implements GardenListener, On
         }.execute();
     }
 
+//    private void displayRecognitionFragment() {
+//        RecognitionFragment likeThatFragment = new RecognitionFragment();
+//        FragmentTransaction transactionWeather = getSupportFragmentManager().beginTransaction();
+//        transactionWeather.setCustomAnimations(R.anim.push_left_in, R.anim.push_right_out);
+//        transactionWeather.replace(R.id.idFragmentRecognition, likeThatFragment).commitAllowingStateLoss();
+//    }
+
     @Override
     public void onTutorialFinished() {
         gotsPrefs.set(GotsPreferences.ORG_GOTS_TUTORIAL_FINISHED, true);
@@ -1108,6 +1040,57 @@ public class CoreActivity extends BaseGotsActivity implements GardenListener, On
     @Override
     protected boolean requireFloatingButton() {
         return false;
+    }
+
+    /**
+     * Slide menu item click listener
+     */
+    private class SlideMenuClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            // display view for selected nav drawer item
+            displayView(position);
+        }
+    }
+
+    public class UserInfo extends AsyncTask<ImageView, Void, Void> {
+        ImageView imageProfile;
+
+        private User user;
+
+        @Override
+        protected Void doInBackground(ImageView... params) {
+            imageProfile = params[0];
+            GotsSocialAuthentication authentication = new GoogleAuthentication(getApplicationContext());
+            try {
+                String token = authentication.getToken(gotsPrefs.getUserAccount());
+                user = authentication.getUser(token);
+                if (user != null) {
+                    downloadImage(user.getId(), user.getPictureURL());
+                }
+            } catch (UserRecoverableAuthException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (GoogleAuthException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        protected void onPostExecute(Void result) {
+            if (user != null && user.getId() != null) {
+                File file = new File(getApplicationContext().getCacheDir() + "/"
+                        + user.getId().toLowerCase().replaceAll("\\s", ""));
+                if (file.exists()) {
+//                        Drawable d = Drawable.createFromStream(getAssets().open(file.getAbsolutePath()), null);
+                    Bitmap d = BitmapFactory.decodeFile(file.getAbsolutePath());
+                    // Bitmap usrLogo = BitmapFactory.decodeFile(file.getAbsolutePath());
+                    // imageProfile.setImageBitmap(usrLogo);
+                    imageProfile.setImageBitmap(d);
+                }
+            }
+        }
     }
 
 //    @Override

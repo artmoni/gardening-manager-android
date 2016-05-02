@@ -5,7 +5,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * <p>
+ * <p/>
  * Contributors:
  * sfleury - initial API and implementation
  * ****************************************************************************
@@ -61,33 +61,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NewSeedActivity extends BaseGotsActivity implements OnClickListener, PictureSelectorListener,
-        SeedContentFragment.OnSeedUpdated ,SpeciesFragment.OnSpeciesSelected{
+        SeedContentFragment.OnSeedUpdated, SpeciesFragment.OnSpeciesSelected {
     public static final String ORG_GOTS_SEED_BARCODE = "org.gots.seed.barcode";
 
     public static final String ORG_GOTS_SEEDID = "org.gots.seedid";
-
-    private static final String SELECTED_SPECIE = "selectedSpecie";
-
-
-    private AutoCompleteTextView autoCompleteVariety;
-
-    private Gallery gallerySpecies;
-
-    private BaseSeed newSeed;
-
-    private TextView textViewBarCode;
-
-    private boolean isNewSeed = true;
-
-
-    private ImageView pictureSelectorView;
-
     public static final int REQUEST_SCAN = 0;
-
     public static final int REQUEST_LOAD_IMAGE = 5000;
-
     public static final int REQUEST_TAKE_PHOTO = 6000;
-
+    private static final String SELECTED_SPECIE = "selectedSpecie";
+    private AutoCompleteTextView autoCompleteVariety;
+    private Gallery gallerySpecies;
+    private BaseSeed newSeed;
+    private TextView textViewBarCode;
+    private boolean isNewSeed = true;
+    private ImageView pictureSelectorView;
     private String picturePath;
 
 
@@ -215,7 +202,6 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
     }
 
 
-
     @Override
     public void onClick(View v) {
         finalFragment.setSeed(newSeed);
@@ -224,7 +210,7 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
             step++;
             if (step > 0)
                 buttonPrevious.setVisibility(View.VISIBLE);
-            if (step == breadcrum.size()-1) {
+            if (step == breadcrum.size() - 1) {
                 buttonNext.setIcon(R.drawable.ic_validate);
             }
             if (step == breadcrum.size()) {
@@ -238,9 +224,9 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
                         @Override
                         protected void onPostExecute(BaseSeed baseSeed) {
                             if (baseSeed != null) {
-                                showNotification("Excellent your plant has been created",false);
+                                showNotification("Excellent your plant has been created", false);
                                 NewSeedActivity.this.finish();
-                            } else{
+                            } else {
                                 showNotification("There was a problem creating your plant", false);
                             }
 
@@ -255,7 +241,7 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
 
         } else if (v == buttonPrevious) {
             step--;
-            if (step < breadcrum.size()-1) {
+            if (step < breadcrum.size() - 1) {
                 buttonNext.setIcon(R.drawable.ic_next);
             }
             if (step == 0) {
@@ -281,7 +267,7 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
         // findViewById(R.id.layoutInputSowing).setBackground(null);
 
         if (newSeed.getSpecie() == null || "".equals(newSeed.getSpecie())) {
-            showNotification(getResources().getString(R.string.fillfields_specie),false);
+            showNotification(getResources().getString(R.string.fillfields_specie), false);
             return false;
         }
         if (newSeed.getVariety() == null || "".equals(newSeed.getVariety())) {
@@ -312,7 +298,7 @@ public class NewSeedActivity extends BaseGotsActivity implements OnClickListener
                 && null != data) {
 
             if (!validateSeed()) {
-                showNotification( "Seed must be validable to execute this action",false);
+                showNotification("Seed must be validable to execute this action", false);
                 return;
             }
             Uri selectedImage = data.getData();

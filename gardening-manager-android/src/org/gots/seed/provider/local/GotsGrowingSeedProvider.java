@@ -1,10 +1,10 @@
 package org.gots.seed.provider.local;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.seed.GrowingSeed;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public interface GotsGrowingSeedProvider {
 

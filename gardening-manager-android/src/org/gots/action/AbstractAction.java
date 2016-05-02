@@ -1,7 +1,6 @@
 package org.gots.action;
 
-import java.util.Comparator;
-import java.util.Date;
+import android.content.Context;
 
 import org.gots.action.provider.GotsActionSeedProvider;
 import org.gots.allotment.GotsAllotmentManager;
@@ -12,49 +11,30 @@ import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GotsSeedManager;
 
-import android.content.Context;
+import java.util.Comparator;
+import java.util.Date;
 
 public class AbstractAction implements BaseAction, Comparator<AbstractActionSeed> {
 
     protected String name;
-
+    protected GotsPreferences gotsPrefs;
+    protected AllotmentProvider allotmentProvider;
+    protected Context mContext;
+    protected GotsSeedManager seedManager;
+    protected GotsGardenManager gardenManager;
+    protected GotsActionSeedProvider actionSeedManager;
+    protected GotsGrowingSeedManager growingSeedManager;
+    protected GotsActionManager actionManager;
     private String description;
-
     private int duration;
-
     private Date dateActionDone;
-
     private int id = -1;
-
     private String UUID;
-
     private int state;
-
     private Date dateActionTodo;
-
     private Object data;
 
-    protected GotsPreferences gotsPrefs;
-
-    protected AllotmentProvider allotmentProvider;
-
-    protected Context mContext;
-
-    protected GotsSeedManager seedManager;
-
-    protected GotsGardenManager gardenManager;
-
-    protected GotsActionSeedProvider actionSeedManager;
-
-    protected GotsGrowingSeedManager growingSeedManager;
-
-    protected GotsActionManager actionManager;
-
     public AbstractAction() {
-    }
-
-    protected GotsContext getGotsContext() {
-        return GotsContext.get(mContext);
     }
 
     public AbstractAction(Context context) {
@@ -66,6 +46,10 @@ public class AbstractAction implements BaseAction, Comparator<AbstractActionSeed
         actionSeedManager = GotsActionSeedManager.getInstance().initIfNew(mContext);
         growingSeedManager = GotsGrowingSeedManager.getInstance().initIfNew(mContext);
         allotmentProvider = GotsAllotmentManager.getInstance().initIfNew(mContext);
+    }
+
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(mContext);
     }
 
     @Override
@@ -109,13 +93,13 @@ public class AbstractAction implements BaseAction, Comparator<AbstractActionSeed
     }
 
     @Override
-    public void setId(int id) {
-        this.id = id;
+    public int getId() {
+        return id;
     }
 
     @Override
-    public int getId() {
-        return id;
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override

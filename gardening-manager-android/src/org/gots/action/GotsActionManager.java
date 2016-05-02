@@ -1,6 +1,8 @@
 package org.gots.action;
 
-import java.util.ArrayList;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 
 import org.gots.action.provider.GotsActionProvider;
 import org.gots.action.provider.local.LocalActionProvider;
@@ -12,9 +14,7 @@ import org.gots.preferences.GotsPreferences;
 import org.gots.utils.NotConfiguredException;
 import org.nuxeo.android.broadcast.NuxeoBroadcastMessages;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
+import java.util.ArrayList;
 
 public class GotsActionManager extends BroadcastReceiver implements GotsActionProvider {
 

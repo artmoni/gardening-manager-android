@@ -1,5 +1,6 @@
 package org.gots.authentication.provider.google;
 
+import android.accounts.Account;
 import android.content.Context;
 import android.util.Log;
 
@@ -61,14 +62,14 @@ public class GoogleAuthentication implements GotsSocialAuthentication {
     }
 
     @Override
-    public String getToken(String accountName) throws GoogleAuthException, IOException {
+    public String getToken(Account account) throws GoogleAuthException, IOException {
         String token = null;
 
         final String SCOPE_PREFIX = "oauth2:";
         final String SCOPES = SCOPE_PREFIX + Scopes.PLUS_LOGIN + " " + Scopes.PROFILE + " "
                 + "https://www.googleapis.com/auth/userinfo.email";
 
-        token = GoogleAuthUtil.getToken(mContext, accountName, SCOPES);
+        token = GoogleAuthUtil.getToken(mContext, account, SCOPES);
         Log.d(TAG, "GoogleAuthUtil.getToken=" + token);
 
         return token;
@@ -283,7 +284,7 @@ public class GoogleAuthentication implements GotsSocialAuthentication {
                 Log.e(TAG, "Server auth error: ");
                 // unknown error, do something else
             } else {
-                Log.e(TAG,"Server returned the following error code: " + serverCode);
+                Log.e(TAG, "Server returned the following error code: " + serverCode);
             }
         } catch (MalformedURLException e1) {
             Log.e(TAG, e1.getMessage(), e1);

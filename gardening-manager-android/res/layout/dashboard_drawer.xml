@@ -23,39 +23,32 @@
 
                 <FrameLayout
                     android:id="@+id/idFragmentTutorial"
-                    style="@style/dashboard_card"
-                     />
+                    style="@style/dashboard_card" />
 
 
                 <FrameLayout
                     android:id="@+id/idFragmentActions"
-                    style="@style/dashboard_card"
-                    />
+                    style="@style/dashboard_card" />
 
                 <FrameLayout
                     android:id="@+id/idFragmentCatalog"
-                    style="@style/dashboard_card"
-                    />
+                    style="@style/dashboard_card" />
 
                 <FrameLayout
                     android:id="@+id/idFragmentIncredible"
-                    style="@style/dashboard_card"
-                    />
+                    style="@style/dashboard_card" />
 
                 <FrameLayout
                     android:id="@+id/idFragmentWeather"
-                    style="@style/dashboard_card"
-                    />
+                    style="@style/dashboard_card" />
 
                 <FrameLayout
                     android:id="@+id/idFragmentSensor"
-                    style="@style/dashboard_card"
-                    />
+                    style="@style/dashboard_card" />
 
                 <FrameLayout
                     android:id="@+id/idFragmentWorkflow"
-                    style="@style/dashboard_card"
-                    />
+                    style="@style/dashboard_card" />
 
                 <!--<FrameLayout-->
                 <!--android:id="@+id/idFragmentRecognition"-->

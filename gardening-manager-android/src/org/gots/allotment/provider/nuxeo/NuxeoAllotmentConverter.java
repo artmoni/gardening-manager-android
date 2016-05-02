@@ -1,11 +1,11 @@
 package org.gots.allotment.provider.nuxeo;
 
+import android.util.Log;
+
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
-
-import android.util.Log;
 
 public class NuxeoAllotmentConverter {
 

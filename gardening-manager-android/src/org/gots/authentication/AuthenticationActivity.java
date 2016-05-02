@@ -1,16 +1,5 @@
 package org.gots.authentication;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.gots.R;
-import org.gots.authentication.provider.google.GoogleAuthentication;
-import org.gots.authentication.provider.nuxeo.NuxeoAuthentication;
-import org.gots.broadcast.BroadCastMessages;
-import org.gots.ui.BaseGotsActivity;
-import org.gots.ui.fragment.TutorialFragment;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.AlertDialog;
@@ -29,46 +18,39 @@ import android.widget.Button;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 
+import org.gots.R;
+import org.gots.authentication.provider.google.GoogleAuthentication;
+import org.gots.authentication.provider.nuxeo.NuxeoAuthentication;
+import org.gots.broadcast.BroadCastMessages;
+import org.gots.ui.BaseGotsActivity;
+import org.gots.ui.fragment.TutorialFragment;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class AuthenticationActivity extends BaseGotsActivity {
     public static final String PARAM_AUTHTOKEN_TYPE = "auth.token";
 
     public static final String PARAM_USER_PASS = "user.pass";
-
-    private String TAG = "AuthenticationActivity";
-
-    private String mAuthTokenType;
-
-    private String mAccountType;
-
     public static final String PARAM_CREATE = "create";
-
     public static final int REQ_CODE_CREATE = 1;
-
     public static final int REQ_CODE_UPDATE = 2;
-
     public static final String EXTRA_REQUEST_CODE = "req.code";
-
     public static final int RESP_CODE_SUCCESS = 0;
-
     public static final int RESP_CODE_ERROR = 1;
-
     public static final int RESP_CODE_CANCEL = 2;
-
     public static final String ARG_ACCOUNT_TYPE = "type.account";
-
     public static final String ARG_AUTH_TYPE = "type.auth";
-
     public static final String ARG_ADD_ACCOUNT = "new";
-
     public static final String AUTH_TOKEN_TYPE = "token.nuxeo";
-
-
-    int[] tutorialList = { R.layout.tutorial_a, R.layout.tutorial_b, R.layout.tutorial_c, R.layout.tutorial_d,
-            R.layout.tutorial_g, R.layout.tutorial_f, R.layout.tutorial_e };
-
-    int[] tutorialTitle = { R.string.weather_label, R.string.dashboard_hut_name, R.string.dashboard_garden_name,
-            R.string.dashboard_actions_name, R.string.tutorial_g_title,R.string.dashboard_sensor_name, R.string.profile_share_data };
-
+    int[] tutorialList = {R.layout.tutorial_a, R.layout.tutorial_b, R.layout.tutorial_c, R.layout.tutorial_d,
+            R.layout.tutorial_g, R.layout.tutorial_f, R.layout.tutorial_e};
+    int[] tutorialTitle = {R.string.weather_label, R.string.dashboard_hut_name, R.string.dashboard_garden_name,
+            R.string.dashboard_actions_name, R.string.tutorial_g_title, R.string.dashboard_sensor_name, R.string.profile_share_data};
+    private String TAG = "AuthenticationActivity";
+    private String mAuthTokenType;
+    private String mAccountType;
     private ViewPager mPager;
 
     private ScreenSlidePagerAdapter mPagerAdapter;
@@ -144,16 +126,18 @@ public class AuthenticationActivity extends BaseGotsActivity {
                     @Override
                     public void onClick(DialogInterface dialog, final int item) {
 
-                        new AsyncTask<String, Integer, Intent>() {
+                        new AsyncTask<Account, Integer, Intent>() {
 
                             protected void onPreExecute() {
                                 // setActionRefresh(true);
                                 // findViewById(R.id.textViewError).setVisibility(View.GONE);
                                 sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
-                            };
+                            }
+
+                            ;
 
                             @Override
-                            protected Intent doInBackground(String... params) {
+                            protected Intent doInBackground(Account... params) {
                                 GotsSocialAuthentication googleAuthentication = new GoogleAuthentication(
                                         getApplicationContext());
                                 String googleToken = null;
@@ -207,7 +191,7 @@ public class AuthenticationActivity extends BaseGotsActivity {
                                 sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
                                 super.onPostExecute(resultIntent);
                             }
-                        }.execute(googleAccounts.get(item).name);
+                        }.execute(googleAccounts.get(item));
                     }
 
                 }).show();
@@ -310,6 +294,12 @@ public class AuthenticationActivity extends BaseGotsActivity {
     //
     // }
     // }
+
+    @Override
+    protected boolean requireFloatingButton() {
+        return false;
+    }
+
     /**
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
      * sequence.
@@ -370,10 +360,5 @@ public class AuthenticationActivity extends BaseGotsActivity {
                 view.setAlpha(0);
             }
         }
-    }
-
-    @Override
-    protected boolean requireFloatingButton() {
-        return false;
     }
 }

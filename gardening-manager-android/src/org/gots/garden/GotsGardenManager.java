@@ -1,9 +1,9 @@
 package org.gots.garden;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 
 import org.gots.broadcast.BroadCastMessages;
 import org.gots.context.GotsContext;
@@ -15,10 +15,10 @@ import org.gots.nuxeo.NuxeoManager;
 import org.gots.utils.NotConfiguredException;
 import org.nuxeo.android.broadcast.NuxeoBroadcastMessages;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GotsGardenManager extends BroadcastReceiver {
     private static final String TAG = "GardenManager";
@@ -64,7 +64,7 @@ public class GotsGardenManager extends BroadcastReceiver {
 
     /**
      * If it was already called once, the method returns without any change.
-     * 
+     *
      * @return TODO
      */
     public synchronized GotsGardenManager initIfNew(Context context) {

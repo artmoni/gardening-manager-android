@@ -4,17 +4,16 @@
     android:layout_height="wrap_content"
     android:background="@drawable/bg_line_selector"
     android:orientation="horizontal"
-    android:padding="5dp" >
+    android:padding="5dp">
 
     <org.gots.action.view.ActionWidget
         android:id="@+id/idActionView"
         android:layout_width="50dp"
-        android:layout_height="50dp" >
-    </org.gots.action.view.ActionWidget>
+        android:layout_height="50dp"></org.gots.action.view.ActionWidget>
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
         <Switch
             android:id="@+id/switchSeedActionStatus"
@@ -70,8 +69,7 @@
             android:layout_height="30dp"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/imageviewPhoto" >
-        </org.gots.seed.view.GrowingSeedWidget>
+            android:layout_toRightOf="@+id/imageviewPhoto"></org.gots.seed.view.GrowingSeedWidget>
 
         <org.gots.weather.view.WeatherView
             android:id="@+id/idWeatherView"
@@ -79,8 +77,7 @@
             android:layout_height="30dp"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/switchSeedActionStatus" >
-        </org.gots.weather.view.WeatherView>
+            android:layout_toRightOf="@+id/switchSeedActionStatus"></org.gots.weather.view.WeatherView>
     </RelativeLayout>
 
 </LinearLayout>

@@ -18,10 +18,6 @@ public abstract class SeedContentFragment extends BaseGotsFragment {
         super.onAttach(activity);
     }
 
-    public interface OnSeedUpdated {
-        void onSeedUpdated(BaseSeed seed);
-    }
-
     public void setSeed(BaseSeed seed) {
         this.mSeed = seed;
     }
@@ -29,5 +25,9 @@ public abstract class SeedContentFragment extends BaseGotsFragment {
     protected void notifyObservers() {
         if (mCallBack != null)
             mCallBack.onSeedUpdated(mSeed);
+    }
+
+    public interface OnSeedUpdated {
+        void onSeedUpdated(BaseSeed seed);
     }
 }

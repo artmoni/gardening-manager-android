@@ -1,11 +1,11 @@
 package org.gots.weather.service;
 
-import org.gots.authentication.GotsSyncAdapter;
-import org.gots.authentication.syncadapter.WeatherSyncAdapter;
-
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+
+import org.gots.authentication.GotsSyncAdapter;
+import org.gots.authentication.syncadapter.WeatherSyncAdapter;
 
 public class WeatherSyncService extends Service {
 

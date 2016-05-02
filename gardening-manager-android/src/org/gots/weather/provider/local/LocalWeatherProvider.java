@@ -4,14 +4,16 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ * <p/>
  * Contributors:
- *     sfleury - initial API and implementation
+ * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.weather.provider.local;
 
-import java.util.Calendar;
-import java.util.Date;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
 
 import org.gots.DatabaseHelper;
 import org.gots.garden.GardenInterface;
@@ -22,10 +24,8 @@ import org.gots.weather.WeatherManager;
 import org.gots.weather.exception.UnknownWeatherException;
 import org.gots.weather.provider.previmeteo.WeatherProvider;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.DatabaseUtils;
+import java.util.Calendar;
+import java.util.Date;
 
 public class LocalWeatherProvider extends GotsDBHelper implements WeatherProvider {
 

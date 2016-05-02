@@ -1,17 +1,5 @@
 package org.gots.sensor;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
-
-import org.gots.R;
-import org.gots.broadcast.BroadCastMessages;
-import org.gots.sensor.local.LocalSensorSamplesProvider;
-import org.gots.sensor.parrot.ParrotLocation;
-import org.gots.sensor.parrot.ParrotSampleFertilizer;
-import org.gots.sensor.parrot.ParrotSampleTemperature;
-
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,6 +12,18 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+
+import org.gots.R;
+import org.gots.broadcast.BroadCastMessages;
+import org.gots.sensor.local.LocalSensorSamplesProvider;
+import org.gots.sensor.parrot.ParrotLocation;
+import org.gots.sensor.parrot.ParrotSampleFertilizer;
+import org.gots.sensor.parrot.ParrotSampleTemperature;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 
 public class SensorChartFragment extends Fragment {
 
@@ -79,7 +79,9 @@ public class SensorChartFragment extends Fragment {
 
             protected void onPreExecute() {
                 getActivity().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
-            };
+            }
+
+            ;
 
             @Override
             protected Void doInBackground(Void... params) {
@@ -106,7 +108,9 @@ public class SensorChartFragment extends Fragment {
                 }
                 if (isAdded())
                     getActivity().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
-            };
+            }
+
+            ;
         }.execute();
     }
 
@@ -153,7 +157,7 @@ public class SensorChartFragment extends Fragment {
             double par_umole = temperature.getPar_umole_m2s();
             cal.setTime(temperature.getCapture_ts());
             if (currentMonth == -1 || cal.get(Calendar.MONTH) != currentMonth) {
-                currentMonth=cal.get(Calendar.MONTH);
+                currentMonth = cal.get(Calendar.MONTH);
                 xValsMonth.add(cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()));
             }
             Entry entry = new Entry((float) par_umole, index++);

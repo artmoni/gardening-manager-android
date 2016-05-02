@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * <p>
+ * <p/>
  * Contributors:
  * sfleury - initial API and implementation
  ******************************************************************************/
@@ -17,14 +17,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
-
 import org.gots.R;
 import org.gots.seed.BaseSeed;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GotsSeedManager;
 import org.gots.seed.provider.GotsSeedProvider;
-import org.gots.seed.view.SeedWidgetLong;
 import org.gots.ui.GrowingPlantDescriptionActivity;
 import org.gots.ui.PlantDescriptionActivity;
 
@@ -32,12 +29,10 @@ public class PlantDescriptionFragment extends BaseGotsFragment {
 //    public static final String GOTS_SEED_ID = "org.gots.seed.id";
 //    private static final String GOTS_GROWINGSEED_ID = "org.gots.growingseed.id";
 
-    private int seedId;
-
-    // protected BaseSeed mSeed;
-
     protected int resultCameraActivity = 1;
 
+    // protected BaseSeed mSeed;
+    private int seedId;
     private GotsSeedProvider seedManager;
     private GotsGrowingSeedManager growingSeedManager;
 
@@ -58,11 +53,6 @@ public class PlantDescriptionFragment extends BaseGotsFragment {
     private TextView seedDescriptionHarvest;
 
     private OnDescriptionFragmentClicked mCallback;
-
-    public interface OnDescriptionFragmentClicked {
-        public void onInformationClick(String url);
-
-    }
 
     public void setOnDescriptionFragmentClicked(OnDescriptionFragmentClicked descriptionFragmentClicked) {
         mCallback = descriptionFragmentClicked;
@@ -169,5 +159,10 @@ public class PlantDescriptionFragment extends BaseGotsFragment {
     @Override
     public void update() {
         runAsyncDataRetrieval();
+    }
+
+    public interface OnDescriptionFragmentClicked {
+        public void onInformationClick(String url);
+
     }
 }

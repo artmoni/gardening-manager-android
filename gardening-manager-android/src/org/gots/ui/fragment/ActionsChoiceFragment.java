@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ScrollView;
 
 import org.gots.R;
 import org.gots.action.BaseAction;
@@ -19,21 +18,8 @@ import java.util.List;
 public class ActionsChoiceFragment extends BaseGotsFragment {
 
     private GridView gridView;
-
-    public interface OnActionSelectedListener {
-
-        public void onActionClick(BaseAction actionInterface);
-
-        public void onActionLongClick(BaseAction actionInterface);
-
-    }
-
     private OnActionSelectedListener mCallback;
-
     private GotsActionManager actionManager;
-
-
-//    private LinearLayout layout;
 
     @Override
     public void onAttach(Activity activity) {
@@ -45,6 +31,9 @@ public class ActionsChoiceFragment extends BaseGotsFragment {
         }
         super.onAttach(activity);
     }
+
+
+//    private LinearLayout layout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -118,5 +107,13 @@ public class ActionsChoiceFragment extends BaseGotsFragment {
             }
         });
         super.onNuxeoDataRetrieved(data);
+    }
+
+    public interface OnActionSelectedListener {
+
+        public void onActionClick(BaseAction actionInterface);
+
+        public void onActionLongClick(BaseAction actionInterface);
+
     }
 }

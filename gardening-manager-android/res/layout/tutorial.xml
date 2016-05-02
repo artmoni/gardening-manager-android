@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/text_color_light"
-    android:gravity="center_vertical" >
+    android:gravity="center_vertical">
 
     <!--
          <fragment
@@ -18,22 +17,21 @@
         tools:layout="@layout/tutorial_a" />
     -->
 
-    <android.support.v4.view.ViewPager
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/fragmentPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/idButtonCreateGarden"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:paddingBottom="20dp" >
+        android:paddingBottom="20dp">
 
         <org.gots.ui.view.MyPagerTitleStrip
             style="@style/TutorialTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
-            android:padding="10dp"/>
+            android:padding="10dp" />
     </android.support.v4.view.ViewPager>
 
     <Button

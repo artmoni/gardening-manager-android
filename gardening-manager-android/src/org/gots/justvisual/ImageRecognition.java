@@ -1,8 +1,5 @@
 package org.gots.justvisual;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-
 /**
  * Created by sfleury on 13/07/15.
  */

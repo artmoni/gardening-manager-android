@@ -23,19 +23,6 @@ public class AllotmentListFragment extends BaseGotsListFragment {
 
     private OnAllotmentSelected mCallback;
 
-    public interface OnAllotmentSelected {
-        public abstract void onAllotmentClick(BaseAllotmentInterface allotmentInterface);
-
-        public abstract void onAllotmentLongClick(BaseAllotmentInterface allotmentInterface);
-
-        public abstract void onGrowingSeedClick(View v, GrowingSeed growingSeedInterface);
-
-        public abstract void onGrowingSeedLongClick(View v, GrowingSeed growingSeedInterface);
-
-        public abstract void onAllotmentMenuClick(View v, BaseAllotmentInterface allotmentInterface);
-
-    }
-
     @Override
     public void onAttach(Activity activity) {
         try {
@@ -46,18 +33,17 @@ public class AllotmentListFragment extends BaseGotsListFragment {
         super.onAttach(activity);
     }
 
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        return inflater.inflate(R.layout.allotment_list_fragment, null);
-//    }
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         lsa = new ListAllotmentAdapter(getActivity(), new ArrayList<BaseAllotmentInterface>());
 
     }
+
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+//        return inflater.inflate(R.layout.allotment_list_fragment, null);
+//    }
 
     @Override
     public void onViewCreated(View v, Bundle savedInstanceState) {
@@ -94,38 +80,38 @@ public class AllotmentListFragment extends BaseGotsListFragment {
             }
         });
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-                                              private int currentVisibleItemCount;
-                                              private int currentScrollState;
-                                              private int currentFirstVisibleItem;
-                                              private int totalItem;
+                                         private int currentVisibleItemCount;
+                                         private int currentScrollState;
+                                         private int currentFirstVisibleItem;
+                                         private int totalItem;
 
 
-                                              @Override
-                                              public void onScrollStateChanged(AbsListView view, int scrollState) {
-                                                  this.currentScrollState = scrollState;
-                                                  this.isScrollCompleted();
-                                              }
+                                         @Override
+                                         public void onScrollStateChanged(AbsListView view, int scrollState) {
+                                             this.currentScrollState = scrollState;
+                                             this.isScrollCompleted();
+                                         }
 
-                                              @Override
-                                              public void onScroll(AbsListView view, int firstVisibleItem,
-                                                                   int visibleItemCount, int totalItemCount) {
-                                                  this.currentFirstVisibleItem = firstVisibleItem;
-                                                  this.currentVisibleItemCount = visibleItemCount;
-                                                  this.totalItem = totalItemCount;
-
-
-                                              }
-
-                                              private void isScrollCompleted() {
-                                                  if (currentFirstVisibleItem == 0
-                                                          && this.currentScrollState == SCROLL_STATE_IDLE) {
-                                                      /** To do code here*/
-                                                      Log.d(AllotmentListFragment.class.getSimpleName(), "totalItem " + totalItem + " - currentFirstVisibleItem " + currentFirstVisibleItem + "== currentVisibleItemCount " + currentFirstVisibleItem);
+                                         @Override
+                                         public void onScroll(AbsListView view, int firstVisibleItem,
+                                                              int visibleItemCount, int totalItemCount) {
+                                             this.currentFirstVisibleItem = firstVisibleItem;
+                                             this.currentVisibleItemCount = visibleItemCount;
+                                             this.totalItem = totalItemCount;
 
 
-                                                  }
-                                              }
-                                          }
+                                         }
+
+                                         private void isScrollCompleted() {
+                                             if (currentFirstVisibleItem == 0
+                                                     && this.currentScrollState == SCROLL_STATE_IDLE) {
+                                                 /** To do code here*/
+                                                 Log.d(AllotmentListFragment.class.getSimpleName(), "totalItem " + totalItem + " - currentFirstVisibleItem " + currentFirstVisibleItem + "== currentVisibleItemCount " + currentFirstVisibleItem);
+
+
+                                             }
+                                         }
+                                     }
         );
         super.onViewCreated(v, savedInstanceState);
     }
@@ -168,6 +154,19 @@ public class AllotmentListFragment extends BaseGotsListFragment {
 
     @Override
     protected void doRefresh() {
+
+    }
+
+    public interface OnAllotmentSelected {
+        public abstract void onAllotmentClick(BaseAllotmentInterface allotmentInterface);
+
+        public abstract void onAllotmentLongClick(BaseAllotmentInterface allotmentInterface);
+
+        public abstract void onGrowingSeedClick(View v, GrowingSeed growingSeedInterface);
+
+        public abstract void onGrowingSeedLongClick(View v, GrowingSeed growingSeedInterface);
+
+        public abstract void onAllotmentMenuClick(View v, BaseAllotmentInterface allotmentInterface);
 
     }
 }

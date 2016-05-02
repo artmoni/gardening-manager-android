@@ -24,7 +24,6 @@ package org.gots.broadcast;
 
 /**
  * @author jcarsique
- * 
  */
 public final class BroadCastMessages {
 

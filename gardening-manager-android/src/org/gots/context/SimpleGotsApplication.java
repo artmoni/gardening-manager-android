@@ -1,10 +1,10 @@
 package org.gots.context;
 
-import org.nuxeo.android.broadcast.NuxeoBroadcastMessages;
-import org.nuxeo.android.context.SimpleNuxeoApplication;
-
 import android.content.IntentFilter;
 import android.util.Log;
+
+import org.nuxeo.android.broadcast.NuxeoBroadcastMessages;
+import org.nuxeo.android.context.SimpleNuxeoApplication;
 
 public class SimpleGotsApplication extends SimpleNuxeoApplication implements GotsContextProvider {
 

@@ -1,7 +1,6 @@
 package org.gots.seed.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +13,6 @@ import org.gots.seed.BotanicSpecie;
 import org.gots.seed.SeedUtil;
 import org.gots.ui.view.MyTextView;
 
-import java.io.File;
 import java.util.List;
 import java.util.Locale;
 
@@ -42,11 +40,6 @@ public class ListSpeciesAdapter extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         return 0;
-    }
-
-    private class Holder {
-        public ImageView imageView;
-        public MyTextView textViewSpecies;
     }
 
     @Override
@@ -86,6 +79,11 @@ public class ListSpeciesAdapter extends BaseAdapter {
 
         holder.textViewSpecies.setText(SeedUtil.translateSpecie(mContext, specie));
         return convertView;
+    }
+
+    private class Holder {
+        public ImageView imageView;
+        public MyTextView textViewSpecies;
     }
 
 }

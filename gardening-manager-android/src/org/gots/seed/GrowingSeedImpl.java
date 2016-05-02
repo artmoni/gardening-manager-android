@@ -13,19 +13,14 @@ package org.gots.seed;
 import java.util.Date;
 
 public class GrowingSeedImpl implements GrowingSeed {
-    private int id = -1;
-    private BaseSeed plant;
-
-    private static final long serialVersionUID = 1L;
-
-    private Date dateSowing;
-
-    private Date dateHarvest;
-
-    private Date dateLastWatering;
-
     public static final int NB_DAY_ALERT = 10;
     public static final int NB_DAY_WARNING = 5;
+    private static final long serialVersionUID = 1L;
+    private int id = -1;
+    private BaseSeed plant;
+    private Date dateSowing;
+    private Date dateHarvest;
+    private Date dateLastWatering;
     private String uuid;
 
     @Override
@@ -34,14 +29,14 @@ public class GrowingSeedImpl implements GrowingSeed {
     }
 
     @Override
-    public String toString() {
-
-        return super.toString() + "\n" + "Semé le " + getDateSowing();
+    public void setDateLastWatering(Date dateLastWatering) {
+        this.dateLastWatering = dateLastWatering;
     }
 
     @Override
-    public void setDateLastWatering(Date dateLastWatering) {
-        this.dateLastWatering = dateLastWatering;
+    public String toString() {
+
+        return super.toString() + "\n" + "Semé le " + getDateSowing();
     }
 
     @Override
@@ -66,18 +61,13 @@ public class GrowingSeedImpl implements GrowingSeed {
 //    }
 
     @Override
-    public void setPlant(BaseSeed plant) {
-        this.plant = plant;
-    }
-
-    @Override
     public BaseSeed getPlant() {
         return plant;
     }
 
     @Override
-    public void setId(int id) {
-        this.id = id;
+    public void setPlant(BaseSeed plant) {
+        this.plant = plant;
     }
 
     @Override
@@ -86,8 +76,8 @@ public class GrowingSeedImpl implements GrowingSeed {
     }
 
     @Override
-    public void setDateHarvest(Date dateHarvest) {
-        this.dateHarvest = dateHarvest;
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
@@ -96,12 +86,17 @@ public class GrowingSeedImpl implements GrowingSeed {
     }
 
     @Override
-    public void setUUID(String id) {
-        this.uuid = id;
+    public void setDateHarvest(Date dateHarvest) {
+        this.dateHarvest = dateHarvest;
     }
 
     @Override
     public String getUUID() {
         return this.uuid;
+    }
+
+    @Override
+    public void setUUID(String id) {
+        this.uuid = id;
     }
 }

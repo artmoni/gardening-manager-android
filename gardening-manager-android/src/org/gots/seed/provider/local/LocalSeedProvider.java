@@ -7,7 +7,6 @@ import android.util.Log;
 
 import org.gots.exception.GotsException;
 import org.gots.exception.GotsUserNotConnectedException;
-import org.gots.exception.NotImplementedException;
 import org.gots.garden.GardenInterface;
 import org.gots.garden.provider.local.GardenSQLite;
 import org.gots.nuxeo.NuxeoUtils;
@@ -404,7 +403,7 @@ public class LocalSeedProvider extends GotsDBHelper implements GotsSeedProvider 
 
     @Override
     public List<BotanicSpecie> getSpecies(boolean force) {
-       Log.d(TAG," -- not implemented --");
+        Log.d(TAG, " -- not implemented --");
         return new ArrayList<>();
     }
 }

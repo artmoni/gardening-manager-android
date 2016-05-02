@@ -1,5 +1,15 @@
 package org.gots.weather.provider;
 
+import android.content.Context;
+import android.util.Log;
+
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -17,22 +27,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.gots.preferences.GotsPreferences;
-
-import android.content.Context;
-import android.util.Log;
-
 public class WeatherCache {
 
-    private File cacheDirectory;
-
     private static String TAG = "WeatherCache";
+    private File cacheDirectory;
 
     public WeatherCache(Context mContext) {
         cacheDirectory = mContext.getCacheDir();

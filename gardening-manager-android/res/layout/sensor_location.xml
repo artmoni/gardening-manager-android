@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/bg_line_selector"
     android:orientation="vertical"
-    android:padding="5dp" >
+    android:padding="5dp">
 
     <ImageView
         android:id="@+id/sensorImage"
@@ -23,7 +23,7 @@
         android:background="#80444444"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="5dp" >
+        android:padding="5dp">
 
         <TextView
             android:id="@+id/sensorLocationName"
@@ -47,7 +47,6 @@
         android:layout_height="5dp"
         android:layout_centerHorizontal="true"
         android:background="@color/action_ok_color"
-        android:orientation="vertical" >
-    </LinearLayout>
+        android:orientation="vertical"></LinearLayout>
 
 </RelativeLayout>

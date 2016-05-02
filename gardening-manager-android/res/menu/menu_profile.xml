@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!--
          <item android:id="@+id/new_profile" android:icon="@drawable/bt_add_allotment"
 		android:title="@string/profile.menu.add" />
     -->
-   
+
     <!--<item-->
-        <!--android:id="@+id/help"-->
-        <!--android:icon="@drawable/help"-->
-        <!--android:title="@string/menu.help"-->
-        <!--app:showAsAction="always"/>-->
+    <!--android:id="@+id/help"-->
+    <!--android:icon="@drawable/help"-->
+    <!--android:title="@string/menu.help"-->
+    <!--app:showAsAction="always"/>-->
     <item
         android:id="@+id/map"
         android:icon="@drawable/ic_map"
         android:title="Map"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/delete_garden"
         android:title="@string/action.delete"
-        app:showAsAction="withText"/>
+        app:showAsAction="withText" />
     <item
         android:id="@+id/edit_garden"
         android:title="@string/menu.edit"
-        app:showAsAction="withText"/>
+        app:showAsAction="withText" />
 
 </menu>

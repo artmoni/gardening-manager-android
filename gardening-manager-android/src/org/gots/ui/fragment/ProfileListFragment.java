@@ -1,12 +1,5 @@
 package org.gots.ui.fragment;
 
-import java.util.List;
-
-import org.gots.R;
-import org.gots.garden.GardenInterface;
-import org.gots.garden.GotsGardenManager;
-import org.gots.garden.adapter.ProfileAdapter;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +7,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+
+import org.gots.R;
+import org.gots.garden.GardenInterface;
+import org.gots.garden.GotsGardenManager;
+import org.gots.garden.adapter.ProfileAdapter;
+
+import java.util.List;
 
 public class ProfileListFragment extends BaseGotsFragment implements OnItemClickListener {
     GardenInterface currentGarden;
@@ -40,10 +40,6 @@ public class ProfileListFragment extends BaseGotsFragment implements OnItemClick
         super.onViewCreated(v, savedInstanceState);
     }
 
-    public interface OnGardenSelectedListener {
-        public void onGardenSelected(int position);
-    }
-
     @Override
     protected Object retrieveNuxeoData() throws Exception {
         currentGarden = gardenManager.getCurrentGarden();
@@ -68,11 +64,11 @@ public class ProfileListFragment extends BaseGotsFragment implements OnItemClick
         super.onNuxeoDataRetrieved(data);
     }
 
-@Override
-public void update() {
-    // TODO Auto-generated method stub
-    
-}
+    @Override
+    public void update() {
+        // TODO Auto-generated method stub
+
+    }
 
     @Override
     protected boolean requireAsyncDataRetrieval() {
@@ -84,6 +80,10 @@ public void update() {
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         gardenManager.setCurrentGarden(profileAdapter.getItem(position));
 
+    }
+
+    public interface OnGardenSelectedListener {
+        public void onGardenSelected(int position);
     }
 
 }

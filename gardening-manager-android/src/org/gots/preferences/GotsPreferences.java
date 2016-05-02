@@ -39,105 +39,71 @@ import java.util.Properties;
 
 public class GotsPreferences extends NuxeoServerConfig {
 
-    public GotsPreferences(Context androidContext) {
-        super(androidContext);
-        initIfNew(androidContext);
-    }
-
-    private static final String TAG = "GotsPreferences";
-
     public static final boolean ISDEVELOPMENT = false;
-
     public static final boolean DEBUG = false;
-
-    Account userAccount;
-
     // /**
     // * @see NuxeoServerConfig#PREF_SERVER_PASSWORD
     // */
     // public static final String ORG_GOTS_GARDEN_PASSWORD =
     // "org.gots.garden.password";
     public static final String ORG_GOTS_GARDEN_PASSWORD = NuxeoServerConfig.PREF_SERVER_PASSWORD;
-
     // public static final String ORG_GOTS_GARDEN_NUXEO_URI =
     // "org.gots.garden.nuxeo.uri";
     public static final String ORG_GOTS_GARDEN_NUXEO_URI = NuxeoServerConfig.PREF_SERVER_URL;
-
     // /**
     // * @see NuxeoServerConfig#PREF_SERVER_LOGIN
     // */
     // public static final String ORG_GOTS_GARDEN_LOGIN =
     // "org.gots.garden.login";
     public static final String ORG_GOTS_GARDEN_LOGIN = NuxeoServerConfig.PREF_SERVER_LOGIN;
-
     public static final String ORG_GOTS_GARDEN_SUCCESSFUL_LOGIN = "nuxeo.successful.login";
-
     public static final String ORG_GOTS_GARDEN_SERVERCONNECTED = "org.gots.garden.connected";
-
     public static final String ORG_GOTS_GARDEN_DEVICEID = "org.gots.garden.deviceid";
-
     // /**
     // * @see NuxeoServerConfig#PREF_SERVER_TOKEN
     // */
     // public static final String ORG_GOTS_GARDEN_TOKEN =
     // "org.gots.garden.token";
     public static final String ORG_GOTS_GARDEN_TOKEN = NuxeoServerConfig.PREF_SERVER_TOKEN;
-
     public static final String ORG_GOTS_PARROT_TOKEN = "parrot.auth.token";
-
     public static final String ORG_GOTS_PARROT_LOGIN = "parrot.login";
+    public static final String GARDENING_MANAGER_APPNAME = "Gardening Manager";
+    public static final String ORG_GOTS_CURRENT_GARDENID = "org.gots.preference.gardenid";
+    public static final String ORG_GOTS_CURRENT_ALLOTMENT = "org.gots.preference.allotmentid";
 
     // private String ANALYTICS_API_KEY = "UA-916500-18";
 
     // private static final String WEATHER_API_KEY = "";
 
     // private static final String ADMOB_API_KEY = "a14f50fa231b26d";
-
-    public final String GARDENING_MANAGER_DIRECTORY = "Gardening-Manager";
-
-    public static final String GARDENING_MANAGER_APPNAME = "Gardening Manager";
-
-    private static final String GARDENING_MANAGER_DOCUMENTATION_URL = "http://doc.gardening-manager.com";
-
-    private static final String GARDENING_MANAGER_NUXEO_AUTOMATION_TEST = "http://services.gardening-manager.com/test/";
-
-    private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://services.gardening-manager.com/nuxeo/";
-
-    // private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://192.168.43.143:8080/nuxeo/";
-
-    public static final String ORG_GOTS_CURRENT_GARDENID = "org.gots.preference.gardenid";
-
-    public static final String ORG_GOTS_CURRENT_ALLOTMENT = "org.gots.preference.allotmentid";
-
     public static final String ORG_GOTS_TUTORIAL_FINISHED = "org.gots.tutorial.finished";
-
-    protected SharedPreferences sharedPreferences;
-
-    protected Context mContext;
-
-    private static GotsPreferences instance = null;
-
-    private static Exception firstCall;
-
-    private boolean initDone = false;
-
     public static final String URL_TWITTER_GARDENING_MANAGER = "https://twitter.com/GardeningApp";
-
     public static final String URL_FACEBOOK_GARDENING_MANAGER = "http://www.facebook.com/pages/Gardening-Manager/120589404779871";
-
     public static final String URL_GOOGLEPLUS_GARDENING_MANAGER = "https://plus.google.com/u/0/b/108868805153744305734/communities/105269291264998461912";
-
     public static final String URL_SAUTERDANSLESFLAQUES = "http://www.sauterdanslesflaques.com";
 
+    // private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://192.168.43.143:8080/nuxeo/";
     public static final String URL_ARTMONI = "http://www.artmoni.eu";
-
     public static final String URL_TRANSLATE_GARDENING_MANAGER = "http://translate.gardening-manager.com";
-
+    public static final String SYNC_SCHEDULE = "sync.schedule";
+    private static final String TAG = "GotsPreferences";
+    private static final String GARDENING_MANAGER_DOCUMENTATION_URL = "http://doc.gardening-manager.com";
+    private static final String GARDENING_MANAGER_NUXEO_AUTOMATION_TEST = "http://services.gardening-manager.com/test/";
+    private static final String GARDENING_MANAGER_NUXEO_AUTOMATION = "http://services.gardening-manager.com/nuxeo/";
+    private static final String ACCOUNT_TYPE = "gardening-manager";
+    private static GotsPreferences instance = null;
+    private static Exception firstCall;
+    public final String GARDENING_MANAGER_DIRECTORY = "Gardening-Manager";
+    protected SharedPreferences sharedPreferences;
+    protected Context mContext;
+    Account userAccount;
+    private boolean initDone = false;
     private Properties properties = new Properties();
 
-    public static final String SYNC_SCHEDULE = "sync.schedule";
-
-    private static final String ACCOUNT_TYPE = "gardening-manager";
+    public GotsPreferences(Context androidContext) {
+        super(androidContext);
+        initIfNew(androidContext);
+    }
 
     // private static final String PUBKEY =
     // "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtAFVYGad4FaKIZ9A0W2JfMh+B1PQMU+tal9B0XYbEJdZy6UCwqoH42/YLDn0GTjKA+ozAZJtaQqoU/ew95tYKEYszj067HfVehpRtKxLlySFMnqdai0SuGyl5EI4QQovsw3wFU1ihELWBaCg2CcTJqk1jXcWaxsqPPPWty5tAcMwQDWZ0cw6uw8QddztiKlw5IB1XTWdhZTuPL/RcR0Ns+lbEB2kdosozekXr+dRqZ4+PKyHn+j8/407hb76gqn9CmrGhOsJ3E7aOVRCZWZ9nf6aJfFYJP5JY/QHsa+9OsiSj8QXS2vic3ay+MazF09bteN7Wnb15Y9CBK/sM2RAqQIDAQAB";
@@ -159,6 +125,10 @@ public class GotsPreferences extends NuxeoServerConfig {
     // }
     // return instance;
     // }
+
+    public static boolean isDevelopment() {
+        return ISDEVELOPMENT;
+    }
 
     public void reset() {
         initDone = false;
@@ -267,14 +237,6 @@ public class GotsPreferences extends NuxeoServerConfig {
         return properties.getProperty("admob.apikey");
     }
 
-    public void setGardeningManagerServerURI(String uri) {
-        if (!uri.endsWith("/")) {
-            uri = uri + "/";
-        }
-        Log.d(TAG, "setGardeningManagerServerURI " + uri);
-        set(ORG_GOTS_GARDEN_NUXEO_URI, uri);
-    }
-
     public String getGardeningManagerServerURI() {
         String url = sharedPreferences.getString(ORG_GOTS_GARDEN_NUXEO_URI, "");
         Log.d(TAG, "return " + url);
@@ -285,8 +247,12 @@ public class GotsPreferences extends NuxeoServerConfig {
     // ORG_GOTS_PREMIUM_LICENCE = pREMIUM;
     // }
 
-    public static boolean isDevelopment() {
-        return ISDEVELOPMENT;
+    public void setGardeningManagerServerURI(String uri) {
+        if (!uri.endsWith("/")) {
+            uri = uri + "/";
+        }
+        Log.d(TAG, "setGardeningManagerServerURI " + uri);
+        set(ORG_GOTS_GARDEN_NUXEO_URI, uri);
     }
 
     public String getNuxeoLogin() {
@@ -305,12 +271,12 @@ public class GotsPreferences extends NuxeoServerConfig {
         set(ORG_GOTS_GARDEN_PASSWORD, password);
     }
 
-    public void setConnectedToServer(boolean isConnected) {
-        set(ORG_GOTS_GARDEN_SERVERCONNECTED, isConnected);
-    }
-
     public boolean isConnectedToServer() {
         return sharedPreferences.getBoolean(ORG_GOTS_GARDEN_SERVERCONNECTED, false) && !"guest".equals(getNuxeoLogin());
+    }
+
+    public void setConnectedToServer(boolean isConnected) {
+        set(ORG_GOTS_GARDEN_SERVERCONNECTED, isConnected);
     }
 
     public String getToken() {
@@ -321,13 +287,13 @@ public class GotsPreferences extends NuxeoServerConfig {
         set(ORG_GOTS_GARDEN_TOKEN, token);
     }
 
-    public void setScheduleTimeForNotification(long timeinsec) {
-        set(SYNC_SCHEDULE, timeinsec);
-    }
-
     public long getScheduleTimeForNotification() {
         return Long.valueOf(sharedPreferences.getString(SYNC_SCHEDULE, "1"));
 
+    }
+
+    public void setScheduleTimeForNotification(long timeinsec) {
+        set(SYNC_SCHEDULE, timeinsec);
     }
 
     public String getDeviceId() {
@@ -404,19 +370,19 @@ public class GotsPreferences extends NuxeoServerConfig {
         this.userAccount = userAccount;
     }
 
-    public void setParrotToken(String token) {
-        set(ORG_GOTS_PARROT_TOKEN, token);
-    }
-
     public String getParrotToken() {
         return get(ORG_GOTS_PARROT_TOKEN, null);
     }
 
-    public void setParrotLogin(String parrotLogin) {
-        set(ORG_GOTS_PARROT_LOGIN, parrotLogin);
+    public void setParrotToken(String token) {
+        set(ORG_GOTS_PARROT_TOKEN, token);
     }
 
     public String getParrotLogin() {
         return get(ORG_GOTS_PARROT_LOGIN, null);
+    }
+
+    public void setParrotLogin(String parrotLogin) {
+        set(ORG_GOTS_PARROT_LOGIN, parrotLogin);
     }
 }

@@ -1,19 +1,5 @@
 package org.gots.ui.fragment;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
-
-import org.gots.R;
-import org.gots.garden.GardenInterface;
-import org.gots.ui.ProfileActivity;
-import org.gots.weather.WeatherConditionInterface;
-import org.gots.weather.WeatherManager;
-import org.gots.weather.exception.UnknownWeatherException;
-import org.gots.weather.view.WeatherView;
-import org.gots.weather.view.WeatherWidget;
-
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -29,6 +15,20 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+
+import org.gots.R;
+import org.gots.garden.GardenInterface;
+import org.gots.ui.ProfileActivity;
+import org.gots.weather.WeatherConditionInterface;
+import org.gots.weather.WeatherManager;
+import org.gots.weather.exception.UnknownWeatherException;
+import org.gots.weather.view.WeatherView;
+import org.gots.weather.view.WeatherWidget;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 
 public class WeatherResumeFragment extends BaseGotsFragment {
 
@@ -46,11 +46,11 @@ public class WeatherResumeFragment extends BaseGotsFragment {
 
     private LineChart tempChart;
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            weatherWidget = new WeatherWidget(getActivity(), WeatherView.FULL, null);
-            return inflater.inflate(R.layout.weather_resume, null);
-        }
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        weatherWidget = new WeatherWidget(getActivity(), WeatherView.FULL, null);
+        return inflater.inflate(R.layout.weather_resume, null);
+    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -89,7 +89,7 @@ public class WeatherResumeFragment extends BaseGotsFragment {
     protected Object retrieveNuxeoData() throws Exception {
         currentGarden = getCurrentGarden();
         if (weatherManager.fetchWeatherForecast(currentGarden) == WeatherManager.WEATHER_OK) {
-                List<WeatherConditionInterface> conditions = (List<WeatherConditionInterface>) weatherManager.getConditionSet(-2, 2);
+            List<WeatherConditionInterface> conditions = (List<WeatherConditionInterface>) weatherManager.getConditionSet(-2, 2);
             return conditions;
         }
 
@@ -117,7 +117,9 @@ public class WeatherResumeFragment extends BaseGotsFragment {
                 drawTemperatureChart(result);
                 tempChart.setVisibility(View.VISIBLE);
 
-            };
+            }
+
+            ;
         }.execute();
     }
 
@@ -172,8 +174,8 @@ public class WeatherResumeFragment extends BaseGotsFragment {
             if (currentMonth == -1 || cal.get(Calendar.MONTH) != currentMonth) {
                 xValsMonth.add(cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()));
             }
-            Entry entryMin = new Entry( tempCelciusMin, index);
-            Entry entryMax = new Entry( tempCelciusMax, index);
+            Entry entryMin = new Entry(tempCelciusMin, index);
+            Entry entryMax = new Entry(tempCelciusMax, index);
             xVals.add(String.valueOf(cal.get(Calendar.DAY_OF_MONTH)));
 
             valsTemperatureMin.add(entryMin);

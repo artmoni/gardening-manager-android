@@ -1,8 +1,10 @@
 package org.gots.sensor.parrot;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import android.content.Context;
+import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import org.gots.authentication.provider.parrot.ParrotAuthentication;
 import org.gots.sensor.GotsSensorProvider;
@@ -10,11 +12,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
-import android.util.Log;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ParrotSensorProvider implements GotsSensorProvider {
 

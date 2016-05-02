@@ -4,19 +4,14 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ * <p/>
  * Contributors:
- *     sfleury - initial API and implementation
+ * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.weather.provider.google;
 
-import java.io.ByteArrayInputStream;
-import java.net.URL;
-import java.util.Calendar;
-import java.util.Date;
-
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
+import android.os.AsyncTask;
+import android.util.Log;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
@@ -31,21 +26,21 @@ import org.gots.weather.WeatherSet;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
-import android.os.AsyncTask;
-import android.util.Log;
+import java.io.ByteArrayInputStream;
+import java.net.URL;
+import java.util.Calendar;
+import java.util.Date;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 public class GoogleWeatherTask extends AsyncTask<Object, Integer, WeatherConditionInterface> {
-    protected URL url;
-
-    private Date requestedDay;
-
-    private boolean force = false;
-
     private static String queryString;
-
     private static int today;
-
     private static WeatherSet ws;
+    protected URL url;
+    private Date requestedDay;
+    private boolean force = false;
 
     public GoogleWeatherTask(Address address, Date requestedDay) {
         this.requestedDay = requestedDay;

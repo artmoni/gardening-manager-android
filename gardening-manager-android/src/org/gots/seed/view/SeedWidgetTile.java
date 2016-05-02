@@ -4,22 +4,15 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * <p>
+ * <p/>
  * Contributors:
  * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.seed.view;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -27,34 +20,26 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.gots.R;
-import org.gots.broadcast.BroadCastMessages;
 import org.gots.context.GotsContext;
-import org.gots.exception.GotsException;
 import org.gots.preferences.GotsPreferences;
 import org.gots.seed.BaseSeed;
-import org.gots.seed.GotsSeedManager;
 import org.gots.seed.LikeStatus;
 import org.gots.seed.SeedUtil;
-import org.gots.ui.fragment.LoginFragment;
 
 public class SeedWidgetTile extends LinearLayout {
     Context mContext;
 
     // private String TAG = SeedWidgetLong.class.getSimpleName();
-
-    private BaseSeed mSeed;
-
-    private TextView likeCount;
-
-    private ImageView like;
-
-    private ImageView state;
-    private View likeContainer;
     LinearLayout stockLayout;
     TextView stockValue;
     ImageView seedView;
     TextView seedSpecie;
     TextView seedVariety;
+    private BaseSeed mSeed;
+    private TextView likeCount;
+    private ImageView like;
+    private ImageView state;
+    private View likeContainer;
 
     public SeedWidgetTile(Context context) {
         super(context);

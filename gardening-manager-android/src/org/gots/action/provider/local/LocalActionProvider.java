@@ -4,13 +4,16 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ * <p/>
  * Contributors:
- *     sfleury - initial API and implementation
+ * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.action.provider.local;
 
-import java.util.ArrayList;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.util.Log;
 
 import org.gots.action.ActionFactory;
 import org.gots.action.BaseAction;
@@ -18,10 +21,7 @@ import org.gots.action.provider.GotsActionProvider;
 import org.gots.garden.provider.local.GardenSQLite;
 import org.gots.utils.GotsDBHelper;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.util.Log;
+import java.util.ArrayList;
 
 public class LocalActionProvider extends GotsDBHelper implements GotsActionProvider {
 

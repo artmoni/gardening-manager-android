@@ -1,35 +1,28 @@
 package org.gots.sensor.parrot;
 
-import java.util.Date;
-
 import com.google.gson.annotations.SerializedName;
+
+import java.util.Date;
 
 public class ParrotLocationsStatus {
 
     private static final Object STATUS_CRITICAL = "status_critical";
-
-    private String STATUS_WARNING = "status_warning";;
-
     @SerializedName("location_identifier")
     String location_identifier;
-
+    ;
     @SerializedName("global_validity_timedate_utc")
     Date global_validity_timedate_utc;
-
     @SerializedName("last_processed_upload_timedate_utc")
     Date last_processed_upload_timedate_utc;
-
     @SerializedName("air_temperature")
     ParrotStatus air_temperature;
-
     @SerializedName("fertilizer")
     ParrotStatus fertilizer;
-
     @SerializedName("light")
     ParrotStatus light;
-
     @SerializedName("soil_moisture")
     ParrotStatus soil_moisture;
+    private String STATUS_WARNING = "status_warning";
 
     public String getLocation_identifier() {
         return location_identifier;

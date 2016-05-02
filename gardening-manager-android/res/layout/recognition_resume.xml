@@ -12,7 +12,7 @@
         android:layout_height="60dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-android:scaleType="centerCrop"
+        android:scaleType="centerCrop"
         android:src="@drawable/bg_recognition_top" />
 
     <org.gots.ui.view.MyTextView
@@ -30,8 +30,8 @@ android:scaleType="centerCrop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/imageViewTop"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
         android:text="@string/plant.recognition.dailyfreerequest"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -70,8 +70,8 @@ android:scaleType="centerCrop"
         android:id="@+id/textViewPurchased"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView7"
         android:layout_alignStart="@id/textView7"
+        android:layout_below="@+id/textView7"
         android:layout_marginTop="10dp"
         android:text="Purchased requests"
         android:textAppearance="?android:attr/textAppearanceMedium" />

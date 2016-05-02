@@ -32,15 +32,10 @@ import java.util.Map;
 
 public class ProfileMapFragment extends BaseGotsFragment implements OnMapLongClickListener, OnMarkerClickListener {
     private static final String TAG = ProfileMapFragment.class.getSimpleName();
-
-    private MapView mapView;
-
-    private GoogleMap mMap;
-
     OnProfileEventListener mCallback;
-
     HashMap<Marker, GardenInterface> markerGarden = new HashMap<>();
-
+    private MapView mapView;
+    private GoogleMap mMap;
     private GotsGardenManager gardenManager;
 
     @Override

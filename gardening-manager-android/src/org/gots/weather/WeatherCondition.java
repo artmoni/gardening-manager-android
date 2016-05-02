@@ -4,9 +4,9 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ * <p/>
  * Contributors:
- *     sfleury - initial API and implementation
+ * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.weather;
 
@@ -173,14 +173,14 @@ public class WeatherCondition implements WeatherConditionInterface {
         this.id = id;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
-
-    }
-
     public Date getDate() {
 
         return this.date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+
     }
 
     public Float getTempCelciusMax() {
@@ -205,11 +205,11 @@ public class WeatherCondition implements WeatherConditionInterface {
         return builder.toString();
     }
 
-    public void setUUID(String id) {
-        this.uuid = id;
-    }
-
     public String getUUID() {
         return this.uuid;
+    }
+
+    public void setUUID(String id) {
+        this.uuid = id;
     }
 }

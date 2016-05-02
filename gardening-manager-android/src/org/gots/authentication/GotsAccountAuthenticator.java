@@ -28,7 +28,7 @@ public class GotsAccountAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType,
-            String[] requiredFeatures, Bundle options) throws NetworkErrorException {
+                             String[] requiredFeatures, Bundle options) throws NetworkErrorException {
         final Intent intent = new Intent(mContext, AuthenticationActivity.class);
         intent.putExtra(AuthenticationActivity.ARG_ACCOUNT_TYPE, accountType);
         intent.putExtra(AuthenticationActivity.ARG_AUTH_TYPE, authTokenType);
@@ -48,13 +48,13 @@ public class GotsAccountAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
-     
+
         // Extract the username and password from the Account Manager, and ask
         // the server for an appropriate AuthToken.
         final AccountManager am = AccountManager.get(mContext);
-     
+
         String authToken = am.peekAuthToken(account, authTokenType);
-     
+
         // Lets give another try to authenticate the user
         if (TextUtils.isEmpty(authToken)) {
             final String password = am.getPassword(account);
@@ -62,7 +62,7 @@ public class GotsAccountAuthenticator extends AbstractAccountAuthenticator {
 //                authToken = sServerAuthenticate.userSignIn(account.name, password, authTokenType);
             }
         }
-     
+
         // If we get an authToken - we return it
         if (!TextUtils.isEmpty(authToken)) {
             final Bundle result = new Bundle();
@@ -71,7 +71,7 @@ public class GotsAccountAuthenticator extends AbstractAccountAuthenticator {
             result.putString(AccountManager.KEY_AUTHTOKEN, authToken);
             return result;
         }
-     
+
         // If we get here, then we couldn't access the user's password - so we
         // need to re-prompt them for their credentials. We do that by creating
         // an intent to display our AuthenticatorActivity.
@@ -92,7 +92,7 @@ public class GotsAccountAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle updateCredentials(AccountAuthenticatorResponse response, Account account, String authTokenType,
-            Bundle options) throws NetworkErrorException {
+                                    Bundle options) throws NetworkErrorException {
         // TODO Auto-generated method stub
         return null;
     }

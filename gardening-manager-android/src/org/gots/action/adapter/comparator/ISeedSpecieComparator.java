@@ -1,11 +1,11 @@
 package org.gots.action.adapter.comparator;
 
-import java.util.Comparator;
+import android.content.Context;
 
 import org.gots.seed.BaseSeed;
 import org.gots.seed.SeedUtil;
 
-import android.content.Context;
+import java.util.Comparator;
 
 public class ISeedSpecieComparator implements Comparator<BaseSeed> {
 

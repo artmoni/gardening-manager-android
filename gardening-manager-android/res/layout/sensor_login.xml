@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_line_action"
-    android:padding="7dp" >
+    android:padding="7dp">
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@color/text_color_light"
         android:orientation="vertical"
-        android:padding="7dp" >
+        android:padding="7dp">
 
         <ImageView
             android:id="@+id/imageView1"
@@ -38,7 +38,7 @@
             android:layout_centerHorizontal="true"
             android:ems="10"
             android:hint="@string/login.login"
-            android:singleLine="true" >
+            android:singleLine="true">
 
             <requestFocus />
         </EditText>

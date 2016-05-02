@@ -1,17 +1,5 @@
 package org.gots.ui.fragment;
 
-import java.util.Calendar;
-import java.util.List;
-
-import org.gots.R;
-import org.gots.seed.BaseSeed;
-import org.gots.seed.GotsSeedManager;
-import org.gots.seed.adapter.SeedListAdapter;
-import org.gots.seed.adapter.VendorSeedListAdapter;
-import org.gots.ui.CatalogueActivity;
-import org.gots.ui.HutActivity;
-import org.gots.ui.PlantDescriptionActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,6 +8,17 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Gallery;
+
+import org.gots.R;
+import org.gots.seed.BaseSeed;
+import org.gots.seed.GotsSeedManager;
+import org.gots.seed.adapter.SeedListAdapter;
+import org.gots.seed.adapter.VendorSeedListAdapter;
+import org.gots.ui.CatalogueActivity;
+import org.gots.ui.PlantDescriptionActivity;
+
+import java.util.Calendar;
+import java.util.List;
 
 public class CatalogResumeFragment extends BaseGotsFragment implements OnItemClickListener {
     Gallery gallery;

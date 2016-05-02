@@ -19,6 +19,50 @@ public abstract class GotsCoreActivity extends AppCompatActivity {
         return NuxeoContext.get(getApplicationContext());
     }
 
+    protected abstract boolean requireAsyncDataRetrieval();
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (requireAsyncDataRetrieval()) {
+            runAsyncDataRetrieval();
+        }
+    }
+
+    protected void runAsyncDataRetrieval() {
+        new NuxeoAsyncTask().execute((Void[]) null);
+    }
+
+    /**
+     * Should be overridden to include Async process.
+     * Returning a null result will cancel the callback
+     */
+    protected Object retrieveNuxeoData() throws Exception {
+        return null;
+    }
+
+    /**
+     * Called on the UI Thread to notify that async process is started
+     * This may be used to display a waiting message
+     */
+    protected void onNuxeoDataRetrievalStarted() {
+    }
+
+    /**
+     * Called on the UI Thread when the async process is completed.
+     * The input object will be the output of the retrieveNuxeoData
+     */
+    protected void onNuxeoDataRetrieved(Object data) {
+
+    }
+
+    /**
+     * Called on the UI Thread when the async process is completed in error.
+     */
+    protected void onNuxeoDataRetrieveFailed() {
+
+    }
+
     protected class NuxeoAsyncTask extends AsyncTask<Void, Integer, Object> {
 
         @Override
@@ -64,49 +108,5 @@ public abstract class GotsCoreActivity extends AppCompatActivity {
                 onNuxeoDataRetrieveFailed();
             }
         }
-    }
-
-    protected abstract boolean requireAsyncDataRetrieval();
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (requireAsyncDataRetrieval()) {
-            runAsyncDataRetrieval();
-        }
-    }
-
-    protected void runAsyncDataRetrieval() {
-        new NuxeoAsyncTask().execute((Void[]) null);
-    }
-
-    /**
-     * Should be overridden to include Async process.
-     * Returning a null result will cancel the callback
-     */
-    protected Object retrieveNuxeoData() throws Exception {
-        return null;
-    }
-
-    /**
-     * Called on the UI Thread to notify that async process is started
-     * This may be used to display a waiting message
-     */
-    protected void onNuxeoDataRetrievalStarted() {
-    }
-
-    /**
-     * Called on the UI Thread when the async process is completed.
-     * The input object will be the output of the retrieveNuxeoData
-     */
-    protected void onNuxeoDataRetrieved(Object data) {
-
-    }
-
-    /**
-     * Called on the UI Thread when the async process is completed in error.
-     */
-    protected void onNuxeoDataRetrieveFailed() {
-
     }
 }

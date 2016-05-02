@@ -1,7 +1,12 @@
 package org.gots.authentication.syncadapter;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.accounts.Account;
+import android.content.ContentProviderClient;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SyncResult;
+import android.os.Bundle;
+import android.util.Log;
 
 import org.gots.authentication.GotsSyncAdapter;
 import org.gots.broadcast.BroadCastMessages;
@@ -10,13 +15,8 @@ import org.gots.garden.provider.GardenProvider;
 import org.gots.garden.provider.local.LocalGardenProvider;
 import org.gots.garden.provider.nuxeo.NuxeoGardenProvider;
 
-import android.accounts.Account;
-import android.content.ContentProviderClient;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SyncResult;
-import android.os.Bundle;
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GardenSyncAdapter extends GotsSyncAdapter {
 
@@ -30,7 +30,7 @@ public class GardenSyncAdapter extends GotsSyncAdapter {
     }
 
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider,
-            SyncResult syncResult) {
+                              SyncResult syncResult) {
         Log.d("GardenSyncAdapter", "onPerformSync for account[" + account.name + "]");
 
         getContext().sendBroadcast(new Intent(BroadCastMessages.PROGRESS_UPDATE));
@@ -66,8 +66,8 @@ public class GardenSyncAdapter extends GotsSyncAdapter {
             // garden if no more referenced online
             for (GardenInterface localGarden : myLocalGardens) {
                 if (localGarden.getUUID() == null) { // local only without
-                                                     // UUID => create
-                                                     // remote
+                    // UUID => create
+                    // remote
                     myGardens.add(nuxeoGardenProvider.createGarden(localGarden));
                 } else {
                     boolean found = false;

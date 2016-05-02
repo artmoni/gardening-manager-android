@@ -1,14 +1,5 @@
 package org.gots.ui.fragment;
 
-import org.gots.R;
-import org.gots.authentication.provider.google.User;
-import org.gots.bean.RouteNode;
-import org.gots.bean.TaskButton;
-import org.gots.nuxeo.NuxeoWorkflowProvider;
-import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
-import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
-import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -22,6 +13,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import org.gots.R;
+import org.gots.authentication.provider.google.User;
+import org.gots.bean.RouteNode;
+import org.gots.bean.TaskButton;
+import org.gots.nuxeo.NuxeoWorkflowProvider;
+import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
+import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
+import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
 public class WorkflowTaskFragment extends BaseGotsFragment {
     public static final String GOTS_TASKWORKFLOW_ID = "org.gots.task.id";
@@ -62,10 +62,6 @@ public class WorkflowTaskFragment extends BaseGotsFragment {
         buttonContainer = (LinearLayout) view.findViewById(R.id.buttonWorkflowLayout);
 
         return view;
-    }
-    public interface OnWorkflowClickListener {
-        public void onWorkflowFinished();
-
     }
 
     @Override
@@ -179,7 +175,9 @@ public class WorkflowTaskFragment extends BaseGotsFragment {
                                                     mCallback.onWorkflowFinished();
                                                 }
                                                 runAsyncDataRetrieval();
-                                            };
+                                            }
+
+                                            ;
 
                                         }.execute();
                                         return;
@@ -217,6 +215,11 @@ public class WorkflowTaskFragment extends BaseGotsFragment {
     @Override
     protected boolean requireAsyncDataRetrieval() {
         return true;
+    }
+
+    public interface OnWorkflowClickListener {
+        public void onWorkflowFinished();
+
     }
 
 }

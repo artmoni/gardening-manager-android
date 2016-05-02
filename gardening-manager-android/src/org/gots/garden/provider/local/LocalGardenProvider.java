@@ -1,13 +1,13 @@
 package org.gots.garden.provider.local;
 
-import java.util.List;
+import android.content.Context;
 
 import org.gots.garden.GardenInterface;
 import org.gots.garden.provider.GardenProvider;
 import org.gots.preferences.GotsPreferences;
 import org.gots.provider.AbstractProvider;
 
-import android.content.Context;
+import java.util.List;
 
 public class LocalGardenProvider extends AbstractProvider implements GardenProvider {
 
@@ -37,6 +37,11 @@ public class LocalGardenProvider extends AbstractProvider implements GardenProvi
     }
 
     @Override
+    public void setCurrentGarden(GardenInterface garden) {
+        gotsPrefs.set(GotsPreferences.ORG_GOTS_CURRENT_GARDENID, (int) garden.getId());
+    }
+
+    @Override
     public List<GardenInterface> getMyGardens(boolean force) {
         return helper.getGardens();
     }
@@ -48,11 +53,6 @@ public class LocalGardenProvider extends AbstractProvider implements GardenProvi
 
     public GardenInterface getGardenById(Integer id) {
         return helper.getGarden(id);
-    }
-
-    @Override
-    public void setCurrentGarden(GardenInterface garden) {
-        gotsPrefs.set(GotsPreferences.ORG_GOTS_CURRENT_GARDENID, (int) garden.getId());
     }
 
     public int share(GardenInterface garden, String user, String permission) {

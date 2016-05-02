@@ -1,19 +1,5 @@
 package org.gots.sensor;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.util.List;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.gots.R;
-import org.gots.sensor.parrot.ParrotLocation;
-import org.gots.utils.FileUtilities;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -28,6 +14,20 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.gots.R;
+import org.gots.sensor.parrot.ParrotLocation;
+import org.gots.utils.FileUtilities;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.util.List;
+
 public class LocationListAdapter extends BaseAdapter {
 
     private Context mContext;
@@ -37,17 +37,6 @@ public class LocationListAdapter extends BaseAdapter {
     public LocationListAdapter(Context context, List<ParrotLocation> sensors) {
         mContext = context;
         mLocation = sensors;
-    }
-
-    class SensorHolder {
-        ImageView sensorImg;
-
-        TextView sensorName;
-
-        TextView sensorPlantAssignedDate;
-
-        // TextView sensorDescription;
-
     }
 
     @Override
@@ -100,7 +89,7 @@ public class LocationListAdapter extends BaseAdapter {
                     h.sensorImg.getDrawable().getIntrinsicWidth(), h.sensorImg.getDrawable().getIntrinsicHeight());
             h.sensorImg.setImageBitmap(scaleBitmap);
         }
-        
+
         if (getItem(position).getLocation_name() != null)
             h.sensorName.setText("" + getItem(position).getLocation_name());
         else
@@ -177,5 +166,16 @@ public class LocationListAdapter extends BaseAdapter {
         }
 
         return imageFile;
+    }
+
+    class SensorHolder {
+        ImageView sensorImg;
+
+        TextView sensorName;
+
+        TextView sensorPlantAssignedDate;
+
+        // TextView sensorDescription;
+
     }
 }

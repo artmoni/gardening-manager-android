@@ -1,10 +1,5 @@
 package org.gots.sensor;
 
-import java.util.List;
-
-import org.gots.R;
-import org.gots.sensor.parrot.ParrotSensor;
-
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,6 +8,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.gots.R;
+import org.gots.sensor.parrot.ParrotSensor;
+
+import java.util.List;
 
 public class SensorListAdapter extends BaseAdapter {
 
@@ -23,13 +23,6 @@ public class SensorListAdapter extends BaseAdapter {
     public SensorListAdapter(Context context, List<ParrotSensor> sensors) {
         mContext = context;
         mSensors = sensors;
-    }
-
-    class SensorHolder {
-        ImageView sensorImg;
-
-        TextView sensorName;
-
     }
 
     @Override
@@ -66,5 +59,12 @@ public class SensorListAdapter extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    class SensorHolder {
+        ImageView sensorImg;
+
+        TextView sensorName;
+
     }
 }

@@ -1,11 +1,5 @@
 package org.gots.ui;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.gots.R;
-
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.graphics.Bitmap;
@@ -14,6 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SpinnerAdapter;
+
+import org.gots.R;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GalleryImageAdapter implements SpinnerAdapter {
 

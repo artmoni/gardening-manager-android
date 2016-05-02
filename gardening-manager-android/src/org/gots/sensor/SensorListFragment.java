@@ -1,11 +1,5 @@
 package org.gots.sensor;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.gots.R;
-import org.gots.sensor.parrot.ParrotLocation;
-
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
@@ -13,6 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
+import org.gots.R;
+import org.gots.sensor.parrot.ParrotLocation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SensorListFragment extends ListFragment {
 

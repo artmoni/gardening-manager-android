@@ -1,9 +1,8 @@
 package org.gots.allotment;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 
 import org.gots.allotment.provider.AllotmentProvider;
 import org.gots.allotment.provider.local.LocalAllotmentProvider;
@@ -15,9 +14,10 @@ import org.gots.nuxeo.NuxeoManager;
 import org.gots.utils.NotConfiguredException;
 import org.nuxeo.android.broadcast.NuxeoBroadcastMessages;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GotsAllotmentManager extends BroadcastReceiver implements AllotmentProvider {
 
@@ -26,25 +26,16 @@ public class GotsAllotmentManager extends BroadcastReceiver implements Allotment
     private static GotsAllotmentManager instance;
 
     private static Exception firstCall;
-
-    private Context mContext;
-
-    private AllotmentProvider allotmentProvider = null;
-
-    private boolean initDone = false;
-
     Map<Integer, BaseAllotmentInterface> allotments;
-
+    private Context mContext;
+    private AllotmentProvider allotmentProvider = null;
+    private boolean initDone = false;
     private boolean haschanged = false;
 
     private NuxeoManager nuxeoManager;
 
     private GotsAllotmentManager() {
 
-    }
-
-    protected GotsContext getGotsContext() {
-        return GotsContext.get(mContext);
     }
 
     /**
@@ -60,6 +51,10 @@ public class GotsAllotmentManager extends BroadcastReceiver implements Allotment
             throw new NotConfiguredException(firstCall);
         }
         return instance;
+    }
+
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(mContext);
     }
 
     /**
@@ -139,14 +134,14 @@ public class GotsAllotmentManager extends BroadcastReceiver implements Allotment
     }
 
     @Override
-    public void setCurrentAllotment(BaseAllotmentInterface allotmentInterface) {
-
-        allotmentProvider.setCurrentAllotment(allotmentInterface);
+    public BaseAllotmentInterface getCurrentAllotment() {
+        return allotmentProvider.getCurrentAllotment();
     }
 
     @Override
-    public BaseAllotmentInterface getCurrentAllotment() {
-        return allotmentProvider.getCurrentAllotment();
+    public void setCurrentAllotment(BaseAllotmentInterface allotmentInterface) {
+
+        allotmentProvider.setCurrentAllotment(allotmentInterface);
     }
 
     @Override

@@ -5,7 +5,7 @@
     android:layout_margin="5dp"
     android:background="@color/brown_light"
     android:padding="5dp"
-    android:visibility="gone" >
+    android:visibility="gone">
 
     <ImageView
         android:id="@+id/imageViewTop"
@@ -37,7 +37,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/imageViewTop"
-        android:dividerHeight="2dp" >
-    </ListView>
+        android:dividerHeight="2dp"></ListView>
 
 </RelativeLayout>

@@ -30,14 +30,10 @@ public class GotsActionSeedManager extends BroadcastReceiver implements GotsActi
     private static Exception firstCall;
 
     GotsActionSeedProvider provider;
-
-    private boolean initDone;
-
-    private Context mContext;
-
-    private GotsPreferences gotsPrefs;
-
     Map<Integer, ActionOnSeed> actionsToDO;
+    private boolean initDone;
+    private Context mContext;
+    private GotsPreferences gotsPrefs;
 
     public static synchronized GotsActionSeedManager getInstance() {
         if (instance == null) {

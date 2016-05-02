@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * <p>
+ * <p/>
  * Contributors:
  * sfleury - initial API and implementation
  ******************************************************************************/
@@ -134,8 +134,8 @@ public class LocalActionSeedProvider extends GotsDBHelper implements GotsActionS
         if (seed != null) {
             //@formatter:off
             Cursor cursor = bdd.rawQuery("select * from " + DatabaseHelper.ACTIONSEEDS_TABLE_NAME + " actionseed"
-                    + " WHERE actionseed." + DatabaseHelper.ACTIONSEED_GROWINGSEED_ID + "=" + seed.getId()
-                    + " AND actionseed." + DatabaseHelper.ACTIONSEED_DATEACTIONDONE + " IS NOT NULL"
+                            + " WHERE actionseed." + DatabaseHelper.ACTIONSEED_GROWINGSEED_ID + "=" + seed.getId()
+                            + " AND actionseed." + DatabaseHelper.ACTIONSEED_DATEACTIONDONE + " IS NOT NULL"
                     , null);
             //@formatter:on
             if (cursor.moveToFirst()) {

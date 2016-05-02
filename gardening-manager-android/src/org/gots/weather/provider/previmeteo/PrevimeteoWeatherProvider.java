@@ -5,23 +5,18 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * <p>
+ * <p/>
  * Contributors:
  * sfleury - initial API and implementation
  * ****************************************************************************
  */
 package org.gots.weather.provider.previmeteo;
 
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.Calendar;
-import java.util.Date;
+import android.content.Context;
+import android.text.format.DateFormat;
+import android.util.Log;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 import org.apache.http.client.HttpResponseException;
 import org.gots.context.GotsContext;
@@ -37,32 +32,33 @@ import org.gots.weather.provider.local.LocalWeatherProvider;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
-import android.content.Context;
-import android.text.format.DateFormat;
-import android.util.Log;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.Calendar;
+import java.util.Date;
 
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 public class PrevimeteoWeatherProvider extends LocalWeatherProvider {
     private static final String TAG = PrevimeteoWeatherProvider.class.getSimpleName();
-
-    private WeatherSet weatherSet;
-
-    private boolean iserror;
-
-    private WeatherCache cache;
-
-    private GotsPreferences gotsPreferences;
     private static String PREVIMETEO_URL = "http://services.gardening-manager.com/previmeteo/";
+    private WeatherSet weatherSet;
+    private boolean iserror;
+    private WeatherCache cache;
+    private GotsPreferences gotsPreferences;
 
-
-    protected GotsContext getGotsContext() {
-        return GotsContext.get(mContext);
-    }
 
     public PrevimeteoWeatherProvider(Context context) {
         super(context);
         gotsPreferences = getGotsContext().getServerConfig();
+    }
+
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(mContext);
     }
 
     protected URL buildUriFromAddress(String forecastLocality) throws MalformedURLException {

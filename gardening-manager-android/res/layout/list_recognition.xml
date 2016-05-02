@@ -59,12 +59,12 @@
         android:id="@+id/buttonConfirme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/horizontalScrollView"
+        android:layout_centerHorizontal="true"
         android:background="@drawable/bg_line_action_selector"
         android:padding="0dp"
         android:text="@string/plant.recognition.confirm"
-        android:textStyle="bold"
         android:textColor="@color/white"
-        android:layout_below="@id/horizontalScrollView"
-        android:layout_centerHorizontal="true" />
+        android:textStyle="bold" />
 
 </RelativeLayout>

@@ -4,35 +4,11 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- *
+ * <p/>
  * Contributors:
- *     sfleury - initial API and implementation
+ * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.garden.adapter;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-
-import org.gots.R;
-import org.gots.authentication.GotsSocialAuthentication;
-import org.gots.authentication.provider.google.GoogleAuthentication;
-import org.gots.authentication.provider.google.User;
-import org.gots.context.GotsContext;
-import org.gots.garden.GardenInterface;
-import org.gots.garden.GotsGardenManager;
-import org.gots.preferences.GotsPreferences;
-import org.gots.weather.WeatherCondition;
-import org.gots.weather.WeatherConditionInterface;
-import org.gots.weather.WeatherManager;
-import org.gots.weather.exception.UnknownWeatherException;
-import org.gots.weather.view.WeatherView;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -52,6 +28,30 @@ import android.widget.TextView;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 
+import org.gots.R;
+import org.gots.authentication.GotsSocialAuthentication;
+import org.gots.authentication.provider.google.GoogleAuthentication;
+import org.gots.authentication.provider.google.User;
+import org.gots.context.GotsContext;
+import org.gots.garden.GardenInterface;
+import org.gots.garden.GotsGardenManager;
+import org.gots.preferences.GotsPreferences;
+import org.gots.weather.WeatherCondition;
+import org.gots.weather.WeatherConditionInterface;
+import org.gots.weather.WeatherManager;
+import org.gots.weather.exception.UnknownWeatherException;
+import org.gots.weather.view.WeatherView;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+
 public class ProfileAdapter extends BaseAdapter {
 
     private Context mContext;
@@ -66,10 +66,9 @@ public class ProfileAdapter extends BaseAdapter {
     private GotsGardenManager gardenManager;
 
     private GardenInterface currentGarden;
-
-    protected GotsContext getGotsContext() {
-        return GotsContext.get(mContext);
-    }
+    private ViewGroup weatherHistory;
+    private User user;
+    private GotsPreferences gotsPreferences;
 
     public ProfileAdapter(Context context, List<GardenInterface> myGardens, GardenInterface currentGarden) {
         mContext = context;
@@ -82,6 +81,10 @@ public class ProfileAdapter extends BaseAdapter {
 
         gotsPreferences = getGotsContext().getServerConfig();
 
+    }
+
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(mContext);
     }
 
     @Override
@@ -124,36 +127,6 @@ public class ProfileAdapter extends BaseAdapter {
         return;
     }
 
-    public class UserInfo extends AsyncTask<ImageView, Void, Void> {
-        ImageView imageProfile;
-
-        @Override
-        protected Void doInBackground(ImageView... params) {
-            imageProfile = params[0];
-            GotsSocialAuthentication authentication = new GoogleAuthentication(mContext);
-            try {
-                String token = authentication.getToken(gotsPreferences.getNuxeoLogin());
-                user = authentication.getUser(token);
-                downloadImage(user.getId(), user.getPictureURL());
-            } catch (UserRecoverableAuthException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (GoogleAuthException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        protected void onPostExecute(Void result) {
-            if (user != null && user.getId() != null) {
-                File file = new File(mContext.getCacheDir() + "/" + user.getId().toLowerCase().replaceAll("\\s", ""));
-                Bitmap usrLogo = BitmapFactory.decodeFile(file.getAbsolutePath());
-                imageProfile.setImageBitmap(usrLogo);
-            }
-        };
-    }
-
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
@@ -188,9 +161,9 @@ public class ProfileAdapter extends BaseAdapter {
                 UserInfo userInfoTask = new UserInfo();
                 userInfoTask.execute(imageProfile);
             }// mContext.startService(weatherIntent);
-             // mContext.registerReceiver(weatherBroadcastReceiver, new
-             // IntentFilter(
-             // WeatherUpdateService.BROADCAST_ACTION));
+            // mContext.registerReceiver(weatherBroadcastReceiver, new
+            // IntentFilter(
+            // WeatherUpdateService.BROADCAST_ACTION));
 
         } else {
             vi.setSelected(false);
@@ -202,11 +175,11 @@ public class ProfileAdapter extends BaseAdapter {
             // weatherHistoryContainer.setVisibility(View.GONE);
 
         }
-        if (itemGarden.isIncredibleEdible()){
+        if (itemGarden.isIncredibleEdible()) {
             imageGardenType.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_garden_incredible));
-        }else
+        } else
             imageGardenType.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_garden_private));
-            
+
 
         if (GotsPreferences.DEBUG)
             gardenName.setText(itemGarden.toString());
@@ -275,7 +248,7 @@ public class ProfileAdapter extends BaseAdapter {
 
                     currentGarden = getItem(position);
                     gardenManager.setCurrentGarden(currentGarden);
-                    
+
                     notifyDataSetChanged();
 
 //                    if (gardenManager.getCurrentGarden() != null) {
@@ -335,22 +308,22 @@ public class ProfileAdapter extends BaseAdapter {
 
         //default min 10 days before
         int lastConditionDay = 10;
-        while (lastConditionDay-- !=0)
-            try{
+        while (lastConditionDay-- != 0)
+            try {
                 if (weatherManager.getCondition(-lastConditionDay).getDate() != null)
                     min.setTime(weatherManager.getCondition(-lastConditionDay).getDate());
-                lastConditionDay=0;
-            }catch (UnknownWeatherException e){
+                lastConditionDay = 0;
+            } catch (UnknownWeatherException e) {
 
             }
 
         //default max coord 30 days before
         while (lastConditionDay++ < 30)
-            try{
+            try {
                 if (weatherManager.getCondition(-lastConditionDay).getDate() != null)
                     max.setTime(weatherManager.getCondition(-lastConditionDay).getDate());
-                lastConditionDay=30;
-            }catch (UnknownWeatherException e){
+                lastConditionDay = 30;
+            } catch (UnknownWeatherException e) {
 
             }
 
@@ -369,15 +342,41 @@ public class ProfileAdapter extends BaseAdapter {
         webView.loadUrl(url);
     }
 
-    private ViewGroup weatherHistory;
-
-    private User user;
-
-    private GotsPreferences gotsPreferences;
-
     @Override
     public void notifyDataSetChanged() {
         super.notifyDataSetChanged();
+    }
+
+    public class UserInfo extends AsyncTask<ImageView, Void, Void> {
+        ImageView imageProfile;
+
+        @Override
+        protected Void doInBackground(ImageView... params) {
+            imageProfile = params[0];
+            GotsSocialAuthentication authentication = new GoogleAuthentication(mContext);
+            try {
+                String token = authentication.getToken(gotsPreferences.getUserAccount());
+                user = authentication.getUser(token);
+                downloadImage(user.getId(), user.getPictureURL());
+            } catch (UserRecoverableAuthException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (GoogleAuthException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        protected void onPostExecute(Void result) {
+            if (user != null && user.getId() != null) {
+                File file = new File(mContext.getCacheDir() + "/" + user.getId().toLowerCase().replaceAll("\\s", ""));
+                Bitmap usrLogo = BitmapFactory.decodeFile(file.getAbsolutePath());
+                imageProfile.setImageBitmap(usrLogo);
+            }
+        }
+
+        ;
     }
 
 }

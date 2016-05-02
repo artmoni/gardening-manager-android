@@ -110,14 +110,14 @@ public class LocalAllotmentProvider extends GotsDBHelper implements AllotmentPro
         ContentValues values = convertToContentValues(allotment);
         Cursor cursor = null;
         try {
-            if (allotment.getId() >= 0){
+            if (allotment.getId() >= 0) {
                 bdd.update(DatabaseHelper.ALLOTMENT_TABLE_NAME, values,
                         DatabaseHelper.ALLOTMENT_ID + "=\"" + allotment.getId() + "\"", null);
                 cursor = bdd.query(DatabaseHelper.ALLOTMENT_TABLE_NAME, null, DatabaseHelper.ALLOTMENT_ID + "='"
                         + allotment.getId() + "'", null, null, null, null);
-            }else {
+            } else {
                 bdd.update(DatabaseHelper.ALLOTMENT_TABLE_NAME, values,
-                        DatabaseHelper.ALLOTMENT_UUID + "=\"" + allotment.getUUID()+ "\"", null);
+                        DatabaseHelper.ALLOTMENT_UUID + "=\"" + allotment.getUUID() + "\"", null);
                 cursor = bdd.query(DatabaseHelper.ALLOTMENT_TABLE_NAME, null, DatabaseHelper.ALLOTMENT_UUID + "='"
                         + allotment.getUUID() + "'", null, null, null, null);
             }

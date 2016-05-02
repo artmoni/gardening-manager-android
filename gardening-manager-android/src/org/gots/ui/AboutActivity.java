@@ -20,11 +20,8 @@ import org.gots.preferences.GotsPreferences;
 import java.util.Locale;
 
 public class AboutActivity extends BaseGotsActivity {
-    private String TAG = "AboutActivity";
-
-
     protected int refreshCounter;
-
+    private String TAG = "AboutActivity";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

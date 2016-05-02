@@ -1,10 +1,9 @@
 package org.gots.sensor.parrot;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import android.content.Context;
+import android.util.Log;
+
+import com.google.gson.Gson;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -14,10 +13,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
-import android.util.Log;
-
-import com.google.gson.Gson;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class ParrotSamplesProvider implements GotsSensorSamplesProvider {
 
@@ -40,7 +40,7 @@ public class ParrotSamplesProvider implements GotsSensorSamplesProvider {
         String api_1_03_sample = "/sensor_data/v2/sample/location/" + locationId;
         List<ParrotSampleFertilizer> sensorSampleFertilizers = new ArrayList<ParrotSampleFertilizer>();
         JSONObject json = null;
-        
+
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         if (from != null) {
             String fromUTC = new SimpleDateFormat().format(from);
@@ -104,7 +104,7 @@ public class ParrotSamplesProvider implements GotsSensorSamplesProvider {
         List<ParrotSampleTemperature> sensorSampleTemperature = new ArrayList<ParrotSampleTemperature>();
         try {
             JSONObject json = (JSONObject) authentication.getJSON(api_1_03_sample, params);
-            if (json.has("samples")){
+            if (json.has("samples")) {
                 JSONArray jsonFertilizer = json.getJSONArray("samples");
                 Gson gson = new Gson();
                 for (int i = 0; i < jsonFertilizer.length(); i++) {

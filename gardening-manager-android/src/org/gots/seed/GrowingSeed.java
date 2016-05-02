@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * <p>
+ * <p/>
  * Contributors:
  * sfleury - initial API and implementation
  ******************************************************************************/
@@ -14,13 +14,13 @@ import java.util.Date;
 
 public interface GrowingSeed {
 
-    public void setId(int id);
-
     public int getId();
 
-    public void setPlant(BaseSeed plant);
+    public void setId(int id);
 
     public BaseSeed getPlant();
+
+    public void setPlant(BaseSeed plant);
 
     public Date getDateSowing();
 
@@ -34,8 +34,8 @@ public interface GrowingSeed {
 
     public void setDateHarvest(Date dateHarvest);
 
-    public void setUUID(String id);
-
     public String getUUID();
+
+    public void setUUID(String id);
 
 }

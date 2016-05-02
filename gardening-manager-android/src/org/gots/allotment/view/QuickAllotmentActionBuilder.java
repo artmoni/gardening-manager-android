@@ -4,11 +4,14 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- *
+ * <p/>
  * Contributors:
- *     sfleury - initial API and implementation
+ * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.allotment.view;
+
+import android.content.Intent;
+import android.view.View;
 
 import net.londatiga.android.QuickAction;
 
@@ -17,10 +20,6 @@ import org.gots.action.bean.SowingAction;
 import org.gots.action.view.ActionWidget;
 import org.gots.bean.BaseAllotmentInterface;
 import org.gots.ui.CatalogueActivity;
-import org.gots.ui.HutActivity;
-
-import android.content.Intent;
-import android.view.View;
 
 public class QuickAllotmentActionBuilder {
     final QuickAction quickAction;

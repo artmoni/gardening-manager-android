@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="0px" >
+    android:padding="0px">
 
     <LinearLayout
         android:id="@+id/idAllotmentTitlebar"
@@ -13,7 +13,7 @@
         android:layout_gravity="right"
         android:background="@drawable/parcelle_contextual_bar"
         android:gravity="right"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/idAllotmentMenu"
@@ -27,8 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left|center_vertical"
             android:layout_margin="2dp"
-            android:background="@drawable/parcelle_contextual_bar_vertical_divider" >
-        </LinearLayout>
+            android:background="@drawable/parcelle_contextual_bar_vertical_divider"></LinearLayout>
 
         <TextView
             android:id="@+id/textAllotmentName"
@@ -54,7 +53,6 @@
         android:layout_height="match_parent"
         android:horizontalSpacing="2dp"
         android:numColumns="4"
-        android:verticalSpacing="2dp" >
-    </org.gots.ui.ExpandableHeightGridView>
+        android:verticalSpacing="2dp"></org.gots.ui.ExpandableHeightGridView>
 
 </LinearLayout>

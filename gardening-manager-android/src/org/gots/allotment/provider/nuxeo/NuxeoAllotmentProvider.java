@@ -26,14 +26,10 @@ import java.util.List;
 
 public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
     protected static final String TAG = "NuxeoAllotmentProvider";
-
-    String myToken;
-
-    String myLogin;
-
-    String myDeviceId;
-
     protected String myApp;
+    String myToken;
+    String myLogin;
+    String myDeviceId;
 
     // protected LazyUpdatableDocumentsList documentsList = null;
 
@@ -51,6 +47,11 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
     @Override
     public BaseAllotmentInterface getCurrentAllotment() {
         return super.getCurrentAllotment();
+    }
+
+    @Override
+    public void setCurrentAllotment(BaseAllotmentInterface allotmentInterface) {
+        super.setCurrentAllotment(allotmentInterface);
     }
 
     @Override
@@ -87,7 +88,7 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
                 else
                     allotment = super.createAllotment(allotment);
 
-                File file = allotment.getImagePath() != null ? new File (allotment.getImagePath()) : new File(gotsPrefs.getFilesDir().getAbsolutePath(), document.getId());
+                File file = allotment.getImagePath() != null ? new File(allotment.getImagePath()) : new File(gotsPrefs.getFilesDir().getAbsolutePath(), document.getId());
                 Log.d(TAG, file.toString());
                 if (!file.exists()) {
 
@@ -103,7 +104,7 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
 
                         @Override
                         public void onDownloadFailed(FileBlob fileBlob) {
-                            Log.w(TAG, "getMyAllotments() onDownloadFailed() file=" + fileBlob.getFile().getAbsolutePath()+" allotment= "+document.getTitle() );
+                            Log.w(TAG, "getMyAllotments() onDownloadFailed() file=" + fileBlob.getFile().getAbsolutePath() + " allotment= " + document.getTitle());
                         }
                     });
 //                    if (fileBlob != null && fileBlob.getLength() > 0)
@@ -235,10 +236,5 @@ public class NuxeoAllotmentProvider extends LocalAllotmentProvider {
         }
 
         return super.updateAllotment(allotment);
-    }
-
-    @Override
-    public void setCurrentAllotment(BaseAllotmentInterface allotmentInterface) {
-        super.setCurrentAllotment(allotmentInterface);
     }
 }

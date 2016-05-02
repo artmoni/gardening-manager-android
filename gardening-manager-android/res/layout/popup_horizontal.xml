@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/quickPopupAction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dip"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/quickPopupActionTemporary"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/pop_up_graine_green"
-            android:visibility="gone" >
+            android:visibility="gone">
 
             <ScrollView
                 android:id="@+id/scroller"
@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:fadingEdgeLength="5dip"
                 android:gravity="left"
-                android:scrollbars="none" >
+                android:scrollbars="none">
 
                 <LinearLayout
                     android:id="@+id/tracks"
@@ -39,13 +39,13 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
             android:background="@drawable/pop_up_graine"
-            android:gravity="center_horizontal" >
+            android:gravity="center_horizontal">
 
             <ScrollView
                 android:id="@+id/scroller2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:scrollbars="none" >
+                android:scrollbars="none">
 
                 <LinearLayout
                     android:id="@+id/tracks2"

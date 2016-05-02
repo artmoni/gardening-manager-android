@@ -4,11 +4,18 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ * <p/>
  * Contributors:
- *     sfleury - initial API and implementation
+ * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.utils;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -18,16 +25,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.media.ExifInterface;
-
 public class FileUtilities {
     public static boolean StoreByteImage(Context mContext, byte[] imageData, int quality, String directory,
-            String expName) {
+                                         String expName) {
 
         File sdImageMainDirectory = new File("/sdcard/Gots/" + directory);
         FileOutputStream fileOutputStream = null;
@@ -105,15 +105,15 @@ public class FileUtilities {
             int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
 
             switch (orientation) {
-            case ExifInterface.ORIENTATION_ROTATE_270:
-                rotate = 270;
-                break;
-            case ExifInterface.ORIENTATION_ROTATE_180:
-                rotate = 180;
-                break;
-            case ExifInterface.ORIENTATION_ROTATE_90:
-                rotate = 90;
-                break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    rotate = 270;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    rotate = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    rotate = 90;
+                    break;
             }
         } catch (Exception e) {
             e.printStackTrace();

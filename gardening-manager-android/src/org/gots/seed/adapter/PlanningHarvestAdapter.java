@@ -4,17 +4,17 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ * <p/>
  * Contributors:
- *     sfleury - initial API and implementation
+ * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.seed.adapter;
 
-import org.gots.seed.BaseSeed;
-import org.gots.seed.view.MonthWidget;
-
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.gots.seed.BaseSeed;
+import org.gots.seed.view.MonthWidget;
 
 public class PlanningHarvestAdapter extends PlanningAdapter {
     BaseSeed mSeed;
@@ -35,7 +35,7 @@ public class PlanningHarvestAdapter extends PlanningAdapter {
 
             // [0][1][2][3][min][5][6][position][max][9][10][11]
             if ((position >= harvestMin && position <= harvestMax)
-            // [0][position][max][3][4][5][6][7][min][9][10][11]
+                    // [0][position][max][3][4][5][6][7][min][9][10][11]
                     || ((position <= harvestMax) && (harvestMax < harvestMin))
                     // [0][1][max][3][4][5][6][7][min][9][position][11]
                     || (position >= harvestMin) && (harvestMax < harvestMin))

@@ -4,17 +4,17 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ * <p/>
  * Contributors:
- *     sfleury - initial API and implementation
+ * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.seed.adapter;
 
-import org.gots.seed.BaseSeed;
-import org.gots.seed.view.MonthWidget;
-
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.gots.seed.BaseSeed;
+import org.gots.seed.view.MonthWidget;
 
 public class PlanningSowAdapter extends PlanningAdapter {
     BaseSeed mSeed;

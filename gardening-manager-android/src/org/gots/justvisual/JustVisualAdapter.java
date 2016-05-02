@@ -23,7 +23,6 @@ import org.gots.R;
 import org.gots.ui.WebHelpActivity;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,12 +57,6 @@ public class JustVisualAdapter extends BaseAdapter {
         stopProcessing = true;
     }
 
-    public interface OnAdapterClickListener {
-        void onImageClick(Bitmap bitmap);
-
-        void onConfirmeClicked(JustVisualResult result);
-    }
-
     @Override
     public int getCount() {
         return visualResults.size();
@@ -77,15 +70,6 @@ public class JustVisualAdapter extends BaseAdapter {
     @Override
     public long getItemId(int i) {
         return i;
-    }
-
-    public class Holder {
-
-        public TextView textViewCommonName;
-        public TextView textViewSpecies;
-        public LinearLayout layoutResult;
-        public FloatingActionButton floatingActionInformation;
-        public Button buttonConfirme;
     }
 
     @Override
@@ -121,7 +105,6 @@ public class JustVisualAdapter extends BaseAdapter {
             });
 
 
-
             view.setTag(holder);
         } else
             holder = (Holder) view.getTag();
@@ -131,7 +114,7 @@ public class JustVisualAdapter extends BaseAdapter {
         holder.textViewCommonName.setText(result.getCommonName());
         holder.textViewSpecies.setText(result.getSpecies());
         holder.layoutResult.removeAllViews();
-         new AsyncTask<Object, Integer, Bitmap>() {
+        new AsyncTask<Object, Integer, Bitmap>() {
             List<Bitmap> images = new ArrayList<Bitmap>();
             ViewGroup layout;
 
@@ -217,6 +200,21 @@ public class JustVisualAdapter extends BaseAdapter {
 
     public void setOnImageClick(OnAdapterClickListener listener) {
         this.mCallback = listener;
+    }
+
+    public interface OnAdapterClickListener {
+        void onImageClick(Bitmap bitmap);
+
+        void onConfirmeClicked(JustVisualResult result);
+    }
+
+    public class Holder {
+
+        public TextView textViewCommonName;
+        public TextView textViewSpecies;
+        public LinearLayout layoutResult;
+        public FloatingActionButton floatingActionInformation;
+        public Button buttonConfirme;
     }
 
 

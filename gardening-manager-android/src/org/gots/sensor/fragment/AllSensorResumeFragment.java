@@ -1,19 +1,19 @@
 package org.gots.sensor.fragment;
 
-import java.util.List;
+import android.view.View;
+import android.widget.Button;
 
 import org.gots.sensor.SensorLocationWidget;
 import org.gots.sensor.parrot.ParrotLocation;
 import org.gots.sensor.parrot.ParrotLocationsStatus;
 
-import android.view.View;
-import android.widget.Button;
+import java.util.List;
 
 public class AllSensorResumeFragment extends SensorResumeFragment {
 
     @Override
     protected void onSensorStatusRetrieved(List<ParrotLocation> parrotLocations,
-            List<ParrotLocationsStatus> parrotLocationsStatus) {
+                                           List<ParrotLocationsStatus> parrotLocationsStatus) {
         for (ParrotLocationsStatus locationsStatus : parrotLocationsStatus) {
             ParrotLocation sensorLocation = null;
 

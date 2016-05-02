@@ -95,23 +95,23 @@ public class Garden implements GardenInterface {
     }
 
     @Override
-    public String getCountryName() {
-        return getAddress().getCountryName();
-    }
-
-    @Override
-    public String getLocality() {
-        return getAddress().getLocality();
-    }
-
-    @Override
     public void setAdminArea(String adminArea) {
         this.address.setAdminArea(adminArea);
     }
 
     @Override
+    public String getCountryName() {
+        return getAddress().getCountryName();
+    }
+
+    @Override
     public void setCountryName(String countryName) {
         this.address.setCountryName(countryName);
+    }
+
+    @Override
+    public String getLocality() {
+        return getAddress().getLocality();
     }
 
     @Override
@@ -153,13 +153,13 @@ public class Garden implements GardenInterface {
     }
 
     @Override
-    public void setUUID(String id) {
-        uuid = id;
+    public String getUUID() {
+        return uuid;
     }
 
     @Override
-    public String getUUID() {
-        return uuid;
+    public void setUUID(String id) {
+        uuid = id;
     }
 
     @Override
@@ -196,13 +196,13 @@ public class Garden implements GardenInterface {
     }
 
     @Override
-    public void setLocalityForecast(String locality) {
-        this.localityForecast = locality;
+    public String getLocalityForecast() {
+        return localityForecast != null ? localityForecast : getLocality();
     }
 
     @Override
-    public String getLocalityForecast() {
-        return localityForecast != null ? localityForecast : getLocality();
+    public void setLocalityForecast(String locality) {
+        this.localityForecast = locality;
     }
 
 }

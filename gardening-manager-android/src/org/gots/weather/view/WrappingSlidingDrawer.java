@@ -4,9 +4,9 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ * <p/>
  * Contributors:
- *     sfleury - initial API and implementation
+ * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.weather.view;
 
@@ -17,58 +17,58 @@ import android.widget.SlidingDrawer;
 
 public class WrappingSlidingDrawer extends SlidingDrawer {
 
-	public WrappingSlidingDrawer(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
+    private boolean mVertical;
+    private int mTopOffset;
 
-		int orientation = attrs.getAttributeIntValue("android", "orientation", ORIENTATION_VERTICAL);
-		mTopOffset = attrs.getAttributeIntValue("android", "topOffset", 0);
-		mVertical = (orientation == SlidingDrawer.ORIENTATION_VERTICAL);
-	}
+    public WrappingSlidingDrawer(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
 
-	public WrappingSlidingDrawer(Context context, AttributeSet attrs) {
-		super(context, attrs);
+        int orientation = attrs.getAttributeIntValue("android", "orientation", ORIENTATION_VERTICAL);
+        mTopOffset = attrs.getAttributeIntValue("android", "topOffset", 0);
+        mVertical = (orientation == SlidingDrawer.ORIENTATION_VERTICAL);
+    }
 
-		int orientation = attrs.getAttributeIntValue("android", "orientation", ORIENTATION_VERTICAL);
-		mTopOffset = attrs.getAttributeIntValue("android", "topOffset", 0);
-		mVertical = (orientation == SlidingDrawer.ORIENTATION_VERTICAL);
-	}
+    public WrappingSlidingDrawer(Context context, AttributeSet attrs) {
+        super(context, attrs);
 
-	@Override
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int orientation = attrs.getAttributeIntValue("android", "orientation", ORIENTATION_VERTICAL);
+        mTopOffset = attrs.getAttributeIntValue("android", "topOffset", 0);
+        mVertical = (orientation == SlidingDrawer.ORIENTATION_VERTICAL);
+    }
 
-		int widthSpecMode = MeasureSpec.getMode(widthMeasureSpec);
-		int widthSpecSize = MeasureSpec.getSize(widthMeasureSpec);
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
-		int heightSpecMode = MeasureSpec.getMode(heightMeasureSpec);
-		int heightSpecSize = MeasureSpec.getSize(heightMeasureSpec);
+        int widthSpecMode = MeasureSpec.getMode(widthMeasureSpec);
+        int widthSpecSize = MeasureSpec.getSize(widthMeasureSpec);
 
-		if (widthSpecMode == MeasureSpec.UNSPECIFIED || heightSpecMode == MeasureSpec.UNSPECIFIED) {
-			throw new RuntimeException("SlidingDrawer cannot have UNSPECIFIED dimensions");
-		}
+        int heightSpecMode = MeasureSpec.getMode(heightMeasureSpec);
+        int heightSpecSize = MeasureSpec.getSize(heightMeasureSpec);
 
-		final View handle = getHandle();
-		final View content = getContent();
-		measureChild(handle, widthMeasureSpec, heightMeasureSpec);
+        if (widthSpecMode == MeasureSpec.UNSPECIFIED || heightSpecMode == MeasureSpec.UNSPECIFIED) {
+            throw new RuntimeException("SlidingDrawer cannot have UNSPECIFIED dimensions");
+        }
 
-		if (mVertical) {
-			int height = heightSpecSize - handle.getMeasuredHeight() - mTopOffset;
-			content.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(height, heightSpecMode));
-			heightSpecSize = handle.getMeasuredHeight() + mTopOffset + content.getMeasuredHeight();
-			widthSpecSize = content.getMeasuredWidth();
-			if (handle.getMeasuredWidth() > widthSpecSize)
-				widthSpecSize = handle.getMeasuredWidth();
-		} else {
-			int width = widthSpecSize - handle.getMeasuredWidth() - mTopOffset;
-			getContent().measure(MeasureSpec.makeMeasureSpec(width, widthSpecMode), heightMeasureSpec);
-			widthSpecSize = handle.getMeasuredWidth() + mTopOffset + content.getMeasuredWidth();
-			heightSpecSize = content.getMeasuredHeight();
-			if (handle.getMeasuredHeight() > heightSpecSize)
-				heightSpecSize = handle.getMeasuredHeight();
-		}
+        final View handle = getHandle();
+        final View content = getContent();
+        measureChild(handle, widthMeasureSpec, heightMeasureSpec);
 
-		setMeasuredDimension(widthSpecSize, heightSpecSize);
-	}
+        if (mVertical) {
+            int height = heightSpecSize - handle.getMeasuredHeight() - mTopOffset;
+            content.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(height, heightSpecMode));
+            heightSpecSize = handle.getMeasuredHeight() + mTopOffset + content.getMeasuredHeight();
+            widthSpecSize = content.getMeasuredWidth();
+            if (handle.getMeasuredWidth() > widthSpecSize)
+                widthSpecSize = handle.getMeasuredWidth();
+        } else {
+            int width = widthSpecSize - handle.getMeasuredWidth() - mTopOffset;
+            getContent().measure(MeasureSpec.makeMeasureSpec(width, widthSpecMode), heightMeasureSpec);
+            widthSpecSize = handle.getMeasuredWidth() + mTopOffset + content.getMeasuredWidth();
+            heightSpecSize = content.getMeasuredHeight();
+            if (handle.getMeasuredHeight() > heightSpecSize)
+                heightSpecSize = handle.getMeasuredHeight();
+        }
 
-	private boolean mVertical;
-	private int mTopOffset;
+        setMeasuredDimension(widthSpecSize, heightSpecSize);
+    }
 }

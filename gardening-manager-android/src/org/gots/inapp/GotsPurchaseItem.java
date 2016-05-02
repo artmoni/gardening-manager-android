@@ -16,28 +16,17 @@ import java.util.List;
  */
 public class GotsPurchaseItem {
     public static final int BUY_REQUEST_CODE = 87632;
-
-    private static final String TAG = "GotsPurchaseItem";
-
-    private static final boolean FORCE_PREMIUM = true; // REMOVED ADS FROM 01/01/16
     public static final String SKU_TEST_PURCHASE = "android.test.purchased";
-
     public static final String SKU_PREMIUM = "gots.premium";
-
     public static final String SKU_FEATURE_PDFHISTORY = "gots.feature.pdfhistory";
-
     public static final String SKU_FEATURE_PARROT = "gots.feature.parrot";
-
     public static final String SKU_FEATURE_RECOGNITION_50 = "gots.feature.recognition.50";
-
     public static final String SKU_FEATURE_RECOGNITION_100 = "gots.feature.recognition.100";
-
     public static final String FEATURE_RECOGNITION_COUNTER = "gots.feature.recognition.counter";
-
     public static final String FEATURE_RECOGNITION_COUNTERDAILY = "gots.feature.recognition.counterdaily";
-
     public static final String FEATURE_RECOGNITION_LASTDAY = "gots.feature.recognition.lastday";
-
+    private static final String TAG = "GotsPurchaseItem";
+    private static final boolean FORCE_PREMIUM = true; // REMOVED ADS FROM 01/01/16
     public static int RECOGNITION_FREE_COUNTER_MAX = 3;
     // public static String SKU_FEATURE_PDFHISTORY = SKU_TEST_PURCHASE;
 
@@ -50,32 +39,14 @@ public class GotsPurchaseItem {
         prefs = mContext.getSharedPreferences("purchaseitem", 0);
     }
 
-    public void setFeatureExportPDF(boolean hasPurchase) {
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean(SKU_FEATURE_PDFHISTORY, hasPurchase);
-        editor.commit();
-    }
-
-    public void setFeatureParrot(boolean hasParrot) {
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean(SKU_FEATURE_PARROT, hasParrot);
-        editor.commit();
+    public boolean isPremium() {
+        return prefs.getBoolean(SKU_PREMIUM, false) ? true : unlockPremium() ? true : FORCE_PREMIUM;
     }
 
     public void setPremium(boolean hasPurchase) {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean(SKU_PREMIUM, hasPurchase);
         editor.commit();
-    }
-
-    public void setFeatureRecognitionCounter(int nbRecognitionAllowed) {
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt(FEATURE_RECOGNITION_COUNTER, nbRecognitionAllowed);
-        editor.commit();
-    }
-
-    public boolean isPremium() {
-        return prefs.getBoolean(SKU_PREMIUM, false) ? true : unlockPremium() ? true : FORCE_PREMIUM;
     }
 
     private boolean unlockPremium() {
@@ -107,12 +78,30 @@ public class GotsPurchaseItem {
         return prefs.getBoolean(SKU_FEATURE_PDFHISTORY, false) || isPremium();
     }
 
+    public void setFeatureExportPDF(boolean hasPurchase) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(SKU_FEATURE_PDFHISTORY, hasPurchase);
+        editor.commit();
+    }
+
     public boolean getFeatureParrot() {
         return prefs.getBoolean(SKU_FEATURE_PARROT, false) || isPremium();
     }
 
+    public void setFeatureParrot(boolean hasParrot) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(SKU_FEATURE_PARROT, hasParrot);
+        editor.commit();
+    }
+
     public int getFeatureRecognitionCounter() {
         return prefs.getInt(FEATURE_RECOGNITION_COUNTER, 0);
+    }
+
+    public void setFeatureRecognitionCounter(int nbRecognitionAllowed) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(FEATURE_RECOGNITION_COUNTER, nbRecognitionAllowed);
+        editor.commit();
     }
 
 //    public int getFeatureRecognitionFreeCounterMax() {

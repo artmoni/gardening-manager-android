@@ -40,14 +40,10 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
             + Locale.getDefault().getCountry().toLowerCase() + "\"";
 
     private static final String QUERY_FILTER_SECTION = " AND ecm:path STARTSWITH '/default-domain/sections/'";
-
-    String myToken;
-
-    String myLogin;
-
-    String myDeviceId;
-
     protected String myApp;
+    String myToken;
+    String myLogin;
+    String myDeviceId;
 
     // protected LazyUpdatableDocumentsList documentsList;
 
@@ -655,12 +651,12 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                 botanicSpecie.setSpecieName(doc.getTitle());
 
                 File f = new File(gotsPrefs.getFilesDir(), doc.getId());
-                if (!f.exists()){
+                if (!f.exists()) {
                     NuxeoUtils.downloadBlob(service, doc, f, new NuxeoUtils.OnDownloadBlob() {
                         @Override
                         public void onDownloadSuccess(FileBlob fileBlob) {
                             botanicSpecie.setFilepath(fileBlob.getFile().getAbsolutePath());
-                            Log.d(TAG, "downloaded picture for "+botanicSpecie.getSpecieName()+" "+fileBlob.getFile().getAbsolutePath());
+                            Log.d(TAG, "downloaded picture for " + botanicSpecie.getSpecieName() + " " + fileBlob.getFile().getAbsolutePath());
                         }
 
                         @Override
@@ -668,8 +664,7 @@ public class NuxeoSeedProvider extends LocalSeedProvider {
                             Log.d(TAG, "no picture for this species");
                         }
                     });
-                }
-                else
+                } else
                     botanicSpecie.setFilepath(f.getAbsolutePath());
                 botanicSpecies.add(botanicSpecie);
             }

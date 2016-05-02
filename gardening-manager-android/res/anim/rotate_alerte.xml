@@ -1,7 +1,7 @@
-<animation-list android:id="@+id/animation" android:oneshot="false" 
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/animation" android:oneshot="false">
     <item android:drawable="@drawable/parcelle_symbol_white" android:duration="700" />
     <item android:drawable="@drawable/parcelle_symbol_red_2" android:duration="700" />
     <item android:drawable="@drawable/parcelle_symbol_red_1" android:duration="700" />
     <item android:drawable="@drawable/parcelle_symbol_red_3" android:duration="500" />
- </animation-list> 
+</animation-list>

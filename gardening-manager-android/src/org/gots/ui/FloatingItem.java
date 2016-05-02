@@ -28,12 +28,12 @@ public class FloatingItem {
         this.onClickListener = clickListener;
     }
 
-    public void setOnLongClickListener(OnLongClickListener onLongClickListener) {
-        this.onLongClickListener = onLongClickListener;
-    }
-
     public OnLongClickListener getOnLongClickListener() {
         return onLongClickListener;
+    }
+
+    public void setOnLongClickListener(OnLongClickListener onLongClickListener) {
+        this.onLongClickListener = onLongClickListener;
     }
 
     public int getRessourceId() {

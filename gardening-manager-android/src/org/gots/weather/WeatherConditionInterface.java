@@ -4,9 +4,9 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ * <p/>
  * Contributors:
- *     sfleury - initial API and implementation
+ * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.weather;
 
@@ -46,16 +46,16 @@ public interface WeatherConditionInterface {
 
     public abstract void setIconURL(String iconURL);
 
-    public abstract void setId(int id);
-
     public abstract int getId();
 
-    public abstract void setDate(Date date);
+    public abstract void setId(int id);
 
     public abstract Date getDate();
 
-    public abstract void setUUID(String id);
+    public abstract void setDate(Date date);
 
     public abstract String getUUID();
+
+    public abstract void setUUID(String id);
 
 }

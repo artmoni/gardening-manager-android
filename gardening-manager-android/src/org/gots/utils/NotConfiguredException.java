@@ -23,9 +23,10 @@ package org.gots.utils;
 
 /**
  * @author jcarsique
- *
  */
 public class NotConfiguredException extends IllegalStateException {
+
+    private static final long serialVersionUID = 1L;
 
     @SuppressWarnings("unused")
     private NotConfiguredException() {
@@ -37,7 +38,5 @@ public class NotConfiguredException extends IllegalStateException {
     public NotConfiguredException(Exception firstCall) {
         super("Instance called twice whereas it was not configured on first call. See root stack trace.", firstCall);
     }
-
-    private static final long serialVersionUID = 1L;
 
 }

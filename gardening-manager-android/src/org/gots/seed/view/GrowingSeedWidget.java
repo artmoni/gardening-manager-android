@@ -5,7 +5,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * <p>
+ * <p/>
  * Contributors:
  * sfleury - initial API and implementation
  * ****************************************************************************
@@ -36,10 +36,6 @@ public class GrowingSeedWidget extends RelativeLayout {
     private GotsProgressBar progressBar;
     private TextView textProgress;
 
-    protected GotsContext getGotsContext() {
-        return GotsContext.get(mContext);
-    }
-
     public GrowingSeedWidget(Context context) {
         super(context);
         this.mContext = context;
@@ -50,6 +46,10 @@ public class GrowingSeedWidget extends RelativeLayout {
         super(context, attrs);
         this.mContext = context;
         initView();
+    }
+
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(mContext);
     }
 
     private void initView() {

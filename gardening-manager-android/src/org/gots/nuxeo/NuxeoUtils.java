@@ -22,12 +22,6 @@ public class NuxeoUtils {
 
     private static final String TAG = NuxeoUtils.class.getSimpleName();
 
-    public interface OnBlobUpload {
-        void onUploadSuccess(Document document, File file, Serializable data);
-
-        void onUploadFailed(String message);
-    }
-
     public static void attachBlobToDocument(Session session, Document document, PropertyMap blobProp) {
 
         try {
@@ -47,54 +41,6 @@ public class NuxeoUtils {
             Log.i(TAG, e.getMessage());
         }
 
-    }
-
-    public void uploadBlob(final Session session, final Document document, final File file, final OnBlobUpload callBack) {
-        final FileBlob blobToUpload = new FileBlob(file);
-        blobToUpload.setMimeType("image/jpeg");
-
-        String batchId = String.valueOf(new Random().nextInt(1000));
-        final String fileId = blobToUpload.getFileName();
-
-        FileUploader uploader = session.getAdapter(FileUploader.class);
-        BlobWithProperties blobUploading = uploader.storeFileForUpload(batchId, fileId, blobToUpload);
-        String uploadUUID = blobUploading.getProperty(FileUploader.UPLOAD_UUID);
-        Log.i(TAG, "Started blob upload UUID " + uploadUUID);
-        final PropertyMap blobProp = new PropertyMap();
-        blobProp.set("type", "blob");
-        blobProp.set("length", Long.valueOf(blobUploading.getLength()));
-        blobProp.set("mime-type", blobUploading.getMimeType());
-        blobProp.set("name", blobToUpload.getFileName());
-        // set information for server side Blob mapping
-        blobProp.set("upload-batch", batchId);
-        blobProp.set("upload-fileId", fileId);
-        // set information for the update query to know it's
-        // dependencies
-        blobProp.set("android-require-type", "upload");
-        blobProp.set("android-require-uuid", uploadUUID);
-        uploader.startUpload(uploadUUID, new AsyncCallback<Serializable>() {
-            @Override
-            public void onSuccess(String executionId, Serializable data) {
-                NuxeoUtils.attachBlobToDocument(session, document, blobProp);
-                if (callBack != null)
-                    callBack.onUploadSuccess(document, file, data);
-                Log.i(TAG, "success");
-            }
-
-            @Override
-            public void onError(String executionId, Throwable e) {
-                if (callBack != null)
-                    callBack.onUploadFailed(e.getMessage());
-                Log.i(TAG, "errdroior");
-
-            }
-        });
-    }
-
-    public interface OnDownloadBlob {
-        void onDownloadSuccess(FileBlob fileBlob);
-
-        void onDownloadFailed(FileBlob fileBlob);
     }
 
     public static void downloadBlob(final DocumentManager service, final Document doc, final File file, final OnDownloadBlob mCallBack) {
@@ -143,5 +89,59 @@ public class NuxeoUtils {
         }.execute();
 
 
+    }
+
+    public void uploadBlob(final Session session, final Document document, final File file, final OnBlobUpload callBack) {
+        final FileBlob blobToUpload = new FileBlob(file);
+        blobToUpload.setMimeType("image/jpeg");
+
+        String batchId = String.valueOf(new Random().nextInt(1000));
+        final String fileId = blobToUpload.getFileName();
+
+        FileUploader uploader = session.getAdapter(FileUploader.class);
+        BlobWithProperties blobUploading = uploader.storeFileForUpload(batchId, fileId, blobToUpload);
+        String uploadUUID = blobUploading.getProperty(FileUploader.UPLOAD_UUID);
+        Log.i(TAG, "Started blob upload UUID " + uploadUUID);
+        final PropertyMap blobProp = new PropertyMap();
+        blobProp.set("type", "blob");
+        blobProp.set("length", Long.valueOf(blobUploading.getLength()));
+        blobProp.set("mime-type", blobUploading.getMimeType());
+        blobProp.set("name", blobToUpload.getFileName());
+        // set information for server side Blob mapping
+        blobProp.set("upload-batch", batchId);
+        blobProp.set("upload-fileId", fileId);
+        // set information for the update query to know it's
+        // dependencies
+        blobProp.set("android-require-type", "upload");
+        blobProp.set("android-require-uuid", uploadUUID);
+        uploader.startUpload(uploadUUID, new AsyncCallback<Serializable>() {
+            @Override
+            public void onSuccess(String executionId, Serializable data) {
+                NuxeoUtils.attachBlobToDocument(session, document, blobProp);
+                if (callBack != null)
+                    callBack.onUploadSuccess(document, file, data);
+                Log.i(TAG, "success");
+            }
+
+            @Override
+            public void onError(String executionId, Throwable e) {
+                if (callBack != null)
+                    callBack.onUploadFailed(e.getMessage());
+                Log.i(TAG, "errdroior");
+
+            }
+        });
+    }
+
+    public interface OnBlobUpload {
+        void onUploadSuccess(Document document, File file, Serializable data);
+
+        void onUploadFailed(String message);
+    }
+
+    public interface OnDownloadBlob {
+        void onDownloadSuccess(FileBlob fileBlob);
+
+        void onDownloadFailed(FileBlob fileBlob);
     }
 }

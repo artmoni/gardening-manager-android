@@ -4,17 +4,11 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- *
+ * <p/>
  * Contributors:
- *     sfleury - initial API and implementation
+ * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.weather.location;
-
-import java.util.List;
-import java.util.Locale;
-
-import org.gots.R;
-import org.gots.bean.Address;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -26,6 +20,12 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
+
+import org.gots.R;
+import org.gots.bean.Address;
+
+import java.util.List;
+import java.util.Locale;
 
 public class GardenLocator implements LocationListener {
     Context mContext;
@@ -150,21 +150,21 @@ public class GardenLocator implements LocationListener {
 
     public void onLocationChanged(Location location) {
         // TODO Auto-generated method stub
-        
+
     }
 
     public void onStatusChanged(String provider, int status, Bundle extras) {
         // TODO Auto-generated method stub
-        
+
     }
 
     public void onProviderEnabled(String provider) {
         // TODO Auto-generated method stub
-        
+
     }
 
     public void onProviderDisabled(String provider) {
         // TODO Auto-generated method stub
-        
+
     }
 }

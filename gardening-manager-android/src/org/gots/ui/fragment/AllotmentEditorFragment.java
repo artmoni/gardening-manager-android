@@ -19,45 +19,23 @@ import android.widget.TextView;
 import org.gots.R;
 import org.gots.bean.Allotment;
 import org.gots.bean.BaseAllotmentInterface;
-import org.gots.context.GotsContext;
-import org.gots.preferences.GotsPreferences;
 import org.gots.seed.GotsGrowingSeedManager;
 import org.gots.seed.GrowingSeed;
 import org.gots.seed.adapter.ListGrowingSeedAdapter;
 import org.gots.ui.ExpandableHeightGridView;
 import org.gots.utils.FileUtilities;
 
-import java.io.File;
 import java.util.List;
 
 public class AllotmentEditorFragment extends BaseGotsFragment {
 
-    private GotsGrowingSeedManager growingSeedManager;
-
-    public interface OnAllotmentListener {
-        public void onAllotmentCreated(BaseAllotmentInterface allotment);
-
-        public void onAllotmentModified(BaseAllotmentInterface allotment);
-
-        public void onAllotmentSeedClicked(BaseAllotmentInterface allotment, GrowingSeed seed);
-
-        public void onAllotmentAddPlantClicked(BaseGotsFragment fragment, BaseAllotmentInterface allotment);
-
-        public void onAllotmentSeedLongClicked(BaseAllotmentInterface allotment, GrowingSeed item);
-    }
-
     protected static final int REQUEST_ACTION_PICK = 10;
-
+    private GotsGrowingSeedManager growingSeedManager;
     private OnAllotmentListener mCallback;
-
     private TextView textviewAllotmentName;
-
     private BaseAllotmentInterface allotment;
-
     private TextView textviewPlantCount;
-
     private ExpandableHeightGridView gridView;
-
     private ImageView imageViewAllotment;
 
     @Override
@@ -134,7 +112,7 @@ public class AllotmentEditorFragment extends BaseGotsFragment {
 //                File f = new File(GotsPreferences..getFilesDir().getAbsolutePath(), document.getId())
 //                FileUtilities.copy(picturePath,)
 //            }
-                allotment.setImagePath(picturePath);
+            allotment.setImagePath(picturePath);
 
             Bitmap bitmap = FileUtilities.decodeScaledBitmapFromSdCard(picturePath, 100, 100);
             imageViewAllotment.setImageBitmap(bitmap);
@@ -233,5 +211,17 @@ public class AllotmentEditorFragment extends BaseGotsFragment {
     @Override
     public void update() {
         runAsyncDataRetrieval();
+    }
+
+    public interface OnAllotmentListener {
+        public void onAllotmentCreated(BaseAllotmentInterface allotment);
+
+        public void onAllotmentModified(BaseAllotmentInterface allotment);
+
+        public void onAllotmentSeedClicked(BaseAllotmentInterface allotment, GrowingSeed seed);
+
+        public void onAllotmentAddPlantClicked(BaseGotsFragment fragment, BaseAllotmentInterface allotment);
+
+        public void onAllotmentSeedLongClicked(BaseAllotmentInterface allotment, GrowingSeed item);
     }
 }

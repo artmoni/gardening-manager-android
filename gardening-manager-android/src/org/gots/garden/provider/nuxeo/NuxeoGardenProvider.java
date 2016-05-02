@@ -1,8 +1,7 @@
 package org.gots.garden.provider.nuxeo;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import android.content.Context;
+import android.util.Log;
 
 import org.gots.garden.GardenInterface;
 import org.gots.garden.provider.local.LocalGardenProvider;
@@ -20,8 +19,9 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 
-import android.content.Context;
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * See <a href="http://doc.nuxeo.com/x/mQAz">Nuxeo documentation on Content
@@ -32,25 +32,16 @@ public class NuxeoGardenProvider extends LocalGardenProvider {
     public static final String DOCTYPE_GARDEN = "Garden";
 
     private static final String TAG = "NuxeoGardenProvider";
-
-    String myToken;
-
-    String myLogin;
-
-    String myDeviceId;
-
-    String myApp;
-
-    // private static final long TIMEOUT = 10;
-
     protected NuxeoServerConfig nxConfig;
-
     protected NuxeoContext nuxeoContext;
-
     protected AndroidAutomationClient nuxeoClient;
-
     protected LazyUpdatableDocumentsList documentsList;
 
+    // private static final long TIMEOUT = 10;
+    String myToken;
+    String myLogin;
+    String myDeviceId;
+    String myApp;
     private GardenInterface currentGarden;
 
     public NuxeoGardenProvider(Context context) {

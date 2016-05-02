@@ -5,13 +5,13 @@
     android:layout_height="wrap_content"
     android:background="@drawable/background_simple"
     android:gravity="center_vertical"
-    android:orientation="horizontal" >
+    android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_marginBottom="43dp"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/bannerAd"
@@ -19,16 +19,13 @@
             android:layout_height="90dp"
             android:layout_gravity="center_horizontal"
             android:background="@color/text_color_dark"
-            android:gravity="center_horizontal" >
-        </LinearLayout>
+            android:gravity="center_horizontal"></LinearLayout>
 
-        <org.gots.layout.DashboardLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <org.gots.layout.DashboardLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_gravity="center_horizontal|center_vertical"
-            android:orientation="vertical" 
-            >
+            android:orientation="vertical">
 
             <Button
                 android:id="@+id/dashboard_button_hut"
@@ -53,7 +50,8 @@
                 style="@style/DashboardButton"
                 android:drawableTop="@drawable/dashboard_button_profile_selector"
                 android:text="@string/dashboard.profile.name" />
-             <Button
+
+            <Button
                 android:id="@+id/dashboard_button_sensor"
                 style="@style/DashboardButton"
                 android:drawableTop="@drawable/dashboard_button_sensor_selector"
@@ -70,7 +68,7 @@
         android:handle="@+id/handle"
         android:orientation="vertical"
         android:paddingLeft="5dp"
-        android:paddingRight="5dp" >
+        android:paddingRight="5dp">
 
         <LinearLayout
             android:id="@+id/handle"
@@ -89,15 +87,13 @@
             android:gravity="top"
             android:orientation="horizontal"
             android:paddingLeft="5dp"
-            android:paddingRight="5dp" >
-        </LinearLayout>
+            android:paddingRight="5dp"></LinearLayout>
     </org.gots.weather.view.WrappingSlidingDrawer>
 
     <ImageView
         android:id="@+id/idImageLogo"
         android:layout_width="fill_parent"
         android:layout_height="100dp"
-        android:background="@drawable/bt_logo" >
-    </ImageView>
+        android:background="@drawable/bt_logo"></ImageView>
 
 </RelativeLayout>

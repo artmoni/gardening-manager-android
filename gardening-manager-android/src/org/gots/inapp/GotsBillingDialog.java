@@ -32,17 +32,35 @@ public class GotsBillingDialog extends DialogFragment {
     protected static final int BUY_REQUEST_CODE = 12345;
 
     protected static final String TAG = "GotsBillingDialog";
-
-    private Purchase purchase;
-
-    private IabHelper buyHelper;
-
     View v;
-
+    boolean billingServiceAvailable = false;
+    private Purchase purchase;
+    private IabHelper buyHelper;
     private LinearLayout horizontalScrollView;
     private List<HolderSku> mSkus = new ArrayList<>();
     private OnPurchaseFinished onPurchasedFinishedListener;
+    IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener
+            = new IabHelper.OnIabPurchaseFinishedListener() {
+        public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
+//            if (result.isFailure()) {
+//                Log.d(TAG, "Error purchasing: " + result);
+//                return;
+//            }
 
+            if (result.isSuccess()) {
+                update();
+                if (onPurchasedFinishedListener != null)
+                    onPurchasedFinishedListener.onPurchaseSucceed(purchase);
+                Log.d(TAG, "Success purchasing: " + result);
+
+            } else {
+                if (onPurchasedFinishedListener != null)
+                    onPurchasedFinishedListener.onPurchaseFailed(purchase);
+                Log.d(TAG, "Error purchasing: " + result);
+
+            }
+        }
+    };
 
     public void addSKUFeature(HolderSku sku) {
         mSkus.add(sku);
@@ -53,8 +71,6 @@ public class GotsBillingDialog extends DialogFragment {
         super.onCreate(arg0);
 
     }
-
-    boolean billingServiceAvailable = false;
 
     protected GotsContext getGotsContext() {
         return GotsContext.get(getActivity());
@@ -126,30 +142,6 @@ public class GotsBillingDialog extends DialogFragment {
             }
         });
     }
-
-    IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener
-            = new IabHelper.OnIabPurchaseFinishedListener() {
-        public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
-//            if (result.isFailure()) {
-//                Log.d(TAG, "Error purchasing: " + result);
-//                return;
-//            }
-
-            if (result.isSuccess()) {
-                update();
-                if (onPurchasedFinishedListener != null)
-                    onPurchasedFinishedListener.onPurchaseSucceed(purchase);
-                Log.d(TAG, "Success purchasing: " + result);
-
-            } else {
-                if (onPurchasedFinishedListener != null)
-                    onPurchasedFinishedListener.onPurchaseFailed(purchase);
-                Log.d(TAG, "Error purchasing: " + result);
-
-            }
-        }
-    };
-
 
     private void addPurchaseItem(final SkuDetails detailsFeature, boolean hasPurchase) {
         PurchaseItemLayout purchaseItemLayout = new PurchaseItemLayout(getActivity());

@@ -12,15 +12,14 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
 import org.gots.R;
-import org.gots.seed.SeedUtil;
 import org.gots.seed.provider.local.LocalSeedProvider;
 
 /**
  * Created by sfleury on 10/07/15.
  */
 public class VarietyFragment extends SeedContentFragment {
-    private AutoCompleteTextView autoCompleteVariety;
     LocalSeedProvider helper;
+    private AutoCompleteTextView autoCompleteVariety;
 //    private OnVarietySelected mCallback;
 
 //    public interface OnVarietySelected {

@@ -1,30 +1,24 @@
 package org.gots.utils;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
 import org.gots.DatabaseHelper;
 import org.gots.context.GotsContext;
 import org.gots.garden.provider.local.GardenSQLite;
 import org.gots.preferences.GotsPreferences;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-
 public class GotsDBHelper {
 
+    public final static int DATABASE_GARDEN_TYPE = 100;
     protected SQLiteDatabase bdd;
-
-    private SQLiteOpenHelper actionSeedSQLite;
-
     protected Context mContext;
 
     protected GotsPreferences gotsPrefs;
-
+    private SQLiteOpenHelper actionSeedSQLite;
     private int databaseType = 0;
 
-    public final static int DATABASE_GARDEN_TYPE = 100;
-    protected GotsContext getGotsContext() {
-        return GotsContext.get(mContext);
-    }
     public GotsDBHelper(Context mContext) {
         this.mContext = mContext;
         gotsPrefs = getGotsContext().getServerConfig();
@@ -38,9 +32,13 @@ public class GotsDBHelper {
         open();
     }
 
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(mContext);
+    }
+
     private synchronized void open() {
         if (databaseType == DATABASE_GARDEN_TYPE)
-            actionSeedSQLite =  GardenSQLite.getInstance(mContext);
+            actionSeedSQLite = GardenSQLite.getInstance(mContext);
         else
             actionSeedSQLite = DatabaseHelper.getInstance(mContext,
                     getGotsContext().getServerConfig().getCurrentGardenId());

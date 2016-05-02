@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * <p>
+ * <p/>
  * Contributors:
  * sfleury - initial API and implementation
  ******************************************************************************/
@@ -28,17 +28,12 @@ public class ActionsDoneListFragment extends BaseGotsListFragment {
 
 //    public static final String ORG_GOTS_GROWINGSEED_ID = "org.gots.growingseed.id";
 
-    Handler mHandler = new Handler();
-
     protected TextView mDialogText;
-
     protected boolean mShowing;
-
-    private ListAllActionAdapter listAllActionAdapter;
-
+    Handler mHandler = new Handler();
     int seedid = -1;
-
     boolean force_sync = false;
+    private ListAllActionAdapter listAllActionAdapter;
 
     @Override
     public void onViewCreated(View v, Bundle savedInstanceState) {

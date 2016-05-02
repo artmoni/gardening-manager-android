@@ -1,31 +1,28 @@
 package org.gots.seed.provider.parrot;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.net.URL;
-import java.net.URLConnection;
-
-import org.gots.context.GotsContext;
-import org.gots.preferences.GotsPreferences;
-import org.gots.seed.BaseSeed;
-import org.gots.seed.BaseSeedImpl;
-import org.gots.seed.GrowingSeedImpl;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.gots.context.GotsContext;
+import org.gots.preferences.GotsPreferences;
+import org.gots.seed.BaseSeed;
+import org.gots.seed.BaseSeedImpl;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.net.URL;
+import java.net.URLConnection;
+
 public class ParrotSeedConverter {
     private static final String TAG = "ParrotSeedConverter";
-
-    private GotsPreferences gotsPref;
-
     Context mContext;
+    private GotsPreferences gotsPref;
 
     public ParrotSeedConverter(Context context) {
         mContext = context;

@@ -1,11 +1,10 @@
 package org.gots.nuxeo;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Properties;
+import android.content.Context;
+import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -27,11 +26,12 @@ import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import org.nuxeo.ecm.automation.client.jaxrs.model.IdRef;
 import org.nuxeo.ecm.automation.client.jaxrs.spi.DefaultSession;
 
-import android.content.Context;
-import android.util.Log;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Properties;
 
 public class NuxeoWorkflowProvider {
     private String TAG = NuxeoWorkflowProvider.class.getSimpleName();
@@ -40,22 +40,49 @@ public class NuxeoWorkflowProvider {
         NuxeoManager.getInstance().initIfNew(mContext);
     }
 
-    protected AndroidAutomationClient getNuxeoClient() {
-        return NuxeoManager.getInstance().getNuxeoClient();
+    public static String GET(String url, DefaultSession session) {
+        InputStream inputStream = null;
+        String result = "";
+        try {
+
+            // create HttpClient
+            HttpClient httpclient = new DefaultHttpClient();
+
+            HttpGet httpGet = new HttpGet(url);
+            httpGet.setHeader("X-NXDocumentProperties", "*");
+            // for (Map.Entry<String, String> entry : req.getConnector().getHeaders().entrySet()) {
+            // httpGet.setHeader(entry.getKey(), entry.getValue());
+            // }
+            // make GET request to the given URL_CLASSNAME
+            // HttpResponse httpResponse = httpclient.execute(httpGet);
+            HttpResponse httpResponse = session.getConnector().executeSimpleHttp(httpGet);
+
+            // receive response as inputStream
+            inputStream = httpResponse.getEntity().getContent();
+
+            // convert inputstream to string
+            if (inputStream != null)
+                result = convertInputStreamToString(inputStream);
+            else
+                result = "Did not work!";
+
+        } catch (Exception e) {
+            Log.d("InputStream", e.getLocalizedMessage());
+        }
+
+        return result;
     }
 
-    public Documents getDocumentsRoute(BaseSeed seed) {
-        Documents documentsRoute = null;
-        try {
-            Session session = getNuxeoClient().getSession();
-            DocumentManager service = session.getAdapter(DocumentManager.class);
-            documentsRoute = service.query(
-                    "Select * from DocumentRoute where docri:participatingDocuments = ? AND ecm:currentLifeCycleState = 'running'",
-                    new String[] { seed.getUUID() }, null, "*", 0, 50, CacheBehavior.STORE);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return documentsRoute;
+    private static String convertInputStreamToString(InputStream inputStream) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        String line = "";
+        String result = "";
+        while ((line = bufferedReader.readLine()) != null)
+            result += line;
+
+        inputStream.close();
+        return result;
+
     }
 
     // public Documents getTasksDoc(String docId) {
@@ -71,6 +98,24 @@ public class NuxeoWorkflowProvider {
     // }
     // return tasksDoc;
     // }
+
+    protected AndroidAutomationClient getNuxeoClient() {
+        return NuxeoManager.getInstance().getNuxeoClient();
+    }
+
+    public Documents getDocumentsRoute(BaseSeed seed) {
+        Documents documentsRoute = null;
+        try {
+            Session session = getNuxeoClient().getSession();
+            DocumentManager service = session.getAdapter(DocumentManager.class);
+            documentsRoute = service.query(
+                    "Select * from DocumentRoute where docri:participatingDocuments = ? AND ecm:currentLifeCycleState = 'running'",
+                    new String[]{seed.getUUID()}, null, "*", 0, 50, CacheBehavior.STORE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return documentsRoute;
+    }
 
     public RouteNode getRouteNode(String docId) {
         RouteNode node = null;
@@ -280,50 +325,5 @@ public class NuxeoWorkflowProvider {
     }
 
     public void setWorkflowVar(String key, String value) {
-    }
-
-    public static String GET(String url, DefaultSession session) {
-        InputStream inputStream = null;
-        String result = "";
-        try {
-
-            // create HttpClient
-            HttpClient httpclient = new DefaultHttpClient();
-
-            HttpGet httpGet = new HttpGet(url);
-            httpGet.setHeader("X-NXDocumentProperties", "*");
-            // for (Map.Entry<String, String> entry : req.getConnector().getHeaders().entrySet()) {
-            // httpGet.setHeader(entry.getKey(), entry.getValue());
-            // }
-            // make GET request to the given URL_CLASSNAME
-            // HttpResponse httpResponse = httpclient.execute(httpGet);
-            HttpResponse httpResponse = session.getConnector().executeSimpleHttp(httpGet);
-
-            // receive response as inputStream
-            inputStream = httpResponse.getEntity().getContent();
-
-            // convert inputstream to string
-            if (inputStream != null)
-                result = convertInputStreamToString(inputStream);
-            else
-                result = "Did not work!";
-
-        } catch (Exception e) {
-            Log.d("InputStream", e.getLocalizedMessage());
-        }
-
-        return result;
-    }
-
-    private static String convertInputStreamToString(InputStream inputStream) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-        String line = "";
-        String result = "";
-        while ((line = bufferedReader.readLine()) != null)
-            result += line;
-
-        inputStream.close();
-        return result;
-
     }
 }

@@ -12,7 +12,6 @@ import org.gots.R;
 import org.gots.provider.SeedsContentProvider;
 import org.gots.seed.BaseSeed;
 import org.gots.seed.BotanicSpecie;
-import org.gots.ui.fragment.BaseGotsFragment;
 import org.gots.ui.fragment.CatalogueFragment;
 import org.gots.ui.fragment.LoginFragment;
 import org.gots.ui.fragment.PlantDescriptionFragment;

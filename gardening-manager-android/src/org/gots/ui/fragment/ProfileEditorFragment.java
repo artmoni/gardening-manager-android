@@ -30,10 +30,8 @@ import org.gots.garden.view.OnProfileEventListener;
 
 public class ProfileEditorFragment extends BaseGotsFragment {
     public static final int OPTION_EDIT = 1;
-
-    private static final String TAG = ProfileEditorFragment.class.getSimpleName();
     public static final String PROFILE_EDITOR_MODE = "option";
-
+    private static final String TAG = ProfileEditorFragment.class.getSimpleName();
     private LocationManager mlocManager;
 
 //    GardenInterface garden;

@@ -11,13 +11,13 @@ import org.gots.seed.view.SeedWidgetLong;
 /**
  * Created by sfleury on 13/07/15.
  */
-public class PlantCreationFragment extends SeedContentFragment{
+public class PlantCreationFragment extends SeedContentFragment {
 
     private SeedWidgetLong seedWidgetLong;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.input_seed_main,null);
+        View v = inflater.inflate(R.layout.input_seed_main, null);
         seedWidgetLong = (SeedWidgetLong) v.findViewById(R.id.idSeedWidgetLong);
         return v;
     }

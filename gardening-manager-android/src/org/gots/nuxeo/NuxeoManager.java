@@ -21,7 +21,11 @@
  * *********************************************************************** */
 package org.gots.nuxeo;
 
-import org.gots.broadcast.BroadCastMessages;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
+
 import org.gots.context.GotsContext;
 import org.gots.preferences.GotsPreferences;
 import org.gots.utils.NotConfiguredException;
@@ -34,15 +38,8 @@ import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.impl.NotAvailableOffline;
 import org.nuxeo.ecm.automation.client.jaxrs.spi.auth.TokenRequestInterceptor;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.util.Log;
-
 /**
  * @author jcarsique
- * 
  */
 public class NuxeoManager extends BroadcastReceiver {
     private static final String TAG = "NuxeoManager";
@@ -95,7 +92,7 @@ public class NuxeoManager extends BroadcastReceiver {
         nxConfig.setSharedPrefs(gotsPrefs.getSharedPrefs());
         nxConfig.setCacheKey(NuxeoServerConfig.PREF_SERVER_TOKEN);
         nuxeoContext = NuxeoContextFactory.getNuxeoContext(context, nxConfig);
-       
+
         initDone = true;
         Log.d(TAG, "getSession with: " + nxConfig.getServerBaseUrl() + " login=" + nxConfig.getLogin() + " password="
                 + (GotsPreferences.ISDEVELOPMENT ? nxConfig.getPassword() : "******"));
@@ -115,6 +112,7 @@ public class NuxeoManager extends BroadcastReceiver {
         }
         return nuxeoClient;
     }
+
     public NuxeoContext getNuxeoContext() {
         return nuxeoContext;
     }

@@ -35,13 +35,10 @@ import java.util.Map;
 
 public class WorkflowResumeFragment extends BaseGotsFragment implements OnItemClickListener {
 
-    private Blob tasks;
-
     TextView workflowTasksTextView;
-
-    private Gallery gallery;
-
     Map<Integer, TaskInfo> map = new HashMap<>();
+    private Blob tasks;
+    private Gallery gallery;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

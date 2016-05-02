@@ -1,11 +1,11 @@
 package org.gots.garden.service;
 
-import org.gots.authentication.GotsSyncAdapter;
-import org.gots.authentication.syncadapter.GardenSyncAdapter;
-
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+
+import org.gots.authentication.GotsSyncAdapter;
+import org.gots.authentication.syncadapter.GardenSyncAdapter;
 
 public class GardenSyncService extends Service {
 

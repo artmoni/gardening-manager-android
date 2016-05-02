@@ -1,11 +1,11 @@
 package org.gots.action.service;
 
-import org.gots.authentication.GotsSyncAdapter;
-import org.gots.authentication.syncadapter.ActionsSyncAdapter;
-
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+
+import org.gots.authentication.GotsSyncAdapter;
+import org.gots.authentication.syncadapter.ActionsSyncAdapter;
 
 public class ActionsSyncService extends Service {
 

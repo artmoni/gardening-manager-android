@@ -1,11 +1,11 @@
 package org.gots.ui.fragment;
 
-import org.gots.R;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.gots.R;
 
 public class IncredibleResumeFragment extends BaseGotsFragment {
 
@@ -22,7 +22,7 @@ public class IncredibleResumeFragment extends BaseGotsFragment {
     @Override
     public void update() {
         runAsyncDataRetrieval();
-        
+
     }
 
     @Override

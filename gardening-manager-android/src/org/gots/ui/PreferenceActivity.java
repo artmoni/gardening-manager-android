@@ -1,15 +1,5 @@
 package org.gots.ui;
 
-import org.gots.R;
-import org.gots.context.GotsContext;
-import org.gots.preferences.GotsPreferences;
-import org.gots.provider.ActionsContentProvider;
-import org.gots.provider.AllotmentContentProvider;
-import org.gots.provider.GardenContentProvider;
-import org.gots.provider.SeedsContentProvider;
-import org.gots.provider.SensorContentProvider;
-import org.nuxeo.android.config.NuxeoServerConfig;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
@@ -20,21 +10,25 @@ import android.preference.Preference;
 import android.util.Log;
 import android.view.MenuItem;
 
+import org.gots.R;
+import org.gots.context.GotsContext;
+import org.gots.preferences.GotsPreferences;
+import org.gots.provider.ActionsContentProvider;
+import org.gots.provider.AllotmentContentProvider;
+import org.gots.provider.GardenContentProvider;
+import org.gots.provider.SeedsContentProvider;
+import org.gots.provider.SensorContentProvider;
+import org.nuxeo.android.config.NuxeoServerConfig;
+
 public class PreferenceActivity extends android.preference.PreferenceActivity implements
         OnSharedPreferenceChangeListener {
 
-    GotsPreferences gotsPreferences;
-
     public static final long HOUR_PER_DAY = 24L;
-
     public static final long MINUTE_PER_HOUR = 60L;
-
     public static final long SECONDS_PER_MINUTE = 60L;
-
     public static final long SYNC_INTERVAL = SECONDS_PER_MINUTE * MINUTE_PER_HOUR * HOUR_PER_DAY;
-
     private static final String TAG = "PreferenceActivity";
-
+    GotsPreferences gotsPreferences;
     private Account mAccount;
 
     protected GotsContext getGotsContext() {
@@ -91,8 +85,7 @@ public class PreferenceActivity extends android.preference.PreferenceActivity im
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.home:
                 finish();
                 break;

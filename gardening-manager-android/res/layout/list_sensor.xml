@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <ImageView
         android:id="@+id/sensorImage"
@@ -20,6 +20,5 @@
         android:layout_centerVertical="true"
         android:text="NickName" />
 
- 
-   
+
 </RelativeLayout>

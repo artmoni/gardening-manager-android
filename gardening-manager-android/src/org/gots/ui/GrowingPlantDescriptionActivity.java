@@ -1,12 +1,7 @@
 package org.gots.ui;
 
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-
-import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import org.gots.R;
 import org.gots.action.ActionOnSeed;

@@ -4,15 +4,11 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ * <p/>
  * Contributors:
- *     sfleury - initial API and implementation
+ * sfleury - initial API and implementation
  ******************************************************************************/
 package org.gots.action.view;
-
-import org.gots.R;
-import org.gots.action.BaseAction;
-import org.gots.action.util.ActionState;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -21,23 +17,20 @@ import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-public class ActionWidget extends LinearLayout {
-    private BaseAction mAction;
+import org.gots.R;
+import org.gots.action.BaseAction;
+import org.gots.action.util.ActionState;
 
-    private Context mContext;
+public class ActionWidget extends LinearLayout {
+    private static final int[] STATE_OK = {R.attr.state_ok};
+    private static final int[] STATE_WARNING = {R.attr.state_warning};
 
     // private OnActionItemClickListener mItemClickListener;
-
+    private static final int[] STATE_CRITICAL = {R.attr.state_critical};
+    private static final int[] STATE_UNDEFINED = {R.attr.state_undefined};
+    private BaseAction mAction;
+    private Context mContext;
     private int state = ActionState.NORMAL;
-
-    private static final int[] STATE_OK = { R.attr.state_ok };
-
-    private static final int[] STATE_WARNING = { R.attr.state_warning };
-
-    private static final int[] STATE_CRITICAL = { R.attr.state_critical };
-
-    private static final int[] STATE_UNDEFINED = { R.attr.state_undefined };
-
     private ImageView actionImage;
 
     public ActionWidget(Context context, AttributeSet set, int defstyle) {

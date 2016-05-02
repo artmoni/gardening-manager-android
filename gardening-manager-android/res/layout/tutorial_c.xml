@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/text_color_light"
-    android:gravity="center_vertical" >
+    android:gravity="center_vertical">
 
     <TextView
         android:id="@+id/textView2"
@@ -35,11 +35,11 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <!--<ImageView-->
-        <!--android:id="@+id/imageView3"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_below="@+id/textView2"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:src="@drawable/tutorial_allotment" />-->
+    <!--android:id="@+id/imageView3"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@+id/textView2"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:src="@drawable/tutorial_allotment" />-->
 
 </RelativeLayout>

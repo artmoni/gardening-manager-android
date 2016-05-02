@@ -28,19 +28,12 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
     private static final String TAG = "GotsSeedManager";
 
     private static GotsSeedManager instance;
-
-    private Context mContext;
-
-    private GotsSeedProvider mSeedProvider;
-
-    private boolean initDone = false;
-
-    private List<BaseSeed> newSeeds = new ArrayList<BaseSeed>();
-
-    Map<Integer, BaseSeed> allSeeds;
-
     private static Exception firstCall;
-
+    Map<Integer, BaseSeed> allSeeds;
+    private Context mContext;
+    private GotsSeedProvider mSeedProvider;
+    private boolean initDone = false;
+    private List<BaseSeed> newSeeds = new ArrayList<BaseSeed>();
     private GotsPreferences gotsPrefs;
 
     private String[] listSpecies;
@@ -54,17 +47,6 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
         allSeeds = new HashMap<>();
     }
 
-    private GotsContext getGotsContext() {
-        return GotsContext.get(mContext);
-    }
-
-    protected void setSeedProvider() {
-        if (gotsPrefs.isConnectedToServer() && !nuxeoManager.getNuxeoClient().isOffline()) {
-            mSeedProvider = new NuxeoSeedProvider(mContext);
-        } else
-            mSeedProvider = new LocalSeedProvider(mContext);
-    }
-
     public static synchronized GotsSeedManager getInstance() {
         if (instance == null) {
             instance = new GotsSeedManager();
@@ -74,6 +56,17 @@ public class GotsSeedManager extends BroadcastReceiver implements GotsSeedProvid
             throw new NotConfiguredException(firstCall);
         }
         return instance;
+    }
+
+    private GotsContext getGotsContext() {
+        return GotsContext.get(mContext);
+    }
+
+    protected void setSeedProvider() {
+        if (gotsPrefs.isConnectedToServer() && !nuxeoManager.getNuxeoClient().isOffline()) {
+            mSeedProvider = new NuxeoSeedProvider(mContext);
+        } else
+            mSeedProvider = new LocalSeedProvider(mContext);
     }
 
     /**

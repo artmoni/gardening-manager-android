@@ -1,9 +1,5 @@
 package org.gots.sensor.notification;
 
-import org.gots.R;
-import org.gots.ui.ActionActivity;
-import org.gots.ui.CoreActivity;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -12,18 +8,17 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
+import org.gots.R;
+import org.gots.ui.ActionActivity;
+import org.gots.ui.CoreActivity;
+
 public class SensorStatusNotification {
-    private Context mContext;
-
-    private int numMessages;
-
     private static final int NOTIFICATION = 102;
-
-    private Notification summaryNotification;
-
-    private NotificationCompat.Builder mBuilder;
-
     NotificationCompat.InboxStyle inboxStyle;
+    private Context mContext;
+    private int numMessages;
+    private Notification summaryNotification;
+    private NotificationCompat.Builder mBuilder;
 
     public SensorStatusNotification(Context context) {
         mContext = context;

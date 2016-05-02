@@ -52,8 +52,8 @@ public class WeatherListFragment extends BaseGotsListFragment {
         List<WeatherConditionInterface> conditions = (List<WeatherConditionInterface>) data;
         List<HashMap<String, String>> fillMaps = new ArrayList<HashMap<String, String>>();
 
-        String[] from = new String[]{"textViewWeather", "tempMin", "tempMax", "textViewWind", "weatherConditionDate","weatherImage"};
-        int[] to = new int[]{R.id.textViewWeather, R.id.tempMin, R.id.tempMax, R.id.textViewWind, R.id.weatherConditionDate,R.id.weatherImage};
+        String[] from = new String[]{"textViewWeather", "tempMin", "tempMax", "textViewWind", "weatherConditionDate", "weatherImage"};
+        int[] to = new int[]{R.id.textViewWeather, R.id.tempMin, R.id.tempMax, R.id.textViewWind, R.id.weatherConditionDate, R.id.weatherImage};
 
         for (WeatherConditionInterface condition :
                 conditions) {

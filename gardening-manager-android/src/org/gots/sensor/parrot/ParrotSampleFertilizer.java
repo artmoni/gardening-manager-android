@@ -1,9 +1,9 @@
 package org.gots.sensor.parrot;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import com.google.gson.annotations.SerializedName;
 
 /*
  * {

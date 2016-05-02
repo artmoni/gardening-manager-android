@@ -1,10 +1,10 @@
 package org.gots.ui.fragment;
 
-import org.gots.context.GotsContext;
-import org.gots.preferences.GotsPreferences;
-
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+
+import org.gots.context.GotsContext;
+import org.gots.preferences.GotsPreferences;
 
 public class AbstractDialogFragment extends DialogFragment {
 

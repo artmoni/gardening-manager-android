@@ -1,8 +1,15 @@
 package org.gots.sensor;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -14,16 +21,9 @@ import org.gots.sensor.parrot.ParrotLocation;
 import org.gots.sensor.parrot.ParrotLocationsStatus;
 import org.gots.utils.FileUtilities;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 
 public class SensorLocationWidget extends RelativeLayout {
 

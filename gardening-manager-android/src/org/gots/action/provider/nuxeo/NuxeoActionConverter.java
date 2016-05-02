@@ -1,10 +1,10 @@
 package org.gots.action.provider.nuxeo;
 
+import android.content.Context;
+
 import org.gots.action.ActionFactory;
 import org.gots.action.BaseAction;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
-
-import android.content.Context;
 
 public class NuxeoActionConverter {
 

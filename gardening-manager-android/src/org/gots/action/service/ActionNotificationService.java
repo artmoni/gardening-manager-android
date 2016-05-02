@@ -1,8 +1,13 @@
 package org.gots.action.service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 
 import org.gots.R;
 import org.gots.action.ActionOnSeed;
@@ -18,24 +23,16 @@ import org.gots.seed.service.GotsService;
 import org.gots.ui.ActionActivity;
 import org.gots.ui.CoreActivity;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class ActionNotificationService extends GotsService {
     private static final int NOTIFICATION = 100;
 
     // NotificationManager mNM;
-
-    private ArrayList<ActionOnSeed> actions = new ArrayList<ActionOnSeed>();
-
     private static final String TAG = "ActionNotificationService";
-
+    private ArrayList<ActionOnSeed> actions = new ArrayList<ActionOnSeed>();
     private GotsGrowingSeedManager growingSeedManager;
 
     private GotsActionSeedProvider actionseedManager;
@@ -58,9 +55,8 @@ public class ActionNotificationService extends GotsService {
 
         new AsyncTask<Void, Void, Void>() {
 
-            private Thread thread;
-
             boolean shouldcontinue = true;
+            private Thread thread;
 
             protected void onPreExecute() {
                 thread = new Thread() {
@@ -78,14 +74,16 @@ public class ActionNotificationService extends GotsService {
                 };
 
                 thread.start();
-            };
+            }
+
+            ;
 
             @Override
             protected Void doInBackground(Void... params) {
                 ArrayList<GrowingSeed> allSeeds = growingSeedManager.getGrowingSeeds();
                 // if (allSeeds.size() > 0)
 
-                for (Iterator<GrowingSeed> iterator = allSeeds.iterator(); iterator.hasNext();) {
+                for (Iterator<GrowingSeed> iterator = allSeeds.iterator(); iterator.hasNext(); ) {
                     GrowingSeed seed = iterator.next();
                     List<ActionOnSeed> seedActions;
 
@@ -108,7 +106,9 @@ public class ActionNotificationService extends GotsService {
                 shouldcontinue = false;
                 sendBroadcast(new Intent(BroadCastMessages.PROGRESS_FINISHED));
 
-            };
+            }
+
+            ;
         }.execute();
 
         return super.onStartCommand(intent, flags, startId);

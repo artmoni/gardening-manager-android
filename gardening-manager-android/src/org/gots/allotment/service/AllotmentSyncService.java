@@ -1,11 +1,11 @@
 package org.gots.allotment.service;
 
-import org.gots.authentication.GotsSyncAdapter;
-import org.gots.authentication.syncadapter.AllotmentSyncAdapter;
-
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+
+import org.gots.authentication.GotsSyncAdapter;
+import org.gots.authentication.syncadapter.AllotmentSyncAdapter;
 
 public class AllotmentSyncService extends Service {
 

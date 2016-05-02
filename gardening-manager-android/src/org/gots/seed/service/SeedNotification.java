@@ -1,13 +1,5 @@
 package org.gots.seed.service;
 
-import java.util.List;
-
-import org.gots.R;
-import org.gots.seed.BaseSeed;
-import org.gots.seed.SeedUtil;
-import org.gots.ui.ActionActivity;
-import org.gots.ui.CoreActivity;
-
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -15,12 +7,19 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
+import org.gots.R;
+import org.gots.seed.BaseSeed;
+import org.gots.seed.SeedUtil;
+import org.gots.ui.ActionActivity;
+import org.gots.ui.CoreActivity;
+
+import java.util.List;
+
 public class SeedNotification {
-    private Context mContext;
+    private static final int NOTIFICATION = 101;
 
 //    private NotificationManager notificationManager;
-
-    private static final int NOTIFICATION = 101;
+    private Context mContext;
 
     public SeedNotification(Context context) {
         this.mContext = context;
@@ -55,7 +54,7 @@ public class SeedNotification {
 
 //        notification.flags |= Notification.FLAG_AUTO_CANCEL;
 //        notificationManager.notify(NOTIFICATION, notification);
-        
+
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(mContext).setSmallIcon(
                 SeedUtil.getSeedDrawable(mContext, newSeeds.get(0))).setContentTitle(title).setContentText(content);
 
@@ -77,7 +76,7 @@ public class SeedNotification {
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.setContentIntent(resultPendingIntent);
         mBuilder.setAutoCancel(true);
-        
+
         NotificationManager mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         // Set the info for the views that show in the notification panel.
         // notification.setLatestEventInfo(this, title, content, contentIntent);

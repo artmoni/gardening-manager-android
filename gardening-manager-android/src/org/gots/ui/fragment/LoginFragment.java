@@ -49,12 +49,6 @@ public class LoginFragment extends BaseGotsFragment {
     private GotsContextProvider gotsContextProvider;
     private ListView listView;
 
-    public interface OnLoginEventListener {
-        public void onAuthenticationSucceed(Account account);
-
-        void onAuthenticationFailed(String string);
-    }
-
     @Override
     public void onAttach(Activity activity) {
         try {
@@ -90,6 +84,17 @@ public class LoginFragment extends BaseGotsFragment {
         return v;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (AUTHTOKEN_CODE_RESULT == requestCode) {
+            if (resultCode == Activity.RESULT_OK) {
+                requestOAuth2Token(selectedAccount);
+//                mCallBack.onAuthenticationSucceed(selectedAccount);
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
 
 //    public List<String> getAccounts(String account_type) {
 //        AccountManager manager = (AccountManager) getActivity().getSystemService(FragmentActivity.ACCOUNT_SERVICE);
@@ -102,19 +107,6 @@ public class LoginFragment extends BaseGotsFragment {
 //
 //        return accountString;
 //    }
-
-
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (AUTHTOKEN_CODE_RESULT == requestCode) {
-            if (resultCode == Activity.RESULT_OK) {
-                requestOAuth2Token(selectedAccount);
-//                mCallBack.onAuthenticationSucceed(selectedAccount);
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
 
     protected void requestOAuth2Token(final Account account) {
         new AsyncTask<String, Integer, String>() {
@@ -129,7 +121,7 @@ public class LoginFragment extends BaseGotsFragment {
                 String nuxeoToken = null;
                 String accountName = params[0];
                 try {
-                    authToken = authentication.getToken(accountName);
+                    authToken = authentication.getToken(account);
                     if (authToken != null) {
                         NuxeoAuthentication nuxeoAuthentication = new NuxeoAuthentication(getActivity());
                         nuxeoToken = nuxeoAuthentication.request_oauth2_token(authToken);
@@ -182,7 +174,7 @@ public class LoginFragment extends BaseGotsFragment {
                 }
                 super.onPostExecute(resultToken);
             }
-        }.execute(account.name);
+        }.execute();
     }
 
     void buildListAccount(String accountType) {
@@ -206,7 +198,7 @@ public class LoginFragment extends BaseGotsFragment {
                 getActivity().sendBroadcast(new Intent(BroadCastMessages.AUTHENTIFICATION_BEGIN));
                 selectedAccount = usableAccounts.get(position);
                 requestOAuth2Token(selectedAccount);
-                GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Login", "Request " +selectedAccount.type, 0);
+                GoogleAnalyticsTracker.getInstance().trackEvent("Authentication", "Login", "Request " + selectedAccount.type, 0);
             }
         });
 
@@ -228,7 +220,6 @@ public class LoginFragment extends BaseGotsFragment {
 
     }
 
-
     @Override
     public void update() {
 
@@ -237,5 +228,11 @@ public class LoginFragment extends BaseGotsFragment {
     @Override
     protected boolean requireAsyncDataRetrieval() {
         return false;
+    }
+
+    public interface OnLoginEventListener {
+        public void onAuthenticationSucceed(Account account);
+
+        void onAuthenticationFailed(String string);
     }
 }

@@ -65,10 +65,10 @@
                     android:padding="5dp" />
 
                 <!--<FrameLayout-->
-                    <!--android:id="@+id/idFragmentRecognition"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="fill_parent"-->
-                    <!--android:padding="5dp" />-->
+                <!--android:id="@+id/idFragmentRecognition"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="fill_parent"-->
+                <!--android:padding="5dp" />-->
             </LinearLayout>
 
         </ScrollView>

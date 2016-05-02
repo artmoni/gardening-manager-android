@@ -7,7 +7,7 @@ public interface OnProfileEventListener {
     public void onProfileSelected(GardenInterface garden);
 
     public void onProfileEdited(BaseGotsFragment fragment, GardenInterface garden);
-    
+
     public void onProfileCreated(GardenInterface garden);
-    
+
 }

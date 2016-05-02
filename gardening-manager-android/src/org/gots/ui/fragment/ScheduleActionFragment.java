@@ -1,20 +1,5 @@
 package org.gots.ui.fragment;
 
-import java.util.Calendar;
-import java.util.List;
-
-import org.gots.R;
-import org.gots.action.ActionOnSeed;
-import org.gots.action.BaseAction;
-import org.gots.action.GotsActionManager;
-import org.gots.action.GotsActionSeedManager;
-import org.gots.action.adapter.SimpleListActionAdapter;
-import org.gots.action.provider.GotsActionSeedProvider;
-import org.gots.broadcast.BroadCastMessages;
-import org.gots.seed.GotsGrowingSeedManager;
-import org.gots.seed.GrowingSeed;
-import org.gots.seed.view.SeedWidgetLong;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -40,16 +25,27 @@ import android.widget.Toast;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
+import org.gots.R;
+import org.gots.action.ActionOnSeed;
+import org.gots.action.BaseAction;
+import org.gots.action.GotsActionManager;
+import org.gots.action.GotsActionSeedManager;
+import org.gots.action.adapter.SimpleListActionAdapter;
+import org.gots.action.provider.GotsActionSeedProvider;
+import org.gots.broadcast.BroadCastMessages;
+import org.gots.seed.GotsGrowingSeedManager;
+import org.gots.seed.GrowingSeed;
+import org.gots.seed.view.SeedWidgetLong;
+
+import java.util.Calendar;
+import java.util.List;
+
 public class ScheduleActionFragment extends DialogFragment implements OnItemClickListener, OnClickListener {
 
-    Integer[] list = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
-
-    private GridView listActions;
-
-    private GrowingSeed mySeed;
-
+    Integer[] list = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
     BaseAction selectedAction;
-
+    private GridView listActions;
+    private GrowingSeed mySeed;
     private Spinner spinner;
 
     private RadioGroup radioGroup;
@@ -58,10 +54,10 @@ public class ScheduleActionFragment extends DialogFragment implements OnItemClic
 
     @Override
     public void onAttach(Activity activity) {
-        
+
         super.onAttach(activity);
     }
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +73,9 @@ public class ScheduleActionFragment extends DialogFragment implements OnItemClic
             protected void onPreExecute() {
 
                 helper = GotsActionManager.getInstance().initIfNew(getActivity());
-            };
+            }
+
+            ;
 
             @Override
             protected List<BaseAction> doInBackground(String... params) {
@@ -108,7 +106,9 @@ public class ScheduleActionFragment extends DialogFragment implements OnItemClic
                 listActions.setNumColumns(nbcolumn);
                 listActions.setAdapter(new SimpleListActionAdapter(getActivity(), actions));
                 listActions.setOnItemClickListener(ScheduleActionFragment.this);
-            };
+            }
+
+            ;
         }.execute();
 
         // listActions.setNumColumns(listActions.getCount());
@@ -138,14 +138,14 @@ public class ScheduleActionFragment extends DialogFragment implements OnItemClic
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-        case R.id.buttonPlanAction:
-            scheduleAction();
-            break;
-        case R.id.idListAction:
-            Log.i("listAction", "" + ((GridView) v).getCheckedItemPosition());
-            break;
-        default:
-            break;
+            case R.id.buttonPlanAction:
+                scheduleAction();
+                break;
+            case R.id.idListAction:
+                Log.i("listAction", "" + ((GridView) v).getCheckedItemPosition());
+                break;
+            default:
+                break;
         }
     }
 
@@ -161,15 +161,15 @@ public class ScheduleActionFragment extends DialogFragment implements OnItemClic
         int idx = radioGroup.indexOfChild(radioButton);
 
         switch (radioButtonID) {
-        case R.id.radioWeek:
-            duration = duration * 7;
-            break;
-        case R.id.radioMonth:
-            duration = duration * 30;
-            break;
+            case R.id.radioWeek:
+                duration = duration * 7;
+                break;
+            case R.id.radioMonth:
+                duration = duration * 30;
+                break;
 
-        default:
-            break;
+            default:
+                break;
         }
 
         Calendar sowingdate = Calendar.getInstance();
@@ -201,7 +201,7 @@ public class ScheduleActionFragment extends DialogFragment implements OnItemClic
                 @Override
                 protected Void doInBackground(Void... params) {
                     GotsActionSeedProvider actionHelper = GotsActionSeedManager.getInstance().initIfNew(getActivity());
-                    actionHelper.insertAction(mySeed, (ActionOnSeed)selectedAction);
+                    actionHelper.insertAction(mySeed, (ActionOnSeed) selectedAction);
                     return null;
                 }
 

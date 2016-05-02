@@ -1,5 +1,19 @@
 package org.gots.authentication.provider.nuxeo;
 
+import android.content.Context;
+import android.os.Build;
+import android.provider.Settings.Secure;
+import android.util.Base64;
+import android.util.Log;
+
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.message.BasicNameValuePair;
+import org.gots.context.GotsContext;
+import org.gots.preferences.GotsPreferences;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,20 +25,6 @@ import java.net.URLConnection;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.message.BasicNameValuePair;
-import org.gots.context.GotsContext;
-import org.gots.preferences.GotsPreferences;
-
-import android.content.Context;
-import android.os.Build;
-import android.provider.Settings.Secure;
-import android.util.Base64;
-import android.util.Log;
-
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
-
 public class NuxeoAuthentication {
 
     protected String TAG = "NuxeoAuthentication";
@@ -32,12 +32,14 @@ public class NuxeoAuthentication {
     GotsPreferences gotsPrefs;
 
     private Context mContext;
-    protected GotsContext getGotsContext() {
-        return GotsContext.get(mContext);
-    }
+
     public NuxeoAuthentication(Context context) {
         this.mContext = context;
         gotsPrefs = getGotsContext().getServerConfig();
+    }
+
+    protected GotsContext getGotsContext() {
+        return GotsContext.get(mContext);
     }
 
     public String request_basicauth_token(String login, String password, boolean revoke) throws IOException {

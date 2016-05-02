@@ -41,24 +41,24 @@ public class SimpleListActionAdapter extends BaseAdapter {
         return getItem(arg0).getId();
     }
 
-    public class Holder {
-        public ActionWidget actionWidget;
-        public TextView textViewActionName;
-    }
-
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
         // getItem(arg0).setState(ActionState.NORMAL);
         if (view == null) {
             holder = new Holder();
             view = (RelativeLayout) LayoutInflater.from(mContext).inflate(R.layout.list_action_simple, viewGroup, false);
-            holder.actionWidget = (ActionWidget)view.findViewById(R.id.idActionView);
-            holder.textViewActionName = (TextView)view.findViewById(R.id.textViewActionName);
+            holder.actionWidget = (ActionWidget) view.findViewById(R.id.idActionView);
+            holder.textViewActionName = (TextView) view.findViewById(R.id.textViewActionName);
             view.setTag(holder);
         } else
             holder = (Holder) view.getTag();
         holder.actionWidget.setAction(getItem(position));
         holder.textViewActionName.setText(getItem(position).getName());
         return view;
+    }
+
+    public class Holder {
+        public ActionWidget actionWidget;
+        public TextView textViewActionName;
     }
 }

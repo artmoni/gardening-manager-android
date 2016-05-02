@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res/org.gots">
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:drawable="@color/action_warning_color" android:state_pressed="true"/>
-    <item android:drawable="@color/action_warning_color" android:state_selected="true"/>
-    <item android:drawable="@color/text_color_light"/>
+    <item android:drawable="@color/action_warning_color" android:state_pressed="true" />
+    <item android:drawable="@color/action_warning_color" android:state_selected="true" />
+    <item android:drawable="@color/text_color_light" />
 
 </selector>

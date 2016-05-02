@@ -9,12 +9,12 @@ public class LikeStatus {
         return likesCount;
     }
 
-    public int getUserLikeStatus() {
-        return userLikeStatus;
-    }
-
     public void setLikesCount(int likesCount) {
         this.likesCount = likesCount;
+    }
+
+    public int getUserLikeStatus() {
+        return userLikeStatus;
     }
 
     public void setUserLikeStatus(int userLikeStatus) {

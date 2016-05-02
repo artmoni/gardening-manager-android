@@ -1,8 +1,5 @@
 package org.gots.ui.fragment;
 
-import org.gots.R;
-import org.nuxeo.android.fragments.BaseNuxeoFragment;
-
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,22 +10,24 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.gots.R;
+
 public class TutorialFragment extends BaseGotsFragment {
 
+    TextView textView;
     private int mCurrentTutorialRessource;
     private ImageView image;
-    TextView textView;
 
     public TutorialFragment() {
+    }
+
+    public TutorialFragment(int currentRessource) {
+        mCurrentTutorialRessource = currentRessource;
     }
 
     @Override
     public void update() {
         requireAsyncDataRetrieval();
-    }
-
-    public TutorialFragment(int currentRessource) {
-        mCurrentTutorialRessource = currentRessource;
     }
 
     @Override

@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * <p>
+ * <p/>
  * Contributors:
  * sfleury - initial API and implementation
  ******************************************************************************/
@@ -45,28 +45,21 @@ import java.util.List;
 public class CatalogueFragment extends BaseGotsListFragment implements OnScrollListener,
         AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
-    protected static final String FILTER_FAVORITES = "filter.favorites";
-
-    protected static final String FILTER_THISMONTH = "filter.thismonth";
+    public static final String BROADCAST_FILTER = "broadcast_filter";
+    public static final String IS_SELECTABLE = "seed.selectable";
 
     // protected static final String FILTER_BARCODE = "filter.barcode";
 
 //    protected static final String FILTER_VALUE = "filter.data";
 
     // public static final String FILTER_PARROT = "filter.parrot";
-
-    protected static final String FILTER_STOCK = "filter.stock";
-
-    protected static final String FILTER_TEXT = "filter.text";
-
-    private static final String FILTER_BARCODE = "filter.barcode";
-
-    private static final String FILTER_CATALOGUE = "filter.catalogue";
-
-    public static final String BROADCAST_FILTER = "broadcast_filter";
-    public static final String IS_SELECTABLE = "seed.selectable";
     public static final String TAG = CatalogueFragment.class.getSimpleName();
-
+    protected static final String FILTER_FAVORITES = "filter.favorites";
+    protected static final String FILTER_THISMONTH = "filter.thismonth";
+    protected static final String FILTER_STOCK = "filter.stock";
+    protected static final String FILTER_TEXT = "filter.text";
+    private static final String FILTER_BARCODE = "filter.barcode";
+    private static final String FILTER_CATALOGUE = "filter.catalogue";
     public Context mContext;
 
     public SeedListAdapter listVendorSeedAdapter;
@@ -90,14 +83,6 @@ public class CatalogueFragment extends BaseGotsListFragment implements OnScrollL
     private String lastBarcode;
     private View layoutSearchFileter;
     private FloatingActionButton fabSearch;
-
-    public interface OnSeedSelected {
-        public abstract void onPlantCatalogueClick(BaseSeed seed);
-
-        public abstract void onPlantCatalogueLongClick(CatalogueFragment vendorListFragment, BaseSeed seed);
-
-        public abstract void onPlantFiltered(String filterTitle);
-    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -219,7 +204,6 @@ public class CatalogueFragment extends BaseGotsListFragment implements OnScrollL
         return view;
     }
 
-
     @Override
     protected boolean requireAsyncDataRetrieval() {
         return true;
@@ -328,5 +312,13 @@ public class CatalogueFragment extends BaseGotsListFragment implements OnScrollL
 
         }
 
+    }
+
+    public interface OnSeedSelected {
+        public abstract void onPlantCatalogueClick(BaseSeed seed);
+
+        public abstract void onPlantCatalogueLongClick(CatalogueFragment vendorListFragment, BaseSeed seed);
+
+        public abstract void onPlantFiltered(String filterTitle);
     }
 }
