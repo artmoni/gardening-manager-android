@@ -40,7 +40,7 @@ public class PreferenceActivity extends android.preference.PreferenceActivity im
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
         gotsPreferences = getGotsContext().getServerConfig();
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        //getActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         findPreference("parrot.login").setSummary(gotsPreferences.getParrotLogin());

@@ -128,7 +128,7 @@ public class PlantDescriptionActivity extends BaseGotsActivity implements Allotm
         } else
             fragmentDescription.update();
 
-        getSupportActionBar().setTitle(mSeed.getVariety());
+        setTitleBar(mSeed.getVariety());
 
         super.onNuxeoDataRetrieved(data);
     }

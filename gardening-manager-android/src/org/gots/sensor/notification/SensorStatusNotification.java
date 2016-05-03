@@ -10,7 +10,7 @@ import android.support.v4.app.TaskStackBuilder;
 
 import org.gots.R;
 import org.gots.ui.ActionActivity;
-import org.gots.ui.CoreActivity;
+import org.gots.ui.MainActivity;
 
 public class SensorStatusNotification {
     private static final int NOTIFICATION = 102;
@@ -25,8 +25,8 @@ public class SensorStatusNotification {
         numMessages = 0;
         mBuilder = new NotificationCompat.Builder(mContext).setSmallIcon(R.drawable.ic_sensor).setContentTitle(
                 mContext.getResources().getString(R.string.dashboard_sensor_name)).setContentText("Alert");
-        Intent resultIntent = new Intent(mContext, CoreActivity.class);
-        resultIntent.setAction(CoreActivity.LAUNCHER_ACTION);
+        Intent resultIntent = new Intent(mContext, MainActivity.class);
+        resultIntent.setAction(MainActivity.LAUNCHER_ACTION);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(mContext);
         stackBuilder.addParentStack(ActionActivity.class);
         stackBuilder.addNextIntent(resultIntent);

@@ -89,7 +89,7 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CoreActivity extends BaseGotsActivity implements GardenListener, OnTutorialFinishedListener,
+public class MainActivity extends BaseGotsActivity implements GardenListener, OnTutorialFinishedListener,
         OnActionsClickListener, OnSensorClickListener {
     public static final int INDEX_CATALOGUE = 0;
     public static final int INDEX_GARDEN = 1;
@@ -113,7 +113,7 @@ public class CoreActivity extends BaseGotsActivity implements GardenListener, On
     private NavDrawerListAdapter adapter;
     private RelativeLayout mDrawerLinear;
     private Spinner spinnerGarden;
-    private String TAG = "CoreActivity";
+    private String TAG = "MainActivity";
     private List<GardenInterface> myGardens;
     private boolean doubleBackToExitPressedOnce;
 
@@ -602,7 +602,7 @@ public class CoreActivity extends BaseGotsActivity implements GardenListener, On
         // Intent intent = new Intent(getApplicationContext(), ProfileCreationActivity.class);
         // startActivity(intent);
         // }
-        AppRater.app_launched(CoreActivity.this);
+        AppRater.app_launched(MainActivity.this);
     }
 
     protected void displayUserAvatar() {
@@ -749,11 +749,11 @@ public class CoreActivity extends BaseGotsActivity implements GardenListener, On
                     }
                 }
                 if (dropdownValues.length > 0) {
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(CoreActivity.this,
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this,
                             android.R.layout.simple_spinner_item, android.R.id.text1, dropdownValues);
 
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    // actionBar.setListNavigationCallbacks(adapter, CoreActivity.this);
+                    // actionBar.setListNavigationCallbacks(adapter, MainActivity.this);
 
                     spinnerGarden.setAdapter(adapter);
                     spinnerGarden.setSelection(selectedGardenIndex);

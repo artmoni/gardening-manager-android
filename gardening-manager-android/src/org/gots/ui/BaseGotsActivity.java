@@ -209,18 +209,7 @@ public abstract class BaseGotsActivity extends GotsCoreActivity implements GotsC
 
         setContentView(R.layout.layout_simple);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-//        setSupportActionBar(toolbar);
-//        toolbar.inflateMenu(R.menu.menu_common);
-//        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item) {
-//                return false;
-//            }
-//        });
-
-//        if (activities.size() > 0)
-//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setSupportActionBar(toolbar);
 
         // TODO All this should be part of the application/service/...
         gotsPrefs = getGotsContext().getServerConfig();
@@ -430,6 +419,8 @@ public abstract class BaseGotsActivity extends GotsCoreActivity implements GotsC
         gotsBillingDialog.show(fm, "fragment_edit_name");
     }
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_common, menu);
@@ -544,10 +535,16 @@ public abstract class BaseGotsActivity extends GotsCoreActivity implements GotsC
         return super.getNuxeoContext();
     }
 
-    protected void setTitleBar(final int dashboardAllotmentsName) {
+    protected void setTitleBar(final int ressourceStringTitle) {
+       setTitleBar(getResources().getString(ressourceStringTitle));
+    }
+
+    protected void setTitleBar(String titleBar) {
         ActionBar bar = getSupportActionBar();
-        bar.setDisplayHomeAsUpEnabled(true);
-        bar.setTitle(dashboardAllotmentsName);
+        if (bar != null){
+            bar.setDisplayHomeAsUpEnabled(true);
+            bar.setTitle(titleBar);
+        }
     }
 
     private int getMainLayout() {

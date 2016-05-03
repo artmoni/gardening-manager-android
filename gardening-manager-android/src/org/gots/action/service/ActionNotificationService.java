@@ -21,7 +21,7 @@ import org.gots.seed.GrowingSeed;
 import org.gots.seed.SeedUtil;
 import org.gots.seed.service.GotsService;
 import org.gots.ui.ActionActivity;
-import org.gots.ui.CoreActivity;
+import org.gots.ui.MainActivity;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -148,8 +148,8 @@ public class ActionNotificationService extends GotsService {
         // notification
         // PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, ActionActivity.class), 0);
 
-        Intent resultIntent = new Intent(this, CoreActivity.class);
-        resultIntent.setAction(CoreActivity.LAUNCHER_ACTION);
+        Intent resultIntent = new Intent(this, MainActivity.class);
+        resultIntent.setAction(MainActivity.LAUNCHER_ACTION);
 
         // The stack builder object will contain an artificial back stack for the
         // started Activity.

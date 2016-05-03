@@ -41,9 +41,6 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
 
     private GardenInterface currentGarden;
 
-//    private ProfileMapFragment mapFragment;
-
-    //    private List<GardenInterface> allGardens;
     private ProfileEditorFragment fragment;
     private ProfileResumeFragment resumeFragment;
 
@@ -101,14 +98,6 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
         return floatingItems;
     }
 
-//    public BroadcastReceiver gardenBroadcastReceiver = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            if (BroadCastMessages.GARDEN_EVENT.equals(intent.getAction())) {
-//                //runAsyncDataRetrieval();
-//            }
-//        }
-//    };
 
     protected boolean requireAsyncDataRetrieval() {
         return true;
@@ -118,13 +107,11 @@ public class ProfileActivity extends BaseGotsActivity implements OnProfileEventL
 
     @Override
     protected Object retrieveNuxeoData() throws Exception {
-//        currentGarden = getCurrentGarden();
         return getCurrentGarden();
     }
 
     @Override
     protected void onNuxeoDataRetrieved(Object myGarden) {
-//        this.allGardens = (List<GardenInterface>) myGardens;
         currentGarden = (GardenInterface) myGarden;
         if (currentGarden.getGpsLatitude() == 0 || currentGarden.getGpsLongitude() == 0) {
 //            Toast.makeText(getApplicationContext(), "Long press to localize your garden", Toast.LENGTH_LONG).show();

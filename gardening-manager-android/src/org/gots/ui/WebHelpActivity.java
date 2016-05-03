@@ -37,10 +37,8 @@ public class WebHelpActivity extends BaseGotsActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.help);
+        setTitleBar("Documentation");
 
-        ActionBar bar = getSupportActionBar();
-        bar.setDisplayHomeAsUpEnabled(true);
-        bar.setTitle("Documentation");
 
         mWebView = (WebView) findViewById(R.id.webViewHelp);
         mWebView.setWebViewClient(new WebHelpClient());

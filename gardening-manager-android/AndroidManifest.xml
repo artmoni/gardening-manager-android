@@ -76,7 +76,7 @@
             android:name=".ui.GardenActivity"
              />
         <activity
-            android:name=".ui.CoreActivity"
+            android:name=".ui.MainActivity"
             />
         <activity
             android:name=".ui.SensorActivity"
