@@ -24,11 +24,11 @@
         android:id="@+id/connection"
         android:icon="@drawable/ic_login"
         android:title="@string/login.disconnect"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/settings"
         android:icon="@drawable/ic_compose"
-        android:showAsAction="always"
+        app:showAsAction="ifRoom"
         android:title="settings" />
 
 </menu>

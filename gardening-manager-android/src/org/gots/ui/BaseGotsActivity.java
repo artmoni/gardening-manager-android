@@ -210,10 +210,17 @@ public abstract class BaseGotsActivity extends GotsCoreActivity implements GotsC
         setContentView(R.layout.layout_simple);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-//        ActionBar bar = getSupportActionBar();
-toolbar.setTitle("tete");
-//        if (activities.size() > 0)
-//            bar.setDisplayHomeAsUpEnabled(true);
+        toolbar.inflateMenu(R.menu.menu_common);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                return false;
+            }
+        });
+
+        ActionBar bar = getSupportActionBar();
+        if (activities.size() > 0)
+            bar.setDisplayHomeAsUpEnabled(true);
 
         // TODO All this should be part of the application/service/...
         gotsPrefs = getGotsContext().getServerConfig();

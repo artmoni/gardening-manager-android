@@ -12,59 +12,46 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
-    <LinearLayout
-        android:id="@+id/globalContainer"
-        android:layout_width="fill_parent"
+
+    <FrameLayout
+        android:id="@+id/resumeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_below="@id/toolbar" />
+
+
+    <FrameLayout
+        android:id="@+id/mainLayout"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_below="@id/toolbar"
-        android:orientation="vertical">
+        android:layout_below="@id/resumeLayout"
+        android:layout_above="@+id/layoutNotification">
 
+    </FrameLayout>
 
-        <FrameLayout
-            android:id="@+id/resumeLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-
-        <FrameLayout
-            android:id="@+id/mainLayout"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-        </FrameLayout>
-    </LinearLayout>
-
-
-    <com.getbase.floatingactionbutton.FloatingActionsMenu
-        android:id="@+id/idFAB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/globalContainer"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        app:fab_addButtonColorNormal="@color/text_color_dark"
-        app:fab_addButtonColorPressed="@color/action_warning_color"
-        fab:fab_labelStyle="@style/fab_label"
-        fab:fab_labelsPosition="left" />
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/layoutNotification"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/idFAB"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="0dp"
-        android:background="@drawable/bg_line_action"
         android:orientation="vertical"
         android:padding="10dp"
         android:visibility="visible">
 
 
     </android.support.design.widget.CoordinatorLayout>
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/idFAB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="right"
+        app:fab_addButtonColorNormal="@color/text_color_dark"
+        app:fab_addButtonColorPressed="@color/action_warning_color"
+        fab:fab_labelStyle="@style/fab_label"
+        fab:fab_labelsPosition="left" />
 </RelativeLayout>
