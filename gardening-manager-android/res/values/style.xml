@@ -361,26 +361,25 @@
     </style>
 
     <style name="Theme.Styled" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:actionBarStyle">@style/Widget.Styled.ActionBar</item>
-        <item name="android:actionBarTabTextStyle">@style/Widget.Styled.TabTextStyle</item>
-        <item name="android:actionBarTabStyle">@style/Widget.Styled.TabBar</item>
-        <item name="android:divider">@drawable/tab_divider</item>
-        <item name="android:dropDownItemStyle">@style/Widget.DropDownItemLight</item>
-        <item name="android:autoCompleteTextViewStyle">@style/Widget.AutoCompleteTextViewLight
-        </item>
-        <item name="android:spinnerDropDownItemStyle">@style/DropDownItem</item>
-        <item name="spinnerDropDownItemStyle">@style/DropDownItem</item>
-        <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
-        <item name="android:actionDropDownStyle">@style/DropDownNav</item>
-        <item name="actionDropDownStyle">@style/DropDownNav</item>
-        <item name="android:textColor">@color/text_color_dark</item>
-        <item name="android:actionModeBackground">@drawable/contextual_bar_top</item>
-        <item name="android:actionModeSplitBackground">@drawable/contextual_bar_bottom</item>
+        <!--<item name="android:actionBarStyle">@style/Widget.Styled.ActionBar</item>-->
+        <!--<item name="android:actionBarTabTextStyle">@style/Widget.Styled.TabTextStyle</item>-->
+        <!--<item name="android:actionBarTabStyle">@style/Widget.Styled.TabBar</item>-->
+        <!--<item name="android:divider">@drawable/tab_divider</item>-->
+        <!--<item name="android:dropDownItemStyle">@style/Widget.DropDownItemLight</item>-->
+        <!--<item name="android:autoCompleteTextViewStyle">@style/Widget.AutoCompleteTextViewLight-->
+        <!--</item>-->
+        <!--<item name="android:spinnerDropDownItemStyle">@style/DropDownItem</item>-->
+        <!--<item name="spinnerDropDownItemStyle">@style/DropDownItem</item>-->
+        <!--<item name="android:spinnerItemStyle">@style/SpinnerItem</item>-->
+        <!--<item name="android:actionDropDownStyle">@style/DropDownNav</item>-->
+        <!--<item name="actionDropDownStyle">@style/DropDownNav</item>-->
+        <!--<item name="android:textColor">@color/text_color_dark</item>-->
+        <!--<item name="android:actionModeBackground">@drawable/contextual_bar_top</item>-->
+        <!--<item name="android:actionModeSplitBackground">@drawable/contextual_bar_bottom</item>-->
         <!--If you are using revision 22.1 please use just windowNoTitle. Without android:-->
         <item name="windowNoTitle">true</item>
         <!--We will be using the toolbar so no need to show ActionBar-->
         <item name="windowActionBar">false</item>
-        <item name="android:windowActionBar">false</item>
         <!-- Set theme colors from http://www.google.com/design/spec/style/color.html#color-color-palette-->
         <!-- colorPrimary is used for the default action bar background -->
         <item name="colorPrimary">@color/brown_light</item>
