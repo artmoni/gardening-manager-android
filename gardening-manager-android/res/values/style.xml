@@ -356,6 +356,10 @@
         <item name="android:padding">10dp</item>
     </style>
 
+    <style name="GotsTheme" parent="Theme.Styled">
+
+    </style>
+
     <style name="Theme.Styled" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/Widget.Styled.ActionBar</item>
         <item name="android:actionBarTabTextStyle">@style/Widget.Styled.TabTextStyle</item>
@@ -373,6 +377,20 @@
         <item name="android:actionModeBackground">@drawable/contextual_bar_top</item>
         <item name="android:actionModeSplitBackground">@drawable/contextual_bar_bottom</item>
         <item name="android:colorPrimaryDark">@color/text_color_dark</item>
+        <!--If you are using revision 22.1 please use just windowNoTitle. Without android:-->
+        <item name="windowNoTitle">true</item>
+        <!--We will be using the toolbar so no need to show ActionBar-->
+        <item name="windowActionBar">false</item>
+        <!-- Set theme colors from http://www.google.com/design/spec/style/color.html#color-color-palette-->
+        <!-- colorPrimary is used for the default action bar background -->
+        <item name="colorPrimary">@color/text_color_light</item>
+        <!-- colorPrimaryDark is used for the status bar -->
+        <item name="colorPrimaryDark">@color/text_color_dark</item>
+        <!-- colorAccent is used as the default value for colorControlActivated
+             which is used to tint widgets -->
+        <item name="colorAccent">#FF4081</item>
+        <!-- You can also set colorControlNormal, colorControlActivated
+            colorControlHighlight and colorSwitchThumbNormal. -->
     </style>
 
     <style name="SpinnerItem">

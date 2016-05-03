@@ -43,6 +43,7 @@ import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -207,10 +208,12 @@ public abstract class BaseGotsActivity extends GotsCoreActivity implements GotsC
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.layout_simple);
-        ActionBar bar = getSupportActionBar();
-
-        if (activities.size() > 0)
-            bar.setDisplayHomeAsUpEnabled(true);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+//        ActionBar bar = getSupportActionBar();
+toolbar.setTitle("tete");
+//        if (activities.size() > 0)
+//            bar.setDisplayHomeAsUpEnabled(true);
 
         // TODO All this should be part of the application/service/...
         gotsPrefs = getGotsContext().getServerConfig();

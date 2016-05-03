@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.gots"
-    android:versionCode="1007005"
-    android:versionName="1.7.6-SNAPSHOT">
-
-    <uses-sdk
-        android:minSdkVersion="21"
-        android:targetSdkVersion="22" />
+    >
 
     <uses-permission
         android:name="android.permission.ACCESS_FINE_LOCATION"
@@ -66,11 +61,11 @@
         android:allowBackup="true"
         android:icon="@drawable/launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.Styled">
+        android:theme="@style/GotsTheme">
         <activity
             android:name=".ui.SplashScreenActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Styled">
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -79,27 +74,27 @@
         </activity>
         <activity
             android:name=".ui.GardenActivity"
-            android:theme="@style/Theme.Styled" />
+             />
         <activity
             android:name=".ui.CoreActivity"
-            android:theme="@style/Theme.Styled"></activity>
+            />
         <activity
             android:name=".ui.SensorActivity"
-            android:theme="@style/Theme.Styled"></activity>
+            />
         <activity
             android:name=".ui.ProfileActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
-            android:theme="@style/Theme.Styled"></activity>
+            />
         <activity
             android:name=".ui.ActionActivity"
-            android:theme="@style/Theme.Styled" />
+             />
         <activity
             android:name=".ui.AboutActivity"
-            android:theme="@style/Theme.Styled" />
+             />
         <activity
             android:name=".ui.WebHelpActivity"
-            android:theme="@style/Theme.Styled" />
-        <!--<activity android:name=".ui.TabSeedActivity" android:theme="@style/Theme.Styled" >-->
+             />
+        <!--<activity android:name=".ui.TabSeedActivity"  >-->
         <!--&lt;!&ndash;<intent-filter>&ndash;&gt;-->
         <!--&lt;!&ndash;<data android:host="my.gardening-manager.com" android:scheme="http"/>&ndash;&gt;-->
 
@@ -110,7 +105,7 @@
         <!--</activity>-->
         <activity
             android:name=".ui.PlantDescriptionActivity"
-            android:theme="@style/Theme.Styled">
+            >
             <intent-filter>
                 <data
                     android:host="my.gardening-manager.com"
@@ -124,31 +119,31 @@
         </activity>
         <activity
             android:name=".ui.GrowingPlantDescriptionActivity"
-            android:theme="@style/Theme.Styled" />
+             />
         <activity android:name=".ui.RecognitionActivity" />
         <activity
             android:name=".ui.HutActivity"
-            android:theme="@style/Theme.Styled"
+
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".ui.NewSeedActivity"
-            android:theme="@style/Theme.Styled"
+
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".ui.AccountList"
-            android:theme="@style/Theme.Styled" />
+             />
         <activity
             android:name=".authentication.AuthenticationActivity"
-            android:theme="@style/Theme.Styled" />
+             />
         <activity
             android:name="com.google.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
         <activity
             android:name=".ui.PreferenceActivity"
-            android:theme="@style/Theme.Styled" />
+             />
         <activity
             android:name=".ui.CatalogueActivity"
-            android:theme="@style/Theme.Styled" />
+             />
 
         <provider
             android:name="org.gots.provider.SensorContentProvider"
